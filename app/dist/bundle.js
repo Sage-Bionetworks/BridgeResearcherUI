@@ -44,13 +44,12 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(13);
-	__webpack_require__(11);
-	var director = __webpack_require__(10);
-	var ko = __webpack_require__(16);
-	var $ = __webpack_require__(12);
-	var define = __webpack_require__(2);
-	var sessionService = __webpack_require__(3);
+	__webpack_require__(1);
+	__webpack_require__(5);
+	var director = __webpack_require__(14);
+	var ko = __webpack_require__(7);
+	var $ = __webpack_require__(6);
+	var sessionService = __webpack_require__(12);
 
 	$.fn.serializeJSON = function() {
 	    var json = this.serializeArray().reduce(function(obj, el) {
@@ -63,7 +62,8 @@
 	    if (typeof data !== 'string') {
 	        data = JSON.stringify(data);
 	    }
-	    console.debug("POST", url, data);
+	    var output = data.replace(/"password":"([^"]*)"/, '"password":"[REDACTED]"');
+	    console.debug("POST", url, output);
 	    return $.ajax({method: 'POST', url: url,
 	        headers: {'Content-Type': 'application/json'},
 	        data: data, type: "application/json"
@@ -73,28 +73,27 @@
 
 	// These can be made asynchronous.
 	ko.components.register('home', {
-	    viewModel: __webpack_require__(4), template: __webpack_require__(7)
+	    viewModel: __webpack_require__(16), template: __webpack_require__(17)
 	});
 	ko.components.register('study', {
-	    viewModel: __webpack_require__(5), template: __webpack_require__(8)
+	    viewModel: __webpack_require__(18), template: __webpack_require__(19)
 	});
 	ko.components.register('notFound', {
-	    viewModel: __webpack_require__(6), template: __webpack_require__(9)
+	    viewModel: __webpack_require__(20), template: __webpack_require__(21)
 	});
 
-	var RootViewModel = define({
-	    init: function() {
-	        this.mainPage = ko.observable("home");
-	        this.sessionToken = ko.observable("");
-	    },
-	    routeTo: function(name) {
+	var RootViewModel = function() {
+	    this.mainPage = ko.observable("study");
+	    this.sessionToken = ko.observable("");
+
+	    this.routeTo = function(name) {
 	        return function() {
 	            this.mainPage(name);
 	        }.bind(this);
-	    }
-	});
+	    };
+	};
 	var root = new RootViewModel();
-	ko.applyBindings(root, document.querySelector("#page-container"));
+	ko.applyBindings(root, document.querySelector("#page-context"));
 
 	// This is for debugging, and will be removed.
 	sessionService.addListener(function(session) {
@@ -117,913 +116,338 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var sessionService = __webpack_require__(3);
+	// style-loader: Adds some css to the DOM by adding a <style> tag
 
-	module.exports = config = {
-	    host: {
-	        'local': 'http://localhost:9000',
-	        'develop': 'https://webservices-develop.sagebridge.org',
-	        'staging': 'https://webservices-staging.sagebridge.org',
-	        'production': 'https://webservices.sagebridge.org'
-	    },
-	    signIn: function(env) {
-	        return config.host[env] + '/api/v1/auth/signIn';
-	    }
-
-	};
-
+	// load the styles
+	var content = __webpack_require__(2);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(4)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./main.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./main.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
 
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/**
-	 * Very simple syntactic sugar for defining classes.
-	 * @param parent
-	 * @param methods
-	 */
-	module.exports = function(parent, methods) {
-	    if (arguments.length === 1) { // parent is optional
-	        methods = parent;
-	        parent = null;
-	    }
-	    var F = (methods.init || function() {});
-	    if (parent) {
-	        var C = function() {}; // don't call parent constructor
-	        C.prototype = parent.prototype;
-	        F.prototype = new C();
-	    }
-	    if (methods.properties) {
-	        for (var methName in methods.properties) {
-	            Object.defineProperty(F.prototype, methName, {
-	                enumerable: false,
-	                configurable: false,
-	                get: methods.properties[methName]
-	            });
-	        }
-	        delete methods.properties;
-	    }
-	    delete methods.init;
-	    for (var prop in methods) {
-	        F.prototype[prop] = methods[prop];
-	    }
-	    F.prototype.constructor = F;
-	    return F;
-	}
+	exports = module.exports = __webpack_require__(3)();
+	exports.push([module.id, "body {\n    background-color: white;\n}\n#page-container {\n    max-width: 800px;\n    margin: 20px auto;\n}\n\n#authModal {\n    padding: 2rem 2rem 1.5rem 2rem;\n}\n.field .ui.button {\n    margin-top: .5rem ! important;\n}\n\nbody {\n    display: -webkit-flex;\n    display: flex;\n    min-height: 100vh;\n    -webkit-flex-direction: column;\n    flex-direction: column;\n}\nsection {\n    display: -webkit-flex;\n    display: flex;\n    -webkit-flex: 1;\n    flex: 1;\n}\nmain {\n    -webkit-flex: 1;\n    flex: 1;\n}\nnav {\n    -webkit-flex: 0 0 18em;\n    flex: 0 0 18em;\n    -webkit-order: -1;\n    order: -1;\n}\nnav .menu {\n    margin: 1rem .5rem ! important;\n}\nmain {\n    padding-top: 2rem ! important;\n    padding-left: 2rem ! important;\n}\nheader {\n    display: -webkit-flex;\n    display: flex;\n    padding: 1rem 1rem 0 1.5rem;\n    -webkit-align-items: center;\n    align-items: center;\n    -webkit-justify-content: space-between;\n    justify-content: space-between;\n    flex-direction: row;\n    background-color: #3b83c0;\n}\nheader .content, header a {\n    color: white;\n}\nheader .sub.header {\n    color: lightblue ! important;\n}\nmain {\n    padding: 1rem;\n}\nfooter p {\n    border-top: 1px solid #e5e5e5;\n    padding: .5rem;\n    text-align: center;\n}\n", ""]);
 
 /***/ },
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var EventEmitter = __webpack_require__(17);
-	var $ = __webpack_require__(12);
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	// css base code, injected by the css-loader
+	module.exports = function() {
+		var list = [];
 
-	const SESSION_KEY = 'session';
-	const SESSION_EVENT_KEY = 'session';
-	var session = null;
-	var events = new EventEmitter();
+		// return the list of modules as css string
+		list.toString = function toString() {
+			var result = [];
+			for(var i = 0; i < this.length; i++) {
+				var item = this[i];
+				if(item[2]) {
+					result.push("@media " + item[2] + "{" + item[1] + "}");
+				} else {
+					result.push(item[1]);
+				}
+			}
+			return result.join("");
+		};
 
-	$(function() {
-	    session = localStorage.getItem(SESSION_KEY);
-	    if (session) {
-	        events.emit(SESSION_EVENT_KEY, JSON.parse(session));
-	    } else {
-	        events.emit(SESSION_EVENT_KEY, null);
-	    }
-	});
-
-	module.exports = {
-	    isAuthenticated: function() {
-	        return (session !== null);
-	    },
-	    startSession: function(sess) {
-	        localStorage.setItem(SESSION_KEY, JSON.stringify(sess));
-	        session = sess;
-	        events.emit(SESSION_EVENT_KEY, sess);
-	    },
-	    endSession: function() {
-	        localStorage.removeItem(SESSION_KEY);
-	        session = null;
-	        events.emit(SESSION_EVENT_KEY, null);
-	    },
-	    addListener: function(listener) {
-	        events.addListener(SESSION_EVENT_KEY, listener);
-	    },
-	    removeListener: function(listener) {
-	        events.removeListener(SESSION_EVENT_KEY, listener);
-	    }
+		// import a list of modules into the list
+		list.i = function(modules, mediaQuery) {
+			if(typeof modules === "string")
+				modules = [[null, modules, ""]];
+			var alreadyImportedModules = {};
+			for(var i = 0; i < this.length; i++) {
+				var id = this[i][0];
+				if(typeof id === "number")
+					alreadyImportedModules[id] = true;
+			}
+			for(i = 0; i < modules.length; i++) {
+				var item = modules[i];
+				// skip already imported module
+				// this implementation is not 100% perfect for weird media query combinations
+				//  when a module is imported multiple times with different media queries.
+				//  I hope this will never occur (Hey this way we have smaller bundles)
+				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+					if(mediaQuery && !item[2]) {
+						item[2] = mediaQuery;
+					} else if(mediaQuery) {
+						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+					}
+					list.push(item);
+				}
+			}
+		};
+		return list;
 	};
+
 
 /***/ },
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var define = __webpack_require__(2);
-	var ko = __webpack_require__(16);
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	var stylesInDom = {},
+		memoize = function(fn) {
+			var memo;
+			return function () {
+				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+				return memo;
+			};
+		},
+		isOldIE = memoize(function() {
+			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+		}),
+		getHeadElement = memoize(function () {
+			return document.head || document.getElementsByTagName("head")[0];
+		}),
+		singletonElement = null,
+		singletonCounter = 0;
 
-	module.exports = define({
-	    init: function() {
-	        this.username = ko.observable("Davey Jones");
-	    }
-	});
+	module.exports = function(list, options) {
+		if(false) {
+			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+		}
+
+		options = options || {};
+		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+		// tags it will allow on a page
+		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
+
+		var styles = listToStyles(list);
+		addStylesToDom(styles, options);
+
+		return function update(newList) {
+			var mayRemove = [];
+			for(var i = 0; i < styles.length; i++) {
+				var item = styles[i];
+				var domStyle = stylesInDom[item.id];
+				domStyle.refs--;
+				mayRemove.push(domStyle);
+			}
+			if(newList) {
+				var newStyles = listToStyles(newList);
+				addStylesToDom(newStyles, options);
+			}
+			for(var i = 0; i < mayRemove.length; i++) {
+				var domStyle = mayRemove[i];
+				if(domStyle.refs === 0) {
+					for(var j = 0; j < domStyle.parts.length; j++)
+						domStyle.parts[j]();
+					delete stylesInDom[domStyle.id];
+				}
+			}
+		};
+	}
+
+	function addStylesToDom(styles, options) {
+		for(var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+			if(domStyle) {
+				domStyle.refs++;
+				for(var j = 0; j < domStyle.parts.length; j++) {
+					domStyle.parts[j](item.parts[j]);
+				}
+				for(; j < item.parts.length; j++) {
+					domStyle.parts.push(addStyle(item.parts[j], options));
+				}
+			} else {
+				var parts = [];
+				for(var j = 0; j < item.parts.length; j++) {
+					parts.push(addStyle(item.parts[j], options));
+				}
+				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+			}
+		}
+	}
+
+	function listToStyles(list) {
+		var styles = [];
+		var newStyles = {};
+		for(var i = 0; i < list.length; i++) {
+			var item = list[i];
+			var id = item[0];
+			var css = item[1];
+			var media = item[2];
+			var sourceMap = item[3];
+			var part = {css: css, media: media, sourceMap: sourceMap};
+			if(!newStyles[id])
+				styles.push(newStyles[id] = {id: id, parts: [part]});
+			else
+				newStyles[id].parts.push(part);
+		}
+		return styles;
+	}
+
+	function createStyleElement() {
+		var styleElement = document.createElement("style");
+		var head = getHeadElement();
+		styleElement.type = "text/css";
+		head.appendChild(styleElement);
+		return styleElement;
+	}
+
+	function createLinkElement() {
+		var linkElement = document.createElement("link");
+		var head = getHeadElement();
+		linkElement.rel = "stylesheet";
+		head.appendChild(linkElement);
+		return linkElement;
+	}
+
+	function addStyle(obj, options) {
+		var styleElement, update, remove;
+
+		if (options.singleton) {
+			var styleIndex = singletonCounter++;
+			styleElement = singletonElement || (singletonElement = createStyleElement());
+			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
+			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
+		} else if(obj.sourceMap &&
+			typeof URL === "function" &&
+			typeof URL.createObjectURL === "function" &&
+			typeof URL.revokeObjectURL === "function" &&
+			typeof Blob === "function" &&
+			typeof btoa === "function") {
+			styleElement = createLinkElement();
+			update = updateLink.bind(null, styleElement);
+			remove = function() {
+				styleElement.parentNode.removeChild(styleElement);
+				if(styleElement.href)
+					URL.revokeObjectURL(styleElement.href);
+			};
+		} else {
+			styleElement = createStyleElement();
+			update = applyToTag.bind(null, styleElement);
+			remove = function() {
+				styleElement.parentNode.removeChild(styleElement);
+			};
+		}
+
+		update(obj);
+
+		return function updateStyle(newObj) {
+			if(newObj) {
+				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
+					return;
+				update(obj = newObj);
+			} else {
+				remove();
+			}
+		};
+	}
+
+	var replaceText = (function () {
+		var textStore = [];
+
+		return function (index, replacement) {
+			textStore[index] = replacement;
+			return textStore.filter(Boolean).join('\n');
+		};
+	})();
+
+	function applyToSingletonTag(styleElement, index, remove, obj) {
+		var css = remove ? "" : obj.css;
+
+		if (styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = replaceText(index, css);
+		} else {
+			var cssNode = document.createTextNode(css);
+			var childNodes = styleElement.childNodes;
+			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
+			if (childNodes.length) {
+				styleElement.insertBefore(cssNode, childNodes[index]);
+			} else {
+				styleElement.appendChild(cssNode);
+			}
+		}
+	}
+
+	function applyToTag(styleElement, obj) {
+		var css = obj.css;
+		var media = obj.media;
+		var sourceMap = obj.sourceMap;
+
+		if(media) {
+			styleElement.setAttribute("media", media)
+		}
+
+		if(styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = css;
+		} else {
+			while(styleElement.firstChild) {
+				styleElement.removeChild(styleElement.firstChild);
+			}
+			styleElement.appendChild(document.createTextNode(css));
+		}
+	}
+
+	function updateLink(linkElement, obj) {
+		var css = obj.css;
+		var media = obj.media;
+		var sourceMap = obj.sourceMap;
+
+		if(sourceMap) {
+			// http://stackoverflow.com/a/26603875
+			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+		}
+
+		var blob = new Blob([css], { type: "text/css" });
+
+		var oldSrc = linkElement.href;
+
+		linkElement.href = URL.createObjectURL(blob);
+
+		if(oldSrc)
+			URL.revokeObjectURL(oldSrc);
+	}
+
 
 /***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var define = __webpack_require__(2);
-	var ko = __webpack_require__(16);
-
-	module.exports = function() {
-	    this.studyName = ko.observable("My Study Name");
-	};
-
-	/*
-	module.exports = define({
-	    init: function(params) {
-	        this.studyName = ko.observable("My Study Name");
-	    }
-	});*/
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var define = __webpack_require__(2);
-
-	module.exports = define({
-	    init: function(params) {
-	    }
-	});
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = "<h3>Home</h3>\n\n<p>So this is the home page widget, bound to <span data-bind=\"text: username\"></span></p>\n";
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = "<h3>Study</h3>\n\n<p>So this is the home page widget, bound to <span data-bind=\"text: studyName\"></span></p>";
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = "<p>Page not found.</p>";
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	
-
-	//
-	// Generated on Tue Dec 16 2014 12:13:47 GMT+0100 (CET) by Charlie Robbins, Paolo Fragomeni & the Contributors (Using Codesurgeon).
-	// Version 1.2.6
-	//
-
-	(function (exports) {
-
-	/*
-	 * browser.js: Browser specific functionality for director.
-	 *
-	 * (C) 2011, Charlie Robbins, Paolo Fragomeni, & the Contributors.
-	 * MIT LICENSE
-	 *
-	 */
-
-	var dloc = document.location;
-
-	function dlocHashEmpty() {
-	  // Non-IE browsers return '' when the address bar shows '#'; Director's logic
-	  // assumes both mean empty.
-	  return dloc.hash === '' || dloc.hash === '#';
-	}
-
-	var listener = {
-	  mode: 'modern',
-	  hash: dloc.hash,
-	  history: false,
-
-	  check: function () {
-	    var h = dloc.hash;
-	    if (h != this.hash) {
-	      this.hash = h;
-	      this.onHashChanged();
-	    }
-	  },
-
-	  fire: function () {
-	    if (this.mode === 'modern') {
-	      this.history === true ? window.onpopstate() : window.onhashchange();
-	    }
-	    else {
-	      this.onHashChanged();
-	    }
-	  },
-
-	  init: function (fn, history) {
-	    var self = this;
-	    this.history = history;
-
-	    if (!Router.listeners) {
-	      Router.listeners = [];
-	    }
-
-	    function onchange(onChangeEvent) {
-	      for (var i = 0, l = Router.listeners.length; i < l; i++) {
-	        Router.listeners[i](onChangeEvent);
-	      }
-	    }
-
-	    //note IE8 is being counted as 'modern' because it has the hashchange event
-	    if ('onhashchange' in window && (document.documentMode === undefined
-	      || document.documentMode > 7)) {
-	      // At least for now HTML5 history is available for 'modern' browsers only
-	      if (this.history === true) {
-	        // There is an old bug in Chrome that causes onpopstate to fire even
-	        // upon initial page load. Since the handler is run manually in init(),
-	        // this would cause Chrome to run it twise. Currently the only
-	        // workaround seems to be to set the handler after the initial page load
-	        // http://code.google.com/p/chromium/issues/detail?id=63040
-	        setTimeout(function() {
-	          window.onpopstate = onchange;
-	        }, 500);
-	      }
-	      else {
-	        window.onhashchange = onchange;
-	      }
-	      this.mode = 'modern';
-	    }
-	    else {
-	      //
-	      // IE support, based on a concept by Erik Arvidson ...
-	      //
-	      var frame = document.createElement('iframe');
-	      frame.id = 'state-frame';
-	      frame.style.display = 'none';
-	      document.body.appendChild(frame);
-	      this.writeFrame('');
-
-	      if ('onpropertychange' in document && 'attachEvent' in document) {
-	        document.attachEvent('onpropertychange', function () {
-	          if (event.propertyName === 'location') {
-	            self.check();
-	          }
-	        });
-	      }
-
-	      window.setInterval(function () { self.check(); }, 50);
-
-	      this.onHashChanged = onchange;
-	      this.mode = 'legacy';
-	    }
-
-	    Router.listeners.push(fn);
-
-	    return this.mode;
-	  },
-
-	  destroy: function (fn) {
-	    if (!Router || !Router.listeners) {
-	      return;
-	    }
-
-	    var listeners = Router.listeners;
-
-	    for (var i = listeners.length - 1; i >= 0; i--) {
-	      if (listeners[i] === fn) {
-	        listeners.splice(i, 1);
-	      }
-	    }
-	  },
-
-	  setHash: function (s) {
-	    // Mozilla always adds an entry to the history
-	    if (this.mode === 'legacy') {
-	      this.writeFrame(s);
-	    }
-
-	    if (this.history === true) {
-	      window.history.pushState({}, document.title, s);
-	      // Fire an onpopstate event manually since pushing does not obviously
-	      // trigger the pop event.
-	      this.fire();
-	    } else {
-	      dloc.hash = (s[0] === '/') ? s : '/' + s;
-	    }
-	    return this;
-	  },
-
-	  writeFrame: function (s) {
-	    // IE support...
-	    var f = document.getElementById('state-frame');
-	    var d = f.contentDocument || f.contentWindow.document;
-	    d.open();
-	    d.write("<script>_hash = '" + s + "'; onload = parent.listener.syncHash;<script>");
-	    d.close();
-	  },
-
-	  syncHash: function () {
-	    // IE support...
-	    var s = this._hash;
-	    if (s != dloc.hash) {
-	      dloc.hash = s;
-	    }
-	    return this;
-	  },
-
-	  onHashChanged: function () {}
-	};
-
-	var Router = exports.Router = function (routes) {
-	  if (!(this instanceof Router)) return new Router(routes);
-
-	  this.params   = {};
-	  this.routes   = {};
-	  this.methods  = ['on', 'once', 'after', 'before'];
-	  this.scope    = [];
-	  this._methods = {};
-
-	  this._insert = this.insert;
-	  this.insert = this.insertEx;
-
-	  this.historySupport = (window.history != null ? window.history.pushState : null) != null
-
-	  this.configure();
-	  this.mount(routes || {});
-	};
-
-	Router.prototype.init = function (r) {
-	  var self = this
-	    , routeTo;
-	  this.handler = function(onChangeEvent) {
-	    var newURL = onChangeEvent && onChangeEvent.newURL || window.location.hash;
-	    var url = self.history === true ? self.getPath() : newURL.replace(/.*#/, '');
-	    self.dispatch('on', url.charAt(0) === '/' ? url : '/' + url);
-	  };
-
-	  listener.init(this.handler, this.history);
-
-	  if (this.history === false) {
-	    if (dlocHashEmpty() && r) {
-	      dloc.hash = r;
-	    } else if (!dlocHashEmpty()) {
-	      self.dispatch('on', '/' + dloc.hash.replace(/^(#\/|#|\/)/, ''));
-	    }
-	  }
-	  else {
-	    if (this.convert_hash_in_init) {
-	      // Use hash as route
-	      routeTo = dlocHashEmpty() && r ? r : !dlocHashEmpty() ? dloc.hash.replace(/^#/, '') : null;
-	      if (routeTo) {
-	        window.history.replaceState({}, document.title, routeTo);
-	      }
-	    }
-	    else {
-	      // Use canonical url
-	      routeTo = this.getPath();
-	    }
-
-	    // Router has been initialized, but due to the chrome bug it will not
-	    // yet actually route HTML5 history state changes. Thus, decide if should route.
-	    if (routeTo || this.run_in_init === true) {
-	      this.handler();
-	    }
-	  }
-
-	  return this;
-	};
-
-	Router.prototype.explode = function () {
-	  var v = this.history === true ? this.getPath() : dloc.hash;
-	  if (v.charAt(1) === '/') { v=v.slice(1) }
-	  return v.slice(1, v.length).split("/");
-	};
-
-	Router.prototype.setRoute = function (i, v, val) {
-	  var url = this.explode();
-
-	  if (typeof i === 'number' && typeof v === 'string') {
-	    url[i] = v;
-	  }
-	  else if (typeof val === 'string') {
-	    url.splice(i, v, s);
-	  }
-	  else {
-	    url = [i];
-	  }
-
-	  listener.setHash(url.join('/'));
-	  return url;
-	};
-
-	//
-	// ### function insertEx(method, path, route, parent)
-	// #### @method {string} Method to insert the specific `route`.
-	// #### @path {Array} Parsed path to insert the `route` at.
-	// #### @route {Array|function} Route handlers to insert.
-	// #### @parent {Object} **Optional** Parent "routes" to insert into.
-	// insert a callback that will only occur once per the matched route.
-	//
-	Router.prototype.insertEx = function(method, path, route, parent) {
-	  if (method === "once") {
-	    method = "on";
-	    route = function(route) {
-	      var once = false;
-	      return function() {
-	        if (once) return;
-	        once = true;
-	        return route.apply(this, arguments);
-	      };
-	    }(route);
-	  }
-	  return this._insert(method, path, route, parent);
-	};
-
-	Router.prototype.getRoute = function (v) {
-	  var ret = v;
-
-	  if (typeof v === "number") {
-	    ret = this.explode()[v];
-	  }
-	  else if (typeof v === "string"){
-	    var h = this.explode();
-	    ret = h.indexOf(v);
-	  }
-	  else {
-	    ret = this.explode();
-	  }
-
-	  return ret;
-	};
-
-	Router.prototype.destroy = function () {
-	  listener.destroy(this.handler);
-	  return this;
-	};
-
-	Router.prototype.getPath = function () {
-	  var path = window.location.pathname;
-	  if (path.substr(0, 1) !== '/') {
-	    path = '/' + path;
-	  }
-	  return path;
-	};
-	function _every(arr, iterator) {
-	  for (var i = 0; i < arr.length; i += 1) {
-	    if (iterator(arr[i], i, arr) === false) {
-	      return;
-	    }
-	  }
-	}
-
-	function _flatten(arr) {
-	  var flat = [];
-	  for (var i = 0, n = arr.length; i < n; i++) {
-	    flat = flat.concat(arr[i]);
-	  }
-	  return flat;
-	}
-
-	function _asyncEverySeries(arr, iterator, callback) {
-	  if (!arr.length) {
-	    return callback();
-	  }
-	  var completed = 0;
-	  (function iterate() {
-	    iterator(arr[completed], function(err) {
-	      if (err || err === false) {
-	        callback(err);
-	        callback = function() {};
-	      } else {
-	        completed += 1;
-	        if (completed === arr.length) {
-	          callback();
-	        } else {
-	          iterate();
-	        }
-	      }
-	    });
-	  })();
-	}
-
-	function paramifyString(str, params, mod) {
-	  mod = str;
-	  for (var param in params) {
-	    if (params.hasOwnProperty(param)) {
-	      mod = params[param](str);
-	      if (mod !== str) {
-	        break;
-	      }
-	    }
-	  }
-	  return mod === str ? "([._a-zA-Z0-9-%()]+)" : mod;
-	}
-
-	function regifyString(str, params) {
-	  var matches, last = 0, out = "";
-	  while (matches = str.substr(last).match(/[^\w\d\- %@&]*\*[^\w\d\- %@&]*/)) {
-	    last = matches.index + matches[0].length;
-	    matches[0] = matches[0].replace(/^\*/, "([_.()!\\ %@&a-zA-Z0-9-]+)");
-	    out += str.substr(0, matches.index) + matches[0];
-	  }
-	  str = out += str.substr(last);
-	  var captures = str.match(/:([^\/]+)/ig), capture, length;
-	  if (captures) {
-	    length = captures.length;
-	    for (var i = 0; i < length; i++) {
-	      capture = captures[i];
-	      if (capture.slice(0, 2) === "::") {
-	        str = capture.slice(1);
-	      } else {
-	        str = str.replace(capture, paramifyString(capture, params));
-	      }
-	    }
-	  }
-	  return str;
-	}
-
-	function terminator(routes, delimiter, start, stop) {
-	  var last = 0, left = 0, right = 0, start = (start || "(").toString(), stop = (stop || ")").toString(), i;
-	  for (i = 0; i < routes.length; i++) {
-	    var chunk = routes[i];
-	    if (chunk.indexOf(start, last) > chunk.indexOf(stop, last) || ~chunk.indexOf(start, last) && !~chunk.indexOf(stop, last) || !~chunk.indexOf(start, last) && ~chunk.indexOf(stop, last)) {
-	      left = chunk.indexOf(start, last);
-	      right = chunk.indexOf(stop, last);
-	      if (~left && !~right || !~left && ~right) {
-	        var tmp = routes.slice(0, (i || 1) + 1).join(delimiter);
-	        routes = [ tmp ].concat(routes.slice((i || 1) + 1));
-	      }
-	      last = (right > left ? right : left) + 1;
-	      i = 0;
-	    } else {
-	      last = 0;
-	    }
-	  }
-	  return routes;
-	}
-
-	var QUERY_SEPARATOR = /\?.*/;
-
-	Router.prototype.configure = function(options) {
-	  options = options || {};
-	  for (var i = 0; i < this.methods.length; i++) {
-	    this._methods[this.methods[i]] = true;
-	  }
-	  this.recurse = options.recurse || this.recurse || false;
-	  this.async = options.async || false;
-	  this.delimiter = options.delimiter || "/";
-	  this.strict = typeof options.strict === "undefined" ? true : options.strict;
-	  this.notfound = options.notfound;
-	  this.resource = options.resource;
-	  this.history = options.html5history && this.historySupport || false;
-	  this.run_in_init = this.history === true && options.run_handler_in_init !== false;
-	  this.convert_hash_in_init = this.history === true && options.convert_hash_in_init !== false;
-	  this.every = {
-	    after: options.after || null,
-	    before: options.before || null,
-	    on: options.on || null
-	  };
-	  return this;
-	};
-
-	Router.prototype.param = function(token, matcher) {
-	  if (token[0] !== ":") {
-	    token = ":" + token;
-	  }
-	  var compiled = new RegExp(token, "g");
-	  this.params[token] = function(str) {
-	    return str.replace(compiled, matcher.source || matcher);
-	  };
-	  return this;
-	};
-
-	Router.prototype.on = Router.prototype.route = function(method, path, route) {
-	  var self = this;
-	  if (!route && typeof path == "function") {
-	    route = path;
-	    path = method;
-	    method = "on";
-	  }
-	  if (Array.isArray(path)) {
-	    return path.forEach(function(p) {
-	      self.on(method, p, route);
-	    });
-	  }
-	  if (path.source) {
-	    path = path.source.replace(/\\\//ig, "/");
-	  }
-	  if (Array.isArray(method)) {
-	    return method.forEach(function(m) {
-	      self.on(m.toLowerCase(), path, route);
-	    });
-	  }
-	  path = path.split(new RegExp(this.delimiter));
-	  path = terminator(path, this.delimiter);
-	  this.insert(method, this.scope.concat(path), route);
-	};
-
-	Router.prototype.path = function(path, routesFn) {
-	  var self = this, length = this.scope.length;
-	  if (path.source) {
-	    path = path.source.replace(/\\\//ig, "/");
-	  }
-	  path = path.split(new RegExp(this.delimiter));
-	  path = terminator(path, this.delimiter);
-	  this.scope = this.scope.concat(path);
-	  routesFn.call(this, this);
-	  this.scope.splice(length, path.length);
-	};
-
-	Router.prototype.dispatch = function(method, path, callback) {
-	  var self = this, fns = this.traverse(method, path.replace(QUERY_SEPARATOR, ""), this.routes, ""), invoked = this._invoked, after;
-	  this._invoked = true;
-	  if (!fns || fns.length === 0) {
-	    this.last = [];
-	    if (typeof this.notfound === "function") {
-	      this.invoke([ this.notfound ], {
-	        method: method,
-	        path: path
-	      }, callback);
-	    }
-	    return false;
-	  }
-	  if (this.recurse === "forward") {
-	    fns = fns.reverse();
-	  }
-	  function updateAndInvoke() {
-	    self.last = fns.after;
-	    self.invoke(self.runlist(fns), self, callback);
-	  }
-	  after = this.every && this.every.after ? [ this.every.after ].concat(this.last) : [ this.last ];
-	  if (after && after.length > 0 && invoked) {
-	    if (this.async) {
-	      this.invoke(after, this, updateAndInvoke);
-	    } else {
-	      this.invoke(after, this);
-	      updateAndInvoke();
-	    }
-	    return true;
-	  }
-	  updateAndInvoke();
-	  return true;
-	};
-
-	Router.prototype.invoke = function(fns, thisArg, callback) {
-	  var self = this;
-	  var apply;
-	  if (this.async) {
-	    apply = function(fn, next) {
-	      if (Array.isArray(fn)) {
-	        return _asyncEverySeries(fn, apply, next);
-	      } else if (typeof fn == "function") {
-	        fn.apply(thisArg, (fns.captures || []).concat(next));
-	      }
-	    };
-	    _asyncEverySeries(fns, apply, function() {
-	      if (callback) {
-	        callback.apply(thisArg, arguments);
-	      }
-	    });
-	  } else {
-	    apply = function(fn) {
-	      if (Array.isArray(fn)) {
-	        return _every(fn, apply);
-	      } else if (typeof fn === "function") {
-	        return fn.apply(thisArg, fns.captures || []);
-	      } else if (typeof fn === "string" && self.resource) {
-	        self.resource[fn].apply(thisArg, fns.captures || []);
-	      }
-	    };
-	    _every(fns, apply);
-	  }
-	};
-
-	Router.prototype.traverse = function(method, path, routes, regexp, filter) {
-	  var fns = [], current, exact, match, next, that;
-	  function filterRoutes(routes) {
-	    if (!filter) {
-	      return routes;
-	    }
-	    function deepCopy(source) {
-	      var result = [];
-	      for (var i = 0; i < source.length; i++) {
-	        result[i] = Array.isArray(source[i]) ? deepCopy(source[i]) : source[i];
-	      }
-	      return result;
-	    }
-	    function applyFilter(fns) {
-	      for (var i = fns.length - 1; i >= 0; i--) {
-	        if (Array.isArray(fns[i])) {
-	          applyFilter(fns[i]);
-	          if (fns[i].length === 0) {
-	            fns.splice(i, 1);
-	          }
-	        } else {
-	          if (!filter(fns[i])) {
-	            fns.splice(i, 1);
-	          }
-	        }
-	      }
-	    }
-	    var newRoutes = deepCopy(routes);
-	    newRoutes.matched = routes.matched;
-	    newRoutes.captures = routes.captures;
-	    newRoutes.after = routes.after.filter(filter);
-	    applyFilter(newRoutes);
-	    return newRoutes;
-	  }
-	  if (path === this.delimiter && routes[method]) {
-	    next = [ [ routes.before, routes[method] ].filter(Boolean) ];
-	    next.after = [ routes.after ].filter(Boolean);
-	    next.matched = true;
-	    next.captures = [];
-	    return filterRoutes(next);
-	  }
-	  for (var r in routes) {
-	    if (routes.hasOwnProperty(r) && (!this._methods[r] || this._methods[r] && typeof routes[r] === "object" && !Array.isArray(routes[r]))) {
-	      current = exact = regexp + this.delimiter + r;
-	      if (!this.strict) {
-	        exact += "[" + this.delimiter + "]?";
-	      }
-	      match = path.match(new RegExp("^" + exact));
-	      if (!match) {
-	        continue;
-	      }
-	      if (match[0] && match[0] == path && routes[r][method]) {
-	        next = [ [ routes[r].before, routes[r][method] ].filter(Boolean) ];
-	        next.after = [ routes[r].after ].filter(Boolean);
-	        next.matched = true;
-	        next.captures = match.slice(1);
-	        if (this.recurse && routes === this.routes) {
-	          next.push([ routes.before, routes.on ].filter(Boolean));
-	          next.after = next.after.concat([ routes.after ].filter(Boolean));
-	        }
-	        return filterRoutes(next);
-	      }
-	      next = this.traverse(method, path, routes[r], current);
-	      if (next.matched) {
-	        if (next.length > 0) {
-	          fns = fns.concat(next);
-	        }
-	        if (this.recurse) {
-	          fns.push([ routes[r].before, routes[r].on ].filter(Boolean));
-	          next.after = next.after.concat([ routes[r].after ].filter(Boolean));
-	          if (routes === this.routes) {
-	            fns.push([ routes["before"], routes["on"] ].filter(Boolean));
-	            next.after = next.after.concat([ routes["after"] ].filter(Boolean));
-	          }
-	        }
-	        fns.matched = true;
-	        fns.captures = next.captures;
-	        fns.after = next.after;
-	        return filterRoutes(fns);
-	      }
-	    }
-	  }
-	  return false;
-	};
-
-	Router.prototype.insert = function(method, path, route, parent) {
-	  var methodType, parentType, isArray, nested, part;
-	  path = path.filter(function(p) {
-	    return p && p.length > 0;
-	  });
-	  parent = parent || this.routes;
-	  part = path.shift();
-	  if (/\:|\*/.test(part) && !/\\d|\\w/.test(part)) {
-	    part = regifyString(part, this.params);
-	  }
-	  if (path.length > 0) {
-	    parent[part] = parent[part] || {};
-	    return this.insert(method, path, route, parent[part]);
-	  }
-	  if (!part && !path.length && parent === this.routes) {
-	    methodType = typeof parent[method];
-	    switch (methodType) {
-	     case "function":
-	      parent[method] = [ parent[method], route ];
-	      return;
-	     case "object":
-	      parent[method].push(route);
-	      return;
-	     case "undefined":
-	      parent[method] = route;
-	      return;
-	    }
-	    return;
-	  }
-	  parentType = typeof parent[part];
-	  isArray = Array.isArray(parent[part]);
-	  if (parent[part] && !isArray && parentType == "object") {
-	    methodType = typeof parent[part][method];
-	    switch (methodType) {
-	     case "function":
-	      parent[part][method] = [ parent[part][method], route ];
-	      return;
-	     case "object":
-	      parent[part][method].push(route);
-	      return;
-	     case "undefined":
-	      parent[part][method] = route;
-	      return;
-	    }
-	  } else if (parentType == "undefined") {
-	    nested = {};
-	    nested[method] = route;
-	    parent[part] = nested;
-	    return;
-	  }
-	  throw new Error("Invalid route context: " + parentType);
-	};
-
-
-
-	Router.prototype.extend = function(methods) {
-	  var self = this, len = methods.length, i;
-	  function extend(method) {
-	    self._methods[method] = true;
-	    self[method] = function() {
-	      var extra = arguments.length === 1 ? [ method, "" ] : [ method ];
-	      self.on.apply(self, extra.concat(Array.prototype.slice.call(arguments)));
-	    };
-	  }
-	  for (i = 0; i < len; i++) {
-	    extend(methods[i]);
-	  }
-	};
-
-	Router.prototype.runlist = function(fns) {
-	  var runlist = this.every && this.every.before ? [ this.every.before ].concat(_flatten(fns)) : _flatten(fns);
-	  if (this.every && this.every.on) {
-	    runlist.push(this.every.on);
-	  }
-	  runlist.captures = fns.captures;
-	  runlist.source = fns.source;
-	  return runlist;
-	};
-
-	Router.prototype.mount = function(routes, path) {
-	  if (!routes || typeof routes !== "object" || Array.isArray(routes)) {
-	    return;
-	  }
-	  var self = this;
-	  path = path || [];
-	  if (!Array.isArray(path)) {
-	    path = path.split(self.delimiter);
-	  }
-	  function insertOrMount(route, local) {
-	    var rename = route, parts = route.split(self.delimiter), routeType = typeof routes[route], isRoute = parts[0] === "" || !self._methods[parts[0]], event = isRoute ? "on" : rename;
-	    if (isRoute) {
-	      rename = rename.slice((rename.match(new RegExp("^" + self.delimiter)) || [ "" ])[0].length);
-	      parts.shift();
-	    }
-	    if (isRoute && routeType === "object" && !Array.isArray(routes[route])) {
-	      local = local.concat(parts);
-	      self.mount(routes[route], local);
-	      return;
-	    }
-	    if (isRoute) {
-	      local = local.concat(rename.split(self.delimiter));
-	      local = terminator(local, self.delimiter);
-	    }
-	    self.insert(event, local, routes[route]);
-	  }
-	  for (var route in routes) {
-	    if (routes.hasOwnProperty(route)) {
-	      insertOrMount(route, path.slice(0));
-	    }
-	  }
-	};
-
-
-
-	}(true ? exports : window));
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var $ = __webpack_require__(12);
-	var ko = __webpack_require__(16);
-	var mapping = __webpack_require__(18);
-	var config = __webpack_require__(1);
-	var sessionService = __webpack_require__(3);
+	var $ = __webpack_require__(6);
+	var ko = __webpack_require__(7);
+	var mapping = __webpack_require__(10);
+	var config = __webpack_require__(11);
+	var sessionService = __webpack_require__(12);
+	var optionsService = __webpack_require__(22);
 
 	// This is still the signin view model. There'll be another view model in this class.
 	var AuthViewModel = function() {
 	    var $authModal = $("#authModal");
 
-	    var env = sessionStorage.getItem('environment');
-	    var study = sessionStorage.getItem('study');
+	    var env = optionsService.get('environment', 'production');
+	    var study = optionsService.get('study', 'api');
 
 	    this.error = ko.observable("");
 	    this.errorClass = ko.observable("");
 	    this.loading = ko.observable(false);
+	    this.studyOptions = config.studies;
 
 	    this.data = mapping.fromJS({"username":"", "password": "", "study":study});
 	    this.environment = ko.observable(env);
@@ -1091,8 +515,8 @@
 	        this.loading(true);
 
 	        var env = this.environment();
-	        sessionStorage.setItem('environment', env);
-	        sessionStorage.setItem('study', this.data.study());
+	        optionsService.set('environment', env);
+	        optionsService.set('study', this.data.study());
 
 	        var request = $.jsonPOST(config.signIn(env), mapping.toJS(this.data));
 	        request.done(this.onSignIn.bind(this, env));
@@ -1107,7 +531,7 @@
 
 
 /***/ },
-/* 12 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10323,265 +9747,7 @@
 
 
 /***/ },
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(14);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(15)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./main.css", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./main.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(19)();
-	exports.push([module.id, "body {\n    background-color: white;\n}\n#page-container {\n    max-width: 800px;\n    margin: 20px auto;\n}\n\n#authModal {\n    padding: 2rem 2rem 1.5rem 2rem;\n}\n.field .ui.button {\n    margin-top: .5rem ! important;\n}\n/*\n.ui.active.dimmer {\n    background-color: steelblue;\n}\n*/\n.HolyGrail {\n    display: flex;\n    min-height: 100vh;\n    flex-direction: column;\n}\n.HolyGrail-body {\n    display: flex;\n    flex: 1;\n    flex-direction: row;\n}\n.HolyGrail-content {\n    padding: .5rem;\n    flex: 1;\n}\n.HolyGrail-nav {\n    padding: 1.5rem .5rem;\n    order: -1;\n}\n.HolyGrail-nav, .HolyGrail-ads {\n    flex: 0 0 16em;\n}\nheader {\n    display: flex;\n    padding: 1rem 1rem 0 1.5rem;\n    align-items: baseline;\n    justify-content: space-between;\n    background-color: gainsboro;\n}\nfooter p {\n    border-top: 1px solid #e5e5e5;\n    padding: .5rem;\n    text-align: center;\n}\n", ""]);
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-		MIT License http://www.opensource.org/licenses/mit-license.php
-		Author Tobias Koppers @sokra
-	*/
-	var stylesInDom = {},
-		memoize = function(fn) {
-			var memo;
-			return function () {
-				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
-				return memo;
-			};
-		},
-		isOldIE = memoize(function() {
-			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
-		}),
-		getHeadElement = memoize(function () {
-			return document.head || document.getElementsByTagName("head")[0];
-		}),
-		singletonElement = null,
-		singletonCounter = 0;
-
-	module.exports = function(list, options) {
-		if(false) {
-			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
-		}
-
-		options = options || {};
-		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-		// tags it will allow on a page
-		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
-
-		var styles = listToStyles(list);
-		addStylesToDom(styles, options);
-
-		return function update(newList) {
-			var mayRemove = [];
-			for(var i = 0; i < styles.length; i++) {
-				var item = styles[i];
-				var domStyle = stylesInDom[item.id];
-				domStyle.refs--;
-				mayRemove.push(domStyle);
-			}
-			if(newList) {
-				var newStyles = listToStyles(newList);
-				addStylesToDom(newStyles, options);
-			}
-			for(var i = 0; i < mayRemove.length; i++) {
-				var domStyle = mayRemove[i];
-				if(domStyle.refs === 0) {
-					for(var j = 0; j < domStyle.parts.length; j++)
-						domStyle.parts[j]();
-					delete stylesInDom[domStyle.id];
-				}
-			}
-		};
-	}
-
-	function addStylesToDom(styles, options) {
-		for(var i = 0; i < styles.length; i++) {
-			var item = styles[i];
-			var domStyle = stylesInDom[item.id];
-			if(domStyle) {
-				domStyle.refs++;
-				for(var j = 0; j < domStyle.parts.length; j++) {
-					domStyle.parts[j](item.parts[j]);
-				}
-				for(; j < item.parts.length; j++) {
-					domStyle.parts.push(addStyle(item.parts[j], options));
-				}
-			} else {
-				var parts = [];
-				for(var j = 0; j < item.parts.length; j++) {
-					parts.push(addStyle(item.parts[j], options));
-				}
-				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
-			}
-		}
-	}
-
-	function listToStyles(list) {
-		var styles = [];
-		var newStyles = {};
-		for(var i = 0; i < list.length; i++) {
-			var item = list[i];
-			var id = item[0];
-			var css = item[1];
-			var media = item[2];
-			var sourceMap = item[3];
-			var part = {css: css, media: media, sourceMap: sourceMap};
-			if(!newStyles[id])
-				styles.push(newStyles[id] = {id: id, parts: [part]});
-			else
-				newStyles[id].parts.push(part);
-		}
-		return styles;
-	}
-
-	function createStyleElement() {
-		var styleElement = document.createElement("style");
-		var head = getHeadElement();
-		styleElement.type = "text/css";
-		head.appendChild(styleElement);
-		return styleElement;
-	}
-
-	function createLinkElement() {
-		var linkElement = document.createElement("link");
-		var head = getHeadElement();
-		linkElement.rel = "stylesheet";
-		head.appendChild(linkElement);
-		return linkElement;
-	}
-
-	function addStyle(obj, options) {
-		var styleElement, update, remove;
-
-		if (options.singleton) {
-			var styleIndex = singletonCounter++;
-			styleElement = singletonElement || (singletonElement = createStyleElement());
-			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
-			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
-		} else if(obj.sourceMap &&
-			typeof URL === "function" &&
-			typeof URL.createObjectURL === "function" &&
-			typeof URL.revokeObjectURL === "function" &&
-			typeof Blob === "function" &&
-			typeof btoa === "function") {
-			styleElement = createLinkElement();
-			update = updateLink.bind(null, styleElement);
-			remove = function() {
-				styleElement.parentNode.removeChild(styleElement);
-				if(styleElement.href)
-					URL.revokeObjectURL(styleElement.href);
-			};
-		} else {
-			styleElement = createStyleElement();
-			update = applyToTag.bind(null, styleElement);
-			remove = function() {
-				styleElement.parentNode.removeChild(styleElement);
-			};
-		}
-
-		update(obj);
-
-		return function updateStyle(newObj) {
-			if(newObj) {
-				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
-					return;
-				update(obj = newObj);
-			} else {
-				remove();
-			}
-		};
-	}
-
-	var replaceText = (function () {
-		var textStore = [];
-
-		return function (index, replacement) {
-			textStore[index] = replacement;
-			return textStore.filter(Boolean).join('\n');
-		};
-	})();
-
-	function applyToSingletonTag(styleElement, index, remove, obj) {
-		var css = remove ? "" : obj.css;
-
-		if (styleElement.styleSheet) {
-			styleElement.styleSheet.cssText = replaceText(index, css);
-		} else {
-			var cssNode = document.createTextNode(css);
-			var childNodes = styleElement.childNodes;
-			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
-			if (childNodes.length) {
-				styleElement.insertBefore(cssNode, childNodes[index]);
-			} else {
-				styleElement.appendChild(cssNode);
-			}
-		}
-	}
-
-	function applyToTag(styleElement, obj) {
-		var css = obj.css;
-		var media = obj.media;
-		var sourceMap = obj.sourceMap;
-
-		if(media) {
-			styleElement.setAttribute("media", media)
-		}
-
-		if(styleElement.styleSheet) {
-			styleElement.styleSheet.cssText = css;
-		} else {
-			while(styleElement.firstChild) {
-				styleElement.removeChild(styleElement.firstChild);
-			}
-			styleElement.appendChild(document.createTextNode(css));
-		}
-	}
-
-	function updateLink(linkElement, obj) {
-		var css = obj.css;
-		var media = obj.media;
-		var sourceMap = obj.sourceMap;
-
-		if(sourceMap) {
-			// http://stackoverflow.com/a/26603875
-			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
-		}
-
-		var blob = new Blob([css], { type: "text/css" });
-
-		var oldSrc = linkElement.href;
-
-		linkElement.href = URL.createObjectURL(blob);
-
-		if(oldSrc)
-			URL.revokeObjectURL(oldSrc);
-	}
-
-
-/***/ },
-/* 16 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module) {/*!
@@ -10602,7 +9768,7 @@
 	        JSON = window["JSON"];
 	(function(factory) {
 	    // Support three module loading scenarios
-	    if ("function" === 'function' && __webpack_require__(20)['amd']) {
+	    if ("function" === 'function' && __webpack_require__(9)['amd']) {
 	        // [1] AMD anonymous module
 	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports, __webpack_require__], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else if (true) {
@@ -16060,317 +15226,33 @@
 	}());
 	})();
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)(module)))
 
 /***/ },
-/* 17 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// Copyright Joyent, Inc. and other Node contributors.
-	//
-	// Permission is hereby granted, free of charge, to any person obtaining a
-	// copy of this software and associated documentation files (the
-	// "Software"), to deal in the Software without restriction, including
-	// without limitation the rights to use, copy, modify, merge, publish,
-	// distribute, sublicense, and/or sell copies of the Software, and to permit
-	// persons to whom the Software is furnished to do so, subject to the
-	// following conditions:
-	//
-	// The above copyright notice and this permission notice shall be included
-	// in all copies or substantial portions of the Software.
-	//
-	// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-	// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-	// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-	// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-	// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-	// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-	function EventEmitter() {
-	  this._events = this._events || {};
-	  this._maxListeners = this._maxListeners || undefined;
-	}
-	module.exports = EventEmitter;
-
-	// Backwards-compat with node 0.10.x
-	EventEmitter.EventEmitter = EventEmitter;
-
-	EventEmitter.prototype._events = undefined;
-	EventEmitter.prototype._maxListeners = undefined;
-
-	// By default EventEmitters will print a warning if more than 10 listeners are
-	// added to it. This is a useful default which helps finding memory leaks.
-	EventEmitter.defaultMaxListeners = 10;
-
-	// Obviously not all Emitters should be limited to 10. This function allows
-	// that to be increased. Set to zero for unlimited.
-	EventEmitter.prototype.setMaxListeners = function(n) {
-	  if (!isNumber(n) || n < 0 || isNaN(n))
-	    throw TypeError('n must be a positive number');
-	  this._maxListeners = n;
-	  return this;
-	};
-
-	EventEmitter.prototype.emit = function(type) {
-	  var er, handler, len, args, i, listeners;
-
-	  if (!this._events)
-	    this._events = {};
-
-	  // If there is no 'error' event listener then throw.
-	  if (type === 'error') {
-	    if (!this._events.error ||
-	        (isObject(this._events.error) && !this._events.error.length)) {
-	      er = arguments[1];
-	      if (er instanceof Error) {
-	        throw er; // Unhandled 'error' event
-	      }
-	      throw TypeError('Uncaught, unspecified "error" event.');
-	    }
-	  }
-
-	  handler = this._events[type];
-
-	  if (isUndefined(handler))
-	    return false;
-
-	  if (isFunction(handler)) {
-	    switch (arguments.length) {
-	      // fast cases
-	      case 1:
-	        handler.call(this);
-	        break;
-	      case 2:
-	        handler.call(this, arguments[1]);
-	        break;
-	      case 3:
-	        handler.call(this, arguments[1], arguments[2]);
-	        break;
-	      // slower
-	      default:
-	        len = arguments.length;
-	        args = new Array(len - 1);
-	        for (i = 1; i < len; i++)
-	          args[i - 1] = arguments[i];
-	        handler.apply(this, args);
-	    }
-	  } else if (isObject(handler)) {
-	    len = arguments.length;
-	    args = new Array(len - 1);
-	    for (i = 1; i < len; i++)
-	      args[i - 1] = arguments[i];
-
-	    listeners = handler.slice();
-	    len = listeners.length;
-	    for (i = 0; i < len; i++)
-	      listeners[i].apply(this, args);
-	  }
-
-	  return true;
-	};
-
-	EventEmitter.prototype.addListener = function(type, listener) {
-	  var m;
-
-	  if (!isFunction(listener))
-	    throw TypeError('listener must be a function');
-
-	  if (!this._events)
-	    this._events = {};
-
-	  // To avoid recursion in the case that type === "newListener"! Before
-	  // adding it to the listeners, first emit "newListener".
-	  if (this._events.newListener)
-	    this.emit('newListener', type,
-	              isFunction(listener.listener) ?
-	              listener.listener : listener);
-
-	  if (!this._events[type])
-	    // Optimize the case of one listener. Don't need the extra array object.
-	    this._events[type] = listener;
-	  else if (isObject(this._events[type]))
-	    // If we've already got an array, just append.
-	    this._events[type].push(listener);
-	  else
-	    // Adding the second element, need to change to array.
-	    this._events[type] = [this._events[type], listener];
-
-	  // Check for listener leak
-	  if (isObject(this._events[type]) && !this._events[type].warned) {
-	    var m;
-	    if (!isUndefined(this._maxListeners)) {
-	      m = this._maxListeners;
-	    } else {
-	      m = EventEmitter.defaultMaxListeners;
-	    }
-
-	    if (m && m > 0 && this._events[type].length > m) {
-	      this._events[type].warned = true;
-	      console.error('(node) warning: possible EventEmitter memory ' +
-	                    'leak detected. %d listeners added. ' +
-	                    'Use emitter.setMaxListeners() to increase limit.',
-	                    this._events[type].length);
-	      if (typeof console.trace === 'function') {
-	        // not supported in IE 10
-	        console.trace();
-	      }
-	    }
-	  }
-
-	  return this;
-	};
-
-	EventEmitter.prototype.on = EventEmitter.prototype.addListener;
-
-	EventEmitter.prototype.once = function(type, listener) {
-	  if (!isFunction(listener))
-	    throw TypeError('listener must be a function');
-
-	  var fired = false;
-
-	  function g() {
-	    this.removeListener(type, g);
-
-	    if (!fired) {
-	      fired = true;
-	      listener.apply(this, arguments);
-	    }
-	  }
-
-	  g.listener = listener;
-	  this.on(type, g);
-
-	  return this;
-	};
-
-	// emits a 'removeListener' event iff the listener was removed
-	EventEmitter.prototype.removeListener = function(type, listener) {
-	  var list, position, length, i;
-
-	  if (!isFunction(listener))
-	    throw TypeError('listener must be a function');
-
-	  if (!this._events || !this._events[type])
-	    return this;
-
-	  list = this._events[type];
-	  length = list.length;
-	  position = -1;
-
-	  if (list === listener ||
-	      (isFunction(list.listener) && list.listener === listener)) {
-	    delete this._events[type];
-	    if (this._events.removeListener)
-	      this.emit('removeListener', type, listener);
-
-	  } else if (isObject(list)) {
-	    for (i = length; i-- > 0;) {
-	      if (list[i] === listener ||
-	          (list[i].listener && list[i].listener === listener)) {
-	        position = i;
-	        break;
-	      }
-	    }
-
-	    if (position < 0)
-	      return this;
-
-	    if (list.length === 1) {
-	      list.length = 0;
-	      delete this._events[type];
-	    } else {
-	      list.splice(position, 1);
-	    }
-
-	    if (this._events.removeListener)
-	      this.emit('removeListener', type, listener);
-	  }
-
-	  return this;
-	};
-
-	EventEmitter.prototype.removeAllListeners = function(type) {
-	  var key, listeners;
-
-	  if (!this._events)
-	    return this;
-
-	  // not listening for removeListener, no need to emit
-	  if (!this._events.removeListener) {
-	    if (arguments.length === 0)
-	      this._events = {};
-	    else if (this._events[type])
-	      delete this._events[type];
-	    return this;
-	  }
-
-	  // emit removeListener for all listeners on all events
-	  if (arguments.length === 0) {
-	    for (key in this._events) {
-	      if (key === 'removeListener') continue;
-	      this.removeAllListeners(key);
-	    }
-	    this.removeAllListeners('removeListener');
-	    this._events = {};
-	    return this;
-	  }
-
-	  listeners = this._events[type];
-
-	  if (isFunction(listeners)) {
-	    this.removeListener(type, listeners);
-	  } else {
-	    // LIFO order
-	    while (listeners.length)
-	      this.removeListener(type, listeners[listeners.length - 1]);
-	  }
-	  delete this._events[type];
-
-	  return this;
-	};
-
-	EventEmitter.prototype.listeners = function(type) {
-	  var ret;
-	  if (!this._events || !this._events[type])
-	    ret = [];
-	  else if (isFunction(this._events[type]))
-	    ret = [this._events[type]];
-	  else
-	    ret = this._events[type].slice();
-	  return ret;
-	};
-
-	EventEmitter.listenerCount = function(emitter, type) {
-	  var ret;
-	  if (!emitter._events || !emitter._events[type])
-	    ret = 0;
-	  else if (isFunction(emitter._events[type]))
-	    ret = 1;
-	  else
-	    ret = emitter._events[type].length;
-	  return ret;
-	};
-
-	function isFunction(arg) {
-	  return typeof arg === 'function';
-	}
-
-	function isNumber(arg) {
-	  return typeof arg === 'number';
-	}
-
-	function isObject(arg) {
-	  return typeof arg === 'object' && arg !== null;
-	}
-
-	function isUndefined(arg) {
-	  return arg === void 0;
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
 	}
 
 
 /***/ },
-/* 18 */
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function() { throw new Error("define cannot be used indirect"); };
+
+
+/***/ },
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -16386,7 +15268,7 @@
 
 	    if (true) {
 	        // CommonJS or Node: hard-coded dependency on "knockout"
-	        factory(__webpack_require__(16), exports);
+	        factory(__webpack_require__(7), exports);
 	    }
 	    else if (typeof define === "function" && define["amd"]) {
 	        // AMD anonymous module with hard-coded dependency on "knockout"
@@ -17224,83 +16106,1180 @@
 
 
 /***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var sessionService = __webpack_require__(12);
+
+	module.exports = config = {
+	    studies: [
+	        {value: "test", label: "Test"},
+	        {value: "api", label: "API"},
+	        {value: "asthma", label: "Asthma Health"},
+	        {value: "diabetes", label: "GlucoSuccess"},
+	        {value: "parkinson", label: "mPower"},
+	        {value: "cardiovascular", label: "My Heart Counts"},
+	        {value: "breastcancer", label: "Share The Journey"}
+	    ],
+	    host: {
+	        'local': 'http://localhost:9000',
+	        'develop': 'https://webservices-develop.sagebridge.org',
+	        'staging': 'https://webservices-staging.sagebridge.org',
+	        'production': 'https://webservices.sagebridge.org'
+	    },
+	    signIn: function(env) {
+	        return config.host[env] + '/api/v1/auth/signIn';
+	    }
+
+	};
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var EventEmitter = __webpack_require__(13);
+	var $ = __webpack_require__(6);
+
+	const SESSION_KEY = 'session';
+	const SESSION_EVENT_KEY = 'session';
+	var session = null;
+	var events = new EventEmitter();
+
+	$(function() {
+	    session = localStorage.getItem(SESSION_KEY);
+	    if (session) {
+	        events.emit(SESSION_EVENT_KEY, JSON.parse(session));
+	    } else {
+	        events.emit(SESSION_EVENT_KEY, null);
+	    }
+	});
+
+	module.exports = {
+	    isAuthenticated: function() {
+	        return (session !== null);
+	    },
+	    startSession: function(sess) {
+	        localStorage.setItem(SESSION_KEY, JSON.stringify(sess));
+	        session = sess;
+	        events.emit(SESSION_EVENT_KEY, sess);
+	    },
+	    endSession: function() {
+	        localStorage.removeItem(SESSION_KEY);
+	        session = null;
+	        events.emit(SESSION_EVENT_KEY, null);
+	    },
+	    addListener: function(listener) {
+	        events.addListener(SESSION_EVENT_KEY, listener);
+	    },
+	    removeListener: function(listener) {
+	        events.removeListener(SESSION_EVENT_KEY, listener);
+	    }
+	};
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// Copyright Joyent, Inc. and other Node contributors.
+	//
+	// Permission is hereby granted, free of charge, to any person obtaining a
+	// copy of this software and associated documentation files (the
+	// "Software"), to deal in the Software without restriction, including
+	// without limitation the rights to use, copy, modify, merge, publish,
+	// distribute, sublicense, and/or sell copies of the Software, and to permit
+	// persons to whom the Software is furnished to do so, subject to the
+	// following conditions:
+	//
+	// The above copyright notice and this permission notice shall be included
+	// in all copies or substantial portions of the Software.
+	//
+	// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+	// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+	// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+	// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+	// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+	// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+	function EventEmitter() {
+	  this._events = this._events || {};
+	  this._maxListeners = this._maxListeners || undefined;
+	}
+	module.exports = EventEmitter;
+
+	// Backwards-compat with node 0.10.x
+	EventEmitter.EventEmitter = EventEmitter;
+
+	EventEmitter.prototype._events = undefined;
+	EventEmitter.prototype._maxListeners = undefined;
+
+	// By default EventEmitters will print a warning if more than 10 listeners are
+	// added to it. This is a useful default which helps finding memory leaks.
+	EventEmitter.defaultMaxListeners = 10;
+
+	// Obviously not all Emitters should be limited to 10. This function allows
+	// that to be increased. Set to zero for unlimited.
+	EventEmitter.prototype.setMaxListeners = function(n) {
+	  if (!isNumber(n) || n < 0 || isNaN(n))
+	    throw TypeError('n must be a positive number');
+	  this._maxListeners = n;
+	  return this;
+	};
+
+	EventEmitter.prototype.emit = function(type) {
+	  var er, handler, len, args, i, listeners;
+
+	  if (!this._events)
+	    this._events = {};
+
+	  // If there is no 'error' event listener then throw.
+	  if (type === 'error') {
+	    if (!this._events.error ||
+	        (isObject(this._events.error) && !this._events.error.length)) {
+	      er = arguments[1];
+	      if (er instanceof Error) {
+	        throw er; // Unhandled 'error' event
+	      }
+	      throw TypeError('Uncaught, unspecified "error" event.');
+	    }
+	  }
+
+	  handler = this._events[type];
+
+	  if (isUndefined(handler))
+	    return false;
+
+	  if (isFunction(handler)) {
+	    switch (arguments.length) {
+	      // fast cases
+	      case 1:
+	        handler.call(this);
+	        break;
+	      case 2:
+	        handler.call(this, arguments[1]);
+	        break;
+	      case 3:
+	        handler.call(this, arguments[1], arguments[2]);
+	        break;
+	      // slower
+	      default:
+	        len = arguments.length;
+	        args = new Array(len - 1);
+	        for (i = 1; i < len; i++)
+	          args[i - 1] = arguments[i];
+	        handler.apply(this, args);
+	    }
+	  } else if (isObject(handler)) {
+	    len = arguments.length;
+	    args = new Array(len - 1);
+	    for (i = 1; i < len; i++)
+	      args[i - 1] = arguments[i];
+
+	    listeners = handler.slice();
+	    len = listeners.length;
+	    for (i = 0; i < len; i++)
+	      listeners[i].apply(this, args);
+	  }
+
+	  return true;
+	};
+
+	EventEmitter.prototype.addListener = function(type, listener) {
+	  var m;
+
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  if (!this._events)
+	    this._events = {};
+
+	  // To avoid recursion in the case that type === "newListener"! Before
+	  // adding it to the listeners, first emit "newListener".
+	  if (this._events.newListener)
+	    this.emit('newListener', type,
+	              isFunction(listener.listener) ?
+	              listener.listener : listener);
+
+	  if (!this._events[type])
+	    // Optimize the case of one listener. Don't need the extra array object.
+	    this._events[type] = listener;
+	  else if (isObject(this._events[type]))
+	    // If we've already got an array, just append.
+	    this._events[type].push(listener);
+	  else
+	    // Adding the second element, need to change to array.
+	    this._events[type] = [this._events[type], listener];
+
+	  // Check for listener leak
+	  if (isObject(this._events[type]) && !this._events[type].warned) {
+	    var m;
+	    if (!isUndefined(this._maxListeners)) {
+	      m = this._maxListeners;
+	    } else {
+	      m = EventEmitter.defaultMaxListeners;
+	    }
+
+	    if (m && m > 0 && this._events[type].length > m) {
+	      this._events[type].warned = true;
+	      console.error('(node) warning: possible EventEmitter memory ' +
+	                    'leak detected. %d listeners added. ' +
+	                    'Use emitter.setMaxListeners() to increase limit.',
+	                    this._events[type].length);
+	      if (typeof console.trace === 'function') {
+	        // not supported in IE 10
+	        console.trace();
+	      }
+	    }
+	  }
+
+	  return this;
+	};
+
+	EventEmitter.prototype.on = EventEmitter.prototype.addListener;
+
+	EventEmitter.prototype.once = function(type, listener) {
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  var fired = false;
+
+	  function g() {
+	    this.removeListener(type, g);
+
+	    if (!fired) {
+	      fired = true;
+	      listener.apply(this, arguments);
+	    }
+	  }
+
+	  g.listener = listener;
+	  this.on(type, g);
+
+	  return this;
+	};
+
+	// emits a 'removeListener' event iff the listener was removed
+	EventEmitter.prototype.removeListener = function(type, listener) {
+	  var list, position, length, i;
+
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  if (!this._events || !this._events[type])
+	    return this;
+
+	  list = this._events[type];
+	  length = list.length;
+	  position = -1;
+
+	  if (list === listener ||
+	      (isFunction(list.listener) && list.listener === listener)) {
+	    delete this._events[type];
+	    if (this._events.removeListener)
+	      this.emit('removeListener', type, listener);
+
+	  } else if (isObject(list)) {
+	    for (i = length; i-- > 0;) {
+	      if (list[i] === listener ||
+	          (list[i].listener && list[i].listener === listener)) {
+	        position = i;
+	        break;
+	      }
+	    }
+
+	    if (position < 0)
+	      return this;
+
+	    if (list.length === 1) {
+	      list.length = 0;
+	      delete this._events[type];
+	    } else {
+	      list.splice(position, 1);
+	    }
+
+	    if (this._events.removeListener)
+	      this.emit('removeListener', type, listener);
+	  }
+
+	  return this;
+	};
+
+	EventEmitter.prototype.removeAllListeners = function(type) {
+	  var key, listeners;
+
+	  if (!this._events)
+	    return this;
+
+	  // not listening for removeListener, no need to emit
+	  if (!this._events.removeListener) {
+	    if (arguments.length === 0)
+	      this._events = {};
+	    else if (this._events[type])
+	      delete this._events[type];
+	    return this;
+	  }
+
+	  // emit removeListener for all listeners on all events
+	  if (arguments.length === 0) {
+	    for (key in this._events) {
+	      if (key === 'removeListener') continue;
+	      this.removeAllListeners(key);
+	    }
+	    this.removeAllListeners('removeListener');
+	    this._events = {};
+	    return this;
+	  }
+
+	  listeners = this._events[type];
+
+	  if (isFunction(listeners)) {
+	    this.removeListener(type, listeners);
+	  } else {
+	    // LIFO order
+	    while (listeners.length)
+	      this.removeListener(type, listeners[listeners.length - 1]);
+	  }
+	  delete this._events[type];
+
+	  return this;
+	};
+
+	EventEmitter.prototype.listeners = function(type) {
+	  var ret;
+	  if (!this._events || !this._events[type])
+	    ret = [];
+	  else if (isFunction(this._events[type]))
+	    ret = [this._events[type]];
+	  else
+	    ret = this._events[type].slice();
+	  return ret;
+	};
+
+	EventEmitter.listenerCount = function(emitter, type) {
+	  var ret;
+	  if (!emitter._events || !emitter._events[type])
+	    ret = 0;
+	  else if (isFunction(emitter._events[type]))
+	    ret = 1;
+	  else
+	    ret = emitter._events[type].length;
+	  return ret;
+	};
+
+	function isFunction(arg) {
+	  return typeof arg === 'function';
+	}
+
+	function isNumber(arg) {
+	  return typeof arg === 'number';
+	}
+
+	function isObject(arg) {
+	  return typeof arg === 'object' && arg !== null;
+	}
+
+	function isUndefined(arg) {
+	  return arg === void 0;
+	}
+
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+
+	//
+	// Generated on Tue Dec 16 2014 12:13:47 GMT+0100 (CET) by Charlie Robbins, Paolo Fragomeni & the Contributors (Using Codesurgeon).
+	// Version 1.2.6
+	//
+
+	(function (exports) {
+
+	/*
+	 * browser.js: Browser specific functionality for director.
+	 *
+	 * (C) 2011, Charlie Robbins, Paolo Fragomeni, & the Contributors.
+	 * MIT LICENSE
+	 *
+	 */
+
+	var dloc = document.location;
+
+	function dlocHashEmpty() {
+	  // Non-IE browsers return '' when the address bar shows '#'; Director's logic
+	  // assumes both mean empty.
+	  return dloc.hash === '' || dloc.hash === '#';
+	}
+
+	var listener = {
+	  mode: 'modern',
+	  hash: dloc.hash,
+	  history: false,
+
+	  check: function () {
+	    var h = dloc.hash;
+	    if (h != this.hash) {
+	      this.hash = h;
+	      this.onHashChanged();
+	    }
+	  },
+
+	  fire: function () {
+	    if (this.mode === 'modern') {
+	      this.history === true ? window.onpopstate() : window.onhashchange();
+	    }
+	    else {
+	      this.onHashChanged();
+	    }
+	  },
+
+	  init: function (fn, history) {
+	    var self = this;
+	    this.history = history;
+
+	    if (!Router.listeners) {
+	      Router.listeners = [];
+	    }
+
+	    function onchange(onChangeEvent) {
+	      for (var i = 0, l = Router.listeners.length; i < l; i++) {
+	        Router.listeners[i](onChangeEvent);
+	      }
+	    }
+
+	    //note IE8 is being counted as 'modern' because it has the hashchange event
+	    if ('onhashchange' in window && (document.documentMode === undefined
+	      || document.documentMode > 7)) {
+	      // At least for now HTML5 history is available for 'modern' browsers only
+	      if (this.history === true) {
+	        // There is an old bug in Chrome that causes onpopstate to fire even
+	        // upon initial page load. Since the handler is run manually in init(),
+	        // this would cause Chrome to run it twise. Currently the only
+	        // workaround seems to be to set the handler after the initial page load
+	        // http://code.google.com/p/chromium/issues/detail?id=63040
+	        setTimeout(function() {
+	          window.onpopstate = onchange;
+	        }, 500);
+	      }
+	      else {
+	        window.onhashchange = onchange;
+	      }
+	      this.mode = 'modern';
+	    }
+	    else {
+	      //
+	      // IE support, based on a concept by Erik Arvidson ...
+	      //
+	      var frame = document.createElement('iframe');
+	      frame.id = 'state-frame';
+	      frame.style.display = 'none';
+	      document.body.appendChild(frame);
+	      this.writeFrame('');
+
+	      if ('onpropertychange' in document && 'attachEvent' in document) {
+	        document.attachEvent('onpropertychange', function () {
+	          if (event.propertyName === 'location') {
+	            self.check();
+	          }
+	        });
+	      }
+
+	      window.setInterval(function () { self.check(); }, 50);
+
+	      this.onHashChanged = onchange;
+	      this.mode = 'legacy';
+	    }
+
+	    Router.listeners.push(fn);
+
+	    return this.mode;
+	  },
+
+	  destroy: function (fn) {
+	    if (!Router || !Router.listeners) {
+	      return;
+	    }
+
+	    var listeners = Router.listeners;
+
+	    for (var i = listeners.length - 1; i >= 0; i--) {
+	      if (listeners[i] === fn) {
+	        listeners.splice(i, 1);
+	      }
+	    }
+	  },
+
+	  setHash: function (s) {
+	    // Mozilla always adds an entry to the history
+	    if (this.mode === 'legacy') {
+	      this.writeFrame(s);
+	    }
+
+	    if (this.history === true) {
+	      window.history.pushState({}, document.title, s);
+	      // Fire an onpopstate event manually since pushing does not obviously
+	      // trigger the pop event.
+	      this.fire();
+	    } else {
+	      dloc.hash = (s[0] === '/') ? s : '/' + s;
+	    }
+	    return this;
+	  },
+
+	  writeFrame: function (s) {
+	    // IE support...
+	    var f = document.getElementById('state-frame');
+	    var d = f.contentDocument || f.contentWindow.document;
+	    d.open();
+	    d.write("<script>_hash = '" + s + "'; onload = parent.listener.syncHash;<script>");
+	    d.close();
+	  },
+
+	  syncHash: function () {
+	    // IE support...
+	    var s = this._hash;
+	    if (s != dloc.hash) {
+	      dloc.hash = s;
+	    }
+	    return this;
+	  },
+
+	  onHashChanged: function () {}
+	};
+
+	var Router = exports.Router = function (routes) {
+	  if (!(this instanceof Router)) return new Router(routes);
+
+	  this.params   = {};
+	  this.routes   = {};
+	  this.methods  = ['on', 'once', 'after', 'before'];
+	  this.scope    = [];
+	  this._methods = {};
+
+	  this._insert = this.insert;
+	  this.insert = this.insertEx;
+
+	  this.historySupport = (window.history != null ? window.history.pushState : null) != null
+
+	  this.configure();
+	  this.mount(routes || {});
+	};
+
+	Router.prototype.init = function (r) {
+	  var self = this
+	    , routeTo;
+	  this.handler = function(onChangeEvent) {
+	    var newURL = onChangeEvent && onChangeEvent.newURL || window.location.hash;
+	    var url = self.history === true ? self.getPath() : newURL.replace(/.*#/, '');
+	    self.dispatch('on', url.charAt(0) === '/' ? url : '/' + url);
+	  };
+
+	  listener.init(this.handler, this.history);
+
+	  if (this.history === false) {
+	    if (dlocHashEmpty() && r) {
+	      dloc.hash = r;
+	    } else if (!dlocHashEmpty()) {
+	      self.dispatch('on', '/' + dloc.hash.replace(/^(#\/|#|\/)/, ''));
+	    }
+	  }
+	  else {
+	    if (this.convert_hash_in_init) {
+	      // Use hash as route
+	      routeTo = dlocHashEmpty() && r ? r : !dlocHashEmpty() ? dloc.hash.replace(/^#/, '') : null;
+	      if (routeTo) {
+	        window.history.replaceState({}, document.title, routeTo);
+	      }
+	    }
+	    else {
+	      // Use canonical url
+	      routeTo = this.getPath();
+	    }
+
+	    // Router has been initialized, but due to the chrome bug it will not
+	    // yet actually route HTML5 history state changes. Thus, decide if should route.
+	    if (routeTo || this.run_in_init === true) {
+	      this.handler();
+	    }
+	  }
+
+	  return this;
+	};
+
+	Router.prototype.explode = function () {
+	  var v = this.history === true ? this.getPath() : dloc.hash;
+	  if (v.charAt(1) === '/') { v=v.slice(1) }
+	  return v.slice(1, v.length).split("/");
+	};
+
+	Router.prototype.setRoute = function (i, v, val) {
+	  var url = this.explode();
+
+	  if (typeof i === 'number' && typeof v === 'string') {
+	    url[i] = v;
+	  }
+	  else if (typeof val === 'string') {
+	    url.splice(i, v, s);
+	  }
+	  else {
+	    url = [i];
+	  }
+
+	  listener.setHash(url.join('/'));
+	  return url;
+	};
+
+	//
+	// ### function insertEx(method, path, route, parent)
+	// #### @method {string} Method to insert the specific `route`.
+	// #### @path {Array} Parsed path to insert the `route` at.
+	// #### @route {Array|function} Route handlers to insert.
+	// #### @parent {Object} **Optional** Parent "routes" to insert into.
+	// insert a callback that will only occur once per the matched route.
+	//
+	Router.prototype.insertEx = function(method, path, route, parent) {
+	  if (method === "once") {
+	    method = "on";
+	    route = function(route) {
+	      var once = false;
+	      return function() {
+	        if (once) return;
+	        once = true;
+	        return route.apply(this, arguments);
+	      };
+	    }(route);
+	  }
+	  return this._insert(method, path, route, parent);
+	};
+
+	Router.prototype.getRoute = function (v) {
+	  var ret = v;
+
+	  if (typeof v === "number") {
+	    ret = this.explode()[v];
+	  }
+	  else if (typeof v === "string"){
+	    var h = this.explode();
+	    ret = h.indexOf(v);
+	  }
+	  else {
+	    ret = this.explode();
+	  }
+
+	  return ret;
+	};
+
+	Router.prototype.destroy = function () {
+	  listener.destroy(this.handler);
+	  return this;
+	};
+
+	Router.prototype.getPath = function () {
+	  var path = window.location.pathname;
+	  if (path.substr(0, 1) !== '/') {
+	    path = '/' + path;
+	  }
+	  return path;
+	};
+	function _every(arr, iterator) {
+	  for (var i = 0; i < arr.length; i += 1) {
+	    if (iterator(arr[i], i, arr) === false) {
+	      return;
+	    }
+	  }
+	}
+
+	function _flatten(arr) {
+	  var flat = [];
+	  for (var i = 0, n = arr.length; i < n; i++) {
+	    flat = flat.concat(arr[i]);
+	  }
+	  return flat;
+	}
+
+	function _asyncEverySeries(arr, iterator, callback) {
+	  if (!arr.length) {
+	    return callback();
+	  }
+	  var completed = 0;
+	  (function iterate() {
+	    iterator(arr[completed], function(err) {
+	      if (err || err === false) {
+	        callback(err);
+	        callback = function() {};
+	      } else {
+	        completed += 1;
+	        if (completed === arr.length) {
+	          callback();
+	        } else {
+	          iterate();
+	        }
+	      }
+	    });
+	  })();
+	}
+
+	function paramifyString(str, params, mod) {
+	  mod = str;
+	  for (var param in params) {
+	    if (params.hasOwnProperty(param)) {
+	      mod = params[param](str);
+	      if (mod !== str) {
+	        break;
+	      }
+	    }
+	  }
+	  return mod === str ? "([._a-zA-Z0-9-%()]+)" : mod;
+	}
+
+	function regifyString(str, params) {
+	  var matches, last = 0, out = "";
+	  while (matches = str.substr(last).match(/[^\w\d\- %@&]*\*[^\w\d\- %@&]*/)) {
+	    last = matches.index + matches[0].length;
+	    matches[0] = matches[0].replace(/^\*/, "([_.()!\\ %@&a-zA-Z0-9-]+)");
+	    out += str.substr(0, matches.index) + matches[0];
+	  }
+	  str = out += str.substr(last);
+	  var captures = str.match(/:([^\/]+)/ig), capture, length;
+	  if (captures) {
+	    length = captures.length;
+	    for (var i = 0; i < length; i++) {
+	      capture = captures[i];
+	      if (capture.slice(0, 2) === "::") {
+	        str = capture.slice(1);
+	      } else {
+	        str = str.replace(capture, paramifyString(capture, params));
+	      }
+	    }
+	  }
+	  return str;
+	}
+
+	function terminator(routes, delimiter, start, stop) {
+	  var last = 0, left = 0, right = 0, start = (start || "(").toString(), stop = (stop || ")").toString(), i;
+	  for (i = 0; i < routes.length; i++) {
+	    var chunk = routes[i];
+	    if (chunk.indexOf(start, last) > chunk.indexOf(stop, last) || ~chunk.indexOf(start, last) && !~chunk.indexOf(stop, last) || !~chunk.indexOf(start, last) && ~chunk.indexOf(stop, last)) {
+	      left = chunk.indexOf(start, last);
+	      right = chunk.indexOf(stop, last);
+	      if (~left && !~right || !~left && ~right) {
+	        var tmp = routes.slice(0, (i || 1) + 1).join(delimiter);
+	        routes = [ tmp ].concat(routes.slice((i || 1) + 1));
+	      }
+	      last = (right > left ? right : left) + 1;
+	      i = 0;
+	    } else {
+	      last = 0;
+	    }
+	  }
+	  return routes;
+	}
+
+	var QUERY_SEPARATOR = /\?.*/;
+
+	Router.prototype.configure = function(options) {
+	  options = options || {};
+	  for (var i = 0; i < this.methods.length; i++) {
+	    this._methods[this.methods[i]] = true;
+	  }
+	  this.recurse = options.recurse || this.recurse || false;
+	  this.async = options.async || false;
+	  this.delimiter = options.delimiter || "/";
+	  this.strict = typeof options.strict === "undefined" ? true : options.strict;
+	  this.notfound = options.notfound;
+	  this.resource = options.resource;
+	  this.history = options.html5history && this.historySupport || false;
+	  this.run_in_init = this.history === true && options.run_handler_in_init !== false;
+	  this.convert_hash_in_init = this.history === true && options.convert_hash_in_init !== false;
+	  this.every = {
+	    after: options.after || null,
+	    before: options.before || null,
+	    on: options.on || null
+	  };
+	  return this;
+	};
+
+	Router.prototype.param = function(token, matcher) {
+	  if (token[0] !== ":") {
+	    token = ":" + token;
+	  }
+	  var compiled = new RegExp(token, "g");
+	  this.params[token] = function(str) {
+	    return str.replace(compiled, matcher.source || matcher);
+	  };
+	  return this;
+	};
+
+	Router.prototype.on = Router.prototype.route = function(method, path, route) {
+	  var self = this;
+	  if (!route && typeof path == "function") {
+	    route = path;
+	    path = method;
+	    method = "on";
+	  }
+	  if (Array.isArray(path)) {
+	    return path.forEach(function(p) {
+	      self.on(method, p, route);
+	    });
+	  }
+	  if (path.source) {
+	    path = path.source.replace(/\\\//ig, "/");
+	  }
+	  if (Array.isArray(method)) {
+	    return method.forEach(function(m) {
+	      self.on(m.toLowerCase(), path, route);
+	    });
+	  }
+	  path = path.split(new RegExp(this.delimiter));
+	  path = terminator(path, this.delimiter);
+	  this.insert(method, this.scope.concat(path), route);
+	};
+
+	Router.prototype.path = function(path, routesFn) {
+	  var self = this, length = this.scope.length;
+	  if (path.source) {
+	    path = path.source.replace(/\\\//ig, "/");
+	  }
+	  path = path.split(new RegExp(this.delimiter));
+	  path = terminator(path, this.delimiter);
+	  this.scope = this.scope.concat(path);
+	  routesFn.call(this, this);
+	  this.scope.splice(length, path.length);
+	};
+
+	Router.prototype.dispatch = function(method, path, callback) {
+	  var self = this, fns = this.traverse(method, path.replace(QUERY_SEPARATOR, ""), this.routes, ""), invoked = this._invoked, after;
+	  this._invoked = true;
+	  if (!fns || fns.length === 0) {
+	    this.last = [];
+	    if (typeof this.notfound === "function") {
+	      this.invoke([ this.notfound ], {
+	        method: method,
+	        path: path
+	      }, callback);
+	    }
+	    return false;
+	  }
+	  if (this.recurse === "forward") {
+	    fns = fns.reverse();
+	  }
+	  function updateAndInvoke() {
+	    self.last = fns.after;
+	    self.invoke(self.runlist(fns), self, callback);
+	  }
+	  after = this.every && this.every.after ? [ this.every.after ].concat(this.last) : [ this.last ];
+	  if (after && after.length > 0 && invoked) {
+	    if (this.async) {
+	      this.invoke(after, this, updateAndInvoke);
+	    } else {
+	      this.invoke(after, this);
+	      updateAndInvoke();
+	    }
+	    return true;
+	  }
+	  updateAndInvoke();
+	  return true;
+	};
+
+	Router.prototype.invoke = function(fns, thisArg, callback) {
+	  var self = this;
+	  var apply;
+	  if (this.async) {
+	    apply = function(fn, next) {
+	      if (Array.isArray(fn)) {
+	        return _asyncEverySeries(fn, apply, next);
+	      } else if (typeof fn == "function") {
+	        fn.apply(thisArg, (fns.captures || []).concat(next));
+	      }
+	    };
+	    _asyncEverySeries(fns, apply, function() {
+	      if (callback) {
+	        callback.apply(thisArg, arguments);
+	      }
+	    });
+	  } else {
+	    apply = function(fn) {
+	      if (Array.isArray(fn)) {
+	        return _every(fn, apply);
+	      } else if (typeof fn === "function") {
+	        return fn.apply(thisArg, fns.captures || []);
+	      } else if (typeof fn === "string" && self.resource) {
+	        self.resource[fn].apply(thisArg, fns.captures || []);
+	      }
+	    };
+	    _every(fns, apply);
+	  }
+	};
+
+	Router.prototype.traverse = function(method, path, routes, regexp, filter) {
+	  var fns = [], current, exact, match, next, that;
+	  function filterRoutes(routes) {
+	    if (!filter) {
+	      return routes;
+	    }
+	    function deepCopy(source) {
+	      var result = [];
+	      for (var i = 0; i < source.length; i++) {
+	        result[i] = Array.isArray(source[i]) ? deepCopy(source[i]) : source[i];
+	      }
+	      return result;
+	    }
+	    function applyFilter(fns) {
+	      for (var i = fns.length - 1; i >= 0; i--) {
+	        if (Array.isArray(fns[i])) {
+	          applyFilter(fns[i]);
+	          if (fns[i].length === 0) {
+	            fns.splice(i, 1);
+	          }
+	        } else {
+	          if (!filter(fns[i])) {
+	            fns.splice(i, 1);
+	          }
+	        }
+	      }
+	    }
+	    var newRoutes = deepCopy(routes);
+	    newRoutes.matched = routes.matched;
+	    newRoutes.captures = routes.captures;
+	    newRoutes.after = routes.after.filter(filter);
+	    applyFilter(newRoutes);
+	    return newRoutes;
+	  }
+	  if (path === this.delimiter && routes[method]) {
+	    next = [ [ routes.before, routes[method] ].filter(Boolean) ];
+	    next.after = [ routes.after ].filter(Boolean);
+	    next.matched = true;
+	    next.captures = [];
+	    return filterRoutes(next);
+	  }
+	  for (var r in routes) {
+	    if (routes.hasOwnProperty(r) && (!this._methods[r] || this._methods[r] && typeof routes[r] === "object" && !Array.isArray(routes[r]))) {
+	      current = exact = regexp + this.delimiter + r;
+	      if (!this.strict) {
+	        exact += "[" + this.delimiter + "]?";
+	      }
+	      match = path.match(new RegExp("^" + exact));
+	      if (!match) {
+	        continue;
+	      }
+	      if (match[0] && match[0] == path && routes[r][method]) {
+	        next = [ [ routes[r].before, routes[r][method] ].filter(Boolean) ];
+	        next.after = [ routes[r].after ].filter(Boolean);
+	        next.matched = true;
+	        next.captures = match.slice(1);
+	        if (this.recurse && routes === this.routes) {
+	          next.push([ routes.before, routes.on ].filter(Boolean));
+	          next.after = next.after.concat([ routes.after ].filter(Boolean));
+	        }
+	        return filterRoutes(next);
+	      }
+	      next = this.traverse(method, path, routes[r], current);
+	      if (next.matched) {
+	        if (next.length > 0) {
+	          fns = fns.concat(next);
+	        }
+	        if (this.recurse) {
+	          fns.push([ routes[r].before, routes[r].on ].filter(Boolean));
+	          next.after = next.after.concat([ routes[r].after ].filter(Boolean));
+	          if (routes === this.routes) {
+	            fns.push([ routes["before"], routes["on"] ].filter(Boolean));
+	            next.after = next.after.concat([ routes["after"] ].filter(Boolean));
+	          }
+	        }
+	        fns.matched = true;
+	        fns.captures = next.captures;
+	        fns.after = next.after;
+	        return filterRoutes(fns);
+	      }
+	    }
+	  }
+	  return false;
+	};
+
+	Router.prototype.insert = function(method, path, route, parent) {
+	  var methodType, parentType, isArray, nested, part;
+	  path = path.filter(function(p) {
+	    return p && p.length > 0;
+	  });
+	  parent = parent || this.routes;
+	  part = path.shift();
+	  if (/\:|\*/.test(part) && !/\\d|\\w/.test(part)) {
+	    part = regifyString(part, this.params);
+	  }
+	  if (path.length > 0) {
+	    parent[part] = parent[part] || {};
+	    return this.insert(method, path, route, parent[part]);
+	  }
+	  if (!part && !path.length && parent === this.routes) {
+	    methodType = typeof parent[method];
+	    switch (methodType) {
+	     case "function":
+	      parent[method] = [ parent[method], route ];
+	      return;
+	     case "object":
+	      parent[method].push(route);
+	      return;
+	     case "undefined":
+	      parent[method] = route;
+	      return;
+	    }
+	    return;
+	  }
+	  parentType = typeof parent[part];
+	  isArray = Array.isArray(parent[part]);
+	  if (parent[part] && !isArray && parentType == "object") {
+	    methodType = typeof parent[part][method];
+	    switch (methodType) {
+	     case "function":
+	      parent[part][method] = [ parent[part][method], route ];
+	      return;
+	     case "object":
+	      parent[part][method].push(route);
+	      return;
+	     case "undefined":
+	      parent[part][method] = route;
+	      return;
+	    }
+	  } else if (parentType == "undefined") {
+	    nested = {};
+	    nested[method] = route;
+	    parent[part] = nested;
+	    return;
+	  }
+	  throw new Error("Invalid route context: " + parentType);
+	};
+
+
+
+	Router.prototype.extend = function(methods) {
+	  var self = this, len = methods.length, i;
+	  function extend(method) {
+	    self._methods[method] = true;
+	    self[method] = function() {
+	      var extra = arguments.length === 1 ? [ method, "" ] : [ method ];
+	      self.on.apply(self, extra.concat(Array.prototype.slice.call(arguments)));
+	    };
+	  }
+	  for (i = 0; i < len; i++) {
+	    extend(methods[i]);
+	  }
+	};
+
+	Router.prototype.runlist = function(fns) {
+	  var runlist = this.every && this.every.before ? [ this.every.before ].concat(_flatten(fns)) : _flatten(fns);
+	  if (this.every && this.every.on) {
+	    runlist.push(this.every.on);
+	  }
+	  runlist.captures = fns.captures;
+	  runlist.source = fns.source;
+	  return runlist;
+	};
+
+	Router.prototype.mount = function(routes, path) {
+	  if (!routes || typeof routes !== "object" || Array.isArray(routes)) {
+	    return;
+	  }
+	  var self = this;
+	  path = path || [];
+	  if (!Array.isArray(path)) {
+	    path = path.split(self.delimiter);
+	  }
+	  function insertOrMount(route, local) {
+	    var rename = route, parts = route.split(self.delimiter), routeType = typeof routes[route], isRoute = parts[0] === "" || !self._methods[parts[0]], event = isRoute ? "on" : rename;
+	    if (isRoute) {
+	      rename = rename.slice((rename.match(new RegExp("^" + self.delimiter)) || [ "" ])[0].length);
+	      parts.shift();
+	    }
+	    if (isRoute && routeType === "object" && !Array.isArray(routes[route])) {
+	      local = local.concat(parts);
+	      self.mount(routes[route], local);
+	      return;
+	    }
+	    if (isRoute) {
+	      local = local.concat(rename.split(self.delimiter));
+	      local = terminator(local, self.delimiter);
+	    }
+	    self.insert(event, local, routes[route]);
+	  }
+	  for (var route in routes) {
+	    if (routes.hasOwnProperty(route)) {
+	      insertOrMount(route, path.slice(0));
+	    }
+	  }
+	};
+
+
+
+	}(true ? exports : window));
+
+/***/ },
+/* 15 */,
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ko = __webpack_require__(7);
+
+	module.exports = function() {
+	    this.username = ko.observable("Davey Jones");
+	};
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = "<h3>Home</h3>\n\n<p>So this is the home page widget, bound to <span data-bind=\"text: username\"></span></p>\n";
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ko = __webpack_require__(7);
+
+	module.exports = function() {
+	    this.studyName = ko.observable("My Study Name");
+	};
+
+
+/***/ },
 /* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/*
-		MIT License http://www.opensource.org/licenses/mit-license.php
-		Author Tobias Koppers @sokra
-	*/
-	// css base code, injected by the css-loader
-	module.exports = function() {
-		var list = [];
-
-		// return the list of modules as css string
-		list.toString = function toString() {
-			var result = [];
-			for(var i = 0; i < this.length; i++) {
-				var item = this[i];
-				if(item[2]) {
-					result.push("@media " + item[2] + "{" + item[1] + "}");
-				} else {
-					result.push(item[1]);
-				}
-			}
-			return result.join("");
-		};
-
-		// import a list of modules into the list
-		list.i = function(modules, mediaQuery) {
-			if(typeof modules === "string")
-				modules = [[null, modules, ""]];
-			var alreadyImportedModules = {};
-			for(var i = 0; i < this.length; i++) {
-				var id = this[i][0];
-				if(typeof id === "number")
-					alreadyImportedModules[id] = true;
-			}
-			for(i = 0; i < modules.length; i++) {
-				var item = modules[i];
-				// skip already imported module
-				// this implementation is not 100% perfect for weird media query combinations
-				//  when a module is imported multiple times with different media queries.
-				//  I hope this will never occur (Hey this way we have smaller bundles)
-				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-					if(mediaQuery && !item[2]) {
-						item[2] = mediaQuery;
-					} else if(mediaQuery) {
-						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-					}
-					list.push(item);
-				}
-			}
-		};
-		return list;
-	};
-
+	module.exports = "<h3>Study</h3>\n\n<p>So this is the home page widget, bound to <span data-bind=\"text: studyName\"></span></p>";
 
 /***/ },
 /* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = function() { throw new Error("define cannot be used indirect"); };
-
+	module.exports = function() {
+	};
 
 /***/ },
 /* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = function(module) {
-		if(!module.webpackPolyfill) {
-			module.deprecate = function() {};
-			module.paths = [];
-			// module.parent = undefined by default
-			module.children = [];
-			module.webpackPolyfill = 1;
-		}
-		return module;
-	}
+	module.exports = "<p>Page not found.</p>";
 
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = {
+	    set: function(key, value) {
+	        sessionStorage.setItem(key, JSON.stringify(value));
+	    },
+	    get: function(key, defaultValue) {
+	        var value = sessionStorage.getItem(key);
+	        if (value) {
+	            return JSON.parse(value);
+	        }
+	        if (defaultValue) {
+	            return defaultValue;
+	        }
+	        throw new Error("User option '"+key+"' not set.");
+	    }
+	};
 
 /***/ }
 /******/ ]);

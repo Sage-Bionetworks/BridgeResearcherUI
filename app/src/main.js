@@ -3,7 +3,6 @@ require('./auth/auth');
 var director = require('director');
 var ko = require('knockout');
 var $ = require('jquery');
-var define = require('./define');
 var sessionService = require('./services/session_service');
 
 $.fn.serializeJSON = function() {
@@ -17,7 +16,8 @@ $.jsonPOST = function(url, data) {
     if (typeof data !== 'string') {
         data = JSON.stringify(data);
     }
-    console.debug("POST", url, data);
+    var output = data.replace(/"password":"([^"]*)"/, '"password":"[REDACTED]"');
+    console.debug("POST", url, output);
     return $.ajax({method: 'POST', url: url,
         headers: {'Content-Type': 'application/json'},
         data: data, type: "application/json"
@@ -36,19 +36,18 @@ ko.components.register('notFound', {
     viewModel: require('./not_found/not_found'), template: require('./not_found/not_found.html')
 });
 
-var RootViewModel = define({
-    init: function() {
-        this.mainPage = ko.observable("home");
-        this.sessionToken = ko.observable("");
-    },
-    routeTo: function(name) {
+var RootViewModel = function() {
+    this.mainPage = ko.observable("study");
+    this.sessionToken = ko.observable("");
+
+    this.routeTo = function(name) {
         return function() {
             this.mainPage(name);
         }.bind(this);
-    }
-});
+    };
+};
 var root = new RootViewModel();
-ko.applyBindings(root, document.querySelector("#page-container"));
+ko.applyBindings(root, document.querySelector("#page-context"));
 
 // This is for debugging, and will be removed.
 sessionService.addListener(function(session) {

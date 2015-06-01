@@ -12,38 +12,56 @@ body {
 .field .ui.button {
     margin-top: .5rem ! important;
 }
-/*
-.ui.active.dimmer {
-    background-color: steelblue;
-}
-*/
-.HolyGrail {
+
+body {
+    display: -webkit-flex;
     display: flex;
     min-height: 100vh;
+    -webkit-flex-direction: column;
     flex-direction: column;
 }
-.HolyGrail-body {
+section {
+    display: -webkit-flex;
     display: flex;
-    flex: 1;
-    flex-direction: row;
-}
-.HolyGrail-content {
-    padding: .5rem;
+    -webkit-flex: 1;
     flex: 1;
 }
-.HolyGrail-nav {
-    padding: 1.5rem .5rem;
+main {
+    -webkit-flex: 1;
+    flex: 1;
+}
+nav {
+    -webkit-flex: 0 0 18em;
+    flex: 0 0 18em;
+    -webkit-order: -1;
     order: -1;
 }
-.HolyGrail-nav, .HolyGrail-ads {
-    flex: 0 0 16em;
+nav .menu {
+    margin: 1rem .5rem ! important;
+}
+main {
+    padding-top: 2rem ! important;
+    padding-left: 2rem ! important;
 }
 header {
+    display: -webkit-flex;
     display: flex;
     padding: 1rem 1rem 0 1.5rem;
-    align-items: baseline;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: space-between;
     justify-content: space-between;
-    background-color: gainsboro;
+    flex-direction: row;
+    background-color: #3b83c0;
+}
+header .content, header a {
+    color: white;
+}
+header .sub.header {
+    color: lightblue ! important;
+}
+main {
+    padding: 1rem;
 }
 footer p {
     border-top: 1px solid #e5e5e5;

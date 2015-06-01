@@ -3,17 +3,19 @@ var ko = require('knockout');
 var mapping = require('knockout-mapping');
 var config = require('../config');
 var sessionService = require('../services/session_service');
+var optionsService = require('../services/options_service');
 
 // This is still the signin view model. There'll be another view model in this class.
 var AuthViewModel = function() {
     var $authModal = $("#authModal");
 
-    var env = sessionStorage.getItem('environment');
-    var study = sessionStorage.getItem('study');
+    var env = optionsService.get('environment', 'production');
+    var study = optionsService.get('study', 'api');
 
     this.error = ko.observable("");
     this.errorClass = ko.observable("");
     this.loading = ko.observable(false);
+    this.studyOptions = config.studies;
 
     this.data = mapping.fromJS({"username":"", "password": "", "study":study});
     this.environment = ko.observable(env);
@@ -81,8 +83,8 @@ var AuthViewModel = function() {
         this.loading(true);
 
         var env = this.environment();
-        sessionStorage.setItem('environment', env);
-        sessionStorage.setItem('study', this.data.study());
+        optionsService.set('environment', env);
+        optionsService.set('study', this.data.study());
 
         var request = $.jsonPOST(config.signIn(env), mapping.toJS(this.data));
         request.done(this.onSignIn.bind(this, env));
