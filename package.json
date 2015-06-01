@@ -1,0 +1,27 @@
+{
+  "name": "bridge-researcher-ui",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server": "webpack-dev-server --content-base app",
+    "watch": "webpack --progress --colors --watch",
+    "release": "webpack -p",
+    "test": "echo \"Error: no test specified (yet)\" && exit 1"
+  },
+  "author": "Bridge Server Team <bridgeit@sagebase.org>",
+  "license": "MIT",
+  "devDependencies": {
+    "css-loader": "^0.12.1",
+    "director": "^1.2.8",
+    "html-loader": "^0.3.0",
+    "jquery": "^2.1.4",
+    "knockout": "^3.3.0",
+    "knockout-es5": "^0.1.1", // loads WeakMap, not ko... ?
+    "knockout-mapping": "^2.5.0",
+    "node-libs-browser": "^0.5.0",
+    "style-loader": "^0.12.2",
+    "webpack": "^1.9.7",
+    "webpack-dev-server": "^1.8.2"
+  }
+}

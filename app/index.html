@@ -1,0 +1,91 @@
+<html>
+<head>
+    <title>Bridge Researcher Portal</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/semantic.min.css"/>
+</head>
+<body class="HolyGrail">
+    <header>
+        <h2>Bridge Researcher Portal</h2>
+        <a href="#signOut">Sign Out</a>
+    </header>
+    <div class="HolyGrail-body">
+        <main class="HolyGrail-content" id="page-container">
+            <div data-bind="component: mainPage"></div>
+        </main>
+        <nav class="HolyGrail-nav">
+            <div class="ui left vertical menu">
+                <a href="#home" class="item">
+                    <i class="home icon"></i>Home
+                </a>
+                <a href="#study" class="item">
+                    <i class="lab icon"></i>Study
+                </a>
+            </div>
+        </nav>
+        <!--
+        <aside class="HolyGrail-ads">
+        </aside>
+        -->
+    </div>
+    <footer>
+        <p>&copy; 2015 Sage Bionetworks. <span id="sessionToken"></span></p>
+    </footer>
+
+    <div id="authModal" class="ui small modal">
+        <div id="signIn">
+            <h3>Sign In</h3>
+            <div data-bind="attr: { class: errorClass }">
+                <p data-bind="text: error"></p>
+            </div>
+            <form class="ui form">
+                <div class="field">
+                    <label for="username">Email address</label>
+                    <input name="username" id="username" type="text" data-bind="textInput: data.username"/>
+                </div>
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input name="password" id="password" type="password" data-bind="textInput: data.password"/>
+                </div>
+                <div class="two fields">
+                    <div class="field">
+                        <label for="study">Study</label>
+                        <select name="study" id="study" class="ui dropdown" data-bind="value: data.study">
+                            <option value="api">API</option>
+                            <option value="asthma">Asthma Health</option>
+                            <option value="diabetes">GlucoSuccess</option>
+                            <option value="parkinson">mPower</option>
+                            <option value="cardio">My Heart Counts</option>
+                            <option value="breastcancer">Share The Journey</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="environment">Environment</label>
+                        <select name="environment" id="environment" class="ui dropdown" data-bind="value: environment">
+                            <option value="local">Local</option>
+                            <option value="develop">Development</option>
+                            <option value="staging">Staging</option>
+                            <option value="production">Production</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="field">
+                    <button type="submit" data-bind="click: signIn, attr: {class: submitStatus()}">Sign In</button>
+                    <a style="margin-left:1rem" href="#forgotPassword" class="ui horizontal link" data-bind="click: forgotPassword">Forgot Password</a>
+                </div>
+            </form>
+        </div>
+        <div id="forgotPassword" style="display:none">
+
+        </div>
+    </div>
+
+    <div id="forgotPasswordModal" class="ui small modal">
+
+    </div>
+    <!--
+    jQuery exported by bundle, but would it ever require something about semantic UI?
+    -->
+    <script src="../dist/bundle.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/semantic.min.js"></script>
+</body>
+</html>

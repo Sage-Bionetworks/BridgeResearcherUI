@@ -1,0 +1,52 @@
+body {
+    background-color: white;
+}
+#page-container {
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+#authModal {
+    padding: 2rem 2rem 1.5rem 2rem;
+}
+.field .ui.button {
+    margin-top: .5rem ! important;
+}
+/*
+.ui.active.dimmer {
+    background-color: steelblue;
+}
+*/
+.HolyGrail {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+.HolyGrail-body {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+}
+.HolyGrail-content {
+    padding: .5rem;
+    flex: 1;
+}
+.HolyGrail-nav {
+    padding: 1.5rem .5rem;
+    order: -1;
+}
+.HolyGrail-nav, .HolyGrail-ads {
+    flex: 0 0 16em;
+}
+header {
+    display: flex;
+    padding: 1rem 1rem 0 1.5rem;
+    align-items: baseline;
+    justify-content: space-between;
+    background-color: gainsboro;
+}
+footer p {
+    border-top: 1px solid #e5e5e5;
+    padding: .5rem;
+    text-align: center;
+}
