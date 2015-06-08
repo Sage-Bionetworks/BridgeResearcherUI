@@ -2,8 +2,8 @@ var $ = require('jquery');
 var ko = require('knockout');
 var mapping = require('knockout-mapping');
 var config = require('../config');
-var sessionService = require('../services/session_service');
 var optionsService = require('../services/options_service');
+var serverService = require('../services/server_service');
 
 // This is still the signin view model. There'll be another view model in this class.
 var AuthViewModel = function() {
@@ -33,25 +33,16 @@ var AuthViewModel = function() {
         this.errorClass("error hidden ui message");
         this.error("");
     };
-    this.submitStatus = function() {
-        return (this.loading()) ? "ui primary loading button" : "ui primary submit button";
+    this.onSessionStart = function(data) {
+        $authModal.modal('hide');
     };
-    this.onSessionChange = function(data) {
-        if (data == null) {
-            // These are interfering with knockout's data binding...
-            //$env.dropdown();
-            //$study.dropdown();
-            this.hideError();
-            $authModal.modal('setting', 'closable', false);
-            $authModal.modal('show');
-        } else {
-            $authModal.modal('hide');
-        }
+    this.onSessionEnd = function(data) {
+        this.hideError();
+        $authModal.modal('setting', 'closable', false);
+        $authModal.modal('show');
     };
     this.onSignIn = function(env, data) {
         if (data.sessionToken) {
-            data.environment = env;
-            sessionService.startSession(data);
             this.data.username("");
             this.data.password("");
         } else {
@@ -86,12 +77,13 @@ var AuthViewModel = function() {
         optionsService.set('environment', env);
         optionsService.set('study', this.data.study());
 
-        var request = $.jsonPOST(config.signIn(env), mapping.toJS(this.data));
-        request.done(this.onSignIn.bind(this, env));
-        request.fail(this.onError.bind(this));
+        var request = serverService.signIn(env, mapping.toJS(this.data));
+        request.then(this.onSignIn.bind(this, env));
+        request.catch(this.onError.bind(this));
     };
 
-    sessionService.addListener(this.onSessionChange.bind(this));
+    serverService.addSessionStartListener(this.onSessionStart.bind(this));
+    serverService.addSessionEndListener(this.onSessionEnd.bind(this));
 }
 
 var authViewModel = new AuthViewModel();

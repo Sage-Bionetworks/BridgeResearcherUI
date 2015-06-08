@@ -7,9 +7,12 @@ module.exports = {
         if (value) {
             return JSON.parse(value);
         }
-        if (defaultValue) {
+        if (arguments.length > 1) {
             return defaultValue;
         }
         throw new Error("User option '"+key+"' not set.");
+    },
+    remove: function(key) {
+        sessionStorage.removeItem(key);
     }
 };

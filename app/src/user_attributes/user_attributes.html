@@ -1,0 +1,36 @@
+<div class="ui grid">
+    <div class="ten wide column">
+        <h3>User Attributes</h3>
+
+        <div class="ui large labels" data-bind="foreach: records">
+            <div class="ui label">
+                <span data-bind="text: $data"></span> <i class="icon close" data-bind="click: $component.remove"></i>
+            </div><br/>
+        </div>
+        <div class="ui action input">
+            <input type="text" data-bind="value: $component.addField"/>
+            <button class="ui button" data-bind="click: $component.add">Add</button>
+        </div>
+        <div class="field" style="margin-top:1rem">
+            <button type="submit" class="ui primary submit button"
+                    data-bind="click: $component.save">Save</button>
+        </div>
+    </div>
+    <div class="six wide column">
+
+        <div class="ui message" style="float:left!important">
+            <p>Bridge stores personally identifiable information separately from the health information collected
+                for a study. By default, we accept a participant’s first and last name, and an email address,
+                through that participant’s user profile. </p>
+
+            <p>You can configure your study to accept additional information about a participant. These fields can then
+                be added to a user profile and they will be saved and included as part of the
+                <a href="#actions">Participant Roster</a>. </p>
+
+            <p>Like a participant’s name or email address, this information will not be included in the data set exported from the
+                study.</p>
+        </div>
+
+    </div>
+</div>
+

@@ -1,0 +1,45 @@
+<div class="ui secondary pointing menu">
+    <a class="item" data-bind="click: function() { tab('current') }, css: {active: tab() == 'current'}">
+        <i class="file outline icon"></i> Consent Agreement
+    </a>
+    <a class="item" data-bind="click: function() { tab('history') }, css: {active: tab() == 'history'}">
+        <i class="history icon"></i> Edit History
+    </a>
+</div>
+<div class="form">
+    <div data-bind="visible: $component.tab() == 'current'">
+        <div class="ui yellow label" data-bind="css: { hidden: $component.active() }">
+            <i class="warning icon"></i> You are editing an older version of the consent</span>
+        </div>
+        <div class="ui label">
+            <i class="clock icon"></i> <span data-bind="text: $component.date"></span>
+        </div>
+        <div style="margin: 1rem 0">
+            <textarea data-bind="createEditor: true" class="ui textarea doc"></textarea>
+        </div>
+        <button class="ui primary button" data-bind="click: save">Save</button>
+    </div>
+    <div data-bind="visible: $component.tab() == 'history'">
+        <table class="ui table">
+            <thead>
+                <tr>
+                    <th>Saved On</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: historyItems">
+                <tr data-bind="css: { positive: $data.active }">
+                    <td>
+                        <a href="" data-bind="click: $parent.loadHistoryItem, text: createdOnDisplay"></a>
+                    </td>
+                    <td>
+                        <div data-bind="visible: $data.active">
+                            <i class="icon checkmark"></i> Active</td>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </div>
+    </div>
+</div>
+

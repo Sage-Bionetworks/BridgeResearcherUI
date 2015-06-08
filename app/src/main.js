@@ -3,7 +3,7 @@ require('./auth/auth');
 var director = require('director');
 var ko = require('knockout');
 var $ = require('jquery');
-var sessionService = require('./services/session_service');
+var serverService = require('./services/server_service');
 
 $.fn.serializeJSON = function() {
     var json = this.serializeArray().reduce(function(obj, el) {
@@ -12,55 +12,80 @@ $.fn.serializeJSON = function() {
     }, {});
     return JSON.stringify(json);
 };
-$.jsonPOST = function(url, data) {
-    if (typeof data !== 'string') {
-        data = JSON.stringify(data);
-    }
-    var output = data.replace(/"password":"([^"]*)"/, '"password":"[REDACTED]"');
-    console.debug("POST", url, output);
-    return $.ajax({method: 'POST', url: url,
-        headers: {'Content-Type': 'application/json'},
-        data: data, type: "application/json"
-    });
+ko.observableArray.fn.pushAll = function(valuesToPush) {
+    var underlyingArray = this();
+    this.valueWillMutate();
+    ko.utils.arrayPushAll(underlyingArray, valuesToPush);
+    this.valueHasMutated();
+    return this;  //optional
 };
 
-
-// These can be made asynchronous.
-ko.components.register('home', {
-    viewModel: require('./home/home'), template: require('./home/home.html')
+ko.components.register('info', {
+    viewModel: require('./info/info'), template: require('./info/info.html')
 });
-ko.components.register('study', {
-    viewModel: require('./study/study'), template: require('./study/study.html')
+ko.components.register('consent', {
+    viewModel: require('./consent/consent'), template: require('./consent/consent.html')
 });
-ko.components.register('notFound', {
+ko.components.register('eligibility', {
+    viewModel: require('./eligibility/eligibility'), template: require('./eligibility/eligibility.html')
+});
+ko.components.register('password_policy', {
+    viewModel: require('./password_policy/password_policy'), template: require('./password_policy/password_policy.html')
+});
+ko.components.register('user_attributes', {
+    viewModel: require('./user_attributes/user_attributes'), template: require('./user_attributes/user_attributes.html')
+});
+ko.components.register('ve_template', {
+    viewModel: require('./ve_template/ve_template'), template: require('./ve_template/ve_template.html')
+});
+ko.components.register('rp_template', {
+    viewModel: require('./rp_template/rp_template'), template: require('./rp_template/rp_template.html')
+});
+ko.components.register('actions', {
+    viewModel: require('./actions/actions'), template: require('./actions/actions.html')
+});
+ko.components.register('not_found', {
     viewModel: require('./not_found/not_found'), template: require('./not_found/not_found.html')
 });
 
 var RootViewModel = function() {
-    this.mainPage = ko.observable("study");
-    this.sessionToken = ko.observable("");
+    var self = this;
 
-    this.routeTo = function(name) {
+    self.selected = ko.observable('not_found');
+    self.sessionToken = ko.observable("");
+
+    self.mainPage = ko.observable('not_found');
+    self.mainPage.subscribe(self.selected);
+
+    self.routeTo = function(name) {
         return function() {
-            this.mainPage(name);
-        }.bind(this);
+            self.mainPage(name);
+        }
     };
 };
 var root = new RootViewModel();
 ko.applyBindings(root, document.querySelector("#page-context"));
 
 // This is for debugging, and will be removed.
-sessionService.addListener(function(session) {
-    var token = (session == null) ? "" : session.sessionToken;
-    $("#sessionToken").text(token);
+serverService.addSessionStartListener(function(session) {
+    $("#sessionToken").text(session.sessionToken);
+});
+serverService.addSessionEndListener(function(session) {
+    $("#sessionToken").text("");
 });
 
 director.Router({
-    'home': root.routeTo('home'),
-    'study': root.routeTo('study'),
-    'signOut': sessionService.endSession
+    'info': root.routeTo('info'),
+    'consent': root.routeTo('consent'),
+    'eligibility': root.routeTo('eligibility'),
+    'password_policy': root.routeTo('password_policy'),
+    'user_attributes': root.routeTo('user_attributes'),
+    'verify_email_template': root.routeTo('ve_template'),
+    'reset_password_template': root.routeTo('rp_template'),
+    'actions': root.routeTo('actions'),
+    'signOut': serverService.signOut
 }).configure({
-    notfound: root.routeTo('notFound')
+    notfound: root.routeTo('not_found')
 }).init();
 
 // Make this global for Semantic UI.

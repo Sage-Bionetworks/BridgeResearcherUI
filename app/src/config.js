@@ -1,5 +1,3 @@
-var sessionService = require('./services/session_service');
-
 module.exports = config = {
     studies: [
         {value: "test", label: "Test"},
@@ -16,8 +14,10 @@ module.exports = config = {
         'staging': 'https://webservices-staging.sagebridge.org',
         'production': 'https://webservices.sagebridge.org'
     },
-    signIn: function(env) {
-        return config.host[env] + '/api/v1/auth/signIn';
-    }
-
+    signIn: '/api/v1/auth/signIn',
+    signOut: '/api/v1/auth/signOut',
+    get_study: '/researcher/v1/study',
+    active_study_consent: '/researcher/v1/consents/active',
+    study_consent_history: '/researcher/v1/consents',
+    study_consent: '/researcher/v1/consents/'
 };

@@ -12,7 +12,6 @@ body {
 .field .ui.button {
     margin-top: .5rem ! important;
 }
-
 body {
     display: -webkit-flex;
     display: flex;
@@ -36,12 +35,11 @@ nav {
     -webkit-order: -1;
     order: -1;
 }
-nav .menu {
-    margin: 1rem .5rem ! important;
+nav > .menu {
+    margin: 2rem 1rem ! important;
 }
 main {
-    padding-top: 2rem ! important;
-    padding-left: 2rem ! important;
+    padding: 2rem 4rem 0 4rem ! important;
 }
 header {
     display: -webkit-flex;
@@ -52,7 +50,7 @@ header {
     -webkit-justify-content: space-between;
     justify-content: space-between;
     flex-direction: row;
-    background-color: #3b83c0;
+    background-color: #5bbd72; /*#3b83c0;*/
 }
 header .content, header a {
     color: white;
@@ -62,6 +60,9 @@ header .sub.header {
 }
 main {
     padding: 1rem;
+}
+footer {
+    margin-top: 1rem;
 }
 footer p {
     border-top: 1px solid #e5e5e5;
