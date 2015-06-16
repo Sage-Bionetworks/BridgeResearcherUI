@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "webpack-dev-server --content-base app",
+    "start": "webpack-dev-server --content-base app",
     "watch": "webpack --progress --colors --watch",
     "release": "webpack -p",
     "test": "exit 0"
