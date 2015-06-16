@@ -4,9 +4,10 @@ var serverService = require('../../services/server_service');
 // Candidates for a common utilities class. Could curry these so they can be added
 // to promise handlers directly
 function success(vm, event) {
-    return function() {
+    return function(response) {
         event.target.classList.remove("loading");
         vm.errorFields.removeAll();
+        return response;
     }
 }
 function failure(vm, event) {
@@ -19,6 +20,7 @@ function failure(vm, event) {
         } else {
             vm.errorFields.removeAll();
         }
+        return response;
     }
 }
 

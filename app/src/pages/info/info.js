@@ -1,44 +1,79 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
 
-function jsonMessageHandler(observable, button) {
+function success(vm, event) {
     return function(response) {
-        if (button) {
-            button.classList.remove("loading");
-        }
-        if (response.responseJSON && response.responseJSON.message) {
-            observable(response.responseJSON.message);
-        } else if (response.message) {
-            observable(response.message);
-        } else {
-            observable(response.toString());
-        }
+        console.log(response);
+        event.target.classList.remove("loading");
+        vm.errorFields.removeAll();
+        return response;
     }
 }
+function failure(vm, event) {
+    return function(response) {
+        console.log(response);
+        var json = response.responseJSON;
+        event.target.classList.remove("loading");
+        vm.message({text:json.message, 'status': 'error'});
+        if (json.errors) {
+            vm.errorFields.pushAll(Object.keys(json.errors));
+        } else {
+            vm.errorFields.removeAll();
+        }
+        return response;
+    }
+}
+
+function observablesFor(vm, fields) {
+    for (var i=0; i < fields.length; i++) {
+        var name = fields[i];
+        vm[name] = ko.observable("");
+    }
+}
+function observe(vm, object, fields) {
+    for (var i=0; i < fields.length; i++) {
+        var name = fields[i];
+        vm[name](object[name]);
+    }
+}
+function marshallFor(vm, fields) {
+    for (var i=0; i < fields.length; i++) {
+        var name = fields[i];
+        vm.study[name] = vm[name]();
+    }
+}
+
+var fields = ['name', 'sponsorName', 'technicalEmail', 'supportEmail', 'consentNotificationEmail', 'identifier'];
 
 module.exports = function() {
     var self = this;
 
-    self.records = ko.observableArray();
-    self.errorMsg = ko.observable("");
+    // The next step is to just wrap all of this standard stuff up into a function to initialize
+    // the viewModel for a standard form view.
+    observablesFor(self, fields);
+    self.message = ko.observable("");
     self.errorFields = ko.observableArray();
 
-    serverService.getStudy().then(function(study) {
-        self.records.push(study);
-    });
-
-    self.save = function(study, event) {
-        event.preventDefault();
-        serverService.saveStudy(study).then(function(response) {
-            self.records()[0].version = response.version;
-        }).catch(function(response) {
-            if (response.responseJSON) {
-                self.errorMsg(response.responseJSON.message);
-                self.errorFields.removeAll();
-                self.errorFields.pushAll(Object.keys(response.responseJSON.errors));
-            } else {
-                alert("There has been an error on the server");
-            }
+    self.errorFor = function(fieldName) {
+        return ko.computed(function() {
+            return (self.errorFields.indexOf(fieldName) > -1) ? "error" : "";
         });
     };
+
+    self.save = function(vm, event) {
+        event.target.classList.add("loading");
+        marshallFor(self, fields);
+
+        serverService.saveStudy(self.study)
+            .then(success(vm, event))
+            .then(function(response) {
+                self.study.version = response.version;
+                self.message({text: "Study information saved."});
+            }).catch(failure(vm, event));
+    };
+
+    serverService.getStudy().then(function(study) {
+        self.study = study;
+        observe(self, study, fields);
+    });
 };
