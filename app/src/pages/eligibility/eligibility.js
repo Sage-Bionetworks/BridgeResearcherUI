@@ -1,67 +1,45 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
+var utils = require('../../utils');
 
-function jsonMessageHandler(observable, button) {
-    return function(response) {
-        if (button) {
-            button.classList.remove("loading");
-        }
-        if (response.responseJSON && response.responseJSON.message) {
-            observable(response.responseJSON.message);
-        } else if (response.message) {
-            observable(response.message);
-        } else {
-            observable(response.toString());
-        }
-    }
-}
-
-function validValue(value) {
-    return (value === "") || (/^\d+$/.test(value) && value >= 0);
-}
+var fields = ["minAgeOfConsent", "maxNumOfParticipants"];
 
 module.exports = function() {
     var self = this;
 
     self.study = null;
     self.message = ko.observable("");
-    self.errorMsg = ko.observable("");
     self.errorFields = ko.observableArray();
-    self.minAgeOfConsent = ko.observable(0);
-    self.maxNumOfParticipants = ko.observable(0);
+    utils.observablesFor(self, fields);
+
+    self.minAge = ko.computed(function(){
+        return (self.minAgeOfConsent() == 0) ? "No age limit" : self.minAgeOfConsent();
+    });
+    self.maxNum = ko.computed(function(){
+        return (self.maxNumOfParticipants() == 0) ? "No limit" : self.maxNumOfParticipants();
+    });
+
+    self.errorFor = function(fieldName) {
+        return ko.computed(function() {
+            return (self.errorFields.indexOf(fieldName) > -1) ? "error" : "";
+        });
+    };
 
     self.save = function(vm, event) {
-        self.message("");
-        self.errorMsg("");
-        self.errorFields.removeAll();
+        utils.startHandler(vm, event);
+        utils.observablesToObject(self, self.study, fields);
 
-        var minAge = self.minAgeOfConsent();
-        var maxNum = self.maxNumOfParticipants();
-        if (!validValue(minAge)) {
-            self.errorFields.push("minAge");
-            self.errorMsg("Please enter values of zero or greater.");
-        }
-        if (!validValue(maxNum)) {
-            self.errorFields.push("maxNum");
-            self.errorMsg("Please enter values of zero or greater.");
-        }
-        if (self.errorFields().length === 0) {
-            event.target.classList.add("loading");
-            self.study.minAgeOfConsent = minAge;
-            self.study.maxNumOfParticipants = maxNum;
-            serverService.saveStudy(self.study)
-                .then(function(versionHolder) {
-                    event.target.classList.remove("loading");
-                    self.study.version = versionHolder.version;
-                    self.message("Study updated.");
-                })
-                .catch(jsonMessageHandler(self.errorMsg, event.target));
-        }
+        serverService.saveStudy(self.study)
+            .then(utils.successHandler(self, event))
+            .then(function(response) {
+                self.study.version = response.version;
+                self.message({text:"Study updated."});
+            })
+            .catch(utils.failureHandler(self, event));
     };
 
     serverService.getStudy().then(function(study) {
         self.study = study;
-        self.minAgeOfConsent(study.minAgeOfConsent);
-        self.maxNumOfParticipants(study.maxNumOfParticipants);
+        utils.valuesToObservables(self, study, fields);
     });
 };

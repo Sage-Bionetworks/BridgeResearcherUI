@@ -10,7 +10,7 @@
                 <input type="text" name="subject" data-bind="value: subject"/>
             </div>
             <div class="field" data-bind="css: errorFor('resetPasswordTemplate.body')">
-                <textarea id="rpTemplate" data-bind="createEditor: true, html: body" class="ui textarea doc"></textarea>
+                <textarea id="rpTemplate" data-bind="createEditor: $component" class="ui textarea doc"></textarea>
             </div>
             <button class="ui primary submit button" data-bind="click: save">Save</button>
         </form>

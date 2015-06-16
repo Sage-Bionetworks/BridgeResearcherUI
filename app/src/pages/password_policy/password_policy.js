@@ -1,5 +1,6 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
+var utils = require('../../utils');
 
 module.exports = function() {
     var self = this;
@@ -15,16 +16,15 @@ module.exports = function() {
     });
 
     self.save = function(passwordPolicy, event) {
-        event.target.classList.add("loading");
+        utils.startHandler(self, event);
         self.study.passwordPolicy = passwordPolicy;
 
-        serverService.saveStudy(self.study).then(function(response) {
-            self.study.version = response.version;
-            event.target.classList.remove("loading");
-            self.message({text:"Password policy has been saved."});
-        }).catch(function(reponse) {
-            event.target.classList.remove("loading");
-            self.message({text: response.message, status: "error"});
-        });
+        serverService.saveStudy(self.study)
+            .then(utils.successHandler(self, event))
+            .then(function(response) {
+                self.study.version = response.version;
+                self.message({text:"Password policy has been saved."});
+            })
+            .catch(utils.failureHandler(self, event));
     };
 };

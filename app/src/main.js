@@ -17,7 +17,7 @@ ko.observableArray.fn.contains = function(value) {
     return underlyingArray.indexOf(value) > -1;
 };
 ko.bindingHandlers.createEditor = {
-    init: function(element) {
+    init: function(element, valueAccessor) {
         var config = {
             toolbarGroups: [
                 { name: 'clipboard', groups: ['clipboard','undo']},
@@ -26,7 +26,12 @@ ko.bindingHandlers.createEditor = {
                 {"name":"insert","groups":["insert"]},
                 {"name":"styles","groups":["styles"]},
                 {"name":"links","groups":["links"]}
-            ]
+            ],
+            on: {
+                instanceReady: function(event) {
+                    valueAccessor().initEditor();
+                }
+            }
         };
         CKEDITOR.replace(element, config);
     }
@@ -56,9 +61,6 @@ ko.components.register('rp_template', {
 ko.components.register('actions', {
     viewModel: require('./pages/actions/actions'), template: require('./pages/actions/actions.html')
 });
-ko.components.register('not_found', {
-    viewModel: require('./pages/not_found/not_found'), template: require('./pages/not_found/not_found.html')
-});
 ko.components.register('form-message', {
     viewModel: require('./widgets/form_message/form_message'), template: require('./widgets/form_message/form_message.html')
 });
@@ -66,10 +68,10 @@ ko.components.register('form-message', {
 var RootViewModel = function() {
     var self = this;
 
-    self.selected = ko.observable('not_found');
+    self.selected = ko.observable('info');
     self.sessionToken = ko.observable("");
 
-    self.mainPage = ko.observable('not_found');
+    self.mainPage = ko.observable('info');
     self.mainPage.subscribe(self.selected);
 
     self.routeTo = function(name) {
