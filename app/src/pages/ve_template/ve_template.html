@@ -1,0 +1,46 @@
+<div class="ui grid">
+    <div class="ten wide column">
+        <h3>Verify Email Template</h3>
+
+        <form-message params="message: message"></form-message>
+
+        <form class="ui form">
+            <div class="field" data-bind="css: errorFor('verifyEmailTemplate.subject')">
+                <label>Subject</label>
+                <input type="text" name="subject" data-bind="value: subject"/>
+            </div>
+            <div class="field" data-bind="css: errorFor('verifyEmailTemplate.body')">
+                <textarea id="veTemplate" data-bind="createEditor: true, html: body" class="ui textarea doc"></textarea>
+            </div>
+            <button class="ui primary submit button" data-bind="click: save">Save</button>
+        </form>
+    </div>
+    <div class="six wide column">
+        <div class="ui message">
+            <p>This is the email sent to users when they sign up for your study. </p>
+
+            <p><strong>It <em>must</em> contain the value <code>${url}</code>,</strong> which is a variable that will be
+                replaced with the address users must click to verify their email addresses. </p>
+
+            <p>There are other values available: </p>
+
+            <style>
+                .ui.table td { vertical-align: top; padding: 2px 3px; }
+            </style>
+            <table class="ui table">
+                <tr>
+                    <td>${name}</td>
+                    <td>the name you entered for your study</td>
+                </tr>
+                <tr>
+                    <td>${sponsorName}</td>
+                    <td>the name you entered for the group sponsoring the study</td>
+                </tr>
+                <tr>
+                    <td>${supportEmail}</td>
+                    <td>your support email address</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

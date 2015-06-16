@@ -1,0 +1,113 @@
+<html>
+<head>
+    <title>Bridge Researcher Portal</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/semantic.min.css"/>
+    <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+</head>
+<body>
+    <div id="page-context">
+        <header>
+            <h2 class="ui header">
+                <i style="font-size: 3.5rem" class="white heartbeat icon"></i>
+                <div class="content">
+                    <div style="margin-bottom: .25rem">Bridge Researcher Portal</div>
+                    <div class="sub header">Sage Bionetworks</div>
+                </div>
+            </h2>
+            <a href="#signOut">Sign Out</a>
+        </header>
+        <section>
+            <main>
+                <div data-bind="component: mainPage"></div>
+            </main>
+            <nav>
+                <div class="ui vertical menu" style="width:100%">
+                    <div class="item">
+                        <i class="lab icon"></i> Study
+                        <div class="menu">
+                            <a href="#info" class="item" data-bind="css:{active:selected()=='info'}">
+                                General Information
+                            </a>
+                            <a href="#consent" class="item" data-bind="css:{active:selected()=='consent'}">
+                                Consent Agreement
+                            </a>
+                            <a href="#eligibility" class="item" data-bind="css:{active:selected()=='eligibility'}">
+                                Eligibility Criteria
+                            </a>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <i class="user icon"></i> Account Management
+                        <div class="menu">
+                            <a href="#password_policy" class="item" data-bind="css:{active:selected()=='password_policy'}">
+                                Password Policy
+                            </a>
+                            <a href="#user_attributes" class="item" data-bind="css:{active:selected()=='user_attributes'}">
+                                User Attributes
+                            </a>
+                            <a href="#verify_email_template" class="item" data-bind="css:{active:selected()=='ve_template'}">
+                                Verify Email Template
+                            </a>
+                            <a href="#reset_password_template" class="item" data-bind="css:{active:selected()=='rp_template'}">
+                                Reset Password Template
+                            </a>
+                            <a href="#actions" class="item" data-bind="css:{active:selected()=='actions'}">
+                                Participant Roster
+                            </a>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <i class="sign out icon"></i> <a href="#signOut">Sign Out</a>
+                    </div>
+                </div>
+            </nav>
+        </section>
+        <footer>
+            <p>&copy; 2015 Sage Bionetworks. <span id="sessionToken"></span></p>
+        </footer>
+    </div>
+
+    <div id="authModal" class="ui small modal">
+        <div id="signIn">
+            <h3>Sign In</h3>
+            <div data-bind="attr: { class: errorClass }">
+                <p data-bind="text: error"></p>
+            </div>
+            <form class="ui form">
+                <div class="field">
+                    <label for="username">Email address</label>
+                    <input name="username" id="username" type="text" data-bind="textInput: data.username"/>
+                </div>
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input name="password" id="password" type="password" data-bind="textInput: data.password"/>
+                </div>
+                <div class="two fields">
+                    <div class="field">
+                        <label for="study">Study</label>
+                        <select name="study" id="study" class="ui dropdown"
+                                data-bind="value: data.study, options: studyOptions,
+                                optionsText: 'label', optionsValue: 'value'">
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="environment">Environment</label>
+                        <select name="environment" id="environment" class="ui dropdown" data-bind="value: environment">
+                            <option value="local">Local</option>
+                            <option value="develop">Development</option>
+                            <option value="staging">Staging</option>
+                            <option value="production">Production</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="field">
+                    <button type="submit" class="ui primary submit button" data-bind="click: signIn">Sign In</button>
+                    <a style="margin-left:1rem" href="#forgotPassword" class="ui horizontal link" data-bind="click: forgotPassword">Forgot Password</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="../dist/bundle.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/semantic.min.js"></script>
+</body>
+</html>

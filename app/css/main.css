@@ -1,0 +1,75 @@
+body {
+    background-color: white;
+}
+#page-container {
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+#authModal {
+    padding: 2rem 2rem 1.5rem 2rem;
+}
+.field .ui.button {
+    margin-top: .5rem ! important;
+}
+body {
+    display: -webkit-flex;
+    display: flex;
+    min-height: 100vh;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+}
+section {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex: 1;
+    flex: 1;
+}
+main {
+    -webkit-flex: 1;
+    flex: 1;
+}
+nav {
+    -webkit-flex: 0 0 18em;
+    flex: 0 0 18em;
+    -webkit-order: -1;
+    order: -1;
+}
+nav > .menu {
+    margin: 2rem 1rem ! important;
+}
+main {
+    padding: 2rem 4rem 0 4rem ! important;
+}
+header {
+    display: -webkit-flex;
+    display: flex;
+    padding: 1rem 1rem 0 1.5rem;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    flex-direction: row;
+    background-color: #5bbd72; /*#3b83c0;*/
+}
+header .content, header a {
+    color: white;
+}
+header .sub.header {
+    color: lightblue ! important;
+}
+main {
+    padding: 1rem;
+}
+footer {
+    margin-top: 1rem;
+}
+footer p {
+    border-top: 1px solid #e5e5e5;
+    padding: .5rem;
+    text-align: center;
+}
+/* Styles the CKEditor to show an error state when the field is marked as an error */
+.ui.form .field.error .cke {
+    outline: 2px solid #d95c5c;
+}
