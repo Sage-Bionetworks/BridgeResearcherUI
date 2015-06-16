@@ -3,3 +3,18 @@ node_js:
     0.12.3
 script:
     webpack -p
+deploy:
+    - provider: s3
+      bucket: "research-staging.sagebridge.org"
+      skip_cleanup: true
+      endpoint: research-staging.sagebridge.org.s3-website-us-west-2.amazonaws.com
+      local_dir: app
+      on:
+          branch: develop
+    - provider: s3
+      bucket: "research.sagebridge.org"
+      skip_cleanup: true
+      endpoint: research.sagebridge.org.s3-website-us-west-2.amazonaws.com
+      local_dir: app
+      on:
+          branch: release
