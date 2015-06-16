@@ -69,3 +69,7 @@ footer p {
     padding: .5rem;
     text-align: center;
 }
+/* Styles the CKEditor to show an error state when the field is marked as an error */
+.ui.form .field.error .cke {
+    outline: 2px solid #d95c5c;
+}

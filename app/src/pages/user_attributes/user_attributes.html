@@ -2,6 +2,8 @@
     <div class="ten wide column">
         <h3>User Attributes</h3>
 
+        <form-message params="message: message"></form-message>
+
         <div class="ui large labels" data-bind="foreach: records">
             <div class="ui label">
                 <span data-bind="text: $data"></span> <i class="icon close" data-bind="click: $component.remove"></i>

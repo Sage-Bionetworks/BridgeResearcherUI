@@ -19,5 +19,6 @@ module.exports = config = {
     get_study: '/researcher/v1/study',
     active_study_consent: '/researcher/v1/consents/active',
     study_consent_history: '/researcher/v1/consents',
-    study_consent: '/researcher/v1/consents/'
+    study_consent: '/researcher/v1/consents/',
+    send_roster: '/researcher/v1/study/participants'
 };

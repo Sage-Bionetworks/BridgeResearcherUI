@@ -1,0 +1,21 @@
+<div>
+    <h3>Participant Roster</h3>
+
+    <div class="ui error message" data-bind="text: errorMsg, visible: errorMsg().length"></div>
+    <div class="ui green message" data-bind="text: message, visible: message().length"></div>
+
+    <style>
+        td { padding: 5px 10px; }
+    </style>
+    <table>
+        <tr>
+            <td style="white-space: nowrap">
+                <button class="ui primary submit button" data-bind="click: sendRoster">Email Participant Roster</button>
+            </td>
+            <td>
+                <p>You can email the entire participant roster to your consent administrator (the email address you've set to receive consent notifications). </div>
+            </td>
+        </tr>
+    </table>
+
+</div>

@@ -33,8 +33,14 @@ function getHeaders() {
     }
     return headers;
 }
+function sendHandler() {
+}
+function completeHandler() {
+}
 function post(url, data) {
-    if (typeof data !== 'string') {
+    if (!data) {
+        data = "{}";
+    } else if (typeof data !== 'string') {
         data = JSON.stringify(data);
     }
     var output = data.replace(/"password":"([^"]*)"/, '"password":"[REDACTED]"');
@@ -47,12 +53,8 @@ function post(url, data) {
         data: data,
         type: "application/json",
         dataType: "json",
-        beforeSend: function() {
-            $(".form").addClass("loading");
-        },
-        complete: function() {
-            $(".form").removeClass("loading");
-        }
+        beforeSend: sendHandler,
+        complete: completeHandler
     });
 }
 function get(url) {
@@ -63,12 +65,8 @@ function get(url) {
         headers: getHeaders(),
         type: "application/json",
         dataType: "json",
-        ajaxStart: function() {
-            $("form").addClass("loading");
-        },
-        ajaxStop: function() {
-            $("form").removeClass("loading");
-        }
+        beforeSend: sendHandler,
+        complete: completeHandler
     });
 }
 function makeSessionWaitingPromise(func) {
@@ -85,8 +83,12 @@ function makeSessionWaitingPromise(func) {
             events.once(SESSION_STARTED_EVENT_KEY, executor);
         }
     });
-    promise.catch(function(error) {
-        console.error(error);
+    promise.catch(function(response) {
+        if (response.responseJSON) {
+            console.error(response.status, response.responseJSON);
+        } else {
+            console.error("Significant server failure", response);
+        }
     });
     return promise;
 }
@@ -99,6 +101,7 @@ module.exports = {
     signIn: function(env, data) {
         var request = Promise.resolve(post(config.host[env] + config.signIn, data));
         request.then(function(sess) {
+            console.log(sess);
             sess.environment = env;
             session = sess;
             optionsService.set(SESSION_KEY, sess);
@@ -143,6 +146,11 @@ module.exports = {
     getConsentHistory: function() {
         return makeSessionWaitingPromise(function() {
             return get(config.host[session.environment] + config.study_consent_history);
+        });
+    },
+    sendRoster: function() {
+        return makeSessionWaitingPromise(function() {
+            return post(config.host[session.environment] + config.send_roster);
         });
     },
     addSessionStartListener: function(listener) {

@@ -1,9 +1,9 @@
 var $ = require('jquery');
 var ko = require('knockout');
 var mapping = require('knockout-mapping');
-var config = require('../config');
-var optionsService = require('../services/options_service');
-var serverService = require('../services/server_service');
+var config = require('../../config');
+var optionsService = require('../../services/options_service');
+var serverService = require('../../services/server_service');
 
 // This is still the signin view model. There'll be another view model in this class.
 var AuthViewModel = function() {
@@ -41,7 +41,7 @@ var AuthViewModel = function() {
         $authModal.modal('setting', 'closable', false);
         $authModal.modal('show');
     };
-    this.onSignIn = function(env, data) {
+    this.onSignIn = function(data) {
         if (data.sessionToken) {
             this.data.username("");
             this.data.password("");
@@ -53,8 +53,6 @@ var AuthViewModel = function() {
         this.hideError();
         $authModal.modal('hide');
     };
-
-    // Need a good general-purpose error handler
 
     this.onError = function(error) {
         console.error("onError arguments", arguments);

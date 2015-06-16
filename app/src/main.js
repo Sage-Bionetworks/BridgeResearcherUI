@@ -1,17 +1,10 @@
 require('../css/main');
-require('./auth/auth');
+require('./pages/auth/auth');
 var director = require('director');
 var ko = require('knockout');
 var $ = require('jquery');
 var serverService = require('./services/server_service');
 
-$.fn.serializeJSON = function() {
-    var json = this.serializeArray().reduce(function(obj, el) {
-        obj[el.name] = el.value;
-        return obj;
-    }, {});
-    return JSON.stringify(json);
-};
 ko.observableArray.fn.pushAll = function(valuesToPush) {
     var underlyingArray = this();
     this.valueWillMutate();
@@ -19,33 +12,55 @@ ko.observableArray.fn.pushAll = function(valuesToPush) {
     this.valueHasMutated();
     return this;  //optional
 };
+ko.observableArray.fn.contains = function(value) {
+    var underlyingArray = this();
+    return underlyingArray.indexOf(value) > -1;
+};
+ko.bindingHandlers.createEditor = {
+    init: function(element) {
+        var config = {
+            toolbarGroups: [
+                { name: 'clipboard', groups: ['clipboard','undo']},
+                {"name":"basicstyles","groups":["basicstyles"]},
+                {"name":"paragraph","groups":["list","blocks"]},
+                {"name":"insert","groups":["insert"]},
+                {"name":"styles","groups":["styles"]},
+                {"name":"links","groups":["links"]}
+            ]
+        };
+        CKEDITOR.replace(element, config);
+    }
+};
 
 ko.components.register('info', {
-    viewModel: require('./info/info'), template: require('./info/info.html')
+    viewModel: require('./pages/info/info'), template: require('./pages/info/info.html')
 });
 ko.components.register('consent', {
-    viewModel: require('./consent/consent'), template: require('./consent/consent.html')
+    viewModel: require('./pages/consent/consent'), template: require('./pages/consent/consent.html')
 });
 ko.components.register('eligibility', {
-    viewModel: require('./eligibility/eligibility'), template: require('./eligibility/eligibility.html')
+    viewModel: require('./pages/eligibility/eligibility'), template: require('./pages/eligibility/eligibility.html')
 });
 ko.components.register('password_policy', {
-    viewModel: require('./password_policy/password_policy'), template: require('./password_policy/password_policy.html')
+    viewModel: require('./pages/password_policy/password_policy'), template: require('./pages/password_policy/password_policy.html')
 });
 ko.components.register('user_attributes', {
-    viewModel: require('./user_attributes/user_attributes'), template: require('./user_attributes/user_attributes.html')
+    viewModel: require('./pages/user_attributes/user_attributes'), template: require('./pages/user_attributes/user_attributes.html')
 });
 ko.components.register('ve_template', {
-    viewModel: require('./ve_template/ve_template'), template: require('./ve_template/ve_template.html')
+    viewModel: require('./pages/ve_template/ve_template'), template: require('./pages/ve_template/ve_template.html')
 });
 ko.components.register('rp_template', {
-    viewModel: require('./rp_template/rp_template'), template: require('./rp_template/rp_template.html')
+    viewModel: require('./pages/rp_template/rp_template'), template: require('./pages/rp_template/rp_template.html')
 });
 ko.components.register('actions', {
-    viewModel: require('./actions/actions'), template: require('./actions/actions.html')
+    viewModel: require('./pages/actions/actions'), template: require('./pages/actions/actions.html')
 });
 ko.components.register('not_found', {
-    viewModel: require('./not_found/not_found'), template: require('./not_found/not_found.html')
+    viewModel: require('./pages/not_found/not_found'), template: require('./pages/not_found/not_found.html')
+});
+ko.components.register('form-message', {
+    viewModel: require('./widgets/form_message/form_message'), template: require('./widgets/form_message/form_message.html')
 });
 
 var RootViewModel = function() {
@@ -85,7 +100,7 @@ director.Router({
     'actions': root.routeTo('actions'),
     'signOut': serverService.signOut
 }).configure({
-    notfound: root.routeTo('not_found')
+    notfound: root.routeTo('info')
 }).init();
 
 // Make this global for Semantic UI.

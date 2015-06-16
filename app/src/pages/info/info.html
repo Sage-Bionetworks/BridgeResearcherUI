@@ -1,0 +1,48 @@
+<div class="ui grid" data-bind="foreach: records">
+    <div class="ten wide column">
+        <h3>General Information</h3>
+
+        <form class="ui form" data-bind="css: {error: $component.errorMsg().length}">
+            <div class="ui error message">
+                <p data-bind="text: $component.errorMsg"></p>
+            </div>
+            <div class="field" data-bind="css: {error: $component.errorFields.contains('name')}">
+                <label>Study name</label>
+                <input type="text" name="name" data-bind="value: $data.name"/>
+            </div>
+            <div class="field" data-bind="css: {error: $component.errorFields.contains('sponsorName')}">
+                <label>Sponsor name</label>
+                <input type="text" name="name" data-bind="value: $data.sponsorName"/>
+            </div>
+            <div class="field" data-bind="css: {error: $component.errorFields.contains('technicalEmail')}">
+                <label>Technical contact email</label>
+                <input type="text" name="technicalEmail" data-bind="value: $data.technicalEmail"/>
+            </div>
+            <div class="field" data-bind="css: {error: $component.errorFields.contains('supportEmail')}">
+                <label>Support email</label>
+                <input type="text" name="supportEmail" data-bind="value: $data.supportEmail"/>
+            </div>
+            <div class="field" data-bind="css: {error: $component.errorFields.contains('consentNotificationEmail')}">
+                <label>Consent notification email</label>
+                <input type="text" name="consentNotificationEmail" data-bind="value: $data.consentNotificationEmail"/>
+            </div>
+            <div class="field">
+                <button type="submit" class="ui primary submit button" data-bind="click: $parent.save">Save</button>
+            </div>
+        </form>
+    </div>
+    <div class="six wide column">
+        <div class="ui message">
+            <p>The identifier for this study is <b style="color:black; font-family: monospace" data-bind="text: $data.identifier"></b>.
+                Your technical staff will need this identifier to integrate with the Bridge server. </p>
+
+            <p>Sage Bionetworks will use the technical email address to contact you about administration of the study. </p>
+
+            <p>The support email will be given to participants to contact you about the study and to ask for
+            technical support. This is the only email address exposed to end users. </p>
+
+            <p>The consent notification address will receive a copy of every consent that is signed by participants. The recipient
+                should have permission to view personally-identifying information about participants. </p>
+        </div>
+    </div>
+</div>

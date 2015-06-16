@@ -1,0 +1,25 @@
+<h3>Eligibility Criteria</h3>
+
+<form class="ui form" data-bind="css: {error: $component.errorMsg().length}">
+
+    <div class="ui error message" data-bind="text: errorMsg, visible: errorMsg().length"></div>
+    <div class="ui green message" data-bind="text: message, visible: message().length"></div>
+
+    <div class="field" data-bind="css: {error: $component.errorFields.contains('minAge')}">
+        <label>Youngest allowable age for participants</label>
+        <input type="number" data-bind="value: minAgeOfConsent"/>
+        <div class="ui pointing label">
+            <em>Zero indicates no minimum age for consent in study.</em>
+        </div>
+    </div>
+    <div class="field" data-bind="css: {error: $component.errorFields.contains('maxNum')}">
+        <label>Maximum number of participants in study</label>
+        <input type="text" data-bind="value: maxNumOfParticipants"/>
+        <div class="ui pointing label">
+            <em>Zero indicates no limit set on the number of participants.</em>
+        </div>
+    </div>
+    <div class="field">
+        <button type="submit" class="ui primary submit button" data-bind="click: save">Save</button>
+    </div>
+</form>
