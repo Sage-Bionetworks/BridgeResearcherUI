@@ -1,5 +1,7 @@
 # BridgeResearcherUI
 
+[![Build Status](https://travis-ci.org/Sage-Bionetworks/BridgeResearcherUI.svg?branch=develop)](https://travis-ci.org/Sage-Bionetworks/BridgeResearcherUI)
+
 Study management application for Bridge researchers.
 
 ## Getting started
