@@ -14,7 +14,7 @@ deploy:
       skip_cleanup: true
       acl: public_read
       endpoint: research-staging.sagebridge.org.s3-website-us-west-2.amazonaws.com
-      region: "Oregon"
+      region: "us-west-2"
       local_dir: app
       on:
           branch: develop
@@ -27,7 +27,7 @@ deploy:
       skip_cleanup: true
       acl: public_read
       endpoint: research.sagebridge.org.s3-website-us-west-2.amazonaws.com
-      region: "Oregon"
+      region: "us-west-2"
       local_dir: app
       on:
           branch: release
