@@ -33,18 +33,14 @@ function getHeaders() {
     }
     return headers;
 }
-function sendHandler() {
-}
-function completeHandler() {
-}
 function post(url, data) {
     if (!data) {
         data = "{}";
     } else if (typeof data !== 'string') {
         data = JSON.stringify(data);
     }
-    var output = data.replace(/"password":"([^"]*)"/, '"password":"[REDACTED]"');
-    console.debug("POST", url, output);
+    var dataString = data.replace(/"password":"([^"]*)"/, '"password":"[REDACTED]"');
+    console.debug("POST", url, dataString);
 
     return $.ajax({
         method: 'POST',
@@ -52,9 +48,7 @@ function post(url, data) {
         headers: getHeaders(),
         data: data,
         type: "application/json",
-        dataType: "json",
-        beforeSend: sendHandler,
-        complete: completeHandler
+        dataType: "json"
     });
 }
 function get(url) {
@@ -64,9 +58,7 @@ function get(url) {
         url: url,
         headers: getHeaders(),
         type: "application/json",
-        dataType: "json",
-        beforeSend: sendHandler,
-        complete: completeHandler
+        dataType: "json"
     });
 }
 function makeSessionWaitingPromise(func) {

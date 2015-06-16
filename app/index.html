@@ -70,9 +70,9 @@
     <div id="authModal" class="ui small modal">
         <div id="signIn">
             <h3>Sign In</h3>
-            <div data-bind="attr: { class: errorClass }">
-                <p data-bind="text: error"></p>
-            </div>
+
+            <form-message params="message: message"></form-message>
+
             <form class="ui form">
                 <div class="field">
                     <label for="username">Email address</label>

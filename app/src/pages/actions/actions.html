@@ -1,8 +1,7 @@
 <div>
     <h3>Participant Roster</h3>
 
-    <div class="ui error message" data-bind="text: errorMsg, visible: errorMsg().length"></div>
-    <div class="ui green message" data-bind="text: message, visible: message().length"></div>
+    <form-message params="message: message"></form-message>
 
     <style>
         td { padding: 5px 10px; }

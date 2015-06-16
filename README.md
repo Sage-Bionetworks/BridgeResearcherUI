@@ -14,7 +14,7 @@ Install node and npm. We recommend using something like nvm to manage your node 
     
 Run a server (localhost:8080)
 
-    npm run server
+    npm run start
     
 Rebuild when a file changes
 
@@ -26,4 +26,4 @@ Build a release
 
 ## Notes
 
-Please try and include resources using npm rather than Bower. Two build tools (npm + webpack) are enough.
+Please try and include resources using npm rather than Bower. Two build tools (npm + webpack) seems like enough.

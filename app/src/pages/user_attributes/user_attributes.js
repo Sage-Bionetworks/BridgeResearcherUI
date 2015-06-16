@@ -1,5 +1,6 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
+var utils = require('../../utils');
 
 module.exports = function() {
     var self = this;
@@ -24,18 +25,15 @@ module.exports = function() {
         self.addField("");
     };
     self.save = function(vm, event) {
-        event.target.classList.add("loading");
+        utils.startHandler(self, event);
         self.study.userProfileAttributes = self.records();
 
         var request = serverService.saveStudy(self.study);
-        request.then(function(response) {
-            event.target.classList.remove("loading");
+        request.then(utils.successHandler(self, event))
+        .then(function(response) {
             self.study.version = response.version;
             self.message({text: "User attributes saved."});
-        }).catch(function(response) {
-            event.target.classList.remove("loading");
-            self.message({text: response.message, status: "error"});
-        });
+        }).catch(utils.failureHandler(vm, event));
     };
 
     var request = serverService.getStudy();

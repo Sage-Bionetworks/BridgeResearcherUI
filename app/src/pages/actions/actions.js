@@ -1,32 +1,20 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
-
-// Would like to create a utility library of these.
-function jsonMessageHandler(observable, button) {
-    return function(response) {
-        if (button) {
-            button.classList.remove("loading");
-        }
-        if (response.responseJSON && response.responseJSON.message) {
-            observable(response.responseJSON.message);
-        } else if (response.message) {
-            observable(response.message);
-        } else {
-            observable(response.toString());
-        }
-    }
-}
+var utils = require('../../utils');
 
 module.exports = function() {
     var self = this;
 
     self.message = ko.observable("");
-    self.errorMsg = ko.observable("");
 
     self.sendRoster = function(vm, event) {
-        event.target.classList.add("loading");
+        utils.startHandler(self, event);
+
         serverService.sendRoster()
-            .then(jsonMessageHandler(self.message, event.target))
-            .catch(jsonMessageHandler(self.errorMsg, event.target));
+            .then(utils.successHandler(vm, event))
+            .then(function(response) {
+                self.message({text: response.message});
+            })
+            .catch(utils.failureHandler(vm, event));
     };
 };
