@@ -1,4 +1,3 @@
-var $ = require('jquery');
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
 
