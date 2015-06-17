@@ -1,6 +1,18 @@
 var ko = require('knockout');
 
+/**
+ * Common utility methods for ViewModels.
+ *
+ * TODO: Add dirty state tracking to the observables that are created.
+ */
 module.exports = {
+    /**
+     * A start handler called before a request to the server is made. All errors are cleared
+     * and a loading indicator is shown. This is not done globally because some server requests
+     * happen in the background and don't signal to the user that they are occurring.
+     * @param vm
+     * @param event
+     */
     startHandler: function(vm, event) {
         event.target.classList.add("loading");
         if (vm.errorFields) {
@@ -27,6 +39,15 @@ module.exports = {
             return response;
         }
     },
+    /**
+     * An ajax failure handler for a view model that supports the editing of a form.
+     * Turns off the loading indicator, shows a global error message if there is a message
+     * observable, and adds any error fields to an errorFields array, which is used to
+     * mark fields that are invalid in the UI.
+     * @param vm
+     * @param event
+     * @returns {Function}
+     */
     failureHandler: function(vm, event) {
         return function(response) {
             var json = response.responseJSON;
@@ -44,18 +65,37 @@ module.exports = {
             return response;
         }
     },
+    /**
+     * Create an observable for each field name provided.
+     * @param vm
+     * @param fields
+     */
     observablesFor: function(vm, fields) {
         for (var i=0; i < fields.length; i++) {
             var name = fields[i];
             vm[name] = ko.observable("");
         }
     },
+    /**
+     * Given a model object, update all the observables for each field name provided.
+     * You will need to call utils.observablesFor() with these fields first.
+     *
+     * @param vm
+     * @param object
+     * @param fields
+     */
     valuesToObservables: function(vm, object, fields) {
         for (var i=0; i < fields.length; i++) {
             var name = fields[i];
             vm[name](object[name]);
         }
     },
+    /**
+     * Copy all the values of all the observables (presumably updated) back to the model object.
+     * @param vm
+     * @param object
+     * @param fields
+     */
     observablesToObject: function(vm, object, fields) {
         for (var i=0; i < fields.length; i++) {
             var name = fields[i];

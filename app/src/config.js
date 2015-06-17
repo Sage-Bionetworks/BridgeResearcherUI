@@ -1,6 +1,5 @@
 module.exports = config = {
     studies: [
-        {value: "test", label: "Test"},
         {value: "api", label: "API"},
         {value: "asthma", label: "Asthma Health"},
         {value: "diabetes", label: "GlucoSuccess"},

@@ -10,7 +10,7 @@
                 <input type="text" name="subject" data-bind="value: subject"/>
             </div>
             <div class="field" data-bind="css: errorFor('verifyEmailTemplate.body')">
-                <textarea id="veTemplate" data-bind="createEditor: $component" class="ui textarea doc"></textarea>
+                <textarea id="veTemplate" data-bind="ckeditor: $component.initEditor" class="ui textarea doc"></textarea>
             </div>
             <button class="ui primary submit button" data-bind="click: save">Save</button>
         </form>

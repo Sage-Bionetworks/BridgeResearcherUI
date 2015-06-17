@@ -16,8 +16,11 @@ ko.observableArray.fn.contains = function(value) {
     var underlyingArray = this();
     return underlyingArray.indexOf(value) > -1;
 };
-ko.bindingHandlers.createEditor = {
+ko.bindingHandlers.ckeditor = {
     init: function(element, valueAccessor) {
+        if (!CKEDITOR) {
+            throw new Error("CK editor has not been loaded in the page");
+        }
         var config = {
             toolbarGroups: [
                 { name: 'clipboard', groups: ['clipboard','undo']},
@@ -29,7 +32,8 @@ ko.bindingHandlers.createEditor = {
             ],
             on: {
                 instanceReady: function(event) {
-                    valueAccessor().initEditor();
+                    var callback = valueAccessor();
+                    callback(event.editor);
                 }
             }
         };
