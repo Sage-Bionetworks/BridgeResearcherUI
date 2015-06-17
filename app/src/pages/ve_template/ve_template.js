@@ -1,6 +1,6 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
-var util = require('../../utils');
+var utils = require('../../utils');
 
 module.exports = function() {
     var self = this;
@@ -9,12 +9,14 @@ module.exports = function() {
     self.subject = ko.observable("");
     self.message = ko.observable("");
     self.errorFields = ko.observableArray();
+    self.editor = null;
 
-    self.initEditor = function() {
+    self.initEditor = function(ckeditor) {
+        self.editor = ckeditor;
         serverService.getStudy().then(function(study) {
             self.study = study;
             self.subject(study.verifyEmailTemplate.subject);
-            CKEDITOR.instances.veTemplate.setData(study.verifyEmailTemplate.body);
+            self.editor.setData(study.verifyEmailTemplate.body);
         });
     };
 
@@ -27,7 +29,7 @@ module.exports = function() {
     self.save = function(vm, event) {
         utils.startHandler(self, event);
         self.study.verifyEmailTemplate.subject = self.subject();
-        self.study.verifyEmailTemplate.body = CKEDITOR.instances.veTemplate.getData();
+        self.study.verifyEmailTemplate.body = self.editor.getData();
 
         serverService.saveStudy(self.study)
             .then(utils.successHandler(vm, event))

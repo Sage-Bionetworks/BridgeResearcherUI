@@ -9,12 +9,14 @@ module.exports = function() {
     self.subject = ko.observable("");
     self.message = ko.observable("");
     self.errorFields = ko.observableArray();
+    self.editor = null;
 
-    self.initEditor = function() {
+    self.initEditor = function(ckeditor) {
+        self.editor = ckeditor;
         serverService.getStudy().then(function(study) {
             self.study = study;
             self.subject(study.resetPasswordTemplate.subject);
-            CKEDITOR.instances.rpTemplate.setData(study.resetPasswordTemplate.body);
+            self.editor.setData(study.resetPasswordTemplate.body);
         });
     };
 
@@ -27,7 +29,7 @@ module.exports = function() {
     self.save = function(vm, event) {
         utils.startHandler(self, event);
         self.study.resetPasswordTemplate.subject = self.subject();
-        self.study.resetPasswordTemplate.body = CKEDITOR.instances.rpTemplate.getData();
+        self.study.resetPasswordTemplate.body = self.editor.getData();
 
         serverService.saveStudy(self.study)
             .then(utils.successHandler(vm, event))

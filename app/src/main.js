@@ -1,9 +1,10 @@
 require('../css/main');
-require('./pages/auth/auth');
+//require('./pages/auth/auth');
 var director = require('director');
 var ko = require('knockout');
 var $ = require('jquery');
 var serverService = require('./services/server_service');
+var utils = require('./utils');
 
 ko.observableArray.fn.pushAll = function(valuesToPush) {
     var underlyingArray = this();
@@ -16,8 +17,11 @@ ko.observableArray.fn.contains = function(value) {
     var underlyingArray = this();
     return underlyingArray.indexOf(value) > -1;
 };
-ko.bindingHandlers.createEditor = {
+ko.bindingHandlers.ckeditor = {
     init: function(element, valueAccessor) {
+        if (!CKEDITOR) {
+            throw new Error("CK editor has not been loaded in the page");
+        }
         var config = {
             toolbarGroups: [
                 { name: 'clipboard', groups: ['clipboard','undo']},
@@ -29,13 +33,31 @@ ko.bindingHandlers.createEditor = {
             ],
             on: {
                 instanceReady: function(event) {
-                    valueAccessor().initEditor();
+                    var callback = valueAccessor();
+                    callback(event.editor);
                 }
             }
         };
         CKEDITOR.replace(element, config);
     }
 };
+ko.bindingHandlers.modal = {
+    init: function(element, valueAccessor, ignored1, ignored2, bindingContext) {
+        ko.bindingHandlers.component.init(element, valueAccessor, ignored1, ignored2, bindingContext);
+    },
+    update: function(element, valueAccessor, ignored1, ignored2, bindingContext) {
+        var value = ko.unwrap(valueAccessor());
+        var $modal = $(element).children(".modal");
+        if ($modal.modal) {
+            $modal.modal({"closable": false});
+            if (value !== "none_dialog") {
+                $modal.modal('show');
+            } else {
+                $modal.modal('hide');
+            }
+        }
+    }
+}
 
 ko.components.register('info', {
     viewModel: require('./pages/info/info'), template: require('./pages/info/info.html')
@@ -64,6 +86,15 @@ ko.components.register('actions', {
 ko.components.register('form-message', {
     viewModel: require('./widgets/form_message/form_message'), template: require('./widgets/form_message/form_message.html')
 });
+ko.components.register('none_dialog', {
+    template: require('./dialogs/none/none_dialog.html')
+});
+ko.components.register('sign_in_dialog', {
+    viewModel: require('./dialogs/sign_in/sign_in'), template: require('./dialogs/sign_in/sign_in.html'), synchronous: true
+});
+ko.components.register('forgot_password_dialog', {
+    viewModel: require('./dialogs/forgot_password/forgot_password'), template: require('./dialogs/forgot_password/forgot_password.html'), synchronous: true
+});
 
 var RootViewModel = function() {
     var self = this;
@@ -74,14 +105,28 @@ var RootViewModel = function() {
     self.mainPage = ko.observable('info');
     self.mainPage.subscribe(self.selected);
 
+    self.currentDialog = ko.observable('none_dialog');
+
+    self.signOut = function() {
+        console.log("Signing out.")
+        serverService.signOut();
+    };
+
     self.routeTo = function(name) {
         return function() {
             self.mainPage(name);
         }
     };
+
+    utils.eventbus.addListener('dialogs', function(value) {
+        if (value === "none_dialog") {
+            $(".modal").modal('hide');
+        }
+        self.currentDialog(value);
+    });
 };
 var root = new RootViewModel();
-ko.applyBindings(root, document.querySelector("#page-context"));
+ko.applyBindings(root, document.body);
 
 // This is for debugging, and will be removed.
 serverService.addSessionStartListener(function(session) {
@@ -89,6 +134,12 @@ serverService.addSessionStartListener(function(session) {
 });
 serverService.addSessionEndListener(function(session) {
     $("#sessionToken").text("");
+});
+serverService.addSessionStartListener(function() {
+    utils.eventbus.emit('dialogs', 'none_dialog');
+});
+serverService.addSessionEndListener(function() {
+    root.currentDialog('sign_in_dialog');
 });
 
 director.Router({
@@ -99,8 +150,7 @@ director.Router({
     'user_attributes': root.routeTo('user_attributes'),
     'verify_email_template': root.routeTo('ve_template'),
     'reset_password_template': root.routeTo('rp_template'),
-    'actions': root.routeTo('actions'),
-    'signOut': serverService.signOut
+    'actions': root.routeTo('actions')
 }).configure({
     notfound: root.routeTo('info')
 }).init();

@@ -115,6 +115,9 @@ module.exports = {
         };
         return new Promise(f);
     },
+    requestResetPassword: function(env, data) {
+        return Promise.resolve(post(config.host[env] + config.request_reset_password, data));
+    },
     getStudy: function() {
         return makeSessionWaitingPromise(function() {
             return get(config.host[session.environment] + config.get_study);

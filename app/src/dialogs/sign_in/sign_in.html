@@ -1,0 +1,36 @@
+<div class="small ui modal">
+    <div class="content">
+        <h3>Sign In</h3>
+
+        <form-message params="message: message"></form-message>
+
+        <form class="ui form">
+            <div class="field">
+                <label for="username">Email address</label>
+                <input id="username" type="text" data-bind="textInput: username"/>
+            </div>
+            <div class="field">
+                <label for="password">Password</label>
+                <input id="password" type="password" data-bind="textInput: password"/>
+            </div>
+            <div class="two fields">
+                <div class="field">
+                    <label for="study">Study</label>
+                    <select id="study" class="ui dropdown" data-bind="value: study,
+                        options: studyOptions, optionsText: 'label', optionsValue: 'value'">
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="environment">Environment</label>
+                    <select name="environment" id="environment" class="ui dropdown" data-bind="value: environment,
+                        options: environmentOptions, optionsText: 'label', optionsValue: 'value'">
+                    </select>
+                </div>
+            </div>
+            <div class="field">
+                <button type="submit" class="ui primary submit button" data-bind="click: signIn">Sign In</button>
+                <button class="ui button" data-bind="click: forgotPassword">Forgot Password</button>
+            </div>
+        </form>
+    </div>
+</div>
