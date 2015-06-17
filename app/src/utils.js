@@ -5,6 +5,7 @@ var EventEmitter = require('events');
  * Common utility methods for ViewModels.
  *
  * TODO: Add dirty state tracking to the observables that are created.
+ * TODO: eventbus works but come up with a one method dialog-specific method
  */
 module.exports = {
     eventbus: new EventEmitter(),
