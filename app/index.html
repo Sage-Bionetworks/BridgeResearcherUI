@@ -14,7 +14,7 @@
                     <div class="sub header">Sage Bionetworks</div>
                 </div>
             </h2>
-            <a href="#signOut">Sign Out</a>
+            <a href="#" data-bind="click: signOut">Sign Out</a>
         </header>
         <section>
             <main>
@@ -57,7 +57,7 @@
                         </div>
                     </div>
                     <div class="item">
-                        <i class="sign out icon"></i> <a href="#signOut">Sign Out</a>
+                        <i class="sign out icon"></i> <a href="#" data-bind="click: signOut">Sign Out</a>
                     </div>
                 </div>
             </nav>
@@ -66,47 +66,7 @@
             <p>&copy; 2015 Sage Bionetworks. <span id="sessionToken"></span></p>
         </footer>
     </div>
-
-    <div id="authModal" class="ui small modal">
-        <div id="signIn">
-            <h3>Sign In</h3>
-
-            <form-message params="message: message"></form-message>
-
-            <form class="ui form">
-                <div class="field">
-                    <label for="username">Email address</label>
-                    <input name="username" id="username" type="text" data-bind="textInput: data.username"/>
-                </div>
-                <div class="field">
-                    <label for="password">Password</label>
-                    <input name="password" id="password" type="password" data-bind="textInput: data.password"/>
-                </div>
-                <div class="two fields">
-                    <div class="field">
-                        <label for="study">Study</label>
-                        <select name="study" id="study" class="ui dropdown"
-                                data-bind="value: data.study, options: studyOptions,
-                                optionsText: 'label', optionsValue: 'value'">
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label for="environment">Environment</label>
-                        <select name="environment" id="environment" class="ui dropdown" data-bind="value: environment">
-                            <option value="local">Local</option>
-                            <option value="develop">Development</option>
-                            <option value="staging">Staging</option>
-                            <option value="production">Production</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="field">
-                    <button type="submit" class="ui primary submit button" data-bind="click: signIn">Sign In</button>
-                    <a style="margin-left:1rem" href="#forgotPassword" class="ui horizontal link" data-bind="click: forgotPassword">Forgot Password</a>
-                </div>
-            </form>
-        </div>
-    </div>
+    <div id="dialogHolder" data-bind="modal: currentDialog"></div>
     <script src="../dist/bundle.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/semantic.min.js"></script>
 </body>

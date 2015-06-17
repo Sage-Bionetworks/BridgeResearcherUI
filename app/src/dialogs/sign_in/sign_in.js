@@ -1,5 +1,4 @@
 var ko = require('knockout');
-// var dialogService = require('../../services/dialog_service');
 var optionsService = require('../../services/options_service');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
@@ -10,14 +9,15 @@ var fields = ['username', 'password', 'study', 'environment'];
 module.exports = function() {
     var self = this;
 
-    var env = optionsService.get('environment', 'production');
     var study = optionsService.get('study', 'api');
+    var env = optionsService.get('environment', 'production');
 
     self.message = ko.observable("");
     utils.observablesFor(self, fields);
-    self.environment(env);
     self.study(study);
     self.studyOptions = config.studies;
+    self.environmentOptions = config.environments;
+    self.environment(env);
 
     self.signIn = function(vm, event) {
         if (self.username() === "" || self.password() === "") {
@@ -29,7 +29,7 @@ module.exports = function() {
 
         utils.startHandler(self, event);
 
-        serverService.signIn(env, {
+        serverService.signIn(self.environment(), {
             username: self.username(), password: self.password(), study: self.study()
         })
         .then(utils.successHandler(self, event))
@@ -41,7 +41,7 @@ module.exports = function() {
     };
 
     self.forgotPassword = function() {
-        alert("not implemented");
+        utils.eventbus.emit('dialogs', 'forgot_password_dialog');
     };
 
 };

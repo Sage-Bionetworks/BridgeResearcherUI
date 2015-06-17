@@ -1,4 +1,4 @@
-<div class="small ui active modal">
+<div class="small ui modal">
     <div class="content">
         <h3>Sign In</h3>
 
@@ -16,17 +16,14 @@
             <div class="two fields">
                 <div class="field">
                     <label for="study">Study</label>
-                    <select id="study" class="ui dropdown" data-bind="value: study, options: studyOptions,
-                            optionsText: 'label', optionsValue: 'value'">
+                    <select id="study" class="ui dropdown" data-bind="value: study,
+                        options: studyOptions, optionsText: 'label', optionsValue: 'value'">
                     </select>
                 </div>
                 <div class="field">
                     <label for="environment">Environment</label>
-                    <select name="environment" id="environment" class="ui dropdown" data-bind="value: environment">
-                        <option value="local">Local</option>
-                        <option value="develop">Development</option>
-                        <option value="staging">Staging</option>
-                        <option value="production">Production</option>
+                    <select name="environment" id="environment" class="ui dropdown" data-bind="value: environment,
+                        options: environmentOptions, optionsText: 'label', optionsValue: 'value'">
                     </select>
                 </div>
             </div>

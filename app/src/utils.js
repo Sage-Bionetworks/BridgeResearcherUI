@@ -1,4 +1,5 @@
 var ko = require('knockout');
+var EventEmitter = require('events');
 
 /**
  * Common utility methods for ViewModels.
@@ -6,6 +7,7 @@ var ko = require('knockout');
  * TODO: Add dirty state tracking to the observables that are created.
  */
 module.exports = {
+    eventbus: new EventEmitter(),
     /**
      * A start handler called before a request to the server is made. All errors are cleared
      * and a loading indicator is shown. This is not done globally because some server requests

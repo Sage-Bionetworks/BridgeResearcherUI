@@ -15,6 +15,16 @@ module.exports = function() {
     self.active = ko.observable(true);
     self.date = ko.observable('...');
     self.historyItems = ko.observableArray();
+    self.editor = null;
+
+    self.initEditor = function(ckeditor) {
+        self.editor = ckeditor;
+        serverService.getStudy().then(function(study) {
+            self.study = study;
+            self.subject(study.verifyEmailTemplate.subject);
+            self.editor.setData(study.verifyEmailTemplate.body);
+        });
+    };
 
     self.formatDate = function(date) {
         return new Date(date).toLocaleString();
@@ -29,7 +39,7 @@ module.exports = function() {
     serverService.getActiveStudyConsent().then(loadIntoEditor);
 
     self.save = function() {
-        console.log(CKEDITOR.instances.consentEditor.getData());
+        console.log(self.editor.getData());
     };
 
     self.loadHistoryItem = function(item) {

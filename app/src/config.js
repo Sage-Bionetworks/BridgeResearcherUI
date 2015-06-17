@@ -1,4 +1,10 @@
 module.exports = config = {
+    environments: [
+        {value: "local", label: "Local"},
+        {value: "develop", label: "Development"},
+        {value: "staging", label: "Staging"},
+        {value: "production", label: "Production"}
+    ],
     studies: [
         {value: "api", label: "API"},
         {value: "asthma", label: "Asthma Health"},
@@ -19,5 +25,6 @@ module.exports = config = {
     active_study_consent: '/researcher/v1/consents/active',
     study_consent_history: '/researcher/v1/consents',
     study_consent: '/researcher/v1/consents/',
-    send_roster: '/researcher/v1/study/participants'
+    send_roster: '/researcher/v1/study/participants',
+    request_reset_password: '/api/v1/auth/requestResetPassword'
 };

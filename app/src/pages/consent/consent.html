@@ -15,7 +15,7 @@
             <i class="clock icon"></i> <span data-bind="text: $component.date"></span>
         </div>
         <div style="margin: 1rem 0">
-            <textarea id="consentEditor" data-bind="createEditor: true" class="ui textarea doc"></textarea>
+            <textarea id="consentEditor" data-bind="ckeditor: $component.initEditor" class="ui textarea doc"></textarea>
         </div>
         <button class="ui primary button" data-bind="click: save">Save</button>
     </div>
