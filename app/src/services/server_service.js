@@ -68,7 +68,7 @@ function makeSessionWaitingPromise(func) {
             var p = func();
             p.then(resolve);
             p.fail(reject);
-        }
+        };
         if (session) {
             executor();
         } else {

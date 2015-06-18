@@ -1,5 +1,4 @@
 require('../css/main');
-//require('./pages/auth/auth');
 var director = require('director');
 var ko = require('knockout');
 var $ = require('jquery');
@@ -57,7 +56,7 @@ ko.bindingHandlers.modal = {
             }
         }
     }
-}
+};
 
 ko.components.register('info', {
     viewModel: require('./pages/info/info'), template: require('./pages/info/info.html')
@@ -108,14 +107,14 @@ var RootViewModel = function() {
     self.currentDialog = ko.observable('none_dialog');
 
     self.signOut = function() {
-        console.log("Signing out.")
+        console.log("Signing out.");
         serverService.signOut();
     };
 
     self.routeTo = function(name) {
         return function() {
             self.mainPage(name);
-        }
+        };
     };
 
     utils.eventbus.addListener('dialogs', function(value) {

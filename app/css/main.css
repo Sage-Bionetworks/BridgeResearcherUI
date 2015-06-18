@@ -1,23 +1,13 @@
 body {
     background-color: white;
-}
-#page-container {
-    max-width: 800px;
-    margin: 20px auto;
-}
-
-#authModal {
-    padding: 2rem 2rem 1.5rem 2rem;
-}
-.field .ui.button {
-    margin-top: .5rem ! important;
-}
-body {
     display: -webkit-flex;
     display: flex;
     min-height: 100vh;
     -webkit-flex-direction: column;
     flex-direction: column;
+}
+.field .ui.button {
+    margin-top: .5rem ! important;
 }
 section {
     display: -webkit-flex;
@@ -34,12 +24,7 @@ nav {
     flex: 0 0 18em;
     -webkit-order: -1;
     order: -1;
-}
-nav > .menu {
-    margin: 2rem 1rem ! important;
-}
-main {
-    padding: 2rem 4rem 0 4rem ! important;
+    padding:  2rem 1rem ! important;
 }
 header {
     display: -webkit-flex;
@@ -51,6 +36,8 @@ header {
     justify-content: space-between;
     flex-direction: row;
     background-color: #5bbd72; /*#3b83c0;*/
+    box-shadow: 0px 2px 3px silver;
+    margin-bottom: 4px; /* scroll behind shadown. */
 }
 header .content, header a {
     color: white;
@@ -59,17 +46,14 @@ header .sub.header {
     color: lightblue ! important;
 }
 main {
-    padding: 1rem;
-}
-footer {
-    margin-top: 1rem;
+    padding: 2rem 1.5rem 1rem 1.5rem;
+    overflow: scroll;
 }
 footer p {
     border-top: 1px solid #e5e5e5;
     padding: .5rem;
     text-align: center;
 }
-/* Styles the CKEditor to show an error state when the field is marked as an error */
-.ui.form .field.error .cke {
-    outline: 2px solid #d95c5c;
+.form {
+    padding: 0 ! important;
 }
