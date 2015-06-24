@@ -5,7 +5,7 @@ var serverService = require('../../services/server_service');
 module.exports = function() {
     var self = this;
 
-    self.message = ko.observable();
+    self.message = ko.observable("This is a message");
     self.active = ko.observable(true);
     self.createdOn = ko.observable('Created on ...');
     self.historyItems = ko.observableArray();
@@ -14,6 +14,7 @@ module.exports = function() {
 
     self.tab = ko.observable('current');
     self.tab.subscribe(function(value) {
+        self.message("");
         if (value === "history") {
             serverService.getConsentHistory().then(function(data) {
                 self.historyItems(data.items);
@@ -22,7 +23,6 @@ module.exports = function() {
     });
 
     function loadIntoEditor(consent) {
-        console.log("consent", consent);
         self.createdOn("Created on " + self.formatDate(consent.createdOn));
         self.active(consent.active);
         self.editor.setData(consent.documentContent);
@@ -41,7 +41,7 @@ module.exports = function() {
     self.selectToPublish = function(vm, event) {
         self.consentSelected(ko.dataFor(event.target));
         return true;
-    }
+    };
 
     self.publish = function(vm, event) {
         utils.startHandler(vm, event);

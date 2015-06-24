@@ -1,3 +1,4 @@
+<form-message params="message: message"></form-message>
 <div class="ui secondary pointing menu">
     <a class="item" data-bind="click: function() { tab('current') }, css: {active: tab() == 'current'}">
         <i class="file outline icon"></i> Consent Agreement
@@ -6,7 +7,6 @@
         <i class="history icon"></i> Publication Status
     </a>
 </div>
-<form-message params="message: message"></form-message>
 <div class="form">
     <div data-bind="visible: tab() == 'current'">
         <div class="ui label">
