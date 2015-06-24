@@ -53,10 +53,11 @@ module.exports = {
      */
     failureHandler: function(vm, event) {
         return function(response) {
-            var json = response.responseJSON;
             event.target.classList.remove("loading");
             if (vm.message) {
-                vm.message({text:json.message, 'status': 'error'});
+                var msg = (response.responseJSON) ? response.responseJSON.message :
+                    "There has been an error contacting the server.";
+                vm.message({text:msg, 'status': 'error'});
             }
             if (vm.errorFields) {
                 if (json.errors) {

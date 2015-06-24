@@ -3,26 +3,26 @@
         <i class="file outline icon"></i> Consent Agreement
     </a>
     <a class="item" data-bind="click: function() { tab('history') }, css: {active: tab() == 'history'}">
-        <i class="history icon"></i> Edit History
+        <i class="history icon"></i> Publication Status
     </a>
 </div>
+<form-message params="message: message"></form-message>
 <div class="form">
-    <div data-bind="visible: $component.tab() == 'current'">
-        <div class="ui yellow label" data-bind="css: { hidden: $component.active() }">
-            <i class="warning icon"></i> You are editing an older version of the consent</span>
-        </div>
+    <div data-bind="visible: tab() == 'current'">
         <div class="ui label">
-            <i class="clock icon"></i> <span data-bind="text: $component.date"></span>
+            <i class="clock icon"></i> <span data-bind="text: createdOn"></span>
         </div>
         <div style="margin: 1rem 0">
-            <textarea id="consentEditor" data-bind="ckeditor: $component.initEditor" class="ui textarea doc"></textarea>
+            <textarea id="consentEditor" data-bind="ckeditor: initEditor" class="ui textarea doc"></textarea>
         </div>
         <button class="ui primary button" data-bind="click: save">Save</button>
     </div>
-    <div data-bind="visible: $component.tab() == 'history'">
+    <div data-bind="visible: tab() == 'history'">
+        <button class="ui primary button" data-bind="click: publish, disable: consentSelected() == null">Publish</button>
         <table class="ui table">
             <thead>
                 <tr>
+                    <th width="20">&nbsp;</th>
                     <th>Saved On</th>
                     <th>&nbsp;</th>
                 </tr>
@@ -30,8 +30,11 @@
             <tbody data-bind="foreach: historyItems">
                 <tr data-bind="css: { positive: $data.active }">
                     <td>
+                        <input type="radio" name="publish" data-bind="click: $component.selectToPublish, attr: {'checked': $data.active}"/>
+                    </td>
+                    <td>
                         <a href="" data-bind="click: $parent.loadHistoryItem,
-                            text: $component.formatDate($data.createdOn)"></a>
+                            text: $parent.formatDate($data.createdOn)"></a>
                     </td>
                     <td>
                         <div data-bind="visible: $data.active" style="text-align: right">
@@ -43,4 +46,3 @@
         </div>
     </div>
 </div>
-

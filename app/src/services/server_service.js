@@ -138,6 +138,20 @@ module.exports = {
             return get(config.host[session.environment] + config.study_consent + new Date(createdOn).toISOString());
         });
     },
+    /**
+     * This creates a new version of the consent with a new timestamp.
+     * @param consent
+     */
+    saveStudyConsent: function(consent) {
+        return makeSessionWaitingPromise(function() {
+            return post(config.host[session.environment] + config.study_consents, consent);
+        });
+    },
+    publishStudyConsent: function(createdOn) {
+        return makeSessionWaitingPromise(function() {
+            return post(config.host[session.environment] + config.publish_study_consent + new Date(createdOn).toISOString());
+        });
+    },
     getConsentHistory: function() {
         return makeSessionWaitingPromise(function() {
             return get(config.host[session.environment] + config.study_consent_history);
