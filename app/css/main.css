@@ -9,6 +9,9 @@ body {
 .field .ui.button {
     margin-top: .5rem ! important;
 }
+.ui.dimmer {
+    background-color: rgba(0,0,0,.6) ! important;
+}
 section {
     display: -webkit-flex;
     display: flex;
@@ -35,9 +38,9 @@ header {
     -webkit-justify-content: space-between;
     justify-content: space-between;
     flex-direction: row;
-    background-color: #5bbd72; /*#3b83c0;*/
+    background-color: #5bbd72;
     box-shadow: 0px 2px 3px silver;
-    margin-bottom: 4px; /* scroll behind shadown. */
+    margin-bottom: 4px;
 }
 header .content, header a {
     color: white;
