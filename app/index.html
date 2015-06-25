@@ -11,16 +11,17 @@
             <i style="font-size: 3.5rem" class="white heartbeat icon"></i>
             <div class="content">
                 <div style="margin-bottom: .25rem">Bridge Researcher Portal</div>
-                <div class="sub header">Sage Bionetworks</div>
+                <div class="sub header">
+                    <span data-bind="text: studyName"></span>
+                    <span data-bind="text: environment"></span>
+                </div>
             </div>
         </h2>
         <a href="#" data-bind="click: signOut">Sign Out</a>
     </header>
     <section>
         <main>
-            <div data-bind="component: mainPage">
-
-            </div>
+            <div data-bind="component: mainPage"></div>
         </main>
         <nav>
             <div class="ui vertical menu" style="width:100%">
@@ -65,7 +66,7 @@
         </nav>
     </section>
     <footer>
-        <p>&copy; 2015 Sage Bionetworks. <span id="sessionToken"></span></p>
+        <p>&copy; 2015 Sage Bionetworks. <span data-bind="text: sessionToken"></span></p>
     </footer>
     <div id="dialogHolder" data-bind="modal: currentDialog"></div>
     <script src="./dist/bundle.js"></script>

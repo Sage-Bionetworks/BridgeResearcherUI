@@ -31,7 +31,7 @@ module.exports = function() {
 
     self.initEditor = function(ckeditor) {
         self.editor = ckeditor;
-        serverService.getActiveStudyConsent().then(loadIntoEditor);
+        serverService.getMostRecentStudyConsent().then(loadIntoEditor);
     };
 
     self.formatDate = function(date) {

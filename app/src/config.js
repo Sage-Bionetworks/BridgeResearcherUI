@@ -23,6 +23,7 @@ module.exports = config = {
     signOut: '/api/v1/auth/signOut',
     get_study: '/researcher/v1/study',
     active_study_consent: '/researcher/v1/consents/active',
+    most_recent_study_consent: '/researcher/v1/consents/recent',
     study_consent_history: '/researcher/v1/consents',
     study_consents: '/researcher/v1/consents',
     study_consent: '/researcher/v1/consents/',

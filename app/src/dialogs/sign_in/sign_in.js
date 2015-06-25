@@ -6,6 +6,12 @@ var config = require('../../config');
 
 var fields = ['username', 'password', 'study', 'environment'];
 
+function findStudyName(studyIdentifier) {
+    return config.studies.filter(function(studyOption) {
+        return (studyOption.value === studyIdentifier);
+    })[0].label;
+}
+
 module.exports = function() {
     var self = this;
 
@@ -29,7 +35,8 @@ module.exports = function() {
 
         utils.startHandler(self, event);
 
-        serverService.signIn(self.environment(), {
+        var studyName = findStudyName(self.study());
+        serverService.signIn(studyName, self.environment(), {
             username: self.username(), password: self.password(), study: self.study()
         })
         .then(utils.successHandler(self, event))
