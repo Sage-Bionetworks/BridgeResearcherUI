@@ -24,7 +24,9 @@ module.exports = config = {
     get_study: '/researcher/v1/study',
     active_study_consent: '/researcher/v1/consents/active',
     study_consent_history: '/researcher/v1/consents',
+    study_consents: '/researcher/v1/consents',
     study_consent: '/researcher/v1/consents/',
+    publish_study_consent: '/researcher/v1/consents/active/',
     send_roster: '/researcher/v1/study/participants',
     request_reset_password: '/api/v1/auth/requestResetPassword'
 };

@@ -2,6 +2,7 @@ var ko = require('knockout');
 var utils = require('../../utils');
 var serverService = require('../../services/server_service');
 var optionsService = require('../../services/options_service');
+var config = require('../../config');
 
 var fields = ['email', 'study', 'environment', 'study'];
 
@@ -39,5 +40,5 @@ module.exports = function() {
     };
     self.cancel = function() {
         utils.eventbus.emit('dialogs', 'sign_in_dialog');
-    }
+    };
 };

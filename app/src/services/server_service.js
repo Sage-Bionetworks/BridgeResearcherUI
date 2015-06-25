@@ -68,7 +68,7 @@ function makeSessionWaitingPromise(func) {
             var p = func();
             p.then(resolve);
             p.fail(reject);
-        }
+        };
         if (session) {
             executor();
         } else {
@@ -87,7 +87,6 @@ function makeSessionWaitingPromise(func) {
 
 module.exports = {
     isAuthenticated: function() {
-        console.info("isAuthenticated");
         return (session !== null);
     },
     signIn: function(env, data) {
@@ -136,6 +135,16 @@ module.exports = {
     getStudyConsent: function(createdOn) {
         return makeSessionWaitingPromise(function() {
             return get(config.host[session.environment] + config.study_consent + new Date(createdOn).toISOString());
+        });
+    },
+    saveStudyConsent: function(consent) {
+        return makeSessionWaitingPromise(function() {
+            return post(config.host[session.environment] + config.study_consents, consent);
+        });
+    },
+    publishStudyConsent: function(createdOn) {
+        return makeSessionWaitingPromise(function() {
+            return post(config.host[session.environment] + config.publish_study_consent + new Date(createdOn).toISOString());
         });
     },
     getConsentHistory: function() {

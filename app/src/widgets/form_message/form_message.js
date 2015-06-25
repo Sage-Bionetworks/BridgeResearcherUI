@@ -33,5 +33,5 @@ module.exports = function(params) {
     self.hasMessage = ko.computed(function() {
         return self.internalMessage().length > 0;
     });
-}
+};
 
