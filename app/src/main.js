@@ -98,6 +98,10 @@ ko.components.register('forgot_password_dialog', {
 var RootViewModel = function() {
     var self = this;
 
+    self.sessionToken = ko.observable("");
+    self.environment = ko.observable("");
+    self.studyName = ko.observable("Sage Bionetworks");
+
     self.selected = ko.observable('info');
     self.sessionToken = ko.observable("");
 
@@ -117,6 +121,17 @@ var RootViewModel = function() {
         };
     };
 
+    serverService.addSessionStartListener(function(session) {
+        self.studyName(session.studyName);
+        self.sessionToken(session.sessionToken);
+        self.environment(" [" + session.environment + "]");
+    });
+    serverService.addSessionEndListener(function(session) {
+        self.studyName("");
+        self.sessionToken("");
+        self.environment("");
+    });
+
     utils.eventbus.addListener('dialogs', function(value) {
         if (value === "none_dialog") {
             $(".modal").modal('hide');
@@ -127,13 +142,6 @@ var RootViewModel = function() {
 var root = new RootViewModel();
 ko.applyBindings(root, document.body);
 
-// This is for debugging, and will be removed.
-serverService.addSessionStartListener(function(session) {
-    $("#sessionToken").text(session.sessionToken);
-});
-serverService.addSessionEndListener(function(session) {
-    $("#sessionToken").text("");
-});
 serverService.addSessionStartListener(function() {
     utils.eventbus.emit('dialogs', 'none_dialog');
 });

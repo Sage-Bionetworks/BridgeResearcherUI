@@ -12,37 +12,55 @@
         <div class="ui label">
             <i class="clock icon"></i> <span data-bind="text: createdOn"></span>
         </div>
+        <div class="green ui label" data-bind="visible: active">
+            <i class="checkmark icon"></i> Currently Published
+        </div>
+        <div class="orange ui label" data-bind="visible: !active()">
+            <i class="warning icon"></i> Not Currently Published
+        </div>
         <div style="margin: 1rem 0">
             <textarea id="consentEditor" data-bind="ckeditor: initEditor" class="ui textarea doc"></textarea>
         </div>
         <button class="ui primary button" data-bind="click: save">Save</button>
     </div>
     <div data-bind="visible: tab() == 'history'">
-        <button class="ui primary button" data-bind="click: publish, disable: consentSelected() == null">Publish</button>
-        <table class="ui table">
-            <thead>
-                <tr>
-                    <th width="20">&nbsp;</th>
-                    <th>Saved On</th>
-                    <th>&nbsp;</th>
-                </tr>
-            </thead>
-            <tbody data-bind="foreach: historyItems">
-                <tr data-bind="css: { positive: $data.active }">
-                    <td>
-                        <input type="radio" name="publish" data-bind="click: $component.selectToPublish, attr: {'checked': $data.active}"/>
-                    </td>
-                    <td>
-                        <a href="" data-bind="click: $parent.loadHistoryItem,
-                            text: $parent.formatDate($data.createdOn)"></a>
-                    </td>
-                    <td>
-                        <div data-bind="visible: $data.active" style="text-align: right">
-                            <i class="icon checkmark"></i> In Use</td>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
+        <div class="ui grid">
+            <div class="ten wide column">
+                <button class="ui primary button" data-bind="click: publish, disable: consentSelected() == null">Publish</button>
+                <table class="ui table">
+                    <thead>
+                        <tr>
+                            <th width="20">&nbsp;</th>
+                            <th>Saved On</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: historyItems">
+                        <tr data-bind="css: { positive: $data.active }">
+                            <td>
+                                <input type="radio" name="publish" data-bind="click: $component.selectToPublish, attr: {'checked': $data.active}"/>
+                            </td>
+                            <td>
+                                <a href="" data-bind="click: $parent.loadHistoryItem,
+                                text: $parent.formatDate($data.createdOn)"></a>
+                            </td>
+                            <td>
+                                <div data-bind="visible: $data.active" style="text-align: right">
+                                    <i class="icon checkmark"></i> Published
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="six wide column">
+                <div class="ui message">
+                    <p>Only one version of your consent agreement is published at any given time. <strong>This should be the version of the consent agreement that is approved by your IRB.</strong> </p>
+                    <p>Every edit of the consent is saved, and you can publish any version of it at any time. </p>
+                    <p>When participants sign in, their session includes a flag indicating whether or not they have signed the currently published consent agreement. This can be used to ask them to re-consent before participating further in the study, although the Bridge server does not require this. </p>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>

@@ -4,6 +4,9 @@
  *
  * If a call is made to the server before a session exists, a one-time listener is registered to wait
  * for a session to be established, then the call is completed.
+ *
+ * Right now when you sign out, and then sign back in, the system doesn't update the UI. So if you
+ * sign in to a different study or environment, nothing changes until you click around.
  */
 var EventEmitter = require('events');
 var optionsService = require('../services/options_service');
@@ -13,16 +16,16 @@ var $ = require('jquery');
 var SESSION_KEY = 'session';
 var SESSION_STARTED_EVENT_KEY = 'sessionStarted';
 var SESSION_ENDED_EVENT_KEY = 'sessionEnded';
+var listeners = new EventEmitter();
 var session = null;
-var events = new EventEmitter();
 
 $(function() {
     session = optionsService.get(SESSION_KEY, null);
     if (session && session.environment) {
-        events.emit(SESSION_STARTED_EVENT_KEY, session);
+        listeners.emit(SESSION_STARTED_EVENT_KEY, session);
     } else {
         session = null;
-        events.emit(SESSION_ENDED_EVENT_KEY);
+        listeners.emit(SESSION_ENDED_EVENT_KEY);
     }
 });
 
@@ -33,7 +36,7 @@ function getHeaders() {
     }
     return headers;
 }
-function post(url, data) {
+function postInt(url, data) {
     if (!data) {
         data = "{}";
     } else if (typeof data !== 'string') {
@@ -51,7 +54,7 @@ function post(url, data) {
         dataType: "json"
     });
 }
-function get(url) {
+function getInt(url) {
     console.debug("GET", url);
     return $.ajax({
         method: 'GET',
@@ -72,7 +75,7 @@ function makeSessionWaitingPromise(func) {
         if (session) {
             executor();
         } else {
-            events.once(SESSION_STARTED_EVENT_KEY, executor);
+            listeners.once(SESSION_STARTED_EVENT_KEY, executor);
         }
     });
     promise.catch(function(response) {
@@ -84,83 +87,76 @@ function makeSessionWaitingPromise(func) {
     });
     return promise;
 }
+function get(path) {
+    return makeSessionWaitingPromise(function() {
+        return getInt(config.host[session.environment] + path);
+    });
+}
+function post(path, body) {
+    return makeSessionWaitingPromise(function() {
+        return postInt(config.host[session.environment] + path, body);
+    });
+}
 
 module.exports = {
     isAuthenticated: function() {
         return (session !== null);
     },
-    signIn: function(env, data) {
-        var request = Promise.resolve(post(config.host[env] + config.signIn, data));
+    signIn: function(studyName, env, data) {
+        var request = Promise.resolve(postInt(config.host[env] + config.signIn, data));
         request.then(function(sess) {
-            console.log(sess);
-            sess.environment = env;
+            sess.studyName = studyName;
             session = sess;
             optionsService.set(SESSION_KEY, sess);
-            events.emit(SESSION_STARTED_EVENT_KEY, session);
+            listeners.emit(SESSION_STARTED_EVENT_KEY, session);
         });
         return request;
     },
     signOut: function() {
-        // Need to sign out whether the server throws an error or not.
         var env = session.environment;
         session = null;
         optionsService.remove(SESSION_KEY);
-        events.emit(SESSION_ENDED_EVENT_KEY);
-
-        var f = function(resolve, reject) {
-            var p = get(config.host[env] + config.signOut);
+        listeners.emit(SESSION_ENDED_EVENT_KEY);
+        return new Promise(function(resolve, reject) {
+            var p = getInt(config.host[env] + config.signOut);
             p.then(resolve);
             p.fail(reject);
-        };
-        return new Promise(f);
+        });
     },
     requestResetPassword: function(env, data) {
-        return Promise.resolve(post(config.host[env] + config.request_reset_password, data));
+        return Promise.resolve(postInt(config.host[env] + config.requestResetPassword, data));
     },
     getStudy: function() {
-        return makeSessionWaitingPromise(function() {
-            return get(config.host[session.environment] + config.get_study);
-        });
+        return get(config.getStudy);
     },
     saveStudy: function(study) {
-        return makeSessionWaitingPromise(function() {
-            return post(config.host[session.environment] + config.get_study, study);
-        });
+        return post(config.getStudy, study);
     },
     getActiveStudyConsent: function() {
-        return makeSessionWaitingPromise(function() {
-            return get(config.host[session.environment] + config.active_study_consent);
-        });
+        return get(config.activeStudyConsent);
+    },
+    getMostRecentStudyConsent: function() {
+        return get(config.mostRecentStudyConsent);
     },
     getStudyConsent: function(createdOn) {
-        return makeSessionWaitingPromise(function() {
-            return get(config.host[session.environment] + config.study_consent + new Date(createdOn).toISOString());
-        });
+        return get(config.studyConsent + new Date(createdOn).toISOString());
     },
     saveStudyConsent: function(consent) {
-        return makeSessionWaitingPromise(function() {
-            return post(config.host[session.environment] + config.study_consents, consent);
-        });
+        return post(config.studyConsents, consent);
     },
     publishStudyConsent: function(createdOn) {
-        return makeSessionWaitingPromise(function() {
-            return post(config.host[session.environment] + config.publish_study_consent + new Date(createdOn).toISOString());
-        });
+        return post(config.publishStudyConsent + new Date(createdOn).toISOString());
     },
     getConsentHistory: function() {
-        return makeSessionWaitingPromise(function() {
-            return get(config.host[session.environment] + config.study_consent_history);
-        });
+        return get(config.studyConsentHistory);
     },
     sendRoster: function() {
-        return makeSessionWaitingPromise(function() {
-            return post(config.host[session.environment] + config.send_roster);
-        });
+        return post(config.sendRoster);
     },
     addSessionStartListener: function(listener) {
-        events.addListener(SESSION_STARTED_EVENT_KEY, listener);
+        listeners.addListener(SESSION_STARTED_EVENT_KEY, listener);
     },
     addSessionEndListener: function(listener) {
-        events.addListener(SESSION_ENDED_EVENT_KEY, listener);
+        listeners.addListener(SESSION_ENDED_EVENT_KEY, listener);
     }
 };
