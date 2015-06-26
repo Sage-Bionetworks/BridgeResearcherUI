@@ -23,10 +23,15 @@ module.exports = function() {
     });
 
     function loadIntoEditor(consent) {
+        if (consent.documentContent.indexOf("<html") > -1) {
+            console.warn("HTML document returned from server, stripping out body content");
+            var doc = consent.documentContent;
+            consent.documentContent = doc.split(/<body[^>]*\>/)[1].split(/<\/body\>.*/)[0].trim();
+            console.log("Content to edit", consent.documentContent);
+        }
         self.createdOn("Created on " + self.formatDate(consent.createdOn));
         self.active(consent.active);
         self.editor.setData(consent.documentContent);
-        self.tab('current');
     }
 
     self.initEditor = function(ckeditor) {
@@ -51,6 +56,8 @@ module.exports = function() {
                 serverService.getConsentHistory().then(function(data) {
                     self.historyItems(data.items);
                 });
+                self.loadHistoryItem(self.consentSelected());
+                self.consentSelected(null);
             })
             .catch(utils.failureHandler(vm ,event));
     };
@@ -61,6 +68,9 @@ module.exports = function() {
         serverService.saveStudyConsent({documentContent: self.editor.getData()})
             .then(utils.successHandler(self, event))
             .then(loadIntoEditor)
+            .then(function() {
+                self.message({text:"Consent saved."});
+            })
             .catch(utils.failureHandler(self, event));
     };
 

@@ -4,6 +4,9 @@
  *
  * If a call is made to the server before a session exists, a one-time listener is registered to wait
  * for a session to be established, then the call is completed.
+ *
+ * Right now when you sign out, and then sign back in, the system doesn't update the UI. So if you
+ * sign in to a different study or environment, nothing changes until you click around.
  */
 var EventEmitter = require('events');
 var optionsService = require('../services/options_service');
@@ -121,34 +124,34 @@ module.exports = {
         });
     },
     requestResetPassword: function(env, data) {
-        return Promise.resolve(postInt(config.host[env] + config.request_reset_password, data));
+        return Promise.resolve(postInt(config.host[env] + config.requestResetPassword, data));
     },
     getStudy: function() {
-        return get(config.get_study);
+        return get(config.getStudy);
     },
     saveStudy: function(study) {
-        return post(config.get_study, study);
+        return post(config.getStudy, study);
     },
     getActiveStudyConsent: function() {
-        return get(config.active_study_consent);
+        return get(config.activeStudyConsent);
     },
     getMostRecentStudyConsent: function() {
-        return get(config.most_recent_study_consent);
+        return get(config.mostRecentStudyConsent);
     },
     getStudyConsent: function(createdOn) {
-        return get(config.study_consent + new Date(createdOn).toISOString());
+        return get(config.studyConsent + new Date(createdOn).toISOString());
     },
     saveStudyConsent: function(consent) {
-        return post(config.study_consents, consent);
+        return post(config.studyConsents, consent);
     },
     publishStudyConsent: function(createdOn) {
-        return post(config.publish_study_consent + new Date(createdOn).toISOString());
+        return post(config.publishStudyConsent + new Date(createdOn).toISOString());
     },
     getConsentHistory: function() {
-        return get(config.study_consent_history);
+        return get(config.studyConsentHistory);
     },
     sendRoster: function() {
-        return post(config.send_roster);
+        return post(config.sendRoster);
     },
     addSessionStartListener: function(listener) {
         listeners.addListener(SESSION_STARTED_EVENT_KEY, listener);

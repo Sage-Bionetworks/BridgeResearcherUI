@@ -6,12 +6,12 @@ module.exports = config = {
         {value: "production", label: "Production"}
     ],
     studies: [
-        {value: "api", label: "API"},
-        {value: "asthma", label: "Asthma Health"},
-        {value: "diabetes", label: "GlucoSuccess"},
-        {value: "parkinson", label: "mPower"},
-        {value: "cardiovascular", label: "My Heart Counts"},
-        {value: "breastcancer", label: "Share The Journey"}
+        {identifier: "api", name: "API"},
+        {identifier: "asthma", name: "Asthma Health"},
+        {identifier: "diabetes", name: "GlucoSuccess"},
+        {identifier: "parkinson", name: "mPower"},
+        {identifier: "cardiovascular", name: "My Heart Counts"},
+        {identifier: "breastcancer", name: "Share The Journey"}
     ],
     host: {
         'local': 'http://localhost:9000',
@@ -21,13 +21,13 @@ module.exports = config = {
     },
     signIn: '/api/v1/auth/signIn',
     signOut: '/api/v1/auth/signOut',
-    get_study: '/researcher/v1/study',
-    active_study_consent: '/researcher/v1/consents/active',
-    most_recent_study_consent: '/researcher/v1/consents/recent',
-    study_consent_history: '/researcher/v1/consents',
-    study_consents: '/researcher/v1/consents',
-    study_consent: '/researcher/v1/consents/',
-    publish_study_consent: '/researcher/v1/consents/active/',
-    send_roster: '/researcher/v1/study/participants',
-    request_reset_password: '/api/v1/auth/requestResetPassword'
+    getStudy: '/researcher/v1/study',
+    activeStudyConsent: '/researcher/v1/consents/active',
+    mostRecentStudyConsent: '/researcher/v1/consents/recent',
+    studyConsentHistory: '/researcher/v1/consents',
+    studyConsents: '/researcher/v1/consents',
+    studyConsent: '/researcher/v1/consents/',
+    publishStudyConsent: '/researcher/v1/consents/active/',
+    sendRoster: '/researcher/v1/study/participants',
+    requestResetPassword: '/api/v1/auth/requestResetPassword'
 };

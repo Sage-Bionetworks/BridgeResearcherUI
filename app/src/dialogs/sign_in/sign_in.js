@@ -8,8 +8,8 @@ var fields = ['username', 'password', 'study', 'environment'];
 
 function findStudyName(studyIdentifier) {
     return config.studies.filter(function(studyOption) {
-        return (studyOption.value === studyIdentifier);
-    })[0].label;
+        return (studyOption.identifier === studyIdentifier);
+    })[0].name;
 }
 
 module.exports = function() {
