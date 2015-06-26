@@ -75,6 +75,10 @@ module.exports = function() {
     };
 
     self.loadHistoryItem = function(item) {
-        serverService.getStudyConsent(item.createdOn).then(loadIntoEditor);
+        serverService.getStudyConsent(item.createdOn)
+            .then(loadIntoEditor)
+            .then(function() {
+                self.tab('current');
+            });
     };
 };
