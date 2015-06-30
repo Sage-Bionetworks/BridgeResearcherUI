@@ -8,7 +8,8 @@
  * Right now when you sign out, and then sign back in, the system doesn't update the UI. So if you
  * sign in to a different study or environment, nothing changes until you click around.
  */
-var EventEmitter = require('events');
+// Necessary because export of library is broken
+var EventEmitter = require('../events');
 var optionsService = require('../services/options_service');
 var config = require('../config');
 var $ = require('jquery');
@@ -111,6 +112,9 @@ module.exports = {
             listeners.emit(SESSION_STARTED_EVENT_KEY, session);
         });
         return request;
+    },
+    getStudyInfo: function(env) {
+        return Promise.resolve(getInt(config.host[env] + config.getStudyInfo));
     },
     signOut: function() {
         var env = session.environment;

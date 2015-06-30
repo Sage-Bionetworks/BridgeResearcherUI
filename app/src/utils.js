@@ -1,5 +1,6 @@
 var ko = require('knockout');
-var EventEmitter = require('events');
+var EventEmitter = require('./events');
+var serverService = require('./services/server_service');
 
 /**
  * Common utility methods for ViewModels.
@@ -105,5 +106,21 @@ module.exports = {
             var name = fields[i];
             object[name] = vm[name]();
         }
+    },
+    /**
+     * Get the list of studies that can be used for authentication
+     */
+    getStudyInfo: function(vm) {
+        return function(env) {
+            vm.message("");
+            serverService.getStudyInfo(env).then(function(studies) {
+                studies.items.sort(function(a,b) {
+                    return a.name > b.name;
+                });
+                vm.studyOptions(studies.items);
+            }).catch(function(response) {
+                vm.message({text: response.message, status: 'error'});
+            });
+        };
     }
 }

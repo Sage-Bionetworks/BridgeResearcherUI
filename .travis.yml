@@ -3,6 +3,7 @@ node_js:
     0.12.3
 script:
     webpack -p
+    mocha --recursive
 deploy:
     - provider: s3
       access_key_id: ${AWS_KEY}

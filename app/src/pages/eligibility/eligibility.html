@@ -9,12 +9,6 @@
 
         <div class="ui large label" data-bind="text: minAge"></div>
     </div>
-    <div class="field" data-bind="css: errorFor('maxNumOfParticipants')">
-        <label>Maximum number of participants in study</label>
-        <input type="range" min="0" max="1000" data-bind="value: maxNumOfParticipants, valueUpdate: 'input'"/>
-
-        <div class="ui large label" data-bind="text: maxNum"></div>
-    </div>
     <div class="field">
         <button type="submit" class="ui primary submit button" data-bind="click: save">Save</button>
     </div>

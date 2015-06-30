@@ -15,9 +15,12 @@ module.exports = function() {
     self.message = ko.observable("");
     utils.observablesFor(self, fields);
     self.study(study);
-    self.studyOptions = config.studies;
-    self.environment(env);
+    self.studyOptions = ko.observableArray();
+
     self.environmentOptions = config.environments;
+    self.environment = ko.observable();
+    self.environment.subscribe(utils.getStudyInfo(self));
+    self.environment(env);
 
     self.sendResetPasswordRequest = function() {
         if (self.email() === "") {
