@@ -6,8 +6,8 @@ var config = require('../../config');
 
 var fields = ['username', 'password', 'study', 'environment'];
 
-function findStudyName(studyIdentifier) {
-    return config.studies.filter(function(studyOption) {
+function findStudyName(studies, studyIdentifier) {
+    return studies.filter(function(studyOption) {
         return (studyOption.identifier === studyIdentifier);
     })[0].name;
 }
@@ -21,8 +21,11 @@ module.exports = function() {
     self.message = ko.observable("");
     utils.observablesFor(self, fields);
     self.study(study);
-    self.studyOptions = config.studies;
+    self.studyOptions = ko.observableArray();
+
     self.environmentOptions = config.environments;
+    self.environment = ko.observable();
+    self.environment.subscribe(utils.getStudyInfo(self));
     self.environment(env);
 
     self.signIn = function(vm, event) {
@@ -35,7 +38,7 @@ module.exports = function() {
 
         utils.startHandler(self, event);
 
-        var studyName = findStudyName(self.study());
+        var studyName = findStudyName(self.studyOptions(), self.study());
         serverService.signIn(studyName, self.environment(), {
             username: self.username(), password: self.password(), study: self.study()
         })

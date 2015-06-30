@@ -7,7 +7,7 @@
     "start": "webpack-dev-server --content-base app",
     "watch": "webpack --progress --colors --watch",
     "release": "webpack -p",
-    "test": "exit 0"
+    "test": "mocha"
   },
   "author": "Bridge Server Team <bridgeit@sagebase.org>",
   "license": "MIT",
@@ -19,6 +19,8 @@
     "knockout": "^3.3.0",
     "knockout-es5": "^0.1.1",
     "knockout-mapping": "^2.5.0",
+    "mocha": "^2.2.5",
+    "moment": "^2.10.3",
     "node-libs-browser": "^0.5.0",
     "style-loader": "^0.12.2",
     "webpack": "^1.9.7",

@@ -5,6 +5,7 @@ module.exports = config = {
         {value: "staging", label: "Staging"},
         {value: "production", label: "Production"}
     ],
+    /*
     studies: [
         {identifier: "api", name: "API"},
         {identifier: "asthma", name: "Asthma Health"},
@@ -13,6 +14,7 @@ module.exports = config = {
         {identifier: "cardiovascular", name: "My Heart Counts"},
         {identifier: "breastcancer", name: "Share The Journey"}
     ],
+    */
     host: {
         'local': 'http://localhost:9000',
         'develop': 'https://webservices-develop.sagebridge.org',
@@ -22,6 +24,7 @@ module.exports = config = {
     signIn: '/api/v1/auth/signIn',
     signOut: '/api/v1/auth/signOut',
     getStudy: '/researcher/v1/study',
+    getStudyInfo: '/researcher/v1/studies',
     activeStudyConsent: '/researcher/v1/consents/active',
     mostRecentStudyConsent: '/researcher/v1/consents/recent',
     studyConsentHistory: '/researcher/v1/consents',

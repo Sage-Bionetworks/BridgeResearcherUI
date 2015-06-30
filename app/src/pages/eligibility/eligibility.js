@@ -2,7 +2,7 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 
-var fields = ["minAgeOfConsent", "maxNumOfParticipants"];
+var fields = ["minAgeOfConsent"];
 
 module.exports = function() {
     var self = this;
@@ -13,10 +13,7 @@ module.exports = function() {
     utils.observablesFor(self, fields);
 
     self.minAge = ko.computed(function(){
-        return (self.minAgeOfConsent() == 0) ? "No age limit" : self.minAgeOfConsent();
-    });
-    self.maxNum = ko.computed(function(){
-        return (self.maxNumOfParticipants() == 0) ? "No limit" : self.maxNumOfParticipants();
+        return (self.minAgeOfConsent() === 0) ? "No age limit" : self.minAgeOfConsent();
     });
 
     self.errorFor = function(fieldName) {
