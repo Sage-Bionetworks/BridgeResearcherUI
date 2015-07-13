@@ -94,6 +94,9 @@ ko.components.register('sign_in_dialog', {
 ko.components.register('forgot_password_dialog', {
     viewModel: require('./dialogs/forgot_password/forgot_password'), template: require('./dialogs/forgot_password/forgot_password.html'), synchronous: true
 });
+ko.components.register('not_found', {
+    template: require('./pages/not_found/not_found.html'), synchronous: true
+});
 
 var RootViewModel = function() {
     var self = this;
@@ -104,6 +107,7 @@ var RootViewModel = function() {
 
     self.selected = ko.observable('info');
     self.sessionToken = ko.observable("");
+    self.roles = ko.observableArray();
 
     self.mainPage = ko.observable('info');
     self.mainPage.subscribe(self.selected);
@@ -121,15 +125,26 @@ var RootViewModel = function() {
         };
     };
 
+    self.isResearcher = ko.computed(function() {
+        return self.roles.contains('researcher');
+    });
+
+    self.isDeveloper = ko.computed(function() {
+        return self.roles.contains('developer');
+    });
+
     serverService.addSessionStartListener(function(session) {
         self.studyName(session.studyName);
         self.sessionToken(session.sessionToken);
         self.environment(" [" + session.environment + "]");
+        self.roles(session.roles);
+        self.mainPage(self.isDeveloper() ? "info" : "consent");
     });
     serverService.addSessionEndListener(function(session) {
         self.studyName("");
         self.sessionToken("");
         self.environment("");
+        self.roles([]);
     });
 
     utils.eventbus.addListener('dialogs', function(value) {
@@ -159,7 +174,7 @@ director.Router({
     'reset_password_template': root.routeTo('rp_template'),
     'actions': root.routeTo('actions')
 }).configure({
-    notfound: root.routeTo('info')
+    notfound: root.routeTo('not_found')
 }).init();
 
 // Make this global for Semantic UI.

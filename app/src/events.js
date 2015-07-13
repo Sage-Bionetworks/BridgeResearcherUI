@@ -21,7 +21,7 @@ EventEmitter.prototype = {
     once: function(event, callback) {
         validate.call(this, event, callback);
         this.events[event].push(function callee() {
-            this.off(Event, callee); // clever
+            this.off(event, callee); // clever
             callback.apply(this, arguments);
         }, this);
         return this;
