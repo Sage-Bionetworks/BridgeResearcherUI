@@ -25,7 +25,7 @@ module.exports = function() {
 
     self.environmentOptions = config.environments;
     self.environment = ko.observable();
-    self.environment.subscribe(utils.getStudyInfo(self));
+    self.environment.subscribe(utils.getStudyList(self));
     self.environment(env);
 
     self.signIn = function(vm, event) {

@@ -21,16 +21,14 @@ module.exports = config = {
         'staging': 'https://webservices-staging.sagebridge.org',
         'production': 'https://webservices.sagebridge.org'
     },
-    signIn: '/api/v1/auth/signIn',
-    signOut: '/api/v1/auth/signOut',
-    getStudy: '/researcher/v1/study',
-    getStudyInfo: '/researcher/v1/studies',
-    activeStudyConsent: '/researcher/v1/consents/active',
-    mostRecentStudyConsent: '/researcher/v1/consents/recent',
-    studyConsentHistory: '/researcher/v1/consents',
-    studyConsents: '/researcher/v1/consents',
-    studyConsent: '/researcher/v1/consents/',
-    publishStudyConsent: '/researcher/v1/consents/active/',
-    sendRoster: '/researcher/v1/study/participants',
-    requestResetPassword: '/api/v1/auth/requestResetPassword'
+    signIn: '/v3/auth/signIn',
+    signOut: '/v3/auth/signOut',
+    getStudy: '/v3/studies/self',
+    getStudyList: '/v3/studies?format=summary',
+    activeStudyConsent: '/v3/consents/published',
+    mostRecentStudyConsent: '/v3/consents/recent',
+    studyConsents: '/v3/consents',
+    studyConsent: '/v3/consents/',
+    sendRoster: '/v3/users/emailParticipantRoster',
+    requestResetPassword: '/v3/auth/requestResetPassword'
 };
