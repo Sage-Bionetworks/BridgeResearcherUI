@@ -114,8 +114,8 @@ module.exports = {
         });
         return request;
     },
-    getStudyInfo: function(env) {
-        return Promise.resolve(getInt(config.host[env] + config.getStudyInfo));
+    getStudyList: function(env) {
+        return Promise.resolve(getInt(config.host[env] + config.getStudyList));
     },
     signOut: function() {
         var env = session.environment;
@@ -123,7 +123,7 @@ module.exports = {
         optionsService.remove(SESSION_KEY);
         listeners.emit(SESSION_ENDED_EVENT_KEY);
         return new Promise(function(resolve, reject) {
-            var p = getInt(config.host[env] + config.signOut);
+            var p = postInt(config.host[env] + config.signOut);
             p.then(resolve);
             p.fail(reject);
         });
@@ -150,10 +150,10 @@ module.exports = {
         return post(config.studyConsents, consent);
     },
     publishStudyConsent: function(createdOn) {
-        return post(config.publishStudyConsent + new Date(createdOn).toISOString());
+        return post(config.studyConsent + new Date(createdOn).toISOString() + "/publish");
     },
     getConsentHistory: function() {
-        return get(config.studyConsentHistory);
+        return get(config.studyConsents);
     },
     sendRoster: function() {
         return post(config.sendRoster);

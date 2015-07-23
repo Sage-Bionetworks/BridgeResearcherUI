@@ -110,10 +110,10 @@ module.exports = {
     /**
      * Get the list of studies that can be used for authentication
      */
-    getStudyInfo: function(vm) {
+    getStudyList: function(vm) {
         return function(env) {
             vm.message("");
-            serverService.getStudyInfo(env).then(function(studies) {
+            serverService.getStudyList(env).then(function(studies) {
                 studies.items.sort(function(a,b) {
                     return a.name > b.name;
                 });
