@@ -29,6 +29,6 @@ module.exports = config = {
     mostRecentStudyConsent: '/v3/consents/recent',
     studyConsents: '/v3/consents',
     studyConsent: '/v3/consents/',
-    sendRoster: '/v3/users/emailParticipantRoster',
+    emailRoster: '/v3/users/emailParticipantRoster',
     requestResetPassword: '/v3/auth/requestResetPassword'
 };

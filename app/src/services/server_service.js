@@ -155,8 +155,8 @@ module.exports = {
     getConsentHistory: function() {
         return get(config.studyConsents);
     },
-    sendRoster: function() {
-        return post(config.sendRoster);
+    emailRoster: function() {
+        return post(config.emailRoster);
     },
     addSessionStartListener: function(listener) {
         listeners.addListener(SESSION_STARTED_EVENT_KEY, listener);

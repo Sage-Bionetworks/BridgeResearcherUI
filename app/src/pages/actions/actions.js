@@ -7,10 +7,10 @@ module.exports = function() {
 
     self.message = ko.observable("");
 
-    self.sendRoster = function(vm, event) {
+    self.emailRoster = function(vm, event) {
         utils.startHandler(self, event);
 
-        serverService.sendRoster()
+        serverService.email()
             .then(utils.successHandler(vm, event))
             .then(function(response) {
                 self.message({text: response.message});
