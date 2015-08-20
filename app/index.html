@@ -22,40 +22,54 @@
     </header>
     <section>
         <main>
-            <div data-bind="component: mainPage"></div>
+            <div data-bind="component: {name: mainPage, params: mainParams}"></div>
         </main>
         <nav>
             <div class="ui vertical menu" style="width:100%">
                 <div class="item">
                     <i class="lab icon"></i> Study
                     <div class="menu">
-                        <a href="#info" class="item" data-bind="css:{active:selected()=='info'}, visible: isDeveloper">
+                        <a href="#info" class="item" data-bind="css:{active:isActive('info')}, visible: isDeveloper">
                             General Information
                         </a>
-                        <a href="#consent" class="item" data-bind="css:{active:selected()=='consent'}, visible: isResearcher">
+                        <a href="#consent" class="item" data-bind="css:{active:isActive('consent')}, visible: isResearcher">
                             Consent Agreement
                         </a>
-                        <a href="#eligibility" class="item" data-bind="css:{active:selected()=='eligibility'}, visible: isDeveloper">
+                        <a href="#eligibility" class="item" data-bind="css:{active:isActive('eligibility')}, visible: isDeveloper">
                             Eligibility Criteria
                         </a>
                     </div>
                 </div>
+                <div class="item" data-bind="visible: isDeveloper">
+                    <i class="server icon"></i> Surveys & Tasks
+                    <div class="menu">
+                        <a href="#surveys" class="item" data-bind="css:{active:isActive('surveys')}">
+                            Surveys
+                        </a>
+                        <a href="#schemas" class="item" data-bind="css:{active:isActive('schemas')}">
+                            Upload Schemas
+                        </a>
+                        <a href="#schedules" class="item" data-bind="css:{active:isActive('schedules')}">
+                            Schedules
+                        </a>
+                    </div>
+                 </div>
                 <div class="item">
                     <i class="user icon"></i> Account Management
                     <div class="menu">
-                        <a href="#password_policy" class="item" data-bind="css:{active:selected()=='password_policy'}, visible: isDeveloper">
+                        <a href="#password_policy" class="item" data-bind="css:{active:isActive('password_policy')}, visible: isDeveloper">
                             Password Policy
                         </a>
-                        <a href="#user_attributes" class="item" data-bind="css:{active:selected()=='user_attributes'}, visible: isDeveloper">
+                        <a href="#user_attributes" class="item" data-bind="css:{active:isActive('user_attributes')}, visible: isDeveloper">
                             User Attributes
                         </a>
-                        <a href="#verify_email_template" class="item" data-bind="css:{active:selected()=='ve_template'}, visible: isDeveloper">
+                        <a href="#verify_email_template" class="item" data-bind="css:{active:isActive('ve_template')}, visible: isDeveloper">
                             Verify Email Template
                         </a>
-                        <a href="#reset_password_template" class="item" data-bind="css:{active:selected()=='rp_template'}, visible: isDeveloper">
+                        <a href="#reset_password_template" class="item" data-bind="css:{active:isActive('rp_template')}, visible: isDeveloper">
                             Reset Password Template
                         </a>
-                        <a href="#actions" class="item" data-bind="css:{active:selected()=='actions'}, visible: isResearcher">
+                        <a href="#actions" class="item" data-bind="css:{active:isActive('actions')}, visible: isResearcher">
                             Participant Roster
                         </a>
                     </div>

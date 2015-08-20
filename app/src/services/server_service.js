@@ -158,10 +158,40 @@ module.exports = {
     emailRoster: function() {
         return post(config.emailRoster);
     },
+    getSurveys: function() {
+        return get(config.surveys);
+    },
+    getSurveyAllRevisions: function(guid) {
+        return get(config.survey + guid + '/revisions');
+    },
+    getSurveyMostRecent: function(guid) {
+        return get(config.survey + guid + '/revisions/recent');
+    },
+    getSurvey: function(guid, createdOn) {
+        return get(config.survey + guid + '/revisions/' + new Date(createdOn).toISOString());
+    },
+    createSurvey: function(survey) {
+        return post(config.surveys, survey);
+    },
+    publishSurvey: function(guid, createdOn) {
+        return post(config.survey + guid + '/revisions/' + new Date(createdOn).toISOString() + '/publish');
+    },
+    versionSurvey: function(guid, createdOn) {
+        return post(config.survey + guid + '/revisions/' + new Date(createdOn).toISOString() + '/version');
+    },
+    updateSurvey: function(survey) {
+        return post(config.survey + survey.guid + '/revisions/' + new Date(survey.createdOn).toISOString(), survey);
+    },
     addSessionStartListener: function(listener) {
+        if (typeof listener !== "function") {
+            throw Error("Session listener not a function");
+        }
         listeners.addListener(SESSION_STARTED_EVENT_KEY, listener);
     },
     addSessionEndListener: function(listener) {
+        if (typeof listener !== "function") {
+            throw Error("Session listener not a function");
+        }
         listeners.addListener(SESSION_ENDED_EVENT_KEY, listener);
     }
 };

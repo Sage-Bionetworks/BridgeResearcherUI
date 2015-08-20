@@ -1,0 +1,38 @@
+<div class="ui breadcrumb">
+    <a href="#/surveys" class="section">Surveys</a>
+    <div class="divider"> / </div>
+    <a href="#/survey_versions/" class="section" data-bind="attr:{href: '#/survey_versions/'+guidObs()}, text: nameObs"></a>
+    <div class="divider"> / </div>
+    <span class="active section" data-bind="text: formatDate(dateObs())"></span>
+</div>
+
+<h3><span data-bind="text: nameObs"></span></h3>
+
+<form-message params="message: message"></form-message>
+
+<form class="ui form">
+    <div class="two fields">
+        <div class="field">
+            <label>Name</label>
+            <div data-bind="visible: publishedObs(), text: nameObs"></div>
+            <input type="text" name="name" data-bind="visible: !publishedObs(), value: nameObs"/>
+        </div>
+        <div class="field">
+            <label>Identifier</label>
+            <div data-bind="visible: publishedObs(), text: identifierObs"></div>
+            <input type="text" name="name" data-bind="visible: !publishedObs(), value: identifierObs"/>
+        </div>
+    </div>
+</form>
+
+<div class="button-container">
+    <button class="ui primary button" data-bind="visible: publishedObs(), click: version">New Version</button>
+    <button class="ui primary button" data-bind="visible: !publishedObs(), click: save">Save</button>
+    <button class="ui primary button" data-bind="visible: !publishedObs(), click: publish">Publish</button>
+</div>
+
+<h3>Questions</h3>
+
+<div class="survey" data-bind="foreach: elementsObs">
+    <div class="element" data-bind="component: {name: $data.type, params: {element: $data, publishedObs: $parent.publishedObs}}"></div>
+</div>

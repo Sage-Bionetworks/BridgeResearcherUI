@@ -9,6 +9,9 @@ body {
 .field .ui.button {
     margin-top: .5rem ! important;
 }
+.button-container {
+    margin: 2rem 0;
+}
 .ui.dimmer {
     background-color: rgba(0,0,0,.6) ! important;
 }
@@ -21,6 +24,8 @@ section {
 main {
     -webkit-flex: 1;
     flex: 1;
+    padding: 2rem 1.5rem 1rem 1.5rem;
+    overflow-y: scroll;
 }
 nav {
     -webkit-flex: 0 0 18em;
@@ -48,10 +53,6 @@ header .content, header a {
 header .sub.header {
     color: lightgoldenrodyellow ! important;
 }
-main {
-    padding: 2rem 1.5rem 1rem 1.5rem;
-    overflow: scroll;
-}
 footer p {
     border-top: 1px solid #e5e5e5;
     padding: .5rem;
@@ -60,3 +61,13 @@ footer p {
 .form {
     padding: 0 ! important;
 }
+.pointing {
+    cursor: pointer;
+}
+
+/* TABLES */
+td {
+    white-space: nowrap;
+}
+@import "forms.css";
+@import "survey.css";

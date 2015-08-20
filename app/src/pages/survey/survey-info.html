@@ -1,0 +1,17 @@
+<div class="element-content">
+    <div contenteditable="false" class="element-content-prompt" data-bind="css: {editor: !publishedObs()}, attr: {contenteditable: !publishedObs()}, text: element.prompt"></div>
+    <div contenteditable="false" class="element-content-prompt-detail" data-bind="css: {editor: !publishedObs()}, attr: {contenteditable: !publishedObs()}, text: element.promptDetail"></div>
+</div>
+<div class="element-callout">
+    <div>
+        <a class="ui huge green circular label">#<span data-bind="text: $index() + 1"></span></a>
+    </div>
+    <div class="element-callout-identifier-box">
+        <div class="element-callout-identifier" data-bind="visible: publishedObs(), text: element.identifier"></div>
+        <input type="text" class="editor element-callout-identifier" data-bind="visible: !publishedObs(), value: element.identifier"/>
+        <div class="element-callout-identifier-label">Identifier</div>
+    </div>
+    <div class="element-callout-delete">
+        <div data-bind="click: $parents[1].deleteElement, visible: !publishedObs()"><a>Delete<i class="close icon"></i></a></div>
+    </div>
+</div>

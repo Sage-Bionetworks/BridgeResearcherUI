@@ -82,6 +82,21 @@ ko.components.register('rp_template', {
 ko.components.register('actions', {
     viewModel: require('./pages/actions/actions'), template: require('./pages/actions/actions.html')
 });
+ko.components.register('surveys', {
+    viewModel: require('./pages/surveys/surveys.js'), template: require('./pages/surveys/surveys.html')
+});
+ko.components.register('survey_versions', {
+    viewModel: require('./pages/surveys/survey_versions.js'), template: require('./pages/surveys/survey_versions.html')
+});
+ko.components.register('survey', {
+    viewModel: require('./pages/survey/survey.js'), template: require('./pages/survey/survey.html')
+});
+ko.components.register('schemas', {
+    viewModel: require('./pages/schemas/schemas.js'), template: require('./pages/schemas/schemas.html')
+});
+ko.components.register('schedules', {
+    viewModel: require('./pages/schedules/schedules.js'), template: require('./pages/schedules/schedules.html')
+});
 ko.components.register('form-message', {
     viewModel: require('./widgets/form_message/form_message'), template: require('./widgets/form_message/form_message.html')
 });
@@ -95,8 +110,67 @@ ko.components.register('forgot_password_dialog', {
     viewModel: require('./dialogs/forgot_password/forgot_password'), template: require('./dialogs/forgot_password/forgot_password.html'), synchronous: true
 });
 ko.components.register('not_found', {
-    template: require('./pages/not_found/not_found.html'), synchronous: true
+    template: require('./pages/not_found/not_found.html')
 });
+/* Surveys */
+ko.components.register('SurveyQuestion', {
+    template: require('./pages/survey/survey-question.html')
+});
+ko.components.register('SurveyInfoScreen', {
+    template: require('./pages/survey/survey-info.html')
+});
+/*
+ko.components.register('DateConstraints', {
+    template: require('./pages/survey/constraints/date.html')
+});
+ko.components.register('DateTimeConstraints', {
+    template: require('./pages/survey/constraints/datetime.html')
+});
+ko.components.register('IntegerConstraints', {
+    template: require('./pages/survey/constraints/numerical.html')
+});
+ko.components.register('DecimalConstraints', {
+    template: require('./pages/survey/constraints/numerical.html')
+});
+ko.components.register('StringConstraints', {
+    template: require('./pages/survey/constraints/string.html')
+});
+ko.components.register('MultiValueConstraints', {
+    template: require('./pages/survey/constraints/multi.html')
+});
+*/
+ko.components.register('BooleanConstraints', {
+    viewModel: require('./pages/survey/constraints/constraints'), template: require('./pages/survey/constraints/boolean.html')
+});
+ko.components.register('DateConstraints', {
+    viewModel: require('./pages/survey/constraints/constraints'), template: require('./pages/survey/constraints/date.html')
+});
+ko.components.register('DateTimeConstraints', {
+    viewModel: require('./pages/survey/constraints/constraints'), template: require('./pages/survey/constraints/datetime.html')
+});
+ko.components.register('IntegerConstraints', {
+    viewModel: require('./pages/survey/constraints/constraints'), template: require('./pages/survey/constraints/numerical.html')
+});
+ko.components.register('DecimalConstraints', {
+    viewModel: require('./pages/survey/constraints/constraints'), template: require('./pages/survey/constraints/numerical.html')
+});
+ko.components.register('StringConstraints', {
+    viewModel: require('./pages/survey/constraints/constraints'), template: require('./pages/survey/constraints/string.html')
+});
+ko.components.register('MultiValueConstraints', {
+    viewModel: require('./pages/survey/constraints/constraints'), template: require('./pages/survey/constraints/multi.html')
+});
+/* Shared rules display */
+ko.components.register('rules', {
+    template: require('./pages/survey/constraints/rules.html')
+});
+ko.components.register('constraints-label', {
+    template: require('./pages/survey/constraints/constraints-label.html')
+});
+ko.components.register('ui-hint', {
+    template: require('./pages/survey/constraints/ui-hint.html')
+});
+
 
 var RootViewModel = function() {
     var self = this;
@@ -111,8 +185,17 @@ var RootViewModel = function() {
 
     self.mainPage = ko.observable('info');
     self.mainPage.subscribe(self.selected);
+    self.mainParams = ko.observable({});
 
     self.currentDialog = ko.observable('none_dialog');
+
+    // TODO: fix this so it's more flexible
+    self.isActive = function(tag) {
+        if (self.selected() === "survey" && tag === 'surveys') {
+            return true;
+        }
+        return tag === self.selected();
+    };
 
     self.signOut = function() {
         console.log("Signing out.");
@@ -120,8 +203,16 @@ var RootViewModel = function() {
     };
 
     self.routeTo = function(name) {
-        return function() {
+        return function(params) {
             self.mainPage(name);
+            self.mainParams({});
+        };
+    };
+    self.surveyRoute = function(name) {
+        return function(guid, createdOn) {
+            console.log("PARAMS", name, guid, createdOn);
+            self.mainPage(name);
+            self.mainParams({guid: guid, createdOn: (createdOn === "recent") ? null : createdOn});
         };
     };
 
@@ -138,7 +229,6 @@ var RootViewModel = function() {
         self.sessionToken(session.sessionToken);
         self.environment(" [" + session.environment + "]");
         self.roles(session.roles);
-        self.mainPage(self.isDeveloper() ? "info" : "consent");
     });
     serverService.addSessionEndListener(function(session) {
         self.studyName("");
@@ -164,18 +254,24 @@ serverService.addSessionEndListener(function() {
     root.currentDialog('sign_in_dialog');
 });
 
-director.Router({
-    'info': root.routeTo('info'),
-    'consent': root.routeTo('consent'),
-    'eligibility': root.routeTo('eligibility'),
-    'password_policy': root.routeTo('password_policy'),
-    'user_attributes': root.routeTo('user_attributes'),
-    'verify_email_template': root.routeTo('ve_template'),
-    'reset_password_template': root.routeTo('rp_template'),
-    'actions': root.routeTo('actions')
-}).configure({
-    notfound: root.routeTo('not_found')
-}).init();
+var router = new director.Router();
+router.param('guid', /([^\/]*)/);
+router.param('createdOn', /([^\/]*)/);
+router.on('/info', root.routeTo('info'));
+router.on('/consent', root.routeTo('consent'));
+router.on('/eligibility', root.routeTo('eligibility'));
+router.on('/password_policy', root.routeTo('password_policy'));
+router.on('/user_attributes', root.routeTo('user_attributes'));
+router.on('/verify_email_template', root.routeTo('ve_template'));
+router.on('/reset_password_template', root.routeTo('rp_template'));
+router.on('/actions', root.routeTo('actions'));
+router.on('/survey/:guid/:createdOn', root.surveyRoute('survey'));
+router.on('/survey_versions/:guid', root.surveyRoute('survey_versions'));
+router.on('/surveys', root.routeTo('surveys'));
+router.on('/schemas', root.routeTo('schemas'));
+router.on('/schedules', root.routeTo('schedules'));
+router.configure({notfound: root.routeTo('not_found')});
+router.init();
 
 // Make this global for Semantic UI.
 window.jQuery = $;

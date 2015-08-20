@@ -1,0 +1,44 @@
+<div class="ui breadcrumb">
+    <a href="#/surveys" class="section">Surveys</a>
+    <div class="divider"> / </div>
+    <span class="section" data-bind="text: nameObs()"> Versions</span>
+</div>
+
+<h3><span data-bind="text: nameObs()"></span> Versions</h3>
+
+<div class="ui grid">
+    <div class="ten wide column">
+        <table class="ui table" data-bind="visible: itemsObs().length > 0">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Version Date</th>
+                <th>&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody data-bind="foreach: itemsObs">
+            <tr data-bind="css: { positive: $data.published }">
+                <td>
+                    <a href="#" data-bind="attr: {href: '#/survey/'+$data.guid+'/'+$data.createdOn}, text: $data.name"></a>
+                </td>
+                <td data-bind="text: $parent.formatDate($data.createdOn)"></td>
+                <td width="100%">
+                    <div data-bind="visible: $data.published" style="text-align: right">
+                        <i class="checkmark icon"></i> Published
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="six wide column">
+        <div class="ui message">
+            <p>A survey can have many versions, each identified by the time it was created.</p>
+            <p>To keep track of versions, we recommend you give each version a unique name, e.g. "Smoking questions added". (Participants do not see this.)</p>
+            <p>Each version can be edited independently, as many times as desired. Once you publish it, however, the survey can no longer be modified.
+            <p>You can only schedule published surveys. It is common to create a schedule that returns the most recently published version of a survey, so participants automatically receive updates to the survey. </p>
+            <p><b>A participant's survey answers are recorded along with the specific version of the study the participant received.</b> </p>
+            <p>[TODO] Confused yet? The most recently published version of a survey is the survey with the most recent createdOn timestamp (not modifiedOn timestamp) that is published. Don't even know how to describe this. </p>
+        </div>
+    </div>
+</div>

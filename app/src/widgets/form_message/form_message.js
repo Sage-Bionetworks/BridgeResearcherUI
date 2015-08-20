@@ -9,16 +9,18 @@ module.exports = function(params) {
 
     // Subscribe to receive messages from parent MV.
     params.message.subscribe(function(newValue) {
+        console.log(newValue)
         if (typeof newValue === "string") {
             self.internalMessage("");
             self.cssClass("green");
             $(".form").removeClass("error");
             return;
-        } else if (typeof newValue.text == "string") {
+        } else if (typeof newValue.text === "string") {
+            newValue.status = newValue.status || "green";
             self.internalMessage(newValue.text);
-            self.cssClass((newValue.status === "error") ? "error" : "green");
+            self.cssClass(newValue.status);
         } else {
-            self.internalMessage("<ERROR>");
+            self.internalMessage("Some pretty boring error happened. We don't know what exactly. Please try again.");
             self.cssClass("error");
             console.error(arguments);
         }

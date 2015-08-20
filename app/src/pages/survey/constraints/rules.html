@@ -1,0 +1,21 @@
+<div data-bind="visible: publishedObs()">
+    <div data-bind="visible: !rules || rules.length == 0">
+        &lt;None&gt;
+    </div>
+    <div data-bind="visible: rules && rules.length > 0">
+        <div data-bind="foreach: rules">
+            <div><span style="font-variant: small-caps; font-weight: bold" data-bind="text: $data.operator"></span> <span data-bind="text: $data.value"></span>: skipTo <span data-bind="text: $data.skipTo"></span></div>
+        </div>
+    </div>
+</div>
+<div data-bind="visible: !publishedObs()">
+    <div data-bind="visible: !rules || rules.length == 0">
+        <a href="#" data-bind="click: $parent.addRule">Add Rules</a>
+    </div>
+    <div data-bind="visible: rules && rules.length > 0">
+        <div data-bind="foreach: rules">
+            <div><span style="font-variant: small-caps; font-weight: bold" data-bind="text: $data.operator"></span> <span data-bind="text: $data.value"></span>: skipTo <span data-bind="text: $data.skipTo"></span></div>
+        </div>
+        <div><a href="#">Edit Rules</a></div>
+    </div>
+</div>

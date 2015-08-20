@@ -1,0 +1,45 @@
+<constraints-label params="title: 'Enumerated Value Constraints'"></constraints-label>
+<div class="element-content-constraints">
+    <div>
+        <div>Allow other?</div>
+        <div>
+            <div class="ui checkbox">
+                <input type="checkbox" class="hidden" data-bind="attr: { checked: element.constraints.allowOther, disabled: publishedObs() }"/>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div>UI Hint:</div>
+        <div>
+            <ui-hint params="element: element, publishedObs: publishedObs"></ui-hint>
+        </div>
+    </div>
+    <div>
+        <div>Allow multiple?</div>
+        <div>
+            <div class="ui checkbox">
+                <input type="checkbox" class="hidden" data-bind="attr: { checked: element.constraints.allowMultiple, disabled: publishedObs() }"/>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div>Fire event?</div>
+        <div>
+            <div class="ui checkbox">
+                <input type="checkbox" class="hidden" data-bind="attr: { checked: element.constraints.fireEvent, disabled: publishedObs() }"/>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div>Enumeration</div>
+        <div>
+            <a href="#" data-bind="click: editEnum">
+                <span data-bind="text: element.constraints.enumeration.length"></span> options
+            </a>
+        </div>
+    </div>
+    <div>
+        <div>Rules:</div>
+        <div><rules params="rules: element.constraints.rules, publishedObs: publishedObs"></rules></div>
+    </div>
+</div>

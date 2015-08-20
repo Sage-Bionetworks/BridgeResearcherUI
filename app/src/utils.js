@@ -52,6 +52,7 @@ module.exports = {
      * @param event
      * @returns {Function}
      */
+    // TODO: Very complicated and no longer works.
     failureHandler: function(vm, event) {
         return function(response) {
             event.target.classList.remove("loading");
@@ -113,14 +114,28 @@ module.exports = {
     getStudyList: function(vm) {
         return function(env) {
             vm.message("");
+            vm.studyOptions([]);
+            document.getElementById("study").disabled = true;
             serverService.getStudyList(env).then(function(studies) {
                 studies.items.sort(function(a,b) {
                     return a.name > b.name;
                 });
                 vm.studyOptions(studies.items);
+                document.getElementById("study").disabled = false;
             }).catch(function(response) {
                 vm.message({text: response.message, status: 'error'});
             });
         };
+    },
+    /**
+     * Convert a date into a locale-appropriate string (browser-dependent).
+     * @param date
+     * @returns {string}
+     */
+    formatDate: function(date) {
+        if (date) {
+            return new Date(date).toLocaleString();
+        }
+        return "";
     }
-}
+};

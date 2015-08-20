@@ -1,0 +1,28 @@
+<h3>Surveys</h3>
+
+<div class="button-container">
+    <button class="ui primary button" data-bind="click: createNew">New Survey</button>
+</div>
+
+<form-message params="message: message"></form-message>
+
+<div data-bind="visible: items().length === 0">Loading...</div>
+
+<table class="ui table">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Last Updated</th>
+    </tr>
+    </thead>
+    <tbody data-bind="foreach: items">
+        <tr data-bind="css: { positive: $data.active }">
+            <td>
+                <a href="#" data-bind="attr: {'href': '#/survey_versions/'+$data.guid}, text: $data.name"></a>
+            </td>
+            <td>
+                <span data-bind="text: $parent.formatDate($data.createdOn)"></span>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,41 @@
+<constraints-label params="title: 'Number Constraints'"></constraints-label>
+<div class="element-content-constraints">
+    <div>
+        <div>Minimum Value:</div>
+        <div><input type="text" class="editor" data-bind="value: element.constraints.minValue"/></div>
+    </div>
+    <div>
+        <div>UI Hint:</div>
+        <div>
+            <ui-hint params="element: element, publishedObs: publishedObs"></ui-hint>
+        </div>
+    </div>
+    <div>
+        <div>Maximum Value:</div>
+        <div><input type="text" class="editor" data-bind="value: element.constraints.maxValue"/></div>
+    </div>
+    <div>
+        <div>Fire event?</div>
+        <div>
+            <div class="ui checkbox">
+                <input type="checkbox" tabindex="0" class="hidden">
+                <label></label>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div>Step:</div>
+        <div><input type="text" class="editor" data-bind="value: element.constraints.step"/></div>
+    </div>
+    <div>
+        <div>Rules:</div>
+        <div><rules params="rules: element.constraints.rules, publishedObs: publishedObs"></rules></div>
+    </div>
+    <div>
+        <div>Unit:</div>
+        <div><input type="text" class="editor" data-bind="value: element.constraints.unit"/></div>
+    </div>
+    <div>
+
+    </div>
+</div>

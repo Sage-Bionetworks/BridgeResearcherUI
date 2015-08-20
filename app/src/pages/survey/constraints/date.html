@@ -1,0 +1,43 @@
+<constraints-label params="title: 'Date Constraints'"></constraints-label>
+<div class="element-content-constraints">
+    <div>
+        <div>Earliest date</div>
+        <div>
+            <div data-bind="visible: publishedObs(), text: formatDate(element.constraints.earliestValue)"/>
+            <input type="date" data-bind="visible: !publishedObs(), value: element.constraints.earliestValue"/>
+        </div>
+    </div>
+    <div>
+        <div>UI Hint:</div>
+        <div>
+            <ui-hint params="element: element, publishedObs: publishedObs"></ui-hint>
+        </div>
+    </div>
+    <div>
+        <div>Latest date</div>
+        <div>
+            <div data-bind="visible: publishedObs(), text: formatDate(element.constraints.latestValue)"/>
+            <input type="date" data-bind="visible: !publishedObs(), value: element.constraints.latestValue"/>
+        </div>
+    </div>
+    <div>
+        <div>Fire event?</div>
+        <div>
+            <div class="ui checkbox">
+                <input type="checkbox" class="hidden" data-bind="attr: { checked: element.constraints.fireEvent, disabled: publishedObs() }"/>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div>Allow future dates?</div>
+        <div>
+            <div class="ui checkbox">
+                <input type="checkbox" class="hidden" data-bind="attr: { checked: element.constraints.allowFuture, disabled: publishedObs() }"/>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div>Rules:</div>
+        <div><rules params="rules: element.constraints.rules, publishedObs: publishedObs"></rules></div>
+    </div>
+</div>

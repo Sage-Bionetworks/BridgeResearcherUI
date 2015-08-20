@@ -1,0 +1,10 @@
+.editor {
+    border: none;
+    border-bottom: 1px dotted #ccc;
+    background-color: transparent;
+    display: block;
+    width: 100%;
+}
+select.ui.dropdown {
+    height: auto;
+}

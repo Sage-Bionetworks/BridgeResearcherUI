@@ -1,0 +1,90 @@
+.survey {
+    padding: 1rem;
+}
+.element {
+    width: 100%;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    box-shadow: 1px 1px 1px #ccc;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1rem;
+
+    transform: scaleY(100%);
+    transform-origin: top;
+    overflow: hidden;
+    transition: transform .5s ease;
+}
+    .element-callout, .element-content {
+        padding: .5rem 1rem 1rem 1rem;
+    }
+    .element-callout {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-content: flex-end;
+        justify-content: space-between;
+    }
+        .element-callout .circular.label {
+            margin-top: 1rem;
+        }
+        .element-callout-identifier-box {
+            text-align: center;
+            flex: 1;
+        }
+            .element-callout-identifier {
+                margin: .4rem 0 .4rem 0;
+                text-align: center;
+                font-size: larger;
+                font-weight: bold;
+            }
+            .element-callout-identifier-label {
+                margin-bottom: 1rem;
+            }
+        .element-callout-delete {
+
+        }
+.element-content {
+    flex: 1;
+    padding: 1rem 2rem;
+}
+    /* The use of .ui here override semantic UI's styles. May want to do this elsewhere. */
+    .ui.element-content-segment {
+        padding-top: .75rem;
+        background-color: #f4f4f4;
+    }
+    .ui.medium.ribbon.label {
+        margin-bottom: .5rem;
+    }
+    .element-content-prompt {
+        font-size: 1.3rem;
+        font-weight: bold;
+        margin: .4rem 0;
+        padding-left: 1rem;
+    }
+        .element-content-prompt-detail {
+            font-size: 1.1rem;
+            color: #bbb;
+            font-weight: normal;
+            font-style: italic;
+            padding-left: 1rem;
+        }
+.element-content-constraints {
+    display: flex;
+    flex-wrap: wrap;
+}
+    .element-content-constraints > div {
+        width: 50%;
+        display: flex;
+        flex-direction: row;
+        align-items: baseline;
+    }
+        .element-content-constraints > div > div {
+            padding: .2rem .4rem;
+        }
+        .element-content-constraints > div > div:first-child {
+            width: 40%;
+        }
+        .element-content-constraints > div > div:last-child {
+            flex: 2;
+        }

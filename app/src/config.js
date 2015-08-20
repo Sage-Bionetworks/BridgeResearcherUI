@@ -30,5 +30,7 @@ module.exports = config = {
     studyConsents: '/v3/consents',
     studyConsent: '/v3/consents/',
     emailRoster: '/v3/users/emailParticipantRoster',
-    requestResetPassword: '/v3/auth/requestResetPassword'
+    requestResetPassword: '/v3/auth/requestResetPassword',
+    surveys: '/v3/surveys',
+    survey: '/v3/surveys/'
 };
