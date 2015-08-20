@@ -8,8 +8,7 @@ module.exports = function(params) {
     self.internalMessage = ko.observable("");
 
     // Subscribe to receive messages from parent MV.
-    params.message.subscribe(function(newValue) {
-        console.log(newValue)
+    params.messageObs.subscribe(function(newValue) {
         if (typeof newValue === "string") {
             self.internalMessage("");
             self.cssClass("green");

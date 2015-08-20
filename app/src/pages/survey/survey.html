@@ -3,12 +3,12 @@
     <div class="divider"> / </div>
     <a href="#/survey_versions/" class="section" data-bind="attr:{href: '#/survey_versions/'+guidObs()}, text: nameObs"></a>
     <div class="divider"> / </div>
-    <span class="active section" data-bind="text: formatDate(dateObs())"></span>
+    <span class="active section" data-bind="text: formatDateTime(dateObs())"></span>
 </div>
 
 <h3><span data-bind="text: nameObs"></span></h3>
 
-<form-message params="message: message"></form-message>
+<form-message params="messageObs: messageObs"></form-message>
 
 <form class="ui form">
     <div class="two fields">

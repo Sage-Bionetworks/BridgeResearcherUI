@@ -6,8 +6,7 @@ var $ = require('jquery');
 module.exports = function(params) {
     var self = this;
 
-    // TODO: We really need a naming convention, change this to self.messageObs
-    self.message = ko.observable();
+    self.messageObs = ko.observable();
     self.nameObs = ko.observable();
     self.dateObs = ko.observable();
     self.guidObs = ko.observable();
@@ -38,11 +37,11 @@ module.exports = function(params) {
         self.identifierObs(self.survey.identifier);
         self.publishedObs(self.survey.published);
         if (message) {
-            self.message({text: message});
+            self.messageObs({text: message});
         }
     }
 
-    self.formatDate = utils.formatDate;
+    self.formatDateTime = utils.formatDateTime;
 
     self.version = function(vm, event) {
         utils.startHandler(self, event);

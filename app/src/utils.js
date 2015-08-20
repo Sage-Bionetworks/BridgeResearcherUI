@@ -22,8 +22,8 @@ module.exports = {
         if (vm.errorFields) {
             vm.errorFields.removeAll();
         }
-        if (vm.message) {
-            vm.message("");
+        if (vm.messageObs) {
+            vm.messageObs("");
         }
     },
     /**
@@ -56,10 +56,10 @@ module.exports = {
     failureHandler: function(vm, event) {
         return function(response) {
             event.target.classList.remove("loading");
-            if (vm.message) {
+            if (vm.messageObs) {
                 var msg = (response.responseJSON) ? response.responseJSON.message :
                     "There has been an error contacting the server.";
-                vm.message({text:msg, 'status': 'error'});
+                vm.messageObs({text:msg, 'status': 'error'});
             }
             if (vm.errorFields) {
                 if (json.errors) {
@@ -113,7 +113,7 @@ module.exports = {
      */
     getStudyList: function(vm) {
         return function(env) {
-            vm.message("");
+            vm.messageObs("");
             vm.studyOptions([]);
             document.getElementById("study").disabled = true;
             serverService.getStudyList(env).then(function(studies) {
@@ -123,7 +123,7 @@ module.exports = {
                 vm.studyOptions(studies.items);
                 document.getElementById("study").disabled = false;
             }).catch(function(response) {
-                vm.message({text: response.message, status: 'error'});
+                vm.messageObs({text: response.message, status: 'error'});
             });
         };
     },
@@ -132,9 +132,32 @@ module.exports = {
      * @param date
      * @returns {string}
      */
-    formatDate: function(date) {
+    formatDateTime: function(date) {
         if (date) {
             return new Date(date).toLocaleString();
+        }
+        return "";
+    },
+    /**
+     * Convert a ISO date string ("2010-01-01") to a browser-dependent, local
+     * date string, adjusting for the time zone offset on that date, to compensate
+     * for the fact that a date without a time is abstract and not expressed
+     * relative to a time zone. Otherwise the browser may shift the date to a
+     * different day when it localizes the time zone.
+     * @param date
+     * @returns {*}
+     */
+    formatDate: function(date) {
+        if (date) {
+            // Get the declared offset of the local time on the date in question (accounts
+            // for daylight savings at right time of year)
+            var offset = new Date(date).toString().match(/GMT([^\s]*)/)[1];
+            // If offset is +0600, on Safari this fails if you don't insert ':' as in: +06:00
+            offset = offset.replace(/00$/,":00");
+            // Now force date to a specific datetime, in local time at that time
+            var localDate = date + "T00:00:00" + offset;
+            // And return only the date portion of that date object
+            return new Date(localDate).toLocaleDateString();
         }
         return "";
     }

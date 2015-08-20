@@ -88,3 +88,6 @@
         .element-content-constraints > div > div:last-child {
             flex: 2;
         }
+    .element-content-constraints select.ui.dropdown {
+        height: auto;
+    }

@@ -12,7 +12,7 @@ module.exports = function() {
     var study = optionsService.get('study', 'api');
     var env = optionsService.get('environment', 'production');
 
-    self.message = ko.observable("");
+    self.messageObs = ko.observable("");
     utils.observablesFor(self, fields);
     self.study(study);
     self.studyOptions = ko.observableArray();
@@ -24,7 +24,7 @@ module.exports = function() {
 
     self.sendResetPasswordRequest = function() {
         if (self.email() === "") {
-            return self.message({text:"Email address is required.", status:"error"});
+            return self.messageObs({text:"Email address is required.", status:"error"});
         }
         optionsService.set('environment', self.environment());
         optionsService.set('study', self.study());

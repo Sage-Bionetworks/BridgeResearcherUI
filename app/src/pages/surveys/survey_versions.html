@@ -21,7 +21,7 @@
                 <td>
                     <a href="#" data-bind="attr: {href: '#/survey/'+$data.guid+'/'+$data.createdOn}, text: $data.name"></a>
                 </td>
-                <td data-bind="text: $parent.formatDate($data.createdOn)"></td>
+                <td data-bind="text: $parent.formatDateTime($data.createdOn)"></td>
                 <td width="100%">
                     <div data-bind="visible: $data.published" style="text-align: right">
                         <i class="checkmark icon"></i> Published

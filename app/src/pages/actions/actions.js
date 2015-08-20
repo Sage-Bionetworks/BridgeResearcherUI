@@ -5,7 +5,7 @@ var utils = require('../../utils');
 module.exports = function() {
     var self = this;
 
-    self.message = ko.observable("");
+    self.messageObs = ko.observable("");
 
     self.emailRoster = function(vm, event) {
         utils.startHandler(self, event);
@@ -13,7 +13,7 @@ module.exports = function() {
         serverService.email()
             .then(utils.successHandler(vm, event))
             .then(function(response) {
-                self.message({text: response.message});
+                self.messageObs({text: response.message});
             })
             .catch(utils.failureHandler(vm, event));
     };

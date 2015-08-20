@@ -6,7 +6,7 @@ module.exports = function(survey) {
     var self = this;
     self.survey = survey;
 
-    self.message = ko.observable("");
+    self.messageObs = ko.observable("");
     self.itemsObs = ko.observableArray([]);
     self.nameObs = ko.computed(function() {
         if (self.itemsObs().length > 0) {
@@ -15,9 +15,7 @@ module.exports = function(survey) {
         return "";
     });
 
-    self.formatDate = function(date) {
-        return new Date(date).toLocaleString();
-    };
+    self.formatDateTime = utils.formatDateTime;
 
     serverService.getSurveyAllRevisions(survey.guid).then(function(list) {
         self.itemsObs(list.items);

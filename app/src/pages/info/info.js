@@ -8,7 +8,7 @@ module.exports = function() {
     var self = this;
 
     utils.observablesFor(self, fields);
-    self.message = ko.observable("");
+    self.messageObs = ko.observable("");
     self.errorFields = ko.observableArray();
 
     self.errorFor = function(fieldName) {
@@ -25,7 +25,7 @@ module.exports = function() {
             .then(utils.successHandler(vm, event))
             .then(function(response) {
                 self.study.version = response.version;
-                self.message({text: "Study information saved."});
+                self.messageObs({text: "Study information saved."});
             }).catch(utils.failureHandler(vm, event));
     };
 

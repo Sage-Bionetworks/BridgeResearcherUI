@@ -18,7 +18,7 @@ module.exports = function() {
     var study = optionsService.get('study', 'api');
     var env = optionsService.get('environment', 'production');
 
-    self.message = ko.observable("");
+    self.messageObs = ko.observable("");
     utils.observablesFor(self, fields);
     self.study(study);
     self.studyOptions = ko.observableArray();
@@ -30,7 +30,7 @@ module.exports = function() {
 
     self.signIn = function(vm, event) {
         if (self.username() === "" || self.password() === "") {
-            return self.message({text:"Username and/or password are required.", status:"error"});
+            return self.messageObs({text:"Username and/or password are required.", status:"error"});
         }
         // Succeed or fail, let's keep these values for other sign ins.
         optionsService.set('environment', self.environment());

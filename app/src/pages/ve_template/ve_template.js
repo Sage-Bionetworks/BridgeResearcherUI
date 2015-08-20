@@ -7,7 +7,7 @@ module.exports = function() {
 
     self.study = null;
     self.subject = ko.observable("");
-    self.message = ko.observable("");
+    self.messageObs = ko.observable("");
     self.errorFields = ko.observableArray();
     self.editor = null;
 
@@ -34,7 +34,7 @@ module.exports = function() {
         serverService.saveStudy(self.study)
             .then(utils.successHandler(vm, event))
             .then(function(response) {
-                self.message({text:"Email saved."});
+                self.messageObs({text:"Email saved."});
                 self.study.version = response.version;
             }).catch(utils.failureHandler(vm, event));
     };

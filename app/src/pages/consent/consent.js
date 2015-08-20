@@ -5,7 +5,7 @@ var serverService = require('../../services/server_service');
 module.exports = function() {
     var self = this;
 
-    self.message = ko.observable("This is a message");
+    self.messageObs = ko.observable("This is a message");
     self.active = ko.observable(true);
     self.createdOn = ko.observable('Created on ...');
     self.historyItems = ko.observableArray();
@@ -14,7 +14,7 @@ module.exports = function() {
 
     self.tab = ko.observable('current');
     self.tab.subscribe(function(value) {
-        self.message("");
+        self.messageObs("");
         if (value === "history") {
             serverService.getConsentHistory().then(function(data) {
                 self.historyItems(data.items);
@@ -29,7 +29,7 @@ module.exports = function() {
             consent.documentContent = doc.split(/<body[^>]*\>/)[1].split(/<\/body\>.*/)[0].trim();
             console.log("Content to edit", consent.documentContent);
         }
-        self.createdOn("Created on " + self.formatDate(consent.createdOn));
+        self.createdOn("Created on " + self.formatDateTime(consent.createdOn));
         self.active(consent.active);
         self.editor.setData(consent.documentContent);
     }
@@ -39,9 +39,7 @@ module.exports = function() {
         serverService.getMostRecentStudyConsent().then(loadIntoEditor);
     };
 
-    self.formatDate = function(date) {
-        return new Date(date).toLocaleString();
-    };
+    self.formatDateTime = utils.formatDateTime;
 
     self.selectToPublish = function(vm, event) {
         self.consentSelected(ko.dataFor(event.target));
@@ -69,7 +67,7 @@ module.exports = function() {
             .then(utils.successHandler(self, event))
             .then(loadIntoEditor)
             .then(function() {
-                self.message({text:"Consent saved."});
+                self.messageObs({text:"Consent saved."});
             })
             .catch(utils.failureHandler(self, event));
     };

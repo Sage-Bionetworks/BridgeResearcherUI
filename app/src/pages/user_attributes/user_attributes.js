@@ -8,20 +8,20 @@ module.exports = function() {
     self.study = null;
     self.records = ko.observableArray();
     self.addField = ko.observable("");
-    self.message = ko.observable("");
+    self.messageObs = ko.observable("");
 
     self.remove = function(attribute) {
         self.records.remove(attribute);
     };
     self.add = function() {
         if (!self.addField()) {
-            return self.message({text: "You must provide a value for an attribute.", status: "error"});
+            return self.messageObs({text: "You must provide a value for an attribute.", status: "error"});
         }
         if (self.records.contains(self.addField())) {
-            return self.message({text: "The attribute must be a unique value.", status: "error"});
+            return self.messageObs({text: "The attribute must be a unique value.", status: "error"});
         }
         self.records.push(self.addField());
-        self.message("");
+        self.messageObs("");
         self.addField("");
     };
     self.save = function(vm, event) {
@@ -32,7 +32,7 @@ module.exports = function() {
         request.then(utils.successHandler(self, event))
         .then(function(response) {
             self.study.version = response.version;
-            self.message({text: "User attributes saved."});
+            self.messageObs({text: "User attributes saved."});
         }).catch(utils.failureHandler(vm, event));
     };
 

@@ -1,4 +1,5 @@
-<form-message params="message: message"></form-message>
+<form-message params="messageObs: messageObs"></form-message>
+
 <div class="ui secondary pointing menu">
     <a class="item" data-bind="click: function() { tab('current') }, css: {active: tab() == 'current'}">
         <i class="file outline icon"></i> Consent Agreement
@@ -42,7 +43,7 @@
                             </td>
                             <td>
                                 <a href="" data-bind="click: $parent.loadHistoryItem,
-                                text: $parent.formatDate($data.createdOn)"></a>
+                                text: $parent.formatDateTime($data.createdOn)"></a>
                             </td>
                             <td>
                                 <div data-bind="visible: $data.active" style="text-align: right">

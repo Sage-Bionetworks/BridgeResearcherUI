@@ -121,44 +121,44 @@ ko.components.register('SurveyInfoScreen', {
 });
 /*
 ko.components.register('DateConstraints', {
-    template: require('./pages/survey/constraints/date.html')
+    template: require('./pages/survey/constraints/date_constraints.html')
 });
 ko.components.register('DateTimeConstraints', {
-    template: require('./pages/survey/constraints/datetime.html')
+    template: require('./pages/survey/constraints/datetime_constraints.html')
 });
 ko.components.register('IntegerConstraints', {
-    template: require('./pages/survey/constraints/numerical.html')
+    template: require('./pages/survey/constraints/numerical_constraints.html')
 });
 ko.components.register('DecimalConstraints', {
-    template: require('./pages/survey/constraints/numerical.html')
+    template: require('./pages/survey/constraints/numerical_constraints.html')
 });
 ko.components.register('StringConstraints', {
-    template: require('./pages/survey/constraints/string.html')
+    template: require('./pages/survey/constraints/string_constraints.html')
 });
 ko.components.register('MultiValueConstraints', {
-    template: require('./pages/survey/constraints/multi.html')
+    template: require('./pages/survey/constraints/multi_constraints.html')
 });
 */
 ko.components.register('BooleanConstraints', {
-    viewModel: require('./pages/survey/constraints/constraints'), template: require('./pages/survey/constraints/boolean.html')
+    viewModel: require('./pages/survey/constraints/constraints'), template: require('./pages/survey/constraints/boolean_constraints.html')
 });
 ko.components.register('DateConstraints', {
-    viewModel: require('./pages/survey/constraints/constraints'), template: require('./pages/survey/constraints/date.html')
+    viewModel: require('./pages/survey/constraints/constraints'), template: require('./pages/survey/constraints/date_constraints.html')
 });
 ko.components.register('DateTimeConstraints', {
-    viewModel: require('./pages/survey/constraints/constraints'), template: require('./pages/survey/constraints/datetime.html')
+    viewModel: require('./pages/survey/constraints/constraints'), template: require('./pages/survey/constraints/datetime_constraints.html')
 });
 ko.components.register('IntegerConstraints', {
-    viewModel: require('./pages/survey/constraints/constraints'), template: require('./pages/survey/constraints/numerical.html')
+    viewModel: require('./pages/survey/constraints/constraints'), template: require('./pages/survey/constraints/numerical_constraints.html')
 });
 ko.components.register('DecimalConstraints', {
-    viewModel: require('./pages/survey/constraints/constraints'), template: require('./pages/survey/constraints/numerical.html')
+    viewModel: require('./pages/survey/constraints/constraints'), template: require('./pages/survey/constraints/numerical_constraints.html')
 });
 ko.components.register('StringConstraints', {
-    viewModel: require('./pages/survey/constraints/constraints'), template: require('./pages/survey/constraints/string.html')
+    viewModel: require('./pages/survey/constraints/constraints'), template: require('./pages/survey/constraints/string_constraints.html')
 });
 ko.components.register('MultiValueConstraints', {
-    viewModel: require('./pages/survey/constraints/constraints'), template: require('./pages/survey/constraints/multi.html')
+    viewModel: require('./pages/survey/constraints/constraints'), template: require('./pages/survey/constraints/multi_constraints.html')
 });
 /* Shared rules display */
 ko.components.register('rules', {

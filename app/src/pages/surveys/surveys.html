@@ -1,10 +1,10 @@
 <h3>Surveys</h3>
 
+<form-message params="messageObs: messageObs"></form-message>
+
 <div class="button-container">
     <button class="ui primary button" data-bind="click: createNew">New Survey</button>
 </div>
-
-<form-message params="message: message"></form-message>
 
 <div data-bind="visible: items().length === 0">Loading...</div>
 
@@ -21,7 +21,7 @@
                 <a href="#" data-bind="attr: {'href': '#/survey_versions/'+$data.guid}, text: $data.name"></a>
             </td>
             <td>
-                <span data-bind="text: $parent.formatDate($data.createdOn)"></span>
+                <span data-bind="text: $parent.formatDateTime($data.createdOn)"></span>
             </td>
         </tr>
     </tbody>

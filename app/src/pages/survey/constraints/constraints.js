@@ -1,4 +1,5 @@
 var $ = require('jquery');
+var utils = require('../../../utils');
 
 var uiHintLabels = {
     'checkbox':'Checkbox',
@@ -34,16 +35,15 @@ var selectOptionsByType = {
     'TimeConstraints':[uiHintOptions.timepicker]
 };
 
+// At some point this "one VM for all editors" thing will break down....
 module.exports = function(params) {
     var self = this;
 
     self.element = params.element;
     self.publishedObs = params.publishedObs;
 
-    self.formatDate = function(date) {
-        console.log(date);
-        return new Date(date).toDateString();
-    };
+    self.formatDate = utils.formatDate;
+
     self.editEnum = function() {
         alert("editEnum: Not implemented");
     };

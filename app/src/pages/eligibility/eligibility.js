@@ -8,7 +8,7 @@ module.exports = function() {
     var self = this;
 
     self.study = null;
-    self.message = ko.observable("");
+    self.messageObs = ko.observable("");
     self.errorFields = ko.observableArray();
     utils.observablesFor(self, fields);
 
@@ -30,7 +30,7 @@ module.exports = function() {
             .then(utils.successHandler(self, event))
             .then(function(response) {
                 self.study.version = response.version;
-                self.message({text:"Study updated."});
+                self.messageObs({text:"Study updated."});
             })
             .catch(utils.failureHandler(self, event));
     };
