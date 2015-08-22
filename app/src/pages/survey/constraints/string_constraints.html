@@ -3,42 +3,38 @@
     <div>
         <div>Minimum Length:</div>
         <div>
-            <div data-bind="visible: publishedObs(), text: element.constraints.minLength"></div>
-            <input type="text" class="editor" data-bind="visible: !publishedObs(), value: element.constraints.minLength"/>
+            <ui-text params="fieldObs: minLengthObs(), publishedObs: publishedObs"></ui-text>
         </div>
     </div>
     <div>
         <div>UI Hint:</div>
         <div>
-            <ui-hint params="element: element, publishedObs: publishedObs"></ui-hint>
+            <ui-select params="fieldObs: uiHintObs, fieldLabel: uiHintLabel,
+                publishedObs: publishedObs, optionsSrc: getUiHintOptions"></ui-select>
         </div>
     </div>
     <div>
         <div>Maximum Length:</div>
         <div>
-            <div data-bind="visible: publishedObs(), text: element.constraints.maxLength"></div>
-            <input type="text" class="editor" data-bind="visible: !publishedObs(), value: element.constraints.maxLength"/>
+            <ui-text params="fieldObs: maxLengthObs(), publishedObs: publishedObs"></ui-text>
         </div>
     </div>
     <div>
         <div>Fire event?</div>
         <div>
-            <div class="ui checkbox">
-                <input type="checkbox" class="hidden" data-bind="attr: { checked: element.constraints.fireEvent, disabled: publishedObs() }"/>
-            </div>
+            <ui-checkbox params="checkedObs: fireEventObs, disabledObs: publishedObs"></ui-checkbox>
         </div>
     </div>
     <div>
         <div>Pattern:</div>
         <div>
-            <div data-bind="visible: publishedObs(), text: element.constraints.pattern"></div>
-            <input type="text" class="editor" data-bind="visible: !publishedObs(), value: element.constraints.pattern"/>
+            <ui-text params="fieldObs: patternObs(), publishedObs: publishedObs"></ui-text>
         </div>
     </div>
     <div>
         <div>Rules:</div>
         <div>
-            <rules params="rules: element.constraints.rules, publishedObs: publishedObs"></rules>
+            <ui-rules params="rulesObs: rulesObs, publishedObs: publishedObs"></ui-rules>
         </div>
     </div>
 </div>

@@ -9,14 +9,11 @@
     display: flex;
     flex-direction: row;
     margin-bottom: 1rem;
-
-    transform: scaleY(100%);
-    transform-origin: top;
     overflow: hidden;
-    transition: transform .5s ease;
+    transition: height .5s ease;
 }
     .element-callout, .element-content {
-        padding: .5rem 1rem 1rem 1rem;
+
     }
     .element-callout {
         text-align: center;
@@ -24,6 +21,7 @@
         flex-direction: column;
         align-content: flex-end;
         justify-content: space-between;
+        padding: .5rem 1rem 1rem 1rem;
     }
         .element-callout .circular.label {
             margin-top: 1rem;
@@ -42,11 +40,11 @@
                 margin-bottom: 1rem;
             }
         .element-callout-delete {
-
+            cursor: pointer;
         }
 .element-content {
-    flex: 1;
-    padding: 1rem 2rem;
+    flex: 2;
+    padding: 1rem 1rem 1rem 2rem;
 }
     /* The use of .ui here override semantic UI's styles. May want to do this elsewhere. */
     .ui.element-content-segment {
@@ -59,7 +57,6 @@
     .element-content-prompt {
         font-size: 1.3rem;
         font-weight: bold;
-        margin: .4rem 0;
         padding-left: 1rem;
     }
         .element-content-prompt-detail {
@@ -67,7 +64,7 @@
             color: #bbb;
             font-weight: normal;
             font-style: italic;
-            padding-left: 1rem;
+            padding: .4rem 1rem;
         }
 .element-content-constraints {
     display: flex;

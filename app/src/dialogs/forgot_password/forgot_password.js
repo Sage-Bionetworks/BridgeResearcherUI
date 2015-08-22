@@ -4,7 +4,7 @@ var serverService = require('../../services/server_service');
 var optionsService = require('../../services/options_service');
 var config = require('../../config');
 
-var fields = ['email', 'study', 'environment', 'study'];
+var fields = ['email', 'study', 'environment'];
 
 module.exports = function() {
     var self = this;

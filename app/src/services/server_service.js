@@ -164,11 +164,14 @@ module.exports = {
     getSurveyAllRevisions: function(guid) {
         return get(config.survey + guid + '/revisions');
     },
+    getSurvey: function(guid, createdOn) {
+        return get(config.survey + guid + '/revisions/' + new Date(createdOn).toISOString());
+    },
     getSurveyMostRecent: function(guid) {
         return get(config.survey + guid + '/revisions/recent');
     },
-    getSurvey: function(guid, createdOn) {
-        return get(config.survey + guid + '/revisions/' + new Date(createdOn).toISOString());
+    getSurveyMostRecentlyPublished: function(guid) {
+        return get(config.survey + guid + '/revisions/published');
     },
     createSurvey: function(survey) {
         return post(config.surveys, survey);

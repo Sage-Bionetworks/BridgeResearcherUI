@@ -7,7 +7,7 @@ module.exports = function() {
 
     self.messageObs = ko.observable("This is a message");
     self.active = ko.observable(true);
-    self.createdOn = ko.observable('Created on ...');
+    self.createdOn = ko.observable('');
     self.historyItems = ko.observableArray();
     self.consentSelected = ko.observable(null);
     self.editor = null;
@@ -23,13 +23,14 @@ module.exports = function() {
     });
 
     function loadIntoEditor(consent) {
+        console.log("loadIntoEditor", consent);
         if (consent.documentContent.indexOf("<html") > -1) {
             console.warn("HTML document returned from server, stripping out body content");
             var doc = consent.documentContent;
             consent.documentContent = doc.split(/<body[^>]*\>/)[1].split(/<\/body\>.*/)[0].trim();
             console.log("Content to edit", consent.documentContent);
         }
-        self.createdOn("Created on " + self.formatDateTime(consent.createdOn));
+        self.createdOn(self.formatDateTime(consent.createdOn));
         self.active(consent.active);
         self.editor.setData(consent.documentContent);
     }
@@ -48,14 +49,18 @@ module.exports = function() {
 
     self.publish = function(vm, event) {
         utils.startHandler(vm, event);
-        serverService.publishStudyConsent(self.consentSelected().createdOn)
+
+        var createdOn = self.consentSelected().createdOn;
+        self.consentSelected(null);
+
+        serverService.publishStudyConsent(createdOn)
             .then(utils.successHandler(vm, event))
             .then(function(response) {
                 serverService.getConsentHistory().then(function(data) {
                     self.historyItems(data.items);
+                    serverService.getStudyConsent(createdOn)
+                        .then(loadIntoEditor);
                 });
-                self.loadHistoryItem(self.consentSelected());
-                self.consentSelected(null);
             })
             .catch(utils.failureHandler(vm ,event));
     };

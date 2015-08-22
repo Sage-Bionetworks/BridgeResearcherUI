@@ -43,13 +43,13 @@
                 <div class="item" data-bind="visible: isDeveloper">
                     <i class="server icon"></i> Surveys & Tasks
                     <div class="menu">
-                        <a href="#surveys" class="item" data-bind="css:{active:isActive('surveys')}">
+                        <a href="#surveys" class="item" data-bind="css:{active:isActive('surveys')}, visible: isDeveloper">
                             Surveys
                         </a>
-                        <a href="#schemas" class="item" data-bind="css:{active:isActive('schemas')}">
+                        <a href="#schemas" class="item" data-bind="css:{active:isActive('schemas')}, visible: isDeveloper">
                             Upload Schemas
                         </a>
-                        <a href="#schedules" class="item" data-bind="css:{active:isActive('schedules')}">
+                        <a href="#schedules" class="item" data-bind="css:{active:isActive('schedules')}, visible: isDeveloper">
                             Schedules
                         </a>
                     </div>
@@ -81,7 +81,7 @@
         </nav>
     </section>
     <footer>
-        <p>&copy; 2015 Sage Bionetworks. <span data-bind="text: sessionToken"></span></p>
+        <p>&copy; 2015 Sage Bionetworks.</p>
     </footer>
     <div id="dialogHolder" data-bind="modal: currentDialog"></div>
     <script src="./dist/bundle.js"></script>

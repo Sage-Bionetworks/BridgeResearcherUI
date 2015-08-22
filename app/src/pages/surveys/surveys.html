@@ -5,24 +5,22 @@
 <div class="button-container">
     <button class="ui primary button" data-bind="click: createNew">New Survey</button>
 </div>
-
-<div data-bind="visible: items().length === 0">Loading...</div>
-
-<table class="ui table">
+<div data-bind="visible: itemsObs().length === 0">Loading...</div>
+<table class="ui table" data-bind="visible: itemsObs().length > 0">
     <thead>
-    <tr>
-        <th>Name</th>
-        <th>Last Updated</th>
-    </tr>
+        <tr>
+            <th>Name</th>
+            <th>Last Updated</th>
+            <th>Identifier</th>
+        </tr>
     </thead>
-    <tbody data-bind="foreach: items">
+    <tbody data-bind="foreach: itemsObs">
         <tr data-bind="css: { positive: $data.active }">
             <td>
-                <a href="#" data-bind="attr: {'href': '#/survey_versions/'+$data.guid}, text: $data.name"></a>
+                <a href="#" data-bind="attr: {'href': '#/survey/'+$data.guid}, text: $data.name"></a>
             </td>
-            <td>
-                <span data-bind="text: $parent.formatDateTime($data.createdOn)"></span>
-            </td>
+            <td data-bind="text: $parent.formatDateTime($data.createdOn)"></td>
+            <td data-bind="text: $data.identifier"></td>
         </tr>
     </tbody>
 </table>

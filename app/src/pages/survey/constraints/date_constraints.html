@@ -3,41 +3,38 @@
     <div>
         <div>Earliest date</div>
         <div>
-            <div data-bind="visible: publishedObs(), text: formatDate(element.constraints.earliestValue)"/>
-            <input type="date" data-bind="visible: !publishedObs(), value: element.constraints.earliestValue"/>
+            <ui-date params="fieldObs: earliestValueObs, publishedObs: publishedObs"></ui-date>
         </div>
     </div>
     <div>
         <div>UI Hint:</div>
         <div>
-            <ui-hint params="element: element, publishedObs: publishedObs"></ui-hint>
+            <ui-select params="fieldObs: uiHintObs, fieldLabel: uiHintLabel,
+                publishedObs: publishedObs, optionsSrc: getUiHintOptions"></ui-select>
         </div>
     </div>
     <div>
         <div>Latest date</div>
         <div>
-            <div data-bind="visible: publishedObs(), text: formatDate(element.constraints.latestValue)"/>
-            <input type="date" data-bind="visible: !publishedObs(), value: element.constraints.latestValue"/>
+            <ui-date params="fieldObs: latestValueObs, publishedObs: publishedObs"></ui-date>
         </div>
     </div>
     <div>
         <div>Fire event?</div>
         <div>
-            <div class="ui checkbox">
-                <input type="checkbox" class="hidden" data-bind="attr: { checked: element.constraints.fireEvent, disabled: publishedObs() }"/>
-            </div>
+            <ui-checkbox params="checkedObs: fireEventObs, disabledObs: publishedObs"></ui-checkbox>
         </div>
     </div>
     <div>
         <div>Allow future dates?</div>
         <div>
-            <div class="ui checkbox">
-                <input type="checkbox" class="hidden" data-bind="attr: { checked: element.constraints.allowFuture, disabled: publishedObs() }"/>
-            </div>
+            <ui-checkbox params="checkedObs: allowFutureObs, disabledObs: publishedObs"></ui-checkbox>
         </div>
     </div>
     <div>
         <div>Rules:</div>
-        <div><rules params="rules: element.constraints.rules, publishedObs: publishedObs"></rules></div>
+        <div>
+            <ui-rules params="rulesObs: rulesObs, publishedObs: publishedObs"></ui-rules>
+        </div>
     </div>
 </div>

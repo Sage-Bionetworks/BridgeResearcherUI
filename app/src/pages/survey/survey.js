@@ -3,37 +3,29 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var $ = require('jquery');
 
+var fields = ['name','createdOn','guid','identifier','published','elements[]'];
+
+// TODO: Dragula to create a palette you can use to add to the survey. And to reorder questions.
+// TODO: rule editor
+// TODO: enumerations editor
 module.exports = function(params) {
     var self = this;
 
     self.messageObs = ko.observable();
-    self.nameObs = ko.observable();
-    self.dateObs = ko.observable();
-    self.guidObs = ko.observable();
-    self.identifierObs = ko.observable();
-    self.publishedObs = ko.observable();
-    self.elementsObs = ko.observableArray([]);
+    utils.observablesFor(self, fields);
 
     function loadVM(survey) {
-        console.log(survey);
-
-        survey.elements[1].constraints.type = "DateConstraints";
-        survey.elements[1].constraints.earliestValue = "2010-01-01";
-
         self.survey = survey;
-        self.nameObs(survey.name);
-        self.dateObs(survey.createdOn);
-        self.guidObs(survey.guid);
-        self.identifierObs(survey.identifier);
-        self.publishedObs(survey.published);
-        self.elementsObs.pushAll(survey.elements);
+        utils.valuesToObservables(self, survey, fields);
     }
 
     function updateVM(keys, message) {
         self.survey.guid = keys.guid;
         self.survey.createdOn = keys.createdOn;
         self.survey.version = keys.version;
+        // In theory, this should cause the editor to flip from writeable to readonly...
         self.nameObs(self.survey.name);
+        self.createdOnObs(self.survey.createdOn);
         self.identifierObs(self.survey.identifier);
         self.publishedObs(self.survey.published);
         if (message) {
@@ -43,51 +35,56 @@ module.exports = function(params) {
 
     self.formatDateTime = utils.formatDateTime;
 
-    self.version = function(vm, event) {
-        utils.startHandler(self, event);
-
-        serverService.versionSurvey(self.survey.guid, self.survey.createdOn)
-            .then(utils.successHandler(vm, event))
-            .then(function(response) {
-                self.survey.published = false;
-                updateVM(response, "A new survey version has been created.");
-            }).catch(utils.failureHandler(vm, event));
-    };
     self.publish = function(vm, event) {
+        function version(keys) {
+            return serverService.versionSurvey(keys.guid, keys.createdOn).catch(utils.failureHandler(vm, event));
+        }
+        function publish(keys) {
+            return serverService.publishSurvey(keys.guid, keys.createdOn).catch(utils.failureHandler(vm, event));
+        }
+        function save() {
+            return serverService.updateSurvey(self.survey).catch(utils.failureHandler(vm, event));
+        }
+        function load(keys) {
+            return serverService.getSurvey(keys.guid, keys.createdOn)
+                .then(utils.successHandler(vm, event))
+                .then(loadVM)
+                .then(function(createdOn){
+                    self.messageObs({text: "The survey version created on " + self.formatDateTime(lastCreatedOn) + " has been published. A new version has been created for further editing."});
+                });
+        }
         utils.startHandler(self, event);
-
-        serverService.publishSurvey(self.survey.guid, self.survey.createdOn)
-            .then(utils.successHandler(vm, event))
-            .then(function(response) {
-                self.survey.published = true;
-                updateVM(response, "Survey has been published.");
-            }).catch(utils.failureHandler(vm, event));
+        var lastCreatedOn = self.survey.createdOn;
+        marshallSurveyForm();
+        save().then(publish).then(version).then(load);
     };
+    /**
+     * Just save the thing.
+     * @param vm
+     * @param event
+     */
     self.save = function(vm, event) {
         utils.startHandler(self, event);
         marshallSurveyForm();
 
-        console.log(JSON.stringify(self.survey));
+        // REMOVEME
         utils.successHandler(vm, event);
-        /*
         serverService.updateSurvey(self.survey)
-            .then(utils.successHandler(vm, event))
-            .then(function(response) {
+             .then(utils.successHandler(vm, event))
+             .then(function(response) {
                 updateVM(response, "Survey saved.");
-            }).catch(utils.failureHandler(vm, event));
-        */
+             }).catch(utils.failureHandler(vm, event));
     };
-
-    self.deleteElement = function(element, event) {
+    self.deleteElement = function(params, event) {
+        var index = self.elementsObs.indexOf(params.element);
+        var element = self.elementsObs()[index];
         if (confirm("Are about to delete question '"+element.identifier+"'.\n\n Are you sure?")) {
-            // Yes, this is gorpy. Should use a binding
-            var $element = $(event.target).closest(".element").css({'transform':'scaleY(0)'});
+            var $element = $(event.target).closest(".element");
+            $element.height($element.height()).height(0);
             setTimeout(function() {
-                $element.remove();
-                var index = self.survey.elements.indexOf(element);
-                self.survey.elements.splice(index,1);
                 self.elementsObs.remove(element);
-            },550);
+                $element.remove();
+            },510);
         }
     };
 
@@ -98,5 +95,9 @@ module.exports = function(params) {
         // No knockout binding at the moment... there's no reason there couldn't be.
     }
 
-    serverService.getSurvey(params.guid, params.createdOn).then(loadVM);
+    if (params.createdOn) {
+        serverService.getSurvey(params.guid, params.createdOn).then(loadVM);
+    } else {
+        serverService.getSurveyMostRecent(params.guid).then(loadVM);
+    }
 };

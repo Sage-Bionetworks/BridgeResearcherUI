@@ -1,7 +1,8 @@
 .editor {
     border: none;
     border-bottom: 1px dotted #ccc;
-    background-color: transparent;
-    display: block;
+    /* background-color: transparent; */
+    /* Causes elements to jump around in flex layouts for no obvious reason. */
+    /* display: block; */
     width: 100%;
 }

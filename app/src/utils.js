@@ -2,13 +2,29 @@ var ko = require('knockout');
 var EventEmitter = require('./events');
 var serverService = require('./services/server_service');
 
+function is(obj, typeName) {
+    return Object.prototype.toString.call(obj) === "[object "+typeName+"]";
+}
+/**
+ * We have to determine this without a source object, because sometimes
+ * observables must be set up before we have loaded the object from
+ * the server. So fields that are to be array should be postfixed with
+ * "[]", as in "elements[]".
+ */
+function nameInspector(string) {
+    var isArray = /\[\]$/.test(string);
+    var name = (isArray) ? string.match(/[^\[]*/)[0] : string;
+    return {name: name, observerName: name+"Obs", isArray: isArray};
+}
 /**
  * Common utility methods for ViewModels.
  *
  * TODO: Add dirty state tracking to the observables that are created.
  * TODO: eventbus works but come up with a one method dialog-specific method
+ * TODO: bus for event errors that are now just getting logged and not shown to user. Wire to root message panel.
  */
 module.exports = {
+    is: is,
     eventbus: new EventEmitter(),
     /**
      * A start handler called before a request to the server is made. All errors are cleared
@@ -69,17 +85,24 @@ module.exports = {
                 }
             }
             return response;
-        }
+        };
     },
     /**
      * Create an observable for each field name provided.
      * @param vm
      * @param fields
+     * @param [source] - if provided, values will be initialized from this object
      */
-    observablesFor: function(vm, fields) {
+    observablesFor: function(vm, fields, source) {
         for (var i=0; i < fields.length; i++) {
             var name = fields[i];
-            vm[name] = ko.observable("");
+            var insp = nameInspector(name);
+            var value = (source) ? source[insp.name] : "";
+            if (insp.isArray) {
+                vm[insp.observerName] = ko.observableArray(value);
+            } else {
+                vm[insp.observerName] = ko.observable(value);
+            }
         }
     },
     /**
@@ -93,7 +116,8 @@ module.exports = {
     valuesToObservables: function(vm, object, fields) {
         for (var i=0; i < fields.length; i++) {
             var name = fields[i];
-            vm[name](object[name]);
+            var insp = nameInspector(name);
+            vm[insp.observerName](object[insp.name]);
         }
     },
     /**
@@ -105,12 +129,15 @@ module.exports = {
     observablesToObject: function(vm, object, fields) {
         for (var i=0; i < fields.length; i++) {
             var name = fields[i];
-            object[name] = vm[name]();
+            var insp = nameInspector(name);
+            object[insp.name] = vm[insp.observerName]();
         }
     },
     /**
      * Get the list of studies that can be used for authentication
      */
+    // TODO: This could just be in serverService, not utils. Also it knows a
+    // lot about the viewModel, factor that out, even at the cost of duplication.
     getStudyList: function(vm) {
         return function(env) {
             vm.messageObs("");

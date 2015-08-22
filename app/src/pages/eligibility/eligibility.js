@@ -13,7 +13,7 @@ module.exports = function() {
     utils.observablesFor(self, fields);
 
     self.minAge = ko.computed(function(){
-        return (self.minAgeOfConsent() === 0) ? "No age limit" : self.minAgeOfConsent();
+        return (self.minAgeOfConsentObs() === 0) ? "No age limit" : self.minAgeOfConsentObs();
     });
 
     self.errorFor = function(fieldName) {

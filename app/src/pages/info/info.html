@@ -7,23 +7,23 @@
         <form class="ui form">
             <div class="field" data-bind="css: errorFor('name')">
                 <label>Study name</label>
-                <input type="text" name="name" data-bind="value: name"/>
+                <input type="text" name="name" data-bind="value: nameObs"/>
             </div>
             <div class="field" data-bind="css: errorFor('sponsorName')">
                 <label>Sponsor name</label>
-                <input type="text" name="name" data-bind="value: sponsorName"/>
+                <input type="text" name="name" data-bind="value: sponsorNameObs"/>
             </div>
             <div class="field" data-bind="css: {error: errorFor('technicalEmail')">
                 <label>Technical contact email</label>
-                <input type="text" name="technicalEmail" data-bind="value: technicalEmail"/>
+                <input type="text" name="technicalEmail" data-bind="value: technicalEmailObs"/>
             </div>
             <div class="field" data-bind="css: {error: errorFor('supportEmail')">
                 <label>Support email</label>
-                <input type="text" name="supportEmail" data-bind="value: supportEmail"/>
+                <input type="text" name="supportEmail" data-bind="value: supportEmailObs"/>
             </div>
             <div class="field" data-bind="css: {error: errorFor('consentNotificationEmail')">
                 <label>Consent notification email</label>
-                <input type="text" name="consentNotificationEmail" data-bind="value: consentNotificationEmail"/>
+                <input type="text" name="consentNotificationEmail" data-bind="value: consentNotificationEmailObs"/>
             </div>
             <div class="field">
                 <button type="submit" class="ui primary submit button" data-bind="click: save">Save</button>
@@ -32,7 +32,7 @@
     </div>
     <div class="six wide column">
         <div class="ui message">
-            <p>The identifier for this study is <b style="color:black; font-family: monospace" data-bind="text: identifier"></b>.
+            <p>The identifier for this study is <b style="color:black; font-family: monospace" data-bind="text: identifierObs"></b>.
                 Your technical staff will need this identifier to integrate with the Bridge server. </p>
 
             <p>Sage Bionetworks will use the technical email address to contact you about administration of the study. </p>
