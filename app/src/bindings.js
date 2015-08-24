@@ -51,20 +51,20 @@ ko.bindingHandlers.ckeditor = {
     }
 };
 ko.bindingHandlers.modal = {
-    init: function(element, valueAccessor, ignored1, ignored2, bindingContext) {
-        console.log(arguments);
-        ko.bindingHandlers.component.init(element, valueAccessor, ignored1, ignored2, bindingContext);
-    },
-    update: function(element, valueAccessor, ignored1, ignored2, bindingContext) {
-        var value = ko.unwrap(valueAccessor());
-        var $modal = $(element).children(".modal");
-        if ($modal.modal) {
-            $modal.modal({"closable": false});
-            if (value !== "none_dialog") {
-                $modal.modal('show');
-            } else {
-                $modal.modal('hide');
+    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        ko.bindingHandlers.component.init(element, valueAccessor, allBindings, viewModel, bindingContext);
+        var config = valueAccessor();
+        config.extend({notify: 'always'}); // Even if the user opens an identical dialog, reopen it.
+        config.subscribe(function (newConfig) {
+            var $modal = $(element).children(".modal");
+            if ($modal.modal) {
+                $modal.modal({"closable": false});
+                if (newConfig.name !== "none_dialog") {
+                    $modal.modal('show');
+                } else {
+                    $modal.modal('hide');
+                }
             }
-        }
+        });
     }
 };

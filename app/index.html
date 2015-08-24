@@ -83,7 +83,8 @@
     <footer>
         <p>&copy; 2015 Sage Bionetworks.</p>
     </footer>
-    <div id="dialogHolder" data-bind="modal: dialogName"></div>
+    <!--<div id="dialogHolder" data-bind="modal: {name: dialogName, params: dialogParams}"></div>-->
+    <div id="dialogHolder" data-bind="modal: dialogObs"></div>
     <script src="./dist/bundle.js"></script>
     <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/semantic.min.js"></script>

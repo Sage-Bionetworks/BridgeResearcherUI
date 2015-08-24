@@ -93,14 +93,14 @@ module.exports = {
             vm.getUnitOptions = function() {
                 return unitOptions;
             };
-            vm.editEnum = function(vm, event) {
-                var context = ko.contextFor(event.target);
-                utils.openDialog('enumeration', context.$parent);
+            vm.editEnum = function() {
+                utils.openDialog('enumeration', {parentViewModel: vm});
             };
-            vm.editRules = function(vm, event) {
-                var context = ko.contextFor(event.target);
-                utils.openDialog('rules', context.$parent);
+            vm.editRules = function() {
+                utils.openDialog('rules', {parentViewModel: vm});
             };
+        } else {
+            console.log("Skipped element because it wasn't a question", params.element);
         }
     }
 };

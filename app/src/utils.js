@@ -26,6 +26,9 @@ function nameInspector(string) {
  */
 module.exports = {
     is: is,
+
+    // TODO: This is used by root and no other, and it seems like it should be possible to
+    // do root.openDialog(), etc.
     addDialogListener: function(listener) {
         dialogBus.addEventListener('dialogs', listener);
     },

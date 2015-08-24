@@ -3,4 +3,8 @@
     <div class="content">
         <h3>Rules</h3>
     </div>
+
+    <div data-bind="foreach: rulesObs">
+        <div data-bind="text: $data"></div>
+    </div>
 </div>

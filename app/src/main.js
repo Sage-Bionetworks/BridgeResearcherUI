@@ -20,8 +20,7 @@ var RootViewModel = function() {
     self.mainPage.subscribe(self.selected);
     self.mainParams = ko.observable({});
 
-    self.dialogName = ko.observable('none_dialog');
-    self.dialogParams = ko.observable();
+    self.dialogObs = ko.observable({name: "none_dialog", params: {}});
 
     // TODO: fix this so it's more flexible
     self.isActive = function(tag) {
@@ -67,13 +66,12 @@ var RootViewModel = function() {
         self.environment("");
         self.roles([]);
     });
-    utils.addDialogListener(function(name, vm) {
+    utils.addDialogListener(function(name, params) {
         if ("close" === name) {
             $(".modal").modal('hide');
             name = "none_dialog";
         }
-        self.dialogParams({parentViewModel: vm});
-        self.dialogName(name);
+        self.dialogObs({name: name, params: params});
     });
 };
 var root = new RootViewModel();
