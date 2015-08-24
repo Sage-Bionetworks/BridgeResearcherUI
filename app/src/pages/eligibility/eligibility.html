@@ -3,9 +3,9 @@
 
     <form-message params="messageObs: messageObs"></form-message>
 
-    <div class="field" data-bind="css: errorFor('minAgeOfConsent')">
+    <div class="field">
         <label>Youngest allowable age for participants</label>
-        <input type="range" min="0" max="100" data-bind="value: minAgeOfConsentObs, valueUpdate: 'input'"/>
+        <input type="range" min="18" max="121" data-bind="value: minAgeOfConsentObs, valueUpdate: 'input'"/>
 
         <div class="ui large label" data-bind="text: minAge"></div>
     </div>

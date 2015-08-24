@@ -6,6 +6,10 @@ var config = require('../../config');
 
 var fields = ['email', 'study', 'environment'];
 
+function openDialog() {
+    utils.openDialog('sign_in_dialog');
+}
+
 module.exports = function() {
     var self = this;
 
@@ -14,34 +18,30 @@ module.exports = function() {
 
     self.messageObs = ko.observable("");
     utils.observablesFor(self, fields);
-    self.study(study);
+    self.studyObs(study);
     self.studyOptions = ko.observableArray();
 
     self.environmentOptions = config.environments;
-    self.environment = ko.observable();
-    self.environment.subscribe(utils.getStudyList(self));
-    self.environment(env);
+    self.environmentObs.subscribe(utils.getStudyList(self));
+    self.environmentObs(env);
 
     self.sendResetPasswordRequest = function() {
-        if (self.email() === "") {
+        if (self.emailObs() === "") {
             return self.messageObs({text:"Email address is required.", status:"error"});
         }
-        optionsService.set('environment', self.environment());
-        optionsService.set('study', self.study());
+        optionsService.set('environment', self.environmentObs());
+        optionsService.set('study', self.studyObs());
 
         utils.startHandler(self, event);
 
-        serverService.requestResetPassword(self.environment(), {
-            email: self.email(), study: self.study()
+        serverService.requestResetPassword(self.environmentObs(), {
+            email: self.emailObs(), study: self.studyObs()
         })
+        .then(openDialog)
         .then(utils.successHandler(self, event))
-        .then(function(response) {
-            utils.eventbus.emit('dialogs', 'sign_in_dialog');
-        })
         .catch(utils.failureHandler(self, event));
-
     };
     self.cancel = function() {
-        utils.eventbus.emit('dialogs', 'sign_in_dialog');
+        utils.openDialog('sign_in_dialog');
     };
 };

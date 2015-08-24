@@ -28,21 +28,21 @@ module.exports = function() {
         utils.startHandler(self, event);
         self.study.userProfileAttributes = self.records();
 
-        var request = serverService.saveStudy(self.study);
-        request.then(utils.successHandler(self, event))
-        .then(function(response) {
-            self.study.version = response.version;
-            self.messageObs({text: "User attributes saved."});
-        }).catch(utils.failureHandler(vm, event));
+        serverService.saveStudy(self.study)
+            .then(function(response) {
+                self.study.version = response.version;
+                self.messageObs({text: "User attributes saved."});
+            })
+            .then(utils.successHandler(self, event))
+            .catch(utils.failureHandler(vm, event));
     };
 
-    var request = serverService.getStudy();
-    request.then(function(study) {
-        self.study = study;
-        self.records.pushAll(study.userProfileAttributes);
-    });
-    request.catch(function(request) {
-        console.error("ERROR", request);
-    });
-
+    serverService.getStudy()
+        .then(function(study) {
+            self.study = study;
+            self.records.pushAll(study.userProfileAttributes);
+        })
+        .catch(function(request) {
+            console.error("ERROR", request);
+        });
 };

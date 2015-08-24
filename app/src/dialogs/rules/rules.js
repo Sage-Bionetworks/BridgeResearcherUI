@@ -1,9 +1,16 @@
+var ko = require('knockout');
 var utils = require('../../utils');
 
-module.exports = function() {
+module.exports = function(params) {
     var self = this;
+    /*
+    console.log(params);
+    var parent = params.parentViewModel;
+    var rules = parent.element.constraints.rules ||[];
 
+    self.rulesObs = ko.observableArray(rules);
+    */
     self.cancel = function() {
-        utils.eventbus.emit('dialogs', 'sign_in_dialog');
+        utils.closeDialog();
     };
 };

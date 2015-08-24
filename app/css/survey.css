@@ -51,7 +51,7 @@
         padding-top: .75rem;
         background-color: #f4f4f4;
     }
-    .ui.medium.ribbon.label {
+    .ui.medium.ribbon.label { /* TODO: Name this */
         margin-bottom: .5rem;
     }
     .element-content-prompt {
@@ -66,25 +66,25 @@
             font-style: italic;
             padding: .4rem 1rem;
         }
-.element-content-constraints {
-    display: flex;
-    flex-wrap: wrap;
-}
-    .element-content-constraints > div {
-        width: 50%;
+    .element-content-constraints {
         display: flex;
-        flex-direction: row;
-        align-items: baseline;
+        flex-wrap: wrap;
     }
-        .element-content-constraints > div > div {
-            padding: .2rem .4rem;
+        .element-content-constraints > div { /* "row" element */
+            width: 50%;
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
         }
-        .element-content-constraints > div > div:first-child {
-            width: 40%;
+            .element-content-constraints > div > div { /* "cell" elements */
+                padding: .2rem .4rem;
+            }
+            .element-content-constraints > div > div:first-child {
+                width: 40%;
+            }
+            .element-content-constraints > div > div:last-child {
+                flex: 2;
+            }
+        .element-content-constraints select.ui.dropdown {
+            height: auto;
         }
-        .element-content-constraints > div > div:last-child {
-            flex: 2;
-        }
-    .element-content-constraints select.ui.dropdown {
-        height: auto;
-    }

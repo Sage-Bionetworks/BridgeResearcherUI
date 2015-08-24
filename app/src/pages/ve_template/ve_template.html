@@ -5,11 +5,11 @@
         <form-message params="messageObs: messageObs"></form-message>
 
         <form class="ui form">
-            <div class="field" data-bind="css: errorFor('verifyEmailTemplate.subject')">
+            <div class="field">
                 <label>Subject</label>
                 <input type="text" name="subject" data-bind="value: subject"/>
             </div>
-            <div class="field" data-bind="css: errorFor('verifyEmailTemplate.body')">
+            <div class="field">
                 <textarea id="veTemplate" data-bind="ckeditor: $component.initEditor" class="ui textarea doc"></textarea>
             </div>
             <button class="ui primary submit button" data-bind="click: save">Save</button>

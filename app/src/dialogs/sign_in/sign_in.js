@@ -20,38 +20,39 @@ module.exports = function() {
 
     self.messageObs = ko.observable("");
     utils.observablesFor(self, fields);
-    self.study(study);
+    self.studyObs(study);
     self.studyOptions = ko.observableArray();
 
     self.environmentOptions = config.environments;
-    self.environment = ko.observable();
-    self.environment.subscribe(utils.getStudyList(self));
-    self.environment(env);
+    self.environmentObs.subscribe(utils.getStudyList(self));
+    self.environmentObs(env);
+
+    function clear() {
+        self.usernameObs("");
+        self.passwordObs("");
+    }
 
     self.signIn = function(vm, event) {
-        if (self.username() === "" || self.password() === "") {
+        if (self.usernameObs() === "" || self.passwordObs() === "") {
             return self.messageObs({text:"Username and/or password are required.", status:"error"});
         }
         // Succeed or fail, let's keep these values for other sign ins.
-        optionsService.set('environment', self.environment());
-        optionsService.set('study', self.study());
+        optionsService.set('environment', self.environmentObs());
+        optionsService.set('study', self.studyObs());
 
         utils.startHandler(self, event);
 
-        var studyName = findStudyName(self.studyOptions(), self.study());
-        serverService.signIn(studyName, self.environment(), {
-            username: self.username(), password: self.password(), study: self.study()
+        var studyName = findStudyName(self.studyOptions(), self.studyObs());
+        serverService.signIn(studyName, self.environmentObs(), {
+            username: self.usernameObs(), password: self.passwordObs(), study: self.studyObs()
         })
+        .then(clear)
         .then(utils.successHandler(self, event))
-        .then(function(response) {
-            self.username("");
-            self.password("");
-        })
         .catch(utils.failureHandler(self, event));
     };
 
     self.forgotPassword = function() {
-        utils.eventbus.emit('dialogs', 'forgot_password_dialog');
+        utils.openDialog('forgot_password_dialog');
     };
 
 };

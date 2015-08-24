@@ -110,7 +110,7 @@ module.exports = {
             session = sess;
             optionsService.set(SESSION_KEY, sess);
             listeners.emit(SESSION_STARTED_EVENT_KEY, session);
-            console.log(sess);
+            //console.log(sess);
         });
         return request;
     },
@@ -189,12 +189,12 @@ module.exports = {
         if (typeof listener !== "function") {
             throw Error("Session listener not a function");
         }
-        listeners.addListener(SESSION_STARTED_EVENT_KEY, listener);
+        listeners.addEventListener(SESSION_STARTED_EVENT_KEY, listener);
     },
     addSessionEndListener: function(listener) {
         if (typeof listener !== "function") {
             throw Error("Session listener not a function");
         }
-        listeners.addListener(SESSION_ENDED_EVENT_KEY, listener);
+        listeners.addEventListener(SESSION_ENDED_EVENT_KEY, listener);
     }
 };

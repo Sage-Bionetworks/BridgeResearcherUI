@@ -20,7 +20,8 @@ var RootViewModel = function() {
     self.mainPage.subscribe(self.selected);
     self.mainParams = ko.observable({});
 
-    self.currentDialog = ko.observable('none_dialog');
+    self.dialogName = ko.observable('none_dialog');
+    self.dialogParams = ko.observable();
 
     // TODO: fix this so it's more flexible
     self.isActive = function(tag) {
@@ -66,23 +67,23 @@ var RootViewModel = function() {
         self.environment("");
         self.roles([]);
     });
-
-    utils.eventbus.addListener('dialogs', function(dialogName, params) {
-        if (["none_dialog","close","hide"].indexOf(dialogName) > -1) {
+    utils.addDialogListener(function(name, vm) {
+        if ("close" === name) {
             $(".modal").modal('hide');
-            dialogName = "none_dialog";
+            name = "none_dialog";
         }
-        self.currentDialog(dialogName);
+        self.dialogParams({parentViewModel: vm});
+        self.dialogName(name);
     });
 };
 var root = new RootViewModel();
 ko.applyBindings(root, document.body);
 
 serverService.addSessionStartListener(function() {
-    utils.eventbus.emit('dialogs', 'none_dialog');
+    utils.closeDialog();
 });
 serverService.addSessionEndListener(function() {
-    root.currentDialog('sign_in_dialog');
+    utils.openDialog('sign_in_dialog');
 });
 
 var router = new director.Router();

@@ -3,7 +3,7 @@
 <form-message params="messageObs: messageObs"></form-message>
 
 <div class="button-container">
-    <button class="ui primary button" data-bind="click: createNew">New Survey</button>
+    <a href="#/survey/new" class="ui primary button">New Survey</a>
 </div>
 <div data-bind="visible: itemsObs().length === 0">Loading...</div>
 <table class="ui table" data-bind="visible: itemsObs().length > 0">

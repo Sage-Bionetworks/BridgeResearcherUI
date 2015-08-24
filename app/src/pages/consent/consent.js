@@ -2,36 +2,33 @@ var ko = require('knockout');
 var utils = require('../../utils');
 var serverService = require('../../services/server_service');
 
+var fields = ['message', 'active', 'createdOn', 'historyItems[]', 'consentSelected'];
+
 module.exports = function() {
     var self = this;
 
-    self.messageObs = ko.observable("This is a message");
-    self.active = ko.observable(true);
-    self.createdOn = ko.observable('');
-    self.historyItems = ko.observableArray();
-    self.consentSelected = ko.observable(null);
+    utils.observablesFor(self, fields);
+    self.activeObs = ko.observable(true);
+    self.consentSelectedObs = ko.observable(null);
     self.editor = null;
 
-    self.tab = ko.observable('current');
-    self.tab.subscribe(function(value) {
+    self.tabObs = ko.observable('current');
+    self.tabObs.subscribe(function(value) {
         self.messageObs("");
         if (value === "history") {
             serverService.getConsentHistory().then(function(data) {
-                self.historyItems(data.items);
+                self.historyItemsObs(data.items);
             });
         }
     });
 
     function loadIntoEditor(consent) {
-        console.log("loadIntoEditor", consent);
         if (consent.documentContent.indexOf("<html") > -1) {
-            console.warn("HTML document returned from server, stripping out body content");
             var doc = consent.documentContent;
             consent.documentContent = doc.split(/<body[^>]*\>/)[1].split(/<\/body\>.*/)[0].trim();
-            console.log("Content to edit", consent.documentContent);
         }
-        self.createdOn(self.formatDateTime(consent.createdOn));
-        self.active(consent.active);
+        self.createdOnObs(self.formatDateTime(consent.createdOn));
+        self.activeObs(consent.active);
         self.editor.setData(consent.documentContent);
     }
 
@@ -43,25 +40,25 @@ module.exports = function() {
     self.formatDateTime = utils.formatDateTime;
 
     self.selectToPublish = function(vm, event) {
-        self.consentSelected(ko.dataFor(event.target));
+        self.consentSelectedObs(ko.dataFor(event.target));
         return true;
     };
 
     self.publish = function(vm, event) {
         utils.startHandler(vm, event);
 
-        var createdOn = self.consentSelected().createdOn;
-        self.consentSelected(null);
+        var createdOn = self.consentSelectedObs().createdOn;
+        self.consentSelectedObs(null);
 
         serverService.publishStudyConsent(createdOn)
-            .then(utils.successHandler(vm, event))
             .then(function(response) {
                 serverService.getConsentHistory().then(function(data) {
-                    self.historyItems(data.items);
+                    self.historyItemsObs(data.items);
                     serverService.getStudyConsent(createdOn)
                         .then(loadIntoEditor);
                 });
             })
+            .then(utils.successHandler(vm, event))
             .catch(utils.failureHandler(vm ,event));
     };
 
@@ -69,11 +66,11 @@ module.exports = function() {
         utils.startHandler(self, event);
 
         serverService.saveStudyConsent({documentContent: self.editor.getData()})
-            .then(utils.successHandler(self, event))
             .then(loadIntoEditor)
             .then(function() {
                 self.messageObs({text:"Consent saved."});
             })
+            .then(utils.successHandler(self, event))
             .catch(utils.failureHandler(self, event));
     };
 
@@ -81,7 +78,7 @@ module.exports = function() {
         serverService.getStudyConsent(item.createdOn)
             .then(loadIntoEditor)
             .then(function() {
-                self.tab('current');
+                self.tabObs('current');
             });
     };
 };

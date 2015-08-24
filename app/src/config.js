@@ -5,16 +5,6 @@ module.exports = config = {
         {value: "staging", label: "Staging"},
         {value: "production", label: "Production"}
     ],
-    /*
-    studies: [
-        {identifier: "api", name: "API"},
-        {identifier: "asthma", name: "Asthma Health"},
-        {identifier: "diabetes", name: "GlucoSuccess"},
-        {identifier: "parkinson", name: "mPower"},
-        {identifier: "cardiovascular", name: "My Heart Counts"},
-        {identifier: "breastcancer", name: "Share The Journey"}
-    ],
-    */
     host: {
         'local': 'http://localhost:9000',
         'develop': 'https://webservices-develop.sagebridge.org',

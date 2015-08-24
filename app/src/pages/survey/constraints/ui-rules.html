@@ -10,12 +10,12 @@
 </div>
 <div data-bind="visible: !publishedObs()">
     <div data-bind="visible: !rulesObs || rulesObs().length == 0">
-        <a href="#" data-bind="click: $parent.addRule">Add Rules</a>
+        <a href="#" data-bind="click: $parent.editRules">Add Rules</a>
     </div>
     <div data-bind="visible: rulesObs && rulesObs().length > 0">
         <div data-bind="foreach: rulesObs">
             <div><span style="font-variant: small-caps; font-weight: bold" data-bind="text: $data.operator"></span> <span data-bind="text: $data.value"></span>: skipTo <span data-bind="text: $data.skipTo"></span></div>
         </div>
-        <div><a href="#">Edit Rules</a></div>
+        <div><a href="#" data-bind="click: $parent.editRules">Edit Rules</a></div>
     </div>
 </div>

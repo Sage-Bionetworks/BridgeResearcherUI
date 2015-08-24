@@ -3,22 +3,22 @@
 <form-message params="messageObs: messageObs"></form-message>
 
 <div class="ui secondary pointing menu">
-    <a class="item" data-bind="click: function() { tab('current') }, css: {active: tab() == 'current'}">
+    <a class="item" data-bind="click: function() { tabObs('current') }, css: {active: tabObs() == 'current'}">
         <i class="file outline icon"></i> Consent Agreement
     </a>
-    <a class="item" data-bind="click: function() { tab('history') }, css: {active: tab() == 'history'}">
+    <a class="item" data-bind="click: function() { tabObs('history') }, css: {active: tabObs() == 'history'}">
         <i class="history icon"></i> History
     </a>
     <div class="right menu">
         <div class="item">
-            <i class="clock icon"></i> <span data-bind="text: createdOn"></span>
+            <i class="clock icon"></i> <span data-bind="text: createdOnObs"></span>
         </div>
-        <div class="item" data-bind="visible: active">
+        <div class="item" data-bind="visible: activeObs">
             <div class="green ui label">
                 <i class="checkmark icon"></i> Published
             </div>
         </div>
-        <div class="item" data-bind="visible: !active()">
+        <div class="item" data-bind="visible: !activeObs()">
             <div class="orange ui label">
                 <i class="warning icon"></i> Not Published
             </div>
@@ -27,16 +27,16 @@
 </div>
 
 <div class="form">
-    <div data-bind="visible: tab() == 'current'">
+    <div data-bind="visible: tabObs() == 'current'">
         <div style="margin: 1rem 0">
             <button class="ui primary button" data-bind="click: save">Save</button>
         </div>
         <textarea id="consentEditor" data-bind="ckeditor: initEditor" class="ui textarea"></textarea>
     </div>
-    <div data-bind="visible: tab() == 'history'">
+    <div data-bind="visible: tabObs() == 'history'">
         <div class="ui grid">
             <div class="ten wide column">
-                <button class="ui primary button" data-bind="click: publish, disable: consentSelected() == null">Publish</button>
+                <button class="ui primary button" data-bind="click: publish, disable: consentSelectedObs() == null">Publish</button>
                 <table class="ui table">
                     <thead>
                         <tr>
@@ -45,7 +45,7 @@
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
-                    <tbody data-bind="foreach: historyItems">
+                    <tbody data-bind="foreach: historyItemsObs">
                         <tr data-bind="css: { positive: $data.active }">
                             <td>
                                 <input type="radio" name="publish" data-bind="click: $component.selectToPublish, attr: {'checked': $data.active}"/>

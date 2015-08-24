@@ -1,33 +1,27 @@
 var $ = require('jquery');
 var ko = require('knockout');
 
+var GENERIC_ERROR = "Some pretty boring error happened. We don't know what exactly. Please try again.";
+
 module.exports = function(params) {
     var self = this;
 
     self.cssClass = ko.observable("green");
     self.internalMessage = ko.observable("");
 
+    function displayMessage(css, message) {
+        self.cssClass(css);
+        self.internalMessage(message);
+    }
+
     // Subscribe to receive messages from parent MV.
     params.messageObs.subscribe(function(newValue) {
         if (typeof newValue === "string") {
-            self.internalMessage("");
-            self.cssClass("green");
-            $(".form").removeClass("error");
-            return;
+            displayMessage("green", newValue);
         } else if (typeof newValue.text === "string") {
-            newValue.status = newValue.status || "green";
-            self.internalMessage(newValue.text);
-            self.cssClass(newValue.status);
+            displayMessage(newValue.status || "green", newValue.text);
         } else {
-            self.internalMessage("Some pretty boring error happened. We don't know what exactly. Please try again.");
-            self.cssClass("error");
-            console.error(arguments);
-        }
-
-        if (self.cssClass() === "error") {
-            $(".form").addClass("error");
-        } else {
-            $(".form").removeClass("error");
+            displayMessage("error", GENERIC_ERROR);
         }
     });
 

@@ -55,10 +55,7 @@ EventEmitter.prototype = {
         return this;
     }
 };
-// TODO: Lost these by renaming as appropriate.
 EventEmitter.prototype.addEventListener = EventEmitter.prototype.on;
-EventEmitter.prototype.addListener = EventEmitter.prototype.on;
 EventEmitter.prototype.removeEventListener = EventEmitter.prototype.off;
-EventEmitter.prototype.removeListener = EventEmitter.prototype.off;
 
 module.exports = EventEmitter;

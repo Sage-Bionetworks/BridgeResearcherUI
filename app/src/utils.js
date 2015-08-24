@@ -1,6 +1,7 @@
 var ko = require('knockout');
 var EventEmitter = require('./events');
 var serverService = require('./services/server_service');
+var dialogBus = new EventEmitter();
 
 function is(obj, typeName) {
     return Object.prototype.toString.call(obj) === "[object "+typeName+"]";
@@ -16,16 +17,24 @@ function nameInspector(string) {
     var name = (isArray) ? string.match(/[^\[]*/)[0] : string;
     return {name: name, observerName: name+"Obs", isArray: isArray};
 }
+
 /**
  * Common utility methods for ViewModels.
  *
  * TODO: Add dirty state tracking to the observables that are created.
- * TODO: eventbus works but come up with a one method dialog-specific method
  * TODO: bus for event errors that are now just getting logged and not shown to user. Wire to root message panel.
  */
 module.exports = {
     is: is,
-    eventbus: new EventEmitter(),
+    addDialogListener: function(listener) {
+        dialogBus.addEventListener('dialogs', listener);
+    },
+    openDialog: function(dialogName, params) {
+        dialogBus.emit('dialogs', dialogName, params);
+    },
+    closeDialog: function() {
+        dialogBus.emit('dialogs', 'close');
+    },
     /**
      * A start handler called before a request to the server is made. All errors are cleared
      * and a loading indicator is shown. This is not done globally because some server requests
@@ -35,9 +44,6 @@ module.exports = {
      */
     startHandler: function(vm, event) {
         event.target.classList.add("loading");
-        if (vm.errorFields) {
-            vm.errorFields.removeAll();
-        }
         if (vm.messageObs) {
             vm.messageObs("");
         }
@@ -53,38 +59,31 @@ module.exports = {
     successHandler: function(vm, event) {
         return function(response) {
             event.target.classList.remove("loading");
-            if (vm.errorFields) {
-                vm.errorFields.removeAll();
-            }
-            return response;
-        }
+            //return response;
+        };
     },
     /**
      * An ajax failure handler for a view model that supports the editing of a form.
      * Turns off the loading indicator, shows a global error message if there is a message
-     * observable, and adds any error fields to an errorFields array, which is used to
-     * mark fields that are invalid in the UI.
+     * observable.
      * @param vm
      * @param event
      * @returns {Function}
      */
-    // TODO: Very complicated and no longer works.
     failureHandler: function(vm, event) {
         return function(response) {
             event.target.classList.remove("loading");
             if (vm.messageObs) {
-                var msg = (response.responseJSON) ? response.responseJSON.message :
-                    "There has been an error contacting the server.";
-                vm.messageObs({text:msg, 'status': 'error'});
-            }
-            if (vm.errorFields) {
-                if (json.errors) {
-                    vm.errorFields.pushAll(Object.keys(json.errors));
+                if (response instanceof Error) {
+                    vm.messageObs({text:response.message, 'status': 'error'});
+                } else if (response.responseJSON) {
+                    vm.messageObs({text:response.responseJSON.message, 'status': 'error'});
                 } else {
-                    vm.errorFields.removeAll();
+                    // No message, the message component will provide something generic
+                    console.error(JSON.stringify(response));
+                    vm.messageObs({'status': 'error'});
                 }
             }
-            return response;
         };
     },
     /**
@@ -117,7 +116,10 @@ module.exports = {
         for (var i=0; i < fields.length; i++) {
             var name = fields[i];
             var insp = nameInspector(name);
-            vm[insp.observerName](object[insp.name]);
+            var value = object[insp.name];
+            if (vm[insp.observerName] && value) {
+                vm[insp.observerName](value);
+            }
         }
     },
     /**
@@ -130,7 +132,9 @@ module.exports = {
         for (var i=0; i < fields.length; i++) {
             var name = fields[i];
             var insp = nameInspector(name);
-            object[insp.name] = vm[insp.observerName]();
+            if (object[insp.name] && vm[insp.observerName]) {
+                object[insp.name] = vm[insp.observerName]();
+            }
         }
     },
     /**
@@ -142,13 +146,11 @@ module.exports = {
         return function(env) {
             vm.messageObs("");
             vm.studyOptions([]);
-            document.getElementById("study").disabled = true;
             serverService.getStudyList(env).then(function(studies) {
                 studies.items.sort(function(a,b) {
                     return a.name > b.name;
                 });
                 vm.studyOptions(studies.items);
-                document.getElementById("study").disabled = false;
             }).catch(function(response) {
                 vm.messageObs({text: response.message, status: 'error'});
             });

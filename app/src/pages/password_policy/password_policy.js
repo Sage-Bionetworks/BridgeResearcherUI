@@ -20,11 +20,11 @@ module.exports = function() {
         self.study.passwordPolicy = passwordPolicy;
 
         serverService.saveStudy(self.study)
-            .then(utils.successHandler(self, event))
             .then(function(response) {
                 self.study.version = response.version;
                 self.messageObs({text:"Password policy has been saved."});
             })
+            .then(utils.successHandler(self, event))
             .catch(utils.failureHandler(self, event));
     };
 };

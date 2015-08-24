@@ -1,3 +1,4 @@
+/* HTML TAGS */
 body {
     background-color: white;
     display: -webkit-flex;
@@ -5,18 +6,6 @@ body {
     min-height: 100vh;
     -webkit-flex-direction: column;
     flex-direction: column;
-}
-.field .ui.button {
-    margin-top: .5rem ! important;
-}
-.button-container {
-    margin: 0 0 1rem 0;
-}
-.ui.dimmer {
-    background-color: rgba(0,0,0,.6) ! important;
-}
-.ui.breadcrumb {
-    margin: 0;
 }
 section {
     display: -webkit-flex;
@@ -61,11 +50,30 @@ footer p {
     padding: .5rem;
     text-align: center;
 }
-.form {
+
+/* SEMANTIC UI TWEAKS */
+/* TODO: Should all probably include .ui */
+.field .ui.button {
+    margin-top: .5rem ! important;
+}
+.ui.dimmer {
+    background-color: rgba(0,0,0,.6) ! important;
+}
+.ui.breadcrumb {
+    margin: 0;
+}
+.form { /* Semantic ui?! */
     padding: 0 ! important;
 }
+
+/* GENERAL */
+
 .pointing {
     cursor: pointer;
+}
+
+.button-container {
+    margin: 0 0 1rem 0;
 }
 
 /* TABLES */

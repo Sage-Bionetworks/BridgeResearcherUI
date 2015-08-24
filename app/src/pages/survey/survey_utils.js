@@ -93,11 +93,13 @@ module.exports = {
             vm.getUnitOptions = function() {
                 return unitOptions;
             };
-            vm.editEnum = function() {
-                utils.eventbus.emit('dialogs', 'enumeration', vm);
+            vm.editEnum = function(vm, event) {
+                var context = ko.contextFor(event.target);
+                utils.openDialog('enumeration', context.$parent);
             };
-            vm.addRule = function() {
-                utils.eventbus.emit('dialogs', 'rules', vm);
+            vm.editRules = function(vm, event) {
+                var context = ko.contextFor(event.target);
+                utils.openDialog('rules', context.$parent);
             };
         }
     }
