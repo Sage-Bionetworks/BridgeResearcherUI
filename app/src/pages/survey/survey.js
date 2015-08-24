@@ -3,31 +3,30 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var $ = require('jquery');
 
-var fields = ['name','createdOn','guid','identifier','published','elements[]'];
+var fields = ['survey','name','createdOn','guid','identifier','published','elements[]'];
 
-// TODO: Dragula to create a palette you can use to add to the survey. And to reorder questions.
-// TODO: rule editor
-// TODO: enumerations editor
 module.exports = function(params) {
     var self = this;
 
     self.messageObs = ko.observable();
     utils.observablesFor(self, fields);
 
+    self.surveyObs({});
+
     function loadVM(survey) {
-        self.survey = survey;
+        self.surveyObs(survey);
         utils.valuesToObservables(self, survey, fields);
     }
 
     function updateVM(keys, message) {
-        self.survey.guid = keys.guid;
-        self.survey.createdOn = keys.createdOn;
-        self.survey.version = keys.version;
+        self.surveyObs().guid = keys.guid;
+        self.surveyObs().createdOn = keys.createdOn;
+        self.surveyObs().version = keys.version;
         // In theory, this should cause the editor to flip from writeable to readonly...
-        self.nameObs(self.survey.name);
-        self.createdOnObs(self.survey.createdOn);
-        self.identifierObs(self.survey.identifier);
-        self.publishedObs(self.survey.published);
+        self.nameObs(self.surveyObs().name);
+        self.createdOnObs(self.surveyObs().createdOn);
+        self.identifierObs(self.surveyObs().identifier);
+        self.publishedObs(self.surveyObs().published);
         if (message) {
             self.messageObs({text: message});
         }
@@ -43,7 +42,7 @@ module.exports = function(params) {
             return serverService.publishSurvey(keys.guid, keys.createdOn).catch(utils.failureHandler(vm, event));
         }
         function save() {
-            return serverService.updateSurvey(self.survey).catch(utils.failureHandler(vm, event));
+            return serverService.updateSurvey(self.surveyObs()).catch(utils.failureHandler(vm, event));
         }
         function load(keys) {
             return serverService.getSurvey(keys.guid, keys.createdOn)
@@ -54,7 +53,7 @@ module.exports = function(params) {
                 });
         }
         utils.startHandler(self, event);
-        var lastCreatedOn = self.survey.createdOn;
+        var lastCreatedOn = self.surveyObs().createdOn;
         marshallSurveyForm();
         save().then(publish).then(version).then(load);
     };
@@ -69,7 +68,7 @@ module.exports = function(params) {
 
         // REMOVEME
         utils.successHandler(vm, event);
-        serverService.updateSurvey(self.survey)
+        serverService.updateSurvey(self.surveyObs())
              .then(utils.successHandler(vm, event))
              .then(function(response) {
                 updateVM(response, "Survey saved.");
@@ -90,8 +89,8 @@ module.exports = function(params) {
 
     // This is a complicated process because we're not data binding a lot right now. This may change.
     function marshallSurveyForm() {
-        self.survey.name = self.nameObs();
-        self.survey.identifier = self.identifierObs();
+        self.surveyObs().name = self.nameObs();
+        self.surveyObs().identifier = self.identifierObs();
         // No knockout binding at the moment... there's no reason there couldn't be.
     }
 

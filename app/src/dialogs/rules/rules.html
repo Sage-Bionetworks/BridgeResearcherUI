@@ -1,10 +1,83 @@
-<div class="ui small modal">
+<div class="ui modal">
     <i class="close icon"></i>
     <div class="content">
         <h3>Rules</h3>
     </div>
-
-    <div data-bind="foreach: rulesObs">
-        <div data-bind="text: $data"></div>
+    <div class="ui form">
+        <div class="rules-table" data-bind="visible: rulesObs().length === 0">
+            <div class="rules-table-rule">
+                There are no rules for this question.
+            </div>
+        </div>
+        <div data-bind="foreach: rulesObs, visible: rulesObs().length !== 0" class="rules-table">
+            <div class="rules-table-rule">
+                <div class="rules-table-rule-cell">
+                    When value
+                </div>
+                <div class="rules-table-rule-cell">
+                    <ui-select params="fieldObs: $data.operator, fieldLabel: $parent.operatorLabel,
+                            publishedObs: $parent.publishedObs, optionsSrc: $parent.getOperators"></ui-select>
+                </div>
+                <div class="rules-table-rule-cell">
+                    <ui-text params="fieldObs: $data.value, publishedObs: $parent.publishedObs"></ui-text>
+                </div>
+                <div class="rules-table-rule-cell">
+                    then skip to
+                </div>
+                <div class="rules-table-rule-cell">
+                    <ui-select params="fieldObs: $data.skipTo, fieldLabel: $parent.identifierLabel,
+                            publishedObs: $parent.publishedObs, optionsSrc: $parent.getIdentifiers"></ui-select>
+                </div>
+                <div class="rules-table-rule-cell">
+                    <div data-bind="click: $parent.deleteRule"><a><i class="close icon"></i></a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="rules-actions">
+        <a href="#" data-bind="click: addRule" class="ui primary button">Add Rule</a>
+        <a href="#" data-bind="click: saveRules" class="ui button">Save</a>
+        <a href="#" data-bind="click: cancelRules" class="ui button">Cancel</a>
     </div>
 </div>
+<!--
+<div class="ui small modal">
+    <i class="close icon"></i>
+    <div class="content rules">
+        <h3>Rules</h3>
+
+        <div data-bind="visible: publishedObs()">
+            <div data-bind="foreach: rulesObs">
+                <div>
+                    When value <span data-bind="text: $parent.operatorLabel($data.operator())"></span>
+                    <span data-bind="text: $data.value()"></span> then skip to
+                    <span data-bind="text: $data.skipTo()"></span> READ
+                </div>
+            </div>
+        </div>
+        <div data-bind="visible: !publishedObs()">
+            <div data-bind="foreach: rulesObs">
+                <div class="rules-row">
+                    <div class="rules-row-cell">
+                        When value
+                    </div>
+                    <div class="rules-cell">
+                        <ui-select params="fieldObs: $data.operator, fieldLabel: $parent.operatorLabel,
+                            publishedObs: $parent.publishedObs, optionsSrc: $parent.getOperators"></ui-select>
+                    </div>
+                    <div class="field rules-cell">
+                        <ui-text params="fieldObs: $data.value, publishedObs: $parent.publishedObs"></ui-text>
+                    </div>
+                    <div class="rules-cell">
+                        skip to
+                    </div>
+                    <div class="rules-cell">
+                        <ui-select params="fieldObs: $data.skipTo, fieldLabel: $parent.identifierLabel,
+                            publishedObs: $parent.publishedObs, optionsSrc: $parent.getIdentifiers"></ui-select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+-->

@@ -38,11 +38,9 @@ var unitOptions = [
     {value: 'centimeters', label: 'Centimeters'},
     {value: 'cubic_centimeters', label: 'Cubic Centimeters'},
     {value: 'cubic_meters', label: 'Cubic Meters'},
-    {value: 'days', label: 'Days'},
     {value: 'feet', label: 'Feet'},
     {value: 'gallons', label: 'Gallons'},
     {value: 'grams', label: 'Grams'},
-    {value: 'hours', label: 'Hours'},
     {value: 'inches', label: 'Inches'},
     {value: 'kilograms', label: 'Kilograms'},
     {value: 'kilometers', label: 'Kilometers'},
@@ -50,18 +48,21 @@ var unitOptions = [
     {value: 'meters', label: 'Meters'},
     {value: 'miles', label: 'Miles'},
     {value: 'milliliters', label: 'Millileters'},
-    {value: 'minutes', label: 'Minutes'},
-    {value: 'months', label: 'Months'},
     {value: 'ounces', label: 'Ounces'},
     {value: 'pints', label: 'Pints'},
     {value: 'pounds', label: 'Pounds'},
     {value: 'quarts', label: 'Quarts'},
+    {value: 'yards', label: 'Yards'}
+];
+var durationOptions = [
     {value: 'seconds', label: 'Seconds'},
+    {value: 'minutes', label: 'Minutes'},
+    {value: 'hours', label: 'Hours'},
+    {value: 'days', label: 'Days'},
     {value: 'weeks', label: 'Weeks'},
-    {value: 'yards', label: 'Yards'},
+    {value: 'months', label: 'Months'},
     {value: 'years', label: 'Years'}
 ];
-
 module.exports = {
     /**
      * Most constraints have a lot of common elements, initialize them all here.
@@ -76,8 +77,12 @@ module.exports = {
         if (params.element.type === "SurveyQuestion") {
             vm.fireEventObs = ko.observable(params.element.fireEvent);
             vm.rulesObs = ko.observableArray(params.element.constraints.rules);
-            vm.uiHintObs = ko.observable(params.element.uiHint);
+            vm.hasRules = function() {
+                return (vm.rulesObs() != null && vm.rulesObs().length > 0);
+            };
+            vm.surveyObs = params.surveyObs;
 
+            vm.uiHintObs = ko.observable(params.element.uiHint);
             vm.uiHintLabel = function(token) {
                 return uiHintLabels[token];
             };
@@ -92,6 +97,9 @@ module.exports = {
             };
             vm.getUnitOptions = function() {
                 return unitOptions;
+            };
+            vm.getDurationOptions = function() {
+                return durationOptions;
             };
             vm.editEnum = function() {
                 utils.openDialog('enumeration', {parentViewModel: vm});

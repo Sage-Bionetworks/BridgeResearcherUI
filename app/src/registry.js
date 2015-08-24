@@ -37,13 +37,15 @@ reg('rules', './dialogs/rules/rules');
 reg('enumeration', './dialogs/enumeration/enumeration');
 
 /* SURVEYS */
-regt('SurveyQuestion', './pages/survey/survey-question');
 regt('SurveyInfoScreen', './pages/survey/survey-info');
+reg('SurveyQuestion', './pages/survey/survey-question');
 reg('BooleanConstraints', './pages/survey/constraints/boolean_constraints');
 reg('DateConstraints', './pages/survey/constraints/date_constraints');
 reg('DateTimeConstraints', './pages/survey/constraints/datetime_constraints');
-reg('IntegerConstraints', './pages/survey/constraints/numerical_constraints');
-reg('DecimalConstraints', './pages/survey/constraints/numerical_constraints');
+reg('DurationConstraints', './pages/survey/constraints/duration_constraints');
+reg('TimeConstraints', './pages/survey/constraints/time_constraints');
+reg('IntegerConstraints', './pages/survey/constraints/integer_constraints');
+reg('DecimalConstraints', './pages/survey/constraints/decimal_constraints');
 reg('StringConstraints', './pages/survey/constraints/string_constraints');
 reg('MultiValueConstraints', './pages/survey/constraints/multi_constraints');
 
@@ -52,4 +54,5 @@ regt('ui-rules', './pages/survey/constraints/ui-rules');
 regt('ui-checkbox', './pages/survey/constraints/ui-checkbox');
 regt('ui-text', './pages/survey/constraints/ui-text');
 regt('ui-date', './pages/survey/constraints/ui-date');
+regt('ui-datetime', './pages/survey/constraints/ui-datetime');
 regt('ui-select', './pages/survey/constraints/ui-select');

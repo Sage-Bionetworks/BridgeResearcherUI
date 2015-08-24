@@ -88,3 +88,27 @@
         .element-content-constraints select.ui.dropdown {
             height: auto;
         }
+.rules-table {
+    border-top: 1px solid silver;
+    border-bottom: 1px solid silver;
+    padding: 1rem;
+    max-height: 200px;
+    overflow-y: scroll;
+}
+    .rules-table-rule {
+        display: flex;
+        align-items: center;
+    }
+        .rules-table-rule-cell {
+            padding: .2rem .2rem;
+        }
+        .rules-table-rule-cell input, .rules-table-rule-cell select {
+            width: 10rem ! important;
+        }
+        .rules-table-rule-cell:last-child {
+            flex:2;
+            text-align: right;
+        }
+    .rules-actions {
+        padding:1rem 2rem;
+    }

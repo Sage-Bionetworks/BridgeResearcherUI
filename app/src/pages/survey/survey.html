@@ -57,9 +57,6 @@
 <div class="survey" data-bind="foreach: elementsObs">
     <div class="element" data-bind="component: {
         name: $data.type,
-        params: {
-            element: $data,
-            publishedObs: $parent.publishedObs
-        }
+        params: { element: $data, indexObs: $index, surveyObs: $parent.surveyObs, publishedObs: $parent.publishedObs }
     }"></div>
 </div>
