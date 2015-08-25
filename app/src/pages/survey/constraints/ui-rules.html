@@ -1,28 +1,20 @@
-<div data-bind="visible: publishedObs()">
-    <div data-bind="visible: !$parent.hasRules()">
+<div data-bind="visible: !$parent.hasRules()">
+    <div data-bind="visible: publishedObs()">
         &lt;None&gt;
     </div>
-    <div data-bind="visible: $parent.hasRules()">
-        <div data-bind="foreach: rulesObs">
-            <div>
-                <span style="font-variant: small-caps; font-weight: bold" data-bind="text: $data.operator"></span>
-                <span data-bind="text: $data.value"></span>: skipTo <span data-bind="text: $data.skipTo"></span>
-            </div>
-        </div>
-    </div>
-</div>
-<div data-bind="visible: !publishedObs()">
-    <div data-bind="visible: !$parent.hasRules()">
+    <div data-bind="visible: !publishedObs()">
         <a href="#" data-bind="click: $parent.editRules">Add Rules</a>
     </div>
-    <div data-bind="visible: $parent.hasRules()">
-        <div data-bind="foreach: rulesObs">
-            <div>
-                <span style="font-variant: small-caps; font-weight: bold" data-bind="text: $data.operator"></span>
-                <span data-bind="text: $data.value"></span>: skipTo
-                <span data-bind="text: $data.skipTo"></span>
-            </div>
+</div>
+<div data-bind="visible: $parent.hasRules()">
+    <div data-bind="foreach: rulesObs">
+        <div>
+            skip to <span data-bind="text: $data.skipTo()"></span> when answer
+            <span data-bind="text: $parents[1].operatorLabel($data.operator())"></span>
+            <span data-bind="visible: $data.operator() != 'de', text: $data.value()"></span>
         </div>
-        <div><a href="#" data-bind="click: $parent.editRules">Edit Rules</a></div>
+    </div>
+    <div data-bind="visible: !publishedObs()">
+        <a href="#" data-bind="click: $parent.editRules">Edit Rules</a>
     </div>
 </div>

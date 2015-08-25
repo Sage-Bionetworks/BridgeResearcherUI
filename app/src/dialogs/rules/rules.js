@@ -2,16 +2,6 @@ var ko = require('knockout');
 var utils = require('../../utils');
 var mapping = require('knockout-mapping');
 
-var opOptions = [
-    {value: 'eq', label: '='},
-    {value: 'ne', label: '!='},
-    {value: 'lt', label: '<'},
-    {value: 'gt', label: '>'},
-    {value: 'le', label: '<='},
-    {value: 'ge', label: '>='},
-    {value: 'de', label: 'declined'}
-];
-
 module.exports = function(params) {
     var self = this;
 
@@ -20,25 +10,19 @@ module.exports = function(params) {
     self.element = parent.element;
     self.publishedObs = parent.publishedObs;
 
-    self.rulesObs = params.rulesObs;
-    var rulesCopy = self.rulesObs();
-    self.rulesObs(self.rulesObs().map(function(rule) {
-        return mapping.fromJS(rule);
+    // Make a copy for editing.
+    self.rulesObs = ko.observableArray(params.rulesObs().map(function(rule) {
+        return ko.mapping.fromJS(ko.mapping.toJS(rule));
     }));
+
+    // Operator label and option constructors are in survey_utils.js
+    // because they are also reference by the <ui-rules/> element.
+    self.getOperators = parent.getOperators;
+    self.operatorLabel = parent.operatorLabel;
 
     var identifierOptions = self.surveyObs().elements.map(function(el) {
         return {value: el.identifier, label: el.identifier};
     });
-
-    self.getOperators = function() {
-        return opOptions;
-    };
-    self.operatorLabel = function(token) {
-        var options = opOptions.filter(function(option) {
-            return option.value === token;
-        });
-        return (options.length) ? options[0].label: '';
-    };
     self.getIdentifiers = function() {
         return identifierOptions;
     };
@@ -59,15 +43,16 @@ module.exports = function(params) {
         self.rulesObs.remove(rule);
     };
     self.saveRules = function() {
+        self.rulesObs().forEach(function(rule) {
+            if (rule.operator() === 'de') {
+                rule.value(null);
+            }
+            return rule;
+        });
+        params.rulesObs(self.rulesObs());
         utils.closeDialog();
     };
-    /*
-    self.cancel = function() {
-        self.rulesObs(rulesCopy);
-        utils.closeDialog();
-    };*/
     self.cancelRules = function() {
-        self.rulesObs(rulesCopy);
         utils.closeDialog();
     };
 };

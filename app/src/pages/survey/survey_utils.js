@@ -1,5 +1,6 @@
 var utils = require('../../utils');
 var ko = require('knockout');
+var mapping = require('knockout-mapping');
 
 var uiHintLabels = {
     'checkbox':'Checkbox',
@@ -63,6 +64,16 @@ var durationOptions = [
     {value: 'months', label: 'Months'},
     {value: 'years', label: 'Years'}
 ];
+var opOptions = [
+    {value: 'eq', label: '='},
+    {value: 'ne', label: '!='},
+    {value: 'lt', label: '<'},
+    {value: 'gt', label: '>'},
+    {value: 'le', label: '<='},
+    {value: 'ge', label: '>='},
+    {value: 'de', label: 'declined'}
+];
+
 module.exports = {
     /**
      * Most constraints have a lot of common elements, initialize them all here.
@@ -77,6 +88,9 @@ module.exports = {
         if (params.element.type === "SurveyQuestion") {
             vm.fireEventObs = ko.observable(params.element.fireEvent);
             vm.rulesObs = ko.observableArray(params.element.constraints.rules);
+            vm.rulesObs(vm.rulesObs().map(function(rule) {
+                return mapping.fromJS(rule);
+            }));
             vm.hasRules = function() {
                 return (vm.rulesObs() != null && vm.rulesObs().length > 0);
             };
@@ -106,6 +120,15 @@ module.exports = {
             };
             vm.editRules = function() {
                 utils.openDialog('rules', {parentViewModel: vm, rulesObs: vm.rulesObs});
+            };
+            vm.getOperators = function() {
+                return opOptions;
+            };
+            vm.operatorLabel = function(token) {
+                var options = opOptions.filter(function(option) {
+                    return option.value == token;
+                });
+                return (options.length) ? options[0].label: '';
             };
         } else {
             console.log("Skipped element because it wasn't a question", params.element);
