@@ -19,7 +19,9 @@
                             publishedObs: $parent.publishedObs, optionsSrc: $parent.getOperators"></ui-select>
                 </div>
                 <div class="rules-table-rule-cell">
-                    <ui-text params="fieldObs: $data.value, publishedObs: $parent.publishedObs"></ui-text>
+                    <div data-bind="css:{hidden: $data.operator() === 'de'}"> <!--data-bind="visible: $data.operator() !== 'de'"-->
+                        <ui-text params="fieldObs: $data.value, publishedObs: $parent.publishedObs"></ui-text>
+                    </div>
                 </div>
                 <div class="rules-table-rule-cell">
                     then skip to
@@ -29,7 +31,7 @@
                             publishedObs: $parent.publishedObs, optionsSrc: $parent.getIdentifiers"></ui-select>
                 </div>
                 <div class="rules-table-rule-cell">
-                    <div data-bind="click: $parent.deleteRule"><a><i class="close icon"></i></a></div>
+                    <div data-bind="click: $parent.deleteRule" style="cursor:pointer"><a><i class="trash icon"></i></a></div>
                 </div>
             </div>
         </div>

@@ -112,3 +112,6 @@
     .rules-actions {
         padding:1rem 2rem;
     }
+.hidden {
+    visibility: hidden;
+}

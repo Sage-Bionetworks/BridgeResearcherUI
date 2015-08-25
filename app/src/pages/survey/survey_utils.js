@@ -105,7 +105,7 @@ module.exports = {
                 utils.openDialog('enumeration', {parentViewModel: vm});
             };
             vm.editRules = function() {
-                utils.openDialog('rules', {parentViewModel: vm});
+                utils.openDialog('rules', {parentViewModel: vm, rulesObs: vm.rulesObs});
             };
         } else {
             console.log("Skipped element because it wasn't a question", params.element);

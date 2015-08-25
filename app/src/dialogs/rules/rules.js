@@ -9,26 +9,27 @@ var opOptions = [
     {value: 'gt', label: '>'},
     {value: 'le', label: '<='},
     {value: 'ge', label: '>='},
-    {value: 'de', label: 'declined'},
+    {value: 'de', label: 'declined'}
 ];
 
 module.exports = function(params) {
     var self = this;
+
     var parent = params.parentViewModel;
     self.surveyObs = parent.surveyObs;
     self.element = parent.element;
     self.publishedObs = parent.publishedObs;
 
-    var rules = (parent.element.constraints.rules || []).map(mapping.fromJS);
-    self.rulesObs = ko.observableArray(rules);
+    self.rulesObs = params.rulesObs;
+    var rulesCopy = self.rulesObs();
+    self.rulesObs(self.rulesObs().map(function(rule) {
+        return mapping.fromJS(rule);
+    }));
 
     var identifierOptions = self.surveyObs().elements.map(function(el) {
         return {value: el.identifier, label: el.identifier};
     });
 
-    self.cancel = function() {
-        utils.closeDialog();
-    };
     self.getOperators = function() {
         return opOptions;
     };
@@ -38,11 +39,11 @@ module.exports = function(params) {
         });
         return (options.length) ? options[0].label: '';
     };
-    self.identifierLabel = function(token) {
-        return token;
-    };
     self.getIdentifiers = function() {
         return identifierOptions;
+    };
+    self.identifierLabel = function(token) {
+        return token;
     };
 
     self.addRule = function() {
@@ -52,17 +53,21 @@ module.exports = function(params) {
             skipTo: ko.observable(identifierOptions[0].value)
         });
     };
-    self.deleteRule = function(rule) {
+    self.deleteRule = function(rule, event) {
+        event.preventDefault();
+        event.stopPropagation();
         self.rulesObs.remove(rule);
     };
     self.saveRules = function() {
-        // So, yay. we did it, but nothing updates in the UI
-        self.element.constraints.rules = self.rulesObs().map(mapping.toJS).filter(function(rule) {
-            return !!rule.value;
-        });
         utils.closeDialog();
     };
+    /*
+    self.cancel = function() {
+        self.rulesObs(rulesCopy);
+        utils.closeDialog();
+    };*/
     self.cancelRules = function() {
+        self.rulesObs(rulesCopy);
         utils.closeDialog();
     };
 };
