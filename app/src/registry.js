@@ -1,4 +1,5 @@
 var ko = require('knockout');
+
 function reg(name, path) {
     ko.components.register(name, {
         viewModel: require(path),

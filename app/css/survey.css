@@ -1,6 +1,4 @@
-.survey {
-    padding: 1rem;
-}
+.survey { padding: 1rem; }
 .element {
     width: 100%;
     border: 1px solid #cccccc;
@@ -110,8 +108,12 @@
             text-align: right;
         }
     .rules-actions {
-        padding:1rem 2rem;
+        padding: 1.5rem 2rem;
     }
 .hidden {
     visibility: hidden;
+}
+.element-enum {
+    margin: .25rem 0;
+    cursor: pointer;
 }

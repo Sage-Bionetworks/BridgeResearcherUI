@@ -115,9 +115,6 @@ module.exports = {
             vm.getDurationOptions = function() {
                 return durationOptions;
             };
-            vm.editEnum = function() {
-                utils.openDialog('enumeration', {parentViewModel: vm});
-            };
             vm.editRules = function() {
                 utils.openDialog('rules', {parentViewModel: vm, rulesObs: vm.rulesObs});
             };

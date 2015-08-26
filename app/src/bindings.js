@@ -1,17 +1,28 @@
 var ko = require('knockout');
 var $ = require('jquery');
 
+// http://stackoverflow.com/questions/23606541/observable-array-push-multiple-objects-in-knockout-js
 ko.observableArray.fn.pushAll = function(valuesToPush) {
     var underlyingArray = this();
     this.valueWillMutate();
     ko.utils.arrayPushAll(underlyingArray, valuesToPush);
     this.valueHasMutated();
-    return this;  //optional
+    return this;
 };
 ko.observableArray.fn.contains = function(value) {
     var underlyingArray = this();
     return underlyingArray.indexOf(value) > -1;
 };
+// No event notification to subscribers that this has changed. Useful for integration with Dragula
+ko.observableArray.fn.removeQuietly = function(value) {
+    var underlyingArray = this();
+    ko.utils.arrayRemoveItem(underlyingArray, value);
+}
+// No event notification to subscribers that this has changed. Useful for integration with Dragula
+ko.observableArray.fn.insertQuietly = function(value, index) {
+    var underlyingArray = this();
+    underlyingArray.splice(index,0,value);
+}
 ko.bindingHandlers.semantic = {
     init: function(element, valueAccessor) {
         var value = ko.unwrap(valueAccessor());
@@ -19,7 +30,7 @@ ko.bindingHandlers.semantic = {
             element.classList.add("ui");
             element.classList.add("checkbox");
             $(element).checkbox();
-        } else if (value == 'dropdown') {
+        } else if (value === 'dropdown') {
             element.classList.add("ui");
             element.classList.add("dropdown");
             $(element).dropdown();

@@ -43,13 +43,13 @@ module.exports = function(params) {
         self.rulesObs.remove(rule);
     };
     self.saveRules = function() {
-        self.rulesObs().forEach(function(rule) {
+        var rules = self.rulesObs().filter(function(rule) {
             if (rule.operator() === 'de') {
                 rule.value(null);
             }
-            return rule;
+            return (rule.operator() === 'de' || rule.value());
         });
-        params.rulesObs(self.rulesObs());
+        params.rulesObs(rules);
         utils.closeDialog();
     };
     self.cancelRules = function() {

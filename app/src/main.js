@@ -1,4 +1,5 @@
 require('../css/main');
+require('../../node_modules/dragula/dist/dragula');
 var director = require('director');
 var ko = require('knockout');
 var $ = require('jquery');

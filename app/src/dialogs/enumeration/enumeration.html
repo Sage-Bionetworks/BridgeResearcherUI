@@ -1,6 +1,81 @@
-<div class="small ui modal">
+<div class=" ui modal">
     <i class="close icon"></i>
+    <div class="header">
+        Enumerated Values
+    </div>
     <div class="content">
-        <h3>Enumerated Values</h3>
+        <div class="ui secondary pointing menu">
+            <div class="item" data-bind="css:{active:isActive('editor')}, click: setTab('editor')">
+                Edit List
+            </div>
+            <div class="item" data-bind="css:{active:isActive('existing')}, click: setTab('existing')">
+                Use Existing List
+            </div>
+        </div>
+        <div data-bind="visible: isActive('editor')" style="margin-bottom: -1.5rem">
+            <div class="ui two column grid">
+                <div class="column">
+                    <div class="ui list zones" data-bind="foreach: list">
+                        <div class="item element-enum">
+                            <i class="trash icon" data-bind="click: $parent.removeListItem"></i>
+                            <div class="content">
+                                <div class="header">
+                                    <span data-bind="text: label"></span>
+                                    <span style="font-weight: normal" data-bind="visible: $parent.hasDetail($data)">
+                                        &mdash;<span data-bind="text: detail"></span>
+                                    </span>
+                                </div>
+                                <div class="description" data-bind="visible: label != value">
+                                    Recorded on server as &ldquo;<span data-bind="text: value"></span>&rdquo;
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <form class="ui form">
+                        <h4 class="ui dividing header">Add New List Item</h4>
+                        <div class="field">
+                            <label>Label</label>
+                            <ui-text params="fieldObs: labelObs, publishedObs: publishedObs"></ui-text>
+                        </div>
+                        <div class="field">
+                            <label>Detail (optional)</label>
+                            <ui-text params="fieldObs: detailObs, publishedObs: publishedObs"></ui-text>
+                        </div>
+                        <div class="field">
+                            <label>Server value (optional)</label>
+                            <ui-text params="fieldObs: valueObs, publishedObs: publishedObs"></ui-text>
+                        </div>
+                        <div class="field">
+                            <a href="#" data-bind="click: addListItem" class="ui button">Add</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div data-bind="visible: isActive('existing')">
+            <div data-bind="foreach: allLists" class="ui list">
+                <div class="item">
+                    <i class="list layout icon"></i>
+                    <div class="content">
+                        <a href="#" data-bind="click: $parent.selectList, html: $data.name"></a> (<span data-bind="text: $data.occurrences"></span>)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="rules-actions" data-bind="visible: isActive('editor')">
+        <div style="margin-bottom:1rem">
+            <div class="ui dropdown" data-bind="semantic: 'checkbox', click: toggleCopyObs">
+                <input type="checkbox" class="hidden" data-bind="checked: copyObs, disable: publishedObs"/>
+                <label>Update every instance of this list (in every question)</label>
+            </div>
+        </div>
+        <a href="#" data-bind="click: saveList" class="ui primary button">Save</a>
+        <a href="#" data-bind="click: cancel" class="ui button">Cancel</a>
+    </div>
+    <div class="rules-actions" data-bind="visible: isActive('existing')">
+        <a href="#" data-bind="click: cancel" class="ui button">Cancel</a>
     </div>
 </div>

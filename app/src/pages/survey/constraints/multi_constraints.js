@@ -9,4 +9,8 @@ module.exports = function(params) {
 
     surveyUtils.initConstraintsVM(self, params);
     utils.observablesFor(self, fields, self.element.constraints);
+
+    self.editEnum = function() {
+        utils.openDialog('enumeration', {parentViewModel: self});
+    };
 };
