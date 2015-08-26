@@ -1,10 +1,10 @@
-<div class=" ui modal">
+<div class="ui small modal">
     <i class="close icon"></i>
     <div class="header">
         Enumerated Values
     </div>
     <div class="content">
-        <div class="ui secondary pointing menu">
+        <div class="ui secondary pointing menu" data-bind="visible: !publishedObs()">
             <div class="item" data-bind="css:{active:isActive('editor')}, click: setTab('editor')">
                 Edit List
             </div>
@@ -15,9 +15,9 @@
         <div data-bind="visible: isActive('editor')" style="margin-bottom: -1.5rem">
             <div class="ui two column grid">
                 <div class="column">
-                    <div class="ui list zones" data-bind="foreach: list">
+                    <div class="ui list zones" data-bind="foreach: listObs">
                         <div class="item element-enum">
-                            <i class="trash icon" data-bind="click: $parent.removeListItem"></i>
+                            <i class="trash icon" data-bind="visible: !$parent.publishedObs(), click: $parent.removeListItem"></i>
                             <div class="content">
                                 <div class="header">
                                     <span data-bind="text: label"></span>
@@ -33,19 +33,16 @@
                     </div>
                 </div>
                 <div class="column">
-                    <form class="ui form">
+                    <form class="ui form" data-bind="visible: !publishedObs()">
                         <h4 class="ui dividing header">Add New List Item</h4>
                         <div class="field">
-                            <label>Label</label>
-                            <ui-text params="fieldObs: labelObs, publishedObs: publishedObs"></ui-text>
+                            <input type="text" class="editor" placeholder="Label" data-bind="textInput: labelObs"/>
                         </div>
                         <div class="field">
-                            <label>Detail (optional)</label>
-                            <ui-text params="fieldObs: detailObs, publishedObs: publishedObs"></ui-text>
+                            <input type="text" class="editor" placeholder="Detail (optional)" data-bind="textInput: detailObs"/>
                         </div>
                         <div class="field">
-                            <label>Server value (optional)</label>
-                            <ui-text params="fieldObs: valueObs, publishedObs: publishedObs"></ui-text>
+                            <input type="text" class="editor" placeholder="Server value (optional)" data-bind="textInput: valueObs"/>
                         </div>
                         <div class="field">
                             <a href="#" data-bind="click: addListItem" class="ui button">Add</a>
@@ -65,17 +62,20 @@
             </div>
         </div>
     </div>
-    <div class="rules-actions" data-bind="visible: isActive('editor')">
+    <div class="rules-actions" data-bind="visible: !publishedObs() && isActive('editor')">
         <div style="margin-bottom:1rem">
             <div class="ui dropdown" data-bind="semantic: 'checkbox', click: toggleCopyObs">
                 <input type="checkbox" class="hidden" data-bind="checked: copyObs, disable: publishedObs"/>
                 <label>Update every instance of this list (in every question)</label>
             </div>
         </div>
-        <a href="#" data-bind="click: saveList" class="ui primary button">Save</a>
-        <a href="#" data-bind="click: cancel" class="ui button">Cancel</a>
+        <button data-bind="click: saveList, disable: listObs().length === 0" class="ui primary button">Save</button>
+        <button data-bind="click: cancel" class="ui button">Cancel</button>
     </div>
-    <div class="rules-actions" data-bind="visible: isActive('existing')">
-        <a href="#" data-bind="click: cancel" class="ui button">Cancel</a>
+    <div class="rules-actions" data-bind="visible: !publishedObs() && isActive('existing')">
+        <button data-bind="click: cancel" class="ui button">Cancel</button>
+    </div>
+    <div class="rules-actions" data-bind="visible: publishedObs">
+        <button data-bind="click: cancel" class="ui button">Close</button>
     </div>
 </div>

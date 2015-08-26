@@ -2,6 +2,7 @@ var utils = require('../../utils');
 var ko = require('knockout');
 var hash = require('object-hash');
 var dragula = require('dragula');
+var $ = require('jquery');
 
 function ListsSource(survey, element) {
     this.currentListEntry = null;
@@ -85,34 +86,29 @@ module.exports = function(params) {
 
     var listsSource = new ListsSource(self.surveyObs(), self.element);
     self.allLists = ko.observableArray(listsSource.getAllLists());
-    self.list = ko.observableArray(listsSource.getCurrentEntry().enumeration);
+    self.listObs = ko.observableArray([].concat(listsSource.getCurrentEntry().enumeration));
 
     var zonesEl = document.querySelector(".zones");
 
     self.hasDetail = function(item) {
         return !!item.detail;
     };
-    self.removeListItem = function(listItem) {
-        self.list.remove(listItem);
+    self.removeListItem = function(item) {
+        self.listObs.remove(item);
     };
     self.toggleCopyObs = function() {
         self.copyObs(!self.copyObs());
     };
     self.selectList = function(entry, event) {
-        ko.utils.emptyDomNode(zonesEl);
-        self.list(entry.enumeration);
+        self.listObs(entry.enumeration);
         listsSource.setCurrentEntry(entry);
         self.currentTabObs('editor');
     };
     self.addListItem = function() {
         var label = self.labelObs();
-        if (label !== "") {
+        if (label) {
             var value = self.valueObs() || label;
-            var item = {label: label, value: value};
-            if (self.detailObs()) {
-                item.detail = self.detailObs();
-            }
-            self.list.push(item);
+            self.listObs.push({label: label, value: value, detail: self.detailObs()});
         }
         self.labelObs("");
         self.detailObs("");
@@ -120,7 +116,7 @@ module.exports = function(params) {
     };
     self.saveList = function() {
         var entry = listsSource.getCurrentEntry();
-        entry.enumeration = self.list();
+        entry.enumeration = self.listObs();
 
         // We're looking for lists on other elements that were similar to the list before
         // the user started editing it, so we want the original MD5 before it gets
@@ -155,12 +151,24 @@ module.exports = function(params) {
         };
     };
 
-    dragula([zonesEl])
-        .on('drop', function(el, zone) {
+    // This mostly works. We remove one of the two versions of the node that's been copied
+    // over, once by our own manipulation of the observable array, and once by Dragula (I
+    // see no way to prevent Dragula from doing its thing).
+    if (!self.publishedObs()) {
+        var _item = null;
+        dragula([zonesEl]).on('drop', function(el, zone) {
             // This utility handles node lists
             var index = ko.utils.arrayIndexOf(el.parentNode.children, el);
             var data = ko.contextFor(el).$data;
-            self.list.removeQuietly(data);
-            self.list.insertQuietly(data, index);
+            self.listObs.remove(data);
+            self.listObs.splice(index,0,data);
+        }).on('cloned', function(mirror, item, type) {
+            _item = item;
+        }).on('drop', function() {
+            if (_item) {
+                _item.parentNode.removeChild(_item);
+                _item = null;
+            }
         });
+    }
 };

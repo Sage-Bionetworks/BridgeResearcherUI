@@ -1,5 +1,7 @@
 var moment = require('moment');
 
+// TODO: Including moment to do schedule formatting adds quite a bit to the download size of the JS.
+
 /**
  * An object that augments schedule json, particularly to describe it.
  * Schedules have labels but practically it would seem better to describe
