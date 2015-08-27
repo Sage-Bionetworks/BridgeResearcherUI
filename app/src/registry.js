@@ -1,5 +1,8 @@
 var ko = require('knockout');
 
+// NOTE: If you have a VM backing a template, it cannot have a dash "-" in its name,
+// it must have an underscore. TODO: Just move everything to using underscores.
+
 function reg(name, path) {
     ko.components.register(name, {
         viewModel: require(path),
@@ -49,6 +52,8 @@ reg('IntegerConstraints', './pages/survey/constraints/integer_constraints');
 reg('DecimalConstraints', './pages/survey/constraints/decimal_constraints');
 reg('StringConstraints', './pages/survey/constraints/string_constraints');
 reg('MultiValueConstraints', './pages/survey/constraints/multi_constraints');
+
+reg('insertion-control', './pages/survey/insertion_control');
 
 regt('constraints-label', './pages/survey/constraints/constraints-label');
 regt('ui-rules', './pages/survey/constraints/ui-rules');

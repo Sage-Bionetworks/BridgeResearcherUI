@@ -4,11 +4,11 @@ var hash = require('object-hash');
 var dragula = require('dragula');
 var $ = require('jquery');
 
-function ListsSource(survey, element) {
+function ListsSource(elements, element) {
     this.currentListEntry = null;
     this.listSet = [];
     var md5s = {};
-    survey.elements.forEach(function(anElement) {
+    elements.forEach(function(anElement) {
         var enumeration = getEnumeration(anElement);
         if (enumeration) {
             var entry = makeListMapEntry(enumeration);
@@ -62,18 +62,23 @@ function itemLabel(item) {
 }
 
 function copyEntry(element, entry) {
-    element.constraints.enumeration = entry.enumeration;
+   if (element.constraints.enumerationObs) {
+        element.constraints.enumerationObs(entry.enumeration);
+    }
 }
 
 function getEnumeration(element) {
-    return (element.constraints && element.constraints.enumeration) ? element.constraints.enumeration : null;
+    if (element.constraints && element.constraints.enumerationObs) {
+        return element.constraints.enumerationObs();
+    }
+    return null;
 }
 
 module.exports = function(params) {
     var self = this;
 
     var parent = params.parentViewModel;
-    self.surveyObs = parent.surveyObs;
+    self.elementsObs = parent.elementsObs;
     self.element = parent.element;
     self.publishedObs = parent.publishedObs;
 
@@ -84,11 +89,11 @@ module.exports = function(params) {
     // Should we copy edits over to all the same lists...
     self.copyObs = ko.observable(true);
 
-    var listsSource = new ListsSource(self.surveyObs(), self.element);
+    var listsSource = new ListsSource(self.elementsObs(), self.element);
     self.allLists = ko.observableArray(listsSource.getAllLists());
     self.listObs = ko.observableArray([].concat(listsSource.getCurrentEntry().enumeration));
 
-    var zonesEl = document.querySelector(".zones");
+    var zonesEl = document.querySelector(".listZone");
 
     self.hasDetail = function(item) {
         return !!item.detail;
@@ -125,14 +130,15 @@ module.exports = function(params) {
 
         copyEntry(self.element, entry);
         if (self.copyObs()) {
-            self.surveyObs().elements.forEach(function (element) {
+            self.elementsObs().forEach(function (element) {
                 var enumeration = getEnumeration(element);
                 if (enumeration && hash.MD5(enumeration) === oldMD5) {
                     copyEntry(element, entry);
                 }
             });
         }
-        parent.enumerationObs(entry.enumeration);
+        // Isn't this redunant?
+        // parent.enumerationObs(entry.enumeration);
         utils.closeDialog();
     };
     self.cancel = function() {

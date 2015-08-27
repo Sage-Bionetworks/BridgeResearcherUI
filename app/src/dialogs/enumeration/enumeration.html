@@ -15,7 +15,7 @@
         <div data-bind="visible: isActive('editor')" style="margin-bottom: -1.5rem">
             <div class="ui two column grid">
                 <div class="column">
-                    <div class="ui list zones" data-bind="foreach: listObs">
+                    <div class="ui list listZone" data-bind="foreach: listObs">
                         <div class="item element-enum">
                             <i class="trash icon" data-bind="visible: !$parent.publishedObs(), click: $parent.removeListItem"></i>
                             <div class="content">
@@ -36,13 +36,13 @@
                     <form class="ui form" data-bind="visible: !publishedObs()">
                         <h4 class="ui dividing header">Add New List Item</h4>
                         <div class="field">
-                            <input type="text" class="editor" placeholder="Label" data-bind="textInput: labelObs"/>
+                            <ui-text params="fieldObs: labelObs, publishedObs: publishedObs, placeholder: 'Label'"></ui-text>
                         </div>
                         <div class="field">
-                            <input type="text" class="editor" placeholder="Detail (optional)" data-bind="textInput: detailObs"/>
+                            <ui-text params="fieldObs: detailObs, publishedObs: publishedObs, placeholder: 'Detail (optional)'"></ui-text>
                         </div>
                         <div class="field">
-                            <input type="text" class="editor" placeholder="Server value (optional)" data-bind="textInput: valueObs"/>
+                            <ui-text params="fieldObs: valueObs, publishedObs: publishedObs, placeholder: 'Server value (optional)'"></ui-text>
                         </div>
                         <div class="field">
                             <a href="#" data-bind="click: addListItem" class="ui button">Add</a>

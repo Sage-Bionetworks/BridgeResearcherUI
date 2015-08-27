@@ -13,16 +13,6 @@ ko.observableArray.fn.contains = function(value) {
     var underlyingArray = this();
     return underlyingArray.indexOf(value) > -1;
 };
-// No event notification to subscribers that this has changed. Useful for integration with Dragula
-ko.observableArray.fn.removeQuietly = function(value) {
-    var underlyingArray = this();
-    ko.utils.arrayRemoveItem(underlyingArray, value);
-}
-// No event notification to subscribers that this has changed. Useful for integration with Dragula
-ko.observableArray.fn.insertQuietly = function(value, index) {
-    var underlyingArray = this();
-    underlyingArray.splice(index,0,value);
-}
 ko.bindingHandlers.semantic = {
     init: function(element, valueAccessor) {
         var value = ko.unwrap(valueAccessor());

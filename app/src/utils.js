@@ -17,6 +17,9 @@ function nameInspector(string) {
     var name = (isArray) ? string.match(/[^\[]*/)[0] : string;
     return {name: name, observerName: name+"Obs", isArray: isArray};
 }
+function isDefined(obj) {
+    return (typeof obj !== "undefined");
+}
 
 /**
  * Common utility methods for ViewModels.
@@ -26,6 +29,7 @@ function nameInspector(string) {
  */
 module.exports = {
     is: is,
+    isDefined: isDefined,
 
     // TODO: This is used by root and no other, and it seems like it should be possible to
     // do root.openDialog(), etc.
@@ -62,7 +66,7 @@ module.exports = {
     successHandler: function(vm, event) {
         return function(response) {
             event.target.classList.remove("loading");
-            //return response;
+            return response;
         };
     },
     /**
@@ -97,8 +101,7 @@ module.exports = {
      */
     observablesFor: function(vm, fields, source) {
         for (var i=0; i < fields.length; i++) {
-            var name = fields[i];
-            var insp = nameInspector(name);
+            var insp = nameInspector(fields[i]);
             var value = (source) ? source[insp.name] : "";
             if (insp.isArray) {
                 vm[insp.observerName] = ko.observableArray(value);
@@ -109,7 +112,8 @@ module.exports = {
     },
     /**
      * Given a model object, update all the observables for each field name provided.
-     * You will need to call utils.observablesFor() with these fields first.
+     * Will not attempt to copy if either the observable property or the property on
+     * the object, as defined by field, do not exist.
      *
      * @param vm
      * @param object
@@ -117,11 +121,12 @@ module.exports = {
      */
     valuesToObservables: function(vm, object, fields) {
         for (var i=0; i < fields.length; i++) {
-            var name = fields[i];
-            var insp = nameInspector(name);
+            var insp = nameInspector(fields[i]);
+
+            var obs = vm[insp.observerName];
             var value = object[insp.name];
-            if (vm[insp.observerName] && value) {
-                vm[insp.observerName](value);
+            if (isDefined(obs) && isDefined(value)) {
+                obs(value);
             }
         }
     },
@@ -133,10 +138,12 @@ module.exports = {
      */
     observablesToObject: function(vm, object, fields) {
         for (var i=0; i < fields.length; i++) {
-            var name = fields[i];
-            var insp = nameInspector(name);
-            if (object[insp.name] && vm[insp.observerName]) {
-                object[insp.name] = vm[insp.observerName]();
+            var insp = nameInspector(fields[i]);
+
+            var obs = vm[insp.observerName];
+            var value = object[insp.name];
+            if (isDefined(obs) && isDefined(value)) {
+                object[insp.name] = obs();
             }
         }
     },

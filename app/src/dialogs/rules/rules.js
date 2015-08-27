@@ -6,7 +6,7 @@ module.exports = function(params) {
     var self = this;
 
     var parent = params.parentViewModel;
-    self.surveyObs = parent.surveyObs;
+    self.elementsObs = parent.elementsObs;
     self.element = parent.element;
     self.publishedObs = parent.publishedObs;
 
@@ -20,7 +20,10 @@ module.exports = function(params) {
     self.getOperators = parent.getOperators;
     self.operatorLabel = parent.operatorLabel;
 
-    var identifierOptions = self.surveyObs().elements.map(function(el) {
+    var identifierOptions = self.elementsObs().filter(function(el) {
+        // Weed out new elements with no identifiers
+        return !!el.identifier;
+    }).map(function(el) {
         return {value: el.identifier, label: el.identifier};
     });
     self.getIdentifiers = function() {

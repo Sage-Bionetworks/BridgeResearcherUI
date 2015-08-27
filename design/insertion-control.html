@@ -1,0 +1,125 @@
+<!doctype HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Insertion Control</title>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/semantic.min.css"/>
+</head>
+<body>
+<div style="margin:3rem">
+    <div class="ui message">
+        <p>This is a message container.</p>
+    </div>
+    <div class="insertion-control">
+        <div class="card front">
+            <i class="add square icon"></i> Add
+        </div>
+        <div class="ui menu back">
+            <div class="header item">
+                <a href="#href">
+                    <i class="add square icon"></i> Add
+                </a>
+            </div>
+            <a class="item">
+                Multi-Choice
+            </a>
+            <a class="item">
+                String
+            </a>
+            <a class="item">
+                Boolean
+            </a>
+            <a class="item">
+                Integer
+            </a>
+            <a class="item">
+                Decimal
+            </a>
+            <a class="item">
+                Date
+            </a>
+            <a class="item">
+                Date & Time
+            </a>
+            <a class="item">
+                Time
+            </a>
+            <a class="item">
+                Information Only
+            </a>
+        </div>
+    </div>
+    <div class="ui message">
+        <p>This is a message container.</p>
+    </div>
+</div>
+<script>
+    var SHOW_DELAY = 200;
+    var HIDE_DELAY = 800;
+    var el = document.querySelector(".insertion-control");
+    var showTimer = null;
+    var hideTimer = null;
+
+    function clearTimers() {
+        clearTimeout(showTimer);
+        clearTimeout(hideTimer);
+    }
+
+    el.addEventListener('mouseover', function() {
+        clearTimers();
+        showTimer = setTimeout(function() {
+            el.classList.add('flipped');
+        }, SHOW_DELAY);
+    }, false);
+    el.addEventListener('mouseout', function() {
+        clearTimers();
+        hideTimer = setTimeout(function() {
+            el.classList.remove('flipped');
+        }, HIDE_DELAY);
+    }, false);
+
+    var links = document.querySelectorAll('a');
+    for (var i=0; i < links.length; i++) {
+        var link = links[i];
+        link.addEventListener('click', function() {
+            clearTimers();
+            link.parentNode.parentNode.classList.remove('flipped');
+        }, false);
+    }
+
+</script>
+<style>
+    .insertion-control {
+        position: relative;
+        height: 15px;
+        width: 100%;
+        transform-style: preserve-3d;
+        transition: transform .5s ease-in, height .5s ease-in, margin-top .5s ease-in, margin-bottom .5s ease-in;
+    }
+        .insertion-control .ui.menu, .card {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            margin: 0;
+            backface-visibility: hidden;
+        }
+        .insertion-control .ui.menu.back {
+            transform: rotateX(180deg);
+        }
+        .insertion-control .ui.menu.back a {
+            color: #009fda; /* Semantic UI choice? */
+        }
+        .insertion-control .card.front {
+            color: #ccc;
+            transform: rotateX(0deg);
+        }
+        .insertion-control .flipped {
+            transform: rotateX(180deg);
+            height: 39px;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+</style>
+</body>
+</html>

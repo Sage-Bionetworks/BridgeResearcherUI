@@ -73,8 +73,35 @@ var opOptions = [
     {value: 'ge', label: '>='},
     {value: 'de', label: 'declined'}
 ];
+var elTemplate = {
+    'SurveyInfoScreen': {type: 'SurveyInfoScreen'},
+    'SurveyQuestion': {fireEvent: false, type: 'SurveyQuestion'}
+};
+var constraintTemplates = {
+    'BooleanConstraints': {dataType: "boolean", rules: [], uiHint: 'checkbox', type: 'BooleanConstraints'},
+    'DateConstraints': {dataType: "date", allowFuture: false, rules: [], uiHint: 'datepicker', type: 'DateConstraints'},
+    'DateTimeConstraints': {dataType: "datetime", allowFuture: false, rules: [], uiHint: 'datetimepicker', type: 'DateTimeConstraints'},
+    'DurationConstraints': {dataType: "duration", rules: [], uiHint: 'numberfield', type: 'DurationConstraints'},
+    'TimeConstraints': {dataType: "time", rules: [], uiHint: 'timepicker', type: 'TimeConstraints'},
+    'IntegerConstraints': {dataType: "integer", rules: [], uiHint: 'numberfield', type: 'IntegerConstraints'},
+    'DecimalConstraints': {dataType: "decimal", rules: [], uiHint: 'numberfield', type: 'DecimalConstraints'},
+    'StringConstraints': {dataType: "string", rules: [], uiHint: 'multilinetext', type: 'StringConstraints'},
+    'MultiValueConstraints': {dataType: "string", enumeration: [], rules: [], uiHint: 'checkbox', type: 'MultiValueConstraints'}
+}
 
 module.exports = {
+    newElement: function(type) {
+        var elementType = (type === "SurveyInfoScreen") ? type : "SurveyQuestion";
+
+        var newEl = elTemplate[elementType];
+        if (elementType === "SurveyQuestion") {
+            newEl.constraints = JSON.parse(JSON.stringify(constraintTemplates[type]));
+            newEl.uiHint = newEl.constraints.uiHint;
+            delete newEl.constraints.uiHint;
+        }
+        return newEl;
+    },
+
     /**
      * Most constraints have a lot of common elements, initialize them all here.
      * @param vm
@@ -94,7 +121,7 @@ module.exports = {
             vm.hasRules = function() {
                 return (vm.rulesObs() != null && vm.rulesObs().length > 0);
             };
-            vm.surveyObs = params.surveyObs;
+            vm.elementsObs = params.elementsObs;
 
             vm.uiHintObs = ko.observable(params.element.uiHint);
             vm.uiHintLabel = function(token) {

@@ -3,7 +3,7 @@
     <div contenteditable="false" class="element-content-prompt-detail" data-bind="css: {editor: !publishedObs()}, attr: {contenteditable: !publishedObs()}, text: element.promptDetail"></div>
     <div class="ui segment element-content-segment" data-bind="component: {
         name: element.constraints.type,
-        params: {element: element, surveyObs: surveyObs, publishedObs: publishedObs}
+        params: {elementsObs: elementsObs, element: element, publishedObs: publishedObs}
     }"></div>
 </div>
 <div class="element-callout">

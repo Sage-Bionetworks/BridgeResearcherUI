@@ -14,7 +14,7 @@
   "devDependencies": {
     "css-loader": "^0.12.1",
     "director": "^1.2.8",
-    "dragula": "^3.1.0", // not working at the moment
+    "dragula": "^3.1.0",
     "html-loader": "^0.3.0",
     "jquery": "^2.1.4",
     "knockout": "^3.3.0",

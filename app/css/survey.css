@@ -117,3 +117,36 @@
     margin: .25rem 0;
     cursor: pointer;
 }
+.insertion-control {
+    position: relative;
+    height: 15px;
+    width: 100%;
+    margin: 1rem 0;
+    transform-style: preserve-3d;
+    transition: transform .5s ease-in, height .5s ease-in, margin-top .5s ease-in, margin-bottom .5s ease-in;
+}
+    .insertion-control-card {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        margin: 0;
+        backface-visibility: hidden;
+    }
+    .insertion-control-back {
+        cursor: pointer;
+        transform: rotateX(180deg);
+    }
+    .insertion-control-back a {
+        color: #009fda; /* Semantic UI choice? */
+    }
+    .insertion-control-front {
+        color: #ccc;
+        transform: rotateX(0deg);
+    }
+    .insertion-control-flipped {
+        transform: rotateX(180deg)!important;
+        height: 39px!important;
+        margin-top: 1rem!important;
+        margin-bottom: 1rem!important;
+    }
