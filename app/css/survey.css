@@ -148,7 +148,7 @@
         color: #009fda; /* Semantic UI choice? */
     }
     .insertion-control-front {
-        color: #ccc;
+        color: #009fda;
         transform: rotateX(0deg);
     }
     .insertion-control-flipped {

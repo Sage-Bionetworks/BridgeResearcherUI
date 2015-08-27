@@ -98,14 +98,14 @@ module.exports = {
             newEl.constraints = JSON.parse(JSON.stringify(constraintTemplates[type]));
             newEl.uiHint = newEl.constraints.uiHint;
             delete newEl.constraints.uiHint;
+            if (newEl.constraints.enumeration) {
+                newEl.constraints.enumerationObs = ko.observableArray(newEl.constraints.enumeration);
+            }
         }
         // TODO: duplicated in survey.js
         newEl.promptObs = ko.observable();
         newEl.promptDetailObs = ko.observable();
         newEl.identifierObs = ko.observable();
-        if (newEl.constraints.enumeration) {
-            newEl.constraints.enumerationObs = ko.observableArray(newEl.constraints.enumeration);
-        }
         return newEl;
     },
 

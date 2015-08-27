@@ -25,4 +25,5 @@ module.exports = function(params) {
     self.fieldObs = params.fieldObs;
     self.publishedObs = params.publishedObs;
     self.className = params.className;
+    self.placeholder = params.placeholder;
 };

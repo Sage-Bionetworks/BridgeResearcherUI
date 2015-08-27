@@ -119,7 +119,8 @@ module.exports = function(params) {
     self.deleteElement = function(params, event) {
         var index = self.elementsObs.indexOf(params.element);
         var element = self.elementsObs()[index];
-        if (confirm("Are about to delete question '"+element.identifier+"'.\n\n Are you sure?")) {
+        var id = element.identifierObs() || "<none>";
+        if (confirm("You are about to delete question '"+id+"'.\n\n Are you sure?")) {
             var $element = $(event.target).closest(".element");
             $element.height($element.height()).height(0);
             setTimeout(function() {

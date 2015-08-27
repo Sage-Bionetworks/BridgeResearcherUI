@@ -1,6 +1,6 @@
 <div data-bind="attr: {class: className}, visible: publishedObs, text: fieldObs"></div>
 <div data-bind="resizeTextArea: true, attr: {class: 'textarea-container '+className}, ">
-    <textarea class="editor" data-bind="visible: !publishedObs(), textInput: fieldObs"></textarea>
+    <textarea class="editor" data-bind="visible: !publishedObs(), textInput: fieldObs, attr:{placeholder:placeholder}"></textarea>
     <div class="textarea-size"></div>
 </div>
 
