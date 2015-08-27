@@ -51,7 +51,11 @@ module.exports = function(params) {
         self.identifierObs(survey.identifier);
         self.publishedObs(survey.published);
         self.versionObs(survey.version);
+        // TODO: This is duplicated in survey_utils.js
         var elements = survey.elements.map(function(element) {
+            element.promptObs = ko.observable(element.prompt);
+            element.promptDetailObs = ko.observable(element.promptDetail);
+            element.identifierObs = ko.observable(element.identifier);
             var con = element.constraints;
             if (con && con.enumeration) {
                 con.enumerationObs = ko.observableArray(con.enumeration);
@@ -135,7 +139,11 @@ module.exports = function(params) {
     var elementsZoneEl = document.querySelector(".elementZone");
     if (!self.publishedObs()) {
         var _item = null;
-        dragula([elementsZoneEl]).on('drop', function(el, zone) {
+        dragula([elementsZoneEl], {
+            moves: function (el, container, handle) {
+                return (handle.className === 'ui gray left corner label');
+            }
+        }).on('drop', function(el, zone) {
             // This utility handles node lists
             var index = ko.utils.arrayIndexOf(el.parentNode.children, el);
             var data = ko.contextFor(el).$data;

@@ -1,6 +1,9 @@
+<a class="ui gray left corner label">
+    <i class="resize vertical icon"></i>
+</a>
 <div class="element-content">
-    <div contenteditable="false" class="element-content-prompt" data-bind="css: {editor: !publishedObs()}, attr: {contenteditable: !publishedObs()}, text: element.prompt"></div>
-    <div contenteditable="false" class="element-content-prompt-detail" data-bind="css: {editor: !publishedObs()}, attr: {contenteditable: !publishedObs()}, text: element.promptDetail"></div>
+    <ui-textarea params="fieldObs: element.promptObs, publishedObs: publishedObs, className: 'element-content-prompt'"></ui-textarea>
+    <ui-textarea params="fieldObs: element.promptDetailObs, publishedObs: publishedObs, className: 'element-content-prompt-detail'"></ui-textarea>
 </div>
 <div class="element-callout">
     <div>
@@ -8,7 +11,7 @@
     </div>
     <div class="element-callout-identifier-box">
         <div class="element-callout-identifier" data-bind="visible: publishedObs(), text: element.identifier"></div>
-        <input type="text" class="editor element-callout-identifier" data-bind="visible: !publishedObs(), value: element.identifier"/>
+        <input type="text" class="editor element-callout-identifier" data-bind="visible: !publishedObs(), textInput: element.identifier"/>
         <div class="element-callout-identifier-label">Identifier</div>
     </div>
     <div class="element-callout-delete">

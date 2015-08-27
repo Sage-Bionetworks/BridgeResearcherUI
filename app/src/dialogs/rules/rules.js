@@ -21,13 +21,17 @@ module.exports = function(params) {
     self.operatorLabel = parent.operatorLabel;
 
     var identifierOptions = self.elementsObs().filter(function(el) {
-        // Weed out new elements with no identifiers
-        return !!el.identifier;
+        return !!el.identifierObs();
     }).map(function(el) {
-        return {value: el.identifier, label: el.identifier};
+        return {value: el.identifierObs(), label: el.identifierObs()};
     });
     self.getIdentifiers = function() {
-        return identifierOptions;
+        //return identifierOptions;
+        return self.elementsObs().filter(function(el) {
+            return !!el.identifierObs();
+        }).map(function(el) {
+            return {value: el.identifierObs(), label: el.identifierObs()};
+        });
     };
     self.identifierLabel = function(token) {
         return token;

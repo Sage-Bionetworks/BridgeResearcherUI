@@ -62,3 +62,4 @@ regt('ui-text', './pages/survey/constraints/ui-text');
 regt('ui-date', './pages/survey/constraints/ui-date');
 regt('ui-datetime', './pages/survey/constraints/ui-datetime');
 regt('ui-select', './pages/survey/constraints/ui-select');
+reg('ui-textarea', './pages/survey/constraints/ui_textarea');

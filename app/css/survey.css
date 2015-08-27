@@ -1,9 +1,14 @@
-.survey { padding: 1rem; }
+.survey {
+    padding: 1rem;
+}
 .element {
     width: 100%;
+    /*
     border: 1px solid #cccccc;
     border-radius: 6px;
     box-shadow: 1px 1px 1px #ccc;
+    padding:0;
+    */
     display: flex;
     flex-direction: row;
     margin-bottom: 1rem;
@@ -62,7 +67,7 @@
             color: #bbb;
             font-weight: normal;
             font-style: italic;
-            padding: .4rem 1rem;
+            padding: .4rem 1rem 0 1rem;
         }
     .element-content-constraints {
         display: flex;
@@ -123,7 +128,9 @@
     width: 100%;
     margin: 1rem 0;
     transform-style: preserve-3d;
-    transition: transform .5s ease-in, height .5s ease-in, margin-top .5s ease-in, margin-bottom .5s ease-in;
+    transition-property: transform, height, margin-top, margin-bottom;
+    transition-duration: .3s;
+    transition-timing-function: ease-in;
 }
     .insertion-control-card {
         width: 100%;
@@ -150,3 +157,27 @@
         margin-top: 1rem!important;
         margin-bottom: 1rem!important;
     }
+.textarea-container {
+    position: relative;
+    width: 100%;
+}
+textarea, .textarea-size {
+    overflow: hidden;
+    width: 100%;
+    font-familiy: inherit;
+    font-size: inherit;
+    box-sizing: inherit;
+    padding: inherit;
+}
+textarea {
+    height: 100%;
+    position: absolute;
+    resize: none;
+    white-space: normal;
+}
+.textarea-size {
+    visibility: hidden;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-words;
+}

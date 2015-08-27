@@ -1,6 +1,9 @@
+<a class="ui gray left corner label">
+    <i class="move   icon"></i>
+</a>
 <div class="element-content">
-    <div contenteditable="false" class="element-content-prompt" data-bind="css: {editor: !publishedObs()}, attr: {contenteditable: !publishedObs()}, text: element.prompt"></div>
-    <div contenteditable="false" class="element-content-prompt-detail" data-bind="css: {editor: !publishedObs()}, attr: {contenteditable: !publishedObs()}, text: element.promptDetail"></div>
+    <ui-textarea params="fieldObs: element.promptObs, publishedObs: publishedObs, className: 'element-content-prompt'"></ui-textarea>
+    <ui-textarea params="fieldObs: element.promptDetailObs, publishedObs: publishedObs, className: 'element-content-prompt-detail'"></ui-textarea>
     <div class="ui segment element-content-segment" data-bind="component: {
         name: element.constraints.type,
         params: {elementsObs: elementsObs, element: element, publishedObs: publishedObs}
@@ -11,8 +14,8 @@
         <a class="ui huge blue circular label"><span data-bind="text: indexObs()+1"></span></a>
     </div>
     <div class="element-callout-identifier-box">
-        <div class="element-callout-identifier" data-bind="visible: publishedObs(), text: element.identifier"></div>
-        <input type="text" class="editor element-callout-identifier" data-bind="visible: !publishedObs(), value: element.identifier"/>
+        <div class="element-callout-identifier" data-bind="visible: publishedObs(), text: element.identifierObs"></div>
+        <input type="text" class="editor element-callout-identifier" data-bind="visible: !publishedObs(), textInput: element.identifierObs"/>
         <div class="element-callout-identifier-label">Identifier</div>
     </div>
     <div class="element-callout-delete">

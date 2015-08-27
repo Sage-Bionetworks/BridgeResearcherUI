@@ -1,7 +1,7 @@
 var ko = require('knockout');
 var surveyUtils = require('./survey_utils');
 
-var SHOW_DELAY = 200;
+var SHOW_DELAY = 1;
 var HIDE_DELAY = 800;
 
 ko.bindingHandlers.flipper = {
@@ -15,7 +15,7 @@ ko.bindingHandlers.flipper = {
         }
 
         var obj = ko.unwrap(valueAccessor());
-        element.addEventListener('mouseover', function(event) {
+        element.addEventListener('click', function(event) {
             clearTimers();
             showTimer = setTimeout(function() {
                 element.classList.add('insertion-control-flipped');

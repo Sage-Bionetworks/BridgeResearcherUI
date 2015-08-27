@@ -55,7 +55,7 @@
 <h3>Questions</h3>
 
 <div class="survey elementZone" data-bind="foreach: elementsObs">
-    <div class="element" data-bind="component: {
+    <div class="ui raised segment element" style="position: relative" data-bind="component: {
         name: $data.type,
         params: { elementsObs: $parent.elementsObs, element: $data, indexObs: $index, publishedObs: $parent.publishedObs }
     }"></div>
