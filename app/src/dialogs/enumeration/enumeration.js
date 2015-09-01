@@ -109,6 +109,13 @@ module.exports = function(params) {
         listsSource.setCurrentEntry(entry);
         self.currentTabObs('editor');
     };
+    self.handleKeyEvent = function(vm, event) {
+        if (event.keyCode === 13) {
+            self.addListItem();
+            return false;
+        }
+        return true;
+    };
     self.addListItem = function() {
         var label = self.labelObs();
         if (label) {
@@ -118,7 +125,9 @@ module.exports = function(params) {
         self.labelObs("");
         self.detailObs("");
         self.valueObs("");
+        self.labelFocusedObs(true);
     };
+    self.labelFocusedObs = ko.observable(true);
     self.saveList = function() {
         var entry = listsSource.getCurrentEntry();
         entry.enumeration = self.listObs();
@@ -145,7 +154,6 @@ module.exports = function(params) {
         utils.closeDialog();
     };
 
-    // TODO: Create tab component, this is annoying. Should be good for all tabs in application
     self.currentTabObs = ko.observable('editor');
     self.isActive = function(tag) {
         return tag === self.currentTabObs();

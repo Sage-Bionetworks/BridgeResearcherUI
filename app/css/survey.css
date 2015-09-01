@@ -49,13 +49,13 @@
     flex: 2;
     padding: 1rem 1rem 1rem 2rem;
 }
-    /* The use of .ui here override semantic UI's styles. May want to do this elsewhere. */
-    .ui.element-content-segment {
-        padding-top: .75rem;
-        background-color: #f4f4f4;
+    /* The use of !important overrides semantic UI's styles. We do this elsewhere too. */
+    .element-content-segment {
+        padding-top: .75rem!important;
+        background-color: #f4f4f4!important;
     }
-    .ui.medium.ribbon.label { /* TODO: Name this */
-        margin-bottom: .5rem;
+    .constraints-label {
+        margin-bottom: .5rem!important;
     }
     .element-content-prompt {
         font-size: 1.3rem;
@@ -141,15 +141,15 @@
         backface-visibility: hidden;
     }
     .insertion-control-back {
-        cursor: pointer;
         transform: rotateX(180deg);
     }
-    .insertion-control-back a {
-        color: #009fda; /* Semantic UI choice? */
+    .insertion-control-back a.item {
+        color: #009fda!important; /* Semantic UI choice? */
     }
     .insertion-control-front {
         color: #009fda;
         transform: rotateX(0deg);
+        cursor: pointer;
     }
     .insertion-control-flipped {
         transform: rotateX(180deg)!important;

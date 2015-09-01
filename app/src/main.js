@@ -8,6 +8,10 @@ var utils = require('./utils');
 require('./bindings');
 require('./registry');
 
+var pageSets = {
+    'surveys': ['surveys','survey','survey_versions']
+};
+
 var RootViewModel = function() {
     var self = this;
 
@@ -23,10 +27,9 @@ var RootViewModel = function() {
 
     self.dialogObs = ko.observable({name: "none_dialog", params: {}});
 
-    // TODO: fix this so it's more flexible
     self.isActive = function(tag) {
-        if (self.selected() === "survey" && tag === 'surveys') {
-            return true;
+        if (pageSets[tag]) {
+            return pageSets[tag].indexOf(self.selected()) > -1;
         }
         return tag === self.selected();
     };

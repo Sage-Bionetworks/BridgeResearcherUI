@@ -1,68 +1,21 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
+var surveyUtils = require('./survey_utils');
 var utils = require('../../utils');
 var $ = require('jquery');
 var dragula = require('dragula');
 
-function surveyMarshaller(survey) {
-    return function(vm) {
-        survey.name = vm.nameObs();
-        survey.createdOn = vm.createdOnObs();
-        survey.guid = vm.guidObs();
-        survey.identifier = vm.identifierObs();
-        survey.published = vm.publishedObs();
-        survey.version = vm.versionObs();
-        // Does this update survey.elements? By my understanding, it does.
-        survey.elements = vm.elementsObs().map(function (element) {
-            var con = element.constraints;
-            if (con) {
-                if (con.enumerationObs) {
-                    con.enumeration = con.enumerationObs();
-                }
-                if (con.rulesObs) {
-                    con.rules = con.rulesObs();
-                }
-            }
-            return element;
-        });
-        return survey;
-    };
-}
-
 module.exports = function(params) {
     var self = this;
 
-    self.marshaller = null;
-
+    self.survey = null;
     self.messageObs = ko.observable();
-    self.nameObs = ko.observable("");
-    self.createdOnObs = ko.observable("");
-    self.guidObs = ko.observable("");
-    self.identifierObs = ko.observable("");
-    self.publishedObs = ko.observable("");
-    self.versionObs = ko.observable("");
-    self.elementsObs = ko.observableArray([]);
+    self.formatDateTime = utils.formatDateTime;
+    surveyUtils.initSurveyVM(self);
 
     function loadVM(survey) {
-        self.marshaller = surveyMarshaller(survey);
-        self.nameObs(survey.name);
-        self.createdOnObs(survey.createdOn);
-        self.guidObs(survey.guid);
-        self.identifierObs(survey.identifier);
-        self.publishedObs(survey.published);
-        self.versionObs(survey.version);
-        // TODO: This is duplicated in survey_utils.js
-        var elements = survey.elements.map(function(element) {
-            element.promptObs = ko.observable(element.prompt);
-            element.promptDetailObs = ko.observable(element.promptDetail);
-            element.identifierObs = ko.observable(element.identifier);
-            var con = element.constraints;
-            if (con && con.enumeration) {
-                con.enumerationObs = ko.observableArray(con.enumeration);
-            }
-            return element;
-        });
-        self.elementsObs.pushAll(elements);
+        self.survey = survey;
+        surveyUtils.surveyToObservables(self, survey);
         return survey.createdOn;
     }
 
@@ -74,8 +27,6 @@ module.exports = function(params) {
             self.messageObs({text: message});
         }
     }
-
-    self.formatDateTime = utils.formatDateTime;
 
     self.publish = function(vm, event) {
         function version(keys) {
@@ -108,13 +59,23 @@ module.exports = function(params) {
      */
     self.save = function(vm, event) {
         utils.startHandler(self, event);
-        var survey = self.marshaller(self);
+        surveyUtils.observablesToSurvey(self, self.survey);
+        console.log(JSON.stringify(self.survey));
 
-        serverService.updateSurvey(survey)
-             .then(utils.successHandler(vm, event))
-             .then(function(response) {
-                updateVM(response, "Survey saved.");
-             }).catch(utils.failureHandler(vm, event));
+        if (self.survey.guid) {
+            serverService.updateSurvey(self.survey)
+                .then(utils.successHandler(vm, event))
+                .then(function(response) {
+                    updateVM(response, "Survey saved.");
+                }).catch(utils.failureHandler(vm, event));
+        } else {
+            serverService.createSurvey(self.survey)
+                .then(utils.successHandler(vm, event))
+                .then(function(response) {
+                    updateVM(response, "Survey created.");
+                }).catch(utils.failureHandler(vm, event));
+        }
+
     };
     self.deleteElement = function(params, event) {
         var index = self.elementsObs.indexOf(params.element);
@@ -126,16 +87,17 @@ module.exports = function(params) {
             setTimeout(function() {
                 self.elementsObs.remove(element);
                 $element.remove();
-            },510);
+            },10);
         }
     };
 
-    if (params.createdOn) {
+    if (params.guid === "new") {
+        loadVM(surveyUtils.newSurvey());
+    } else if (params.createdOn) {
         serverService.getSurvey(params.guid, params.createdOn).then(loadVM);
     } else {
         serverService.getSurveyMostRecent(params.guid).then(loadVM);
     }
-
 
     var elementsZoneEl = document.querySelector(".elementZone");
     if (!self.publishedObs()) {

@@ -4,8 +4,7 @@ var ko = require('knockout');
 module.exports = function(params) {
     var self = this;
     surveyUtils.initConstraintsVM(self, params);
-
-    self.earliestValueObs = ko.observable(self.element.constraints.earliestValue);
-    self.latestValueObs = ko.observable(self.element.constraints.latestValue);
-    self.allowFutureObs = ko.observable(self.element.constraints.allowFuture);
+    self.earliestValueObs = self.element.constraints.earliestValueObs;
+    self.latestValueObs = self.element.constraints.latestValueObs;
+    self.allowFutureObs = self.element.constraints.allowFutureObs;
 };

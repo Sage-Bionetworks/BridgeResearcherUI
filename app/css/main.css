@@ -52,8 +52,7 @@ footer p {
 }
 
 /* SEMANTIC UI TWEAKS */
-/* TODO: Should all probably include .ui */
-.field .ui.button {
+.ui.field .ui.button {
     margin-top: .5rem ! important;
 }
 .ui.dimmer {
@@ -65,7 +64,7 @@ footer p {
 .ui.modal>.header {
     font-size: 1.3rem;
 }
-.form { /* Semantic ui?! */
+.ui.form {
     padding: 0 ! important;
 }
 

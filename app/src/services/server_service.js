@@ -80,7 +80,9 @@ function makeSessionWaitingPromise(func) {
         }
     });
     promise.catch(function(response) {
-        if (response.responseJSON) {
+        if (response.status === 401) {
+            signOut();
+        } else if (response.responseJSON) {
             console.error(response.status, response.responseJSON);
         } else {
             console.error("Significant server failure", response);
@@ -96,6 +98,24 @@ function get(path) {
 function post(path, body) {
     return makeSessionWaitingPromise(function() {
         return postInt(config.host[session.environment] + path, body);
+    });
+}
+
+/**
+ * If we ever get back a 401, the UI isn't in sync with reality, sign the
+ * user out. So this is called from error handler, as well as being available
+ * from serverService.
+ * @returns {Promise}
+ */
+function signOut() {
+    var env = session.environment;
+    session = null;
+    optionsService.remove(SESSION_KEY);
+    listeners.emit(SESSION_ENDED_EVENT_KEY);
+    return new Promise(function(resolve, reject) {
+        var p = postInt(config.host[env] + config.signOut);
+        p.then(resolve);
+        p.fail(reject);
     });
 }
 
@@ -117,17 +137,7 @@ module.exports = {
     getStudyList: function(env) {
         return Promise.resolve(getInt(config.host[env] + config.getStudyList));
     },
-    signOut: function() {
-        var env = session.environment;
-        session = null;
-        optionsService.remove(SESSION_KEY);
-        listeners.emit(SESSION_ENDED_EVENT_KEY);
-        return new Promise(function(resolve, reject) {
-            var p = postInt(config.host[env] + config.signOut);
-            p.then(resolve);
-            p.fail(reject);
-        });
-    },
+    signOut: signOut,
     requestResetPassword: function(env, data) {
         return Promise.resolve(postInt(config.host[env] + config.requestResetPassword, data));
     },

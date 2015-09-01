@@ -1,8 +1,5 @@
 var ko = require('knockout');
 
-// NOTE: If you have a VM backing a template, it cannot have a dash "-" in its name,
-// it must have an underscore. TODO: Just move everything to using underscores.
-
 function reg(name, path) {
     ko.components.register(name, {
         viewModel: require(path),
@@ -41,8 +38,8 @@ reg('rules', './dialogs/rules/rules');
 reg('enumeration', './dialogs/enumeration/enumeration');
 
 /* SURVEYS */
-regt('SurveyInfoScreen', './pages/survey/survey-info');
-reg('SurveyQuestion', './pages/survey/survey-question');
+reg('SurveyInfoScreen', './pages/survey/survey_info');
+reg('SurveyQuestion', './pages/survey/survey_question');
 reg('BooleanConstraints', './pages/survey/constraints/boolean_constraints');
 reg('DateConstraints', './pages/survey/constraints/date_constraints');
 reg('DateTimeConstraints', './pages/survey/constraints/datetime_constraints');
@@ -55,11 +52,11 @@ reg('MultiValueConstraints', './pages/survey/constraints/multi_constraints');
 
 reg('insertion-control', './pages/survey/insertion_control');
 
-regt('constraints-label', './pages/survey/constraints/constraints-label');
-regt('ui-rules', './pages/survey/constraints/ui-rules');
-regt('ui-checkbox', './pages/survey/constraints/ui-checkbox');
-regt('ui-text', './pages/survey/constraints/ui-text');
-regt('ui-date', './pages/survey/constraints/ui-date');
-regt('ui-datetime', './pages/survey/constraints/ui-datetime');
-regt('ui-select', './pages/survey/constraints/ui-select');
-reg('ui-textarea', './pages/survey/constraints/ui_textarea');
+regt('constraints-label', './pages/survey/constraints/constraints_label');
+regt('ui-rules', './pages/survey/constraints/ui_rules');
+regt('ui-checkbox', './pages/survey/constraints/ui_checkbox');
+regt('ui-text', './pages/survey/constraints/ui_text');
+regt('ui-date', './pages/survey/constraints/ui_date');
+regt('ui-datetime', './pages/survey/constraints/ui_datetime');
+regt('ui-select', './pages/survey/constraints/ui_select');
+regt('ui-textarea', './pages/survey/constraints/ui_textarea');

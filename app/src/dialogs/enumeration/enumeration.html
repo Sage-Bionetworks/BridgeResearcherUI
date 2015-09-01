@@ -36,13 +36,16 @@
                     <form class="ui form" data-bind="visible: !publishedObs()">
                         <h4 class="ui dividing header">Add New List Item</h4>
                         <div class="field">
-                            <ui-text params="fieldObs: labelObs, publishedObs: publishedObs, placeholder: 'Label'"></ui-text>
+                            <ui-text params="fieldObs: labelObs, publishedObs: publishedObs,
+                                placeholder: 'Label', keyHandler: handleKeyEvent, hasFocus: labelFocusedObs"></ui-text>
                         </div>
                         <div class="field">
-                            <ui-text params="fieldObs: detailObs, publishedObs: publishedObs, placeholder: 'Detail (optional)'"></ui-text>
+                            <ui-text params="fieldObs: detailObs, publishedObs: publishedObs,
+                                placeholder: 'Detail (optional)', keyHandler: handleKeyEvent"></ui-text>
                         </div>
                         <div class="field">
-                            <ui-text params="fieldObs: valueObs, publishedObs: publishedObs, placeholder: 'Server value (optional)'"></ui-text>
+                            <ui-text params="fieldObs: valueObs, publishedObs: publishedObs,
+                                placeholder: 'Server value (optional)', keyHandler: handleKeyEvent"></ui-text>
                         </div>
                         <div class="field">
                             <a href="#" data-bind="click: addListItem" class="ui button">Add</a>

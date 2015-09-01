@@ -1,12 +1,10 @@
-<div class="insertion-control" data-bind="flipper: {click: 'clicker', index: $index}">
+<div class="insertion-control" data-bind="flipper: {click: 'clickHandler', index: indexObs}, visible: !publishedObs()">
     <div class="insertion-control-card insertion-control-front">
         <i class="add square icon"></i> Add
     </div>
     <div class="insertion-control-card insertion-control-back">
         <div class="ui menu">
-            <div class="header item">
-                <a href="#"><i class="add square icon"></i> Add</a>
-            </div>
+            <div class="header item"><i class="add square icon"></i> Add</div>
             <a class="item" data-type="MultiValueConstraints">Multi-Choice</a>
             <a class="item" data-type="StringConstraints">String</a>
             <a class="item" data-type="BooleanConstraints">Boolean</a>

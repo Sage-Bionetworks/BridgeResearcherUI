@@ -30,7 +30,14 @@ function isDefined(obj) {
 module.exports = {
     is: is,
     isDefined: isDefined,
-
+    /**
+     * f(x) = x
+     * @param arg
+     * @returns {*}
+     */
+    identity: function(arg) {
+        return arg;
+    },
     // TODO: This is used by root and no other, and it seems like it should be possible to
     // do root.openDialog(), etc.
     addDialogListener: function(listener) {

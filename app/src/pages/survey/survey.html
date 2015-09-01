@@ -10,11 +10,11 @@
     <a class="active item">
         <i class="file outline icon"></i> Editor
     </a>
-    <a href="#" data-bind="attr: {href: '#/survey_versions/'+guidObs()}" class="item">
+    <a href="#" data-bind="attr: {href: '#/survey_versions/'+guidObs()}, visible: !!guidObs()" class="item">
         <i class="history icon"></i> History
     </a>
     <div class="right menu">
-        <div class="item">
+        <div class="item" data-bind="visible: !!guidObs()">
             <i class="clock icon"></i> <span data-bind="text: formatDateTime(createdOnObs())"></span>
         </div>
         <div class="item" data-bind="visible: publishedObs">
@@ -54,13 +54,20 @@
 
 <h3>Questions</h3>
 
+<div data-bind="visible: elementsObs().length === 0">
+    <p>There are currently no questions in this survey.</p>
+    <!-- ko component: {
+        name: "insertion-control",
+        params: { elementsObs: elementsObs, indexObs: 0, publishedObs: publishedObs }
+    } --><!-- /ko -->
+</div>
 <div class="survey elementZone" data-bind="foreach: elementsObs">
     <div class="ui raised segment element" style="position: relative" data-bind="component: {
         name: $data.type,
-        params: { elementsObs: $parent.elementsObs, element: $data, indexObs: $index, publishedObs: $parent.publishedObs }
+        params: { element: $data, elementsObs: $parent.elementsObs, indexObs: $index, publishedObs: $parent.publishedObs }
     }"></div>
     <!-- ko component: {
         name: "insertion-control",
-        params: { elementsObs: $parent.elementsObs, element: $data, indexObs: $index, publishedObs: $parent.publishedObs }
+        params: { elementsObs: $parent.elementsObs, indexObs: $index, publishedObs: $parent.publishedObs }
     } --><!-- /ko -->
 </div>
