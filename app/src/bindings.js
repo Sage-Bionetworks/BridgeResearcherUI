@@ -24,11 +24,9 @@ ko.bindingHandlers.semantic = {
             var observer = allBindings().checkboxObs;
             var input = $(element).children("input[type=checkbox]").get(0);
             $(element).on('click', function() {
-                observer(!observer());
-                if (observer()) {
-                    element.classList.add("checked");
-                } else {
-                    element.classList.remove("checked");
+                if (!input.disabled) {
+                    observer(!observer());
+                    element.classList.toggle("checked", observer());
                 }
             });
         } else if (value === 'dropdown') {

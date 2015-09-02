@@ -24,16 +24,20 @@
     <thead>
         <tr>
             <th>Version Date</th>
+            <th>Last Modified</th>
             <th>&nbsp;</th>
         </tr>
     </thead>
     <tbody data-bind="foreach: itemsObs">
     <tr data-bind="css: { positive: $data.published }">
-        <td>
+        <td width="100%">
             <a href="#" data-bind="attr: {href: '#/survey/'+$data.guid+'/'+$data.createdOn},
                 text: $parent.formatDateTime($data.createdOn)"></a>
         </td>
-        <td width="100%">
+        <td data-bind="text: $parent.formatDateTime($data.modifiedOn)">
+
+        </td>
+        <td>
             <div data-bind="visible: $data.published" style="text-align: right">
                 <i class="checkmark icon"></i> Published
             </div>

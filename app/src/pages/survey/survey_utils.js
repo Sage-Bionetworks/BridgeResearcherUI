@@ -2,6 +2,7 @@ var utils = require('../../utils');
 var ko = require('knockout');
 
 var UNIT_OPTIONS = Object.freeze([
+    {value: null, label: '<none>'},
     {value: 'centimeters', label: 'Centimeters'},
     {value: 'cubic_centimeters', label: 'Cubic Centimeters'},
     {value: 'cubic_meters', label: 'Cubic Meters'},
@@ -22,6 +23,7 @@ var UNIT_OPTIONS = Object.freeze([
     {value: 'yards', label: 'Yards'}
 ]);
 var DURATION_OPTIONS = Object.freeze([
+    {value: null, label: ''},
     {value: 'seconds', label: 'Seconds'},
     {value: 'minutes', label: 'Minutes'},
     {value: 'hours', label: 'Hours'},

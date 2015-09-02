@@ -73,7 +73,10 @@ footer p {
 .pointing {
     cursor: pointer;
 }
-
+.loading.status {
+    margin: 2rem 0;
+    font-size: larger;
+}
 .button-container {
     margin: 0 0 1rem 0;
 }

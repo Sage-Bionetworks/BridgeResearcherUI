@@ -63,7 +63,7 @@ module.exports = function() {
         if (list.items.length) {
             self.itemsObs(list.items.map(addCheckedObs));
         } else {
-            self.messageObs({text:"There are currently no surveys.",status:"gray"});
+            document.querySelector(".loading.status").textContent = "There are currently no surveys.";
         }
     });
 };
