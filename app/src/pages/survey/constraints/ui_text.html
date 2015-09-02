@@ -1,0 +1,3 @@
+<div data-bind="text: fieldObs, visible: publishedObs()"></div>
+<input type="text" class="editor" data-bind="textInput: fieldObs, visible: !publishedObs(),
+    attr:{placeholder: $data.placeholder}, event: {keydown: $data.keyHandler}, hasFocus: $data.hasFocus"/>

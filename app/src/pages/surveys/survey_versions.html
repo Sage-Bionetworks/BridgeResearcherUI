@@ -1,0 +1,43 @@
+<div class="ui breadcrumb">
+    <a href="#/surveys" class="section">Surveys</a>
+</div>
+
+<h3 data-bind="text: nameObs"></h3>
+
+<form-message params="messageObs: messageObs"></form-message>
+
+<div class="ui secondary larger pointing menu">
+    <a href="#" data-bind="attr: {href: '#/survey/'+guidObs()}" class="item">
+        <i class="file outline icon"></i> Editor
+    </a>
+    <a class="active item">
+        <i class="history icon"></i> History
+    </a>
+</div>
+
+<div class="button-container">
+    <button class="ui primary button" data-bind="visible: showVersionObs, click: version">New Version</button>
+</div>
+
+<div data-bind="visible: itemsObs().length === 0">Loading...</div>
+<table class="ui table" data-bind="visible: itemsObs().length > 0">
+    <thead>
+        <tr>
+            <th>Version Date</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: itemsObs">
+    <tr data-bind="css: { positive: $data.published }">
+        <td>
+            <a href="#" data-bind="attr: {href: '#/survey/'+$data.guid+'/'+$data.createdOn},
+                text: $parent.formatDateTime($data.createdOn)"></a>
+        </td>
+        <td width="100%">
+            <div data-bind="visible: $data.published" style="text-align: right">
+                <i class="checkmark icon"></i> Published
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>

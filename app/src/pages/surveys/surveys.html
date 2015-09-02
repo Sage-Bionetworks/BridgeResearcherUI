@@ -1,0 +1,31 @@
+<h3>Surveys</h3>
+
+<form-message params="messageObs: messageObs"></form-message>
+
+<div class="button-container">
+    <a href="#/survey/new" class="ui primary button">New Survey</a>
+    <button class="ui red button" data-bind="disable: !anyChecked(), click: deleteSurveys">Delete</button>
+</div>
+<div data-bind="visible: itemsObs().length === 0">Loading...</div>
+<table class="ui table" data-bind="visible: itemsObs().length > 0">
+    <thead>
+        <tr>
+            <th width="5"></th>
+            <th>Name</th>
+            <th>Last Updated</th>
+            <th>Identifier</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: itemsObs">
+        <tr data-bind="css: { positive: $data.active }">
+            <td>
+                <ui-checkbox params="checkedObs: $data.checkedObs, disabledObs: $parent.publishedObs"></ui-checkbox>
+            </td>
+            <td>
+                <a href="#" data-bind="attr: {'href': '#/survey/'+$data.guid}, text: $data.name"></a>
+            </td>
+            <td data-bind="text: $parent.formatDateTime($data.createdOn)"></td>
+            <td data-bind="text: $data.identifier"></td>
+        </tr>
+    </tbody>
+</table>

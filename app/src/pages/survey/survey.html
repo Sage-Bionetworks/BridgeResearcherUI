@@ -1,0 +1,73 @@
+<div class="ui breadcrumb">
+    <a href="#/surveys" class="section">Surveys</a>
+</div>
+
+<h3 data-bind="text: nameObs"></h3>
+
+<form-message params="messageObs: messageObs"></form-message>
+
+<div class="ui secondary larger pointing menu">
+    <a class="active item">
+        <i class="file outline icon"></i> Editor
+    </a>
+    <a href="#" data-bind="attr: {href: '#/survey_versions/'+guidObs()}, visible: !!guidObs()" class="item">
+        <i class="history icon"></i> History
+    </a>
+    <div class="right menu">
+        <div class="item" data-bind="visible: !!guidObs()">
+            <i class="clock icon"></i> <span data-bind="text: formatDateTime(createdOnObs())"></span>
+        </div>
+        <div class="item" data-bind="visible: publishedObs">
+            <div class="green ui label">
+                <i class="checkmark icon"></i> Published
+            </div>
+        </div>
+        <div class="item" data-bind="visible: !publishedObs()">
+            <div class="orange ui label">
+                <i class="warning icon"></i> Not Published
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="button-container">
+    <div class="ui warning message" data-bind="visible: publishedObs">
+        <p>You are viewing an old revision of this survey. </p>
+        <p>It has already been published and cannot be edited. </p>
+    </div>
+    <button class="ui primary button" data-bind="visible: !publishedObs(), click: save">Save</button>
+    <button class="ui primary button" data-bind="visible: !publishedObs(), click: publish">Publish</button>
+</div>
+
+<form class="ui form">
+    <div class="two fields">
+        <div class="field">
+            <label>Name</label>
+            <ui-text params="fieldObs: nameObs, publishedObs: publishedObs"></ui-text>
+        </div>
+        <div class="field">
+            <label>Identifier</label>
+            <ui-text params="fieldObs: identifierObs, publishedObs: publishedObs"></ui-text>
+        </div>
+    </div>
+</form>
+
+<h3>Questions</h3>
+
+<div data-bind="visible: elementsObs().length === 0">
+    <p>There are currently no questions in this survey.</p>
+    <!-- ko component: {
+        name: "insertion-control",
+        params: { elementsObs: elementsObs, indexObs: 0, publishedObs: publishedObs }
+    } --><!-- /ko -->
+</div>
+<div class="survey elementZone" data-bind="foreach: elementsObs">
+    <div class="ui raised segment element" style="position: relative" data-bind="component: {
+        name: $data.type,
+        params: { element: $data, elementsObs: $parent.elementsObs, indexObs: $index, publishedObs: $parent.publishedObs }
+    }"></div>
+    <!-- ko component: {
+        name: "insertion-control",
+        params: { elementsObs: $parent.elementsObs, indexObs: $index, publishedObs: $parent.publishedObs }
+    } --><!-- /ko -->
+</div>

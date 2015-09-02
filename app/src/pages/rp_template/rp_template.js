@@ -7,8 +7,7 @@ module.exports = function() {
 
     self.study = null;
     self.subject = ko.observable("");
-    self.message = ko.observable("");
-    self.errorFields = ko.observableArray();
+    self.messageObs = ko.observable("");
     self.editor = null;
 
     self.initEditor = function(ckeditor) {
@@ -20,22 +19,16 @@ module.exports = function() {
         });
     };
 
-    self.errorFor = function(fieldName) {
-        return ko.computed(function() {
-            return (self.errorFields.indexOf(fieldName) > -1) ? "error" : "";
-        });
-    };
-
     self.save = function(vm, event) {
         utils.startHandler(self, event);
         self.study.resetPasswordTemplate.subject = self.subject();
         self.study.resetPasswordTemplate.body = self.editor.getData();
 
         serverService.saveStudy(self.study)
-            .then(utils.successHandler(vm, event))
             .then(function(response) {
-                self.message({text:"Email saved."});
                 self.study.version = response.version;
-            }).catch(utils.failureHandler(vm, event));
+            })
+            .then(utils.successHandler(vm, event, "Email saved."))
+            .catch(utils.failureHandler(vm, event));
     };
 };

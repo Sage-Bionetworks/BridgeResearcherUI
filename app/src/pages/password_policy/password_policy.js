@@ -8,7 +8,7 @@ module.exports = function() {
     self.study;
     self.passwordPolicy = ko.observable();
     self.minLengths = ko.observableArray([2,3,4,5,6,7,8,9,10,11,12,13,14]);
-    self.message = ko.observable();
+    self.messageObs = ko.observable();
 
     serverService.getStudy().then(function(study) {
         self.study = study;
@@ -20,11 +20,10 @@ module.exports = function() {
         self.study.passwordPolicy = passwordPolicy;
 
         serverService.saveStudy(self.study)
-            .then(utils.successHandler(self, event))
             .then(function(response) {
                 self.study.version = response.version;
-                self.message({text:"Password policy has been saved."});
             })
+            .then(utils.successHandler(self, event, "Password policy has been saved."))
             .catch(utils.failureHandler(self, event));
     };
 };

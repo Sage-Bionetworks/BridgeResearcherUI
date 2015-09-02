@@ -1,0 +1,177 @@
+.survey {
+    padding: 1rem;
+}
+.element {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    transition: height .5s ease;
+}
+    .element-callout, .element-content {
+    }
+    .element-callout {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-content: flex-end;
+        justify-content: space-between;
+        padding: .5rem 1rem 1rem 1rem;
+        width: 12rem;
+    }
+        .element-callout .circular.label {
+            margin-top: 1rem;
+        }
+        .element-callout-identifier-box {
+            text-align: center;
+            flex: 1;
+        }
+            .element-callout-identifier {
+                margin: .4rem 0 .4rem 0;
+                text-align: center;
+                font-size: larger;
+                font-weight: bold;
+            }
+            .element-callout-identifier-label {
+                margin-bottom: 1rem;
+            }
+        .element-callout-delete {
+            cursor: pointer;
+        }
+.element-content {
+    flex: 1;
+    padding: 1rem 1rem 1rem 2rem;
+}
+    /* The use of !important overrides semantic UI's styles. We do this elsewhere too. */
+    .element-content-segment {
+        padding-top: .75rem!important;
+        background-color: #f4f4f4!important;
+    }
+    .constraints-label {
+        margin-bottom: .5rem!important;
+    }
+    .element-content-prompt {
+        font-size: 1.3rem;
+        font-weight: bold;
+        padding-left: 1rem;
+    }
+        .element-content-prompt-detail {
+            font-size: 1.1rem;
+            color: #bbb;
+            font-weight: normal;
+            font-style: italic;
+            padding: .4rem 1rem 0 1rem;
+        }
+    .element-content-constraints {
+        display: flex;
+        flex-wrap: wrap;
+    }
+        .element-content-constraints > div { /* "row" element */
+            width: 50%;
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
+        }
+            .element-content-constraints > div > div { /* "cell" elements */
+                padding: .2rem .4rem;
+            }
+            .element-content-constraints > div > div:first-child {
+                width: 40%;
+            }
+            .element-content-constraints > div > div:last-child {
+                flex: 2;
+            }
+        .element-content-constraints select.ui.dropdown {
+            height: auto;
+        }
+.rules-table {
+    border-top: 1px solid silver;
+    border-bottom: 1px solid silver;
+    padding: 1rem;
+    max-height: 200px;
+    overflow-y: scroll;
+}
+    .rules-table-rule {
+        display: flex;
+        align-items: center;
+    }
+        .rules-table-rule-cell {
+            padding: .2rem .2rem;
+        }
+        .rules-table-rule-cell input, .rules-table-rule-cell select {
+            width: 10rem ! important;
+        }
+        .rules-table-rule-cell:last-child {
+            flex:2;
+            text-align: right;
+        }
+    .rules-actions {
+        padding: 1.5rem 2rem;
+    }
+.hidden {
+    visibility: hidden;
+}
+.element-enum {
+    margin: .25rem 0;
+    cursor: pointer;
+}
+.insertion-control {
+    position: relative;
+    height: 15px;
+    width: 100%;
+    margin: 1rem 0;
+    transform-style: preserve-3d;
+    transition-property: transform, height, margin-top, margin-bottom;
+    transition-duration: .3s;
+    transition-timing-function: ease-in;
+}
+    .insertion-control-card {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        margin: 0;
+        backface-visibility: hidden;
+    }
+    .insertion-control-back {
+        transform: rotateX(180deg);
+    }
+    .insertion-control-back a.item {
+        color: #009fda!important; /* Semantic UI choice? */
+    }
+    .insertion-control-front {
+        color: #009fda;
+        transform: rotateX(0deg);
+        cursor: pointer;
+    }
+    .insertion-control-flipped {
+        transform: rotateX(180deg)!important;
+        height: 39px!important;
+        margin-top: 1rem!important;
+        margin-bottom: 1rem!important;
+    }
+.textarea-container {
+    position: relative;
+    width: 100%;
+}
+textarea, .textarea-size {
+    overflow: hidden;
+    width: 100%;
+    font-familiy: inherit;
+    font-size: inherit;
+    box-sizing: inherit;
+    padding: inherit;
+}
+textarea {
+    height: 100%;
+    position: absolute;
+    resize: none;
+    white-space: normal;
+}
+.textarea-size {
+    visibility: hidden;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-words;
+}

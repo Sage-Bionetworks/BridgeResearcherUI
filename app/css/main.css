@@ -1,3 +1,4 @@
+/* HTML TAGS */
 body {
     background-color: white;
     display: -webkit-flex;
@@ -5,12 +6,6 @@ body {
     min-height: 100vh;
     -webkit-flex-direction: column;
     flex-direction: column;
-}
-.field .ui.button {
-    margin-top: .5rem ! important;
-}
-.ui.dimmer {
-    background-color: rgba(0,0,0,.6) ! important;
 }
 section {
     display: -webkit-flex;
@@ -21,6 +16,8 @@ section {
 main {
     -webkit-flex: 1;
     flex: 1;
+    padding: 2rem 1.5rem 1rem 1.5rem;
+    overflow-y: scroll;
 }
 nav {
     -webkit-flex: 0 0 18em;
@@ -48,15 +45,42 @@ header .content, header a {
 header .sub.header {
     color: lightgoldenrodyellow ! important;
 }
-main {
-    padding: 2rem 1.5rem 1rem 1.5rem;
-    overflow: scroll;
-}
 footer p {
     border-top: 1px solid #e5e5e5;
     padding: .5rem;
     text-align: center;
 }
-.form {
+
+/* SEMANTIC UI TWEAKS */
+.ui.field .ui.button {
+    margin-top: .5rem ! important;
+}
+.ui.dimmer {
+    background-color: rgba(0,0,0,.6) ! important;
+}
+.ui.breadcrumb {
+    margin: 0;
+}
+.ui.modal>.header {
+    font-size: 1.3rem;
+}
+.ui.form {
     padding: 0 ! important;
 }
+
+/* GENERAL */
+
+.pointing {
+    cursor: pointer;
+}
+
+.button-container {
+    margin: 0 0 1rem 0;
+}
+
+/* TABLES */
+td {
+    white-space: nowrap;
+}
+@import "forms.css";
+@import "survey.css";

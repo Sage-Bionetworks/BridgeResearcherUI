@@ -1,0 +1,40 @@
+<constraints-label params="title: 'Date Constraints'"></constraints-label>
+<div class="element-content-constraints">
+    <div>
+        <div>Earliest date</div>
+        <div>
+            <ui-date params="fieldObs: earliestValueObs, publishedObs: publishedObs"></ui-date>
+        </div>
+    </div>
+    <div>
+        <div>UI Hint:</div>
+        <div>
+            <ui-select params="fieldObs: uiHintObs, fieldLabel: uiHintLabel,
+                publishedObs: publishedObs, optionsSrc: uiHintOptions"></ui-select>
+        </div>
+    </div>
+    <div>
+        <div>Latest date</div>
+        <div>
+            <ui-date params="fieldObs: latestValueObs, publishedObs: publishedObs"></ui-date>
+        </div>
+    </div>
+    <div>
+        <div>Fire event?</div>
+        <div>
+            <ui-checkbox params="checkedObs: fireEventObs, disabledObs: publishedObs"></ui-checkbox>
+        </div>
+    </div>
+    <div>
+        <div>Allow future dates?</div>
+        <div>
+            <ui-checkbox params="checkedObs: allowFutureObs, disabledObs: publishedObs"></ui-checkbox>
+        </div>
+    </div>
+    <div>
+        <div>Rules:</div>
+        <div>
+            <ui-rules params="rulesObs: rulesObs, elementsObs: elementsObs, publishedObs: publishedObs"></ui-rules>
+        </div>
+    </div>
+</div>

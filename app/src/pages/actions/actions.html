@@ -1,20 +1,8 @@
 <div>
     <h3>Participant Roster</h3>
 
-    <form-message params="message: message"></form-message>
+    <form-message params="messageObs: messageObs"></form-message>
 
-    <style>
-        td { padding: 5px 10px; }
-    </style>
-    <table>
-        <tr>
-            <td style="white-space: nowrap">
-                <button class="ui primary submit button" data-bind="click: sendRoster">Email Participant Roster</button>
-            </td>
-            <td>
-                <p>You can email the entire participant roster to your consent administrator (the email address you've set to receive consent notifications). </div>
-            </td>
-        </tr>
-    </table>
-
+    <p><button class="ui primary submit button" data-bind="click: emailRoster">Email Participant Roster</button></p>
+    <p>You can email the entire participant roster to your consent administrator (the email address you've set to receive consent notifications). </div>
 </div>

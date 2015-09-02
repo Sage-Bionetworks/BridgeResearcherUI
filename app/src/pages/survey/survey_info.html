@@ -1,0 +1,20 @@
+<a class="ui gray left corner label" data-bind="visible: !publishedObs()">
+    <i class="move icon"></i>
+</a>
+<div class="element-content">
+    <ui-textarea params="fieldObs: promptObs, publishedObs: publishedObs, className: 'element-content-prompt', placeholder: 'Prompt'"></ui-textarea>
+    <ui-textarea params="fieldObs: promptDetailObs, publishedObs: publishedObs, className: 'element-content-prompt-detail', placeholder: 'Prompt Detail'"></ui-textarea>
+</div>
+<div class="element-callout">
+    <div>
+        <a class="ui huge green circular label"><span data-bind="text: indexObs()+1"></span></a>
+    </div>
+    <div class="element-callout-identifier-box">
+        <div class="element-callout-identifier" data-bind="visible: publishedObs(), text: identifierObs"></div>
+        <input type="text" class="editor element-callout-identifier" data-bind="visible: !publishedObs(), textInput: identifierObs"/>
+        <div class="element-callout-identifier-label">Identifier</div>
+    </div>
+    <div class="element-callout-delete">
+        <div data-bind="click: $parents[1].deleteElement, visible: !publishedObs()"><a>Delete<i class="close icon"></i></a></div>
+    </div>
+</div>

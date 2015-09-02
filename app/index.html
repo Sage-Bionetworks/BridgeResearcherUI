@@ -22,54 +22,68 @@
     </header>
     <section>
         <main>
-            <div data-bind="component: mainPage"></div>
+            <div data-bind="component: {name: mainPage, params: mainParams}"></div>
         </main>
         <nav>
             <div class="ui vertical menu" style="width:100%">
                 <div class="item">
                     <i class="lab icon"></i> Study
                     <div class="menu">
-                        <a href="#info" class="item" data-bind="css:{active:selected()=='info'}, visible: isDeveloper">
+                        <a href="#info" class="item" data-bind="css:{active:isActive('info')}, visible: isDeveloper">
                             General Information
                         </a>
-                        <a href="#consent" class="item" data-bind="css:{active:selected()=='consent'}, visible: isResearcher">
+                        <a href="#consent" class="item" data-bind="css:{active:isActive('consent')}, visible: isResearcher">
                             Consent Agreement
                         </a>
-                        <a href="#eligibility" class="item" data-bind="css:{active:selected()=='eligibility'}, visible: isDeveloper">
+                        <a href="#eligibility" class="item" data-bind="css:{active:isActive('eligibility')}, visible: isDeveloper">
                             Eligibility Criteria
                         </a>
                     </div>
                 </div>
+                <div class="item" data-bind="visible: isDeveloper">
+                    <i class="server icon"></i> Surveys & Tasks
+                    <div class="menu">
+                        <a href="#surveys" class="item" data-bind="css:{active:isActive('surveys')}, visible: isDeveloper">
+                            Surveys
+                        </a>
+                        <!--
+                        <a href="#schemas" class="item" data-bind="css:{active:isActive('schemas')}, visible: isDeveloper">
+                            Upload Schemas
+                        </a>
+                        <a href="#schedules" class="item" data-bind="css:{active:isActive('schedules')}, visible: isDeveloper">
+                            Schedules
+                        </a>
+                        -->
+                    </div>
+                 </div>
                 <div class="item">
                     <i class="user icon"></i> Account Management
                     <div class="menu">
-                        <a href="#password_policy" class="item" data-bind="css:{active:selected()=='password_policy'}, visible: isDeveloper">
+                        <a href="#password_policy" class="item" data-bind="css:{active:isActive('password_policy')}, visible: isDeveloper">
                             Password Policy
                         </a>
-                        <a href="#user_attributes" class="item" data-bind="css:{active:selected()=='user_attributes'}, visible: isDeveloper">
+                        <a href="#user_attributes" class="item" data-bind="css:{active:isActive('user_attributes')}, visible: isDeveloper">
                             User Attributes
                         </a>
-                        <a href="#verify_email_template" class="item" data-bind="css:{active:selected()=='ve_template'}, visible: isDeveloper">
+                        <a href="#verify_email_template" class="item" data-bind="css:{active:isActive('ve_template')}, visible: isDeveloper">
                             Verify Email Template
                         </a>
-                        <a href="#reset_password_template" class="item" data-bind="css:{active:selected()=='rp_template'}, visible: isDeveloper">
+                        <a href="#reset_password_template" class="item" data-bind="css:{active:isActive('rp_template')}, visible: isDeveloper">
                             Reset Password Template
                         </a>
-                        <a href="#actions" class="item" data-bind="css:{active:selected()=='actions'}, visible: isResearcher">
+                        <a href="#actions" class="item" data-bind="css:{active:isActive('actions')}, visible: isResearcher">
                             Participant Roster
                         </a>
                     </div>
-                </div>
-                <div class="item">
-                    <i class="sign out icon"></i> <a href="#" data-bind="click: signOut">Sign Out</a>
                 </div>
             </div>
         </nav>
     </section>
     <footer>
-        <p>&copy; 2015 Sage Bionetworks. <span data-bind="text: sessionToken"></span></p>
+        <p>&copy; 2015 Sage Bionetworks.</p>
     </footer>
-    <div id="dialogHolder" data-bind="modal: currentDialog"></div>
+    <!--<div id="dialogHolder" data-bind="modal: {name: dialogName, params: dialogParams}"></div>-->
+    <div id="dialogHolder" data-bind="modal: dialogObs"></div>
     <script src="./dist/bundle.js"></script>
     <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/semantic.min.js"></script>

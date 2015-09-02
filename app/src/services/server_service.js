@@ -65,6 +65,16 @@ function getInt(url) {
         dataType: "json"
     });
 }
+function deleteInt(url) {
+    console.debug("DELETE", url);
+    return $.ajax({
+        method: 'DELETE',
+        url: url,
+        headers: getHeaders(),
+        type: "application/json",
+        dataType: "json"
+    });
+}
 function makeSessionWaitingPromise(func) {
     var promise = new Promise(function(resolve, reject) {
         // 3rd law of JavaScript... when in doubt use another function
@@ -80,7 +90,9 @@ function makeSessionWaitingPromise(func) {
         }
     });
     promise.catch(function(response) {
-        if (response.responseJSON) {
+        if (response.status === 401) {
+            signOut();
+        } else if (response.responseJSON) {
             console.error(response.status, response.responseJSON);
         } else {
             console.error("Significant server failure", response);
@@ -98,6 +110,29 @@ function post(path, body) {
         return postInt(config.host[session.environment] + path, body);
     });
 }
+function del(path) {
+    return makeSessionWaitingPromise(function() {
+        return deleteInt(config.host[session.environment] + path);
+    });
+}
+
+/**
+ * If we ever get back a 401, the UI isn't in sync with reality, sign the
+ * user out. So this is called from error handler, as well as being available
+ * from serverService.
+ * @returns {Promise}
+ */
+function signOut() {
+    var env = session.environment;
+    session = null;
+    optionsService.remove(SESSION_KEY);
+    listeners.emit(SESSION_ENDED_EVENT_KEY);
+    return new Promise(function(resolve, reject) {
+        var p = postInt(config.host[env] + config.signOut);
+        p.then(resolve);
+        p.fail(reject);
+    });
+}
 
 module.exports = {
     isAuthenticated: function() {
@@ -110,24 +145,14 @@ module.exports = {
             session = sess;
             optionsService.set(SESSION_KEY, sess);
             listeners.emit(SESSION_STARTED_EVENT_KEY, session);
-            console.log(sess);
+            //console.log(sess);
         });
         return request;
     },
     getStudyList: function(env) {
         return Promise.resolve(getInt(config.host[env] + config.getStudyList));
     },
-    signOut: function() {
-        var env = session.environment;
-        session = null;
-        optionsService.remove(SESSION_KEY);
-        listeners.emit(SESSION_ENDED_EVENT_KEY);
-        return new Promise(function(resolve, reject) {
-            var p = postInt(config.host[env] + config.signOut);
-            p.then(resolve);
-            p.fail(reject);
-        });
-    },
+    signOut: signOut,
     requestResetPassword: function(env, data) {
         return Promise.resolve(postInt(config.host[env] + config.requestResetPassword, data));
     },
@@ -155,13 +180,49 @@ module.exports = {
     getConsentHistory: function() {
         return get(config.studyConsents);
     },
-    sendRoster: function() {
-        return post(config.sendRoster);
+    emailRoster: function() {
+        return post(config.emailRoster);
+    },
+    getSurveys: function() {
+        return get(config.surveys);
+    },
+    getSurveyAllRevisions: function(guid) {
+        return get(config.survey + guid + '/revisions');
+    },
+    getSurvey: function(guid, createdOn) {
+        return get(config.survey + guid + '/revisions/' + new Date(createdOn).toISOString());
+    },
+    getSurveyMostRecent: function(guid) {
+        return get(config.survey + guid + '/revisions/recent');
+    },
+    getSurveyMostRecentlyPublished: function(guid) {
+        return get(config.survey + guid + '/revisions/published');
+    },
+    createSurvey: function(survey) {
+        return post(config.surveys, survey);
+    },
+    publishSurvey: function(guid, createdOn) {
+        return post(config.survey + guid + '/revisions/' + new Date(createdOn).toISOString() + '/publish');
+    },
+    versionSurvey: function(guid, createdOn) {
+        return post(config.survey + guid + '/revisions/' + new Date(createdOn).toISOString() + '/version');
+    },
+    updateSurvey: function(survey) {
+        return post(config.survey + survey.guid + '/revisions/' + new Date(survey.createdOn).toISOString(), survey);
+    },
+    deleteSurvey: function(survey) {
+        return del(config.survey + survey.guid + '/revisions/' + new Date(survey.createdOn).toISOString());
     },
     addSessionStartListener: function(listener) {
-        listeners.addListener(SESSION_STARTED_EVENT_KEY, listener);
+        if (typeof listener !== "function") {
+            throw Error("Session listener not a function");
+        }
+        listeners.addEventListener(SESSION_STARTED_EVENT_KEY, listener);
     },
     addSessionEndListener: function(listener) {
-        listeners.addListener(SESSION_ENDED_EVENT_KEY, listener);
+        if (typeof listener !== "function") {
+            throw Error("Session listener not a function");
+        }
+        listeners.addEventListener(SESSION_ENDED_EVENT_KEY, listener);
     }
 };

@@ -2,27 +2,27 @@
     <div class="content">
         <h3>Sign In</h3>
 
-        <form-message params="message: message"></form-message>
+        <form-message params="messageObs: messageObs"></form-message>
 
         <form class="ui form">
             <div class="field">
                 <label for="username">Email address</label>
-                <input id="username" type="text" data-bind="textInput: username"/>
+                <input id="username" type="text" data-bind="textInput: usernameObs"/>
             </div>
             <div class="field">
                 <label for="password">Password</label>
-                <input id="password" type="password" data-bind="textInput: password"/>
+                <input id="password" type="password" data-bind="textInput: passwordObs"/>
             </div>
             <div class="two fields">
                 <div class="field">
                     <label for="study">Study</label>
-                    <select id="study" class="ui dropdown" data-bind="value: study,
+                    <select id="study" class="ui dropdown" data-bind="value: studyObs,
                         options: studyOptions, optionsText: 'name', optionsValue: 'identifier'">
                     </select>
                 </div>
                 <div class="field">
                     <label for="environment">Environment</label>
-                    <select name="environment" id="environment" class="ui dropdown" data-bind="value: environment,
+                    <select name="environment" id="environment" class="ui dropdown" data-bind="value: environmentObs,
                         options: environmentOptions, optionsText: 'label', optionsValue: 'value'">
                     </select>
                 </div>
