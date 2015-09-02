@@ -65,6 +65,16 @@ function getInt(url) {
         dataType: "json"
     });
 }
+function deleteInt(url) {
+    console.debug("DELETE", url);
+    return $.ajax({
+        method: 'DELETE',
+        url: url,
+        headers: getHeaders(),
+        type: "application/json",
+        dataType: "json"
+    });
+}
 function makeSessionWaitingPromise(func) {
     var promise = new Promise(function(resolve, reject) {
         // 3rd law of JavaScript... when in doubt use another function
@@ -98,6 +108,11 @@ function get(path) {
 function post(path, body) {
     return makeSessionWaitingPromise(function() {
         return postInt(config.host[session.environment] + path, body);
+    });
+}
+function del(path) {
+    return makeSessionWaitingPromise(function() {
+        return deleteInt(config.host[session.environment] + path);
     });
 }
 
@@ -194,6 +209,9 @@ module.exports = {
     },
     updateSurvey: function(survey) {
         return post(config.survey + survey.guid + '/revisions/' + new Date(survey.createdOn).toISOString(), survey);
+    },
+    deleteSurvey: function(survey) {
+        return del(config.survey + survey.guid + '/revisions/' + new Date(survey.createdOn).toISOString());
     },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {

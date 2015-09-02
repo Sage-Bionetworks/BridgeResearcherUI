@@ -70,9 +70,12 @@ module.exports = {
      * @param event
      * @returns {Function}
      */
-    successHandler: function(vm, event) {
+    successHandler: function(vm, event, message) {
         return function(response) {
             event.target.classList.remove("loading");
+            if (message) {
+                vm.messageObs({text:message});
+            }
             return response;
         };
     },

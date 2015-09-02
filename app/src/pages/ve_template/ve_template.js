@@ -26,10 +26,9 @@ module.exports = function() {
 
         serverService.saveStudy(self.study)
             .then(function(response) {
-                self.messageObs({text:"Email saved."});
                 self.study.version = response.version;
             })
-            .then(utils.successHandler(vm, event))
+            .then(utils.successHandler(vm, event, "Email saved."))
             .catch(utils.failureHandler(vm, event));
     };
 };

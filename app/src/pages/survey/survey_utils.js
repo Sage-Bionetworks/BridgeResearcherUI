@@ -76,6 +76,16 @@ var ELEMENT_TEMPLATE = Object.freeze({
     'SurveyInfoScreen': {type:'SurveyInfoScreen', prompt:'', promptDetail:'', identifier:''},
     'SurveyQuestion': {type:'SurveyQuestion', fireEvent:false, 'uiHint':'', prompt:'', promptDetail:'', identifier:''}
 });
+var DATA_TYPE_OPTIONS = Object.freeze([
+    {label: 'String', value: 'string'},
+    {label: 'Boolean', value: 'boolean'},
+    {label: 'Date', value: 'date'},
+    {label: 'Date & Time', value: 'datetime'},
+    {label: 'Time', value: 'time'},
+    {label: 'Duration', value: 'duration'},
+    {label: 'Integer', value: 'integer'},
+    {label: 'Decimal', value: 'decimal'}
+]);
 var CONSTRAINTS_TEMPLATES = Object.freeze({
     'BooleanConstraints': {dataType:'boolean', rules:[]},
     'DateConstraints': {dataType:'date', rules:[], allowFuture:false, earliestValue:'', latestValue:'' },
@@ -200,7 +210,6 @@ module.exports = {
         if (elementType === "SurveyQuestion") {
             newEl.uiHint = UI_HINT_FOR_CONSTRAINTS[type];
             newEl.constraints = getConstraints(type);
-            delete newEl.constraints.uiHint;
         }
         return elementToObservables(newEl);
     },
@@ -258,7 +267,8 @@ module.exports = {
             vm.fireEventObs = params.element.fireEventObs;
             vm.uiHintOptions = SELECT_OPTIONS_BY_TYPE[params.element.constraints.type];
             vm.uiHintLabel = makeFinderByLabel(vm.uiHintOptions);
-
+            vm.dataTypeOptions = DATA_TYPE_OPTIONS;
+            vm.dataTypeLabel = makeFinderByLabel(vm.dataTypeOptions);
             vm.unitOptions = UNIT_OPTIONS;
             vm.unitLabel = makeFinderByLabel(UNIT_OPTIONS);
 

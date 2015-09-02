@@ -36,8 +36,8 @@ module.exports = function(params) {
             return serverService.publishSurvey(keys.guid, keys.createdOn).catch(utils.failureHandler(vm, event));
         }
         function save() {
-            var survey = self.marshaller(self);
-            return serverService.updateSurvey(survey).catch(utils.failureHandler(vm, event));
+            surveyUtils.observablesToSurvey(self, self.survey);
+            return serverService.updateSurvey(self.survey).catch(utils.failureHandler(vm, event));
         }
         function load(keys) {
             return serverService.getSurvey(keys.guid, keys.createdOn)
@@ -87,7 +87,7 @@ module.exports = function(params) {
             setTimeout(function() {
                 self.elementsObs.remove(element);
                 $element.remove();
-            },10);
+            },510); // waiting for animation to complete
         }
     };
 

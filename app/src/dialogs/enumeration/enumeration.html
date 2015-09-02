@@ -67,10 +67,9 @@
     </div>
     <div class="rules-actions" data-bind="visible: !publishedObs() && isActive('editor')">
         <div style="margin-bottom:1rem">
-            <div class="ui dropdown" data-bind="semantic: 'checkbox', click: toggleCopyObs">
-                <input type="checkbox" class="hidden" data-bind="checked: copyObs, disable: publishedObs"/>
-                <label>Update every instance of this list (in every question)</label>
-            </div>
+            <ui-checkbox params="checkedObs: copyToAllEnumsObs, disabledObs: publishedObs">
+                Update this list in every question where it is used
+            </ui-checkbox>
         </div>
         <button data-bind="click: saveList, disable: listObs().length === 0" class="ui primary button">Save</button>
         <button data-bind="click: cancel" class="ui button">Cancel</button>

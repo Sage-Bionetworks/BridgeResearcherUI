@@ -31,9 +31,8 @@ module.exports = function() {
         serverService.saveStudy(self.study)
             .then(function(response) {
                 self.study.version = response.version;
-                self.messageObs({text: "User attributes saved."});
             })
-            .then(utils.successHandler(self, event))
+            .then(utils.successHandler(self, event, "User attributes saved."))
             .catch(utils.failureHandler(vm, event));
     };
 

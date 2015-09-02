@@ -22,9 +22,8 @@ module.exports = function() {
         serverService.saveStudy(self.study)
             .then(function(response) {
                 self.study.version = response.version;
-                self.messageObs({text:"Password policy has been saved."});
             })
-            .then(utils.successHandler(self, event))
+            .then(utils.successHandler(self, event, "Password policy has been saved."))
             .catch(utils.failureHandler(self, event));
     };
 };

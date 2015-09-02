@@ -1,9 +1,10 @@
 <constraints-label params="title: 'Enumerated Value Constraints'"></constraints-label>
 <div class="element-content-constraints">
     <div>
-        <div>Allow other?</div>
+        <div>Data Type</div>
         <div>
-            <ui-checkbox params="checkedObs: allowOtherObs, disabledObs: publishedObs"></ui-checkbox>
+            <ui-select params="fieldObs: dataTypeObs, fieldLabel: dataTypeLabel,
+                publishedObs: publishedObs, optionsSrc: dataTypeOptions"></ui-select>
         </div>
     </div>
     <div>
@@ -14,9 +15,9 @@
         </div>
     </div>
     <div>
-        <div>Allow multiple?</div>
+        <div>Allow other?</div>
         <div>
-            <ui-checkbox params="checkedObs: allowMultipleObs, disabledObs: publishedObs"></ui-checkbox>
+            <ui-checkbox params="checkedObs: allowOtherObs, disabledObs: publishedObs"></ui-checkbox>
         </div>
     </div>
     <div>
@@ -26,17 +27,23 @@
         </div>
     </div>
     <div>
-        <div>Enumeration</div>
+        <div>Allow multiple?</div>
         <div>
-            <a href="#" data-bind="click: editEnum">
-                <span data-bind="text: enumerationObs().length"></span> options
-            </a>
+            <ui-checkbox params="checkedObs: allowMultipleObs, disabledObs: publishedObs"></ui-checkbox>
         </div>
     </div>
     <div>
         <div>Rules:</div>
         <div>
             <ui-rules params="rulesObs: rulesObs, elementsObs: elementsObs, publishedObs: publishedObs"></ui-rules>
+        </div>
+    </div>
+    <div>
+        <div>Enumeration</div>
+        <div>
+            <a href="#" data-bind="click: editEnum">
+                <span data-bind="text: enumerationObs().length"></span> options
+            </a>
         </div>
     </div>
 </div>

@@ -67,10 +67,7 @@ module.exports = function() {
 
         serverService.saveStudyConsent({documentContent: self.editor.getData()})
             .then(loadIntoEditor)
-            .then(function() {
-                self.messageObs({text:"Consent saved."});
-            })
-            .then(utils.successHandler(self, event))
+            .then(utils.successHandler(self, event, "Consent saved."))
             .catch(utils.failureHandler(self, event));
     };
 

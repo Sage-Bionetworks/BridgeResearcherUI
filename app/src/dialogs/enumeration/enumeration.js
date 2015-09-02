@@ -86,8 +86,8 @@ module.exports = function(params) {
     self.detailObs = ko.observable();
     self.valueObs = ko.observable();
 
-    // Should we copy edits over to all the same lists...
-    self.copyObs = ko.observable(true);
+    // Should we copy edits over to all the same lists.
+    self.copyToAllEnumsObs = ko.observable(true);
 
     var listsSource = new ListsSource(self.elementsObs(), self.element);
     self.allLists = ko.observableArray(listsSource.getAllLists());
@@ -100,9 +100,6 @@ module.exports = function(params) {
     };
     self.removeListItem = function(item) {
         self.listObs.remove(item);
-    };
-    self.toggleCopyObs = function() {
-        self.copyObs(!self.copyObs());
     };
     self.selectList = function(entry, event) {
         self.listObs(entry.enumeration);
@@ -138,7 +135,7 @@ module.exports = function(params) {
         var oldMD5 = entry.md5;
 
         copyEntry(self.element, entry);
-        if (self.copyObs()) {
+        if (self.copyToAllEnumsObs()) {
             self.elementsObs().forEach(function (element) {
                 var enumeration = getEnumeration(element);
                 if (enumeration && hash.MD5(enumeration) === oldMD5) {
@@ -146,8 +143,6 @@ module.exports = function(params) {
                 }
             });
         }
-        // Isn't this redunant?
-        // parent.enumerationObs(entry.enumeration);
         utils.closeDialog();
     };
     self.cancel = function() {

@@ -25,10 +25,21 @@ function filterOutRulesWithNoValues(rule) {
     return (rule.operator() === 'de' || rule.value());
 }
 
-function getIdentifiers(elementsArray) {
-    // The filter removes new elements that don't yet have an identifier.
+/**
+ * Create options for all elements after the current element in the survey, that have
+ * identifiers (new elements will not until the user adds the field).
+ * @param elementsArray
+ * @param startIdentifier
+ * @returns {*|Array}
+ */
+function getIdentifierOptions(elementsArray, startIdentifier) {
+    var startIdentifierFound = false;
     return elementsArray.filter(function(el) {
-        return !!el.identifierObs();
+        var valid = !!el.identifierObs() && startIdentifierFound;
+        if (el.identifierObs() === startIdentifier) {
+            startIdentifierFound = true;
+        }
+        return valid;
     }).map(function(el) {
         return {value: el.identifierObs(), label: el.identifierObs()};
     });
@@ -51,7 +62,7 @@ module.exports = function(params) {
     var con = params.element.constraints;
     self.rulesObs = ko.observableArray(con.rulesObs().map(createRule));
 
-    self.identifierOptions = getIdentifiers(self.elementsObs());
+    self.identifierOptions = getIdentifierOptions(self.elementsObs(), self.element.identifier);
     self.identifierLabel = utils.identity;
     self.operatorOptions = parent.operatorOptions;
     self.operatorLabel = parent.operatorLabel;

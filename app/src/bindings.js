@@ -17,21 +17,22 @@ ko.observableArray.fn.contains = function(value) {
     return underlyingArray.indexOf(value) > -1;
 };
 ko.bindingHandlers.semantic = {
-    init: function(element, valueAccessor) {
+    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
         var value = ko.unwrap(valueAccessor());
         if (value === 'checkbox') {
-            var input = $(element).children("input").get(0);
-            element.classList.add("ui");
-            element.classList.add("checkbox");
-            $(element).checkbox();
-            // This seems to be necessary to update knockout model.
-            $(element).on('change', function() {
-                var context = ko.contextFor(input);
-                context.$component.checkedObs(input.checked);
+            element.className += " ui checkbox";
+            var observer = allBindings().checkboxObs;
+            var input = $(element).children("input[type=checkbox]").get(0);
+            $(element).on('click', function() {
+                observer(!observer());
+                if (observer()) {
+                    element.classList.add("checked");
+                } else {
+                    element.classList.remove("checked");
+                }
             });
         } else if (value === 'dropdown') {
-            element.classList.add("ui");
-            element.classList.add("dropdown");
+            element.className += " ui dropdown";
             $(element).dropdown();
         }
     }
