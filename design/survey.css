@@ -40,6 +40,11 @@
     .element-content {
         flex: 1;
     }
+        .element-content-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin: .4rem 0;
+        }
         .element-content-prompt {
             font-size: 1.3rem;
             font-weight: bold;

@@ -1,9 +1,17 @@
+<h3>Email Templates</h3>
+
+<form-message params="messageObs: messageObs"></form-message>
+
+<div class="ui secondary larger pointing menu">
+    <a class="active item">
+        <i class="file outline icon"></i> Verfiy Email
+    </a>
+    <a href="#/reset_password_template" class="item">
+        <i class="history icon"></i> Reset Password
+    </a>
+</div>
 <div class="ui grid">
     <div class="ten wide column">
-        <h3>Verify Email Template</h3>
-
-        <form-message params="messageObs: messageObs"></form-message>
-
         <form class="ui form">
             <div class="field">
                 <label>Subject</label>
@@ -24,23 +32,17 @@
 
             <p>There are other values available: </p>
 
-            <style>
-                .ui.table td { vertical-align: top; padding: 2px 3px; }
-            </style>
-            <table class="ui table">
-                <tr>
-                    <td>${studyName}</td>
-                    <td>the name you entered for your study</td>
-                </tr>
-                <tr>
-                    <td>${sponsorName}</td>
-                    <td>the name you entered for the group sponsoring the study</td>
-                </tr>
-                <tr>
-                    <td>${supportEmail}</td>
-                    <td>your support email address</td>
-                </tr>
-            </table>
+            <dl>
+                <dt>${studyName}</dt>
+                <dd>the name you entered for your study</dd>
+
+                <dt>${sponsorName}</dt>
+                <dd>the name you entered for the group sponsoring the study</dd>
+
+                <dt>${supportEmail}</dt>
+                <dd>your support email address</dd>
+            </dl>
         </div>
     </div>
 </div>
+

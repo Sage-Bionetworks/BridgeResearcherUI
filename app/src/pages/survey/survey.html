@@ -2,6 +2,10 @@
     <a href="#/surveys" class="section">Surveys</a>
 </div>
 
+<div class="ui warning message" data-bind="visible: publishedObs">
+    <p>You are viewing a published revision of this survey. It cannot be edited. </p>
+</div>
+
 <h3 data-bind="text: nameObs"></h3>
 
 <form-message params="messageObs: messageObs"></form-message>
@@ -31,9 +35,6 @@
 </div>
 
 <div class="button-container">
-    <div class="ui warning message" data-bind="visible: publishedObs">
-        <p>You are viewing a published revision of this survey. It cannot be edited. </p>
-    </div>
     <button class="ui primary button" data-bind="visible: !publishedObs(), click: save">Save</button>
     <button class="ui primary button" data-bind="visible: !publishedObs(), click: publish">Publish</button>
 </div>
