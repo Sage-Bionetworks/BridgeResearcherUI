@@ -51,6 +51,12 @@
     .constraints-label {
         margin-bottom: .5rem!important;
     }
+    .element-content-title {
+        font-size: 1.3rem;
+        font-weight: bold;
+        padding-left: 1rem;
+        margin-bottom: .5rem;
+    }
     .element-content-prompt {
         font-size: 1.3rem;
         font-weight: bold;
@@ -109,9 +115,6 @@
     .rules-actions {
         padding: 1.5rem 2rem;
     }
-.hidden {
-    visibility: hidden;
-}
 .element-enum {
     margin: .25rem 0;
     cursor: pointer;

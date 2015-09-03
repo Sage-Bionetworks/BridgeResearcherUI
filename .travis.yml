@@ -2,7 +2,7 @@ language: node_js
 node_js:
     0.12.3
 script:
-    webpack -p
+    webpack
     mocha --recursive
 deploy:
     - provider: s3
