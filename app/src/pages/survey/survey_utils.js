@@ -2,6 +2,7 @@ var utils = require('../../utils');
 var ko = require('knockout');
 
 var UNIT_OPTIONS = Object.freeze([
+    {value: null, label: '<none>'},
     {value: 'centimeters', label: 'Centimeters'},
     {value: 'cubic_centimeters', label: 'Cubic Centimeters'},
     {value: 'cubic_meters', label: 'Cubic Meters'},
@@ -22,6 +23,7 @@ var UNIT_OPTIONS = Object.freeze([
     {value: 'yards', label: 'Yards'}
 ]);
 var DURATION_OPTIONS = Object.freeze([
+    {value: null, label: ''},
     {value: 'seconds', label: 'Seconds'},
     {value: 'minutes', label: 'Minutes'},
     {value: 'hours', label: 'Hours'},
@@ -110,7 +112,7 @@ var UI_HINT_FOR_CONSTRAINTS = Object.freeze({
 });
 
 var SURVEY_FIELDS = ['name','createdOn','guid','identifier','published','version'];
-var ELEMENT_FIELDS = ['prompt','promptDetail','uiHint','identifier','fireEvent'];
+var ELEMENT_FIELDS = ['prompt','promptDetail', 'title', 'uiHint','identifier','fireEvent'];
 
 function getConstraints(type) {
     var con = {type: type};

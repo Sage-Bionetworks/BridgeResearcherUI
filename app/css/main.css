@@ -55,9 +55,6 @@ footer p {
 .ui.field .ui.button {
     margin-top: .5rem ! important;
 }
-.ui.dimmer {
-    background-color: rgba(0,0,0,.6) ! important;
-}
 .ui.breadcrumb {
     margin: 0;
 }
@@ -73,7 +70,10 @@ footer p {
 .pointing {
     cursor: pointer;
 }
-
+.loading.status {
+    margin: 2rem 0;
+    font-size: larger;
+}
 .button-container {
     margin: 0 0 1rem 0;
 }

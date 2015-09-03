@@ -1,7 +1,7 @@
 var $ = require('jquery');
 var ko = require('knockout');
 
-var GENERIC_ERROR = "Some pretty boring error happened. We don't know what exactly. Please try again.";
+var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
 
 module.exports = function(params) {
     var self = this;
