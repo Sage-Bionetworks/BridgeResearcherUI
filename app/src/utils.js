@@ -198,6 +198,8 @@ module.exports = {
      */
     formatDate: function(date) {
         if (date) {
+            // TODO: it looks like html5 date control is submitting a time portion, it should not
+            date = date.replace('T00:00:00.000Z','');
             // Get the declared offset of the local time on the date in question (accounts
             // for daylight savings at right time of year)
             var offset = new Date(date).toString().match(/GMT([^\s]*)/)[1];

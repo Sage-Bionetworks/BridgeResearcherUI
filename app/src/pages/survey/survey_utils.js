@@ -121,6 +121,13 @@ function getConstraints(type) {
 }
 
 function makeObservable(obj, field) {
+    // TODO: clean up after BRIDGE-779. This fixes date constraints, but breaks datetime constraints.
+    if (field === "earliestValue" || field === "latestValue") {
+        console.log(field, obj[field]);
+        var obs = ko.observable();
+        obs(obj[field].replace("T00:00:00.000Z",""));
+        return obs;
+    }
     return (field === "rules" || field === "enumeration") ? ko.observableArray(obj[field]) : ko.observable(obj[field]);
 }
 
@@ -251,6 +258,7 @@ module.exports = {
         vm.element = params.element;
         vm.elementsObs = params.elementsObs;
         vm.formatDate = utils.formatDate;
+        vm.formatDateTime = utils.formatDateTime;
 
         if (params.element.type === "SurveyQuestion") {
             vm.hasRules = function() {
