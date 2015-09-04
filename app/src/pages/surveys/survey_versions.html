@@ -15,33 +15,53 @@
     </a>
 </div>
 
-<div class="button-container">
-    <button class="ui primary button" data-bind="visible: showVersionObs, click: version">New Version</button>
+<div class="ui grid">
+    <div class="ten wide column">
+        <div class="button-container">
+            <button class="ui primary button" data-bind="disable: !oneChecked(), click: version">New Version</button>
+            <button class="ui red button" data-bind="disable: !oneDeletableChecked(), click: deleteSurveys">Delete</button>
+        </div>
+
+        <div data-bind="visible: itemsObs().length === 0">Loading...</div>
+        <table class="ui table" data-bind="visible: itemsObs().length > 0">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Version Date</th>
+                <th>Last Modified</th>
+                <th>&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody data-bind="foreach: itemsObs">
+            <tr data-bind="css: { positive: $data.published }">
+                <td>
+                    <ui-checkbox params="checkedObs: $data.checkedObs, disabledObs: $parent.publishedObs"></ui-checkbox>
+                </td>
+                <td width="100%">
+                    <a href="#" data-bind="attr: {href: '#/survey/'+$data.guid+'/'+$data.createdOn},
+                        text: $parent.formatDateTime($data.createdOn)"></a>
+                </td>
+                <td data-bind="text: $parent.formatDateTime($data.modifiedOn)">
+                </td>
+                <td>
+                    <div data-bind="visible: $data.published" style="text-align: right">
+                        <i class="checkmark icon"></i> Published
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="six wide column">
+        <div class="ui message">
+            <p>Select a single version in order to copy it to create a new version. </p>
+
+            <p>You may delete any version, but once published, you cannot delete all published versions. One published
+                version must remain to fulfill any schedules that references the published version of this survey. </p>
+
+            <p><b>WARNING: If you have created a schedule that points to a specific version of a survey, you can delete
+                that version here; this will break the schedule.</b> </p>
+        </div>
+    </div>
 </div>
 
-<div data-bind="visible: itemsObs().length === 0">Loading...</div>
-<table class="ui table" data-bind="visible: itemsObs().length > 0">
-    <thead>
-        <tr>
-            <th>Version Date</th>
-            <th>Last Modified</th>
-            <th>&nbsp;</th>
-        </tr>
-    </thead>
-    <tbody data-bind="foreach: itemsObs">
-    <tr data-bind="css: { positive: $data.published }">
-        <td width="100%">
-            <a href="#" data-bind="attr: {href: '#/survey/'+$data.guid+'/'+$data.createdOn},
-                text: $parent.formatDateTime($data.createdOn)"></a>
-        </td>
-        <td data-bind="text: $parent.formatDateTime($data.modifiedOn)">
-
-        </td>
-        <td>
-            <div data-bind="visible: $data.published" style="text-align: right">
-                <i class="checkmark icon"></i> Published
-            </div>
-        </td>
-    </tr>
-    </tbody>
-</table>
