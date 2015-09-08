@@ -5,10 +5,24 @@
     width: 100%;
     display: flex;
     flex-direction: row;
-    margin-bottom: 1rem;
     overflow: hidden;
     transition: height .5s ease;
+
+    /* container */
+    border: 1px solid #e5e5e5;
+    border-radius: 6px;
+    -webkit-user-select: none;
+    user-select: none;
 }
+    .element-draghandle {
+        width: 1rem;
+        align-self: stretch;
+        background: #f4f4f4;
+        background-image: radial-gradient(#e5e5e5 1px, transparent 0), radial-gradient(#ccc 1px, transparent 0);
+        background-size: 10px 10px;
+        background-position: 0 0, 5px 5px;
+        cursor: ns-resize;
+    }
     .element-callout, .element-content {
     }
     .element-callout {

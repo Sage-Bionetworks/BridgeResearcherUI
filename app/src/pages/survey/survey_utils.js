@@ -121,12 +121,11 @@ function getConstraints(type) {
 }
 
 function makeObservable(obj, field) {
-    // TODO: clean up after BRIDGE-779. This fixes date constraints, but breaks datetime constraints.
-    if (field === "earliestValue" || field === "latestValue") {
-        console.log(field, obj[field]);
-        var obs = ko.observable();
-        obs(obj[field].replace("T00:00:00.000Z",""));
-        return obs;
+    // Strip out time zone, as this control is local time only. We may change it as well on the server
+    // to use LocalDateTime, that's pending.
+    if (obj.dataType === "datetime" && (field === "earliestValue" || field === "latestValue")) {
+        var matches = obj[field].match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/);
+        return ko.observable(matches.length ? matches[0] : "");
     }
     return (field === "rules" || field === "enumeration") ? ko.observableArray(obj[field]) : ko.observable(obj[field]);
 }

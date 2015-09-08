@@ -104,7 +104,7 @@ module.exports = function(params) {
         var _item = null;
         dragula([elementsZoneEl], {
             moves: function (el, container, handle) {
-                return (handle.className === 'ui gray left corner label');
+                return (handle.className === 'element-draghandle');
             }
         }).on('drop', function(el, zone) {
             // This utility handles node lists
