@@ -62,7 +62,7 @@
     } --><!-- /ko -->
 </div>
 <div class="survey elementZone" data-bind="foreach: elementsObs">
-    <div class="ui raised segment element" style="position: relative" data-bind="component: {
+    <div class="element" data-bind="component: {
         name: $data.type,
         params: { element: $data, elementsObs: $parent.elementsObs, indexObs: $index, publishedObs: $parent.publishedObs }
     }"></div>
