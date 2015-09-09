@@ -51,6 +51,12 @@ var RootViewModel = function() {
             self.mainParams({guid: guid, createdOn: (createdOn === "recent") ? null : createdOn});
         };
     };
+    self.schemaRoute = function(name) {
+        return function(schemaId, revision) {
+            self.mainPage(name);
+            self.mainParams({schemaId: schemaId, revision: (revision) ? revision : null});
+        };
+    };
 
     self.isResearcher = ko.computed(function() {
         return self.roles.contains('researcher');
@@ -104,6 +110,9 @@ router.on('/survey/:guid/:createdOn', root.surveyRoute('survey'));
 router.on('/survey_versions/:guid', root.surveyRoute('survey_versions'));
 router.on('/surveys', root.routeTo('surveys'));
 router.on('/schemas', root.routeTo('schemas'));
+router.on('/schemas/:schemaId', root.schemaRoute('schema'));
+router.on('/schemas/:schemaId/versions', root.schemaRoute('schema_versions'));
+router.on('/schemas/:schemaId/:revision', root.schemaRoute('schema'));
 router.on('/schedules', root.routeTo('schedules'));
 router.configure({notfound: root.routeTo('not_found')});
 router.init();

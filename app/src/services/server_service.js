@@ -214,6 +214,24 @@ module.exports = {
     deleteSurvey: function(survey) {
         return del(config.survey + survey.guid + '/revisions/' + new Date(survey.createdOn).toISOString());
     },
+    getAllUploadSchemas: function() {
+        return get(config.schemas);
+    },
+    getMostRecentUploadSchema: function(identifier) {
+        return get(config.schemas + "/" + identifier);
+    },
+    getUploadSchema: function(identifier, revision) {
+        return get(config.schemas + "/" + identifier + "/revisions/" + revision);
+    },
+    updateUploadSchema: function(schema) {
+        return post(config.schemas, schema);
+    },
+    deleteSchemaRevision: function(schema) {
+        return del(config.schemas + "/" + identifier + "/revisions/" + revision);
+    },
+    deleteAllSchemaRevisions: function(schema) {
+        return del(config.schemas + "/" + identifier);
+    },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {
             throw Error("Session listener not a function");

@@ -1,0 +1,56 @@
+<div class="ui breadcrumb">
+    <a href="#/schemas" class="section">Upload Schemas</a>
+</div>
+
+<h3>
+    <span data-bind="text: nameObs"></span> (revision <span data-bind="text: revisionObs"></span>)
+</h3>
+
+<form-message params="messageObs: messageObs"></form-message>
+
+<div class="ui secondary larger pointing menu">
+    <a class="active item">
+        <i class="file outline icon"></i> Editor
+    </a>
+    <a href="#" data-bind="attr: {href: '#/schemas/'+schemaIdObs()+'/versions'}, visible: !!schemaIdObs()" class="item">
+        <i class="history icon"></i> History
+    </a>
+</div>
+
+<div class="button-container">
+    <button class="ui primary button" data-bind="visible: !publishedObs(), click: save">Save</button>
+</div>
+
+<form class="ui form">
+    <div class="two fields">
+        <div class="required field">
+            <label>Name</label>
+            <ui-text params="fieldObs: nameObs, publishedObs: publishedObs"></ui-text>
+        </div>
+        <div class="field">
+            <label>Identifier</label>
+            <ui-text params="fieldObs: schemaIdObs, publishedObs: publishedObs"></ui-text>
+        </div>
+    </div>
+</form>
+
+<h3 style="margin:0">Field Definitions</h3>
+
+<div data-bind="visible: itemsObs().length === 0">
+    <p>There are currently no field definitions in this upload schema.</p>
+    <!-- ko component: {
+        name: "add-control",
+        params: { itemsObs: itemsObs, index: 0, publishedObs: publishedObs }
+    } --><!-- /ko -->
+</div>
+<div class="survey elementZone" data-bind="foreach: itemsObs">
+    <div class="element" data-bind="component: {
+        name: 'field_definition',
+        params: { field: $data, itemsObs: $parent.itemsObs, indexObs: $index, publishedObs: $parent.publishedObs }
+    }"></div>
+    <!-- ko component: {
+        name: "add-control",
+        params: { itemsObs: $parent.itemsObs, index: $index, publishedObs: $parent.publishedObs }
+    } --><!-- /ko -->
+</div>
+

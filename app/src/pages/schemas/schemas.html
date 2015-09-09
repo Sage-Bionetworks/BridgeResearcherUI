@@ -1,1 +1,26 @@
-<div>Schemas TBD</div>
+<h3>Upload Schemas</h3>
+
+<form-message params="messageObs: messageObs"></form-message>
+
+<div class="button-container">
+    <a href="#/schemas/new" class="ui primary button">New Upload Schema</a>
+</div>
+<div class="loading status" data-bind="visible: itemsObs().length === 0">Loading...</div>
+<table class="ui compact table" data-bind="visible: itemsObs().length > 0">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Latest Revision</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: itemsObs">
+        <tr data-bind="css: { positive: $data.active }">
+            <td>
+                <a href="#" data-bind="attr: {'href': '#/schemas/'+$data.schemaId}, text: $data.name"></a>
+            </td>
+            <td data-bind="text: $data.revision"></td>
+            <td data-bind="text: $parent.schemaTypeLabel($data.schemaType)"></td>
+        </tr>
+    </tbody>
+</table>

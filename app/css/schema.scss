@@ -1,0 +1,27 @@
+.element-content-single-row-constraints {
+    @include flex-box(row);
+}
+    .element-content-single-row-constraints > div { /* "row" element */
+        @include flex-box(row);
+        @include align-items(baseline);
+    }
+        .element-content-single-row-constraints > div > div {
+            padding: 0 .25rem;
+        }
+        .element-content-single-row-constraints input[type=text] {
+            font-weight: bold;
+        }
+        .element-content-single-row-constraints ui-checkbox {
+            margin-left: 1rem;
+        }
+.element-content-single-row-constraints select.ui.dropdown {
+  height: auto;
+}
+.add-control {
+    color: #009fda;
+    cursor: pointer;
+    position: relative;
+    height: 15px;
+    width: 100%;
+    margin: 1rem 0;
+}
