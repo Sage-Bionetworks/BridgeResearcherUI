@@ -13,6 +13,7 @@ var EventEmitter = require('../events');
 var optionsService = require('../services/options_service');
 var config = require('../config');
 var $ = require('jquery');
+var Promise = require('es6-promise').Promise;
 
 var SESSION_KEY = 'session';
 var SESSION_STARTED_EVENT_KEY = 'sessionStarted';

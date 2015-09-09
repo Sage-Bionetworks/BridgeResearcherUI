@@ -1,4 +1,4 @@
-<div class="element-draghandle">
+<div class="element-draghandle" data-bind="visible: !publishedObs()">
 </div>
 <div class="element-content">
     <ui-textarea params="fieldObs: titleObs, publishedObs: publishedObs, className: 'element-content-title', placeholder: 'Title'"></ui-textarea>
@@ -7,7 +7,7 @@
 </div>
 <div class="element-callout">
     <div>
-        <a class="ui huge green circular label"><span data-bind="text: indexObs()+1"></span></a>
+        <span class="ui huge green circular label" data-bind="text: indexObs()+1"></span>
     </div>
     <div class="element-callout-identifier-box">
         <div class="element-callout-identifier" data-bind="visible: publishedObs(), text: identifierObs"></div>

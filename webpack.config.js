@@ -7,11 +7,11 @@ module.exports = {
     },
     module: {
         loaders: [
-            { test: /\.css$/, loader: "style!css" },
+            { test: /\.(scss|css)$/, loader: "style!css!sass" },
             { test: /\.html$/, loader: "html" }
         ]
     },
     resolve: {
-        extensions: ['', '.css', '.js', '.html']
+        extensions: ['', '.css', '.js', '.html','.scss']
     }
 }

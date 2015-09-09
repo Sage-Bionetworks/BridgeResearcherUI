@@ -125,7 +125,7 @@ function makeObservable(obj, field) {
     // to use LocalDateTime, that's pending.
     if (obj.dataType === "datetime" && (field === "earliestValue" || field === "latestValue")) {
         var matches = obj[field].match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/);
-        return ko.observable(matches.length ? matches[0] : "");
+        return ko.observable(matches && matches.length ? matches[0] : "");
     }
     return (field === "rules" || field === "enumeration") ? ko.observableArray(obj[field]) : ko.observable(obj[field]);
 }
