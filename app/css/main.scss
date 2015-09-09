@@ -1,50 +1,46 @@
+@import "./lib.scss";
+@import "./forms.scss";
+@import "./survey.scss";
+
 /* HTML TAGS */
 body {
+    @include flex-box(column);
     background-color: white;
-    display: -webkit-flex;
-    display: flex;
     min-height: 100vh;
-    -webkit-flex-direction: column;
-    flex-direction: column;
 }
 section {
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex: 1;
-    flex: 1;
+    @include flex-box(row);
+    @include flex(1);
 }
 main {
-    -webkit-flex: 1;
-    flex: 1;
+    @include flex(1);
     padding: 2rem 1.5rem 1rem 1.5rem;
     overflow-y: scroll;
 }
 nav {
-    -webkit-flex: 0 0 18em;
-    flex: 0 0 18em;
-    -webkit-order: -1;
-    order: -1;
+    @include flex(0 0 18em);
+    @include order(-1);
     padding:  2rem 1rem ! important;
 }
 header {
-    display: -webkit-flex;
-    display: flex;
+    @include flex-box(row);
+    @include align-items(center);
+    @include justify-content(space-between);
     padding: 1rem 1rem 0 1.5rem;
-    -webkit-align-items: center;
-    align-items: center;
-    -webkit-justify-content: space-between;
-    justify-content: space-between;
-    flex-direction: row;
     background-color: #5bbd72;
     box-shadow: 0px 2px 3px silver;
     margin-bottom: 4px;
 }
-header .content, header a {
-    color: white;
-}
-header .sub.header {
-    color: lightgoldenrodyellow ! important;
-}
+    header .content, header a {
+        color: white;
+    }
+    header .sub.header {
+        color: lightgoldenrodyellow ! important;
+    }
+    .header-content-title {
+        font-variant: small-caps;
+        letter-spacing: 2px;
+    }
 footer p {
     border-top: 1px solid #e5e5e5;
     padding: .5rem;
@@ -80,7 +76,6 @@ footer p {
 
 /* TABLES */
 td {
-    white-space: nowrap;
+    /*you just can't do this everywhere like this */
+    /*white-space: nowrap;*/
 }
-@import "forms.css";
-@import "survey.css";

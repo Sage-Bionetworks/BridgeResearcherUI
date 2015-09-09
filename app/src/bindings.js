@@ -111,18 +111,21 @@ ko.bindingHandlers.flipper = {
         var obj = ko.unwrap(valueAccessor());
         element.addEventListener('click', function(event) {
             clearTimers();
+            element.classList.add('insertion-control-flipped');/*
             showTimer = setTimeout(function() {
-                element.classList.add('insertion-control-flipped');
-            }, SHOW_DELAY);
+
+            }, SHOW_DELAY);*/
             if (viewModel[obj.mouseover]) {
                 viewModel[obj.mouseover](element);
             }
         }, false);
         element.addEventListener('mouseover', function(event) {
             clearTimers();
+            /*
             hideTimer = setTimeout(function() {
                 element.classList.remove('insertion-control-flipped');
             }, HIDE_DELAY);
+            */
         }, false);
         element.addEventListener('mouseout', function(event) {
             clearTimers();
@@ -145,3 +148,48 @@ ko.bindingHandlers.flipper = {
         }, false);
     }
 };
+/*
+function getCaretPosition(field) {
+    var pos = 0;
+
+    if (document.selection) {
+        field.focus();
+        var sel = document.selection.createRange();
+        sel.moveStart ('character', -field.value.length);
+        pos = sel.text.length;
+    } else if (field.selectionStart || field.selectionStart == '0') {
+        pos = field.selectionStart;
+    }
+    return (pos);
+}
+
+var DATE_PATTERN = [/\d/,/\d/,/\d/,/\d/,/-/,/\d/,/\d/,/-/,/\d/,/\d/];
+var DATETIME_PATTERN = DATE_PATTERN.concat([/\s/,/\d/,/\d/,/\:/,/\d/,/\d/,/\s/,/[apAP]/,/[mM]/]);
+
+function patternCreator(element, pattern) {
+    return function(event) {
+        if (!event.altKey && !event.metaKey) {
+            var ch = String.fromCharCode(event.keyCode);
+            var string = element.value + ch;
+            var subPattern = pattern[string.length-1];
+            if (string.length > pattern.length || !subPattern.test(ch)) {
+                event.preventDefault();
+            }
+        }
+    };
+};
+ko.bindingHandlers.date = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        if (element.type === "text") {
+            element.addEventListener("keypress", patternCreator(element, DATE_PATTERN), false);
+        }
+    }
+};
+ko.bindingHandlers.datetime = {
+    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        if (element.type === "text") {
+            element.addEventListener("keypress", patternCreator(element, DATETIME_PATTERN), false);
+        }
+    }
+};
+*/

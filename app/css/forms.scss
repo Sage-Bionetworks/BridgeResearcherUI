@@ -5,3 +5,8 @@
     /* display: block; */
     width: 100%;
 }
+.require::after {
+    margin: -.2em 0 0 .2em;
+    content: '*';
+    color: #d95c5c;
+}

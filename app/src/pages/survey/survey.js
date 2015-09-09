@@ -14,6 +14,7 @@ module.exports = function(params) {
     surveyUtils.initSurveyVM(self);
 
     function loadVM(survey) {
+        console.log("load", survey);
         self.survey = survey;
         surveyUtils.surveyToObservables(self, survey);
         return survey.createdOn;
@@ -83,7 +84,8 @@ module.exports = function(params) {
         var id = element.identifierObs() || "<none>";
         if (confirm("You are about to delete question '"+id+"'.\n\n Are you sure?")) {
             var $element = $(event.target).closest(".element");
-            $element.height($element.height()).height(0);
+
+            $element.css("max-height","0px");
             setTimeout(function() {
                 self.elementsObs.remove(element);
                 $element.remove();
@@ -102,23 +104,24 @@ module.exports = function(params) {
     var elementsZoneEl = document.querySelector(".elementZone");
     if (!self.publishedObs()) {
         var _item = null;
+
         dragula([elementsZoneEl], {
             moves: function (el, container, handle) {
                 return (handle.className === 'element-draghandle');
             }
         }).on('drop', function(el, zone) {
+            var elements = document.querySelectorAll(".elementZone .element");
             // This utility handles node lists
-            var index = ko.utils.arrayIndexOf(el.parentNode.children, el);
+            var index = ko.utils.arrayIndexOf(elements, el);
             var data = ko.contextFor(el).$data;
             self.elementsObs.remove(data);
             self.elementsObs.splice(index,0,data);
-        }).on('cloned', function(mirror, item, type) {
-            _item = item;
-        }).on('drop', function() {
             if (_item) {
                 _item.parentNode.removeChild(_item);
                 _item = null;
             }
+        }).on('cloned', function(mirror, item, type) {
+            _item = item;
         });
     }
 

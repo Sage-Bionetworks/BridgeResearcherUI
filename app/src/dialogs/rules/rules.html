@@ -19,7 +19,7 @@
                             publishedObs: $parent.publishedObs, optionsSrc: $parent.operatorOptions"></ui-select>
                 </div>
                 <div class="rules-table-rule-cell">
-                    <div data-bind="css:{hidden: $data.operator() === 'de'}">
+                    <div data-bind="visible: $data.operator() !== 'de'">
                         <ui-text params="fieldObs: $data.value, publishedObs: $parent.publishedObs"></ui-text>
                     </div>
                 </div>
