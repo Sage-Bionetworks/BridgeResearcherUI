@@ -12,7 +12,7 @@ module.exports = {
     module: {
         loaders: [
             { test: /\.(scss|css)$/, loader: "style!css!sass" },
-            { test: /\.html$/, loader: "html" }
+            { test: /\.html$/, loader: "html?removeComments=false" }
         ]
     },
     resolve: {
