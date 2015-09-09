@@ -14,6 +14,7 @@ module.exports = function(params) {
     surveyUtils.initSurveyVM(self);
 
     function loadVM(survey) {
+        console.log("load", survey);
         self.survey = survey;
         surveyUtils.surveyToObservables(self, survey);
         return survey.createdOn;

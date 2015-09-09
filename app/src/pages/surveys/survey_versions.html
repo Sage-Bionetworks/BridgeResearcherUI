@@ -27,7 +27,7 @@
             <thead>
             <tr>
                 <th></th>
-                <th>Version Date</th>
+                <th>Name</th>
                 <th>Last Modified</th>
                 <th>&nbsp;</th>
             </tr>
@@ -37,9 +37,9 @@
                 <td>
                     <ui-checkbox params="checkedObs: $data.checkedObs, disabledObs: $parent.publishedObs"></ui-checkbox>
                 </td>
-                <td width="100%">
+                <td>
                     <a href="#" data-bind="attr: {href: '#/survey/'+$data.guid+'/'+$data.createdOn},
-                        text: $parent.formatDateTime($data.createdOn)"></a>
+                        text: $data.name"></a><br/>Created <span data-bind="text:$parent.formatDateTime($data.createdOn)"></span>
                 </td>
                 <td data-bind="text: $parent.formatDateTime($data.modifiedOn)">
                 </td>

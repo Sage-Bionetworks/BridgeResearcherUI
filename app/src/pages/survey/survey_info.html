@@ -12,7 +12,7 @@
     <div class="element-callout-identifier-box">
         <div class="element-callout-identifier" data-bind="visible: publishedObs(), text: identifierObs"></div>
         <input type="text" class="editor element-callout-identifier" data-bind="visible: !publishedObs(), textInput: identifierObs"/>
-        <div class="element-callout-identifier-label">Identifier</div>
+        <div class="require element-callout-identifier-label">Identifier</div>
     </div>
     <div class="element-callout-delete">
         <div data-bind="click: $parents[1].deleteElement, visible: !publishedObs()"><a>Delete<i class="close icon"></i></a></div>

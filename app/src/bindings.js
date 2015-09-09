@@ -111,18 +111,21 @@ ko.bindingHandlers.flipper = {
         var obj = ko.unwrap(valueAccessor());
         element.addEventListener('click', function(event) {
             clearTimers();
+            element.classList.add('insertion-control-flipped');/*
             showTimer = setTimeout(function() {
-                element.classList.add('insertion-control-flipped');
-            }, SHOW_DELAY);
+
+            }, SHOW_DELAY);*/
             if (viewModel[obj.mouseover]) {
                 viewModel[obj.mouseover](element);
             }
         }, false);
         element.addEventListener('mouseover', function(event) {
             clearTimers();
+            /*
             hideTimer = setTimeout(function() {
                 element.classList.remove('insertion-control-flipped');
             }, HIDE_DELAY);
+            */
         }, false);
         element.addEventListener('mouseout', function(event) {
             clearTimers();

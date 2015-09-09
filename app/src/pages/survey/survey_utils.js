@@ -23,7 +23,7 @@ var UNIT_OPTIONS = Object.freeze([
     {value: 'yards', label: 'Yards'}
 ]);
 var DURATION_OPTIONS = Object.freeze([
-    {value: null, label: ''},
+    {value: null, label: '<none>'},
     {value: 'seconds', label: 'Seconds'},
     {value: 'minutes', label: 'Minutes'},
     {value: 'hours', label: 'Hours'},
@@ -92,7 +92,7 @@ var CONSTRAINTS_TEMPLATES = Object.freeze({
     'BooleanConstraints': {dataType:'boolean', rules:[]},
     'DateConstraints': {dataType:'date', rules:[], allowFuture:false, earliestValue:'', latestValue:'' },
     'DateTimeConstraints': {dataType:'datetime', rules:[], allowFuture:false, earliestValue:'', latestValue:'' },
-    'DurationConstraints': {dataType:'duration', rules:[]},
+    'DurationConstraints': {dataType:'duration', rules:[], minValue:0, maxValue:0, unit: '', step:1.0},
     'TimeConstraints': {dataType:'time', rules:[]},
     'IntegerConstraints': {dataType:'integer', rules:[], minValue:0, maxValue:255, unit: '', step:1.0},
     'DecimalConstraints': {dataType:'decimal', rules: [], minValue:0, maxValue:255, unit: '', step:1.0},
@@ -280,6 +280,9 @@ module.exports = {
             vm.dataTypeLabel = makeFinderByLabel(vm.dataTypeOptions);
             vm.unitOptions = UNIT_OPTIONS;
             vm.unitLabel = makeFinderByLabel(UNIT_OPTIONS);
+
+            vm.durationOptions = DURATION_OPTIONS;
+            vm.durationLabel = makeFinderByLabel(DURATION_OPTIONS);
 
             vm.operatorOptions = OPERATOR_OPTIONS;
             vm.operatorLabel = makeFinderByLabel(OPERATOR_OPTIONS);

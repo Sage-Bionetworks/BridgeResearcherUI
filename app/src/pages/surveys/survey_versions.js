@@ -21,6 +21,10 @@ function makeRemoveSurveysFromTable(vm, deletables) {
         });
     };
 }
+function notAllPublishedChecked(countPublished, countPublishedChecked) {
+    return ((countPublished === 0 && countPublishedChecked == 0) ||
+            (countPublished !== countPublishedChecked));
+}
 
 module.exports = function(keys) {
     var self = this;
@@ -49,14 +53,14 @@ module.exports = function(keys) {
     // checked published items, and make sure they are not the same and not 1.
     self.oneDeletableChecked = function() {
         var countChecked = 0;
-        var countPublished = 0;
-        var countPublishedChecked = 0;
+        var countPub = 0;
+        var countPubChecked = 0;
         self.itemsObs().forEach(function(item) {
             countChecked += (item.checkedObs()) ? 1 : 0;
-            countPublished += (item.published) ? 1 : 0;
-            countPublishedChecked += (item.checkedObs() && item.published) ? 1 : 0;
+            countPub += (item.published) ? 1 : 0;
+            countPubChecked += (item.checkedObs() && item.published) ? 1 : 0;
         });
-        return (countPublished !== countPublishedChecked && countChecked > 0);
+        return (notAllPublishedChecked(countPub, countPubChecked) && countChecked > 0);
     }
     self.oneChecked = function () {
         return self.itemsObs().reduce(function(count, item) {
