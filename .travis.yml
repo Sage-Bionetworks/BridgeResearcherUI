@@ -3,7 +3,6 @@ node_js:
     0.12.3
 script:
     webpack -p
-    gzip --best --stdout app/dist/bundle.js > app/dist/bundle.js.gz
     mocha --recursive
 deploy:
     - provider: s3
