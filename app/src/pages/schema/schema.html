@@ -2,9 +2,12 @@
     <a href="#/schemas" class="section">Upload Schemas</a>
 </div>
 
-<h3>
-    <span data-bind="text: nameObs"></span> (revision <span data-bind="text: revisionObs"></span>)
-</h3>
+<div class="ui warning message" data-bind="visible: publishedObs">
+    <p>You are viewing an older version of the schema (revision <span data-bind="text: revisionObs"></span>). It cannot be edited. </p>
+</div>
+
+<h3 data-bind="visible: nameObs().length > 0, text: nameObs"></h3>
+<h3 data-bind="visible: nameObs().length === 0">New Upload Schema</h3>
 
 <form-message params="messageObs: messageObs"></form-message>
 
@@ -12,7 +15,7 @@
     <a class="active item">
         <i class="file outline icon"></i> Editor
     </a>
-    <a href="#" data-bind="attr: {href: '#/schemas/'+schemaIdObs()+'/versions'}, visible: !!schemaIdObs()" class="item">
+    <a href="#" data-bind="attr: {href: '#/schemas/'+schemaIdObs()+'/versions'}, visible: !!revisionObs()" class="item">
         <i class="history icon"></i> History
     </a>
 </div>
@@ -27,14 +30,21 @@
             <label>Name</label>
             <ui-text params="fieldObs: nameObs, publishedObs: publishedObs"></ui-text>
         </div>
-        <div class="field">
+        <div class="required field">
+            <label>Schema Type</label>
+            <ui-select params="fieldObs: schemaTypeObs, fieldLabel: schemaTypeLabel,
+                    publishedObs: publishedObs, optionsSrc: schemaTypeOptions"></ui-select>
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="required field">
             <label>Identifier</label>
             <ui-text params="fieldObs: schemaIdObs, publishedObs: publishedObs"></ui-text>
         </div>
     </div>
 </form>
 
-<h3 style="margin:0">Field Definitions</h3>
+<h3>Field Definitions</h3>
 
 <div data-bind="visible: itemsObs().length === 0">
     <p>There are currently no field definitions in this upload schema.</p>

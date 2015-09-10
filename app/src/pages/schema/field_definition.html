@@ -1,15 +1,13 @@
 <div class="element-draghandle" data-bind="visible: !publishedObs()">
 </div>
 <div class="element-content">
-    <div class="element-content-single-row-constraints">
+    <div class="element-content-editor">
         <div>
-            <div>Name:</div>
             <div>
-                <ui-text params="fieldObs: nameObs, publishedObs: publishedObs"></ui-text>
+                <ui-text params="fieldObs: nameObs, publishedObs: publishedObs, placeholder: 'Name'"></ui-text>
             </div>
         </div>
         <div>
-            <div>Type:</div>
             <div>
                 <ui-select params="fieldObs: typeObs, fieldLabel: fieldTypeLabel,
                     publishedObs: publishedObs, optionsSrc: fieldTypeOptions"></ui-select>
@@ -17,6 +15,11 @@
         </div>
         <div>
             <ui-checkbox params="checkedObs: requiredObs, disabledObs: publishedObs">Required</ui-checkbox>
+        </div>
+        <div>
+            <div class="element-content-editor-delete" data-bind="click: $parents[1].deleteField, visible: !publishedObs()">
+                Delete<i class="close icon"></i>
+            </div>
         </div>
     </div>
 </div>

@@ -9,7 +9,7 @@ module.exports = function(params) {
     self.index = params.indexObs;
 
     self.clickHandler = function(type, index) {
-        var el = surveyUtils.newElement(type);
+        var el = surveyUtils.newField(type);
         self.elementsObs.splice(index+1,0,el);
     };
 };

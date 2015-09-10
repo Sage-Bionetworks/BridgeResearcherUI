@@ -9,7 +9,8 @@ require('./bindings');
 require('./registry');
 
 var pageSets = {
-    'surveys': ['surveys','survey','survey_versions']
+    'surveys': ['surveys','survey','survey_versions'],
+    'schemas': ['schemas','schema','schema_versions']
 };
 
 var RootViewModel = function() {
@@ -105,10 +106,10 @@ router.on('/user_attributes', root.routeTo('user_attributes'));
 router.on('/verify_email_template', root.routeTo('ve_template'));
 router.on('/reset_password_template', root.routeTo('rp_template'));
 router.on('/actions', root.routeTo('actions'));
-router.on('/survey/:guid', root.surveyRoute('survey'));
-router.on('/survey/:guid/:createdOn', root.surveyRoute('survey'));
-router.on('/survey_versions/:guid', root.surveyRoute('survey_versions'));
 router.on('/surveys', root.routeTo('surveys'));
+router.on('/surveys/:guid', root.surveyRoute('survey'));
+router.on('/surveys/:guid/versions', root.surveyRoute('survey_versions'));
+router.on('/surveys/:guid/:createdOn', root.surveyRoute('survey'));
 router.on('/schemas', root.routeTo('schemas'));
 router.on('/schemas/:schemaId', root.schemaRoute('schema'));
 router.on('/schemas/:schemaId/versions', root.schemaRoute('schema_versions'));

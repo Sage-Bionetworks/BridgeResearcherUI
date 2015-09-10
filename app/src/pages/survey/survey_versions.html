@@ -2,12 +2,12 @@
     <a href="#/surveys" class="section">Surveys</a>
 </div>
 
-<h3 data-bind="text: nameObs"></h3>
+<h3 data-bind="text: nameObs">Survey Versions</h3>
 
 <form-message params="messageObs: messageObs"></form-message>
 
 <div class="ui secondary larger pointing menu">
-    <a href="#" data-bind="attr: {href: '#/survey/'+guidObs()}" class="item">
+    <a href="#" data-bind="attr: {href: '#/surveys/'+guidObs()}" class="item">
         <i class="file outline icon"></i> Editor
     </a>
     <a class="active item">
@@ -38,7 +38,7 @@
                     <ui-checkbox params="checkedObs: $data.checkedObs, disabledObs: $parent.publishedObs"></ui-checkbox>
                 </td>
                 <td>
-                    <a href="#" data-bind="attr: {href: '#/survey/'+$data.guid+'/'+$data.createdOn},
+                    <a href="#" data-bind="attr: {href: '#/surveys/'+$data.guid+'/'+$data.createdOn},
                         text: $data.name"></a><br/>Created <span data-bind="text:$parent.formatDateTime($data.createdOn)"></span>
                 </td>
                 <td data-bind="text: $parent.formatDateTime($data.modifiedOn)">

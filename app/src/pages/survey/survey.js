@@ -14,7 +14,6 @@ module.exports = function(params) {
     surveyUtils.initSurveyVM(self);
 
     function loadVM(survey) {
-        console.log("load", survey);
         self.survey = survey;
         surveyUtils.surveyToObservables(self, survey);
         return survey.createdOn;
@@ -61,7 +60,6 @@ module.exports = function(params) {
     self.save = function(vm, event) {
         utils.startHandler(self, event);
         surveyUtils.observablesToSurvey(self, self.survey);
-        console.log(JSON.stringify(self.survey));
 
         if (self.survey.guid) {
             serverService.updateSurvey(self.survey)

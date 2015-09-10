@@ -3,7 +3,7 @@
 <form-message params="messageObs: messageObs"></form-message>
 
 <div class="button-container">
-    <a href="#/survey/new" class="ui primary button">New Survey</a>
+    <a href="#/surveys/new" class="ui primary button">New Survey</a>
 </div>
 <div class="loading status" data-bind="visible: itemsObs().length === 0">Loading...</div>
 <table class="ui compact table" data-bind="visible: itemsObs().length > 0">
@@ -17,7 +17,7 @@
     <tbody data-bind="foreach: itemsObs">
         <tr data-bind="css: { positive: $data.active }">
             <td>
-                <a href="#" data-bind="attr: {'href': '#/survey/'+$data.guid}, text: $data.name"></a>
+                <a href="#" data-bind="attr: {'href': '#/surveys/'+$data.guid}, text: $data.name"></a>
             </td>
             <td data-bind="text: $parent.formatDateTime($data.modifiedOn)"></td>
             <td data-bind="text: $data.identifier"></td>

@@ -1,4 +1,5 @@
 var schemaUtils = require('./schema_utils');
+var ko = require('knockout');
 
 module.exports = function(params) {
     var self = this;
@@ -8,8 +9,8 @@ module.exports = function(params) {
     self.index = params.index;
 
     self.clickHandler = function(vm, event) {
-        var index = vm.index();
-        var el = schemaUtils.newElement();
-        self.itemsObs.splice(index+1,0,el);
+        var index = ko.unwrap(vm.index);
+        var field = schemaUtils.newField();
+        self.itemsObs.splice(index+1,0,field);
     };
 };

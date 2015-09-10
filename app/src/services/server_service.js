@@ -218,6 +218,9 @@ module.exports = {
         return get(config.schemas);
     },
     getMostRecentUploadSchema: function(identifier) {
+        return get(config.schemas + "/" + identifier + '/recent');
+    },
+    getUploadSchemaAllRevisions: function(identifier) {
         return get(config.schemas + "/" + identifier);
     },
     getUploadSchema: function(identifier, revision) {
@@ -227,10 +230,7 @@ module.exports = {
         return post(config.schemas, schema);
     },
     deleteSchemaRevision: function(schema) {
-        return del(config.schemas + "/" + identifier + "/revisions/" + revision);
-    },
-    deleteAllSchemaRevisions: function(schema) {
-        return del(config.schemas + "/" + identifier);
+        return del(config.schemas + "/" + schema.schemaId + "/revisions/" + schema.revision);
     },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {

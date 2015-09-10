@@ -2,7 +2,7 @@
     <a href="#/schemas" class="section">Upload Schemas</a>
 </div>
 
-<h3 data-bind="text: nameObs"></h3>
+<h3 data-bind="text: nameObs">Schema Versions</h3>
 
 <form-message params="messageObs: messageObs"></form-message>
 
@@ -15,37 +15,28 @@
     </a>
 </div>
 
-<div class="ui grid">
-    <div class="ten wide column">
-        <div class="button-container">
-            <button class="ui red button" data-bind="disable: !anyChecked(), click: deleteRevisions">Delete</button>
-        </div>
-
-        <div data-bind="visible: itemsObs().length === 0">Loading...</div>
-        <table class="ui table" data-bind="visible: itemsObs().length > 0">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Name</th>
-                    <th>Revision</th>
-                </tr>
-            </thead>
-            <tbody data-bind="foreach: itemsObs">
-                <tr>
-                    <td>
-                        <ui-checkbox params="checkedObs: $data.checkedObs, disabledObs: $parent.publishedObs"></ui-checkbox>
-                    </td>
-                    <td width="100%">
-                        <a href="#" data-bind="attr: {href: '#/schemas/'+$data.schemaId},text: $data.name"></a>
-                    </td>
-                    <td data-bind="text: $data.revision"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="six wide column">
-        <div class="ui message">
-            <p>Some help text here. Not sure what. </p>
-        </div>
-    </div>
+<div class="button-container">
+    <button class="ui red button" data-bind="disable: !anyChecked(), click: deleteRevisions">Delete</button>
 </div>
+
+<div data-bind="visible: itemsObs().length === 0">Loading...</div>
+<table class="ui table" data-bind="visible: itemsObs().length > 0">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Revision</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: itemsObs">
+        <tr>
+            <td>
+                <ui-checkbox params="checkedObs: $data.checkedObs, disabledObs: $parent.publishedObs"></ui-checkbox>
+            </td>
+            <td width="100%">
+                <a href="#" data-bind="attr: {href: $parent.link($data)}, text: $data.name"></a>
+            </td>
+            <td data-bind="text: $data.revision"></td>
+        </tr>
+    </tbody>
+</table>

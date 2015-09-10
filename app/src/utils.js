@@ -211,5 +211,46 @@ module.exports = {
             return new Date(localDate).toLocaleDateString();
         }
         return "";
+    },
+    /**
+     * Create a function that will remove items from a history table once we confirm they
+     * are deleted. If we've deleted everything, go to the root view for this type of item.
+     * This method assums that the viewModel holds the row model in an "itemObs" observable.
+     *
+     * @param vm
+     *  a viewModel with an "itemObs" observable array of the model objects in the table
+     * @param deletables
+     *  an array of model objects to delete (associated to the rows of the table)
+     * @param rootPath
+     *  if all items are deleted, redirect to this view.
+     * @returns {Function}
+     *  a function to assign to the success handler of a promise
+     */
+    makeTableRowHandler: function(vm, deletables, rootPath) {
+        return function() {
+            if (vm.itemsObs().length == deletables.length) {
+                document.location = rootPath;
+            } else {
+                deletables.forEach(function(deletable) {
+                    vm.itemsObs.remove(deletable);
+                });
+            }
+        };
+    },
+    /**
+     * Given an array of option objects (with the properties "label" and "value"), return a function
+     * that will return the label given a value.
+     * @param options
+     * @returns {Function}
+     */
+    makeFinderByLabel: function(options) {
+        return function(value) {
+            for (var i= 0; i < options.length; i++) {
+                if (options[i].value === value) {
+                    return options[i].label;
+                }
+            }
+            return "";
+        };
     }
 };

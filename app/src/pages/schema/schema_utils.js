@@ -22,33 +22,25 @@ var FIELD_TYPE_OPTIONS = Object.freeze([
     {value: 'timestamp', label: 'Date & Time'}
 ]);
 
-// TODO: Also in survey_utils.js, maybe move to utils.js or forms.js
-function makeFinderByLabel(list) {
-    return function(value) {
-        var options = list.filter(function(option) {
-            return option.value === value;
-        });
-        return (options.length) ? options[0].label: '';
-    };
-}
-
 module.exports = {
-    newElement: function() {
+    newField: function() {
         return {
-            nameObs: ko.observable(),
+            nameObs: ko.observable(""),
             requiredObs: ko.observable(false),
             typeObs: ko.observable('attachment_blob')
         };
     },
     initSchemasVM: function(vm) {
-        vm.schemaTypeLabel = makeFinderByLabel(SCHEMA_TYPE_OPTIONS);
+        vm.schemaTypeLabel = utils.makeFinderByLabel(SCHEMA_TYPE_OPTIONS);
     },
     initVM: function(vm) {
+        vm.schemaTypeOptions = SCHEMA_TYPE_OPTIONS;
+        vm.schemaTypeLabel = utils.makeFinderByLabel(SCHEMA_TYPE_OPTIONS);
         vm.fieldTypeOptions = FIELD_TYPE_OPTIONS;
-        vm.fieldTypeLabel = makeFinderByLabel(FIELD_TYPE_OPTIONS);
+        vm.fieldTypeLabel = utils.makeFinderByLabel(FIELD_TYPE_OPTIONS);
     },
     initFieldDefinitionVM: function(vm) {
         vm.fieldTypeOptions = FIELD_TYPE_OPTIONS;
-        vm.fieldTypeLabel = makeFinderByLabel(FIELD_TYPE_OPTIONS);
+        vm.fieldTypeLabel = utils.makeFinderByLabel(FIELD_TYPE_OPTIONS);
     }
 };
