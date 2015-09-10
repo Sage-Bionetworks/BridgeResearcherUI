@@ -61,13 +61,13 @@ Schedule.prototype = {
         if (this.startsOn || this.endsOn) {
             string += " Only schedule tasks ";
             if (this.startsOn) {
-                string += "after " + this.startsOn.toLocaleString();
+                string += "after " + this.startsOn.toUTCString();
             }
             if (this.startsOn || this.endsOn) {
                 string += " and ";
             }
             if (this.endsOn) {
-                string += "before " + this.endsOn.toLocaleString();
+                string += "before " + this.endsOn.toUTCString();
             }
             string += ".";
         }

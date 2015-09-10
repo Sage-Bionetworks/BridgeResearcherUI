@@ -1,0 +1,39 @@
+.element-content-editor {
+    @include flex-box(row);
+}
+    .element-content-editor > div { /* "row" element */
+        @include flex-box(row);
+        @include align-items(baseline);
+    }
+        .element-content-editor > div > div {
+            padding: 0 .25rem;
+        }
+        .element-content-editor ui-text {
+            display:block;
+            font-weight: bold;
+            width: 13rem;
+        }
+        .element-content-editor ui-select {
+            display:block;
+            width: 13rem;
+        }
+        .element-content-editor ui-checkbox {
+            margin-left: 1rem;
+        }
+        .element-content-editor select.ui.dropdown {
+            height: auto;
+        }
+            .element-content-editor-delete {
+                margin-left: 2rem;
+                color: #009fda;
+                cursor: pointer;
+                line-height: 1.4;
+            }
+.add-control {
+    color: #009fda;
+    cursor: pointer;
+    position: relative;
+    height: 15px;
+    width: 100%;
+    margin: 1rem 0;
+}

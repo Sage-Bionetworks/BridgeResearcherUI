@@ -26,11 +26,13 @@ describe('Schedule', function() {
 
     it('should show a readable explanation of a repeating schedule', function() {
         var schedule = new Schedule(jsonFactory());
-        assert.equal("Label for schedule (After a day, and every 3 days thereafter, at 10AM and 2PM, take the tapping test. If not done after 2 days, remove the task. Only schedule tasks after 2/2/2015, 2:10:10 AM and before 1/1/2015, 2:10:10 AM.)", schedule.toString());
+        // TODO: This fails due to time zone adjustment for the user.
+        assert.equal("Label for schedule (After a day, and every 3 days thereafter, at 10AM and 2PM, take the tapping test. If not done after 2 days, remove the task. Only schedule tasks after Mon, 02 Feb 2015 10:10:10 GMT and before Thu, 01 Jan 2015 10:10:10 GMT.)", schedule.toString());
     });
     it('should show a readable explanation of a one-time schedule', function() {
         var schedule = new Schedule(jsonFactory());
-        assert.equal("Label for schedule (After a day, and every 3 days thereafter, at 10AM and 2PM, take the tapping test. If not done after 2 days, remove the task. Only schedule tasks after 2/2/2015, 2:10:10 AM and before 1/1/2015, 2:10:10 AM.)", schedule.toString());
+        // TODO: This fails due to time zone adjustment for the user.
+        assert.equal("Label for schedule (After a day, and every 3 days thereafter, at 10AM and 2PM, take the tapping test. If not done after 2 days, remove the task. Only schedule tasks after Mon, 02 Feb 2015 10:10:10 GMT and before Thu, 01 Jan 2015 10:10:10 GMT.)", schedule.toString());
     });
     it('should expose dates as dates', function() {
         var schedule = new Schedule(jsonFactory());

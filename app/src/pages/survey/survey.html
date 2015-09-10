@@ -6,7 +6,8 @@
     <p>You are viewing a published revision of this survey. It cannot be edited. </p>
 </div>
 
-<h3 data-bind="text: nameObs"></h3>
+<h3 data-bind="visible: nameObs().length > 0, text: nameObs"></h3>
+<h3 data-bind="visible: nameObs().length == 0">New Survey</h3>
 
 <form-message params="messageObs: messageObs"></form-message>
 
@@ -14,7 +15,7 @@
     <a class="active item">
         <i class="file outline icon"></i> Editor
     </a>
-    <a href="#" data-bind="attr: {href: '#/survey_versions/'+guidObs()}, visible: !!guidObs()" class="item">
+    <a href="#" data-bind="attr: {href: '#/surveys/'+guidObs()+'/versions'}, visible: !!guidObs()" class="item">
         <i class="history icon"></i> History
     </a>
     <div class="right menu">

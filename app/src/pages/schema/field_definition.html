@@ -1,0 +1,25 @@
+<div class="element-draghandle" data-bind="visible: !publishedObs()">
+</div>
+<div class="element-content">
+    <div class="element-content-editor">
+        <div>
+            <div>
+                <ui-text params="fieldObs: nameObs, publishedObs: publishedObs, placeholder: 'Name'"></ui-text>
+            </div>
+        </div>
+        <div>
+            <div>
+                <ui-select params="fieldObs: typeObs, fieldLabel: fieldTypeLabel,
+                    publishedObs: publishedObs, optionsSrc: fieldTypeOptions"></ui-select>
+            </div>
+        </div>
+        <div>
+            <ui-checkbox params="checkedObs: requiredObs, disabledObs: publishedObs">Required</ui-checkbox>
+        </div>
+        <div>
+            <div class="element-content-editor-delete" data-bind="click: $parents[1].deleteField, visible: !publishedObs()">
+                Delete<i class="close icon"></i>
+            </div>
+        </div>
+    </div>
+</div>

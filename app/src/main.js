@@ -9,7 +9,8 @@ require('./bindings');
 require('./registry');
 
 var pageSets = {
-    'surveys': ['surveys','survey','survey_versions']
+    'surveys': ['surveys','survey','survey_versions'],
+    'schemas': ['schemas','schema','schema_versions']
 };
 
 var RootViewModel = function() {
@@ -49,6 +50,12 @@ var RootViewModel = function() {
         return function(guid, createdOn) {
             self.mainPage(name);
             self.mainParams({guid: guid, createdOn: (createdOn === "recent") ? null : createdOn});
+        };
+    };
+    self.schemaRoute = function(name) {
+        return function(schemaId, revision) {
+            self.mainPage(name);
+            self.mainParams({schemaId: schemaId, revision: (revision) ? revision : null});
         };
     };
 
@@ -99,11 +106,14 @@ router.on('/user_attributes', root.routeTo('user_attributes'));
 router.on('/verify_email_template', root.routeTo('ve_template'));
 router.on('/reset_password_template', root.routeTo('rp_template'));
 router.on('/actions', root.routeTo('actions'));
-router.on('/survey/:guid', root.surveyRoute('survey'));
-router.on('/survey/:guid/:createdOn', root.surveyRoute('survey'));
-router.on('/survey_versions/:guid', root.surveyRoute('survey_versions'));
 router.on('/surveys', root.routeTo('surveys'));
+router.on('/surveys/:guid', root.surveyRoute('survey'));
+router.on('/surveys/:guid/versions', root.surveyRoute('survey_versions'));
+router.on('/surveys/:guid/:createdOn', root.surveyRoute('survey'));
 router.on('/schemas', root.routeTo('schemas'));
+router.on('/schemas/:schemaId', root.schemaRoute('schema'));
+router.on('/schemas/:schemaId/versions', root.schemaRoute('schema_versions'));
+router.on('/schemas/:schemaId/:revision', root.schemaRoute('schema'));
 router.on('/schedules', root.routeTo('schedules'));
 router.configure({notfound: root.routeTo('not_found')});
 router.init();

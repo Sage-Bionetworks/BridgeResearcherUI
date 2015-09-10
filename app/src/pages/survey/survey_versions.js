@@ -14,13 +14,6 @@ function makeDeletionCall(item) {
         return serverService.deleteSurvey(item);
     };
 }
-function makeRemoveSurveysFromTable(vm, deletables) {
-    return function() {
-        deletables.forEach(function(deletable) {
-            vm.itemsObs.remove(deletable);
-        });
-    };
-}
 function notAllPublishedChecked(countPublished, countPublishedChecked) {
     return ((countPublished === 0 && countPublishedChecked == 0) ||
             (countPublished !== countPublishedChecked));
@@ -84,9 +77,9 @@ module.exports = function(keys) {
                     return promise.then(makeDeletionCall(deletable));
                 }
             }, null)
-                    .then(makeRemoveSurveysFromTable(vm, deletables))
-                    .then(utils.successHandler(vm, event, confirmMsg))
-                    .catch(utils.failureHandler(vm, event));
+                .then(utils.makeTableRowHandler(vm, deletables, "#/surveys"))
+                .then(utils.successHandler(vm, event, confirmMsg))
+                .catch(utils.failureHandler(vm, event));
         }
     }
     self.version = function (vm, event) {

@@ -22,8 +22,10 @@ reg('rp_template','./pages/rp_template/rp_template');
 reg('actions','./pages/actions/actions');
 reg('surveys','./pages/surveys/surveys');
 reg('survey', './pages/survey/survey');
-reg('survey_versions','./pages/surveys/survey_versions');
+reg('survey_versions','./pages/survey/survey_versions');
 reg('schemas', './pages/schemas/schemas');
+reg('schema', './pages/schema/schema');
+reg('schema_versions', './pages/schema/schema_versions');
 reg('schedules', './pages/schedules/schedules');
 regt('not_found', './pages/not_found/not_found');
 
@@ -60,3 +62,7 @@ regt('ui-date', './pages/survey/constraints/ui_date');
 regt('ui-datetime', './pages/survey/constraints/ui_datetime');
 regt('ui-select', './pages/survey/constraints/ui_select');
 regt('ui-textarea', './pages/survey/constraints/ui_textarea');
+
+/* SCHEMAS */
+reg('field_definition', './pages/schema/field_definition');
+reg('add-control', './pages/schema/add_control');

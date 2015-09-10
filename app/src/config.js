@@ -22,5 +22,6 @@ module.exports = config = {
     emailRoster: '/v3/users/emailParticipantRoster',
     requestResetPassword: '/v3/auth/requestResetPassword',
     surveys: '/v3/surveys',
-    survey: '/v3/surveys/'
+    survey: '/v3/surveys/',
+    schemas: '/v3/uploadschemas'
 };
