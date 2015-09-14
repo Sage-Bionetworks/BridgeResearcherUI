@@ -1,7 +1,7 @@
-<div class="element-draghandle" data-bind="visible: !publishedObs()">
+<div class="sfield-draghandle" data-bind="visible: !publishedObs()">
 </div>
-<div class="element-content">
-    <div class="element-content-editor">
+<div class="sfield-content">
+    <div class="sfield-content-editor">
         <div>
             <div>
                 <ui-text params="fieldObs: nameObs, publishedObs: publishedObs, placeholder: 'Name'"></ui-text>
@@ -16,10 +16,13 @@
         <div>
             <ui-checkbox params="checkedObs: requiredObs, disabledObs: publishedObs">Required</ui-checkbox>
         </div>
-        <div>
-            <div class="element-content-editor-delete" data-bind="click: $parents[1].deleteField, visible: !publishedObs()">
-                Delete<i class="close icon"></i>
-            </div>
-        </div>
+        <div class="sfield-content-editor-buttons">
+            <a data-bind="click: $parents[1].deleteField, visible: !publishedObs()">
+                <i class="trash icon"></i>Delete
+            </a>
+            <a data-bind="click: $parents[1].addBelow, visible: !publishedObs()">
+                <i class="add icon"></i>Add Below
+            </a>
+        </a>
     </div>
 </div>

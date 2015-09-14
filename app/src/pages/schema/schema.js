@@ -66,7 +66,7 @@ module.exports = function(params) {
         var index = self.itemsObs.indexOf(vm.field);
         var fieldDef = self.itemsObs()[index];
         if (confirm("You are about to delete '"+fieldDef.name+"'.\n\n Are you sure?")) {
-            var $element = $(event.target).closest(".element");
+            var $element = $(event.target).closest(".sfield");
 
             $element.css("max-height","0px");
             setTimeout(function() {
@@ -74,6 +74,15 @@ module.exports = function(params) {
                 $element.remove();
             },510); // waiting for animation to complete
         }
+    };
+    self.addBelow = function(vm, event) {
+        var index = self.itemsObs.indexOf(vm.field);
+        var field = schemaUtils.newField();
+        self.itemsObs.splice(index+1,0,field);
+    };
+    self.addFirst = function(vm, event) {
+        var field = schemaUtils.newField();
+        self.itemsObs.push(field);
     };
 
     if (params.schemaId === "new") {
@@ -84,16 +93,16 @@ module.exports = function(params) {
         serverService.getMostRecentUploadSchema(params.schemaId).then(loadVM);
     }
 
-    var elementsZoneEl = document.querySelector(".elementZone");
+    var elementsZoneEl = document.querySelector(".sfieldZone");
     if (!self.publishedObs()) {
         var _item = null;
 
         dragula([elementsZoneEl], {
             moves: function (el, container, handle) {
-                return (handle.className === 'element-draghandle');
+                return (handle.className === 'sfield-draghandle');
             }
         }).on('drop', function(el, zone) {
-            var elements = document.querySelectorAll(".elementZone .element");
+            var elements = document.querySelectorAll(".sfieldZone .sfield");
             // This utility handles node lists
             var index = ko.utils.arrayIndexOf(elements, el);
             var data = ko.contextFor(el).$data;

@@ -48,19 +48,12 @@
 
 <div data-bind="visible: itemsObs().length === 0">
     <p>There are currently no field definitions in this upload schema.</p>
-    <!-- ko component: {
-        name: "add-control",
-        params: { itemsObs: itemsObs, index: 0, publishedObs: publishedObs }
-    } --><!-- /ko -->
+    <p><a href="#" class="ui primary button" data-bind="click: addFirst"><i class="add square icon"></i> Add Field</a></p>
 </div>
-<div class="survey elementZone" data-bind="foreach: itemsObs">
-    <div class="element" data-bind="component: {
+<div class="schema sfieldZone" data-bind="foreach: itemsObs">
+    <div class="sfield" data-bind="component: {
         name: 'field_definition',
         params: { field: $data, itemsObs: $parent.itemsObs, indexObs: $index, publishedObs: $parent.publishedObs }
     }"></div>
-    <!-- ko component: {
-        name: "add-control",
-        params: { itemsObs: $parent.itemsObs, index: $index, publishedObs: $parent.publishedObs }
-    } --><!-- /ko -->
 </div>
 

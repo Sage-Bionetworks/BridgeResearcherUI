@@ -17,7 +17,7 @@
     <tbody data-bind="foreach: itemsObs">
         <tr data-bind="css: { positive: $data.active }">
             <td>
-                <a href="#" data-bind="attr: {'href': '#/schemas/'+$data.schemaId}, text: $data.name"></a>
+                <a data-bind="attr: {'href': '#/schemas/'+$data.schemaId}, text: $data.name"></a>
             </td>
             <td data-bind="text: $data.revision"></td>
             <td data-bind="text: $parent.schemaTypeLabel($data.schemaType)"></td>
