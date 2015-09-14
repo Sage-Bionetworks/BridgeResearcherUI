@@ -135,6 +135,10 @@ function signOut() {
     });
 }
 
+function isSupportedUser() {
+    return (this.roles.indexOf("developer") > -1 || this.roles.indexOf("researcher") > -1);
+}
+
 module.exports = {
     isAuthenticated: function() {
         return (session !== null);
@@ -142,11 +146,13 @@ module.exports = {
     signIn: function(studyName, env, data) {
         var request = Promise.resolve(postInt(config.host[env] + config.signIn, data));
         request.then(function(sess) {
-            sess.studyName = studyName;
-            session = sess;
-            optionsService.set(SESSION_KEY, sess);
-            listeners.emit(SESSION_STARTED_EVENT_KEY, session);
-            console.log(sess);
+            sess.isSupportedUser = isSupportedUser;
+            if (sess.isSupportedUser()) {
+                sess.studyName = studyName;
+                session = sess;
+                optionsService.set(SESSION_KEY, sess);
+                listeners.emit(SESSION_STARTED_EVENT_KEY, session);
+            }
         });
         return request;
     },

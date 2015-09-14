@@ -91,13 +91,14 @@ module.exports = {
         return function(response) {
             event.target.classList.remove("loading");
             if (vm.messageObs) {
-                if (response instanceof Error) {
+                if (response.status === 412) {
+                    vm.messageObs({text:'You do not appear to be either a developer or a researcher.', 'status': 'error'});
+                } else if (response instanceof Error) {
                     vm.messageObs({text:response.message, 'status': 'error'});
                 } else if (response.responseJSON) {
                     vm.messageObs({text:response.responseJSON.message, 'status': 'error'});
                 } else {
                     // No message, the message component will provide something generic
-                    console.error(JSON.stringify(response));
                     vm.messageObs({'status': 'error'});
                 }
             }
