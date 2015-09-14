@@ -65,4 +65,3 @@ regt('ui-textarea', './pages/survey/constraints/ui_textarea');
 
 /* SCHEMAS */
 reg('field_definition', './pages/schema/field_definition');
-reg('add-control', './pages/schema/add_control');

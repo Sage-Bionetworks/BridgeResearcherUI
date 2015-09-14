@@ -1,39 +1,72 @@
-.element-content-editor {
+.sfield {
+    @include flex-box(row);
+    @include transition(max-height .5s ease);
+    width: 100%;
+    overflow: hidden;
+    margin: .75rem 0;
+    max-height: 500px;
+
+    /* container */
+    @include user-select(none);
+    border: 1px solid #e5e5e5;
+    border-radius: 6px;
+}
+.sfield-draghandle {
+    width: 1rem;
+    align-self: stretch;
+    background: #f4f4f4;
+    background-image: radial-gradient(#e5e5e5 1px, transparent 0), radial-gradient(#e5e5e5 1px, transparent 0);
+    background-size: 10px 10px;
+    background-position: 0 0, 5px 5px;
+    cursor: ns-resize;
+}
+.sfield-content {
+    padding: .5rem;
+}
+.sfield-content-editor {
     @include flex-box(row);
 }
-    .element-content-editor > div { /* "row" element */
+    .sfield-content-editor > div { /* "row" element */
         @include flex-box(row);
         @include align-items(baseline);
     }
-        .element-content-editor > div > div {
+        .sfield-content-editor > div > div {
             padding: 0 .25rem;
         }
-        .element-content-editor ui-text {
+        .sfield-content-editor ui-text {
             display:block;
             font-weight: bold;
             width: 13rem;
         }
-        .element-content-editor ui-select {
+        .sfield-content-editor ui-select {
             display:block;
             width: 13rem;
         }
-        .element-content-editor ui-checkbox {
+        .sfield-content-editor ui-checkbox {
             margin-left: 1rem;
         }
-        .element-content-editor select.ui.dropdown {
+        .sfield-content-editor select.ui.dropdown {
             height: auto;
         }
-            .element-content-editor-delete {
-                margin-left: 2rem;
+            .sfield-content-editor-buttons {
+                margin-left: 4rem;
                 color: #009fda;
                 cursor: pointer;
                 line-height: 1.4;
             }
+                .sfield-content-editor-buttons > a {
+                    margin: 0 .5rem;
+                }
+
 .add-control {
-    color: #009fda;
     cursor: pointer;
-    position: relative;
-    height: 15px;
+    height: 20px;
     width: 100%;
-    margin: 1rem 0;
 }
+    .add-control-container {
+        height: 15px;
+    }
+    .add-control-container:hover {
+        color: #009fda;
+        visibility: visible;
+    }
