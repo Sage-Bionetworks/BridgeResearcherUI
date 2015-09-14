@@ -146,7 +146,7 @@ module.exports = {
             session = sess;
             optionsService.set(SESSION_KEY, sess);
             listeners.emit(SESSION_STARTED_EVENT_KEY, session);
-            //console.log(sess);
+            console.log(sess);
         });
         return request;
     },
