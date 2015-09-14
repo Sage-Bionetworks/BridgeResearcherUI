@@ -5,6 +5,8 @@
     <title>Bridge Study Manager</title>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/semantic.min.css"/>
     <script src="//cdn.polyfill.io/v1/polyfill.min.js" async defer></script>
+    <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/semantic.min.js"></script>
 </head>
 <body>
     <header>
@@ -69,14 +71,6 @@
                         <a href="#verify_email_template" class="item" data-bind="css:{active:isActive('ve_template')}, visible: isDeveloper">
                             Email Templates
                         </a>
-                        <!--
-                        <a href="#verify_email_template" class="item" data-bind="css:{active:isActive('ve_template')}, visible: isDeveloper">
-                            Verify Email Template
-                        </a>
-                        <a href="#reset_password_template" class="item" data-bind="css:{active:isActive('rp_template')}, visible: isDeveloper">
-                            Reset Password Template
-                        </a>
-                        -->
                         <a href="#actions" class="item" data-bind="css:{active:isActive('actions')}, visible: isResearcher">
                             Participant Roster
                         </a>
@@ -90,7 +84,5 @@
     </footer>
     <div id="dialogHolder" data-bind="modal: dialogObs"></div>
     <script src="./dist/bundle.js"></script>
-    <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/semantic.min.js"></script>
 </body>
 </html>
