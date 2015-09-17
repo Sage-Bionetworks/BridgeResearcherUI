@@ -1,0 +1,49 @@
+<div class="ui small modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Edit Scheduling Event
+    </div>
+    <div class="content">
+        <div class="ui form">
+            <div class="field">
+                <ui-select params="fieldObs: objectTypeObs, fieldLabel: objectTypeLabel,
+                        publishedObs: publishedObs, optionsSrc: objectTypeOptions"></ui-select>
+            </div>
+            <div class="three fields">
+                <div class="field">
+                    <div data-bind="visible: objectTypeObs() == 'question'">
+                        <ui-select params="fieldObs: questionObs, fieldLabel: questionsLabel,
+                            publishedObs: publishedObs, optionsSrc: questionsOptionsObs"></ui-select>
+                    </div>
+                    <div data-bind="visible: objectTypeObs() == 'survey'">
+                        <ui-select params="fieldObs: surveyObs, fieldLabel: surveysLabel,
+                            publishedObs: publishedObs, optionsSrc: surveysOptionsObs"></ui-select>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="inline-form-text" data-bind="visible: objectTypeObs() == 'question'">
+                        is answered as
+                    </div>
+                    <div class="inline-form-text" data-bind="visible: objectTypeObs() == 'survey'">
+                        is finished
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="inline-form-text" data-bind="visible: objectTypeObs() == 'question'">
+                        <input type="text" data-bind="textInput: answerObs"/>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <ui-checkbox params="checkedObs: enrollmentObs, disabledObs: publishedObs">
+                    And on enrollment
+                </ui-checkbox>
+            </div>
+        </div>
+    </div>
+    <div class="rules-actions">
+        <button class="ui primary button" data-bind="click: save">Save</button>
+        <button class="ui button" data-bind="click: clear">Clear</button>
+        <button class="ui button" data-bind="click: cancel">Cancel</button>
+    </div>
+</div>

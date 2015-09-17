@@ -1,0 +1,70 @@
+<!doctype HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Activity Controls</title>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/semantic.min.css"/>
+</head>
+<body>
+
+<style type="text/css">
+    .activity {
+        display: flex;
+        flex-direction: row;
+    }
+        .activity > div {
+            padding: 0 1rem;
+        }
+</style>
+
+<div class="ui form">
+    <div class="ui activity segment">
+        <div>
+            <div class="label">
+                <input type="text" placeholder="Label"/>
+            </div>
+        </div>
+        <div>
+            <div class="label-detail">
+                <input type="text" placeholder="Label Detail"/>
+            </div>
+        </div>
+        <div>
+            <select class="ui dropdown">
+                <option>Do Task</option>
+                <option>Take Survey</option>
+            </select>
+        </div>
+        <div>
+            <input type="text" placeholder="Task ID"/>
+        </div>
+        <div>
+            <div>
+                <a data-bind="click">
+                    <i class="trash icon"></i>Delete
+                </a>
+                <a href="#">
+                    <i class="square add icon"></i>Add Below
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="ui activity segment">
+        <div>
+            label
+            labelDetail
+        </div>
+        <div>
+            task/survey
+        </div>
+        <div>
+            input/select
+        </div>
+        <div>
+            trash
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

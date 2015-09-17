@@ -28,7 +28,16 @@ function isDefined(obj) {
  * TODO: bus for event errors that are now just getting logged and not shown to user. Wire to root message panel.
  */
 module.exports = {
+    /**
+     * Determine type of object
+     * @param object - object to test
+     * @param string - the type name to verify, e.g. 'Date' or 'Array'
+     */
     is: is,
+    /**
+     * Is this variable defined?
+     * @param object - the variable being tested
+     */
     isDefined: isDefined,
     /**
      * f(x) = x
@@ -199,7 +208,6 @@ module.exports = {
      */
     formatDate: function(date) {
         if (date) {
-            // TODO: it looks like html5 date control is submitting a time portion, it should not
             date = date.replace('T00:00:00.000Z','');
             // Get the declared offset of the local time on the date in question (accounts
             // for daylight savings at right time of year)
@@ -216,7 +224,7 @@ module.exports = {
     /**
      * Create a function that will remove items from a history table once we confirm they
      * are deleted. If we've deleted everything, go to the root view for this type of item.
-     * This method assums that the viewModel holds the row model in an "itemObs" observable.
+     * This method assumes that the viewModel holds the row model in an "itemsObs" observable.
      *
      * @param vm
      *  a viewModel with an "itemObs" observable array of the model objects in the table
@@ -239,8 +247,8 @@ module.exports = {
         };
     },
     /**
-     * Given an array of option objects (with the properties "label" and "value"), return a function
-     * that will return the label given a value.
+     * Given an array of option objects (with the properties "label" and "value"),
+     * return a function that will return the label given a value.
      * @param options
      * @returns {Function}
      */

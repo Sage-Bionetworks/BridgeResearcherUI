@@ -1,0 +1,24 @@
+.schedule-fieldset .ui.form {
+    margin: .5rem;
+}
+.schedule-legend {
+    font-weight: bold;
+    font-size: 120%;
+    padding: 0 .5rem;
+}
+
+/* This is actually for the schedule */
+.activity {
+    display: flex;
+    flex-direction: row;
+}
+    .activity:nth-child(even) {
+        background-color: #f4f4f4;
+    }
+    .activity > div {
+        padding: .5rem;
+        margin: 0;
+    }
+        .activity-controls > a {
+            margin-left: .75rem;
+        }

@@ -23,5 +23,6 @@ module.exports = config = {
     requestResetPassword: '/v3/auth/requestResetPassword',
     surveys: '/v3/surveys',
     survey: '/v3/surveys/',
-    schemas: '/v3/uploadschemas'
+    schemas: '/v3/uploadschemas',
+    schemaPlans: '/v3/scheduleplans'
 };
