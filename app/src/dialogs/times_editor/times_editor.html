@@ -1,0 +1,28 @@
+<div class="ui small modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Edit Times of Day
+    </div>
+    <div class="content">
+        <div data-bind="foreach: itemsObs" style="font-size:larger">
+            <div>
+                <span class="inline-form-text">
+                    <a href="#" data-bind="click: $component.deleteTime">
+                        <i class="trash icon"></i>
+                    </a>
+                </span>
+                <span class="inline-form-text" data-bind="text: $component.timesLabel($data)"></span>
+            </div>
+        </div>
+        <div class="field">
+            <ui-select params="fieldObs: timeObs, fieldLabel: timesLabel,
+                publishedObs: publishedObs, optionsSrc: timesOptions"></ui-select>
+            <button class="ui button" data-bind="click: addTime">Add</button>
+        </div>
+    </div>
+    <div class="rules-actions">
+        <button class="ui primary button" data-bind="click: save">Save</button>
+        <button class="ui button" data-bind="click: clear">Clear</button>
+        <button class="ui button" data-bind="click: cancel">Cancel</button>
+    </div>
+</div>

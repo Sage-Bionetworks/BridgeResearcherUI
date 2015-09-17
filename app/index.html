@@ -51,9 +51,12 @@
                         <a href="#/schemas" class="item" data-bind="css:{active:isActive('schemas')}, visible: isDeveloper">
                             Upload Schemas
                         </a>
+                        <a href="#/scheduleplans" class="item" data-bind="css:{active:isActive('scheduling')}, visible: isDeveloper">
+                            Scheduling
+                        </a>
                         <!--
-                        <a href="#schedules" class="item" data-bind="css:{active:isActive('schedules')}, visible: isDeveloper">
-                            Schedules
+                        <a href="#/monitor" class="item" data-bind="css:{active:isActive('monitor')}, visible: isDeveloper">
+                            Upload Monitor
                         </a>
                         -->
                     </div>
@@ -82,7 +85,7 @@
         <p>&copy; 2015 Sage Bionetworks.</p>
     </footer>
     <div id="dialogHolder" data-bind="modal: dialogObs"></div>
-    <script src="./dist/bundle.js"></script>
+    <script src="dist/bundle.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/semantic.min.js"></script>
 </body>
 </html>

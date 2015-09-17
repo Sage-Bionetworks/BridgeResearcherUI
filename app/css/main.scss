@@ -2,6 +2,7 @@
 @import "./forms.scss";
 @import "./survey.scss";
 @import "./schema.scss";
+@import "./scheduleplan.scss";
 
 /* HTML TAGS */
 body {
@@ -73,10 +74,4 @@ footer p {
 }
 .button-container {
     margin: 0 0 1rem 0;
-}
-
-/* TABLES */
-td {
-    /*you just can't do this everywhere like this */
-    /*white-space: nowrap;*/
 }

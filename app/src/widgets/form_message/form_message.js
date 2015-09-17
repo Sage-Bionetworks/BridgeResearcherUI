@@ -16,7 +16,10 @@ module.exports = function(params) {
 
     // Subscribe to receive messages from parent MV.
     params.messageObs.subscribe(function(newValue) {
-        if (typeof newValue === "string") {
+        if (newValue === null) {
+            self.cssClass("");
+            self.internalMessage("");
+        } else if (typeof newValue === "string") {
             displayMessage("green", newValue);
         } else if (typeof newValue.text === "string") {
             displayMessage(newValue.status || "green", newValue.text);

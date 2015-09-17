@@ -12,15 +12,20 @@
             <th>Name</th>
             <th>Last Updated</th>
             <th>Identifier</th>
+            <th>Upload Schema</th>
         </tr>
     </thead>
     <tbody data-bind="foreach: itemsObs">
-        <tr data-bind="css: { positive: $data.active }">
+        <tr>
             <td>
                 <a href="#" data-bind="attr: {'href': '#/surveys/'+$data.guid}, text: $data.name"></a>
             </td>
             <td data-bind="text: $parent.formatDateTime($data.modifiedOn)"></td>
             <td data-bind="text: $data.identifier"></td>
+            <td>
+                <a href="#" data-bind="visible: $data.schemaRevision, attr:{'href':'#/schemas/'+$data.identifier+'/'+$data.schemaRevision}, text: 'v'+$data.schemaRevision"></a>
+                <em data-bind="visible: !$data.schemaRevision">Draft</em>
+            </td>
         </tr>
     </tbody>
 </table>

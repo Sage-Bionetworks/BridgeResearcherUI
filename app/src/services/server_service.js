@@ -21,6 +21,9 @@ var SESSION_ENDED_EVENT_KEY = 'sessionEnded';
 var listeners = new EventEmitter();
 var session = null;
 
+// Cache this.
+var currentStudy = null;
+
 $(function() {
     session = optionsService.get(SESSION_KEY, null);
     if (session && session.environment) {
@@ -45,7 +48,7 @@ function postInt(url, data) {
         data = JSON.stringify(data);
     }
     var dataString = data.replace(/"password":"([^"]*)"/, '"password":"[REDACTED]"');
-    console.debug("POST", url, dataString);
+    //console.debug("POST", url, dataString);
 
     return $.ajax({
         method: 'POST',
@@ -57,7 +60,7 @@ function postInt(url, data) {
     });
 }
 function getInt(url) {
-    console.debug("GET", url);
+    //console.debug("GET", url);
     return $.ajax({
         method: 'GET',
         url: url,
@@ -67,7 +70,7 @@ function getInt(url) {
     });
 }
 function deleteInt(url) {
-    console.debug("DELETE", url);
+    //console.debug("DELETE", url);
     return $.ajax({
         method: 'DELETE',
         url: url,
@@ -92,6 +95,7 @@ function makeSessionWaitingPromise(func) {
     });
     promise.catch(function(response) {
         if (response.status === 401) {
+            console.error("Signed out due to 401");
             signOut();
         } else if (response.responseJSON) {
             console.error(response.status, response.responseJSON);
@@ -126,6 +130,7 @@ function del(path) {
 function signOut() {
     var env = session.environment;
     session = null;
+    currentStudy = null;
     optionsService.remove(SESSION_KEY);
     listeners.emit(SESSION_ENDED_EVENT_KEY);
     return new Promise(function(resolve, reject) {
@@ -135,6 +140,10 @@ function signOut() {
     });
 }
 
+function isSupportedUser() {
+    return (this.roles.indexOf("developer") > -1 || this.roles.indexOf("researcher") > -1);
+}
+
 module.exports = {
     isAuthenticated: function() {
         return (session !== null);
@@ -142,11 +151,13 @@ module.exports = {
     signIn: function(studyName, env, data) {
         var request = Promise.resolve(postInt(config.host[env] + config.signIn, data));
         request.then(function(sess) {
-            sess.studyName = studyName;
-            session = sess;
-            optionsService.set(SESSION_KEY, sess);
-            listeners.emit(SESSION_STARTED_EVENT_KEY, session);
-            console.log(sess);
+            sess.isSupportedUser = isSupportedUser;
+            if (sess.isSupportedUser()) {
+                sess.studyName = studyName;
+                session = sess;
+                optionsService.set(SESSION_KEY, sess);
+                listeners.emit(SESSION_STARTED_EVENT_KEY, session);
+            }
         });
         return request;
     },
@@ -158,10 +169,20 @@ module.exports = {
         return Promise.resolve(postInt(config.host[env] + config.requestResetPassword, data));
     },
     getStudy: function() {
-        return get(config.getStudy);
+        if (currentStudy !== null) {
+            return Promise.resolve(currentStudy);
+        }
+        return get(config.getStudy).then(function(study) {
+            currentStudy = study;
+            return study;
+        });
     },
     saveStudy: function(study) {
-        return post(config.getStudy, study);
+        return post(config.getStudy, study).then(function(response) {
+            currentStudy = study;
+            currentStudy.version = response.version;
+            return response;
+        });
     },
     getActiveStudyConsent: function() {
         return get(config.activeStudyConsent);
@@ -186,6 +207,9 @@ module.exports = {
     },
     getSurveys: function() {
         return get(config.surveys);
+    },
+    getPublishedSurveys: function() {
+        return get(config.surveys + '/published');
     },
     getSurveyAllRevisions: function(guid) {
         return get(config.survey + guid + '/revisions');
@@ -231,6 +255,22 @@ module.exports = {
     },
     deleteSchemaRevision: function(schema) {
         return del(config.schemas + "/" + schema.schemaId + "/revisions/" + schema.revision);
+    },
+    getSchedulePlans: function() {
+        return get(config.schemaPlans);
+    },
+    getSchedulePlan: function(guid) {
+        return get(config.schemaPlans + "/" + guid);
+    },
+    saveSchedulePlan: function(plan) {
+        if (plan.guid) {
+            return post(config.schemaPlans + "/" + plan.guid, plan);
+        } else {
+            return post(config.schemaPlans, plan);
+        }
+    },
+    deleteSchedulePlan: function(guid) {
+        return del(config.schemaPlans + "/" + guid);
     },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {

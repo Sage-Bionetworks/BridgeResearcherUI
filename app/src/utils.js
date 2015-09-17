@@ -20,7 +20,38 @@ function nameInspector(string) {
 function isDefined(obj) {
     return (typeof obj !== "undefined");
 }
-
+function deleteUnusedProperties(object) {
+    if (is(object, 'Array')) {
+        for (var i=0; i < object.length; i++) {
+            deleteUnusedProperties(object[i]);
+        }
+    } else if (is(object, 'Object')) {
+        for (var prop in object) {
+            if (typeof object[prop] === 'undefined' || object[prop] === "" || object[prop] === null) {
+                delete object[prop];
+            } else {
+                deleteUnusedProperties(object[prop]);
+            }
+        }
+    }
+}
+function makeOptionFinder(arrayOrObs) {
+    return function(value) {
+        var options = ko.unwrap(arrayOrObs);
+        for (var i= 0; i < options.length; i++) {
+            var option = options[i];
+            if (option.value === value) {
+                return option;
+            }
+        }
+    };
+}
+function makeOptionLabelFinder(arrayOrObs) {
+    return function(value) {
+        var option = makeOptionFinder(arrayOrObs)(value);
+        return option ? option.label : "";
+    };
+}
 /**
  * Common utility methods for ViewModels.
  *
@@ -28,7 +59,16 @@ function isDefined(obj) {
  * TODO: bus for event errors that are now just getting logged and not shown to user. Wire to root message panel.
  */
 module.exports = {
+    /**
+     * Determine type of object
+     * @param object - object to test
+     * @param string - the type name to verify, e.g. 'Date' or 'Array'
+     */
     is: is,
+    /**
+     * Is this variable defined?
+     * @param object - the variable being tested
+     */
     isDefined: isDefined,
     /**
      * f(x) = x
@@ -89,15 +129,18 @@ module.exports = {
      */
     failureHandler: function(vm, event) {
         return function(response) {
-            event.target.classList.remove("loading");
+            if (event){
+                event.target.classList.remove("loading");
+            }
             if (vm.messageObs) {
-                if (response instanceof Error) {
+                if (response.status === 412) {
+                    vm.messageObs({text:'You do not appear to be either a developer or a researcher.', 'status': 'error'});
+                } else if (response instanceof Error) {
                     vm.messageObs({text:response.message, 'status': 'error'});
                 } else if (response.responseJSON) {
                     vm.messageObs({text:response.responseJSON.message, 'status': 'error'});
                 } else {
                     // No message, the message component will provide something generic
-                    console.error(JSON.stringify(response));
                     vm.messageObs({'status': 'error'});
                 }
             }
@@ -150,9 +193,14 @@ module.exports = {
         for (var i=0; i < fields.length; i++) {
             var insp = nameInspector(fields[i]);
 
+            // TODO: At one point you were checking that the model object had the property before
+            // copying the observer back to it, but this prevents the UI from adding properties when the
+            // model didn't initially have them. Disabling this, but may break something elsewhere.
             var obs = vm[insp.observerName];
-            var value = object[insp.name];
-            if (isDefined(obs) && isDefined(value)) {
+            //var value = object[insp.name];
+            console.log("updating", insp.name, obs()/*, value*/);
+            //if (isDefined(obs) && isDefined(value)) {
+            if (isDefined(obs)) {
                 object[insp.name] = obs();
             }
         }
@@ -198,7 +246,6 @@ module.exports = {
      */
     formatDate: function(date) {
         if (date) {
-            // TODO: it looks like html5 date control is submitting a time portion, it should not
             date = date.replace('T00:00:00.000Z','');
             // Get the declared offset of the local time on the date in question (accounts
             // for daylight savings at right time of year)
@@ -215,7 +262,7 @@ module.exports = {
     /**
      * Create a function that will remove items from a history table once we confirm they
      * are deleted. If we've deleted everything, go to the root view for this type of item.
-     * This method assums that the viewModel holds the row model in an "itemObs" observable.
+     * This method assumes that the viewModel holds the row model in an "itemsObs" observable.
      *
      * @param vm
      *  a viewModel with an "itemObs" observable array of the model objects in the table
@@ -238,19 +285,21 @@ module.exports = {
         };
     },
     /**
-     * Given an array of option objects (with the properties "label" and "value"), return a function
-     * that will return the label given a value.
-     * @param options
+     * Given an array of option objects (with the properties "label" and "value"),
+     * return a function that will return a specific option given a value.
+     * @param options array or observableArray
      * @returns {Function}
      */
-    makeFinderByLabel: function(options) {
-        return function(value) {
-            for (var i= 0; i < options.length; i++) {
-                if (options[i].value === value) {
-                    return options[i].label;
-                }
-            }
-            return "";
-        };
-    }
+    makeOptionFinder: makeOptionFinder,
+    /**
+     * Given an array of option objects (with the properties "label" and "value"),
+     * return a function that will return an option label given a value.
+     * @param options array or observableArray
+     * @returns {Function}
+     */
+    makeOptionLabelFinder: makeOptionLabelFinder,
+    /**
+     * Walk object and remove any properties that are set to null or an empty string.
+     */
+    deleteUnusedProperties: deleteUnusedProperties
 };

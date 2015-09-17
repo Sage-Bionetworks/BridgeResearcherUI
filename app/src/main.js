@@ -58,6 +58,12 @@ var RootViewModel = function() {
             self.mainParams({schemaId: schemaId, revision: (revision) ? revision : null});
         };
     };
+    self.schedulePlanRoute = function(name) {
+        return function(guid) {
+            self.mainPage(name);
+            self.mainParams({guid: guid});
+        };
+    };
 
     self.isResearcher = ko.computed(function() {
         return self.roles.contains('researcher');
@@ -114,7 +120,10 @@ router.on('/schemas', root.routeTo('schemas'));
 router.on('/schemas/:schemaId', root.schemaRoute('schema'));
 router.on('/schemas/:schemaId/versions', root.schemaRoute('schema_versions'));
 router.on('/schemas/:schemaId/:revision', root.schemaRoute('schema'));
+router.on('/monitor', root.routeTo('monitor'));
 router.on('/schedules', root.routeTo('schedules'));
+router.on('/scheduleplans', root.routeTo('scheduleplans'));
+router.on('/scheduleplans/:guid', root.schedulePlanRoute('scheduleplan'));
 router.configure({notfound: root.routeTo('not_found')});
 router.init();
 

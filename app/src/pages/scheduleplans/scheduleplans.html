@@ -1,26 +1,26 @@
-<h3>Upload Schemas</h3>
+<h3>Scheduling</h3>
 
 <form-message params="messageObs: messageObs"></form-message>
 
 <div class="button-container">
-    <a href="#/schemas/new" class="ui primary button">New Upload Schema</a>
+    <a href="#/scheduleplans/new" class="ui primary button">New Schedule Plan</a>
 </div>
 <div class="loading status" data-bind="visible: itemsObs().length === 0">Loading...</div>
 <table class="ui compact table" data-bind="visible: itemsObs().length > 0">
     <thead>
         <tr>
-            <th>Name</th>
+            <th>Schedule</th>
             <th>Type</th>
-            <th>Latest Revision</th>
+            <th>Last Updated</th>
         </tr>
     </thead>
     <tbody data-bind="foreach: itemsObs">
-        <tr data-bind="css: { positive: $data.active }">
+        <tr>
             <td>
-                <a data-bind="attr: {'href': '#/schemas/'+$data.schemaId}, text: $data.name"></a>
+                <a href="#" data-bind="attr: {'href': '#/scheduleplans/'+$data.guid}, text: $data.label"></a>
             </td>
-            <td data-bind="text: $parent.schemaTypeLabel($data.schemaType)"></td>
-            <td data-bind="text: $data.revision"></td>
+            <td data-bind="text: $parent.formatScheduleType($data.strategy.type)"></td>
+            <td data-bind="text: $parent.formatDateTime($data.modifiedOn)"></td>
         </tr>
     </tbody>
 </table>

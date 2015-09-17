@@ -10,3 +10,26 @@
     content: '*';
     color: #d95c5c;
 }
+.duration-control {
+    display: flex;
+    flex-direction: row;
+}
+    .duration-control input {
+        width: 3.5rem!important;
+    }
+    .duration-control select {
+        margin-left: .5rem;
+        width: 6rem!important;
+    }
+/* This is a magic number that aligns text with Semantic UI controls. */
+/* As such I have a special class for it. */
+.inline-form-text {
+    line-height: 38px;
+}
+.inline-editor-controls a:first-child {
+    margin-right: 1rem;
+}
+.inline-editor-controls a {
+    cursor: pointer;
+    color: green;
+}

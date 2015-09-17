@@ -27,9 +27,13 @@ module.exports = function() {
     self.environmentObs.subscribe(utils.getStudyList(self));
     self.environmentObs(env);
 
-    function clear() {
+    function clear(response) {
         self.usernameObs("");
         self.passwordObs("");
+        if (!response.isSupportedUser()) {
+            self.messageObs({text:'You do not appear to be either a developer or a researcher.', 'status': 'error'});
+        }
+        return response;
     }
 
     self.signIn = function(vm, event) {
