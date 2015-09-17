@@ -17,7 +17,6 @@ var SCHEDULE_TYPE_OPTIONS = Object.freeze([
     {value: 'once', label: 'Once'},
     {value: 'recurring', label: 'Recurring'}
 ]);
-
 var ACTIVITY_TYPE_OPTIONS = Object.freeze([
     {value: 'task', label: 'Do Task'},
     {value: 'survey', label: 'Take Survey'}
@@ -39,7 +38,7 @@ function copyObserverValuesBackToActivity(activity) {
     } else {
         activity.survey = {
             guid: activity.surveyGuidObs(),
-            identifier: scheduleService.getSurveyIdentifierWithGuid(activity.surveyGuidObs()).identifier
+            identifier: scheduleService.surveysOptionsFinder(activity.surveyGuidObs()).identifier
         };
     }
 }
@@ -89,9 +88,8 @@ module.exports = function(params) {
         if (strategy) {
             // Problems:
             // times come back in "08:00:00.000" format
-            // periods are not parsed into their repsective fields
             // startsOn and endsOn are not LocalDates, they are absolute date strings.
-            // Let's fix these manually just for now:
+            // TODO: May need to be fixed elsewhere
             strategy.schedule.times = strategy.schedule.times.map(function(time) {
                 return time.replace(":00.000","");
             });
@@ -110,10 +108,10 @@ module.exports = function(params) {
     self.publishedObs = ko.observable(false);
 
     self.scheduleTypeOptions = SCHEDULE_TYPE_OPTIONS;
-    self.scheduleTypeLabel = utils.makeFinderByLabel(SCHEDULE_TYPE_OPTIONS);
+    self.scheduleTypeLabel = utils.makeOptionLabelFinder(SCHEDULE_TYPE_OPTIONS);
 
     self.activityTypeOptions = ACTIVITY_TYPE_OPTIONS;
-    self.activityTypeLabel = utils.makeFinderByLabel(ACTIVITY_TYPE_OPTIONS);
+    self.activityTypeLabel = utils.makeOptionLabelFinder(ACTIVITY_TYPE_OPTIONS);
 
     self.surveysOptionsObs = scheduleService.surveysOptionsObs;
     self.surveysOptionsLabel = scheduleService.surveysOptionsLabel;
@@ -134,7 +132,7 @@ module.exports = function(params) {
     };
     self.editEventId = function(vm, event) {
         event.preventDefault();
-        utils.openDialog('add_event_dialog', {
+        utils.openDialog('event_id_editor', {
             'eventIdObs': self.eventIdObs,'clearEventIdFunc': self.clearEventId
         });
     };

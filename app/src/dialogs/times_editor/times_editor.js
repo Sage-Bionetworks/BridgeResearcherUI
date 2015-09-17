@@ -12,13 +12,11 @@ module.exports = function(params) {
     self.timeObs = ko.observable();
     self.timesOptions = scheduleService.timeOptions;
     self.timesLabel = scheduleService.timeOptionsLabel;
-
-    self.formatTime = scheduleService.formatTime;
     self.publishedObs = ko.observable(false);
 
     self.addTime = function(vm, event) {
         event.preventDefault();
-        var time = scheduleService.findTimeOptionByValue(self.timeObs());
+        var time = scheduleService.timeOptionsFinder(self.timeObs());
         if (self.itemsObs().indexOf(time.value) === -1) {
             self.itemsObs.push(time.value);
             self.itemsObs.sort();

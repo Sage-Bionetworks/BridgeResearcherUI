@@ -31,16 +31,16 @@ module.exports = {
         };
     },
     initSchemasVM: function(vm) {
-        vm.schemaTypeLabel = utils.makeFinderByLabel(SCHEMA_TYPE_OPTIONS);
+        vm.schemaTypeLabel = utils.makeOptionLabelFinder(SCHEMA_TYPE_OPTIONS);
     },
     initVM: function(vm) {
         vm.schemaTypeOptions = SCHEMA_TYPE_OPTIONS;
-        vm.schemaTypeLabel = utils.makeFinderByLabel(SCHEMA_TYPE_OPTIONS);
+        vm.schemaTypeLabel = utils.makeOptionLabelFinder(SCHEMA_TYPE_OPTIONS);
         vm.fieldTypeOptions = FIELD_TYPE_OPTIONS;
-        vm.fieldTypeLabel = utils.makeFinderByLabel(FIELD_TYPE_OPTIONS);
+        vm.fieldTypeLabel = utils.makeOptionLabelFinder(FIELD_TYPE_OPTIONS);
     },
     initFieldDefinitionVM: function(vm) {
         vm.fieldTypeOptions = FIELD_TYPE_OPTIONS;
-        vm.fieldTypeLabel = utils.makeFinderByLabel(FIELD_TYPE_OPTIONS);
+        vm.fieldTypeLabel = utils.makeOptionLabelFinder(FIELD_TYPE_OPTIONS);
     }
 };

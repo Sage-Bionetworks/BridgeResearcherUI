@@ -7,12 +7,19 @@ var DURATION_OPTIONS = Object.freeze([
     {value: 'P*W', label: 'Weeks'},
     {value: 'P*M', label: 'Months'}
 ]);
+var DURATION_NO_HOURS_OPTIONS = Object.freeze([
+    {value: 'P*D', label: 'Days'},
+    {value: 'P*W', label: 'Weeks'},
+    {value: 'P*M', label: 'Months'}
+]);
 
 /**
  * Let's call the numerical portion of the duration the 'amount', and kind of time
  * period being described the 'duration'.
  *
  * @param params
+ *  fieldObs - the field this control represents
+ *  noHours - if true, no hours will be shown in the dropdown menu
  */
 module.exports = function(params) {
     var self = this;
@@ -21,8 +28,13 @@ module.exports = function(params) {
     self.amountObs = ko.observable();
     self.durationObs = ko.observable();
 
-    self.durationOptions = DURATION_OPTIONS;
-    self.durationOptionsLabel = utils.makeFinderByLabel(DURATION_OPTIONS);
+    if (params.noHours === true) {
+        self.durationOptions = DURATION_NO_HOURS_OPTIONS;
+        self.durationOptionsLabel = utils.makeOptionLabelFinder(DURATION_NO_HOURS_OPTIONS);
+    } else {
+        self.durationOptions = DURATION_OPTIONS;
+        self.durationOptionsLabel = utils.makeOptionLabelFinder(DURATION_OPTIONS);
+    }
 
     function updateSubFields() {
         var value = self.fieldObs();
@@ -33,7 +45,7 @@ module.exports = function(params) {
                 self.amountObs(amt);
                 self.durationObs(duration);
             } else {
-                console.error("fieldObs invalid, not setting amountObs/durationObs", value);
+                //console.error("fieldObs invalid, not setting amountObs/durationObs", value);
             }
         }
     }
@@ -48,9 +60,9 @@ module.exports = function(params) {
         amt = parseInt(amt,10);
         if (typeof amt === 'number' && (amt%1)===0 && self.durationOptionsLabel(duration) !== '') {
             self.fieldObs(duration.replace('*',amt));
-            console.debug("setting fieldObs", self.fieldObs());
+            //console.debug("setting fieldObs", self.fieldObs());
         } else {
-            console.debug("duration values invalid, not updating fieldObs", amt, duration);
+            //console.debug("duration values invalid, not updating fieldObs", amt, duration);
         }
     }
 }

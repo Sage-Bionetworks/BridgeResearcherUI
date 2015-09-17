@@ -6,8 +6,6 @@ var TYPE_OPTIONS = Object.freeze([
     {value: 'SimpleScheduleStrategy', label: 'Simple Schedule'},
     {value: 'ABTestScheduleStrategy', label: 'A/B Test Schedule'}
 ]);
-var SCHEDULE_FIELDS = ['scheduleType','eventId','delay','interval',
-    'expires','cronTrigger','startsOn','endsOn','times','activities'];
 
 function newSchedulePlan() {
     return {
@@ -45,9 +43,9 @@ module.exports = function(params) {
 
     // Fields for this form
     self.labelObs = ko.observable("");
-    self.schedulePlanTypeObs = ko.observable('SimpleSchedulePlan');
+    self.schedulePlanTypeObs = ko.observable('SimpleScheduleStrategy');
     self.schedulePlanTypeOptions = TYPE_OPTIONS;
-    self.schedulePlanTypeLabel = utils.makeFinderByLabel(TYPE_OPTIONS);
+    self.schedulePlanTypeLabel = utils.makeOptionLabelFinder(TYPE_OPTIONS);
 
     self.save = function(vm, event) {
         self.plan.label = self.labelObs();
@@ -67,7 +65,6 @@ module.exports = function(params) {
     };
 
     function loadVM(plan) {
-        console.log(plan);
         self.plan = plan;
         self.labelObs(plan.label);
         self.schedulePlanTypeObs(plan.strategy.type);
@@ -75,7 +72,6 @@ module.exports = function(params) {
     }
 
     if (params.guid !== "new") {
-        // TODO: Also want to direct this load to the parent screen, while maintaining the message...
         serverService.getSchedulePlan(params.guid).then(loadVM).catch(utils.failureHandler(self));
     } else {
         loadVM(newSchedulePlan());

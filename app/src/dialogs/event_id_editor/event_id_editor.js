@@ -13,13 +13,21 @@ module.exports = function(params) {
 
     self.clearEventIdFunc = params.clearEventIdFunc;
     self.publishedObs = ko.observable(false);
+    self.messageObs = ko.observable();
     self.eventIdObs = params.eventIdObs;
     self.answerObs = ko.observable();
     self.enrollmentObs = ko.observable(true);
 
     self.objectTypeObs = ko.observable(OBJECT_TYPE[0].value);
     self.objectTypeOptions = OBJECT_TYPE;
-    self.objectTypeLabel = utils.makeFinderByLabel(OBJECT_TYPE);
+    self.objectTypeLabel = utils.makeOptionLabelFinder(OBJECT_TYPE);
+    self.objectTypeObs.subscribe(function(newValue) {
+        if (newValue === "question") {
+            self.messageObs({text:"To schedule against a question, you must check the 'fireEvent' checkbox for that question in the survey.", status: "info"});
+        } else {
+            self.messageObs("");
+        }
+    })
 
     self.surveyObs = ko.observable();
     self.surveysOptionsObs = scheduleService.surveysOptionsObs;
@@ -31,6 +39,10 @@ module.exports = function(params) {
 
     self.save = function() {
         var eventId = self.objectTypeObs() + ":";
+        if (eventId === "question:" && !self.answerObs()) {
+            self.messageObs({text:'An answer is required.',status:'error'});
+            return;
+        }
         if (eventId === "question:") {
             eventId += self.questionObs() + ":answered=" + self.answerObs();
         } else if (eventId === "survey:") {

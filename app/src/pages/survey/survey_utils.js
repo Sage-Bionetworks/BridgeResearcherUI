@@ -257,7 +257,7 @@ module.exports = {
                 return SELECT_OPTIONS_BY_TYPE[vm.element.constraints.type];
             };
             vm.editRules = function() {
-                utils.openDialog('rules', {parentViewModel: vm, element: vm.element, publishedObs: vm.publishedObs});
+                utils.openDialog('rules_editor', {parentViewModel: vm, element: vm.element, publishedObs: vm.publishedObs});
             };
 
             vm.durationOptions = DURATION_OPTIONS;
@@ -265,17 +265,17 @@ module.exports = {
             vm.uiHintObs = params.element.uiHintObs;
             vm.fireEventObs = params.element.fireEventObs;
             vm.uiHintOptions = SELECT_OPTIONS_BY_TYPE[params.element.constraints.type];
-            vm.uiHintLabel = utils.makeFinderByLabel(vm.uiHintOptions);
+            vm.uiHintLabel = utils.makeOptionLabelFinder(vm.uiHintOptions);
             vm.dataTypeOptions = DATA_TYPE_OPTIONS;
-            vm.dataTypeLabel = utils.makeFinderByLabel(vm.dataTypeOptions);
+            vm.dataTypeLabel = utils.makeOptionLabelFinder(vm.dataTypeOptions);
             vm.unitOptions = UNIT_OPTIONS;
-            vm.unitLabel = utils.makeFinderByLabel(UNIT_OPTIONS);
+            vm.unitLabel = utils.makeOptionLabelFinder(UNIT_OPTIONS);
 
             vm.durationOptions = DURATION_OPTIONS;
-            vm.durationLabel = utils.makeFinderByLabel(DURATION_OPTIONS);
+            vm.durationLabel = utils.makeOptionLabelFinder(DURATION_OPTIONS);
 
             vm.operatorOptions = OPERATOR_OPTIONS;
-            vm.operatorLabel = utils.makeFinderByLabel(OPERATOR_OPTIONS);
+            vm.operatorLabel = utils.makeOptionLabelFinder(OPERATOR_OPTIONS);
         }
     }
 };

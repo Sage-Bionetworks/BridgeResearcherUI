@@ -35,6 +35,23 @@ function deleteUnusedProperties(object) {
         }
     }
 }
+function makeOptionFinder(arrayOrObs) {
+    return function(value) {
+        var options = ko.unwrap(arrayOrObs);
+        for (var i= 0; i < options.length; i++) {
+            var option = options[i];
+            if (option.value === value) {
+                return option;
+            }
+        }
+    };
+}
+function makeOptionLabelFinder(arrayOrObs) {
+    return function(value) {
+        var option = makeOptionFinder(arrayOrObs)(value);
+        return option ? option.label : "";
+    };
+}
 /**
  * Common utility methods for ViewModels.
  *
@@ -269,20 +286,18 @@ module.exports = {
     },
     /**
      * Given an array of option objects (with the properties "label" and "value"),
-     * return a function that will return the label given a value.
-     * @param options
+     * return a function that will return a specific option given a value.
+     * @param options array or observableArray
      * @returns {Function}
      */
-    makeFinderByLabel: function(options) {
-        return function(value) {
-            for (var i= 0; i < options.length; i++) {
-                if (options[i].value === value) {
-                    return options[i].label;
-                }
-            }
-            return "";
-        };
-    },
+    makeOptionFinder: makeOptionFinder,
+    /**
+     * Given an array of option objects (with the properties "label" and "value"),
+     * return a function that will return an option label given a value.
+     * @param options array or observableArray
+     * @returns {Function}
+     */
+    makeOptionLabelFinder: makeOptionLabelFinder,
     /**
      * Walk object and remove any properties that are set to null or an empty string.
      */

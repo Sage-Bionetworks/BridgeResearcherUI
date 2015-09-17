@@ -11,6 +11,6 @@ module.exports = function(params) {
     self.dataTypeObs = self.element.constraints.dataTypeObs;
 
     self.editEnum = function() {
-        utils.openDialog('enumeration', {parentViewModel: self, enumerationObs: self.enumerationObs});
+        utils.openDialog('enumeration_editor', {parentViewModel: self, enumerationObs: self.enumerationObs});
     };
 };
