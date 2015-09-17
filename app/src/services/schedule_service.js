@@ -49,7 +49,7 @@ var questionsOptionsObs = ko.observableArray([]);
 serverService.getPublishedSurveys().then(function(response) {
     response.items.sort(nameSorter);
     surveysOptionsObs.pushAll(response.items.map(function(survey) {
-        return {label: survey.name, value: survey.guid, createdOn: survey.createdOn};
+        return {label: survey.name, value: survey.guid, createdOn: survey.createdOn, identifier: survey.identifier};
     }));
 }).then(function() {
     // Wasn't that fun? That was fun. But this is even more fun: find all the questions in all the surveys...
@@ -76,26 +76,17 @@ for (var i=0; i < 24; i++) {
     var meridian = (i < 12) ? "AM" : "PM";
     MINUTES.forEach(function(min) {
         var label = hour+":"+min+" "+meridian;
-        var timeOfDay= hour24+":"+min+":00";
+        var timeOfDay= hour24+":"+min;
         TIME_OPTIONS.push({label: label, value: timeOfDay});
     });
 }
 // I think these are just idiomatic.
 TIME_OPTIONS.shift();
 TIME_OPTIONS.shift();
-TIME_OPTIONS.unshift({label: "12:30 AM", value: "00:30:00"});
-TIME_OPTIONS.push({label: "12:00 PM", value: "00:00:00"});
+TIME_OPTIONS.unshift({label: "12:30 AM", value: "00:30"});
+TIME_OPTIONS.push({label: "12:00 PM", value: "00:00"});
 
 function findTimeOptionByValue(value) {
-    if (!/\d{2}\:\d{2}\:\d{2}/.test(value)) {
-        var parts = value.split(':');
-        while(parts.length < 3) {
-            parts.push("00");
-        }
-        value = parts[0]+":"+parts[1]+":"+parts[2];
-        console.log(value);
-    }
-
     for (var i= 0, len = TIME_OPTIONS.length; i < len; i++) {
         if (TIME_OPTIONS[i].value === value) {
             return TIME_OPTIONS[i];
@@ -109,6 +100,16 @@ function formatTimesArray(times) {
 function formatTime(time) {
     return findTimeOptionByValue(time).label;
 }
+function getSurveyIdentifierWithGuid(guid) {
+    var options = surveysOptionsObs();
+    for (var i= 0, len = options.length; i < len; i++) {
+        if (options[i].value === guid) {
+            return options[i];
+        }
+    }
+    return null;
+}
+
 module.exports = {
     makeObserverFinder: makeFinder,
     formatEventId: formatEventId,
@@ -120,5 +121,6 @@ module.exports = {
     timeOptionsLabel: utils.makeFinderByLabel(TIME_OPTIONS),
     findTimeOptionByValue: findTimeOptionByValue,
     formatTime: formatTime,
-    formatTimesArray: formatTimesArray
+    formatTimesArray: formatTimesArray,
+    getSurveyIdentifierWithGuid: getSurveyIdentifierWithGuid
 };

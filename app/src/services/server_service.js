@@ -48,7 +48,7 @@ function postInt(url, data) {
         data = JSON.stringify(data);
     }
     var dataString = data.replace(/"password":"([^"]*)"/, '"password":"[REDACTED]"');
-    console.debug("POST", url, dataString);
+    //console.debug("POST", url, dataString);
 
     return $.ajax({
         method: 'POST',
@@ -60,7 +60,7 @@ function postInt(url, data) {
     });
 }
 function getInt(url) {
-    console.debug("GET", url);
+    //console.debug("GET", url);
     return $.ajax({
         method: 'GET',
         url: url,
@@ -70,7 +70,7 @@ function getInt(url) {
     });
 }
 function deleteInt(url) {
-    console.debug("DELETE", url);
+    //console.debug("DELETE", url);
     return $.ajax({
         method: 'DELETE',
         url: url,
@@ -95,6 +95,7 @@ function makeSessionWaitingPromise(func) {
     });
     promise.catch(function(response) {
         if (response.status === 401) {
+            console.error("Signed out due to 401");
             signOut();
         } else if (response.responseJSON) {
             console.error(response.status, response.responseJSON);

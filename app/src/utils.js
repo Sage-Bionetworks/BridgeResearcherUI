@@ -20,7 +20,21 @@ function nameInspector(string) {
 function isDefined(obj) {
     return (typeof obj !== "undefined");
 }
-
+function deleteUnusedProperties(object) {
+    if (is(object, 'Array')) {
+        for (var i=0; i < object.length; i++) {
+            deleteUnusedProperties(object[i]);
+        }
+    } else if (is(object, 'Object')) {
+        for (var prop in object) {
+            if (typeof object[prop] === 'undefined' || object[prop] === "" || object[prop] === null) {
+                delete object[prop];
+            } else {
+                deleteUnusedProperties(object[prop]);
+            }
+        }
+    }
+}
 /**
  * Common utility methods for ViewModels.
  *
@@ -98,7 +112,9 @@ module.exports = {
      */
     failureHandler: function(vm, event) {
         return function(response) {
-            event.target.classList.remove("loading");
+            if (event){
+                event.target.classList.remove("loading");
+            }
             if (vm.messageObs) {
                 if (response.status === 412) {
                     vm.messageObs({text:'You do not appear to be either a developer or a researcher.', 'status': 'error'});
@@ -160,9 +176,14 @@ module.exports = {
         for (var i=0; i < fields.length; i++) {
             var insp = nameInspector(fields[i]);
 
+            // TODO: At one point you were checking that the model object had the property before
+            // copying the observer back to it, but this prevents the UI from adding properties when the
+            // model didn't initially have them. Disabling this, but may break something elsewhere.
             var obs = vm[insp.observerName];
-            var value = object[insp.name];
-            if (isDefined(obs) && isDefined(value)) {
+            //var value = object[insp.name];
+            console.log("updating", insp.name, obs()/*, value*/);
+            //if (isDefined(obs) && isDefined(value)) {
+            if (isDefined(obs)) {
                 object[insp.name] = obs();
             }
         }
@@ -261,5 +282,9 @@ module.exports = {
             }
             return "";
         };
-    }
+    },
+    /**
+     * Walk object and remove any properties that are set to null or an empty string.
+     */
+    deleteUnusedProperties: deleteUnusedProperties
 };

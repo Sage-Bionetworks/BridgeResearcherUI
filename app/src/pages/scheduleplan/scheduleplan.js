@@ -53,8 +53,9 @@ module.exports = function(params) {
         self.plan.label = self.labelObs();
         self.plan.strategy = self.delegate.strategy();
 
+        utils.deleteUnusedProperties(self.plan);
         console.log(JSON.stringify(self.plan));
-        /*
+
         utils.startHandler(self, event);
         serverService.saveSchedulePlan(self.plan)
             .then(utils.successHandler(self, event, "The schedule plan has been saved."))
@@ -63,10 +64,10 @@ module.exports = function(params) {
                 self.plan.version = response.version;
             })
             .catch(utils.failureHandler(self, event));
-        */
     };
 
     function loadVM(plan) {
+        console.log(plan);
         self.plan = plan;
         self.labelObs(plan.label);
         self.schedulePlanTypeObs(plan.strategy.type);
@@ -74,7 +75,8 @@ module.exports = function(params) {
     }
 
     if (params.guid !== "new") {
-        serverService.getSchedulePlan(params.guid).then(loadVM);
+        // TODO: Also want to direct this load to the parent screen, while maintaining the message...
+        serverService.getSchedulePlan(params.guid).then(loadVM).catch(utils.failureHandler(self));
     } else {
         loadVM(newSchedulePlan());
     }

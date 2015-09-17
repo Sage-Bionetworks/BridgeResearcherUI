@@ -8,7 +8,7 @@ var scheduleService = require('../../services/schedule_service.js');
  * When there's no eventId, enrollment is assumed; generally if there is any event,
  * enrollment would be included last in a comma-separated list of events.
  */
-var FIELDS = ['delay','interval','scheduleType','expires','startsOn','endsOn','eventId',
+var SCHEDULE_FIELDS = ['delay','interval','scheduleType','expires','startsOn','endsOn','eventId',
     'cronTrigger', 'times[]', 'activities[]', 'enrollment'];
 
 var ACTIVITY_FIELDS = ['label','labelDetail','activityType','taskId','surveyGuid'];
@@ -28,7 +28,7 @@ var ACTIVITY_TYPE_OPTIONS = Object.freeze([
  * more complicated than what ko.mapping provides.
  * @param activity
  */
-function activityObserversToModel(activity) {
+function copyObserverValuesBackToActivity(activity) {
     activity.label = activity.labelObs();
     activity.labelDetail = activity.labelDetailObs();
     activity.activityType = activity.activityTypeObs();
@@ -38,7 +38,8 @@ function activityObserversToModel(activity) {
         };
     } else {
         activity.survey = {
-            guid: activity.surveyGuidObs()
+            guid: activity.surveyGuidObs(),
+            identifier: scheduleService.getSurveyIdentifierWithGuid(activity.surveyGuidObs()).identifier
         };
     }
 }
@@ -47,14 +48,17 @@ function activityObserversToModel(activity) {
  * more complicated than what ko.mapping provides.
  * @param activity
  */
-function activityModelToObservers(activity) {
+function addObserversToActivity(activity) {
     activity.labelObs = ko.observable(activity.label);
     activity.labelDetailObs = ko.observable(activity.labelDetail);
     activity.activityTypeObs = ko.observable(activity.activityType);
+    activity.taskIdObs = ko.observable();
     if (activity.activityType === 'task') {
-        activity.taskIdObs = ko.observable(activity.task.identifier);
-    } else {
-        activity.surveyGuidObs = ko.observable(activity.survey.guid);
+        activity.taskIdObs(activity.task.identifier);
+    }
+    activity.surveyGuidObs = ko.observable();
+    if (activity.activityType === 'survey') {
+        activity.surveyGuidObs(activity.survey.guid);
     }
 }
 
@@ -68,25 +72,40 @@ module.exports = function(params) {
     var self = this;
 
     self.strategyObs = params.strategyObs;
+    utils.observablesFor(self, SCHEDULE_FIELDS);
 
     // This is the implementation called by the schedule plan viewModel to construct
     // the model
     params.delegate.strategy = function() {
         var strategy = self.strategyObs();
-        utils.observablesToObject(self, strategy.schedule, FIELDS);
-        strategy.schedule.activities.forEach(activityObserversToModel);
+        self.activitiesObs().forEach(copyObserverValuesBackToActivity);
+        utils.observablesToObject(self, strategy.schedule, SCHEDULE_FIELDS);
         return strategy;
     };
 
     // This is fired when the parent viewModel gets a plan back from the server
     ko.computed(function() {
         var strategy = self.strategyObs();
-        strategy.schedule.times.sort();
-        utils.valuesToObservables(self, strategy.schedule, FIELDS);
-        strategy.schedule.activities.forEach(activityModelToObservers);
+        if (strategy) {
+            // Problems:
+            // times come back in "08:00:00.000" format
+            // periods are not parsed into their repsective fields
+            // startsOn and endsOn are not LocalDates, they are absolute date strings.
+            // Let's fix these manually just for now:
+            strategy.schedule.times = strategy.schedule.times.map(function(time) {
+                return time.replace(":00.000","");
+            });
+            if (strategy.schedule.startsOn) {
+                strategy.schedule.startsOn = strategy.schedule.startsOn.replace(":00.000Z","");
+            }
+            if (strategy.schedule.endsOn) {
+                strategy.schedule.endsOn = strategy.schedule.endsOn.replace(":00.000Z","");
+            }
+            strategy.schedule.times.sort();
+            strategy.schedule.activities.forEach(addObserversToActivity);
+            utils.valuesToObservables(self, strategy.schedule, SCHEDULE_FIELDS);
+        }
     });
-
-    utils.observablesFor(self, FIELDS);
 
     self.publishedObs = ko.observable(false);
 
