@@ -1,3 +1,7 @@
+@mixin link {
+    color: #009fda!important;
+    cursor: pointer;
+}
 @mixin flex-box($direction) {
     display: -webkit-flex;
     display: -ms-flexbox;

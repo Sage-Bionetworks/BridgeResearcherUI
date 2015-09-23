@@ -21,7 +21,7 @@ var SESSION_ENDED_EVENT_KEY = 'sessionEnded';
 var listeners = new EventEmitter();
 var session = null;
 
-// Cache this.
+// Cache this. It *must* be a copy of the server version.
 var currentStudy = null;
 
 $(function() {
@@ -154,9 +154,12 @@ module.exports = {
             sess.isSupportedUser = isSupportedUser;
             if (sess.isSupportedUser()) {
                 sess.studyName = studyName;
+                sess.studyId = data.study;
                 session = sess;
                 optionsService.set(SESSION_KEY, sess);
                 listeners.emit(SESSION_STARTED_EVENT_KEY, session);
+            } else {
+                throw new Error("User is not authorized to use this service");
             }
         });
         return request;
@@ -173,14 +176,13 @@ module.exports = {
             return Promise.resolve(currentStudy);
         }
         return get(config.getStudy).then(function(study) {
-            currentStudy = study;
+            currentStudy = JSON.parse(JSON.stringify(study));
             return study;
         });
     },
     saveStudy: function(study) {
         return post(config.getStudy, study).then(function(response) {
-            currentStudy = study;
-            currentStudy.version = response.version;
+            currentStudy = null;
             return response;
         });
     },
@@ -271,6 +273,15 @@ module.exports = {
     },
     deleteSchedulePlan: function(guid) {
         return del(config.schemaPlans + "/" + guid);
+    },
+    getSession: function() {
+        if (session) {
+            return Promise.resolve(session);
+        } else {
+            return new Promise(function(resolve, reject) {
+                listeners.once(SESSION_STARTED_EVENT_KEY, resolve);
+            });
+        }
     },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {

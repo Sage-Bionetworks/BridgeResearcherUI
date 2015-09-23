@@ -19,7 +19,7 @@
     <button class="ui red button" data-bind="disable: !anyChecked(), click: deleteRevisions">Delete</button>
 </div>
 
-<div data-bind="visible: itemsObs().length === 0">Loading...</div>
+<div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
 <table class="ui table" data-bind="visible: itemsObs().length > 0">
     <thead>
         <tr>

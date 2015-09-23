@@ -72,7 +72,10 @@ module.exports = function(params) {
     }
 
     if (params.guid !== "new") {
-        serverService.getSchedulePlan(params.guid).then(loadVM).catch(utils.failureHandler(self));
+        serverService.getSchedulePlan(params.guid).then(loadVM).catch(function(response) {
+            utils.message('warning', "Schedule plan not found.");
+            document.location = "#/scheduleplans";
+        });
     } else {
         loadVM(newSchedulePlan());
     }

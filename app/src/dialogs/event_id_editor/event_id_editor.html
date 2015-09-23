@@ -4,7 +4,6 @@
         Edit Scheduling Event
     </div>
     <div class="content">
-        <form-message params="messageObs: messageObs"></form-message>
         <div class="ui form">
             <div class="field">
                 <ui-select params="fieldObs: objectTypeObs, fieldLabel: objectTypeLabel,
@@ -41,6 +40,7 @@
                 </ui-checkbox>
             </div>
         </div>
+        <form-message params="messageObs: messageObs"></form-message>
     </div>
     <div class="rules-actions">
         <button class="ui primary button" data-bind="click: save">Save</button>

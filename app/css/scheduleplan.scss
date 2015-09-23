@@ -9,8 +9,7 @@
 
 /* This is actually for the schedule */
 .activity {
-    display: flex;
-    flex-direction: row;
+    @include flex-box(row);
 }
     .activity:nth-child(even) {
         background-color: #f4f4f4;

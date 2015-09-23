@@ -79,6 +79,12 @@ module.exports = function(params) {
         var strategy = self.strategyObs();
         self.activitiesObs().forEach(copyObserverValuesBackToActivity);
         utils.observablesToObject(self, strategy.schedule, SCHEDULE_FIELDS);
+
+        // To avoid an error, if the type is "once", remove the repeating fields (that are hidden).
+        if (strategy.schedule.scheduleType === "once") {
+            delete strategy.schedule.interval;
+            delete strategy.schedule.cronTrigger;
+        }
         return strategy;
     };
 

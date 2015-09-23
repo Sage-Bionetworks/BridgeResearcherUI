@@ -42,10 +42,10 @@ ListsSource.prototype = {
 }
 
 function makeListMapEntry(enumeration) {
-    var name = "<empty>";
+    var name = "&lt;empty&gt;";
     if (enumeration.length === 1) {
         name = itemLabel(enumeration[0]);
-    } else if (enumeration.length == 2) {
+    } else if (enumeration.length === 2) {
         name = itemLabel(enumeration[0]) + " / " + itemLabel(enumeration[enumeration.length-1]);
     } else if (enumeration.length > 2) {
         name = itemLabel(enumeration[0]) + " to " + itemLabel(enumeration[enumeration.length-1]);
@@ -68,8 +68,9 @@ function copyEntry(element, entry) {
 }
 
 function getEnumeration(element) {
-    if (element.constraints && element.constraints.enumerationObs) {
-        return element.constraints.enumerationObs();
+    var con = element.constraints;
+    if (con && con.enumerationObs) {
+        return con.enumerationObs();
     }
     return null;
 }
@@ -91,7 +92,8 @@ module.exports = function(params) {
 
     var listsSource = new ListsSource(self.elementsObs(), self.element);
     self.allLists = ko.observableArray(listsSource.getAllLists());
-    self.listObs = ko.observableArray([].concat(listsSource.getCurrentEntry().enumeration));
+
+    self.listObs = ko.observableArray(listsSource.getCurrentEntry().enumeration);
 
     var zonesEl = document.querySelector(".listZone");
 

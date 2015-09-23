@@ -59,7 +59,11 @@ module.exports = function(params) {
 
         amt = parseInt(amt,10);
         if (typeof amt === 'number' && (amt%1)===0 && self.durationOptionsLabel(duration) !== '') {
-            self.fieldObs(duration.replace('*',amt));
+            if (amt === 0) {
+                self.fieldObs(null);
+            } else {
+                self.fieldObs(duration.replace('*',amt));
+            }
             //console.debug("setting fieldObs", self.fieldObs());
         } else {
             //console.debug("duration values invalid, not updating fieldObs", amt, duration);

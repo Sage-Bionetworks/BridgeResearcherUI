@@ -66,7 +66,7 @@ module.exports = function(keys) {
                 "Are you sure you want to delete these survey versions?" :
                 "Are you sure you want to delete this survey version?";
         var confirmMsg = (deletables.length > 2) ?
-                "Survey versions deleted" : "Survey version deleted.";
+                "Survey versions deleted." : "Survey version deleted.";
         if (confirm(msg)) {
             utils.startHandler(self, event);
 
