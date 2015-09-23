@@ -4,10 +4,6 @@ var serverService = require('../../services/server_service');
 var schemaUtils = require('../schema/schema_utils');
 var utils = require('../../utils');
 
-function nameSorter(a,b) {
-    return a.name.toLowerCase() > b.name.toLowerCase();
-}
-
 module.exports = function() {
     var self = this;
 
@@ -17,10 +13,10 @@ module.exports = function() {
 
     serverService.getAllUploadSchemas().then(function(response) {
         if (response.items.length) {
-            response.items.sort(nameSorter);
+            response.items.sort(utils.makeFieldSorter("name"));
             self.itemsObs(response.items);
         } else {
-            document.querySelector(".loading.status").textContent = "There are currently no upload schemas.";
+            document.querySelector(".loading_status").textContent = "There are currently no upload schemas.";
         }
     });
 };

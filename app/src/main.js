@@ -1,5 +1,5 @@
 require('../css/main');
-require('../../node_modules/dragula/dist/dragula');
+require('../lib/toastr.min');
 var director = require('director');
 var ko = require('knockout');
 var $ = require('jquery');
@@ -8,16 +8,18 @@ var utils = require('./utils');
 require('./bindings');
 require('./registry');
 
+// Used in navigation to keep a section highlighted as you navigate into it.
 var pageSets = {
     'surveys': ['surveys','survey','survey_versions'],
-    'schemas': ['schemas','schema','schema_versions']
+    'schemas': ['schemas','schema','schema_versions'],
+    'scheduleplans': ['scheduleplans','scheduleplan']
 };
 
 var RootViewModel = function() {
     var self = this;
 
     self.environment = ko.observable("");
-    self.studyName = ko.observable("Sage Bionetworks");
+    self.studyName = ko.observable("");
 
     self.selected = ko.observable('info');
     self.roles = ko.observableArray();

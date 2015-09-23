@@ -11,8 +11,7 @@
     color: #d95c5c;
 }
 .duration-control {
-    display: flex;
-    flex-direction: row;
+    @include flex-box(row);
 }
     .duration-control input {
         width: 3.5rem!important;
@@ -30,6 +29,5 @@
     margin-right: 1rem;
 }
 .inline-editor-controls a {
-    cursor: pointer;
-    color: green;
+    @include link;
 }

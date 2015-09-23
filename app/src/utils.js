@@ -2,6 +2,16 @@ var ko = require('knockout');
 var EventEmitter = require('./events');
 var serverService = require('./services/server_service');
 var dialogBus = new EventEmitter();
+var toastr = require('toastr');
+
+var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
+
+toastr.options = {
+    positionClass: "toast-bottom-right",
+    hideDuration: 300,
+    timeOut: 5000,
+    preventDuplicates: true
+};
 
 function is(obj, typeName) {
     return Object.prototype.toString.call(obj) === "[object "+typeName+"]";
@@ -56,9 +66,15 @@ function makeOptionLabelFinder(arrayOrObs) {
  * Common utility methods for ViewModels.
  *
  * TODO: Add dirty state tracking to the observables that are created.
- * TODO: bus for event errors that are now just getting logged and not shown to user. Wire to root message panel.
  */
 module.exports = {
+    message: function(severity, message) {
+        if (toastr[severity]) {
+            toastr[severity](message);
+        } else {
+            console.error(severity + " is not a toastr function", message);
+        }
+    },
     /**
      * Determine type of object
      * @param object - object to test
@@ -77,6 +93,16 @@ module.exports = {
      */
     identity: function(arg) {
         return arg;
+    },
+    /**
+     * Create a sort function that sorts an array of items by a specific field name
+     * (must be a string, will be sorted ignoring case).Sort items by a property of each object (must be a string)
+     * @param listener
+     */
+    makeFieldSorter: function(fieldName) {
+        return function sorter(a,b) {
+            return a[fieldName].toLowerCase().localeCompare(b[fieldName].toLowerCase());
+        };
     },
     // TODO: This is used by root and no other, and it seems like it should be possible to
     // do root.openDialog(), etc.
@@ -98,9 +124,7 @@ module.exports = {
      */
     startHandler: function(vm, event) {
         event.target.classList.add("loading");
-        if (vm.messageObs) {
-            vm.messageObs("");
-        }
+        toastr.clear();
     },
     /**
      * An Ajax success handler for a view model that supports the editing of a form.
@@ -114,7 +138,7 @@ module.exports = {
         return function(response) {
             event.target.classList.remove("loading");
             if (message) {
-                vm.messageObs({text:message});
+                toastr.success(message);
             }
             return response;
         };
@@ -134,14 +158,13 @@ module.exports = {
             }
             if (vm.messageObs) {
                 if (response.status === 412) {
-                    vm.messageObs({text:'You do not appear to be either a developer or a researcher.', 'status': 'error'});
+                    toastr.error('You do not appear to be either a developer or a researcher.');
                 } else if (response instanceof Error) {
-                    vm.messageObs({text:response.message, 'status': 'error'});
+                    toastr.error(response.message);
                 } else if (response.responseJSON) {
-                    vm.messageObs({text:response.responseJSON.message, 'status': 'error'});
+                    toastr.error(response.responseJSON.message);
                 } else {
-                    // No message, the message component will provide something generic
-                    vm.messageObs({'status': 'error'});
+                    toastr.error(GENERIC_ERROR);
                 }
             }
         };
@@ -275,12 +298,12 @@ module.exports = {
      */
     makeTableRowHandler: function(vm, deletables, rootPath) {
         return function() {
-            if (vm.itemsObs().length == deletables.length) {
+            deletables.forEach(function(deletable) {
+                vm.itemsObs.remove(deletable);
+            });
+            if (vm.itemsObs().length === 0) {
+                document.querySelector(".loading_status").textContent = "There are currently no items.";
                 document.location = rootPath;
-            } else {
-                deletables.forEach(function(deletable) {
-                    vm.itemsObs.remove(deletable);
-                });
             }
         };
     },

@@ -22,11 +22,12 @@
     "knockout-mapping": "^2.5.0",
     "mocha": "^2.2.5",
     "moment": "^2.10.3",
-    "node-sass": "^3.3.2",
     "node-libs-browser": "^0.5.0",
+    "node-sass": "^3.3.2",
     "object-hash": "^0.8.0",
     "sass-loader": "^2.0.1",
     "style-loader": "^0.12.2",
+    "toastr": "^2.1.2",
     "webpack": "^1.9.7",
     "webpack-dev-server": "^1.8.2"
   },

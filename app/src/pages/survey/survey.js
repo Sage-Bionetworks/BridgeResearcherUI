@@ -40,13 +40,11 @@ module.exports = function(params) {
             return serverService.updateSurvey(self.survey).catch(utils.failureHandler(vm, event));
         }
         function load(keys) {
+            var msg = "The survey version created on " + self.formatDateTime(lastCreatedOn) +
+                    " has been published. A new version has been created for further editing.";
             return serverService.getSurvey(keys.guid, keys.createdOn)
-                .then(utils.successHandler(vm, event))
-                .then(loadVM)
-                .then(function(){
-                    self.messageObs({text: "The survey version created on " + self.formatDateTime(lastCreatedOn) +
-                        " has been published. A new version has been created for further editing."});
-                });
+                .then(utils.successHandler(vm, event), msg)
+                .then(loadVM);
         }
         utils.startHandler(self, event);
         var lastCreatedOn = self.createdOnObs();

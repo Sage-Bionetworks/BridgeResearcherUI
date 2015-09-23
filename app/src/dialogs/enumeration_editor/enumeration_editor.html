@@ -17,7 +17,7 @@
                 <div class="column">
                     <div class="ui list listZone" data-bind="foreach: listObs">
                         <div class="item element-enum">
-                            <i class="trash icon" data-bind="visible: !$parent.publishedObs(), click: $parent.removeListItem"></i>
+                            <i class="trash icon" data-bind="click: $parent.removeListItem, visible: !$parent.publishedObs()"></i>
                             <div class="content">
                                 <div class="header">
                                     <span data-bind="text: label"></span>

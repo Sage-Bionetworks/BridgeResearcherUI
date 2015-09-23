@@ -5,13 +5,14 @@
 <div class="button-container">
     <a href="#/surveys/new" class="ui primary button">New Survey</a>
 </div>
-<div class="loading status" data-bind="visible: itemsObs().length === 0">Loading...</div>
+<div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
 <table class="ui compact table" data-bind="visible: itemsObs().length > 0">
     <thead>
         <tr>
             <th>Name</th>
             <th>Last Updated</th>
             <th>Identifier</th>
+            <th>Schedule(s)</th>
             <th>Upload Schema</th>
         </tr>
     </thead>
@@ -22,8 +23,10 @@
             </td>
             <td data-bind="text: $parent.formatDateTime($data.modifiedOn)"></td>
             <td data-bind="text: $data.identifier"></td>
+            <td data-bind="foreach: $data.schedulePlanObs"><!-- ko if: $index() > 0 -->, <!-- /ko -->
+                <a target="_blank" data-bind="attr: {href: '#/scheduleplans/'+$data.guid}, text: $data.label"></a></td>
             <td>
-                <a href="#" data-bind="visible: $data.schemaRevision, attr:{'href':'#/schemas/'+$data.identifier+'/'+$data.schemaRevision}, text: 'v'+$data.schemaRevision"></a>
+                <a target="_blank" data-bind="visible: $data.schemaRevision, attr:{'href':'#/schemas/'+$data.identifier+'/'+$data.schemaRevision}, text: 'v'+$data.schemaRevision"></a>
                 <em data-bind="visible: !$data.schemaRevision">Draft</em>
             </td>
         </tr>

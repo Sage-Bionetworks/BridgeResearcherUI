@@ -62,13 +62,15 @@ footer p {
 .ui.form {
     padding: 0 ! important;
 }
-
+.ui.modal .content {
+    padding: 1.5rem;
+}
 /* GENERAL */
 
 .pointing {
     cursor: pointer;
 }
-.loading.status {
+.loading_status {
     margin: 2rem 0;
     font-size: larger;
 }

@@ -9,6 +9,9 @@
     <a class="item" data-bind="click: function() { tabObs('history') }, css: {active: tabObs() == 'history'}">
         <i class="history icon"></i> History
     </a>
+    <a class="item" data-bind="click: function() { tabObs('download') }, css: {active: tabObs() == 'download'}">
+        <i class="history icon"></i> Download
+    </a>
     <div class="right menu">
         <div class="item">
             <i class="clock icon"></i> <span data-bind="text: createdOnObs"></span>
@@ -68,6 +71,40 @@
                     <p>Only one version of your consent agreement is published at any given time. <strong>This should be the version of the consent agreement that is approved by your IRB.</strong> </p>
                     <p>Every edit of the consent is saved, and you can publish any version of it at any time. </p>
                     <p>When participants sign in, their session includes a flag indicating whether or not they have signed the currently published consent agreement. This can be used to ask them to re-consent before participating further in the study, although the Bridge server does not require this. </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div data-bind="visible: tabObs() == 'download'">
+        <div class="ui grid">
+            <div class="ten wide column">
+                <table class="ui compact table">
+                    <thead>
+                        <tr>
+                            <th>Format</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>HTML</td>
+                            <td>
+                                <a target="_blank" data-bind="attr: {'href': htmlUrlObs}, text: htmlUrlObs"></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>PDF</td>
+                            <td>
+                                <a target="_blank" data-bind="attr: {'href': pdfUrlObs}, text: pdfUrlObs"></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="six wide column">
+                <div class="ui message">
+                    <p>The published version of the consent can be accessed from your mobile app, or from other support materials,
+                    at the following addresses. </p>
                 </div>
             </div>
         </div>

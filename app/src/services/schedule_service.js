@@ -23,10 +23,6 @@ for (var i=0; i < 24; i++) {
         });
     });
 }
-
-function nameSorter(a,b) {
-    return a.name.toLowerCase() > b.name.toLowerCase();
-}
 function formatEventId(value) {
     if (!value) {
         return "On enrollment (default)";
@@ -55,14 +51,15 @@ function formatTimesArray(times) {
 }
 
 function collectSurveyOptions(response) {
-    response.items.sort(nameSorter);
+    response.items.sort(utils.makeFieldSorter("name"));
     surveysOptionsObs.pushAll(response.items.map(function(survey) {
         return {label: survey.name, value: survey.guid, createdOn: survey.createdOn, identifier: survey.identifier};
     }));
 }
 function collectSurveyQuestions(survey) {
     var options = survey.elements.filter(function(element) {
-        return (element.type === "SurveyQuestion");
+        // Once you enable this, you truly can't schedule against un-published surveys
+        return (element.type === "SurveyQuestion"/* && element.fireEvent*/);
     }).map(function(question) {
         return {label: survey.name + ": " + question.identifier, value: question.guid };
     });

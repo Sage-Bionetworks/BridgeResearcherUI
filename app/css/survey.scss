@@ -1,7 +1,7 @@
 @import "./lib.scss";
 
 .survey {
-    padding: 1rem;
+    /*padding: 1rem;*/
 }
 .element {
     @include flex-box(row);
@@ -130,11 +130,11 @@
             text-align: right;
         }
     .rules-actions {
-        padding: 1.5rem 2rem;
+        padding: 0 1.5rem 1.5rem 1.5rem;
     }
 .element-enum {
+    @include link;
     margin: .25rem 0;
-    cursor: pointer;
 }
 .insertion-control {
     position: relative;
@@ -162,12 +162,11 @@
         @include transform(rotateX(180deg));
     }
     .insertion-control-back a.item {
-        color: #009fda!important; /* Semantic UI choice? */
+        @include link;
     }
     .insertion-control-front {
         @include transform(rotateX(0deg));
-        color: #009fda;
-        cursor: pointer;
+        @include link;
     }
     .insertion-control-flipped {
         @include transform(rotateX(180deg)!important);

@@ -5,7 +5,8 @@ var scheduleService = require('../../services/schedule_service');
 
 var OBJECT_TYPE = Object.freeze([
     {value: 'survey', label: 'When survey'},
-    {value: 'question', label: 'When question'}
+    {value: 'question', label: 'When question'}/*,
+    {value: 'task', label: 'When task'} actually the server doesn't support this */
 ]);
 
 module.exports = function(params) {
@@ -40,9 +41,10 @@ module.exports = function(params) {
     self.save = function() {
         var eventId = self.objectTypeObs() + ":";
         if (eventId === "question:" && !self.answerObs()) {
-            self.messageObs({text:'An answer is required.',status:'error'});
+            utils.message('error', 'An answer is required.');
             return;
         }
+        var eventId = self.objectTypeObs() + ":";
         if (eventId === "question:") {
             eventId += self.questionObs() + ":answered=" + self.answerObs();
         } else if (eventId === "survey:") {

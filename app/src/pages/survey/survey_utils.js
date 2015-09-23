@@ -130,7 +130,9 @@ function makeObservable(obj, field) {
             return ko.observable(matches && matches.length ? matches[0] : "");
         }
     }
-    return (field === "rules" || field === "enumeration") ? ko.observableArray(obj[field]) : ko.observable(obj[field]);
+    // Note we're copying the array when passing it to the observable, or it gets shared between properties,
+    // enumeration in particular (rules is remodeled)
+    return (field === "rules" || field === "enumeration") ? ko.observableArray([].concat(obj[field])) : ko.observable(obj[field]);
 }
 
 /**

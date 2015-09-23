@@ -44,6 +44,7 @@ module.exports = function(params) {
     }
 
     self.save = function(vm, event) {
+        utils.startHandler(vm, event);
         self.schema.name = self.nameObs();
         self.schema.schemaId = self.schemaIdObs();
         self.schema.revision = self.revisionObs();
