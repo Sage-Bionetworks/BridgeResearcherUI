@@ -5,9 +5,9 @@
 @mixin flex-box($direction) {
     display: -webkit-flex;
     display: -ms-flexbox;
-    display: flex;
     -webkit-flex-direction: $direction;
     -ms-flex-direction: $direction;
+    display: flex;
     flex-direction: $direction;
 }
 /* These would go back in time further, but I don't think they're needed.

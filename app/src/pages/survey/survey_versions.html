@@ -15,52 +15,38 @@
     </a>
 </div>
 
-<div class="ui grid">
-    <div class="ten wide column">
-        <div class="button-container">
-            <button class="ui primary button" data-bind="disable: !oneChecked(), click: version">New Version</button>
-            <button class="ui red button" data-bind="disable: !oneDeletableChecked(), click: deleteSurveys">Delete</button>
-        </div>
-
-        <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
-        <table class="ui table" data-bind="visible: itemsObs().length > 0">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Name</th>
-                    <th>Last Modified</th>
-                    <th>&nbsp;</th>
-                </tr>
-            </thead>
-            <tbody data-bind="foreach: itemsObs">
-                <tr data-bind="css: { positive: $data.published }">
-                    <td>
-                        <ui-checkbox params="checkedObs: $data.checkedObs, disabledObs: $parent.publishedObs"></ui-checkbox>
-                    </td>
-                    <td>
-                        <a href="#" data-bind="attr: {href: '#/surveys/'+$data.guid+'/'+$data.createdOn},
-                            text: $data.name"></a><br/>Created <span data-bind="text:$parent.formatDateTime($data.createdOn)"></span>
-                    </td>
-                    <td data-bind="text: $parent.formatDateTime($data.modifiedOn)">
-                    </td>
-                    <td>
-                        <div data-bind="visible: $data.published" style="text-align: right">
-                            <i class="checkmark icon"></i> Published
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="six wide column">
-        <div class="ui message">
-            <p>Select a single version in order to copy it to create a new version. </p>
-
-            <p>You may delete any version, but once published, you cannot delete all published versions. One published
-                    version must remain in case a schedule or task references the survey.</p>
-
-            <p><b>WARNING: If you have created a schedule that points to a specific version of a survey, you can delete
-                that version here; this will break the schedule.</b> </p>
-        </div>
-    </div>
+<div class="button-container">
+    <button class="ui primary button" data-bind="disable: disablePublish, click: publish">Publish</button>
+    <button class="ui red button" data-bind="disable: disableDelete(), click: deleteSurvey">Delete</button>
 </div>
+<div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
+<table class="ui table" data-bind="visible: itemsObs().length > 0">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Upload Schema</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: itemsObs">
+        <tr data-bind="css: { positive: $data.published }">
+            <td>
+                <input type="radio" name="publish" data-bind="click: $component.selectForAction"/>
+            </td>
+            <td>
+                <a href="#" data-bind="attr: {href: '#/surveys/'+$data.guid+'/'+$data.createdOn},
+                    text: $data.name"></a><br/>Created <span data-bind="text:$parent.formatDateTime($data.createdOn)"></span>
+            </td>
+            <td>
+                <a target="_blank" data-bind="visible: $data.schemaRevision, attr:{'href':'#/schemas/'+$data.identifier+'/'+$data.schemaRevision}, text: 'v'+$data.schemaRevision"></a>
+                <em data-bind="visible: !$data.schemaRevision">Draft</em>
+            </td>
+            <td>
+                <div data-bind="visible: $data.published" style="text-align: right">
+                    <i class="checkmark icon"></i> Published
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
