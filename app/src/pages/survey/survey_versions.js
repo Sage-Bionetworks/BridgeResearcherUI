@@ -6,18 +6,6 @@ function addCheckedObs(item) {
     item.checkedObs = ko.observable(false);
     return item;
 }
-function hasBeenChecked(item) {
-    return item.checkedObs();
-}
-function makeDeletionCall(item) {
-    return function() {
-        return serverService.deleteSurvey(item);
-    };
-}
-function notAllPublishedChecked(countPublished, countPublishedChecked) {
-    return ((countPublished === 0 && countPublishedChecked == 0) ||
-            (countPublished !== countPublishedChecked));
-}
 
 module.exports = function(keys) {
     var self = this;
@@ -34,66 +22,55 @@ module.exports = function(keys) {
         return "";
     });
     self.publishedObs = ko.observable(false); // for checkboxes
-
     self.formatDateTime = utils.formatDateTime;
+    self.selectedObs = ko.observable(null);
 
-    self.anyChecked = function () {
-        return self.itemsObs().some(function (item) {
-            return item.checkedObs();
-        });
-    }
-    // You can delete anything except the last published item. So count all published items, and all
-    // checked published items, and make sure they are not the same and not 1.
-    self.oneDeletableChecked = function() {
-        var countChecked = 0;
-        var countPub = 0;
-        var countPubChecked = 0;
+    self.disablePublish = ko.computed(function() {
+        return self.selectedObs() === null || self.selectedObs().published;
+    });
+    self.disableDelete = ko.computed(function() {
+        // Cannot delete the last published item in the table
+        var pubCount = self.itemsObs().filter(function(item) {
+            return item.published;
+        }).length;
+        return (self.selectedObs() === null) || self.selectedObs().published && pubCount === 1;
+    });
+
+    self.selectForAction = function(vm, event) {
+        var survey = ko.dataFor(event.target);
         self.itemsObs().forEach(function(item) {
-            countChecked += (item.checkedObs()) ? 1 : 0;
-            countPub += (item.published) ? 1 : 0;
-            countPubChecked += (item.checkedObs() && item.published) ? 1 : 0;
+            if (item !== survey) {
+                item.checkedObs(false);
+            } else if (item === survey && !item.checkedObs()) {
+                item.checkedObs(true);
+            }
         });
-        return (notAllPublishedChecked(countPub, countPubChecked) && countChecked > 0);
-    }
-    self.oneChecked = function () {
-        return self.itemsObs().reduce(function(count, item) {
-            return (item.checkedObs()) ? (count+1) : count;
-        }, 0) === 1;
-    }
-    self.deleteSurveys = function(vm, event) {
-        var deletables = self.itemsObs().filter(hasBeenChecked);
-        var msg = (deletables.length > 2) ?
-                "Are you sure you want to delete these survey versions?" :
-                "Are you sure you want to delete this survey version?";
-        var confirmMsg = (deletables.length > 2) ?
-                "Survey versions deleted." : "Survey version deleted.";
-        if (confirm(msg)) {
-            utils.startHandler(self, event);
-
-            deletables.reduce(function(promise, deletable) {
-                if (promise === null) {
-                    return serverService.deleteSurvey(deletable);
-                } else {
-                    return promise.then(makeDeletionCall(deletable));
-                }
-            }, null)
-                .then(utils.makeTableRowHandler(vm, deletables, "#/surveys"))
-                .then(utils.successHandler(vm, event, confirmMsg))
-                .catch(utils.failureHandler(vm, event));
+        self.selectedObs(survey);
+        return true;
+    };
+    self.deleteSurvey = function(vm, event) {
+        var survey = self.selectedObs();
+        if (survey !== null) {
+            if (confirm("Are you sure you want to delete this survey version?")) {
+                utils.startHandler(self, event);
+                serverService.deleteSurvey(survey)
+                    .then(load)
+                    .then(utils.makeTableRowHandler(vm, [survey], "#/surveys"))
+                    .then(utils.successHandler(vm, event, "Survey version deleted."))
+                    .catch(utils.failureHandler(vm, event));
+            }
         }
     }
-    self.version = function (vm, event) {
-        utils.startHandler(self, event);
-
-        var keys = self.itemsObs().filter(function(item) {
-            return item.checkedObs();
-        })[0];
-        serverService.versionSurvey(keys.guid, keys.createdOn)
+    self.publish = function(vm, event) {
+        var survey = self.selectedObs();
+        if (survey !== null) {
+            utils.startHandler(self, event);
+            serverService.publishSurvey(survey.guid, survey.createdOn)
                 .then(load)
-                .then(utils.successHandler(vm, event, "A new survey version has been created."))
+                .then(utils.successHandler(vm, event, "Survey has been published."))
                 .catch(utils.failureHandler(vm, event));
+        }
     };
-
     function load(survey) {
         serverService.getSurveyAllRevisions(keys.guid).then(function(list) {
             self.itemsObs(list.items.map(addCheckedObs));

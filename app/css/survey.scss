@@ -72,20 +72,19 @@
     .element-content-title {
         font-size: 1.3rem;
         font-weight: bold;
-        padding-left: 1rem;
-        margin-bottom: .5rem;
+        padding: .4rem 0;
+        /*margin-bottom: .5rem;*/
     }
     .element-content-prompt {
         font-size: 1.3rem;
         font-weight: bold;
-        padding-left: 1rem;
     }
         .element-content-prompt-detail {
             font-size: 1.1rem;
             color: #bbb;
             font-weight: normal;
             font-style: italic;
-            padding: .4rem 1rem 0 1rem;
+            padding: .4rem 0;
         }
     .element-content-constraints {
         @include flex-box(row);
@@ -131,6 +130,9 @@
         }
     .rules-actions {
         padding: 0 1.5rem 1.5rem 1.5rem;
+    }
+    .rules-editor-actions {
+        padding: 2rem 1.5rem 1.5rem 1.5rem;
     }
 .element-enum {
     @include link;

@@ -27,17 +27,17 @@
             <div data-bind="component: {name: mainPage, params: mainParams}"></div>
         </main>
         <nav>
-            <div class="ui vertical menu" style="width:100%">
+            <div class="ui vertical menu">
                 <div class="item">
                     <i class="lab icon"></i> Study
                     <div class="menu">
-                        <a href="#info" class="item" data-bind="css:{active:isActive('info')}, visible: isDeveloper">
+                        <a href="#/info" class="item" data-bind="css:{active:isActive('info')}, visible: isDeveloper">
                             General Information
                         </a>
-                        <a href="#consent" class="item" data-bind="css:{active:isActive('consent')}, visible: isResearcher">
+                        <a href="#/consent" class="item" data-bind="css:{active:isActive('consent')}, visible: isResearcher">
                             Consent Agreement
                         </a>
-                        <a href="#eligibility" class="item" data-bind="css:{active:isActive('eligibility')}, visible: isDeveloper">
+                        <a href="#/eligibility" class="item" data-bind="css:{active:isActive('eligibility')}, visible: isDeveloper">
                             Eligibility Criteria
                         </a>
                     </div>
@@ -64,16 +64,16 @@
                 <div class="item">
                     <i class="user icon"></i> Account Management
                     <div class="menu">
-                        <a href="#password_policy" class="item" data-bind="css:{active:isActive('password_policy')}, visible: isDeveloper">
+                        <a href="#/password_policy" class="item" data-bind="css:{active:isActive('password_policy')}, visible: isDeveloper">
                             Password Policy
                         </a>
-                        <a href="#user_attributes" class="item" data-bind="css:{active:isActive('user_attributes')}, visible: isDeveloper">
+                        <a href="#/user_attributes" class="item" data-bind="css:{active:isActive('user_attributes')}, visible: isDeveloper">
                             User Attributes
                         </a>
-                        <a href="#verify_email_template" class="item" data-bind="css:{active:isActive('ve_template')}, visible: isDeveloper">
+                        <a href="#/verify_email_template" class="item" data-bind="css:{active:isActive('ve_template')}, visible: isDeveloper">
                             Email Templates
                         </a>
-                        <a href="#actions" class="item" data-bind="css:{active:isActive('actions')}, visible: isResearcher">
+                        <a href="#/actions" class="item" data-bind="css:{active:isActive('actions')}, visible: isResearcher">
                             Participant Roster
                         </a>
                     </div>

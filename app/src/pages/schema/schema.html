@@ -2,10 +2,6 @@
     <a href="#/schemas" class="section">Upload Schemas</a>
 </div>
 
-<div class="ui warning message" data-bind="visible: publishedObs">
-    <p>You are viewing an older version of the schema (revision <span data-bind="text: revisionObs"></span>). It cannot be edited. </p>
-</div>
-
 <h3 data-bind="visible: nameObs().length > 0, text: nameObs"></h3>
 <h3 data-bind="visible: nameObs().length === 0">New Upload Schema</h3>
 
@@ -18,6 +14,11 @@
     <a href="#" data-bind="attr: {href: '#/schemas/'+schemaIdObs()+'/versions'}, visible: !!revisionObs()" class="item">
         <i class="history icon"></i> History
     </a>
+    <div class="right menu">
+        <div class="item" data-bind="visible: !!schemaIdObs()">
+            <i class="clock icon"></i> <span data-bind="text: revisionLabel"></span>
+        </div>
+    </div>
 </div>
 
 <div class="button-container">

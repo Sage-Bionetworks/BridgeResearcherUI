@@ -25,9 +25,12 @@ module.exports = function(params) {
     // except for the most recent one, which we load by the way we link to the
     // editor.
     self.publishedObs = ko.observable(false);
-    if (params.revision) {
-        self.publishedObs(true);
-    }
+    self.revisionLabel = ko.computed(function() {
+        if (self.revisionObs()) {
+            return 'v' + self.revisionObs();
+        }
+        return '';
+    });
 
     function loadVM(schema) {
         self.schema = schema;
@@ -41,6 +44,7 @@ module.exports = function(params) {
             def.typeObs = ko.observable(def.type);
             return def;
         }));
+        return schema;
     }
 
     self.save = function(vm, event) {
@@ -89,7 +93,11 @@ module.exports = function(params) {
     if (params.schemaId === "new") {
         loadVM({name:'',schemaId:'',schemaType:'ios_data',revision:0,fieldDefinitions:[]});
     } else if (params.revision) {
-        serverService.getUploadSchema(params.schemaId, params.revision).then(loadVM);
+        serverService.getMostRecentUploadSchema(params.schemaId).then(function(response) {
+            serverService.getUploadSchema(params.schemaId, params.revision).then(loadVM).then(function() {
+                self.revisionObs(response.revision);
+            });
+        });
     } else {
         serverService.getMostRecentUploadSchema(params.schemaId).then(loadVM);
     }

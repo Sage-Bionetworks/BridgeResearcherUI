@@ -58,7 +58,9 @@ function collectSurveyOptions(response) {
 }
 function collectSurveyQuestions(survey) {
     var options = survey.elements.filter(function(element) {
-        // Once you enable this, you truly can't schedule against un-published surveys
+        // TODO: Once you enable this, you truly can't schedule against un-published surveys, it's annoying.
+        // Then again, not as annoying as setting up a schedule that will never fire.
+        // Need to consider ways to mitigate this and ensure the UI does update when it's set in the survey editor.
         return (element.type === "SurveyQuestion"/* && element.fireEvent*/);
     }).map(function(question) {
         return {label: survey.name + ": " + question.identifier, value: question.guid };
@@ -66,6 +68,7 @@ function collectSurveyQuestions(survey) {
     questionsOptionsObs.pushAll(options);
 }
 
+// TODO: Working on server API to get rid of this 1:N call structure.
 serverService.getPublishedSurveys().then(collectSurveyOptions).then(function() {
     surveysOptionsObs().forEach(function(keys) {
         serverService.getSurvey(keys.value, keys.createdOn).then(collectSurveyQuestions);

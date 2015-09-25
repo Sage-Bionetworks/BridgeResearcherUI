@@ -13,7 +13,6 @@
             <th>Last Updated</th>
             <th>Identifier</th>
             <th>Schedule(s)</th>
-            <th>Upload Schema</th>
         </tr>
     </thead>
     <tbody data-bind="foreach: itemsObs">
@@ -24,10 +23,7 @@
             <td data-bind="text: $parent.formatDateTime($data.modifiedOn)"></td>
             <td data-bind="text: $data.identifier"></td>
             <td data-bind="foreach: $data.schedulePlanObs"><!-- ko if: $index() > 0 -->, <!-- /ko -->
-                <a target="_blank" data-bind="attr: {href: '#/scheduleplans/'+$data.guid}, text: $data.label"></a></td>
-            <td>
-                <a target="_blank" data-bind="visible: $data.schemaRevision, attr:{'href':'#/schemas/'+$data.identifier+'/'+$data.schemaRevision}, text: 'v'+$data.schemaRevision"></a>
-                <em data-bind="visible: !$data.schemaRevision">Draft</em>
+                <a target="_blank" data-bind="attr: {href: '#/scheduleplans/'+$data.guid}, text: $data.label"></a>
             </td>
         </tr>
     </tbody>
