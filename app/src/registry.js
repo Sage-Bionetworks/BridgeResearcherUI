@@ -29,6 +29,8 @@ reg('schema_versions', './pages/schema/schema_versions');
 reg('monitor', './pages/monitor/monitor');
 reg('scheduleplans', './pages/scheduleplans/scheduleplans');
 reg('scheduleplan', './pages/scheduleplan/scheduleplan');
+reg('SimpleScheduleStrategy', './pages/scheduleplan/simple_strategy');
+reg('ABTestScheduleStrategy', './pages/scheduleplan/ab_strategy');
 reg('schedule', './pages/scheduleplan/schedule');
 regt('not_found', './pages/not_found/not_found');
 
@@ -43,7 +45,6 @@ reg('enumeration_editor', './dialogs/enumeration_editor/enumeration_editor');
 reg('event_id_editor', './dialogs/event_id_editor/event_id_editor');
 reg('times_editor', './dialogs/times_editor/times_editor');
 reg('rules_editor', './dialogs/rules_editor/rules_editor');
-
 
 /* SURVEYS */
 reg('SurveyInfoScreen', './pages/survey/survey_info');

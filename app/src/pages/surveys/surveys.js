@@ -62,7 +62,6 @@ module.exports = function() {
             return [];
         }
     }).then(function(surveys) {
-        console.log(surveys);
         if (surveys.length) {
             serverService.getSchedulePlans().then(function(response) {
                 annotateSurveys(surveys, response.items);

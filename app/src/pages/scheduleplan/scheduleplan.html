@@ -25,10 +25,4 @@
     </div>
 </form>
 
-<div data-bind="visible: schedulePlanTypeObs() === 'SimpleScheduleStrategy'">
-    <div data-bind="component: {name: 'schedule', params: {strategyObs: strategyObs, delegate: delegate}}"></div>
-</div>
-
-<div  data-bind="visible: schedulePlanTypeObs() === 'ABTestScheduleStrategy'">
-    <h4>A/B Test Groups</h4>
-</div>
+<div data-bind="component: {name: schedulePlanTypeObs, params: {strategyObs: strategyObs}}"></div>

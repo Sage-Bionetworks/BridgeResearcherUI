@@ -3,7 +3,7 @@
 }
 .schedule-legend {
     font-weight: bold;
-    font-size: 120%;
+    font-size: 110%;
     padding: 0 .5rem;
 }
 
@@ -20,4 +20,25 @@
     }
         .activity-controls > a {
             margin-left: .75rem;
+        }
+
+.schedulegroup {
+}
+    .schedulegroup-fieldset {
+        display:block;
+        @include transition(max-height .5s ease);
+        max-height: 80rem;
+        overflow: auto;
+        padding:1.5rem!important;
+        margin-bottom:2rem!important;
+        box-shadow: inset 0px 0px 2px 2px rgba(204,204,204,1)!important;
+    }
+        .schedulegroup-fieldset-legend {
+            background-color: white;
+            font-size: 120%;
+            padding: 0 1rem;
+        }
+        .schedulegroup-field-delete {
+            text-align: right;
+            padding-right: 1rem;
         }

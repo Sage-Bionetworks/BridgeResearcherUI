@@ -124,9 +124,7 @@ module.exports = function(params) {
         self.labelObs("");
         self.detailObs("");
         self.valueObs("");
-        self.labelFocusedObs(true);
     };
-    self.labelFocusedObs = ko.observable(true);
     self.saveList = function() {
         var entry = listsSource.getCurrentEntry();
         entry.enumeration = self.listObs();

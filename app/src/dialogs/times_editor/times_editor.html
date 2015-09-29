@@ -6,6 +6,9 @@
     <div class="content">
         <div class="ui two column grid">
             <div class="column">
+                <div data-bind="visible: itemsObs().length === 0">
+                    <p>&lt;None&gt;</p>
+                </div>
                 <div data-bind="foreach: itemsObs" style="font-size:larger">
                     <div>
                         <span class="inline-form-text">

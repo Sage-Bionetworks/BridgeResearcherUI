@@ -1,0 +1,42 @@
+<h4>A/B Test Groups</h4>
+
+<p class="help-text">Define any number of schedules to be randomly assigned to study participants. Each is given
+a percentage weight and that proportion of the population will receive the survey (small numbers of participants
+may vary from these percentages due to random assignment). Percentages for all groups must add up to 100%. </p>
+
+<form class="ui form schedulegroup" data-bind="foreach: scheduleGroupsObs">
+    <fieldset class="schedulegroup-fieldset">
+        <legend class="schedulegroup-fieldset-legend">
+            <h4 data-bind="text: 'Group #' + ($index()+1)"></h4>
+        </legend>
+        <div class="two fields">
+            <div class="field">
+                <label>Percentage of users to receive this schedule</label>
+                <div style="width:10rem">
+                    <input type="range" min="1" max="100" data-bind="value: $data.percentageObs, valueUpdate: 'input'"/>
+                    <!--
+                    <ui-text params="fieldObs: $data.percentageObs, publishedObs: publishedObs"></ui-text>
+                    -->
+                    <div class="ui large label" data-bind="text: $data.percentLabel"></div>
+                </div>
+            </div>
+            <div class="schedulegroup-field-delete field">
+                <a href="#" data-bind="click: $component.removeGroup">
+                    <i class="delete square icon"></i>Remove This Schedule Group
+                </a>
+            </div>
+        </div>
+        <fieldset class="schedule-fieldset">
+            <legend class="schedule-legend">
+                <h4>Schedule</h4>
+            </legend>
+            <div data-bind="component: {name: 'schedule', params: {scheduleObs: $data.scheduleObs}}"></div>
+        </fieldset>
+    </fieldset>
+</form>
+<div class="ui form">
+    <a class="ui primary button" data-bind="click: addGroup">
+        <i class="add square icon"></i>Add Schedule Group
+    </a>
+</div>
+

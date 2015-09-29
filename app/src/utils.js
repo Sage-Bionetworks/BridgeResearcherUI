@@ -221,7 +221,6 @@ module.exports = {
             // model didn't initially have them. Disabling this, but may break something elsewhere.
             var obs = vm[insp.observerName];
             //var value = object[insp.name];
-            console.log("updating", insp.name, obs()/*, value*/);
             //if (isDefined(obs) && isDefined(value)) {
             if (isDefined(obs)) {
                 object[insp.name] = obs();

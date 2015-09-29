@@ -31,3 +31,8 @@
 .inline-editor-controls a {
     @include link;
 }
+.help-text {
+    color: #ccc;
+    letter-spacing: 1px;
+    padding: 0 .5rem;
+}

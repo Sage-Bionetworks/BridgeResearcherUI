@@ -68,6 +68,23 @@ function collectSurveyQuestions(survey) {
     questionsOptionsObs.pushAll(options);
 }
 
+
+function newSimpleStrategy() {
+    return { schedule: newSchedule(), type: 'SimpleScheduleStrategy' };
+}
+
+function newABTestStrategy() {
+    return { scheduleGroups: [], type: 'ABTestScheduleStrategy' };
+}
+
+function newSchedule() {
+    return {
+        scheduleType: 'once', eventId:null, delay:null, interval:null,
+        expires:null, cronTrigger:null, startsOn:null, endsOn:null, times:[],
+        activities:[{label:'', labelDetail:'', activityType:'task', task:{identifier:''}}]
+    };
+}
+
 // TODO: Working on server API to get rid of this 1:N call structure.
 serverService.getPublishedSurveys().then(collectSurveyOptions).then(function() {
     surveysOptionsObs().forEach(function(keys) {
@@ -76,6 +93,9 @@ serverService.getPublishedSurveys().then(collectSurveyOptions).then(function() {
 });
 
 module.exports = {
+    newSchedule: newSchedule,
+    newSimpleStrategy: newSimpleStrategy,
+    newABTestStrategy: newABTestStrategy,
     formatEventId: formatEventId,
     formatTimesArray: formatTimesArray,
     timeOptions: TIME_OPTIONS,
