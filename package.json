@@ -4,14 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "clean": "rm -rf app/dist; mkdir app/dist",
     "start": "webpack-dev-server --content-base app",
     "watch": "webpack --progress --colors --watch",
     "release": "webpack -p",
-    "test": "mocha"
+    "test": "mocha --recursive"
   },
   "author": "Bridge Server Team <bridgeit@sagebase.org>",
   "license": "MIT",
   "devDependencies": {
+    "browserify": "^11.2.0",
     "css-loader": "^0.12.1",
     "director": "^1.2.8",
     "dragula": "^3.1.0",
@@ -21,11 +23,13 @@
     "knockout": "^3.3.0",
     "knockout-mapping": "^2.5.0",
     "mocha": "^2.2.5",
-    "moment": "^2.10.3",
     "node-libs-browser": "^0.5.0",
     "node-sass": "^3.3.2",
     "object-hash": "^0.8.0",
+    "proxyquire": "^1.7.2",
+    "proxyquireify": "^3.0.0",
     "sass-loader": "^2.0.1",
+    "sinon": "^1.17.1",
     "style-loader": "^0.12.2",
     "toastr": "^2.1.2",
     "webpack": "^1.9.7",

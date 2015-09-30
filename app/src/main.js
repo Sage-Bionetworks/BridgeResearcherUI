@@ -1,107 +1,9 @@
 require('../css/main');
 require('../lib/toastr.min');
-var director = require('director');
-var ko = require('knockout');
-var $ = require('jquery');
-var serverService = require('./services/server_service');
-var utils = require('./utils');
 require('./bindings');
 require('./registry');
-
-// Used in navigation to keep a section highlighted as you navigate into it.
-var pageSets = {
-    'surveys': ['surveys','survey','survey_versions'],
-    'schemas': ['schemas','schema','schema_versions'],
-    'scheduleplans': ['scheduleplans','scheduleplan']
-};
-
-var RootViewModel = function() {
-    var self = this;
-
-    self.environment = ko.observable("");
-    self.studyName = ko.observable("");
-
-    self.selected = ko.observable('info');
-    self.roles = ko.observableArray();
-
-    self.mainPage = ko.observable('info');
-    self.mainPage.subscribe(self.selected);
-    self.mainParams = ko.observable({});
-
-    self.dialogObs = ko.observable({name: "none_dialog", params: {}});
-
-    self.isActive = function(tag) {
-        if (pageSets[tag]) {
-            return pageSets[tag].indexOf(self.selected()) > -1;
-        }
-        return tag === self.selected();
-    };
-
-    self.signOut = function() {
-        console.log("Signing out.");
-        serverService.signOut();
-    };
-
-    self.routeTo = function(name) {
-        return function(params) {
-            self.mainPage(name);
-            self.mainParams({});
-        };
-    };
-    self.surveyRoute = function(name) {
-        return function(guid, createdOn) {
-            self.mainPage(name);
-            self.mainParams({guid: guid, createdOn: (createdOn === "recent") ? null : createdOn});
-        };
-    };
-    self.schemaRoute = function(name) {
-        return function(schemaId, revision) {
-            self.mainPage(name);
-            self.mainParams({schemaId: schemaId, revision: (revision) ? revision : null});
-        };
-    };
-    self.schedulePlanRoute = function(name) {
-        return function(guid) {
-            self.mainPage(name);
-            self.mainParams({guid: guid});
-        };
-    };
-
-    self.isResearcher = ko.computed(function() {
-        return self.roles.contains('researcher');
-    });
-
-    self.isDeveloper = ko.computed(function() {
-        return self.roles.contains('developer');
-    });
-
-    serverService.addSessionStartListener(function(session) {
-        self.studyName(session.studyName);
-        self.environment(" [" + session.environment + "]");
-        self.roles(session.roles);
-    });
-    serverService.addSessionEndListener(function(session) {
-        self.studyName("");
-        self.environment("");
-        self.roles([]);
-    });
-    utils.addDialogListener(function(name, params) {
-        if ("close" === name) {
-            $(".modal").modal('hide');
-            name = "none_dialog";
-        }
-        self.dialogObs({name: name, params: params});
-    });
-};
-var root = new RootViewModel();
-ko.applyBindings(root, document.body);
-
-serverService.addSessionStartListener(function() {
-    utils.closeDialog();
-});
-serverService.addSessionEndListener(function() {
-    utils.openDialog('sign_in_dialog');
-});
+var director = require('director');
+var root = require('./root');
 
 var router = new director.Router();
 router.param('guid', /([^\/]*)/);
@@ -130,4 +32,4 @@ router.configure({notfound: root.routeTo('not_found')});
 router.init();
 
 // Make this global for Semantic UI.
-window.jQuery = $;
+window.jQuery = require('jquery');;

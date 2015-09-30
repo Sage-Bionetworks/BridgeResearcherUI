@@ -8,7 +8,6 @@ module.exports = function() {
     self.study = null;
     self.records = ko.observableArray();
     self.addField = ko.observable("");
-    self.messageObs = ko.observable("");
 
     self.remove = function(attribute) {
         self.records.remove(attribute);
@@ -16,14 +15,11 @@ module.exports = function() {
     self.add = function() {
         if (!self.addField()) {
             return utils.message('warning', 'You must provide a value for an attribute.');
-            //return self.messageObs({text: "You must provide a value for an attribute.", status: "error"});
         }
         if (self.records.contains(self.addField())) {
             return utils.message('warning', 'The attribute must be a unique value.');
-            //return self.messageObs({text: "The attribute must be a unique value.", status: "error"});
         }
         self.records.push(self.addField());
-        self.messageObs("");
         self.addField("");
     };
     self.save = function(vm, event) {

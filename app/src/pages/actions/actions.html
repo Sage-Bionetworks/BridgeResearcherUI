@@ -1,8 +1,11 @@
-<div>
+<div class="fixed-header">
     <h3>Participant Roster</h3>
-
-    <form-message params="messageObs: messageObs"></form-message>
-
-    <p><button class="ui primary submit button" data-bind="click: emailRoster">Email Participant Roster</button></p>
-    <p>You can email the entire participant roster to your consent administrator (the email address you've set to receive consent notifications). </div>
+    <div class="fixed-header-buttons"></div>
+    <div class="ui secondary pointing menu"></div>
+</div>
+<div class="scrollbox">
+    <dl>
+        <dt>You can email the entire participant roster to your consent administrator (the email address you've set to receive consent notifications). </dt>
+        <dd><button class="ui primary small button" data-bind="click: emailRoster">Email Participant Roster</button></dd>
+    </dl>
 </div>

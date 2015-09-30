@@ -1,7 +1,9 @@
 var ko = require('knockout');
 var utils = require('../../utils');
-var serverService = require('../../services/server_service.js');
-var scheduleService = require('../../services/schedule_service.js');
+var surveyUtils = require('../../pages/survey/survey_utils');
+var serverService = require('../../services/server_service');
+var scheduleService = require('../../services/schedule_service');
+var root = require('../../root');
 
 /**
  * enrollment - used to calculate if enrollment should be included in the eventId.
@@ -22,7 +24,7 @@ var ACTIVITY_TYPE_OPTIONS = Object.freeze([
     {value: 'survey', label: 'Take Survey'}
 ]);
 function newActivity() {
-    var activity = JSON.parse(JSON.stringify(ACTIVITY_FIELDS));
+    var activity = scheduleService.newSchedule().activities[0];
     utils.observablesFor(activity, ACTIVITY_FIELDS);
     activity.activityTypeObs('task');
     return activity;
@@ -43,7 +45,7 @@ function copyObserverValuesBackToActivity(activity) {
     } else {
         activity.survey = {
             guid: activity.surveyGuidObs(),
-            identifier: scheduleService.surveysOptionsFinder(activity.surveyGuidObs()).identifier
+            identifier: surveyUtils.surveysOptionsFinder(activity.surveyGuidObs()).identifier
         };
     }
 }
@@ -70,6 +72,7 @@ function addObserversToActivity(activity) {
  * @param schedule
  */
 function fixScheduleTimes(schedule) {
+    // TOD: These are also fixed in the formatter, but probably need to be fixed here as well.
     schedule.times = schedule.times.map(function(time) {
         return time.replace(":00.000","");
     });
@@ -107,7 +110,7 @@ module.exports = function(params) {
     };
 
     // This is fired when the parent viewModel gets a plan back from the server
-    ko.pureComputed(function() {
+    ko.computed(function() {
         var schedule = self.scheduleObs();
         if (schedule) {
             fixScheduleTimes(schedule);
@@ -128,8 +131,8 @@ module.exports = function(params) {
     self.activityTypeOptions = ACTIVITY_TYPE_OPTIONS;
     self.activityTypeLabel = utils.makeOptionLabelFinder(ACTIVITY_TYPE_OPTIONS);
 
-    self.surveysOptionsObs = scheduleService.surveysOptionsObs;
-    self.surveysOptionsLabel = scheduleService.surveysOptionsLabel;
+    self.surveysOptionsObs = surveyUtils.surveysOptionsObs;
+    self.surveysOptionsLabel = surveyUtils.surveysOptionsLabel;
 
     self.formatDateTime = utils.formatDateTime;
     self.formatTimes = function() {
@@ -143,7 +146,7 @@ module.exports = function(params) {
 
     self.editTimes = function(vm, event) {
         event.preventDefault();
-        utils.openDialog('times_editor', {
+        root.openDialog('times_editor', {
             'timesObs': self.timesObs, 'clearTimesFunc': self.clearTimes
         });
     };
@@ -153,7 +156,7 @@ module.exports = function(params) {
     };
     self.editEventId = function(vm, event) {
         event.preventDefault();
-        utils.openDialog('event_id_editor', {
+        root.openDialog('event_id_editor', {
             'eventIdObs': self.eventIdObs,'clearEventIdFunc': self.clearEventId
         });
     };

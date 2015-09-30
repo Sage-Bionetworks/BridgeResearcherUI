@@ -1,7 +1,7 @@
 var ko = require('knockout');
 var utils = require('../../utils');
 var serverService = require('../../services/server_service');
-var scheduleService = require('../../services/schedule_service');
+var surveyUtils = require('../../pages/survey/survey_utils');
 
 var OBJECT_TYPE = Object.freeze([
     {value: 'survey', label: 'When survey'},
@@ -14,7 +14,6 @@ module.exports = function(params) {
 
     self.clearEventIdFunc = params.clearEventIdFunc;
     self.publishedObs = ko.observable(false);
-    self.messageObs = ko.observable();
     self.eventIdObs = params.eventIdObs;
     self.answerObs = ko.observable();
     self.enrollmentObs = ko.observable(true);
@@ -24,19 +23,17 @@ module.exports = function(params) {
     self.objectTypeLabel = utils.makeOptionLabelFinder(OBJECT_TYPE);
     self.objectTypeObs.subscribe(function(newValue) {
         if (newValue === "question") {
-            self.messageObs({text:"To schedule against a question, you must check the 'fireEvent' checkbox for that question in the survey.", status: "info"});
-        } else {
-            self.messageObs("");
+            utils.message('warning', 'To schedule against a question, check the "fireEvent" checkbox for that question in the survey editor.');
         }
-    })
+    });
 
     self.surveyObs = ko.observable();
-    self.surveysOptionsObs = scheduleService.surveysOptionsObs;
-    self.surveysLabel = scheduleService.surveysOptionsLabel;
+    self.surveysOptionsObs = surveyUtils.surveysOptionsObs;
+    self.surveysLabel = surveyUtils.surveysOptionsLabel;
 
     self.questionObs = ko.observable();
-    self.questionsOptionsObs = scheduleService.questionsOptionsObs;
-    self.questionsLabel = scheduleService.questionsOptionsLabel
+    self.questionsOptionsObs = surveyUtils.questionsOptionsObs;
+    self.questionsLabel = surveyUtils.questionsOptionsLabel
 
     self.save = function() {
         var eventId = self.objectTypeObs() + ":";

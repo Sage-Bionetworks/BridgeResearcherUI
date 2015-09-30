@@ -24,15 +24,18 @@ var session = null;
 // Cache this. It *must* be a copy of the server version.
 var currentStudy = null;
 
-$(function() {
-    session = optionsService.get(SESSION_KEY, null);
-    if (session && session.environment) {
-        listeners.emit(SESSION_STARTED_EVENT_KEY, session);
-    } else {
-        session = null;
-        listeners.emit(SESSION_ENDED_EVENT_KEY);
-    }
-});
+if (typeof window !== "undefined") { // jQuery throws up if there's no window, even in unit tests.
+    $(function() {
+        session = optionsService.get(SESSION_KEY, null);
+        if (session && session.environment) {
+            listeners.emit(SESSION_STARTED_EVENT_KEY, session);
+        } else {
+            session = null;
+            listeners.emit(SESSION_ENDED_EVENT_KEY);
+        }
+    });
+}
+
 
 function getHeaders() {
     var headers = {'Content-Type': 'application/json'};
@@ -156,16 +159,20 @@ module.exports = {
                 sess.studyName = studyName;
                 sess.studyId = data.study;
                 session = sess;
-                optionsService.set(SESSION_KEY, sess);
-                listeners.emit(SESSION_STARTED_EVENT_KEY, session);
-            } else {
-                throw new Error("User is not authorized to use this service");
+                optionsService.set(SESSION_KEY, session);
+                listeners.emit(SESSION_STARTED_EVENT_KEY, sess);
             }
+            return sess;
         });
         return request;
     },
     getStudyList: function(env) {
-        return Promise.resolve(getInt(config.host[env] + config.getStudyList));
+        var request = Promise.resolve(getInt(config.host[env] + config.getStudyList));
+        request.then(function(response) {
+            response.items.sort(utils.makeFieldSorter("name"));
+            return response;
+        });
+        return request;
     },
     signOut: signOut,
     requestResetPassword: function(env, data) {
@@ -224,6 +231,15 @@ module.exports = {
     },
     getSurveyMostRecentlyPublished: function(guid) {
         return get(config.survey + guid + '/revisions/published');
+    },
+    getSurveysSummarized: function() {
+        var promise = get(config.surveys + '/published');
+        return promise.then(function(response) {
+            var promises = response.items.map(function(survey) {
+                return get(config.survey + survey.guid + '/revisions/' + survey.createdOn);
+            });
+            return Promise.all(promises);
+        });
     },
     createSurvey: function(survey) {
         return post(config.surveys, survey);

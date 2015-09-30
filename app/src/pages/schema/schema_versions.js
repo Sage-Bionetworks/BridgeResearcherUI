@@ -21,7 +21,6 @@ module.exports = function(params) {
     var self = this;
 
     self.nameObs = ko.observable();
-    self.messageObs = ko.observable();
     self.schemaIdObs = ko.observable(params.schemaId);
     self.itemsObs = ko.observableArray([]);
 

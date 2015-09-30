@@ -8,7 +8,6 @@ module.exports = function() {
     var self = this;
 
     schemaUtils.initSchemasVM(self);
-    self.messageObs = ko.observable("");
     self.itemsObs = ko.observableArray([]);
 
     serverService.getAllUploadSchemas().then(function(response) {

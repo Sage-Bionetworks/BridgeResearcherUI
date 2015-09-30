@@ -1,7 +1,6 @@
 var ko = require('knockout');
 var utils = require('../../utils');
 var scheduleService = require('../../services/schedule_service.js');
-var $ = require('jquery');
 
 function groupToObservables(group) {
     group.percentageObs = ko.observable(group.percentage);
@@ -42,24 +41,14 @@ module.exports = function(params) {
     };
 
     // This is fired when the parent viewModel gets a plan back from the server
-    ko.pureComputed(function () {
+    ko.computed(function () {
         var strategy = params.strategyObs();
-        self.scheduleGroupsObs(strategy.scheduleGroups.map(groupToObservables));
+        if (strategy && strategy.scheduleGroups) {
+            self.scheduleGroupsObs(strategy.scheduleGroups.map(groupToObservables));
+        }
     });
 
     self.addGroup = function(vm, event) {
         self.scheduleGroupsObs.push(newGroup());
-    };
-    self.removeGroup = function(vm, event) {
-        event.preventDefault();
-        if (confirm("You are about to a schedule group.\n\n Are you sure?")) {
-            var context = ko.contextFor(event.target);
-            var $element = $(event.target).closest(".schedulegroup-fieldset");
-            $element.css("max-height","0px");
-            setTimeout(function() {
-                self.scheduleGroupsObs.remove(context.$data);
-                $element.remove();
-            },510);
-        }
     };
 };

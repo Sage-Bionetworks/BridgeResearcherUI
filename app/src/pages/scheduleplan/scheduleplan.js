@@ -25,7 +25,6 @@ module.exports = function(params) {
     var self = this;
 
     self.plan = null;
-    self.messageObs = ko.observable();
     self.publishedObs = ko.observable(false);
 
     // Models for the strategy object. The callback function will be called when saving the
@@ -54,7 +53,6 @@ module.exports = function(params) {
 
         utils.deleteUnusedProperties(self.plan);
 
-        console.log(self.plan);
         utils.startHandler(self, event);
         serverService.saveSchedulePlan(self.plan)
             .then(utils.successHandler(self, event, "The schedule plan has been saved."))
@@ -68,8 +66,8 @@ module.exports = function(params) {
     function loadVM(plan) {
         self.plan = plan;
         self.labelObs(plan.label);
-        self.strategyObs(plan.strategy);
         self.schedulePlanTypeObs(plan.strategy.type);
+        self.strategyObs(plan.strategy);
     }
 
     if (params.guid !== "new") {

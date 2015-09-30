@@ -1,21 +1,22 @@
-<h3>Surveys</h3>
-
-<form-message params="messageObs: messageObs"></form-message>
-
-<div class="button-container">
-    <a href="#/surveys/new" class="ui primary button">New Survey</a>
+<div class="fixed-header">
+    <h3>Surveys</h3>
+    <div class="fixed-header-buttons">
+        <a href="#/surveys/new" class="ui primary small button">New Survey</a>
+    </div>
+    <div class="ui secondary pointing menu"></div>
 </div>
-<div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
-<table class="ui compact table" data-bind="visible: itemsObs().length > 0">
-    <thead>
+<div class="scrollbox">
+    <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
+    <table class="ui compact table" data-bind="visible: itemsObs().length > 0">
+        <thead>
         <tr>
             <th>Name</th>
             <th>Last Updated</th>
             <th>Identifier</th>
             <th>Schedule(s)</th>
         </tr>
-    </thead>
-    <tbody data-bind="foreach: itemsObs">
+        </thead>
+        <tbody data-bind="foreach: itemsObs">
         <tr>
             <td>
                 <a href="#" data-bind="attr: {'href': '#/surveys/'+$data.guid}, text: $data.name"></a>
@@ -26,5 +27,6 @@
                 <a target="_blank" data-bind="attr: {href: '#/scheduleplans/'+$data.guid}, text: $data.label"></a>
             </td>
         </tr>
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>

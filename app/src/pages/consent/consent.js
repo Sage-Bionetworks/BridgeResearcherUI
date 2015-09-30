@@ -15,7 +15,6 @@ module.exports = function() {
 
     self.tabObs = ko.observable('current');
     self.tabObs.subscribe(function(value) {
-        self.messageObs("");
         if (value === "history") {
             serverService.getConsentHistory().then(function(data) {
                 self.historyItemsObs(data.items);

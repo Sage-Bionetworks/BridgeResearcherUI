@@ -77,6 +77,53 @@ ko.bindingHandlers.modal = {
         });
     }
 };
+
+function findItemsObs(context, collName) {
+    for (var i = 0; i < context.$parents.length; i++) {
+        if (context.$parents[i][collName]) {
+            if (context.$parents[i][collName]) {
+                return context.$parents[i][collName];
+            }
+        }
+    }
+    return null;
+}
+
+/**
+ * Fade and remove element in a list. The binding has the following parameters, passed in through a
+ * parameter object:
+ *  selector {String}
+ *      the selector to find the encompassing HTML element that represents a single item in this
+ *          observable array
+ *  object {Object}
+ *      the actual object to remove from the observable array
+ *  collection {String}
+ *      the name of the collection on a viewModel in the hierachy for this element. Defaults to 'itemsObs'
+ *
+ *  This binding assumes a transition that lasts 500ms.
+ */
+ko.bindingHandlers.fadeRemove = {
+    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var config = ko.unwrap(valueAccessor());
+        var selector = config.selector;
+        var rowItem = config.object;
+        var collName = config.collection || 'itemsObs';
+        var context = ko.contextFor(element);
+        var itemsObs = findItemsObs(context, collName);
+        var $element = $(element).closest(selector);
+
+        element.addEventListener('click', function(event) {
+            event.preventDefault();
+            if (confirm("Are you sure?")) {
+                $element.css("max-height","0px");
+                setTimeout(function() {
+                    itemsObs.remove(rowItem);
+                    $element.remove();
+                },510); // waiting for animation to complete
+            }
+        });
+    }
+};
 /**
  * Create an auto-resizing textarea control without going insane. Unfortunately this
  * solution requires CSS as well, see survey.css where this is currently used.

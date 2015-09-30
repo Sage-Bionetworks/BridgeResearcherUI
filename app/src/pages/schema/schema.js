@@ -4,7 +4,6 @@ var serverService = require('../../services/server_service');
 var schemaUtils = require('../schema/schema_utils');
 var utils = require('../../utils');
 var dragula = require('dragula');
-var $ = require('jquery');
 
 /**
  * You can edit the name and the fields in an upload schema.
@@ -14,7 +13,6 @@ module.exports = function(params) {
     var self = this;
 
     schemaUtils.initVM(self);
-    self.messageObs = ko.observable("");
     self.schemaIdObs = ko.observable(params.schemaId);
     self.revisionObs = ko.observable(params.revision);
     self.schemaTypeObs = ko.observable("");
@@ -66,19 +64,6 @@ module.exports = function(params) {
                 self.revisionObs(response.revision);
             })
             .catch(utils.failureHandler(vm, event));
-    };
-    self.deleteField = function(vm, event) {
-        var index = self.itemsObs.indexOf(vm.field);
-        var fieldDef = self.itemsObs()[index];
-        if (confirm("You are about to delete '"+fieldDef.name+"'.\n\n Are you sure?")) {
-            var $element = $(event.target).closest(".sfield");
-
-            $element.css("max-height","0px");
-            setTimeout(function() {
-                self.itemsObs.remove(fieldDef);
-                $element.remove();
-            },510); // waiting for animation to complete
-        }
     };
     self.addBelow = function(vm, event) {
         var index = self.itemsObs.indexOf(vm.field);

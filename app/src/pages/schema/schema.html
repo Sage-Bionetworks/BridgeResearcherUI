@@ -1,58 +1,55 @@
-<div class="ui breadcrumb">
-    <a href="#/schemas" class="section">Upload Schemas</a>
-</div>
-
-<h3 data-bind="visible: nameObs().length > 0, text: nameObs"></h3>
-<h3 data-bind="visible: nameObs().length === 0">New Upload Schema</h3>
-
-<form-message params="messageObs: messageObs"></form-message>
-
-<div class="ui secondary larger pointing menu">
-    <a class="active item">
-        <i class="file outline icon"></i> Editor
-    </a>
-    <a href="#" data-bind="attr: {href: '#/schemas/'+schemaIdObs()+'/versions'}, visible: !!revisionObs()" class="item">
-        <i class="history icon"></i> History
-    </a>
-    <div class="right menu">
-        <div class="item" data-bind="visible: !!schemaIdObs()">
-            <i class="clock icon"></i> <span data-bind="text: revisionLabel"></span>
+<div class="fixed-header">
+    <h3>
+        <a href="#/schemas" class="section">Upload Schemas</a>
+        <span data-bind="visible: nameObs().length > 0, text: nameObs"></span>
+        <span data-bind="visible: nameObs().length === 0">New Upload Schema</span>
+    </h3>
+    <div class="fixed-header-buttons">
+        <button class="ui primary small button" data-bind="visible: !publishedObs(), click: save">Save</button>
+    </div>
+    <div class="ui secondary larger pointing menu">
+        <a class="active item">
+            <i class="file outline icon"></i> Editor
+        </a>
+        <a href="#" data-bind="attr: {href: '#/schemas/'+schemaIdObs()+'/versions'}, visible: !!revisionObs()" class="item">
+            <i class="history icon"></i> History
+        </a>
+        <div class="right menu">
+            <div class="item" data-bind="visible: !!schemaIdObs()">
+                <i class="clock icon"></i> <span data-bind="text: revisionLabel"></span>
+            </div>
         </div>
     </div>
 </div>
-
-<div class="button-container">
-    <button class="ui primary button" data-bind="visible: !publishedObs(), click: save">Save</button>
-</div>
-
-<form class="ui form">
-    <div class="three fields">
-        <div class="required field">
-            <label>Name</label>
-            <ui-text params="fieldObs: nameObs, publishedObs: publishedObs"></ui-text>
-        </div>
-        <div class="required field">
-            <label>Schema Type</label>
-            <ui-select params="fieldObs: schemaTypeObs, fieldLabel: schemaTypeLabel,
+<div class="scrollbox">
+    <form class="ui form">
+        <div class="three fields">
+            <div class="required field">
+                <label>Name</label>
+                <ui-text params="fieldObs: nameObs, publishedObs: publishedObs"></ui-text>
+            </div>
+            <div class="required field">
+                <label>Schema Type</label>
+                <ui-select params="fieldObs: schemaTypeObs, fieldLabel: schemaTypeLabel,
                     publishedObs: publishedObs, optionsSrc: schemaTypeOptions"></ui-select>
+            </div>
+            <div class="required field">
+                <label>Identifier</label>
+                <ui-text params="fieldObs: schemaIdObs, publishedObs: publishedObs"></ui-text>
+            </div>
         </div>
-        <div class="required field">
-            <label>Identifier</label>
-            <ui-text params="fieldObs: schemaIdObs, publishedObs: publishedObs"></ui-text>
-        </div>
+    </form>
+
+    <h3>Field Definitions</h3>
+
+    <div data-bind="visible: itemsObs().length === 0">
+        <p>There are currently no field definitions in this upload schema.</p>
+        <p><a href="#" class="ui primary button" data-bind="click: addFirst"><i class="add square icon"></i> Add Field</a></p>
     </div>
-</form>
-
-<h3>Field Definitions</h3>
-
-<div data-bind="visible: itemsObs().length === 0">
-    <p>There are currently no field definitions in this upload schema.</p>
-    <p><a href="#" class="ui primary button" data-bind="click: addFirst"><i class="add square icon"></i> Add Field</a></p>
+    <div class="schema sfieldZone" data-bind="foreach: itemsObs">
+        <div class="sfield" data-bind="component: {
+            name: 'field_definition',
+            params: { field: $data, itemsObs: $parent.itemsObs, indexObs: $index, publishedObs: $parent.publishedObs }
+        }"></div>
+    </div>
 </div>
-<div class="schema sfieldZone" data-bind="foreach: itemsObs">
-    <div class="sfield" data-bind="component: {
-        name: 'field_definition',
-        params: { field: $data, itemsObs: $parent.itemsObs, indexObs: $index, publishedObs: $parent.publishedObs }
-    }"></div>
-</div>
-

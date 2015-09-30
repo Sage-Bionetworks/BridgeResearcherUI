@@ -1,5 +1,6 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service.js');
+var scheduleService = require('../../services/schedule_service.js');
 var utils = require('../../utils');
 
 // TODO: All this code is copied in any table that allows deletion...
@@ -19,7 +20,6 @@ function makeDeletionCall(item) {
 module.exports = function() {
     var self = this;
 
-    self.messageObs = ko.observableArray("");
     self.itemsObs = ko.observableArray([]);
     self.formatDateTime = utils.formatDateTime;
     // TODO: This information is also on the detail editor screen.
@@ -57,6 +57,7 @@ module.exports = function() {
                     .catch(utils.failureHandler(vm, event));
         }
     };
+    self.formatStrategy = scheduleService.formatStrategy;
 
     serverService.getSchedulePlans().then(function(response) {
         if (response.items.length) {

@@ -14,8 +14,10 @@ module.exports = function(params) {
     };
 
     // This is fired when the parent viewModel gets a plan back from the server
-    ko.pureComputed(function () {
+    ko.computed(function () {
         var strategy = params.strategyObs();
-        self.scheduleObs(strategy.schedule);
+        if (strategy && strategy.schedule) {
+            self.scheduleObs(strategy.schedule);
+        }
     });
 }

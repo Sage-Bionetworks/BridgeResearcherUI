@@ -1,5 +1,13 @@
 var utils = require('../../utils');
 var ko = require('knockout');
+var serverService = require('../../services/server_service');
+var root = require('../../root');
+
+var surveysOptionsObs = ko.observableArray([]);
+var surveysOptionsLabelFinder = utils.makeOptionLabelFinder(surveysOptionsObs);
+
+var questionsOptionsObs = ko.observableArray([]);
+var questionsOptionsLabelFinder = utils.makeOptionLabelFinder(questionsOptionsObs)
 
 var UNIT_OPTIONS = Object.freeze([
     {value: null, label: '<none>'},
@@ -201,6 +209,19 @@ function newSurvey() {
     return {name:'', guid:'', identifier:'', published:false, createdOn:null, elements:[], version:null};
 }
 
+serverService.getSurveysSummarized().then(function(surveys) {
+    surveys.sort(utils.makeFieldSorter("name"));
+    surveysOptionsObs.pushAll(surveys.map(function(survey) {
+        var options = survey.elements.filter(function(element) {
+            return (element.type === "SurveyQuestion"/* && element.fireEvent*/);
+        }).map(function(question) {
+            return {label: survey.name + ": " + question.identifier, value: question.guid };
+        });
+        questionsOptionsObs.pushAll(options);
+        return {label: survey.name, value: survey.guid, createdOn: survey.createdOn, identifier: survey.identifier};
+    }));
+});
+
 module.exports = {
     newSurvey: newSurvey,
     newField: function(type) {
@@ -259,7 +280,7 @@ module.exports = {
                 return SELECT_OPTIONS_BY_TYPE[vm.element.constraints.type];
             };
             vm.editRules = function() {
-                utils.openDialog('rules_editor', {parentViewModel: vm, element: vm.element, publishedObs: vm.publishedObs});
+                root.openDialog('rules_editor', {parentViewModel: vm, element: vm.element, publishedObs: vm.publishedObs});
             };
 
             vm.durationOptions = DURATION_OPTIONS;
@@ -279,5 +300,10 @@ module.exports = {
             vm.operatorOptions = OPERATOR_OPTIONS;
             vm.operatorLabel = utils.makeOptionLabelFinder(OPERATOR_OPTIONS);
         }
-    }
+    },
+    surveysOptionsObs: surveysOptionsObs,
+    surveysOptionsLabel: surveysOptionsLabelFinder,
+    surveysOptionsFinder: utils.makeOptionFinder(surveysOptionsObs),
+    questionsOptionsObs: questionsOptionsObs,
+    questionsOptionsLabel: questionsOptionsLabelFinder
 };

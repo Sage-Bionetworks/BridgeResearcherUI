@@ -5,8 +5,6 @@ var utils = require('../../utils');
 module.exports = function() {
     var self = this;
 
-    self.messageObs = ko.observable("");
-
     self.emailRoster = function(vm, event) {
         utils.startHandler(self, event);
 

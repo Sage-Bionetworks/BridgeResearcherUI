@@ -1,42 +1,40 @@
-<div class="ui breadcrumb">
-    <a href="#/schemas" class="section">Upload Schemas</a>
+<div class="fixed-header">
+    <h3>
+        <a href="#/schemas" class="section">Upload Schemas</a>
+        <span data-bind="text: nameObs">Schema Versions</span>
+    </h3>
+    <div class="fixed-header-buttons">
+        <button class="ui red small button" data-bind="disable: !anyChecked(), click: deleteRevisions">Delete</button>
+    </div>
+    <div class="ui secondary larger pointing menu">
+        <a href="#" class="item" data-bind="attr: {href: '#/schemas/'+schemaIdObs()}">
+            <i class="file outline icon"></i> Editor
+        </a>
+        <a href="#" class="active item">
+            <i class="history icon"></i> History
+        </a>
+    </div>
 </div>
-
-<h3 data-bind="text: nameObs">Schema Versions</h3>
-
-<form-message params="messageObs: messageObs"></form-message>
-
-<div class="ui secondary larger pointing menu">
-    <a href="#" class="item" data-bind="attr: {href: '#/schemas/'+schemaIdObs()}">
-        <i class="file outline icon"></i> Editor
-    </a>
-    <a href="#" class="active item">
-        <i class="history icon"></i> History
-    </a>
+<div class="scrollbox">
+    <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
+    <table class="ui table" data-bind="visible: itemsObs().length > 0">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Revision</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: itemsObs">
+            <tr>
+                <td>
+                    <ui-checkbox params="checkedObs: $data.checkedObs, disabledObs: $parent.publishedObs"></ui-checkbox>
+                </td>
+                <td width="100%">
+                    <a href="#" data-bind="attr: {href: $parent.link($data)}, text: $data.name"></a>
+                </td>
+                <td data-bind="text: $data.revision"></td>
+            </tr>
+        </tbody>
+    </table>
 </div>
-
-<div class="button-container">
-    <button class="ui red button" data-bind="disable: !anyChecked(), click: deleteRevisions">Delete</button>
-</div>
-
-<div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
-<table class="ui table" data-bind="visible: itemsObs().length > 0">
-    <thead>
-        <tr>
-            <th></th>
-            <th>Name</th>
-            <th>Revision</th>
-        </tr>
-    </thead>
-    <tbody data-bind="foreach: itemsObs">
-        <tr>
-            <td>
-                <ui-checkbox params="checkedObs: $data.checkedObs, disabledObs: $parent.publishedObs"></ui-checkbox>
-            </td>
-            <td width="100%">
-                <a href="#" data-bind="attr: {href: $parent.link($data)}, text: $data.name"></a>
-            </td>
-            <td data-bind="text: $data.revision"></td>
-        </tr>
-    </tbody>
-</table>

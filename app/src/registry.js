@@ -1,6 +1,7 @@
 var ko = require('knockout');
 
 function reg(name, path) {
+    console.log("reg", name, path, /dialogs/.test(path));
     ko.components.register(name, {
         viewModel: require(path),
         template: require(path+".html"),
@@ -8,7 +9,11 @@ function reg(name, path) {
     });
 }
 function regt(name, path) {
-    ko.components.register(name, {template: require(path+".html")});
+    console.log("regt", name, path, /dialogs/.test(path));
+    ko.components.register(name, {
+        template: require(path+".html"),
+        synchronous: /dialogs/.test(path)
+    });
 }
 
 // PAGES
@@ -33,9 +38,6 @@ reg('SimpleScheduleStrategy', './pages/scheduleplan/simple_strategy');
 reg('ABTestScheduleStrategy', './pages/scheduleplan/ab_strategy');
 reg('schedule', './pages/scheduleplan/schedule');
 regt('not_found', './pages/not_found/not_found');
-
-// WIDGETS
-reg('form-message', './widgets/form_message/form_message');
 
 // DIALOGS
 regt('none_dialog','./dialogs/none/none_dialog');

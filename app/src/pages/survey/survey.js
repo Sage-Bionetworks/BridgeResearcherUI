@@ -2,14 +2,12 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var surveyUtils = require('./survey_utils');
 var utils = require('../../utils');
-var $ = require('jquery');
 var dragula = require('dragula');
 
 module.exports = function(params) {
     var self = this;
 
     self.survey = null;
-    self.messageObs = ko.observable();
     self.formatDateTime = utils.formatDateTime;
     surveyUtils.initSurveyVM(self);
 
@@ -29,7 +27,7 @@ module.exports = function(params) {
         self.createdOnObs(keys.createdOn);
         self.versionObs(keys.version);
         if (message) {
-            self.messageObs({text: message});
+            utils.message('success', message);
         }
     }
     function version(keys) {
@@ -75,21 +73,6 @@ module.exports = function(params) {
         }
 
     };
-    self.deleteElement = function(params, event) {
-        var index = self.elementsObs.indexOf(params.element);
-        var element = self.elementsObs()[index];
-        var id = element.identifierObs() || "<none>";
-        if (confirm("You are about to delete question '"+id+"'.\n\n Are you sure?")) {
-            var $element = $(event.target).closest(".element");
-
-            $element.css("max-height","0px");
-            setTimeout(function() {
-                self.elementsObs.remove(element);
-                $element.remove();
-            },510); // waiting for animation to complete
-        }
-    };
-
     if (params.guid === "new") {
         loadVM(surveyUtils.newSurvey());
     } else if (params.createdOn) {

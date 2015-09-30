@@ -1,15 +1,18 @@
-<form class="ui form">
-    <h3>Eligibility Criteria</h3>
-
-    <form-message params="messageObs: messageObs"></form-message>
-
-    <div class="field">
-        <label>Youngest allowable age for participants</label>
-        <input type="range" min="18" max="121" data-bind="value: minAgeOfConsentObs, valueUpdate: 'input'"/>
-
-        <div class="ui large label" data-bind="text: minAge"></div>
+<div class="fixed-header">
+    <h3>Consent Agreement</h3>
+    <div class="fixed-header-buttons">
+        <button class="ui primary small button" data-bind="click: save">Save</button>
     </div>
-    <div class="field">
-        <button type="submit" class="ui primary submit button" data-bind="click: save">Save</button>
-    </div>
-</form>
+    <div class="ui secondary pointing menu"></div>
+</div>
+<div class="scrollbar">
+    <form class="ui form" style="margin:1.5rem 1rem">
+        <div class="field">
+            <label>Youngest allowable age for participants</label>
+            <input type="range" min="18" max="121" data-bind="value: minAgeOfConsentObs, valueUpdate: 'input'"/>
+
+            <div class="ui large label" data-bind="text: minAge"></div>
+        </div>
+    </form>
+</div>
+

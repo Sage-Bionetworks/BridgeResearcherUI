@@ -2,7 +2,6 @@ var utils = require('../../utils');
 var ko = require('knockout');
 var hash = require('object-hash');
 var dragula = require('dragula');
-var $ = require('jquery');
 
 function ListsSource(elements, element) {
     this.currentListEntry = null;

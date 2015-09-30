@@ -41,7 +41,6 @@ function annotateSurveys(surveys, plans) {
 module.exports = function() {
     var self = this;
 
-    self.messageObs = ko.observable("");
     self.itemsObs = ko.observableArray([]);
     self.formatDateTime = utils.formatDateTime;
 

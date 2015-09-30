@@ -14,14 +14,11 @@ may vary from these percentages due to random assignment). Percentages for all g
                 <label>Percentage of users to receive this schedule</label>
                 <div style="width:10rem">
                     <input type="range" min="1" max="100" data-bind="value: $data.percentageObs, valueUpdate: 'input'"/>
-                    <!--
-                    <ui-text params="fieldObs: $data.percentageObs, publishedObs: publishedObs"></ui-text>
-                    -->
                     <div class="ui large label" data-bind="text: $data.percentLabel"></div>
                 </div>
             </div>
             <div class="schedulegroup-field-delete field">
-                <a href="#" data-bind="click: $component.removeGroup">
+                <a href="#" data-bind="fadeRemove: {selector: '.schedulegroup-fieldset', object: $data, collection: 'scheduleGroupsObs'}">
                     <i class="delete square icon"></i>Remove This Schedule Group
                 </a>
             </div>

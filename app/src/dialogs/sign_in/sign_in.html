@@ -2,8 +2,6 @@
     <div class="content">
         <h3>Sign In</h3>
 
-        <form-message params="messageObs: messageObs"></form-message>
-
         <form class="ui form">
             <div class="field">
                 <label for="username">Email address</label>
@@ -17,7 +15,7 @@
                 <div class="field">
                     <label for="study">Study</label>
                     <select id="study" class="ui dropdown" data-bind="value: studyObs,
-                        options: studyOptions, optionsText: 'name', optionsValue: 'identifier'">
+                        options: studyOptionsObs, optionsText: 'name', optionsValue: 'identifier'">
                     </select>
                 </div>
                 <div class="field">
@@ -28,8 +26,8 @@
                 </div>
             </div>
             <div class="field">
-                <button type="submit" class="ui primary submit button" data-bind="click: signIn">Sign In</button>
-                <button class="ui button" data-bind="click: forgotPassword">Forgot Password</button>
+                <button class="ui primary small button" data-bind="click: signIn">Sign In</button>
+                <button class="ui small button" data-bind="click: forgotPassword">Forgot Password</button>
             </div>
         </form>
     </div>

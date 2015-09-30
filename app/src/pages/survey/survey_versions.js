@@ -11,7 +11,6 @@ module.exports = function(keys) {
     var self = this;
     self.keys = keys;
 
-    self.messageObs = ko.observable("");
     self.guidObs = ko.observable(keys.guid);
     self.itemsObs = ko.observableArray([]);
     self.showVersionObs = ko.observable(false);

@@ -1,5 +1,5 @@
 <form class="ui form">
-    <div class="two fields">
+    <div class="three fields">
         <div class="field">
             <label>When to schedule</label>
             <div style="margin: .5rem 0" data-bind="text: formatEventId(eventIdObs())"></div>
@@ -14,7 +14,7 @@
                 publishedObs: publishedObs, optionsSrc: scheduleTypeOptions"></ui-select>
         </div>
     </div>
-    <div class="four fields">
+    <div class="three fields">
         <div class="field">
             <label data-bind="text: (scheduleTypeObs() === 'recurring') ? 'At these times' : 'At this time'"></label>
             <div style="margin: .5rem 0" data-bind="text: formatTimes(timesObs())"></div>
@@ -33,7 +33,7 @@
             <ui-text params="fieldObs: cronTriggerObs, publishedObs: publishedObs"></ui-text><br> <a href="http://www.cronmaker.com/" target="_blank">Online tool to make one</a>
         </div>
     </div>
-    <div class="four fields">
+    <div class="three fields">
         <div class="field">
             <label>Delay first task by</label>
             <ui-duration params="fieldObs: delayObs"></ui-duration>
@@ -45,7 +45,7 @@
     </div>
     <fieldset>
         <legend>Scheduling Window (UTC time)</legend>
-        <div class="two fields">
+        <div class="three fields">
             <div class="field">
                 <label>Only schedule tasks after</label>
                 <ui-datetime params="fieldObs: startsOnObs, publishedObs: publishedObs"></ui-datetime>
@@ -73,14 +73,14 @@
                     <input type="text" placeholder="Label Detail" data-bind="textInput: $data.labelDetailObs"/>
                 </div>
                 <div>
-                    <ui-select params="fieldObs: activityTypeObs, fieldLabel: $component.activityTypeLabel,
+                    <ui-select params="fieldObs: $data.activityTypeObs, fieldLabel: $component.activityTypeLabel,
                         publishedObs: $component.publishedObs, optionsSrc: $component.activityTypeOptions"></ui-select>
                 </div>
-                <div style="width: 10rem" data-bind="visible: activityTypeObs() == 'task'">
+                <div style="width: 10rem" data-bind="visible: $data.activityTypeObs() == 'task'">
                     <input type="text" placeholder="Task ID" data-bind="textInput: $data.taskIdObs"/>
                 </div>
-                <div style="width: 10rem" data-bind="visible: activityTypeObs() == 'survey'">
-                    <ui-select params="fieldObs: surveyGuidObs, fieldLabel: $component.surveysOptionsLabel,
+                <div style="width: 10rem" data-bind="visible: $data.activityTypeObs() == 'survey'">
+                    <ui-select params="fieldObs: $data.surveyGuidObs, fieldLabel: $component.surveysOptionsLabel,
                         publishedObs: $component.publishedObs, optionsSrc: $component.surveysOptionsObs"></ui-select>
                 </div>
                 <div>
