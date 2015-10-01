@@ -1,6 +1,7 @@
 var ko = require('knockout');
 var utils = require('../../utils');
 var scheduleService = require('../../services/schedule_service');
+var root = require('../../root');
 
 module.exports = function(params) {
     var self = this;
@@ -29,13 +30,13 @@ module.exports = function(params) {
     }
     self.save = function() {
         self.timesObs(self.itemsObs());
-        utils.closeDialog();
+        root.closeDialog();
     };
     self.clear = function(vm, event) {
         self.clearTimesFunc(vm, event);
-        utils.closeDialog();
+        root.closeDialog();
     };
     self.cancel = function() {
-        utils.closeDialog();
+        root.closeDialog();
     };
 };

@@ -2,6 +2,7 @@ var utils = require('../../utils');
 var ko = require('knockout');
 var hash = require('object-hash');
 var dragula = require('dragula');
+var root = require('../../root');
 
 function ListsSource(elements, element) {
     this.currentListEntry = null;
@@ -142,10 +143,10 @@ module.exports = function(params) {
                 }
             });
         }
-        utils.closeDialog();
+        root.closeDialog();
     };
     self.cancel = function() {
-        utils.closeDialog();
+        root.closeDialog();
     };
 
     self.currentTabObs = ko.observable('editor');

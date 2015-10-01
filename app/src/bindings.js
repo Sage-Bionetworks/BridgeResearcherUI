@@ -67,8 +67,8 @@ ko.bindingHandlers.modal = {
         config.subscribe(function (newConfig) {
             var $modal = $(element).children(".modal");
             if ($modal.modal) {
-                $modal.modal({"closable": false});
-                if (newConfig.name !== "none_dialog") {
+                if (newConfig.name !== "none") {
+                    $modal.modal({"closable": false, "detachable": false});
                     $modal.modal('show');
                 } else {
                     $modal.modal('hide');

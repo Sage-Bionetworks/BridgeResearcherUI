@@ -2,6 +2,7 @@ var ko = require('knockout');
 var utils = require('../../utils');
 var serverService = require('../../services/server_service');
 var surveyUtils = require('../../pages/survey/survey_utils');
+var root = require('../../root');
 
 var OBJECT_TYPE = Object.freeze([
     {value: 'survey', label: 'When survey'},
@@ -51,13 +52,13 @@ module.exports = function(params) {
             eventId += ",enrollment";
         }
         self.eventIdObs(eventId);
-        utils.closeDialog();
+        root.closeDialog();
     };
     self.clear = function(vm, event) {
         self.clearEventIdFunc(vm, event);
-        utils.closeDialog();
+        root.closeDialog();
     };
     self.cancel = function() {
-        utils.closeDialog();
+        root.closeDialog();
     };
 }

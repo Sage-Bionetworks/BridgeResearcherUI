@@ -81,8 +81,8 @@ module.exports = function(params) {
         serverService.getMostRecentUploadSchema(params.schemaId).then(function(response) {
             serverService.getUploadSchema(params.schemaId, params.revision).then(loadVM).then(function() {
                 self.revisionObs(response.revision);
-            });
-        });
+            }).catch(utils.failureHandler(self));
+        }).catch(utils.failureHandler(self));
     } else {
         serverService.getMostRecentUploadSchema(params.schemaId).then(loadVM);
     }

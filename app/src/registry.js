@@ -16,6 +16,9 @@ function regt(name, path) {
     });
 }
 
+// Just leave this for now. This has been a real pain to get working.
+ko.components.register('none', {template: '<div class="ui modal dialog"></div>'});
+
 // PAGES
 reg('info','./pages/info/info');
 reg('consent','./pages/consent/consent');
@@ -40,7 +43,7 @@ reg('schedule', './pages/scheduleplan/schedule');
 regt('not_found', './pages/not_found/not_found');
 
 // DIALOGS
-regt('none_dialog','./dialogs/none/none_dialog');
+//regt('none_dialog','./dialogs/none/none');
 reg('sign_in_dialog', './dialogs/sign_in/sign_in');
 reg('forgot_password_dialog', './dialogs/forgot_password/forgot_password');
 reg('enumeration_editor', './dialogs/enumeration_editor/enumeration_editor');

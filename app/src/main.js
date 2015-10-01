@@ -2,6 +2,7 @@ require('../css/main');
 require('../lib/toastr.min');
 require('./bindings');
 require('./registry');
+
 var director = require('director');
 var root = require('./root');
 
@@ -32,4 +33,4 @@ router.configure({notfound: root.routeTo('not_found')});
 router.init();
 
 // Make this global for Semantic UI.
-window.jQuery = require('jquery');;
+window.jQuery = require('jquery');

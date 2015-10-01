@@ -1,8 +1,6 @@
 var ko = require('knockout');
 var serverService = require('./services/server_service');
 
-console.log(ko);
-
 // Used in navigation to keep a section highlighted as you navigate into it.
 var pageSets = {
     'surveys': ['surveys','survey','survey_versions'],
@@ -18,12 +16,12 @@ var RootViewModel = function() {
     self.studyName = ko.observable("");
 
     self.selected = ko.observable('info');
-    self.roles = ko.observableArray();
+    self.roles = ko.observableArray([]);
 
     self.mainPage = ko.observable('info');
     self.mainPage.subscribe(self.selected);
     self.mainParams = ko.observable({});
-    self.dialogObs = ko.observable({name: "none_dialog", params: {}});
+    self.dialogObs = ko.observable({name: 'none'});
 
     self.isActive = function(tag) {
         if (pageSets[tag]) {
@@ -31,12 +29,10 @@ var RootViewModel = function() {
         }
         return tag === self.selected();
     };
-
     self.signOut = function() {
         console.log("Signing out.");
         serverService.signOut();
     };
-
     self.routeTo = function(name) {
         return function(params) {
             self.mainPage(name);
@@ -61,23 +57,19 @@ var RootViewModel = function() {
             self.mainParams({guid: guid});
         };
     };
-
     self.isResearcher = ko.computed(function() {
         return self.roles.contains('researcher');
     });
-
     self.isDeveloper = ko.computed(function() {
         return self.roles.contains('developer');
     });
-
     self.openDialog = function(dialogName, params) {
         console.log("root.openDialog()", dialogName, params);
         self.dialogObs({name: dialogName, params: params});
     };
-
     self.closeDialog = function() {
         console.log("root.closeDialog()");
-        self.dialogObs({name: "none_dialog", params: {}});
+        self.dialogObs({name: 'none'});
     };
 
     serverService.addSessionStartListener(function(session) {

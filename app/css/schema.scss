@@ -29,6 +29,7 @@
     .sfield-content-editor > div { /* "row" element */
         @include flex-box(row);
         @include align-items(baseline);
+        padding: 0 .5rem;
     }
         .sfield-content-editor > div > div {
             padding: 0 .25rem;
@@ -36,11 +37,11 @@
         .sfield-content-editor ui-text {
             display:block;
             font-weight: bold;
-            width: 13rem;
+            width: 26rem;
         }
         .sfield-content-editor ui-select {
             display:block;
-            width: 13rem;
+            width: 11rem;
         }
         .sfield-content-editor ui-checkbox {
             margin-left: 1rem;
@@ -50,7 +51,7 @@
         }
             .sfield-content-editor-buttons {
                 @include link;
-                margin-left: 4rem;
+                margin-left: 2rem;
                 line-height: 1.4;
             }
                 .sfield-content-editor-buttons > a {

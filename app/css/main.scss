@@ -47,7 +47,7 @@ main {
         }
     .scrollbox {
         @include flex(1);
-        padding: 1rem 2rem 1rem 1rem;
+        padding: 1rem;
         height: 100vh;
         overflow-y: auto;
     }
@@ -78,6 +78,9 @@ header {
     .header-content-title {
         font-variant: small-caps;
         letter-spacing: 2px;
+    }
+    header a:hover {
+        color: lightblue;
     }
 .scrollbox dd {
     margin: 1rem;
