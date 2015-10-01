@@ -28,7 +28,7 @@ module.exports = function() {
 
     self.sendResetPasswordRequest = function(vm, event) {
         if (self.emailObs() === "") {
-            utils.message('error', "Email address is required.");
+            root.message('error', "Email address is required.");
         }
         optionsService.set('environment', self.environmentObs());
         optionsService.set('study', self.studyObs());

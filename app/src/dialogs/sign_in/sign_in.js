@@ -36,7 +36,7 @@ module.exports = function() {
         self.usernameObs("");
         self.passwordObs("");
         if (!response.isSupportedUser()) {
-            utils.message('error', 'You do not appear to be either a developer or a researcher.');
+            root.message('error', 'You do not appear to be either a developer or a researcher.');
         } else {
             root.closeDialog();
         }
@@ -45,7 +45,7 @@ module.exports = function() {
 
     self.signIn = function(vm, event) {
         if (self.usernameObs() === "" || self.passwordObs() === "") {
-            utils.message('error', 'Username and/or password are required.');
+            root.message('error', 'Username and/or password are required.');
         }
         // Succeed or fail, let's keep these values for other sign ins.
         optionsService.set('environment', self.environmentObs());

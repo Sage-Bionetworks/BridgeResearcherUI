@@ -16,22 +16,41 @@ ko.observableArray.fn.contains = function(value) {
     var underlyingArray = this();
     return underlyingArray.indexOf(value) > -1;
 };
+
 ko.bindingHandlers.semantic = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
         var value = ko.unwrap(valueAccessor());
+        var $element = $(element);
         if (value === 'checkbox') {
-            element.className += " ui checkbox";
+            var input = $element.children("input[type=checkbox]").get(0);
             var observer = allBindings().checkboxObs;
-            var input = $(element).children("input[type=checkbox]").get(0);
-            $(element).on('click', function() {
+            $element.addClass("ui checkbox").on('click', function() {
                 if (!input.disabled) {
                     observer(!observer());
-                    element.classList.toggle("checked", observer());
+                    $element.toggleClass('checked', observer());
                 }
             });
+        } else if (value === 'radio') {
+            var input = $element.children("input[type=radio]").get(0);
+            var observer = allBindings().radioObs;
+            observer.subscribe(function(newValue) {
+                if (newValue === input.value) {
+                    input.checked = true;
+                    $element.addClass("checked");
+                }
+            });
+            if (observer() === input.value) {
+                input.checked = true;
+                $element.addClass("checked");
+            }
+            $element.addClass("ui radio checkbox").on('click', function() {
+                if (!input.disabled) {
+                    observer(input.value);
+                    $element.addClass("checked");
+                }
+            }).checkbox();
         } else if (value === 'dropdown') {
-            element.className += " ui dropdown";
-            $(element).dropdown();
+            $element.addClass("ui dropdown").dropdown();
         }
     }
 };

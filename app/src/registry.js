@@ -1,7 +1,6 @@
 var ko = require('knockout');
 
 function reg(name, path) {
-    console.log("reg", name, path, /dialogs/.test(path));
     ko.components.register(name, {
         viewModel: require(path),
         template: require(path+".html"),
@@ -9,7 +8,6 @@ function reg(name, path) {
     });
 }
 function regt(name, path) {
-    console.log("regt", name, path, /dialogs/.test(path));
     ko.components.register(name, {
         template: require(path+".html"),
         synchronous: /dialogs/.test(path)
@@ -50,6 +48,7 @@ reg('enumeration_editor', './dialogs/enumeration_editor/enumeration_editor');
 reg('event_id_editor', './dialogs/event_id_editor/event_id_editor');
 reg('times_editor', './dialogs/times_editor/times_editor');
 reg('rules_editor', './dialogs/rules_editor/rules_editor');
+reg('date_window_editor', './dialogs/date_window_editor/date_window_editor');
 
 /* SURVEYS */
 reg('SurveyInfoScreen', './pages/survey/survey_info');

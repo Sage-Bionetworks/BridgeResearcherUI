@@ -1,5 +1,7 @@
 var ko = require('knockout');
+var toastr = require('toastr');
 var serverService = require('./services/server_service');
+var config = require('./config');
 
 // Used in navigation to keep a section highlighted as you navigate into it.
 var pageSets = {
@@ -8,6 +10,8 @@ var pageSets = {
     'scheduleplans': ['scheduleplans','scheduleplan'],
     've_template': ['ve_template', 'rp_template']
 };
+
+toastr.options = config.toastr;
 
 var RootViewModel = function() {
     var self = this;
@@ -64,12 +68,24 @@ var RootViewModel = function() {
         return self.roles.contains('developer');
     });
     self.openDialog = function(dialogName, params) {
-        console.log("root.openDialog()", dialogName, params);
+        console.debug("root.openDialog()", dialogName, params);
         self.dialogObs({name: dialogName, params: params});
     };
     self.closeDialog = function() {
-        console.log("root.closeDialog()");
+        console.debug("root.closeDialog()");
         self.dialogObs({name: 'none'});
+    };
+    /**
+     * Displays a message that we UI insiders like to call "a piece of toast"
+     * @param severity {String} one of 'success', 'info', 'warning' or 'error'
+     * @param message {String} the message for the toast
+     */
+    self.message = function(severity, message) {
+        if (toastr[severity]) {
+            toastr[severity](message);
+        } else {
+            throw new Error(severity + ' is not a message type');
+        }
     };
 
     serverService.addSessionStartListener(function(session) {

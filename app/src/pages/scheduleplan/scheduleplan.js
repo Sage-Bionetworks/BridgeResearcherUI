@@ -2,6 +2,7 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service.js');
 var scheduleService = require('../../services/schedule_service.js');
 var utils = require('../../utils');
+var root = require('../../root');
 
 var TYPE_OPTIONS = Object.freeze([
     {value: 'SimpleScheduleStrategy', label: 'Simple Schedule'},
@@ -74,7 +75,7 @@ module.exports = function(params) {
         serverService.getSchedulePlan(params.guid).then(loadVM).catch(function(response) {
             // TODO: Need better error handling here.
             console.error(response);
-            utils.message('warning', "Schedule plan not found.");
+            root.message('warning', "Schedule plan not found.");
             document.location = "#/scheduleplans";
         });
     } else {

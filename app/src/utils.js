@@ -1,15 +1,10 @@
 var ko = require('knockout');
-var EventEmitter = require('./events');
 var toastr = require('toastr');
+var config = require('./config');
 
 var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
 
-toastr.options = {
-    positionClass: "toast-bottom-right",
-    hideDuration: 300,
-    timeOut: 5000,
-    preventDuplicates: true
-};
+toastr.options = config.toastr;
 
 function is(obj, typeName) {
     return Object.prototype.toString.call(obj) === "[object "+typeName+"]";
@@ -60,29 +55,11 @@ function makeOptionLabelFinder(arrayOrObs) {
         return option ? option.label : "";
     };
 }
-function message(severity, message) {
-    if (['success','info','warning','error'].indexOf(severity) === -1) {
-        throw new Error(severity + ' is not a message type');
-    }
-    if (toastr[severity]) {
-        toastr[severity](message);
-    } else {
-        console.error(severity + " is not a toastr function", message);
-    }
-}
 
 /**
  * Common utility methods for ViewModels.
- *
- * TODO: Add dirty state tracking to the observables that are created.
  */
 module.exports = {
-    /**
-     * Displays a message that we UI insiders like to call "a piece of toast"
-     * @param severity {String} one of 'success', 'info', 'warning' or 'error'
-     * @param message {String} the message that's also toast
-     */
-    message: message,
     /**
      * Determine type of object
      * @param object - object to test

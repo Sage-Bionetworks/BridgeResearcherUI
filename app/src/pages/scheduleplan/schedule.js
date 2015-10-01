@@ -164,6 +164,34 @@ module.exports = function(params) {
         event.preventDefault();
         self.eventIdObs(null);
     };
+    self.formatWindow = function() {
+        if (self.startsOnObs() || self.endsOnObs()) {
+            var string = "";
+            if (self.startsOnObs()) {
+                string += new Date(self.startsOnObs()).toUTCString();
+            }
+            if (self.startsOnObs() && self.endsOnObs()) {
+                string += " to<br>";
+            }
+            if (self.endsOnObs()) {
+                string += new Date(self.endsOnObs()).toUTCString();
+            }
+            return string;
+        }
+        return "&lt;None&gt;";
+    };
+    self.editWindow = function(vm, event) {
+        event.preventDefault();
+        root.openDialog('date_window_editor', {
+            'startsOnObs': self.startsOnObs,
+            'endsOnObs': self.endsOnObs,
+            'clearWindowFunc': self.clearWindow
+        });
+    };
+    self.clearWindow = function() {
+        self.startsOnObs(null);
+        self.endsOnObs(null);
+    };
     self.addFirstActivity = function(vm, event) {
         self.activitiesObs.push(newActivity());
     };

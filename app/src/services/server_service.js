@@ -12,6 +12,7 @@
 var EventEmitter = require('../events');
 var optionsService = require('../services/options_service');
 var config = require('../config');
+var utils = require("../utils");
 var $ = require('jquery');
 var Promise = require('es6-promise').Promise;
 
@@ -239,7 +240,20 @@ module.exports = {
                 return get(config.survey + survey.guid + '/revisions/' + survey.createdOn);
             });
             return Promise.all(promises);
+        }).then(function(surveys) {
+            surveys.sort(utils.makeFieldSorter("name"));
+            return surveys.map(function(survey) {
+                survey.elements = survey.elements.filter(function(element) {
+                    return (element.type === "SurveyQuestion");
+                }).map(function(question) {
+                    var label = survey.name+": "+question.identifier+((question.fireEvent)?" *":"");
+                    return {label: label, value: question.guid };
+                });
+                return {label: survey.name, value: survey.guid, questions: survey.elements,
+                    createdOn: survey.createdOn, identifier: survey.identifier};
+            });
         });
+        return promise;
     },
     createSurvey: function(survey) {
         return post(config.surveys, survey);

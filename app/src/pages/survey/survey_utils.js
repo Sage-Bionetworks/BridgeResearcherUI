@@ -209,18 +209,17 @@ function newSurvey() {
     return {name:'', guid:'', identifier:'', published:false, createdOn:null, elements:[], version:null};
 }
 
-serverService.getSurveysSummarized().then(function(surveys) {
-    surveys.sort(utils.makeFieldSorter("name"));
-    surveysOptionsObs.pushAll(surveys.map(function(survey) {
-        var options = survey.elements.filter(function(element) {
-            return (element.type === "SurveyQuestion"/* && element.fireEvent*/);
-        }).map(function(question) {
-            return {label: survey.name + ": " + question.identifier, value: question.guid };
+function triggerSurveyRefresh() {
+    surveysOptionsObs.removeAll();
+    questionsOptionsObs.removeAll();
+    return serverService.getSurveysSummarized().then(function(surveys) {
+        surveysOptionsObs.pushAll(surveys);
+        surveys.forEach(function(survey) {
+            questionsOptionsObs.pushAll(survey.questions);
         });
-        questionsOptionsObs.pushAll(options);
-        return {label: survey.name, value: survey.guid, createdOn: survey.createdOn, identifier: survey.identifier};
-    }));
-});
+    });
+}
+triggerSurveyRefresh();
 
 module.exports = {
     newSurvey: newSurvey,
@@ -234,6 +233,9 @@ module.exports = {
         }
         return elementToObservables(newEl);
     },
+    // TODO: Really don't like having to manually update this when we open the event ID editor.
+    // Also won't update the survey view itself.
+    triggerSurveyRefresh: triggerSurveyRefresh,
     surveyToObservables: function(vm, survey) {
         SURVEY_FIELDS.forEach(function(field) {
             vm[field+"Obs"](survey[field]);

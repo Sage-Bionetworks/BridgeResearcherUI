@@ -1,6 +1,7 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
+var root = require('../../root');
 
 module.exports = function() {
     var self = this;
@@ -14,10 +15,10 @@ module.exports = function() {
     };
     self.add = function() {
         if (!self.addField()) {
-            return utils.message('warning', 'You must provide a value for an attribute.');
+            return root.message('warning', 'You must provide a value for an attribute.');
         }
         if (self.records.contains(self.addField())) {
-            return utils.message('warning', 'The attribute must be a unique value.');
+            return root.message('warning', 'The attribute must be a unique value.');
         }
         self.records.push(self.addField());
         self.addField("");

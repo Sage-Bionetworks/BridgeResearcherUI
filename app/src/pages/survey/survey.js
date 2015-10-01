@@ -2,6 +2,7 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var surveyUtils = require('./survey_utils');
 var utils = require('../../utils');
+var root = require('../../root');
 var dragula = require('dragula');
 
 module.exports = function(params) {
@@ -27,7 +28,7 @@ module.exports = function(params) {
         self.createdOnObs(keys.createdOn);
         self.versionObs(keys.version);
         if (message) {
-            utils.message('success', message);
+            root.message('success', message);
         }
     }
     function version(keys) {
