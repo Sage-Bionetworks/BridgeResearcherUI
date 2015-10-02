@@ -1,9 +1,10 @@
 <div class="ui small modal">
     <i class="close icon"></i>
     <div class="header">
-        Edit Times of Day
+        <span data-bind="visible: scheduleType === 'recurring'">Edit Times of Day</span>
+        <span data-bind="visible: scheduleType === 'once'">Edit Time of Day</span>
     </div>
-    <div class="content">
+    <div class="content" data-bind="visible: scheduleType === 'recurring'">
         <div class="ui two column grid">
             <div class="column">
                 <div data-bind="visible: itemsObs().length === 0">
@@ -28,6 +29,10 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="content" data-bind="visible: scheduleType === 'once'">
+        <ui-select params="fieldObs: timeObs, fieldLabel: timesLabel,
+            publishedObs: publishedObs, optionsSrc: timesOptions"></ui-select>
     </div>
     <div class="rules-actions">
         <button class="ui primary small button" data-bind="click: save">Save</button>

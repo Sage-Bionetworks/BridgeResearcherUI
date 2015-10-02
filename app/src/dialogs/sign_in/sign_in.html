@@ -1,7 +1,8 @@
 <div class="small ui modal">
+    <div class="header">
+        Sign In
+    </div>
     <div class="content">
-        <h3>Sign In</h3>
-
         <form class="ui form">
             <div class="field">
                 <label for="username">Email address</label>
@@ -13,22 +14,22 @@
             </div>
             <div class="two fields">
                 <div class="field">
-                    <label for="study">Study</label>
-                    <select id="study" class="ui dropdown" data-bind="value: studyObs,
-                        options: studyOptionsObs, optionsText: 'name', optionsValue: 'identifier'">
-                    </select>
-                </div>
-                <div class="field">
                     <label for="environment">Environment</label>
                     <select name="environment" id="environment" class="ui dropdown" data-bind="value: environmentObs,
                         options: environmentOptions, optionsText: 'label', optionsValue: 'value'">
                     </select>
                 </div>
-            </div>
-            <div class="field">
-                <button class="ui primary small button" data-bind="click: signIn">Sign In</button>
-                <button class="ui small button" data-bind="click: forgotPassword">Forgot Password</button>
+                <div class="field">
+                    <label for="study">Study</label>
+                    <select id="study" class="ui dropdown" data-bind="value: studyObs,
+                        options: studyOptionsObs, optionsText: 'name', optionsValue: 'identifier'">
+                    </select>
+                </div>
             </div>
         </form>
+    </div>
+    <div class="rules-actions">
+        <button class="ui primary small button" data-bind="click: signIn">Sign In</button>
+        <button class="ui small button" data-bind="click: forgotPassword">Forgot Password</button>
     </div>
 </div>

@@ -45,8 +45,17 @@ var RootViewModel = function() {
     };
     self.surveyRoute = function(name) {
         return function(guid, createdOn) {
+            var date = null;
+            try {
+                if (createdOn) {
+                    date = new Date(createdOn)
+                    date.toISOString();
+                }
+            } catch(e) {
+                date = null;
+            }
             self.mainPage(name);
-            self.mainParams({guid: guid, createdOn: (createdOn === "recent") ? null : createdOn});
+            self.mainParams({guid: guid, createdOn: date});
         };
     };
     self.schemaRoute = function(name) {

@@ -7,21 +7,18 @@ function addCheckedObs(item) {
     return item;
 }
 
-module.exports = function(keys) {
+module.exports = function(params) {
     var self = this;
-    self.keys = keys;
+    self.keys = params;
 
-    self.guidObs = ko.observable(keys.guid);
-    self.itemsObs = ko.observableArray([]);
-    self.showVersionObs = ko.observable(false);
-    self.nameObs = ko.computed(function () {
-        if (self.itemsObs().length > 0) {
-            return self.itemsObs()[0].name;
-        }
-        return "";
-    });
-    self.publishedObs = ko.observable(false); // for checkboxes
     self.formatDateTime = utils.formatDateTime;
+    self.guidObs = ko.observable(params.guid);
+    self.createdOnObs = ko.observable(params.createdOn);
+    self.publishedObs = ko.observable(false);
+    self.nameObs = ko.observable();
+
+    self.itemsObs = ko.observableArray([]);
+    // self.showVersionObs = ko.observable(false); unused?
     self.selectedObs = ko.observable(null);
 
     self.disablePublish = ko.computed(function() {
@@ -71,10 +68,19 @@ module.exports = function(keys) {
         }
     };
     function load(survey) {
-        serverService.getSurveyAllRevisions(keys.guid).then(function(list) {
-            self.itemsObs(list.items.map(addCheckedObs));
+        var matchDate = (typeof params.createdOn !== "string") ?
+            params.createdOn.toISOString() : params.createdOn;
+        serverService.getSurveyAllRevisions(params.guid).then(function(list) {
+            self.itemsObs(list.items.map(function(survey) {
+                survey.checkedObs = ko.observable(false);
+                if (survey.createdOn === matchDate) {
+                    self.nameObs(survey.name);
+                    self.publishedObs(survey.published);
+                }
+                return survey;
+            }));
         });
         return survey.createdOn;
     }
-    load(keys);
+    load(params);
 };

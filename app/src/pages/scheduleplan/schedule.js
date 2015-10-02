@@ -147,7 +147,9 @@ module.exports = function(params) {
     self.editTimes = function(vm, event) {
         event.preventDefault();
         root.openDialog('times_editor', {
-            'timesObs': self.timesObs, 'clearTimesFunc': self.clearTimes
+            timesObs: self.timesObs,
+            scheduleTypeObs: self.scheduleTypeObs,
+            clearTimesFunc: self.clearTimes
         });
     };
     self.clearTimes = function(vm, event) {

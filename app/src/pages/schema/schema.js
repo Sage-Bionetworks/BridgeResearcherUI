@@ -3,7 +3,6 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var schemaUtils = require('../schema/schema_utils');
 var utils = require('../../utils');
-var dragula = require('dragula');
 
 /**
  * You can edit the name and the fields in an upload schema.
@@ -85,29 +84,5 @@ module.exports = function(params) {
         }).catch(utils.failureHandler(self));
     } else {
         serverService.getMostRecentUploadSchema(params.schemaId).then(loadVM);
-    }
-
-    var elementsZoneEl = document.querySelector(".sfieldZone");
-    if (!self.publishedObs()) {
-        var _item = null;
-
-        dragula([elementsZoneEl], {
-            moves: function (el, container, handle) {
-                return (handle.className === 'sfield-draghandle');
-            }
-        }).on('drop', function(el, zone) {
-            var elements = document.querySelectorAll(".sfieldZone .sfield");
-            // This utility handles node lists
-            var index = ko.utils.arrayIndexOf(elements, el);
-            var data = ko.contextFor(el).$data;
-            self.itemsObs.remove(data);
-            self.itemsObs.splice(index,0,data);
-            if (_item) {
-                _item.parentNode.removeChild(_item);
-                _item = null;
-            }
-        }).on('cloned', function(mirror, item, type) {
-            _item = item;
-        });
     }
 };

@@ -29,6 +29,7 @@ reg('actions','./pages/actions/actions');
 reg('surveys','./pages/surveys/surveys');
 reg('survey', './pages/survey/survey');
 reg('survey_versions','./pages/survey/survey_versions');
+reg('survey_schema','./pages/survey/survey_schema');
 reg('schemas', './pages/schemas/schemas');
 reg('schema', './pages/schema/schema');
 reg('schema_versions', './pages/schema/schema_versions');
@@ -62,10 +63,11 @@ reg('IntegerConstraints', './pages/survey/constraints/integer_constraints');
 reg('DecimalConstraints', './pages/survey/constraints/decimal_constraints');
 reg('StringConstraints', './pages/survey/constraints/string_constraints');
 reg('MultiValueConstraints', './pages/survey/constraints/multi_constraints');
+
+// Custom elements
 reg('insertion-control', './pages/survey/insertion_control');
 regt('constraints-label', './pages/survey/constraints/constraints_label');
 regt('ui-rules', './pages/survey/constraints/ui_rules');
-
 regt('ui-checkbox', './widgets/form/ui_checkbox');
 regt('ui-text', './widgets/form/ui_text');
 regt('ui-date', './widgets/form/ui_date');
@@ -73,6 +75,7 @@ regt('ui-datetime', './widgets/form/ui_datetime');
 regt('ui-select', './widgets/form/ui_select');
 regt('ui-textarea', './widgets/form/ui_textarea');
 reg('ui-duration', './widgets/form/ui_duration');
+reg('survey-tabset', './pages/survey/tabset');
 
 /* SCHEMAS */
 reg('field_definition', './pages/schema/field_definition');

@@ -1,5 +1,6 @@
 require('../css/main');
 require('../lib/toastr.min');
+require('../lib/dragula.min');
 require('./bindings');
 require('./registry');
 
@@ -18,8 +19,8 @@ router.on('/verify_email_template', root.routeTo('ve_template'));
 router.on('/reset_password_template', root.routeTo('rp_template'));
 router.on('/actions', root.routeTo('actions'));
 router.on('/surveys', root.routeTo('surveys'));
-router.on('/surveys/:guid', root.surveyRoute('survey'));
-router.on('/surveys/:guid/versions', root.surveyRoute('survey_versions'));
+router.on('/surveys/:guid/:createdOn/versions', root.surveyRoute('survey_versions'));
+router.on('/surveys/:guid/:createdOn/schema', root.surveyRoute('survey_schema'));
 router.on('/surveys/:guid/:createdOn', root.surveyRoute('survey'));
 router.on('/schemas', root.routeTo('schemas'));
 router.on('/schemas/:schemaId', root.schemaRoute('schema'));

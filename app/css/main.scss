@@ -45,6 +45,9 @@ main {
             content: ' » ';
             color: black;
         }
+        .fixed-header-buttons {
+            margin: .5rem 0;
+        }
     .scrollbox {
         @include flex(1);
         padding: 1rem;

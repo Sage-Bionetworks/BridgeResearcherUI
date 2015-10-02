@@ -7,34 +7,9 @@
     <div class="fixed-header-buttons">
         <button class="ui primary small button" data-bind="visible: !disabledObs(), click: save">Save</button>
     </div>
-    <div class="ui secondary pointing menu">
-        <a class="active item">
-            <i class="file outline icon"></i> Editor
-        </a>
-        <a href="#" data-bind="attr: {href: '#/surveys/'+guidObs()+'/versions'}, visible: !!guidObs()" class="item">
-            <i class="history icon"></i> History
-        </a>
-        <div class="right menu">
-            <div class="item" data-bind="visible: !!guidObs()">
-                <i class="clock icon"></i> <span data-bind="text: formatDateTime(createdOnObs())"></span>
-            </div>
-            <div class="item" data-bind="visible: publishedObs">
-                <div class="green ui label">
-                    <i class="checkmark icon"></i> Published
-                </div>
-            </div>
-            <div class="item" data-bind="visible: !publishedObs()">
-                <div class="orange ui label">
-                    <i class="warning icon"></i> Not Published
-                </div>
-            </div>
-        </div>
-    </div>
+    <survey-tabset params="selected: 'editor', viewModel: $data"></survey-tabset>
 </div>
 <div class="scrollbox">
-    <div class="ui warning message" data-bind="visible: disabledObs">
-        <p>You are viewing a published revision of this survey. It cannot be edited. </p>
-    </div>
     <form class="ui form">
         <div class="two fields">
             <div class="required field">
@@ -57,7 +32,11 @@
             params: { elementsObs: elementsObs, indexObs: 0, publishedObs: disabledObs }
         } --><!-- /ko -->
     </div>
-    <div class="survey elementZone" data-bind="foreach: elementsObs">
+    <div class="survey elementZone" data-bind="dragula: {
+        dragHandleSelector: '.element-draghandle',
+        elementSelector: '.element',
+        listObs: elementsObs
+    }, foreach: elementsObs">
         <div class="element" data-bind="component: {
         name: $data.type,
         params: { element: $data, elementsObs: $parent.elementsObs, indexObs: $index, publishedObs: $parent.disabledObs }

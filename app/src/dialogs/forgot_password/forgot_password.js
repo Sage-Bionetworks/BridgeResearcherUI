@@ -18,7 +18,7 @@ module.exports = function() {
 
     self.environmentOptions = config.environments;
     self.environmentObs.subscribe(function(newValue) {
-        self.studyOptionsObs([]);
+        self.studyOptionsObs({name:'Updating...',identifier:''});
         serverService.getStudyList(newValue)
                 .then(function(studies){
                     self.studyOptionsObs(studies.items);
@@ -29,6 +29,7 @@ module.exports = function() {
     self.sendResetPasswordRequest = function(vm, event) {
         if (self.emailObs() === "") {
             root.message('error', "Email address is required.");
+            return;
         }
         optionsService.set('environment', self.environmentObs());
         optionsService.set('study', self.studyObs());

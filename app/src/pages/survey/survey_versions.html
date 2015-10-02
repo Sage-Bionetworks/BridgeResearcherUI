@@ -7,14 +7,7 @@
         <button class="ui primary small button" data-bind="disable: disablePublish, click: publish">Publish</button>
         <button class="ui red small button" data-bind="disable: disableDelete(), click: deleteSurvey">Delete</button>
     </div>
-    <div class="ui secondary larger pointing menu">
-        <a href="#" data-bind="attr: {href: '#/surveys/'+guidObs()}" class="item">
-            <i class="file outline icon"></i> Editor
-        </a>
-        <a class="active item">
-            <i class="history icon"></i> History
-        </a>
-    </div>
+    <survey-tabset params="selected: 'history', viewModel: $data"></survey-tabset>
 </div>
 <div class="scrollbox">
     <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>

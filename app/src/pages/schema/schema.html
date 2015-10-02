@@ -46,7 +46,11 @@
         <p>There are currently no field definitions in this upload schema.</p>
         <p><a href="#" class="ui primary button" data-bind="click: addFirst"><i class="add square icon"></i> Add Field</a></p>
     </div>
-    <div class="schema sfieldZone" data-bind="foreach: itemsObs">
+    <div class="schema sfieldZone" data-bind="dragula: {
+        dragHandleSelector: '.sfield-draghandle',
+        elementSelector: '.sfield',
+        listObs: itemsObs
+    }, foreach: itemsObs">
         <div class="sfield" data-bind="component: {
             name: 'field_definition',
             params: { field: $data, itemsObs: $parent.itemsObs, indexObs: $index, publishedObs: $parent.publishedObs }

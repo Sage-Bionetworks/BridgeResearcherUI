@@ -9,11 +9,18 @@ module.exports = function(params) {
     self.itemsObs = ko.observableArray(params.timesObs());
     self.timesObs = params.timesObs;
     self.clearTimesFunc = params.clearTimesFunc;
+    self.scheduleType = params.scheduleTypeObs();
 
     self.timeObs = ko.observable();
     self.timesOptions = scheduleService.timeOptions;
     self.timesLabel = scheduleService.timeOptionsLabel;
     self.publishedObs = ko.observable(false);
+
+    // When it's only one time, this becomes the control that reflects the
+    // state of the schedule, so initialize it.
+    if (self.scheduleType === 'once') {
+        self.timesObs(params.timesObs()[0]);
+    }
 
     self.addTime = function(vm, event) {
         event.preventDefault();
@@ -29,7 +36,13 @@ module.exports = function(params) {
         self.itemsObs.remove(context.$data);
     }
     self.save = function() {
-        self.timesObs(self.itemsObs());
+        // Get the time from different places depending on whether
+        // it's a list or a single value.
+        if (self.scheduleType === 'once') {
+            self.timesObs([self.timeObs()]);
+        } else {
+            self.timesObs(self.itemsObs());
+        }
         root.closeDialog();
     };
     self.clear = function(vm, event) {

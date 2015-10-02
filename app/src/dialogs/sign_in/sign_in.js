@@ -24,7 +24,7 @@ module.exports = function() {
     self.environmentOptions = config.environments;
 
     self.environmentObs.subscribe(function(newValue) {
-        self.studyOptionsObs([]);
+        self.studyOptionsObs({name:'Updating...',identifier:''});
         serverService.getStudyList(newValue)
             .then(function(studies){
                 self.studyOptionsObs(studies.items);
@@ -37,6 +37,7 @@ module.exports = function() {
         self.passwordObs("");
         if (!response.isSupportedUser()) {
             root.message('error', 'You do not appear to be either a developer or a researcher.');
+            return;
         } else {
             root.closeDialog();
         }
@@ -46,6 +47,7 @@ module.exports = function() {
     self.signIn = function(vm, event) {
         if (self.usernameObs() === "" || self.passwordObs() === "") {
             root.message('error', 'Username and/or password are required.');
+            return;
         }
         // Succeed or fail, let's keep these values for other sign ins.
         optionsService.set('environment', self.environmentObs());

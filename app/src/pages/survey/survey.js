@@ -3,7 +3,6 @@ var serverService = require('../../services/server_service');
 var surveyUtils = require('./survey_utils');
 var utils = require('../../utils');
 var root = require('../../root');
-var dragula = require('dragula');
 
 module.exports = function(params) {
     var self = this;
@@ -80,29 +79,5 @@ module.exports = function(params) {
         serverService.getSurvey(params.guid, params.createdOn).then(loadVM);
     } else {
         serverService.getSurveyMostRecent(params.guid).then(loadVM);
-    }
-
-    var elementsZoneEl = document.querySelector(".elementZone");
-    if (!self.publishedObs()) {
-        var _item = null;
-
-        dragula([elementsZoneEl], {
-            moves: function (el, container, handle) {
-                return (handle.className === 'element-draghandle');
-            }
-        }).on('drop', function(el, zone) {
-            var elements = document.querySelectorAll(".elementZone .element");
-            // This utility handles node lists
-            var index = ko.utils.arrayIndexOf(elements, el);
-            var data = ko.contextFor(el).$data;
-            self.elementsObs.remove(data);
-            self.elementsObs.splice(index,0,data);
-            if (_item) {
-                _item.parentNode.removeChild(_item);
-                _item = null;
-            }
-        }).on('cloned', function(mirror, item, type) {
-            _item = item;
-        });
     }
 };

@@ -49,9 +49,6 @@ EventEmitter.prototype = {
         if (this.events[event]) {
             var args = Array.prototype.slice.call(arguments,1);
             this.events[event].forEach(function(callback) {
-                if (event === "sessionStarted") {
-                    console.log(event, args);
-                }
                 callback.apply(this, args);
             }, this);
         }

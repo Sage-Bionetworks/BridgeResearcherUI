@@ -19,7 +19,7 @@
         <tbody data-bind="foreach: itemsObs">
         <tr>
             <td>
-                <a href="#" data-bind="attr: {'href': '#/surveys/'+$data.guid}, text: $data.name"></a>
+                <a href="#" data-bind="attr: {'href': '#/surveys/'+$data.guid+'/'+$data.createdOn}, text: $data.name"></a>
             </td>
             <td data-bind="text: $parent.formatDateTime($data.modifiedOn)"></td>
             <td data-bind="text: $data.identifier"></td>
