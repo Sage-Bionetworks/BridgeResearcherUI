@@ -78,6 +78,8 @@ ko.bindingHandlers.semantic = {
             }).checkbox();
         } else if (value === 'dropdown') {
             $element.addClass("ui dropdown").dropdown();
+        } else if (value === 'popup') {
+            $element.popup();
         }
     }
 };
@@ -171,25 +173,7 @@ ko.bindingHandlers.fadeRemove = {
     }
 };
 /**
- * Create an auto-resizing textarea control without going insane. Unfortunately this
- * solution requires CSS as well, see survey.css where this is currently used.
- *
- * http://www.brianchu.com/blog/2013/11/02/creating-an-auto-growing-text-input/
- */
-ko.bindingHandlers.resizeTextArea = {
-    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-        var textareaSize = element.querySelector('.textarea-size');
-        var textarea = element.querySelector('textarea');
-        var autoSize = function () {
-            textareaSize.innerHTML = textarea.value.trim() + '\n';
-        };
-        textarea.addEventListener('input', autoSize, false);
-        setTimeout(autoSize, 200);
-    }
-};
-/**
  * Creates that flippy insertion control in the survey editor.
- *
  */
 ko.bindingHandlers.flipper = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {

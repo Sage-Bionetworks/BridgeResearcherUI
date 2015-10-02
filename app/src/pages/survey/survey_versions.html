@@ -32,7 +32,7 @@
                     text: $data.name"></a><br/>Created <span data-bind="text:$parent.formatDateTime($data.createdOn)"></span>
             </td>
             <td>
-                <a target="_blank" data-bind="visible: $data.schemaRevision, attr:{'href':'#/schemas/'+$data.identifier+'/'+$data.schemaRevision}, text: 'v'+$data.schemaRevision"></a>
+                <span data-bind="visible: $data.schemaRevision, text: 'v'+$data.schemaRevision"></span>
                 <em data-bind="visible: !$data.schemaRevision">Draft</em>
             </td>
             <td>

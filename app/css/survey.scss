@@ -56,7 +56,6 @@
         }
 .element-content {
     @include flex(1);
-    /* TODO: These next two MIGHT fix IE11, or not */
     @include justify-content(stretch);
     @include align-items(stretch);
     padding: 1rem 0rem 1rem 2rem;
@@ -73,7 +72,6 @@
         font-size: 1.3rem;
         font-weight: bold;
         padding: .4rem 0;
-        /*margin-bottom: .5rem;*/
     }
     .element-content-prompt {
         font-size: 1.3rem;
@@ -84,7 +82,7 @@
             color: #bbb;
             font-weight: normal;
             font-style: italic;
-            padding: .4rem 0;
+            /*padding: .4rem 0;*/
         }
     .element-content-constraints {
         @include flex-box(row);
@@ -176,27 +174,10 @@
         margin-top: 1rem!important;
         margin-bottom: 1rem!important;
     }
-.textarea-container {
-    position: relative;
-    width: 100%;
-}
-textarea, .textarea-size {
-    overflow: hidden;
-    width: 100%;
-    font-familiy: inherit;
-    font-size: inherit;
-    box-sizing: inherit;
-    padding: inherit;
-}
 textarea {
-    height: 100%;
-    position: absolute;
-    resize: none;
-    white-space: normal;
-}
-.textarea-size {
-    visibility: hidden;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+    display: block;
+    width: 100%;
+    padding: .3rem;
+    height:2rem;
+    overflow: hidden;
 }
