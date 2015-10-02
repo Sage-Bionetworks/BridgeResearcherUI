@@ -15,7 +15,11 @@
         <div data-bind="visible: isActive('editor')" style="margin-bottom: -1.5rem">
             <div class="ui two column grid">
                 <div class="column">
-                    <div class="ui list listZone" data-bind="foreach: listObs">
+                    <div class="ui list listZone" data-bind="dragula: {
+                        dragHandleSelector: '.item',
+                        elementSelector: '.item',
+                        listObs: listObs
+                    }, foreach: listObs">
                         <div class="item element-enum">
                             <i class="trash icon" data-bind="click: $parent.removeListItem, visible: !$parent.publishedObs()"></i>
                             <div class="content">

@@ -74,15 +74,18 @@ module.exports = function(params) {
         self.itemsObs.push(field);
     };
 
+    var notFoundHandler = utils.notFoundHandler(self, "Upload schema not found.", "#/schemas");
+
     if (params.schemaId === "new") {
         loadVM({name:'',schemaId:'',schemaType:'ios_data',revision:0,fieldDefinitions:[]});
     } else if (params.revision) {
         serverService.getMostRecentUploadSchema(params.schemaId).then(function(response) {
             serverService.getUploadSchema(params.schemaId, params.revision).then(loadVM).then(function() {
                 self.revisionObs(response.revision);
-            }).catch(utils.failureHandler(self));
-        }).catch(utils.failureHandler(self));
+            }).catch(notFoundHandler);
+        }).catch(notFoundHandler);
     } else {
-        serverService.getMostRecentUploadSchema(params.schemaId).then(loadVM);
+        serverService.getMostRecentUploadSchema(params.schemaId).then(loadVM)
+            .catch(notFoundHandler);
     }
 };

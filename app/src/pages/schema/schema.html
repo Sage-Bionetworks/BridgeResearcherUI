@@ -1,11 +1,13 @@
 <div class="fixed-header">
-    <h3>
-        <a href="#/schemas" class="section">Upload Schemas</a>
-        <span data-bind="visible: nameObs().length > 0, text: nameObs"></span>
-        <span data-bind="visible: nameObs().length === 0">New Upload Schema</span>
-    </h3>
-    <div class="fixed-header-buttons">
-        <button class="ui primary small button" data-bind="visible: !publishedObs(), click: save">Save</button>
+    <div class="fixed-header-title">
+        <h3>
+            <a href="#/schemas" class="section">Upload Schemas</a>
+            <span data-bind="visible: nameObs().length > 0, text: nameObs"></span>
+            <span data-bind="visible: nameObs().length === 0">New Upload Schema</span>
+        </h3>
+        <div class="fixed-header-buttons">
+            <button class="ui primary small button" data-bind="visible: !publishedObs(), click: save">Save</button>
+        </div>
     </div>
     <div class="ui secondary larger pointing menu">
         <a class="active item">

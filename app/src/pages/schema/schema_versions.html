@@ -1,16 +1,18 @@
 <div class="fixed-header">
-    <h3>
-        <a href="#/schemas" class="section">Upload Schemas</a>
-        <span data-bind="text: nameObs">Schema Versions</span>
-    </h3>
-    <div class="fixed-header-buttons">
-        <button class="ui red small button" data-bind="disable: !anyChecked(), click: deleteRevisions">Delete</button>
+    <div class="fixed-header-title">
+        <h3>
+            <a href="#/schemas" class="section">Upload Schemas</a>
+            <span data-bind="text: nameObs">Schema Versions</span>
+        </h3>
+        <div class="fixed-header-buttons">
+            <button class="ui red small button" data-bind="disable: !anyChecked(), click: deleteRevisions">Delete</button>
+        </div>
     </div>
     <div class="ui secondary larger pointing menu">
         <a href="#" class="item" data-bind="attr: {href: '#/schemas/'+schemaIdObs()}">
             <i class="file outline icon"></i> Editor
         </a>
-        <a href="#" class="active item">
+        <a class="active item">
             <i class="history icon"></i> History
         </a>
     </div>

@@ -47,7 +47,7 @@ function formatEventId(value) {
     return string.charAt(0).toUpperCase() + string.substring(1);
 }
 function formatTimesArray(times) {
-    return (times.length) ? toList(times.map(function(time) {
+    return (times && times.length) ? toList(times.map(function(time) {
         time = time.replace(":00.000","");
         // If there's no label, it's an odd time. Just leave it for now.
         return timeFormatter(time) || time;

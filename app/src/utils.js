@@ -254,9 +254,25 @@ module.exports = {
                 vm.itemsObs.remove(deletable);
             });
             if (vm.itemsObs().length === 0) {
+                // Yes both. There are cases where 'rootPath' is just the current page.
                 document.querySelector(".loading_status").textContent = "There are currently no items.";
                 document.location = rootPath;
             }
+        };
+    },
+    /**
+     * Generic handler for pages which are loading a particular entity, that attemp to
+     * deal with 404s by redirecting to a parent page.
+     * @param vm
+     * @param message
+     * @param rootPath
+     * @returns {Function}
+     */
+    notFoundHandler: function(vm, message, rootPath) {
+        return function(response) {
+            console.error(response);
+            toastr.error((message) ? message : response.statusText);
+            document.location = rootPath;
         };
     },
     /**

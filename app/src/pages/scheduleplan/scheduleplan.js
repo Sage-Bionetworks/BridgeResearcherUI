@@ -71,13 +71,10 @@ module.exports = function(params) {
         self.strategyObs(plan.strategy);
     }
 
+    var notFoundHandler = utils.notFoundHandler(self, "Schedule plan not found.", "#/surveys");
+
     if (params.guid !== "new") {
-        serverService.getSchedulePlan(params.guid).then(loadVM).catch(function(response) {
-            // TODO: Need better error handling here.
-            console.error(response);
-            root.message('warning', "Schedule plan not found.");
-            document.location = "#/scheduleplans";
-        });
+        serverService.getSchedulePlan(params.guid).then(loadVM).catch(notFoundHandler);
     } else {
         loadVM(newSchedulePlan());
     }

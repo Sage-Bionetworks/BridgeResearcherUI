@@ -1,11 +1,13 @@
 <div class="fixed-header">
-    <h3>
-        <a href="#/surveys" class="section">Surveys</a>
-        <span data-bind="text: nameObs">Survey Versions</span>
-    </h3>
-    <div class="fixed-header-buttons">
-        <button class="ui primary small button" data-bind="disable: disablePublish, click: publish">Publish</button>
-        <button class="ui red small button" data-bind="disable: disableDelete(), click: deleteSurvey">Delete</button>
+    <div class="fixed-header-title">
+        <h3>
+            <a href="#/surveys" class="section">Surveys</a>
+            <span data-bind="text: nameObs">Survey Versions</span>
+        </h3>
+        <div class="fixed-header-buttons">
+            <button class="ui primary small button" data-bind="disable: disablePublish, click: publish">Publish</button>
+            <button class="ui red small button" data-bind="disable: disableDelete(), click: deleteSurvey">Delete</button>
+        </div>
     </div>
     <survey-tabset params="selected: 'history', viewModel: $data"></survey-tabset>
 </div>

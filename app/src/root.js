@@ -37,38 +37,9 @@ var RootViewModel = function() {
         console.log("Signing out.");
         serverService.signOut();
     };
-    self.routeTo = function(name) {
-        return function(params) {
-            self.mainPage(name);
-            self.mainParams({});
-        };
-    };
-    self.surveyRoute = function(name) {
-        return function(guid, createdOn) {
-            var date = null;
-            try {
-                if (createdOn) {
-                    date = new Date(createdOn)
-                    date.toISOString();
-                }
-            } catch(e) {
-                date = null;
-            }
-            self.mainPage(name);
-            self.mainParams({guid: guid, createdOn: date});
-        };
-    };
-    self.schemaRoute = function(name) {
-        return function(schemaId, revision) {
-            self.mainPage(name);
-            self.mainParams({schemaId: schemaId, revision: (revision) ? revision : null});
-        };
-    };
-    self.schedulePlanRoute = function(name) {
-        return function(guid) {
-            self.mainPage(name);
-            self.mainParams({guid: guid});
-        };
+    self.changeView = function(name, params) {
+        self.mainPage(name);
+        self.mainParams(params);
     };
     self.isResearcher = ko.computed(function() {
         return self.roles.contains('researcher');
@@ -96,10 +67,9 @@ var RootViewModel = function() {
             throw new Error(severity + ' is not a message type');
         }
     };
-
     serverService.addSessionStartListener(function(session) {
         self.studyName(session.studyName);
-        self.environment(" [" + session.environment + "]");
+        self.environment(session.environment);
         self.roles(session.roles);
         self.closeDialog();
     });

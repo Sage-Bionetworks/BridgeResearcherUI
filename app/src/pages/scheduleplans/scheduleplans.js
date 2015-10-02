@@ -52,9 +52,9 @@ module.exports = function() {
                     return promise.then(makeDeletionCall(deletable.guid));
                 }
             }, null)
-                    .then(utils.makeTableRowHandler(vm, deletables, "#/scheduleplans"))
-                    .then(utils.successHandler(vm, event, confirmMsg))
-                    .catch(utils.failureHandler(vm, event));
+                .then(utils.makeTableRowHandler(vm, deletables, "#/scheduleplans"))
+                .then(utils.successHandler(vm, event, confirmMsg))
+                .catch(utils.failureHandler(vm, event));
         }
     };
     self.formatStrategy = scheduleService.formatStrategy;

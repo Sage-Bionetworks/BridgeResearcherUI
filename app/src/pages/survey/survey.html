@@ -1,11 +1,13 @@
 <div class="fixed-header">
-    <h3>
-        <a href="#/surveys" class="section">Surveys</a>
-        <span data-bind="visible: nameObs().length > 0, text: nameObs"></span>
-        <span data-bind="visible: nameObs().length == 0">New Survey</span>
-    </h3>
-    <div class="fixed-header-buttons">
-        <button class="ui primary small button" data-bind="visible: !disabledObs(), click: save">Save</button>
+    <div class="fixed-header-title">
+        <h3>
+            <a href="#/surveys" class="section">Surveys</a>
+            <span data-bind="visible: nameObs().length > 0, text: nameObs"></span>
+            <span data-bind="visible: nameObs().length == 0">New Survey</span>
+        </h3>
+        <div class="fixed-header-buttons">
+            <button class="ui primary small button" data-bind="visible: !disabledObs(), click: save">Save</button>
+        </div>
     </div>
     <survey-tabset params="selected: 'editor', viewModel: $data"></survey-tabset>
 </div>

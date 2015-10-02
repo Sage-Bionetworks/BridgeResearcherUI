@@ -1,11 +1,13 @@
 <div class="fixed-header">
-    <h3>Consent Agreement</h3>
-    <div class="fixed-header-buttons">
-        <div data-bind="visible: tabObs() == 'current'">
-            <button class="ui small primary button" data-bind="click: save">Save</button>
-        </div>
-        <div data-bind="visible: tabObs() == 'history'">
-            <button class="ui small primary button" data-bind="click: publish, disable: consentSelectedObs() == null">Publish</button>
+    <div class="fixed-header-title">
+        <h3>Consent Agreement</h3>
+        <div class="fixed-header-buttons">
+            <div data-bind="visible: tabObs() == 'current'">
+                <button class="ui small primary button" data-bind="click: save">Save</button>
+            </div>
+            <div data-bind="visible: tabObs() == 'history'">
+                <button class="ui small primary button" data-bind="click: publish, disable: consentSelectedObs() == null">Publish</button>
+            </div>
         </div>
     </div>
     <div class="ui secondary pointing menu">

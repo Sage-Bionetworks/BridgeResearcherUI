@@ -136,11 +136,13 @@ module.exports = function(params) {
 
     self.formatDateTime = utils.formatDateTime;
     self.formatTimes = function() {
-        if (self.scheduleTypeObs() === 'recurring') {
-            return scheduleService.formatTimesArray(self.timesObs());
-        } else {
-            return scheduleService.formatTimesArray(self.timesObs().slice(0,1));
+        var type = self.scheduleTypeObs();
+        var times = self.timesObs();
+        if (times && times.length) {
+            return scheduleService.formatTimesArray(
+                (type === 'recurring') ? times : times.slice(0,1));
         }
+        return scheduleService.formatTimesArray(null);
     };
     self.formatEventId = scheduleService.formatEventId;
 
@@ -172,9 +174,7 @@ module.exports = function(params) {
             if (self.startsOnObs()) {
                 string += new Date(self.startsOnObs()).toUTCString();
             }
-            if (self.startsOnObs() && self.endsOnObs()) {
-                string += " to<br>";
-            }
+            string += "&mdash;";
             if (self.endsOnObs()) {
                 string += new Date(self.endsOnObs()).toUTCString();
             }

@@ -12,10 +12,11 @@ module.exports = {
         'production': 'https://webservices.sagebridge.org'
     },
     toastr: {
-        positionClass: "toast-bottom-right",
+        positionClass: "toast-top-right",
         hideDuration: 300,
-        timeOut: 5000,
-        preventDuplicates: true
+        timeOut: 7000,
+        preventDuplicates: true,
+        opacity: 1.0
     },
     signIn: '/v3/auth/signIn',
     signOut: '/v3/auth/signOut',

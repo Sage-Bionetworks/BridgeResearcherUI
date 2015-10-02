@@ -47,7 +47,7 @@ module.exports = function(params) {
     function load(keys) {
         return serverService.getSurvey(keys.guid, keys.createdOn).then(loadVM);
     }
-   /**
+    /**
      * Save the thing.
      * @param vm
      * @param event
@@ -73,11 +73,14 @@ module.exports = function(params) {
         }
 
     };
+
+    var notFoundHandler = utils.notFoundHandler(self, "Survey not found", "#/surveys");
+
     if (params.guid === "new") {
         loadVM(surveyUtils.newSurvey());
     } else if (params.createdOn) {
-        serverService.getSurvey(params.guid, params.createdOn).then(loadVM);
+        serverService.getSurvey(params.guid, params.createdOn).then(loadVM).catch(notFoundHandler);
     } else {
-        serverService.getSurveyMostRecent(params.guid).then(loadVM);
+        serverService.getSurveyMostRecent(params.guid).then(loadVM).catch(notFoundHandler);
     }
 };
