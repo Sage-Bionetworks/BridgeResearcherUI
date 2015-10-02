@@ -41,7 +41,6 @@ function annotateSurveys(surveys, plans) {
 module.exports = function() {
     var self = this;
 
-    self.messageObs = ko.observable("");
     self.itemsObs = ko.observableArray([]);
     self.formatDateTime = utils.formatDateTime;
 
@@ -62,7 +61,6 @@ module.exports = function() {
             return [];
         }
     }).then(function(surveys) {
-        console.log(surveys);
         if (surveys.length) {
             serverService.getSchedulePlans().then(function(response) {
                 annotateSurveys(surveys, response.items);

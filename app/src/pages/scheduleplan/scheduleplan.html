@@ -1,34 +1,29 @@
-<div class="ui breadcrumb">
-    <a href="#/scheduleplans" class="section">Scheduling</a>
-</div>
-
-<h3 data-bind="visible: labelObs().length > 0, text: labelObs"></h3>
-<h3 data-bind="visible: labelObs().length === 0">New Schedule Plan</h3>
-
-<form-message params="messageObs: messageObs"></form-message>
-
-<div class="button-container">
-    <button class="ui primary button" data-bind="visible: !publishedObs(), click: save">Save</button>
-</div>
-
-<form class="ui form" style="margin-bottom: 1rem">
-    <div class="two fields">
-        <div class="required field">
-            <label>Name</label>
-            <ui-text params="fieldObs: labelObs, publishedObs: publishedObs"></ui-text>
-        </div>
-        <div class="required field">
-            <label>Schedule Plan Type</label>
-            <ui-select params="fieldObs: schedulePlanTypeObs, fieldLabel: schedulePlanTypeLabel,
-                    publishedObs: publishedObs, optionsSrc: schedulePlanTypeOptions"></ui-select>
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <h3>
+            <a href="#/scheduleplans" class="section">Scheduling</a>
+            <span data-bind="visible: labelObs().length > 0, text: labelObs"></span>
+            <span data-bind="visible: labelObs().length === 0">New Schedule Plan</span>
+        </h3>
+        <div class="fixed-header-buttons">
+            <button class="ui primary small button" data-bind="visible: !publishedObs(), click: save">Save</button>
         </div>
     </div>
-</form>
-
-<div data-bind="visible: schedulePlanTypeObs() === 'SimpleScheduleStrategy'">
-    <div data-bind="component: {name: 'schedule', params: {strategyObs: strategyObs, delegate: delegate}}"></div>
+    <div class="ui secondary pointing menu"></div>
 </div>
-
-<div  data-bind="visible: schedulePlanTypeObs() === 'ABTestScheduleStrategy'">
-    <h4>A/B Test Groups</h4>
+<div class="scrollbox">
+    <form class="ui form" style="margin-bottom: 1rem">
+        <div class="two fields">
+            <div class="required field">
+                <label>Name</label>
+                <ui-text params="fieldObs: labelObs, publishedObs: publishedObs"></ui-text>
+            </div>
+            <div class="required field">
+                <label>Schedule Plan Type</label>
+                <ui-select params="fieldObs: schedulePlanTypeObs, fieldLabel: schedulePlanTypeLabel,
+                    publishedObs: publishedObs, optionsSrc: schedulePlanTypeOptions"></ui-select>
+            </div>
+        </div>
+    </form>
+    <div data-bind="component: {name: schedulePlanTypeObs, params: {strategyObs: strategyObs}}"></div>
 </div>

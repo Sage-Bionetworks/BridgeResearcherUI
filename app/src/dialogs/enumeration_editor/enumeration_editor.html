@@ -15,7 +15,11 @@
         <div data-bind="visible: isActive('editor')" style="margin-bottom: -1.5rem">
             <div class="ui two column grid">
                 <div class="column">
-                    <div class="ui list listZone" data-bind="foreach: listObs">
+                    <div class="ui list listZone" data-bind="dragula: {
+                        dragHandleSelector: '.item',
+                        elementSelector: '.item',
+                        listObs: listObs
+                    }, foreach: listObs">
                         <div class="item element-enum">
                             <i class="trash icon" data-bind="click: $parent.removeListItem, visible: !$parent.publishedObs()"></i>
                             <div class="content">
@@ -37,7 +41,7 @@
                         <h4 class="ui dividing header">Add New List Item</h4>
                         <div class="field">
                             <ui-text params="fieldObs: labelObs, publishedObs: publishedObs,
-                                placeholder: 'Label', keyHandler: handleKeyEvent, hasFocus: labelFocusedObs"></ui-text>
+                                placeholder: 'Label', keyHandler: handleKeyEvent"></ui-text>
                         </div>
                         <div class="field">
                             <ui-text params="fieldObs: detailObs, publishedObs: publishedObs,
@@ -48,7 +52,7 @@
                                 placeholder: 'Server value (optional)', keyHandler: handleKeyEvent"></ui-text>
                         </div>
                         <div class="field">
-                            <a href="#" data-bind="click: addListItem" class="ui button">Add</a>
+                            <a href="#" data-bind="click: addListItem" class="ui small button">Add</a>
                         </div>
                     </form>
                 </div>
@@ -71,13 +75,13 @@
                 Update this list in every question where it is used
             </ui-checkbox>
         </div>
-        <button data-bind="click: saveList, disable: listObs().length === 0" class="ui primary button">Save</button>
-        <button data-bind="click: cancel" class="ui button">Cancel</button>
+        <button data-bind="click: saveList, disable: listObs().length === 0" class="ui small primary button">Save</button>
+        <button data-bind="click: cancel" class="ui small button">Cancel</button>
     </div>
     <div class="rules-actions" data-bind="visible: !publishedObs() && isActive('existing')">
-        <button data-bind="click: cancel" class="ui button">Cancel</button>
+        <button data-bind="click: cancel" class="ui small button">Cancel</button>
     </div>
     <div class="rules-actions" data-bind="visible: publishedObs">
-        <button data-bind="click: cancel" class="ui button">Close</button>
+        <button data-bind="click: cancel" class="ui small button">Close</button>
     </div>
 </div>

@@ -1,73 +1,51 @@
-<div class="ui breadcrumb">
-    <a href="#/surveys" class="section">Surveys</a>
-</div>
-
-<h3 data-bind="visible: nameObs().length > 0, text: nameObs"></h3>
-<h3 data-bind="visible: nameObs().length == 0">New Survey</h3>
-
-<form-message params="messageObs: messageObs"></form-message>
-
-<div class="ui secondary larger pointing menu">
-    <a class="active item">
-        <i class="file outline icon"></i> Editor
-    </a>
-    <a href="#" data-bind="attr: {href: '#/surveys/'+guidObs()+'/versions'}, visible: !!guidObs()" class="item">
-        <i class="history icon"></i> History
-    </a>
-    <div class="right menu">
-        <div class="item" data-bind="visible: !!guidObs()">
-            <i class="clock icon"></i> <span data-bind="text: formatDateTime(createdOnObs())"></span>
-        </div>
-        <div class="item" data-bind="visible: publishedObs">
-            <div class="green ui label">
-                <i class="checkmark icon"></i> Published
-            </div>
-        </div>
-        <div class="item" data-bind="visible: !publishedObs()">
-            <div class="orange ui label">
-                <i class="warning icon"></i> Not Published
-            </div>
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <h3>
+            <a href="#/surveys" class="section">Surveys</a>
+            <span data-bind="visible: nameObs().length > 0, text: nameObs"></span>
+            <span data-bind="visible: nameObs().length == 0">New Survey</span>
+        </h3>
+        <div class="fixed-header-buttons">
+            <button class="ui primary small button" data-bind="visible: !disabledObs(), click: save">Save</button>
         </div>
     </div>
+    <survey-tabset params="selected: 'editor', viewModel: $data"></survey-tabset>
 </div>
-
-<div class="button-container">
-    <button class="ui primary button" data-bind="visible: !disabledObs(), click: save">Save</button>
-</div>
-
-<div class="ui warning message" data-bind="visible: disabledObs">
-    <p>You are viewing a published revision of this survey. It cannot be edited. </p>
-</div>
-
-<form class="ui form">
-    <div class="two fields">
-        <div class="required field">
-            <label>Name</label>
-            <ui-text params="fieldObs: nameObs, publishedObs: disabledObs"></ui-text>
+<div class="scrollbox">
+    <form class="ui form">
+        <div class="two fields">
+            <div class="required field">
+                <label>Name</label>
+                <ui-text params="fieldObs: nameObs, publishedObs: disabledObs"></ui-text>
+            </div>
+            <div class="required field">
+                <label>Identifier</label>
+                <ui-text params="fieldObs: identifierObs, publishedObs: disabledObs"></ui-text>
+            </div>
         </div>
-        <div class="required field">
-            <label>Identifier</label>
-            <ui-text params="fieldObs: identifierObs, publishedObs: disabledObs"></ui-text>
-        </div>
+    </form>
+
+    <h3>Questions</h3>
+
+    <div data-bind="visible: elementsObs().length === 0">
+        <p>There are currently no questions in this survey.</p>
+        <!-- ko component: {
+            name: "insertion-control",
+            params: { elementsObs: elementsObs, indexObs: 0, publishedObs: disabledObs }
+        } --><!-- /ko -->
     </div>
-</form>
-
-<h3>Questions</h3>
-
-<div data-bind="visible: elementsObs().length === 0">
-    <p>There are currently no questions in this survey.</p>
-    <!-- ko component: {
-        name: "insertion-control",
-        params: { elementsObs: elementsObs, indexObs: 0, publishedObs: disabledObs }
-    } --><!-- /ko -->
-</div>
-<div class="survey elementZone" data-bind="foreach: elementsObs">
-    <div class="element" data-bind="component: {
+    <div class="survey elementZone" data-bind="dragula: {
+        dragHandleSelector: '.element-draghandle',
+        elementSelector: '.element',
+        listObs: elementsObs
+    }, foreach: elementsObs">
+        <div class="element" data-bind="component: {
         name: $data.type,
         params: { element: $data, elementsObs: $parent.elementsObs, indexObs: $index, publishedObs: $parent.disabledObs }
     }"></div>
-    <!-- ko component: {
-        name: "insertion-control",
-        params: { elementsObs: $parent.elementsObs, indexObs: $index, publishedObs: $parent.disabledObs }
-    } --><!-- /ko -->
+        <!-- ko component: {
+            name: "insertion-control",
+            params: { elementsObs: $parent.elementsObs, indexObs: $index, publishedObs: $parent.disabledObs }
+        } --><!-- /ko -->
+    </div>
 </div>

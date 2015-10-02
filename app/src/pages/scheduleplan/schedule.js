@@ -1,7 +1,9 @@
 var ko = require('knockout');
 var utils = require('../../utils');
-var serverService = require('../../services/server_service.js');
-var scheduleService = require('../../services/schedule_service.js');
+var surveyUtils = require('../../pages/survey/survey_utils');
+var serverService = require('../../services/server_service');
+var scheduleService = require('../../services/schedule_service');
+var root = require('../../root');
 
 /**
  * enrollment - used to calculate if enrollment should be included in the eventId.
@@ -21,7 +23,12 @@ var ACTIVITY_TYPE_OPTIONS = Object.freeze([
     {value: 'task', label: 'Do Task'},
     {value: 'survey', label: 'Take Survey'}
 ]);
-
+function newActivity() {
+    var activity = scheduleService.newSchedule().activities[0];
+    utils.observablesFor(activity, ACTIVITY_FIELDS);
+    activity.activityTypeObs('task');
+    return activity;
+}
 /**
  * Copy observers values in each schedule activity to that object. Slightly
  * more complicated than what ko.mapping provides.
@@ -38,13 +45,12 @@ function copyObserverValuesBackToActivity(activity) {
     } else {
         activity.survey = {
             guid: activity.surveyGuidObs(),
-            identifier: scheduleService.surveysOptionsFinder(activity.surveyGuidObs()).identifier
+            identifier: surveyUtils.surveysOptionsFinder(activity.surveyGuidObs()).identifier
         };
     }
 }
 /**
- * Copy properties of activity in a schedule to observers for editing. Slightly
- * more complicated than what ko.mapping provides.
+ * Copy all the activity's fields to observers.
  * @param activity
  */
 function addObserversToActivity(activity) {
@@ -60,54 +66,60 @@ function addObserversToActivity(activity) {
         activity.surveyGuidObs(activity.survey.guid);
     }
 }
-
-function newActivity() {
-    var activity = {label:'', labelDetail:'', activityType:'task', taskId:'', surveyGuid:''};
-    utils.observablesFor(activity, ACTIVITY_FIELDS);
-    return activity;
+/**
+ * Times come back in "08:00:00.000" format, we only want HH:MM.
+ * Not sure anything can be done about this, on the server?
+ * @param schedule
+ */
+function fixScheduleTimes(schedule) {
+    // TOD: These are also fixed in the formatter, but probably need to be fixed here as well.
+    schedule.times = schedule.times.map(function(time) {
+        return time.replace(":00.000","");
+    });
+    if (schedule.startsOn) {
+        schedule.startsOn = schedule.startsOn.replace(":00.000Z","");
+    }
+    if (schedule.endsOn) {
+        schedule.endsOn = schedule.endsOn.replace(":00.000Z","");
+    }
+    schedule.times.sort();
 }
 
+/**
+ * Editor for a schedule (regardless of the strategy it is embedded in).
+ * @param params
+ *      - scheduleObs: schedule observer with a callback function attached to it.
+ */
 module.exports = function(params) {
     var self = this;
 
-    self.strategyObs = params.strategyObs;
+    self.scheduleObs = params.scheduleObs;
     utils.observablesFor(self, SCHEDULE_FIELDS);
 
-    // This is the implementation called by the schedule plan viewModel to construct
-    // the model
-    params.delegate.strategy = function() {
-        var strategy = self.strategyObs();
+    // This is the implementation called by the schedule plan viewModel to construct the model
+    self.scheduleObs.callback = function() {
         self.activitiesObs().forEach(copyObserverValuesBackToActivity);
-        utils.observablesToObject(self, strategy.schedule, SCHEDULE_FIELDS);
+        utils.observablesToObject(self, self.scheduleObs(), SCHEDULE_FIELDS);
 
         // To avoid an error, if the type is "once", remove the repeating fields (that are hidden).
-        if (strategy.schedule.scheduleType === "once") {
-            delete strategy.schedule.interval;
-            delete strategy.schedule.cronTrigger;
+        if (self.scheduleObs().scheduleType === "once") {
+            delete self.scheduleObs().interval;
+            delete self.scheduleObs().cronTrigger;
         }
-        return strategy;
+        return self.scheduleObs();
     };
 
     // This is fired when the parent viewModel gets a plan back from the server
     ko.computed(function() {
-        var strategy = self.strategyObs();
-        if (strategy) {
-            // Problems:
-            // times come back in "08:00:00.000" format
-            // startsOn and endsOn are not LocalDates, they are absolute date strings.
-            // TODO: May need to be fixed elsewhere
-            strategy.schedule.times = strategy.schedule.times.map(function(time) {
-                return time.replace(":00.000","");
-            });
-            if (strategy.schedule.startsOn) {
-                strategy.schedule.startsOn = strategy.schedule.startsOn.replace(":00.000Z","");
+        var schedule = self.scheduleObs();
+        if (schedule) {
+            fixScheduleTimes(schedule);
+            schedule.activities.forEach(addObserversToActivity);
+            if (schedule.scheduleType === "once") {
+                delete schedule.interval;
+                delete schedule.cronTrigger;
             }
-            if (strategy.schedule.endsOn) {
-                strategy.schedule.endsOn = strategy.schedule.endsOn.replace(":00.000Z","");
-            }
-            strategy.schedule.times.sort();
-            strategy.schedule.activities.forEach(addObserversToActivity);
-            utils.valuesToObservables(self, strategy.schedule, SCHEDULE_FIELDS);
+            utils.valuesToObservables(self, schedule, SCHEDULE_FIELDS);
         }
     });
 
@@ -119,17 +131,27 @@ module.exports = function(params) {
     self.activityTypeOptions = ACTIVITY_TYPE_OPTIONS;
     self.activityTypeLabel = utils.makeOptionLabelFinder(ACTIVITY_TYPE_OPTIONS);
 
-    self.surveysOptionsObs = scheduleService.surveysOptionsObs;
-    self.surveysOptionsLabel = scheduleService.surveysOptionsLabel;
+    self.surveysOptionsObs = surveyUtils.surveysOptionsObs;
+    self.surveysOptionsLabel = surveyUtils.surveysOptionsLabel;
 
     self.formatDateTime = utils.formatDateTime;
-    self.formatTimes = scheduleService.formatTimesArray;
+    self.formatTimes = function() {
+        var type = self.scheduleTypeObs();
+        var times = self.timesObs();
+        if (times && times.length) {
+            return scheduleService.formatTimesArray(
+                (type === 'recurring') ? times : times.slice(0,1));
+        }
+        return scheduleService.formatTimesArray(null);
+    };
     self.formatEventId = scheduleService.formatEventId;
 
     self.editTimes = function(vm, event) {
         event.preventDefault();
-        utils.openDialog('times_editor', {
-            'timesObs': self.timesObs, 'clearTimesFunc': self.clearTimes
+        root.openDialog('times_editor', {
+            timesObs: self.timesObs,
+            scheduleTypeObs: self.scheduleTypeObs,
+            clearTimesFunc: self.clearTimes
         });
     };
     self.clearTimes = function(vm, event) {
@@ -138,13 +160,39 @@ module.exports = function(params) {
     };
     self.editEventId = function(vm, event) {
         event.preventDefault();
-        utils.openDialog('event_id_editor', {
+        root.openDialog('event_id_editor', {
             'eventIdObs': self.eventIdObs,'clearEventIdFunc': self.clearEventId
         });
     };
     self.clearEventId = function(vm, event) {
         event.preventDefault();
         self.eventIdObs(null);
+    };
+    self.formatWindow = function() {
+        if (self.startsOnObs() || self.endsOnObs()) {
+            var string = "";
+            if (self.startsOnObs()) {
+                string += new Date(self.startsOnObs()).toUTCString();
+            }
+            string += "&mdash;";
+            if (self.endsOnObs()) {
+                string += new Date(self.endsOnObs()).toUTCString();
+            }
+            return string;
+        }
+        return "&lt;None&gt;";
+    };
+    self.editWindow = function(vm, event) {
+        event.preventDefault();
+        root.openDialog('date_window_editor', {
+            'startsOnObs': self.startsOnObs,
+            'endsOnObs': self.endsOnObs,
+            'clearWindowFunc': self.clearWindow
+        });
+    };
+    self.clearWindow = function() {
+        self.startsOnObs(null);
+        self.endsOnObs(null);
     };
     self.addFirstActivity = function(vm, event) {
         self.activitiesObs.push(newActivity());

@@ -1,5 +1,6 @@
 var surveyUtils = require('../survey_utils');
 var utils = require('../../../utils');
+var root = require('../../../root');
 
 module.exports = function(params) {
     var self = this;
@@ -11,6 +12,6 @@ module.exports = function(params) {
     self.dataTypeObs = self.element.constraints.dataTypeObs;
 
     self.editEnum = function() {
-        utils.openDialog('enumeration_editor', {parentViewModel: self, enumerationObs: self.enumerationObs});
+        root.openDialog('enumeration_editor', {parentViewModel: self, enumerationObs: self.enumerationObs});
     };
 };

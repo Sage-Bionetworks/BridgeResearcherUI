@@ -1,5 +1,6 @@
 var ko = require('knockout');
 var utils = require('../../utils');
+var root = require('../../root');
 
 /**
  * Create a rule object with new observables.
@@ -79,9 +80,9 @@ module.exports = function(params) {
     self.saveRules = function() {
         var rules = self.rulesObs().filter(filterOutRulesWithNoValues);
         self.element.constraints.rulesObs(rules);
-        utils.closeDialog();
+        root.closeDialog();
     };
     self.cancelRules = function() {
-        utils.closeDialog();
+        root.closeDialog();
     };
 };

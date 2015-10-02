@@ -1,0 +1,26 @@
+<div class="ui small modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Edit Execution Window (UTC time)
+    </div>
+    <div class="content">
+        <div class="ui form">
+            <div class="two fields">
+                <div class="field">
+                    <label>Schedule tasks from date</label>
+                    <ui-datetime params="fieldObs: startsOnObs, publishedObs: publishedObs"></ui-datetime>
+                </div>
+                <div class="field">
+                    <label>to date</label>
+                    <ui-datetime params="fieldObs: endsOnObs, publishedObs: publishedObs"></ui-datetime>
+                </div>
+            </div>
+        </div>
+        <p class="help-text">If set, tasks will not be scheduled outside of this time window. The times are in UTC and apply to all participants in the study at the same time, wherever they are located. </p>
+    </div>
+    <div class="rules-actions">
+        <button class="ui primary small button" data-bind="click: save">Save</button>
+        <button class="ui small button" data-bind="click: clear">Clear</button>
+        <button class="ui small button" data-bind="click: cancel">Cancel</button>
+    </div>
+</div>

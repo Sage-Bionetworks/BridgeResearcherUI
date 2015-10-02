@@ -15,6 +15,6 @@
         <div class="require element-callout-identifier-label">Identifier</div>
     </div>
     <div class="element-callout-delete">
-        <div data-bind="click: $parents[1].deleteElement, visible: !publishedObs()"><a>Delete<i class="close icon"></i></a></div>
+        <div data-bind="fadeRemove: {selector: '.element', collection: 'elementsObs', object: $data.element}, visible: !publishedObs()"><a><i class="trash icon"></i> Delete</a></div>
     </div>
 </div>

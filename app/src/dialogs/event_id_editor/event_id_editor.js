@@ -1,12 +1,12 @@
 var ko = require('knockout');
 var utils = require('../../utils');
 var serverService = require('../../services/server_service');
-var scheduleService = require('../../services/schedule_service');
+var surveyUtils = require('../../pages/survey/survey_utils');
+var root = require('../../root');
 
 var OBJECT_TYPE = Object.freeze([
     {value: 'survey', label: 'When survey'},
-    {value: 'question', label: 'When question'}/*,
-    {value: 'task', label: 'When task'} actually the server doesn't support this */
+    {value: 'question', label: 'When question'}
 ]);
 
 module.exports = function(params) {
@@ -14,37 +14,51 @@ module.exports = function(params) {
 
     self.clearEventIdFunc = params.clearEventIdFunc;
     self.publishedObs = ko.observable(false);
-    self.messageObs = ko.observable();
     self.eventIdObs = params.eventIdObs;
     self.answerObs = ko.observable();
-    self.enrollmentObs = ko.observable(true);
+    self.enrollmentObs = ko.observable(false);
 
     self.objectTypeObs = ko.observable(OBJECT_TYPE[0].value);
     self.objectTypeOptions = OBJECT_TYPE;
     self.objectTypeLabel = utils.makeOptionLabelFinder(OBJECT_TYPE);
     self.objectTypeObs.subscribe(function(newValue) {
         if (newValue === "question") {
-            self.messageObs({text:"To schedule against a question, you must check the 'fireEvent' checkbox for that question in the survey.", status: "info"});
-        } else {
-            self.messageObs("");
+            root.message('warning', 'To schedule against a question, check the question\'s "fireEvent" checkbox and be sure to publish that version of the survey.');
         }
-    })
+    });
 
     self.surveyObs = ko.observable();
-    self.surveysOptionsObs = scheduleService.surveysOptionsObs;
-    self.surveysLabel = scheduleService.surveysOptionsLabel;
+    self.surveysOptionsObs = surveyUtils.surveysOptionsObs;
+    self.surveysLabel = surveyUtils.surveysOptionsLabel;
 
     self.questionObs = ko.observable();
-    self.questionsOptionsObs = scheduleService.questionsOptionsObs;
-    self.questionsLabel = scheduleService.questionsOptionsLabel
+    self.questionsOptionsObs = surveyUtils.questionsOptionsObs;
+    self.questionsLabel = surveyUtils.questionsOptionsLabel
+
+    surveyUtils.triggerSurveyRefresh().then(function() {
+        self.eventIdObs().split(",").forEach(function(eventId) {
+            if (eventId === "enrollment") {
+                self.enrollmentObs(true);
+            } else {
+                var parts = eventId.split(":");
+                if (parts[0] === "question") {
+                    self.objectTypeObs("question");
+                    self.questionObs(parts[1]);
+                    self.answerObs(parts[2].replace("answered=",""));
+                } else if (parts[0] === "survey") {
+                    self.objectTypeObs("survey");
+                    self.surveyObs(parts[1]);
+                }
+            }
+        });
+    });
 
     self.save = function() {
         var eventId = self.objectTypeObs() + ":";
         if (eventId === "question:" && !self.answerObs()) {
-            utils.message('error', 'An answer is required.');
+            root.message('error', 'An answer is required.');
             return;
         }
-        var eventId = self.objectTypeObs() + ":";
         if (eventId === "question:") {
             eventId += self.questionObs() + ":answered=" + self.answerObs();
         } else if (eventId === "survey:") {
@@ -54,13 +68,13 @@ module.exports = function(params) {
             eventId += ",enrollment";
         }
         self.eventIdObs(eventId);
-        utils.closeDialog();
+        root.closeDialog();
     };
     self.clear = function(vm, event) {
         self.clearEventIdFunc(vm, event);
-        utils.closeDialog();
+        root.closeDialog();
     };
     self.cancel = function() {
-        utils.closeDialog();
+        root.closeDialog();
     };
 }

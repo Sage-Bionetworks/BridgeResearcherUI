@@ -16,33 +16,74 @@ section {
 }
 main {
     @include flex(1);
-    padding: 2rem 1.5rem 1rem 1.5rem;
-    overflow-y: scroll;
+    @include flex-box(column);
+    padding: 0;
 }
+    .fixed-header {
+        @include flex-box(column);
+        padding: 0 1rem;
+    }
+        .fixed-header-title {
+            @include flex-box(row);
+            @include align-items(space-between);
+            @include justify-content(top);
+            width: 100%;
+            margin: 1.5rem 0 1rem 0;
+        }
+            .fixed-header-title h3 {
+                @include flex(1);
+                @include order(2);
+                font-size: 1.8rem;
+                text-align: right;
+                margin: 0 2rem;
+            }
+            .fixed-header-buttons {
+                @include flex(1);
+                margin: 0 1rem;
+            }
+        .fixed-header .section {
+            font-size: 1.1rem;
+            font-weight: normal;
+        }
+        .fixed-header .section::after {
+            content: ' » ';
+            color: black;
+        }
+    .scrollbox {
+        @include flex(1);
+        padding: 1rem;
+        height: 100vh;
+        overflow-y: auto;
+    }
 nav {
     @include flex(0 0 18em);
     @include order(-1);
     padding:  2rem 1rem ! important;
+    background-color: rgba(96,134,153,.2);
 }
 header {
     @include flex-box(row);
-    @include align-items(center);
+    @include align-items(top);
     @include justify-content(space-between);
-    padding: 1rem 1rem 0 1.5rem;
-    background-color: #5bbd72;
-    box-shadow: 0px 2px 3px silver;
-    margin-bottom: 4px;
+    background-color: rgba(26,144,204,0.7);
 }
-    header .content, header a {
-        color: white;
+    header i {
+        font-size: 2rem!important;
     }
-    header .sub.header {
-        color: lightgoldenrodyellow ! important;
-    }
-    .header-content-title {
+    header h2 {
         font-variant: small-caps;
         letter-spacing: 2px;
+        color: white;
+        padding: 1rem 2rem 0rem 1.5rem;
     }
+    .header-env {
+        font-size: 1.25rem!important;
+        padding: 1.5rem 2rem 0rem 0rem;
+        color: white;
+    }
+.scrollbox dd {
+    margin: 1rem;
+}
 footer p {
     border-top: 1px solid #e5e5e5;
     padding: .5rem;
@@ -64,6 +105,7 @@ footer p {
 }
 nav .ui.menu {
     width:100% ! important;
+    box-shadow: 0px 2px 3px silver;
 }
 .ui.modal .content {
     padding: 1.5rem;

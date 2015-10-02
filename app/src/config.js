@@ -1,4 +1,4 @@
-module.exports = config = {
+module.exports = {
     environments: [
         {value: "local", label: "Local"},
         {value: "develop", label: "Development"},
@@ -10,6 +10,13 @@ module.exports = config = {
         'develop': 'https://webservices-develop.sagebridge.org',
         'staging': 'https://webservices-staging.sagebridge.org',
         'production': 'https://webservices.sagebridge.org'
+    },
+    toastr: {
+        positionClass: "toast-top-right",
+        hideDuration: 300,
+        timeOut: 7000,
+        preventDuplicates: true,
+        opacity: 1.0
     },
     signIn: '/v3/auth/signIn',
     signOut: '/v3/auth/signOut',

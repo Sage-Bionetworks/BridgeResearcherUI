@@ -7,7 +7,6 @@ module.exports = function() {
 
     self.study = null;
     self.subject = ko.observable("");
-    self.messageObs = ko.observable("");
     self.editor = null;
 
     self.initEditor = function(ckeditor) {

@@ -3,8 +3,6 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var schemaUtils = require('../schema/schema_utils');
 var utils = require('../../utils');
-var dragula = require('dragula');
-var $ = require('jquery');
 
 /**
  * You can edit the name and the fields in an upload schema.
@@ -14,7 +12,6 @@ module.exports = function(params) {
     var self = this;
 
     schemaUtils.initVM(self);
-    self.messageObs = ko.observable("");
     self.schemaIdObs = ko.observable(params.schemaId);
     self.revisionObs = ko.observable(params.revision);
     self.schemaTypeObs = ko.observable("");
@@ -67,19 +64,6 @@ module.exports = function(params) {
             })
             .catch(utils.failureHandler(vm, event));
     };
-    self.deleteField = function(vm, event) {
-        var index = self.itemsObs.indexOf(vm.field);
-        var fieldDef = self.itemsObs()[index];
-        if (confirm("You are about to delete '"+fieldDef.name+"'.\n\n Are you sure?")) {
-            var $element = $(event.target).closest(".sfield");
-
-            $element.css("max-height","0px");
-            setTimeout(function() {
-                self.itemsObs.remove(fieldDef);
-                $element.remove();
-            },510); // waiting for animation to complete
-        }
-    };
     self.addBelow = function(vm, event) {
         var index = self.itemsObs.indexOf(vm.field);
         var field = schemaUtils.newField();
@@ -90,39 +74,18 @@ module.exports = function(params) {
         self.itemsObs.push(field);
     };
 
+    var notFoundHandler = utils.notFoundHandler(self, "Upload schema not found.", "#/schemas");
+
     if (params.schemaId === "new") {
         loadVM({name:'',schemaId:'',schemaType:'ios_data',revision:0,fieldDefinitions:[]});
     } else if (params.revision) {
         serverService.getMostRecentUploadSchema(params.schemaId).then(function(response) {
             serverService.getUploadSchema(params.schemaId, params.revision).then(loadVM).then(function() {
                 self.revisionObs(response.revision);
-            });
-        });
+            }).catch(notFoundHandler);
+        }).catch(notFoundHandler);
     } else {
-        serverService.getMostRecentUploadSchema(params.schemaId).then(loadVM);
-    }
-
-    var elementsZoneEl = document.querySelector(".sfieldZone");
-    if (!self.publishedObs()) {
-        var _item = null;
-
-        dragula([elementsZoneEl], {
-            moves: function (el, container, handle) {
-                return (handle.className === 'sfield-draghandle');
-            }
-        }).on('drop', function(el, zone) {
-            var elements = document.querySelectorAll(".sfieldZone .sfield");
-            // This utility handles node lists
-            var index = ko.utils.arrayIndexOf(elements, el);
-            var data = ko.contextFor(el).$data;
-            self.itemsObs.remove(data);
-            self.itemsObs.splice(index,0,data);
-            if (_item) {
-                _item.parentNode.removeChild(_item);
-                _item = null;
-            }
-        }).on('cloned', function(mirror, item, type) {
-            _item = item;
-        });
+        serverService.getMostRecentUploadSchema(params.schemaId).then(loadVM)
+            .catch(notFoundHandler);
     }
 };

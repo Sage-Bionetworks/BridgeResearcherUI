@@ -2,14 +2,12 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var surveyUtils = require('./survey_utils');
 var utils = require('../../utils');
-var $ = require('jquery');
-var dragula = require('dragula');
+var root = require('../../root');
 
 module.exports = function(params) {
     var self = this;
 
     self.survey = null;
-    self.messageObs = ko.observable();
     self.formatDateTime = utils.formatDateTime;
     surveyUtils.initSurveyVM(self);
 
@@ -29,7 +27,7 @@ module.exports = function(params) {
         self.createdOnObs(keys.createdOn);
         self.versionObs(keys.version);
         if (message) {
-            self.messageObs({text: message});
+            root.message('success', message);
         }
     }
     function version(keys) {
@@ -49,7 +47,7 @@ module.exports = function(params) {
     function load(keys) {
         return serverService.getSurvey(keys.guid, keys.createdOn).then(loadVM);
     }
-   /**
+    /**
      * Save the thing.
      * @param vm
      * @param event
@@ -75,50 +73,14 @@ module.exports = function(params) {
         }
 
     };
-    self.deleteElement = function(params, event) {
-        var index = self.elementsObs.indexOf(params.element);
-        var element = self.elementsObs()[index];
-        var id = element.identifierObs() || "<none>";
-        if (confirm("You are about to delete question '"+id+"'.\n\n Are you sure?")) {
-            var $element = $(event.target).closest(".element");
 
-            $element.css("max-height","0px");
-            setTimeout(function() {
-                self.elementsObs.remove(element);
-                $element.remove();
-            },510); // waiting for animation to complete
-        }
-    };
+    var notFoundHandler = utils.notFoundHandler(self, "Survey not found", "#/surveys");
 
     if (params.guid === "new") {
         loadVM(surveyUtils.newSurvey());
     } else if (params.createdOn) {
-        serverService.getSurvey(params.guid, params.createdOn).then(loadVM);
+        serverService.getSurvey(params.guid, params.createdOn).then(loadVM).catch(notFoundHandler);
     } else {
-        serverService.getSurveyMostRecent(params.guid).then(loadVM);
-    }
-
-    var elementsZoneEl = document.querySelector(".elementZone");
-    if (!self.publishedObs()) {
-        var _item = null;
-
-        dragula([elementsZoneEl], {
-            moves: function (el, container, handle) {
-                return (handle.className === 'element-draghandle');
-            }
-        }).on('drop', function(el, zone) {
-            var elements = document.querySelectorAll(".elementZone .element");
-            // This utility handles node lists
-            var index = ko.utils.arrayIndexOf(elements, el);
-            var data = ko.contextFor(el).$data;
-            self.elementsObs.remove(data);
-            self.elementsObs.splice(index,0,data);
-            if (_item) {
-                _item.parentNode.removeChild(_item);
-                _item = null;
-            }
-        }).on('cloned', function(mirror, item, type) {
-            _item = item;
-        });
+        serverService.getSurveyMostRecent(params.guid).then(loadVM).catch(notFoundHandler);
     }
 };

@@ -1,6 +1,8 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service.js');
+var scheduleService = require('../../services/schedule_service.js');
 var utils = require('../../utils');
+var root = require('../../root');
 
 var TYPE_OPTIONS = Object.freeze([
     {value: 'SimpleScheduleStrategy', label: 'Simple Schedule'},
@@ -11,13 +13,7 @@ function newSchedulePlan() {
     return {
         type: 'SchedulePlan',
         label: "",
-        strategy: {
-            schedule: {
-                scheduleType: 'once', eventId:null, delay:null, interval:null, expires:null,
-                cronTrigger:null, startsOn:null, endsOn:null, times:[], activities:[]
-            },
-            type: 'SimpleScheduleStrategy'
-        }
+        strategy: scheduleService.newSimpleStrategy()
     };
 }
 
@@ -30,29 +26,33 @@ module.exports = function(params) {
     var self = this;
 
     self.plan = null;
-    self.messageObs = ko.observable();
     self.publishedObs = ko.observable(false);
 
-    // This object is passed to the sub-component views, which are solely responsible for implementing
-    // an editor for the strategy, and providng a callback to get it.
-    self.delegate = {
-        strategy: utils.identity
-    };
-    // To pass the strategy to sub-component views once it is loaded.
+    // Models for the strategy object. The callback function will be called when saving the
+    // schedule plan; the strategy implementation must implement this callback to return a
+    // strategy object
     self.strategyObs = ko.observable();
+    self.strategyObs.callback = utils.identity;
 
     // Fields for this form
     self.labelObs = ko.observable("");
     self.schedulePlanTypeObs = ko.observable('SimpleScheduleStrategy');
     self.schedulePlanTypeOptions = TYPE_OPTIONS;
     self.schedulePlanTypeLabel = utils.makeOptionLabelFinder(TYPE_OPTIONS);
+    self.schedulePlanTypeObs = ko.observable('SimpleScheduleStrategy');
+    self.schedulePlanTypeObs.subscribe(function(newValue) {
+        if (newValue === 'SimpleScheduleStrategy') {
+            self.strategyObs(scheduleService.newSimpleStrategy());
+        } else if (newValue === 'ABTestScheduleStrategy') {
+            self.strategyObs(scheduleService.newABTestStrategy());
+        }
+    });
 
     self.save = function(vm, event) {
         self.plan.label = self.labelObs();
-        self.plan.strategy = self.delegate.strategy();
+        self.plan.strategy = self.strategyObs.callback();
 
         utils.deleteUnusedProperties(self.plan);
-        console.log(JSON.stringify(self.plan));
 
         utils.startHandler(self, event);
         serverService.saveSchedulePlan(self.plan)
@@ -71,11 +71,10 @@ module.exports = function(params) {
         self.strategyObs(plan.strategy);
     }
 
+    var notFoundHandler = utils.notFoundHandler(self, "Schedule plan not found.", "#/surveys");
+
     if (params.guid !== "new") {
-        serverService.getSchedulePlan(params.guid).then(loadVM).catch(function(response) {
-            utils.message('warning', "Schedule plan not found.");
-            document.location = "#/scheduleplans";
-        });
+        serverService.getSchedulePlan(params.guid).then(loadVM).catch(notFoundHandler);
     } else {
         loadVM(newSchedulePlan());
     }

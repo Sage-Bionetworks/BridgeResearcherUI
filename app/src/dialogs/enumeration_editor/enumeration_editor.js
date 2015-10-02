@@ -1,8 +1,7 @@
 var utils = require('../../utils');
 var ko = require('knockout');
 var hash = require('object-hash');
-var dragula = require('dragula');
-var $ = require('jquery');
+var root = require('../../root');
 
 function ListsSource(elements, element) {
     this.currentListEntry = null;
@@ -124,9 +123,7 @@ module.exports = function(params) {
         self.labelObs("");
         self.detailObs("");
         self.valueObs("");
-        self.labelFocusedObs(true);
     };
-    self.labelFocusedObs = ko.observable(true);
     self.saveList = function() {
         var entry = listsSource.getCurrentEntry();
         entry.enumeration = self.listObs();
@@ -145,10 +142,10 @@ module.exports = function(params) {
                 }
             });
         }
-        utils.closeDialog();
+        root.closeDialog();
     };
     self.cancel = function() {
-        utils.closeDialog();
+        root.closeDialog();
     };
 
     self.currentTabObs = ko.observable('editor');
@@ -161,25 +158,4 @@ module.exports = function(params) {
             self.currentTabObs(tabName);
         };
     };
-
-    // This mostly works. We remove one of the two versions of the node that's been copied
-    // over, once by our own manipulation of the observable array, and once by Dragula (I
-    // see no way to prevent Dragula from doing its thing).
-    if (!self.publishedObs()) {
-        var _item = null;
-        dragula([zonesEl]).on('drop', function(el, zone) {
-            // This utility handles node lists
-            var index = ko.utils.arrayIndexOf(el.parentNode.children, el);
-            var data = ko.contextFor(el).$data;
-            self.listObs.remove(data);
-            self.listObs.splice(index,0,data);
-        }).on('cloned', function(mirror, item, type) {
-            _item = item;
-        }).on('drop', function() {
-            if (_item) {
-                _item.parentNode.removeChild(_item);
-                _item = null;
-            }
-        });
-    }
 };

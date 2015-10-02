@@ -4,27 +4,18 @@
     <meta charset="utf-8"/>
     <title>Bridge Study Manager</title>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/semantic.min.css"/>
-    <script src="//cdn.polyfill.io/v1/polyfill.min.js" async defer></script>
-    <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
 </head>
 <body>
     <header>
-        <h2 class="ui header">
-            <i style="font-size: 3.5rem" class="white heartbeat icon"></i>
-            <div class="content">
-                <div class="header-content-title">Bridge Study Manager</div>
-                <div class="sub header">
-                    <span data-bind="text: studyName"></span>
-                    <span style="padding-left: 20px"></span>
-                    <span data-bind="text: environment"></span>
-                </div>
-            </div>
-        </h2>
-        <a href="#" data-bind="click: signOut">Sign Out</a>
+        <h2><i class="white heartbeat icon"></i> Bridge Study Manager</h2>
+        <div class="header-env">
+            <span data-bind="text: studyName"></span>
+            <span> on </span>
+            <span data-bind="text: environment"></span>
+        </div class="header-env">
     </header>
     <section>
-        <main>
-            <div data-bind="component: {name: mainPage, params: mainParams}"></div>
+        <main data-bind="component: {name: mainPage, params: mainParams}">
         </main>
         <nav>
             <div class="ui vertical menu">
@@ -40,16 +31,16 @@
                         <a href="#/eligibility" class="item" data-bind="css:{active:isActive('eligibility')}, visible: isDeveloper">
                             Eligibility Criteria
                         </a>
+                        <a href="#/schemas" class="item" data-bind="css:{active:isActive('schemas')}, visible: isDeveloper">
+                            Bulk Upload Schemas
+                        </a>
                     </div>
                 </div>
                 <div class="item" data-bind="visible: isDeveloper">
-                    <i class="server icon"></i> Surveys & Tasks
+                    <i class="server icon"></i> Task Scheduling
                     <div class="menu">
                         <a href="#/surveys" class="item" data-bind="css:{active:isActive('surveys')}, visible: isDeveloper">
                             Surveys
-                        </a>
-                        <a href="#/schemas" class="item" data-bind="css:{active:isActive('schemas')}, visible: isDeveloper">
-                            Upload Schemas
                         </a>
                         <a href="#/scheduleplans" class="item" data-bind="css:{active:isActive('scheduleplans')}, visible: isDeveloper">
                             Scheduling
@@ -68,7 +59,7 @@
                             Password Policy
                         </a>
                         <a href="#/user_attributes" class="item" data-bind="css:{active:isActive('user_attributes')}, visible: isDeveloper">
-                            User Attributes
+                            User Profile Attributes
                         </a>
                         <a href="#/verify_email_template" class="item" data-bind="css:{active:isActive('ve_template')}, visible: isDeveloper">
                             Email Templates
@@ -78,13 +69,18 @@
                         </a>
                     </div>
                 </div>
+                <div class="item">
+                    <i class="sign out icon"></i> <a href="#" data-bind="click: signOut">Sign Out</a>
+                </div>
             </div>
         </nav>
     </section>
     <footer>
         <p>&copy; 2015 Sage Bionetworks.</p>
     </footer>
-    <div id="dialogHolder" data-bind="modal: dialogObs"></div>
+    <div data-bind="modal: dialogObs"></div>
+    <script src="//cdn.polyfill.io/v1/polyfill.min.js"></script>
+    <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
     <script src="dist/bundle.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/semantic.min.js"></script>
 </body>

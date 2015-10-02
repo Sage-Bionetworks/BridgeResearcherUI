@@ -1,17 +1,10 @@
 var ko = require('knockout');
-var EventEmitter = require('./events');
-var serverService = require('./services/server_service');
-var dialogBus = new EventEmitter();
 var toastr = require('toastr');
+var config = require('./config');
 
 var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
 
-toastr.options = {
-    positionClass: "toast-bottom-right",
-    hideDuration: 300,
-    timeOut: 5000,
-    preventDuplicates: true
-};
+toastr.options = config.toastr;
 
 function is(obj, typeName) {
     return Object.prototype.toString.call(obj) === "[object "+typeName+"]";
@@ -62,19 +55,11 @@ function makeOptionLabelFinder(arrayOrObs) {
         return option ? option.label : "";
     };
 }
+
 /**
  * Common utility methods for ViewModels.
- *
- * TODO: Add dirty state tracking to the observables that are created.
  */
 module.exports = {
-    message: function(severity, message) {
-        if (toastr[severity]) {
-            toastr[severity](message);
-        } else {
-            console.error(severity + " is not a toastr function", message);
-        }
-    },
     /**
      * Determine type of object
      * @param object - object to test
@@ -103,17 +88,6 @@ module.exports = {
         return function sorter(a,b) {
             return a[fieldName].toLowerCase().localeCompare(b[fieldName].toLowerCase());
         };
-    },
-    // TODO: This is used by root and no other, and it seems like it should be possible to
-    // do root.openDialog(), etc.
-    addDialogListener: function(listener) {
-        dialogBus.addEventListener('dialogs', listener);
-    },
-    openDialog: function(dialogName, params) {
-        dialogBus.emit('dialogs', dialogName, params);
-    },
-    closeDialog: function() {
-        dialogBus.emit('dialogs', 'close');
     },
     /**
      * A start handler called before a request to the server is made. All errors are cleared
@@ -156,16 +130,14 @@ module.exports = {
             if (event){
                 event.target.classList.remove("loading");
             }
-            if (vm.messageObs) {
-                if (response.status === 412) {
-                    toastr.error('You do not appear to be either a developer or a researcher.');
-                } else if (response instanceof Error) {
-                    toastr.error(response.message);
-                } else if (response.responseJSON) {
-                    toastr.error(response.responseJSON.message);
-                } else {
-                    toastr.error(GENERIC_ERROR);
-                }
+            if (response.status === 412) {
+                toastr.error('You do not appear to be either a developer or a researcher.');
+            } else if (response instanceof Error) {
+                toastr.error(response.message);
+            } else if (response.responseJSON) {
+                toastr.error(response.responseJSON.message);
+            } else {
+                toastr.error(GENERIC_ERROR);
             }
         };
     },
@@ -221,31 +193,11 @@ module.exports = {
             // model didn't initially have them. Disabling this, but may break something elsewhere.
             var obs = vm[insp.observerName];
             //var value = object[insp.name];
-            console.log("updating", insp.name, obs()/*, value*/);
             //if (isDefined(obs) && isDefined(value)) {
             if (isDefined(obs)) {
                 object[insp.name] = obs();
             }
         }
-    },
-    /**
-     * Get the list of studies that can be used for authentication
-     */
-    // TODO: This could just be in serverService, not utils. Also it knows a
-    // lot about the viewModel, factor that out, even at the cost of duplication.
-    getStudyList: function(vm) {
-        return function(env) {
-            vm.messageObs("");
-            vm.studyOptions([]);
-            serverService.getStudyList(env).then(function(studies) {
-                studies.items.sort(function(a,b) {
-                    return a.name > b.name;
-                });
-                vm.studyOptions(studies.items);
-            }).catch(function(response) {
-                vm.messageObs({text: response.message, status: 'error'});
-            });
-        };
     },
     /**
      * Convert a date into a locale-appropriate string (browser-dependent).
@@ -302,9 +254,25 @@ module.exports = {
                 vm.itemsObs.remove(deletable);
             });
             if (vm.itemsObs().length === 0) {
+                // Yes both. There are cases where 'rootPath' is just the current page.
                 document.querySelector(".loading_status").textContent = "There are currently no items.";
                 document.location = rootPath;
             }
+        };
+    },
+    /**
+     * Generic handler for pages which are loading a particular entity, that attemp to
+     * deal with 404s by redirecting to a parent page.
+     * @param vm
+     * @param message
+     * @param rootPath
+     * @returns {Function}
+     */
+    notFoundHandler: function(vm, message, rootPath) {
+        return function(response) {
+            console.error(response);
+            toastr.error((message) ? message : response.statusText);
+            document.location = rootPath;
         };
     },
     /**
