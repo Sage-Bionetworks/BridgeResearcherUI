@@ -38,15 +38,18 @@ function copyObserverValuesBackToActivity(activity) {
     activity.label = activity.labelObs();
     activity.labelDetail = activity.labelDetailObs();
     activity.activityType = activity.activityTypeObs();
+    console.log(activity.activityTypeObs());
     if (activity.activityType === 'task') {
         activity.task = {
             identifier: activity.taskIdObs()
         };
+        delete activity.survey;
     } else {
         activity.survey = {
             guid: activity.surveyGuidObs(),
             identifier: surveyUtils.surveysOptionsFinder(activity.surveyGuidObs()).identifier
         };
+        delete activity.task;
     }
 }
 /**

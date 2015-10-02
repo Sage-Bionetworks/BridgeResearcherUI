@@ -48,11 +48,9 @@ var RootViewModel = function() {
         return self.roles.contains('developer');
     });
     self.openDialog = function(dialogName, params) {
-        console.debug("root.openDialog()", dialogName, params);
         self.dialogObs({name: dialogName, params: params});
     };
     self.closeDialog = function() {
-        console.debug("root.closeDialog()");
         self.dialogObs({name: 'none'});
     };
     /**

@@ -4,9 +4,6 @@
  *
  * If a call is made to the server before a session exists, a one-time listener is registered to wait
  * for a session to be established, then the call is completed.
- *
- * Right now when you sign out, and then sign back in, the system doesn't update the UI. So if you
- * sign in to a different study or environment, nothing changes until you click around.
  */
 // Necessary because export of library is broken
 var EventEmitter = require('../events');
@@ -22,8 +19,33 @@ var SESSION_ENDED_EVENT_KEY = 'sessionEnded';
 var listeners = new EventEmitter();
 var session = null;
 
-// Cache this. It *must* be a copy of the server version.
-var currentStudy = null;
+var Cache = (function() {
+    var cached = {};
+    return {
+        get: function(key) {
+            var value = cached[key];
+            if (value) {
+                console.debug("Cache hit:",key);
+            } else {
+                console.debug("Cache miss:",key);
+            }
+            return value;
+        },
+        set: function(key, value) {
+            console.debug("Cache set:",key);
+            cached[key] = JSON.parse(JSON.stringify(value));
+        },
+        remove: function(key) {
+            console.debug("Cache delete::",key);
+            delete cached[key];
+        },
+        removeAll: function() {
+            console.debug("Clearing entire cache");
+            cached = {};
+        }
+    };
+})();
+
 
 if (typeof window !== "undefined") { // jQuery throws up if there's no window, even in unit tests.
     $(function() {
@@ -134,7 +156,7 @@ function del(path) {
 function signOut() {
     var env = session.environment;
     session = null;
-    currentStudy = null;
+    Cache.removeAll();;
     optionsService.remove(SESSION_KEY);
     listeners.emit(SESSION_ENDED_EVENT_KEY);
     return new Promise(function(resolve, reject) {
@@ -180,17 +202,18 @@ module.exports = {
         return Promise.resolve(postInt(config.host[env] + config.requestResetPassword, data));
     },
     getStudy: function() {
-        if (currentStudy !== null) {
-            return Promise.resolve(currentStudy);
+        var study = Cache.get('study');
+        if (study) {
+            return Promise.resolve(study);
         }
         return get(config.getStudy).then(function(study) {
-            currentStudy = JSON.parse(JSON.stringify(study));
+            Cache.set('study', study);
             return study;
         });
     },
     saveStudy: function(study) {
         return post(config.getStudy, study).then(function(response) {
-            currentStudy = null;
+            Cache.remove('study');
             return response;
         });
     },
@@ -225,7 +248,15 @@ module.exports = {
         return get(config.survey + guid + '/revisions');
     },
     getSurvey: function(guid, createdOn) {
-        return get(config.survey + guid + '/revisions/' + new Date(createdOn).toISOString());
+        var createdString = new Date(createdOn).toISOString();
+        var survey = Cache.get(guid+':'+createdString);
+        if (survey) {
+            return Promise.resolve(survey);
+        }
+        return get(config.survey + guid + '/revisions/' + createdString).then(function(survey) {
+            Cache.set(survey.guid+':'+survey.createdOn, survey);
+            return survey;
+        });
     },
     getSurveyMostRecent: function(guid) {
         return get(config.survey + guid + '/revisions/recent');
@@ -259,16 +290,30 @@ module.exports = {
         return post(config.surveys, survey);
     },
     publishSurvey: function(guid, createdOn) {
-        return post(config.survey + guid + '/revisions/' + new Date(createdOn).toISOString() + '/publish');
+        var createdString = new Date(createdOn).toISOString();
+        return post(config.survey + guid + '/revisions/' + createdString + '/publish').then(function(response) {
+            Cache.remove(guid+':'+createdString);
+            return response;
+        });
     },
     versionSurvey: function(guid, createdOn) {
-        return post(config.survey + guid + '/revisions/' + new Date(createdOn).toISOString() + '/version');
+        var createdString = new Date(createdOn).toISOString();
+        return post(config.survey + guid + '/revisions/' + createdString + '/version').then(function(response) {
+            Cache.remove(guid+':'+createdString);
+            return response;
+        });
     },
     updateSurvey: function(survey) {
-        return post(config.survey + survey.guid + '/revisions/' + new Date(survey.createdOn).toISOString(), survey);
+        var createdString = new Date(survey.createdOn).toISOString();
+        return post(config.survey + survey.guid + '/revisions/' + createdString, survey).then(function(response) {
+            Cache.remove(survey.guid+':'+createdString);
+            return response;
+        });
     },
     deleteSurvey: function(survey) {
-        return del(config.survey + survey.guid + '/revisions/' + new Date(survey.createdOn).toISOString());
+        var createdString = new Date(survey.createdOn).toISOString();
+        Cache.remove(survey.guid+':'+createdString);
+        return del(config.survey + survey.guid + '/revisions/' + createdString);
     },
     getAllUploadSchemas: function() {
         return get(config.schemas);

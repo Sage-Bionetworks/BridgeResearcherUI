@@ -68,19 +68,23 @@ module.exports = function(params) {
         }
     };
     function load(survey) {
+        // This is faster than it looks because of client-side caching
+        serverService.getSurvey(params.guid, params.createdOn).then(function(survey) {
+            self.nameObs(survey.name);
+            self.publishedObs(survey.published);
+            serverService.getSurveyAllRevisions(params.guid).then(function(list) {
+                self.itemsObs(list.items.map(function(survey) {
+                    survey.checkedObs = ko.observable(false);
+                    return survey;
+                }));
+            });
+        }).catch(utils.notFoundHandler(self, "Survey not found."));
+        /*
+
         var matchDate = (typeof params.createdOn !== "string") ?
             params.createdOn.toISOString() : params.createdOn;
-        serverService.getSurveyAllRevisions(params.guid).then(function(list) {
-            self.itemsObs(list.items.map(function(survey) {
-                survey.checkedObs = ko.observable(false);
-                if (survey.createdOn === matchDate) {
-                    self.nameObs(survey.name);
-                    self.publishedObs(survey.published);
-                }
-                return survey;
-            }));
-        });
         return survey.createdOn;
+        */
     }
     load(params);
 };

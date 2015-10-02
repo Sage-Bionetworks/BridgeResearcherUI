@@ -272,7 +272,9 @@ module.exports = {
         return function(response) {
             console.error(response);
             toastr.error((message) ? message : response.statusText);
-            document.location = rootPath;
+            if (rootPath) {
+                document.location = rootPath;
+            }
         };
     },
     /**
