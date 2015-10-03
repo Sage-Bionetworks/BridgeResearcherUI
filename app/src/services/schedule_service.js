@@ -4,9 +4,10 @@ var utils = require('../utils');
 
 var PERIOD_WORDS = {
     'H': 'hour',
-    'D': 'day',
+    'D': "day",
     'M': "month",
-    'W': 'week'
+    'W': 'week',
+    'Y': 'year'
 }
 
 var TIME_OPTIONS = [];
@@ -67,13 +68,13 @@ function formatActivities(buffer, activities) {
 function sentenceCase(string) {
     return string.substring(0,1).toUpperCase() + string.substring(1);
 }
-function parsePeriod(period) {
-    var parts = period.substring(1).split("T");
-    var duration = (parts.length === 2) ? parts[1] : parts[0];
-    return {
-        amt: parseInt(duration, 10),
-        measure: PERIOD_WORDS[duration.replace(/[\d]*/,'')]
-    };
+function parsePeriods(period) {
+    var periods = period.substring(1).match(/(\d+\D)/g);
+    return periods.map(function(period) {
+        var amt = parseInt(period);
+        var measure = PERIOD_WORDS[period.replace(/[\d]*/, '')];
+        return {amt: amt, measure: measure};
+    });
 }
 function formatPeriod(amt, measure) {
     if (amt === 1 && measure == "H") {
@@ -84,17 +85,23 @@ function formatPeriod(amt, measure) {
     return amt + " " + measure + "s";
 }
 function periodToWords(periodStr) {
-    var period = parsePeriod(periodStr);
-    if (period.amt === 1 && period.measure === "H") {
-        return "an " + period.measure;
-    } else if (period.amt === 1) {
-        return "a " + period.measure;
-    }
-    return period.amt + " " + period.measure + "s";
+    var periods = parsePeriods(periodStr);
+    return periods.map(function(period) {
+        if (period.amt === 1 && period.measure === "H") {
+            return "an " + period.measure;
+        } else if (period.amt === 1) {
+            return "a " + period.measure;
+        }
+        return period.amt + " " + period.measure + "s";
+    }).join(', ');
 }
 function periodToWordsNoArticle(periodStr) {
-    var period = parsePeriod(periodStr);
-    return (period.amt === 1) ? (period.amt + " " + period.measure) : (period.amt + " " + period.measure+"s");
+    var periods = parsePeriods(periodStr);
+    return periods.map(function(period) {
+        return (period.amt === 1) ?
+            (period.amt + " " + period.measure) :
+            (period.amt + " " + period.measure+"s");
+    }).join(', ');
 }
 function toList(array) {
     var len = array.length;
