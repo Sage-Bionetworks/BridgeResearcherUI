@@ -1,6 +1,5 @@
 <constraints-label params="title: 'Duration  Question Options'"></constraints-label>
-<div class="
--content-constraints">
+<div class="element-content-constraints">
     <div>
         <div>Minimum Value:</div>
         <div>
@@ -21,7 +20,9 @@
         </div>
     </div>
     <div>
-        <div>Fire event?</div>
+        <div>
+            <fire-event></fire-event>
+        </div>
         <div>
             <ui-checkbox params="checkedObs: fireEventObs, disabledObs: publishedObs"></ui-checkbox>
         </div>
@@ -41,7 +42,7 @@
     <div>
         <div>Unit:</div>
         <div>
-            <ui-select params="fieldObs: unitObs, fieldLabel: unitLabel,
+            <ui-select params="fieldObs: unitObs, fieldLabel: durationLabel,
                 publishedObs: publishedObs, optionsSrc: durationOptions"></ui-select>
         </div>
     </div>

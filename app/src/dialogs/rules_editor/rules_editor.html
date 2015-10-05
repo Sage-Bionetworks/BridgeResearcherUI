@@ -1,0 +1,44 @@
+<div class="ui modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Rules
+    </div>
+    <div class="ui form">
+        <div class="rules-table" data-bind="visible: rulesObs().length === 0">
+            <div class="rules-table-rule">
+                There are no rules for this question.
+            </div>
+        </div>
+        <div data-bind="foreach: rulesObs, visible: rulesObs().length !== 0" class="rules-table">
+            <div class="rules-table-rule">
+                <div class="rules-table-rule-cell">
+                    When value
+                </div>
+                <div class="rules-table-rule-cell">
+                    <ui-select params="fieldObs: $data.operator, fieldLabel: $parent.operatorLabel,
+                            publishedObs: $parent.publishedObs, optionsSrc: $parent.operatorOptions"></ui-select>
+                </div>
+                <div class="rules-table-rule-cell">
+                    <div data-bind="visible: $data.operator() !== 'de'">
+                        <ui-text params="fieldObs: $data.value, publishedObs: $parent.publishedObs"></ui-text>
+                    </div>
+                </div>
+                <div class="rules-table-rule-cell">
+                    then skip to later question:
+                </div>
+                <div class="rules-table-rule-cell">
+                    <ui-select params="fieldObs: $data.skipTo, fieldLabel: $parent.identifierLabel,
+                            publishedObs: $parent.publishedObs, optionsSrc: $parent.identifierOptions"></ui-select>
+                </div>
+                <div class="rules-table-rule-cell">
+                    <div data-bind="click: $parent.deleteRule" style="cursor:pointer"><a><i class="trash icon"></i></a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="rules-editor-actions">
+        <button class="ui primary small button" data-bind="click: addRule">Add Rule</button>
+        <button class="ui small button" data-bind="click: saveRules">Save</button>
+        <button class="ui small button" data-bind="click: cancelRules">Cancel</button>
+    </div>
+</div>

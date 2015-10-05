@@ -1,10 +1,7 @@
 <constraints-label params="title: 'Boolean Question Options'"></constraints-label>
 <div class="element-content-constraints">
     <div>
-        <div>Fire event?</div>
-        <div>
-            <ui-checkbox params="checkedObs: fireEventObs, disabledObs: publishedObs"></ui-checkbox>
-        </div>
+
     </div>
     <div>
         <div>UI Hint:</div>
@@ -12,6 +9,20 @@
             <ui-select params="fieldObs: uiHintObs, fieldLabel: uiHintLabel,
                 publishedObs: publishedObs, optionsSrc: uiHintOptions"></ui-select>
         </div>
+    </div>
+    <div>
+
+    </div>
+    <div>
+        <div>
+            <fire-event></fire-event>
+        </div>
+        <div>
+            <ui-checkbox params="checkedObs: fireEventObs, disabledObs: publishedObs"></ui-checkbox>
+        </div>
+    </div>
+    <div>
+
     </div>
     <div>
         <div>Rules:</div>

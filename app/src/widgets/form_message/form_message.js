@@ -1,5 +1,5 @@
-var $ = require('jquery');
 var ko = require('knockout');
+var toastr = require('toastr');
 
 var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
 
@@ -16,12 +16,18 @@ module.exports = function(params) {
 
     // Subscribe to receive messages from parent MV.
     params.messageObs.subscribe(function(newValue) {
-        if (typeof newValue === "string") {
-            displayMessage("green", newValue);
+        if (newValue === null) {
+            //self.cssClass("");
+            //self.internalMessage("");
+        } else if (typeof newValue === "string") {
+            //displayMessage("green", newValue);
+            toastr.success(newValue);
         } else if (typeof newValue.text === "string") {
-            displayMessage(newValue.status || "green", newValue.text);
+            //displayMessage(newValue.status || "green", newValue.text);
+            toastr.success(newValue.text);
         } else {
-            displayMessage("error", GENERIC_ERROR);
+            //displayMessage("error", GENERIC_ERROR);
+            toastr.error(GENERIC_ERROR);
         }
     });
 

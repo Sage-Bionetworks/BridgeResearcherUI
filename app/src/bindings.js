@@ -1,6 +1,6 @@
 var ko = require('knockout');
 var $ = require('jquery');
-
+var dragula = require('dragula');
 var SHOW_DELAY = 1;
 var HIDE_DELAY = 800;
 
@@ -16,22 +16,70 @@ ko.observableArray.fn.contains = function(value) {
     var underlyingArray = this();
     return underlyingArray.indexOf(value) > -1;
 };
+
+ko.bindingHandlers.dragula = {
+    init: function(element, valueAccessor) {
+        var _item = null;
+        var config = ko.unwrap(valueAccessor());
+
+        dragula([element], {
+            direction: 'vertical',
+            moves: function (el, container, handle) {
+                return $(handle).is(config.dragHandleSelector);
+            }
+        }).on('drop', function(el, zone) {
+            var elements = element.querySelectorAll(config.elementSelector);
+            // This utility handles node lists
+            var index = ko.utils.arrayIndexOf(elements, el);
+            var data = ko.contextFor(el).$data;
+            config.listObs.remove(data);
+            config.listObs.splice(index,0,data);
+            if (_item) {
+                _item.parentNode.removeChild(_item);
+                _item = null;
+            }
+        }).on('cloned', function(mirror, item, type) {
+            _item = item;
+        });
+    }
+};
+
 ko.bindingHandlers.semantic = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
         var value = ko.unwrap(valueAccessor());
+        var $element = $(element);
         if (value === 'checkbox') {
-            element.className += " ui checkbox";
+            var input = $element.children("input[type=checkbox]").get(0);
             var observer = allBindings().checkboxObs;
-            var input = $(element).children("input[type=checkbox]").get(0);
-            $(element).on('click', function() {
+            $element.addClass("ui checkbox").on('click', function() {
                 if (!input.disabled) {
                     observer(!observer());
-                    element.classList.toggle("checked", observer());
+                    $element.toggleClass('checked', observer());
                 }
             });
+        } else if (value === 'radio') {
+            var input = $element.children("input[type=radio]").get(0);
+            var observer = allBindings().radioObs;
+            observer.subscribe(function(newValue) {
+                if (newValue === input.value) {
+                    input.checked = true;
+                    $element.addClass("checked");
+                }
+            });
+            if (observer() === input.value) {
+                input.checked = true;
+                $element.addClass("checked");
+            }
+            $element.addClass("ui radio checkbox").on('click', function() {
+                if (!input.disabled) {
+                    observer(input.value);
+                    $element.addClass("checked");
+                }
+            }).checkbox();
         } else if (value === 'dropdown') {
-            element.className += " ui dropdown";
-            $(element).dropdown();
+            $element.addClass("ui dropdown").dropdown();
+        } else if (value === 'popup') {
+            $element.popup();
         }
     }
 };
@@ -67,8 +115,8 @@ ko.bindingHandlers.modal = {
         config.subscribe(function (newConfig) {
             var $modal = $(element).children(".modal");
             if ($modal.modal) {
-                $modal.modal({"closable": false});
-                if (newConfig.name !== "none_dialog") {
+                if (newConfig.name !== "none") {
+                    $modal.modal({"closable": false, "detachable": false});
                     $modal.modal('show');
                 } else {
                     $modal.modal('hide');
@@ -77,26 +125,55 @@ ko.bindingHandlers.modal = {
         });
     }
 };
+
+function findItemsObs(context, collName) {
+    for (var i = 0; i < context.$parents.length; i++) {
+        if (context.$parents[i][collName]) {
+            if (context.$parents[i][collName]) {
+                return context.$parents[i][collName];
+            }
+        }
+    }
+    return null;
+}
+
 /**
- * Create an auto-resizing textarea control without going insane. Unfortunately this
- * solution requires CSS as well, see survey.css where this is currently used.
+ * Fade and remove element in a list. The binding has the following parameters, passed in through a
+ * parameter object:
+ *  selector {String}
+ *      the selector to find the encompassing HTML element that represents a single item in this
+ *          observable array
+ *  object {Object}
+ *      the actual object to remove from the observable array
+ *  collection {String}
+ *      the name of the collection on a viewModel in the hierachy for this element. Defaults to 'itemsObs'
  *
- * http://www.brianchu.com/blog/2013/11/02/creating-an-auto-growing-text-input/
+ *  This binding assumes a transition that lasts 500ms.
  */
-ko.bindingHandlers.resizeTextArea = {
-    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-        var textareaSize = element.querySelector('.textarea-size');
-        var textarea = element.querySelector('textarea');
-        var autoSize = function () {
-            textareaSize.innerHTML = textarea.value.trim() + '\n';
-        };
-        textarea.addEventListener('input', autoSize, false);
-        setTimeout(autoSize, 200);
+ko.bindingHandlers.fadeRemove = {
+    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var config = ko.unwrap(valueAccessor());
+        var selector = config.selector;
+        var rowItem = config.object;
+        var collName = config.collection || 'itemsObs';
+        var context = ko.contextFor(element);
+        var itemsObs = findItemsObs(context, collName);
+        var $element = $(element).closest(selector);
+
+        element.addEventListener('click', function(event) {
+            event.preventDefault();
+            if (confirm("Are you sure?")) {
+                $element.css("max-height","0px");
+                setTimeout(function() {
+                    itemsObs.remove(rowItem);
+                    $element.remove();
+                },510); // waiting for animation to complete
+            }
+        });
     }
 };
 /**
  * Creates that flippy insertion control in the survey editor.
- *
  */
 ko.bindingHandlers.flipper = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
@@ -111,19 +188,15 @@ ko.bindingHandlers.flipper = {
         var obj = ko.unwrap(valueAccessor());
         element.addEventListener('click', function(event) {
             clearTimers();
+            element.classList.add('insertion-control-flipped');/*
             showTimer = setTimeout(function() {
-                element.classList.add('insertion-control-flipped');
-            }, SHOW_DELAY);
+
+            }, SHOW_DELAY);*/
             if (viewModel[obj.mouseover]) {
                 viewModel[obj.mouseover](element);
             }
         }, false);
-        element.addEventListener('mouseover', function(event) {
-            clearTimers();
-            hideTimer = setTimeout(function() {
-                element.classList.remove('insertion-control-flipped');
-            }, HIDE_DELAY);
-        }, false);
+        element.addEventListener('mouseover', clearTimers, false);
         element.addEventListener('mouseout', function(event) {
             clearTimers();
             hideTimer = setTimeout(function() {

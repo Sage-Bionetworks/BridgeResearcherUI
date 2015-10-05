@@ -1,0 +1,33 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <h3>Scheduling</h3>
+        <div class="fixed-header-buttons">
+            <a href="#/scheduleplans/new" class="ui primary small button">New Schedule Plan</a>
+            <button class="ui red small button" data-bind="disable: !atLeastOneChecked(), click: deleteSchedulePlans">Delete</button>
+        </div>
+    </div>
+    <div class="ui secondary pointing menu"></div>
+</div>
+<div class="scrollbox">
+    <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
+    <table class="ui compact table" data-bind="visible: itemsObs().length > 0">
+        <thead>
+        <tr>
+            <th width="10"></th>
+            <th width="250">Schedule</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody data-bind="foreach: itemsObs">
+        <tr>
+            <td>
+                <ui-checkbox params="checkedObs: $data.checkedObs, disabledObs: $parent.publishedObs"></ui-checkbox>
+            </td>
+            <td>
+                <a href="#" data-bind="attr: {'href': '#/scheduleplans/'+$data.guid}, text: $data.label"></a>
+            </td>
+            <td data-bind="html: $parent.formatStrategy($data.strategy)"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>

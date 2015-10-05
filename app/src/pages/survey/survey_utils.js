@@ -1,5 +1,13 @@
 var utils = require('../../utils');
 var ko = require('knockout');
+var serverService = require('../../services/server_service');
+var root = require('../../root');
+
+var surveysOptionsObs = ko.observableArray([]);
+var surveysOptionsLabelFinder = utils.makeOptionLabelFinder(surveysOptionsObs);
+
+var questionsOptionsObs = ko.observableArray([]);
+var questionsOptionsLabelFinder = utils.makeOptionLabelFinder(questionsOptionsObs)
 
 var UNIT_OPTIONS = Object.freeze([
     {value: null, label: '<none>'},
@@ -23,7 +31,7 @@ var UNIT_OPTIONS = Object.freeze([
     {value: 'yards', label: 'Yards'}
 ]);
 var DURATION_OPTIONS = Object.freeze([
-    {value: null, label: ''},
+    {value: null, label: '<none>'},
     {value: 'seconds', label: 'Seconds'},
     {value: 'minutes', label: 'Minutes'},
     {value: 'hours', label: 'Hours'},
@@ -92,7 +100,7 @@ var CONSTRAINTS_TEMPLATES = Object.freeze({
     'BooleanConstraints': {dataType:'boolean', rules:[]},
     'DateConstraints': {dataType:'date', rules:[], allowFuture:false, earliestValue:'', latestValue:'' },
     'DateTimeConstraints': {dataType:'datetime', rules:[], allowFuture:false, earliestValue:'', latestValue:'' },
-    'DurationConstraints': {dataType:'duration', rules:[]},
+    'DurationConstraints': {dataType:'duration', rules:[], minValue:0, maxValue:0, unit: '', step:1.0},
     'TimeConstraints': {dataType:'time', rules:[]},
     'IntegerConstraints': {dataType:'integer', rules:[], minValue:0, maxValue:255, unit: '', step:1.0},
     'DecimalConstraints': {dataType:'decimal', rules: [], minValue:0, maxValue:255, unit: '', step:1.0},
@@ -124,10 +132,15 @@ function makeObservable(obj, field) {
     // Strip out time zone, as this control is local time only. We may change it as well on the server
     // to use LocalDateTime, that's pending.
     if (obj.dataType === "datetime" && (field === "earliestValue" || field === "latestValue")) {
-        var matches = obj[field].match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/);
-        return ko.observable(matches.length ? matches[0] : "");
+        var value = obj[field];
+        if (value) {
+            var matches = value.match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/);
+            return ko.observable(matches && matches.length ? matches[0] : "");
+        }
     }
-    return (field === "rules" || field === "enumeration") ? ko.observableArray(obj[field]) : ko.observable(obj[field]);
+    // Note we're copying the array when passing it to the observable, or it gets shared between properties,
+    // enumeration in particular (rules is remodeled)
+    return (field === "rules" || field === "enumeration") ? ko.observableArray([].concat(obj[field])) : ko.observable(obj[field]);
 }
 
 /**
@@ -145,7 +158,7 @@ function elementToObservables(element) {
             con[field+"Obs"] = makeObservable(con, field);
         });
         // ... and then the rules
-        con.rulesObs(con.rulesObs().map(function(rule) {
+        con.rulesObs(con.rules.map(function(rule) {
             return {
                 operator: ko.observable(rule.operator),
                 value: ko.observable(rule.value),
@@ -192,26 +205,25 @@ function updateModelField(model, fieldName) {
         model[fieldName] = model[obsName]();
     }
 }
-/**
- * Create a method that returns an option's label by its value.
- * @param list
- * @returns {Function}
- */
-function makeFinderByLabel(list) {
-    return function(value) {
-        var options = list.filter(function(option) {
-            return option.value === value;
-        });
-        return (options.length) ? options[0].label: '';
-    };
-}
 function newSurvey() {
     return {name:'', guid:'', identifier:'', published:false, createdOn:null, elements:[], version:null};
 }
 
+function triggerSurveyRefresh() {
+    surveysOptionsObs.removeAll();
+    questionsOptionsObs.removeAll();
+    return serverService.getSurveysSummarized().then(function(surveys) {
+        surveysOptionsObs.pushAll(surveys);
+        surveys.forEach(function(survey) {
+            questionsOptionsObs.pushAll(survey.questions);
+        });
+    });
+}
+triggerSurveyRefresh();
+
 module.exports = {
     newSurvey: newSurvey,
-    newElement: function(type) {
+    newField: function(type) {
         var elementType = (type === "SurveyInfoScreen") ? type : "SurveyQuestion";
         var newEl = {type: elementType};
         ko.utils.extend(newEl, ELEMENT_TEMPLATE[elementType]);
@@ -221,10 +233,13 @@ module.exports = {
         }
         return elementToObservables(newEl);
     },
+    // TODO: Really don't like having to manually update this when we open the event ID editor.
+    // Also won't update the survey view itself.
+    triggerSurveyRefresh: triggerSurveyRefresh,
     surveyToObservables: function(vm, survey) {
         SURVEY_FIELDS.forEach(function(field) {
             vm[field+"Obs"](survey[field]);
-        })
+        });
         var elements = survey.elements.map(elementToObservables);
         vm.elementsObs.pushAll(elements);
     },
@@ -267,7 +282,7 @@ module.exports = {
                 return SELECT_OPTIONS_BY_TYPE[vm.element.constraints.type];
             };
             vm.editRules = function() {
-                utils.openDialog('rules', {parentViewModel: vm, element: vm.element, publishedObs: vm.publishedObs});
+                root.openDialog('rules_editor', {parentViewModel: vm, element: vm.element, publishedObs: vm.publishedObs});
             };
 
             vm.durationOptions = DURATION_OPTIONS;
@@ -275,14 +290,22 @@ module.exports = {
             vm.uiHintObs = params.element.uiHintObs;
             vm.fireEventObs = params.element.fireEventObs;
             vm.uiHintOptions = SELECT_OPTIONS_BY_TYPE[params.element.constraints.type];
-            vm.uiHintLabel = makeFinderByLabel(vm.uiHintOptions);
+            vm.uiHintLabel = utils.makeOptionLabelFinder(vm.uiHintOptions);
             vm.dataTypeOptions = DATA_TYPE_OPTIONS;
-            vm.dataTypeLabel = makeFinderByLabel(vm.dataTypeOptions);
+            vm.dataTypeLabel = utils.makeOptionLabelFinder(vm.dataTypeOptions);
             vm.unitOptions = UNIT_OPTIONS;
-            vm.unitLabel = makeFinderByLabel(UNIT_OPTIONS);
+            vm.unitLabel = utils.makeOptionLabelFinder(UNIT_OPTIONS);
+
+            vm.durationOptions = DURATION_OPTIONS;
+            vm.durationLabel = utils.makeOptionLabelFinder(DURATION_OPTIONS);
 
             vm.operatorOptions = OPERATOR_OPTIONS;
-            vm.operatorLabel = makeFinderByLabel(OPERATOR_OPTIONS);
+            vm.operatorLabel = utils.makeOptionLabelFinder(OPERATOR_OPTIONS);
         }
-    }
+    },
+    surveysOptionsObs: surveysOptionsObs,
+    surveysOptionsLabel: surveysOptionsLabelFinder,
+    surveysOptionsFinder: utils.makeOptionFinder(surveysOptionsObs),
+    questionsOptionsObs: questionsOptionsObs,
+    questionsOptionsLabel: questionsOptionsLabelFinder
 };

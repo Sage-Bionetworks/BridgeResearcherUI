@@ -1,6 +1,7 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
+var root = require('../../root');
 
 module.exports = function() {
     var self = this;
@@ -8,20 +9,18 @@ module.exports = function() {
     self.study = null;
     self.records = ko.observableArray();
     self.addField = ko.observable("");
-    self.messageObs = ko.observable("");
 
     self.remove = function(attribute) {
         self.records.remove(attribute);
     };
     self.add = function() {
         if (!self.addField()) {
-            return self.messageObs({text: "You must provide a value for an attribute.", status: "error"});
+            return root.message('warning', 'You must provide a value for an attribute.');
         }
         if (self.records.contains(self.addField())) {
-            return self.messageObs({text: "The attribute must be a unique value.", status: "error"});
+            return root.message('warning', 'The attribute must be a unique value.');
         }
         self.records.push(self.addField());
-        self.messageObs("");
         self.addField("");
     };
     self.save = function(vm, event) {

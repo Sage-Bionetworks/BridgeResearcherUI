@@ -1,47 +1,51 @@
-<div class="ui grid">
-    <div class="ten wide column">
+<div class="fixed-header">
+    <div class="fixed-header-title">
         <h3>General Information</h3>
-
-        <form-message params="messageObs: messageObs"></form-message>
-
-        <form class="ui form">
-            <div class="field">
-                <label>Study name</label>
-                <input type="text" name="name" data-bind="value: nameObs"/>
-            </div>
-            <div class="field">
-                <label>Sponsor name</label>
-                <input type="text" name="name" data-bind="value: sponsorNameObs"/>
-            </div>
-            <div class="field">
-                <label>Technical contact email</label>
-                <input type="text" name="technicalEmail" data-bind="value: technicalEmailObs"/>
-            </div>
-            <div class="field">
-                <label>Support email</label>
-                <input type="text" name="supportEmail" data-bind="value: supportEmailObs"/>
-            </div>
-            <div class="field">
-                <label>Consent notification email</label>
-                <input type="text" name="consentNotificationEmail" data-bind="value: consentNotificationEmailObs"/>
-            </div>
-            <div class="field">
-                <button type="submit" class="ui primary submit button" data-bind="click: save">Save</button>
-            </div>
-        </form>
+        <div class="fixed-header-buttons">
+            <a href="#" class="ui small primary button" data-bind="click: save">Save</a>
+        </div>
     </div>
-    <div class="six wide column">
-        <div class="ui message">
-            <p>The identifier for this study is <b style="color:black; font-family: monospace" data-bind="text: identifierObs"></b>.
-                Your technical staff will need this identifier to integrate with the Bridge server. </p>
+    <div class="ui pointing menu"></div>
+</div>
+<div class="scrollbox">
+    <div class="ui grid">
+        <div class="ten wide column">
+            <form class="ui form">
+                <div class="required field">
+                    <label>Study name</label>
+                    <input type="text" name="name" data-bind="value: nameObs"/>
+                </div>
+                <div class="required field">
+                    <label>Sponsor name</label>
+                    <input type="text" name="name" data-bind="value: sponsorNameObs"/>
+                </div>
+                <div class="required field">
+                    <label>Technical contact email</label>
+                    <input type="text" name="technicalEmail" data-bind="value: technicalEmailObs"/>
+                </div>
+                <div class="required field">
+                    <label>Support email</label>
+                    <input type="text" name="supportEmail" data-bind="value: supportEmailObs"/>
+                </div>
+                <div class="required field">
+                    <label>Consent notification email</label>
+                    <input type="text" name="consentNotificationEmail" data-bind="value: consentNotificationEmailObs"/>
+                </div>
+            </form>
+        </div>
+        <div class="six wide column">
+            <div class="ui message">
+                <p>The identifier for this study is <b style="color:black; font-family: monospace" data-bind="text: identifierObs"></b>.
+                    Your technical staff will need this identifier to integrate with the Bridge server. </p>
 
-            <p>Sage Bionetworks will use the technical email address to contact you about administration of the study. </p>
+                <p>Sage Bionetworks will use the technical email address to contact you about administration of the study. </p>
 
-            <p>The support email will be given to participants to contact you about the study and to ask for
-            technical support. This is the only email address exposed to end users. </p>
+                <p>The support email will be given to participants to contact you about the study and to ask for
+                    technical support. This is the only email address exposed to end users. </p>
 
-            <p>The consent notification address will receive a copy of every consent that is signed by participants. The recipient
-                should have permission to view personally-identifying information about participants. </p>
+                <p>The consent notification address will receive a copy of every consent that is signed by participants. The recipient
+                    should have permission to view personally-identifying information about participants. </p>
+            </div>
         </div>
     </div>
 </div>

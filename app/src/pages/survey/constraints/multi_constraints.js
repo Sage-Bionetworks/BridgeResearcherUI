@@ -1,5 +1,6 @@
 var surveyUtils = require('../survey_utils');
 var utils = require('../../../utils');
+var root = require('../../../root');
 
 module.exports = function(params) {
     var self = this;
@@ -8,9 +9,12 @@ module.exports = function(params) {
     self.allowOtherObs = self.element.constraints.allowOtherObs;
     self.allowMultipleObs = self.element.constraints.allowMultipleObs;
     self.enumerationObs = self.element.constraints.enumerationObs;
+    self.enumerationObs.subscribe(function(newValue) {
+        console.log(params, newValue);
+    });
     self.dataTypeObs = self.element.constraints.dataTypeObs;
 
     self.editEnum = function() {
-        utils.openDialog('enumeration', {parentViewModel: self, enumerationObs: self.enumerationObs});
+        root.openDialog('enumeration_editor', {parentViewModel: self, enumerationObs: self.enumerationObs});
     };
 };

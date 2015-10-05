@@ -1,5 +1,6 @@
 var ko = require('knockout');
 var utils = require('../../utils');
+var config = require('../../config');
 var serverService = require('../../services/server_service');
 
 var fields = ['message', 'active', 'createdOn', 'historyItems[]', 'consentSelected'];
@@ -14,7 +15,6 @@ module.exports = function() {
 
     self.tabObs = ko.observable('current');
     self.tabObs.subscribe(function(value) {
-        self.messageObs("");
         if (value === "history") {
             serverService.getConsentHistory().then(function(data) {
                 self.historyItemsObs(data.items);
@@ -78,4 +78,15 @@ module.exports = function() {
                 self.tabObs('current');
             });
     };
+
+    self.htmlUrlObs = ko.observable('');
+    self.pdfUrlObs = ko.observable('');
+
+    serverService.getSession().then(function(session) {
+        var host = config.host[session.environment] + "/" + session.studyId + "/consent.";
+        host = host.replace('https','http');
+        host = host.replace('webservices','docs');
+        self.htmlUrlObs(host + 'html');
+        self.pdfUrlObs(host + 'pdf');
+    });
 };

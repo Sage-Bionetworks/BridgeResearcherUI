@@ -1,0 +1,46 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <h3>
+            <a href="#/surveys" class="section">Surveys</a>
+            <span data-bind="text: nameObs">Survey Versions</span>
+        </h3>
+        <div class="fixed-header-buttons">
+            <button class="ui primary small button" data-bind="disable: disablePublish, click: publish">Publish</button>
+            <button class="ui red small button" data-bind="disable: disableDelete(), click: deleteSurvey">Delete</button>
+        </div>
+    </div>
+    <survey-tabset params="selected: 'history', viewModel: $data"></survey-tabset>
+</div>
+<div class="scrollbox">
+    <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
+    <table class="ui table" data-bind="visible: itemsObs().length > 0">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Upload Schema</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody data-bind="foreach: itemsObs">
+        <tr data-bind="css: { positive: $data.published }">
+            <td>
+                <input type="radio" name="publish" data-bind="click: $component.selectForAction"/>
+            </td>
+            <td>
+                <a href="#" data-bind="attr: {href: '#/surveys/'+$data.guid+'/'+$data.createdOn},
+                    text: $data.name"></a><br/>Created <span data-bind="text:$parent.formatDateTime($data.createdOn)"></span>
+            </td>
+            <td>
+                <span data-bind="visible: $data.schemaRevision, text: 'v'+$data.schemaRevision"></span>
+                <em data-bind="visible: !$data.schemaRevision">Draft</em>
+            </td>
+            <td>
+                <div data-bind="visible: $data.published" style="text-align: right">
+                    <i class="checkmark icon"></i> Published
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

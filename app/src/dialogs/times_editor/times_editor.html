@@ -1,0 +1,42 @@
+<div class="ui small modal">
+    <i class="close icon"></i>
+    <div class="header">
+        <span data-bind="visible: scheduleType === 'recurring'">Edit Times of Day</span>
+        <span data-bind="visible: scheduleType === 'once'">Edit Time of Day</span>
+    </div>
+    <div class="content" data-bind="visible: scheduleType === 'recurring'">
+        <div class="ui two column grid">
+            <div class="column">
+                <div data-bind="visible: itemsObs().length === 0">
+                    <p>&lt;None&gt;</p>
+                </div>
+                <div data-bind="foreach: itemsObs" style="font-size:larger">
+                    <div>
+                        <span class="inline-form-text">
+                            <a href="#" data-bind="click: $component.deleteTime">
+                                <i class="trash icon"></i>
+                            </a>
+                        </span>
+                        <span class="inline-form-text" data-bind="text: $component.timesLabel($data)"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <ui-select params="fieldObs: timeObs, fieldLabel: timesLabel,
+                        publishedObs: publishedObs, optionsSrc: timesOptions"></ui-select>
+                    <button class="ui small button" data-bind="click: addTime">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content" data-bind="visible: scheduleType === 'once'">
+        <ui-select params="fieldObs: timeObs, fieldLabel: timesLabel,
+            publishedObs: publishedObs, optionsSrc: timesOptions"></ui-select>
+    </div>
+    <div class="rules-actions">
+        <button class="ui primary small button" data-bind="click: save">Save</button>
+        <button class="ui small button" data-bind="click: clear">Clear</button>
+        <button class="ui small button" data-bind="click: cancel">Cancel</button>
+    </div>
+</div>

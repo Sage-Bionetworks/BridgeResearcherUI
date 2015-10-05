@@ -1,0 +1,183 @@
+@import "./lib.scss";
+
+.survey {
+    /*padding: 1rem;*/
+}
+.element {
+    @include flex-box(row);
+    @include transition(max-height .5s ease);
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    max-height: 50rem;
+
+    /* container */
+    @include user-select(none);
+    border: 1px solid #e5e5e5;
+    border-radius: 6px;
+}
+    .element-draghandle {
+        width: 1rem;
+        align-self: stretch;
+        background: #f4f4f4;
+        background-image: radial-gradient(#e5e5e5 1px, transparent 0), radial-gradient(#e5e5e5 1px, transparent 0);
+        background-size: 10px 10px;
+        background-position: 0 0, 5px 5px;
+        cursor: ns-resize;
+    }
+    .element-callout, .element-content {
+    }
+    .element-callout {
+        @include flex-box(column);
+        @include align-content(flex-end);
+        @include justify-content(space-between);
+        text-align: center;
+        padding: .5rem 1rem 1rem 1rem;
+        width: 12rem;
+    }
+        .element-callout .circular.label {
+            margin-top: 1rem;
+        }
+        .element-callout-identifier-box {
+            @include flex(1);
+            text-align: center;
+        }
+            .element-callout-identifier {
+                margin: .4rem 0 .4rem 0;
+                text-align: center;
+                font-size: larger;
+                font-weight: bold;
+            }
+            .element-callout-identifier-label {
+                margin-bottom: 1rem;
+            }
+        .element-callout-delete {
+            cursor: pointer;
+        }
+.element-content {
+    @include flex(1);
+    @include justify-content(stretch);
+    @include align-items(stretch);
+    padding: 1rem 0rem 1rem 2rem;
+}
+    /* The use of !important overrides semantic UI's styles. We do this elsewhere too. */
+    .element-content-segment {
+        padding-top: .75rem!important;
+        background-color: #f4f4f4!important;
+    }
+    .constraints-label {
+        margin-bottom: .5rem!important;
+    }
+    .element-content-title {
+        font-size: 1.3rem;
+        font-weight: bold;
+        padding: .4rem 0;
+    }
+    .element-content-prompt {
+        font-size: 1.3rem;
+        font-weight: bold;
+    }
+        .element-content-prompt-detail {
+            font-size: 1.1rem;
+            color: #bbb;
+            font-weight: normal;
+            font-style: italic;
+            /*padding: .4rem 0;*/
+        }
+    .element-content-constraints {
+        @include flex-box(row);
+        @include flex-wrap();
+    }
+        .element-content-constraints > div { /* "row" element */
+            @include flex-box(row);
+            @include align-items(baseline);
+            width: 50%;
+        }
+            .element-content-constraints > div > div { /* "cell" elements */
+                padding: .2rem .4rem;
+            }
+            .element-content-constraints > div > div:first-child {
+                width: 40%;
+            }
+            .element-content-constraints > div > div:last-child {
+                @include flex(2);
+            }
+        .element-content-constraints select.ui.dropdown {
+            height: auto;
+        }
+.rules-table {
+    border-top: 1px solid silver;
+    border-bottom: 1px solid silver;
+    padding: 1rem;
+    max-height: 200px;
+    overflow-y: scroll;
+}
+    .rules-table-rule {
+        @include flex-box(row);
+        @include align-items(center);
+    }
+        .rules-table-rule-cell {
+            padding: .2rem .2rem;
+        }
+        .rules-table-rule-cell input, .rules-table-rule-cell select {
+            width: 10rem ! important;
+        }
+        .rules-table-rule-cell:last-child {
+            @include flex(2);
+            text-align: right;
+        }
+    .rules-actions {
+        padding: 0 1.5rem 1.5rem 1.5rem;
+    }
+    .rules-editor-actions {
+        padding: 2rem 1.5rem 1.5rem 1.5rem;
+    }
+.element-enum {
+    @include link;
+    margin: .25rem 0;
+}
+.insertion-control {
+    position: relative;
+    height: 15px;
+    width: 100%;
+    margin: 1rem 0;
+    -webkit-transform-style: preserve-3d;
+    -webkit-transition-property: -webkit-transform, height;
+    -webkit-transition-duration: .3s;
+    -webkit-transition-timing-function: ease-in;
+    transform-style: preserve-3d;
+    transition-property: transform, height;
+    transition-duration: .3s;
+    transition-timing-function: ease-in;
+}
+    .insertion-control-card {
+        @include backface-visibility(hidden);
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        margin: 0;
+    }
+    .insertion-control-back {
+        @include transform(rotateX(180deg));
+    }
+    .insertion-control-back a.item {
+        @include link;
+    }
+    .insertion-control-front {
+        @include transform(rotateX(0deg));
+        @include link;
+    }
+    .insertion-control-flipped {
+        @include transform(rotateX(180deg)!important);
+        height: 39px!important;
+        margin-top: 1rem!important;
+        margin-bottom: 1rem!important;
+    }
+textarea {
+    display: block;
+    width: 100%;
+    padding: .3rem;
+    height:2rem;
+    overflow: hidden;
+}

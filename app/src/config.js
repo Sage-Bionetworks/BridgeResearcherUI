@@ -1,4 +1,4 @@
-module.exports = config = {
+module.exports = {
     environments: [
         {value: "local", label: "Local"},
         {value: "develop", label: "Development"},
@@ -11,6 +11,13 @@ module.exports = config = {
         'staging': 'https://webservices-staging.sagebridge.org',
         'production': 'https://webservices.sagebridge.org'
     },
+    toastr: {
+        positionClass: "toast-top-right",
+        hideDuration: 300,
+        timeOut: 7000,
+        preventDuplicates: true,
+        opacity: 1.0
+    },
     signIn: '/v3/auth/signIn',
     signOut: '/v3/auth/signOut',
     getStudy: '/v3/studies/self',
@@ -22,5 +29,7 @@ module.exports = config = {
     emailRoster: '/v3/users/emailParticipantRoster',
     requestResetPassword: '/v3/auth/requestResetPassword',
     surveys: '/v3/surveys',
-    survey: '/v3/surveys/'
+    survey: '/v3/surveys/',
+    schemas: '/v3/uploadschemas',
+    schemaPlans: '/v3/scheduleplans'
 };

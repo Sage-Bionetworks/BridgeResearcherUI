@@ -2,8 +2,9 @@ language: node_js
 node_js:
     0.12.3
 script:
-    webpack
-    mocha --recursive
+    - mocha --recursive
+    - webpack -p
+    - gzip --best --stdout app/dist/bundle.js > app/dist/bundle.js.gz
 deploy:
     - provider: s3
       access_key_id: ${AWS_KEY}
@@ -11,6 +12,7 @@ deploy:
       bucket: "research-staging.sagebridge.org"
       skip_cleanup: true
       acl: public_read
+      detect_encoding: true
       endpoint: research-staging.sagebridge.org.s3-website-us-west-2.amazonaws.com
       region: "us-west-2"
       local_dir: app
@@ -22,6 +24,7 @@ deploy:
       bucket: "research.sagebridge.org"
       skip_cleanup: true
       acl: public_read
+      detect_encoding: true
       endpoint: research.sagebridge.org.s3-website-us-west-2.amazonaws.com
       region: "us-west-2"
       local_dir: app

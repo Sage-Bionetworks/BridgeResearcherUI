@@ -1,7 +1,10 @@
 var ko = require('knockout');
-var EventEmitter = require('./events');
-var serverService = require('./services/server_service');
-var dialogBus = new EventEmitter();
+var toastr = require('toastr');
+var config = require('./config');
+
+var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
+
+toastr.options = config.toastr;
 
 function is(obj, typeName) {
     return Object.prototype.toString.call(obj) === "[object "+typeName+"]";
@@ -20,15 +23,53 @@ function nameInspector(string) {
 function isDefined(obj) {
     return (typeof obj !== "undefined");
 }
+function deleteUnusedProperties(object) {
+    if (is(object, 'Array')) {
+        for (var i=0; i < object.length; i++) {
+            deleteUnusedProperties(object[i]);
+        }
+    } else if (is(object, 'Object')) {
+        for (var prop in object) {
+            if (typeof object[prop] === 'undefined' || object[prop] === "" || object[prop] === null) {
+                delete object[prop];
+            } else {
+                deleteUnusedProperties(object[prop]);
+            }
+        }
+    }
+}
+function makeOptionFinder(arrayOrObs) {
+    return function(value) {
+        var options = ko.unwrap(arrayOrObs);
+        for (var i= 0; i < options.length; i++) {
+            var option = options[i];
+            if (option.value === value) {
+                return option;
+            }
+        }
+    };
+}
+function makeOptionLabelFinder(arrayOrObs) {
+    return function(value) {
+        var option = makeOptionFinder(arrayOrObs)(value);
+        return option ? option.label : "";
+    };
+}
 
 /**
  * Common utility methods for ViewModels.
- *
- * TODO: Add dirty state tracking to the observables that are created.
- * TODO: bus for event errors that are now just getting logged and not shown to user. Wire to root message panel.
  */
 module.exports = {
+    /**
+     * Determine type of object
+     * @param object - object to test
+     * @param string - the type name to verify, e.g. 'Date' or 'Array'
+     */
     is: is,
+    /**
+     * Is this variable defined?
+     * @param object - the variable being tested
+     */
     isDefined: isDefined,
     /**
      * f(x) = x
@@ -38,16 +79,15 @@ module.exports = {
     identity: function(arg) {
         return arg;
     },
-    // TODO: This is used by root and no other, and it seems like it should be possible to
-    // do root.openDialog(), etc.
-    addDialogListener: function(listener) {
-        dialogBus.addEventListener('dialogs', listener);
-    },
-    openDialog: function(dialogName, params) {
-        dialogBus.emit('dialogs', dialogName, params);
-    },
-    closeDialog: function() {
-        dialogBus.emit('dialogs', 'close');
+    /**
+     * Create a sort function that sorts an array of items by a specific field name
+     * (must be a string, will be sorted ignoring case).Sort items by a property of each object (must be a string)
+     * @param listener
+     */
+    makeFieldSorter: function(fieldName) {
+        return function sorter(a,b) {
+            return a[fieldName].toLowerCase().localeCompare(b[fieldName].toLowerCase());
+        };
     },
     /**
      * A start handler called before a request to the server is made. All errors are cleared
@@ -58,9 +98,7 @@ module.exports = {
      */
     startHandler: function(vm, event) {
         event.target.classList.add("loading");
-        if (vm.messageObs) {
-            vm.messageObs("");
-        }
+        toastr.clear();
     },
     /**
      * An Ajax success handler for a view model that supports the editing of a form.
@@ -74,7 +112,7 @@ module.exports = {
         return function(response) {
             event.target.classList.remove("loading");
             if (message) {
-                vm.messageObs({text:message});
+                toastr.success(message);
             }
             return response;
         };
@@ -89,17 +127,17 @@ module.exports = {
      */
     failureHandler: function(vm, event) {
         return function(response) {
-            event.target.classList.remove("loading");
-            if (vm.messageObs) {
-                if (response instanceof Error) {
-                    vm.messageObs({text:response.message, 'status': 'error'});
-                } else if (response.responseJSON) {
-                    vm.messageObs({text:response.responseJSON.message, 'status': 'error'});
-                } else {
-                    // No message, the message component will provide something generic
-                    console.error(JSON.stringify(response));
-                    vm.messageObs({'status': 'error'});
-                }
+            if (event){
+                event.target.classList.remove("loading");
+            }
+            if (response.status === 412) {
+                toastr.error('You do not appear to be either a developer or a researcher.');
+            } else if (response instanceof Error) {
+                toastr.error(response.message);
+            } else if (response.responseJSON) {
+                toastr.error(response.responseJSON.message);
+            } else {
+                toastr.error(GENERIC_ERROR);
             }
         };
     },
@@ -150,31 +188,16 @@ module.exports = {
         for (var i=0; i < fields.length; i++) {
             var insp = nameInspector(fields[i]);
 
+            // TODO: At one point you were checking that the model object had the property before
+            // copying the observer back to it, but this prevents the UI from adding properties when the
+            // model didn't initially have them. Disabling this, but may break something elsewhere.
             var obs = vm[insp.observerName];
-            var value = object[insp.name];
-            if (isDefined(obs) && isDefined(value)) {
+            //var value = object[insp.name];
+            //if (isDefined(obs) && isDefined(value)) {
+            if (isDefined(obs)) {
                 object[insp.name] = obs();
             }
         }
-    },
-    /**
-     * Get the list of studies that can be used for authentication
-     */
-    // TODO: This could just be in serverService, not utils. Also it knows a
-    // lot about the viewModel, factor that out, even at the cost of duplication.
-    getStudyList: function(vm) {
-        return function(env) {
-            vm.messageObs("");
-            vm.studyOptions([]);
-            serverService.getStudyList(env).then(function(studies) {
-                studies.items.sort(function(a,b) {
-                    return a.name > b.name;
-                });
-                vm.studyOptions(studies.items);
-            }).catch(function(response) {
-                vm.messageObs({text: response.message, status: 'error'});
-            });
-        };
     },
     /**
      * Convert a date into a locale-appropriate string (browser-dependent).
@@ -198,7 +221,6 @@ module.exports = {
      */
     formatDate: function(date) {
         if (date) {
-            // TODO: it looks like html5 date control is submitting a time portion, it should not
             date = date.replace('T00:00:00.000Z','');
             // Get the declared offset of the local time on the date in question (accounts
             // for daylight savings at right time of year)
@@ -211,5 +233,66 @@ module.exports = {
             return new Date(localDate).toLocaleDateString();
         }
         return "";
-    }
+    },
+    /**
+     * Create a function that will remove items from a history table once we confirm they
+     * are deleted. If we've deleted everything, go to the root view for this type of item.
+     * This method assumes that the viewModel holds the row model in an "itemsObs" observable.
+     *
+     * @param vm
+     *  a viewModel with an "itemObs" observable array of the model objects in the table
+     * @param deletables
+     *  an array of model objects to delete (associated to the rows of the table)
+     * @param rootPath
+     *  if all items are deleted, redirect to this view.
+     * @returns {Function}
+     *  a function to assign to the success handler of a promise
+     */
+    makeTableRowHandler: function(vm, deletables, rootPath) {
+        return function() {
+            deletables.forEach(function(deletable) {
+                vm.itemsObs.remove(deletable);
+            });
+            if (vm.itemsObs().length === 0) {
+                // Yes both. There are cases where 'rootPath' is just the current page.
+                document.querySelector(".loading_status").textContent = "There are currently no items.";
+                document.location = rootPath;
+            }
+        };
+    },
+    /**
+     * Generic handler for pages which are loading a particular entity, that attemp to
+     * deal with 404s by redirecting to a parent page.
+     * @param vm
+     * @param message
+     * @param rootPath
+     * @returns {Function}
+     */
+    notFoundHandler: function(vm, message, rootPath) {
+        return function(response) {
+            console.error(response);
+            toastr.error((message) ? message : response.statusText);
+            if (rootPath) {
+                document.location = rootPath;
+            }
+        };
+    },
+    /**
+     * Given an array of option objects (with the properties "label" and "value"),
+     * return a function that will return a specific option given a value.
+     * @param options array or observableArray
+     * @returns {Function}
+     */
+    makeOptionFinder: makeOptionFinder,
+    /**
+     * Given an array of option objects (with the properties "label" and "value"),
+     * return a function that will return an option label given a value.
+     * @param options array or observableArray
+     * @returns {Function}
+     */
+    makeOptionLabelFinder: makeOptionLabelFinder,
+    /**
+     * Walk object and remove any properties that are set to null or an empty string.
+     */
+    deleteUnusedProperties: deleteUnusedProperties
 };

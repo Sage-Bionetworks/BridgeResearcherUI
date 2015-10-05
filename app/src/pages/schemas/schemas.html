@@ -1,1 +1,30 @@
-<div>Schemas TBD</div>
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <h3>Bulk Upload Schemas</h3>
+        <div class="fixed-header-buttons">
+            <a href="#/schemas/new" class="ui primary small button">New Schema</a>
+        </div>
+    </div>
+    <div class="ui secondary pointing menu"></div>
+</div>
+<div class="scrollbox">
+    <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
+    <table class="ui compact table" data-bind="visible: itemsObs().length > 0">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Latest Revision</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: itemsObs">
+            <tr data-bind="css: { positive: $data.active }">
+                <td>
+                    <a data-bind="attr: {'href': '#/schemas/'+encodeURIComponent($data.schemaId)}, text: $data.name"></a>
+                </td>
+                <td data-bind="text: $parent.schemaTypeLabel($data.schemaType)"></td>
+                <td data-bind="text: $data.revision"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

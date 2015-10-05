@@ -1,0 +1,38 @@
+.editor {
+    border: none;
+    border-bottom: 1px dotted #ccc;
+    /* Causes elements to jump around in flex layouts for no obvious reason. */
+    /* display: block; */
+    width: 100%;
+}
+.require::after {
+    margin: -.2em 0 0 .2em;
+    content: '*';
+    color: #d95c5c;
+}
+.duration-control {
+    @include flex-box(row);
+}
+    .duration-control input {
+        width: 3.5rem!important;
+    }
+    .duration-control select {
+        margin-left: .5rem;
+        width: 6rem!important;
+    }
+/* This is a magic number that aligns text with Semantic UI controls. */
+/* As such I have a special class for it. */
+.inline-form-text {
+    line-height: 38px;
+}
+.inline-editor-controls a:first-child {
+    margin-right: 1rem;
+}
+.inline-editor-controls a {
+    @include link;
+}
+.help-text {
+    color: #ccc;
+    letter-spacing: 1px;
+    padding: 0 .5rem;
+}

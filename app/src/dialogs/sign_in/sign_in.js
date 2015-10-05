@@ -3,8 +3,9 @@ var optionsService = require('../../services/options_service');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var config = require('../../config');
+var root = require('../../root');
 
-var fields = ['username', 'password', 'study', 'environment'];
+var fields = ['username', 'password', 'study', 'environment', 'studyOptions[]'];
 
 function findStudyName(studies, studyIdentifier) {
     return studies.filter(function(studyOption) {
@@ -18,23 +19,35 @@ module.exports = function() {
     var study = optionsService.get('study', 'api');
     var env = optionsService.get('environment', 'production');
 
-    self.messageObs = ko.observable("");
     utils.observablesFor(self, fields);
     self.studyObs(study);
-    self.studyOptions = ko.observableArray();
-
     self.environmentOptions = config.environments;
-    self.environmentObs.subscribe(utils.getStudyList(self));
+
+    self.environmentObs.subscribe(function(newValue) {
+        self.studyOptionsObs({name:'Updating...',identifier:''});
+        serverService.getStudyList(newValue)
+            .then(function(studies){
+                self.studyOptionsObs(studies.items);
+            }).catch(utils.failureHandler(self));
+    });
     self.environmentObs(env);
 
-    function clear() {
+    function clear(response) {
         self.usernameObs("");
         self.passwordObs("");
+        if (!response.isSupportedUser()) {
+            root.message('error', 'You do not appear to be either a developer or a researcher.');
+            return;
+        } else {
+            root.closeDialog();
+        }
+        return response;
     }
 
     self.signIn = function(vm, event) {
         if (self.usernameObs() === "" || self.passwordObs() === "") {
-            return self.messageObs({text:"Username and/or password are required.", status:"error"});
+            root.message('error', 'Username and/or password are required.');
+            return;
         }
         // Succeed or fail, let's keep these values for other sign ins.
         optionsService.set('environment', self.environmentObs());
@@ -42,7 +55,7 @@ module.exports = function() {
 
         utils.startHandler(self, event);
 
-        var studyName = findStudyName(self.studyOptions(), self.studyObs());
+        var studyName = findStudyName(self.studyOptionsObs(), self.studyObs());
         serverService.signIn(studyName, self.environmentObs(), {
             username: self.usernameObs(), password: self.passwordObs(), study: self.studyObs()
         })
@@ -52,7 +65,7 @@ module.exports = function() {
     };
 
     self.forgotPassword = function() {
-        utils.openDialog('forgot_password_dialog');
+        root.openDialog('forgot_password_dialog');
     };
 
 };

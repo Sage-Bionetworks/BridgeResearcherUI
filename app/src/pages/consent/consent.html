@@ -1,51 +1,59 @@
-<h3>Consent Agreement</h3>
-
-<form-message params="messageObs: messageObs"></form-message>
-
-<div class="ui secondary pointing menu">
-    <a class="item" data-bind="click: function() { tabObs('current') }, css: {active: tabObs() == 'current'}">
-        <i class="file outline icon"></i> Consent Agreement
-    </a>
-    <a class="item" data-bind="click: function() { tabObs('history') }, css: {active: tabObs() == 'history'}">
-        <i class="history icon"></i> History
-    </a>
-    <div class="right menu">
-        <div class="item">
-            <i class="clock icon"></i> <span data-bind="text: createdOnObs"></span>
-        </div>
-        <div class="item" data-bind="visible: activeObs">
-            <div class="green ui label">
-                <i class="checkmark icon"></i> Published
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <h3>Consent Agreement</h3>
+        <div class="fixed-header-buttons">
+            <div data-bind="visible: tabObs() == 'current'">
+                <button class="ui small primary button" data-bind="click: save">Save</button>
+            </div>
+            <div data-bind="visible: tabObs() == 'history'">
+                <button class="ui small primary button" data-bind="click: publish, disable: consentSelectedObs() == null">Publish</button>
             </div>
         </div>
-        <div class="item" data-bind="visible: !activeObs()">
-            <div class="orange ui label">
-                <i class="warning icon"></i> Not Published
+    </div>
+    <div class="ui secondary pointing menu">
+        <a class="item" data-bind="click: function() { tabObs('current') }, css: {active: tabObs() == 'current'}">
+            <i class="file outline icon"></i> Consent Agreement
+        </a>
+        <a class="item" data-bind="click: function() { tabObs('history') }, css: {active: tabObs() == 'history'}">
+            <i class="history icon"></i> History
+        </a>
+        <a class="item" data-bind="click: function() { tabObs('download') }, css: {active: tabObs() == 'download'}">
+            <i class="history icon"></i> Download
+        </a>
+        <div class="right menu">
+            <div class="item">
+                <i class="clock icon"></i> <span data-bind="text: createdOnObs"></span>
+            </div>
+            <div class="item" data-bind="visible: activeObs">
+                <div class="green ui label">
+                    <i class="checkmark icon"></i> Published
+                </div>
+            </div>
+            <div class="item" data-bind="visible: !activeObs()">
+                <div class="orange ui label">
+                    <i class="warning icon"></i> Not Published
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-<div class="form">
-    <div data-bind="visible: tabObs() == 'current'">
-        <div style="margin: 1rem 0">
-            <button class="ui primary button" data-bind="click: save">Save</button>
+<div class="scrollbox">
+    <div class="form">
+        <div data-bind="visible: tabObs() == 'current'">
+            <textarea id="consentEditor" data-bind="ckeditor: initEditor" class="ui textarea"></textarea>
         </div>
-        <textarea id="consentEditor" data-bind="ckeditor: initEditor" class="ui textarea"></textarea>
-    </div>
-    <div data-bind="visible: tabObs() == 'history'">
-        <div class="ui grid">
-            <div class="ten wide column">
-                <button class="ui primary button" data-bind="click: publish, disable: consentSelectedObs() == null">Publish</button>
-                <table class="ui table">
-                    <thead>
+        <div data-bind="visible: tabObs() == 'history'">
+            <div class="ui grid">
+                <div class="ten wide column">
+                    <table class="ui compact table">
+                        <thead>
                         <tr>
                             <th width="20">&nbsp;</th>
                             <th>Saved On</th>
                             <th>&nbsp;</th>
                         </tr>
-                    </thead>
-                    <tbody data-bind="foreach: historyItemsObs">
+                        </thead>
+                        <tbody data-bind="foreach: historyItemsObs">
                         <tr data-bind="css: { positive: $data.active }">
                             <td>
                                 <input type="radio" name="publish" data-bind="click: $component.selectToPublish, attr: {'checked': $data.active}"/>
@@ -60,16 +68,53 @@
                                 </div>
                             </td>
                         </tr>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="six wide column">
+                    <div class="ui message">
+                        <p>Only one version of your consent agreement is published at any given time. <strong>This should be the version of the consent agreement that is approved by your IRB.</strong> </p>
+                        <p>Every edit of the consent is saved, and you can publish any version of it at any time. </p>
+                        <p>When participants sign in, their session includes a flag indicating whether or not they have signed the currently published consent agreement. This can be used to ask them to re-consent before participating further in the study, although the Bridge server does not require this. </p>
+                    </div>
+                </div>
             </div>
-            <div class="six wide column">
-                <div class="ui message">
-                    <p>Only one version of your consent agreement is published at any given time. <strong>This should be the version of the consent agreement that is approved by your IRB.</strong> </p>
-                    <p>Every edit of the consent is saved, and you can publish any version of it at any time. </p>
-                    <p>When participants sign in, their session includes a flag indicating whether or not they have signed the currently published consent agreement. This can be used to ask them to re-consent before participating further in the study, although the Bridge server does not require this. </p>
+        </div>
+        <div data-bind="visible: tabObs() == 'download'">
+            <div class="ui grid">
+                <div class="ten wide column">
+                    <table class="ui compact table">
+                        <thead>
+                        <tr>
+                            <th>Format</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>HTML</td>
+                            <td>
+                                <a target="_blank" data-bind="attr: {'href': htmlUrlObs}, text: htmlUrlObs"></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>PDF</td>
+                            <td>
+                                <a target="_blank" data-bind="attr: {'href': pdfUrlObs}, text: pdfUrlObs"></a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="six wide column">
+                    <div class="ui message">
+                        <p>The published version of the consent can be accessed from your mobile app, or from other support materials,
+                            at the following addresses. </p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+

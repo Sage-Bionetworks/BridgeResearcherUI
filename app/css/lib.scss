@@ -1,0 +1,81 @@
+@mixin link {
+    color: #009fda!important;
+    cursor: pointer;
+}
+@mixin flex-box($direction) {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    -webkit-flex-direction: $direction;
+    -ms-flex-direction: $direction;
+    display: flex;
+    flex-direction: $direction;
+}
+/* These would go back in time further, but I don't think they're needed.
+@mixin flex-row() {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+}
+@mixin flex-column() {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+*/
+@mixin flex($weight) {
+    -webkit-flex: $weight;
+    -webkit-box-flex: $weight;
+    -ms-flex: $weight;
+    flex: $weight;
+}
+@mixin flex-wrap() {
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+@mixin order($order) {
+    -webkit-order: $order;
+    order: $order;
+}
+@mixin align-items($pos) {
+    -webkit-align-items: $pos;
+    align-items: $pos;
+}
+@mixin justify-content($pos) {
+    -webkit-justify-content: $pos;
+    justify-content: $pos;
+}
+@mixin align-content($pos) {
+    -webkit-align-content: $pos;
+    align-content: $pos;
+}
+@mixin transform($trans) {
+    -webkit-transform: $trans;
+    transform: $trans;
+}
+@mixin transition($trans) {
+    -webkit-transition: $trans;
+    transition: $trans;
+}
+@mixin backface-visibility($var) {
+    -webkit-backface-visibility: $var;
+    backface-visibility: $var;
+}
+@mixin user-select($var) {
+    -webkit-user-select: $var;
+    user-select: $var;
+}
