@@ -110,13 +110,13 @@ ko.bindingHandlers.ckeditor = {
 ko.bindingHandlers.modal = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
         ko.bindingHandlers.component.init(element, valueAccessor, allBindings, viewModel, bindingContext);
-        var config = valueAccessor();
-        config.extend({notify: 'always'}); // Even if the user opens an identical dialog, reopen it.
-        config.subscribe(function (newConfig) {
-            var $modal = $(element).children(".modal");
+        var observable = valueAccessor();
+        observable.subscribe(function (newConfig) {
+            //var $modal = $(element).children(".modal");
+            var $modal = $(".ui.modal");
             if ($modal.modal) {
                 if (newConfig.name !== "none") {
-                    $modal.modal({"closable": false, "detachable": false});
+                    $modal.modal({"closable": false, "detachable": false, "notify": 'always'});
                     $modal.modal('show');
                 } else {
                     $modal.modal('hide');

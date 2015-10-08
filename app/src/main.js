@@ -52,6 +52,7 @@ router.on('/surveys', routeTo('surveys'));
 router.on('/surveys/:guid/:createdOn/versions', surveyRoute('survey_versions'));
 router.on('/surveys/:guid/:createdOn/schema', surveyRoute('survey_schema'));
 router.on('/surveys/:guid/:createdOn', surveyRoute('survey'));
+router.on('/surveys/:guid', surveyRoute('survey')); // always new
 router.on('/schemas', routeTo('schemas'));
 router.on('/schemas/:schemaId', schemaRoute('schema'));
 router.on('/schemas/:schemaId/versions', schemaRoute('schema_versions'));

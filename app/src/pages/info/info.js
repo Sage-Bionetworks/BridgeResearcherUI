@@ -1,6 +1,9 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
+// importing root here generates all sorts of weird behavior. Note that we have to create a root variable in the
+// root.js file... it's not CommonJS. Not sure what's going on here.
+// var root = require('../../root');
 
 var fields = ['message', 'name', 'sponsorName', 'technicalEmail', 'supportEmail', 'consentNotificationEmail', 'identifier'];
 
@@ -19,6 +22,12 @@ module.exports = function() {
             })
             .then(utils.successHandler(vm, event, "Study information saved."))
             .catch(utils.failureHandler(vm, event));
+    };
+    self.publicKey = function() {
+        if (self.study) {
+            // It finds this and it works...
+            root.openDialog('publickey', {study: self.study});
+        }
     };
 
     serverService.getStudy().then(function(study) {

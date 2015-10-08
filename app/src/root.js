@@ -66,7 +66,7 @@ var RootViewModel = function() {
         }
     };
     serverService.addSessionStartListener(function(session) {
-        self.studyName(session.studyName);
+        self.studyName("&ldquo;" + session.studyName + "&rdquo;");
         self.environment(session.environment);
         self.roles(session.roles);
         self.closeDialog();
@@ -81,5 +81,12 @@ var RootViewModel = function() {
 
 module.exports = root = new RootViewModel();
 ko.applyBindings(root, document.body);
+/*
+module.exports = (function() {
+    var root = new RootViewModel();
+    ko.applyBindings(root, document.body);
+    return root;
+})();
 
+*/
 

@@ -19,34 +19,6 @@ var SESSION_ENDED_EVENT_KEY = 'sessionEnded';
 var listeners = new EventEmitter();
 var session = null;
 
-var Cache = (function() {
-    var cached = {};
-    return {
-        get: function(key) {
-            var value = cached[key];
-            if (value) {
-                console.debug("Cache hit:",key);
-            } else {
-                console.debug("Cache miss:",key);
-            }
-            return value;
-        },
-        set: function(key, value) {
-            console.debug("Cache set:",key);
-            cached[key] = JSON.parse(JSON.stringify(value));
-        },
-        remove: function(key) {
-            console.debug("Cache delete::",key);
-            delete cached[key];
-        },
-        removeAll: function() {
-            console.debug("Clearing entire cache");
-            cached = {};
-        }
-    };
-})();
-
-
 if (typeof window !== "undefined") { // jQuery throws up if there's no window, even in unit tests.
     $(function() {
         session = optionsService.get(SESSION_KEY, null);
@@ -58,7 +30,6 @@ if (typeof window !== "undefined") { // jQuery throws up if there's no window, e
         }
     });
 }
-
 
 function getHeaders() {
     var headers = {'Content-Type': 'application/json'};
@@ -156,8 +127,13 @@ function del(path) {
 function signOut() {
     var env = session.environment;
     session = null;
-    Cache.removeAll();;
-    optionsService.remove(SESSION_KEY);
+    // We want to clear persistence, but keep these between sign-ins.
+    var studyKey = optionsService.get('studyKey');
+    var envName = optionsService.get('environment');
+    optionsService.removeAll();
+    optionsService.set('studyKey', studyKey);
+    optionsService.set('environment', envName);
+
     listeners.emit(SESSION_ENDED_EVENT_KEY);
     return new Promise(function(resolve, reject) {
         var p = postInt(config.host[env] + config.signOut);
@@ -202,18 +178,21 @@ module.exports = {
         return Promise.resolve(postInt(config.host[env] + config.requestResetPassword, data));
     },
     getStudy: function() {
-        var study = Cache.get('study');
+        var study = optionsService.get('study');
         if (study) {
             return Promise.resolve(study);
         }
         return get(config.getStudy).then(function(study) {
-            Cache.set('study', study);
+            optionsService.set('study', study);
             return study;
         });
     },
+    getStudyPublicKey: function() {
+        return get(config.getStudyPublicKey);
+    },
     saveStudy: function(study) {
         return post(config.getStudy, study).then(function(response) {
-            Cache.remove('study');
+            optionsService.remove('study');
             return response;
         });
     },
@@ -249,12 +228,12 @@ module.exports = {
     },
     getSurvey: function(guid, createdOn) {
         var createdString = new Date(createdOn).toISOString();
-        var survey = Cache.get(guid+':'+createdString);
+        var survey = optionsService.get(guid+':'+createdString);
         if (survey) {
             return Promise.resolve(survey);
         }
         return get(config.survey + guid + '/revisions/' + createdString).then(function(survey) {
-            Cache.set(survey.guid+':'+survey.createdOn, survey);
+            optionsService.set(survey.guid+':'+survey.createdOn, survey);
             return survey;
         });
     },
@@ -292,27 +271,27 @@ module.exports = {
     publishSurvey: function(guid, createdOn) {
         var createdString = new Date(createdOn).toISOString();
         return post(config.survey + guid + '/revisions/' + createdString + '/publish').then(function(response) {
-            Cache.remove(guid+':'+createdString);
+            optionsService.remove(guid+':'+createdString);
             return response;
         });
     },
     versionSurvey: function(guid, createdOn) {
         var createdString = new Date(createdOn).toISOString();
         return post(config.survey + guid + '/revisions/' + createdString + '/version').then(function(response) {
-            Cache.remove(guid+':'+createdString);
+            optionsService.remove(guid+':'+createdString);
             return response;
         });
     },
     updateSurvey: function(survey) {
         var createdString = new Date(survey.createdOn).toISOString();
         return post(config.survey + survey.guid + '/revisions/' + createdString, survey).then(function(response) {
-            Cache.remove(survey.guid+':'+createdString);
+            optionsService.remove(survey.guid+':'+createdString);
             return response;
         });
     },
     deleteSurvey: function(survey) {
         var createdString = new Date(survey.createdOn).toISOString();
-        Cache.remove(survey.guid+':'+createdString);
+        optionsService.remove(survey.guid+':'+createdString);
         return del(config.survey + survey.guid + '/revisions/' + createdString);
     },
     getAllUploadSchemas: function() {
