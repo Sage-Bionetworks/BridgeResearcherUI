@@ -40,6 +40,7 @@ reg('SimpleScheduleStrategy', './pages/scheduleplan/simple_strategy');
 reg('ABTestScheduleStrategy', './pages/scheduleplan/ab_strategy');
 reg('schedule', './pages/scheduleplan/schedule');
 regt('not_found', './pages/not_found/not_found');
+reg('publickey', './dialogs/publickey/publickey');
 
 // DIALOGS
 //regt('none_dialog','./dialogs/none/none');
