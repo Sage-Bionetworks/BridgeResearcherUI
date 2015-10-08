@@ -124,3 +124,9 @@ nav .ui.menu {
 .button-container {
     margin: 0 0 1rem 0;
 }
+.public-key {
+    font-family:monospace;
+    white-space:pre;
+    height: 20rem;
+    overflow-y:scroll;
+}

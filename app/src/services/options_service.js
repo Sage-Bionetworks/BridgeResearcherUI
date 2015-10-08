@@ -1,18 +1,27 @@
 module.exports = {
     set: function(key, value) {
-        sessionStorage.setItem(key, JSON.stringify(value));
+        console.log("Saving", key);
+        localStorage.setItem(key, JSON.stringify(value));
     },
     get: function(key, defaultValue) {
-        var value = sessionStorage.getItem(key);
+        console.log("Retrieving", key);
+        var value = localStorage.getItem(key);
         if (value) {
+            console.log("Retrieving", key);
             return JSON.parse(value);
         }
         if (arguments.length > 1) {
+            console.log("Retrieving default", defaultValue);
             return defaultValue;
         }
-        throw new Error("User option '"+key+"' not set.");
+        return null;
     },
     remove: function(key) {
-        sessionStorage.removeItem(key);
+        console.log("Removing", key);
+        localStorage.removeItem(key);
+    },
+    removeAll: function() {
+        console.log("Removing all items");
+        localStorage.clear();
     }
 };

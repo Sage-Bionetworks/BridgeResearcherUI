@@ -11,14 +11,16 @@ module.exports = function() {
     utils.observablesFor(self, fields);
 
     self.minAge = ko.computed(function(){
-        return (self.minAgeOfConsentObs() === "121") ? "No age limit" : self.minAgeOfConsentObs();
+        // We want loose comparison because sometimes it's the string "121" and sometimes it's the
+        // number 121. This is due to the control being bound to a range control that returns a string.
+        return (self.minAgeOfConsentObs() == "121") ? "No age limit" : self.minAgeOfConsentObs();
     });
 
     self.save = function(vm, event) {
         utils.startHandler(vm, event);
         utils.observablesToObject(self, self.study, fields);
 
-        if (self.study.minAgeOfConsent === "121") {
+        if (self.study.minAgeOfConsent == "121") {
             self.study.minAgeOfConsent = 0;
         }
         serverService.saveStudy(self.study)

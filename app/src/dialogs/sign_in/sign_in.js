@@ -16,11 +16,11 @@ function findStudyName(studies, studyIdentifier) {
 module.exports = function() {
     var self = this;
 
-    var study = optionsService.get('study', 'api');
+    var studyKey = optionsService.get('studyKey', 'api');
     var env = optionsService.get('environment', 'production');
 
     utils.observablesFor(self, fields);
-    self.studyObs(study);
+    self.studyObs(studyKey);
     self.environmentOptions = config.environments;
 
     self.environmentObs.subscribe(function(newValue) {
@@ -28,6 +28,7 @@ module.exports = function() {
         serverService.getStudyList(newValue)
             .then(function(studies){
                 self.studyOptionsObs(studies.items);
+                self.studyObs(studyKey);
             }).catch(utils.failureHandler(self));
     });
     self.environmentObs(env);
@@ -51,7 +52,7 @@ module.exports = function() {
         }
         // Succeed or fail, let's keep these values for other sign ins.
         optionsService.set('environment', self.environmentObs());
-        optionsService.set('study', self.studyObs());
+        optionsService.set('studyKey', self.studyObs());
 
         utils.startHandler(self, event);
 

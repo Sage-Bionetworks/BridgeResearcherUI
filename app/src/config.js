@@ -21,6 +21,7 @@ module.exports = {
     signIn: '/v3/auth/signIn',
     signOut: '/v3/auth/signOut',
     getStudy: '/v3/studies/self',
+    getStudyPublicKey: '/v3/studies/self/publicKey',
     getStudyList: '/v3/studies?format=summary',
     activeStudyConsent: '/v3/consents/published',
     mostRecentStudyConsent: '/v3/consents/recent',

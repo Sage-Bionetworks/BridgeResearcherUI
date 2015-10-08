@@ -1,0 +1,13 @@
+<div class="ui modal">
+    <i class="close icon"></i>
+    <div class="header">
+        CMS Public Key
+    </div>
+    <div class="content">
+        <div data-bind="text:contentObs" class="ui segment public-key">Loading...</div>
+    </div>
+    <div class="rules-actions">
+        <a class="ui primary small button" data-bind="attr: {download: downloadHref, href: downloadFileName}">Download</a>
+        <button class="ui small button" data-bind="click: close">Close</button>
+    </div>
+</div>
