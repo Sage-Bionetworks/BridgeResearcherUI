@@ -6,7 +6,6 @@ var $ = require('jquery');
 module.exports = function(params) {
     var self = this;
 
-    console.log(params.study);
     self.contentObs = ko.observable();
 
     self.close = function(vm, event) {
