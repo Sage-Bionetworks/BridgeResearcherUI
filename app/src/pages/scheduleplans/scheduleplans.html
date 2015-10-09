@@ -15,6 +15,7 @@
         <tr>
             <th width="10"></th>
             <th width="250">Schedule</th>
+            <th>Limit to app versions</th>
             <th>Description</th>
         </tr>
         </thead>
@@ -26,6 +27,7 @@
             <td>
                 <a href="#" data-bind="attr: {'href': '#/scheduleplans/'+$data.guid}, text: $data.label"></a>
             </td>
+            <td data-bind="html: $parent.formatVersions($data.minAppVersion, $data.maxAppVersion)"></td>
             <td data-bind="html: $parent.formatStrategy($data.strategy)"></td>
         </tr>
         </tbody>
