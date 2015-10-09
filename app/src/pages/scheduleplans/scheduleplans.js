@@ -30,6 +30,16 @@ module.exports = function() {
             return "A/B Test Schedule Plan";
         }
     };
+    self.formatVersions = function(minValue, maxValue) {
+        if (utils.isDefined(minValue) && utils.isDefined(maxValue)) {
+            return minValue + "-" + maxValue;
+        } else if (utils.isDefined(minValue)) {
+            return minValue + "+";
+        } else if (utils.isDefined(maxValue)) {
+            return "0-" + maxValue;
+        }
+        return "<i>All versions</i>";
+    };
     self.atLeastOneChecked = function () {
         return self.itemsObs().some(function(item) {
             return item.checkedObs();
