@@ -71,6 +71,7 @@ regt('constraints-label', './pages/survey/constraints/constraints_label');
 regt('ui-rules', './pages/survey/constraints/ui_rules');
 regt('ui-checkbox', './widgets/form/ui_checkbox');
 regt('ui-text', './widgets/form/ui_text');
+regt('ui-number', './widgets/form/ui_number');
 regt('ui-date', './widgets/form/ui_date');
 regt('ui-datetime', './widgets/form/ui_datetime');
 regt('ui-select', './widgets/form/ui_select');

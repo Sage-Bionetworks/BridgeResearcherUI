@@ -36,6 +36,8 @@ module.exports = function(params) {
 
     // Fields for this form
     self.labelObs = ko.observable("");
+    self.minAppVersionObs = ko.observable("");
+    self.maxAppVersionObs = ko.observable("");
     self.schedulePlanTypeObs = ko.observable('SimpleScheduleStrategy');
     self.schedulePlanTypeOptions = TYPE_OPTIONS;
     self.schedulePlanTypeLabel = utils.makeOptionLabelFinder(TYPE_OPTIONS);
@@ -51,6 +53,8 @@ module.exports = function(params) {
     self.save = function(vm, event) {
         self.plan.label = self.labelObs();
         self.plan.strategy = self.strategyObs.callback();
+        self.plan.minAppVersion = self.minAppVersionObs();
+        self.plan.maxAppVersion = self.maxAppVersionObs();
 
         utils.deleteUnusedProperties(self.plan);
 
@@ -68,6 +72,8 @@ module.exports = function(params) {
         self.plan = plan;
         self.labelObs(plan.label);
         self.schedulePlanTypeObs(plan.strategy.type);
+        self.minAppVersionObs(plan.minAppVersion);
+        self.maxAppVersionObs(plan.maxAppVersion);
         self.strategyObs(plan.strategy);
     }
 
