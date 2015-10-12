@@ -174,10 +174,12 @@
         margin-top: 1rem!important;
         margin-bottom: 1rem!important;
     }
-textarea {
+.textarea {
     display: block;
     width: 100%;
     padding: .3rem;
-    height:2rem;
     overflow: hidden;
+}
+[contentEditable=true]:empty:not(:focus):before{
+    content:attr(data-placeholder);
 }

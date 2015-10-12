@@ -1,8 +1,8 @@
 'use strict';
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
-var schemaUtils = require('./schema_utils');
 var utils = require('../../utils');
+var Promise = require('es6-promise').Promise;
 
 function addCheckedObs(item) {
     item.checkedObs = ko.observable(false);
@@ -10,11 +10,6 @@ function addCheckedObs(item) {
 }
 function hasBeenChecked(item) {
     return item.checkedObs();
-}
-function makeDeletionCall(schema) {
-    return function() {
-        return serverService.deleteSchemaRevision(schema);
-    };
 }
 
 module.exports = function(params) {
@@ -45,13 +40,10 @@ module.exports = function(params) {
         if (confirm(msg)) {
             utils.startHandler(self, event);
 
-            deletables.reduce(function(promise, deletable) {
-                if (promise === null) {
-                    return serverService.deleteSchemaRevision(deletable);
-                } else {
-                    return promise.then(makeDeletionCall(deletable));
-                }
-            }, null)
+            var promises = deletables.map(function(revision) {
+                return serverService.deleteSchemaRevision(revision);
+            });
+            Promise.all(promises)
                 .then(utils.makeTableRowHandler(vm, deletables, "#/schemas"))
                 .then(utils.successHandler(vm, event, confirmMsg))
                 .catch(utils.failureHandler(vm, event));
