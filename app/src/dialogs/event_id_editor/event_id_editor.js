@@ -2,11 +2,13 @@ var ko = require('knockout');
 var utils = require('../../utils');
 var serverService = require('../../services/server_service');
 var surveyUtils = require('../../pages/survey/survey_utils');
+var scheduleService = require('../../services/schedule_service');
 var root = require('../../root');
 
 var OBJECT_TYPE = Object.freeze([
     {value: 'survey', label: 'When survey'},
-    {value: 'question', label: 'When question'}
+    {value: 'question', label: 'When question'},
+    {value: 'activity', label: 'When activity'}
 ]);
 
 module.exports = function(params) {
@@ -28,29 +30,36 @@ module.exports = function(params) {
     });
 
     self.surveyObs = ko.observable();
-    self.surveysOptionsObs = surveyUtils.surveysOptionsObs;
-    self.surveysLabel = surveyUtils.surveysOptionsLabel;
+    self.surveysOptionsObs = ko.observableArray([]);
+    self.surveysLabel = utils.makeOptionLabelFinder(self.surveysOptionsObs);
 
     self.questionObs = ko.observable();
-    self.questionsOptionsObs = surveyUtils.questionsOptionsObs;
-    self.questionsLabel = surveyUtils.questionsOptionsLabel
+    self.questionsOptionsObs = ko.observableArray([]);
+    self.questionsLabel = utils.makeOptionLabelFinder(self.questionsOptionsObs);
+    surveyUtils.loadSurveyObservers(self.surveysOptionsObs, self.questionsOptionsObs);
 
-    surveyUtils.triggerSurveyRefresh().then(function() {
-        self.eventIdObs().split(",").forEach(function(eventId) {
-            if (eventId === "enrollment") {
-                self.enrollmentObs(true);
-            } else {
-                var parts = eventId.split(":");
-                if (parts[0] === "question") {
-                    self.objectTypeObs("question");
-                    self.questionObs(parts[1]);
-                    self.answerObs(parts[2].replace("answered=",""));
-                } else if (parts[0] === "survey") {
-                    self.objectTypeObs("survey");
-                    self.surveyObs(parts[1]);
-                }
+    self.activityObs = ko.observable();
+    self.activityOptionsObs = ko.observableArray([]);
+    self.activityLabel = utils.makeOptionLabelFinder(self.activityOptionsObs);
+    scheduleService.loadActivitiesObserver(self.activityOptionsObs);
+
+    self.eventIdObs().split(",").forEach(function(eventId) {
+        if (eventId === "enrollment") {
+            self.enrollmentObs(true);
+        } else {
+            var parts = eventId.split(":");
+            if (parts[0] === "question") {
+                self.objectTypeObs("question");
+                self.questionObs(parts[1]);
+                self.answerObs(parts[2].replace("answered=",""));
+            } else if (parts[0] === "survey") {
+                self.objectTypeObs("survey");
+                self.surveyObs(parts[1]);
+            } else if (parts[0] === "activity") {
+                self.objectTypeObs("activity");
+                self.activityObs(parts[1]);
             }
-        });
+        }
     });
 
     self.save = function() {
@@ -63,6 +72,8 @@ module.exports = function(params) {
             eventId += self.questionObs() + ":answered=" + self.answerObs();
         } else if (eventId === "survey:") {
             eventId += self.surveyObs() + ":finished";
+        } else if (eventId === "activity:") {
+            eventId += self.activityObs() + ":finished";
         }
         if (self.enrollmentObs()) {
             eventId += ",enrollment";

@@ -89,10 +89,11 @@ ko.bindingHandlers.ckeditor = {
             throw new Error("CK editor has not been loaded in the page");
         }
         var config = {
+            height: "25rem",
             toolbarGroups: [
                 { name: 'clipboard', groups: ['clipboard','undo']},
                 {"name":"basicstyles","groups":["basicstyles"]},
-                {"name":"paragraph","groups":["list","blocks"]},
+                {"name":"paragraph","groups":["indent","align","list","blocks"]},
                 {"name":"insert","groups":["insert"]},
                 {"name":"styles","groups":["styles"]},
                 {"name":"links","groups":["links"]}

@@ -13,7 +13,7 @@ var root = require('../../root');
 var SCHEDULE_FIELDS = ['delay','interval','scheduleType','expires','startsOn','endsOn','eventId',
     'cronTrigger', 'times[]', 'activities[]', 'enrollment'];
 
-var ACTIVITY_FIELDS = ['label','labelDetail','activityType','taskId','surveyGuid'];
+var ACTIVITY_FIELDS = ['label','labelDetail','activityType','taskId','guid','surveyGuid'];
 
 var SCHEDULE_TYPE_OPTIONS = Object.freeze([
     {value: 'once', label: 'Once'},
@@ -38,7 +38,6 @@ function copyObserverValuesBackToActivity(activity) {
     activity.label = activity.labelObs();
     activity.labelDetail = activity.labelDetailObs();
     activity.activityType = activity.activityTypeObs();
-    console.log(activity.activityTypeObs());
     if (activity.activityType === 'task') {
         activity.task = {
             identifier: activity.taskIdObs()
@@ -134,8 +133,9 @@ module.exports = function(params) {
     self.activityTypeOptions = ACTIVITY_TYPE_OPTIONS;
     self.activityTypeLabel = utils.makeOptionLabelFinder(ACTIVITY_TYPE_OPTIONS);
 
-    self.surveysOptionsObs = surveyUtils.surveysOptionsObs;
-    self.surveysOptionsLabel = surveyUtils.surveysOptionsLabel;
+    self.surveysOptionsObs = ko.observableArray([]);
+    self.surveysOptionsLabel = utils.makeOptionLabelFinder(self.surveysOptionsObs);
+    surveyUtils.loadSurveyObservers(self.surveysOptionsObs);
 
     self.formatDateTime = utils.formatDateTime;
     self.formatTimes = function() {

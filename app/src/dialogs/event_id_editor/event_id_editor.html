@@ -19,12 +19,19 @@
                         <ui-select params="fieldObs: surveyObs, fieldLabel: surveysLabel,
                             publishedObs: publishedObs, optionsSrc: surveysOptionsObs"></ui-select>
                     </div>
+                    <div data-bind="visible: objectTypeObs() == 'activity'">
+                        <ui-select params="fieldObs: activityObs, fieldLabel: activityLabel,
+                            publishedObs: publishedObs, optionsSrc: activityOptionsObs"></ui-select>
+                    </div>
                 </div>
                 <div class="field">
                     <div class="inline-form-text" data-bind="visible: objectTypeObs() == 'question'">
                         is answered as
                     </div>
                     <div class="inline-form-text" data-bind="visible: objectTypeObs() == 'survey'">
+                        is finished
+                    </div>
+                    <div class="inline-form-text" data-bind="visible: objectTypeObs() == 'activity'">
                         is finished
                     </div>
                 </div>

@@ -1,6 +1,19 @@
 var ko = require('knockout');
 var surveyUtils = require('../pages/survey/survey_utils');
+var serverService = require('./server_service');
 var utils = require('../utils');
+
+var activitiesObs = ko.observableArray([]);
+var activityOptionsLabel = utils.makeOptionLabelFinder(activitiesObs);
+
+var surveysOptionsObs = ko.observableArray([]);
+var surveysOptionsLabel = utils.makeOptionLabelFinder(surveysOptionsObs);
+
+var questionsOptionsObs = ko.observableArray([]);
+var questionsOptionsLabel = utils.makeOptionLabelFinder(questionsOptionsObs);
+
+loadActivitiesObserver(activitiesObs);
+surveyUtils.loadSurveyObservers(surveysOptionsObs, questionsOptionsObs);
 
 var PERIOD_WORDS = {
     'H': 'hour',
@@ -25,6 +38,7 @@ for (var i=0; i < 24; i++) {
         });
     });
 }
+
 function formatEventId(value) {
     if (!value) {
         return "On enrollment (default)";
@@ -36,12 +50,15 @@ function formatEventId(value) {
         // events have three parts, e.g. survey:<guid>:finished
         var parts = value.split(":");
         if (parts[0] === "survey") {
-            var surveyLabel = surveyUtils.surveysOptionsLabel(parts[1]);
+            var surveyLabel = surveysOptionsLabel(parts[1]);
             return "when survey '"+surveyLabel+"' is finished";
         } else if (parts[0] === "question") {
-            var questionLabel = surveyUtils.questionsOptionsLabel(parts[1]);
+            var questionLabel = questionsOptionsLabel(parts[1]);
             var answerValue = parts[2].split("=")[1];
             return "when question '"+questionLabel+"' is answered with value '"+answerValue+"'";
+        } else if (parts[0] === "activity") {
+            var activityLabel = activityOptionsLabel(parts[1]);
+            return "when activity '"+activityLabel+"' is finished";
         }
     }).join(', and ');
 
@@ -196,6 +213,32 @@ function formatStrategy(strategy) {
         return "<i>Unknown</i>";
     }
 }
+function getSchedules(object, array) {
+    array = array || [];
+    for (var prop in object) {
+        if (prop === "schedule") {
+            array.push(object[prop]);
+        } else if (typeof object[prop] === 'object') {
+            return getSchedules(object[prop], array);
+        }
+    }
+    return array;
+}
+function loadActivitiesObserver(activitiesObs) {
+    return serverService.getSchedulePlans().then(function(response) {
+        var activities = [];
+        if (response.items && response.items.length) {
+            response.items.forEach(function(plan) {
+                getSchedules(plan).forEach(function(schedule) {
+                    schedule.activities.forEach(function(activity) {
+                        activities.push({label: activity.label, "value": activity.guid});
+                    });
+                });
+            });
+        }
+        activitiesObs.pushAll(activities);
+    });
+}
 
 module.exports = {
     newSchedule: newSchedule,
@@ -206,5 +249,6 @@ module.exports = {
     formatStrategy: formatStrategy,
     timeOptions: TIME_OPTIONS,
     timeOptionsLabel: utils.makeOptionLabelFinder(TIME_OPTIONS),
-    timeOptionsFinder: utils.makeOptionFinder(TIME_OPTIONS)
+    timeOptionsFinder: utils.makeOptionFinder(TIME_OPTIONS),
+    loadActivitiesObserver: loadActivitiesObserver
 };
