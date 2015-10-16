@@ -19,6 +19,7 @@ ko.components.register('none', {template: '<div class="ui modal dialog"></div>'}
 
 // PAGES
 reg('info','./pages/info/info');
+reg('email','./pages/email/email');
 reg('consent','./pages/consent/consent');
 reg('eligibility','./pages/eligibility/eligibility');
 reg('password_policy','./pages/password_policy/password_policy');

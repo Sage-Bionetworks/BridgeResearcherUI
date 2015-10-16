@@ -3,12 +3,6 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var root = require('../../root');
 
-var surveysOptionsObs = ko.observableArray([]);
-var surveysOptionsLabelFinder = utils.makeOptionLabelFinder(surveysOptionsObs);
-
-var questionsOptionsObs = ko.observableArray([]);
-var questionsOptionsLabelFinder = utils.makeOptionLabelFinder(questionsOptionsObs)
-
 var UNIT_OPTIONS = Object.freeze([
     {value: null, label: '<none>'},
     {value: 'centimeters', label: 'Centimeters'},
@@ -209,17 +203,19 @@ function newSurvey() {
     return {name:'', guid:'', identifier:'', published:false, createdOn:null, elements:[], version:null};
 }
 
-function triggerSurveyRefresh() {
-    surveysOptionsObs.removeAll();
-    questionsOptionsObs.removeAll();
+function loadSurveyObservers(surveysOptsObs, questionsOptsObs) {
     return serverService.getSurveysSummarized().then(function(surveys) {
-        surveysOptionsObs.pushAll(surveys);
-        surveys.forEach(function(survey) {
-            questionsOptionsObs.pushAll(survey.questions);
-        });
+        surveysOptsObs.removeAll();
+        surveysOptsObs.pushAll(surveys);
+        if (questionsOptsObs) {
+            questionsOptsObs.removeAll();
+            surveys.forEach(function(survey) {
+                questionsOptsObs.pushAll(survey.questions);
+            });
+        }
+        return surveys;
     });
 }
-triggerSurveyRefresh();
 
 module.exports = {
     newSurvey: newSurvey,
@@ -233,9 +229,6 @@ module.exports = {
         }
         return elementToObservables(newEl);
     },
-    // TODO: Really don't like having to manually update this when we open the event ID editor.
-    // Also won't update the survey view itself.
-    triggerSurveyRefresh: triggerSurveyRefresh,
     surveyToObservables: function(vm, survey) {
         SURVEY_FIELDS.forEach(function(field) {
             vm[field+"Obs"](survey[field]);
@@ -303,9 +296,12 @@ module.exports = {
             vm.operatorLabel = utils.makeOptionLabelFinder(OPERATOR_OPTIONS);
         }
     },
-    surveysOptionsObs: surveysOptionsObs,
-    surveysOptionsLabel: surveysOptionsLabelFinder,
-    surveysOptionsFinder: utils.makeOptionFinder(surveysOptionsObs),
-    questionsOptionsObs: questionsOptionsObs,
-    questionsOptionsLabel: questionsOptionsLabelFinder
+    /**
+     * Pass in some observers that will be populated with the appropriate option objects
+     * based on the surveys/questions in the study.
+     *
+     * surveysOptionsObs - an observable array for the survey options generated
+     * questionsOptionsObs - an observable array for the survey questions generated
+     */
+    loadSurveyObservers: loadSurveyObservers
 };

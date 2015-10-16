@@ -22,13 +22,17 @@ main {
     .fixed-header {
         @include flex-box(column);
         padding: 0 1rem;
+
+        .ui.secondary.pointing.menu {
+            margin-bottom: 1rem;
+        }
     }
         .fixed-header-title {
             @include flex-box(row);
             @include align-items(space-between);
             @include justify-content(top);
             width: 100%;
-            margin: 1.5rem 0 1rem 0;
+            margin: 1.5rem 0 .5rem 0;
         }
             .fixed-header-title h3 {
                 @include flex(1);
@@ -53,7 +57,7 @@ main {
         }
     .scrollbox {
         @include flex(1);
-        padding: 1rem;
+        padding: .5rem 1.5rem;
         height: 100vh;
         overflow-y: auto;
     }
@@ -112,13 +116,16 @@ nav .ui.menu {
 .ui.modal .content {
     padding: 1.5rem;
 }
+.ui.table {
+    margin: 0;
+}
+
 /* GENERAL */
 
 .pointing {
     cursor: pointer;
 }
 .loading_status {
-    margin: 1rem 2rem;
     font-size: larger;
 }
 .button-container {

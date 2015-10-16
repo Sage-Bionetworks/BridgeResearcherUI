@@ -178,11 +178,7 @@ module.exports = {
         return Promise.resolve(postInt(config.host[env] + config.requestResetPassword, data));
     },
     getStudy: function() {
-        var study = optionsService.get('study');
-        if (study) {
-            return Promise.resolve(study);
-        }
-        return get(config.getStudy).then(function(study) {
+        return optionsService.getPromise('study') || get(config.getStudy).then(function(study) {
             optionsService.set('study', study);
             return study;
         });
@@ -228,11 +224,9 @@ module.exports = {
     },
     getSurvey: function(guid, createdOn) {
         var createdString = new Date(createdOn).toISOString();
-        var survey = optionsService.get(guid+':'+createdString);
-        if (survey) {
-            return Promise.resolve(survey);
-        }
-        return get(config.survey + guid + '/revisions/' + createdString).then(function(survey) {
+        var key = guid+':'+createdString;
+        var url = config.survey + guid + '/revisions/' + createdString;
+        return optionsService.getPromise(key) || get(url).then(function(survey) {
             optionsService.set(survey.guid+':'+survey.createdOn, survey);
             return survey;
         });
@@ -244,26 +238,18 @@ module.exports = {
         return get(config.survey + guid + '/revisions/published');
     },
     getSurveysSummarized: function() {
-        var promise = get(config.surveys + '/published');
-        return promise.then(function(response) {
-            var promises = response.items.map(function(survey) {
-                return get(config.survey + survey.guid + '/revisions/' + survey.createdOn);
-            });
-            return Promise.all(promises);
-        }).then(function(surveys) {
-            surveys.sort(utils.makeFieldSorter("name"));
-            return surveys.map(function(survey) {
+        return get(config.surveys + '?format=summary').then(function(response) {
+            response.items.sort(utils.makeFieldSorter("name"));
+            return response.items.map(function(survey) {
                 survey.elements = survey.elements.filter(function(element) {
                     return (element.type === "SurveyQuestion");
                 }).map(function(question) {
                     var label = survey.name+": "+question.identifier+((question.fireEvent)?" *":"");
                     return {label: label, value: question.guid };
                 });
-                return {label: survey.name, value: survey.guid, questions: survey.elements,
-                    createdOn: survey.createdOn, identifier: survey.identifier};
+                return {label: survey.name, value: survey.guid, questions: survey.elements};
             });
         });
-        return promise;
     },
     createSurvey: function(survey) {
         return post(config.surveys, survey);
@@ -291,8 +277,10 @@ module.exports = {
     },
     deleteSurvey: function(survey) {
         var createdString = new Date(survey.createdOn).toISOString();
-        optionsService.remove(survey.guid+':'+createdString);
-        return del(config.survey + survey.guid + '/revisions/' + createdString);
+        return del(config.survey + survey.guid + '/revisions/' + createdString).then(function(response) {
+            optionsService.remove(survey.guid+':'+createdString);
+            return response;
+        });
     },
     getAllUploadSchemas: function() {
         return get(config.schemas);
@@ -313,20 +301,28 @@ module.exports = {
         return del(config.schemas + "/" + schema.schemaId + "/revisions/" + schema.revision);
     },
     getSchedulePlans: function() {
-        return get(config.schemaPlans);
+        return optionsService.getPromise('scheduleplans') || get(config.schemaPlans).then(function(response) {
+            optionsService.set('scheduleplans',response);
+            return response;
+        });
     },
     getSchedulePlan: function(guid) {
         return get(config.schemaPlans + "/" + guid);
     },
     saveSchedulePlan: function(plan) {
-        if (plan.guid) {
-            return post(config.schemaPlans + "/" + plan.guid, plan);
-        } else {
-            return post(config.schemaPlans, plan);
-        }
+        var promise = (plan.guid) ?
+                post(config.schemaPlans + "/" + plan.guid, plan) :
+                post(config.schemaPlans, plan);
+        return promise.then(function(response) {
+            optionsService.remove('scheduleplans');
+            return response;
+        });
     },
     deleteSchedulePlan: function(guid) {
-        return del(config.schemaPlans + "/" + guid);
+        return del(config.schemaPlans + "/" + guid).then(function(response) {
+            optionsService.remove('scheduleplans');
+            return response;
+        });
     },
     getSession: function() {
         if (session) {

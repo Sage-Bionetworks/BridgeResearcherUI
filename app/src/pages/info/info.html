@@ -1,12 +1,19 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
-        <h3>General Information</h3>
+        <h3>Settings</h3>
         <div class="fixed-header-buttons">
-            <button class="ui small button" data-bind="click: publicKey">Download CMS Public Key</button>
+
             <button class="ui small primary button" data-bind="click: save">Save</button>
         </div>
     </div>
-    <div class="ui pointing menu"></div>
+    <div class="ui secondary larger pointing menu">
+        <a class="active item">
+            <i class="setting icon"></i> General
+        </a>
+        <a href="#/email" class="item">
+            <i class="mail outline icon"></i> Email Contacts
+        </a>
+    </div>
 </div>
 <div class="scrollbox">
     <div class="ui grid">
@@ -20,17 +27,15 @@
                     <label>Sponsor name</label>
                     <input type="text" name="name" data-bind="value: sponsorNameObs"/>
                 </div>
-                <div class="required field">
-                    <label>Technical contact email</label>
-                    <input type="text" name="technicalEmail" data-bind="value: technicalEmailObs"/>
+                <div class="field" style="margin: 1.5rem 0">
+                    <label>Data Validation</label>
+                    <ui-checkbox params="checkedObs: strictUploadValidationEnabledObs,
+                        disabledObs: publishedObs">
+                        Enable strict validation of upload files <b>(recommended)</b>
+                    </ui-checkbox>
                 </div>
-                <div class="required field">
-                    <label>Support email</label>
-                    <input type="text" name="supportEmail" data-bind="value: supportEmailObs"/>
-                </div>
-                <div class="required field">
-                    <label>Consent notification email</label>
-                    <input type="text" name="consentNotificationEmail" data-bind="value: consentNotificationEmailObs"/>
+                <div class="field">
+                    <button class="ui small button" data-bind="click: publicKey">Download CMS Public Key</button>
                 </div>
             </form>
         </div>
@@ -39,13 +44,13 @@
                 <p>The identifier for this study is <b style="color:black; font-family: monospace" data-bind="text: identifierObs"></b>.
                     Your technical staff will need this identifier to integrate with the Bridge server. </p>
 
-                <p>Sage Bionetworks will use the technical email address to contact you about administration of the study. </p>
+                <p>Please do not disable strict upload validation unless instructed to do so. If your
+                    application submits corrupted data, you will have to fix it after the data
+                    is collected. </p>
 
-                <p>The support email will be given to participants to contact you about the study and to ask for
-                    technical support. This is the only email address exposed to end users. </p>
-
-                <p>The consent notification address will receive a copy of every consent that is signed by participants. The recipient
-                    should have permission to view personally-identifying information about participants. </p>
+                <p>The CMS key is provided to encrypt data you send to the Bridge server. The encryption key
+                    (specific to your study) ensures that the data cannot be read on the phone, or in transit to
+                    the Bridge server. </p>
             </div>
         </div>
     </div>

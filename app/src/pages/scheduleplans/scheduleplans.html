@@ -3,6 +3,7 @@
         <h3>Scheduling</h3>
         <div class="fixed-header-buttons">
             <a href="#/scheduleplans/new" class="ui primary small button">New Schedule Plan</a>
+            <button class="ui small button" data-bind="disable: !atLeastOneChecked(), click: copySchedulePlans">Copy</button>
             <button class="ui red small button" data-bind="disable: !atLeastOneChecked(), click: deleteSchedulePlans">Delete</button>
         </div>
     </div>
@@ -10,26 +11,29 @@
 </div>
 <div class="scrollbox">
     <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
-    <table class="ui compact table" data-bind="visible: itemsObs().length > 0">
-        <thead>
-        <tr>
-            <th width="10"></th>
-            <th width="250">Schedule</th>
-            <th>Limit to app versions</th>
-            <th>Description</th>
-        </tr>
-        </thead>
-        <tbody data-bind="foreach: itemsObs">
-        <tr>
-            <td>
-                <ui-checkbox params="checkedObs: $data.checkedObs, disabledObs: $parent.publishedObs"></ui-checkbox>
-            </td>
-            <td>
-                <a href="#" data-bind="attr: {'href': '#/scheduleplans/'+$data.guid}, text: $data.label"></a>
-            </td>
-            <td data-bind="html: $parent.formatVersions($data.minAppVersion, $data.maxAppVersion)"></td>
-            <td data-bind="html: $parent.formatStrategy($data.strategy)"></td>
-        </tr>
-        </tbody>
-    </table>
+    <div data-bind="visible: itemsObs().length > 0">
+        <p>When copying schedules, we'll adjust the app version filter so they don't schedule activities for users until you're ready. </p>
+        <table class="ui compact table">
+            <thead>
+                <tr>
+                    <th width="10"></th>
+                    <th width="250">Schedule</th>
+                    <th style="white-space:nowrap">Limit to app versions</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: itemsObs">
+                <tr>
+                    <td>
+                        <ui-checkbox params="checkedObs: $data.checkedObs, disabledObs: $parent.publishedObs"></ui-checkbox>
+                    </td>
+                    <td>
+                        <a href="#" data-bind="attr: {'href': '#/scheduleplans/'+$data.guid}, text: $data.label"></a>
+                    </td>
+                    <td data-bind="html: $parent.formatVersions($data.minAppVersion, $data.maxAppVersion)"></td>
+                    <td data-bind="html: $parent.formatStrategy($data.strategy)"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
