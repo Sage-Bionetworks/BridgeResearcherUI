@@ -69,6 +69,7 @@ module.exports = function(params) {
     };
 
     function loadVM(plan) {
+        console.log(plan);
         self.plan = plan;
         self.labelObs(plan.label);
         self.schedulePlanTypeObs(plan.strategy.type);

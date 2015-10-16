@@ -3,6 +3,10 @@ var surveyUtils = require('../pages/survey/survey_utils');
 var serverService = require('./server_service');
 var utils = require('../utils');
 
+// Every time we make reference to stuff in this class, we want to update what we know
+// about schemas and surveys. So we'll have to delve further into making requests that
+// trigger updates, rather than the server singleton-style code that we have here.
+
 var activitiesObs = ko.observableArray([]);
 var activityOptionsLabel = utils.makeOptionLabelFinder(activitiesObs);
 
@@ -13,7 +17,6 @@ var questionsOptionsObs = ko.observableArray([]);
 var questionsOptionsLabel = utils.makeOptionLabelFinder(questionsOptionsObs);
 
 loadActivitiesObserver(activitiesObs);
-surveyUtils.loadSurveyObservers(surveysOptionsObs, questionsOptionsObs);
 
 var PERIOD_WORDS = {
     'H': 'hour',
@@ -122,6 +125,16 @@ function periodToWordsNoArticle(periodStr) {
             (period.amt + " " + period.measure+"s");
     }).join(', ');
 }
+function formatVersionRange(minValue, maxValue) {
+    if (utils.isDefined(minValue) && utils.isDefined(maxValue)) {
+        return " ("+minValue + "-" + maxValue + ")";
+    } else if (utils.isDefined(minValue)) {
+        return " ("+minValue + "+)";
+    } else if (utils.isDefined(maxValue)) {
+        return " (0-" + maxValue + ")";
+    }
+    return "";
+}
 function toList(array) {
     var len = array.length;
     if (len === 0) {
@@ -228,9 +241,13 @@ function loadActivitiesObserver(activitiesObs) {
         var activities = [];
         if (response.items && response.items.length) {
             response.items.forEach(function(plan) {
+                var versionString = formatVersionRange(plan.minAppVersion, plan.maxAppVersion);
+                //var versionString = " (in " + plan.label + ")";
+
                 getSchedules(plan).forEach(function(schedule) {
                     schedule.activities.forEach(function(activity) {
-                        activities.push({label: activity.label, "value": activity.guid});
+                        var actLabel = activity.label + versionString;
+                        activities.push({label: actLabel, "value": activity.guid});
                     });
                 });
             });

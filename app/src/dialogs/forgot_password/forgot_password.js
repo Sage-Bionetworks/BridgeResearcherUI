@@ -10,8 +10,8 @@ var fields = ['email', 'study', 'environment', 'studyOptions[]'];
 module.exports = function() {
     var self = this;
 
-    var study = optionsService.get('study', 'api');
-    var env = optionsService.get('environment', 'production');
+    var study = optionsService.get('study') || 'api';
+    var env = optionsService.get('environment') || 'production';
 
     utils.observablesFor(self, fields);
     self.studyObs(study);

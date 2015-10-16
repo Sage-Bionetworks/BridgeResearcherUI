@@ -16,8 +16,8 @@ function findStudyName(studies, studyIdentifier) {
 module.exports = function() {
     var self = this;
 
-    var studyKey = optionsService.get('studyKey', 'api');
-    var env = optionsService.get('environment', 'production');
+    var studyKey = optionsService.get('studyKey') || 'api';
+    var env = optionsService.get('environment') || 'production';
 
     utils.observablesFor(self, fields);
     self.studyObs(studyKey);

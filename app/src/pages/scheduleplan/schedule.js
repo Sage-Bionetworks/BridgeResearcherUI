@@ -111,7 +111,6 @@ module.exports = function(params) {
     };
 
     // This is fired when the parent viewModel gets a plan back from the server
-    /*
     ko.computed(function() {
         var schedule = self.scheduleObs();
         if (schedule) {
@@ -124,7 +123,7 @@ module.exports = function(params) {
             utils.valuesToObservables(self, schedule, SCHEDULE_FIELDS);
         }
     });
-    */
+    /*
     self.scheduleObs.subscribe(function(newValue) {
         fixScheduleTimes(newValue);
         // We have to add the options that are referenced by these activities, or they do
@@ -136,7 +135,7 @@ module.exports = function(params) {
         }
         utils.valuesToObservables(self, newValue, SCHEDULE_FIELDS);
     });
-
+*/
     self.publishedObs = ko.observable(false);
 
     self.scheduleTypeOptions = SCHEDULE_TYPE_OPTIONS;

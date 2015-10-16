@@ -21,7 +21,7 @@ var session = null;
 
 if (typeof window !== "undefined") { // jQuery throws up if there's no window, even in unit tests.
     $(function() {
-        session = optionsService.get(SESSION_KEY, null);
+        session = optionsService.get(SESSION_KEY);
         if (session && session.environment) {
             listeners.emit(SESSION_STARTED_EVENT_KEY, session);
         } else {
@@ -117,7 +117,38 @@ function del(path) {
         return deleteInt(config.host[session.environment] + path);
     });
 }
-
+function removeFromCache(key) {
+    return function(response) {
+        optionsService.remove(key);
+        return response;
+    };
+}
+function setCache(key) {
+    return function(response) {
+        optionsService.set(key, response);
+        return response;
+    };
+}
+function getSurveyKey(arg, arg2) {
+    if (arguments.length === 2) {
+        return arg + ":" + new Date(arg2.toISOString());
+    } else {
+        return arg.guid + ":" + new Date(arg.createdOn).toISOString();
+    }
+}
+function surveyOption(survey) {
+    survey.elements = survey.elements.filter(filterQuestions).map(questionOption(survey));
+    return { label: survey.name, value: survey.guid, questions: survey.elements };
+}
+function filterQuestions(element) {
+    return (element.type === "SurveyQuestion");
+}
+function questionOption(survey) {
+    return function(question) {
+        var label = survey.name+": "+question.identifier+((question.fireEvent)?" *":"");
+        return { label: label, value: question.guid };
+    };
+}
 /**
  * If we ever get back a 401, the UI isn't in sync with reality, sign the
  * user out. So this is called from error handler, as well as being available
@@ -178,22 +209,13 @@ module.exports = {
         return Promise.resolve(postInt(config.host[env] + config.requestResetPassword, data));
     },
     getStudy: function() {
-        return optionsService.getPromise('study') || get(config.getStudy).then(function(study) {
-            optionsService.set('study', study);
-            return study;
-        });
+        return optionsService.getPromise('study') || get(config.getStudy).then(setCache('study'));
     },
     getStudyPublicKey: function() {
         return get(config.getStudyPublicKey);
     },
     saveStudy: function(study) {
-        return post(config.getStudy, study).then(function(response) {
-            optionsService.remove('study');
-            return response;
-        });
-    },
-    getActiveStudyConsent: function() {
-        return get(config.activeStudyConsent);
+        return post(config.getStudy, study).then(removeFromCache('study'));
     },
     getMostRecentStudyConsent: function() {
         return get(config.mostRecentStudyConsent);
@@ -216,39 +238,23 @@ module.exports = {
     getSurveys: function() {
         return get(config.surveys);
     },
-    getPublishedSurveys: function() {
-        return get(config.surveys + '/published');
-    },
     getSurveyAllRevisions: function(guid) {
         return get(config.survey + guid + '/revisions');
     },
     getSurvey: function(guid, createdOn) {
         var createdString = new Date(createdOn).toISOString();
-        var key = guid+':'+createdString;
-        var url = config.survey + guid + '/revisions/' + createdString;
-        return optionsService.getPromise(key) || get(url).then(function(survey) {
-            optionsService.set(survey.guid+':'+survey.createdOn, survey);
-            return survey;
-        });
+        var url = config.survey+guid+'/revisions/'+createdString;
+        var key = getSurveyKey(guid, createdOn);
+
+        return optionsService.getPromise(key) || get(url).then(setCache(key));
     },
     getSurveyMostRecent: function(guid) {
         return get(config.survey + guid + '/revisions/recent');
     },
-    getSurveyMostRecentlyPublished: function(guid) {
-        return get(config.survey + guid + '/revisions/published');
-    },
     getSurveysSummarized: function() {
         return get(config.surveys + '?format=summary').then(function(response) {
             response.items.sort(utils.makeFieldSorter("name"));
-            return response.items.map(function(survey) {
-                survey.elements = survey.elements.filter(function(element) {
-                    return (element.type === "SurveyQuestion");
-                }).map(function(question) {
-                    var label = survey.name+": "+question.identifier+((question.fireEvent)?" *":"");
-                    return {label: label, value: question.guid };
-                });
-                return {label: survey.name, value: survey.guid, questions: survey.elements};
-            });
+            return response.items.map(surveyOption);
         });
     },
     createSurvey: function(survey) {
@@ -256,31 +262,23 @@ module.exports = {
     },
     publishSurvey: function(guid, createdOn) {
         var createdString = new Date(createdOn).toISOString();
-        return post(config.survey + guid + '/revisions/' + createdString + '/publish').then(function(response) {
-            optionsService.remove(guid+':'+createdString);
-            return response;
-        });
+        var url = config.survey + guid + '/revisions/' + createdString + '/publish';
+        return post(url).then(removeFromCache(getSurveyKey(guid, createdOn)));
     },
     versionSurvey: function(guid, createdOn) {
         var createdString = new Date(createdOn).toISOString();
-        return post(config.survey + guid + '/revisions/' + createdString + '/version').then(function(response) {
-            optionsService.remove(guid+':'+createdString);
-            return response;
-        });
+        var url = config.survey + guid + '/revisions/' + createdString + '/version';
+        return post(url).then(removeFromCache(getSurveyKey(guid, createdOn)));
     },
     updateSurvey: function(survey) {
         var createdString = new Date(survey.createdOn).toISOString();
-        return post(config.survey + survey.guid + '/revisions/' + createdString, survey).then(function(response) {
-            optionsService.remove(survey.guid+':'+createdString);
-            return response;
-        });
+        var url = config.survey + survey.guid + '/revisions/' + createdString;
+        return post(url, survey).then(removeFromCache(getSurveyKey(survey)));
     },
     deleteSurvey: function(survey) {
         var createdString = new Date(survey.createdOn).toISOString();
-        return del(config.survey + survey.guid + '/revisions/' + createdString).then(function(response) {
-            optionsService.remove(survey.guid+':'+createdString);
-            return response;
-        });
+        var url = config.survey + survey.guid + '/revisions/' + createdString;
+        return del(url).then(removeFromCache(getSurveyKey(survey)));
     },
     getAllUploadSchemas: function() {
         return get(config.schemas);
@@ -301,28 +299,20 @@ module.exports = {
         return del(config.schemas + "/" + schema.schemaId + "/revisions/" + schema.revision);
     },
     getSchedulePlans: function() {
-        return optionsService.getPromise('scheduleplans') || get(config.schemaPlans).then(function(response) {
-            optionsService.set('scheduleplans',response);
-            return response;
-        });
+        return optionsService.getPromise('scheduleplans') || get(config.schemaPlans).then(setCache('scheduleplans'));
     },
     getSchedulePlan: function(guid) {
         return get(config.schemaPlans + "/" + guid);
     },
     saveSchedulePlan: function(plan) {
-        var promise = (plan.guid) ?
-                post(config.schemaPlans + "/" + plan.guid, plan) :
-                post(config.schemaPlans, plan);
-        return promise.then(function(response) {
-            optionsService.remove('scheduleplans');
-            return response;
-        });
+        if (plan.guid) {
+            return post(config.schemaPlans + "/" + plan.guid, plan).then(removeFromCache('scheduleplans'));
+        } else {
+            return post(config.schemaPlans, plan).then(removeFromCache('scheduleplans'));
+        }
     },
     deleteSchedulePlan: function(guid) {
-        return del(config.schemaPlans + "/" + guid).then(function(response) {
-            optionsService.remove('scheduleplans');
-            return response;
-        });
+        return del(config.schemaPlans + "/" + guid).then(removeFromCache('scheduleplans'));
     },
     getSession: function() {
         if (session) {
