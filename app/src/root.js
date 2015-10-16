@@ -5,6 +5,7 @@ var config = require('./config');
 
 // Used in navigation to keep a section highlighted as you navigate into it.
 var pageSets = {
+    'info': ['info', 'email'],
     'surveys': ['surveys','survey','survey_versions'],
     'schemas': ['schemas','schema','schema_versions'],
     'scheduleplans': ['scheduleplans','scheduleplan'],

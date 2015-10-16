@@ -61,7 +61,6 @@ function itemLabel(item) {
 }
 
 function copyEntry(element, entry) {
-    console.log("copyEntry", element, entry);
     if (element.constraints.enumerationObs) {
         element.constraints.enumerationObs([].concat(entry.enumeration));
     }
@@ -129,8 +128,6 @@ module.exports = function(params) {
     self.saveList = function() {
         var entry = listsSource.getCurrentEntry();
 
-        console.log("Comparing md5", hash.MD5(entry.enumeration), entry.md5);
-
         entry.enumeration = self.listObs();
 
         // We're looking for lists on other elements that were similar to the list before
@@ -142,12 +139,8 @@ module.exports = function(params) {
         if (self.copyToAllEnumsObs()) {
             self.elementsObs().forEach(function (element) {
                 var enumeration = getEnumeration(element);
-                console.log(hash.MD5(enumeration), oldMD5);
                 if (enumeration && hash.MD5(enumeration) === oldMD5) {
-                    console.log("Updating",element.prompt);
                     copyEntry(element, entry);
-                } else {
-                    console.log("Not updating element", element.prompt);
                 }
             });
         }
