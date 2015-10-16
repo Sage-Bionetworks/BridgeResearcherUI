@@ -13,7 +13,7 @@
 </div>
 <div class="scrollbox">
     <form class="ui form" style="margin-bottom: 1rem">
-        <div class="two fields">
+        <div class="three fields">
             <div class="required field">
                 <label>Name</label>
                 <ui-text params="fieldObs: labelObs, publishedObs: publishedObs"></ui-text>
@@ -22,6 +22,17 @@
                 <label>Schedule Plan Type</label>
                 <ui-select params="fieldObs: schedulePlanTypeObs, fieldLabel: schedulePlanTypeLabel,
                     publishedObs: publishedObs, optionsSrc: schedulePlanTypeOptions"></ui-select>
+            </div>
+            <div class="field">
+                <label>Limit schedules &amp; tasks to app version(s):</label>
+                <div class="two fields">
+                    <div class="field">
+                        <ui-number params="fieldObs: minAppVersionObs, publishedObs: publishedObs, placeholder: 'Min'"></ui-number>
+                    </div>
+                    <div class="field">
+                        <ui-number params="fieldObs: maxAppVersionObs, publishedObs: publishedObs, placeholder: 'Max'"></ui-number>
+                    </div>
+                </div>
             </div>
         </div>
     </form>

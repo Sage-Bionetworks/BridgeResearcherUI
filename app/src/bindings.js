@@ -1,7 +1,7 @@
 var ko = require('knockout');
 var $ = require('jquery');
 var dragula = require('dragula');
-var SHOW_DELAY = 1;
+//var SHOW_DELAY = 1;
 var HIDE_DELAY = 800;
 
 // http://stackoverflow.com/questions/23606541/observable-array-push-multiple-objects-in-knockout-js
@@ -89,10 +89,11 @@ ko.bindingHandlers.ckeditor = {
             throw new Error("CK editor has not been loaded in the page");
         }
         var config = {
+            height: "25rem",
             toolbarGroups: [
                 { name: 'clipboard', groups: ['clipboard','undo']},
                 {"name":"basicstyles","groups":["basicstyles"]},
-                {"name":"paragraph","groups":["list","blocks"]},
+                {"name":"paragraph","groups":["indent","align","list","blocks"]},
                 {"name":"insert","groups":["insert"]},
                 {"name":"styles","groups":["styles"]},
                 {"name":"links","groups":["links"]}
@@ -123,6 +124,20 @@ ko.bindingHandlers.modal = {
                 }
             }
         });
+    }
+};
+ko.bindingHandlers.editableDiv = {
+    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var observer = valueAccessor();
+        element.textContent = observer();
+        element.addEventListener('keydown', function(e) {
+            if (e.keyCode === 13){
+                e.preventDefault();
+            }
+        }, false);
+        element.addEventListener('keyup', function() {
+            observer(element.textContent);
+        }, false);
     }
 };
 

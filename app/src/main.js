@@ -41,6 +41,7 @@ var router = new director.Router();
 router.param('guid', /([^\/]*)/);
 router.param('createdOn', /([^\/]*)/);
 router.on('/info', routeTo('info'));
+router.on('/email', routeTo('email'));
 router.on('/consent', routeTo('consent'));
 router.on('/eligibility', routeTo('eligibility'));
 router.on('/password_policy', routeTo('password_policy'));

@@ -1,7 +1,6 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var root = require('../../root');
-var $ = require('jquery');
 
 module.exports = function(params) {
     var self = this;

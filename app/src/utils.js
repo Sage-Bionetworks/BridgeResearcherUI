@@ -50,8 +50,9 @@ function makeOptionFinder(arrayOrObs) {
     };
 }
 function makeOptionLabelFinder(arrayOrObs) {
+    var finder = makeOptionFinder(arrayOrObs);
     return function(value) {
-        var option = makeOptionFinder(arrayOrObs)(value);
+        var option = finder(value);
         return option ? option.label : "";
     };
 }
