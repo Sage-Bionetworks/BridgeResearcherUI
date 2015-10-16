@@ -1,5 +1,13 @@
-//var proxyquire = require('proxyquireify')(require);
-//var assert = require("assert");
+var assert = require("assert");
+var proxyquire = require('proxyquire').noCallThru();
+/*
+var serverServiceStub = {};
+
+var scheduleService = proxyquire('./../../schedule_service', {
+    path: {
+        './server_service': serverServiceStub
+    }
+});
 
 function getStrategy() {
     return {
@@ -22,7 +30,7 @@ function getStrategy() {
 function getActivity() {
     return {"label": "Take the Tapping Test", "labelDetail": "10 minutes", "task": {"identifier":"tapping-test"}, "activityType": "task"}
 }
-/*describe('Schedule', function() {
+describe('Schedule', function() {
     // all three of the above with a delay
     // all three with a different event than 'enrollment'
 

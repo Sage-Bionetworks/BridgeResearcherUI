@@ -238,23 +238,16 @@ module.exports = {
         return get(config.survey + guid + '/revisions/published');
     },
     getSurveysSummarized: function() {
-        var promise = get(config.surveys + '/published');
-        return promise.then(function(response) {
-            var promises = response.items.map(function(survey) {
-                return get(config.survey + survey.guid + '/revisions/' + survey.createdOn);
-            });
-            return Promise.all(promises);
-        }).then(function(surveys) {
-            surveys.sort(utils.makeFieldSorter("name"));
-            return surveys.map(function(survey) {
+        return get(config.surveys + '?format=summary').then(function(response) {
+            response.items.sort(utils.makeFieldSorter("name"));
+            return response.items.map(function(survey) {
                 survey.elements = survey.elements.filter(function(element) {
                     return (element.type === "SurveyQuestion");
                 }).map(function(question) {
                     var label = survey.name+": "+question.identifier+((question.fireEvent)?" *":"");
                     return {label: label, value: question.guid };
                 });
-                return {label: survey.name, value: survey.guid, questions: survey.elements,
-                    createdOn: survey.createdOn, identifier: survey.identifier};
+                return {label: survey.name, value: survey.guid, questions: survey.elements};
             });
         });
     },

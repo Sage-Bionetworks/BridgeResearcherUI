@@ -43,9 +43,9 @@ function formatEventId(value) {
     if (!value) {
         return "On enrollment (default)";
     }
-    var string = value.split(',').reverse().map(function(value) {
+    return value.split(',').reverse().map(function(value) {
         if (value === "enrollment") {
-            return "on enrollment";
+            return "On enrollment";
         }
         // events have three parts, e.g. survey:<guid>:finished
         var parts = value.split(":");
@@ -61,8 +61,6 @@ function formatEventId(value) {
             return "when activity '"+activityLabel+"' is finished";
         }
     }).join(', and ');
-
-    return string.charAt(0).toUpperCase() + string.substring(1);
 }
 function formatTimesArray(times) {
     return (times && times.length) ? toList(times.map(function(time) {
@@ -72,14 +70,18 @@ function formatTimesArray(times) {
     })) : "<None>";
 }
 function formatActivities(buffer, activities) {
+    var actMap = {};
     activities.map(function(act) {
+        var label = 'do task (not specified)';
         if (act.activityType === "task" && act.task) {
-            return buffer.push("do task '"+act.task.identifier+"'");
+            label = "do task '"+activityOptionsLabel(act.guid)+"'";
         } else if (act.activityType === "survey" && act.survey) {
-            return buffer.push("do task '"+act.survey.identifier+"'");
-
+            label = "do survey '"+activityOptionsLabel(act.guid)+"'";
         }
-        buffer.push('do task (not specified)');
+        actMap[label] = ++actMap[label] || 1;
+    });
+    Object.keys(actMap).forEach(function(label) {
+        return buffer.push(label + " " + (actMap[label] === 1 ? "" : (actMap[label] + " times")));
     });
 }
 function sentenceCase(string) {
@@ -152,9 +154,6 @@ function formatSchedule(sch) {
     }
     var buffer = [];
 
-    if (sch.activities && sch.activities.length > 1) {
-        buffer.push("schedule " + sch.activities.length + " tasks");
-    }
     var initClause = "";
     if (sch.delay) {
         initClause = periodToWords(sch.delay) + " after ";
@@ -163,7 +162,7 @@ function formatSchedule(sch) {
     }
     var events = (sch.eventId) ? sch.eventId.split(",").reverse() : ["enrollment"];
     initClause += toList(events.map(function(event) {
-        return (event === "enrollment") ? "enrollment" : formatEventId(event).toLowerCase();
+        return (event === "enrollment") ? "enrollment" : formatEventId(event);
     }));
     buffer.push(initClause);
     if (sch.scheduleType === "recurring") {

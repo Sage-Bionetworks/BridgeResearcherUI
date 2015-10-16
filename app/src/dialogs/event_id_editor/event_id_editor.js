@@ -43,24 +43,26 @@ module.exports = function(params) {
     self.activityLabel = utils.makeOptionLabelFinder(self.activityOptionsObs);
     scheduleService.loadActivitiesObserver(self.activityOptionsObs);
 
-    self.eventIdObs().split(",").forEach(function(eventId) {
-        if (eventId === "enrollment") {
-            self.enrollmentObs(true);
-        } else {
-            var parts = eventId.split(":");
-            if (parts[0] === "question") {
-                self.objectTypeObs("question");
-                self.questionObs(parts[1]);
-                self.answerObs(parts[2].replace("answered=",""));
-            } else if (parts[0] === "survey") {
-                self.objectTypeObs("survey");
-                self.surveyObs(parts[1]);
-            } else if (parts[0] === "activity") {
-                self.objectTypeObs("activity");
-                self.activityObs(parts[1]);
+    if (self.eventIdObs()) {
+        self.eventIdObs().split(",").forEach(function(eventId) {
+            if (eventId === "enrollment") {
+                self.enrollmentObs(true);
+            } else {
+                var parts = eventId.split(":");
+                if (parts[0] === "question") {
+                    self.objectTypeObs("question");
+                    self.questionObs(parts[1]);
+                    self.answerObs(parts[2].replace("answered=",""));
+                } else if (parts[0] === "survey") {
+                    self.objectTypeObs("survey");
+                    self.surveyObs(parts[1]);
+                } else if (parts[0] === "activity") {
+                    self.objectTypeObs("activity");
+                    self.activityObs(parts[1]);
+                }
             }
-        }
-    });
+        });
+    }
 
     self.save = function() {
         var eventId = self.objectTypeObs() + ":";

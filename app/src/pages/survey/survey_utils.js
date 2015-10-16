@@ -204,13 +204,16 @@ function newSurvey() {
 }
 
 function loadSurveyObservers(surveysOptsObs, questionsOptsObs) {
-    serverService.getSurveysSummarized().then(function(surveys) {
+    return serverService.getSurveysSummarized().then(function(surveys) {
+        surveysOptsObs.removeAll();
         surveysOptsObs.pushAll(surveys);
         if (questionsOptsObs) {
+            questionsOptsObs.removeAll();
             surveys.forEach(function(survey) {
                 questionsOptsObs.pushAll(survey.questions);
             });
         }
+        return surveys;
     });
 }
 

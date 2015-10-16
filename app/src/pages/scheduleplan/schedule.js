@@ -38,17 +38,16 @@ function copyObserverValuesBackToActivity(activity) {
     activity.label = activity.labelObs();
     activity.labelDetail = activity.labelDetailObs();
     activity.activityType = activity.activityTypeObs();
+    delete activity.survey;
+    delete activity.task;
     if (activity.activityType === 'task') {
         activity.task = {
             identifier: activity.taskIdObs()
         };
-        delete activity.survey;
-    } else {
+    } else if (activity.activityType === 'survey') {
         activity.survey = {
-            guid: activity.surveyGuidObs(),
-            identifier: surveyUtils.surveysOptionsFinder(activity.surveyGuidObs()).identifier
+            guid: activity.surveyGuidObs()
         };
-        delete activity.task;
     }
 }
 /**
@@ -112,6 +111,7 @@ module.exports = function(params) {
     };
 
     // This is fired when the parent viewModel gets a plan back from the server
+    /*
     ko.computed(function() {
         var schedule = self.scheduleObs();
         if (schedule) {
@@ -124,6 +124,18 @@ module.exports = function(params) {
             utils.valuesToObservables(self, schedule, SCHEDULE_FIELDS);
         }
     });
+    */
+    self.scheduleObs.subscribe(function(newValue) {
+        fixScheduleTimes(newValue);
+        // We have to add the options that are referenced by these activities, or they do
+        // not show up correctly and get wiped out.
+        newValue.activities.forEach(addObserversToActivity);
+        if (newValue.scheduleType === "once") {
+            delete newValue.interval;
+            delete newValue.cronTrigger;
+        }
+        utils.valuesToObservables(self, newValue, SCHEDULE_FIELDS);
+    });
 
     self.publishedObs = ko.observable(false);
 
@@ -135,7 +147,19 @@ module.exports = function(params) {
 
     self.surveysOptionsObs = ko.observableArray([]);
     self.surveysOptionsLabel = utils.makeOptionLabelFinder(self.surveysOptionsObs);
-    surveyUtils.loadSurveyObservers(self.surveysOptionsObs);
+
+    // This is a workaround for this super-annoying bug, where the options just aren't maintaining
+    // state after they are updated. This is because initially there isn't an option that matches
+    // the value, so it's lost.
+    surveyUtils.loadSurveyObservers(self.surveysOptionsObs).then(function() {
+        if (self.scheduleObs().activities) {
+            self.scheduleObs().activities.forEach(function(activity) {
+                if (activity.survey && activity.survey.guid) {
+                    activity.surveyGuidObs(activity.survey.guid);
+                }
+            });
+        }
+    });
 
     self.formatDateTime = utils.formatDateTime;
     self.formatTimes = function() {
