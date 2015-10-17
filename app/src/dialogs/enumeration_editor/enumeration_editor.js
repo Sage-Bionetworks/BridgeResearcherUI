@@ -24,9 +24,7 @@ function ListsSource(elements, element) {
     for (var key in md5s) {
         this.listSet.push(md5s[key]);
     }
-    this.listSet.sort(function(a,b) {
-        return a.name.localeCompare(b.name);
-    });
+    this.listSet.sort(utils.makeFieldSorter('name'));
 }
 ListsSource.prototype = {
     getAllLists: function() {

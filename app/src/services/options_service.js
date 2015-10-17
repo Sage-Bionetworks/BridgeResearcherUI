@@ -1,58 +1,77 @@
-var Promise = require('es6-promise').Promise;
+var serverService = require('./server_service');
+var utils = require('../utils');
 
-var cache = {};
+var NAME_SORTER = utils.makeFieldSorter('name');
+var LABEL_SORTER = utils.makeFieldSorter('label');
 
-var isSessionKey = function() {
-    // These keys are persisted long-term. The rest are just held in memory in one window.
-    var sessionKeys = ['session','environment','studyKey'];
-    return function(key) {
-        return sessionKeys.indexOf(key) > -1;
-    };
-}
-function set(key, value) {
-    console.log("[cache] Setting", key);
-    if (isSessionKey(key)) {
-        localStorage.setItem(key, JSON.stringify(value));
-    } else {
-        cache[key] = JSON.stringify(value);
+function getSchedules(object, array) {
+    array = array || [];
+    for (var prop in object) {
+        if (prop === "schedule") {
+            array.push(object[prop]);
+        } else if (typeof object[prop] === 'object') {
+            return getSchedules(object[prop], array);
+        }
     }
+    return array;
 }
-function get(key) {
-    var value = (isSessionKey(key)) ? localStorage.getItem(key) : cache[key];
-    if (value === null) {
-        return null;
+function formatVersionRange(minValue, maxValue) {
+    if (utils.isDefined(minValue) && utils.isDefined(maxValue)) {
+        return " ("+minValue + "-" + maxValue + ")";
+    } else if (utils.isDefined(minValue)) {
+        return " ("+minValue + "+)";
+    } else if (utils.isDefined(maxValue)) {
+        return " (0-" + maxValue + ")";
     }
-    console.log("[cache] Loading from cache", key);
-    return JSON.parse(value);
+    return "";
 }
-function getPromise(key) {
-    var value = get(key);
-    return (value === null) ? value : Promise.resolve(value);
+function getActivityOptions() {
+    return serverService.getSchedulePlans().then(function(response) {
+        var activities = [];
+        response.items.forEach(function(plan) {
+            var versionString = formatVersionRange(plan.minAppVersion, plan.maxAppVersion);
+            getSchedules(plan).forEach(function(schedule) {
+                schedule.activities.forEach(function(activity) {
+                    var actLabel = activity.label + versionString;
+                    activities.push({label: actLabel, "value": activity.guid});
+                });
+            });
+        });
+        return activities.sort(LABEL_SORTER);
+    });
 }
-function remove(key) {
-    console.log("[cache] Removing", key);
-    if (isSessionKey(key)) {
-        localStorage.removeItem(key);
-    } else {
-        delete cache[key];
-    }
+function getSurveyOptions() {
+    return serverService.getSurveysSummarized().then(sortSurveys).then(collectSurveyOptions);
 }
-function removeAll() {
-    console.log("[cache] Removing all items");
-    localStorage.clear();
-    cache = {};
+function getQuestionOptions() {
+    return serverService.getSurveysSummarized().then(sortSurveys).then(collectQuestionOptions);
+}
+function sortSurveys(response) {
+    return response.items.sort(NAME_SORTER);
+}
+function collectSurveyOptions(surveys) {
+    return surveys.map(function(survey) {
+        return { label: survey.name, value: survey.guid };
+    });
+}
+function collectQuestionOptions(surveys) {
+    var questions = []
+    surveys.forEach(function(survey) {
+        survey.elements.filter(filterQuestions).then(function (questions) {
+            questions.forEach(function(question) {
+                var label = survey.name+": "+question.identifier+((question.fireEvent)?" *":"");
+                questions.push({ label: label, value: question.guid });
+            });
+        });
+    });
+    return questions;
+}
+function filterQuestions(element) {
+    return (element.type === "SurveyQuestion");
 }
 
 module.exports = {
-    set: set,
-    get: get,
-    /**
-     * A convenience version of the get method that returns a promise if the value is found,
-     * or null otherwise.
-     * @param key
-     * @returns a promise that returns the value, if it is found, or else null
-     */
-    getPromise: getPromise,
-    remove: remove,
-    removeAll: removeAll
+    getActivityOptions: getActivityOptions,
+    getSurveyOptions: getSurveyOptions,
+    getQuestionOptions: getQuestionOptions
 };

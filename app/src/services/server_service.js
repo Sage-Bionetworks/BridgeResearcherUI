@@ -7,7 +7,7 @@
  */
 // Necessary because export of library is broken
 var EventEmitter = require('../events');
-var optionsService = require('../services/options_service');
+var storeService = require('./store_service');
 var config = require('../config');
 var utils = require("../utils");
 var $ = require('jquery');
@@ -21,7 +21,7 @@ var session = null;
 
 if (typeof window !== "undefined") { // jQuery throws up if there's no window, even in unit tests.
     $(function() {
-        session = optionsService.get(SESSION_KEY);
+        session = storeService.get(SESSION_KEY);
         if (session && session.environment) {
             listeners.emit(SESSION_STARTED_EVENT_KEY, session);
         } else {
@@ -119,13 +119,13 @@ function del(path) {
 }
 function removeFromCache(key) {
     return function(response) {
-        optionsService.remove(key);
+        storeService.remove(key);
         return response;
     };
 }
 function setCache(key) {
     return function(response) {
-        optionsService.set(key, response);
+        storeService.set(key, response);
         return response;
     };
 }
@@ -135,19 +135,6 @@ function getSurveyKey(arg, arg2) {
     } else {
         return arg.guid + ":" + new Date(arg.createdOn).toISOString();
     }
-}
-function surveyOption(survey) {
-    survey.elements = survey.elements.filter(filterQuestions).map(questionOption(survey));
-    return { label: survey.name, value: survey.guid, questions: survey.elements };
-}
-function filterQuestions(element) {
-    return (element.type === "SurveyQuestion");
-}
-function questionOption(survey) {
-    return function(question) {
-        var label = survey.name+": "+question.identifier+((question.fireEvent)?" *":"");
-        return { label: label, value: question.guid };
-    };
 }
 /**
  * If we ever get back a 401, the UI isn't in sync with reality, sign the
@@ -159,11 +146,11 @@ function signOut() {
     var env = session.environment;
     session = null;
     // We want to clear persistence, but keep these between sign-ins.
-    var studyKey = optionsService.get('studyKey');
-    var envName = optionsService.get('environment');
-    optionsService.removeAll();
-    optionsService.set('studyKey', studyKey);
-    optionsService.set('environment', envName);
+    var studyKey = storeService.get('studyKey');
+    var envName = storeService.get('environment');
+    storeService.removeAll();
+    storeService.set('studyKey', studyKey);
+    storeService.set('environment', envName);
 
     listeners.emit(SESSION_ENDED_EVENT_KEY);
     return new Promise(function(resolve, reject) {
@@ -189,7 +176,7 @@ module.exports = {
                 sess.studyName = studyName;
                 sess.studyId = data.study;
                 session = sess;
-                optionsService.set(SESSION_KEY, session);
+                storeService.set(SESSION_KEY, session);
                 listeners.emit(SESSION_STARTED_EVENT_KEY, sess);
             }
             return sess;
@@ -199,8 +186,7 @@ module.exports = {
     getStudyList: function(env) {
         var request = Promise.resolve(getInt(config.host[env] + config.getStudyList));
         request.then(function(response) {
-            response.items.sort(utils.makeFieldSorter("name"));
-            return response;
+            return response.items.sort(utils.makeFieldSorter("name"));
         });
         return request;
     },
@@ -209,7 +195,8 @@ module.exports = {
         return Promise.resolve(postInt(config.host[env] + config.requestResetPassword, data));
     },
     getStudy: function() {
-        return optionsService.getPromise('study') || get(config.getStudy).then(setCache('study'));
+        return storeService.getPromise('study') ||
+               get(config.getStudy).then(setCache('study'));
     },
     getStudyPublicKey: function() {
         return get(config.getStudyPublicKey);
@@ -246,16 +233,14 @@ module.exports = {
         var url = config.survey+guid+'/revisions/'+createdString;
         var key = getSurveyKey(guid, createdOn);
 
-        return optionsService.getPromise(key) || get(url).then(setCache(key));
+        return storeService.getPromise(key) || get(url).then(setCache(key));
     },
     getSurveyMostRecent: function(guid) {
         return get(config.survey + guid + '/revisions/recent');
     },
     getSurveysSummarized: function() {
-        return get(config.surveys + '?format=summary').then(function(response) {
-            response.items.sort(utils.makeFieldSorter("name"));
-            return response.items.map(surveyOption);
-        });
+        return storeService.getPromise('survey-summaries') ||
+               get(config.surveys + '?format=summary').then(setCache('survey-summaries'));
     },
     createSurvey: function(survey) {
         return post(config.surveys, survey);
@@ -299,7 +284,8 @@ module.exports = {
         return del(config.schemas + "/" + schema.schemaId + "/revisions/" + schema.revision);
     },
     getSchedulePlans: function() {
-        return optionsService.getPromise('scheduleplans') || get(config.schemaPlans).then(setCache('scheduleplans'));
+        return storeService.getPromise('scheduleplans') ||
+               get(config.schemaPlans).then(setCache('scheduleplans'));
     },
     getSchedulePlan: function(guid) {
         return get(config.schemaPlans + "/" + guid);

@@ -2,7 +2,8 @@ var ko = require('knockout');
 var utils = require('../../utils');
 var surveyUtils = require('../../pages/survey/survey_utils');
 var serverService = require('../../services/server_service');
-var scheduleService = require('../../services/schedule_service');
+var optionsService = require('../../services/options_service');
+var scheduleUtils = require('./schedule_utils');
 var root = require('../../root');
 
 /**
@@ -24,7 +25,7 @@ var ACTIVITY_TYPE_OPTIONS = Object.freeze([
     {value: 'survey', label: 'Take Survey'}
 ]);
 function newActivity() {
-    var activity = scheduleService.newSchedule().activities[0];
+    var activity = scheduleUtils.newSchedule().activities[0];
     utils.observablesFor(activity, ACTIVITY_FIELDS);
     activity.activityTypeObs('task');
     return activity;
@@ -116,6 +117,11 @@ module.exports = function(params) {
         if (schedule) {
             fixScheduleTimes(schedule);
             schedule.activities.forEach(addObserversToActivity);
+            schedule.activities.forEach(function(activity) {
+                if (activity.survey && !self.surveysOptionsObs.loaded) {
+                    self.surveysOptionsObs.push({label: 'Loading...', value: activity.survey.guid});
+                }
+            });
             if (schedule.scheduleType === "once") {
                 delete schedule.interval;
                 delete schedule.cronTrigger;
@@ -123,19 +129,7 @@ module.exports = function(params) {
             utils.valuesToObservables(self, schedule, SCHEDULE_FIELDS);
         }
     });
-    /*
-    self.scheduleObs.subscribe(function(newValue) {
-        fixScheduleTimes(newValue);
-        // We have to add the options that are referenced by these activities, or they do
-        // not show up correctly and get wiped out.
-        newValue.activities.forEach(addObserversToActivity);
-        if (newValue.scheduleType === "once") {
-            delete newValue.interval;
-            delete newValue.cronTrigger;
-        }
-        utils.valuesToObservables(self, newValue, SCHEDULE_FIELDS);
-    });
-*/
+
     self.publishedObs = ko.observable(false);
 
     self.scheduleTypeOptions = SCHEDULE_TYPE_OPTIONS;
@@ -147,17 +141,16 @@ module.exports = function(params) {
     self.surveysOptionsObs = ko.observableArray([]);
     self.surveysOptionsLabel = utils.makeOptionLabelFinder(self.surveysOptionsObs);
 
-    // This is a workaround for this super-annoying bug, where the options just aren't maintaining
-    // state after they are updated. This is because initially there isn't an option that matches
-    // the value, so it's lost.
-    surveyUtils.loadSurveyObservers(self.surveysOptionsObs).then(function() {
-        if (self.scheduleObs().activities) {
-            self.scheduleObs().activities.forEach(function(activity) {
-                if (activity.survey && activity.survey.guid) {
-                    activity.surveyGuidObs(activity.survey.guid);
-                }
-            });
-        }
+    // Above, when an activity with a survey is loaded, if there's no option for it,
+    // it is not selected and then ends up being the first option when it comes in.
+    // Put a dummy loading option in to fix that. But then, if this firest first, the
+    // loading option is not removed. So the .loaded property is used to guard against
+    // thats. In all, ugly.
+    optionsService.getSurveyOptions().then(function(surveys) {
+        console.log("surveys",surveys);
+        self.surveysOptionsObs.removeAll();
+        self.surveysOptionsObs.pushAll(surveys);
+        self.surveysOptionsObs.loaded = true;
     });
 
     self.formatDateTime = utils.formatDateTime;
@@ -165,12 +158,12 @@ module.exports = function(params) {
         var type = self.scheduleTypeObs();
         var times = self.timesObs();
         if (times && times.length) {
-            return scheduleService.formatTimesArray(
+            return scheduleUtils.formatTimesArray(
                 (type === 'recurring') ? times : times.slice(0,1));
         }
-        return scheduleService.formatTimesArray(null);
+        return scheduleUtils.formatTimesArray(null);
     };
-    self.formatEventId = scheduleService.formatEventId;
+    self.formatEventId = scheduleUtils.formatEventId;
 
     self.editTimes = function(vm, event) {
         event.preventDefault();

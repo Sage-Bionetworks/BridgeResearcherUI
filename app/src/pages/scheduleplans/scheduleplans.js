@@ -1,6 +1,6 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service.js');
-var scheduleService = require('../../services/schedule_service.js');
+var scheduleUtils = require('../scheduleplan/schedule_utils.js');
 var utils = require('../../utils');
 var Promise = require('es6-promise').Promise;
 
@@ -80,13 +80,12 @@ module.exports = function() {
                 .catch(utils.failureHandler(vm, event));
         }
     };
-    self.formatStrategy = scheduleService.formatStrategy;
+    self.formatStrategy = scheduleUtils.formatStrategy;
 
     function load() {
         serverService.getSchedulePlans().then(function(response) {
             if (response.items.length) {
-                response.items.sort(utils.makeFieldSorter("label"));
-                self.itemsObs(response.items.map(addCheckedObs));
+                self.itemsObs(response.items.sort(utils.makeFieldSorter("label")).map(addCheckedObs));
             } else {
                 document.querySelector(".loading_status").textContent = "There are currently no schedules.";
             }
