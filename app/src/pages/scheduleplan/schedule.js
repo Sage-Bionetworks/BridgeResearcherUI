@@ -141,9 +141,18 @@ module.exports = function(params) {
     self.surveysOptionsObs = ko.observableArray([]);
     self.surveysOptionsLabel = utils.makeOptionLabelFinder(self.surveysOptionsObs);
 
+    self.taskIdObs = ko.observable("");
+    self.taskIdsObs = ko.observableArray([]);
+    serverService.getStudy().then(function(study) {
+        self.taskIdsObs.pushAll(study.taskIdentifiers.map(function(id) {
+            return {value: id, label: id};
+        }));
+    });
+    self.taskOptionsLabel = utils.makeOptionLabelFinder(self.taskIdsObs);
+
     // Above, when an activity with a survey is loaded, if there's no option for it,
     // it is not selected and then ends up being the first option when it comes in.
-    // Put a dummy loading option in to fix that. But then, if this firest first, the
+    // Put a dummy loading option in to fix that. But then, if this firstest first, the
     // loading option is not removed. So the .loaded property is used to guard against
     // thats. In all, ugly.
     optionsService.getSurveyOptions().then(function(surveys) {
