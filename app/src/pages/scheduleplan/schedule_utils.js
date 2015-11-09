@@ -1,19 +1,20 @@
 var ko = require('knockout');
-var surveyUtils = require('../pages/survey/survey_utils');
-var serverService = require('./server_service');
-var utils = require('../utils');
+var surveyUtils = require('../survey/survey_utils');
+var serverService = require('./../../services/server_service');
+var utils = require('../../utils');
+var optionsService = require('./../../services/options_service');
 
 var activitiesObs = ko.observableArray([]);
 var activityOptionsLabel = utils.makeOptionLabelFinder(activitiesObs);
+optionsService.getActivityOptions().then(activitiesObs);
 
 var surveysOptionsObs = ko.observableArray([]);
 var surveysOptionsLabel = utils.makeOptionLabelFinder(surveysOptionsObs);
+optionsService.getSurveyOptions().then(surveysOptionsObs);
 
 var questionsOptionsObs = ko.observableArray([]);
 var questionsOptionsLabel = utils.makeOptionLabelFinder(questionsOptionsObs);
-
-loadActivitiesObserver(activitiesObs);
-surveyUtils.loadSurveyObservers(surveysOptionsObs, questionsOptionsObs);
+optionsService.getQuestionOptions().then(questionsOptionsObs);
 
 var PERIOD_WORDS = {
     'H': 'hour',
@@ -21,7 +22,7 @@ var PERIOD_WORDS = {
     'M': "month",
     'W': 'week',
     'Y': 'year'
-}
+};
 
 var TIME_OPTIONS = [];
 var MINUTES = ["00","30"];
@@ -90,18 +91,10 @@ function sentenceCase(string) {
 function parsePeriods(period) {
     var periods = period.substring(1).match(/(\d+\D)/g);
     return periods.map(function(period) {
-        var amt = parseInt(period);
+        var amt = parseInt(period, 10);
         var measure = PERIOD_WORDS[period.replace(/[\d]*/, '')];
         return {amt: amt, measure: measure};
     });
-}
-function formatPeriod(amt, measure) {
-    if (amt === 1 && measure == "H") {
-        return "an " + measure;
-    } else if (amt === 1) {
-        return "a " + measure;
-    }
-    return amt + " " + measure + "s";
 }
 function periodToWords(periodStr) {
     var periods = parsePeriods(periodStr);
@@ -147,6 +140,9 @@ function newSchedule() {
         expires:null, cronTrigger:null, startsOn:null, endsOn:null, times:[],
         activities:[{label:'', labelDetail:'', activityType:'task', task:{identifier:''}}]
     };
+}
+function newSchedulePlan() {
+    return {type: 'SchedulePlan', label: "", strategy: newSimpleStrategy()};
 }
 function formatSchedule(sch) {
     if (!sch) {
@@ -212,35 +208,10 @@ function formatStrategy(strategy) {
         return "<i>Unknown</i>";
     }
 }
-function getSchedules(object, array) {
-    array = array || [];
-    for (var prop in object) {
-        if (prop === "schedule") {
-            array.push(object[prop]);
-        } else if (typeof object[prop] === 'object') {
-            return getSchedules(object[prop], array);
-        }
-    }
-    return array;
-}
-function loadActivitiesObserver(activitiesObs) {
-    return serverService.getSchedulePlans().then(function(response) {
-        var activities = [];
-        if (response.items && response.items.length) {
-            response.items.forEach(function(plan) {
-                getSchedules(plan).forEach(function(schedule) {
-                    schedule.activities.forEach(function(activity) {
-                        activities.push({label: activity.label, "value": activity.guid});
-                    });
-                });
-            });
-        }
-        activitiesObs.pushAll(activities);
-    });
-}
 
 module.exports = {
     newSchedule: newSchedule,
+    newSchedulePlan: newSchedulePlan,
     newSimpleStrategy: newSimpleStrategy,
     newABTestStrategy: newABTestStrategy,
     formatEventId: formatEventId,
@@ -248,6 +219,5 @@ module.exports = {
     formatStrategy: formatStrategy,
     timeOptions: TIME_OPTIONS,
     timeOptionsLabel: utils.makeOptionLabelFinder(TIME_OPTIONS),
-    timeOptionsFinder: utils.makeOptionFinder(TIME_OPTIONS),
-    loadActivitiesObserver: loadActivitiesObserver
+    timeOptionsFinder: utils.makeOptionFinder(TIME_OPTIONS)
 };

@@ -202,7 +202,7 @@ function updateModelField(model, fieldName) {
 function newSurvey() {
     return {name:'', guid:'', identifier:'', published:false, createdOn:null, elements:[], version:null};
 }
-
+/*
 function loadSurveyObservers(surveysOptsObs, questionsOptsObs) {
     return serverService.getSurveysSummarized().then(function(surveys) {
         surveysOptsObs.removeAll();
@@ -216,7 +216,7 @@ function loadSurveyObservers(surveysOptsObs, questionsOptsObs) {
         return surveys;
     });
 }
-
+*/
 module.exports = {
     newSurvey: newSurvey,
     newField: function(type) {
@@ -295,13 +295,6 @@ module.exports = {
             vm.operatorOptions = OPERATOR_OPTIONS;
             vm.operatorLabel = utils.makeOptionLabelFinder(OPERATOR_OPTIONS);
         }
-    },
-    /**
-     * Pass in some observers that will be populated with the appropriate option objects
-     * based on the surveys/questions in the study.
-     *
-     * surveysOptionsObs - an observable array for the survey options generated
-     * questionsOptionsObs - an observable array for the survey questions generated
-     */
-    loadSurveyObservers: loadSurveyObservers
+    }/*,
+    loadSurveyObservers: loadSurveyObservers*/
 };

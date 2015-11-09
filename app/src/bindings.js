@@ -90,6 +90,7 @@ ko.bindingHandlers.ckeditor = {
         }
         var config = {
             height: "25rem",
+            resize_dir: "vertical",
             toolbarGroups: [
                 { name: 'clipboard', groups: ['clipboard','undo']},
                 {"name":"basicstyles","groups":["basicstyles"]},

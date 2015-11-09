@@ -2,12 +2,14 @@ var ko = require('knockout');
 var utils = require('../../utils');
 var serverService = require('../../services/server_service');
 var surveyUtils = require('../../pages/survey/survey_utils');
-var scheduleService = require('../../services/schedule_service');
+var scheduleUtils = require('../../pages/scheduleplan/schedule_utils');
+var optionsService = require('./../../services/options_service');
 var root = require('../../root');
 
 var OBJECT_TYPE = Object.freeze([
+        /*
     {value: 'survey', label: 'When survey'},
-    {value: 'question', label: 'When question'},
+    {value: 'question', label: 'When question'},*/
     {value: 'activity', label: 'When activity'}
 ]);
 
@@ -32,16 +34,17 @@ module.exports = function(params) {
     self.surveyObs = ko.observable();
     self.surveysOptionsObs = ko.observableArray([]);
     self.surveysLabel = utils.makeOptionLabelFinder(self.surveysOptionsObs);
+    optionsService.getSurveyOptions().then(self.surveysOptionsObs);
 
     self.questionObs = ko.observable();
     self.questionsOptionsObs = ko.observableArray([]);
     self.questionsLabel = utils.makeOptionLabelFinder(self.questionsOptionsObs);
-    surveyUtils.loadSurveyObservers(self.surveysOptionsObs, self.questionsOptionsObs);
+    optionsService.getQuestionOptions().then(self.questionsOptionsObs);
 
     self.activityObs = ko.observable();
     self.activityOptionsObs = ko.observableArray([]);
     self.activityLabel = utils.makeOptionLabelFinder(self.activityOptionsObs);
-    scheduleService.loadActivitiesObserver(self.activityOptionsObs);
+    optionsService.getActivityOptions().then(self.activityOptionsObs);
 
     if (self.eventIdObs()) {
         self.eventIdObs().split(",").forEach(function(eventId) {

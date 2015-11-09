@@ -1,6 +1,6 @@
 var ko = require('knockout');
 var utils = require('../../utils');
-var scheduleService = require('../../services/schedule_service');
+var scheduleUtils = require('../../pages/scheduleplan/schedule_utils');
 var root = require('../../root');
 
 module.exports = function(params) {
@@ -12,8 +12,8 @@ module.exports = function(params) {
     self.scheduleType = params.scheduleTypeObs();
 
     self.timeObs = ko.observable();
-    self.timesOptions = scheduleService.timeOptions;
-    self.timesLabel = scheduleService.timeOptionsLabel;
+    self.timesOptions = scheduleUtils.timeOptions;
+    self.timesLabel = scheduleUtils.timeOptionsLabel;
     self.publishedObs = ko.observable(false);
 
     // When it's only one time, this becomes the control that reflects the
@@ -24,7 +24,7 @@ module.exports = function(params) {
 
     self.addTime = function(vm, event) {
         event.preventDefault();
-        var time = scheduleService.timeOptionsFinder(self.timeObs());
+        var time = scheduleUtils.timeOptionsFinder(self.timeObs());
         if (self.itemsObs().indexOf(time.value) === -1) {
             self.itemsObs.push(time.value);
             self.itemsObs.sort();
