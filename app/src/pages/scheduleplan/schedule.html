@@ -58,7 +58,7 @@
     </div>
     <h5>Activities</h5>
     <p>One or more activities can be scheduled together. They will appear as separate scheduled activities in your application. </p>
-    <p data-bind="visible: $component.taskIdsObs().length == 0">
+    <p data-bind="visible: $component.taskOptionsObs().length == 0">
         <b>There are no task identifiers defined,</b> so you cannot schedule any tasks.
         <a href="#/task_identifiers" target="_blank">Create</a> some identifiers, then refresh this page
         in order to schedule tasks. </b>
@@ -81,13 +81,8 @@
                         publishedObs: $component.publishedObs, optionsSrc: $component.activityTypeOptions"></ui-select>
                 </div>
                 <div style="width: 10rem" data-bind="visible: $data.activityTypeObs() == 'task'">
-                    <div class="inline-form-text" data-bind="visible: $component.taskIdsObs().length == 0">
-                            &lt;No tasks&gt;
-                    </div>
-                    <div data-bind="visible: $component.taskIdsObs().length != 0">
-                        <ui-select params="fieldObs: $data.taskIdObs, fieldLabel: $component.taskOptionsLabel,
-                            publishedObs: $component.publishedObs, optionsSrc: $component.taskIdsObs"></ui-select>
-                    </div>
+                    <ui-select params="fieldObs: $data.taskIdObs, fieldLabel: $component.taskOptionsLabel,
+                        publishedObs: $component.publishedObs, optionsSrc: $component.taskOptionsObs"></ui-select>
                 </div>
                 <div style="width: 10rem" data-bind="visible: $data.activityTypeObs() == 'survey'">
                     <ui-select params="fieldObs: $data.surveyGuidObs, fieldLabel: $component.surveysOptionsLabel,

@@ -69,9 +69,17 @@ function collectQuestionOptions(surveys) {
 function filterQuestions(element) {
     return (element.type === "SurveyQuestion");
 }
+function getTaskIdentifierOptions() {
+    return serverService.getStudy().then(function(study) {
+        return study.taskIdentifiers.map(function(id) {
+            return { label:id, value:id };
+        });
+    });
+}
 
 module.exports = {
     getActivityOptions: getActivityOptions,
     getSurveyOptions: getSurveyOptions,
-    getQuestionOptions: getQuestionOptions
+    getQuestionOptions: getQuestionOptions,
+    getTaskIdentifierOptions: getTaskIdentifierOptions
 };
