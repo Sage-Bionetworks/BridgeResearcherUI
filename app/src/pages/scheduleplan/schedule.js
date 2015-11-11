@@ -98,6 +98,20 @@ module.exports = function(params) {
     self.scheduleObs = params.scheduleObs;
     utils.observablesFor(self, SCHEDULE_FIELDS);
 
+    self.publishedObs = ko.observable(false);
+
+    self.scheduleTypeOptions = SCHEDULE_TYPE_OPTIONS;
+    self.scheduleTypeLabel = utils.makeOptionLabelFinder(SCHEDULE_TYPE_OPTIONS);
+
+    self.activityTypeOptions = ACTIVITY_TYPE_OPTIONS;
+    self.activityTypeLabel = utils.makeOptionLabelFinder(ACTIVITY_TYPE_OPTIONS);
+
+    self.surveysOptionsObs = ko.observableArray([]);
+    self.surveysOptionsLabel = utils.makeOptionLabelFinder(self.surveysOptionsObs);
+
+    self.taskOptionsObs = ko.observableArray([]);
+    self.taskOptionsLabel = utils.makeOptionLabelFinder(self.taskOptionsObs);
+
     // This is the implementation called by the schedule plan viewModel to construct the model
     self.scheduleObs.callback = function() {
         self.activitiesObs().forEach(copyObserverValuesBackToActivity);
@@ -121,6 +135,9 @@ module.exports = function(params) {
                 if (activity.survey && !self.surveysOptionsObs.loaded) {
                     self.surveysOptionsObs.push({label: 'Loading...', value: activity.survey.guid});
                 }
+                if (activity.task && !self.taskOptionsObs.loaded) {
+                    self.taskOptionsObs.push({label: activity.task.identifier, value: activity.task.identifier});
+                }
             });
             if (schedule.scheduleType === "once") {
                 delete schedule.interval;
@@ -130,36 +147,25 @@ module.exports = function(params) {
         }
     });
 
-    self.publishedObs = ko.observable(false);
-
-    self.scheduleTypeOptions = SCHEDULE_TYPE_OPTIONS;
-    self.scheduleTypeLabel = utils.makeOptionLabelFinder(SCHEDULE_TYPE_OPTIONS);
-
-    self.activityTypeOptions = ACTIVITY_TYPE_OPTIONS;
-    self.activityTypeLabel = utils.makeOptionLabelFinder(ACTIVITY_TYPE_OPTIONS);
-
-    self.surveysOptionsObs = ko.observableArray([]);
-    self.surveysOptionsLabel = utils.makeOptionLabelFinder(self.surveysOptionsObs);
-
-    self.taskIdObs = ko.observable("");
-    self.taskIdsObs = ko.observableArray([]);
-    serverService.getStudy().then(function(study) {
-        self.taskIdsObs.pushAll(study.taskIdentifiers.map(function(id) {
-            return {value: id, label: id};
-        }));
-    });
-    self.taskOptionsLabel = utils.makeOptionLabelFinder(self.taskIdsObs);
-
     // Above, when an activity with a survey is loaded, if there's no option for it,
     // it is not selected and then ends up being the first option when it comes in.
     // Put a dummy loading option in to fix that. But then, if this firstest first, the
     // loading option is not removed. So the .loaded property is used to guard against
     // thats. In all, ugly.
     optionsService.getSurveyOptions().then(function(surveys) {
-        console.log("surveys",surveys);
         self.surveysOptionsObs.removeAll();
         self.surveysOptionsObs.pushAll(surveys);
         self.surveysOptionsObs.loaded = true;
+    });
+    optionsService.getTaskIdentifierOptions().then(function(options) {
+        // In this case as a transition, if we have an identifier that hasn't been enumerated,
+        // don't update the options because we're displaying it as a dummy option. It'll still
+        // fail when the user saves it.
+        if (options.length > 0) {
+            self.taskOptionsObs.removeAll();
+            self.taskOptionsObs.pushAll(options);
+            self.taskOptionsObs.loaded = true;
+        }
     });
 
     self.formatDateTime = utils.formatDateTime;

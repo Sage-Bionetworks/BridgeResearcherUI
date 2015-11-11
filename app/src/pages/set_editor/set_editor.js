@@ -63,12 +63,12 @@ module.exports = function(propertyName) {
         };
 
         serverService.getStudy()
-                .then(function(study) {
-                    self.study = study;
-                    self.records.pushAll(study[propertyName]);
-                })
-                .catch(function(request) {
-                    console.error("ERROR", request);
-                });
+            .then(function(study) {
+                self.study = study;
+                self.records.pushAll(study[propertyName]);
+            })
+            .catch(function(request) {
+                console.error("ERROR", request);
+            });
     };
 };
