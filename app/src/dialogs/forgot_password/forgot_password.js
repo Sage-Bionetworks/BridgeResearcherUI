@@ -1,7 +1,7 @@
 var ko = require('knockout');
 var utils = require('../../utils');
 var serverService = require('../../services/server_service');
-var optionsService = require('../../services/options_service');
+var storeService = require('../../services/store_service');
 var config = require('../../config');
 var root = require('../../root');
 
@@ -10,8 +10,8 @@ var fields = ['email', 'study', 'environment', 'studyOptions[]'];
 module.exports = function() {
     var self = this;
 
-    var study = optionsService.get('study', 'api');
-    var env = optionsService.get('environment', 'production');
+    var study = storeService.get('study') || 'api';
+    var env = storeService.get('environment') || 'production';
 
     utils.observablesFor(self, fields);
     self.studyObs(study);
@@ -31,8 +31,8 @@ module.exports = function() {
             root.message('error', "Email address is required.");
             return;
         }
-        optionsService.set('environment', self.environmentObs());
-        optionsService.set('study', self.studyObs());
+        storeService.set('environment', self.environmentObs());
+        storeService.set('study', self.studyObs());
 
         utils.startHandler(self, event);
         serverService.requestResetPassword(self.environmentObs(), {

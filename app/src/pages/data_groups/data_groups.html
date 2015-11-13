@@ -1,6 +1,6 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
-        <h3>User Profile Attributes</h3>
+        <h3>Data Groups</h3>
         <div class="fixed-header-buttons">
             <button class="ui primary button" data-bind="disable: $component.noChanges, click: $component.save">Save</button>
         </div>
@@ -24,18 +24,18 @@
         </div>
         <div class="six wide column">
             <div class="ui message">
-                <p>Bridge stores personally identifiable information separately from the health information collected
-                    for a study. By default, we accept a participant's first and last name, and an email address,
-                    through that participant’s user profile. </p>
+                <p>Individual user accounts can be tagged with one or more data groups through the profile API. </p>
 
-                <p>You can configure your study to accept additional information about a participant. These fields can
-                    then be added to a user profile and they will be saved and included as part of the
-                    <a href="#actions">Participant Roster</a>. </p>
+                <p>These tags allow to process the data from participants. For example, you may wish to define a
+                    "test_users" data group and assign testers to this group, so you can filter out their data when
+                    analyzing results. </p>
 
-                <p>Like a participant's name or email address, this information will not be included in the data set
-                    exported from the study.</p>
+                <p>You can also use these tags to filter scheduled activities for groups of users, generating different
+                    data for different study participants. </p>
+
+                <p><b>These tags cannot include identifying information about specific users.</b> They are exported
+                    with the study data set. If you need to identify users, please use the external identifier API. </p>
             </div>
-
         </div>
     </div>
 </div>

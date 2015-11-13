@@ -1,6 +1,6 @@
 var ko = require('knockout');
-var serverService = require('../../services/server_service.js');
-var scheduleService = require('../../services/schedule_service.js');
+var serverService = require('../../services/server_service');
+var scheduleUtils = require('./schedule_utils');
 var utils = require('../../utils');
 var root = require('../../root');
 
@@ -8,14 +8,6 @@ var TYPE_OPTIONS = Object.freeze([
     {value: 'SimpleScheduleStrategy', label: 'Simple Schedule'},
     {value: 'ABTestScheduleStrategy', label: 'A/B Test Schedule'}
 ]);
-
-function newSchedulePlan() {
-    return {
-        type: 'SchedulePlan',
-        label: "",
-        strategy: scheduleService.newSimpleStrategy()
-    };
-}
 
 /**
  * The complexity of this view comes from the fact that the entire data model is in the strategy,
@@ -44,9 +36,9 @@ module.exports = function(params) {
     self.schedulePlanTypeObs = ko.observable('SimpleScheduleStrategy');
     self.schedulePlanTypeObs.subscribe(function(newValue) {
         if (newValue === 'SimpleScheduleStrategy') {
-            self.strategyObs(scheduleService.newSimpleStrategy());
+            self.strategyObs(scheduleUtils.newSimpleStrategy());
         } else if (newValue === 'ABTestScheduleStrategy') {
-            self.strategyObs(scheduleService.newABTestStrategy());
+            self.strategyObs(scheduleUtils.newABTestStrategy());
         }
     });
 
@@ -77,11 +69,11 @@ module.exports = function(params) {
         self.strategyObs(plan.strategy);
     }
 
-    var notFoundHandler = utils.notFoundHandler(self, "Schedule plan not found.", "#/surveys");
+    var notFoundHandler = utils.notFoundHandler(self, "Schedule plan not found.", "#/scheduleplans");
 
     if (params.guid !== "new") {
         serverService.getSchedulePlan(params.guid).then(loadVM).catch(notFoundHandler);
     } else {
-        loadVM(newSchedulePlan());
+        loadVM(scheduleUtils.newSchedulePlan());
     }
 }

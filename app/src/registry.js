@@ -13,6 +13,13 @@ function regt(name, path) {
         synchronous: /dialogs/.test(path)
     });
 }
+function setEditor(name, template, attribute) {
+    ko.components.register(name, {
+        template: require(template+'.html'),
+        viewModel: require('./pages/set_editor/set_editor')(attribute),
+        synchronous: false
+    });
+}
 
 // Just leave this for now. This has been a real pain to get working.
 ko.components.register('none', {template: '<div class="ui modal dialog"></div>'});
@@ -23,7 +30,6 @@ reg('email','./pages/email/email');
 reg('consent','./pages/consent/consent');
 reg('eligibility','./pages/eligibility/eligibility');
 reg('password_policy','./pages/password_policy/password_policy');
-reg('user_attributes','./pages/user_attributes/user_attributes');
 reg('ve_template','./pages/ve_template/ve_template');
 reg('rp_template','./pages/rp_template/rp_template');
 reg('actions','./pages/actions/actions');
@@ -83,3 +89,6 @@ regt('fire-event', './widgets/fire_event');
 
 /* SCHEMAS */
 reg('field_definition', './pages/schema/field_definition');
+setEditor('user_attributes', './pages/user_attributes/user_attributes', 'userProfileAttributes');
+setEditor('task_identifiers', './pages/task_identifiers/task_identifiers', 'taskIdentifiers');
+setEditor('data_groups', './pages/data_groups/data_groups', 'dataGroups');

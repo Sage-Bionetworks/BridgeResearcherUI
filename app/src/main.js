@@ -46,6 +46,8 @@ router.on('/consent', routeTo('consent'));
 router.on('/eligibility', routeTo('eligibility'));
 router.on('/password_policy', routeTo('password_policy'));
 router.on('/user_attributes', routeTo('user_attributes'));
+router.on('/task_identifiers', routeTo('task_identifiers'));
+router.on('/data_groups', routeTo('data_groups'));
 router.on('/verify_email_template', routeTo('ve_template'));
 router.on('/reset_password_template', routeTo('rp_template'));
 router.on('/actions', routeTo('actions'));

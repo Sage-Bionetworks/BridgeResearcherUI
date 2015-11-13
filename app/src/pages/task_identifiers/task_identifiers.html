@@ -1,6 +1,6 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
-        <h3>User Profile Attributes</h3>
+        <h3>Task Identifiers</h3>
         <div class="fixed-header-buttons">
             <button class="ui primary button" data-bind="disable: $component.noChanges, click: $component.save">Save</button>
         </div>
@@ -24,18 +24,18 @@
         </div>
         <div class="six wide column">
             <div class="ui message">
-                <p>Bridge stores personally identifiable information separately from the health information collected
-                    for a study. By default, we accept a participant's first and last name, and an email address,
-                    through that participant’s user profile. </p>
+                <p>You can schedule activities for participants that include either <em>surveys</em> or <em>tasks</em>.</p>
 
-                <p>You can configure your study to accept additional information about a participant. These fields can
-                    then be added to a user profile and they will be saved and included as part of the
-                    <a href="#actions">Participant Roster</a>. </p>
+                <p>Surveys can be created here through the research manager, then scheduled to run in your application
+                    through the Bridge SDK. </p>
 
-                <p>Like a participant's name or email address, this information will not be included in the data set
-                    exported from the study.</p>
+                <p>Tasks are known only to your application. However you can schedule them by assigning them unique
+                    <em>identifiers</em>. A complete list of these should be defined here. </p>
+
+                <p>Once this is done, these identifiers will be available to you when you schedule tasks in the scheduler.
+                    Your application should know what task to run when a schedule references one
+                    of these identifiers. </p>
             </div>
-
         </div>
     </div>
 </div>

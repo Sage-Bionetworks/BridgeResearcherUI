@@ -1,5 +1,5 @@
 var ko = require('knockout');
-var optionsService = require('../../services/options_service');
+var storeService = require('../../services/store_service');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var config = require('../../config');
@@ -16,8 +16,8 @@ function findStudyName(studies, studyIdentifier) {
 module.exports = function() {
     var self = this;
 
-    var studyKey = optionsService.get('studyKey', 'api');
-    var env = optionsService.get('environment', 'production');
+    var studyKey = storeService.get('studyKey') || 'api';
+    var env = storeService.get('environment') || 'production';
 
     utils.observablesFor(self, fields);
     self.studyObs(studyKey);
@@ -51,8 +51,8 @@ module.exports = function() {
             return;
         }
         // Succeed or fail, let's keep these values for other sign ins.
-        optionsService.set('environment', self.environmentObs());
-        optionsService.set('studyKey', self.studyObs());
+        storeService.set('environment', self.environmentObs());
+        storeService.set('studyKey', self.studyObs());
 
         utils.startHandler(self, event);
 

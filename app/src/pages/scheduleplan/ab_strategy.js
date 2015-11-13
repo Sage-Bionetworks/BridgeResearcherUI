@@ -1,6 +1,6 @@
 var ko = require('knockout');
 var utils = require('../../utils');
-var scheduleService = require('../../services/schedule_service.js');
+var scheduleUtils = require('./schedule_utils');
 
 function groupToObservables(group) {
     group.percentageObs = ko.observable(group.percentage);
@@ -22,7 +22,7 @@ function observablesToGroup(group) {
 }
 
 function newGroup() {
-    var group = {percentage:0, schedule:scheduleService.newSchedule()};
+    var group = {percentage:0, schedule:scheduleUtils.newSchedule()};
     groupToObservables(group);
     return group;
 }
