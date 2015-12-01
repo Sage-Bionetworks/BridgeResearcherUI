@@ -35,6 +35,20 @@
                     </ui-checkbox>
                 </div>
                 <div class="field">
+                    <label>Minimum Supported App Versions</label>
+                    <p class="help-text">Leave blank or set to zero if you support all versions that have been released</p>
+                    <div class="six fields">
+                        <div class="field">
+                            <label>iOS</label>
+                            <input placeholder="#" type="number" data-bind="value: minIosObs"/>
+                        </div>
+                        <div class="field">
+                            <label>Android</label>
+                            <input placeholder="#" type="number" data-bind="value: minAndroidObs"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
                     <button class="ui small button" data-bind="click: publicKey">Download CMS Public Key</button>
                 </div>
             </form>
@@ -47,6 +61,11 @@
                 <p>Please do not disable strict upload validation unless instructed to do so. If your
                     application submits corrupted data, you will have to fix it after the data
                     is collected. </p>
+
+                <p>If your study no longer supports an older app version on a particular platform, lock that version
+                    out by setting a <b>minimum supported app version</b>. Apps older than this version on that
+                    platform will receive a 410 response from the server. Your app should prevent the user from
+                    doing anything but upgrading when it receives this response. </p>
 
                 <p>The CMS key is provided to encrypt data you send to the Bridge server. The encryption key
                     (specific to your study) ensures that the data cannot be read on the phone, or in transit to
