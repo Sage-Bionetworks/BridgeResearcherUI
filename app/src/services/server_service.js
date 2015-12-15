@@ -117,20 +117,6 @@ function del(path) {
         return deleteInt(config.host[session.environment] + path);
     });
 }
-/*
-function removeFromCache(key) {
-    return function(response) {
-        storeService.remove(key);
-        return response;
-    };
-}
-function setCache(key) {
-    return function(response) {
-        storeService.set(key, response);
-        return response;
-    };
-}
-*/
 function getSurveyKey(arg, arg2) {
     if (arguments.length === 2) {
         return arg + ":" + new Date(arg2.toISOString());
@@ -235,13 +221,13 @@ module.exports = {
         var url = config.survey+guid+'/revisions/'+createdString;
         var key = getSurveyKey(guid, createdOn);
 
-        return /*storeService.getPromise(key) ||*/ get(url); //.then(setCache(key));
+        return get(url); //.then(setCache(key));
     },
     getSurveyMostRecent: function(guid) {
         return get(config.survey + guid + '/revisions/recent');
     },
     getSurveysSummarized: function() {
-        return /*storeService.getPromise('survey-summaries') ||*/ get(config.surveys + '?format=summary'); //.then(setCache('survey-summaries'));
+        return get(config.surveys + '?format=summary');
     },
     createSurvey: function(survey) {
         return post(config.surveys, survey);
@@ -249,22 +235,22 @@ module.exports = {
     publishSurvey: function(guid, createdOn) {
         var createdString = new Date(createdOn).toISOString();
         var url = config.survey + guid + '/revisions/' + createdString + '/publish';
-        return post(url); //.then(removeFromCache(getSurveyKey(guid, createdOn)));
+        return post(url);
     },
     versionSurvey: function(guid, createdOn) {
         var createdString = new Date(createdOn).toISOString();
         var url = config.survey + guid + '/revisions/' + createdString + '/version';
-        return post(url); // .then(removeFromCache(getSurveyKey(guid, createdOn)));
+        return post(url);
     },
     updateSurvey: function(survey) {
         var createdString = new Date(survey.createdOn).toISOString();
         var url = config.survey + survey.guid + '/revisions/' + createdString;
-        return post(url, survey); //.then(removeFromCache(getSurveyKey(survey)));
+        return post(url, survey);
     },
     deleteSurvey: function(survey) {
         var createdString = new Date(survey.createdOn).toISOString();
         var url = config.survey + survey.guid + '/revisions/' + createdString;
-        return del(url); //.then(removeFromCache(getSurveyKey(survey)));
+        return del(url);
     },
     getAllUploadSchemas: function() {
         return get(config.schemas);
@@ -285,20 +271,20 @@ module.exports = {
         return del(config.schemas + "/" + schema.schemaId + "/revisions/" + schema.revision);
     },
     getSchedulePlans: function() {
-        return /*storeService.getPromise('scheduleplans') ||*/ get(config.schemaPlans); //.then(setCache('scheduleplans'));
+        return get(config.schemaPlans);
     },
     getSchedulePlan: function(guid) {
         return get(config.schemaPlans + "/" + guid);
     },
     saveSchedulePlan: function(plan) {
         if (plan.guid) {
-            return post(config.schemaPlans + "/" + plan.guid, plan); //.then(removeFromCache('scheduleplans'));
+            return post(config.schemaPlans + "/" + plan.guid, plan);
         } else {
-            return post(config.schemaPlans, plan); //.then(removeFromCache('scheduleplans'));
+            return post(config.schemaPlans, plan);
         }
     },
     deleteSchedulePlan: function(guid) {
-        return del(config.schemaPlans + "/" + guid); //.then(removeFromCache('scheduleplans'));
+        return del(config.schemaPlans + "/" + guid);
     },
     getSession: function() {
         if (session) {
