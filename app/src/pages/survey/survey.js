@@ -15,11 +15,13 @@ module.exports = function(params) {
     self.disabledObs = ko.observable(false);
 
     function loadVM(survey) {
+        console.log("loadVM", survey);
         self.survey = survey;
         surveyUtils.surveyToObservables(self, survey);
         return survey.createdOn;
     }
     function updateVM(keys, message) {
+        console.log("updateVM", keys, message);
         self.survey.guid = keys.guid;
         self.survey.createdOn = keys.createdOn;
         self.survey.version = keys.version;
@@ -54,8 +56,11 @@ module.exports = function(params) {
      */
     self.save = function(vm, event) {
         utils.startHandler(self, event);
+
+        console.log(self.survey);
+
         if (self.survey.published) {
-            version(self.survey).then(updateVM).then(save)
+            version(self.survey).then(updateVM).then(save).then(updateVM)
                 .then(function() {
                     self.publishedObs(false);
                     self.survey.published = false;

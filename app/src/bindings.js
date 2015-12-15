@@ -2,7 +2,7 @@ var ko = require('knockout');
 var $ = require('jquery');
 var dragula = require('dragula');
 //var SHOW_DELAY = 1;
-var HIDE_DELAY = 800;
+var HIDE_DELAY = 1800;
 
 // http://stackoverflow.com/questions/23606541/observable-array-push-multiple-objects-in-knockout-js
 ko.observableArray.fn.pushAll = function(valuesToPush) {

@@ -117,6 +117,7 @@ function del(path) {
         return deleteInt(config.host[session.environment] + path);
     });
 }
+/*
 function removeFromCache(key) {
     return function(response) {
         storeService.remove(key);
@@ -129,6 +130,7 @@ function setCache(key) {
         return response;
     };
 }
+*/
 function getSurveyKey(arg, arg2) {
     if (arguments.length === 2) {
         return arg + ":" + new Date(arg2.toISOString());
@@ -196,13 +198,13 @@ module.exports = {
     },
     getStudy: function() {
         return storeService.getPromise('study') ||
-               get(config.getStudy).then(setCache('study'));
+               get(config.getStudy); //.then(setCache('study'));
     },
     getStudyPublicKey: function() {
         return get(config.getStudyPublicKey);
     },
     saveStudy: function(study) {
-        return post(config.getStudy, study).then(removeFromCache('study'));
+        return post(config.getStudy, study); //.then(removeFromCache('study'));
     },
     getMostRecentStudyConsent: function() {
         return get(config.mostRecentStudyConsent);
@@ -233,14 +235,13 @@ module.exports = {
         var url = config.survey+guid+'/revisions/'+createdString;
         var key = getSurveyKey(guid, createdOn);
 
-        return storeService.getPromise(key) || get(url).then(setCache(key));
+        return /*storeService.getPromise(key) ||*/ get(url); //.then(setCache(key));
     },
     getSurveyMostRecent: function(guid) {
         return get(config.survey + guid + '/revisions/recent');
     },
     getSurveysSummarized: function() {
-        return storeService.getPromise('survey-summaries') ||
-               get(config.surveys + '?format=summary').then(setCache('survey-summaries'));
+        return /*storeService.getPromise('survey-summaries') ||*/ get(config.surveys + '?format=summary'); //.then(setCache('survey-summaries'));
     },
     createSurvey: function(survey) {
         return post(config.surveys, survey);
@@ -248,22 +249,22 @@ module.exports = {
     publishSurvey: function(guid, createdOn) {
         var createdString = new Date(createdOn).toISOString();
         var url = config.survey + guid + '/revisions/' + createdString + '/publish';
-        return post(url).then(removeFromCache(getSurveyKey(guid, createdOn)));
+        return post(url); //.then(removeFromCache(getSurveyKey(guid, createdOn)));
     },
     versionSurvey: function(guid, createdOn) {
         var createdString = new Date(createdOn).toISOString();
         var url = config.survey + guid + '/revisions/' + createdString + '/version';
-        return post(url).then(removeFromCache(getSurveyKey(guid, createdOn)));
+        return post(url); // .then(removeFromCache(getSurveyKey(guid, createdOn)));
     },
     updateSurvey: function(survey) {
         var createdString = new Date(survey.createdOn).toISOString();
         var url = config.survey + survey.guid + '/revisions/' + createdString;
-        return post(url, survey).then(removeFromCache(getSurveyKey(survey)));
+        return post(url, survey); //.then(removeFromCache(getSurveyKey(survey)));
     },
     deleteSurvey: function(survey) {
         var createdString = new Date(survey.createdOn).toISOString();
         var url = config.survey + survey.guid + '/revisions/' + createdString;
-        return del(url).then(removeFromCache(getSurveyKey(survey)));
+        return del(url); //.then(removeFromCache(getSurveyKey(survey)));
     },
     getAllUploadSchemas: function() {
         return get(config.schemas);
@@ -284,21 +285,20 @@ module.exports = {
         return del(config.schemas + "/" + schema.schemaId + "/revisions/" + schema.revision);
     },
     getSchedulePlans: function() {
-        return storeService.getPromise('scheduleplans') ||
-               get(config.schemaPlans).then(setCache('scheduleplans'));
+        return /*storeService.getPromise('scheduleplans') ||*/ get(config.schemaPlans); //.then(setCache('scheduleplans'));
     },
     getSchedulePlan: function(guid) {
         return get(config.schemaPlans + "/" + guid);
     },
     saveSchedulePlan: function(plan) {
         if (plan.guid) {
-            return post(config.schemaPlans + "/" + plan.guid, plan).then(removeFromCache('scheduleplans'));
+            return post(config.schemaPlans + "/" + plan.guid, plan); //.then(removeFromCache('scheduleplans'));
         } else {
-            return post(config.schemaPlans, plan).then(removeFromCache('scheduleplans'));
+            return post(config.schemaPlans, plan); //.then(removeFromCache('scheduleplans'));
         }
     },
     deleteSchedulePlan: function(guid) {
-        return del(config.schemaPlans + "/" + guid).then(removeFromCache('scheduleplans'));
+        return del(config.schemaPlans + "/" + guid); //.then(removeFromCache('scheduleplans'));
     },
     getSession: function() {
         if (session) {

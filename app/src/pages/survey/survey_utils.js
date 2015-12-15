@@ -197,6 +197,9 @@ function updateModelField(model, fieldName) {
     var obsName = fieldName + "Obs";
     if (typeof model[obsName]() !== "undefined") {
         model[fieldName] = model[obsName]();
+        if (model[fieldName] === "") {
+            delete model[fieldName];
+        }
     }
 }
 function newSurvey() {
