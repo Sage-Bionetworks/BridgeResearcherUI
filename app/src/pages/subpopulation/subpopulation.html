@@ -1,0 +1,118 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <h3>
+            <a href="#/subpopulations" class="section">Consent Groups</a>
+            <span data-bind="visible: nameObs().length > 0, text: nameObs"></span>
+            <span data-bind="visible: nameObs().length === 0">New Consent Group</span>
+        </h3>
+        <div class="fixed-header-buttons">
+            <button class="ui small primary button" data-bind="click: save">Save</button>
+        </div>
+    </div>
+    <div class="ui secondary pointing menu" data-bind="visible: !isNewObs()">
+    </div>
+</div>
+<div class="scrollbox">
+    <form class="ui form">
+        <div class="fields">
+            <div class="six wide required field">
+                <label>Name</label>
+                <input type="text" name="name" data-bind="value: nameObs"/>
+            </div>
+            <div class="ten wide field">
+                <label>Description</label>
+                <input type="text" name="description" data-bind="value: descriptionObs"/>
+            </div>
+        </div>
+        <div class="fields">
+            <div class="six wide field">
+                <h4>Assignment based on:</h4>
+                <div class="field">
+                    <label>App version:</label>
+                    <div class="two fields">
+                        <div class="six wide field">
+                            <ui-number params="fieldObs: minAppVersionObs, publishedObs: publishedObs, placeholder: 'Min'"></ui-number>
+                        </div>
+                        <div class="six wide field">
+                            <ui-number params="fieldObs: maxAppVersionObs, publishedObs: publishedObs, placeholder: 'Max'"></ui-number>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>User has these data group(s):</label>
+                    <div class="vertical-padding" data-bind="visible: allOfGroupsObs().length === 0">
+                        <i>None selected</i>
+                    </div>
+                    <div class="vertical-padding" data-bind="foreach: allOfGroupsObs">
+                        <div class="ui large label">
+                            <span data-bind="text: $data"></span>
+                            <a data-bind="click: $parent.removeAllOf"><i class="delete icon"></i></a>
+                        </div>
+                    </div>
+                    <div class="field" data-bind="visible: dataGroupsOptions().length === 0">
+                        <i>&lt;No data groups&gt;</i>
+                    </div>
+                    <data class="two fields" data-bind="visible: dataGroupsOptions().length !== 0">
+                        <div class="field">
+                            <ui-select params="fieldObs: allOfGroupsEditorObs, fieldLabel: dataGroupsLabel,
+                                publishedObs: publishedObs, optionsSrc: dataGroupsOptions"></ui-select>
+                        </div>
+                        <div class="field">
+                            <button class="ui button" data-bind="click: addToAll">Add</button>
+                        </div>
+                    </data>
+                </div>
+                <div class="field">
+                    <label>And user does not have any of these data group(s):</label>
+                    <div class="vertical-padding" data-bind="visible: noneOfGroupsObs().length === 0">
+                        <i>None selected</i>
+                    </div>
+                    <div class="vertical-padding" data-bind="foreach: noneOfGroupsObs">
+                        <div class="ui large label">
+                            <span data-bind="text: $data"></span>
+                            <a data-bind="click: $parent.removeNoneOf"><i class="delete icon"></i></a>
+                        </div>
+                    </div>
+                    <div class="field" data-bind="visible: dataGroupsOptions().length === 0">
+                        <i>&lt;No data groups&gt;</i>
+                    </div>
+                    <data class="two fields" data-bind="visible: dataGroupsOptions().length !== 0">
+                        <div class="field">
+                            <ui-select params="fieldObs: noneOfGroupsEditorObs, fieldLabel: dataGroupsLabel,
+                                publishedObs: publishedObs, optionsSrc: dataGroupsOptions"></ui-select>
+                        </div>
+                        <div class="field">
+                            <button class="ui button" data-bind="click: addToNone">Add</button>
+                        </div>
+                    </data>
+                </div>
+            </div>
+            <div class="ten wide field">
+                <h4>Recent Consent History</h4>
+                <p data-bind="visible: historyItemsObs().length === 0">There are no consents until you create this consent group.</p>
+                <div data-bind="visible: historyItemsObs().length > 0">
+                    <table class="ui compact table">
+                        <tbody data-bind="foreach: historyItemsObs">
+                            <tr data-bind="css: { positive: $data.active }">
+                                <td>
+                                    <a data-bind="attr: {'href': $parent.formatLink($data)},
+                                        text: $parent.formatDateTime($data.createdOn)"></a>
+                                </td>
+                                <td>
+                                    <div data-bind="visible: $data.active" style="text-align: right">
+                                        <i class="icon checkmark"></i> Published
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="vertical-padding">
+                        <a data-bind="attr: {'href': newConsentLinkObs}" class="ui small primary button">Edit Consents</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+

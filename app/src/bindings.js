@@ -1,5 +1,4 @@
 var ko = require('knockout');
-var $ = require('jquery');
 var dragula = require('dragula');
 //var SHOW_DELAY = 1;
 var HIDE_DELAY = 1800;

@@ -6,6 +6,16 @@
             <span data-bind="visible: nameObs().length == 0">New Survey</span>
         </h3>
         <div class="fixed-header-buttons">
+            <span class="action item" data-bind="visible: publishedObs">
+                <div class="green ui label">
+                    <i class="checkmark icon"></i> Published
+                </div>
+            </span>
+            <span class="action item" data-bind="visible: !publishedObs()">
+                <div class="orange ui label">
+                    <i class="warning icon"></i> Not Published
+                </div>
+            </span>
             <button class="ui primary small button" data-bind="visible: !disabledObs(), click: save">Save</button>
         </div>
     </div>

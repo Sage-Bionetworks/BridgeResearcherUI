@@ -9,7 +9,8 @@ var pageSets = {
     'surveys': ['surveys','survey','survey_versions'],
     'schemas': ['schemas','schema','schema_versions'],
     'scheduleplans': ['scheduleplans','scheduleplan'],
-    've_template': ['ve_template', 'rp_template']
+    've_template': ['ve_template', 'rp_template'],
+    'subpopulations': ['subpopulations', 'subpopulation', 'consent']
 };
 
 toastr.options = config.toastr;

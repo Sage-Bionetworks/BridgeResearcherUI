@@ -1,0 +1,41 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <h3>Synapse Configuration</h3>
+        <div class="fixed-header-buttons">
+            <button class="ui small primary button" data-bind="click: save">Save</button>
+        </div>
+    </div>
+    <div class="ui secondary larger pointing menu">
+        <a href="#/info" class="item">
+            <i class="setting icon"></i> General
+        </a>
+        <a href="#/email" class="item">
+            <i class="mail outline icon"></i> Email Contacts
+        </a>
+        <a href="#/synapse" class="active item">
+            <i class="cubes icon"></i> Synapse Configuration
+        </a>
+    </div>
+</div>
+<div class="scrollbox">
+    <div class="ui grid">
+        <div class="ten wide column">
+            <form class="ui form">
+                <div class="required six wide field">
+                    <label>Synapse Access Team ID</label>
+                    <input type="text" name="synapseDataAccessTeamId" data-bind="value: synapseDataAccessTeamIdObs"/>
+                </div>
+                <div class="required six wide field">
+                    <label>Synapse Project ID</label>
+                    <input type="text" name="synapseProjectId" data-bind="value: synapseProjectIdObs"/>
+                </div>
+            </form>
+        </div>
+        <div class="six wide column">
+            <div class="ui message">
+                <p>Research data is exported to Synapse. These IDs are necessary for the
+                export to be successful. More information forthcoming. </p>
+            </div>
+        </div>
+    </div>
+</div>
