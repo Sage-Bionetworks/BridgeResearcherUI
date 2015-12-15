@@ -1,8 +1,11 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
         <h3>
-            <a data-bind="attr:{href: '#/subpopulations/'+guidObs()}, text: nameObs" class="section"></a>
-            <span>Consent <span data-bind="text: createdOnObs"</span></span>
+            <span class="section">
+                <a href="#/subpopulations">Consent Groups</a> »
+                <a data-bind="attr:{href: '#/subpopulations/'+guidObs()}, text: nameObs"></a>
+            </span>
+            <span data-bind="text: createdOnObs"</span>
         </h3>
         <div class="fixed-header-buttons">
             <span data-bind="visible: tabObs() == 'current'">
