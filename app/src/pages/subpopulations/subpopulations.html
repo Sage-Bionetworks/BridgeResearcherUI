@@ -1,0 +1,35 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <h3>Consent Groups</h3>
+        <div class="fixed-header-buttons">
+            <a href="#/subpopulations/new" class="ui primary small button">New Consent Group</a>
+            <button class="ui red small button" data-bind="disable: !atLeastOneChecked(), click: deleteSubpopulations">Delete</button>
+        </div>
+    </div>
+    <div class="ui secondary pointing menu"></div>
+</div>
+<div class="scrollbox">
+    <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
+    <table class="ui compact table" data-bind="visible: itemsObs().length > 0">
+        <thead>
+        <tr>
+            <th width="10"></th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Matching Criteria</th>
+        </tr>
+        </thead>
+        <tbody data-bind="foreach: itemsObs">
+            <tr data-bind="css: { positive: $data.active }">
+                <td>
+                    <ui-checkbox params="checkedObs: $data.checkedObs, disabledObs: $parent.publishedObs"></ui-checkbox>
+                </td>
+                <td>
+                    <a data-bind="attr: {'href': '#/subpopulations/'+encodeURIComponent($data.guid)}, text: $data.name"></a>
+                </td>
+                <td data-bind="text: $data.description"></td>
+                <td data-bind="html: $parent.criteriaLabel($data)"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -10,7 +10,6 @@ var EventEmitter = require('../events');
 var storeService = require('./store_service');
 var config = require('../config');
 var utils = require("../utils");
-var $ = require('jquery');
 var Promise = require('es6-promise').Promise;
 
 var SESSION_KEY = 'session';
@@ -190,23 +189,25 @@ module.exports = {
         return get(config.getStudyPublicKey);
     },
     saveStudy: function(study) {
-        return post(config.getStudy, study); //.then(removeFromCache('study'));
+        return post(config.getStudy, study);
     },
-    getMostRecentStudyConsent: function() {
-        return get(config.mostRecentStudyConsent);
+
+    getMostRecentStudyConsent: function(guid) {
+        return get(config.subpopulations + "/" + guid + "/consents/recent");
     },
-    getStudyConsent: function(createdOn) {
-        return get(config.studyConsent + new Date(createdOn).toISOString());
+    getStudyConsent: function(guid, createdOn) {
+        return get(config.subpopulations + "/" + guid + "/consents/" + new Date(createdOn).toISOString());
     },
-    saveStudyConsent: function(consent) {
-        return post(config.studyConsents, consent);
+    saveStudyConsent: function(guid, consent) {
+        return post(config.subpopulations + "/" + guid + "/consents", consent);
     },
-    publishStudyConsent: function(createdOn) {
-        return post(config.studyConsent + new Date(createdOn).toISOString() + "/publish");
+    publishStudyConsent: function(guid, createdOn) {
+        return post(config.subpopulations + "/" + guid + "/consents/" + new Date(createdOn).toISOString() + "/publish");
     },
-    getConsentHistory: function() {
-        return get(config.studyConsents);
+    getConsentHistory: function(guid) {
+        return get(config.subpopulations + "/" + guid + "/consents");
     },
+
     emailRoster: function() {
         return post(config.emailRoster);
     },
@@ -285,6 +286,21 @@ module.exports = {
     },
     deleteSchedulePlan: function(guid) {
         return del(config.schemaPlans + "/" + guid);
+    },
+    getAllSubpopulations: function() {
+        return get(config.subpopulations);
+    },
+    getSubpopulation: function(guid) {
+        return get(config.subpopulations + "/" + guid);
+    },
+    createSubpopulation: function(subpop) {
+        return post(config.subpopulations, subpop);
+    },
+    updateSubpopulation: function(subpop) {
+        return post(config.subpopulations + "/" + subpop.guid, subpop);
+    },
+    deleteSubpopulation: function(guid) {
+        return del(config.subpopulations + "/" + guid);
     },
     getSession: function() {
         if (session) {

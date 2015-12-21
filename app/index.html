@@ -25,14 +25,11 @@
                         <a href="#/info" class="item" data-bind="css:{active:isActive('info')}, visible: isDeveloper">
                             Settings
                         </a>
-                        <a href="#/consent" class="item" data-bind="css:{active:isActive('consent')}, visible: isResearcher">
-                            Consent Agreement
+                        <a href="#/subpopulations" class="item" data-bind="css:{active:isActive('subpopulations')}, visible: isDeveloper">
+                            Consent Groups
                         </a>
                         <a href="#/eligibility" class="item" data-bind="css:{active:isActive('eligibility')}, visible: isDeveloper">
                             Eligibility Criteria
-                        </a>
-                        <a href="#/data_groups" class="item" data-bind="css:{active:isActive('data_groups')}, visible: isDeveloper">
-                            Data Groups
                         </a>
                         <a href="#/scheduleplans" class="item" data-bind="css:{active:isActive('scheduleplans')}, visible: isDeveloper">
                             Scheduling
@@ -52,11 +49,6 @@
                         <a href="#/surveys" class="item" data-bind="css:{active:isActive('surveys')}, visible: isDeveloper">
                             Surveys
                         </a>
-                        <!--
-                        <a href="#/monitor" class="item" data-bind="css:{active:isActive('monitor')}, visible: isDeveloper">
-                            Upload Monitor
-                        </a>
-                        -->
                     </div>
                  </div>
                 <div class="item">
@@ -88,6 +80,7 @@
     <div data-bind="modal: dialogObs"></div>
     <script src="//cdn.polyfill.io/v1/polyfill.min.js"></script>
     <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="dist/bundle.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/semantic.min.js"></script>
 </body>

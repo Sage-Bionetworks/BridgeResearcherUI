@@ -169,6 +169,7 @@ module.exports = {
      * @param fields
      */
     valuesToObservables: function(vm, object, fields) {
+        console.log(arguments);
         for (var i=0; i < fields.length; i++) {
             var insp = nameInspector(fields[i]);
 
