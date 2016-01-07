@@ -88,6 +88,13 @@
                 </div>
             </div>
             <div class="ten wide field">
+                <div class="field">
+                    <label>Is this consent required?</label>
+                    <div class="help-text" style="margin-bottom:1rem">If a user matches this consent group, <i>must</i> they sign the consent to access Bridge?</div>
+                    <ui-checkbox params="checkedObs: requiredObs, disabledObs: publishedObs">
+                        Required
+                    </ui-checkbox>
+                </div>
                 <h4>Recent Consent History</h4>
                 <p data-bind="visible: historyItemsObs().length === 0">There are no consents until you create this consent group.</p>
                 <div data-bind="visible: historyItemsObs().length > 0">
