@@ -3,8 +3,6 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var root = require('../../root');
 
-var DATA_GROUP_PATTERN = /^[a-zA-Z0-9_-]+$/;
-
 module.exports = function(propertyName) {
     return function () {
         var self = this;

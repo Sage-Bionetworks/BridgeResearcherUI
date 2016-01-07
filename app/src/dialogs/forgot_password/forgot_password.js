@@ -1,4 +1,3 @@
-var ko = require('knockout');
 var utils = require('../../utils');
 var serverService = require('../../services/server_service');
 var storeService = require('../../services/store_service');

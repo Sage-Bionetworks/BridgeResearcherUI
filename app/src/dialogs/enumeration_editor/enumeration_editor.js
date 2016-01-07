@@ -93,8 +93,6 @@ module.exports = function(params) {
 
     self.listObs = ko.observableArray(listsSource.getCurrentEntry().enumeration);
 
-    var zonesEl = document.querySelector(".listZone");
-
     self.hasDetail = function(item) {
         return !!item.detail;
     };

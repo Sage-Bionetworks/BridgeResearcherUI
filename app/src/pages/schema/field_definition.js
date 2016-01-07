@@ -1,4 +1,3 @@
-var ko = require('knockout');
 var schemaUtils = require('./schema_utils');
 
 module.exports = function(params) {

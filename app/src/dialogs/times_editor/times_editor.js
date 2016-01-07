@@ -1,5 +1,4 @@
 var ko = require('knockout');
-var utils = require('../../utils');
 var scheduleUtils = require('../../pages/scheduleplan/schedule_utils');
 var root = require('../../root');
 

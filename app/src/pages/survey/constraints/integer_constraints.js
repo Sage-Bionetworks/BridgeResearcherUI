@@ -1,7 +1,4 @@
 var surveyUtils = require('../survey_utils');
-var utils = require('../../../utils');
-
-var fields = ['minValue','maxValue','step','unit'];
 
 module.exports = function(params) {
     var self = this;
