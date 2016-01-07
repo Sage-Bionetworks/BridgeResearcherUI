@@ -2,13 +2,14 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 
-var fields = ['name','description','minAppVersion','maxAppVersion','noneOfGroups[]','allOfGroups[]'];
+var fields = ['name','description','minAppVersion','maxAppVersion','required','noneOfGroups[]','allOfGroups[]'];
 
 module.exports = function(params) {
     var self = this;
 
     self.isNewObs = ko.observable(params.guid === "new");
     self.publishedObs = ko.observable(false);
+    self.requiredObs = ko.observable(false);
     utils.observablesFor(self, fields);
     self.noneOfGroupsEditorObs = ko.observable();
     self.allOfGroupsEditorObs = ko.observable();

@@ -33,24 +33,24 @@
         </tr>
         </thead>
         <tbody data-bind="foreach: itemsObs">
-        <tr data-bind="css: { positive: $data.published }">
-            <td>
-                <input type="radio" name="publish" data-bind="click: $component.selectForAction"/>
-            </td>
-            <td>
-                <a href="#" data-bind="attr: {href: '#/surveys/'+$data.guid+'/'+$data.createdOn},
-                    text: $data.name"></a><br/>Created <span data-bind="text:$parent.formatDateTime($data.createdOn)"></span>
-            </td>
-            <td>
-                <span data-bind="visible: $data.schemaRevision, text: 'v'+$data.schemaRevision"></span>
-                <em data-bind="visible: !$data.schemaRevision">Draft</em>
-            </td>
-            <td>
-                <div data-bind="visible: $data.published" style="text-align: right">
-                    <i class="checkmark icon"></i> Published
-                </div>
-            </td>
-        </tr>
+            <tr data-bind="css: { positive: $data.published }">
+                <td>
+                    <input type="radio" name="publish" data-bind="click: $component.selectForAction"/>
+                </td>
+                <td>
+                    <a href="#" data-bind="attr: {href: '#/surveys/'+$data.guid+'/'+$data.createdOn},
+                        text: $data.name"></a><br/>Created <span data-bind="text:$parent.formatDateTime($data.createdOn)"></span>
+                </td>
+                <td>
+                    <span data-bind="visible: $data.schemaRevision, text: 'v'+$data.schemaRevision"></span>
+                    <em data-bind="visible: !$data.schemaRevision">Draft</em>
+                </td>
+                <td>
+                    <div data-bind="visible: $data.published" style="text-align: right">
+                        <i class="checkmark icon"></i> Published
+                    </div>
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>
