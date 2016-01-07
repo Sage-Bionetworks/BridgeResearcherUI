@@ -72,7 +72,7 @@ function addObserversToActivity(activity) {
  * @param schedule
  */
 function fixScheduleTimes(schedule) {
-    // TOD: These are also fixed in the formatter, but probably need to be fixed here as well.
+    // TODO: These are also fixed in the formatter, but probably need to be fixed here as well.
     schedule.times = schedule.times.map(function(time) {
         return time.replace(":00.000","");
     });
