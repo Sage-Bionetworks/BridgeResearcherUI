@@ -66,10 +66,10 @@ module.exports = function(params) {
             var createdOn = self.consent.createdOn;
 
             var p = serverService.saveStudyConsent(params.guid, {documentContent: self.editor.getData()})
-                    .then(publish)
-                    .then(saveAfterPublish)
-                    .then(utils.successHandler(vm, event, "Consent published"))
-                    .catch(utils.failureHandler(vm, event));
+                .then(publish)
+                .then(saveAfterPublish)
+                .then(utils.successHandler(vm, event, "Consent published"))
+                .catch(utils.failureHandler(vm, event));
         }
     };
     self.save = function(passwordPolicy, event) {

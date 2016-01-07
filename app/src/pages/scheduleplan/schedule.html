@@ -82,8 +82,7 @@
                 </div>
                 <div style="width: 10rem" data-bind="visible: $data.activityTypeObs() == 'task'">
                     <ui-select params="fieldObs: $data.taskIdObs, fieldLabel: $component.taskOptionsLabel,
-                        publishedObs: $component.publishedObs, optionsSrc: $component.taskOptionsObs,
-                        emptyLabel: 'No tasks defined'"></ui-select>
+                        publishedObs: $component.publishedObs, optionsSrc: $component.taskOptionsObs"></ui-select>
                 </div>
                 <div style="width: 10rem" data-bind="visible: $data.activityTypeObs() == 'survey'">
                     <ui-select params="fieldObs: $data.surveyGuidObs, fieldLabel: $component.surveysOptionsLabel,
