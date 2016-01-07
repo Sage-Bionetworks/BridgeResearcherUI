@@ -10,7 +10,6 @@ var EventEmitter = require('../events');
 var storeService = require('./store_service');
 var config = require('../config');
 var utils = require("../utils");
-var $ = require('jquery');
 var Promise = require('es6-promise').Promise;
 
 var SESSION_KEY = 'session';
@@ -44,7 +43,7 @@ function postInt(url, data) {
     } else if (typeof data !== 'string') {
         data = JSON.stringify(data);
     }
-    var dataString = data.replace(/"password":"([^"]*)"/, '"password":"[REDACTED]"');
+    //var dataString = data.replace(/"password":"([^"]*)"/, '"password":"[REDACTED]"');
     //console.debug("POST", url, dataString);
 
     return $.ajax({
@@ -117,25 +116,6 @@ function del(path) {
         return deleteInt(config.host[session.environment] + path);
     });
 }
-function removeFromCache(key) {
-    return function(response) {
-        storeService.remove(key);
-        return response;
-    };
-}
-function setCache(key) {
-    return function(response) {
-        storeService.set(key, response);
-        return response;
-    };
-}
-function getSurveyKey(arg, arg2) {
-    if (arguments.length === 2) {
-        return arg + ":" + new Date(arg2.toISOString());
-    } else {
-        return arg.guid + ":" + new Date(arg.createdOn).toISOString();
-    }
-}
 /**
  * If we ever get back a 401, the UI isn't in sync with reality, sign the
  * user out. So this is called from error handler, as well as being available
@@ -196,29 +176,31 @@ module.exports = {
     },
     getStudy: function() {
         return storeService.getPromise('study') ||
-               get(config.getStudy).then(setCache('study'));
+               get(config.getStudy); //.then(setCache('study'));
     },
     getStudyPublicKey: function() {
         return get(config.getStudyPublicKey);
     },
     saveStudy: function(study) {
-        return post(config.getStudy, study).then(removeFromCache('study'));
+        return post(config.getStudy, study);
     },
-    getMostRecentStudyConsent: function() {
-        return get(config.mostRecentStudyConsent);
+
+    getMostRecentStudyConsent: function(guid) {
+        return get(config.subpopulations + "/" + guid + "/consents/recent");
     },
-    getStudyConsent: function(createdOn) {
-        return get(config.studyConsent + new Date(createdOn).toISOString());
+    getStudyConsent: function(guid, createdOn) {
+        return get(config.subpopulations + "/" + guid + "/consents/" + new Date(createdOn).toISOString());
     },
-    saveStudyConsent: function(consent) {
-        return post(config.studyConsents, consent);
+    saveStudyConsent: function(guid, consent) {
+        return post(config.subpopulations + "/" + guid + "/consents", consent);
     },
-    publishStudyConsent: function(createdOn) {
-        return post(config.studyConsent + new Date(createdOn).toISOString() + "/publish");
+    publishStudyConsent: function(guid, createdOn) {
+        return post(config.subpopulations + "/" + guid + "/consents/" + new Date(createdOn).toISOString() + "/publish");
     },
-    getConsentHistory: function() {
-        return get(config.studyConsents);
+    getConsentHistory: function(guid) {
+        return get(config.subpopulations + "/" + guid + "/consents");
     },
+
     emailRoster: function() {
         return post(config.emailRoster);
     },
@@ -231,16 +213,14 @@ module.exports = {
     getSurvey: function(guid, createdOn) {
         var createdString = new Date(createdOn).toISOString();
         var url = config.survey+guid+'/revisions/'+createdString;
-        var key = getSurveyKey(guid, createdOn);
 
-        return storeService.getPromise(key) || get(url).then(setCache(key));
+        return get(url); //.then(setCache(key));
     },
     getSurveyMostRecent: function(guid) {
         return get(config.survey + guid + '/revisions/recent');
     },
     getSurveysSummarized: function() {
-        return storeService.getPromise('survey-summaries') ||
-               get(config.surveys + '?format=summary').then(setCache('survey-summaries'));
+        return get(config.surveys + '?format=summary');
     },
     createSurvey: function(survey) {
         return post(config.surveys, survey);
@@ -248,22 +228,22 @@ module.exports = {
     publishSurvey: function(guid, createdOn) {
         var createdString = new Date(createdOn).toISOString();
         var url = config.survey + guid + '/revisions/' + createdString + '/publish';
-        return post(url).then(removeFromCache(getSurveyKey(guid, createdOn)));
+        return post(url);
     },
     versionSurvey: function(guid, createdOn) {
         var createdString = new Date(createdOn).toISOString();
         var url = config.survey + guid + '/revisions/' + createdString + '/version';
-        return post(url).then(removeFromCache(getSurveyKey(guid, createdOn)));
+        return post(url);
     },
     updateSurvey: function(survey) {
         var createdString = new Date(survey.createdOn).toISOString();
         var url = config.survey + survey.guid + '/revisions/' + createdString;
-        return post(url, survey).then(removeFromCache(getSurveyKey(survey)));
+        return post(url, survey);
     },
     deleteSurvey: function(survey) {
         var createdString = new Date(survey.createdOn).toISOString();
         var url = config.survey + survey.guid + '/revisions/' + createdString;
-        return del(url).then(removeFromCache(getSurveyKey(survey)));
+        return del(url);
     },
     getAllUploadSchemas: function() {
         return get(config.schemas);
@@ -284,21 +264,35 @@ module.exports = {
         return del(config.schemas + "/" + schema.schemaId + "/revisions/" + schema.revision);
     },
     getSchedulePlans: function() {
-        return storeService.getPromise('scheduleplans') ||
-               get(config.schemaPlans).then(setCache('scheduleplans'));
+        return get(config.schemaPlans);
     },
     getSchedulePlan: function(guid) {
         return get(config.schemaPlans + "/" + guid);
     },
     saveSchedulePlan: function(plan) {
         if (plan.guid) {
-            return post(config.schemaPlans + "/" + plan.guid, plan).then(removeFromCache('scheduleplans'));
+            return post(config.schemaPlans + "/" + plan.guid, plan);
         } else {
-            return post(config.schemaPlans, plan).then(removeFromCache('scheduleplans'));
+            return post(config.schemaPlans, plan);
         }
     },
     deleteSchedulePlan: function(guid) {
-        return del(config.schemaPlans + "/" + guid).then(removeFromCache('scheduleplans'));
+        return del(config.schemaPlans + "/" + guid);
+    },
+    getAllSubpopulations: function() {
+        return get(config.subpopulations);
+    },
+    getSubpopulation: function(guid) {
+        return get(config.subpopulations + "/" + guid);
+    },
+    createSubpopulation: function(subpop) {
+        return post(config.subpopulations, subpop);
+    },
+    updateSubpopulation: function(subpop) {
+        return post(config.subpopulations + "/" + subpop.guid, subpop);
+    },
+    deleteSubpopulation: function(guid) {
+        return del(config.subpopulations + "/" + guid);
     },
     getSession: function() {
         if (session) {

@@ -1,6 +1,5 @@
 var utils = require('../../utils');
 var ko = require('knockout');
-var serverService = require('../../services/server_service');
 var root = require('../../root');
 
 var UNIT_OPTIONS = Object.freeze([
@@ -197,6 +196,9 @@ function updateModelField(model, fieldName) {
     var obsName = fieldName + "Obs";
     if (typeof model[obsName]() !== "undefined") {
         model[fieldName] = model[obsName]();
+        if (model[fieldName] === "") {
+            delete model[fieldName];
+        }
     }
 }
 function newSurvey() {

@@ -1,18 +1,32 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
-        <h3>Consent Agreement</h3>
+        <h3>
+            <span class="section">
+                <a href="#/subpopulations">Consent Groups</a> »
+                <a data-bind="attr:{href: '#/subpopulations/'+guidObs()}, text: nameObs"></a>
+            </span>
+            <span data-bind="text: createdOnObs"></span>
+        </h3>
         <div class="fixed-header-buttons">
-            <div data-bind="visible: tabObs() == 'current'">
+            <span data-bind="visible: tabObs() == 'current'">
+                <span class="action item" data-bind="visible: activeObs">
+                    <div class="green ui label">
+                        <i class="checkmark icon"></i> Published
+                    </div>
+                </span>
+                <span class="action item" data-bind="visible: !activeObs()">
+                    <div class="orange ui label">
+                        <i class="warning icon"></i> Not Published
+                    </div>
+                </span>
+                <button class="ui small button" data-bind="click: publish">Publish</button>
                 <button class="ui small primary button" data-bind="click: save">Save</button>
-            </div>
-            <div data-bind="visible: tabObs() == 'history'">
-                <button class="ui small primary button" data-bind="click: publish, disable: consentSelectedObs() == null">Publish</button>
-            </div>
+            </span>
         </div>
     </div>
     <div class="ui secondary pointing menu">
         <a class="item" data-bind="click: function() { tabObs('current') }, css: {active: tabObs() == 'current'}">
-            <i class="file outline icon"></i> Consent Agreement
+            <i class="file outline icon"></i> Editor
         </a>
         <a class="item" data-bind="click: function() { tabObs('history') }, css: {active: tabObs() == 'history'}">
             <i class="history icon"></i> History
@@ -21,19 +35,6 @@
             <i class="history icon"></i> Download
         </a>
         <div class="right menu">
-            <div class="item">
-                <i class="clock icon"></i> <span data-bind="text: createdOnObs"></span>
-            </div>
-            <div class="item" data-bind="visible: activeObs">
-                <div class="green ui label">
-                    <i class="checkmark icon"></i> Published
-                </div>
-            </div>
-            <div class="item" data-bind="visible: !activeObs()">
-                <div class="orange ui label">
-                    <i class="warning icon"></i> Not Published
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -48,26 +49,22 @@
                     <table class="ui compact table">
                         <thead>
                         <tr>
-                            <th width="20">&nbsp;</th>
                             <th>Saved On</th>
                             <th>&nbsp;</th>
                         </tr>
                         </thead>
                         <tbody data-bind="foreach: historyItemsObs">
-                        <tr data-bind="css: { positive: $data.active }">
-                            <td>
-                                <input type="radio" name="publish" data-bind="click: $component.selectToPublish, attr: {'checked': $data.active}"/>
-                            </td>
-                            <td>
-                                <a href="" data-bind="click: $parent.loadHistoryItem,
-                                text: $parent.formatDateTime($data.createdOn)"></a>
-                            </td>
-                            <td>
-                                <div data-bind="visible: $data.active" style="text-align: right">
-                                    <i class="icon checkmark"></i> Published
-                                </div>
-                            </td>
-                        </tr>
+                            <tr data-bind="css: { positive: $data.active }">
+                                <td>
+                                    <a href="" data-bind="click: $parent.loadHistoryItem,
+                                    text: $parent.formatDateTime($data.createdOn)"></a>
+                                </td>
+                                <td>
+                                    <div data-bind="visible: $data.active" style="text-align: right">
+                                        <i class="icon checkmark"></i> Published
+                                    </div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

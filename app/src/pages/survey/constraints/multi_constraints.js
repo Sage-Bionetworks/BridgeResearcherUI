@@ -1,5 +1,4 @@
 var surveyUtils = require('../survey_utils');
-var utils = require('../../../utils');
 var root = require('../../../root');
 
 module.exports = function(params) {

@@ -5,7 +5,20 @@
             <button class="ui primary button" data-bind="disable: $component.noChanges, click: $component.save">Save</button>
         </div>
     </div>
-    <div class="ui secondary pointing menu"></div>
+    <div class="ui secondary larger pointing menu">
+        <a href="#/info" class="item">
+            <i class="setting icon"></i> General
+        </a>
+        <a href="#/email" class="item">
+            <i class="mail outline icon"></i> Email Contacts
+        </a>
+        <a class="active item">
+            <i class="users icon"></i> Data Groups
+        </a>
+        <a href="#/synapse" class="item">
+            <i class="cubes icon"></i> Synapse Configuration
+        </a>
+    </div>
 </div>
 <div class="scrollbox">
     <div class="ui grid">

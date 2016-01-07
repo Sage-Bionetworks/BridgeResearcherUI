@@ -47,7 +47,6 @@ module.exports = function() {
 
         utils.startHandler(vm, event);
         var promises = copyables.map(function(plan) {
-            var newSchedule = JSON.parse(JSON.stringify(plan));
             delete plan.guid;
             delete plan.version;
             plan.label += " (Copy)";

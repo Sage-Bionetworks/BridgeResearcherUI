@@ -1,6 +1,4 @@
 var ko = require('knockout');
-var surveyUtils = require('../survey/survey_utils');
-var serverService = require('./../../services/server_service');
 var utils = require('../../utils');
 var optionsService = require('./../../services/options_service');
 

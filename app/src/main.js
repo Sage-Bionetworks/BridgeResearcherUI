@@ -1,6 +1,7 @@
 require('../css/main');
 require('../lib/toastr.min');
 require('../lib/dragula.min');
+
 require('./bindings');
 require('./registry');
 
@@ -16,9 +17,8 @@ function surveyRoute(name) {
     return function(guid, createdOn) {
         var date = null;
         try {
-            if (createdOn) {
-                date = new Date(createdOn)
-                date.toISOString();
+            if (createdOn !== "recent") {
+                date = new Date(createdOn);
             }
         } catch(e) {
             date = null;
@@ -31,7 +31,7 @@ function schemaRoute(name) {
         root.changeView(name, {schemaId: schemaId, revision: (revision) ? revision : null});
     };
 }
-function schedulePlanRoute(name) {
+function guidRoute(name) {
     return function(guid) {
         root.changeView(name, {guid: guid});
     };
@@ -42,7 +42,6 @@ router.param('guid', /([^\/]*)/);
 router.param('createdOn', /([^\/]*)/);
 router.on('/info', routeTo('info'));
 router.on('/email', routeTo('email'));
-router.on('/consent', routeTo('consent'));
 router.on('/eligibility', routeTo('eligibility'));
 router.on('/password_policy', routeTo('password_policy'));
 router.on('/user_attributes', routeTo('user_attributes'));
@@ -51,6 +50,9 @@ router.on('/data_groups', routeTo('data_groups'));
 router.on('/verify_email_template', routeTo('ve_template'));
 router.on('/reset_password_template', routeTo('rp_template'));
 router.on('/actions', routeTo('actions'));
+router.on('/subpopulations/:guid/consents/:createdOn', surveyRoute('consent'));
+router.on('/subpopulations/:guid', guidRoute('subpopulation'));
+router.on('/subpopulations', routeTo('subpopulations'));
 router.on('/surveys', routeTo('surveys'));
 router.on('/surveys/:guid/:createdOn/versions', surveyRoute('survey_versions'));
 router.on('/surveys/:guid/:createdOn/schema', surveyRoute('survey_schema'));
@@ -63,9 +65,7 @@ router.on('/schemas/:schemaId/:revision', schemaRoute('schema'));
 router.on('/monitor', routeTo('monitor'));
 router.on('/schedules', routeTo('schedules'));
 router.on('/scheduleplans', routeTo('scheduleplans'));
-router.on('/scheduleplans/:guid', schedulePlanRoute('scheduleplan'));
+router.on('/scheduleplans/:guid', guidRoute('scheduleplan'));
+router.on('/synapse', routeTo('synapse'));
 router.configure({notfound: routeTo('not_found')});
 router.init();
-
-// Make this global for Semantic UI.
-window.jQuery = require('jquery');

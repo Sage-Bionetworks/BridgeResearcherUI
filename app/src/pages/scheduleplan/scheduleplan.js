@@ -2,7 +2,6 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var scheduleUtils = require('./schedule_utils');
 var utils = require('../../utils');
-var root = require('../../root');
 
 var TYPE_OPTIONS = Object.freeze([
     {value: 'SimpleScheduleStrategy', label: 'Simple Schedule'},
@@ -61,6 +60,7 @@ module.exports = function(params) {
     };
 
     function loadVM(plan) {
+        console.log(plan);
         self.plan = plan;
         self.labelObs(plan.label);
         self.schedulePlanTypeObs(plan.strategy.type);

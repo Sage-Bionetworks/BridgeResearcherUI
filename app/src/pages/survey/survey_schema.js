@@ -2,7 +2,6 @@ var ko = require('knockout');
 var utils = require('../../utils');
 var schemaUtils = require('../../pages/schema/schema_utils');
 var serverService = require('../../services/server_service');
-var root = require('../../root');
 
 module.exports = function(params) {
     var self = this;
