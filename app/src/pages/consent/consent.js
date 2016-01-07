@@ -42,6 +42,18 @@ module.exports = function(params) {
         // This could be "recent" but we don't want that after we get a real version
         params.createdOn = consent.createdOn;
     }
+    function publish(response) {
+        params.createdOn = response.createdOn;
+        return serverService.publishStudyConsent(params.guid, params.createdOn);
+    }
+    function saveAfterPublish(response) {
+        self.activeObs(true);
+        serverService.getConsentHistory(params.guid).then(function(data) {
+            self.historyItemsObs(data.items);
+        });
+        return response;
+    }
+
 
     self.formatDateTime = utils.formatDateTime;
 
@@ -53,15 +65,11 @@ module.exports = function(params) {
             utils.startHandler(vm, event);
             var createdOn = self.consent.createdOn;
 
-            serverService.publishStudyConsent(params.guid, createdOn)
-                .then(function(response) {
-                    self.activeObs(true);
-                    serverService.getConsentHistory(params.guid).then(function(data) {
-                        self.historyItemsObs(data.items);
-                    });
-                })
-                .then(utils.successHandler(vm, event))
-                .catch(utils.failureHandler(vm ,event));
+            var p = serverService.saveStudyConsent(params.guid, {documentContent: self.editor.getData()})
+                    .then(publish)
+                    .then(saveAfterPublish)
+                    .then(utils.successHandler(vm, event, "Consent published"))
+                    .catch(utils.failureHandler(vm, event));
         }
     };
     self.save = function(passwordPolicy, event) {

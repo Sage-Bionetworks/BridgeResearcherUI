@@ -1,0 +1,98 @@
+var ko = require('knockout');
+/* Let's see if this works better (if webpack deals with this better).
+function reg(name, path) {
+    ko.components.register(name, {
+        viewModel: require(path),
+        template: require(path+".html"),
+        synchronous: /dialogs/.test(path)
+    });
+}
+function regt(name, path) {
+    ko.components.register(name, {
+        template: require(path+".html"),
+        synchronous: /dialogs/.test(path)
+    });
+}
+function setEditor(name, template, attribute) {
+    ko.components.register(name, {
+        template: require(template+'.html'),
+        viewModel: require('./pages/set_editor/set_editor')(attribute),
+        synchronous: false
+    });
+}
+*/
+// Just leave this for now. This has been a real pain to get working.
+ko.components.register('none', {template: '<div class="ui modal dialog"></div>'});
+
+// PAGES
+ko.components.register('info',{viewModel: require('./pages/info/info'), template: require('./pages/info/info.html'), synchronous: false});
+ko.components.register('email',{viewModel: require('./pages/email/email'), template: require('./pages/email/email.html'), synchronous: false});
+ko.components.register('consent',{viewModel: require('./pages/consent/consent'), template: require('./pages/consent/consent.html'), synchronous: false});
+ko.components.register('eligibility',{viewModel: require('./pages/eligibility/eligibility'), template: require('./pages/eligibility/eligibility.html'), synchronous: false});
+ko.components.register('password_policy',{viewModel: require('./pages/password_policy/password_policy'), template: require('./pages/password_policy/password_policy.html'), synchronous: false});
+ko.components.register('ve_template',{viewModel: require('./pages/ve_template/ve_template'), template: require('./pages/ve_template/ve_template.html'), synchronous: false});
+ko.components.register('rp_template',{viewModel: require('./pages/rp_template/rp_template'), template: require('./pages/rp_template/rp_template.html'), synchronous: false});
+
+ko.components.register('actions',{viewModel: require('./pages/actions/actions'), template: require('./pages/actions/actions.html'), synchronous: false});
+ko.components.register('subpopulations',{viewModel: require('./pages/subpopulations/subpopulations'), template: require('./pages/subpopulations/subpopulations.html'), synchronous: false});
+ko.components.register('subpopulation',{viewModel: require('./pages/subpopulation/subpopulation'), template: require('./pages/subpopulation/subpopulation.html'), synchronous: false});
+ko.components.register('surveys',{viewModel: require('./pages/surveys/surveys'), template: require('./pages/surveys/surveys.html'), synchronous: false});
+ko.components.register('survey',{viewModel: require('./pages/survey/survey'), template: require('./pages/survey/survey.html'), synchronous: false});
+ko.components.register('survey_versions',{viewModel: require('./pages/survey/survey_versions'), template: require('./pages/survey/survey_versions.html'), synchronous: false});
+ko.components.register('survey_schema',{viewModel: require('./pages/survey/survey_schema'), template: require('./pages/survey/survey_schema.html'), synchronous: false});
+ko.components.register('schemas',{viewModel: require('./pages/schemas/schemas'), template: require('./pages/schemas/schemas.html'), synchronous: false});
+ko.components.register('schema',{viewModel: require('./pages/schema/schema'), template: require('./pages/schema/schema.html'), synchronous: false});
+ko.components.register('schema_versions',{viewModel: require('./pages/schema/schema_versions'), template: require('./pages/schema/schema_versions.html'), synchronous: false});
+ko.components.register('synapse',{viewModel: require('./pages/synapse/synapse'), template: require('./pages/synapse/synapse.html'), synchronous: false});
+ko.components.register('monitor',{viewModel: require('./pages/monitor/monitor'), template: require('./pages/monitor/monitor.html'), synchronous: false});
+ko.components.register('scheduleplans',{viewModel: require('./pages/scheduleplans/scheduleplans'), template: require('./pages/scheduleplans/scheduleplans.html'), synchronous: false});
+ko.components.register('scheduleplan',{viewModel: require('./pages/scheduleplan/scheduleplan'), template: require('./pages/scheduleplan/scheduleplan.html'), synchronous: false});
+ko.components.register('SimpleScheduleStrategy',{viewModel: require('./pages/scheduleplan/simple_strategy'), template: require('./pages/scheduleplan/simple_strategy.html'), synchronous: false});
+ko.components.register('ABTestScheduleStrategy',{viewModel: require('./pages/scheduleplan/ab_strategy'), template: require('./pages/scheduleplan/ab_strategy.html'), synchronous: false});
+ko.components.register('schedule',{viewModel: require('./pages/scheduleplan/schedule'), template: require('./pages/scheduleplan/schedule.html'), synchronous: false});
+ko.components.register('not_found',{template:'./pages/not_found/not_found'});
+
+// DIALOGS
+ko.components.register('sign_in_dialog',{viewModel: require('./dialogs/sign_in/sign_in'), template: require('./dialogs/sign_in/sign_in.html'), synchronous: true});
+ko.components.register('forgot_password_dialog',{viewModel: require('./dialogs/forgot_password/forgot_password'), template: require('./dialogs/forgot_password/forgot_password.html'), synchronous: true});
+ko.components.register('enumeration_editor',{viewModel: require('./dialogs/enumeration_editor/enumeration_editor'), template: require('./dialogs/enumeration_editor/enumeration_editor.html'), synchronous: true});
+ko.components.register('event_id_editor',{viewModel: require('./dialogs/event_id_editor/event_id_editor'), template: require('./dialogs/event_id_editor/event_id_editor.html'), synchronous: true});
+ko.components.register('times_editor',{viewModel: require('./dialogs/times_editor/times_editor'), template: require('./dialogs/times_editor/times_editor.html'), synchronous: true});
+ko.components.register('rules_editor',{viewModel: require('./dialogs/rules_editor/rules_editor'), template: require('./dialogs/rules_editor/rules_editor.html'), synchronous: true});
+ko.components.register('date_window_editor',{viewModel: require('./dialogs/date_window_editor/date_window_editor'), template: require('./dialogs/date_window_editor/date_window_editor.html'), synchronous: true});
+ko.components.register('publickey',{viewModel: require('./dialogs/publickey/publickey'), template: require('./dialogs/publickey/publickey.html'), synchronous: true});
+
+/* SURVEYS */
+ko.components.register('SurveyInfoScreen',{viewModel: require('./pages/survey/survey_info'), template: require('./pages/survey/survey_info.html'), synchronous: false});
+ko.components.register('SurveyQuestion',{viewModel: require('./pages/survey/survey_question'), template: require('./pages/survey/survey_question.html'), synchronous: false});
+ko.components.register('BooleanConstraints',{viewModel: require('./pages/survey/constraints/boolean_constraints'), template: require('./pages/survey/constraints/boolean_constraints.html'), synchronous: false});
+ko.components.register('DateConstraints',{viewModel: require('./pages/survey/constraints/date_constraints'), template: require('./pages/survey/constraints/date_constraints.html'), synchronous: false});
+ko.components.register('DateTimeConstraints',{viewModel: require('./pages/survey/constraints/datetime_constraints'), template: require('./pages/survey/constraints/datetime_constraints.html'), synchronous: false});
+ko.components.register('DurationConstraints',{viewModel: require('./pages/survey/constraints/duration_constraints'), template: require('./pages/survey/constraints/duration_constraints.html'), synchronous: false});
+ko.components.register('TimeConstraints',{viewModel: require('./pages/survey/constraints/time_constraints'), template: require('./pages/survey/constraints/time_constraints.html'), synchronous: false});
+ko.components.register('IntegerConstraints',{viewModel: require('./pages/survey/constraints/integer_constraints'), template: require('./pages/survey/constraints/integer_constraints.html'), synchronous: false});
+ko.components.register('DecimalConstraints',{viewModel: require('./pages/survey/constraints/decimal_constraints'), template: require('./pages/survey/constraints/decimal_constraints.html'), synchronous: false});
+ko.components.register('StringConstraints',{viewModel: require('./pages/survey/constraints/string_constraints'), template: require('./pages/survey/constraints/string_constraints.html'), synchronous: false});
+ko.components.register('MultiValueConstraints',{viewModel: require('./pages/survey/constraints/multi_constraints'), template: require('./pages/survey/constraints/multi_constraints.html'), synchronous: false});
+
+// Custom elements
+ko.components.register('insertion-control',{viewModel: require('./pages/survey/insertion_control'), template: require('./pages/survey/insertion_control.html'), synchronous: false});
+ko.components.register('constraints-label',{template: require('./pages/survey/constraints/constraints_label.html'), synchronous: false});
+ko.components.register('ui-rules',{template: require('./pages/survey/constraints/ui_rules.html'), synchronous: false});
+ko.components.register('ui-checkbox',{template: require('./widgets/form/ui_checkbox.html'), synchronous: false});
+ko.components.register('ui-text',{template: require('./widgets/form/ui_text.html'), synchronous: false});
+ko.components.register('ui-number',{template: require('./widgets/form/ui_number.html'), synchronous: false});
+ko.components.register('ui-date',{template: require('./widgets/form/ui_date.html'), synchronous: false});
+ko.components.register('ui-datetime',{template: require('./widgets/form/ui_datetime.html'), synchronous: false});
+ko.components.register('ui-select',{template: require('./widgets/form/ui_select.html'), synchronous: false});
+ko.components.register('ui-textarea',{template: require('./widgets/form/ui_textarea.html'), synchronous: false});
+ko.components.register('ui-duration',{viewModel: require('./widgets/form/ui_duration'), template: require('./widgets/form/ui_duration.html'), synchronous: false});
+ko.components.register('survey-tabset',{viewModel: require('./pages/survey/tabset'), template: require('./pages/survey/tabset.html'), synchronous: false});
+ko.components.register('fire-event',{viewModel:'./widgets/fire_event.html', synchronous:false});
+
+/* SCHEMAS */
+ko.components.register('field_definition',{viewModel: require('./pages/schema/field_definition'), template: require('./pages/schema/field_definition.html'), synchronous: false});
+
+ko.components.register('user_attributes',{template: require('./pages/user_attributes/user_attributes.html'), viewModel: require('./pages/set_editor/set_editor')('userProfileAttributes'), synchronous: false});
+ko.components.register('task_identifiers',{template: require('./pages/task_identifiers/task_identifiers.html'), viewModel: require('./pages/set_editor/set_editor')('taskIdentifiers'), synchronous: false});
+ko.components.register('data_groups',{template: require('./pages/data_groups/data_groups.html'), viewModel: require('./pages/set_editor/set_editor')('dataGroups'), synchronous: false});

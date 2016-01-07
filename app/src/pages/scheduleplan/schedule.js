@@ -72,7 +72,7 @@ function addObserversToActivity(activity) {
  * @param schedule
  */
 function fixScheduleTimes(schedule) {
-    // TOD: These are also fixed in the formatter, but probably need to be fixed here as well.
+    // TODO: These are also fixed in the formatter, but probably need to be fixed here as well.
     schedule.times = schedule.times.map(function(time) {
         return time.replace(":00.000","");
     });
@@ -151,11 +151,13 @@ module.exports = function(params) {
     // loading option is not removed. So the .loaded property is used to guard against
     // thats. In all, ugly.
     optionsService.getSurveyOptions().then(function(surveys) {
+        console.log("surveys",surveys);
         self.surveysOptionsObs.removeAll();
         self.surveysOptionsObs.pushAll(surveys);
         self.surveysOptionsObs.loaded = true;
     });
     optionsService.getTaskIdentifierOptions().then(function(options) {
+        console.log("options",options);
         // In this case as a transition, if we have an identifier that hasn't been enumerated,
         // don't update the options because we're displaying it as a dummy option. It'll still
         // fail when the user saves it.
