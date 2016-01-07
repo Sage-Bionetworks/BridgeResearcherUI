@@ -2,7 +2,6 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var scheduleUtils = require('./schedule_utils');
 var utils = require('../../utils');
-var root = require('../../root');
 
 var TYPE_OPTIONS = Object.freeze([
     {value: 'SimpleScheduleStrategy', label: 'Simple Schedule'},

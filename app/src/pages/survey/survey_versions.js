@@ -2,11 +2,6 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 
-function addCheckedObs(item) {
-    item.checkedObs = ko.observable(false);
-    return item;
-}
-
 module.exports = function(params) {
     var self = this;
     self.keys = params;

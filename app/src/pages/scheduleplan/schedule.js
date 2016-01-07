@@ -1,7 +1,5 @@
 var ko = require('knockout');
 var utils = require('../../utils');
-var surveyUtils = require('../../pages/survey/survey_utils');
-var serverService = require('../../services/server_service');
 var optionsService = require('../../services/options_service');
 var scheduleUtils = require('./schedule_utils');
 var root = require('../../root');

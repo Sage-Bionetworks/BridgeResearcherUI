@@ -1,4 +1,3 @@
-var ko = require('knockout');
 var surveyUtils = require('./survey_utils');
 
 module.exports = function(params) {

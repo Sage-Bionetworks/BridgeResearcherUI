@@ -35,9 +35,6 @@ module.exports = function(params) {
     function version(keys) {
         return serverService.versionSurvey(keys.guid, keys.createdOn);
     }
-    function publish(keys) {
-        return serverService.publishSurvey(keys.guid, keys.createdOn);
-    }
     function create() {
         surveyUtils.observablesToSurvey(self, self.survey);
         return serverService.createSurvey(self.survey);
@@ -45,9 +42,6 @@ module.exports = function(params) {
     function save() {
         surveyUtils.observablesToSurvey(self, self.survey);
         return serverService.updateSurvey(self.survey);
-    }
-    function load(keys) {
-        return serverService.getSurvey(keys.guid, keys.createdOn).then(loadVM);
     }
     /**
      * Save the thing.

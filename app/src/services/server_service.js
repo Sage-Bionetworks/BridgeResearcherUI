@@ -43,7 +43,7 @@ function postInt(url, data) {
     } else if (typeof data !== 'string') {
         data = JSON.stringify(data);
     }
-    var dataString = data.replace(/"password":"([^"]*)"/, '"password":"[REDACTED]"');
+    //var dataString = data.replace(/"password":"([^"]*)"/, '"password":"[REDACTED]"');
     //console.debug("POST", url, dataString);
 
     return $.ajax({
@@ -115,13 +115,6 @@ function del(path) {
     return makeSessionWaitingPromise(function() {
         return deleteInt(config.host[session.environment] + path);
     });
-}
-function getSurveyKey(arg, arg2) {
-    if (arguments.length === 2) {
-        return arg + ":" + new Date(arg2.toISOString());
-    } else {
-        return arg.guid + ":" + new Date(arg.createdOn).toISOString();
-    }
 }
 /**
  * If we ever get back a 401, the UI isn't in sync with reality, sign the
@@ -220,7 +213,6 @@ module.exports = {
     getSurvey: function(guid, createdOn) {
         var createdString = new Date(createdOn).toISOString();
         var url = config.survey+guid+'/revisions/'+createdString;
-        var key = getSurveyKey(guid, createdOn);
 
         return get(url); //.then(setCache(key));
     },
