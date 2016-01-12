@@ -104,10 +104,14 @@ module.exports = function(params) {
     self.activityTypeOptions = ACTIVITY_TYPE_OPTIONS;
     self.activityTypeLabel = utils.makeOptionLabelFinder(ACTIVITY_TYPE_OPTIONS);
 
-    self.surveysOptionsObs = ko.observableArray([]);
+    //self.surveysOptionsObs = ko.observableArray([]);
+    self.surveysOptionsObs = ko.observableArray();
+    self.surveysOptionsObs.extend({rateLimit: 50});
     self.surveysOptionsLabel = utils.makeOptionLabelFinder(self.surveysOptionsObs);
 
-    self.taskOptionsObs = ko.observableArray([]);
+    //self.taskOptionsObs = ko.observableArray([]);
+    self.taskOptionsObs = ko.observableArray();
+    self.taskOptionsObs.extend({rateLimit: 50});
     self.taskOptionsLabel = utils.makeOptionLabelFinder(self.taskOptionsObs);
 
     // This is the implementation called by the schedule plan viewModel to construct the model
@@ -147,7 +151,7 @@ module.exports = function(params) {
 
     // Above, when an activity with a survey is loaded, if there's no option for it,
     // it is not selected and then ends up being the first option when it comes in.
-    // Put a dummy loading option in to fix that. But then, if this firstest first, the
+    // Put a dummy loading option in to fix that. But then, if this very first, the
     // loading option is not removed. So the .loaded property is used to guard against
     // thats. In all, ugly.
     optionsService.getSurveyOptions().then(function(surveys) {

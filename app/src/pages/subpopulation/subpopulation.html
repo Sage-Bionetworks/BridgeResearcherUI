@@ -39,12 +39,12 @@
                     </div>
                 </div>
                 <div class="field">
-                    <label>User has these data group(s):</label>
+                    <label>User has all these data group(s):</label>
                     <div class="vertical-padding" data-bind="visible: allOfGroupsObs().length === 0">
                         <i>None selected</i>
                     </div>
                     <div class="vertical-padding" data-bind="foreach: allOfGroupsObs">
-                        <div class="ui large label">
+                        <div class="ui large blue label">
                             <span data-bind="text: $data"></span>
                             <a data-bind="click: $parent.removeAllOf"><i class="delete icon"></i></a>
                         </div>
@@ -52,23 +52,19 @@
                     <div class="field" data-bind="visible: dataGroupsOptions().length === 0">
                         <i>&lt;No data groups&gt;</i>
                     </div>
-                    <data class="two fields" data-bind="visible: dataGroupsOptions().length !== 0">
-                        <div class="field">
-                            <ui-select params="fieldObs: allOfGroupsEditorObs, fieldLabel: dataGroupsLabel,
-                                publishedObs: publishedObs, optionsSrc: dataGroupsOptions"></ui-select>
-                        </div>
-                        <div class="field">
-                            <button class="ui button" data-bind="click: addToAll">Add</button>
-                        </div>
-                    </data>
+                    <div class="field tag-control" data-bind="visible: dataGroupsOptions().length !== 0">
+                        <ui-select params="fieldObs: allOfGroupsEditorObs, fieldLabel: dataGroupsLabel,
+                            publishedObs: publishedObs, optionsSrc: dataGroupsOptions"></ui-select><button
+                            class="ui small button" data-bind="click: addToAll">Add</button>
+                    </div>
                 </div>
                 <div class="field">
-                    <label>And user does not have any of these data group(s):</label>
+                    <label>And user has <em>none</em> of these data group(s):</label>
                     <div class="vertical-padding" data-bind="visible: noneOfGroupsObs().length === 0">
                         <i>None selected</i>
                     </div>
                     <div class="vertical-padding" data-bind="foreach: noneOfGroupsObs">
-                        <div class="ui large label">
+                        <div class="ui large blue label">
                             <span data-bind="text: $data"></span>
                             <a data-bind="click: $parent.removeNoneOf"><i class="delete icon"></i></a>
                         </div>
@@ -76,15 +72,11 @@
                     <div class="field" data-bind="visible: dataGroupsOptions().length === 0">
                         <i>&lt;No data groups&gt;</i>
                     </div>
-                    <data class="two fields" data-bind="visible: dataGroupsOptions().length !== 0">
-                        <div class="field">
-                            <ui-select params="fieldObs: noneOfGroupsEditorObs, fieldLabel: dataGroupsLabel,
-                                publishedObs: publishedObs, optionsSrc: dataGroupsOptions"></ui-select>
-                        </div>
-                        <div class="field">
-                            <button class="ui button" data-bind="click: addToNone">Add</button>
-                        </div>
-                    </data>
+                    <div class="field tag-control" data-bind="visible: dataGroupsOptions().length !== 0">
+                        <ui-select params="fieldObs: noneOfGroupsEditorObs, fieldLabel: dataGroupsLabel,
+                            publishedObs: publishedObs, optionsSrc: dataGroupsOptions"></ui-select><button
+                            class="ui small button" data-bind="click: addToNone">Add</button>
+                    </div>
                 </div>
             </div>
             <div class="ten wide field">
