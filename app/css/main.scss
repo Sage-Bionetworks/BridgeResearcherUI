@@ -143,3 +143,25 @@ nav .ui.menu {
 .action.item {
     margin-right: 1rem;
 }
+
+/* Tag control */
+.tag-control {
+    border-radius:4px;
+    width: 222px;
+    @include flex-box(row);
+    @include align-items(stretch);
+
+    * {
+        border: none!important;
+        outline: none!important;
+    }
+    select {
+        display:block;
+        width: 150px!important;
+        outline: 1px solid #e5e5e5!important;
+    }
+    button {
+        margin-left: 5px!important;
+        background-color: #f4f4f4;
+    }
+}
