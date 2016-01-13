@@ -1,5 +1,5 @@
 var ko = require('knockout');
-var scheduleUtils = require('../../pages/scheduleplan/schedule_utils');
+var scheduleUtils = require('../../pages/schedule/schedule_utils');
 var root = require('../../root');
 
 module.exports = function(params) {

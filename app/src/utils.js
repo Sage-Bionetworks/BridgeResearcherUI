@@ -261,6 +261,13 @@ module.exports = {
             }
         };
     },
+    addCheckedObs: function(item) {
+        item.checkedObs = ko.observable(false);
+        return item;
+    },
+    hasBeenChecked: function(item) {
+        return item.checkedObs();
+    },
     /**
      * Generic handler for pages which are loading a particular entity, that attemp to
      * deal with 404s by redirecting to a parent page.

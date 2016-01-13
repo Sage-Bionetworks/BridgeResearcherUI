@@ -1,5 +1,6 @@
 var ko = require('knockout');
 var utils = require('../../utils');
+var criteriaUtils = require('../../criteria_utils');
 var optionsService = require('./../../services/options_service');
 
 var activitiesObs = ko.observableArray([]);
@@ -132,6 +133,9 @@ function newSimpleStrategy() {
 function newABTestStrategy() {
     return { scheduleGroups: [], type: 'ABTestScheduleStrategy' };
 }
+function newCriteriaStrategy() {
+    return { scheduleCriteria: [], type: 'CriteriaScheduleStrategy' };
+}
 function newSchedule() {
     return {
         scheduleType: 'once', eventId:null, delay:null, interval:null,
@@ -198,9 +202,14 @@ function formatStrategy(strategy) {
     if (strategy.type === 'SimpleScheduleStrategy') {
         return formatSchedule(strategy.schedule);
     } else if (strategy.type === 'ABTestScheduleStrategy') {
-        return strategy.scheduleGroups.map(function(group) {
+        return strategy.scheduleGroups.map(function (group) {
             return "<span class='times-label'>" + group.percentage + "%:</span> " +
                     formatSchedule(group.schedule);
+        }).join('<br>');
+    } else if (strategy.type === 'CriteriaScheduleStrategy') {
+        return strategy.scheduleCriteria.map(function(group) {
+            return "<span class='times-label'>"+criteriaUtils.label(group)+":</span> "+
+                    formatSchedule(group.schedule);;
         }).join('<br>');
     } else {
         return "<i>Unknown</i>";
@@ -212,9 +221,11 @@ module.exports = {
     newSchedulePlan: newSchedulePlan,
     newSimpleStrategy: newSimpleStrategy,
     newABTestStrategy: newABTestStrategy,
+    newCriteriaStrategy: newCriteriaStrategy,
     formatEventId: formatEventId,
     formatTimesArray: formatTimesArray,
     formatStrategy: formatStrategy,
+    formatSchedule: formatSchedule,
     timeOptions: TIME_OPTIONS,
     timeOptionsLabel: utils.makeOptionLabelFinder(TIME_OPTIONS),
     timeOptionsFinder: utils.makeOptionFinder(TIME_OPTIONS)

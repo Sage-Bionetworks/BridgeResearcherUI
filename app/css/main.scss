@@ -58,12 +58,13 @@ main {
     .scrollbox {
         @include flex(1);
         padding: .5rem 1.5rem;
-        height: 100vh;
+        /*height: 100vh;*/
         overflow-y: auto;
     }
 nav {
     @include flex(0 0 18em);
     @include order(-1);
+    /*overflow-y: scroll;*/
     padding:  2rem 1rem ! important;
     background-color: rgba(96,134,153,.2);
 }
@@ -143,13 +144,29 @@ nav .ui.menu {
 .action.item {
     margin-right: 1rem;
 }
+.ui.vertical.editor.menu {
+    border: 1px solid rebeccapurple;
+}
 
 /* Tag control */
 .tag-control {
+    @include flex-box(row);
+    @include justify-content(space-between);
+    width: 14rem;
+
+    button {
+        z-index:1;
+    }
+    /*
     border-radius:4px;
     width: 222px;
     @include flex-box(row);
     @include align-items(stretch);
+    @include justify-content(space-between);
+    @include align-content(space-between);
+    margin: 1.5rem 0 0 0!important;
+    border:1px solid #e5e5e5;
+    padding:0!important;
 
     * {
         border: none!important;
@@ -157,11 +174,12 @@ nav .ui.menu {
     }
     select {
         display:block;
-        width: 150px!important;
-        outline: 1px solid #e5e5e5!important;
+        width: 220px;
     }
     button {
         margin-left: 5px!important;
         background-color: #f4f4f4;
-    }
+        border-top-right-radius:4px;
+        border-bottom-right-radius:4px;
+    }*/
 }

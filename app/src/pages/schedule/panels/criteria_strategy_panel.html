@@ -1,0 +1,11 @@
+<div class="ui secondary vertical menu" data-bind="foreach: scheduleCriteriaObs">
+    <a class="item" data-bind="click: $component.selectCriteria">
+        <span data-bind="text: $component.criteriaLabel($data)"></span>
+        <i class="delete icon" data-bind="click: $component.removeCriteria"></i>
+    </a>
+</div>
+<div class="item">
+    <a class="ui link" href="#" data-bind="click: $component.addCriteria">
+        <i class="add square icon"></i>Add CSchedule
+    </a>
+</div>

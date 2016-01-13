@@ -1,6 +1,7 @@
 var ko = require('knockout');
-var utils = require('../../utils');
-var scheduleUtils = require('./schedule_utils');
+require('knockout-postbox');
+var utils = require('../../../utils');
+var scheduleUtils = require('../schedule_utils');
 
 function groupToObservables(group) {
     group.percentageObs = ko.observable(group.percentage);
@@ -9,7 +10,7 @@ function groupToObservables(group) {
     group.publishedObs = ko.observable(false);
     group.percentLabel = ko.computed(function(){
         return group.percentageObs()+"%";
-    });
+    }).publishOn("percentageChange");
     return group;
 }
 
@@ -31,7 +32,7 @@ module.exports = function(params) {
     var self = this;
 
     self.strategyObs = params.strategyObs;
-    self.scheduleGroupsObs = ko.observableArray([]);
+    self.scheduleGroupsObs = ko.observableArray([]).syncWith("scheduleGroupChanges");
     self.publishedObs = ko.observable(false);
 
     params.strategyObs.callback = function () {
@@ -47,8 +48,23 @@ module.exports = function(params) {
             self.scheduleGroupsObs(strategy.scheduleGroups.map(groupToObservables));
         }
     });
-
     self.addGroup = function(vm, event) {
         self.scheduleGroupsObs.push(newGroup());
     };
+
+    // These are triggered by the panel editor.
+    ko.postbox.subscribe("scheduleGroupAdd", function() {
+        self.scheduleGroupsObs.push(newGroup());
+    });
+    ko.postbox.subscribe("scheduleGroupRemove", function(group) {
+        self.scheduleGroupsObs.remove(group);
+    });
+    ko.postbox.subscribe("scheduleGroupSelect", function(group) {
+        var index = self.scheduleGroupsObs().indexOf(group);
+
+        // pretty junky magic number stuff going on here.
+        var target = document.querySelectorAll(".schedulegroup-fieldset")[index];
+        var pos = $(target).position().top + 190;
+        $(".scrollbox").animate({scrollTop: pos});
+    });
 };

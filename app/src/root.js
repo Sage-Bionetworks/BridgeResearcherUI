@@ -1,4 +1,5 @@
 var ko = require('knockout');
+require('knockout-postbox');
 var toastr = require('toastr');
 var serverService = require('./services/server_service');
 var config = require('./config');
@@ -26,7 +27,22 @@ var RootViewModel = function() {
 
     self.mainPage = ko.observable('info');
     self.mainPage.subscribe(self.selected);
+    self.mainPage.subscribe(function() {
+        self.setEditorPanel('none',{});
+    });
     self.mainParams = ko.observable({});
+
+    self.editorPanel = ko.observable('none');
+    self.editorParams = ko.observable({});
+    self.isEditorPanelVisible = ko.observable(false);
+
+    self.setEditorPanel = function(name, params) {
+        ko.postbox.reset(); // BAD
+        self.editorPanel(name);
+        self.editorParams(params);
+        self.isEditorPanelVisible(name !== 'none');
+    }
+
     self.dialogObs = ko.observable({name: 'none'});
 
     self.isActive = function(tag) {
@@ -81,14 +97,7 @@ var RootViewModel = function() {
     });
 };
 
-module.exports = root = new RootViewModel();
+var root = new RootViewModel();
+module.exports = root;
 ko.applyBindings(root, document.body);
-/*
-module.exports = (function() {
-    var root = new RootViewModel();
-    ko.applyBindings(root, document.body);
-    return root;
-})();
-
-*/
 

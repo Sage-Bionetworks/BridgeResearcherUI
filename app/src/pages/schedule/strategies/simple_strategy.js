@@ -1,5 +1,5 @@
 var ko = require('knockout');
-var utils = require('../../utils');
+var utils = require('../../../utils');
 
 module.exports = function(params) {
     var self = this;

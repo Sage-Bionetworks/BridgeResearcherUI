@@ -12,12 +12,14 @@
             <span data-bind="html: studyName"></span>
             <span> on </span>
             <span data-bind="text: environment"></span>
-        </div class="header-env">
+        </div>
     </header>
     <section>
         <main data-bind="component: {name: mainPage, params: mainParams}">
         </main>
         <nav>
+            <div class="ui vertical editor menu" data-bind="visible: isEditorPanelVisible,
+                component: {name: editorPanel, params: editorParams}"></div>
             <div class="ui vertical menu">
                 <div class="item">
                     <i class="lab icon"></i> Study
