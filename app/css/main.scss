@@ -36,14 +36,10 @@ main {
         }
             .fixed-header-title h3 {
                 @include flex(1);
-                /*@include order(2);*/
-                /*font-size: 1.8rem;*/
-                /*text-align: right;*/
                 font-size: 1.4rem;
                 margin: 0 1rem;
             }
             .fixed-header-buttons {
-                /*@include flex(1);*/
                 margin: 0 1rem;
             }
         .fixed-header .section {
@@ -58,13 +54,11 @@ main {
     .scrollbox {
         @include flex(1);
         padding: .5rem 1.5rem;
-        /*height: 100vh;*/
         overflow-y: auto;
     }
 nav {
     @include flex(0 0 18em);
     @include order(-1);
-    /*overflow-y: scroll;*/
     padding:  2rem 1rem ! important;
     background-color: rgba(96,134,153,.2);
 }
@@ -157,29 +151,4 @@ nav .ui.menu {
     button {
         z-index:1;
     }
-    /*
-    border-radius:4px;
-    width: 222px;
-    @include flex-box(row);
-    @include align-items(stretch);
-    @include justify-content(space-between);
-    @include align-content(space-between);
-    margin: 1.5rem 0 0 0!important;
-    border:1px solid #e5e5e5;
-    padding:0!important;
-
-    * {
-        border: none!important;
-        outline: none!important;
-    }
-    select {
-        display:block;
-        width: 220px;
-    }
-    button {
-        margin-left: 5px!important;
-        background-color: #f4f4f4;
-        border-top-right-radius:4px;
-        border-bottom-right-radius:4px;
-    }*/
 }
