@@ -11,9 +11,6 @@ module.exports = function(params) {
     self.formatDateTime = utils.formatDateTime;
     surveyUtils.initSurveyVM(self);
 
-    // We never disable this editor. include this across the editor
-    self.disabledObs = ko.observable(false);
-
     function loadVM(survey) {
         console.log("loadVM", survey);
         self.survey = survey;

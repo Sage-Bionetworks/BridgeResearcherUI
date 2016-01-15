@@ -7,7 +7,6 @@ function groupToObservables(group) {
     group.percentageObs = ko.observable(group.percentage);
     group.scheduleObs = ko.observable(group.schedule);
     group.scheduleObs.callback = utils.identity;
-    group.publishedObs = ko.observable(false);
     group.percentLabel = ko.computed(function(){
         return group.percentageObs()+"%";
     });
@@ -33,7 +32,6 @@ module.exports = function(params) {
 
     self.strategyObs = params.strategyObs;
     self.scheduleGroupsObs = ko.observableArray([]).publishOn("scheduleGroupChanges");
-    self.publishedObs = ko.observable(false);
 
     params.strategyObs.callback = function () {
         var strategy = params.strategyObs();

@@ -6,22 +6,18 @@
     <div class="content">
         <div class="ui form">
             <div class="field">
-                <ui-select params="fieldObs: objectTypeObs, fieldLabel: objectTypeLabel,
-                        publishedObs: publishedObs, optionsSrc: objectTypeOptions"></ui-select>
+                <ui-select params="fieldObs: objectTypeObs, fieldLabel: objectTypeLabel, optionsSrc: objectTypeOptions"></ui-select>
             </div>
             <div class="two fields">
                 <div class="field">
                     <div data-bind="visible: objectTypeObs() == 'question'">
-                        <ui-select params="fieldObs: questionObs, fieldLabel: questionsLabel,
-                            publishedObs: publishedObs, optionsSrc: questionsOptionsObs"></ui-select>
+                        <ui-select params="fieldObs: questionObs, fieldLabel: questionsLabel, optionsSrc: questionsOptionsObs"></ui-select>
                     </div>
                     <div data-bind="visible: objectTypeObs() == 'survey'">
-                        <ui-select params="fieldObs: surveyObs, fieldLabel: surveysLabel,
-                            publishedObs: publishedObs, optionsSrc: surveysOptionsObs"></ui-select>
+                        <ui-select params="fieldObs: surveyObs, fieldLabel: surveysLabel, optionsSrc: surveysOptionsObs"></ui-select>
                     </div>
                     <div data-bind="visible: objectTypeObs() == 'activity'">
-                        <ui-select params="fieldObs: activityObs, fieldLabel: activityLabel,
-                            publishedObs: publishedObs, optionsSrc: activityOptionsObs"></ui-select>
+                        <ui-select params="fieldObs: activityObs, fieldLabel: activityLabel, optionsSrc: activityOptionsObs"></ui-select>
                     </div>
                 </div>
                 <div class="field">
@@ -42,7 +38,7 @@
                 </div>
             </div>
             <div class="field">
-                <ui-checkbox params="checkedObs: enrollmentObs, disabledObs: publishedObs">
+                <ui-checkbox params="checkedObs: enrollmentObs">
                     And on enrollment
                 </ui-checkbox>
             </div>

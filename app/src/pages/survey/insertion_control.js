@@ -4,7 +4,6 @@ module.exports = function(params) {
     var self = this;
 
     self.elementsObs = params.elementsObs;
-    self.publishedObs = params.publishedObs;
     self.index = params.indexObs;
 
     self.clickHandler = function(type, index) {

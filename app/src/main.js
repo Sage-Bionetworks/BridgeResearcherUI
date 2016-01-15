@@ -61,7 +61,7 @@ router.on('/surveys/:guid', surveyRoute('survey')); // always new
 router.on('/schemas', routeTo('schemas'));
 router.on('/schemas/:schemaId', schemaRoute('schema'));
 router.on('/schemas/:schemaId/versions', schemaRoute('schema_versions'));
-router.on('/schemas/:schemaId/:revision', schemaRoute('schema'));
+router.on('/schemas/:schemaId/versions/:revision', schemaRoute('schema'));
 router.on('/monitor', routeTo('monitor'));
 router.on('/schedules', routeTo('schedules'));
 router.on('/scheduleplans', routeTo('scheduleplans'));

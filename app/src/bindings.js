@@ -1,6 +1,6 @@
+// jquery and semantic-ui are loaded globally (for now) from CDNs.
 var ko = require('knockout');
 var dragula = require('dragula');
-//var SHOW_DELAY = 1;
 var HIDE_DELAY = 1800;
 
 // http://stackoverflow.com/questions/23606541/observable-array-push-multiple-objects-in-knockout-js
@@ -23,8 +23,8 @@ ko.bindingHandlers.dragula = {
 
         dragula([element], {
             direction: 'vertical',
-            moves: function (el, container, handle) {
-                return $(handle).is(config.dragHandleSelector);
+            moves: function(el, container, handle) {
+                return typeof config.dragHandleSelector === "undefined" || $(handle).is(config.dragHandleSelector);
             }
         }).on('drop', function(el, zone) {
             var elements = element.querySelectorAll(config.elementSelector);
@@ -39,6 +39,8 @@ ko.bindingHandlers.dragula = {
             }
         }).on('cloned', function(mirror, item, type) {
             _item = item;
+        }).on('out', function(el, container, source) {
+            drake.cancel(true);
         });
     }
 };

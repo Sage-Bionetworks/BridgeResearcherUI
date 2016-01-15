@@ -6,7 +6,7 @@
             <span data-bind="visible: nameObs().length === 0">New Upload Schema</span>
         </h3>
         <div class="fixed-header-buttons">
-            <button class="ui primary small button" data-bind="visible: !publishedObs(), click: save">Save</button>
+            <button class="ui primary small button" data-bind="click: save">Save</button>
         </div>
     </div>
     <div class="ui secondary larger pointing menu">
@@ -28,16 +28,15 @@
         <div class="three fields">
             <div class="required field">
                 <label>Name</label>
-                <ui-text params="fieldObs: nameObs, publishedObs: publishedObs"></ui-text>
+                <ui-text params="fieldObs: nameObs"></ui-text>
             </div>
             <div class="required field">
                 <label>Schema Type</label>
-                <ui-select params="fieldObs: schemaTypeObs, fieldLabel: schemaTypeLabel,
-                    publishedObs: publishedObs, optionsSrc: schemaTypeOptions"></ui-select>
+                <ui-select params="fieldObs: schemaTypeObs, fieldLabel: schemaTypeLabel, optionsSrc: schemaTypeOptions"></ui-select>
             </div>
             <div class="required field">
                 <label>Identifier</label>
-                <ui-text params="fieldObs: schemaIdObs, publishedObs: publishedObs"></ui-text>
+                <ui-text params="fieldObs: schemaIdObs"></ui-text>
             </div>
         </div>
     </form>
@@ -55,7 +54,7 @@
     }, foreach: itemsObs">
         <div class="sfield" data-bind="component: {
             name: 'field_definition',
-            params: { field: $data, itemsObs: $parent.itemsObs, indexObs: $index, publishedObs: $parent.publishedObs }
+            params: { field: $data, itemsObs: $parent.itemsObs, indexObs: $index }
         }"></div>
     </div>
 </div>

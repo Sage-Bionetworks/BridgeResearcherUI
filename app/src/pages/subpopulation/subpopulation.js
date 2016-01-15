@@ -8,7 +8,6 @@ module.exports = function(params) {
     var self = this;
 
     self.isNewObs = ko.observable(params.guid === "new");
-    self.publishedObs = ko.observable(false);
     self.requiredObs = ko.observable(false);
     utils.observablesFor(self, fields);
     self.noneOfGroupsEditorObs = ko.observable();

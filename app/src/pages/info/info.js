@@ -25,7 +25,6 @@ module.exports = function() {
     var self = this;
 
     utils.observablesFor(self, fields);
-    self.publishedObs = ko.observable(false);
 
     self.save = function(vm, event) {
         utils.startHandler(self, event);

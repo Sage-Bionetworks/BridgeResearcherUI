@@ -248,7 +248,6 @@ module.exports = {
      * @param params
      */
     initConstraintsVM: function(vm, params) {
-        vm.publishedObs = params.publishedObs;
         vm.element = params.element;
         vm.elementsObs = params.elementsObs;
         vm.formatDate = utils.formatDate;
@@ -262,7 +261,7 @@ module.exports = {
                 return SELECT_OPTIONS_BY_TYPE[vm.element.constraints.type];
             };
             vm.editRules = function() {
-                root.openDialog('rules_editor', {parentViewModel: vm, element: vm.element, publishedObs: vm.publishedObs});
+                root.openDialog('rules_editor', {parentViewModel: vm, element: vm.element});
             };
 
             vm.durationOptions = DURATION_OPTIONS;

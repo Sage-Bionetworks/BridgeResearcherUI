@@ -79,7 +79,6 @@ module.exports = function(params) {
     var parent = params.parentViewModel;
     self.elementsObs = parent.elementsObs;
     self.element = parent.element;
-    self.publishedObs = parent.publishedObs;
 
     self.labelObs = ko.observable();
     self.detailObs = ko.observable();

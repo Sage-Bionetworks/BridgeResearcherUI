@@ -16,7 +16,7 @@
                     <i class="warning icon"></i> Not Published
                 </div>
             </span>
-            <button class="ui primary small button" data-bind="visible: !disabledObs(), click: save">Save</button>
+            <button class="ui primary small button" data-bind="click: save">Save</button>
         </div>
     </div>
     <survey-tabset params="selected: 'editor', viewModel: $data"></survey-tabset>
@@ -26,11 +26,11 @@
         <div class="two fields">
             <div class="required field">
                 <label>Name</label>
-                <ui-text params="fieldObs: nameObs, publishedObs: disabledObs"></ui-text>
+                <ui-text params="fieldObs: nameObs"></ui-text>
             </div>
             <div class="required field">
                 <label>Identifier</label>
-                <ui-text params="fieldObs: identifierObs, publishedObs: disabledObs"></ui-text>
+                <ui-text params="fieldObs: identifierObs"></ui-text>
             </div>
         </div>
     </form>
@@ -41,7 +41,7 @@
         <p>There are currently no questions in this survey.</p>
         <!-- ko component: {
             name: "insertion-control",
-            params: { elementsObs: elementsObs, indexObs: 0, publishedObs: disabledObs }
+            params: { elementsObs: elementsObs, indexObs: 0 }
         } --><!-- /ko -->
     </div>
     <div class="survey elementZone" data-bind="dragula: {
@@ -51,11 +51,11 @@
     }, foreach: elementsObs">
         <div class="element" data-bind="component: {
         name: $data.type,
-        params: { element: $data, elementsObs: $parent.elementsObs, indexObs: $index, publishedObs: $parent.disabledObs }
+        params: { element: $data, elementsObs: $parent.elementsObs, indexObs: $index }
     }"></div>
         <!-- ko component: {
             name: "insertion-control",
-            params: { elementsObs: $parent.elementsObs, indexObs: $index, publishedObs: $parent.disabledObs }
+            params: { elementsObs: $parent.elementsObs, indexObs: $index }
         } --><!-- /ko -->
     </div>
 </div>

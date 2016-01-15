@@ -5,7 +5,6 @@ var root = require('../../root');
 module.exports = function(params) {
     var self = this;
 
-    self.publishedObs = ko.observable(false);
     self.startsOnObs = ko.observable(params.startsOnObs());
     self.endsOnObs = ko.observable(params.endsOnObs());
     self.formatDateTime = utils.formatDateTime;
