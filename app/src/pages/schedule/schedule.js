@@ -95,6 +95,9 @@ module.exports = function(params) {
 
     self.scheduleObs = params.scheduleObs;
     utils.observablesFor(self, SCHEDULE_FIELDS);
+    // this is not initialized by observablesFor, because it is often null when
+    // the value is just enrollment by default.
+    self.eventIdObs = ko.observable("enrollment");
 
     self.publishedObs = ko.observable(false);
 

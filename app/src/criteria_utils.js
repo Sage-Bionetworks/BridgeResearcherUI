@@ -1,34 +1,43 @@
 var utils = require('./utils');
 
-function getAppVersions(minValue, maxValue) {
-    if (utils.isDefined(minValue) && utils.isDefined(maxValue)) {
-        return "Versions " + minValue + "-" + maxValue;
-    } else if (utils.isDefined(minValue)) {
-        return "Versions " + minValue + "+";
-    } else if (utils.isDefined(maxValue)) {
-        return "Versions " + "0-" + maxValue;
-    }
-    return "<i>All versions</i>";
-}
 function quote(a) {
     return '"'+a+'"';
 }
 function quotedList(array) {
     return array.map(quote).join(", ");
 }
-function arrayDefined(obj, prop) {
-    return obj[prop] && obj[prop].length;
+
+function valueForObs(criteria, field) {
+    if (criteria[field+"Obs"]) {
+        return criteria[field+"Obs"]();
+    }
+    return criteria[field];
 }
+
 function label(criteria) {
+    var minAppVersion = valueForObs(criteria, "minAppVersion");
+    var maxAppVersion = valueForObs(criteria, "maxAppVersion");
+    var allOfGroups = valueForObs(criteria, "allOfGroups");
+    var noneOfGroups = valueForObs(criteria, "noneOfGroups");
+
     var arr = [];
-    arr.push(getAppVersions(criteria.minAppVersion, criteria.maxAppVersion));
-    if (arrayDefined(criteria, "allOfGroups")) {
-        arr.push("user must be in data group(s) " + quotedList(criteria.allOfGroups));
+    if (utils.isNotBlank(minAppVersion) && utils.isNotBlank(maxAppVersion)) {
+        arr.push("v" + minAppVersion + "-" + maxAppVersion);
+    } else if (utils.isNotBlank(minAppVersion)) {
+        arr.push("v" + minAppVersion + "+");
+    } else if (utils.isNotBlank(maxAppVersion)) {
+        arr.push("v" + "0-" + maxAppVersion);
     }
-    if (arrayDefined(criteria, "noneOfGroups")) {
-        arr.push("user cannot be in data group(s) " + quotedList(criteria.noneOfGroups));
+    if (allOfGroups.length) {
+        // arr.push("user must be in data group(s) " + quotedList(allOfGroups));
+        arr.push(quotedList(allOfGroups) + " required");
     }
-    return arr.join("; ");
+    if (noneOfGroups.length) {
+        // arr.push("user cannot be in data group(s) " + quotedList(noneOfGroups));
+        arr.push(quotedList(noneOfGroups) + " prohibited");
+    }
+    return (arr.length) ? arr.join("; ") : "No criteria";
+
 }
 
 /**

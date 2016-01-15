@@ -1,14 +1,11 @@
 var ko = require('knockout');
 require('knockout-postbox');
-var scheduleUtils = require('../schedule_utils');
-var criteriaUtils = require('../../../criteria_utils');
 
 module.exports = function(params) {
     var self = this;
 
-    self.formatSchedule = scheduleUtils.formatSchedule;
-    self.scheduleCriteriaObs = ko.observableArray([]).syncWith("scheduleCriteriaChanges");
-    self.criteriaLabel = criteriaUtils.label;
+    var criteria = params.viewModel.strategyObs().scheduleCriteria;
+    self.scheduleCriteriaObs = ko.observableArray(criteria).subscribeTo("scheduleCriteriaChanges");
 
     self.selectCriteria = function(group, event) {
         event.preventDefault();

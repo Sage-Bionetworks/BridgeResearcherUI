@@ -13,7 +13,14 @@ optionsService.getSurveyOptions().then(surveysOptionsObs);
 
 var questionsOptionsObs = ko.observableArray([]);
 var questionsOptionsLabel = utils.makeOptionLabelFinder(questionsOptionsObs);
-optionsService.getQuestionOptions().then(questionsOptionsObs);
+// very expensive to initialize all the questions, so disable. Not currently showing in UI
+//optionsService.getQuestionOptions().then(questionsOptionsObs);
+
+var TYPE_OPTIONS = Object.freeze([
+    {value: 'SimpleScheduleStrategy', label: 'Simple Schedule'},
+    {value: 'ABTestScheduleStrategy', label: 'A/B Test Schedule'},
+    {value: 'CriteriaScheduleStrategy', label: 'Criteria-based Schedule'}
+]);
 
 var PERIOD_WORDS = {
     'H': 'hour',
@@ -43,7 +50,7 @@ function formatEventId(value) {
     if (!value) {
         return "On enrollment (default)";
     }
-    return value.split(',').reverse().map(function(value) {
+    var str = value.split(',').reverse().map(function(value) {
         if (value === "enrollment") {
             return "On enrollment";
         }
@@ -61,6 +68,7 @@ function formatEventId(value) {
             return "when activity '"+activityLabel+"' is finished";
         }
     }).join(', and ');
+    return str.substring(0,1).toUpperCase() + str.substring(1);
 }
 function formatTimesArray(times) {
     return (times && times.length) ? toList(times.map(function(time) {
@@ -209,13 +217,15 @@ function formatStrategy(strategy) {
     } else if (strategy.type === 'CriteriaScheduleStrategy') {
         return strategy.scheduleCriteria.map(function(group) {
             return "<span class='times-label'>"+criteriaUtils.label(group)+":</span> "+
-                    formatSchedule(group.schedule);;
+                    formatSchedule(group.schedule);
         }).join('<br>');
     } else {
         return "<i>Unknown</i>";
     }
 }
-
+function formatScheduleStrategyType(type) {
+    return TYPE_OPTIONS[type].label;
+}
 module.exports = {
     newSchedule: newSchedule,
     newSchedulePlan: newSchedulePlan,
@@ -227,6 +237,8 @@ module.exports = {
     formatStrategy: formatStrategy,
     formatSchedule: formatSchedule,
     timeOptions: TIME_OPTIONS,
+    formatScheduleStrategyType: formatScheduleStrategyType,
     timeOptionsLabel: utils.makeOptionLabelFinder(TIME_OPTIONS),
-    timeOptionsFinder: utils.makeOptionFinder(TIME_OPTIONS)
+    timeOptionsFinder: utils.makeOptionFinder(TIME_OPTIONS),
+    TYPE_OPTIONS: TYPE_OPTIONS
 };

@@ -1,12 +1,11 @@
 var ko = require('knockout');
 require('knockout-postbox');
-var scheduleUtils = require('../schedule_utils');
 
 module.exports = function(params) {
     var self = this;
 
-    self.formatSchedule = scheduleUtils.formatSchedule;
-    self.scheduleGroupsObs = ko.observableArray([]).syncWith("scheduleGroupChanges");
+    var groups = params.viewModel.strategyObs().scheduleGroups;
+    self.scheduleGroupsObs = ko.observableArray(groups).subscribeTo("scheduleGroupChanges");
 
     self.selectGroup = function(group, event) {
         event.preventDefault();

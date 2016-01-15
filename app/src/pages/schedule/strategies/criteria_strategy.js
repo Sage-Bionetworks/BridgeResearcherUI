@@ -2,6 +2,7 @@ var ko = require('knockout');
 require('knockout-postbox');
 var utils = require('../../../utils');
 var scheduleUtils = require('../schedule_utils');
+var criteriaUtils = require('../../../criteria_utils');
 var serverService = require('../../../services/server_service');
 
 function groupToObservables(group) {
@@ -12,7 +13,9 @@ function groupToObservables(group) {
     group.scheduleObs = ko.observable(group.schedule);
     group.scheduleObs.callback = utils.identity;
     group.publishedObs = ko.observable(false);
-
+    group.labelObs = ko.computed(function() {
+        return criteriaUtils.label(group);
+    });
     group.noneOfGroupsEditorObs = ko.observable();
     group.allOfGroupsEditorObs = ko.observable();
 
@@ -50,7 +53,7 @@ function observablesToGroup(group) {
 }
 
 function newGroup() {
-    var group = {minAppVersion:0, maxAppVersion:0, allOfGroups:[], noneOfGroups:[], schedule:scheduleUtils.newSchedule()};
+    var group = {minAppVersion:null, maxAppVersion:null, allOfGroups:[], noneOfGroups:[], schedule:scheduleUtils.newSchedule()};
     groupToObservables(group);
     return group;
 }
@@ -59,7 +62,7 @@ module.exports = function(params) {
     var self = this;
 
     self.strategyObs = params.strategyObs;
-    self.scheduleCriteriaObs = ko.observableArray([]);
+    self.scheduleCriteriaObs = ko.observableArray([]).publishOn("scheduleCriteriaChanges");
     self.publishedObs = ko.observable(false);
     self.dataGroupsOptions = ko.observableArray([]);
 
@@ -69,6 +72,12 @@ module.exports = function(params) {
         return strategy;
     };
 
+    function scrollTo(index) {
+        var target = document.querySelectorAll(".schedulegroup-fieldset")[index];
+        // pretty junky magic number stuff going on here.
+        $(".scrollbox").animate({scrollTop: $(target).position().top+170})
+    }
+
     // This is fired when the parent viewModel gets a plan back from the server
     ko.computed(function () {
         var strategy = params.strategyObs();
@@ -77,20 +86,24 @@ module.exports = function(params) {
         }
     });
 
+    // These are triggered by the panel editor
     ko.postbox.subscribe("scheduleCriteriaAdd", function() {
         self.scheduleCriteriaObs.push(newGroup());
+        setTimeout(function() {
+            scrollTo(self.scheduleCriteriaObs().length-1);
+        },1);
     });
     ko.postbox.subscribe("scheduleCriteriaRemove", function(group) {
         self.scheduleCriteriaObs.remove(group);
     });
     ko.postbox.subscribe("scheduleCriteriaSelect", function(group) {
         var index = self.scheduleCriteriaObs().indexOf(group);
-
-        // pretty junky magic number stuff going on here.
-        var target = document.querySelectorAll(".schedulegroup-fieldset")[index];
-        var pos = $(target).position().top + 190;
-        $(".scrollbox").animate({scrollTop: pos});
+        scrollTo( index );
     });
+    self.addCriteria = function(vm, event) {
+        self.scheduleCriteriaObs.push(newGroup());
+        scrollTo(self.scheduleCriteriaObs().length-1);
+    };
     serverService.getStudy().then(function(study) {
         var array = study.dataGroups.map(function(value) {
             return {label: value, value:value};

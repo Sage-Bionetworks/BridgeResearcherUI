@@ -20,6 +20,9 @@ function nameInspector(string) {
     var name = (isArray) ? string.match(/[^\[]*/)[0] : string;
     return {name: name, observerName: name+"Obs", isArray: isArray};
 }
+function isNotBlank(obj) {
+    return (typeof obj !== "undefined") && obj !== null && obj !== "";
+}
 function isDefined(obj) {
     return (typeof obj !== "undefined");
 }
@@ -72,6 +75,11 @@ module.exports = {
      * @param object - the variable being tested
      */
     isDefined: isDefined,
+    /**
+     * Is this variable defined, not null and not blank?
+     * @param object - the variable being tested
+     */
+    isNotBlank: isNotBlank,
     /**
      * f(x) = x
      * @param arg

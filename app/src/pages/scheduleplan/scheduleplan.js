@@ -4,12 +4,6 @@ var scheduleUtils = require('./../schedule/schedule_utils');
 var utils = require('../../utils');
 var root = require('../../root');
 
-var TYPE_OPTIONS = Object.freeze([
-    {value: 'SimpleScheduleStrategy', label: 'Simple Schedule'},
-    {value: 'ABTestScheduleStrategy', label: 'A/B Test Schedule'},
-    {value: 'CriteriaScheduleStrategy', label: 'Scheduling Criteria'}
-]);
-
 /**
  * The complexity of this view comes from the fact that the entire data model is in the strategy,
  * and the strategy can entirely change the data model.
@@ -31,8 +25,8 @@ module.exports = function(params) {
     self.labelObs = ko.observable("");
     self.minAppVersionObs = ko.observable("");
     self.maxAppVersionObs = ko.observable("");
-    self.schedulePlanTypeOptions = TYPE_OPTIONS;
-    self.schedulePlanTypeLabel = utils.makeOptionLabelFinder(TYPE_OPTIONS);
+    self.schedulePlanTypeOptions = scheduleUtils.TYPE_OPTIONS;
+    self.schedulePlanTypeLabel = utils.makeOptionLabelFinder(scheduleUtils.TYPE_OPTIONS);
     self.schedulePlanTypeObs = ko.observable('SimpleScheduleStrategy');
     self.schedulePlanTypeObs.subscribe(function(newValue) {
         if (newValue === 'SimpleScheduleStrategy') {

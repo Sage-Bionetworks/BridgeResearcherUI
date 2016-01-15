@@ -9,16 +9,7 @@ module.exports = function() {
 
     self.itemsObs = ko.observableArray([]);
     self.formatDateTime = utils.formatDateTime;
-    // TODO: This information is also on the detail editor screen.
-    self.formatScheduleType = function(type) {
-        if (type === "SimpleScheduleStrategy") {
-            return "Simple Schedule Plan";
-        } else if (type === "ABTestScheduleStrategy") {
-            return "A/B Test Schedule Plan";
-        } else if (type === "CriteriaScheduleStrategy") {
-            return "Criteria-based Scheduling";
-        }
-    };
+    self.formatScheduleType = scheduleUtils.formatScheduleStrategyType;
     self.formatVersions = function(minValue, maxValue) {
         if (utils.isDefined(minValue) && utils.isDefined(maxValue)) {
             return minValue + "-" + maxValue;

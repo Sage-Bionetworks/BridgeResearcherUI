@@ -204,21 +204,6 @@ function updateModelField(model, fieldName) {
 function newSurvey() {
     return {name:'', guid:'', identifier:'', published:false, createdOn:null, elements:[], version:null};
 }
-/*
-function loadSurveyObservers(surveysOptsObs, questionsOptsObs) {
-    return serverService.getSurveysSummarized().then(function(surveys) {
-        surveysOptsObs.removeAll();
-        surveysOptsObs.pushAll(surveys);
-        if (questionsOptsObs) {
-            questionsOptsObs.removeAll();
-            surveys.forEach(function(survey) {
-                questionsOptsObs.pushAll(survey.questions);
-            });
-        }
-        return surveys;
-    });
-}
-*/
 module.exports = {
     newSurvey: newSurvey,
     newField: function(type) {
