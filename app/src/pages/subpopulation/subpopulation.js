@@ -22,7 +22,6 @@ module.exports = function(params) {
         self.historyItemsObs(data.items.slice(0, 5));
     }
     function loadVM(response) {
-        console.log("subpopulation",response);
         self.subpopulation = response;
         utils.valuesToObservables(self, self.subpopulation, fields);
     }

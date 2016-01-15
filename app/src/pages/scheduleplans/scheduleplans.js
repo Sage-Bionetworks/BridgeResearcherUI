@@ -1,30 +1,15 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service.js');
-var scheduleUtils = require('../scheduleplan/schedule_utils.js');
+var scheduleUtils = require('../schedule/schedule_utils.js');
 var utils = require('../../utils');
 var Promise = require('es6-promise').Promise;
-
-function addCheckedObs(item) {
-    item.checkedObs = ko.observable(false);
-    return item;
-}
-function hasBeenChecked(item) {
-    return item.checkedObs();
-}
 
 module.exports = function() {
     var self = this;
 
     self.itemsObs = ko.observableArray([]);
     self.formatDateTime = utils.formatDateTime;
-    // TODO: This information is also on the detail editor screen.
-    self.formatScheduleType = function(type) {
-        if (type === "SimpleScheduleStrategy") {
-            return "Simple Schedule Plan";
-        } else if (type === "ABTestScheduleStrategy") {
-            return "A/B Test Schedule Plan";
-        }
-    };
+    self.formatScheduleType = scheduleUtils.formatScheduleStrategyType;
     self.formatVersions = function(minValue, maxValue) {
         if (utils.isDefined(minValue) && utils.isDefined(maxValue)) {
             return minValue + "-" + maxValue;
@@ -41,7 +26,7 @@ module.exports = function() {
         });
     }
     self.copySchedulePlans = function(vm, event) {
-        var copyables = self.itemsObs().filter(hasBeenChecked);
+        var copyables = self.itemsObs().filter(utils.hasBeenChecked);
         var confirmMsg = (copyables.length > 1) ?
             "Schedules have been copied." : "Schedule has been copied.";
 
@@ -61,7 +46,7 @@ module.exports = function() {
 
     };
     self.deleteSchedulePlans = function(vm, event) {
-        var deletables = self.itemsObs().filter(hasBeenChecked);
+        var deletables = self.itemsObs().filter(utils.hasBeenChecked);
         var msg = (deletables.length > 1) ?
                 "Are you sure you want to delete these schedules?" :
                 "Are you sure you want to delete this schedule?";
@@ -84,7 +69,7 @@ module.exports = function() {
     function load() {
         serverService.getSchedulePlans().then(function(response) {
             if (response.items.length) {
-                self.itemsObs(response.items.sort(utils.makeFieldSorter("label")).map(addCheckedObs));
+                self.itemsObs(response.items.sort(utils.makeFieldSorter("label")).map(utils.addCheckedObs));
             } else {
                 document.querySelector(".loading_status").textContent = "There are currently no schedules.";
             }

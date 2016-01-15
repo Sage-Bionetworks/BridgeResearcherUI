@@ -46,9 +46,18 @@ reg('synapse', './pages/synapse/synapse');
 reg('monitor', './pages/monitor/monitor');
 reg('scheduleplans', './pages/scheduleplans/scheduleplans');
 reg('scheduleplan', './pages/scheduleplan/scheduleplan');
-reg('SimpleScheduleStrategy', './pages/scheduleplan/simple_strategy');
-reg('ABTestScheduleStrategy', './pages/scheduleplan/ab_strategy');
-reg('schedule', './pages/scheduleplan/schedule');
+
+reg('schedule', './pages/schedule/schedule');
+reg('schedule_strategy_type_panel', './pages/schedule/schedule_strategy_type_panel');
+
+reg('SimpleScheduleStrategy', './pages/schedule/strategies/simple_strategy');
+reg('ABTestScheduleStrategy', './pages/schedule/strategies/ab_strategy');
+reg('CriteriaScheduleStrategy', './pages/schedule/strategies/criteria_strategy');
+
+reg('ABTestScheduleStrategyPanel', './pages/schedule/panels/ab_strategy_panel');
+reg('CriteriaScheduleStrategyPanel', './pages/schedule/panels/criteria_strategy_panel');
+reg('SimpleScheduleStrategyPanel', './pages/schedule/panels/simple_strategy_panel');
+
 regt('not_found', './pages/not_found/not_found');
 reg('publickey', './dialogs/publickey/publickey');
 

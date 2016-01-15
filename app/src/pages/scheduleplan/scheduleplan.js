@@ -1,12 +1,8 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
-var scheduleUtils = require('./schedule_utils');
+var scheduleUtils = require('./../schedule/schedule_utils');
 var utils = require('../../utils');
-
-var TYPE_OPTIONS = Object.freeze([
-    {value: 'SimpleScheduleStrategy', label: 'Simple Schedule'},
-    {value: 'ABTestScheduleStrategy', label: 'A/B Test Schedule'}
-]);
+var root = require('../../root');
 
 /**
  * The complexity of this view comes from the fact that the entire data model is in the strategy,
@@ -29,15 +25,16 @@ module.exports = function(params) {
     self.labelObs = ko.observable("");
     self.minAppVersionObs = ko.observable("");
     self.maxAppVersionObs = ko.observable("");
-    self.schedulePlanTypeObs = ko.observable('SimpleScheduleStrategy');
-    self.schedulePlanTypeOptions = TYPE_OPTIONS;
-    self.schedulePlanTypeLabel = utils.makeOptionLabelFinder(TYPE_OPTIONS);
+    self.schedulePlanTypeOptions = scheduleUtils.TYPE_OPTIONS;
+    self.schedulePlanTypeLabel = utils.makeOptionLabelFinder(scheduleUtils.TYPE_OPTIONS);
     self.schedulePlanTypeObs = ko.observable('SimpleScheduleStrategy');
     self.schedulePlanTypeObs.subscribe(function(newValue) {
         if (newValue === 'SimpleScheduleStrategy') {
             self.strategyObs(scheduleUtils.newSimpleStrategy());
         } else if (newValue === 'ABTestScheduleStrategy') {
             self.strategyObs(scheduleUtils.newABTestStrategy());
+        } else if (newValue === 'CriteriaScheduleStrategy') {
+            self.strategyObs(scheduleUtils.newCriteriaStrategy());
         }
     });
 
@@ -60,13 +57,13 @@ module.exports = function(params) {
     };
 
     function loadVM(plan) {
-        console.log(plan);
         self.plan = plan;
         self.labelObs(plan.label);
         self.schedulePlanTypeObs(plan.strategy.type);
         self.minAppVersionObs(plan.minAppVersion);
         self.maxAppVersionObs(plan.maxAppVersion);
         self.strategyObs(plan.strategy);
+        root.setEditorPanel('schedule_strategy_type_panel', {viewModel:self});
     }
 
     var notFoundHandler = utils.notFoundHandler(self, "Schedule plan not found.", "#/scheduleplans");

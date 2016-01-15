@@ -1,0 +1,85 @@
+<h4>Criteria-based Scheduling</h4>
+
+<p class="help-text">Define any number of schedules, each will have conditions the user must match to return that
+    schedule to the user. Schedules are evaluated in order and the first one that matches is assigned to the user. </p>
+
+<form class="ui form schedulegroup" data-bind="foreach: scheduleCriteriaObs">
+    <fieldset class="schedulegroup-fieldset">
+        <legend class="schedulegroup-fieldset-legend">
+            <h4>Assignment based on</h4>
+        </legend>
+        <div class="four fields">
+
+            <div class="field">
+                <label>App version:</label>
+                <div class="two fields">
+                    <div class="six wide field">
+                        <ui-number params="fieldObs: $data.minAppVersionObs, publishedObs: publishedObs, placeholder: 'Min'"></ui-number>
+                    </div>
+                    <div class="six wide field">
+                        <ui-number params="fieldObs: $data.maxAppVersionObs, publishedObs: publishedObs, placeholder: 'Max'"></ui-number>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <label>User has all these data group(s):</label>
+                <div class="vertical-padding" data-bind="visible: $data.allOfGroupsObs().length === 0">
+                    <i>None selected</i>
+                </div>
+                <div class="vertical-padding" data-bind="foreach: $data.allOfGroupsObs">
+                    <div class="ui large blue label">
+                        <span data-bind="text: $data"></span>
+                        <a data-bind="click: $parent.removeAllOf"><i class="delete icon"></i></a>
+                    </div>
+                </div>
+                <div class="field" data-bind="visible: $component.dataGroupsOptions().length === 0">
+                    <i>&lt;No data groups&gt;</i>
+                </div>
+                <div class="field tag-control" data-bind="visible: $component.dataGroupsOptions().length !== 0">
+                    <select class="ui dropdown" data-bind="options: $component.dataGroupsOptions, optionsText: 'label', optionsValue: 'value', value: $data.allOfGroupsEditorObs">
+                    </select>
+                    <div>&nbsp;</div>
+                    <button class="ui small button" data-bind="click: $data.addToAll">Add</button>
+                </div>
+            </div>
+            <div class="field">
+                <label>And <em>none</em> of these data group(s):</label>
+                <div class="vertical-padding" data-bind="visible: $data.noneOfGroupsObs().length === 0">
+                    <i>None selected</i>
+                </div>
+                <div class="vertical-padding" data-bind="foreach: $data.noneOfGroupsObs">
+                    <div class="ui large blue label">
+                        <span data-bind="text: $data"></span>
+                        <a data-bind="click: $parent.removeNoneOf"><i class="delete icon"></i></a>
+                    </div>
+                </div>
+                <div class="field" data-bind="visible: $component.dataGroupsOptions().length === 0">
+                    <i>&lt;No data groups&gt;</i>
+                </div>
+                <div class="field tag-control" data-bind="visible: $component.dataGroupsOptions().length !== 0">
+                    <select class="ui dropdown" data-bind="options: $component.dataGroupsOptions, optionsText: 'label', optionsValue: 'value', value: $data.noneOfGroupsEditorObs">
+                    </select>
+                    <div>&nbsp;</div>
+                    <button class="ui small button" data-bind="click: $data.addToNone">Add</button>
+                </div>
+            </div>
+            <div class="schedulegroup-field-delete field">
+                <a href="#" data-bind="fadeRemove: {selector: '.schedulegroup-fieldset', object: $data, collection: 'scheduleCriteriaObs'}">
+                    <i class="delete square icon"></i>Remove This Schedule
+                </a>
+            </div>
+        </div>
+        <fieldset class="schedule-fieldset">
+            <legend class="schedule-legend">
+                <h4>Schedule</h4>
+            </legend>
+            <div data-bind="component: {name: 'schedule', params: {scheduleObs: $data.scheduleObs}}"></div>
+        </fieldset>
+    </fieldset>
+</form>
+<div class="ui form">
+    <a class="ui primary button" data-bind="click: addCriteria">
+        <i class="add square icon"></i>Add Schedule
+    </a>
+</div>
+

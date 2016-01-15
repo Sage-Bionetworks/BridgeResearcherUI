@@ -1,0 +1,11 @@
+<!-- ko foreach: scheduleGroupsObs -->
+<a class="item" data-bind="click: $component.selectGroup">
+    <span data-bind="text: 'Group #' + ($index()+1)"></span> (<span data-bind="text: $data.percentageObs"></span>%)
+    <i class="delete icon" data-bind="click: $component.removeGroup"></i>
+</a>
+<!-- /ko -->
+<div class="item">
+    <a class="ui link" href="#" data-bind="click: $component.addGroup">
+        <i class="add square icon"></i>Add Schedule
+    </a>
+</div>

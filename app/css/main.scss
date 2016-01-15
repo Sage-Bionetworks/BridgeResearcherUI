@@ -36,14 +36,10 @@ main {
         }
             .fixed-header-title h3 {
                 @include flex(1);
-                /*@include order(2);*/
-                /*font-size: 1.8rem;*/
-                /*text-align: right;*/
                 font-size: 1.4rem;
                 margin: 0 1rem;
             }
             .fixed-header-buttons {
-                /*@include flex(1);*/
                 margin: 0 1rem;
             }
         .fixed-header .section {
@@ -58,7 +54,6 @@ main {
     .scrollbox {
         @include flex(1);
         padding: .5rem 1.5rem;
-        height: 100vh;
         overflow-y: auto;
     }
 nav {
@@ -143,25 +138,17 @@ nav .ui.menu {
 .action.item {
     margin-right: 1rem;
 }
+.ui.vertical.editor.menu {
+    border: 1px solid rebeccapurple;
+}
 
 /* Tag control */
 .tag-control {
-    border-radius:4px;
-    width: 222px;
     @include flex-box(row);
-    @include align-items(stretch);
+    @include justify-content(space-between);
+    width: 14rem;
 
-    * {
-        border: none!important;
-        outline: none!important;
-    }
-    select {
-        display:block;
-        width: 150px!important;
-        outline: 1px solid #e5e5e5!important;
-    }
     button {
-        margin-left: 5px!important;
-        background-color: #f4f4f4;
+        z-index:1;
     }
 }

@@ -15,71 +15,75 @@
 <div class="scrollbox">
     <form class="ui form">
         <div class="fields">
-            <div class="six wide required field">
+            <div class="eight wide required field">
                 <label>Name</label>
                 <input type="text" name="name" data-bind="value: nameObs"/>
             </div>
-            <div class="ten wide field">
+            <div class="eight wide field">
                 <label>Description</label>
                 <input type="text" name="description" data-bind="value: descriptionObs"/>
             </div>
         </div>
-        <div class="fields">
-            <div class="six wide field">
-                <h4>Assignment based on:</h4>
-                <div class="field">
-                    <label>App version:</label>
-                    <div class="two fields">
-                        <div class="six wide field">
-                            <ui-number params="fieldObs: minAppVersionObs, publishedObs: publishedObs, placeholder: 'Min'"></ui-number>
-                        </div>
-                        <div class="six wide field">
-                            <ui-number params="fieldObs: maxAppVersionObs, publishedObs: publishedObs, placeholder: 'Max'"></ui-number>
-                        </div>
+        <div class="three fields ui segment" style="padding-bottom: 0">
+            <div class="field">
+                <h4 style="margin-top:0">Assignment based on</h4>
+                <label>App version:</label>
+                <div class="two fields">
+                    <div class="six wide field">
+                        <ui-number params="fieldObs: minAppVersionObs, publishedObs: publishedObs, placeholder: 'Min'"></ui-number>
                     </div>
-                </div>
-                <div class="field">
-                    <label>User has all these data group(s):</label>
-                    <div class="vertical-padding" data-bind="visible: allOfGroupsObs().length === 0">
-                        <i>None selected</i>
-                    </div>
-                    <div class="vertical-padding" data-bind="foreach: allOfGroupsObs">
-                        <div class="ui large blue label">
-                            <span data-bind="text: $data"></span>
-                            <a data-bind="click: $parent.removeAllOf"><i class="delete icon"></i></a>
-                        </div>
-                    </div>
-                    <div class="field" data-bind="visible: dataGroupsOptions().length === 0">
-                        <i>&lt;No data groups&gt;</i>
-                    </div>
-                    <div class="field tag-control" data-bind="visible: dataGroupsOptions().length !== 0">
-                        <ui-select params="fieldObs: allOfGroupsEditorObs, fieldLabel: dataGroupsLabel,
-                            publishedObs: publishedObs, optionsSrc: dataGroupsOptions"></ui-select><button
-                            class="ui small button" data-bind="click: addToAll">Add</button>
-                    </div>
-                </div>
-                <div class="field">
-                    <label>And user has <em>none</em> of these data group(s):</label>
-                    <div class="vertical-padding" data-bind="visible: noneOfGroupsObs().length === 0">
-                        <i>None selected</i>
-                    </div>
-                    <div class="vertical-padding" data-bind="foreach: noneOfGroupsObs">
-                        <div class="ui large blue label">
-                            <span data-bind="text: $data"></span>
-                            <a data-bind="click: $parent.removeNoneOf"><i class="delete icon"></i></a>
-                        </div>
-                    </div>
-                    <div class="field" data-bind="visible: dataGroupsOptions().length === 0">
-                        <i>&lt;No data groups&gt;</i>
-                    </div>
-                    <div class="field tag-control" data-bind="visible: dataGroupsOptions().length !== 0">
-                        <ui-select params="fieldObs: noneOfGroupsEditorObs, fieldLabel: dataGroupsLabel,
-                            publishedObs: publishedObs, optionsSrc: dataGroupsOptions"></ui-select><button
-                            class="ui small button" data-bind="click: addToNone">Add</button>
+                    <div class="six wide field">
+                        <ui-number params="fieldObs: maxAppVersionObs, publishedObs: publishedObs, placeholder: 'Max'"></ui-number>
                     </div>
                 </div>
             </div>
-            <div class="ten wide field">
+            <div class="field">
+                <label>User has all these data group(s):</label>
+                <div class="vertical-padding" data-bind="visible: allOfGroupsObs().length === 0">
+                    <i>None selected</i>
+                </div>
+                <div class="vertical-padding" data-bind="foreach: allOfGroupsObs">
+                    <div class="ui large blue label">
+                        <span data-bind="text: $data"></span>
+                        <a data-bind="click: $parent.removeAllOf"><i class="delete icon"></i></a>
+                    </div>
+                </div>
+                <div class="field" data-bind="visible: dataGroupsOptions().length === 0">
+                    <i>&lt;No data groups&gt;</i>
+                </div>
+                <div class="field tag-control" data-bind="visible: dataGroupsOptions().length !== 0">
+                    <select class="ui dropdown" data-bind="options: dataGroupsOptions, optionsText: 'label',
+                    optionsValue: 'value', value: allOfGroupsEditorObs">
+                    </select>
+                    <div>&nbsp;</div>
+                    <button class="ui small button" data-bind="click: addToAll">Add</button>
+                </div>
+            </div>
+            <div class="field">
+                <label>And user has <em>none</em> of these data group(s):</label>
+                <div class="vertical-padding" data-bind="visible: noneOfGroupsObs().length === 0">
+                    <i>None selected</i>
+                </div>
+                <div class="vertical-padding" data-bind="foreach: noneOfGroupsObs">
+                    <div class="ui large blue label">
+                        <span data-bind="text: $data"></span>
+                        <a data-bind="click: $parent.removeNoneOf"><i class="delete icon"></i></a>
+                    </div>
+                </div>
+                <div class="field" data-bind="visible: dataGroupsOptions().length === 0">
+                    <i>&lt;No data groups&gt;</i>
+                </div>
+                <div class="field tag-control" data-bind="visible: dataGroupsOptions().length !== 0">
+                    <select class="ui dropdown" data-bind="options: dataGroupsOptions, optionsText: 'label',
+                    optionsValue: 'value', value: noneOfGroupsEditorObs">
+                    </select>
+                    <div>&nbsp;</div>
+                    <button class="ui small button" data-bind="click: addToNone">Add</button>
+                </div>
+            </div>
+        </div>
+        <div class="fields">
+            <div class="six wide field">
                 <div class="field">
                     <label>Is this consent required?</label>
                     <div class="help-text" style="margin-bottom:1rem">If a user matches this consent group, <i>must</i> they sign the consent to access Bridge?</div>
@@ -87,22 +91,24 @@
                         Required
                     </ui-checkbox>
                 </div>
+            </div>
+            <div class="ten wide field">
                 <h4>Recent Consent History</h4>
                 <p data-bind="visible: historyItemsObs().length === 0">There are no consents until you create this consent group.</p>
                 <div data-bind="visible: historyItemsObs().length > 0">
                     <table class="ui compact table">
                         <tbody data-bind="foreach: historyItemsObs">
-                            <tr data-bind="css: { positive: $data.active }">
-                                <td>
-                                    <a data-bind="attr: {'href': $parent.formatLink($data)},
-                                        text: $parent.formatDateTime($data.createdOn)"></a>
-                                </td>
-                                <td>
-                                    <div data-bind="visible: $data.active" style="text-align: right">
-                                        <i class="icon checkmark"></i> Published
-                                    </div>
-                                </td>
-                            </tr>
+                        <tr data-bind="css: { positive: $data.active }">
+                            <td>
+                                <a data-bind="attr: {'href': $parent.formatLink($data)},
+                                text: $parent.formatDateTime($data.createdOn)"></a>
+                            </td>
+                            <td>
+                                <div data-bind="visible: $data.active" style="text-align: right">
+                                    <i class="icon checkmark"></i> Published
+                                </div>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                     <div class="vertical-padding">

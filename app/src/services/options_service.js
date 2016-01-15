@@ -41,11 +41,13 @@ function getActivityOptions() {
     });
 }
 function getSurveyOptions() {
-    return serverService.getSurveysSummarized().then(sortSurveys).then(collectSurveyOptions);
+    return serverService.getSurveys().then(sortSurveys).then(collectSurveyOptions);
 }
+/*
 function getQuestionOptions() {
     return serverService.getSurveysSummarized().then(sortSurveys).then(collectQuestionOptions);
 }
+*/
 function sortSurveys(response) {
     return response.items.sort(NAME_SORTER);
 }
@@ -80,6 +82,6 @@ function getTaskIdentifierOptions() {
 module.exports = {
     getActivityOptions: getActivityOptions,
     getSurveyOptions: getSurveyOptions,
-    getQuestionOptions: getQuestionOptions,
+    //getQuestionOptions: getQuestionOptions,
     getTaskIdentifierOptions: getTaskIdentifierOptions
 };
