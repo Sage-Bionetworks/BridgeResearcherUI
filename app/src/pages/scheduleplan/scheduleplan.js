@@ -13,7 +13,6 @@ module.exports = function(params) {
     var self = this;
 
     self.plan = null;
-    self.publishedObs = ko.observable(false);
 
     // Models for the strategy object. The callback function will be called when saving the
     // schedule plan; the strategy implementation must implement this callback to return a

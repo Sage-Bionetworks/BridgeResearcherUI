@@ -4,7 +4,6 @@ module.exports = function(params) {
 
     self.elementsObs = params.elementsObs;
     self.element = params.element;
-    self.publishedObs = params.publishedObs;
     self.indexObs = params.indexObs;
     self.titleObs = self.element.titleObs;
     self.promptObs = self.element.promptObs;

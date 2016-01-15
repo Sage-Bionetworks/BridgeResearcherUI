@@ -108,11 +108,17 @@ nav .ui.menu {
     width:100% ! important;
     box-shadow: 0px 2px 3px silver;
 }
+/*
 .ui.modal .content {
     padding: 1.5rem;
 }
+*/
 .ui.table {
     margin: 0;
+}
+.enum-scrollbox {
+    max-height:16rem;
+    overflow-y:auto;
 }
 
 /* GENERAL */

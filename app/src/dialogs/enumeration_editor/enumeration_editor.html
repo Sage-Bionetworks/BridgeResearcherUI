@@ -4,7 +4,7 @@
         Enumerated Values
     </div>
     <div class="content">
-        <div class="ui secondary pointing menu" data-bind="visible: !publishedObs()">
+        <div class="ui secondary pointing menu">
             <div class="item" data-bind="css:{active:isActive('editor')}, click: setTab('editor')">
                 Edit List
             </div>
@@ -14,14 +14,13 @@
         </div>
         <div data-bind="visible: isActive('editor')" style="margin-bottom: -1.5rem">
             <div class="ui two column grid">
-                <div class="column">
+                <div class="column enum-scrollbox">
                     <div class="ui list listZone" data-bind="dragula: {
-                        dragHandleSelector: '.item',
-                        elementSelector: '.item',
+                        elementSelector: '.element-enum',
                         listObs: listObs
                     }, foreach: listObs">
                         <div class="item element-enum">
-                            <i class="trash icon" data-bind="click: $parent.removeListItem, visible: !$parent.publishedObs()"></i>
+                            <i class="delete icon" data-bind="click: $parent.removeListItem"></i>
                             <div class="content">
                                 <div class="header">
                                     <span data-bind="text: label"></span>
@@ -37,19 +36,16 @@
                     </div>
                 </div>
                 <div class="column">
-                    <form class="ui form" data-bind="visible: !publishedObs()">
+                    <form class="ui form">
                         <h4 class="ui dividing header">Add New List Item</h4>
                         <div class="field">
-                            <ui-text params="fieldObs: labelObs, publishedObs: publishedObs,
-                                placeholder: 'Label', keyHandler: handleKeyEvent"></ui-text>
+                            <ui-text params="fieldObs: labelObs, placeholder: 'Label', keyHandler: handleKeyEvent"></ui-text>
                         </div>
                         <div class="field">
-                            <ui-text params="fieldObs: detailObs, publishedObs: publishedObs,
-                                placeholder: 'Detail (optional)', keyHandler: handleKeyEvent"></ui-text>
+                            <ui-text params="fieldObs: detailObs, placeholder: 'Detail (optional)', keyHandler: handleKeyEvent"></ui-text>
                         </div>
                         <div class="field">
-                            <ui-text params="fieldObs: valueObs, publishedObs: publishedObs,
-                                placeholder: 'Server value (optional)', keyHandler: handleKeyEvent"></ui-text>
+                            <ui-text params="fieldObs: valueObs, placeholder: 'Server value (optional)', keyHandler: handleKeyEvent"></ui-text>
                         </div>
                         <div class="field">
                             <a href="#" data-bind="click: addListItem" class="ui small button">Add</a>
@@ -69,19 +65,16 @@
             </div>
         </div>
     </div>
-    <div class="rules-actions" data-bind="visible: !publishedObs() && isActive('editor')">
+    <div class="rules-actions" data-bind="visible: isActive('editor')">
         <div style="margin-bottom:1rem">
-            <ui-checkbox params="checkedObs: copyToAllEnumsObs, disabledObs: publishedObs">
+            <ui-checkbox params="checkedObs: copyToAllEnumsObs">
                 Update this list in every question where it is used
             </ui-checkbox>
         </div>
         <button data-bind="click: saveList, disable: listObs().length === 0" class="ui small primary button">Save</button>
         <button data-bind="click: cancel" class="ui small button">Cancel</button>
     </div>
-    <div class="rules-actions" data-bind="visible: !publishedObs() && isActive('existing')">
+    <div class="rules-actions" data-bind="visible: isActive('existing')">
         <button data-bind="click: cancel" class="ui small button">Cancel</button>
-    </div>
-    <div class="rules-actions" data-bind="visible: publishedObs">
-        <button data-bind="click: cancel" class="ui small button">Close</button>
     </div>
 </div>

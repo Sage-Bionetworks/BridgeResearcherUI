@@ -12,15 +12,17 @@
         <div data-bind="foreach: rulesObs, visible: rulesObs().length !== 0" class="rules-table">
             <div class="rules-table-rule">
                 <div class="rules-table-rule-cell">
+                    <div data-bind="click: $parent.deleteRule" style="cursor:pointer"><a><i class="delete icon"></i></a></div>
+                </div>
+                <div class="rules-table-rule-cell">
                     When value
                 </div>
                 <div class="rules-table-rule-cell">
-                    <ui-select params="fieldObs: $data.operator, fieldLabel: $parent.operatorLabel,
-                            publishedObs: $parent.publishedObs, optionsSrc: $parent.operatorOptions"></ui-select>
+                    <ui-select params="fieldObs: $data.operator, fieldLabel: $parent.operatorLabel, optionsSrc: $parent.operatorOptions"></ui-select>
                 </div>
                 <div class="rules-table-rule-cell">
                     <div data-bind="visible: $data.operator() !== 'de'">
-                        <ui-text params="fieldObs: $data.value, publishedObs: $parent.publishedObs"></ui-text>
+                        <ui-text params="fieldObs: $data.value"></ui-text>
                     </div>
                 </div>
                 <div class="rules-table-rule-cell">
@@ -28,10 +30,7 @@
                 </div>
                 <div class="rules-table-rule-cell">
                     <ui-select params="fieldObs: $data.skipTo, fieldLabel: $parent.identifierLabel,
-                            publishedObs: $parent.publishedObs, optionsSrc: $parent.identifierOptions"></ui-select>
-                </div>
-                <div class="rules-table-rule-cell">
-                    <div data-bind="click: $parent.deleteRule" style="cursor:pointer"><a><i class="trash icon"></i></a></div>
+                            optionsSrc: $parent.identifierOptions"></ui-select>
                 </div>
             </div>
         </div>

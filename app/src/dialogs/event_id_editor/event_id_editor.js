@@ -14,7 +14,6 @@ module.exports = function(params) {
     var self = this;
 
     self.clearEventIdFunc = params.clearEventIdFunc;
-    self.publishedObs = ko.observable(false);
     self.eventIdObs = params.eventIdObs;
     self.answerObs = ko.observable();
     self.enrollmentObs = ko.observable(false);

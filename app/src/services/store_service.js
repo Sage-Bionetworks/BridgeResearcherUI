@@ -1,5 +1,7 @@
 var Promise = require('es6-promise').Promise;
 
+// Currently we're not using the storeService for general caching only session caching.
+// This will need to be cleaned up at some point.
 var cache = {};
 
 var sessionKeys = ['session','environment','studyKey'];

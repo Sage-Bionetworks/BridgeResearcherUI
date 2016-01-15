@@ -30,17 +30,16 @@ if (typeof window !== "undefined") { // jQuery throws up if there's no window, e
     });
 }
 
-
 var cache = (function() {
     var cachedItems = {};
     return {
         get: function(key) {
             var value = cachedItems[key];
-            console.info((value) ? "[cache] hit" : "[cache] miss",key);
+            console.info((value) ? "[json cache] hit" : "[json cache] miss",key);
             return value;
         },
         set: function(key, response) {
-            console.info("[cache] caching",key);
+            console.info("[json cache] caching",key);
             cachedItems[key] = response;
         },
         clear: function(key) {
@@ -48,11 +47,18 @@ var cache = (function() {
             // e.g. /foo/123 will delete /foo if it is cached, as this would be the
             // collection that might include /foo/123
             Object.keys(cachedItems).forEach(function(aKey) {
-                if (key.indexOf(aKey) === 0) {
-                    console.info("[cache] deleting",aKey);
+                if (key.indexOf(aKey) === 0 || aKey.indexOf(key) === 0) {
+                    console.info("[json cache] deleting",aKey);
                     delete cachedItems[aKey];
                 }
+                if (cachedItems[key+'/recent']) {
+                    console.info("[json cache] deleting",key+'/recent');
+                    delete cachedItems[key+'/versions'];
+                }
             });
+        },
+        reset: function() {
+            cachedItems = {};
         }
     };
 })();
@@ -159,6 +165,7 @@ function del(path) {
  * @returns {Promise}
  */
 function signOut() {
+    cache.reset();
     var env = session.environment;
     session = null;
     // We want to clear persistence, but keep these between sign-ins.
@@ -211,8 +218,10 @@ module.exports = {
         return Promise.resolve(postInt(config.host[env] + config.requestResetPassword, data));
     },
     getStudy: function() {
-        return storeService.getPromise('study') ||
-               get(config.getStudy);
+        return get(config.getStudy).then(function(response) {
+            console.log(response);
+            return response;
+        });
     },
     getStudyPublicKey: function() {
         return get(config.getStudyPublicKey);

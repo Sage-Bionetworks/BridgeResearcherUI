@@ -23,7 +23,7 @@
         <tbody data-bind="foreach: itemsObs">
             <tr data-bind="css: { positive: $data.active }">
                 <td>
-                    <ui-checkbox params="checkedObs: $data.checkedObs, disabledObs: $parent.publishedObs"></ui-checkbox>
+                    <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                 </td>
                 <td>
                     <a data-bind="attr: {'href': '#/subpopulations/'+encodeURIComponent($data.guid)}, text: $data.name"></a>

@@ -50,7 +50,6 @@ function getIdentifierOptions(elementsArray, startIdentifier) {
  * Receives:
  *      ViewModel parentViewModel
  *      Element element
- *      Observer publishedObs
  * @param params
  */
 module.exports = function(params) {
@@ -58,7 +57,6 @@ module.exports = function(params) {
     var parent = params.parentViewModel;
     self.element = parent.element;
     self.elementsObs = parent.elementsObs;
-    self.publishedObs = parent.publishedObs;
 
     var con = params.element.constraints;
     self.rulesObs = ko.observableArray(con.rulesObs().map(createRule));

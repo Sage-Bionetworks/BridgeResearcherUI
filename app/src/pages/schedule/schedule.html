@@ -5,7 +5,7 @@
             <div style="margin: .5rem 0" data-bind="text: formatEventId(eventIdObs())"></div>
             <div class="inline-editor-controls">
                 <a data-bind="click: editEventId"><i class="write icon"></i>Edit</a>
-                <a data-bind="click: clearEventId"><i class="trash icon"></i>Clear</a>
+                <a data-bind="click: clearEventId"><i class="delete icon"></i>Clear</a>
             </div>
         </div>
         <div class="field">
@@ -26,7 +26,7 @@
             <div style="margin: .5rem 0" data-bind="text: formatTimes(timesObs())"></div>
             <div class="inline-editor-controls">
                 <a data-bind="click: editTimes"><i class="write icon"></i>Edit</a>
-                <a data-bind="click: clearTimes"><i class="trash icon"></i>Clear</a>
+                <a data-bind="click: clearTimes"><i class="delete icon"></i>Clear</a>
             </div>
         </div>
         <div class="field" data-bind="visible: scheduleTypeObs() === 'recurring'">
@@ -35,7 +35,7 @@
         </div>
         <div class="field" data-bind="visible: scheduleTypeObs() === 'recurring'">
             <label>&hellip;or using a <a href="http://www.cronmaker.com/" target="_blank">cron expression</a></label>
-            <ui-text params="fieldObs: cronTriggerObs, publishedObs: publishedObs"></ui-text>
+            <ui-text params="fieldObs: cronTriggerObs"></ui-text>
         </div>
     </div>
     <div class="three fields">
@@ -52,7 +52,7 @@
             <div style="margin: .5rem 0" data-bind="html: formatWindow($data)"></div>
             <div class="inline-editor-controls">
                 <a data-bind="click: editWindow"><i class="write icon"></i>Edit</a>
-                <a data-bind="click: clearWindow"><i class="trash icon"></i>Clear</a>
+                <a data-bind="click: clearWindow"><i class="delete icon"></i>Clear</a>
             </div>
         </div>
     </div>
@@ -78,20 +78,20 @@
                 </div>
                 <div>
                     <ui-select params="fieldObs: $data.activityTypeObs, fieldLabel: $component.activityTypeLabel,
-                        publishedObs: $component.publishedObs, optionsSrc: $component.activityTypeOptions"></ui-select>
+                        optionsSrc: $component.activityTypeOptions"></ui-select>
                 </div>
                 <div style="width: 10rem" data-bind="visible: $data.activityTypeObs() == 'task'">
                     <ui-select params="fieldObs: $data.taskIdObs, fieldLabel: $component.taskOptionsLabel,
-                        publishedObs: $component.publishedObs, optionsSrc: $component.taskOptionsObs"></ui-select>
+                        optionsSrc: $component.taskOptionsObs"></ui-select>
                 </div>
                 <div style="width: 10rem" data-bind="visible: $data.activityTypeObs() == 'survey'">
                     <ui-select params="fieldObs: $data.surveyGuidObs, fieldLabel: $component.surveysOptionsLabel,
-                        publishedObs: $component.publishedObs, optionsSrc: $component.surveysOptionsObs"></ui-select>
+                        optionsSrc: $component.surveysOptionsObs"></ui-select>
                 </div>
                 <div>
                     <div class="inline-form-text activity-controls">
                         <a href="#" data-bind="click: $component.deleteActivity">
-                            <i class="trash icon"></i>Delete
+                            <i class="delete icon"></i>Delete
                         </a>
                         <a href="#" data-bind="click: $component.addActivityAfter">
                             <i class="square add icon"></i>Add Below

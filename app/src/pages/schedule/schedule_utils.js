@@ -78,7 +78,6 @@ function formatTimesArray(times) {
     })) : "<None>";
 }
 function formatActivities(buffer, activities) {
-    console.log(activities);
     var actMap = {};
     activities.map(function(act) {
         var label = 'do task (not specified)';
@@ -88,10 +87,8 @@ function formatActivities(buffer, activities) {
         // use activityOptionsLabel
         if (act.activityType === "task" && act.task) {
             label = "do task '"+act.label+"'";
-            //label = "do task '"+activityOptionsLabel(act.guid)+"'";
         } else if (act.activityType === "survey" && act.survey) {
             label = "do survey '"+act.label+"'";
-            //label = "do survey '"+activityOptionsLabel(act.guid)+"'";
         }
         actMap[label] = ++actMap[label] || 1;
     });

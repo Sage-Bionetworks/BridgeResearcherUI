@@ -18,10 +18,6 @@ module.exports = function(params) {
 
     self.nameObs = ko.observable("");
     self.itemsObs = ko.observableArray([]);
-    // We call "published" any schema that is loaded with a specific revision,
-    // except for the most recent one, which we load by the way we link to the
-    // editor.
-    self.publishedObs = ko.observable(false);
     self.revisionLabel = ko.computed(function() {
         if (self.revisionObs()) {
             return 'v' + self.revisionObs();
@@ -48,7 +44,6 @@ module.exports = function(params) {
         utils.startHandler(vm, event);
         self.schema.name = self.nameObs();
         self.schema.schemaId = self.schemaIdObs();
-        self.schema.revision = self.revisionObs();
         self.schema.schemaType = self.schemaTypeObs();
         self.schema.fieldDefinitions = self.itemsObs().map(function(item) {
             return {
@@ -57,12 +52,22 @@ module.exports = function(params) {
                 type: item.typeObs()
             };
         });
-        serverService.updateUploadSchema(self.schema)
-            .then(utils.successHandler(vm, event, "Schema has been saved."))
-            .then(function(response) {
-                self.revisionObs(response.revision);
-            })
-            .catch(utils.failureHandler(vm, event));
+        // get most recent revision so save always works
+        serverService.getMostRecentUploadSchema(params.schemaId)
+                .then(function(response) {
+                    self.schema.revision = response.revision;
+                    self.revisionObs(response.revision);
+                    return response;
+                })
+                .then(function() {
+                    return serverService.updateUploadSchema(self.schema);
+                })
+                .then(function(response) {
+                    self.revisionObs(response.revision);
+                    return response;
+                })
+                .then(utils.successHandler(vm, event, "Schema has been saved."))
+                .catch(utils.failureHandler(vm, event));
     };
     self.addBelow = function(vm, event) {
         var index = self.itemsObs.indexOf(vm.field);
@@ -79,13 +84,12 @@ module.exports = function(params) {
     if (params.schemaId === "new") {
         loadVM({name:'',schemaId:'',schemaType:'ios_data',revision:0,fieldDefinitions:[]});
     } else if (params.revision) {
-        serverService.getMostRecentUploadSchema(params.schemaId).then(function(response) {
-            serverService.getUploadSchema(params.schemaId, params.revision).then(loadVM).then(function() {
-                self.revisionObs(response.revision);
-            }).catch(notFoundHandler);
-        }).catch(notFoundHandler);
+        serverService.getUploadSchema(params.schemaId, params.revision)
+            .then(loadVM)
+            .catch(notFoundHandler);
     } else {
-        serverService.getMostRecentUploadSchema(params.schemaId).then(loadVM)
+        serverService.getMostRecentUploadSchema(params.schemaId)
+            .then(loadVM)
             .catch(notFoundHandler);
     }
 };

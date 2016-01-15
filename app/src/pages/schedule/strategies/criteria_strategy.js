@@ -12,7 +12,6 @@ function groupToObservables(group) {
     group.noneOfGroupsObs = ko.observableArray(group.noneOfGroups);
     group.scheduleObs = ko.observable(group.schedule);
     group.scheduleObs.callback = utils.identity;
-    group.publishedObs = ko.observable(false);
     group.labelObs = ko.computed(function() {
         return criteriaUtils.label(group);
     });
@@ -63,7 +62,6 @@ module.exports = function(params) {
 
     self.strategyObs = params.strategyObs;
     self.scheduleCriteriaObs = ko.observableArray([]).publishOn("scheduleCriteriaChanges");
-    self.publishedObs = ko.observable(false);
     self.dataGroupsOptions = ko.observableArray([]);
 
     params.strategyObs.callback = function () {

@@ -11,11 +11,8 @@ module.exports = function(params) {
     self.schemaIdObs = ko.observable(params.schemaId);
     self.itemsObs = ko.observableArray([]);
 
-    // The first item, which is the latest, can be edited and saved as a new version, so
-    // it is not loaded with a revision number. This queues the editor to make it writable
     self.link = function(item) {
-        return (item.revision === self.itemsObs()[0].revision) ?
-            ("#/schemas/"+item.schemaId) : ("#/schemas/"+item.schemaId+"/"+item.revision);
+        return "#/schemas/"+item.schemaId+"/versions/"+item.revision;
     };
     self.anyChecked = function() {
         return self.itemsObs().some(function(item) {

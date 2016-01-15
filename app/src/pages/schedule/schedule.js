@@ -99,8 +99,6 @@ module.exports = function(params) {
     // the value is just enrollment by default.
     self.eventIdObs = ko.observable("enrollment");
 
-    self.publishedObs = ko.observable(false);
-
     self.scheduleTypeOptions = SCHEDULE_TYPE_OPTIONS;
     self.scheduleTypeLabel = utils.makeOptionLabelFinder(SCHEDULE_TYPE_OPTIONS);
 
