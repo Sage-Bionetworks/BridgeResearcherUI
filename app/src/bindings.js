@@ -113,7 +113,6 @@ ko.bindingHandlers.modal = {
         ko.bindingHandlers.component.init(element, valueAccessor, allBindings, viewModel, bindingContext);
         var observable = valueAccessor();
         observable.subscribe(function (newConfig) {
-            //var $modal = $(element).children(".modal");
             var $modal = $(".ui.modal");
             if ($modal.modal) {
                 if (newConfig.name !== "none") {
