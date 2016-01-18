@@ -49,15 +49,15 @@ module.exports = function(params) {
 
     function scrollTo(index) {
         var target = document.querySelectorAll(".schedulegroup-fieldset")[index];
-        $(".scrollbox").animate({scrollTop: $(target).position().top+170})
+        var $target = $(target);
+        var $scrollbox = $(".scrollbox");
+        $scrollbox.animate({scrollTop: $target.position().top + $scrollbox.position().top});
     }
 
     self.addGroup = function(vm, event) {
         self.scheduleGroupsObs.push(newGroup());
         scrollTo(self.scheduleGroupsObs().length-1);
     };
-
-    // These are triggered by the panel editor.
     ko.postbox.subscribe("scheduleGroupAdd", function() {
         self.scheduleGroupsObs.push(newGroup());
         setTimeout(function() {

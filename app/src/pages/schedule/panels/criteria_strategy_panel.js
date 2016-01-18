@@ -4,6 +4,7 @@ require('knockout-postbox');
 module.exports = function(params) {
     var self = this;
 
+    self.labelObs = params.viewModel.labelObs;
     var criteria = params.viewModel.strategyObs().scheduleCriteria;
     self.scheduleCriteriaObs = ko.observableArray(criteria).subscribeTo("scheduleCriteriaChanges");
 

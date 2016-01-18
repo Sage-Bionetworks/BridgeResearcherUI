@@ -5,6 +5,8 @@ var scheduleUtils = require('../schedule_utils');
 var criteriaUtils = require('../../../criteria_utils');
 var serverService = require('../../../services/server_service');
 
+var fields = ["minAppVersion","maxAppVersion","allOfGroups","noneOfGroups","schedule"];
+
 function groupToObservables(group) {
     group.minAppVersionObs = ko.observable(group.minAppVersion);
     group.maxAppVersionObs = ko.observable(group.maxAppVersion);
@@ -70,10 +72,13 @@ module.exports = function(params) {
         return strategy;
     };
 
+    // NOTE: This works correctly, and makes sense.
     function scrollTo(index) {
         var target = document.querySelectorAll(".schedulegroup-fieldset")[index];
-        // pretty junky magic number stuff going on here.
-        $(".scrollbox").animate({scrollTop: $(target).position().top+170})
+        var $target = $(target);
+        var $scrollbox = $(".scrollbox");
+        console.log($target.position(),"-",$scrollbox.position().top);
+        $scrollbox.animate({scrollTop: $target.position().top + $scrollbox.position().top});
     }
 
     // This is fired when the parent viewModel gets a plan back from the server

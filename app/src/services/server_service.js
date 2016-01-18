@@ -127,9 +127,9 @@ function makeSessionWaitingPromise(func) {
             console.error("Signed out due to 401");
             signOut();
         } else if (response.responseJSON) {
-            console.error(response.status, response.responseJSON);
+            //console.error(response.status, response.responseJSON);
         } else {
-            console.error("Significant server failure", response);
+            //console.error("Significant server failure", response);
         }
     });
     return promise;
@@ -218,10 +218,7 @@ module.exports = {
         return Promise.resolve(postInt(config.host[env] + config.requestResetPassword, data));
     },
     getStudy: function() {
-        return get(config.getStudy).then(function(response) {
-            console.log(response);
-            return response;
-        });
+        return get(config.getStudy);
     },
     getStudyPublicKey: function() {
         return get(config.getStudyPublicKey);

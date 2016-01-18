@@ -4,6 +4,7 @@ require('knockout-postbox');
 module.exports = function(params) {
     var self = this;
 
+    self.labelObs = params.viewModel.labelObs;
     var groups = params.viewModel.strategyObs().scheduleGroups;
     self.scheduleGroupsObs = ko.observableArray(groups).subscribeTo("scheduleGroupChanges");
 

@@ -3,6 +3,7 @@ var toastr = require('toastr');
 var config = require('./config');
 
 var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
+var errorQueue = [];
 
 toastr.options = config.toastr;
 
@@ -58,6 +59,11 @@ function makeOptionLabelFinder(arrayOrObs) {
         var option = finder(value);
         return option ? option.label : "";
     };
+}
+function clearErrors(target) {
+    target.classList.remove("loading");
+}
+function displayErrors(errors) {
 }
 
 /**
@@ -119,7 +125,7 @@ module.exports = {
      */
     successHandler: function(vm, event, message) {
         return function(response) {
-            event.target.classList.remove("loading");
+            clearErrors(event.target);
             if (message) {
                 toastr.success(message);
             }
@@ -137,21 +143,24 @@ module.exports = {
     failureHandler: function(vm, event) {
         return function(response) {
             if (event){
-                event.target.classList.remove("loading");
+                clearErrors(event.target);
             }
             if (response.status === 412) {
                 toastr.error('You do not appear to be either a developer or a researcher.');
             } else if (response instanceof Error) {
                 toastr.error(response.message);
             } else if (response.responseJSON) {
-                toastr.error(response.responseJSON.message);
+                var payload = response.responseJSON;
+                toastr.error(payload.message);
+                displayErrors(payload.errors);
             } else {
                 toastr.error(GENERIC_ERROR);
             }
         };
     },
     /**
-     * Create an observable for each field name provided.
+     * Create an observable for each field name provided. Will create an observableArray if the notation indicates
+     * such (e.g. "entries[]" rather than "entries").
      * @param vm
      * @param fields
      * @param [source] - if provided, values will be initialized from this object
@@ -286,7 +295,6 @@ module.exports = {
      */
     notFoundHandler: function(vm, message, rootPath) {
         return function(response) {
-            console.error(response);
             toastr.error((message) ? message : response.statusText);
             if (rootPath) {
                 document.location = rootPath;

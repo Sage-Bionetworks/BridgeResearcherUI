@@ -108,9 +108,12 @@ nav .ui.menu {
     width:100% ! important;
     box-shadow: 0px 2px 3px silver;
 }
+.ui.red.message, .error-message {
+    display: none;
+}
 /*
-.ui.modal .content {
-    padding: 1.5rem;
+.field.error .text {
+    color: #B22222!important;
 }
 */
 .ui.table {
@@ -146,6 +149,7 @@ nav .ui.menu {
 }
 .ui.vertical.editor.menu {
     border: 1px solid rebeccapurple;
+    overflow: hidden;
 }
 
 /* Tag control */
