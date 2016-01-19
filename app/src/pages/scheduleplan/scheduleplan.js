@@ -2,7 +2,6 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var scheduleUtils = require('./../schedule/schedule_utils');
 var utils = require('../../utils');
-var root = require('../../root');
 
 /**
  * The complexity of this view comes from the fact that the entire data model is in the strategy,
@@ -51,6 +50,7 @@ module.exports = function(params) {
             .then(function(response) {
                 self.plan.guid = response.guid;
                 self.plan.version = response.version;
+                return response;
             })
             .catch(utils.failureHandler(self, event));
     };
@@ -62,7 +62,6 @@ module.exports = function(params) {
         self.minAppVersionObs(plan.minAppVersion);
         self.maxAppVersionObs(plan.maxAppVersion);
         self.strategyObs(plan.strategy);
-        root.setEditorPanel('schedule_strategy_type_panel', {viewModel:self});
     }
 
     var notFoundHandler = utils.notFoundHandler(self, "Schedule plan not found.", "#/scheduleplans");

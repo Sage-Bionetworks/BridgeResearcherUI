@@ -11,14 +11,14 @@
     </div>
     <div class="ui secondary pointing menu"></div>
 </div>
-<div class="scrollbox">
+<ul class="scrollbox">
     <form class="ui form" style="margin-bottom: 1rem">
         <div class="three fields">
             <div class="required field">
                 <label>Name</label>
                 <ui-text params="fieldObs: labelObs"></ui-text>
             </div>
-            <div class="required field">
+            <div class="field">
                 <label>Schedule Plan Type</label>
                 <ui-select params="fieldObs: schedulePlanTypeObs, fieldLabel: schedulePlanTypeLabel,
                     optionsSrc: schedulePlanTypeOptions"></ui-select>
@@ -36,5 +36,5 @@
             </div>
         </div>
     </form>
-    <div data-bind="component: {name: schedulePlanTypeObs, params: {strategyObs: strategyObs}}"></div>
+    <div data-bind="component: {name: schedulePlanTypeObs, params: {strategyObs: strategyObs, labelObs: labelObs}}"></div>
 </div>

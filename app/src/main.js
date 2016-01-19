@@ -4,6 +4,8 @@ require('../lib/dragula.min');
 
 require('./bindings');
 require('./registry');
+var ko = require('knockout');
+require('knockout-postbox');
 
 var director = require('director');
 var root = require('./root');
@@ -67,5 +69,11 @@ router.on('/schedules', routeTo('schedules'));
 router.on('/scheduleplans', routeTo('scheduleplans'));
 router.on('/scheduleplans/:guid', guidRoute('scheduleplan'));
 router.on('/synapse', routeTo('synapse'));
-router.configure({notfound: routeTo('not_found')});
+router.configure({
+    notfound: routeTo('not_found'),
+    'on': [
+        ko.postbox.reset,
+        function() { root.isEditorTabVisible(false); }
+    ]
+});
 router.init();

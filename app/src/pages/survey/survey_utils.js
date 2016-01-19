@@ -281,6 +281,5 @@ module.exports = {
             vm.operatorOptions = OPERATOR_OPTIONS;
             vm.operatorLabel = utils.makeOptionLabelFinder(OPERATOR_OPTIONS);
         }
-    }/*,
-    loadSurveyObservers: loadSurveyObservers*/
+    }
 };

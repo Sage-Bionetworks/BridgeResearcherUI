@@ -1,25 +1,14 @@
 var ko = require('knockout');
 require('knockout-postbox');
+var utils = require('../../../utils');
 
 module.exports = function(params) {
     var self = this;
 
-    var criteria = params.viewModel.strategyObs().scheduleCriteria;
-    self.scheduleCriteriaObs = ko.observableArray(criteria).subscribeTo("scheduleCriteriaChanges");
+    self.labelObs = params.viewModel.labelObs;
+    self.scheduleCriteriaObs = params.viewModel.scheduleCriteriaObs;
 
-    self.selectCriteria = function(group, event) {
-        event.preventDefault();
-        event.stopPropagation();
-        ko.postbox.publish("scheduleCriteriaSelect", group);
-    };
-    self.removeCriteria = function(group, event) {
-        event.preventDefault();
-        event.stopPropagation();
-        ko.postbox.publish("scheduleCriteriaRemove", group);
-    };
-    self.addCriteria = function(vm, event) {
-        event.preventDefault();
-        event.stopPropagation();
-        ko.postbox.publish("scheduleCriteriaAdd");
-    };
+    self.selectCriteria = utils.makeEventToPostboxListener("scheduleCriteriaSelect");
+    self.removeCriteria = utils.makeEventToPostboxListener("scheduleCriteriaRemove");
+    self.addCriteria = utils.makeEventToPostboxListener("scheduleCriteriaAdd");
 };

@@ -44,8 +44,6 @@ module.exports = function(params) {
             if (amt === parseInt(amt,10) && self.durationOptionsLabel(duration) !== '') {
                 self.amountObs(amt);
                 self.durationObs(duration);
-            } else {
-                //console.error("fieldObs invalid, not setting amountObs/durationObs", value);
             }
         }
     }
@@ -57,16 +55,11 @@ module.exports = function(params) {
         var amt = self.amountObs();
         var duration = self.durationObs();
 
+        self.fieldObs(null);
+
         amt = parseInt(amt,10);
-        if (typeof amt === 'number' && (amt%1)===0 && self.durationOptionsLabel(duration) !== '') {
-            if (amt === 0) {
-                self.fieldObs(null);
-            } else {
-                self.fieldObs(duration.replace('*',amt));
-            }
-            //console.debug("setting fieldObs", self.fieldObs());
-        } else {
-            //console.debug("duration values invalid, not updating fieldObs", amt, duration);
+        if (typeof amt === 'number' && (amt%1)===0 && self.durationOptionsLabel(duration) !== '' && amt > 0) {
+            self.fieldObs(duration.replace('*',amt));
         }
     }
 }

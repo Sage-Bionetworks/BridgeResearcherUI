@@ -1,5 +1,4 @@
 var ko = require('knockout');
-require('knockout-postbox');
 var toastr = require('toastr');
 var serverService = require('./services/server_service');
 var config = require('./config');
@@ -35,13 +34,17 @@ var RootViewModel = function() {
     self.editorPanel = ko.observable('none');
     self.editorParams = ko.observable({});
     self.isEditorPanelVisible = ko.observable(false);
+    self.isEditorTabVisible = ko.observable(false);
 
     self.setEditorPanel = function(name, params) {
-        ko.postbox.reset(); // BAD
         self.editorPanel(name);
         self.editorParams(params);
         self.isEditorPanelVisible(name !== 'none');
-    }
+        self.isEditorTabVisible(true);
+    };
+    self.toggleEditorTab = function() {
+        self.isEditorTabVisible(!self.isEditorTabVisible());
+    };
 
     self.dialogObs = ko.observable({name: 'none'});
 

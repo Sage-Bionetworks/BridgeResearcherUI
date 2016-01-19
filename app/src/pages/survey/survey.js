@@ -1,4 +1,5 @@
 var ko = require('knockout');
+require('knockout-postbox');
 var serverService = require('../../services/server_service');
 var surveyUtils = require('./survey_utils');
 var utils = require('../../utils');
@@ -15,6 +16,7 @@ module.exports = function(params) {
         console.log("loadVM", survey);
         self.survey = survey;
         surveyUtils.surveyToObservables(self, survey);
+        root.setEditorPanel('SurveyPanel', {viewModel:self});
         return survey.createdOn;
     }
     function updateVM(keys, message) {
@@ -48,8 +50,6 @@ module.exports = function(params) {
     self.save = function(vm, event) {
         utils.startHandler(self, event);
 
-        console.log(self.survey);
-
         if (self.survey.published) {
             version(self.survey).then(updateVM).then(save).then(updateVM)
                 .then(function() {
@@ -69,6 +69,22 @@ module.exports = function(params) {
         }
 
     };
+
+    var scrollTo = utils.makeScrollTo(".element");
+
+    self.addGroup = function(vm, event) {
+        self.elementsObs.push(surveyUtils.newField('SurveyQuestion'));
+        scrollTo(self.elementsObs().length-1);
+    };
+    ko.postbox.subscribe("elementsAdd", function() {
+        self.addGroup();
+    });
+    ko.postbox.subscribe("elementsRemove",
+            utils.manualFadeRemove(self.elementsObs, ".elementZone .element"));
+    ko.postbox.subscribe("elementsSelect", function(element) {
+        var index = self.elementsObs().indexOf(element);
+        scrollTo( index );
+    });
 
     var notFoundHandler = utils.notFoundHandler(self, "Survey not found", "#/surveys");
 

@@ -23,7 +23,7 @@
     <div class="three fields">
         <div class="field">
             <label data-bind="text: (scheduleTypeObs() === 'recurring') ? 'At these times' : 'At this time'"></label>
-            <div style="margin: .5rem 0" data-bind="text: formatTimes(timesObs())"></div>
+            <div class=text" style="margin: .5rem 0" data-bind="text: formatTimes(timesObs())"></div>
             <div class="inline-editor-controls">
                 <a data-bind="click: editTimes"><i class="write icon"></i>Edit</a>
                 <a data-bind="click: clearTimes"><i class="delete icon"></i>Clear</a>
@@ -70,7 +70,7 @@
     <div data-bind="visible: activitiesObs().length > 0">
         <div class="ui form" data-bind="foreach: activitiesObs">
             <div class="activity">
-                <div>
+                <div class="field">
                     <input type="text" placeholder="Label" data-bind="textInput: $data.labelObs"/>
                 </div>
                 <div>

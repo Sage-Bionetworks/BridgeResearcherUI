@@ -1,0 +1,20 @@
+<div class="ui vertical editor menu">
+    <div class="title item">
+        <i class="calendar icon"></i>
+        <span data-bind="visible: nameObs().length > 0, text: nameObs"></span>
+        <span data-bind="visible: nameObs().length === 0">New Survey</span>
+    </div>
+    <div class="item vertical-scrollbox" data-bind="foreach: elementsObs, dragula: {
+        dragHandleSelector: '.vs-item-content', elementSelector: '.vs-item',
+        listObs: elementsObs}">
+        <div class="vs-item" data-bind="click: $component.selectElement, attr: {title: $data.identifier}">
+            <div class="vs-item-content" data-bind="html: $component.truncate($data.promptObs())"></div>
+            <div class="vs-item-delete"><i class="delete icon" data-bind="click: $component.removeElement"></i></div>
+        </div>
+    </div>
+    <div class="item">
+        <i>Drag items in this list to reorder them.</i>
+    </div>
+</div>
+
+

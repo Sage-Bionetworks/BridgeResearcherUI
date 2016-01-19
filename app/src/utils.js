@@ -59,6 +59,11 @@ function makeOptionLabelFinder(arrayOrObs) {
         return option ? option.label : "";
     };
 }
+function clearErrors(target) {
+    target.classList.remove("loading");
+}
+function displayErrors(errors) {
+}
 
 /**
  * Common utility methods for ViewModels.
@@ -119,7 +124,7 @@ module.exports = {
      */
     successHandler: function(vm, event, message) {
         return function(response) {
-            event.target.classList.remove("loading");
+            clearErrors(event.target);
             if (message) {
                 toastr.success(message);
             }
@@ -137,21 +142,24 @@ module.exports = {
     failureHandler: function(vm, event) {
         return function(response) {
             if (event){
-                event.target.classList.remove("loading");
+                clearErrors(event.target);
             }
             if (response.status === 412) {
                 toastr.error('You do not appear to be either a developer or a researcher.');
             } else if (response instanceof Error) {
                 toastr.error(response.message);
             } else if (response.responseJSON) {
-                toastr.error(response.responseJSON.message);
+                var payload = response.responseJSON;
+                toastr.error(payload.message);
+                displayErrors(payload.errors);
             } else {
                 toastr.error(GENERIC_ERROR);
             }
         };
     },
     /**
-     * Create an observable for each field name provided.
+     * Create an observable for each field name provided. Will create an observableArray if the notation indicates
+     * such (e.g. "entries[]" rather than "entries").
      * @param vm
      * @param fields
      * @param [source] - if provided, values will be initialized from this object
@@ -197,12 +205,8 @@ module.exports = {
         for (var i=0; i < fields.length; i++) {
             var insp = nameInspector(fields[i]);
 
-            // TODO: At one point you were checking that the model object had the property before
-            // copying the observer back to it, but this prevents the UI from adding properties when the
-            // model didn't initially have them. Disabling this, but may break something elsewhere.
+            object[insp.name] = null;
             var obs = vm[insp.observerName];
-            //var value = object[insp.name];
-            //if (isDefined(obs) && isDefined(value)) {
             if (isDefined(obs)) {
                 object[insp.name] = obs();
             }
@@ -286,7 +290,6 @@ module.exports = {
      */
     notFoundHandler: function(vm, message, rootPath) {
         return function(response) {
-            console.error(response);
             toastr.error((message) ? message : response.statusText);
             if (rootPath) {
                 document.location = rootPath;
@@ -310,5 +313,55 @@ module.exports = {
     /**
      * Walk object and remove any properties that are set to null or an empty string.
      */
-    deleteUnusedProperties: deleteUnusedProperties
+    deleteUnusedProperties: deleteUnusedProperties,
+    /**
+     * The logic for the scrollbox scrolling is not idea so isolate it here where we
+     * can fix it everywhere it is used.
+     * @param itemSelector
+     * @returns {scrollTo}
+     */
+    makeScrollTo: function(itemSelector) {
+        return function scrollTo(index) {
+            var $scrollbox = $(".scrollbox");
+            var element = $scrollbox.find(itemSelector).get(index);
+            var offset = $(".fixed-header").outerHeight() * 1.75;
+            $scrollbox.scrollTo(element, {offsetTop: offset});
+        };
+    },
+    /**
+     * The panel editors are sibling views to the main view, so they convert user
+     * UI events into postbox events on the main collection being edited. This is
+     * a convenience method to generate those.
+     * @param eventName
+     * @returns {Function}
+     */
+    makeEventToPostboxListener: function(eventName) {
+        return function(element, event) {
+            event.preventDefault();
+            event.stopPropagation();
+            ko.postbox.publish(eventName, element);
+        };
+    },
+    /**
+     * Although the main editor collection has a binding to fade and then remove an
+     * item from a collection, the panel editor can only post an event to remove, so
+     * this handler emulates the same behavior as the fadeRemove binding.
+     * @param elementsObs
+     * @param elementSelector
+     * @returns {Function}
+     */
+    manualFadeRemove: function(elementsObs, elementSelector) {
+        return function(group) {
+            var index = elementsObs.indexOf(group);
+            var dom = $(elementSelector).eq(index);
+
+            if (confirm("Are you sure?")) {
+                dom.css("max-height","0px");
+                setTimeout(function() {
+                    elementsObs.remove(group);
+                    dom.remove();
+                },510); // waiting for animation to complete
+            }
+        };
+    }
 };

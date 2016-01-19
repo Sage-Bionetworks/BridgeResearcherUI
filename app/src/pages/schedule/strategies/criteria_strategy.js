@@ -4,6 +4,9 @@ var utils = require('../../../utils');
 var scheduleUtils = require('../schedule_utils');
 var criteriaUtils = require('../../../criteria_utils');
 var serverService = require('../../../services/server_service');
+var root = require('../../../root');
+
+var fields = ["minAppVersion","maxAppVersion","allOfGroups","noneOfGroups","schedule"];
 
 function groupToObservables(group) {
     group.minAppVersionObs = ko.observable(group.minAppVersion);
@@ -60,6 +63,7 @@ function newGroup() {
 module.exports = function(params) {
     var self = this;
 
+    self.labelObs = params.labelObs;
     self.strategyObs = params.strategyObs;
     self.scheduleCriteriaObs = ko.observableArray([]).publishOn("scheduleCriteriaChanges");
     self.dataGroupsOptions = ko.observableArray([]);
@@ -70,11 +74,7 @@ module.exports = function(params) {
         return strategy;
     };
 
-    function scrollTo(index) {
-        var target = document.querySelectorAll(".schedulegroup-fieldset")[index];
-        // pretty junky magic number stuff going on here.
-        $(".scrollbox").animate({scrollTop: $(target).position().top+170})
-    }
+    root.setEditorPanel('CriteriaScheduleStrategyPanel', {viewModel:self});
 
     // This is fired when the parent viewModel gets a plan back from the server
     ko.computed(function () {
@@ -84,24 +84,22 @@ module.exports = function(params) {
         }
     });
 
-    // These are triggered by the panel editor
-    ko.postbox.subscribe("scheduleCriteriaAdd", function() {
-        self.scheduleCriteriaObs.push(newGroup());
-        setTimeout(function() {
-            scrollTo(self.scheduleCriteriaObs().length-1);
-        },1);
-    });
-    ko.postbox.subscribe("scheduleCriteriaRemove", function(group) {
-        self.scheduleCriteriaObs.remove(group);
-    });
-    ko.postbox.subscribe("scheduleCriteriaSelect", function(group) {
-        var index = self.scheduleCriteriaObs().indexOf(group);
-        scrollTo( index );
-    });
+    var scrollTo = utils.makeScrollTo(".schedulegroup-fieldset");
+
     self.addCriteria = function(vm, event) {
         self.scheduleCriteriaObs.push(newGroup());
         scrollTo(self.scheduleCriteriaObs().length-1);
     };
+    ko.postbox.subscribe("scheduleCriteriaAdd", function(group) {
+        self.addCriteria();
+    });
+    ko.postbox.subscribe("scheduleCriteriaRemove",
+        utils.manualFadeRemove(self.scheduleCriteriaObs, ".schedulegroup-fieldset"));
+    ko.postbox.subscribe("scheduleCriteriaSelect", function(element) {
+        var index = self.scheduleCriteriaObs().indexOf(element);
+        scrollTo( index );
+    });
+
     serverService.getStudy().then(function(study) {
         var array = study.dataGroups.map(function(value) {
             return {label: value, value:value};

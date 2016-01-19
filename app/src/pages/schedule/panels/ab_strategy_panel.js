@@ -1,25 +1,18 @@
 var ko = require('knockout');
 require('knockout-postbox');
+var utils = require('../../../utils');
 
 module.exports = function(params) {
     var self = this;
 
-    var groups = params.viewModel.strategyObs().scheduleGroups;
-    self.scheduleGroupsObs = ko.observableArray(groups).subscribeTo("scheduleGroupChanges");
+    self.labelObs = params.viewModel.labelObs;
+    self.scheduleGroupsObs = params.viewModel.scheduleGroupsObs;
 
-    self.selectGroup = function(group, event) {
-        event.preventDefault();
-        event.stopPropagation();
-        ko.postbox.publish("scheduleGroupSelect", group);
+    self.groupLabel = function(data, index) {
+        return "Group #"+(index()+1)+" ("+data.percentageObs()+"%)";
     };
-    self.removeGroup = function(group, event) {
-        event.preventDefault();
-        event.stopPropagation();
-        ko.postbox.publish("scheduleGroupRemove", group);
-    };
-    self.addGroup = function(vm, event) {
-        event.preventDefault();
-        event.stopPropagation();
-        ko.postbox.publish("scheduleGroupAdd");
-    };
+
+    self.selectGroup = utils.makeEventToPostboxListener("scheduleGroupSelect");
+    self.removeGroup = utils.makeEventToPostboxListener("scheduleGroupRemove");
+    self.addGroup = utils.makeEventToPostboxListener("scheduleGroupAdd");
 };
