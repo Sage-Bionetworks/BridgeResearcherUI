@@ -12,27 +12,16 @@
                 Use Existing List
             </div>
         </div>
-        <div data-bind="visible: isActive('editor')" style="margin-bottom: -1.5rem">
+        <div data-bind="visible: isActive('editor')">
             <div class="ui two column grid">
-                <div class="column enum-scrollbox">
-                    <div class="ui list listZone" data-bind="dragula: {
-                        elementSelector: '.element-enum',
-                        listObs: listObs
-                    }, foreach: listObs">
-                        <div class="item element-enum">
-                            <i class="delete icon" data-bind="click: $parent.removeListItem"></i>
-                            <div class="content">
-                                <div class="header">
-                                    <span data-bind="text: label"></span>
-                                    <span style="font-weight: normal" data-bind="visible: $parent.hasDetail($data)">
-                                        &mdash;<span data-bind="text: detail"></span>
-                                    </span>
-                                </div>
-                                <div class="description" data-bind="visible: label != value">
-                                    Recorded on server as &ldquo;<span data-bind="text: value"></span>&rdquo;
-                                </div>
-                            </div>
+                <div class="column enum-list" data-bind="foreach: listObs, dragula: {
+                    elementSelector: '.vs-item', listObs: listObs}">
+                    <div class="vs-item">
+                        <div class="vs-item-content">
+                            <span data-bind="text: $data.label"></span>
+                            <span data-bind="visible: $parent.hasDetail($data)">&mdash;<span data-bind="text: $data.detail"></span></span>
                         </div>
+                        <div class="vs-item-delete"><i class="delete icon" data-bind="click: $parent.removeListItem"></i></div>
                     </div>
                 </div>
                 <div class="column">
