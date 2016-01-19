@@ -3,7 +3,6 @@ var toastr = require('toastr');
 var config = require('./config');
 
 var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
-var errorQueue = [];
 
 toastr.options = config.toastr;
 
@@ -206,12 +205,8 @@ module.exports = {
         for (var i=0; i < fields.length; i++) {
             var insp = nameInspector(fields[i]);
 
-            // TODO: At one point you were checking that the model object had the property before
-            // copying the observer back to it, but this prevents the UI from adding properties when the
-            // model didn't initially have them. Disabling this, but may break something elsewhere.
+            object[insp.name] = null;
             var obs = vm[insp.observerName];
-            //var value = object[insp.name];
-            //if (isDefined(obs) && isDefined(value)) {
             if (isDefined(obs)) {
                 object[insp.name] = obs();
             }
@@ -318,5 +313,55 @@ module.exports = {
     /**
      * Walk object and remove any properties that are set to null or an empty string.
      */
-    deleteUnusedProperties: deleteUnusedProperties
+    deleteUnusedProperties: deleteUnusedProperties,
+    /**
+     * The logic for the scrollbox scrolling is not idea so isolate it here where we
+     * can fix it everywhere it is used.
+     * @param itemSelector
+     * @returns {scrollTo}
+     */
+    makeScrollTo: function(itemSelector) {
+        return function scrollTo(index) {
+            var $scrollbox = $(".scrollbox");
+            var element = $scrollbox.find(itemSelector).get(index);
+            var offset = $(".fixed-header").outerHeight() * 1.75;
+            $scrollbox.scrollTo(element, {offsetTop: offset});
+        };
+    },
+    /**
+     * The panel editors are sibling views to the main view, so they convert user
+     * UI events into postbox events on the main collection being edited. This is
+     * a convenience method to generate those.
+     * @param eventName
+     * @returns {Function}
+     */
+    makeEventToPostboxListener: function(eventName) {
+        return function(element, event) {
+            event.preventDefault();
+            event.stopPropagation();
+            ko.postbox.publish(eventName, element);
+        };
+    },
+    /**
+     * Although the main editor collection has a binding to fade and then remove an
+     * item from a collection, the panel editor can only post an event to remove, so
+     * this handler emulates the same behavior as the fadeRemove binding.
+     * @param elementsObs
+     * @param elementSelector
+     * @returns {Function}
+     */
+    manualFadeRemove: function(elementsObs, elementSelector) {
+        return function(group) {
+            var index = elementsObs.indexOf(group);
+            var dom = $(elementSelector).eq(index);
+
+            if (confirm("Are you sure?")) {
+                dom.css("max-height","0px");
+                setTimeout(function() {
+                    elementsObs.remove(group);
+                    dom.remove();
+                },510); // waiting for animation to complete
+            }
+        };
+    }
 };

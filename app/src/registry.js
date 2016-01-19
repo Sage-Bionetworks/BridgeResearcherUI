@@ -54,6 +54,7 @@ reg('CriteriaScheduleStrategy', './pages/schedule/strategies/criteria_strategy')
 reg('ABTestScheduleStrategyPanel', './pages/schedule/panels/ab_strategy_panel');
 reg('CriteriaScheduleStrategyPanel', './pages/schedule/panels/criteria_strategy_panel');
 reg('SimpleScheduleStrategyPanel', './pages/schedule/panels/simple_strategy_panel');
+reg('SurveyPanel', './pages/survey/panels/survey');
 
 regt('not_found', './pages/not_found/not_found');
 reg('publickey', './dialogs/publickey/publickey');

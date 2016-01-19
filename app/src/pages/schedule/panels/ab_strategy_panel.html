@@ -1,15 +1,19 @@
 <div class="ui vertical editor menu">
-    <div class="item">
+    <div class="title item">
         <i class="calendar icon"></i>
         <span data-bind="visible: labelObs().length > 0, text: labelObs"></span>
         <span data-bind="visible: labelObs().length === 0">New Schedule Plan</span>
     </div>
-    <!-- ko foreach: scheduleGroupsObs -->
-    <a class="item" data-bind="click: $component.selectGroup">
-        <span data-bind="text: 'Group #' + ($index()+1)"></span> (<span data-bind="text: $data.percentageObs"></span>%)
-        <i class="delete icon" data-bind="click: $component.removeGroup"></i>
-    </a>
-    <!-- /ko -->
+    <div class="item vertical-scrollbox" data-bind="foreach: scheduleGroupsObs, dragula: {
+            dragHandleSelector: '.vs-item-content', elementSelector: '.vs-item',
+            listObs: scheduleGroupsObs}">
+        <div class="vs-item" data-bind="click: $component.selectGroup">
+            <div class="vs-item-content" data-bind="text: $component.groupLabel($data, $index)">
+
+            </div>
+            <div class="vs-item-delete"><i class="delete icon" data-bind="click: $component.removeGroup"></i></div>
+        </div>
+    </div>
     <div class="item">
         <a class="ui link" href="#" data-bind="click: $component.addGroup">
             <i class="add square icon"></i>Add Schedule

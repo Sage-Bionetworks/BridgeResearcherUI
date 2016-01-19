@@ -2,7 +2,6 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var scheduleUtils = require('./../schedule/schedule_utils');
 var utils = require('../../utils');
-var root = require('../../root');
 
 /**
  * The complexity of this view comes from the fact that the entire data model is in the strategy,
@@ -35,7 +34,6 @@ module.exports = function(params) {
         } else if (newValue === 'CriteriaScheduleStrategy') {
             self.strategyObs(scheduleUtils.newCriteriaStrategy());
         }
-        root.setEditorPanel(newValue+'Panel', {viewModel:self});
     });
 
     self.save = function(vm, event) {
@@ -64,7 +62,6 @@ module.exports = function(params) {
         self.minAppVersionObs(plan.minAppVersion);
         self.maxAppVersionObs(plan.maxAppVersion);
         self.strategyObs(plan.strategy);
-        root.setEditorPanel(plan.strategy.type+'Panel', {viewModel:self});
     }
 
     var notFoundHandler = utils.notFoundHandler(self, "Schedule plan not found.", "#/scheduleplans");
