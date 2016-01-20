@@ -1,7 +1,5 @@
-<div class="element-draghandle">
-</div>
 <div class="element-content">
-    <div class="field" data-bind="attr:{id: $data.collectionName+'prompt'}">
+    <div class="focus" data-bind="attr:{id: $data.collectionName+'prompt'}">
         <ui-textarea params="fieldObs: promptObs, className: 'element-content-prompt', placeholder: 'Prompt'"></ui-textarea>
     </div>
     <ui-textarea params="fieldObs: promptDetailObs, className: 'element-content-prompt-detail', placeholder: 'Prompt Detail'"></ui-textarea>
@@ -18,7 +16,25 @@
         <input type="text" class="editor element-callout-identifier" data-bind="textInput: identifierObs"/>
         <div class="require element-callout-identifier-label">Identifier</div>
     </div>
-    <div class="element-callout-delete">
-        <div data-bind="fadeRemove: {selector: '.element', collection: 'elementsObs', object: $data.element}"><a><i class="delete icon"></i> Delete</a></div>
+    <div class="element-callout-delete ui compact secondary menu">
+        <div class="item" data-bind="semantic:'popup-menu'">
+            <i class="add icon"></i> Add below
+        </div>
+        <div class="ui flowing popup top left transition hidden">
+            <div class="ui secondary vertical menu">
+                <a class="item" data-bind="click: create" data-type="MultiValueConstraints">Multi-Choice</a>
+                <a class="item" data-bind="click: create" data-type="StringConstraints">String</a>
+                <a class="item" data-bind="click: create" data-type="BooleanConstraints">Boolean</a>
+                <a class="item" data-bind="click: create" data-type="IntegerConstraints">Integer</a>
+                <a class="item" data-bind="click: create" data-type="DecimalConstraints">Decimal</a>
+                <a class="item" data-bind="click: create" data-type="DateConstraints">Date</a>
+                <a class="item" data-bind="click: create" data-type="DateTimeConstraints">Date & Time</a>
+                <a class="item" data-bind="click: create" data-type="TimeConstraints">Time</a>
+                <a class="item" data-bind="click: create" data-type="DurationConstraints">Duration</a>
+                <a class="item" data-bind="click: create" data-type="SurveyInfoScreen">Information Only</a>
+            </div>
+        </div>
+        <div class="item" data-bind="click: copy"><i class="copy icon"></i> Copy</div>
+        <div class="item" data-bind="fadeRemove: {selector: '.element', collection: 'elementsObs', object: $data.element}"><a><i class="delete icon"></i> Delete</a></div>
     </div>
 </div>

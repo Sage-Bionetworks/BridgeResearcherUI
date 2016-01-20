@@ -16,15 +16,6 @@
     border: 1px solid #e5e5e5;
     border-radius: 6px;
 }
-    .element-draghandle {
-        width: 1rem;
-        align-self: stretch;
-        background: #f4f4f4;
-        background-image: radial-gradient(#e5e5e5 1px, transparent 0), radial-gradient(#e5e5e5 1px, transparent 0);
-        background-size: 10px 10px;
-        background-position: 0 0, 5px 5px;
-        cursor: ns-resize;
-    }
     .element-callout, .element-content {
     }
     .element-callout {
@@ -53,6 +44,15 @@
             }
         .element-callout-delete {
             cursor: pointer;
+            padding-top: 1rem;
+
+            .item {
+                width:100%;
+                padding: .4rem 0!important;
+            }
+            .item:hover {
+                color: #009fda;
+            }
         }
 .element-content {
     @include flex(1);

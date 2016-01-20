@@ -1,3 +1,5 @@
+var utils = require('../../utils');
+var surveyUtils = require('./survey_utils');
 
 module.exports = function(params) {
     var self = this;
@@ -9,4 +11,7 @@ module.exports = function(params) {
     self.promptObs = self.element.promptObs;
     self.promptDetailObs = self.element.promptDetailObs;
     self.identifierObs = self.element.identifierObs;
+
+    self.copy = surveyUtils.makeCopy(params.elementsObs, params.element);
+    self.create = surveyUtils.makeCreate(params.elementsObs, params.element);
 };
