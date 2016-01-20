@@ -65,6 +65,7 @@ module.exports = function(params) {
 
     self.labelObs = params.labelObs;
     self.strategyObs = params.strategyObs;
+    self.collectionName = params.collectionName;
     self.scheduleCriteriaObs = ko.observableArray([]).publishOn("scheduleCriteriaChanges");
     self.dataGroupsOptions = ko.observableArray([]);
 

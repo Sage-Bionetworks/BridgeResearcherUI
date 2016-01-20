@@ -1,7 +1,7 @@
 var ko = require('knockout');
-var toastr = require('toastr');
 var serverService = require('./services/server_service');
 var config = require('./config');
+var toastr = require('toastr');
 
 // Used in navigation to keep a section highlighted as you navigate into it.
 var pageSets = {

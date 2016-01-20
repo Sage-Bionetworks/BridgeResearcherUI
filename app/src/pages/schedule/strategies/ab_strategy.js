@@ -34,6 +34,7 @@ module.exports = function(params) {
     self.labelObs = params.labelObs;
     self.strategyObs = params.strategyObs;
     self.scheduleGroupsObs = ko.observableArray([]).publishOn("scheduleGroupChanges");
+    self.collectionName = params.collectionName;
 
     root.setEditorPanel('ABTestScheduleStrategyPanel', {viewModel:self});
 

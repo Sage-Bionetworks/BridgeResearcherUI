@@ -1,15 +1,19 @@
 <div class="element-draghandle">
 </div>
 <div class="element-content">
-    <ui-textarea params="fieldObs: titleObs, className: 'element-content-title', placeholder: 'Title'"></ui-textarea>
-    <ui-textarea params="fieldObs: promptObs, className: 'element-content-prompt', placeholder: 'Prompt'"></ui-textarea>
+    <div class="field" data-bind="attr:{id: $data.collectionName+'title'}">
+        <ui-textarea params="fieldObs: titleObs, className: 'element-content-title', placeholder: 'Title'"></ui-textarea>
+    </div>
+    <div class="field" data-bind="attr:{id: $data.collectionName+'prompt'}">
+        <ui-textarea params="fieldObs: promptObs, className: 'element-content-prompt', placeholder: 'Prompt'"></ui-textarea>
+    </div>
     <ui-textarea params="fieldObs: promptDetailObs, className: 'element-content-prompt-detail', placeholder: 'Prompt Detail'"></ui-textarea>
 </div>
 <div class="element-callout">
     <div>
         <span class="ui huge green circular label" data-bind="text: indexObs()+1"></span>
     </div>
-    <div class="element-callout-identifier-box">
+    <div class="element-callout-identifier-box field" data-bind="attr:{id: $data.collectionName+'identifier'}">
         <input type="text" class="editor element-callout-identifier" data-bind="textInput: identifierObs"/>
         <div class="require element-callout-identifier-label">Identifier</div>
     </div>

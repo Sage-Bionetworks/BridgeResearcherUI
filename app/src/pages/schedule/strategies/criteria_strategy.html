@@ -12,15 +12,15 @@
             <div class="field">
                 <label>App version:</label>
                 <div class="two fields">
-                    <div class="six wide field">
+                    <div class="six wide field" data-bind="attr:{id:'strategy_scheduleCriteria'+$index()+'_minAppVersion'}">
                         <ui-number params="fieldObs: $data.minAppVersionObs, placeholder: 'Min'"></ui-number>
                     </div>
-                    <div class="six wide field">
+                    <div class="six wide field" data-bind="attr:{id:'strategy_scheduleCriteria'+$index()+'_maxAppVersion'}">
                         <ui-number params="fieldObs: $data.maxAppVersionObs, placeholder: 'Max'"></ui-number>
                     </div>
                 </div>
             </div>
-            <div class="field">
+            <div class="field" data-bind="attr:{id:'strategy_scheduleCriteria'+$index()+'_allOfGroups'}">
                 <label>User has all these data group(s):</label>
                 <div class="vertical-padding" data-bind="visible: $data.allOfGroupsObs().length === 0">
                     <i>None selected</i>
@@ -41,7 +41,7 @@
                     <button class="ui small button" data-bind="click: $data.addToAll">Add</button>
                 </div>
             </div>
-            <div class="field">
+            <div class="field" data-bind="attr:{id:'strategy_scheduleCriteria'+$index()+'_noneOfGroups'}">
                 <label>And <em>none</em> of these data group(s):</label>
                 <div class="vertical-padding" data-bind="visible: $data.noneOfGroupsObs().length === 0">
                     <i>None selected</i>
@@ -72,7 +72,7 @@
             <legend class="schedule-legend">
                 <h4>Schedule</h4>
             </legend>
-            <div data-bind="component: {name: 'schedule', params: {scheduleObs: $data.scheduleObs}}"></div>
+            <div data-bind="component: {name: 'schedule', params: {scheduleObs: $data.scheduleObs, collectionName: 'scheduleCriteria'+$index()+'_'}}"></div>
         </fieldset>
     </fieldset>
 </form>

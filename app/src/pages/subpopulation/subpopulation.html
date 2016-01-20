@@ -13,13 +13,14 @@
     </div>
 </div>
 <div class="scrollbox">
+    <errors></errors>
     <form class="ui form">
         <div class="fields">
-            <div class="eight wide required field">
+            <div class="eight wide required field" id="name">
                 <label>Name</label>
                 <input type="text" data-bind="value: nameObs"/>
             </div>
-            <div class="eight wide field">
+            <div class="eight wide field" id="description">
                 <label>Description</label>
                 <input type="text" data-bind="value: descriptionObs"/>
             </div>
@@ -29,15 +30,15 @@
                 <h4 style="margin-top:0">Assignment based on</h4>
                 <label>App version:</label>
                 <div class="two fields">
-                    <div class="six wide field">
+                    <div class="six wide field" id="minAppVersion">
                         <ui-number params="fieldObs: minAppVersionObs, placeholder: 'Min'"></ui-number>
                     </div>
-                    <div class="six wide field">
+                    <div class="six wide field" id="maxAppVersion">
                         <ui-number params="fieldObs: maxAppVersionObs, placeholder: 'Max'"></ui-number>
                     </div>
                 </div>
             </div>
-            <div class="field">
+            <div class="field" id="allOfGroups">
                 <label>User has all these data group(s):</label>
                 <div class="vertical-padding" data-bind="visible: allOfGroupsObs().length === 0">
                     <i>None selected</i>
@@ -59,7 +60,7 @@
                     <button class="ui small button" data-bind="click: addToAll">Add</button>
                 </div>
             </div>
-            <div class="field">
+            <div class="field" id="noneOfGroups">
                 <label>And user has <em>none</em> of these data group(s):</label>
                 <div class="vertical-padding" data-bind="visible: noneOfGroupsObs().length === 0">
                     <i>None selected</i>

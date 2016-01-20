@@ -27,7 +27,9 @@ may vary from these percentages due to random assignment). Percentages for all g
             <legend class="schedule-legend">
                 <h4>Schedule</h4>
             </legend>
-            <div data-bind="component: {name: 'schedule', params: {scheduleObs: $data.scheduleObs}}"></div>
+            <div data-bind="component: {name: 'schedule', params: {
+                scheduleObs: $data.scheduleObs, collectionName: 'scheduleGroups'+$index()+'_'
+            }}"></div>
         </fieldset>
     </fieldset>
 </form>

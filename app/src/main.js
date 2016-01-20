@@ -3,6 +3,7 @@ require('../lib/toastr.min');
 require('../lib/dragula.min');
 
 require('./bindings');
+require('./bindings/dragula');
 require('./registry');
 var ko = require('knockout');
 require('knockout-postbox');

@@ -1,4 +1,5 @@
 var ko = require('knockout');
+require('knockout-postbox');
 var toastr = require('toastr');
 var config = require('./config');
 
@@ -59,10 +60,20 @@ function makeOptionLabelFinder(arrayOrObs) {
         return option ? option.label : "";
     };
 }
-function clearErrors(target) {
-    target.classList.remove("loading");
+
+var pendingControl = null;
+var errorQueue = [];
+
+function displayPendingControl(control) {
+    clearPendingControl();
+    control.classList.add("loading");
+    pendingControl = control;
 }
-function displayErrors(errors) {
+function clearPendingControl() {
+    if (pendingControl) {
+        pendingControl.classList.remove("loading");
+        pendingControl = null;
+    }
 }
 
 /**
@@ -111,8 +122,8 @@ module.exports = {
      * @param event
      */
     startHandler: function(vm, event) {
-        event.target.classList.add("loading");
-        toastr.clear();
+        ko.postbox.publish("clearErrors");
+        displayPendingControl(event.target);
     },
     /**
      * An Ajax success handler for a view model that supports the editing of a form.
@@ -124,7 +135,8 @@ module.exports = {
      */
     successHandler: function(vm, event, message) {
         return function(response) {
-            clearErrors(event.target);
+            clearPendingControl();
+            ko.postbox.publish("clearErrors");
             if (message) {
                 toastr.success(message);
             }
@@ -141,17 +153,15 @@ module.exports = {
      */
     failureHandler: function(vm, event) {
         return function(response) {
-            if (event){
-                clearErrors(event.target);
-            }
+            clearPendingControl();
+            ko.postbox.publish("clearErrors");
             if (response.status === 412) {
                 toastr.error('You do not appear to be either a developer or a researcher.');
             } else if (response instanceof Error) {
                 toastr.error(response.message);
             } else if (response.responseJSON) {
                 var payload = response.responseJSON;
-                toastr.error(payload.message);
-                displayErrors(payload.errors);
+                ko.postbox.publish("showErrors", payload);
             } else {
                 toastr.error(GENERIC_ERROR);
             }
