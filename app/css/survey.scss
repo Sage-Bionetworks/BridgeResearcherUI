@@ -135,6 +135,11 @@
 .element-enum {
     @include link;
 }
+.enum-list {
+    padding:0!important;
+    overflow-y: auto;
+    max-height: 253px;
+}
 .insertion-control {
     position: relative;
     height: 15px;

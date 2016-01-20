@@ -17,14 +17,7 @@ function routeTo(name) {
 }
 function surveyRoute(name) {
     return function(guid, createdOn) {
-        var date = null;
-        try {
-            if (createdOn !== "recent") {
-                date = new Date(createdOn);
-            }
-        } catch(e) {
-            date = null;
-        }
+        var date = (createdOn === "recent") ? null : createdOn;
         root.changeView(name, {guid: guid, createdOn: date});
     };
 }
