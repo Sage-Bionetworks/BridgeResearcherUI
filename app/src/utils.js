@@ -1,4 +1,5 @@
 var ko = require('knockout');
+require('knockout-postbox');
 var toastr = require('toastr');
 var config = require('./config');
 
@@ -75,49 +76,6 @@ function clearPendingControl() {
     }
 }
 
-function addError(parent, errorMsg) {
-    errorMsg = errorMsg.replace("Subpopulation","Consent group");
-    errorMsg = errorMsg.replace("subpopulation","consent group");
-
-    var p = document.createElement("p");
-    p.textContent = errorMsg;
-    parent.appendChild(p);
-}
-
-function displayErrors(message, errors) {
-    console.info("displayErrors");
-    var errorsDiv = document.getElementById('errors');
-    errorsDiv.style.display = "block";
-
-    addError(errorsDiv, message);
-
-    for (var fieldName in errors) {
-        // "strategy.scheduleGroups[0].schedule.activities[0].label"
-        // "strategy_scheduleGroups0_schedule_activities0_label"
-        var escapedFieldName = fieldName.replace(/[\[\]]/g,"").replace(/\./g,"_");
-        console.info("Looking for",escapedFieldName);
-        var element = document.getElementById(escapedFieldName);
-        if (element) {
-            element.classList.add("error");
-            errorQueue.push(element);
-        }
-    }
-}
-function clearErrors() {
-    console.info("clearErrors");
-    toastr.clear();
-    var errorsDiv = document.getElementById('errors');
-    if (errorsDiv) {
-        errorsDiv.innerHTML = "";
-        errorsDiv.style.display = "none";
-    }
-    errorQueue.forEach(function(element) {
-        element.classList.remove("error");
-    });
-    errorQueue = [];
-}
-
-
 /**
  * Common utility methods for ViewModels.
  */
@@ -164,7 +122,7 @@ module.exports = {
      * @param event
      */
     startHandler: function(vm, event) {
-        clearErrors();
+        ko.postbox.publish("clearErrors");
         displayPendingControl(event.target);
     },
     /**
@@ -178,7 +136,7 @@ module.exports = {
     successHandler: function(vm, event, message) {
         return function(response) {
             clearPendingControl();
-            clearErrors();
+            ko.postbox.publish("clearErrors");
             if (message) {
                 toastr.success(message);
             }
@@ -196,16 +154,14 @@ module.exports = {
     failureHandler: function(vm, event) {
         return function(response) {
             clearPendingControl();
-            clearErrors();
-            console.log(response);
+            ko.postbox.publish("clearErrors");
             if (response.status === 412) {
                 toastr.error('You do not appear to be either a developer or a researcher.');
             } else if (response instanceof Error) {
                 toastr.error(response.message);
             } else if (response.responseJSON) {
                 var payload = response.responseJSON;
-                //toastr.error("An error has occurred.");
-                displayErrors(payload.message, payload.errors);
+                ko.postbox.publish("showErrors", payload);
             } else {
                 toastr.error(GENERIC_ERROR);
             }

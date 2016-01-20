@@ -22,13 +22,14 @@
     <survey-tabset params="selected: 'editor', viewModel: $data"></survey-tabset>
 </div>
 <div class="scrollbox">
+    <errors></errors>
     <form class="ui form">
         <div class="two fields">
-            <div class="required field">
+            <div class="required field" id="name">
                 <label>Name</label>
                 <ui-text params="fieldObs: nameObs"></ui-text>
             </div>
-            <div class="required field">
+            <div class="required field" id="identifier">
                 <label>Identifier</label>
                 <ui-text params="fieldObs: identifierObs"></ui-text>
             </div>
@@ -51,7 +52,7 @@
     }, foreach: elementsObs">
         <div class="element" data-bind="component: {
         name: $data.type,
-        params: { element: $data, elementsObs: $parent.elementsObs, indexObs: $index }
+        params: { element: $data, elementsObs: $parent.elementsObs, indexObs: $index, collectionName: 'elements'+$index()+'_' }
     }"></div>
         <!-- ko component: {
             name: "insertion-control",
