@@ -1,3 +1,9 @@
+.ui.form.schema .field, .ui.form.schema .fields .field {
+    margin: 0;
+}
+.ui.form.schema .field input {
+    padding: .4rem .5rem;
+}
 .sfield {
     @include flex-box(row);
     @include transition(max-height .5s ease);
@@ -28,7 +34,7 @@
 }
     .sfield-content-editor > div { /* "row" element */
         @include flex-box(row);
-        @include align-items(baseline);
+        @include align-items(center);
         padding: 0 .5rem;
     }
         .sfield-content-editor > div > div {

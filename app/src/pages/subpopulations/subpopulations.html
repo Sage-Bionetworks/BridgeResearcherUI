@@ -9,6 +9,7 @@
     <div class="ui secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
+    <div class="ui red message" id="errors"></div>
     <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
     <table class="ui compact table" data-bind="visible: itemsObs().length > 0">
         <thead>

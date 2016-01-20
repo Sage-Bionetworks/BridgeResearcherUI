@@ -94,6 +94,7 @@ module.exports = function(params) {
     var self = this;
 
     self.scheduleObs = params.scheduleObs;
+    self.collectionName = params.collectionName;
     utils.observablesFor(self, SCHEDULE_FIELDS);
     // this is not initialized by observablesFor, because it is often null when
     // the value is just enrollment by default.

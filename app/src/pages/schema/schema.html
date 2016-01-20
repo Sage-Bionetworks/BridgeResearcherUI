@@ -13,7 +13,7 @@
         <a class="active item">
             <i class="file outline icon"></i> Editor
         </a>
-        <a href="#" data-bind="attr: {href: '#/schemas/'+schemaIdObs()+'/versions'}, visible: !!revisionObs()" class="item">
+        <a href="#" data-bind="attr: {href: '#/schemas/'+encodeURIComponent(schemaIdObs())+'/versions'}, visible: !!revisionObs()" class="item">
             <i class="history icon"></i> History
         </a>
         <div class="right menu">
@@ -25,16 +25,17 @@
 </div>
 <div class="scrollbox">
     <form class="ui form">
+        <div class="ui red message" id="errors"></div>
         <div class="three fields">
-            <div class="required field">
+            <div class="required field" id="name">
                 <label>Name</label>
                 <ui-text params="fieldObs: nameObs"></ui-text>
             </div>
-            <div class="required field">
+            <div class="required field" id="schemaType">
                 <label>Schema Type</label>
                 <ui-select params="fieldObs: schemaTypeObs, fieldLabel: schemaTypeLabel, optionsSrc: schemaTypeOptions"></ui-select>
             </div>
-            <div class="required field">
+            <div class="required field" id="schemaId">
                 <label>Identifier</label>
                 <ui-text params="fieldObs: schemaIdObs"></ui-text>
             </div>
@@ -47,7 +48,7 @@
         <p>There are currently no field definitions in this upload schema.</p>
         <p><a href="#" class="ui primary button" data-bind="click: addFirst"><i class="add square icon"></i> Add Field</a></p>
     </div>
-    <div class="schema sfieldZone" data-bind="dragula: {
+    <div class="ui form schema sfieldZone" data-bind="dragula: {
         dragHandleSelector: '.sfield-draghandle',
         elementSelector: '.sfield',
         listObs: itemsObs

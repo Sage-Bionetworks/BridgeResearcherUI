@@ -21,7 +21,8 @@
         </div>
     </div>
     <div class="three fields">
-        <div class="field">
+        <div class="field" data-bind="attr:{id:
+            'strategy_'+$component.collectionName+'schedule_times'}">
             <label data-bind="text: (scheduleTypeObs() === 'recurring') ? 'At these times' : 'At this time'"></label>
             <div class=text" style="margin: .5rem 0" data-bind="text: formatTimes(timesObs())"></div>
             <div class="inline-editor-controls">
@@ -33,7 +34,8 @@
             <label>Then schedule every</label>
             <ui-duration params="fieldObs: intervalObs, noHours: true"></ui-duration>
         </div>
-        <div class="field" data-bind="visible: scheduleTypeObs() === 'recurring'">
+        <div class="field" data-bind="visible: scheduleTypeObs() === 'recurring', attr:{id:
+            'strategy_'+$component.collectionName+'schedule_cronTrigger'}">
             <label>&hellip;or using a <a href="http://www.cronmaker.com/" target="_blank">cron expression</a></label>
             <ui-text params="fieldObs: cronTriggerObs"></ui-text>
         </div>
@@ -43,7 +45,8 @@
             <label>Delay first task by</label>
             <ui-duration params="fieldObs: delayObs"></ui-duration>
         </div>
-        <div class="field">
+        <div class="field" data-bind="attr:{id:
+            'strategy_'+$component.collectionName+'schedule_expires'}">
             <label>Tasks expire after</label>
             <ui-duration params="fieldObs: expiresObs"></ui-duration>
         </div>
@@ -70,7 +73,8 @@
     <div data-bind="visible: activitiesObs().length > 0">
         <div class="ui form" data-bind="foreach: activitiesObs">
             <div class="activity">
-                <div class="field">
+                <div class="field" data-bind="attr: {
+                    id: 'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_label'}">
                     <input type="text" placeholder="Label" data-bind="textInput: $data.labelObs"/>
                 </div>
                 <div>
@@ -80,11 +84,13 @@
                     <ui-select params="fieldObs: $data.activityTypeObs, fieldLabel: $component.activityTypeLabel,
                         optionsSrc: $component.activityTypeOptions"></ui-select>
                 </div>
-                <div style="width: 10rem" data-bind="visible: $data.activityTypeObs() == 'task'">
+                <div style="width: 10rem" class="field" data-bind="visible: $data.activityTypeObs() == 'task', attr: {
+                    id:'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_task_identifier'}">
                     <ui-select params="fieldObs: $data.taskIdObs, fieldLabel: $component.taskOptionsLabel,
                         optionsSrc: $component.taskOptionsObs"></ui-select>
                 </div>
-                <div style="width: 10rem" data-bind="visible: $data.activityTypeObs() == 'survey'">
+                <div style="width: 10rem" class="field" data-bind="visible: $data.activityTypeObs() == 'survey', attr: {
+                    id:'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_survey_guid'}">
                     <ui-select params="fieldObs: $data.surveyGuidObs, fieldLabel: $component.surveysOptionsLabel,
                         optionsSrc: $component.surveysOptionsObs"></ui-select>
                 </div>

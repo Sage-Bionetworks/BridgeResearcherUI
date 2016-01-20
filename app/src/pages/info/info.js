@@ -1,9 +1,6 @@
+var utils = require('../../utils');
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
-var utils = require('../../utils');
-// importing root here generates all sorts of weird behavior. Note that we have to create a root variable in the
-// root.js file... it's not CommonJS. Not sure what's going on here.
-// var root = require('../../root');
 
 var fields = ['message', 'name', 'sponsorName', 'technicalEmail', 'supportEmail',
     'consentNotificationEmail', 'identifier', 'strictUploadValidationEnabled', 'minIos', 'minAndroid'];
@@ -44,7 +41,7 @@ module.exports = function() {
     self.publicKey = function() {
         if (self.study) {
             // It finds this and it works...
-            root.openDialog('publickey', {study: self.study});
+            require('../../root').openDialog('publickey', {study: self.study});
         }
     };
 

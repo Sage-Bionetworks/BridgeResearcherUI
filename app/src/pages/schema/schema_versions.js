@@ -12,7 +12,7 @@ module.exports = function(params) {
     self.itemsObs = ko.observableArray([]);
 
     self.link = function(item) {
-        return "#/schemas/"+item.schemaId+"/versions/"+item.revision;
+        return "#/schemas/"+encodeURIComponent(item.schemaId)+"/versions/"+item.revision;
     };
     self.anyChecked = function() {
         return self.itemsObs().some(function(item) {
