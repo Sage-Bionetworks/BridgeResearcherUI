@@ -1,6 +1,7 @@
 // jquery is loaded globally
 var ko = require('knockout');
 var dragula = require('dragula');
+var autoScroll = require('dom-autoscroller');
 
 ko.bindingHandlers.dragula = {
     init: function(element, valueAccessor) {
@@ -26,7 +27,15 @@ ko.bindingHandlers.dragula = {
         }).on('cloned', function(mirror, item, type) {
             _item = item;
         }).on('out', function(el, container, source) {
-            drake.cancel(true);
+            //drake.cancel(true); no longer seems necessary
+        });
+        var scroll = autoScroll([element],{
+            margin: 100,
+            pixels: 40,
+            scrollWhenOutside: true,
+            autoScroll: function(){
+                return this.down && drake.dragging;
+            }
         });
     }
 };

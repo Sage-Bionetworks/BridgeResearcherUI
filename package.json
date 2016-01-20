@@ -16,6 +16,7 @@
     "browserify": "^11.2.0",
     "css-loader": "^0.12.1",
     "director": "^1.2.8",
+    "dom-autoscroller": "^1.2.1",
     "dragula": "^3.6.3",
     "es6-promise": "^3.0.2",
     "html-loader": "^0.3.0",
