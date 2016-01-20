@@ -45,18 +45,10 @@
             params: { elementsObs: elementsObs, indexObs: 0 }
         } --><!-- /ko -->
     </div>
-    <div class="survey elementZone" data-bind="dragula: {
-        dragHandleSelector: '.element-draghandle',
-        elementSelector: '.element',
-        listObs: elementsObs
-    }, foreach: elementsObs">
+    <div class="survey elementZone" data-bind="foreach: elementsObs">
         <div class="element" data-bind="component: {
         name: $data.type,
         params: { element: $data, elementsObs: $parent.elementsObs, indexObs: $index, collectionName: 'elements'+$index()+'_' }
     }"></div>
-        <!-- ko component: {
-            name: "insertion-control",
-            params: { elementsObs: $parent.elementsObs, indexObs: $index }
-        } --><!-- /ko -->
     </div>
 </div>

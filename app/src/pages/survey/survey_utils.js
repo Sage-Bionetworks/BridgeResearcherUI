@@ -204,18 +204,49 @@ function updateModelField(model, fieldName) {
 function newSurvey() {
     return {name:'', guid:'', identifier:'', published:false, createdOn:null, elements:[], version:null};
 }
+function newField(type) {
+    var elementType = (type === "SurveyInfoScreen") ? type : "SurveyQuestion";
+    var newEl = {type: elementType};
+    ko.utils.extend(newEl, ELEMENT_TEMPLATE[elementType]);
+    if (elementType === "SurveyQuestion") {
+        newEl.uiHint = UI_HINT_FOR_CONSTRAINTS[type];
+        newEl.constraints = getConstraints(type);
+    }
+    return elementToObservables(newEl);
+}
+function makeCopy(elementsObs, element) {
+    return function(vm, event) {
+        var scrollTo = utils.makeScrollTo(".element")
+        var elements = elementsObs();
+        var index = elements.indexOf(element);
+
+        var element = JSON.parse(JSON.stringify(element));
+        elementToObservables(element);
+        elementsObs.splice(index+1, 0, element);
+        scrollTo(index+1);
+    };
+}
+function makeCreate(elementsObs, element) {
+    return function(vm, event) {
+        var scrollTo = utils.makeScrollTo(".element")
+        var type = event.target.getAttribute("data-type");
+        var elements = elementsObs();
+        var index = elements.indexOf(element);
+
+        var el = newField(type);
+        elementsObs.splice(index+1,0,el);
+        scrollTo(index+1);
+
+        // this sucks, but
+        event.target.parentNode.parentNode.parentNode.removeChild(event.target.parentNode.parentNode);
+    };
+}
+
 module.exports = {
+    makeCopy: makeCopy,
+    makeCreate: makeCreate,
     newSurvey: newSurvey,
-    newField: function(type) {
-        var elementType = (type === "SurveyInfoScreen") ? type : "SurveyQuestion";
-        var newEl = {type: elementType};
-        ko.utils.extend(newEl, ELEMENT_TEMPLATE[elementType]);
-        if (elementType === "SurveyQuestion") {
-            newEl.uiHint = UI_HINT_FOR_CONSTRAINTS[type];
-            newEl.constraints = getConstraints(type);
-        }
-        return elementToObservables(newEl);
-    },
+    newField: newField,
     surveyToObservables: function(vm, survey) {
         SURVEY_FIELDS.forEach(function(field) {
             vm[field+"Obs"](survey[field]);

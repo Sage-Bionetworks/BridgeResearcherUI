@@ -53,6 +53,8 @@ ko.bindingHandlers.semantic = {
             $element.addClass("ui dropdown").dropdown();
         } else if (value === 'popup') {
             $element.popup();
+        } else if (value === 'popup-menu') {
+            $element.popup({on: 'click', hideOnScroll:true, duration: 100, preserve:true});
         }
     }
 };

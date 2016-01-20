@@ -336,6 +336,9 @@ module.exports = {
             var element = $scrollbox.find(itemSelector).get(index);
             var offset = $(".fixed-header").outerHeight() * 1.75;
             $scrollbox.scrollTo(element, {offsetTop: offset});
+            setTimeout(function() {
+                $(element).find(".focus").eq(1).focus();
+            },200);
         };
     },
     /**
