@@ -76,7 +76,7 @@ var SELECT_OPTIONS_BY_TYPE = Object.freeze({
     'TimeConstraints':[UI_HINT_OPTIONS.timepicker]
 });
 var ELEMENT_TEMPLATE = Object.freeze({
-    'SurveyInfoScreen': {type:'SurveyInfoScreen', prompt:'', promptDetail:'', identifier:''},
+    'SurveyInfoScreen': {type:'SurveyInfoScreen', title:'', prompt:'', promptDetail:'', identifier:''},
     'SurveyQuestion': {type:'SurveyQuestion', fireEvent:false, 'uiHint':'', prompt:'', promptDetail:'', identifier:''}
 });
 var DATA_TYPE_OPTIONS = Object.freeze([
@@ -147,9 +147,14 @@ function elementToObservables(element) {
     });
     var con = element.constraints;
     if (con) {
+        Object.keys(con).forEach(function(field) {
+            con[field+"Obs"] = makeObservable(con, field);
+        });
+        /*
         Object.keys(getConstraints(con.type)).forEach(function(field) {
             con[field+"Obs"] = makeObservable(con, field);
         });
+        */
         // ... and then the rules
         con.rulesObs(con.rules.map(function(rule) {
             return {
@@ -235,6 +240,8 @@ function makeCreate(elementsObs, indexObs) {
 
         var el = newField(type);
         elementsObs.splice(index+1,0,el);
+
+        $(event.target).parents('.popup').popup('destroy');
 
         var scrollTo = utils.makeScrollTo(".element");
         scrollTo(index+1);

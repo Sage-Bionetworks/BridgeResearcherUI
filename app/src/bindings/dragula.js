@@ -2,6 +2,7 @@
 var ko = require('knockout');
 var dragula = require('dragula');
 var autoScroll = require('dom-autoscroller');
+require('knockout-postbox');
 
 ko.bindingHandlers.dragula = {
     init: function(element, valueAccessor) {
@@ -9,9 +10,11 @@ ko.bindingHandlers.dragula = {
         var config = ko.unwrap(valueAccessor());
 
         var drake = dragula([element], {
+            removeOnSpill: false,
             direction: 'vertical',
             moves: function(el, container, handle) {
-                return typeof config.dragHandleSelector === "undefined" || $(handle).is(config.dragHandleSelector);
+                return typeof config.dragHandleSelector === "undefined" ||
+                       handle.classList.contains(config.dragHandleSelector.replace(".",""));
             }
         }).on('drop', function(el, zone) {
             var elements = element.querySelectorAll(config.elementSelector);
@@ -24,11 +27,16 @@ ko.bindingHandlers.dragula = {
                 _item.parentNode.removeChild(_item);
                 _item = null;
             }
+            if (config.eventName) {
+                setTimeout(function() {
+                    ko.postbox.publish(config.eventName, data);
+                }, 1);
+            }
         }).on('cloned', function(mirror, item, type) {
             _item = item;
-        }).on('out', function(el, container, source) {
-            //drake.cancel(true); no longer seems necessary
-        });
+        })/*.on('out', function(el, container, source) {
+            drake.cancel(true);
+        })*/;
         autoScroll([element],{
             margin: 100,
             pixels: 40,

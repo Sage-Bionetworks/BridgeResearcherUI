@@ -1,32 +1,11 @@
 <constraints-label params="title: 'Boolean Question Options'"></constraints-label>
-<div class="element-content-constraints">
-    <div>
-
-    </div>
-    <div>
-        <div>UI Hint:</div>
-        <div>
-            <ui-select params="fieldObs: uiHintObs, fieldLabel: uiHintLabel, optionsSrc: uiHintOptions"></ui-select>
-        </div>
-    </div>
-    <div>
-
-    </div>
-    <div>
-        <div>
-            <fire-event></fire-event>
-        </div>
-        <div>
-            <ui-checkbox params="checkedObs: fireEventObs"></ui-checkbox>
-        </div>
-    </div>
-    <div>
-
-    </div>
-    <div>
-        <div>Rules:</div>
-        <div>
+<table class="element-content-constraints">
+    <tr>
+        <td class="element-content-constraints-label">
+            <label>Rules</label>
+        </td>
+        <td class="element-content-constraints-control" width="100%">
             <ui-rules params="rulesObs: rulesObs, elementsObs: elementsObs"></ui-rules>
-        </div>
-    </div>
-</div>
+        </td>
+    </tr>
+</table>

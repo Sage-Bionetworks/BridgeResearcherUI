@@ -329,13 +329,13 @@ module.exports = {
      */
     makeScrollTo: function(itemSelector) {
         return function scrollTo(index) {
-            var $scrollbox = $(".scrollbox");
-            var element = $scrollbox.find(itemSelector).get(index);
             var offset = $(".fixed-header").outerHeight() * 1.75;
-            $scrollbox.scrollTo(element, {offsetTop: offset});
+            var $scrollbox = $(".scrollbox");
+            var $element = $scrollbox.find(itemSelector).eq(index);
+            $scrollbox.scrollTo($element, {offsetTop: offset});
             setTimeout(function() {
-                $(element).find(".focus").eq(1).focus();
-            },200);
+                $element.find(".focus").focus().click();
+            },20);
         };
     },
     /**
@@ -356,6 +356,7 @@ module.exports = {
      * Although the main editor collection has a binding to fade and then remove an
      * item from a collection, the panel editor can only post an event to remove, so
      * this handler emulates the same behavior as the fadeRemove binding.
+     * NOTE: animation has been removed for the time being
      * @param elementsObs
      * @param elementSelector
      * @returns {Function}
@@ -366,11 +367,8 @@ module.exports = {
             var dom = $(elementSelector).eq(index);
 
             if (confirm("Are you sure?")) {
-                dom.css("max-height","0px");
-                setTimeout(function() {
-                    elementsObs.remove(group);
-                    dom.remove();
-                },510); // waiting for animation to complete
+                elementsObs.remove(group);
+                dom.remove();
             }
         };
     }

@@ -11,16 +11,20 @@ html, body {
 body {
     @include flex-box(column);
     background-color: white;
-    min-height: 100vh;
+    /*min-height: 100vh;*/
 }
 section {
     @include flex-box(row);
     @include flex(1);
+    /* FF BUG FIX: http://stackoverflow.com/questions/32911324/vertical-scroll-rendering-issue-in-flexbox-in-firefox 2 lines */
+    min-width: 0;
+    min-height: 0;
 }
 main {
     @include flex(1);
     @include flex-box(column);
     padding: 0;
+    overflow-y: auto;
 }
     .fixed-header {
         @include flex-box(column);
@@ -60,7 +64,7 @@ main {
         margin:0;
     }
 nav {
-    @include flex(0 0 18em);
+    @include flex(0 0 18rem);
     @include order(-1);
     padding:  2rem 1rem ! important;
     background-color: rgba(96,134,153,.2);

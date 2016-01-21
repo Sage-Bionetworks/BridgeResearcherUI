@@ -1,7 +1,6 @@
 // jquery and semantic-ui are loaded globally (for now) from CDNs.
 var ko = require('knockout');
 require('knockout-postbox');
-var HIDE_DELAY = 2500;
 
 // http://stackoverflow.com/questions/23606541/observable-array-push-multiple-objects-in-knockout-js
 ko.observableArray.fn.pushAll = function(valuesToPush) {
@@ -53,7 +52,7 @@ ko.bindingHandlers.semantic = {
         } else if (value === 'popup') {
             $element.popup();
         } else if (value === 'popup-menu') {
-            $element.popup({on: 'click', hideOnScroll:true, duration: 100, preserve:true});
+            $element.popup({on: 'click', hideOnScroll:true, position: 'left center', duration: 100});
         }
     }
 };
@@ -153,57 +152,8 @@ ko.bindingHandlers.fadeRemove = {
             event.preventDefault();
             if (confirm("Are you sure?")) {
                 itemsObs.remove(rowItem);
-                $element.css("max-height","0px");
-                setTimeout(function() {
-                    $element.remove();
-                },510); // waiting for animation to complete
+                $element.remove();
             }
         });
-    }
-};
-/**
- * Creates that flippy insertion control in the survey editor.
- */
-ko.bindingHandlers.flipper = {
-    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-        var showTimer = null;
-        var hideTimer = null;
-
-        function clearTimers() {
-            clearTimeout(showTimer);
-            clearTimeout(hideTimer);
-        }
-
-        var obj = ko.unwrap(valueAccessor());
-        element.addEventListener('click', function(event) {
-            clearTimers();
-            element.classList.add('insertion-control-flipped');/*
-            showTimer = setTimeout(function() {
-
-            }, SHOW_DELAY);*/
-            if (viewModel[obj.mouseover]) {
-                viewModel[obj.mouseover](element);
-            }
-        }, false);
-        element.addEventListener('mouseover', clearTimers, false);
-        element.addEventListener('mouseout', function(event) {
-            clearTimers();
-            hideTimer = setTimeout(function() {
-                element.classList.remove('insertion-control-flipped');
-            }, HIDE_DELAY);
-            if (viewModel[obj.mouseout]) {
-                viewModel[obj.mouseout](element);
-            }
-        }, false);
-        element.addEventListener('click', function(event) {
-            if (event.target.getAttribute('data-type')) {
-                event.stopPropagation();
-                clearTimers();
-                element.classList.remove('insertion-control-flipped');
-                if (viewModel[obj.click]) {
-                    viewModel[obj.click](event.target.getAttribute('data-type'), ko.unwrap(obj.index));
-                }
-            }
-        }, false);
     }
 };
