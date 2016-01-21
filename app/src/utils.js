@@ -4,7 +4,7 @@ var toastr = require('toastr');
 var config = require('./config');
 
 var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
-
+var pendingControl = null;
 toastr.options = config.toastr;
 
 function is(obj, typeName) {
@@ -60,9 +60,6 @@ function makeOptionLabelFinder(arrayOrObs) {
         return option ? option.label : "";
     };
 }
-
-var pendingControl = null;
-var errorQueue = [];
 
 function displayPendingControl(control) {
     clearPendingControl();

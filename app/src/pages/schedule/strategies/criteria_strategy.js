@@ -6,8 +6,6 @@ var criteriaUtils = require('../../../criteria_utils');
 var serverService = require('../../../services/server_service');
 var root = require('../../../root');
 
-var fields = ["minAppVersion","maxAppVersion","allOfGroups","noneOfGroups","schedule"];
-
 function groupToObservables(group) {
     group.minAppVersionObs = ko.observable(group.minAppVersion);
     group.maxAppVersionObs = ko.observable(group.maxAppVersion);

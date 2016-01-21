@@ -35,9 +35,13 @@
                 <label>Schema Type</label>
                 <ui-select params="fieldObs: schemaTypeObs, fieldLabel: schemaTypeLabel, optionsSrc: schemaTypeOptions"></ui-select>
             </div>
-            <div class="required field" id="schemaId">
+            <div class="required field" id="schemaId" data-bind="visible: !!!revisionObs()">
                 <label>Identifier</label>
                 <ui-text params="fieldObs: schemaIdObs"></ui-text>
+            </div>
+            <div class="field" data-bind="visible: !!revisionObs()">
+                <label>Identifier (cannot be changed)</label>
+                <input type="text" readonly data-bind="value: schemaIdObs"/>
             </div>
         </div>
     </form>

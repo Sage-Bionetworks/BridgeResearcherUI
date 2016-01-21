@@ -12,6 +12,8 @@ module.exports = function(params) {
     self.formatDateTime = utils.formatDateTime;
     surveyUtils.initSurveyVM(self);
 
+    self.create = surveyUtils.makeCreate(self.elementsObs, function() { return -1; });
+
     function loadVM(survey) {
         console.log("loadVM", survey);
         self.survey = survey;
@@ -80,7 +82,7 @@ module.exports = function(params) {
         self.addGroup();
     });
     ko.postbox.subscribe("elementsRemove",
-            utils.manualFadeRemove(self.elementsObs, ".elementZone .element"));
+            utils.manualFadeRemove(self.elementsObs, ".survey .element"));
     ko.postbox.subscribe("elementsSelect", function(element) {
         var index = self.elementsObs().indexOf(element);
         scrollTo( index );

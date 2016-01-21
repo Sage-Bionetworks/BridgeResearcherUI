@@ -1,5 +1,4 @@
 // jquery and semantic-ui are loaded globally (for now) from CDNs.
-var config = require('./config');
 var ko = require('knockout');
 require('knockout-postbox');
 var HIDE_DELAY = 2500;
@@ -153,9 +152,9 @@ ko.bindingHandlers.fadeRemove = {
         element.addEventListener('click', function(event) {
             event.preventDefault();
             if (confirm("Are you sure?")) {
+                itemsObs.remove(rowItem);
                 $element.css("max-height","0px");
                 setTimeout(function() {
-                    itemsObs.remove(rowItem);
                     $element.remove();
                 },510); // waiting for animation to complete
             }

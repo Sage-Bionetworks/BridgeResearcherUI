@@ -1,5 +1,4 @@
 var utils = require('../../utils');
-var ko = require('knockout');
 var serverService = require('../../services/server_service');
 
 var fields = ['message', 'name', 'sponsorName', 'technicalEmail', 'supportEmail',

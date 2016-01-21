@@ -63,9 +63,8 @@ module.exports = function(params) {
     self.publish = function(vm, event) {
         if (confirm("Are you sure you want to publish this consent?")) {
             utils.startHandler(vm, event);
-            var createdOn = self.consent.createdOn;
 
-            var p = serverService.saveStudyConsent(params.guid, {documentContent: self.editor.getData()})
+            serverService.saveStudyConsent(params.guid, {documentContent: self.editor.getData()})
                 .then(publish)
                 .then(saveAfterPublish)
                 .then(utils.successHandler(vm, event, "Consent published"))

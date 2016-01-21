@@ -21,7 +21,6 @@ module.exports = function() {
 
     self.errorsObs = ko.observableArray([]);
     self.displayObs = ko.computed(function() {
-        console.log("self.errorsObs().length > 0", self.errorsObs().length > 0);
         return self.errorsObs().length > 0;
     });
 
@@ -52,7 +51,6 @@ module.exports = function() {
                 fieldEl.appendChild(div);
                 errorQueue.push(fieldEl);
             } else {
-                console.info("cannot find field id", id);
                 globalErrors.push(string);
             }
         }

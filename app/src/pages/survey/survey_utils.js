@@ -214,31 +214,30 @@ function newField(type) {
     }
     return elementToObservables(newEl);
 }
-function makeCopy(elementsObs, element) {
+function makeCopy(elementsObs, indexObs) {
     return function(vm, event) {
         var scrollTo = utils.makeScrollTo(".element")
         var elements = elementsObs();
-        var index = elements.indexOf(element);
+        var index = indexObs();
+        var element = elements[index];
+        observablesToElement(element);
 
-        var element = JSON.parse(JSON.stringify(element));
-        elementToObservables(element);
-        elementsObs.splice(index+1, 0, element);
+        var newElement = JSON.parse(JSON.stringify(element));
+        elementToObservables(newElement);
+        elementsObs.splice(index+1, 0, newElement);
         scrollTo(index+1);
     };
 }
-function makeCreate(elementsObs, element) {
+function makeCreate(elementsObs, indexObs) {
     return function(vm, event) {
-        var scrollTo = utils.makeScrollTo(".element")
         var type = event.target.getAttribute("data-type");
-        var elements = elementsObs();
-        var index = elements.indexOf(element);
+        var index = indexObs();
 
         var el = newField(type);
         elementsObs.splice(index+1,0,el);
-        scrollTo(index+1);
 
-        // this sucks, but
-        event.target.parentNode.parentNode.parentNode.removeChild(event.target.parentNode.parentNode);
+        var scrollTo = utils.makeScrollTo(".element");
+        scrollTo(index+1);
     };
 }
 

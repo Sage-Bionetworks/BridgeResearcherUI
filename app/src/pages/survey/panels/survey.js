@@ -11,7 +11,7 @@ module.exports = function(params) {
     self.elementsObs = params.viewModel.elementsObs;
 
     self.truncate = function(value) {
-        if (value.length > MAX_LENGTH) {
+        if (value && value.length > MAX_LENGTH) {
             return value.split(" ").reduce(function(string, value){
                 if (string.length < MAX_LENGTH) {
                     return string + " " + value;
