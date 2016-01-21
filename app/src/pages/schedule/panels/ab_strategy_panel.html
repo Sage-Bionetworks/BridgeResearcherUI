@@ -6,7 +6,7 @@
     </div>
     <div class="item vertical-scrollbox" data-bind="foreach: scheduleGroupsObs, dragula: {
             dragHandleSelector: '.vs-item-content', elementSelector: '.vs-item',
-            listObs: scheduleGroupsObs}">
+            eventName: 'scheduleGroupSelect', listObs: scheduleGroupsObs}">
         <div class="vs-item" data-bind="click: $component.selectGroup">
             <div class="vs-item-content" data-bind="text: $component.groupLabel($data, $index)">
 

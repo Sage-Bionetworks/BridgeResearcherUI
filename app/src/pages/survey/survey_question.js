@@ -9,6 +9,8 @@ module.exports = function(params) {
     self.indexObs = params.indexObs;
     self.promptObs = self.element.promptObs;
     self.promptDetailObs = self.element.promptDetailObs;
+    // SAFARI: This shows 'undefined' unless you enter a blank space.
+    //self.promptDetailObs(self.promptDetailObs() || '');
     self.identifierObs = self.element.identifierObs;
 
     self.copy = surveyUtils.makeCopy(params.elementsObs, params.indexObs);

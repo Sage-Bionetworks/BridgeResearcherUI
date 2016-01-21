@@ -91,13 +91,14 @@
         .element-content-constraints > div { /* "row" element */
             @include flex-box(row);
             @include align-items(baseline);
-            width: 50%;
+            width: 33%;
+            outline: 1px solid red;
         }
             .element-content-constraints > div > div { /* "cell" elements */
                 padding: .2rem .4rem;
             }
             .element-content-constraints > div > div:first-child {
-                width: 40%;
+                /*width: 40%;*/
             }
             .element-content-constraints > div > div:last-child {
                 @include flex(2);
