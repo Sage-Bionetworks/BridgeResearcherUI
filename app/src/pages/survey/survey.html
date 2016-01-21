@@ -40,15 +40,33 @@
 
     <div data-bind="visible: elementsObs().length === 0">
         <p>There are currently no questions in this survey.</p>
-        <!-- ko component: {
-            name: "insertion-control",
-            params: { elementsObs: elementsObs, indexObs: 0 }
-        } --><!-- /ko -->
+        <div class="ui menu back">
+            <div class="header item">
+                <a href="#href">
+                    <i class="add square icon"></i> Add
+                </a>
+            </div>
+            <a class="item" data-bind="click: create" data-type="MultiValueConstraints">Multi-Choice</a>
+            <a class="item" data-bind="click: create" data-type="StringConstraints">String</a>
+            <a class="item" data-bind="click: create" data-type="BooleanConstraints">Boolean</a>
+            <a class="item" data-bind="click: create" data-type="IntegerConstraints">Integer</a>
+            <a class="item" data-bind="click: create" data-type="DecimalConstraints">Decimal</a>
+            <a class="item" data-bind="click: create" data-type="DateConstraints">Date</a>
+            <a class="item" data-bind="click: create" data-type="DateTimeConstraints">Date & Time</a>
+            <a class="item" data-bind="click: create" data-type="TimeConstraints">Time</a>
+            <a class="item" data-bind="click: create" data-type="DurationConstraints">Duration</a>
+            <a class="item" data-bind="click: create" data-type="SurveyInfoScreen">Information Only</a>
+        </div>
     </div>
-    <div class="survey elementZone" data-bind="foreach: elementsObs">
+    <div class="survey" data-bind="foreach: elementsObs">
         <div class="element" data-bind="component: {
-        name: $data.type,
-        params: { element: $data, elementsObs: $parent.elementsObs, indexObs: $index, collectionName: 'elements'+$index()+'_' }
-    }"></div>
+            name: $data.type,
+            params: {
+                element: $data,
+                elementsObs: $parent.elementsObs,
+                indexObs: $index,
+                collectionName: 'elements'+$index()+'_'
+            }
+        }"></div>
     </div>
 </div>

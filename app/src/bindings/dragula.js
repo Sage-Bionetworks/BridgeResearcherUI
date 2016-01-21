@@ -29,7 +29,7 @@ ko.bindingHandlers.dragula = {
         }).on('out', function(el, container, source) {
             //drake.cancel(true); no longer seems necessary
         });
-        var scroll = autoScroll([element],{
+        autoScroll([element],{
             margin: 100,
             pixels: 40,
             scrollWhenOutside: true,

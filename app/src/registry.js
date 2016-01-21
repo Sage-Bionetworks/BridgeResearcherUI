@@ -84,7 +84,6 @@ reg('StringConstraints', './pages/survey/constraints/string_constraints');
 reg('MultiValueConstraints', './pages/survey/constraints/multi_constraints');
 
 // Custom elements
-reg('insertion-control', './pages/survey/insertion_control');
 regt('constraints-label', './pages/survey/constraints/constraints_label');
 regt('ui-rules', './pages/survey/constraints/ui_rules');
 regt('ui-checkbox', './widgets/form/ui_checkbox');

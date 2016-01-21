@@ -13,8 +13,11 @@ module.exports = function(params) {
 
     schemaUtils.initVM(self);
     self.schemaIdObs = ko.observable(params.schemaId);
-    self.revisionObs = ko.observable(params.revision);
     self.schemaTypeObs = ko.observable("");
+    self.revisionObs = ko.observable();
+    if (params.revision) {
+        self.revisionObs(params.revision);
+    }
 
     self.nameObs = ko.observable("");
     self.itemsObs = ko.observableArray([]);
@@ -43,6 +46,7 @@ module.exports = function(params) {
     self.save = function(vm, event) {
         utils.startHandler(vm, event);
         self.schema.name = self.nameObs();
+        self.schema.revision = self.revisionObs();
         self.schema.schemaId = self.schemaIdObs();
         self.schema.schemaType = self.schemaTypeObs();
         self.schema.fieldDefinitions = self.itemsObs().map(function(item) {
@@ -52,22 +56,16 @@ module.exports = function(params) {
                 type: item.typeObs()
             };
         });
-        // get most recent revision so save always works
-        serverService.getMostRecentUploadSchema(params.schemaId)
-                .then(function(response) {
-                    self.schema.revision = response.revision;
-                    self.revisionObs(response.revision);
-                    return response;
-                })
-                .then(function() {
-                    return serverService.updateUploadSchema(self.schema);
-                })
-                .then(function(response) {
-                    self.revisionObs(response.revision);
-                    return response;
-                })
-                .then(utils.successHandler(vm, event, "Schema has been saved."))
-                .catch(utils.failureHandler(vm, event));
+        if (self.schema.schemaId === "new") {
+            delete self.schema.schemaId;
+        }
+        serverService.updateUploadSchema(self.schema)
+            .then(function(response) {
+                self.revisionObs(response.revision);
+                return response;
+            })
+            .then(utils.successHandler(vm, event, "Schema has been saved."))
+            .catch(utils.failureHandler(vm, event));
     };
     self.addBelow = function(vm, event) {
         var index = self.itemsObs.indexOf(vm.field);

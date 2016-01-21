@@ -1,5 +1,3 @@
-var ko = require('knockout');
-require('knockout-postbox');
 var utils = require('../../../utils');
 
 module.exports = function(params) {
