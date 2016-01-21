@@ -6,7 +6,6 @@
 }
 .sfield {
     @include flex-box(row);
-    @include transition(max-height .5s ease);
     width: 100%;
     overflow: hidden;
     margin: .75rem 0;
@@ -17,8 +16,8 @@
     border: 1px solid #e5e5e5;
     border-radius: 6px;
 }
+/*
 .sfield-draghandle {
-    width: 1rem;
     align-self: stretch;
     background: #f4f4f4;
     background-image: radial-gradient(#e5e5e5 1px, transparent 0), radial-gradient(#e5e5e5 1px, transparent 0);
@@ -26,6 +25,7 @@
     background-position: 0 0, 5px 5px;
     cursor: ns-resize;
 }
+*/
 .sfield-content {
     padding: .5rem;
 }
@@ -59,6 +59,7 @@
                 @include link;
                 margin-left: 2rem;
                 line-height: 1.4;
+                white-space: nowrap;
             }
                 .sfield-content-editor-buttons > a {
                     margin: 0 .5rem;

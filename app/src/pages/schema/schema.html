@@ -48,12 +48,13 @@
 
     <h3>Field Definitions</h3>
 
+    <p class="help-text">Drag items to reorder them. </p>
+
     <div data-bind="visible: itemsObs().length === 0">
         <p>There are currently no field definitions in this upload schema.</p>
         <p><a href="#" class="ui primary button" data-bind="click: addFirst"><i class="add square icon"></i> Add Field</a></p>
     </div>
     <div class="ui form schema sfieldZone" data-bind="dragula: {
-        dragHandleSelector: '.sfield-draghandle',
         elementSelector: '.sfield',
         listObs: itemsObs
     }, foreach: itemsObs">

@@ -39,23 +39,18 @@
     <h3>Questions</h3>
 
     <div data-bind="visible: elementsObs().length === 0">
-        <p>There are currently no questions in this survey.</p>
-        <div class="ui menu back">
-            <div class="header item">
-                <a href="#href">
-                    <i class="add square icon"></i> Add
-                </a>
-            </div>
-            <a class="item" data-bind="click: create" data-type="MultiValueConstraints">Multi-Choice</a>
-            <a class="item" data-bind="click: create" data-type="StringConstraints">String</a>
-            <a class="item" data-bind="click: create" data-type="BooleanConstraints">Boolean</a>
-            <a class="item" data-bind="click: create" data-type="IntegerConstraints">Integer</a>
-            <a class="item" data-bind="click: create" data-type="DecimalConstraints">Decimal</a>
-            <a class="item" data-bind="click: create" data-type="DateConstraints">Date</a>
-            <a class="item" data-bind="click: create" data-type="DateTimeConstraints">Date & Time</a>
-            <a class="item" data-bind="click: create" data-type="TimeConstraints">Time</a>
-            <a class="item" data-bind="click: create" data-type="DurationConstraints">Duration</a>
-            <a class="item" data-bind="click: create" data-type="SurveyInfoScreen">Information Only</a>
+        <p>There are currently no questions in this survey. Create a question:</p>
+        <div class="ui menu back" data-bind="click: create">
+            <a class="item" data-type="BooleanConstraints">Boolean</a>
+            <a class="item" data-type="DateConstraints">Date</a>
+            <a class="item" data-type="DateTimeConstraints">Date & Time</a>
+            <a class="item" data-type="DecimalConstraints">Decimal</a>
+            <a class="item" data-type="DurationConstraints">Duration</a>
+            <a class="item" data-type="SurveyInfoScreen">Information Only</a>
+            <a class="item" data-type="IntegerConstraints">Integer</a>
+            <a class="item" data-type="MultiValueConstraints">Multi-Choice</a>
+            <a class="item" data-type="StringConstraints">String</a>
+            <a class="item" data-type="TimeConstraints">Time</a>
         </div>
     </div>
     <div class="survey" data-bind="foreach: elementsObs">

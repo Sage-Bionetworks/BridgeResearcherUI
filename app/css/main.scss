@@ -60,7 +60,7 @@ main {
         margin:0;
     }
 nav {
-    @include flex(0 0 18em);
+    @include flex(0 0 18rem);
     @include order(-1);
     padding:  2rem 1rem ! important;
     background-color: rgba(96,134,153,.2);

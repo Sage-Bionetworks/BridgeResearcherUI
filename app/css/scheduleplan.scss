@@ -26,7 +26,6 @@
 }
     .schedulegroup-fieldset {
         display:block;
-        @include transition(max-height .5s ease);
         max-height: 80rem;
         overflow: auto;
         padding:1.5rem!important;

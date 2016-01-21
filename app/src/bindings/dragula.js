@@ -10,7 +10,7 @@ ko.bindingHandlers.dragula = {
         var config = ko.unwrap(valueAccessor());
 
         var drake = dragula([element], {
-            removeOnSpill: true,
+            removeOnSpill: false,
             direction: 'vertical',
             moves: function(el, container, handle) {
                 return typeof config.dragHandleSelector === "undefined" ||
