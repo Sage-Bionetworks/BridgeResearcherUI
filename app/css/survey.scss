@@ -31,15 +31,21 @@
             @include flex(1);
             text-align: center;
 
-        }
-            .element-callout-identifier-box > .ui.compact.secondary.menu > .item {
-                margin: 0;
-                padding: .2rem 0;
-                cursor:pointer;
-            }
-                .element-callout-identifier-box > .ui.compact.secondary.menu > .item:hover {
-                    color: #4183c4;
+            .ui.compact.secondary.menu {
+                border:none;
+
+                .item {
+                    margin: 0;
+                    padding: .4rem;
                 }
+                .item:hover {
+                    color: #4183c4;
+                    background-color: rgba(0,0,0,.04);
+                    border-radius:2px;
+                }
+            }
+
+        }
             .element-callout-identifier {
                 margin: .4rem 0 .4rem 0;
                 text-align: center;
@@ -50,8 +56,6 @@
                 margin-bottom: 1.5rem;
             }
         .element-callout-delete {
-            cursor: pointer;
-
             .item {
                 width:100%;
                 padding: .4rem 0!important;
@@ -141,13 +145,14 @@
     .rules-editor-actions {
         padding: 2rem 1.5rem 1.5rem 1.5rem;
     }
-.element-enum {
-    @include link;
-}
 .enum-list {
     padding:0!important;
     overflow-y: auto;
     max-height: 253px;
+}
+.enum-scrollbox {
+    max-height:16rem;
+    overflow-y:auto;
 }
 .textarea {
     display: block;

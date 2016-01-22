@@ -12,9 +12,6 @@
         <div data-bind="foreach: rulesObs, visible: rulesObs().length !== 0" class="rules-table">
             <div class="rules-table-rule">
                 <div class="rules-table-rule-cell">
-                    <div data-bind="click: $parent.deleteRule" style="cursor:pointer"><a><i class="delete icon"></i></a></div>
-                </div>
-                <div class="rules-table-rule-cell">
                     When value
                 </div>
                 <div class="rules-table-rule-cell">
@@ -31,6 +28,9 @@
                 <div class="rules-table-rule-cell">
                     <ui-select params="fieldObs: $data.skipTo, fieldLabel: $parent.identifierLabel,
                             optionsSrc: $parent.identifierOptions"></ui-select>
+                </div>
+                <div class="rules-table-rule-cell">
+                    <div data-bind="click: $parent.deleteRule" class="pointing"><i class="delete icon"></i></div>
                 </div>
             </div>
         </div>

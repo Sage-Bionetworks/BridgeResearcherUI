@@ -16,16 +16,6 @@
     border: 1px solid #e5e5e5;
     border-radius: 6px;
 }
-/*
-.sfield-draghandle {
-    align-self: stretch;
-    background: #f4f4f4;
-    background-image: radial-gradient(#e5e5e5 1px, transparent 0), radial-gradient(#e5e5e5 1px, transparent 0);
-    background-size: 10px 10px;
-    background-position: 0 0, 5px 5px;
-    cursor: ns-resize;
-}
-*/
 .sfield-content {
     padding: .5rem;
 }
@@ -56,7 +46,6 @@
             height: auto;
         }
             .sfield-content-editor-buttons {
-                @include link;
                 margin-left: 2rem;
                 line-height: 1.4;
                 white-space: nowrap;
