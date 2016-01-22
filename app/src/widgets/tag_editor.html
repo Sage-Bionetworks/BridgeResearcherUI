@@ -1,12 +1,13 @@
 <!--
-    id
-    label
-    collObs
-    noneLabel
-    editorObs
-    optionsObs
-    removeAction
-    addAction
+    parameters
+        id : String
+        label : String
+        collObs : ArrayObserver -- current state of collection
+        noneLabel : String -- if there are no tags to pick from
+        editorObs : Observer -- current selection
+        optionsObs : ArrayObserver -- the set of tags you can pick from
+        removeAction : Function -- function to remove an item
+        addAction : Function -- function to add an item.
 -->
 <div class="field tag-editor" data-bind="attr:{id: $component.id}">
     <label data-bind="text: $component.label"></label>
