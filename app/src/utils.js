@@ -324,6 +324,20 @@ module.exports = {
      */
     deleteUnusedProperties: deleteUnusedProperties,
     /**
+     * The panel editors are sibling views to the main view, so they convert user
+     * UI events into postbox events on the main collection being edited. This is
+     * a convenience method to generate those.
+     * @param eventName
+     * @returns {Function}
+     */
+    makeEventToPostboxListener: function(eventName) {
+        return function(element, event) {
+            event.preventDefault();
+            event.stopPropagation();
+            ko.postbox.publish(eventName, element);
+        };
+    },
+    /**
      * The logic for the scrollbox scrolling is not idea so isolate it here where we
      * can fix it everywhere it is used.
      * @param itemSelector
@@ -340,18 +354,25 @@ module.exports = {
             },20);
         };
     },
-    /**
-     * The panel editors are sibling views to the main view, so they convert user
-     * UI events into postbox events on the main collection being edited. This is
-     * a convenience method to generate those.
-     * @param eventName
-     * @returns {Function}
-     */
-    makeEventToPostboxListener: function(eventName) {
-        return function(element, event) {
-            event.preventDefault();
-            event.stopPropagation();
-            ko.postbox.publish(eventName, element);
+    fadeUp: function() {
+        return function(div) {
+            if (div.nodeType === 1) {
+                var $div = $(div);
+                $div.slideUp(function() { $div.remove(); });
+            }
+        };
+    },
+    animatedDeleter: function(scrollTo, elementsObs) {
+        return function(element) {
+            if (confirm("Are you sure?")) {
+                var index = elementsObs.indexOf(element);
+                elementsObs.remove(element);
+                if (elementsObs().length > 0) {
+                    setTimeout(function() {
+                        scrollTo(index);
+                    }, 410);
+                }
+            }
         };
     }
 };

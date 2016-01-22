@@ -84,20 +84,22 @@ module.exports = function(params) {
     });
 
     var scrollTo = utils.makeScrollTo(".schedulegroup-fieldset");
+    self.fadeUp = utils.fadeUp();
 
     self.addCriteria = function(vm, event) {
         self.scheduleCriteriaObs.push(newGroup());
         scrollTo(self.scheduleCriteriaObs().length-1);
     };
-    ko.postbox.subscribe("scheduleCriteriaAdd", function(group) {
-        self.addCriteria();
-    });
-    ko.postbox.subscribe("scheduleCriteriaRemove",
-        utils.manualFadeRemove(self.scheduleCriteriaObs, ".schedulegroup-fieldset"));
-    ko.postbox.subscribe("scheduleCriteriaSelect", function(element) {
-        var index = self.scheduleCriteriaObs().indexOf(element);
-        scrollTo( index );
-    });
+    self.removeCriteria = utils.animatedDeleter(scrollTo, self.scheduleCriteriaObs);
+
+    self.selectCriteria = function(group) {
+        var index = self.scheduleCriteriaObs.indexOf(group);
+        scrollTo(index);
+    };
+
+    ko.postbox.subscribe("scheduleCriteriaAdd", self.addCriteria);
+    ko.postbox.subscribe("scheduleCriteriaRemove", self.removeCriteria);
+    ko.postbox.subscribe("scheduleCriteriaSelect", self.selectCriteria);
 
     serverService.getStudy().then(function(study) {
         var array = study.dataGroups.map(function(value) {
