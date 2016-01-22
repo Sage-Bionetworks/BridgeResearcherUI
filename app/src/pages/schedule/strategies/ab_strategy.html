@@ -3,7 +3,10 @@
 a percentage weight and that proportion of the population will receive the survey (small numbers of participants
 may vary from these percentages due to random assignment). Percentages for all groups must add up to 100%. </p>
 
-<form class="ui form schedulegroup" data-bind="foreach: scheduleGroupsObs">
+<form class="ui form schedulegroup" data-bind="template: {
+        foreach: scheduleGroupsObs,
+        beforeRemove: fadeUp
+    }">
     <fieldset class="schedulegroup-fieldset">
         <legend class="schedulegroup-fieldset-legend">
             <h4 data-bind="text: 'Group #' + ($index()+1)"></h4>
@@ -16,8 +19,8 @@ may vary from these percentages due to random assignment). Percentages for all g
                     <div class="ui large label" data-bind="text: $data.percentLabel"></div>
                 </div>
             </div>
-            <div class="schedulegroup-field-delete field">
-                <a href="#" data-bind="fadeRemove: {selector: '.schedulegroup-fieldset', object: $data, collection: 'scheduleGroupsObs'}">
+            <div class="field schedulegroup-field-delete">
+                <a class="link" data-bind="click: $parent.removeGroup">
                     <i class="delete square icon"></i>Remove This Schedule
                 </a>
             </div>

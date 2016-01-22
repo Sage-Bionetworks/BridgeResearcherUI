@@ -1,6 +1,7 @@
 var ko = require('knockout');
 require('knockout-postbox');
 var toastr = require('toastr');
+var $ = require('jquery');
 
 function truncateErrorFieldKey(errorString) {
     var parts = errorString.split(" ");

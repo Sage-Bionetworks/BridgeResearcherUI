@@ -1,6 +1,7 @@
 require('../css/main');
 require('../lib/toastr.min');
 require('../lib/dragula.min');
+require('../lib/jquery.scrollTo');
 
 require('./bindings');
 require('./bindings/dragula');

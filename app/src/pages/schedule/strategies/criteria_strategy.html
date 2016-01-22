@@ -2,7 +2,10 @@
 <p class="help-text">Define any number of schedules, each will have conditions the user must match to return that
     schedule to the user. Schedules are evaluated in order and the first one that matches is assigned to the user. </p>
 
-<form class="ui form schedulegroup" data-bind="foreach: scheduleCriteriaObs">
+<form class="ui form schedulegroup" data-bind="template: {
+        foreach: scheduleCriteriaObs,
+        beforeRemove: fadeUp
+    }">
     <fieldset class="schedulegroup-fieldset">
         <legend class="schedulegroup-fieldset-legend">
             <h4>Assignment based on</h4>
@@ -37,8 +40,8 @@
                   addAction: $data.addToNone }
             } -->
             <!-- /ko -->
-            <div class="schedulegroup-field-delete field">
-                <a href="#" data-bind="fadeRemove: {selector: '.schedulegroup-fieldset', object: $data, collection: 'scheduleCriteriaObs'}">
+            <div class="field schedulegroup-field-delete">
+                <a class="link" data-bind="click: $parent.removeCriteria">
                     <i class="delete square icon"></i>Remove This Schedule
                 </a>
             </div>

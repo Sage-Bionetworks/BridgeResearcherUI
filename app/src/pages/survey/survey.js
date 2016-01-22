@@ -13,8 +13,9 @@ module.exports = function(params) {
     self.formatDateTime = utils.formatDateTime;
     surveyUtils.initSurveyVM(self);
 
-    // Only one is neededed
+    // Only one is needed
     var scrollTo = utils.makeScrollTo(".element");
+    self.fadeUp = utils.fadeUp();
 
     function loadVM(survey) {
         console.log("loadVM", survey);
@@ -75,28 +76,8 @@ module.exports = function(params) {
         self.elementsObs.splice(index+1, 0, newElement);
         scrollTo(index+1);
     };
-    self.deleteElement = function(element) {
-        if (confirm("Are you sure?")) {
-            var index = self.elementsObs.indexOf(element);
-            self.elementsObs.remove(element);
+    self.deleteElement = utils.animatedDeleter(scrollTo, self.elementsObs);
 
-            if (self.elementsObs().length > 0) {
-                scrollTo(index);
-            }
-        }
-    };
-    self.fadeUp = function(div, index, element) {
-        if (div.nodeType === 1) {
-            $(div).slideUp(function() {
-                $(div).remove();
-                setTimeout(function() {
-                    if (self.elementsObs().length > 0) {
-                        scrollTo(index);
-                    }
-                },1);
-            });
-        }
-    };
     ko.postbox.subscribe("elementsRemove", self.deleteElement);
     ko.postbox.subscribe("elementsSelect", function(element) {
         var index = self.elementsObs().indexOf(element);
