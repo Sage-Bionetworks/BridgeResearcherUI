@@ -71,8 +71,8 @@ reg('rules_editor', './dialogs/rules_editor/rules_editor');
 reg('date_window_editor', './dialogs/date_window_editor/date_window_editor');
 
 /* SURVEYS */
-reg('SurveyInfoScreen', './pages/survey/survey_info');
-reg('SurveyQuestion', './pages/survey/survey_question');
+regt('SurveyInfoScreen', './pages/survey/survey_info');
+regt('SurveyQuestion', './pages/survey/survey_question');
 reg('BooleanConstraints', './pages/survey/constraints/boolean_constraints');
 reg('DateConstraints', './pages/survey/constraints/date_constraints');
 reg('DateTimeConstraints', './pages/survey/constraints/datetime_constraints');

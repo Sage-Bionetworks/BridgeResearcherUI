@@ -298,6 +298,7 @@ module.exports = {
      */
     notFoundHandler: function(vm, message, rootPath) {
         return function(response) {
+            console.error(response);
             toastr.error((message) ? message : response.statusText);
             if (rootPath) {
                 document.location = rootPath;
@@ -351,26 +352,6 @@ module.exports = {
             event.preventDefault();
             event.stopPropagation();
             ko.postbox.publish(eventName, element);
-        };
-    },
-    /**
-     * Although the main editor collection has a binding to fade and then remove an
-     * item from a collection, the panel editor can only post an event to remove, so
-     * this handler emulates the same behavior as the fadeRemove binding.
-     * NOTE: animation has been removed for the time being
-     * @param elementsObs
-     * @param elementSelector
-     * @returns {Function}
-     */
-    manualFadeRemove: function(elementsObs, elementSelector) {
-        return function(group) {
-            var index = elementsObs.indexOf(group);
-            var dom = $(elementSelector).eq(index);
-
-            if (confirm("Are you sure?")) {
-                elementsObs.remove(group);
-                dom.remove();
-            }
         };
     }
 };
