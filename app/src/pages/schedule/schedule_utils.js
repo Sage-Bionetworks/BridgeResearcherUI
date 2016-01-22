@@ -81,15 +81,22 @@ function formatActivities(buffer, activities) {
     var actMap = {};
     activities.map(function(act) {
         var label = 'do task (not specified)';
-        // We have a choice here... we can use the name of the thing the activity points to,
-        // or more reliably in terms of timing, we can use the activity label itself, as we're
-        // doing here. Above, we have to recover the activity from the GUID and we have to
-        // use activityOptionsLabel
+
+        // Choice: use the name of the activity (which can be misleading), or the label of the thing
+        // pointed to itself... which is more reliable but can hit timing issues.
+
+        if (act.activityType === "task" && act.task) {
+            label = "do task '"+activityOptionsLabel(act.guid)+"'";
+        } else if (act.activityType === "survey" && act.survey) {
+            label = "do survey '"+activityOptionsLabel(act.guid)+"'";
+        }
+        /*
         if (act.activityType === "task" && act.task) {
             label = "do task '"+act.label+"'";
         } else if (act.activityType === "survey" && act.survey) {
             label = "do survey '"+act.label+"'";
         }
+        */
         actMap[label] = ++actMap[label] || 1;
     });
     Object.keys(actMap).forEach(function(label) {

@@ -41,7 +41,7 @@ function getActivityOptions() {
     });
 }
 function getSurveyOptions() {
-    return serverService.getSurveys().then(sortSurveys).then(collectSurveyOptions);
+    return serverService.getPublishedSurveys().then(sortSurveys).then(collectSurveyOptions);
 }
 /*
 function getQuestionOptions() {

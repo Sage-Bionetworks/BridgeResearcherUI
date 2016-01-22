@@ -53,18 +53,19 @@ module.exports = function(params) {
     });
 
     var scrollTo = utils.makeScrollTo(".schedulegroup-fieldset");
+    self.fadeUp = utils.fadeUp();
 
     self.addGroup = function(vm, event) {
         self.scheduleGroupsObs.push(newGroup());
         scrollTo(self.scheduleGroupsObs().length-1);
     };
-    ko.postbox.subscribe("scheduleGroupAdd", function() {
-        self.addGroup();
-    });
-    ko.postbox.subscribe("scheduleGroupRemove",
-        utils.manualFadeRemove(self.scheduleGroupsObs, ".schedulegroup-fieldset"));
-    ko.postbox.subscribe("scheduleGroupSelect", function(group) {
-        var index = self.scheduleGroupsObs().indexOf(group);
-        scrollTo( index );
-    });
+    self.removeGroup = utils.animatedDeleter(scrollTo, self.scheduleGroupsObs);
+    self.selectGroup = function(group) {
+        var index = self.scheduleGroupsObs.indexOf(group);
+        scrollTo(index);
+    };
+
+    ko.postbox.subscribe("scheduleGroupAdd", self.addGroup);
+    ko.postbox.subscribe("scheduleGroupRemove", self.removeGroup);
+    ko.postbox.subscribe("scheduleGroupSelect", self.selectGroup);
 };

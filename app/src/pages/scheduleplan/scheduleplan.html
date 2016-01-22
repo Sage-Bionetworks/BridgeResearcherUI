@@ -11,18 +11,13 @@
     </div>
     <div class="ui secondary pointing menu"></div>
 </div>
-<ul class="scrollbox">
-    <form class="ui form" style="margin-bottom: 1rem">
+<div class="scrollbox">
+    <form class="ui form">
         <errors></errors>
-        <div class="three fields">
+        <div class="two fields">
             <div class="required field" id="label">
                 <label>Label</label>
                 <ui-text params="fieldObs: labelObs"></ui-text>
-            </div>
-            <div class="field" id="schedulePlanType">
-                <label>Schedule Plan Type</label>
-                <ui-select params="fieldObs: schedulePlanTypeObs, fieldLabel: schedulePlanTypeLabel,
-                    optionsSrc: schedulePlanTypeOptions"></ui-select>
             </div>
             <div class="field">
                 <label>Limit schedules &amp; tasks to app version(s):</label>
@@ -37,5 +32,16 @@
             </div>
         </div>
     </form>
-    <div data-bind="component: {name: schedulePlanTypeObs, params: {strategyObs: strategyObs, labelObs: labelObs}}"></div>
+    <div>
+        <div class="schedule-strategy-header" data-bind="semantic: 'dropdown'">
+            <div class="text" data-bind="text: schedulePlanTypeLabel(schedulePlanTypeObs())">Type of schedule</div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+                <div class="item" data-bind="css:{active:schedulePlanTypeObs() == 'SimpleScheduleStrategy'}, click: schedulePlanTypeObs('SimpleScheduleStrategy')">Simple Schedule</div>
+                <div class="item" data-bind="css:{active:schedulePlanTypeObs() == 'ABTestScheduleStrategy'}, click: schedulePlanTypeObs('ABTestScheduleStrategy')">A/B Test</div>
+                <div class="item" data-bind="css:{active:schedulePlanTypeObs() == 'CriteriaScheduleStrategy'}, click: schedulePlanTypeObs('CriteriaScheduleStrategy')">Criteria-based scheduling</div>
+            </div>
+        </div>
+    </div>
+    <div style="margin-top: 1rem" data-bind="component: {name: schedulePlanTypeObs, params: {strategyObs: strategyObs, labelObs: labelObs}}"></div>
 </div>

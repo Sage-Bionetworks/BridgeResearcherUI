@@ -101,7 +101,7 @@ var CONSTRAINTS_TEMPLATES = Object.freeze({
     'MultiValueConstraints': {dataType:'string', enumeration:[], rules:[], allowOther:false, allowMultiple:false}
 });
 var UI_HINT_FOR_CONSTRAINTS = Object.freeze({
-    'BooleanConstraints': 'radiobutton',
+    'BooleanConstraints': 'checkbox',
     'DateConstraints': 'datepicker',
     'DateTimeConstraints': 'datetimepicker',
     'DurationConstraints': 'numberfield',
@@ -109,7 +109,7 @@ var UI_HINT_FOR_CONSTRAINTS = Object.freeze({
     'IntegerConstraints': 'numberfield',
     'DecimalConstraints': 'numberfield',
     'StringConstraints': 'multilinetext',
-    'MultiValueConstraints': 'checkbox'
+    'MultiValueConstraints': 'radiobutton'
 });
 
 var SURVEY_FIELDS = ['name','createdOn','guid','identifier','published','version'];
@@ -147,14 +147,10 @@ function elementToObservables(element) {
     });
     var con = element.constraints;
     if (con) {
-        Object.keys(con).forEach(function(field) {
-            con[field+"Obs"] = makeObservable(con, field);
-        });
-        /*
+        // We do this twice for new objects... that's okay and it's necessary for correct initialization
         Object.keys(getConstraints(con.type)).forEach(function(field) {
             con[field+"Obs"] = makeObservable(con, field);
         });
-        */
         // ... and then the rules
         con.rulesObs(con.rules.map(function(rule) {
             return {
@@ -173,10 +169,15 @@ function elementToObservables(element) {
  * @returns {*}
  */
 function observablesToElement(element) {
+    // because we've hidden the ability to set a UIHint, we need to adjust here based on the settings for the
+    // MultiValue type:
+    var con = element.constraints;
+    if (con && con.typeObs() === "MultiValueConstraints" && con.allowMultipleObs()) {
+        element.uiHintObs(UI_HINT_OPTIONS.checkbox.value);
+    }
     ELEMENT_FIELDS.forEach(function(field) {
         updateModelField(element, field);
     });
-    var con = element.constraints;
     if (con) {
         Object.keys(getConstraints(con.type)).forEach(function(field) {
             updateModelField(con, field);
@@ -219,40 +220,12 @@ function newField(type) {
     }
     return elementToObservables(newEl);
 }
-function makeCopy(elementsObs, indexObs) {
-    return function(vm, event) {
-        var scrollTo = utils.makeScrollTo(".element")
-        var elements = elementsObs();
-        var index = indexObs();
-        var element = elements[index];
-        observablesToElement(element);
-
-        var newElement = JSON.parse(JSON.stringify(element));
-        elementToObservables(newElement);
-        elementsObs.splice(index+1, 0, newElement);
-        scrollTo(index+1);
-    };
-}
-function makeCreate(elementsObs, indexObs) {
-    return function(vm, event) {
-        var type = event.target.getAttribute("data-type");
-        var index = indexObs();
-
-        var el = newField(type);
-        elementsObs.splice(index+1,0,el);
-
-        $(event.target).parents('.popup').popup('destroy');
-
-        var scrollTo = utils.makeScrollTo(".element");
-        scrollTo(index+1);
-    };
-}
 
 module.exports = {
-    makeCopy: makeCopy,
-    makeCreate: makeCreate,
     newSurvey: newSurvey,
     newField: newField,
+    observablesToElement: observablesToElement,
+    elementToObservables: elementToObservables,
     surveyToObservables: function(vm, survey) {
         SURVEY_FIELDS.forEach(function(field) {
             vm[field+"Obs"](survey[field]);

@@ -1,6 +1,7 @@
 var ko = require('knockout');
 require('knockout-postbox');
 var toastr = require('toastr');
+var $ = require('jquery');
 
 function truncateErrorFieldKey(errorString) {
     var parts = errorString.split(" ");
@@ -51,6 +52,7 @@ module.exports = function() {
                 fieldEl.appendChild(div);
                 errorQueue.push(fieldEl);
             } else {
+                console.debug("Did not find",id);
                 globalErrors.push(string);
             }
         }

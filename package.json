@@ -1,6 +1,6 @@
 {
   "name": "bridge-researcher-ui",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,7 @@
   "author": "Bridge Server Team <bridgeit@sagebase.org>",
   "license": "MIT",
   "devDependencies": {
-    "browserify": "^11.2.0",
+    "compression-webpack-plugin": "^0.2.0",
     "css-loader": "^0.12.1",
     "director": "^1.2.8",
     "dom-autoscroller": "^1.2.1",
@@ -22,14 +22,11 @@
     "html-loader": "^0.3.0",
     "jquery": "^2.1.4",
     "knockout": "^3.3.0",
-    "knockout-mapping": "^2.5.0",
     "knockout-postbox": "^0.5.2",
     "mocha": "^2.2.5",
     "node-libs-browser": "^0.5.0",
     "node-sass": "^3.3.2",
     "object-hash": "^0.8.0",
-    "proxyquire": "^1.7.2",
-    "proxyquireify": "^3.0.0",
     "sass-loader": "^2.0.1",
     "sinon": "^1.17.1",
     "style-loader": "^0.12.2",

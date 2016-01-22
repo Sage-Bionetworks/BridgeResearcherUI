@@ -1,5 +1,3 @@
-var ko = require('knockout');
-require('knockout-postbox');
 var utils = require('../../../utils');
 
 var MAX_LENGTH = 65;
@@ -23,5 +21,4 @@ module.exports = function(params) {
     };
     self.selectElement = utils.makeEventToPostboxListener("elementsSelect");
     self.removeElement = utils.makeEventToPostboxListener("elementsRemove");
-    self.addElement = utils.makeEventToPostboxListener("elementsAdd");
 };

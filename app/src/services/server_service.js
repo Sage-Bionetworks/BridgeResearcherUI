@@ -17,8 +17,10 @@ var SESSION_STARTED_EVENT_KEY = 'sessionStarted';
 var SESSION_ENDED_EVENT_KEY = 'sessionEnded';
 var listeners = new EventEmitter();
 var session = null;
+var $ = require('jquery');
 
 if (typeof window !== "undefined") { // jQuery throws up if there's no window, even in unit tests.
+    window.$ = window.jQuery = $;
     $(function() {
         session = storeService.get(SESSION_KEY);
         if (session && session.environment) {
@@ -29,6 +31,8 @@ if (typeof window !== "undefined") { // jQuery throws up if there's no window, e
         }
     });
 }
+
+var PATH_EXTS = ['/published','/recent','/revisions'];
 
 var cache = (function() {
     var cachedItems = {};
@@ -41,6 +45,8 @@ var cache = (function() {
         set: function(key, response) {
             console.info("[json cache] caching",key);
             cachedItems[key] = response;
+
+            console.debug("cache size", (JSON.stringify(cachedItems).length/1000).toFixed(1) + "k");
         },
         clear: function(key) {
             // Clear all paths that are logically higher in the endpoint namespace,
@@ -51,10 +57,14 @@ var cache = (function() {
                     console.info("[json cache] deleting",aKey);
                     delete cachedItems[aKey];
                 }
-                if (cachedItems[key+'/recent']) {
-                    console.info("[json cache] deleting",key+'/recent');
-                    delete cachedItems[key+'/versions'];
-                }
+                // There are special cases of "descendant" URLS that describe members of the collection,
+                // they are like filters... delete these too
+                PATH_EXTS.forEach(function(extension) {
+                    if (cachedItems[aKey+extension]) {
+                        console.info("[json cache] deleting",aKey+extension);
+                        delete cachedItems[aKey+extension];
+                    }
+                });
             });
         },
         reset: function() {
@@ -126,11 +136,9 @@ function makeSessionWaitingPromise(func) {
         if (response.status === 401) {
             console.error("Signed out due to 401");
             signOut();
-        } else if (response.responseJSON) {
-            //console.error(response.status, response.responseJSON);
-        } else {
-            //console.error("Significant server failure", response);
+            return;
         }
+        console.error(response);
     });
     return promise;
 }
@@ -168,12 +176,6 @@ function signOut() {
     cache.reset();
     var env = session.environment;
     session = null;
-    // We want to clear persistence, but keep these between sign-ins.
-    var studyKey = storeService.get('studyKey');
-    var envName = storeService.get('environment');
-    storeService.removeAll();
-    storeService.set('studyKey', studyKey);
-    storeService.set('environment', envName);
 
     listeners.emit(SESSION_ENDED_EVENT_KEY);
     return new Promise(function(resolve, reject) {
@@ -247,6 +249,9 @@ module.exports = {
     },
     getSurveys: function() {
         return get(config.surveys);
+    },
+    getPublishedSurveys: function() {
+        return get(config.publishedSurveys);
     },
     getSurveyAllRevisions: function(guid) {
         return get(config.survey + guid + '/revisions');

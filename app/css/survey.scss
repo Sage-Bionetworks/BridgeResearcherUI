@@ -27,12 +27,13 @@
         .element-callout .circular.label {
             margin-top: 1rem;
         }
-        .element-callout-identifier-box {
+        .element-callout-box {
             @include flex(1);
             text-align: center;
 
             .ui.compact.secondary.menu {
                 border:none;
+                margin-top: 1.5rem;
 
                 .item {
                     margin: 0;
@@ -46,15 +47,16 @@
             }
 
         }
-            .element-callout-identifier {
-                margin: .4rem 0 .4rem 0;
-                text-align: center;
-                font-size: larger;
-                font-weight: bold;
+            .element-callout-box-identifier {
             }
-            .element-callout-identifier-label {
-                margin-bottom: 1.5rem;
-            }
+                .element-callout-identifier {
+                    text-align: center;
+                    font-size: larger;
+                    font-weight: bold;
+                }
+                .element-callout-identifier-label {
+
+                }
         .element-callout-delete {
             .item {
                 width:100%;
@@ -95,16 +97,15 @@
             /*padding: .4rem 0;*/
         }
     .element-content-constraints {
-        width: 100%;
         table-collapse: collapse;
     }
         .element-content-constraints td {
             vertical-align: baseline;
-            white-space: nowrap;
         }
         .element-content-constraints-label {
             text-align: right;
             padding: .2rem .8rem .2rem .4rem;
+            white-space: nowrap;
         }
         .element-content-constraints-control {
             padding: .2rem 1rem .2rem .2rem;

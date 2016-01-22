@@ -1,6 +1,7 @@
 // jquery and semantic-ui are loaded globally (for now) from CDNs.
 var ko = require('knockout');
 require('knockout-postbox');
+var $ = require('jquery');
 
 // http://stackoverflow.com/questions/23606541/observable-array-push-multiple-objects-in-knockout-js
 ko.observableArray.fn.pushAll = function(valuesToPush) {

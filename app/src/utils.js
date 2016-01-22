@@ -2,6 +2,7 @@ var ko = require('knockout');
 require('knockout-postbox');
 var toastr = require('toastr');
 var config = require('./config');
+var $ = require('jquery');
 
 var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
 var pendingControl = null;
@@ -119,7 +120,8 @@ module.exports = {
      * @param event
      */
     startHandler: function(vm, event) {
-        ko.postbox.publish("clearErrors");
+        //just makes the UI jumpy for no reason since it should always be paired with success/failure handlers
+        //ko.postbox.publish("clearErrors");
         displayPendingControl(event.target);
     },
     /**
@@ -297,6 +299,7 @@ module.exports = {
      */
     notFoundHandler: function(vm, message, rootPath) {
         return function(response) {
+            console.error(response);
             toastr.error((message) ? message : response.statusText);
             if (rootPath) {
                 document.location = rootPath;
@@ -322,6 +325,20 @@ module.exports = {
      */
     deleteUnusedProperties: deleteUnusedProperties,
     /**
+     * The panel editors are sibling views to the main view, so they convert user
+     * UI events into postbox events on the main collection being edited. This is
+     * a convenience method to generate those.
+     * @param eventName
+     * @returns {Function}
+     */
+    makeEventToPostboxListener: function(eventName) {
+        return function(element, event) {
+            event.preventDefault();
+            event.stopPropagation();
+            ko.postbox.publish(eventName, element);
+        };
+    },
+    /**
      * The logic for the scrollbox scrolling is not idea so isolate it here where we
      * can fix it everywhere it is used.
      * @param itemSelector
@@ -338,37 +355,24 @@ module.exports = {
             },20);
         };
     },
-    /**
-     * The panel editors are sibling views to the main view, so they convert user
-     * UI events into postbox events on the main collection being edited. This is
-     * a convenience method to generate those.
-     * @param eventName
-     * @returns {Function}
-     */
-    makeEventToPostboxListener: function(eventName) {
-        return function(element, event) {
-            event.preventDefault();
-            event.stopPropagation();
-            ko.postbox.publish(eventName, element);
+    fadeUp: function() {
+        return function(div) {
+            if (div.nodeType === 1) {
+                var $div = $(div);
+                $div.slideUp(function() { $div.remove(); });
+            }
         };
     },
-    /**
-     * Although the main editor collection has a binding to fade and then remove an
-     * item from a collection, the panel editor can only post an event to remove, so
-     * this handler emulates the same behavior as the fadeRemove binding.
-     * NOTE: animation has been removed for the time being
-     * @param elementsObs
-     * @param elementSelector
-     * @returns {Function}
-     */
-    manualFadeRemove: function(elementsObs, elementSelector) {
-        return function(group) {
-            var index = elementsObs.indexOf(group);
-            var dom = $(elementSelector).eq(index);
-
+    animatedDeleter: function(scrollTo, elementsObs) {
+        return function(element) {
             if (confirm("Are you sure?")) {
-                elementsObs.remove(group);
-                dom.remove();
+                var index = elementsObs.indexOf(element);
+                elementsObs.remove(element);
+                if (elementsObs().length > 0) {
+                    setTimeout(function() {
+                        scrollTo(index);
+                    }, 410);
+                }
             }
         };
     }
