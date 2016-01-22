@@ -26,8 +26,8 @@
             <label data-bind="text: (scheduleTypeObs() === 'recurring') ? 'At these times' : 'At this time'"></label>
             <div class=text" style="margin: .5rem 0" data-bind="text: formatTimes(timesObs())"></div>
             <div class="inline-editor-controls">
-                <a data-bind="click: editTimes"><i class="write icon"></i>Edit</a>
-                <a data-bind="click: clearTimes"><i class="delete icon"></i>Clear</a>
+                <a class="pointing" data-bind="click: editTimes"><i class="write icon"></i>Edit</a>
+                <a class="pointing" data-bind="click: clearTimes"><i class="delete icon"></i>Clear</a>
             </div>
         </div>
         <div class="field" data-bind="visible: scheduleTypeObs() === 'recurring'">
@@ -54,8 +54,8 @@
             <label>Execution Window (UTC time)</label>
             <div style="margin: .5rem 0" data-bind="html: formatWindow($data)"></div>
             <div class="inline-editor-controls">
-                <a data-bind="click: editWindow"><i class="write icon"></i>Edit</a>
-                <a data-bind="click: clearWindow"><i class="delete icon"></i>Clear</a>
+                <a class="pointing" data-bind="click: editWindow"><i class="write icon"></i>Edit</a>
+                <a class="pointing" data-bind="click: clearWindow"><i class="delete icon"></i>Clear</a>
             </div>
         </div>
     </div>

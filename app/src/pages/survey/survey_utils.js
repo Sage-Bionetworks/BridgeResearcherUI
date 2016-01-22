@@ -147,14 +147,10 @@ function elementToObservables(element) {
     });
     var con = element.constraints;
     if (con) {
-        Object.keys(con).forEach(function(field) {
-            con[field+"Obs"] = makeObservable(con, field);
-        });
-        /*
+        // We do this twice for new objects... that's okay and it's necessary for correct initialization
         Object.keys(getConstraints(con.type)).forEach(function(field) {
             con[field+"Obs"] = makeObservable(con, field);
         });
-        */
         // ... and then the rules
         con.rulesObs(con.rules.map(function(rule) {
             return {
