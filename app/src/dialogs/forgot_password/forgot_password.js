@@ -9,7 +9,7 @@ var fields = ['email', 'study', 'environment', 'studyOptions[]'];
 module.exports = function() {
     var self = this;
 
-    var study = storeService.get('study') || 'api';
+    var study = storeService.get('studyKey') || 'api';
     var env = storeService.get('environment') || 'production';
 
     utils.observablesFor(self, fields);
@@ -31,7 +31,7 @@ module.exports = function() {
             return;
         }
         storeService.set('environment', self.environmentObs());
-        storeService.set('study', self.studyObs());
+        storeService.set('studyKey', self.studyObs());
 
         utils.startHandler(self, event);
         serverService.requestResetPassword(self.environmentObs(), {

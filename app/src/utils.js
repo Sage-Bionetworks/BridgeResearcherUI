@@ -2,6 +2,7 @@ var ko = require('knockout');
 require('knockout-postbox');
 var toastr = require('toastr');
 var config = require('./config');
+var $ = require('jquery');
 
 var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
 var pendingControl = null;
