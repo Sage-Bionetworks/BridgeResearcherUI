@@ -13,8 +13,17 @@ module.exports = function(params) {
     self.nameObs = ko.observable();
 
     self.itemsObs = ko.observableArray([]);
-    // self.showVersionObs = ko.observable(false); unused?
     self.selectedObs = ko.observable(null);
+
+    // redirect, you just deleted the record you last loaded in the tabset.
+    function redirectIfDeleteSelf(thisSurvey) {
+        return function(response) {
+            if (thisSurvey.createdOn === new Date(params.createdOn).toISOString()) {
+                document.location = "#/surveys";
+            }
+            return response;
+        };
+    }
 
     self.disablePublish = ko.computed(function() {
         return self.selectedObs() === null || self.selectedObs().published;
@@ -47,6 +56,7 @@ module.exports = function(params) {
                 serverService.deleteSurvey(survey)
                     .then(load)
                     .then(utils.makeTableRowHandler(vm, [survey], "#/surveys"))
+                    .then(redirectIfDeleteSelf(survey))
                     .then(utils.successHandler(vm, event, "Survey version deleted."))
                     .catch(utils.failureHandler(vm, event));
             }
@@ -74,12 +84,6 @@ module.exports = function(params) {
                 }));
             });
         }).catch(utils.notFoundHandler(self, "Survey not found."));
-        /*
-
-        var matchDate = (typeof params.createdOn !== "string") ?
-            params.createdOn.toISOString() : params.createdOn;
-        return survey.createdOn;
-        */
     }
     load(params);
 };

@@ -1,12 +1,7 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
-var scheduleUtils = require('./schedule_utils');
+var scheduleUtils = require('./../schedule/schedule_utils');
 var utils = require('../../utils');
-
-var TYPE_OPTIONS = Object.freeze([
-    {value: 'SimpleScheduleStrategy', label: 'Simple Schedule'},
-    {value: 'ABTestScheduleStrategy', label: 'A/B Test Schedule'}
-]);
 
 /**
  * The complexity of this view comes from the fact that the entire data model is in the strategy,
@@ -17,7 +12,6 @@ module.exports = function(params) {
     var self = this;
 
     self.plan = null;
-    self.publishedObs = ko.observable(false);
 
     // Models for the strategy object. The callback function will be called when saving the
     // schedule plan; the strategy implementation must implement this callback to return a
@@ -29,15 +23,16 @@ module.exports = function(params) {
     self.labelObs = ko.observable("");
     self.minAppVersionObs = ko.observable("");
     self.maxAppVersionObs = ko.observable("");
-    self.schedulePlanTypeObs = ko.observable('SimpleScheduleStrategy');
-    self.schedulePlanTypeOptions = TYPE_OPTIONS;
-    self.schedulePlanTypeLabel = utils.makeOptionLabelFinder(TYPE_OPTIONS);
+    self.schedulePlanTypeOptions = scheduleUtils.TYPE_OPTIONS;
+    self.schedulePlanTypeLabel = utils.makeOptionLabelFinder(scheduleUtils.TYPE_OPTIONS);
     self.schedulePlanTypeObs = ko.observable('SimpleScheduleStrategy');
     self.schedulePlanTypeObs.subscribe(function(newValue) {
         if (newValue === 'SimpleScheduleStrategy') {
             self.strategyObs(scheduleUtils.newSimpleStrategy());
         } else if (newValue === 'ABTestScheduleStrategy') {
             self.strategyObs(scheduleUtils.newABTestStrategy());
+        } else if (newValue === 'CriteriaScheduleStrategy') {
+            self.strategyObs(scheduleUtils.newCriteriaStrategy());
         }
     });
 
@@ -55,12 +50,12 @@ module.exports = function(params) {
             .then(function(response) {
                 self.plan.guid = response.guid;
                 self.plan.version = response.version;
+                return response;
             })
             .catch(utils.failureHandler(self, event));
     };
 
     function loadVM(plan) {
-        console.log(plan);
         self.plan = plan;
         self.labelObs(plan.label);
         self.schedulePlanTypeObs(plan.strategy.type);

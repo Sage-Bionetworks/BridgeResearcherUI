@@ -76,7 +76,7 @@ var SELECT_OPTIONS_BY_TYPE = Object.freeze({
     'TimeConstraints':[UI_HINT_OPTIONS.timepicker]
 });
 var ELEMENT_TEMPLATE = Object.freeze({
-    'SurveyInfoScreen': {type:'SurveyInfoScreen', prompt:'', promptDetail:'', identifier:''},
+    'SurveyInfoScreen': {type:'SurveyInfoScreen', title:'', prompt:'', promptDetail:'', identifier:''},
     'SurveyQuestion': {type:'SurveyQuestion', fireEvent:false, 'uiHint':'', prompt:'', promptDetail:'', identifier:''}
 });
 var DATA_TYPE_OPTIONS = Object.freeze([
@@ -147,9 +147,14 @@ function elementToObservables(element) {
     });
     var con = element.constraints;
     if (con) {
+        Object.keys(con).forEach(function(field) {
+            con[field+"Obs"] = makeObservable(con, field);
+        });
+        /*
         Object.keys(getConstraints(con.type)).forEach(function(field) {
             con[field+"Obs"] = makeObservable(con, field);
         });
+        */
         // ... and then the rules
         con.rulesObs(con.rules.map(function(rule) {
             return {
@@ -204,33 +209,50 @@ function updateModelField(model, fieldName) {
 function newSurvey() {
     return {name:'', guid:'', identifier:'', published:false, createdOn:null, elements:[], version:null};
 }
-/*
-function loadSurveyObservers(surveysOptsObs, questionsOptsObs) {
-    return serverService.getSurveysSummarized().then(function(surveys) {
-        surveysOptsObs.removeAll();
-        surveysOptsObs.pushAll(surveys);
-        if (questionsOptsObs) {
-            questionsOptsObs.removeAll();
-            surveys.forEach(function(survey) {
-                questionsOptsObs.pushAll(survey.questions);
-            });
-        }
-        return surveys;
-    });
+function newField(type) {
+    var elementType = (type === "SurveyInfoScreen") ? type : "SurveyQuestion";
+    var newEl = {type: elementType};
+    ko.utils.extend(newEl, ELEMENT_TEMPLATE[elementType]);
+    if (elementType === "SurveyQuestion") {
+        newEl.uiHint = UI_HINT_FOR_CONSTRAINTS[type];
+        newEl.constraints = getConstraints(type);
+    }
+    return elementToObservables(newEl);
 }
-*/
+function makeCopy(elementsObs, indexObs) {
+    return function(vm, event) {
+        var scrollTo = utils.makeScrollTo(".element")
+        var elements = elementsObs();
+        var index = indexObs();
+        var element = elements[index];
+        observablesToElement(element);
+
+        var newElement = JSON.parse(JSON.stringify(element));
+        elementToObservables(newElement);
+        elementsObs.splice(index+1, 0, newElement);
+        scrollTo(index+1);
+    };
+}
+function makeCreate(elementsObs, indexObs) {
+    return function(vm, event) {
+        var type = event.target.getAttribute("data-type");
+        var index = indexObs();
+
+        var el = newField(type);
+        elementsObs.splice(index+1,0,el);
+
+        $(event.target).parents('.popup').popup('destroy');
+
+        var scrollTo = utils.makeScrollTo(".element");
+        scrollTo(index+1);
+    };
+}
+
 module.exports = {
+    makeCopy: makeCopy,
+    makeCreate: makeCreate,
     newSurvey: newSurvey,
-    newField: function(type) {
-        var elementType = (type === "SurveyInfoScreen") ? type : "SurveyQuestion";
-        var newEl = {type: elementType};
-        ko.utils.extend(newEl, ELEMENT_TEMPLATE[elementType]);
-        if (elementType === "SurveyQuestion") {
-            newEl.uiHint = UI_HINT_FOR_CONSTRAINTS[type];
-            newEl.constraints = getConstraints(type);
-        }
-        return elementToObservables(newEl);
-    },
+    newField: newField,
     surveyToObservables: function(vm, survey) {
         SURVEY_FIELDS.forEach(function(field) {
             vm[field+"Obs"](survey[field]);
@@ -263,7 +285,6 @@ module.exports = {
      * @param params
      */
     initConstraintsVM: function(vm, params) {
-        vm.publishedObs = params.publishedObs;
         vm.element = params.element;
         vm.elementsObs = params.elementsObs;
         vm.formatDate = utils.formatDate;
@@ -277,7 +298,7 @@ module.exports = {
                 return SELECT_OPTIONS_BY_TYPE[vm.element.constraints.type];
             };
             vm.editRules = function() {
-                root.openDialog('rules_editor', {parentViewModel: vm, element: vm.element, publishedObs: vm.publishedObs});
+                root.openDialog('rules_editor', {parentViewModel: vm, element: vm.element});
             };
 
             vm.durationOptions = DURATION_OPTIONS;
@@ -297,6 +318,5 @@ module.exports = {
             vm.operatorOptions = OPERATOR_OPTIONS;
             vm.operatorLabel = utils.makeOptionLabelFinder(OPERATOR_OPTIONS);
         }
-    }/*,
-    loadSurveyObservers: loadSurveyObservers*/
+    }
 };

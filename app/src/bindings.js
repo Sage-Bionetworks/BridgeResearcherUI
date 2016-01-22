@@ -1,7 +1,6 @@
+// jquery and semantic-ui are loaded globally (for now) from CDNs.
 var ko = require('knockout');
-var dragula = require('dragula');
-//var SHOW_DELAY = 1;
-var HIDE_DELAY = 1800;
+require('knockout-postbox');
 
 // http://stackoverflow.com/questions/23606541/observable-array-push-multiple-objects-in-knockout-js
 ko.observableArray.fn.pushAll = function(valuesToPush) {
@@ -14,33 +13,6 @@ ko.observableArray.fn.pushAll = function(valuesToPush) {
 ko.observableArray.fn.contains = function(value) {
     var underlyingArray = this();
     return underlyingArray.indexOf(value) > -1;
-};
-
-ko.bindingHandlers.dragula = {
-    init: function(element, valueAccessor) {
-        var _item = null;
-        var config = ko.unwrap(valueAccessor());
-
-        dragula([element], {
-            direction: 'vertical',
-            moves: function (el, container, handle) {
-                return $(handle).is(config.dragHandleSelector);
-            }
-        }).on('drop', function(el, zone) {
-            var elements = element.querySelectorAll(config.elementSelector);
-            // This utility handles node lists
-            var index = ko.utils.arrayIndexOf(elements, el);
-            var data = ko.contextFor(el).$data;
-            config.listObs.remove(data);
-            config.listObs.splice(index,0,data);
-            if (_item) {
-                _item.parentNode.removeChild(_item);
-                _item = null;
-            }
-        }).on('cloned', function(mirror, item, type) {
-            _item = item;
-        });
-    }
 };
 
 ko.bindingHandlers.semantic = {
@@ -79,6 +51,8 @@ ko.bindingHandlers.semantic = {
             $element.addClass("ui dropdown").dropdown();
         } else if (value === 'popup') {
             $element.popup();
+        } else if (value === 'popup-menu') {
+            $element.popup({on: 'click', hideOnScroll:true, position: 'left center', duration: 100});
         }
     }
 };
@@ -113,7 +87,6 @@ ko.bindingHandlers.modal = {
         ko.bindingHandlers.component.init(element, valueAccessor, allBindings, viewModel, bindingContext);
         var observable = valueAccessor();
         observable.subscribe(function (newConfig) {
-            //var $modal = $(element).children(".modal");
             var $modal = $(".ui.modal");
             if ($modal.modal) {
                 if (newConfig.name !== "none") {
@@ -178,58 +151,9 @@ ko.bindingHandlers.fadeRemove = {
         element.addEventListener('click', function(event) {
             event.preventDefault();
             if (confirm("Are you sure?")) {
-                $element.css("max-height","0px");
-                setTimeout(function() {
-                    itemsObs.remove(rowItem);
-                    $element.remove();
-                },510); // waiting for animation to complete
+                itemsObs.remove(rowItem);
+                $element.remove();
             }
         });
-    }
-};
-/**
- * Creates that flippy insertion control in the survey editor.
- */
-ko.bindingHandlers.flipper = {
-    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-        var showTimer = null;
-        var hideTimer = null;
-
-        function clearTimers() {
-            clearTimeout(showTimer);
-            clearTimeout(hideTimer);
-        }
-
-        var obj = ko.unwrap(valueAccessor());
-        element.addEventListener('click', function(event) {
-            clearTimers();
-            element.classList.add('insertion-control-flipped');/*
-            showTimer = setTimeout(function() {
-
-            }, SHOW_DELAY);*/
-            if (viewModel[obj.mouseover]) {
-                viewModel[obj.mouseover](element);
-            }
-        }, false);
-        element.addEventListener('mouseover', clearTimers, false);
-        element.addEventListener('mouseout', function(event) {
-            clearTimers();
-            hideTimer = setTimeout(function() {
-                element.classList.remove('insertion-control-flipped');
-            }, HIDE_DELAY);
-            if (viewModel[obj.mouseout]) {
-                viewModel[obj.mouseout](element);
-            }
-        }, false);
-        element.addEventListener('click', function(event) {
-            if (event.target.getAttribute('data-type')) {
-                event.stopPropagation();
-                clearTimers();
-                element.classList.remove('insertion-control-flipped');
-                if (viewModel[obj.click]) {
-                    viewModel[obj.click](event.target.getAttribute('data-type'), ko.unwrap(obj.index));
-                }
-            }
-        }, false);
     }
 };

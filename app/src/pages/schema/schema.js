@@ -13,15 +13,14 @@ module.exports = function(params) {
 
     schemaUtils.initVM(self);
     self.schemaIdObs = ko.observable(params.schemaId);
-    self.revisionObs = ko.observable(params.revision);
     self.schemaTypeObs = ko.observable("");
+    self.revisionObs = ko.observable();
+    if (params.revision) {
+        self.revisionObs(params.revision);
+    }
 
     self.nameObs = ko.observable("");
     self.itemsObs = ko.observableArray([]);
-    // We call "published" any schema that is loaded with a specific revision,
-    // except for the most recent one, which we load by the way we link to the
-    // editor.
-    self.publishedObs = ko.observable(false);
     self.revisionLabel = ko.computed(function() {
         if (self.revisionObs()) {
             return 'v' + self.revisionObs();
@@ -47,8 +46,8 @@ module.exports = function(params) {
     self.save = function(vm, event) {
         utils.startHandler(vm, event);
         self.schema.name = self.nameObs();
-        self.schema.schemaId = self.schemaIdObs();
         self.schema.revision = self.revisionObs();
+        self.schema.schemaId = self.schemaIdObs();
         self.schema.schemaType = self.schemaTypeObs();
         self.schema.fieldDefinitions = self.itemsObs().map(function(item) {
             return {
@@ -57,11 +56,15 @@ module.exports = function(params) {
                 type: item.typeObs()
             };
         });
+        if (self.schema.schemaId === "new") {
+            delete self.schema.schemaId;
+        }
         serverService.updateUploadSchema(self.schema)
-            .then(utils.successHandler(vm, event, "Schema has been saved."))
             .then(function(response) {
                 self.revisionObs(response.revision);
+                return response;
             })
+            .then(utils.successHandler(vm, event, "Schema has been saved."))
             .catch(utils.failureHandler(vm, event));
     };
     self.addBelow = function(vm, event) {
@@ -79,13 +82,12 @@ module.exports = function(params) {
     if (params.schemaId === "new") {
         loadVM({name:'',schemaId:'',schemaType:'ios_data',revision:0,fieldDefinitions:[]});
     } else if (params.revision) {
-        serverService.getMostRecentUploadSchema(params.schemaId).then(function(response) {
-            serverService.getUploadSchema(params.schemaId, params.revision).then(loadVM).then(function() {
-                self.revisionObs(response.revision);
-            }).catch(notFoundHandler);
-        }).catch(notFoundHandler);
+        serverService.getUploadSchema(params.schemaId, params.revision)
+            .then(loadVM)
+            .catch(notFoundHandler);
     } else {
-        serverService.getMostRecentUploadSchema(params.schemaId).then(loadVM)
+        serverService.getMostRecentUploadSchema(params.schemaId)
+            .then(loadVM)
             .catch(notFoundHandler);
     }
 };

@@ -5,22 +5,12 @@
     <a class="item" data-bind="css:{active: isActive('schema')}, attr: {href: linkMaker('schema')}, visible: !!publishedObs()">
         <i class="puzzle icon"></i> Schema
     </a>
-    <a class="item" data-bind="css:{active: isActive('history')}, attr: {href: linkMaker('history')}">
+    <a class="item" data-bind="css:{active: isActive('history')}, attr: {href: linkMaker('history')}, visible: !!createdOnObs()">
         <i class="history icon"></i> History &amp; Publication
     </a>
     <div class="right menu">
         <div class="item" data-bind="visible: !!createdOnObs()">
             <i class="clock icon"></i> <span data-bind="text: formatDateTime(createdOnObs())"></span>
-        </div>
-        <div class="item" data-bind="visible: publishedObs">
-            <div class="green ui label">
-                <i class="checkmark icon"></i> Published
-            </div>
-        </div>
-        <div class="item" data-bind="visible: !publishedObs()">
-            <div class="orange ui label">
-                <i class="warning icon"></i> Not Published
-            </div>
         </div>
     </div>
 </div>

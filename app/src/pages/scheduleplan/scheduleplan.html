@@ -6,35 +6,36 @@
             <span data-bind="visible: labelObs().length === 0">New Schedule Plan</span>
         </h3>
         <div class="fixed-header-buttons">
-            <button class="ui primary small button" data-bind="visible: !publishedObs(), click: save">Save</button>
+            <button class="ui primary small button" data-bind="click: save">Save</button>
         </div>
     </div>
     <div class="ui secondary pointing menu"></div>
 </div>
-<div class="scrollbox">
+<ul class="scrollbox">
     <form class="ui form" style="margin-bottom: 1rem">
+        <errors></errors>
         <div class="three fields">
-            <div class="required field">
-                <label>Name</label>
-                <ui-text params="fieldObs: labelObs, publishedObs: publishedObs"></ui-text>
+            <div class="required field" id="label">
+                <label>Label</label>
+                <ui-text params="fieldObs: labelObs"></ui-text>
             </div>
-            <div class="required field">
+            <div class="field" id="schedulePlanType">
                 <label>Schedule Plan Type</label>
                 <ui-select params="fieldObs: schedulePlanTypeObs, fieldLabel: schedulePlanTypeLabel,
-                    publishedObs: publishedObs, optionsSrc: schedulePlanTypeOptions"></ui-select>
+                    optionsSrc: schedulePlanTypeOptions"></ui-select>
             </div>
             <div class="field">
                 <label>Limit schedules &amp; tasks to app version(s):</label>
                 <div class="two fields">
-                    <div class="field">
-                        <ui-number params="fieldObs: minAppVersionObs, publishedObs: publishedObs, placeholder: 'Min'"></ui-number>
+                    <div class="field" id="minAppVersion">
+                        <ui-number params="fieldObs: minAppVersionObs, placeholder: 'Min'"></ui-number>
                     </div>
-                    <div class="field">
-                        <ui-number params="fieldObs: maxAppVersionObs, publishedObs: publishedObs, placeholder: 'Max'"></ui-number>
+                    <div class="field" id="maxAppVersion">
+                        <ui-number params="fieldObs: maxAppVersionObs, placeholder: 'Max'"></ui-number>
                     </div>
                 </div>
             </div>
         </div>
     </form>
-    <div data-bind="component: {name: schedulePlanTypeObs, params: {strategyObs: strategyObs}}"></div>
+    <div data-bind="component: {name: schedulePlanTypeObs, params: {strategyObs: strategyObs, labelObs: labelObs}}"></div>
 </div>

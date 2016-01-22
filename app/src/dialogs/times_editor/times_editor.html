@@ -14,7 +14,7 @@
                     <div>
                         <span class="inline-form-text">
                             <a href="#" data-bind="click: $component.deleteTime">
-                                <i class="trash icon"></i>
+                                <i class="delete icon"></i>
                             </a>
                         </span>
                         <span class="inline-form-text" data-bind="text: $component.timesLabel($data)"></span>
@@ -23,16 +23,14 @@
             </div>
             <div class="column">
                 <div class="field">
-                    <ui-select params="fieldObs: timeObs, fieldLabel: timesLabel,
-                        publishedObs: publishedObs, optionsSrc: timesOptions"></ui-select>
+                    <ui-select params="fieldObs: timeObs, fieldLabel: timesLabel, optionsSrc: timesOptions"></ui-select>
                     <button class="ui small button" data-bind="click: addTime">Add</button>
                 </div>
             </div>
         </div>
     </div>
     <div class="content" data-bind="visible: scheduleType === 'once'">
-        <ui-select params="fieldObs: timeObs, fieldLabel: timesLabel,
-            publishedObs: publishedObs, optionsSrc: timesOptions"></ui-select>
+        <ui-select params="fieldObs: timeObs, fieldLabel: timesLabel, optionsSrc: timesOptions"></ui-select>
     </div>
     <div class="rules-actions">
         <button class="ui primary small button" data-bind="click: save">Save</button>

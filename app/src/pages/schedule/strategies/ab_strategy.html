@@ -19,7 +19,7 @@ may vary from these percentages due to random assignment). Percentages for all g
             </div>
             <div class="schedulegroup-field-delete field">
                 <a href="#" data-bind="fadeRemove: {selector: '.schedulegroup-fieldset', object: $data, collection: 'scheduleGroupsObs'}">
-                    <i class="delete square icon"></i>Remove This Schedule Group
+                    <i class="delete square icon"></i>Remove This Schedule
                 </a>
             </div>
         </div>
@@ -27,7 +27,9 @@ may vary from these percentages due to random assignment). Percentages for all g
             <legend class="schedule-legend">
                 <h4>Schedule</h4>
             </legend>
-            <div data-bind="component: {name: 'schedule', params: {scheduleObs: $data.scheduleObs}}"></div>
+            <div data-bind="component: {name: 'schedule', params: {
+                scheduleObs: $data.scheduleObs, collectionName: 'scheduleGroups'+$index()+'_'
+            }}"></div>
         </fieldset>
     </fieldset>
 </form>

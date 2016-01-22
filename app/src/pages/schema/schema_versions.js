@@ -4,14 +4,6 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var Promise = require('es6-promise').Promise;
 
-function addCheckedObs(item) {
-    item.checkedObs = ko.observable(false);
-    return item;
-}
-function hasBeenChecked(item) {
-    return item.checkedObs();
-}
-
 module.exports = function(params) {
     var self = this;
 
@@ -19,11 +11,8 @@ module.exports = function(params) {
     self.schemaIdObs = ko.observable(params.schemaId);
     self.itemsObs = ko.observableArray([]);
 
-    // The first item, which is the latest, can be edited and saved as a new version, so
-    // it is not loaded with a revision number. This queues the editor to make it writable
     self.link = function(item) {
-        return (item.revision === self.itemsObs()[0].revision) ?
-            ("#/schemas/"+item.schemaId) : ("#/schemas/"+item.schemaId+"/"+item.revision);
+        return "#/schemas/"+encodeURIComponent(item.schemaId)+"/versions/"+item.revision;
     };
     self.anyChecked = function() {
         return self.itemsObs().some(function(item) {
@@ -31,7 +20,7 @@ module.exports = function(params) {
         });
     };
     self.deleteRevisions = function(vm, event) {
-        var deletables = self.itemsObs().filter(hasBeenChecked);
+        var deletables = self.itemsObs().filter(utils.hasBeenChecked);
         var msg = (deletables.length > 2) ?
                 "Are you sure you want to delete these schema versions?" :
                 "Are you sure you want to delete this schema version?";
@@ -50,7 +39,7 @@ module.exports = function(params) {
         }
     };
     serverService.getUploadSchemaAllRevisions(params.schemaId).then(function(response) {
-        self.itemsObs(response.items.map(addCheckedObs));
+        self.itemsObs(response.items.map(utils.addCheckedObs));
         if (response.items.length) {
             self.nameObs(response.items[0].name);
         }

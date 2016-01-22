@@ -16,7 +16,7 @@
     }
     .activity > div {
         padding: .5rem;
-        margin: 0;
+        margin: 0!important;
     }
         .activity-controls > a {
             margin-left: .75rem;
@@ -26,7 +26,6 @@
 }
     .schedulegroup-fieldset {
         display:block;
-        @include transition(max-height .5s ease);
         max-height: 80rem;
         overflow: auto;
         padding:1.5rem!important;
@@ -43,7 +42,5 @@
             padding-right: 1rem;
         }
 .times-label {
-    background-color: #e4e4e4;
-    padding: 0 .4rem;
-    border-radius: .2rem;
+    font-weight: bold;
 }

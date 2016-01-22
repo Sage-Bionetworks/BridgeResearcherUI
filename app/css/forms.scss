@@ -1,8 +1,6 @@
 .editor {
     border: none;
     border-bottom: 1px dotted #ccc;
-    /* Causes elements to jump around in flex layouts for no obvious reason. */
-    /* display: block; */
     width: 100%;
 }
 .require::after {
@@ -28,11 +26,22 @@
 .inline-editor-controls a:first-child {
     margin-right: 1rem;
 }
-.inline-editor-controls a {
-    @include link;
-}
 .help-text {
     color: #aaa;
     font-style: italic;
     padding: 0 .5rem;
+}
+
+/* Tag editor control */
+.tag-editor label {
+    white-space: nowrap;
+}
+.tag-control {
+    @include flex-box(row);
+    @include justify-content(space-between);
+    width: 14rem;
+
+    button {
+        z-index:1;
+    }
 }

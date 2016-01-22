@@ -1,9 +1,10 @@
 var ko = require('knockout');
+require('knockout-postbox');
 var toastr = require('toastr');
 var config = require('./config');
 
 var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
-
+var pendingControl = null;
 toastr.options = config.toastr;
 
 function is(obj, typeName) {
@@ -19,6 +20,9 @@ function nameInspector(string) {
     var isArray = /\[\]$/.test(string);
     var name = (isArray) ? string.match(/[^\[]*/)[0] : string;
     return {name: name, observerName: name+"Obs", isArray: isArray};
+}
+function isNotBlank(obj) {
+    return (typeof obj !== "undefined") && obj !== null && obj !== "";
 }
 function isDefined(obj) {
     return (typeof obj !== "undefined");
@@ -57,6 +61,18 @@ function makeOptionLabelFinder(arrayOrObs) {
     };
 }
 
+function displayPendingControl(control) {
+    clearPendingControl();
+    control.classList.add("loading");
+    pendingControl = control;
+}
+function clearPendingControl() {
+    if (pendingControl) {
+        pendingControl.classList.remove("loading");
+        pendingControl = null;
+    }
+}
+
 /**
  * Common utility methods for ViewModels.
  */
@@ -72,6 +88,11 @@ module.exports = {
      * @param object - the variable being tested
      */
     isDefined: isDefined,
+    /**
+     * Is this variable defined, not null and not blank?
+     * @param object - the variable being tested
+     */
+    isNotBlank: isNotBlank,
     /**
      * f(x) = x
      * @param arg
@@ -98,8 +119,8 @@ module.exports = {
      * @param event
      */
     startHandler: function(vm, event) {
-        event.target.classList.add("loading");
-        toastr.clear();
+        ko.postbox.publish("clearErrors");
+        displayPendingControl(event.target);
     },
     /**
      * An Ajax success handler for a view model that supports the editing of a form.
@@ -111,7 +132,8 @@ module.exports = {
      */
     successHandler: function(vm, event, message) {
         return function(response) {
-            event.target.classList.remove("loading");
+            clearPendingControl();
+            ko.postbox.publish("clearErrors");
             if (message) {
                 toastr.success(message);
             }
@@ -128,22 +150,23 @@ module.exports = {
      */
     failureHandler: function(vm, event) {
         return function(response) {
-            if (event){
-                event.target.classList.remove("loading");
-            }
+            clearPendingControl();
+            ko.postbox.publish("clearErrors");
             if (response.status === 412) {
                 toastr.error('You do not appear to be either a developer or a researcher.');
             } else if (response instanceof Error) {
                 toastr.error(response.message);
             } else if (response.responseJSON) {
-                toastr.error(response.responseJSON.message);
+                var payload = response.responseJSON;
+                ko.postbox.publish("showErrors", payload);
             } else {
                 toastr.error(GENERIC_ERROR);
             }
         };
     },
     /**
-     * Create an observable for each field name provided.
+     * Create an observable for each field name provided. Will create an observableArray if the notation indicates
+     * such (e.g. "entries[]" rather than "entries").
      * @param vm
      * @param fields
      * @param [source] - if provided, values will be initialized from this object
@@ -189,12 +212,8 @@ module.exports = {
         for (var i=0; i < fields.length; i++) {
             var insp = nameInspector(fields[i]);
 
-            // TODO: At one point you were checking that the model object had the property before
-            // copying the observer back to it, but this prevents the UI from adding properties when the
-            // model didn't initially have them. Disabling this, but may break something elsewhere.
+            object[insp.name] = null;
             var obs = vm[insp.observerName];
-            //var value = object[insp.name];
-            //if (isDefined(obs) && isDefined(value)) {
             if (isDefined(obs)) {
                 object[insp.name] = obs();
             }
@@ -261,6 +280,13 @@ module.exports = {
             }
         };
     },
+    addCheckedObs: function(item) {
+        item.checkedObs = ko.observable(false);
+        return item;
+    },
+    hasBeenChecked: function(item) {
+        return item.checkedObs();
+    },
     /**
      * Generic handler for pages which are loading a particular entity, that attemp to
      * deal with 404s by redirecting to a parent page.
@@ -271,7 +297,6 @@ module.exports = {
      */
     notFoundHandler: function(vm, message, rootPath) {
         return function(response) {
-            console.error(response);
             toastr.error((message) ? message : response.statusText);
             if (rootPath) {
                 document.location = rootPath;
@@ -295,5 +320,56 @@ module.exports = {
     /**
      * Walk object and remove any properties that are set to null or an empty string.
      */
-    deleteUnusedProperties: deleteUnusedProperties
+    deleteUnusedProperties: deleteUnusedProperties,
+    /**
+     * The logic for the scrollbox scrolling is not idea so isolate it here where we
+     * can fix it everywhere it is used.
+     * @param itemSelector
+     * @returns {scrollTo}
+     */
+    makeScrollTo: function(itemSelector) {
+        return function scrollTo(index) {
+            var offset = $(".fixed-header").outerHeight() * 1.75;
+            var $scrollbox = $(".scrollbox");
+            var $element = $scrollbox.find(itemSelector).eq(index);
+            $scrollbox.scrollTo($element, {offsetTop: offset});
+            setTimeout(function() {
+                $element.find(".focus").focus().click();
+            },20);
+        };
+    },
+    /**
+     * The panel editors are sibling views to the main view, so they convert user
+     * UI events into postbox events on the main collection being edited. This is
+     * a convenience method to generate those.
+     * @param eventName
+     * @returns {Function}
+     */
+    makeEventToPostboxListener: function(eventName) {
+        return function(element, event) {
+            event.preventDefault();
+            event.stopPropagation();
+            ko.postbox.publish(eventName, element);
+        };
+    },
+    /**
+     * Although the main editor collection has a binding to fade and then remove an
+     * item from a collection, the panel editor can only post an event to remove, so
+     * this handler emulates the same behavior as the fadeRemove binding.
+     * NOTE: animation has been removed for the time being
+     * @param elementsObs
+     * @param elementSelector
+     * @returns {Function}
+     */
+    manualFadeRemove: function(elementsObs, elementSelector) {
+        return function(group) {
+            var index = elementsObs.indexOf(group);
+            var dom = $(elementSelector).eq(index);
+
+            if (confirm("Are you sure?")) {
+                elementsObs.remove(group);
+                dom.remove();
+            }
+        };
+    }
 };

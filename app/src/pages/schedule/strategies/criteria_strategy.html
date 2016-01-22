@@ -1,0 +1,60 @@
+<h4>Criteria-based Scheduling</h4>
+
+<p class="help-text">Define any number of schedules, each will have conditions the user must match to return that
+    schedule to the user. Schedules are evaluated in order and the first one that matches is assigned to the user. </p>
+
+<form class="ui form schedulegroup" data-bind="foreach: scheduleCriteriaObs">
+    <fieldset class="schedulegroup-fieldset">
+        <legend class="schedulegroup-fieldset-legend">
+            <h4>Assignment based on</h4>
+        </legend>
+        <div class="four fields">
+            <div class="field">
+                <label>App version:</label>
+                <div class="two fields">
+                    <div class="six wide field" data-bind="attr:{id:'strategy_scheduleCriteria'+$index()+'_minAppVersion'}">
+                        <ui-number params="fieldObs: $data.minAppVersionObs, placeholder: 'Min'"></ui-number>
+                    </div>
+                    <div class="six wide field" data-bind="attr:{id:'strategy_scheduleCriteria'+$index()+'_maxAppVersion'}">
+                        <ui-number params="fieldObs: $data.maxAppVersionObs, placeholder: 'Max'"></ui-number>
+                    </div>
+                </div>
+            </div>
+            <!-- ko component: {
+                name: "tag-editor",
+                params: { id: 'strategy_scheduleCriteria'+$index()+'_allOfGroups',
+                  label: 'User has all these data group(s):',
+                  collObs: allOfGroupsObs, noneLabel: 'No data groups', editorObs: allOfGroupsEditorObs,
+                  optionsObs: $component.dataGroupsOptions, removeAction: $data.removeAllOf,
+                  addAction: $data.addToAll }
+            } -->
+            <!-- /ko -->
+            <!-- ko component: {
+                name: "tag-editor",
+                params: { id: 'strategy_scheduleCriteria'+$index()+'_noneOfGroups',
+                  label: 'And user has none of these group(s):', collObs: noneOfGroupsObs,
+                  noneLabel: 'No data groups', editorObs: noneOfGroupsEditorObs,
+                  optionsObs: $component.dataGroupsOptions, removeAction: $data.removeNoneOf,
+                  addAction: $data.addToNone }
+            } -->
+            <!-- /ko -->
+            <div class="schedulegroup-field-delete field">
+                <a href="#" data-bind="fadeRemove: {selector: '.schedulegroup-fieldset', object: $data, collection: 'scheduleCriteriaObs'}">
+                    <i class="delete square icon"></i>Remove This Schedule
+                </a>
+            </div>
+        </div>
+        <fieldset class="schedule-fieldset">
+            <legend class="schedule-legend">
+                <h4>Schedule</h4>
+            </legend>
+            <div data-bind="component: {name: 'schedule', params: {scheduleObs: $data.scheduleObs, collectionName: 'scheduleCriteria'+$index()+'_'}}"></div>
+        </fieldset>
+    </fieldset>
+</form>
+<div class="ui form">
+    <a class="ui primary button" data-bind="click: addCriteria">
+        <i class="add square icon"></i>Add Schedule
+    </a>
+</div>
+

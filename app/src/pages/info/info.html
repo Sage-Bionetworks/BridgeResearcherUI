@@ -23,19 +23,19 @@
 <div class="scrollbox">
     <div class="ui grid">
         <div class="ten wide column">
+            <errors> </errors>
             <form class="ui form">
-                <div class="required field">
+                <div class="required field" id="name">
                     <label>Study name</label>
-                    <input type="text" name="name" data-bind="value: nameObs"/>
+                    <input type="text" data-bind="value: nameObs"/>
                 </div>
-                <div class="required field">
+                <div class="required field" id="sponsorName">
                     <label>Sponsor name</label>
-                    <input type="text" name="name" data-bind="value: sponsorNameObs"/>
+                    <input type="text" data-bind="value: sponsorNameObs"/>
                 </div>
                 <div class="field" style="margin: 1.5rem 0">
                     <label>Data Validation</label>
-                    <ui-checkbox params="checkedObs: strictUploadValidationEnabledObs,
-                        disabledObs: publishedObs">
+                    <ui-checkbox params="checkedObs: strictUploadValidationEnabledObs">
                         Enable strict validation of upload files <b>(recommended)</b>
                     </ui-checkbox>
                 </div>

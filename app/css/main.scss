@@ -1,30 +1,47 @@
 @import "./lib.scss";
 @import "./forms.scss";
+@import "./panel.scss";
 @import "./survey.scss";
 @import "./schema.scss";
 @import "./scheduleplan.scss";
 
 /* HTML TAGS */
+html, body {
+    overflow: hidden;
+}
 body {
     @include flex-box(column);
     background-color: white;
-    min-height: 100vh;
+    /*min-height: 100vh;*/
 }
 section {
     @include flex-box(row);
     @include flex(1);
+    /* FF BUG FIX: http://stackoverflow.com/questions/32911324/vertical-scroll-rendering-issue-in-flexbox-in-firefox 2 lines */
+    min-width: 0;
+    min-height: 0;
 }
 main {
     @include flex(1);
     @include flex-box(column);
     padding: 0;
+    overflow-y: auto;
 }
     .fixed-header {
         @include flex-box(column);
-        padding: 0 1rem;
 
         .ui.secondary.pointing.menu {
-            margin-bottom: 1rem;
+            margin-top: .5rem;
+
+            .item {
+                padding: .6rem 1.2rem;
+            }
+        }
+        .ui.secondary.pointing.menu:empty {
+            margin: 0;
+            padding: 0;
+            height: 0;
+            min-height: 1.5rem;
         }
     }
         .fixed-header-title {
@@ -32,18 +49,15 @@ main {
             @include align-items(space-between);
             @include justify-content(top);
             width: 100%;
-            margin: 1.5rem 0 .5rem 0;
+            padding: 1.5rem 1.5rem 0 1.5rem;
         }
             .fixed-header-title h3 {
                 @include flex(1);
-                /*@include order(2);*/
-                /*font-size: 1.8rem;*/
-                /*text-align: right;*/
                 font-size: 1.4rem;
-                margin: 0 1rem;
+                /*margin: 0 1rem;*/
+                margin: .4rem 1rem 0 1rem;
             }
             .fixed-header-buttons {
-                /*@include flex(1);*/
                 margin: 0 1rem;
             }
         .fixed-header .section {
@@ -57,15 +71,22 @@ main {
         }
     .scrollbox {
         @include flex(1);
-        padding: .5rem 1.5rem;
-        height: 100vh;
+        padding: 1.5rem;
         overflow-y: auto;
+        margin:0;
     }
 nav {
-    @include flex(0 0 18em);
+    @include flex(0 0 18rem);
     @include order(-1);
     padding:  2rem 1rem ! important;
     background-color: rgba(96,134,153,.2);
+
+    .title span {
+        font-weight: bold;
+    }
+    .ui.vertical.menu {
+        width: 100%;
+    }
 }
 header {
     @include flex-box(row);
@@ -96,35 +117,8 @@ footer p {
     text-align: center;
 }
 
-/* SEMANTIC UI TWEAKS */
-.ui.field .ui.button {
-    margin-top: .5rem ! important;
-}
-.ui.breadcrumb {
-    margin: 0;
-}
-.ui.modal>.header {
-    font-size: 1.3rem;
-}
-.ui.form {
-    padding: 0 ! important;
-}
-nav .ui.menu {
-    width:100% ! important;
-    box-shadow: 0px 2px 3px silver;
-}
-.ui.modal .content {
-    padding: 1.5rem;
-}
-.ui.table {
-    margin: 0;
-}
-
 /* GENERAL */
 
-.pointing {
-    cursor: pointer;
-}
 .loading_status {
     font-size: larger;
 }
@@ -138,30 +132,16 @@ nav .ui.menu {
     overflow-y:scroll;
 }
 .vertical-padding {
-    margin: 1rem 0;
+    margin: 0 0 .5rem 0;
+    /*margin: 1rem 0;*/
 }
 .action.item {
     margin-right: 1rem;
 }
-
-/* Tag control */
-.tag-control {
-    border-radius:4px;
-    width: 222px;
-    @include flex-box(row);
-    @include align-items(stretch);
-
-    * {
-        border: none!important;
-        outline: none!important;
-    }
-    select {
-        display:block;
-        width: 150px!important;
-        outline: 1px solid #e5e5e5!important;
-    }
-    button {
-        margin-left: 5px!important;
-        background-color: #f4f4f4;
-    }
+.pointing {
+    cursor: pointer;
+}
+.link {
+    color: #009fda!important;
+    cursor: pointer;
 }

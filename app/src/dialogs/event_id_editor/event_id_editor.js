@@ -14,7 +14,6 @@ module.exports = function(params) {
     var self = this;
 
     self.clearEventIdFunc = params.clearEventIdFunc;
-    self.publishedObs = ko.observable(false);
     self.eventIdObs = params.eventIdObs;
     self.answerObs = ko.observable();
     self.enrollmentObs = ko.observable(false);
@@ -36,7 +35,8 @@ module.exports = function(params) {
     self.questionObs = ko.observable();
     self.questionsOptionsObs = ko.observableArray([]);
     self.questionsLabel = utils.makeOptionLabelFinder(self.questionsOptionsObs);
-    optionsService.getQuestionOptions().then(self.questionsOptionsObs);
+    // Very expensive to initialize the question options, which are currently hidden.
+    // optionsService.getQuestionOptions().then(self.questionsOptionsObs);
 
     self.activityObs = ko.observable();
     self.activityOptionsObs = ko.observableArray([]);

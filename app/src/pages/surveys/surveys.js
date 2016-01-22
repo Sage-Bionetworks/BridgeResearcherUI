@@ -19,6 +19,7 @@ function extractSurveyGuids(plan) {
         case 'SimpleScheduleStrategy':
             return extractSurveyGuidsFromSchedule(strategy.schedule);
         case 'ABTestScheduleStrategy':
+        case 'CriteriaScheduleStrategy':
             return (strategy.scheduleGroups || []).forEach(function (group) {
                 return extractSurveyGuidsFromSchedule(group.schedule);
             }).reduce(function(initial, array) {

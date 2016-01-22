@@ -30,7 +30,7 @@
         <tbody data-bind="foreach: itemsObs">
             <tr>
                 <td>
-                    <ui-checkbox params="checkedObs: $data.checkedObs, disabledObs: $parent.publishedObs"></ui-checkbox>
+                    <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                 </td>
                 <td width="100%">
                     <a href="#" data-bind="attr: {href: $parent.link($data)}, text: $data.name"></a>

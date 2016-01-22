@@ -3,7 +3,10 @@ require('../lib/toastr.min');
 require('../lib/dragula.min');
 
 require('./bindings');
+require('./bindings/dragula');
 require('./registry');
+var ko = require('knockout');
+require('knockout-postbox');
 
 var director = require('director');
 var root = require('./root');
@@ -15,14 +18,7 @@ function routeTo(name) {
 }
 function surveyRoute(name) {
     return function(guid, createdOn) {
-        var date = null;
-        try {
-            if (createdOn !== "recent") {
-                date = new Date(createdOn);
-            }
-        } catch(e) {
-            date = null;
-        }
+        var date = (createdOn === "recent") ? null : createdOn;
         root.changeView(name, {guid: guid, createdOn: date});
     };
 }
@@ -61,11 +57,17 @@ router.on('/surveys/:guid', surveyRoute('survey')); // always new
 router.on('/schemas', routeTo('schemas'));
 router.on('/schemas/:schemaId', schemaRoute('schema'));
 router.on('/schemas/:schemaId/versions', schemaRoute('schema_versions'));
-router.on('/schemas/:schemaId/:revision', schemaRoute('schema'));
+router.on('/schemas/:schemaId/versions/:revision', schemaRoute('schema'));
 router.on('/monitor', routeTo('monitor'));
 router.on('/schedules', routeTo('schedules'));
 router.on('/scheduleplans', routeTo('scheduleplans'));
 router.on('/scheduleplans/:guid', guidRoute('scheduleplan'));
 router.on('/synapse', routeTo('synapse'));
-router.configure({notfound: routeTo('not_found')});
+router.configure({
+    notfound: routeTo('not_found'),
+    'on': [
+        ko.postbox.reset,
+        function() { root.isEditorTabVisible(false); }
+    ]
+});
 router.init();

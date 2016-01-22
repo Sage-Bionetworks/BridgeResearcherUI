@@ -30,6 +30,39 @@ if (typeof window !== "undefined") { // jQuery throws up if there's no window, e
     });
 }
 
+var cache = (function() {
+    var cachedItems = {};
+    return {
+        get: function(key) {
+            var value = cachedItems[key];
+            console.info((value) ? "[json cache] hit" : "[json cache] miss",key);
+            return value;
+        },
+        set: function(key, response) {
+            console.info("[json cache] caching",key);
+            cachedItems[key] = response;
+        },
+        clear: function(key) {
+            // Clear all paths that are logically higher in the endpoint namespace,
+            // e.g. /foo/123 will delete /foo if it is cached, as this would be the
+            // collection that might include /foo/123
+            Object.keys(cachedItems).forEach(function(aKey) {
+                if (key.indexOf(aKey) === 0 || aKey.indexOf(key) === 0) {
+                    console.info("[json cache] deleting",aKey);
+                    delete cachedItems[aKey];
+                }
+                if (cachedItems[key+'/recent']) {
+                    console.info("[json cache] deleting",key+'/recent');
+                    delete cachedItems[key+'/versions'];
+                }
+            });
+        },
+        reset: function() {
+            cachedItems = {};
+        }
+    };
+})();
+
 function getHeaders() {
     var headers = {'Content-Type': 'application/json'};
     if (session && session.sessionToken) {
@@ -94,24 +127,33 @@ function makeSessionWaitingPromise(func) {
             console.error("Signed out due to 401");
             signOut();
         } else if (response.responseJSON) {
-            console.error(response.status, response.responseJSON);
+            //console.error(response.status, response.responseJSON);
         } else {
-            console.error("Significant server failure", response);
+            //console.error("Significant server failure", response);
         }
     });
     return promise;
 }
 function get(path) {
-    return makeSessionWaitingPromise(function() {
-        return getInt(config.host[session.environment] + path);
-    });
+    if (cache.get(path)) {
+        return Promise.resolve(cache.get(path));
+    } else {
+        return makeSessionWaitingPromise(function() {
+            return getInt(config.host[session.environment] + path).then(function(response) {
+                cache.set(path, response);
+                return response;
+            });
+        });
+    }
 }
 function post(path, body) {
+    cache.clear(path);
     return makeSessionWaitingPromise(function() {
         return postInt(config.host[session.environment] + path, body);
     });
 }
 function del(path) {
+    cache.clear(path);
     return makeSessionWaitingPromise(function() {
         return deleteInt(config.host[session.environment] + path);
     });
@@ -123,6 +165,7 @@ function del(path) {
  * @returns {Promise}
  */
 function signOut() {
+    cache.reset();
     var env = session.environment;
     session = null;
     // We want to clear persistence, but keep these between sign-ins.
@@ -175,8 +218,7 @@ module.exports = {
         return Promise.resolve(postInt(config.host[env] + config.requestResetPassword, data));
     },
     getStudy: function() {
-        return storeService.getPromise('study') ||
-               get(config.getStudy); //.then(setCache('study'));
+        return get(config.getStudy);
     },
     getStudyPublicKey: function() {
         return get(config.getStudyPublicKey);
@@ -200,7 +242,6 @@ module.exports = {
     getConsentHistory: function(guid) {
         return get(config.subpopulations + "/" + guid + "/consents");
     },
-
     emailRoster: function() {
         return post(config.emailRoster);
     },
@@ -214,13 +255,10 @@ module.exports = {
         var createdString = new Date(createdOn).toISOString();
         var url = config.survey+guid+'/revisions/'+createdString;
 
-        return get(url); //.then(setCache(key));
+        return get(url);
     },
     getSurveyMostRecent: function(guid) {
         return get(config.survey + guid + '/revisions/recent');
-    },
-    getSurveysSummarized: function() {
-        return get(config.surveys + '?format=summary');
     },
     createSurvey: function(survey) {
         return post(config.surveys, survey);

@@ -16,21 +16,22 @@
                     <i class="warning icon"></i> Not Published
                 </div>
             </span>
-            <button class="ui primary small button" data-bind="visible: !disabledObs(), click: save">Save</button>
+            <button class="ui primary small button" data-bind="click: save">Save</button>
         </div>
     </div>
     <survey-tabset params="selected: 'editor', viewModel: $data"></survey-tabset>
 </div>
 <div class="scrollbox">
+    <errors></errors>
     <form class="ui form">
         <div class="two fields">
-            <div class="required field">
+            <div class="required field" id="name">
                 <label>Name</label>
-                <ui-text params="fieldObs: nameObs, publishedObs: disabledObs"></ui-text>
+                <ui-text params="fieldObs: nameObs"></ui-text>
             </div>
-            <div class="required field">
+            <div class="required field" id="identifier">
                 <label>Identifier</label>
-                <ui-text params="fieldObs: identifierObs, publishedObs: disabledObs"></ui-text>
+                <ui-text params="fieldObs: identifierObs"></ui-text>
             </div>
         </div>
     </form>
@@ -38,24 +39,29 @@
     <h3>Questions</h3>
 
     <div data-bind="visible: elementsObs().length === 0">
-        <p>There are currently no questions in this survey.</p>
-        <!-- ko component: {
-            name: "insertion-control",
-            params: { elementsObs: elementsObs, indexObs: 0, publishedObs: disabledObs }
-        } --><!-- /ko -->
+        <p>There are currently no questions in this survey. Create a question:</p>
+        <div class="ui menu back" data-bind="click: create">
+            <a class="item" data-type="BooleanConstraints">Boolean</a>
+            <a class="item" data-type="DateConstraints">Date</a>
+            <a class="item" data-type="DateTimeConstraints">Date & Time</a>
+            <a class="item" data-type="DecimalConstraints">Decimal</a>
+            <a class="item" data-type="DurationConstraints">Duration</a>
+            <a class="item" data-type="SurveyInfoScreen">Information Only</a>
+            <a class="item" data-type="IntegerConstraints">Integer</a>
+            <a class="item" data-type="MultiValueConstraints">Multi-Choice</a>
+            <a class="item" data-type="StringConstraints">String</a>
+            <a class="item" data-type="TimeConstraints">Time</a>
+        </div>
     </div>
-    <div class="survey elementZone" data-bind="dragula: {
-        dragHandleSelector: '.element-draghandle',
-        elementSelector: '.element',
-        listObs: elementsObs
-    }, foreach: elementsObs">
+    <div class="survey" data-bind="foreach: elementsObs">
         <div class="element" data-bind="component: {
-        name: $data.type,
-        params: { element: $data, elementsObs: $parent.elementsObs, indexObs: $index, publishedObs: $parent.disabledObs }
-    }"></div>
-        <!-- ko component: {
-            name: "insertion-control",
-            params: { elementsObs: $parent.elementsObs, indexObs: $index, publishedObs: $parent.disabledObs }
-        } --><!-- /ko -->
+            name: $data.type,
+            params: {
+                element: $data,
+                elementsObs: $parent.elementsObs,
+                indexObs: $index,
+                collectionName: 'elements'+$index()+'_'
+            }
+        }"></div>
     </div>
 </div>

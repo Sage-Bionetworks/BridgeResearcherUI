@@ -1,0 +1,20 @@
+<div class="ui vertical editor menu">
+    <div class="title item">
+        <i class="calendar icon"></i>
+        <span data-bind="visible: labelObs().length > 0, text: labelObs"></span>
+        <span data-bind="visible: labelObs().length === 0">New Schedule Plan</span>
+    </div>
+    <div class="item vertical-scrollbox" data-bind="foreach: scheduleCriteriaObs, dragula: {
+            dragHandleSelector: '.vs-item-content', elementSelector: '.vs-item',
+            eventName: 'scheduleCriteriaSelect', listObs: scheduleCriteriaObs}">
+        <div class="vs-item" data-bind="click: $component.selectCriteria">
+            <div class="vs-item-content" data-bind="text: $data.labelObs"></div>
+            <div class="vs-item-delete pointing"><i class="delete icon" data-bind="click: $component.removeCriteria"></i></div>
+        </div>
+    </div>
+    <div class="item">
+        <a class="ui link" href="#" data-bind="click: $component.addCriteria">
+            <i class="add square icon"></i>Add Schedule
+        </a>
+    </div>
+</div>

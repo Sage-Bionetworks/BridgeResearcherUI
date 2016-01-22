@@ -25,6 +25,7 @@ function setEditor(name, template, attribute) {
 ko.components.register('none', {template: '<div class="ui modal dialog"></div>'});
 
 // PAGES
+reg('errors','./widgets/errors/errors');
 reg('info','./pages/info/info');
 reg('email','./pages/email/email');
 reg('consent','./pages/consent/consent');
@@ -46,9 +47,16 @@ reg('synapse', './pages/synapse/synapse');
 reg('monitor', './pages/monitor/monitor');
 reg('scheduleplans', './pages/scheduleplans/scheduleplans');
 reg('scheduleplan', './pages/scheduleplan/scheduleplan');
-reg('SimpleScheduleStrategy', './pages/scheduleplan/simple_strategy');
-reg('ABTestScheduleStrategy', './pages/scheduleplan/ab_strategy');
-reg('schedule', './pages/scheduleplan/schedule');
+
+reg('schedule', './pages/schedule/schedule');
+reg('SimpleScheduleStrategy', './pages/schedule/strategies/simple_strategy');
+reg('ABTestScheduleStrategy', './pages/schedule/strategies/ab_strategy');
+reg('CriteriaScheduleStrategy', './pages/schedule/strategies/criteria_strategy');
+reg('ABTestScheduleStrategyPanel', './pages/schedule/panels/ab_strategy_panel');
+reg('CriteriaScheduleStrategyPanel', './pages/schedule/panels/criteria_strategy_panel');
+reg('SimpleScheduleStrategyPanel', './pages/schedule/panels/simple_strategy_panel');
+reg('SurveyPanel', './pages/survey/panels/survey');
+
 regt('not_found', './pages/not_found/not_found');
 reg('publickey', './dialogs/publickey/publickey');
 
@@ -76,7 +84,6 @@ reg('StringConstraints', './pages/survey/constraints/string_constraints');
 reg('MultiValueConstraints', './pages/survey/constraints/multi_constraints');
 
 // Custom elements
-reg('insertion-control', './pages/survey/insertion_control');
 regt('constraints-label', './pages/survey/constraints/constraints_label');
 regt('ui-rules', './pages/survey/constraints/ui_rules');
 regt('ui-checkbox', './widgets/form/ui_checkbox');
@@ -89,6 +96,7 @@ regt('ui-textarea', './widgets/form/ui_textarea');
 reg('ui-duration', './widgets/form/ui_duration');
 reg('survey-tabset', './pages/survey/tabset');
 regt('fire-event', './widgets/fire_event');
+regt('tag-editor', './widgets/tag_editor');
 
 /* SCHEMAS */
 reg('field_definition', './pages/schema/field_definition');

@@ -6,14 +6,14 @@
             <span data-bind="visible: nameObs().length === 0">New Upload Schema</span>
         </h3>
         <div class="fixed-header-buttons">
-            <button class="ui primary small button" data-bind="visible: !publishedObs(), click: save">Save</button>
+            <button class="ui primary small button" data-bind="click: save">Save</button>
         </div>
     </div>
     <div class="ui secondary larger pointing menu">
         <a class="active item">
             <i class="file outline icon"></i> Editor
         </a>
-        <a href="#" data-bind="attr: {href: '#/schemas/'+schemaIdObs()+'/versions'}, visible: !!revisionObs()" class="item">
+        <a href="#" data-bind="attr: {href: '#/schemas/'+encodeURIComponent(schemaIdObs())+'/versions'}, visible: !!revisionObs()" class="item">
             <i class="history icon"></i> History
         </a>
         <div class="right menu">
@@ -25,37 +25,42 @@
 </div>
 <div class="scrollbox">
     <form class="ui form">
+        <errors></errors>
         <div class="three fields">
-            <div class="required field">
+            <div class="required field" id="name">
                 <label>Name</label>
-                <ui-text params="fieldObs: nameObs, publishedObs: publishedObs"></ui-text>
+                <ui-text params="fieldObs: nameObs"></ui-text>
             </div>
-            <div class="required field">
+            <div class="required field" id="schemaType">
                 <label>Schema Type</label>
-                <ui-select params="fieldObs: schemaTypeObs, fieldLabel: schemaTypeLabel,
-                    publishedObs: publishedObs, optionsSrc: schemaTypeOptions"></ui-select>
+                <ui-select params="fieldObs: schemaTypeObs, fieldLabel: schemaTypeLabel, optionsSrc: schemaTypeOptions"></ui-select>
             </div>
-            <div class="required field">
+            <div class="required field" id="schemaId" data-bind="visible: !!!revisionObs()">
                 <label>Identifier</label>
-                <ui-text params="fieldObs: schemaIdObs, publishedObs: publishedObs"></ui-text>
+                <ui-text params="fieldObs: schemaIdObs"></ui-text>
+            </div>
+            <div class="field" data-bind="visible: !!revisionObs()">
+                <label>Identifier (cannot be changed)</label>
+                <input type="text" readonly data-bind="value: schemaIdObs"/>
             </div>
         </div>
     </form>
 
     <h3>Field Definitions</h3>
 
+    <p class="help-text">Drag items to reorder them. </p>
+
     <div data-bind="visible: itemsObs().length === 0">
         <p>There are currently no field definitions in this upload schema.</p>
         <p><a href="#" class="ui primary button" data-bind="click: addFirst"><i class="add square icon"></i> Add Field</a></p>
     </div>
-    <div class="schema sfieldZone" data-bind="dragula: {
-        dragHandleSelector: '.sfield-draghandle',
+    <div class="ui form schema sfieldZone" data-bind="dragula: {
         elementSelector: '.sfield',
         listObs: itemsObs
     }, foreach: itemsObs">
         <div class="sfield" data-bind="component: {
             name: 'field_definition',
-            params: { field: $data, itemsObs: $parent.itemsObs, indexObs: $index, publishedObs: $parent.publishedObs }
+            params: { field: $data, itemsObs: $parent.itemsObs, indexObs: $index }
         }"></div>
     </div>
 </div>

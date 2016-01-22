@@ -94,9 +94,11 @@ module.exports = function(params) {
     var self = this;
 
     self.scheduleObs = params.scheduleObs;
+    self.collectionName = params.collectionName;
     utils.observablesFor(self, SCHEDULE_FIELDS);
-
-    self.publishedObs = ko.observable(false);
+    // this is not initialized by observablesFor, because it is often null when
+    // the value is just enrollment by default.
+    self.eventIdObs = ko.observable("enrollment");
 
     self.scheduleTypeOptions = SCHEDULE_TYPE_OPTIONS;
     self.scheduleTypeLabel = utils.makeOptionLabelFinder(SCHEDULE_TYPE_OPTIONS);
@@ -156,6 +158,7 @@ module.exports = function(params) {
     // thats. In all, ugly.
     optionsService.getSurveyOptions().then(function(surveys) {
         self.surveysOptionsObs.removeAll();
+        self.surveysOptionsObs.push({value:"",label:"Select survey:"})
         self.surveysOptionsObs.pushAll(surveys);
         self.surveysOptionsObs.loaded = true;
     });
@@ -163,11 +166,12 @@ module.exports = function(params) {
         // In this case as a transition, if we have an identifier that hasn't been enumerated,
         // don't update the options because we're displaying it as a dummy option. It'll still
         // fail when the user saves it.
+        self.taskOptionsObs.removeAll();
+        self.taskOptionsObs.push({value:"",label:"Select task:"})
         if (options.length > 0) {
-            self.taskOptionsObs.removeAll();
             self.taskOptionsObs.pushAll(options);
-            self.taskOptionsObs.loaded = true;
         }
+        self.taskOptionsObs.loaded = true;
     });
 
     self.formatDateTime = utils.formatDateTime;

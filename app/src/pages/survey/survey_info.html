@@ -1,20 +1,39 @@
-<div class="element-draghandle" data-bind="visible: !publishedObs()">
-</div>
 <div class="element-content">
-    <ui-textarea params="fieldObs: titleObs, publishedObs: publishedObs, className: 'element-content-title', placeholder: 'Title'"></ui-textarea>
-    <ui-textarea params="fieldObs: promptObs, publishedObs: publishedObs, className: 'element-content-prompt', placeholder: 'Prompt'"></ui-textarea>
-    <ui-textarea params="fieldObs: promptDetailObs, publishedObs: publishedObs, className: 'element-content-prompt-detail', placeholder: 'Prompt Detail'"></ui-textarea>
+    <div class="field" data-bind="attr:{id: $data.collectionName+'title'}">
+        <ui-textarea params="fieldObs: titleObs, className: 'focus element-content-title', placeholder: 'Title'"></ui-textarea>
+    </div>
+    <div class="field" data-bind="attr:{id: $data.collectionName+'prompt'}">
+        <ui-textarea params="fieldObs: promptObs, className: 'element-content-prompt', placeholder: 'Prompt'"></ui-textarea>
+    </div>
+    <ui-textarea params="fieldObs: promptDetailObs, className: 'element-content-prompt-detail', placeholder: 'Prompt Detail'"></ui-textarea>
 </div>
 <div class="element-callout">
     <div>
         <span class="ui huge green circular label" data-bind="text: indexObs()+1"></span>
     </div>
-    <div class="element-callout-identifier-box">
-        <div class="element-callout-identifier" data-bind="visible: publishedObs(), text: identifierObs"></div>
-        <input type="text" class="editor element-callout-identifier" data-bind="visible: !publishedObs(), textInput: identifierObs"/>
+    <div class="element-callout-identifier-box field" data-bind="attr:{id: $data.collectionName+'identifier'}">
+        <input type="text" class="editor element-callout-identifier" data-bind="textInput: identifierObs"/>
         <div class="require element-callout-identifier-label">Identifier</div>
-    </div>
-    <div class="element-callout-delete">
-        <div data-bind="fadeRemove: {selector: '.element', collection: 'elementsObs', object: $data.element}, visible: !publishedObs()"><a><i class="trash icon"></i> Delete</a></div>
+        <div class="ui compact pointing secondary vertical menu">
+            <div class="item" data-bind="semantic:'popup-menu'">
+                <i class="add icon"></i> Add below
+            </div>
+            <div class="ui flowing popup hidden" data-bind="click: create">
+                <div class="ui secondary vertical menu">
+                    <a class="item" data-type="BooleanConstraints">Boolean</a>
+                    <a class="item" data-type="DateConstraints">Date</a>
+                    <a class="item" data-type="DateTimeConstraints">Date & Time</a>
+                    <a class="item" data-type="DecimalConstraints">Decimal</a>
+                    <a class="item" data-type="DurationConstraints">Duration</a>
+                    <a class="item" data-type="SurveyInfoScreen">Information Only</a>
+                    <a class="item" data-type="IntegerConstraints">Integer</a>
+                    <a class="item" data-type="MultiValueConstraints">Multi-Choice</a>
+                    <a class="item" data-type="StringConstraints">String</a>
+                    <a class="item" data-type="TimeConstraints">Time</a>
+                </div>
+            </div>
+            <div class="item" data-bind="click: copy"><i class="copy icon"></i> Copy</div>
+            <div class="item" data-bind="fadeRemove: {selector: '.element', collection: 'elementsObs', object: $data.element}"><i class="delete icon"></i> Delete</div>
+        </div>
     </div>
 </div>

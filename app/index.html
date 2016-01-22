@@ -3,7 +3,12 @@
 <head>
     <meta charset="utf-8"/>
     <title>Bridge Study Manager</title>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/semantic.min.css"/>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css"/>
+    <script src="//cdn.polyfill.io/v1/polyfill.min.js"></script>
+    <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+    <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="lib/jquery.scrollTo.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>
 </head>
 <body>
     <header>
@@ -12,13 +17,20 @@
             <span data-bind="html: studyName"></span>
             <span> on </span>
             <span data-bind="text: environment"></span>
-        </div class="header-env">
+        </div>
     </header>
     <section>
         <main data-bind="component: {name: mainPage, params: mainParams}">
         </main>
         <nav>
-            <div class="ui vertical menu">
+            <div class="ui pointing menu" data-bind="visible: isEditorPanelVisible">
+                <a class="item" data-bind="css: {active: !isEditorTabVisible()}, click: toggleEditorTab">Navigation</a>
+                <a class="item" data-bind="css: {active: isEditorTabVisible}, click: toggleEditorTab">Editor</a>
+            </div>
+            <div data-bind="visible: isEditorTabVisible,
+                component: {name: editorPanel, params: editorParams}">
+            </div>
+            <div class="ui vertical menu" data-bind="visible: !isEditorTabVisible()">
                 <div class="item">
                     <i class="lab icon"></i> Study
                     <div class="menu">
@@ -75,13 +87,9 @@
         </nav>
     </section>
     <footer>
-        <p>&copy; 2015 Sage Bionetworks.</p>
+        <p>&copy; 2015 Sage Bionetworks. </p>
     </footer>
     <div data-bind="modal: dialogObs"></div>
-    <script src="//cdn.polyfill.io/v1/polyfill.min.js"></script>
-    <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
-    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="dist/bundle.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/semantic.min.js"></script>
 </body>
 </html>

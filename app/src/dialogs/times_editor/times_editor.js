@@ -1,5 +1,5 @@
 var ko = require('knockout');
-var scheduleUtils = require('../../pages/scheduleplan/schedule_utils');
+var scheduleUtils = require('../../pages/schedule/schedule_utils');
 var root = require('../../root');
 
 module.exports = function(params) {
@@ -13,7 +13,6 @@ module.exports = function(params) {
     self.timeObs = ko.observable();
     self.timesOptions = scheduleUtils.timeOptions;
     self.timesLabel = scheduleUtils.timeOptionsLabel;
-    self.publishedObs = ko.observable(false);
 
     // When it's only one time, this becomes the control that reflects the
     // state of the schedule, so initialize it.

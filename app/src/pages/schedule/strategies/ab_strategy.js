@@ -1,12 +1,13 @@
 var ko = require('knockout');
-var utils = require('../../utils');
-var scheduleUtils = require('./schedule_utils');
+require('knockout-postbox');
+var utils = require('../../../utils');
+var scheduleUtils = require('../schedule_utils');
+var root = require('../../../root');
 
 function groupToObservables(group) {
     group.percentageObs = ko.observable(group.percentage);
     group.scheduleObs = ko.observable(group.schedule);
     group.scheduleObs.callback = utils.identity;
-    group.publishedObs = ko.observable(false);
     group.percentLabel = ko.computed(function(){
         return group.percentageObs()+"%";
     });
@@ -30,9 +31,12 @@ function newGroup() {
 module.exports = function(params) {
     var self = this;
 
+    self.labelObs = params.labelObs;
     self.strategyObs = params.strategyObs;
-    self.scheduleGroupsObs = ko.observableArray([]);
-    self.publishedObs = ko.observable(false);
+    self.scheduleGroupsObs = ko.observableArray([]).publishOn("scheduleGroupChanges");
+    self.collectionName = params.collectionName;
+
+    root.setEditorPanel('ABTestScheduleStrategyPanel', {viewModel:self});
 
     params.strategyObs.callback = function () {
         var strategy = params.strategyObs();
@@ -48,7 +52,19 @@ module.exports = function(params) {
         }
     });
 
+    var scrollTo = utils.makeScrollTo(".schedulegroup-fieldset");
+
     self.addGroup = function(vm, event) {
         self.scheduleGroupsObs.push(newGroup());
+        scrollTo(self.scheduleGroupsObs().length-1);
     };
+    ko.postbox.subscribe("scheduleGroupAdd", function() {
+        self.addGroup();
+    });
+    ko.postbox.subscribe("scheduleGroupRemove",
+        utils.manualFadeRemove(self.scheduleGroupsObs, ".schedulegroup-fieldset"));
+    ko.postbox.subscribe("scheduleGroupSelect", function(group) {
+        var index = self.scheduleGroupsObs().indexOf(group);
+        scrollTo( index );
+    });
 };

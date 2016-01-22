@@ -7,7 +7,7 @@ var root = require('../../root');
 var fields = ['username', 'password', 'study', 'environment', 'studyOptions[]'];
 
 function findStudyName(studies, studyIdentifier) {
-    return studies.filter(function(studyOption) {
+    return (studies || []).filter(function(studyOption) {
         return (studyOption.identifier === studyIdentifier);
     })[0].name;
 }

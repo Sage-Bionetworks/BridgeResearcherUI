@@ -1,22 +1,22 @@
-<div class="sfield-draghandle" data-bind="visible: !publishedObs()">
-</div>
 <div class="sfield-content">
     <div class="sfield-content-editor">
         <div>
-            <ui-text params="fieldObs: nameObs, publishedObs: publishedObs, placeholder: 'Name'"></ui-text>
+            <div class="field" data-bind="attr:{id:'fieldDefinitions'+$index()+'_name'}">
+                <ui-text params="fieldObs: nameObs, placeholder: 'Name'"></ui-text>
+            </div>
         </div>
-        <div>
+        <div class="field">
             <ui-select params="fieldObs: typeObs, fieldLabel: fieldTypeLabel,
-                publishedObs: publishedObs, optionsSrc: fieldTypeOptions"></ui-select>
+                optionsSrc: fieldTypeOptions"></ui-select>
         </div>
-        <div>
-            <ui-checkbox params="checkedObs: requiredObs, disabledObs: publishedObs">Required</ui-checkbox>
+        <div class="field">
+            <ui-checkbox params="checkedObs: requiredObs">Required</ui-checkbox>
         </div>
         <div class="sfield-content-editor-buttons">
-            <a data-bind="fadeRemove: {selector: '.sfield', object: $data.field}, visible: !publishedObs()">
-                <i class="trash icon"></i>Delete
+            <a data-bind="fadeRemove: {selector: '.sfield', object: $data.field}">
+                <i class="delete icon"></i>Delete
             </a>
-            <a data-bind="click: $parents[1].addBelow, visible: !publishedObs()">
+            <a data-bind="click: $parents[1].addBelow">
                 <i class="add icon"></i>Add Below
             </a>
         </a>

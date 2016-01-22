@@ -1,5 +1,6 @@
 var ko = require('knockout');
 var utils = require('../../utils');
+var criteriaUtils = require('../../criteria_utils');
 var optionsService = require('./../../services/options_service');
 
 var activitiesObs = ko.observableArray([]);
@@ -12,7 +13,14 @@ optionsService.getSurveyOptions().then(surveysOptionsObs);
 
 var questionsOptionsObs = ko.observableArray([]);
 var questionsOptionsLabel = utils.makeOptionLabelFinder(questionsOptionsObs);
-optionsService.getQuestionOptions().then(questionsOptionsObs);
+// very expensive to initialize all the questions, so disable. Not currently showing in UI
+//optionsService.getQuestionOptions().then(questionsOptionsObs);
+
+var TYPE_OPTIONS = Object.freeze([
+    {value: 'SimpleScheduleStrategy', label: 'Simple Schedule'},
+    {value: 'ABTestScheduleStrategy', label: 'A/B Test Schedule'},
+    {value: 'CriteriaScheduleStrategy', label: 'Criteria-based Schedule'}
+]);
 
 var PERIOD_WORDS = {
     'H': 'hour',
@@ -42,7 +50,7 @@ function formatEventId(value) {
     if (!value) {
         return "On enrollment (default)";
     }
-    return value.split(',').reverse().map(function(value) {
+    var str = value.split(',').reverse().map(function(value) {
         if (value === "enrollment") {
             return "On enrollment";
         }
@@ -60,6 +68,7 @@ function formatEventId(value) {
             return "when activity '"+activityLabel+"' is finished";
         }
     }).join(', and ');
+    return str.substring(0,1).toUpperCase() + str.substring(1);
 }
 function formatTimesArray(times) {
     return (times && times.length) ? toList(times.map(function(time) {
@@ -72,10 +81,14 @@ function formatActivities(buffer, activities) {
     var actMap = {};
     activities.map(function(act) {
         var label = 'do task (not specified)';
+        // We have a choice here... we can use the name of the thing the activity points to,
+        // or more reliably in terms of timing, we can use the activity label itself, as we're
+        // doing here. Above, we have to recover the activity from the GUID and we have to
+        // use activityOptionsLabel
         if (act.activityType === "task" && act.task) {
-            label = "do task '"+activityOptionsLabel(act.guid)+"'";
+            label = "do task '"+act.label+"'";
         } else if (act.activityType === "survey" && act.survey) {
-            label = "do survey '"+activityOptionsLabel(act.guid)+"'";
+            label = "do survey '"+act.label+"'";
         }
         actMap[label] = ++actMap[label] || 1;
     });
@@ -131,6 +144,9 @@ function newSimpleStrategy() {
 }
 function newABTestStrategy() {
     return { scheduleGroups: [], type: 'ABTestScheduleStrategy' };
+}
+function newCriteriaStrategy() {
+    return { scheduleCriteria: [], type: 'CriteriaScheduleStrategy' };
 }
 function newSchedule() {
     return {
@@ -198,24 +214,35 @@ function formatStrategy(strategy) {
     if (strategy.type === 'SimpleScheduleStrategy') {
         return formatSchedule(strategy.schedule);
     } else if (strategy.type === 'ABTestScheduleStrategy') {
-        return strategy.scheduleGroups.map(function(group) {
+        return strategy.scheduleGroups.map(function (group) {
             return "<span class='times-label'>" + group.percentage + "%:</span> " +
+                    formatSchedule(group.schedule);
+        }).join('<br>');
+    } else if (strategy.type === 'CriteriaScheduleStrategy') {
+        return strategy.scheduleCriteria.map(function(group) {
+            return "<span class='times-label'>"+criteriaUtils.label(group)+":</span> "+
                     formatSchedule(group.schedule);
         }).join('<br>');
     } else {
         return "<i>Unknown</i>";
     }
 }
-
+function formatScheduleStrategyType(type) {
+    return TYPE_OPTIONS[type].label;
+}
 module.exports = {
     newSchedule: newSchedule,
     newSchedulePlan: newSchedulePlan,
     newSimpleStrategy: newSimpleStrategy,
     newABTestStrategy: newABTestStrategy,
+    newCriteriaStrategy: newCriteriaStrategy,
     formatEventId: formatEventId,
     formatTimesArray: formatTimesArray,
     formatStrategy: formatStrategy,
+    formatSchedule: formatSchedule,
     timeOptions: TIME_OPTIONS,
+    formatScheduleStrategyType: formatScheduleStrategyType,
     timeOptionsLabel: utils.makeOptionLabelFinder(TIME_OPTIONS),
-    timeOptionsFinder: utils.makeOptionFinder(TIME_OPTIONS)
+    timeOptionsFinder: utils.makeOptionFinder(TIME_OPTIONS),
+    TYPE_OPTIONS: TYPE_OPTIONS
 };

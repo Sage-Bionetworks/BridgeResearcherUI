@@ -10,6 +10,7 @@
     <div class="ui secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
+    <errors></errors>
     <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
     <div data-bind="visible: itemsObs().length > 0">
         <p>When copying schedules, we'll adjust the app version filter so they don't schedule activities for users until you're ready. </p>
@@ -25,7 +26,7 @@
             <tbody data-bind="foreach: itemsObs">
                 <tr>
                     <td>
-                        <ui-checkbox params="checkedObs: $data.checkedObs, disabledObs: $parent.publishedObs"></ui-checkbox>
+                        <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                     </td>
                     <td>
                         <a href="#" data-bind="attr: {'href': '#/scheduleplans/'+$data.guid}, text: $data.label"></a>

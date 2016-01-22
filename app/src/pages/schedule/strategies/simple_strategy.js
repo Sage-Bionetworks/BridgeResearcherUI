@@ -1,9 +1,11 @@
 var ko = require('knockout');
-var utils = require('../../utils');
+var utils = require('../../../utils');
+var root = require('../../../root');
 
 module.exports = function(params) {
     var self = this;
 
+    self.labelObs = params.labelObs;
     self.scheduleObs = ko.observable();
     self.scheduleObs.callback = utils.identity;
 
@@ -20,4 +22,6 @@ module.exports = function(params) {
             self.scheduleObs(strategy.schedule);
         }
     });
+
+    root.setEditorPanel('SimpleScheduleStrategyPanel', {viewModel:self});
 }
