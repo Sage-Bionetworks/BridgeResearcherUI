@@ -101,7 +101,7 @@ var CONSTRAINTS_TEMPLATES = Object.freeze({
     'MultiValueConstraints': {dataType:'string', enumeration:[], rules:[], allowOther:false, allowMultiple:false}
 });
 var UI_HINT_FOR_CONSTRAINTS = Object.freeze({
-    'BooleanConstraints': 'radiobutton',
+    'BooleanConstraints': 'checkbox',
     'DateConstraints': 'datepicker',
     'DateTimeConstraints': 'datetimepicker',
     'DurationConstraints': 'numberfield',
@@ -109,7 +109,7 @@ var UI_HINT_FOR_CONSTRAINTS = Object.freeze({
     'IntegerConstraints': 'numberfield',
     'DecimalConstraints': 'numberfield',
     'StringConstraints': 'multilinetext',
-    'MultiValueConstraints': 'checkbox'
+    'MultiValueConstraints': 'radiobutton'
 });
 
 var SURVEY_FIELDS = ['name','createdOn','guid','identifier','published','version'];
@@ -169,10 +169,16 @@ function elementToObservables(element) {
  * @returns {*}
  */
 function observablesToElement(element) {
+    // because we've hidden the ability to set a UIHint, we need to adjust here based on the settings for the
+    // MultiValue type:
+    var con = element.constraints;
+    if (con && con.typeObs() === "MultiValueConstraints" && con.allowMultipleObs()) {
+        element.uiHintObs(UI_HINT_OPTIONS.checkbox.value);
+    }
     ELEMENT_FIELDS.forEach(function(field) {
         updateModelField(element, field);
     });
-    var con = element.constraints;
+    console.log(element.uiHint);
     if (con) {
         Object.keys(getConstraints(con.type)).forEach(function(field) {
             updateModelField(con, field);

@@ -26,6 +26,7 @@ module.exports = {
     emailRoster: '/v3/users/emailParticipantRoster',
     requestResetPassword: '/v3/auth/requestResetPassword',
     surveys: '/v3/surveys',
+    publishedSurveys: '/v3/surveys/published',
     survey: '/v3/surveys/',
     schemas: '/v3/uploadschemas',
     schemaPlans: '/v3/scheduleplans',
