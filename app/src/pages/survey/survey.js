@@ -13,7 +13,8 @@ module.exports = function(params) {
     self.formatDateTime = utils.formatDateTime;
     surveyUtils.initSurveyVM(self);
 
-    self.create = surveyUtils.makeCreate(self.elementsObs, function() { return -1; });
+    // Only one is neededed
+    var scrollTo = utils.makeScrollTo(".element");
 
     function loadVM(survey) {
         console.log("loadVM", survey);
@@ -47,6 +48,61 @@ module.exports = function(params) {
         surveyUtils.observablesToSurvey(self, self.survey);
         return serverService.updateSurvey(self.survey);
     }
+
+    self.createNewElement = function(vm, event) {
+        var type = event.target.getAttribute("data-type");
+        var el = surveyUtils.newField(type);
+        self.elementsObs.push(el);
+        var index = self.elementsObs().length-1;
+
+        scrollTo(index);
+    };
+    self.createElementAfter = function(element, event) {
+        var type = event.target.getAttribute("data-type");
+        var index = self.elementsObs.indexOf(element);
+
+        var el = surveyUtils.newField(type);
+        self.elementsObs.splice(index+1,0,el);
+
+        scrollTo(index+1);
+    };
+    self.copyElement = function(element) {
+        var index = self.elementsObs.indexOf(element);
+        surveyUtils.observablesToElement(element);
+
+        var newElement = JSON.parse(JSON.stringify(element));
+        surveyUtils.elementToObservables(newElement);
+        self.elementsObs.splice(index+1, 0, newElement);
+        scrollTo(index+1);
+    };
+    self.deleteElement = function(element) {
+        if (confirm("Are you sure?")) {
+            var index = self.elementsObs.indexOf(element);
+            self.elementsObs.remove(element);
+
+            if (self.elementsObs().length > 0) {
+                scrollTo(index);
+            }
+        }
+    };
+    self.fadeUp = function(div, index, element) {
+        if (div.nodeType === 1) {
+            $(div).slideUp(function() {
+                $(div).remove();
+                setTimeout(function() {
+                    if (self.elementsObs().length > 0) {
+                        scrollTo(index);
+                    }
+                },1);
+            });
+        }
+    };
+    ko.postbox.subscribe("elementsRemove", self.deleteElement);
+    ko.postbox.subscribe("elementsSelect", function(element) {
+        var index = self.elementsObs().indexOf(element);
+        scrollTo( index );
+    });
+
     /**
      * Save the thing.
      * @param vm
@@ -74,22 +130,6 @@ module.exports = function(params) {
         }
 
     };
-
-    var scrollTo = utils.makeScrollTo(".element");
-
-    self.addGroup = function(vm, event) {
-        self.elementsObs.push(surveyUtils.newField('SurveyQuestion'));
-        scrollTo(self.elementsObs().length-1);
-    };
-    ko.postbox.subscribe("elementsAdd", function() {
-        self.addGroup();
-    });
-    ko.postbox.subscribe("elementsRemove",
-            utils.manualFadeRemove(self.elementsObs, ".survey .element"));
-    ko.postbox.subscribe("elementsSelect", function(element) {
-        var index = self.elementsObs().indexOf(element);
-        scrollTo( index );
-    });
 
     var notFoundHandler = utils.notFoundHandler(self, "Survey not found", "#/surveys");
 

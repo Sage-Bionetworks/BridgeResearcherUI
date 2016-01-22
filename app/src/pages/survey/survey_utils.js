@@ -178,7 +178,6 @@ function observablesToElement(element) {
     ELEMENT_FIELDS.forEach(function(field) {
         updateModelField(element, field);
     });
-    console.log(element.uiHint);
     if (con) {
         Object.keys(getConstraints(con.type)).forEach(function(field) {
             updateModelField(con, field);
@@ -221,40 +220,12 @@ function newField(type) {
     }
     return elementToObservables(newEl);
 }
-function makeCopy(elementsObs, indexObs) {
-    return function(vm, event) {
-        var scrollTo = utils.makeScrollTo(".element")
-        var elements = elementsObs();
-        var index = indexObs();
-        var element = elements[index];
-        observablesToElement(element);
-
-        var newElement = JSON.parse(JSON.stringify(element));
-        elementToObservables(newElement);
-        elementsObs.splice(index+1, 0, newElement);
-        scrollTo(index+1);
-    };
-}
-function makeCreate(elementsObs, indexObs) {
-    return function(vm, event) {
-        var type = event.target.getAttribute("data-type");
-        var index = indexObs();
-
-        var el = newField(type);
-        elementsObs.splice(index+1,0,el);
-
-        $(event.target).parents('.popup').popup('destroy');
-
-        var scrollTo = utils.makeScrollTo(".element");
-        scrollTo(index+1);
-    };
-}
 
 module.exports = {
-    makeCopy: makeCopy,
-    makeCreate: makeCreate,
     newSurvey: newSurvey,
     newField: newField,
+    observablesToElement: observablesToElement,
+    elementToObservables: elementToObservables,
     surveyToObservables: function(vm, survey) {
         SURVEY_FIELDS.forEach(function(field) {
             vm[field+"Obs"](survey[field]);

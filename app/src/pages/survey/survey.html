@@ -42,7 +42,7 @@
 
     <div data-bind="visible: elementsObs().length === 0 && isLoaded()">
         <p>There are currently no questions in this survey. Create a question:</p>
-        <div class="ui menu back" data-bind="click: create">
+        <div class="ui menu back" data-bind="click: createNewElement">
             <a class="item" data-type="BooleanConstraints">Boolean</a>
             <a class="item" data-type="DateConstraints">Date</a>
             <a class="item" data-type="DateTimeConstraints">Date & Time</a>
@@ -55,15 +55,53 @@
             <a class="item" data-type="TimeConstraints">Time</a>
         </div>
     </div>
-    <div class="survey" data-bind="foreach: elementsObs">
-        <div class="element" data-bind="component: {
-            name: $data.type,
-            params: {
-                element: $data,
-                elementsObs: $parent.elementsObs,
-                indexObs: $index,
-                collectionName: 'elements'+$index()+'_'
-            }
-        }"></div>
+    <div class="survey" data-bind="template: {
+        foreach: elementsObs,
+        beforeRemove: fadeUp
+    }">
+        <div class="element">
+            <div class="element-content">
+                <!-- ko component: {
+                    name: $data.type,
+                    params: {element: $data, elementsObs: $parent.elementsObs,
+                        indexObs: $index, collectionName: 'elements'+$index()+'_' }
+                } --><!-- /ko -->
+            </div>
+            <div class="element-callout">
+                <div>
+                    <span class="ui huge circular label" data-bind="text: $index()+1, css:{
+                        'blue': $data.type === 'SurveyQuestion',
+                        'green': $data.type === 'SurveyInfoScreen',
+                    }"></span>
+                </div>
+                <div class="element-callout-box">
+                    <div class="element-callout-box-identifier field" data-bind="attr:{id: 'elements'+$index()+'_identifier'}">
+                        <input type="text" class="editor element-callout-identifier" data-bind="textInput: identifierObs"/>
+                        <div class="require element-callout-identifier-label">Identifier</div>
+                    </div>
+                    <div class="ui compact pointing secondary vertical menu" onclick="$(event.target).popup('destroy')">
+                        <div class="item" data-bind="semantic:'popup-menu'">
+                            <i class="add icon"></i> Add below
+                        </div>
+                        <div class="ui flowing popup hidden" data-bind="click: $component.createElementAfter">
+                            <div class="ui secondary vertical menu">
+                                <a class="item" data-type="BooleanConstraints">Boolean</a>
+                                <a class="item" data-type="DateConstraints">Date</a>
+                                <a class="item" data-type="DateTimeConstraints">Date & Time</a>
+                                <a class="item" data-type="DecimalConstraints">Decimal</a>
+                                <a class="item" data-type="DurationConstraints">Duration</a>
+                                <a class="item" data-type="SurveyInfoScreen">Information Only</a>
+                                <a class="item" data-type="IntegerConstraints">Integer</a>
+                                <a class="item" data-type="MultiValueConstraints">Multi-Choice</a>
+                                <a class="item" data-type="StringConstraints">String</a>
+                                <a class="item" data-type="TimeConstraints">Time</a>
+                            </div>
+                        </div>
+                        <div class="item" data-bind="click: $parent.copyElement"><i class="copy icon"></i> Copy</div>
+                        <div class="item" data-bind="click: $parent.deleteElement"><i class="delete icon"></i> Delete</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

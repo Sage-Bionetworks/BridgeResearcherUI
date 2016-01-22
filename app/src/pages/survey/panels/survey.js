@@ -23,5 +23,4 @@ module.exports = function(params) {
     };
     self.selectElement = utils.makeEventToPostboxListener("elementsSelect");
     self.removeElement = utils.makeEventToPostboxListener("elementsRemove");
-    self.addElement = utils.makeEventToPostboxListener("elementsAdd");
 };
