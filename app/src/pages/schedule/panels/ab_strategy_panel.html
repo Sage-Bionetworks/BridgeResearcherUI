@@ -8,10 +8,8 @@
             dragHandleSelector: '.vs-item-content', elementSelector: '.vs-item',
             eventName: 'scheduleGroupSelect', listObs: scheduleGroupsObs}">
         <div class="vs-item" data-bind="click: $component.selectGroup">
-            <div class="vs-item-content" data-bind="text: $component.groupLabel($data, $index)">
-
-            </div>
-            <div class="vs-item-delete"><i class="delete icon" data-bind="click: $component.removeGroup"></i></div>
+            <div class="vs-item-content" data-bind="text: $component.groupLabel($data, $index)"></div>
+            <div class="vs-item-delete pointing"><i class="delete icon" data-bind="click: $component.removeGroup"></i></div>
         </div>
     </div>
     <div class="item">

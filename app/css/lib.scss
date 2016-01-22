@@ -1,7 +1,3 @@
-@mixin link {
-    color: #009fda!important;
-    cursor: pointer;
-}
 @mixin flex-box($direction) {
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -10,32 +6,6 @@
     display: flex;
     flex-direction: $direction;
 }
-/* These would go back in time further, but I don't think they're needed.
-@mixin flex-row() {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: row;
-    -ms-flex-direction: row;
-    flex-direction: row;
-}
-@mixin flex-column() {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
-    -ms-flex-direction: column;
-    flex-direction: column;
-}
-*/
 @mixin flex($weight) {
     -webkit-flex: $weight;
     -webkit-box-flex: $weight;

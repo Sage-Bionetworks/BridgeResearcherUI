@@ -1,5 +1,6 @@
 @import "./lib.scss";
 @import "./forms.scss";
+@import "./panel.scss";
 @import "./survey.scss";
 @import "./schema.scss";
 @import "./scheduleplan.scss";
@@ -31,6 +32,16 @@ main {
 
         .ui.secondary.pointing.menu {
             margin-top: .5rem;
+
+            .item {
+                padding: .6rem 1.2rem;
+            }
+        }
+        .ui.secondary.pointing.menu:empty {
+            margin: 0;
+            padding: 0;
+            height: 0;
+            min-height: 1.5rem;
         }
     }
         .fixed-header-title {
@@ -43,7 +54,8 @@ main {
             .fixed-header-title h3 {
                 @include flex(1);
                 font-size: 1.4rem;
-                margin: 0 1rem;
+                /*margin: 0 1rem;*/
+                margin: .4rem 1rem 0 1rem;
             }
             .fixed-header-buttons {
                 margin: 0 1rem;
@@ -68,6 +80,13 @@ nav {
     @include order(-1);
     padding:  2rem 1rem ! important;
     background-color: rgba(96,134,153,.2);
+
+    .title span {
+        font-weight: bold;
+    }
+    .ui.vertical.menu {
+        width: 100%;
+    }
 }
 header {
     @include flex-box(row);
@@ -98,36 +117,8 @@ footer p {
     text-align: center;
 }
 
-/* SEMANTIC UI TWEAKS */
-.ui.field .ui.button {
-    margin-top: .5rem ! important;
-}
-.ui.breadcrumb {
-    margin: 0;
-}
-.ui.modal>.header {
-    font-size: 1.3rem;
-}
-.ui.form {
-    padding: 0 ! important;
-}
-nav .ui.menu {
-    width:100% ! important;
-}
-
-.ui.table {
-    margin: 0;
-}
-.enum-scrollbox {
-    max-height:16rem;
-    overflow-y:auto;
-}
-
 /* GENERAL */
 
-.pointing {
-    cursor: pointer;
-}
 .loading_status {
     font-size: larger;
 }
@@ -141,51 +132,16 @@ nav .ui.menu {
     overflow-y:scroll;
 }
 .vertical-padding {
-    margin: 1rem 0;
+    margin: 0 0 .5rem 0;
+    /*margin: 1rem 0;*/
 }
 .action.item {
     margin-right: 1rem;
 }
-
-/* Tag control */
-.tag-control {
-    @include flex-box(row);
-    @include justify-content(space-between);
-    width: 14rem;
-
-    button {
-        z-index:1;
-    }
+.pointing {
+    cursor: pointer;
 }
-
-/* Editor panel */
-.title.item {
-    font-weight: bold;
+.link {
+    color: #009fda!important;
+    cursor: pointer;
 }
-.vertical-scrollbox {
-    max-height: 30rem;
-    overflow-y: auto;
-    padding: 0!important;
-    margin: 0!important;
-    border-top: 1px solid #e5e5e5;
-    border-bottom: 1px solid #e5e5e5;
-}
-    .vs-item {
-        display: table-row;
-        padding: 0;
-        margin: 0;
-        cursor: pointer;
-    }
-        .vs-item:hover {
-            background-color: #f4f4f4;
-        }
-    .vs-item > div {
-        display: table-cell;
-    }
-    .vs-item-content {
-        width: 100%;
-        padding: .5rem 1rem;
-    }
-    .vs-item-delete {
-        padding: .5rem 0;
-    }

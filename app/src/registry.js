@@ -96,6 +96,7 @@ regt('ui-textarea', './widgets/form/ui_textarea');
 reg('ui-duration', './widgets/form/ui_duration');
 reg('survey-tabset', './pages/survey/tabset');
 regt('fire-event', './widgets/fire_event');
+regt('tag-editor', './widgets/tag_editor');
 
 /* SCHEMAS */
 reg('field_definition', './pages/schema/field_definition');

@@ -20,48 +20,24 @@
                     </div>
                 </div>
             </div>
-            <div class="field" data-bind="attr:{id:'strategy_scheduleCriteria'+$index()+'_allOfGroups'}">
-                <label>User has all these data group(s):</label>
-                <div class="vertical-padding" data-bind="visible: $data.allOfGroupsObs().length === 0">
-                    <i>None selected</i>
-                </div>
-                <div class="vertical-padding" data-bind="foreach: $data.allOfGroupsObs">
-                    <div class="ui large blue label">
-                        <span data-bind="text: $data"></span>
-                        <a data-bind="click: $parent.removeAllOf"><i class="delete icon"></i></a>
-                    </div>
-                </div>
-                <div class="field" data-bind="visible: $component.dataGroupsOptions().length === 0">
-                    <i>&lt;No data groups&gt;</i>
-                </div>
-                <div class="field tag-control" data-bind="visible: $component.dataGroupsOptions().length !== 0">
-                    <select class="ui dropdown" data-bind="options: $component.dataGroupsOptions, optionsText: 'label', optionsValue: 'value', value: $data.allOfGroupsEditorObs">
-                    </select>
-                    <div>&nbsp;</div>
-                    <button class="ui small button" data-bind="click: $data.addToAll">Add</button>
-                </div>
-            </div>
-            <div class="field" data-bind="attr:{id:'strategy_scheduleCriteria'+$index()+'_noneOfGroups'}">
-                <label>And <em>none</em> of these data group(s):</label>
-                <div class="vertical-padding" data-bind="visible: $data.noneOfGroupsObs().length === 0">
-                    <i>None selected</i>
-                </div>
-                <div class="vertical-padding" data-bind="foreach: $data.noneOfGroupsObs">
-                    <div class="ui large blue label">
-                        <span data-bind="text: $data"></span>
-                        <a data-bind="click: $parent.removeNoneOf"><i class="delete icon"></i></a>
-                    </div>
-                </div>
-                <div class="field" data-bind="visible: $component.dataGroupsOptions().length === 0">
-                    <i>&lt;No data groups&gt;</i>
-                </div>
-                <div class="field tag-control" data-bind="visible: $component.dataGroupsOptions().length !== 0">
-                    <select class="ui dropdown" data-bind="options: $component.dataGroupsOptions, optionsText: 'label', optionsValue: 'value', value: $data.noneOfGroupsEditorObs">
-                    </select>
-                    <div>&nbsp;</div>
-                    <button class="ui small button" data-bind="click: $data.addToNone">Add</button>
-                </div>
-            </div>
+            <!-- ko component: {
+                name: "tag-editor",
+                params: { id: 'strategy_scheduleCriteria'+$index()+'_allOfGroups',
+                  label: 'User has all these data group(s):',
+                  collObs: allOfGroupsObs, noneLabel: 'No data groups', editorObs: allOfGroupsEditorObs,
+                  optionsObs: $component.dataGroupsOptions, removeAction: $data.removeAllOf,
+                  addAction: $data.addToAll }
+            } -->
+            <!-- /ko -->
+            <!-- ko component: {
+                name: "tag-editor",
+                params: { id: 'strategy_scheduleCriteria'+$index()+'_noneOfGroups',
+                  label: 'And user has none of these group(s):', collObs: noneOfGroupsObs,
+                  noneLabel: 'No data groups', editorObs: noneOfGroupsEditorObs,
+                  optionsObs: $component.dataGroupsOptions, removeAction: $data.removeNoneOf,
+                  addAction: $data.addToNone }
+            } -->
+            <!-- /ko -->
             <div class="schedulegroup-field-delete field">
                 <a href="#" data-bind="fadeRemove: {selector: '.schedulegroup-fieldset', object: $data, collection: 'scheduleCriteriaObs'}">
                     <i class="delete square icon"></i>Remove This Schedule

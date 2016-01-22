@@ -1,0 +1,32 @@
+<!--
+    id
+    label
+    collObs
+    noneLabel
+    editorObs
+    optionsObs
+    removeAction
+    addAction
+-->
+<div class="field tag-editor" data-bind="attr:{id: $component.id}">
+    <label data-bind="text: $component.label"></label>
+    <div class="vertical-padding" data-bind="visible: $component.collObs().length === 0">
+        <i>None selected</i>
+    </div>
+    <div class="vertical-padding" data-bind="foreach: $component.collObs">
+        <div class="ui large blue label">
+            <span data-bind="text: $data"></span>
+            <a data-bind="click: $parent.removeAction"><i class="delete icon"></i></a>
+        </div>
+    </div>
+    <div class="field" data-bind="visible: $component.optionsObs().length === 0">
+        <i data-bind="text: '&lt;'+$component.noneLabel+'&gt;'"></i>
+    </div>
+    <div class="field tag-control" data-bind="visible: $component.optionsObs().length !== 0">
+        <select class="ui dropdown" data-bind="options: $component.optionsObs, optionsText: 'label',
+                    optionsValue: 'value', value: $component.editorObs">
+        </select>
+        <div>&nbsp;</div>
+        <button class="ui small button" data-bind="click: $component.addAction">Add</button>
+    </div>
+</div>
