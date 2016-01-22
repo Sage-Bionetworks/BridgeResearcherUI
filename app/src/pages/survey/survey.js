@@ -8,6 +8,7 @@ var root = require('../../root');
 module.exports = function(params) {
     var self = this;
 
+    self.isLoaded = ko.observable(false);
     self.survey = null;
     self.formatDateTime = utils.formatDateTime;
     surveyUtils.initSurveyVM(self);
@@ -19,6 +20,7 @@ module.exports = function(params) {
         self.survey = survey;
         surveyUtils.surveyToObservables(self, survey);
         root.setEditorPanel('SurveyPanel', {viewModel:self});
+        self.isLoaded(true);
         return survey.createdOn;
     }
     function updateVM(keys, message) {
@@ -29,6 +31,7 @@ module.exports = function(params) {
         self.guidObs(keys.guid);
         self.createdOnObs(keys.createdOn);
         self.versionObs(keys.version);
+        self.isLoaded(true);
         if (message) {
             root.message('success', message);
         }

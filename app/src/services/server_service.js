@@ -51,10 +51,12 @@ var cache = (function() {
                     console.info("[json cache] deleting",aKey);
                     delete cachedItems[aKey];
                 }
-                if (cachedItems[key+'/recent']) {
-                    console.info("[json cache] deleting",key+'/recent');
-                    delete cachedItems[key+'/versions'];
-                }
+                ['/published','/recent'].forEach(function(extension) {
+                    if (cachedItems[aKey+extension]) {
+                        console.info("[json cache] deleting",aKey+extension);
+                        delete cachedItems[aKey+extension];
+                    }
+                });
             });
         },
         reset: function() {
@@ -247,6 +249,9 @@ module.exports = {
     },
     getSurveys: function() {
         return get(config.surveys);
+    },
+    getPublishedSurveys: function() {
+        return get(config.publishedSurveys);
     },
     getSurveyAllRevisions: function(guid) {
         return get(config.survey + guid + '/revisions');

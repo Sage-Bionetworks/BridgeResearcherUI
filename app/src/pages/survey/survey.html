@@ -38,7 +38,9 @@
 
     <h3>Questions</h3>
 
-    <div data-bind="visible: elementsObs().length === 0">
+    <div class="loading_status" data-bind="visible: !isLoaded()">Loading...</div>
+
+    <div data-bind="visible: elementsObs().length === 0 && isLoaded()">
         <p>There are currently no questions in this survey. Create a question:</p>
         <div class="ui menu back" data-bind="click: create">
             <a class="item" data-type="BooleanConstraints">Boolean</a>
