@@ -23,7 +23,7 @@ ko.bindingHandlers.dragula = {
             var data = ko.contextFor(el).$data;
             config.listObs.remove(data);
             config.listObs.splice(index,0,data);
-            if (_item) {
+            if (_item && _item.parentNode) {
                 _item.parentNode.removeChild(_item);
                 _item = null;
             }

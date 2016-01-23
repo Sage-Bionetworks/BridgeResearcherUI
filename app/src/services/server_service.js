@@ -20,6 +20,8 @@ var session = null;
 var $ = require('jquery');
 
 if (typeof window !== "undefined") { // jQuery throws up if there's no window, even in unit tests.
+    // Make this accessible to semantic.min.js, which is globally loaded after bundle.js. Otherwise we have
+    // to load jQuery twice.
     window.$ = window.jQuery = $;
     $(function() {
         session = storeService.get(SESSION_KEY);
