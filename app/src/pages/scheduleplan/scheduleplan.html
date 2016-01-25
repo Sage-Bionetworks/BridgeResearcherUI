@@ -33,13 +33,18 @@
         </div>
     </form>
     <div>
-        <div class="schedule-strategy-header" data-bind="semantic: 'dropdown'">
-            <div class="text" data-bind="text: schedulePlanTypeLabel(schedulePlanTypeObs())">Type of schedule</div>
-            <i class="dropdown icon"></i>
-            <div class="menu">
-                <div class="item" data-bind="css:{active:schedulePlanTypeObs() == 'SimpleScheduleStrategy'}, click: schedulePlanTypeObs('SimpleScheduleStrategy')">Simple Schedule</div>
-                <div class="item" data-bind="css:{active:schedulePlanTypeObs() == 'ABTestScheduleStrategy'}, click: schedulePlanTypeObs('ABTestScheduleStrategy')">A/B Test</div>
-                <div class="item" data-bind="css:{active:schedulePlanTypeObs() == 'CriteriaScheduleStrategy'}, click: schedulePlanTypeObs('CriteriaScheduleStrategy')">Criteria-based scheduling</div>
+        <div class="schedule-strategy-header">
+            <div data-bind="semantic: 'dropdown', click: updateType">
+                <input type="hidden" name="schedulePlanType">
+                <div class="text">
+                    <span data-bind="text: schedulePlanTypeLabel(schedulePlanTypeObs())">Type of schedule</span>
+                </div>
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <div class="item" data-type="SimpleScheduleStrategy">Simple Schedule</div>
+                    <div class="item" data-type="ABTestScheduleStrategy">A/B Test</div>
+                    <div class="item" data-type="CriteriaScheduleStrategy">Criteria-based scheduling</div>
+                </div>
             </div>
         </div>
     </div>
