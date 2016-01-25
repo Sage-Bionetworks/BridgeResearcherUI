@@ -54,6 +54,12 @@ module.exports = function(params) {
             })
             .catch(utils.failureHandler(self, event));
     };
+    self.updateType = function(vm, event) {
+        var spType = event.target.getAttribute('data-type');
+        if (spType) {
+            self.schedulePlanTypeObs(event.target.getAttribute('data-type'));
+        }
+    }
 
     function loadVM(plan) {
         self.plan = plan;
