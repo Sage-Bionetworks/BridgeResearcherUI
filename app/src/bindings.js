@@ -68,6 +68,7 @@ ko.bindingHandlers.ckeditor = {
         if (!CKEDITOR) {
             throw new Error("CK editor has not been loaded in the page");
         }
+        var id = element.getAttribute("id");
         var config = {
             height: "25rem",
             resize_dir: "vertical",
@@ -87,6 +88,11 @@ ko.bindingHandlers.ckeditor = {
             }
         };
         CKEDITOR.replace(element, config);
+        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+            if (CKEDITOR.instances[id]) {
+                CKEDITOR.remove(CKEDITOR.instances[id]);
+            };
+        });
     }
 };
 ko.bindingHandlers.modal = {
