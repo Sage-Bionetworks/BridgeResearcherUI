@@ -10,5 +10,8 @@ module.exports = {
         }
         console.log("[cache] Loading from cache", key);
         return JSON.parse(value);
+    },
+    remove: function(key) {
+        localStorage.removeItem(key);
     }
 };

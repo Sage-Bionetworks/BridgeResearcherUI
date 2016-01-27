@@ -19,10 +19,8 @@ var listeners = new EventEmitter();
 var session = null;
 var $ = require('jquery');
 
-if (typeof window !== "undefined") { // jQuery throws up if there's no window, even in unit tests.
-    // Make this accessible to semantic.min.js, which is globally loaded after bundle.js. Otherwise we have
-    // to load jQuery twice.
-    window.$ = window.jQuery = $;
+// jQuery throws up if there's no window, even in unit tests
+if (typeof window !== "undefined") {
     $(function() {
         session = storeService.get(SESSION_KEY);
         if (session && session.environment) {
@@ -68,6 +66,7 @@ var cache = (function() {
                     }
                 });
             });
+            console.debug("cache size", (JSON.stringify(cachedItems).length/1000).toFixed(1) + "k");
         },
         reset: function() {
             cachedItems = {};
@@ -176,6 +175,7 @@ function del(path) {
  */
 function signOut() {
     cache.reset();
+    storeService.remove(SESSION_KEY);
     var env = session.environment;
     session = null;
 

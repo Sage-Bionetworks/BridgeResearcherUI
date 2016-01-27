@@ -3,6 +3,12 @@ var ko = require('knockout');
 require('knockout-postbox');
 var $ = require('jquery');
 
+// need to make a global out of this for semantic to work, as it's not in a package.
+// This is hacky, webpack has better support for this. Worse, semantic is a jQuery
+// plugin and adds no globals that webpack can convert to modules.
+window.$ = window.jQuery = $;
+require('../lib/semantic'); // we reference it here.
+
 // http://stackoverflow.com/questions/23606541/observable-array-push-multiple-objects-in-knockout-js
 ko.observableArray.fn.pushAll = function(valuesToPush) {
     var underlyingArray = this();
@@ -62,6 +68,7 @@ ko.bindingHandlers.ckeditor = {
         if (!CKEDITOR) {
             throw new Error("CK editor has not been loaded in the page");
         }
+        var id = element.getAttribute("id");
         var config = {
             height: "25rem",
             resize_dir: "vertical",
@@ -81,6 +88,11 @@ ko.bindingHandlers.ckeditor = {
             }
         };
         CKEDITOR.replace(element, config);
+        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+            if (CKEDITOR.instances[id]) {
+                CKEDITOR.remove(CKEDITOR.instances[id]);
+            };
+        });
     }
 };
 ko.bindingHandlers.modal = {

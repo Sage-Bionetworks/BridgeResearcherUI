@@ -349,10 +349,12 @@ module.exports = {
             var offset = $(".fixed-header").outerHeight() * 1.75;
             var $scrollbox = $(".scrollbox");
             var $element = $scrollbox.find(itemSelector).eq(index);
-            $scrollbox.scrollTo($element, {offsetTop: offset});
-            setTimeout(function() {
-                $element.find(".focus").focus().click();
-            },20);
+            if ($scrollbox.length && $element.length) {
+                $scrollbox.scrollTo($element, {offsetTop: offset});
+                setTimeout(function() {
+                    $element.find(".focus").focus().click();
+                },20);
+            }
         };
     },
     fadeUp: function() {
@@ -368,11 +370,9 @@ module.exports = {
             if (confirm("Are you sure?")) {
                 var index = elementsObs.indexOf(element);
                 elementsObs.remove(element);
-                if (elementsObs().length > 0) {
-                    setTimeout(function() {
-                        scrollTo(index);
-                    }, 410);
-                }
+                setTimeout(function() {
+                    scrollTo(index);
+                }, 510);
             }
         };
     }

@@ -18,7 +18,6 @@ module.exports = function(params) {
     self.fadeUp = utils.fadeUp();
 
     function loadVM(survey) {
-        console.log("loadVM", survey);
         self.survey = survey;
         surveyUtils.surveyToObservables(self, survey);
         root.setEditorPanel('SurveyPanel', {viewModel:self});
@@ -26,7 +25,6 @@ module.exports = function(params) {
         return survey.createdOn;
     }
     function updateVM(keys, message) {
-        console.log("updateVM", keys, message);
         self.survey.guid = keys.guid;
         self.survey.createdOn = keys.createdOn;
         self.survey.version = keys.version;
