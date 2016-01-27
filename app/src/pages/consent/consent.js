@@ -30,6 +30,22 @@ module.exports = function(params) {
         }
     });
 
+    // The editor and the request for the content can arrive in any order. bind here
+    self.initEditor = (function(vm) {
+        var documentContent = null;
+        return function(object) {
+            if (typeof object === "string") { // content
+                documentContent = object;
+            } else { // editor
+                vm.editor = object;
+            }
+            if (vm.editor && documentContent) {
+                vm.editor.setData(documentContent);
+                documentContent = null;
+            }
+        };
+    })(self);
+
     function loadIntoEditor(consent) {
         if (consent.documentContent.indexOf("<html") > -1) {
             var doc = consent.documentContent;
@@ -37,10 +53,10 @@ module.exports = function(params) {
         }
         self.createdOnObs(self.formatDateTime(consent.createdOn));
         self.activeObs(consent.active);
-        self.editor.setData(consent.documentContent);
         self.consent = consent;
         // This could be "recent" but we don't want that after we get a real version
         params.createdOn = consent.createdOn;
+        self.initEditor(consent.documentContent);
     }
     function publish(response) {
         params.createdOn = response.createdOn;
@@ -54,12 +70,8 @@ module.exports = function(params) {
         return response;
     }
 
-
     self.formatDateTime = utils.formatDateTime;
 
-    self.initEditor = function(ckeditor) {
-        self.editor = ckeditor;
-    };
     self.publish = function(vm, event) {
         if (confirm("Are you sure you want to publish this consent?")) {
             utils.startHandler(vm, event);

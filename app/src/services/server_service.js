@@ -66,6 +66,7 @@ var cache = (function() {
                     }
                 });
             });
+            console.debug("cache size", (JSON.stringify(cachedItems).length/1000).toFixed(1) + "k");
         },
         reset: function() {
             cachedItems = {};
