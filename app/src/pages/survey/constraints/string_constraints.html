@@ -4,7 +4,8 @@
         <td class="element-content-constraints-label">
             <label>Minimum length</label>
         </td>
-        <td class="element-content-constraints-control">
+        <td class="element-content-constraints-control"
+            data-bind="attr:{id:$parent.collectionName+'constraints_minLength'}">
             <ui-text params="fieldObs: minLengthObs"></ui-text>
         </td>
         <td class="element-content-constraints-label">
@@ -26,7 +27,8 @@
         <td class="element-content-constraints-label">
             <label>Pattern</label>
         </td>
-        <td class="element-content-constraints-control">
+        <td class="element-content-constraints-control"
+            data-bind="attr:{id:$parent.collectionName+'constraints_pattern'}">
             <ui-text params="fieldObs: patternObs"></ui-text>
         </td>
     </tr>

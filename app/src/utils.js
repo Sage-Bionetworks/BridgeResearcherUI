@@ -161,7 +161,7 @@ module.exports = {
             } else if (response.responseJSON) {
                 var payload = response.responseJSON;
                 ko.postbox.publish("showErrors", payload);
-                console.log(payload)
+                console.log(payload);
             } else {
                 toastr.error(GENERIC_ERROR);
             }

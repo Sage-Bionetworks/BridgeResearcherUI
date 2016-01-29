@@ -4,7 +4,8 @@
         <td class="element-content-constraints-label">
             <label>Earliest date/time</label>
         </td>
-        <td class="element-content-constraints-control">
+        <td class="element-content-constraints-control" data-bind="attr:{id:
+            $parent.collectionName+'constraints_earliestValue'}">
             <ui-datetime params="fieldObs: earliestValueObs"></ui-datetime>
         </td>
         <td class="element-content-constraints-label">
