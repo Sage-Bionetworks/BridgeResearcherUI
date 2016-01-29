@@ -30,7 +30,8 @@
                 <a class="pointing" data-bind="click: clearTimes"><i class="delete icon"></i>Clear</a>
             </div>
         </div>
-        <div class="field" data-bind="visible: scheduleTypeObs() === 'recurring'">
+        <div class="field" data-bind="visible: scheduleTypeObs() === 'recurring', attr:{id:
+            'strategy_'+$component.collectionName+'schedule_interval'}">
             <label>Then schedule every</label>
             <ui-duration params="fieldObs: intervalObs, noHours: true"></ui-duration>
         </div>
