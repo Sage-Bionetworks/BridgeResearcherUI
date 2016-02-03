@@ -32,6 +32,7 @@ if (typeof window !== "undefined") {
     });
 }
 
+var NO_CACHE_PATHS = ['studies/self/emailStatus'];
 var PATH_EXTS = ['/published','/recent','/revisions'];
 
 var cache = (function() {
@@ -43,10 +44,11 @@ var cache = (function() {
             return value;
         },
         set: function(key, response) {
-            console.info("[json cache] caching",key);
-            cachedItems[key] = response;
-
-            console.debug("cache size", (JSON.stringify(cachedItems).length/1000).toFixed(1) + "k");
+            if (NO_CACHE_PATHS.every(function(path) {return key.indexOf(path) === -1;})) {
+                console.info("[json cache] caching",key);
+                cachedItems[key] = response;
+                console.debug("cache size", (JSON.stringify(cachedItems).length/1000).toFixed(1) + "k");
+            }
         },
         clear: function(key) {
             // Clear all paths that are logically higher in the endpoint namespace,
@@ -338,6 +340,12 @@ module.exports = {
     },
     deleteSubpopulation: function(guid) {
         return del(config.subpopulations + "/" + guid);
+    },
+    verifyEmail: function() {
+        return post(config.verifyEmail);
+    },
+    emailStatus: function() {
+        return get(config.emailStatus);
     },
     getSession: function() {
         if (session) {

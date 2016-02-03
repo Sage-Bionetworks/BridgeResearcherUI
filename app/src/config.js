@@ -30,5 +30,7 @@ module.exports = {
     survey: '/v3/surveys/',
     schemas: '/v3/uploadschemas',
     schemaPlans: '/v3/scheduleplans',
-    subpopulations: '/v3/subpopulations'
+    subpopulations: '/v3/subpopulations',
+    verifyEmail: '/v3/studies/self/verifyEmail',
+    emailStatus: '/v3/studies/self/emailStatus'
 };
