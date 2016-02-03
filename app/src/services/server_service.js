@@ -44,6 +44,7 @@ var cache = (function() {
             return value;
         },
         set: function(key, response) {
+            // If the key does not match any of the paths that should not be cached...
             if (NO_CACHE_PATHS.every(function(path) {return key.indexOf(path) === -1;})) {
                 console.info("[json cache] caching",key);
                 cachedItems[key] = response;
