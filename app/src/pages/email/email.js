@@ -13,7 +13,6 @@ module.exports = function() {
 
     function updateEmailStatus() {
         serverService.emailStatus().then(function(response) {
-            console.log("serverService.emailStatus()", response);
             self.emailStatusObs(response.status);
         });
     }
@@ -23,12 +22,12 @@ module.exports = function() {
         utils.observablesToObject(self, self.study, fields);
 
         serverService.saveStudy(self.study)
-                .then(function(response) {
-                    self.study.version = response.version;
-                })
-                .then(utils.successHandler(vm, event, "Study information saved."))
-                .then(updateEmailStatus)
-                .catch(utils.failureHandler(vm, event));
+            .then(function(response) {
+                self.study.version = response.version;
+            })
+            .then(utils.successHandler(vm, event, "Study information saved."))
+            .then(updateEmailStatus)
+            .catch(utils.failureHandler(vm, event));
     };
     self.publicKey = function() {
         if (self.study) {
@@ -36,11 +35,12 @@ module.exports = function() {
             root.openDialog('publickey', {study: self.study});
         }
     };
-    self.verifyEmail = function() {
+    self.verifyEmail = function(vm, event) {
         serverService.verifyEmail().then(function(response) {
-            console.log("serverService.verifyEmail()", response);
             self.emailStatusObs(response.status);
-        });
+        })
+        .then(utils.successHandler(vm, event, "Request to verify email has been sent."))
+        .catch(utils.failureHandler(vm, event));
     };
     self.refreshStatus = updateEmailStatus;
 
