@@ -23,7 +23,3 @@ Rebuild when a file changes
 Build a release
 
     npm run release
-
-## Notes
-
-Please try and include resources using npm rather than Bower. Two build tools (npm + webpack) seems like enough.

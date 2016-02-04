@@ -27,21 +27,17 @@ main {
     padding: 0;
     overflow-y: auto;
 }
+/* For pages that have no secondary menu of tabs at the top of the main screen. */
+.empty-secondary-menu {
+    margin-top: 1.5rem;
+    border-bottom: 2px solid rgba(34,36,38,.15);
+}
     .fixed-header {
         @include flex-box(column);
+        display: block;
 
         .ui.secondary.pointing.menu {
             margin-top: .5rem;
-
-            .item {
-                padding: .6rem 1.2rem;
-            }
-        }
-        .ui.secondary.pointing.menu:empty {
-            margin: 0;
-            padding: 0;
-            height: 0;
-            min-height: 1.5rem;
         }
     }
         .fixed-header-title {
@@ -54,7 +50,6 @@ main {
             .fixed-header-title h3 {
                 @include flex(1);
                 font-size: 1.4rem;
-                /*margin: 0 1rem;*/
                 margin: .4rem 1rem 0 1rem;
             }
             .fixed-header-buttons {

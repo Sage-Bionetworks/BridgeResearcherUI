@@ -26,6 +26,11 @@ module.exports = function() {
     });
 
     ko.postbox.subscribe("showErrors", function(payload) {
+        if (payload.message && typeof payload.errors === "undefined") {
+            toastr.error(payload.message);
+            return;
+        }
+
         var message = payload.message;
         var errors = payload.errors;
 

@@ -1,6 +1,7 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
+var root = require('../../root');
 
 var fields = ['name','description','minAppVersion','maxAppVersion','required','noneOfGroups[]','allOfGroups[]'];
 
@@ -16,6 +17,8 @@ module.exports = function(params) {
     self.dataGroupsLabel = utils.identity;
     self.historyItemsObs = ko.observable([]);
     self.newConsentLinkObs = ko.observable();
+    self.isDeveloper = root.isDeveloper;
+    self.isResearcher = root.isResearcher;
 
     function updateHistoryItems(data) {
         self.historyItemsObs(data.items.slice(0, 5));

@@ -8,6 +8,7 @@
         optionsObs : ArrayObserver : the set of tags you can pick from
         removeAction : Function : function to remove an item
         addAction : Function : function to add an item.
+        readonly: Boolean if true, hide some stuff
 -->
 <div class="field tag-editor" data-bind="attr:{id: $component.id}">
     <label data-bind="text: $component.label"></label>
@@ -20,10 +21,10 @@
             <a data-bind="click: $parent.removeAction"><i class="delete icon"></i></a>
         </div>
     </div>
-    <div class="field" data-bind="visible: $component.optionsObs().length === 0">
+    <div class="field" data-bind="visible: $component.optionsObs().length === 0 && !$component.readonly">
         <i data-bind="text: '&lt;'+$component.noneLabel+'&gt;'"></i>
     </div>
-    <div class="field tag-control" data-bind="visible: $component.optionsObs().length !== 0">
+    <div class="field tag-control" data-bind="visible: $component.optionsObs().length !== 0 && !$component.readonly">
         <select class="ui dropdown" data-bind="options: $component.optionsObs, optionsText: 'label',
                     optionsValue: 'value', value: $component.editorObs">
         </select>

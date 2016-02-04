@@ -59,7 +59,7 @@ module.exports = function(params) {
         if (spType) {
             self.schedulePlanTypeObs(event.target.getAttribute('data-type'));
         }
-    }
+    };
 
     function loadVM(plan) {
         self.plan = plan;

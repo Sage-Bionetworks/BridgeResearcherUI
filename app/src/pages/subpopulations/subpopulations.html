@@ -1,12 +1,12 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
         <h3>Consent Groups</h3>
-        <div class="fixed-header-buttons">
+        <div class="fixed-header-buttons" data-bind="visible: isDeveloper">
             <a href="#/subpopulations/new" class="ui primary small button">New Consent Group</a>
             <button class="ui red small button" data-bind="disable: !atLeastOneChecked(), click: deleteSubpopulations">Delete</button>
         </div>
     </div>
-    <div class="ui secondary pointing menu"></div>
+    <div class="empty-secondary-menu"></div>
 </div>
 <div class="scrollbox">
     <errors></errors>
@@ -14,7 +14,7 @@
     <table class="ui compact table" data-bind="visible: itemsObs().length > 0">
         <thead>
         <tr>
-            <th width="10"></th>
+            <th width="10" data-bind="visible: isDeveloper"></th>
             <th>Name</th>
             <th>Description</th>
             <th>Matching Criteria</th>
@@ -23,7 +23,7 @@
         </thead>
         <tbody data-bind="foreach: itemsObs">
             <tr data-bind="css: { positive: $data.active }">
-                <td>
+                <td data-bind="visible: $parent.isDeveloper">
                     <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                 </td>
                 <td>

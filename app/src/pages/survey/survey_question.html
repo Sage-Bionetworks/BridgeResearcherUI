@@ -4,5 +4,5 @@
 <ui-textarea params="fieldObs: $data.element.promptDetailObs, className: 'element-content-prompt-detail', placeholder: 'Prompt Detail'"></ui-textarea>
 <div class="ui segment element-content-segment" data-bind="component: {
     name: element.constraints.type,
-    params: {elementsObs: $data.elementsObs, element: element}
+    params: {elementsObs: $data.elementsObs, element: element, collectionName: $data.collectionName}
 }"></div>
