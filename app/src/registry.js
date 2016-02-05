@@ -100,6 +100,7 @@ reg('ui-duration', './widgets/form/ui_duration');
 reg('survey-tabset', './pages/survey/tabset');
 regt('fire-event', './widgets/fire_event');
 regt('tag-editor', './widgets/tag_editor');
+regt('settings-tabset', './widgets/settings_tabset');
 
 /* SCHEMAS */
 reg('field_definition', './pages/schema/field_definition');
