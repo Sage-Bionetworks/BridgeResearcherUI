@@ -191,7 +191,9 @@ function signOut() {
 }
 
 function isSupportedUser() {
-    return (this.roles.indexOf("developer") > -1 || this.roles.indexOf("researcher") > -1);
+    return this.roles.some(function(role) {
+        return ["developer","researcher","admin"].indexOf(role) > -1;
+    });
 }
 
 module.exports = {
@@ -347,6 +349,12 @@ module.exports = {
     },
     emailStatus: function() {
         return get(config.emailStatus);
+    },
+    getCacheKeys: function() {
+        return get(config.cache);
+    },
+    deleteCacheKey: function(cacheKey) {
+        return del(config.cache + "/" + encodeURIComponent(cacheKey));
     },
     getSession: function() {
         if (session) {

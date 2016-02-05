@@ -68,6 +68,9 @@ var RootViewModel = function() {
     self.isDeveloper = ko.computed(function() {
         return self.roles.contains('developer');
     });
+    self.isAdmin = ko.computed(function() {
+        return self.roles.contains('admin');
+    });
     self.openDialog = function(dialogName, params) {
         self.dialogObs({name: dialogName, params: params});
     };
