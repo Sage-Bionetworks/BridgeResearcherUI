@@ -60,6 +60,9 @@ reg('SurveyPanel', './pages/survey/panels/survey');
 regt('not_found', './pages/not_found/not_found');
 reg('publickey', './dialogs/publickey/publickey');
 
+// Admin
+reg('cache', './pages/cache/cache');
+
 // DIALOGS
 //regt('none_dialog','./dialogs/none/none');
 reg('sign_in_dialog', './dialogs/sign_in/sign_in');

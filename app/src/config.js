@@ -32,5 +32,6 @@ module.exports = {
     schemaPlans: '/v3/scheduleplans',
     subpopulations: '/v3/subpopulations',
     verifyEmail: '/v3/studies/self/verifyEmail',
-    emailStatus: '/v3/studies/self/emailStatus'
+    emailStatus: '/v3/studies/self/emailStatus',
+    cache: '/v3/cache'
 };
