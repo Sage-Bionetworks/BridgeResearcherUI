@@ -20,11 +20,22 @@
                     <label>Sponsor name</label>
                     <input type="text" data-bind="value: sponsorNameObs"/>
                 </div>
-                <div class="field" style="margin: 1.5rem 0">
+                <div class="field">
                     <label>Data Validation</label>
                     <ui-checkbox params="checkedObs: strictUploadValidationEnabledObs">
                         Enable strict validation of upload files <b>(recommended)</b>
                     </ui-checkbox>
+                </div>
+                <div class="field" data-bind="visible: isAdmin">
+                    <label>Health code export <i class="admin lock icon"></i></label>
+                    <ui-checkbox params="checkedObs: healthCodeExportEnabledObs">
+                        Include participant health code in the participant roster
+                    </ui-checkbox>
+                </div>
+                <div class="field" data-bind="visible: isAdmin">
+                    <label>Maximum Number of Participants <i class="admin lock icon"></i></label>
+                    <input type="range" min="0" max="5000" data-bind="value: maxNumOfParticipantsObs, valueUpdate: 'input'"/>
+                    <div class="ui large label" data-bind="text: maxParticipants"></div>
                 </div>
                 <div class="field">
                     <label>Minimum Supported App Versions</label>
