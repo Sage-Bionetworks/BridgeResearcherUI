@@ -22,11 +22,12 @@ function updateMinAppObservers(study, obs, name) {
 module.exports = function() {
     var self = this;
 
-    utils.observablesFor(self, fields);
+    // This cannot be loaded sooner, at the top of the file. Just plain don't work.
+    // Why? WHY?!
+    var root = require('../../root')
 
-    // This is one of those failing in webpack where loading this normally doesn't work, you have to
-    // delay loading it.
-    self.isAdmin = require('../../root').isAdmin;
+    utils.observablesFor(self, fields);
+    self.isAdmin = root.isAdmin;
 
     self.maxParticipants = ko.computed(function(){
         return (self.maxNumOfParticipantsObs() === "0" || self.maxNumOfParticipantsObs() === 0) ?
@@ -50,8 +51,7 @@ module.exports = function() {
     };
     self.publicKey = function() {
         if (self.study) {
-            // It finds this and it works...
-            require('../../root').openDialog('publickey', {study: self.study});
+            root.openDialog('publickey', {study: self.study});
         }
     };
 
