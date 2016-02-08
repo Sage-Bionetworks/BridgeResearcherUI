@@ -227,15 +227,15 @@ module.exports = {
         return Promise.resolve(postInt(config.host[env] + config.requestResetPassword, data));
     },
     getStudy: function() {
-        return get(config.getStudy);
+        return get(config.getCurrentStudy);
     },
     getStudyPublicKey: function() {
         return get(config.getStudyPublicKey);
     },
-    saveStudy: function(study) {
-        return post(config.getStudy, study);
+    saveStudy: function(study, isAdmin) {
+        var url = (isAdmin) ? config.getStudy + study.identifier : config.getCurrentStudy;
+        return post(url, study);
     },
-
     getMostRecentStudyConsent: function(guid) {
         return get(config.subpopulations + "/" + guid + "/consents/recent");
     },

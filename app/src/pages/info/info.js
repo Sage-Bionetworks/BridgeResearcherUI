@@ -1,8 +1,10 @@
 var utils = require('../../utils');
 var serverService = require('../../services/server_service');
+var ko = require('knockout');
 
-var fields = ['message', 'name', 'sponsorName', 'technicalEmail', 'supportEmail',
-    'consentNotificationEmail', 'identifier', 'strictUploadValidationEnabled', 'minIos', 'minAndroid'];
+var fields = ['message', 'name', 'sponsorName', 'technicalEmail', 'supportEmail', 'consentNotificationEmail',
+    'identifier', 'strictUploadValidationEnabled', 'maxNumOfParticipants', 'healthCodeExportEnabled', 'minIos',
+    'minAndroid'];
 
 function updateMinAppVersion(vm, obs, name) {
     var value = parseInt(obs(),10);
@@ -22,6 +24,13 @@ module.exports = function() {
 
     utils.observablesFor(self, fields);
 
+    self.isAdmin = require('../../root').isAdmin;
+
+    self.maxParticipants = ko.computed(function(){
+        return (self.maxNumOfParticipantsObs() === "0" || self.maxNumOfParticipantsObs() === 0) ?
+                "No limit" : self.maxNumOfParticipantsObs();
+    });
+
     self.save = function(vm, event) {
         utils.startHandler(self, event);
         utils.observablesToObject(self, self.study, fields);
@@ -30,7 +39,11 @@ module.exports = function() {
         updateMinAppVersion(self, self.minIosObs, "iPhone OS");
         updateMinAppVersion(self, self.minAndroidObs, "Android");
 
-        serverService.saveStudy(self.study)
+        if (self.study.maxNumOfParticipants === 0) {
+            delete self.study.maxNumOfParticipants;
+        }
+
+        serverService.saveStudy(self.study, self.isAdmin())
             .then(function(response) {
                 self.study.version = response.version;
             })

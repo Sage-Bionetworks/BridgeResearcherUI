@@ -140,3 +140,15 @@ footer p {
     color: #009fda!important;
     cursor: pointer;
 }
+.admin.lock.icon {
+    padding-left: .5rem;
+}
+.admin.lock.icon, .admin.lock.icon::after {
+    color: #aaa;
+}
+.admin.lock.icon::after {
+    padding-left: .25rem;
+    content: "admin only";
+    font-variant: small-caps;
+    white-space: pre;
+}
