@@ -1,21 +1,17 @@
 var ko = require('knockout');
 
 function reg(name, path) {
-    ko.components.register(name, {
-        viewModel: require(path),
-        template: require(path+".html"),
-        synchronous: /dialogs/.test(path)
+    ko.components.register(name, { viewModel: require(path),
+        template: require(path+".html"), synchronous: /dialogs/.test(path)
     });
 }
 function regt(name, path) {
     ko.components.register(name, {
-        template: require(path+".html"),
-        synchronous: /dialogs/.test(path)
+        template: require(path+".html"), synchronous: /dialogs/.test(path)
     });
 }
 function setEditor(name, template, attribute) {
-    ko.components.register(name, {
-        template: require(template+'.html'),
+    ko.components.register(name, { template: require(template+'.html'),
         viewModel: require('./pages/set_editor/set_editor')(attribute),
         synchronous: false
     });
