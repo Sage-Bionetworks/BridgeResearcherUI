@@ -24,6 +24,8 @@ module.exports = function() {
 
     utils.observablesFor(self, fields);
 
+    // This is one of those failing in webpack where loading this normally doesn't work, you have to
+    // delay loading it.
     self.isAdmin = require('../../root').isAdmin;
 
     self.maxParticipants = ko.computed(function(){
@@ -38,10 +40,6 @@ module.exports = function() {
         self.study.minSupportedAppVersions = {};
         updateMinAppVersion(self, self.minIosObs, "iPhone OS");
         updateMinAppVersion(self, self.minAndroidObs, "Android");
-
-        if (self.study.maxNumOfParticipants === 0) {
-            delete self.study.maxNumOfParticipants;
-        }
 
         serverService.saveStudy(self.study, self.isAdmin())
             .then(function(response) {
