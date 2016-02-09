@@ -53,9 +53,7 @@ module.exports = function(params) {
             if (Object.keys(UNARY_EVENTS).indexOf(eventId) > -1 && eventId !== "enrollment") {
                 self.eventIdObs(eventId);
                 self.advancedEditorObs(true);
-                return;
-            }
-            if (eventId === "enrollment") {
+            } else if (eventId === "enrollment") {
                 self.enrollmentObs(true);
             } else {
                 var parts = eventId.split(":");
