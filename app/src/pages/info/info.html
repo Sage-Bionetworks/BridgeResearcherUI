@@ -33,6 +33,12 @@
                     </ui-checkbox>
                 </div>
                 <div class="field" data-bind="visible: isAdmin">
+                    <label>Email verification <i class="admin lock icon"></i></label>
+                    <ui-checkbox params="checkedObs: emailVerificationEnabledObs">
+                        Require participants to verify their email address
+                    </ui-checkbox>
+                </div>
+                <div class="field" data-bind="visible: isAdmin">
                     <label>Maximum Number of Participants <i class="admin lock icon"></i></label>
                     <input type="range" min="0" max="5000" data-bind="value: maxNumOfParticipantsObs, valueUpdate: 'input'"/>
                     <div class="ui large label" data-bind="text: maxParticipants"></div>

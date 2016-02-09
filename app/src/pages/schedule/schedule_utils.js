@@ -22,13 +22,19 @@ var TYPE_OPTIONS = Object.freeze([
     {value: 'CriteriaScheduleStrategy', label: 'Criteria-based Schedule'}
 ]);
 
-var PERIOD_WORDS = {
+var PERIOD_WORDS = Object.freeze({
     'H': 'hour',
     'D': "day",
     'M': "month",
     'W': 'week',
     'Y': 'year'
-};
+});
+
+var UNARY_EVENTS = Object.freeze({
+    'enrollment': 'On enrollment',
+    'two_weeks_before_enrollment': 'Two weeks before enrollment',
+    'two_months_before_enrollment': 'Two months before enrollment'
+});
 
 var TIME_OPTIONS = [];
 var MINUTES = ["00","30"];
@@ -51,8 +57,8 @@ function formatEventId(value) {
         return "On enrollment (default)";
     }
     var str = value.split(',').reverse().map(function(value) {
-        if (value === "enrollment") {
-            return "On enrollment";
+        if (UNARY_EVENTS[value]) {
+            return UNARY_EVENTS[value];
         }
         // events have three parts, e.g. survey:<guid>:finished
         var parts = value.split(":");
@@ -67,6 +73,7 @@ function formatEventId(value) {
             var activityLabel = activityOptionsLabel(parts[1]);
             return "when activity '"+activityLabel+"' is finished";
         }
+        return " " + value;
     }).join(', and ');
     return str.substring(0,1).toUpperCase() + str.substring(1);
 }
@@ -179,7 +186,10 @@ function formatSchedule(sch) {
     }
     var events = (sch.eventId) ? sch.eventId.split(",").reverse() : ["enrollment"];
     initClause += toList(events.map(function(event) {
-        return (event === "enrollment") ? "enrollment" : formatEventId(event);
+        if (Object.keys(UNARY_EVENTS).indexOf(event) > -1) {
+            return event.replace(/_/g, " ");
+        }
+        return formatEventId(event);
     }));
     buffer.push(initClause);
     if (sch.scheduleType === "recurring") {
@@ -251,5 +261,6 @@ module.exports = {
     formatScheduleStrategyType: formatScheduleStrategyType,
     timeOptionsLabel: utils.makeOptionLabelFinder(TIME_OPTIONS),
     timeOptionsFinder: utils.makeOptionFinder(TIME_OPTIONS),
-    TYPE_OPTIONS: TYPE_OPTIONS
+    TYPE_OPTIONS: TYPE_OPTIONS,
+    UNARY_EVENTS: UNARY_EVENTS
 };

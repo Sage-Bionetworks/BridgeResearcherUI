@@ -2,6 +2,7 @@ var ko = require('knockout');
 var utils = require('../../utils');
 var optionsService = require('./../../services/options_service');
 var root = require('../../root');
+var UNARY_EVENTS = require('../../pages/schedule/schedule_utils').UNARY_EVENTS;
 
 var OBJECT_TYPE = Object.freeze([
         /*
@@ -12,6 +13,8 @@ var OBJECT_TYPE = Object.freeze([
 
 module.exports = function(params) {
     var self = this;
+
+    var originalValue = params.eventIdObs();
 
     self.clearEventIdFunc = params.clearEventIdFunc;
     self.eventIdObs = params.eventIdObs;
@@ -43,8 +46,15 @@ module.exports = function(params) {
     self.activityLabel = utils.makeOptionLabelFinder(self.activityOptionsObs);
     optionsService.getActivityOptions().then(self.activityOptionsObs);
 
+    self.advancedEditorObs = ko.observable(false);
+
     if (self.eventIdObs()) {
         self.eventIdObs().split(",").forEach(function(eventId) {
+            if (Object.keys(UNARY_EVENTS).indexOf(eventId) > -1 && eventId !== "enrollment") {
+                self.eventIdObs(eventId);
+                self.advancedEditorObs(true);
+                return;
+            }
             if (eventId === "enrollment") {
                 self.enrollmentObs(true);
             } else {
@@ -64,7 +74,7 @@ module.exports = function(params) {
         });
     }
 
-    self.save = function() {
+    self.saveAndCloseDialog = function() {
         var eventId = self.objectTypeObs() + ":";
         if (eventId === "question:" && !self.answerObs()) {
             root.message('error', 'An answer is required.');
@@ -83,11 +93,19 @@ module.exports = function(params) {
         self.eventIdObs(eventId);
         root.closeDialog();
     };
-    self.clear = function(vm, event) {
+    self.showAdvanced = function(vm, event) {
+        self.advancedEditorObs(true);
+    };
+    self.clearAndCloseDialog = function(vm, event) {
         self.clearEventIdFunc(vm, event);
         root.closeDialog();
     };
-    self.cancel = function() {
+    self.closeDialog = function() {
         root.closeDialog();
     };
+    self.resetAndCloseDialog = function(vm, event) {
+        self.eventIdObs(originalValue);
+        root.closeDialog();
+    };
+
 }
