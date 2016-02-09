@@ -4,7 +4,7 @@ var ko = require('knockout');
 
 var fields = ['message', 'name', 'sponsorName', 'technicalEmail', 'supportEmail', 'consentNotificationEmail',
     'identifier', 'strictUploadValidationEnabled', 'maxNumOfParticipants', 'healthCodeExportEnabled', 'minIos',
-    'minAndroid'];
+    'emailVerificationEnabled', 'minAndroid'];
 
 function updateMinAppVersion(vm, obs, name) {
     var value = parseInt(obs(),10);
