@@ -5,7 +5,7 @@ var toastr = require('toastr');
 
 // Used in navigation to keep a section highlighted as you navigate into it.
 var pageSets = {
-    'info': ['info', 'email', 'data_groups', 'synapse'],
+    'info': ['info', 'email', 'data_groups', 'eligibility', 'synapse'],
     'surveys': ['surveys','survey','survey_versions'],
     'schemas': ['schemas','schema','schema_versions'],
     'scheduleplans': ['scheduleplans','scheduleplan'],
@@ -67,6 +67,9 @@ var RootViewModel = function() {
     });
     self.isDeveloper = ko.computed(function() {
         return self.roles.contains('developer');
+    });
+    self.isAdmin = ko.computed(function() {
+        return self.roles.contains('admin');
     });
     self.openDialog = function(dialogName, params) {
         self.dialogObs({name: dialogName, params: params});

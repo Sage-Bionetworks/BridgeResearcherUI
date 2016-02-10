@@ -64,6 +64,8 @@ router.on('/schedules', routeTo('schedules'));
 router.on('/scheduleplans', routeTo('scheduleplans'));
 router.on('/scheduleplans/:guid', guidRoute('scheduleplan'));
 router.on('/synapse', routeTo('synapse'));
+router.on('/cache', routeTo('cache'));
+
 router.configure({
     notfound: routeTo('not_found'),
     'on': [

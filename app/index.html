@@ -29,19 +29,16 @@
                 component: {name: editorPanel, params: editorParams}">
             </div>
             <div class="ui vertical menu" data-bind="visible: !isEditorTabVisible()">
-                <div class="item">
+                <div class="item" data-bind="visible: isDeveloper">
                     <i class="lab icon"></i> Study
                     <div class="menu">
-                        <a href="#/info" class="item" data-bind="css:{active:isActive('info')}, visible: isDeveloper">
+                        <a href="#/info" class="item" data-bind="css:{active:isActive('info')}">
                             Settings
                         </a>
                         <a href="#/subpopulations" class="item" data-bind="css:{active:isActive('subpopulations')}">
                             Consent Groups
                         </a>
-                        <a href="#/eligibility" class="item" data-bind="css:{active:isActive('eligibility')}, visible: isDeveloper">
-                            Eligibility Criteria
-                        </a>
-                        <a href="#/scheduleplans" class="item" data-bind="css:{active:isActive('scheduleplans')}, visible: isDeveloper">
+                        <a href="#/scheduleplans" class="item" data-bind="css:{active:isActive('scheduleplans')}">
                             Scheduling
                         </a>
                     </div>
@@ -49,14 +46,14 @@
                 <div class="item" data-bind="visible: isDeveloper">
                     <i class="server icon"></i> Study Data
                     <div class="menu">
-                        <a href="#/schemas" class="item" data-bind="css:{active:isActive('schemas')}, visible: isDeveloper">
+                        <a href="#/schemas" class="item" data-bind="css:{active:isActive('schemas')}">
                             Data Schemas
                         </a>
-                        <a href="#/task_identifiers" class="item" data-bind="css:{active:isActive('task_identifiers')}, visible: isDeveloper">
+                        <a href="#/task_identifiers" class="item" data-bind="css:{active:isActive('task_identifiers')}">
                             Task Identifiers
                         </a>
 
-                        <a href="#/surveys" class="item" data-bind="css:{active:isActive('surveys')}, visible: isDeveloper">
+                        <a href="#/surveys" class="item" data-bind="css:{active:isActive('surveys')}">
                             Surveys
                         </a>
                     </div>
@@ -75,6 +72,14 @@
                         </a>
                         <a href="#/actions" class="item" data-bind="css:{active:isActive('actions')}, visible: isResearcher">
                             Participant Roster
+                        </a>
+                    </div>
+                </div>
+                <div class="item" data-bind="visible: isAdmin">
+                    <i class="settings icon"></i> Administration
+                    <div class="menu">
+                        <a href="#/cache" class="item" data-bind="css:{active:isActive('cache')}">
+                            Cache Control
                         </a>
                     </div>
                 </div>

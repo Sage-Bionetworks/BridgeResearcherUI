@@ -20,7 +20,8 @@ module.exports = {
     },
     signIn: '/v3/auth/signIn',
     signOut: '/v3/auth/signOut',
-    getStudy: '/v3/studies/self',
+    getStudy: '/v3/studies/',
+    getCurrentStudy: '/v3/studies/self',
     getStudyPublicKey: '/v3/studies/self/publicKey',
     getStudyList: '/v3/studies?format=summary',
     emailRoster: '/v3/users/emailParticipantRoster',
@@ -32,5 +33,6 @@ module.exports = {
     schemaPlans: '/v3/scheduleplans',
     subpopulations: '/v3/subpopulations',
     verifyEmail: '/v3/studies/self/verifyEmail',
-    emailStatus: '/v3/studies/self/emailStatus'
+    emailStatus: '/v3/studies/self/emailStatus',
+    cache: '/v3/cache'
 };

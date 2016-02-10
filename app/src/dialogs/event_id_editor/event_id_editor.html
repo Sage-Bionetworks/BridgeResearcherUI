@@ -3,7 +3,7 @@
     <div class="header">
         Edit Scheduling Event
     </div>
-    <div class="content">
+    <div class="content" data-bind="visible: !advancedEditorObs()">
         <div class="ui form">
             <div class="field">
                 <ui-select params="fieldObs: objectTypeObs, fieldLabel: objectTypeLabel, optionsSrc: objectTypeOptions"></ui-select>
@@ -44,9 +44,24 @@
             </div>
         </div>
     </div>
-    <div class="rules-actions">
-        <button class="ui primary small button" data-bind="click: save">Save</button>
-        <button class="ui small button" data-bind="click: clear">Clear</button>
-        <button class="ui small button" data-bind="click: cancel">Cancel</button>
+    <div class="content" data-bind="visible: advancedEditorObs">
+        <p>If you clicked the "advanced" button, your study has unusual scheduling requirements. You have probably
+            discussed it with Sage engineers, and you should know what to enter as the event ID for this schedule.</p>
+        <div class="ui form">
+            <div class="field">
+                <label>Schedule Event ID</label>
+                <input type="text" data-bind="textInput: eventIdObs"/>
+            </div>
+        </div>
+    </div>
+    <div class="rules-actions" data-bind="visible: !advancedEditorObs()">
+        <button class="ui primary small button" data-bind="click: saveAndCloseDialog">Save</button>
+        <button class="ui small button" data-bind="click: clearAndCloseDialog">Clear</button>
+        <button class="ui small button" data-bind="click: closeDialog">Cancel</button>
+        <button style="float:right" class="ui small button" data-bind="click: showAdvanced">Advanced</button>
+    </div>
+    <div class="rules-actions" data-bind="visible: advancedEditorObs">
+        <button class="ui primary small button" data-bind="click: closeDialog">Save</button>
+        <button class="ui small button" data-bind="click: resetAndCloseDialog">Cancel</button>
     </div>
 </div>

@@ -155,7 +155,7 @@ module.exports = {
             clearPendingControl();
             ko.postbox.publish("clearErrors");
             if (response.status === 412) {
-                toastr.error('You do not appear to be either a developer or a researcher.');
+                toastr.error('You do not appear to be a developer, researcher, or admin.');
             } else if (response instanceof Error) {
                 toastr.error(response.message);
             } else if (response.responseJSON) {

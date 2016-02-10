@@ -36,7 +36,7 @@ module.exports = function() {
         self.usernameObs("");
         self.passwordObs("");
         if (!response.isSupportedUser()) {
-            root.message('error', 'You do not appear to be either a developer or a researcher.');
+            root.message('error', 'You do not appear to be a developer, researcher, or admin.');
             return;
         } else {
             root.closeDialog();

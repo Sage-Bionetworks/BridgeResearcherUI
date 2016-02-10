@@ -191,7 +191,9 @@ function signOut() {
 }
 
 function isSupportedUser() {
-    return (this.roles.indexOf("developer") > -1 || this.roles.indexOf("researcher") > -1);
+    return this.roles.some(function(role) {
+        return ["developer","researcher","admin"].indexOf(role) > -1;
+    });
 }
 
 module.exports = {
@@ -225,15 +227,15 @@ module.exports = {
         return Promise.resolve(postInt(config.host[env] + config.requestResetPassword, data));
     },
     getStudy: function() {
-        return get(config.getStudy);
+        return get(config.getCurrentStudy);
     },
     getStudyPublicKey: function() {
         return get(config.getStudyPublicKey);
     },
-    saveStudy: function(study) {
-        return post(config.getStudy, study);
+    saveStudy: function(study, isAdmin) {
+        var url = (isAdmin) ? config.getStudy + study.identifier : config.getCurrentStudy;
+        return post(url, study);
     },
-
     getMostRecentStudyConsent: function(guid) {
         return get(config.subpopulations + "/" + guid + "/consents/recent");
     },
@@ -347,6 +349,12 @@ module.exports = {
     },
     emailStatus: function() {
         return get(config.emailStatus);
+    },
+    getCacheKeys: function() {
+        return get(config.cache);
+    },
+    deleteCacheKey: function(cacheKey) {
+        return del(config.cache + "/" + encodeURIComponent(cacheKey));
     },
     getSession: function() {
         if (session) {

@@ -1,21 +1,17 @@
 var ko = require('knockout');
 
 function reg(name, path) {
-    ko.components.register(name, {
-        viewModel: require(path),
-        template: require(path+".html"),
-        synchronous: /dialogs/.test(path)
+    ko.components.register(name, { viewModel: require(path),
+        template: require(path+".html"), synchronous: /dialogs/.test(path)
     });
 }
 function regt(name, path) {
     ko.components.register(name, {
-        template: require(path+".html"),
-        synchronous: /dialogs/.test(path)
+        template: require(path+".html"), synchronous: /dialogs/.test(path)
     });
 }
 function setEditor(name, template, attribute) {
-    ko.components.register(name, {
-        template: require(template+'.html'),
+    ko.components.register(name, { template: require(template+'.html'),
         viewModel: require('./pages/set_editor/set_editor')(attribute),
         synchronous: false
     });
@@ -60,6 +56,9 @@ reg('SurveyPanel', './pages/survey/panels/survey');
 regt('not_found', './pages/not_found/not_found');
 reg('publickey', './dialogs/publickey/publickey');
 
+// Admin
+reg('cache', './pages/cache/cache');
+
 // DIALOGS
 //regt('none_dialog','./dialogs/none/none');
 reg('sign_in_dialog', './dialogs/sign_in/sign_in');
@@ -97,6 +96,7 @@ reg('ui-duration', './widgets/form/ui_duration');
 reg('survey-tabset', './pages/survey/tabset');
 regt('fire-event', './widgets/fire_event');
 regt('tag-editor', './widgets/tag_editor');
+regt('settings-tabset', './widgets/settings_tabset');
 
 /* SCHEMAS */
 reg('field_definition', './pages/schema/field_definition');
