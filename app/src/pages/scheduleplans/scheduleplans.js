@@ -3,6 +3,7 @@ var serverService = require('../../services/server_service.js');
 var scheduleUtils = require('../schedule/schedule_utils.js');
 var utils = require('../../utils');
 var Promise = require('es6-promise').Promise;
+var optionsService = require('../../services/options_service');
 
 module.exports = function() {
     var self = this;
@@ -69,11 +70,12 @@ module.exports = function() {
     function load() {
         serverService.getSchedulePlans().then(function(response) {
             if (response.items.length) {
+                console.log(response.items);
                 self.itemsObs(response.items.sort(utils.makeFieldSorter("label")).map(utils.addCheckedObs));
             } else {
                 document.querySelector(".loading_status").textContent = "There are currently no schedules.";
             }
         });
     }
-    load();
+    scheduleUtils.loadOptions().then(load);
 };
