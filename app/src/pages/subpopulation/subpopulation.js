@@ -26,10 +26,12 @@ module.exports = function(params) {
     function loadVM(response) {
         self.subpopulation = response;
         utils.valuesToObservables(self, self.subpopulation, fields);
+        utils.valuesToObservables(self, self.subpopulation.criteria, fields);
     }
     self.save = function(vm, event) {
         utils.startHandler(vm, event);
         utils.observablesToObject(self, self.subpopulation, fields);
+        utils.observablesToObject(self, self.subpopulation.criteria, fields);
         if (self.subpopulation.guid) {
             serverService.updateSubpopulation(self.subpopulation)
                 .then(utils.successHandler(vm, event, "Consent group has been saved."))

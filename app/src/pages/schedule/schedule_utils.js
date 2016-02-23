@@ -235,7 +235,7 @@ function formatStrategy(strategy) {
         }).join('<br>');
     } else if (strategy.type === 'CriteriaScheduleStrategy') {
         return strategy.scheduleCriteria.map(function(group) {
-            return "<span class='times-label'>"+criteriaUtils.label(group)+":</span> "+
+            return "<span class='times-label'>"+criteriaUtils.label(group.criteria)+":</span> "+
                     formatSchedule(group.schedule);
         }).join('<br>');
     } else {

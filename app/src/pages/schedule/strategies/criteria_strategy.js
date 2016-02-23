@@ -7,14 +7,14 @@ var serverService = require('../../../services/server_service');
 var root = require('../../../root');
 
 function groupToObservables(group) {
-    group.minAppVersionObs = ko.observable(group.minAppVersion);
-    group.maxAppVersionObs = ko.observable(group.maxAppVersion);
-    group.allOfGroupsObs = ko.observableArray(group.allOfGroups);
-    group.noneOfGroupsObs = ko.observableArray(group.noneOfGroups);
+    group.minAppVersionObs = ko.observable(group.criteria.minAppVersion);
+    group.maxAppVersionObs = ko.observable(group.criteria.maxAppVersion);
+    group.allOfGroupsObs = ko.observableArray(group.criteria.allOfGroups);
+    group.noneOfGroupsObs = ko.observableArray(group.criteria.noneOfGroups);
     group.scheduleObs = ko.observable(group.schedule);
     group.scheduleObs.callback = utils.identity;
     group.labelObs = ko.computed(function() {
-        return criteriaUtils.label(group);
+        return criteriaUtils.label(group.criteria);
     });
     group.noneOfGroupsEditorObs = ko.observable();
     group.allOfGroupsEditorObs = ko.observable();
@@ -43,17 +43,27 @@ function groupToObservables(group) {
 
 function observablesToGroup(group) {
     return {
-        minAppVersion: parseInt(group.minAppVersionObs(), 10),
-        maxAppVersion: parseInt(group.maxAppVersionObs(), 10),
-        allOfGroups: group.allOfGroupsObs(),
-        noneOfGroups: group.noneOfGroupsObs(),
         schedule: group.scheduleObs.callback(),
+        criteria: {
+            minAppVersion: parseInt(group.minAppVersionObs(), 10),
+            maxAppVersion: parseInt(group.maxAppVersionObs(), 10),
+            allOfGroups: group.allOfGroupsObs(),
+            noneOfGroups: group.noneOfGroupsObs()
+        },
         type: 'ScheduleCriteria'
     };
 }
 
 function newGroup() {
-    var group = {minAppVersion:null, maxAppVersion:null, allOfGroups:[], noneOfGroups:[], schedule:scheduleUtils.newSchedule()};
+    var group = {
+        criteria:{
+            minAppVersion:null,
+            maxAppVersion:null,
+            allOfGroups:[],
+            noneOfGroups:[]
+        },
+        schedule:scheduleUtils.newSchedule()
+    };
     groupToObservables(group);
     return group;
 }
