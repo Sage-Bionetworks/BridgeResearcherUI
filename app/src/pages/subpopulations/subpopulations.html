@@ -30,7 +30,7 @@
                     <a data-bind="attr: {'href': '#/subpopulations/'+encodeURIComponent($data.guid)}, text: $data.name"></a>
                 </td>
                 <td data-bind="text: $data.description"></td>
-                <td data-bind="html: $parent.criteriaLabel($data)"></td>
+                <td data-bind="html: $parent.criteriaLabel($data.criteria)"></td>
                 <td>
                     <span data-bind="visible: $data.required" class="green ui text">
                         <i class="checkmark icon"></i> Required
