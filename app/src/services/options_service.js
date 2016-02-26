@@ -4,6 +4,21 @@ var utils = require('../utils');
 var NAME_SORTER = utils.makeFieldSorter('name');
 var LABEL_SORTER = utils.makeFieldSorter('label');
 
+function getSchedules(plan) {
+    switch(plan.strategy.type) {
+        case 'SimpleScheduleStrategy':
+            return [plan.strategy.schedule];
+        case 'ABTestScheduleStrategy':
+            return plan.strategy.scheduleGroups.map(function(group) {
+                return group.schedule;
+            });
+        case 'CriteriaScheduleStrategy':
+            return plan.strategy.scheduleCriteria.map(function(group) {
+                return group.schedule;
+            });
+    }
+}
+/*
 function getSchedules(object, array) {
     array = array || [];
     for (var prop in object) {
@@ -15,6 +30,7 @@ function getSchedules(object, array) {
     }
     return array;
 }
+*/
 function formatVersionRange(minValue, maxValue) {
     if (utils.isDefined(minValue) && utils.isDefined(maxValue)) {
         return " ("+minValue + "-" + maxValue + ")";

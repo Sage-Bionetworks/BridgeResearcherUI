@@ -2,14 +2,14 @@ var ko = require('knockout');
 var utils = require('../../utils');
 var criteriaUtils = require('../../criteria_utils');
 var optionsService = require('./../../services/options_service');
-
 var activitiesObs = ko.observableArray([]);
 var activityOptionsLabel = utils.makeOptionLabelFinder(activitiesObs);
-optionsService.getActivityOptions().then(activitiesObs);
+var Promise = require('es6-promise').Promise;
+//optionsService.getActivityOptions().then(activitiesObs);
 
 var surveysOptionsObs = ko.observableArray([]);
 var surveysOptionsLabel = utils.makeOptionLabelFinder(surveysOptionsObs);
-optionsService.getSurveyOptions().then(surveysOptionsObs);
+///optionsService.getSurveyOptions().then(surveysOptionsObs);
 
 var questionsOptionsObs = ko.observableArray([]);
 var questionsOptionsLabel = utils.makeOptionLabelFinder(questionsOptionsObs);
@@ -89,9 +89,8 @@ function formatActivities(buffer, activities) {
     activities.map(function(act) {
         var label = 'do task (not specified)';
 
-        // Choice: use the name of the activity (which can be misleading), or the label of the thing
-        // pointed to itself... which is more reliable but can hit timing issues.
-
+        // This may be way too complicated, it still does not show the underlying *real* name
+        // of the thing being linked to in the schedule
         if (act.activityType === "task" && act.task) {
             label = "do task '"+activityOptionsLabel(act.guid)+"'";
         } else if (act.activityType === "survey" && act.survey) {
@@ -102,8 +101,7 @@ function formatActivities(buffer, activities) {
             label = "do task '"+act.label+"'";
         } else if (act.activityType === "survey" && act.survey) {
             label = "do survey '"+act.label+"'";
-        }
-        */
+        } */
         actMap[label] = ++actMap[label] || 1;
     });
     Object.keys(actMap).forEach(function(label) {
@@ -237,7 +235,7 @@ function formatStrategy(strategy) {
         }).join('<br>');
     } else if (strategy.type === 'CriteriaScheduleStrategy') {
         return strategy.scheduleCriteria.map(function(group) {
-            return "<span class='times-label'>"+criteriaUtils.label(group)+":</span> "+
+            return "<span class='times-label'>"+criteriaUtils.label(group.criteria)+":</span> "+
                     formatSchedule(group.schedule);
         }).join('<br>');
     } else {
@@ -262,5 +260,10 @@ module.exports = {
     timeOptionsLabel: utils.makeOptionLabelFinder(TIME_OPTIONS),
     timeOptionsFinder: utils.makeOptionFinder(TIME_OPTIONS),
     TYPE_OPTIONS: TYPE_OPTIONS,
-    UNARY_EVENTS: UNARY_EVENTS
+    UNARY_EVENTS: UNARY_EVENTS,
+    loadOptions: function() {
+        var p1 = optionsService.getActivityOptions().then(activitiesObs);
+        var p2 = optionsService.getSurveyOptions().then(surveysOptionsObs);
+        return Promise.all([p1, p2]);
+    }
 };

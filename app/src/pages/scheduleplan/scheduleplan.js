@@ -72,9 +72,11 @@ module.exports = function(params) {
 
     var notFoundHandler = utils.notFoundHandler(self, "Schedule plan not found.", "#/scheduleplans");
 
-    if (params.guid !== "new") {
-        serverService.getSchedulePlan(params.guid).then(loadVM).catch(notFoundHandler);
-    } else {
-        loadVM(scheduleUtils.newSchedulePlan());
-    }
+    scheduleUtils.loadOptions().then(function() {
+        if (params.guid !== "new") {
+            serverService.getSchedulePlan(params.guid).then(loadVM).catch(notFoundHandler);
+        } else {
+            loadVM(scheduleUtils.newSchedulePlan());
+        }
+    });
 }
