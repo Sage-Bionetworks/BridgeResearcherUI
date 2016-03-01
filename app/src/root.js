@@ -6,7 +6,7 @@ var toastr = require('toastr');
 // Used in navigation to keep a section highlighted as you navigate into it.
 var pageSets = {
     'info': ['info', 'email', 'data_groups', 'eligibility', 'synapse'],
-    'surveys': ['surveys','survey','survey_versions'],
+    'surveys': ['surveys','survey','survey_versions', "survey_schema"],
     'schemas': ['schemas','schema','schema_versions'],
     'scheduleplans': ['scheduleplans','scheduleplan'],
     've_template': ['ve_template', 'rp_template'],
