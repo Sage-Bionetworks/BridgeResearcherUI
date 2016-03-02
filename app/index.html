@@ -58,7 +58,7 @@
                         </a>
                     </div>
                  </div>
-                <div class="item">
+                <div class="item" data-bind="visible: isDeveloper() || isResearcher()">
                     <i class="user icon"></i> Account Management
                     <div class="menu">
                         <a href="#/password_policy" class="item" data-bind="css:{active:isActive('password_policy')}, visible: isDeveloper">
