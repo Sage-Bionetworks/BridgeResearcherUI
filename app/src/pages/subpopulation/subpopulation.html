@@ -11,7 +11,7 @@
     </div>
     <div class="empty-secondary-menu"></div>
 </div>
-<div class="scrollbox" data-bind="visible: isDeveloper()">
+<div class="scrollbox">
     <errors></errors>
     <form class="ui form">
         <div class="fields">
@@ -24,37 +24,8 @@
                 <input type="text" data-bind="value: descriptionObs"/>
             </div>
         </div>
-        <div class="three fields ui segment" style="padding-bottom: 0">
-            <div class="field">
-                <h4 style="margin-top:0">Assignment based on</h4>
-                <label>App version:</label>
-                <div class="two fields">
-                    <div class="six wide field" id="minAppVersion">
-                        <ui-number params="fieldObs: minAppVersionObs, placeholder: 'Min'"></ui-number>
-                    </div>
-                    <div class="six wide field" id="maxAppVersion">
-                        <ui-number params="fieldObs: maxAppVersionObs, placeholder: 'Max'"></ui-number>
-                    </div>
-                </div>
-            </div>
-            <!-- ko component: {
-                name: "tag-editor",
-                params: { id: 'allOfGroups', label: 'User has all these data group(s):',
-                collObs: allOfGroupsObs, noneLabel: 'No data groups', editorObs: allOfGroupsEditorObs,
-                optionsObs: dataGroupsOptions, removeAction: removeAllOf, addAction: addToAll,
-                readonly: false }
-            } -->
-            <!-- /ko -->
-
-            <!-- ko component: {
-                name: "tag-editor",
-                params: { id: 'noneOfGroups', label: 'And user has none of these group(s):',
-                collObs: noneOfGroupsObs, noneLabel: 'No data groups', editorObs: noneOfGroupsEditorObs,
-                optionsObs: dataGroupsOptions, removeAction: removeNoneOf, addAction: addToNone,
-                readonly: false }
-            } -->
-            <!-- /ko -->
-        </div>
+        <h4 style="margin-top:0">Assignment based on</h4>
+        <!-- ko component: {name:"criteria", params:{id:"", criteriaObs:criteriaObs}} --><!-- /ko -->
         <div class="fields">
             <div class="six wide field">
                 <div class="field">
@@ -89,86 +60,3 @@
         </div>
     </form>
 </div>
-<div class="scrollbox" data-bind="visible: isResearcher() && !isDeveloper()">
-    <form class="ui form">
-        <div class="fields">
-            <div class="eight wide required field" id="name">
-                <label>Name</label>
-                <div data-bind="text: nameObs"></div>
-            </div>
-            <div class="eight wide field" id="description">
-                <label>Description</label>
-                <div data-bind="text: descriptionObs"></div>
-            </div>
-        </div>
-        <div class="three fields ui segment" style="padding-bottom: 0">
-            <div class="field">
-                <h4 style="margin-top:0">Assignment based on</h4>
-                <label>App version:</label>
-                <div class="two fields">
-                    <div class="six wide field" id="minAppVersion">
-                        <div data-bind="text: minAppVersionObs"></div>
-                    </div>
-                    <div class="six wide field" id="maxAppVersion">
-                        <div data-bind="text: maxAppVersionObs"></div>
-                    </div>
-                </div>
-            </div>
-            <!-- ko component: {
-                name: "tag-editor",
-                params: { id: 'allOfGroups', label: 'User has all these data group(s):',
-                collObs: allOfGroupsObs, noneLabel: 'No data groups', editorObs: allOfGroupsEditorObs,
-                optionsObs: dataGroupsOptions, removeAction: removeAllOf, addAction: addToAll,
-                readonly: true }
-            } -->
-            <!-- /ko -->
-
-            <!-- ko component: {
-                name: "tag-editor",
-                params: { id: 'noneOfGroups', label: 'And user has none of these group(s):',
-                collObs: noneOfGroupsObs, noneLabel: 'No data groups', editorObs: noneOfGroupsEditorObs,
-                optionsObs: dataGroupsOptions, removeAction: removeNoneOf, addAction: addToNone,
-                readonly: true }
-            } -->
-            <!-- /ko -->
-        </div>
-        <div class="fields">
-            <div class="six wide field">
-                <div class="field">
-                    <label>Is this consent required?</label>
-                    <div class="help-text" style="margin-bottom:1rem">If a user matches this consent group, <i>must</i> they sign the consent to access Bridge?</div>
-                    <div data-bind="visible: isDeveloper()">
-                        <ui-checkbox params="checkedObs: requiredObs">Required</ui-checkbox>
-                    </div>
-                    <div class="ui checkbox" data-bind="visible: isResearcher() && !isDeveloper()">
-                        <input type="checkbox" readonly="readonly" class="hidden" data-bind="checked: requiredObs" />
-                        <label>Required</label>
-                    </div>
-                </div>
-            </div>
-            <div class="ten wide field">
-                <h4>Recent Consent History</h4>
-                <p data-bind="visible: historyItemsObs().length === 0">There are no consents until you create this consent group.</p>
-                <div data-bind="visible: historyItemsObs().length > 0">
-                    <table class="ui compact table">
-                        <tbody data-bind="foreach: historyItemsObs">
-                        <tr data-bind="css: { positive: $data.active }">
-                            <td>
-                                <a data-bind="attr: {'href': $parent.formatLink($data)},
-                                text: $parent.formatDateTime($data.createdOn)"></a>
-                            </td>
-                            <td>
-                                <div data-bind="visible: $data.active" style="text-align: right">
-                                    <i class="icon checkmark"></i> Published
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
-
-

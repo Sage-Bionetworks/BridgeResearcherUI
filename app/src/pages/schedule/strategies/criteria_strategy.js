@@ -7,65 +7,36 @@ var serverService = require('../../../services/server_service');
 var root = require('../../../root');
 
 function groupToObservables(group) {
-    group.minAppVersionObs = ko.observable(group.criteria.minAppVersion);
-    group.maxAppVersionObs = ko.observable(group.criteria.maxAppVersion);
-    group.allOfGroupsObs = ko.observableArray(group.criteria.allOfGroups);
-    group.noneOfGroupsObs = ko.observableArray(group.criteria.noneOfGroups);
+    console.log( "groupToObservables", group.criteria );
+
+    console.log("so does it exist?",group.criteriaObs);
+
+    group.criteriaObs = ko.observable(group.criteria);
+    group.criteriaObs.criteriaCallback = utils.identity;
+    
     group.scheduleObs = ko.observable(group.schedule);
     group.scheduleObs.callback = utils.identity;
+
     group.labelObs = ko.computed(function() {
         return criteriaUtils.label(group.criteria);
     });
-    group.noneOfGroupsEditorObs = ko.observable();
-    group.allOfGroupsEditorObs = ko.observable();
-
-    group.addToNone = function() {
-        var value = group.noneOfGroupsEditorObs();
-        if (group.noneOfGroupsObs().indexOf(value) === -1) {
-            group.noneOfGroupsObs.push(value);
-        }
-    };
-    group.addToAll = function() {
-        var value = group.allOfGroupsEditorObs();
-        if (group.allOfGroupsObs().indexOf(value) === -1) {
-            group.allOfGroupsObs.push(value);
-        }
-    };
-    group.removeNoneOf = function(tag) {
-        group.noneOfGroupsObs.remove(tag);
-    };
-    group.removeAllOf = function(tag) {
-        group.allOfGroupsObs.remove(tag);
-    };
-
     return group;
 }
 
 function observablesToGroup(group) {
+    console.log( "observablesToGroup", group.criteriaObs.criteriaCallback() );
     return {
+        criteria: group.criteriaObs.criteriaCallback(),
         schedule: group.scheduleObs.callback(),
-        criteria: {
-            minAppVersion: parseInt(group.minAppVersionObs(), 10),
-            maxAppVersion: parseInt(group.maxAppVersionObs(), 10),
-            allOfGroups: group.allOfGroupsObs(),
-            noneOfGroups: group.noneOfGroupsObs()
-        },
         type: 'ScheduleCriteria'
     };
 }
 
 function newGroup() {
-    var group = {
-        criteria:{
-            minAppVersion:null,
-            maxAppVersion:null,
-            allOfGroups:[],
-            noneOfGroups:[]
-        },
-        schedule:scheduleUtils.newSchedule()
-    };
-    groupToObservables(group);
-    return group;
+    return groupToObservables({
+        criteria: criteriaUtils.newCriteria(),
+        schedule: scheduleUtils.newSchedule()
+    });
 }
 
 module.exports = function(params) {
@@ -75,7 +46,6 @@ module.exports = function(params) {
     self.strategyObs = params.strategyObs;
     self.collectionName = params.collectionName;
     self.scheduleCriteriaObs = ko.observableArray([]).publishOn("scheduleCriteriaChanges");
-    self.dataGroupsOptions = ko.observableArray([]);
 
     params.strategyObs.callback = function () {
         var strategy = params.strategyObs();
@@ -89,6 +59,7 @@ module.exports = function(params) {
     ko.computed(function () {
         var strategy = params.strategyObs();
         if (strategy && strategy.scheduleCriteria) {
+            console.log("strategy.scheduleCriteria",strategy.scheduleCriteria);
             self.scheduleCriteriaObs(strategy.scheduleCriteria.map(groupToObservables));
         }
     });
@@ -110,11 +81,4 @@ module.exports = function(params) {
     ko.postbox.subscribe("scheduleCriteriaAdd", self.addCriteria);
     ko.postbox.subscribe("scheduleCriteriaRemove", self.removeCriteria);
     ko.postbox.subscribe("scheduleCriteriaSelect", self.selectCriteria);
-
-    serverService.getStudy().then(function(study) {
-        var array = study.dataGroups.map(function(value) {
-            return {label: value, value:value};
-        });
-        self.dataGroupsOptions(array);
-    });
 };

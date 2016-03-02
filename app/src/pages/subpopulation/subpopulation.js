@@ -1,20 +1,19 @@
 var ko = require('knockout');
+var criteriaUtils = require('../../criteria_utils');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var root = require('../../root');
 
-var fields = ['name','description','minAppVersion','maxAppVersion','required','noneOfGroups[]','allOfGroups[]'];
+var fields = ['name','description','required','criteria'];
+
+var newSubpop = {'name':'','description':'','criteria':criteriaUtils.newCriteria()};
 
 module.exports = function(params) {
     var self = this;
 
+    utils.observablesFor(self, fields);
     self.isNewObs = ko.observable(params.guid === "new");
     self.requiredObs = ko.observable(false);
-    utils.observablesFor(self, fields);
-    self.noneOfGroupsEditorObs = ko.observable();
-    self.allOfGroupsEditorObs = ko.observable();
-    self.dataGroupsOptions = ko.observableArray();
-    self.dataGroupsLabel = utils.identity;
     self.historyItemsObs = ko.observable([]);
     self.newConsentLinkObs = ko.observable();
     self.isDeveloper = root.isDeveloper;
@@ -26,12 +25,12 @@ module.exports = function(params) {
     function loadVM(response) {
         self.subpopulation = response;
         utils.valuesToObservables(self, self.subpopulation, fields);
-        utils.valuesToObservables(self, self.subpopulation.criteria, fields);
     }
     self.save = function(vm, event) {
-        utils.startHandler(vm, event);
         utils.observablesToObject(self, self.subpopulation, fields);
-        utils.observablesToObject(self, self.subpopulation.criteria, fields);
+        self.subpopulation.criteria = self.criteriaObs.criteriaCallback();
+        
+        utils.startHandler(vm, event);
         if (self.subpopulation.guid) {
             serverService.updateSubpopulation(self.subpopulation)
                 .then(utils.successHandler(vm, event, "Consent group has been saved."))
@@ -54,24 +53,6 @@ module.exports = function(params) {
                 .catch(utils.failureHandler(vm, event));
         }
     };
-    self.addToNone = function() {
-        var value = self.noneOfGroupsEditorObs();
-        if (self.noneOfGroupsObs().indexOf(value) === -1) {
-            self.noneOfGroupsObs.push(value);
-        }
-    };
-    self.addToAll = function() {
-        var value = self.allOfGroupsEditorObs();
-        if (self.allOfGroupsObs().indexOf(value) === -1) {
-            self.allOfGroupsObs.push(value);
-        }
-    };
-    self.removeNoneOf = function(tag) {
-        self.noneOfGroupsObs.remove(tag);
-    };
-    self.removeAllOf = function(tag) {
-        self.allOfGroupsObs.remove(tag);
-    };
     self.formatLink = function(item) {
         return '#/subpopulations/'+params.guid+"/consents/"+ ((item)?item.createdOn:"recent");
     }
@@ -82,12 +63,8 @@ module.exports = function(params) {
 
     self.newConsentLinkObs(self.formatLink());
     serverService.getStudy().then(function(study) {
-        var array = study.dataGroups.map(function(value) {
-            return {label: value, value:value};
-        });
-        self.dataGroupsOptions(array);
         if (params.guid === "new") {
-            loadVM({'name':'','description':'','minAppVersion':'','maxAppVersion':'','noneOfGroups':[],'allOfGroups':[]});
+            loadVM(newSubpop);
         } else if (params.guid) {
             serverService.getStudy().then(function(study) {
                 serverService.getSubpopulation(params.guid).then(loadVM).catch(notFoundHandler);

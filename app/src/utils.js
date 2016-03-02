@@ -228,7 +228,6 @@ module.exports = {
      * @returns {string}
      */
     formatDateTime: function(date) {
-        console.log(date);
         if (date) {
             return new Date(date).toLocaleString();
         }
