@@ -1,6 +1,6 @@
 node_modules
 note.txt
 .idea
+nbproject
 dist/
 npm-debug.log
-

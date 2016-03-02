@@ -87,7 +87,11 @@ header {
     @include flex-box(row);
     @include align-items(top);
     @include justify-content(space-between);
-    background-color: rgba(26,144,204,0.7);
+    /*background-color: rgba(26,144,204,0.7);*/
+    background-image: linear-gradient(90deg, rgb(52, 152, 219) 41%, rgb(41, 128, 185) 100%);
+    background-image: -moz-linear-gradient(left, rgb(52, 152, 219) 41%, rgb(41, 128, 185) 100%);
+    background-image: -webkit-linear-gradient(left, rgb(52, 152, 219) 41%, rgb(41, 128, 185) 100%);
+    background-image: -ms-linear-gradient(left, rgb(52, 152, 219) 41%, rgb(41, 128, 185) 100%);    
 }
     header i {
         font-size: 2rem!important;
