@@ -66,8 +66,12 @@ ko.bindingHandlers.semantic = {
             setTimeout(function() {
                 var collectionObs = allBindings().updateSelect;
                 $element.addClass("ui fluid search dropdown").attr("multiple","true").dropdown({
-                    onAdd: collectionObs.push,
-                    onRemove: collectionObs.remove
+                    onAdd: function(value) {
+                        collectionObs.push(value);
+                    },
+                    onRemove: function(value) {
+                        collectionObs.remove(value);
+                    }
                 });
                 $element.dropdown("set selected", collectionObs());
                 collectionObs.subscribe(function(newValue) {
