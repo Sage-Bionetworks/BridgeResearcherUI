@@ -7,26 +7,18 @@ var serverService = require('../../../services/server_service');
 var root = require('../../../root');
 
 function groupToObservables(group) {
-    console.log( "groupToObservables", group.criteria );
-
-    console.log("so does it exist?",group.criteriaObs);
-
     group.criteriaObs = ko.observable(group.criteria);
-    group.criteriaObs.criteriaCallback = utils.identity;
-    
     group.scheduleObs = ko.observable(group.schedule);
     group.scheduleObs.callback = utils.identity;
-
     group.labelObs = ko.computed(function() {
-        return criteriaUtils.label(group.criteria);
+        return criteriaUtils.label(group.criteriaObs());
     });
     return group;
 }
 
 function observablesToGroup(group) {
-    console.log( "observablesToGroup", group.criteriaObs.criteriaCallback() );
     return {
-        criteria: group.criteriaObs.criteriaCallback(),
+        criteria: group.criteriaObs(),
         schedule: group.scheduleObs.callback(),
         type: 'ScheduleCriteria'
     };
@@ -59,8 +51,8 @@ module.exports = function(params) {
     ko.computed(function () {
         var strategy = params.strategyObs();
         if (strategy && strategy.scheduleCriteria) {
-            console.log("strategy.scheduleCriteria",strategy.scheduleCriteria);
             self.scheduleCriteriaObs(strategy.scheduleCriteria.map(groupToObservables));
+            root.setEditorPanel('CriteriaScheduleStrategyPanel', {viewModel:self});
         }
     });
 

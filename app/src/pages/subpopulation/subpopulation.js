@@ -28,7 +28,6 @@ module.exports = function(params) {
     }
     self.save = function(vm, event) {
         utils.observablesToObject(self, self.subpopulation, fields);
-        self.subpopulation.criteria = self.criteriaObs.criteriaCallback();
         
         utils.startHandler(vm, event);
         if (self.subpopulation.guid) {

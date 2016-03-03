@@ -10,25 +10,11 @@
         addAction : Function : function to add an item.
         readonly: Boolean if true, hide some stuff
 -->
-<div class="field tag-editor" data-bind="attr:{id: $component.id}">
+<div class="six wide field tag-editor" data-bind="attr:{id: $component.id}">
     <label data-bind="text: $component.label"></label>
-    <div class="vertical-padding" data-bind="visible: $component.collObs().length === 0">
-        <i>None selected</i>
-    </div>
-    <div class="vertical-padding" data-bind="foreach: $component.collObs">
-        <div class="ui large blue label">
-            <span data-bind="text: $data"></span>
-            <a data-bind="click: $parent.removeAction"><i class="delete icon"></i></a>
-        </div>
-    </div>
-    <div class="field" data-bind="visible: $component.optionsObs().length === 0 && !$component.readonly">
-        <i data-bind="text: '&lt;'+$component.noneLabel+'&gt;'"></i>
-    </div>
-    <div class="field tag-control" data-bind="visible: $component.optionsObs().length !== 0 && !$component.readonly">
-        <select class="ui dropdown" data-bind="options: $component.optionsObs, optionsText: 'label',
-                    optionsValue: 'value', value: $component.editorObs">
+    <div class="field" data-bind="visible: $component.optionsObs().length !== 0 && !$component.readonly">
+        <select multiple="" data-bind="semantic: 'multi-search-select', updateSelect: $component.collObs, foreach: $component.optionsObs">
+            <option data-bind="text: $data, selected: $component.collObs().indexOf($data) > -1"></option>
         </select>
-        <div>&nbsp;</div>
-        <button class="ui small button" data-bind="click: $component.addAction">Add</button>
     </div>
 </div>

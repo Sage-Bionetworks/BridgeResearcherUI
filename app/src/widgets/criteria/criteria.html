@@ -1,5 +1,5 @@
-<div class="four fields">
-    <div class="field">
+<div class="fields">
+    <div class="four wide field">
         <label>App version:</label>
         <div class="two fields">
             <div class="eight wide field" data-bind="attr:{id:$data.id+'minAppVersion'}">
@@ -10,9 +10,9 @@
             </div>
         </div>
     </div>
-    <div class="field" data-bind="attr:{id:$data.id+'language'}">
+    <div class="two wide field" data-bind="attr:{id:$data.id+'language'}">
         <label>Language</label>
-        <input type="text" class="eight wide field" data-bind="value: $data.languageObs"/>
+        <input type="text" class="field" data-bind="textInput: $data.languageObs"/>
     </div>
     <!-- ko component: {
         name: "tag-editor",

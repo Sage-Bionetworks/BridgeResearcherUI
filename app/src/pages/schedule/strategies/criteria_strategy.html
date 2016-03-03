@@ -17,7 +17,11 @@
         </div>
         <!-- ko component: {
             name: "criteria",
-            params: { id: 'strategy_scheduleCriteria'+$index()+'_criteria_', criteriaObs: $data.criteriaObs }
+            params: { 
+                id: 'strategy_scheduleCriteria'+$index()+'_criteria_', 
+                criteriaObs: $data.criteriaObs,
+                eventObj: $component.scheduleCriteriaObs
+            }
         } -->
         <!-- /ko -->
         <fieldset class="schedule-fieldset">
