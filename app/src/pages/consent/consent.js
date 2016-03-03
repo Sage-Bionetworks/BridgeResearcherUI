@@ -62,8 +62,14 @@ module.exports = function(params) {
         params.createdOn = response.createdOn;
         return serverService.publishStudyConsent(params.guid, params.createdOn);
     }
+    function load() {
+        return serverService.getStudyConsent(params.guid, params.createdOn);
+    }
     function saveAfterPublish(response) {
+        /*
         self.activeObs(true);
+        self.createdOnObs(self.formatDateTime(params.createdOn));
+        */
         serverService.getConsentHistory(params.guid).then(function(data) {
             self.historyItemsObs(data.items);
         });
@@ -76,8 +82,12 @@ module.exports = function(params) {
         if (confirm("Are you sure you want to publish this consent?")) {
             utils.startHandler(vm, event);
 
-            serverService.saveStudyConsent(params.guid, {documentContent: self.editor.getData()})
-                .then(publish)
+            params.guid = vm.subpopulationGuid;
+            params.createdOn = vm.createdOn;
+
+            serverService.publishStudyConsent(params.guid, params.createdOn)
+                .then(load)
+                .then(loadIntoEditor)
                 .then(saveAfterPublish)
                 .then(utils.successHandler(vm, event, "Consent published"))
                 .catch(utils.failureHandler(vm, event));

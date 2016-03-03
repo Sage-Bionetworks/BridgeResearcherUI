@@ -94,6 +94,7 @@ regt('ui-select', './widgets/form/ui_select');
 regt('ui-textarea', './widgets/form/ui_textarea');
 reg('ui-duration', './widgets/form/ui_duration');
 reg('survey-tabset', './pages/survey/tabset');
+reg('criteria', './widgets/criteria/criteria');
 regt('fire-event', './widgets/fire_event');
 regt('tag-editor', './widgets/tag_editor');
 regt('settings-tabset', './widgets/settings_tabset');
