@@ -25,15 +25,15 @@ module.exports = function(params) {
         };
     }
 
-    self.deleteSurvey = function(vm, event) {
+    self.deleteSurvey = function(survey, event) {
         if (confirm("Are you sure you want to delete this survey version?")) {
             utils.startHandler(self, event);
-            serverService.deleteSurvey(vm)
+            serverService.deleteSurvey(survey)
                 .then(load)
-                .then(utils.makeTableRowHandler(vm, [vm], "#/surveys"))
+                .then(utils.makeTableRowHandler(self, [survey], "#/surveys"))
                 .then(redirectIfDeleteSelf(survey))
-                .then(utils.successHandler(vm, event, "Survey version deleted."))
-                .catch(utils.failureHandler(vm, event));
+                .then(utils.successHandler(self, event, "Survey version deleted."))
+                .catch(utils.failureHandler(self, event));
         }
     }
     self.publish = function(vm, event) {

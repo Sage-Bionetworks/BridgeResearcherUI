@@ -14,20 +14,20 @@
         <label>Language</label>
         <input type="text" class="field" data-bind="textInput: $data.languageObs"/>
     </div>
-    <!-- ko component: {
-        name: "tag-editor",
-        params: { id: $data.id+'allOfGroups',
-            label: 'User has all these data group(s):',
-            collObs: $data.allOfGroupsObs, noneLabel: 'No data groups', editorObs: $data.allOfGroupsEditorObs,
-            optionsObs: $data.dataGroupsOptionsObs, removeAction: $data.removeAllOf,
-            addAction: $data.addToAll }
-    } --><!-- /ko -->
-    <!-- ko component: {
-        name: "tag-editor",
-        params: { id: $data.id+'noneOfGroups',
-            label: 'And none of these group(s):', collObs: $data.noneOfGroupsObs,
-            noneLabel: 'No data groups', editorObs: $data.noneOfGroupsEditorObs,
-            optionsObs: $data.dataGroupsOptionsObs, removeAction: $data.removeNoneOf,
-            addAction: $data.addToNone }
-    } --><!-- /ko -->
+    <div class="six wide field tag-editor" data-bind="attr:{id: $data.id+'allOfGroups'}">
+        <label>User has all these data group(s):</label>
+        <!-- ko component: {
+            name: "tag-editor",
+            params: { collObs: $data.allOfGroupsObs, 
+                noneLabel: 'No data groups configured', optionsObs: $data.dataGroupsOptionsObs }
+        } --><!-- /ko -->
+    </div>
+    <div class="six wide field tag-editor" data-bind="attr:{id: $data.id+'noneOfGroups'}">
+        <label>And none of these group(s):</label>
+        <!-- ko component: {
+            name: "tag-editor",
+            params: { collObs: $data.noneOfGroupsObs,
+                noneLabel: 'No data groups configured', optionsObs: $data.dataGroupsOptionsObs }
+        } --><!-- /ko -->
+    </div>
 </div>

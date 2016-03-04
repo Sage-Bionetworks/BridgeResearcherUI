@@ -156,3 +156,7 @@ footer p {
     font-variant: small-caps;
     white-space: pre;
 }
+input[readonly] {
+    border:none!important;
+    font-style: italic;
+}
