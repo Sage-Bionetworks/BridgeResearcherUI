@@ -19,7 +19,9 @@
         <!-- ko component: {
             name: "tag-editor",
             params: { collObs: $data.allOfGroupsObs, 
-                noneLabel: 'No data groups configured', optionsObs: $data.dataGroupsOptionsObs }
+                noneLabel: 'No data groups configured', 
+                optionsObs: $data.dataGroupsOptionsObs 
+            }
         } --><!-- /ko -->
     </div>
     <div class="six wide field tag-editor" data-bind="attr:{id: $data.id+'noneOfGroups'}">
@@ -27,7 +29,9 @@
         <!-- ko component: {
             name: "tag-editor",
             params: { collObs: $data.noneOfGroupsObs,
-                noneLabel: 'No data groups configured', optionsObs: $data.dataGroupsOptionsObs }
+                noneLabel: 'No data groups configured', 
+                optionsObs: $data.dataGroupsOptionsObs 
+            }
         } --><!-- /ko -->
     </div>
 </div>

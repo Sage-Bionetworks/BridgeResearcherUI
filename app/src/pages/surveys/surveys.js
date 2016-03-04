@@ -3,38 +3,30 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 
+var surveyFieldsToDelete = ['guid','version','createdOn','modifiedOn','published','deleted'];
+
 function addScheduleField(survey) {
     survey.schedulePlanObs = ko.observableArray([]);
 }
-function extractSurveyGuidsFromSchedule(schedule) {
-    return schedule.activities.filter(function(activity) {
-        return !!activity.survey;
-    }).map(function(activity) {
-        return activity.survey.guid;
+
+function collectGuids(object, array) {
+    Object.keys(object).forEach(function(prop) {
+        if (prop === "survey") {
+            array.push(object[prop].guid);
+        } else if (typeof object[prop] === "object") {
+            collectGuids(object[prop], array);
+        }
     });
-}
-function extractSurveyGuids(plan) {
-    var strategy = plan.strategy;
-    switch(strategy.type) {
-        case 'SimpleScheduleStrategy':
-            return extractSurveyGuidsFromSchedule(strategy.schedule);
-        case 'ABTestScheduleStrategy':
-        case 'CriteriaScheduleStrategy':
-            return (strategy.scheduleGroups || []).forEach(function (group) {
-                return extractSurveyGuidsFromSchedule(group.schedule);
-            }).reduce(function(initial, array) {
-                return initial.concat(array);
-            }, []);
-    }
+    return array;
 }
 function annotateSurveys(surveys, plans) {
-    var surveysMap = surveys.reduce(function(map, survey) {
-        map[survey.guid] = survey;
-        return map;
-    }, {});
-    (plans || []).forEach(function(plan) {
-        extractSurveyGuids(plan).forEach(function(guid) {
-            surveysMap[guid].schedulePlanObs.push({label: plan.label, guid: plan.guid});
+    plans.forEach(function(plan) {
+        var allPlanGuids = collectGuids(plan, []);    
+        surveys.forEach(function(survey) {
+            if (allPlanGuids.indexOf(survey.guid) > -1) {
+                var lbl = plan.label + " (" + utils.formatVersionRange(plan.minAppVersion, plan.maxAppVersion)+")";
+                survey.schedulePlanObs.push({label: lbl, guid: plan.guid});
+            } 
         });
     });
 }
@@ -50,24 +42,56 @@ module.exports = function() {
             return obj.label;
         }).join(', ');
     }
+    self.atLeastOneChecked = function () {
+        return self.itemsObs().some(function(item) {
+            return item.checkedObs();
+        });
+    }    
+    self.copySurveys = function(vm, event) {
+        var copyables = self.itemsObs().filter(utils.hasBeenChecked);
+        var confirmMsg = (copyables.length > 1) ?
+            "Surveys have been copied." : "Survey has been copied.";
 
-    serverService.getSurveys().then(function(response) {
-        if (response.items.length) {
-            response.items.sort(utils.makeFieldSorter("name"));
-            response.items.forEach(addScheduleField);
-            self.itemsObs(response.items);
-            return response.items;
-        } else {
-            document.querySelector(".loading_status").textContent = "There are currently no surveys.";
-            return [];
-        }
-    }).then(function(surveys) {
-        if (surveys.length) {
-            serverService.getSchedulePlans().then(function(response) {
-                annotateSurveys(surveys, response.items);
+        utils.startHandler(vm, event);
+        var promises = copyables.map(function(survey) {
+            // Get individual survey because summary survey does not have the elements
+            return serverService.getSurvey(survey.guid, survey.createdOn).then(function(fullSurvey) {
+                fullSurvey.name += " (Copy)";
+                surveyFieldsToDelete.forEach(function(field) {
+                    delete fullSurvey[field]; 
+                });
+                fullSurvey.elements.forEach(function(element) {
+                    delete element.guid;
+                });
+                return serverService.createSurvey(fullSurvey);
             });
-        }
-    }).catch(function(response) {
-        console.error(response);
-    });
+        });
+        Promise.all(promises)
+            .then(load)
+            .then(utils.successHandler(vm, event, confirmMsg))
+            .catch(utils.failureHandler(vm, event));
+    };
+
+    function load() {
+        serverService.getSurveys().then(function(response) {
+            if (response.items.length) {
+                response.items.sort(utils.makeFieldSorter("name"));
+                response.items.forEach(addScheduleField);
+                self.itemsObs(response.items.map(utils.addCheckedObs));
+                return response.items;
+            } else {
+                document.querySelector(".loading_status").textContent = "There are currently no surveys.";
+                return [];
+            }
+        }).then(function(surveys) {
+            if (surveys.length) {
+                serverService.getSchedulePlans().then(function(response) {
+                    annotateSurveys(surveys, response.items);
+                });
+            }
+        }).catch(function(response) {
+            console.error(response);
+        });
+    }
+    load();
 };

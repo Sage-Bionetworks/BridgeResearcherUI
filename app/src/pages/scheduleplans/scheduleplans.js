@@ -11,16 +11,7 @@ module.exports = function() {
     self.itemsObs = ko.observableArray([]);
     self.formatDateTime = utils.formatDateTime;
     self.formatScheduleType = scheduleUtils.formatScheduleStrategyType;
-    self.formatVersions = function(minValue, maxValue) {
-        if (utils.isDefined(minValue) && utils.isDefined(maxValue)) {
-            return minValue + "-" + maxValue;
-        } else if (utils.isDefined(minValue)) {
-            return minValue + "+";
-        } else if (utils.isDefined(maxValue)) {
-            return "0-" + maxValue;
-        }
-        return "<i>All versions</i>";
-    };
+    self.formatVersions = utils.formatVersionRange;
     self.atLeastOneChecked = function () {
         return self.itemsObs().some(function(item) {
             return item.checkedObs();
@@ -66,11 +57,18 @@ module.exports = function() {
         }
     };
     self.formatStrategy = scheduleUtils.formatStrategy;
+    
+    self.sortBy = function(field) {
+        if (field === 'versions') {
+            self.itemsObs(self.itemsObs().sort(utils.makeRangeSorter("minAppVersion", "maxAppVersion")));
+        } else {
+            self.itemsObs(self.itemsObs().sort(utils.makeFieldSorter(field)));
+        }
+    };
 
     function load() {
         serverService.getSchedulePlans().then(function(response) {
             if (response.items.length) {
-                console.log(response.items);
                 self.itemsObs(response.items.sort(utils.makeFieldSorter("label")).map(utils.addCheckedObs));
             } else {
                 document.querySelector(".loading_status").textContent = "There are currently no schedules.";
