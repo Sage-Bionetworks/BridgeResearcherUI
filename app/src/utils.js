@@ -73,7 +73,9 @@ function clearPendingControl() {
         pendingControl = null;
     }
 }
-
+function num(value) {
+    (typeof value !== "number") ? 0 : value;
+}
 /**
  * Common utility methods for ViewModels.
  */
@@ -104,17 +106,12 @@ module.exports = {
     },
     makeRangeSorter: function(fieldMin, fieldMax) {
         return function sorter(a,b) {
-            var minA = (typeof a[fieldMin] !== "number") ? 0 : a[fieldMin];
-            var maxA = (typeof a[fieldMax] !== "number") ? 0 : a[fieldMax];
-            
-            var minB = (typeof b[fieldMin] !== "number") ? 0 : b[fieldMin];
-            var maxB = (typeof b[fieldMax] !== "number") ? 0 : b[fieldMax];
-            
+            var minA = num(a[fieldMin]);
+            var maxA = num(a[fieldMax]);
+            var minB = num(b[fieldMin]);
+            var maxB = num(b[fieldMax]);
             var diff = (minA - minB);
-            if (diff !== 0) {
-                return diff;
-            }
-            return (maxA - maxB);
+            return (diff !== 0) ? diff : (maxA - maxB);
         }  
     },
     /**
