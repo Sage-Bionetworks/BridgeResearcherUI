@@ -28,14 +28,12 @@ function label(criteria) {
         arr.push("v" + "0-" + maxAppVersion);
     }
     if (utils.isNotBlank(language)) {
-        arr.push("lang " + language);
+        arr.push("'" + language + "' language");
     }
     if (allOfGroups.length) {
-        // arr.push("user must be in data group(s) " + quotedList(allOfGroups));
         arr.push(quotedList(allOfGroups) + " required");
     }
     if (noneOfGroups.length) {
-        // arr.push("user cannot be in data group(s) " + quotedList(noneOfGroups));
         arr.push(quotedList(noneOfGroups) + " prohibited");
     }
     return (arr.length) ? arr.join("; ") : "No criteria";

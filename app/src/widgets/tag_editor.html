@@ -1,20 +1,10 @@
-<!--
-    parameters
-        id : String
-        label : String
-        collObs : ArrayObserver : current state of collection
-        noneLabel : String : if there are no tags to pick from
-        editorObs : Observer : current selection
-        optionsObs : ArrayObserver : the set of tags you can pick from
-        removeAction : Function : function to remove an item
-        addAction : Function : function to add an item.
-        readonly: Boolean if true, hide some stuff
--->
-<div class="six wide field tag-editor" data-bind="attr:{id: $component.id}">
-    <label data-bind="text: $component.label"></label>
-    <div class="field" data-bind="visible: $component.optionsObs().length !== 0 && !$component.readonly">
-        <select multiple="" data-bind="semantic: 'multi-search-select', updateSelect: $component.collObs, foreach: $component.optionsObs">
-            <option data-bind="text: $data, selected: $component.collObs().indexOf($data) > -1"></option>
-        </select>
+<div class="field" data-bind="visible: $component.optionsObs().length !== 0 && !$component.readonly">
+    <select multiple="" data-bind="semantic: 'multi-search-select', updateSelect: $component.collObs, foreach: $component.optionsObs">
+        <option data-bind="text: $data, selected: $component.collObs().indexOf($data) > -1"></option>
+    </select>
+</div>
+<div class="field" data-bind="visible: $component.optionsObs().length === 0 || $component.readonly">
+    <div class="field">
+        <input type="text" readonly data-bind="value: $component.noneLabel">
     </div>
 </div>
