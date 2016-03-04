@@ -102,6 +102,21 @@ module.exports = {
     identity: function(arg) {
         return arg;
     },
+    makeRangeSorter: function(fieldMin, fieldMax) {
+        return function sorter(a,b) {
+            var minA = (typeof a[fieldMin] !== "number") ? 0 : a[fieldMin];
+            var maxA = (typeof a[fieldMax] !== "number") ? 0 : a[fieldMax];
+            
+            var minB = (typeof b[fieldMin] !== "number") ? 0 : b[fieldMin];
+            var maxB = (typeof b[fieldMax] !== "number") ? 0 : b[fieldMax];
+            
+            var diff = (minA - minB);
+            if (diff !== 0) {
+                return diff;
+            }
+            return (maxA - maxB);
+        }  
+    },
     /**
      * Create a sort function that sorts an array of items by a specific field name
      * (must be a string, will be sorted ignoring case).Sort items by a property of each object (must be a string)
@@ -256,6 +271,16 @@ module.exports = {
             return new Date(localDate).toLocaleDateString();
         }
         return "";
+    },
+    formatVersionRange: function(minValue, maxValue) {
+        if (isDefined(minValue) && isDefined(maxValue)) {
+            return minValue + "-" + maxValue;
+        } else if (isDefined(minValue)) {
+            return minValue + "+";
+        } else if (isDefined(maxValue)) {
+            return "0-" + maxValue;
+        }
+        return "<i>All versions</i>";
     },
     /**
      * Create a function that will remove items from a history table once we confirm they

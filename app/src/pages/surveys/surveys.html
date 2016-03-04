@@ -2,6 +2,7 @@
     <div class="fixed-header-title">
         <h3>Surveys</h3>
         <div class="fixed-header-buttons">
+            <button class="ui small button" data-bind="disable: !atLeastOneChecked(), click: copySurveys">Copy</button>
             <a href="#/surveys/new" class="ui primary small button">New Survey</a>
         </div>
     </div>
@@ -12,21 +13,23 @@
     <table class="ui compact table" data-bind="visible: itemsObs().length > 0">
         <thead>
         <tr>
+            <th width="10"></th>
             <th>Name</th>
             <th>Last Updated</th>
-            <th>Identifier</th>
             <th>Schedule(s)</th>
         </tr>
         </thead>
         <tbody data-bind="foreach: itemsObs">
         <tr>
             <td>
+                <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+            </td>
+            <td data-bind="attr:{title:$data.identifier}">
                 <a href="#" data-bind="attr: {'href': '#/surveys/'+$data.guid+'/'+$data.createdOn}, text: $data.name"></a>
             </td>
             <td data-bind="text: $parent.formatDateTime($data.modifiedOn)"></td>
-            <td data-bind="text: $data.identifier"></td>
             <td data-bind="foreach: $data.schedulePlanObs"><!-- ko if: $index() > 0 -->, <!-- /ko -->
-                <a target="_blank" data-bind="attr: {href: '#/scheduleplans/'+$data.guid}, text: $data.label"></a>
+                <a target="_blank" data-bind="attr: {href: '#/scheduleplans/'+$data.guid}, html: $data.label"></a>
             </td>
         </tr>
         </tbody>
