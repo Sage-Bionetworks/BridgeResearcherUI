@@ -28,7 +28,7 @@
                 <a href="#" data-bind="attr: {'href': '#/surveys/'+$data.guid+'/'+$data.createdOn}, text: $data.name"></a>
             </td>
             <td data-bind="text: $parent.formatDateTime($data.modifiedOn)"></td>
-            <td data-bind="foreach: $data.schedulePlanObs"><!-- ko if: $index() > 0 -->, <!-- /ko -->
+            <td data-bind="foreach: $data.schedulePlanObs"><!-- ko if: $index() > 0 --><span>, </span><!-- /ko -->
                 <a target="_blank" data-bind="attr: {href: '#/scheduleplans/'+$data.guid}, html: $data.label"></a>
             </td>
         </tr>

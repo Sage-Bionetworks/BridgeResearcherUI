@@ -74,7 +74,7 @@ function clearPendingControl() {
     }
 }
 function num(value) {
-    (typeof value !== "number") ? 0 : value;
+    return (typeof value !== "number") ? 0 : value;
 }
 /**
  * Common utility methods for ViewModels.
