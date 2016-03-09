@@ -60,8 +60,36 @@ ko.bindingHandlers.semantic = {
             $element.popup();
         } else if (value === 'popup-menu') {
             $element.popup({on: 'click', hideOnScroll:true, position: 'left center', duration: 100});
+        } else if (value === 'multi-search-select') {
+            // Every single bit of this nightmare is required on either the subpopulation or the 
+            // scheduleCriteria object to load and save properly.
+            setTimeout(function() {
+                var collectionObs = allBindings().updateSelect;
+                $element.addClass("ui fluid search dropdown").attr("multiple","true").dropdown({
+                    onAdd: function(value) {
+                        if (!collectionObs.contains(value)) {
+                            collectionObs.push(value);    
+                        }
+                    },
+                    onRemove: function(value) {
+                        collectionObs.remove(value);
+                    }
+                });
+                $element.dropdown("set selected", collectionObs());
+                collectionObs.subscribe(function(newValue) {
+                    $element.dropdown("set selected", newValue);
+                });
+            },1);
         }
     }
+};
+ko.bindingHandlers.selected = {
+    init: function(element, valueAccessor) {
+        var value = ko.unwrap(valueAccessor());
+        if (value) {
+            element.setAttribute("selected","selected");
+        }
+    }  
 };
 ko.bindingHandlers.ckeditor = {
     init: function(element, valueAccessor) {

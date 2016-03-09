@@ -12,7 +12,9 @@ html, body {
 body {
     @include flex-box(column);
     background-color: white;
-    /*min-height: 100vh;*/
+    opacity: 0.0;
+    -webkit-transition: opacity .5s ease-in-out;
+    transition: opacity .5s ease-in-out;
 }
 section {
     @include flex-box(row);
@@ -156,3 +158,4 @@ footer p {
     font-variant: small-caps;
     white-space: pre;
 }
+

@@ -19,7 +19,6 @@
                         <i class="warning icon"></i> Not Published
                     </div>
                 </span>
-                <button class="ui small button" data-bind="click: publish">Publish</button>
                 <button class="ui small primary button" data-bind="click: save">Save</button>
             </span>
         </div>
@@ -29,7 +28,7 @@
             <i class="file outline icon"></i> Editor
         </a>
         <a class="item" data-bind="click: function() { tabObs('history') }, css: {active: tabObs() == 'history'}">
-            <i class="history icon"></i> History
+            <i class="history icon"></i> History &amp; Publication
         </a>
         <a class="item" data-bind="click: function() { tabObs('download') }, css: {active: tabObs() == 'download'}">
             <i class="history icon"></i> Download
@@ -48,10 +47,10 @@
                 <div class="ten wide column">
                     <table class="ui compact table">
                         <thead>
-                        <tr>
-                            <th>Saved On</th>
-                            <th>&nbsp;</th>
-                        </tr>
+                            <tr>
+                                <th>Saved On</th>
+                                <th>&nbsp;</th>
+                            </tr>
                         </thead>
                         <tbody data-bind="foreach: historyItemsObs">
                             <tr data-bind="css: { positive: $data.active }">
@@ -62,6 +61,9 @@
                                 <td>
                                     <div data-bind="visible: $data.active" style="text-align: right">
                                         <i class="icon checkmark"></i> Published
+                                    </div>
+                                    <div data-bind="visible: !$data.active" style="text-align: right">
+                                        <button class="ui compact mini button" data-bind="click: $component.publish">Publish</button>
                                     </div>
                                 </td>
                             </tr>
@@ -82,24 +84,24 @@
                 <div class="ten wide column">
                     <table class="ui compact table">
                         <thead>
-                        <tr>
-                            <th>Format</th>
-                            <th></th>
-                        </tr>
+                            <tr>
+                                <th>Format</th>
+                                <th></th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>HTML</td>
-                            <td>
-                                <a target="_blank" data-bind="attr: {'href': htmlUrlObs}, text: htmlUrlObs"></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>PDF</td>
-                            <td>
-                                <a target="_blank" data-bind="attr: {'href': pdfUrlObs}, text: pdfUrlObs"></a>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>HTML</td>
+                                <td>
+                                    <a target="_blank" data-bind="attr: {'href': htmlUrlObs}, text: htmlUrlObs"></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>PDF</td>
+                                <td>
+                                    <a target="_blank" data-bind="attr: {'href': pdfUrlObs}, text: pdfUrlObs"></a>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

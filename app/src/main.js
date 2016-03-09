@@ -74,3 +74,7 @@ router.configure({
     ]
 });
 router.init();
+
+window.addEventListener("load", function() {
+    document.body.style.opacity = "1.0";
+}, false);

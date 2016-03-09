@@ -34,6 +34,10 @@
     font-style: italic;
     padding: 0 .5rem;
 }
+input[readonly] {
+    border:none!important;
+    font-style: italic;
+}
 
 /* Tag editor control */
 .tag-editor label {

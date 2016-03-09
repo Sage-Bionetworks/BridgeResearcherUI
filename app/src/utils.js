@@ -73,7 +73,9 @@ function clearPendingControl() {
         pendingControl = null;
     }
 }
-
+function num(value) {
+    return (typeof value !== "number") ? 0 : value;
+}
 /**
  * Common utility methods for ViewModels.
  */
@@ -101,6 +103,16 @@ module.exports = {
      */
     identity: function(arg) {
         return arg;
+    },
+    makeRangeSorter: function(fieldMin, fieldMax) {
+        return function sorter(a,b) {
+            var minA = num(a[fieldMin]);
+            var maxA = num(a[fieldMax]);
+            var minB = num(b[fieldMin]);
+            var maxB = num(b[fieldMax]);
+            var diff = (minA - minB);
+            return (diff !== 0) ? diff : (maxA - maxB);
+        }  
     },
     /**
      * Create a sort function that sorts an array of items by a specific field name
@@ -256,6 +268,16 @@ module.exports = {
             return new Date(localDate).toLocaleDateString();
         }
         return "";
+    },
+    formatVersionRange: function(minValue, maxValue) {
+        if (isDefined(minValue) && isDefined(maxValue)) {
+            return minValue + "-" + maxValue;
+        } else if (isDefined(minValue)) {
+            return minValue + "+";
+        } else if (isDefined(maxValue)) {
+            return "0-" + maxValue;
+        }
+        return "<i>All versions</i>";
     },
     /**
      * Create a function that will remove items from a history table once we confirm they
