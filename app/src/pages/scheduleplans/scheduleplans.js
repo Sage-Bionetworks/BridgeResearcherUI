@@ -6,7 +6,10 @@ var Promise = require('es6-promise').Promise;
 var optionsService = require('../../services/options_service');
 var storeService = require('../../services/store_service');
 
-var FIELD_SORTER = utils.makeFieldSorter("label");
+var MULTI_FIELD_SORTER = utils.multiFieldSorter(
+    utils.makeRangeSorter("minAppVersion", "maxAppVersion"),
+    utils.makeFieldSorter("label")
+);
 
 function num(value, defaultValue) {
     return (typeof value !== "number") ? defaultValue : value;    
@@ -14,9 +17,9 @@ function num(value, defaultValue) {
 
 module.exports = function() {
     var self = this;
+    self.allItems = [];
 
     self.itemsObs = ko.observableArray([]);
-    self.allItems = [];
     self.formatDateTime = utils.formatDateTime;
     self.formatScheduleType = scheduleUtils.formatScheduleStrategyType;
     self.formatVersions = utils.formatVersionRange;
@@ -75,32 +78,23 @@ module.exports = function() {
     };
     self.formatStrategy = scheduleUtils.formatStrategy;
     
-    self.sortBy = function(field) {
-        if (field === 'versions') {
-            self.itemsObs(self.itemsObs().sort(utils.makeRangeSorter("minAppVersion", "maxAppVersion")));
-        } else {
-            self.itemsObs(self.itemsObs().sort(utils.makeFieldSorter(field)));
-        }
-    };
-    
     function filterItems() {
         var filterNum = parseInt(self.filterObs(),10);
         self.itemsObs(self.allItems.filter(function(item) {
             if (isNaN(filterNum)) {
                 return true;
             }
-            var min = num(item.minAppVersion,0);
+            var min = num(item.minAppVersion, 0);
             var max = num(item.maxAppVersion, Number.MAX_VALUE);
             return (filterNum >= min && filterNum <= max);
         }));
-        self.sortBy('versions');
     }
 
     function load() {
         serverService.getSchedulePlans().then(function(response) {
             if (response.items.length) {
                 self.allItems = response.items.map(utils.addCheckedObs);
-                self.allItems.sort(FIELD_SORTER);
+                self.allItems.sort(MULTI_FIELD_SORTER);
                 filterItems();
             } else {
                 document.querySelector(".loading_status").textContent = "There are currently no schedules.";

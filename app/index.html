@@ -35,11 +35,17 @@
                         <a href="#/info" class="item" data-bind="css:{active:isActive('info')}">
                             Settings
                         </a>
+                        <a href="#/verify_email_template" class="item" data-bind="css:{active:isActive('ve_template')}, visible: isDeveloper">
+                            Email Templates
+                        </a>
                         <a href="#/subpopulations" class="item" data-bind="css:{active:isActive('subpopulations')}">
                             Consent Groups
                         </a>
                         <a href="#/scheduleplans" class="item" data-bind="css:{active:isActive('scheduleplans')}">
                             Scheduling
+                        </a>
+                        <a href="#/participants" class="item" data-bind="css:{active:isActive('participants')}, visible: isResearcher()">
+                            Participants
                         </a>
                     </div>
                 </div>
@@ -58,23 +64,16 @@
                         </a>
                     </div>
                  </div>
-                <div class="item" data-bind="visible: isDeveloper() || isResearcher()">
-                    <i class="user icon"></i> Account Management
+                 <!--
+                <div class="item" data-bind="visible: isResearcher()">
+                    <i class="user icon"></i> Participants
                     <div class="menu">
-                        <a href="#/password_policy" class="item" data-bind="css:{active:isActive('password_policy')}, visible: isDeveloper">
-                            Password Policy
-                        </a>
-                        <a href="#/user_attributes" class="item" data-bind="css:{active:isActive('user_attributes')}, visible: isDeveloper">
-                            User Profile Attributes
-                        </a>
-                        <a href="#/verify_email_template" class="item" data-bind="css:{active:isActive('ve_template')}, visible: isDeveloper">
-                            Email Templates
-                        </a>
-                        <a href="#/actions" class="item" data-bind="css:{active:isActive('actions')}, visible: isResearcher">
+                        <a href="#/actions" class="item" data-bind="css:{active:isActive('actions')}">
                             Participant Roster
                         </a>
                     </div>
                 </div>
+                -->
                 <div class="item" data-bind="visible: isAdmin">
                     <i class="settings icon"></i> Administration
                     <div class="menu">

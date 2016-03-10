@@ -55,6 +55,9 @@ module.exports = function(params) {
     self.formatLink = function(item) {
         return '#/subpopulations/'+params.guid+"/consents/"+ ((item)?item.createdOn:"recent");
     }
+    self.publishedLink = function() {
+        return '#/subpopulations/'+params.guid+"/consents/recent";
+    }
 
     self.formatDateTime = utils.formatDateTime;
 

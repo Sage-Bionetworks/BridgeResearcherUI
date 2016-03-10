@@ -34,5 +34,6 @@ module.exports = {
     subpopulations: '/v3/subpopulations',
     verifyEmail: '/v3/studies/self/verifyEmail',
     emailStatus: '/v3/studies/self/emailStatus',
-    cache: '/v3/cache'
+    cache: '/v3/cache',
+    participants: '/v3/participants'
 };
