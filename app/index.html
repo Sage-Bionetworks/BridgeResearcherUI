@@ -41,9 +41,6 @@
                         <a href="#/subpopulations" class="item" data-bind="css:{active:isActive('subpopulations')}">
                             Consent Groups
                         </a>
-                        <a href="#/scheduleplans" class="item" data-bind="css:{active:isActive('scheduleplans')}">
-                            Scheduling
-                        </a>
                         <a href="#/participants" class="item" data-bind="css:{active:isActive('participants')}, visible: isResearcher()">
                             Participants
                         </a>
@@ -52,6 +49,9 @@
                 <div class="item" data-bind="visible: isDeveloper">
                     <i class="server icon"></i> Study Data
                     <div class="menu">
+                        <a href="#/scheduleplans" class="item" data-bind="css:{active:isActive('scheduleplans')}">
+                            Scheduling
+                        </a>
                         <a href="#/schemas" class="item" data-bind="css:{active:isActive('schemas')}">
                             Data Schemas
                         </a>
@@ -63,17 +63,7 @@
                             Surveys
                         </a>
                     </div>
-                 </div>
-                 <!--
-                <div class="item" data-bind="visible: isResearcher()">
-                    <i class="user icon"></i> Participants
-                    <div class="menu">
-                        <a href="#/actions" class="item" data-bind="css:{active:isActive('actions')}">
-                            Participant Roster
-                        </a>
-                    </div>
                 </div>
-                -->
                 <div class="item" data-bind="visible: isAdmin">
                     <i class="settings icon"></i> Administration
                     <div class="menu">
@@ -89,7 +79,7 @@
         </nav>
     </section>
     <footer>
-        <p>&copy; 2015 Sage Bionetworks. </p>
+        <p>&copy; 2015-2016 Sage Bionetworks. </p>
     </footer>
     <div data-bind="modal: dialogObs"></div>
 

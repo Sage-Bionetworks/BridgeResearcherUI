@@ -17,28 +17,28 @@ module.exports = function(params) {
     self.previousPage = function() {
         var page = self.currentPageObs() -1;
         if (page >= 0) {
-            wrappedLoadingFunc(page*PAGE_SIZE, PAGE_SIZE);
+            wrappedLoadingFunc(page*PAGE_SIZE);
         }
     }
     self.nextPage = function() {
         var page = self.currentPageObs() +1;
         if (page <= self.totalPagesObs()-1) {
-            wrappedLoadingFunc(page*PAGE_SIZE, PAGE_SIZE);
+            wrappedLoadingFunc(page*PAGE_SIZE);
         }
     }
     self.firstPage = function() {
-        wrappedLoadingFunc(0, PAGE_SIZE);
+        wrappedLoadingFunc(0);
     }
     self.lastPage = function() {
-        wrappedLoadingFunc( (self.totalPagesObs()-1) * PAGE_SIZE, PAGE_SIZE );
+        wrappedLoadingFunc((self.totalPagesObs()-1)*PAGE_SIZE);
     };
     
     ko.postbox.subscribe('recordsPaged', updateModel);
     
-    function wrappedLoadingFunc(offsetBy, pageSize) {
+    function wrappedLoadingFunc(offsetBy) {
         // knockout doing its dependency management thing, calls this with invalid page.
         if (offsetBy >= 0) {
-            loadingFunc(offsetBy, pageSize).then(function(response) {
+            loadingFunc(offsetBy, PAGE_SIZE).then(function(response) {
                 ko.postbox.publish('recordsPaged', response);
                 updateModel(response);
             });
