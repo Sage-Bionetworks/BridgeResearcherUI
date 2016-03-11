@@ -60,6 +60,8 @@ var RootViewModel = function() {
         serverService.signOut();
     };
     self.changeView = function(name, params) {
+        self.isEditorTabVisible(false);
+        self.isEditorPanelVisible(false);
         self.mainPage(name);
         self.mainParams(params);
     };

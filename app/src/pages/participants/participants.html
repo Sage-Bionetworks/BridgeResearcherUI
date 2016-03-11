@@ -14,7 +14,9 @@
             <input type="text" placeholder="Email address" data-bind="textInput: searchObs, event: {keydown: search}">
             <i class="search icon"></i>
         </div>   
-        <!-- ko component: {name:'pager', params: {loadingFunc:loadingFunc}} --><!-- /ko -->
+        <!-- ko component: {name:'pager', params: {
+            loadingFunc:loadingFunc, pageKey: 'participants-page', top: true
+        }} --><!-- /ko -->
         <table class="ui compact table">
             <thead>
                 <tr>
@@ -28,12 +30,14 @@
                     <td style="white-space: nowrap">
                         <a href="#" data-bind="attr: {'href': '#/participants/'+encodeURIComponent($data.email)}, text: $data.email"></a>
                     </td>
-                    <td data-bind="text: $data.firstName + ' ' + $data.lastName"></td>
-                    <td data-bind="text: $component.titleCase($data.status)"></td>
+                    <td data-bind="text: $component.formatName($data)"></td>
+                    <td data-bind="text: $component.formatTitleCase($data.status)"></td>
                 </tr>
             </tbody>
         </table>
-        <!-- ko component: {name:'pager', params: {loadingFunc:loadingFunc}} --><!-- /ko -->
+        <!-- ko component: {name:'pager', params: {
+            loadingFunc:loadingFunc, pageKey: 'participants-page', top: false
+        }} --><!-- /ko -->
     </div>
 </div>
 

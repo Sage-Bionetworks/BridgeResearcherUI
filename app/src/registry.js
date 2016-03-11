@@ -45,6 +45,7 @@ reg('scheduleplans', './pages/scheduleplans/scheduleplans');
 reg('scheduleplan', './pages/scheduleplan/scheduleplan');
 reg('participants', './pages/participants/participants');
 reg('participant', './pages/participant/participant');
+//reg('ParticipantPanel', './pages/participant/panels/participant');
 
 reg('schedule', './pages/schedule/schedule');
 reg('SimpleScheduleStrategy', './pages/schedule/strategies/simple_strategy');

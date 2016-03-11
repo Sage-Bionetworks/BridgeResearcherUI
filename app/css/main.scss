@@ -158,11 +158,9 @@ footer p {
     font-variant: small-caps;
     white-space: pre;
 }
-/* meh
-.icon {
-    color:rgb(41, 128, 185);
+.inline-loader {
+    display: none!important;
 }
-header .icon {
-    color: white;
+.loading .inline-loader {
+    display: block!important;
 }
-*/

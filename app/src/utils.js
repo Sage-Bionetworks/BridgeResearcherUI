@@ -296,6 +296,9 @@ module.exports = {
         }
         return "<i>All versions</i>";
     },
+    formatTitleCase: function(text) {
+        return text.substring(0,1).toUpperCase() + text.substring(1);  
+    },
     /**
      * Create a function that will remove items from a history table once we confirm they
      * are deleted. If we've deleted everything, go to the root view for this type of item.
@@ -372,10 +375,10 @@ module.exports = {
      * @returns {Function}
      */
     makeEventToPostboxListener: function(eventName) {
-        return function(element, event) {
+        return function(vm, event) {
             event.preventDefault();
             event.stopPropagation();
-            ko.postbox.publish(eventName, element);
+            ko.postbox.publish(eventName, vm);
         };
     },
     /**

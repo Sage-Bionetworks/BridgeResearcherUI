@@ -359,6 +359,9 @@ module.exports = {
     getParticipants: function(offsetBy, pageSize) {
         return get(config.participants + "?offsetBy="+offsetBy+"&pageSize="+pageSize);
     },
+    signOutUser: function(email) {
+        return post("/v3/users/signOut?email=" + encodeURIComponent(email));  
+    },
     getSession: function() {
         if (session) {
             return Promise.resolve(session);
