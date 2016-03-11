@@ -109,6 +109,12 @@ header {
         padding: 1.5rem 2rem 0rem 0rem;
         color: white;
     }
+.nav-content {
+    position: absolute;
+    color: #bbb;
+    top: 4.5rem;
+    cursor: pointer!important;
+}
 .scrollbox dd {
     margin: 1rem;
 }
