@@ -356,6 +356,12 @@ module.exports = {
     deleteCacheKey: function(cacheKey) {
         return del(config.cache + "/" + encodeURIComponent(cacheKey));
     },
+    getParticipants: function(offsetBy, pageSize) {
+        return get(config.participants + "?offsetBy="+offsetBy+"&pageSize="+pageSize);
+    },
+    signOutUser: function(email) {
+        return post("/v3/users/signOut?email=" + encodeURIComponent(email));  
+    },
     getSession: function() {
         if (session) {
             return Promise.resolve(session);

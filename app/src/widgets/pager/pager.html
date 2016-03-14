@@ -1,0 +1,10 @@
+<div style="float:right" class="ui small pagination menu" data-bind="visible: totalPagesObs() > 1">
+    <a class="item" data-bind="click: firstPage, visible: currentPageObs() != 0">1</a>
+    <a class="item" data-bind="click: previousPage, visible: currentPageObs() != 0">←</a>
+    <div class="active item">
+        <span data-bind="text: currentPageObs() + 1"></span>&nbsp;of&nbsp; 
+        <span data-bind="text: totalPagesObs()"></span>
+    </div>
+    <a class="item" data-bind="click: nextPage, visible: currentPageObs() != (totalPagesObs()-1)">→</a>
+    <a class="item" data-bind="click: lastPage, visible: currentPageObs() != (totalPagesObs()-1), text: totalPagesObs()"></a>
+</div>

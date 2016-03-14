@@ -10,7 +10,8 @@ var pageSets = {
     'schemas': ['schemas','schema','schema_versions'],
     'scheduleplans': ['scheduleplans','scheduleplan'],
     've_template': ['ve_template', 'rp_template'],
-    'subpopulations': ['subpopulations', 'subpopulation', 'consent']
+    'subpopulations': ['subpopulations', 'subpopulation', 'consent'],
+    'participants': ['participants','participant']
 };
 
 toastr.options = config.toastr;
@@ -59,6 +60,8 @@ var RootViewModel = function() {
         serverService.signOut();
     };
     self.changeView = function(name, params) {
+        self.isEditorTabVisible(false);
+        self.isEditorPanelVisible(false);
         self.mainPage(name);
         self.mainParams(params);
     };

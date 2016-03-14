@@ -158,4 +158,9 @@ footer p {
     font-variant: small-caps;
     white-space: pre;
 }
-
+.inline-loader {
+    display: none!important;
+}
+.loading .inline-loader {
+    display: block!important;
+}

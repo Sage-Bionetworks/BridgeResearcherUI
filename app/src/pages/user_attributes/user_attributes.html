@@ -1,16 +1,15 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
-        <h3>User Profile Attributes</h3>
+        <h3>User Profile</h3>
         <div class="fixed-header-buttons">
-            <button class="ui primary button" data-bind="disable: $component.noChanges, click: $component.save">Save</button>
+            <button class="ui small primary button" data-bind="disable: $component.noChanges, click: $component.save">Save</button>
         </div>
     </div>
-    <div class="empty-secondary-menu"></div>
+    <!-- ko component: {name: 'settings-tabset', params: {active: 'user_attributes' }} --><!-- /ko -->
 </div>
 <div class="scrollbox">
     <div class="ui grid">
         <div class="ten wide column">
-
             <div class="ui large labels" data-bind="foreach: records">
                 <div class="ui label">
                     <span data-bind="text: $data"></span> <i class="icon close" data-bind="click: $component.remove"></i>
@@ -28,9 +27,7 @@
                     for a study. By default, we accept a participant's first and last name, and an email address,
                     through that participant’s user profile. </p>
 
-                <p>You can configure your study to accept additional information about a participant. These fields can
-                    then be added to a user profile and they will be saved and included as part of the
-                    <a href="#actions">Participant Roster</a>. </p>
+                <p>You can configure your study to extend the user profile and include additional attributes. </p>
 
                 <p>Like a participant's name or email address, this information will not be included in the data set
                     exported from the study.</p>

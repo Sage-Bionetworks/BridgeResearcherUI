@@ -125,6 +125,23 @@ module.exports = {
         };
     },
     /**
+     * Combine sort functions for multi-field sorting. Takes one or more sort functions (as would be 
+     * passed to an array's sort method).
+     */
+    multiFieldSorter: function() {
+        var sortFuncs = Array.prototype.slice.call(arguments);
+        return function sorter(a,b) {
+            for (var i=0; i < sortFuncs.length; i++) {
+                var sorter = sortFuncs[i];
+                var output = sorter(a,b);
+                if (output != 0) {
+                    return output;
+                }
+            }
+            return 0;
+        }
+    },
+    /**
      * A start handler called before a request to the server is made. All errors are cleared
      * and a loading indicator is shown. This is not done globally because some server requests
      * happen in the background and don't signal to the user that they are occurring.
@@ -279,6 +296,9 @@ module.exports = {
         }
         return "<i>All versions</i>";
     },
+    formatTitleCase: function(text) {
+        return text.substring(0,1).toUpperCase() + text.substring(1);  
+    },
     /**
      * Create a function that will remove items from a history table once we confirm they
      * are deleted. If we've deleted everything, go to the root view for this type of item.
@@ -355,10 +375,10 @@ module.exports = {
      * @returns {Function}
      */
     makeEventToPostboxListener: function(eventName) {
-        return function(element, event) {
+        return function(vm, event) {
             event.preventDefault();
             event.stopPropagation();
-            ko.postbox.publish(eventName, element);
+            ko.postbox.publish(eventName, vm);
         };
     },
     /**
