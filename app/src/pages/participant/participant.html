@@ -6,13 +6,51 @@
         </h3>
         <div class="fixed-header-buttons"></div>
     </div>
-    <div class="empty-secondary-menu"></div>
+    <!-- ko component: {name: 'participant-tabset', params: {active: 'info' }} --><!-- /ko -->
 </div>
 <div class="scrollbox">
     <errors></errors>
-    <p>TBD guys.</p>
-    
-    <div class="buttons">
-        <button class="ui small button" data-bind="click: signOutUser">Sign out user</button>
-    </div>
+    <form class="ui form">
+        <div class="three fields">
+            <div class="field">
+                <label>Name</label>
+                <div data-bind="text: nameObs"></div>
+            </div>
+            <div class="field">
+                <label>Email</label>
+                <div data-bind="text: emailObs"></div>
+            </div>
+            <div class="field">
+                <label>Sharing Scope</label>
+                <div data-bind="text: sharingScopeObs"></div>
+            </div>
+        </div>
+        <div class="three fields">
+            <div class="field">
+                <label>Attributes</label>
+                <table data-bind="foreach: attributesObs">
+                    <tr>
+                        <td data-bind="text: $data.key + ':'"></td>
+                        <td data-bind="text: $data.value"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="field">
+                <label>Data Groups</label>
+                <div style="width:14rem">
+                    <select multiple="" data-bind="semantic: 'multi-search-select', updateSelect: dataGroupsObs, foreach: allDataGroupsObs">
+                        <option data-bind="text: $data, selected: $component.dataGroupsObs().indexOf($data) > -1"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="field">
+                <label>Consents to emails?</label>
+                <div data-bind="text: notifyByEmailObs"></div>
+            </div>
+        </div>
+        <div class="button-set">
+            <button class="ui small button" data-bind="click: updateDataGroups">Update data groups</button>
+            <button class="ui small button" data-bind="click: signOutUser">Sign out user</button>
+        </div>
+    </form>
 </div>

@@ -164,3 +164,14 @@ footer p {
 .loading .inline-loader {
     display: block!important;
 }
+/* Currently used to show signature history on participant_consents.html */
+.ui.card {
+    display: inline-block;
+    margin-right: 1rem;
+}
+.signature {
+    background-size: contain;
+    background-position:center;
+    background-repeat:no-repeat;
+    height: 8rem!important;
+}

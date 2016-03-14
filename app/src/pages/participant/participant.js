@@ -3,6 +3,9 @@ var root = require('../../root');
 var utils = require('../../utils');
 var serverService = require('../../services/server_service');
 
+var fields = ['email','name','sharingScope','notifyByEmail','dataGroups[]','allDataGroups[]',
+    'attributes[]'];
+
 var usersEmail = null;
 
 serverService.addSessionStartListener(function(session) {
@@ -15,7 +18,8 @@ serverService.addSessionEndListener(function() {
 module.exports = function(params) {
     var self = this;
     
-    self.emailObs = ko.observable(decodeURIComponent(params.email));
+    utils.observablesFor(self, fields);
+    self.emailObs(decodeURIComponent(params.email));
     
     self.signOutUser = function(vm, event) {
         utils.startHandler(vm, event);
@@ -29,4 +33,29 @@ module.exports = function(params) {
                 .catch(utils.failureHandler(vm, event));
         }
     };
+    self.updateDataGroups = function(vm, event) {
+        utils.startHandler(vm, event);
+        var email = vm.emailObs();
+        var dataGroups = vm.dataGroupsObs();
+        
+        serverService.updateDataGroups(email, dataGroups)
+            .then(utils.successHandler(vm, event, "Data groups updates."))
+            .catch(utils.failureHandler(vm, event));
+    };
+    
+    serverService.getStudy().then(function(study) {
+        self.allDataGroupsObs.pushAll(study.dataGroups);
+    }).catch(utils.errorHandler);
+
+    serverService.getParticipant(self.emailObs()).then(function(response) {
+        var scope = utils.snakeToTitleCase(response.sharingScope, "No sharing set");
+        self.nameObs(utils.formatName(response));
+        self.sharingScopeObs(scope);
+        self.notifyByEmailObs(response.notifyByEmail ? "Yes" : "No");
+        self.dataGroupsObs(response.dataGroups);
+        var attrs = Object.keys(response.attributes).map(function(key) {
+            return {key: utils.snakeToTitleCase(key,''), value: response.attributes[key]};
+        });
+        self.attributesObs(attrs);
+    }).catch(utils.errorHandler);
 }

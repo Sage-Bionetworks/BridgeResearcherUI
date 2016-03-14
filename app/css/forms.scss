@@ -52,3 +52,6 @@ input[readonly] {
         z-index:1;
     }
 }
+.button-set {
+    @include flex-box(row);
+}

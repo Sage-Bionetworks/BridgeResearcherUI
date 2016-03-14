@@ -1,0 +1,54 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <h3>
+            <a href="#/participants" class="section">Participants</a>
+            <span data-bind="text: emailObs"></span>
+        </h3>
+        <div class="fixed-header-buttons"></div>
+    </div>
+    <!-- ko component: {name: 'participant-tabset', params: {active: 'consents' }} --><!-- /ko -->
+</div>
+<div class="scrollbox">
+    <errors></errors>
+    
+    <style>
+        .signature {
+            background-size: contain;
+            background-position:center;
+            background-repeat:no-repeat;
+            height: 8rem!important;
+            display: block;
+            border: none; outline: none;
+        }
+    </style>
+    
+    
+    <div data-bind="foreach: subpopulationsObs">
+        <h3 data-bind="text: $data.name"></h3>
+        
+        <div data-bind="visible: $data.history.length === 0">
+            <p>No consent.</p>
+        </div>
+        <div data-bind="foreach: $data.history">
+            <div class="ui card" data-bind="css: {red: $data.withdrawnOn}">
+                <div class="ui image" style="border:none;background:transparent;box-shadow:none">
+                    <img class="signature" data-bind="attr:{style: 'background-image: url('+$data.imageData+')'}"/>
+                </div>
+                <div class="content" style="padding-bottom: .5rem">
+                    <div class="header" data-bind="text: $data.name"></div>
+                    <div class="meta">Birthdate: <span class="category" data-bind="text: $data.birthdate"></span></div>
+                    <div class="description">
+                        <p>Signed on <span data-bind="text: $data.signedOn"></span></p>
+                        <p data-bind="visible: !$data.hasSignedActiveConsent">Not the most recent version of this consent (user signed version published on 
+                            <a target="_blank" data-bind="text: $data.consentCreatedOn, attr:{href: $data.consentURL}"></a>).
+                        </p>
+                    </div>
+                </div>
+                <div class="ui red message" data-bind="visible: $data.withdrewOn">
+                    <p class="bold ui red text">Withdrew <span data-bind="text: $data.withdrewOn"></span></p>    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

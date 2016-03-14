@@ -2,11 +2,11 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 
-function notBlankName(array, value) {
-    if (value !== '<EMPTY>' && value.length > 0) {
-        array.push(value);
-    }
-}
+var cssClassNameForStatus = {
+    'disabled': 'negative',
+    'unverified': 'warning',
+    'verified': ''
+};
 
 module.exports = function() {
     var self = this;
@@ -20,11 +20,9 @@ module.exports = function() {
         return true;
     };
     self.formatTitleCase = utils.formatTitleCase;
-    self.formatName = function(data) {
-        var array = [];
-        notBlankName(array, data.firstName);
-        notBlankName(array, data.lastName);
-        return (array.length === 0) ? '—' : array.join(' ');
+    self.formatName = utils.formatName;
+    self.classNameForStatus = function(user) {
+        return cssClassNameForStatus[user.status];
     };
     
     self.loadingFunc = function loadPage(offsetBy, pageSize) {
