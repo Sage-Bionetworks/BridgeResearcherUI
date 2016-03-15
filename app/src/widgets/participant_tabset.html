@@ -1,0 +1,10 @@
+<div class="ui secondary larger pointing menu">
+    <a class="item" data-bind="css:{active:$data.active === 'info'}, 
+        attr:{'href': '#/participants/'+encodeURIComponent($parent.emailObs())}">
+        <i class="setting icon"></i> General
+    </a>
+    <a href="#/email" class="item" data-bind="css:{active:$data.active === 'consents'}, 
+        attr:{'href': '#/participants/'+encodeURIComponent($parent.emailObs())+'/consents'}">
+        <i class="legal icon"></i> Consents
+    </a>
+</div>

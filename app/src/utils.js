@@ -76,6 +76,19 @@ function clearPendingControl() {
 function num(value) {
     return (typeof value !== "number") ? 0 : value;
 }
+function notBlankName(array, value) {
+    if (typeof value !== 'undefined' && value !== '<EMPTY>' && value.length > 0) {
+        array.push(value);
+    }
+}
+function formatTitleCase(string) {
+    if (string) {
+        return string.split(" ").map(function(text) {
+            return text.substring(0,1).toUpperCase() + text.substring(1); 
+        }).join(" ");
+    }
+    return '';
+}
 /**
  * Common utility methods for ViewModels.
  */
@@ -196,6 +209,7 @@ module.exports = {
             }
         };
     },
+    errorHandler: console.error.bind(console),
     /**
      * Create an observable for each field name provided. Will create an observableArray if the notation indicates
      * such (e.g. "entries[]" rather than "entries").
@@ -296,8 +310,27 @@ module.exports = {
         }
         return "<i>All versions</i>";
     },
-    formatTitleCase: function(text) {
-        return text.substring(0,1).toUpperCase() + text.substring(1);  
+    /**
+     * label --> Label (only one word however)
+     */
+    formatTitleCase: formatTitleCase,
+    /**
+     * Format user name, removing our <EMPTY> string to work around Stormpath requirements.
+     */
+    formatName: function(person) {
+        var array = [];
+        notBlankName(array, person.firstName);
+        notBlankName(array, person.lastName);
+        return (array.length === 0) ? '—' : array.join(' ');
+    },
+    /**
+     * snake_case_label --> Snake Case Label 
+     */
+    snakeToTitleCase: function(string, defaultValue) {
+        if (string) {
+            return formatTitleCase(string.replace(/_/g, ' '));
+        }
+        return defaultValue;
     },
     /**
      * Create a function that will remove items from a history table once we confirm they

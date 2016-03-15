@@ -359,6 +359,13 @@ module.exports = {
     getParticipants: function(offsetBy, pageSize) {
         return get(config.participants + "?offsetBy="+offsetBy+"&pageSize="+pageSize);
     },
+    getParticipant: function(email) {
+        return get(config.participants + "/" + encodeURIComponent(email));
+    },
+    updateDataGroups: function(email, dataGroups) {
+        return post(config.participants + "/dataGroups?email=" + encodeURIComponent(email), 
+            {dataGroups: dataGroups});
+    },
     signOutUser: function(email) {
         return post("/v3/users/signOut?email=" + encodeURIComponent(email));  
     },

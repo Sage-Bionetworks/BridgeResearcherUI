@@ -71,6 +71,7 @@ router.on('/scheduleplans/:guid', guidRoute('scheduleplan'));
 router.on('/synapse', routeTo('synapse'));
 router.on('/cache', routeTo('cache'));
 router.on('/participants/:email', emailRoute('participant'));
+router.on('/participants/:email/consents', emailRoute('participant_consents'));
 router.on('/participants', routeTo('participants'));
 
 router.configure({
