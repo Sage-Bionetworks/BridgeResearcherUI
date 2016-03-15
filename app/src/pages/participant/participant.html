@@ -14,15 +14,29 @@
         <div class="three fields">
             <div class="field">
                 <label>Name</label>
-                <div data-bind="text: nameObs"></div>
+                <div class="input-field" data-bind="text: nameObs"></div>
             </div>
             <div class="field">
                 <label>Email</label>
-                <div data-bind="text: emailObs"></div>
+                <div class="input-field" data-bind="text: emailObs"></div>
             </div>
             <div class="field">
                 <label>Sharing Scope</label>
-                <div data-bind="text: sharingScopeObs"></div>
+                <div class="input-field" data-bind="text: sharingScopeObs"></div>
+            </div>
+        </div>
+        <div class="three fields">
+            <div class="field">
+                <label>Languages</label>
+                <div class="input-field" data-bind="text: languagesObs"></div>
+            </div>
+            <div class="field">
+                <label>Roles</label>
+                <div class="input-field" data-bind="text: rolesObs"></div>
+            </div>
+            <div class="field" data-bind="visible: healthCodeObs">
+                <label>Health Code</label>
+                <div class="input-field" data-bind="text: healthCodeObs"></div>
             </div>
         </div>
         <div class="three fields">

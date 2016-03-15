@@ -26,22 +26,24 @@ module.exports = function(params) {
     self.pageSizeObs(pageSize);
     self.currentPageObs(offsetBy/pageSize);
 
-    self.previousPage = function() {
+// TODO: We're adding some kind of loading indicator to these actions.
+
+    self.previousPage = function(vm, event) {
         var page = self.currentPageObs() -1;
         if (page >= 0) {
             wrappedLoadingFunc(page*pageSize);
         }
     }
-    self.nextPage = function() {
+    self.nextPage = function(vm, event) {
         var page = self.currentPageObs() +1;
         if (page <= self.totalPagesObs()-1) {
             wrappedLoadingFunc(page*pageSize);
         }
     }
-    self.firstPage = function() {
+    self.firstPage = function(vm, event) {
         wrappedLoadingFunc(0);
     }
-    self.lastPage = function() {
+    self.lastPage = function(vm, event) {
         wrappedLoadingFunc((self.totalPagesObs()-1)*pageSize);
     };
     
@@ -51,7 +53,7 @@ module.exports = function(params) {
     ko.postbox.subscribe(pageKey+'-recordsPaged', updateModel);
     
     function wrappedLoadingFunc(offsetBy) {
-        loadingFunc(offsetBy, pageSize).then(function(response) {
+        return loadingFunc(offsetBy, pageSize).then(function(response) {
             storeService.set(pageKey, offsetBy);
             ko.postbox.publish(pageKey+'-recordsPaged', response);
             updateModel(response);
