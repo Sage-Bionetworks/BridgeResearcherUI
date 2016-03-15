@@ -2,18 +2,18 @@ var ko = require('knockout');
 var utils = require('../../utils');
 var serverService = require('../../services/server_service');
 var Promise = require('es6-promise').Promise;
- 
+
 module.exports = function(params) {
     var self = this;
-    
+
     self.emailObs = ko.observable(decodeURIComponent(params.email));
-    
+
     self.subpopulationsObs = ko.observableArray([]);
-    
+
     self.formatSignedOn = function(signedOn) {
         return new Date(signedOn);
     }
-    
+
     serverService.getParticipant(self.emailObs()).then(function(response) {
         var histories = response.consentHistories;
         
@@ -44,5 +44,5 @@ module.exports = function(params) {
             });
         });
     }).catch(utils.errorHandler);
-    
+
 };

@@ -11,6 +11,7 @@ var cssClassNameForStatus = {
 module.exports = function() {
     var self = this;
 
+    self.recordsObs = ko.observable("");
     self.itemsObs = ko.observableArray([]);
     self.searchObs = ko.observable();
     self.search = function(vm, event) {
@@ -25,8 +26,13 @@ module.exports = function() {
         return cssClassNameForStatus[user.status];
     };
     
+    function formatCount(total) {
+        return (total+"").replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " user records";
+    }
+    
     self.loadingFunc = function loadPage(offsetBy, pageSize) {
         return serverService.getParticipants(offsetBy, pageSize).then(function(response) {
+            self.recordsObs(formatCount(response.total));
             if (response.items.length) {
                 self.itemsObs(response.items);
             } else if (offsetBy > 0) {
