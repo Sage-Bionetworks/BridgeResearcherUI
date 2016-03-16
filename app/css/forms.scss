@@ -36,7 +36,9 @@
 }
 input[readonly] {
     border:none!important;
-    font-style: italic;
+}
+.input-field { /* For readonly divs that need to occupy the space of an input field */
+    height: 1.5rem;
 }
 
 /* Tag editor control */
