@@ -162,8 +162,6 @@ module.exports = {
      * @param event
      */
     startHandler: function(vm, event) {
-        //just makes the UI jumpy for no reason since it should always be paired with success/failure handlers
-        //ko.postbox.publish("clearErrors");
         displayPendingControl(event.target);
     },
     /**

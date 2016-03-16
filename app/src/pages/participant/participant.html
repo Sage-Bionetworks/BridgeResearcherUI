@@ -41,13 +41,12 @@
         </div>
         <div class="three fields">
             <div class="field">
-                <label>Attributes</label>
-                <table data-bind="foreach: attributesObs">
-                    <tr>
-                        <td data-bind="text: $data.key + ':'"></td>
-                        <td data-bind="text: $data.value"></td>
-                    </tr>
-                </table>
+                <div data-bind="foreach: attributesObs">
+                    <div class="field">
+                        <label data-bind="text: $data.key"></label>
+                        <div class="input-field" data-bind="text: $data.value"></div>
+                    </div>
+                </div>
             </div>
             <div class="field">
                 <label>Data Groups</label>

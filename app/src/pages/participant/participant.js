@@ -61,7 +61,7 @@ module.exports = function(params) {
         self.dataGroupsObs(response.dataGroups);
         self.healthCodeObs(response.healthCode);
         self.languagesObs(response.languages.join(", "));
-        self.rolesObs(formatList(response.roles));
+        self.rolesObs(formatList(response.roles.sort()));
         var attrs = Object.keys(response.attributes).map(function(key) {
             return {key: utils.snakeToTitleCase(key,''), value: response.attributes[key]};
         });

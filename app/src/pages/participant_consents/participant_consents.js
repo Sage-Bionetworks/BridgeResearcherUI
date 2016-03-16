@@ -25,6 +25,7 @@ module.exports = function(params) {
                 var subpopHistories = histories[subpop.guid].map(function(record) {
                     var history = {};
                     history.consentURL = '/#/subpopulations/'+subpop.guid+'/consents/'+record.consentCreatedOn;
+                    history.name = record.name;
                     history.birthdate = new Date(record.birthdate).toLocaleDateString(); 
                     history.signedOn = new Date(record.signedOn).toLocaleString();
                     history.consentCreatedOn = new Date(record.consentCreatedOn).toLocaleString();
