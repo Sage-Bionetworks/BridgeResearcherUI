@@ -16,16 +16,18 @@
         <div data-bind="visible: $data.history.length === 0">
             <p>No consent.</p>
         </div>
-        <div data-bind="foreach: $data.history">
+        <div class="signature-container" data-bind="foreach: $data.history">
             <div class="ui card" data-bind="css: {red: $data.withdrawnOn}">
-                <div class="ui image" style="border:none;background:transparent;box-shadow:none">
+                <div class="ui image" style="">
                     <img class="signature" data-bind="attr:{style: 'background-image: url('+$data.imageData+')'}"/>
                 </div>
                 <div class="content">
                     <div class="header" data-bind="text: $data.name"></div>
-                    <div class="meta">Birthdate: <span class="category" data-bind="text: $data.birthdate"></span></div>
+                    <div class="meta">
+                        Birthdate: <span class="category" data-bind="text: $data.birthdate"></span>
+                    </div>
                     <div class="description">
-                        <p>Signed on <span data-bind="text: $data.signedOn"></span></p>
+                        <p>Consented on <span data-bind="text: $data.signedOn"></span></p>
                         <p data-bind="visible: !$data.hasSignedActiveConsent">Not the most recent version of this consent (user signed version published on 
                             <a target="_blank" data-bind="text: $data.consentCreatedOn, attr:{href: $data.consentURL}"></a>).
                         </p>

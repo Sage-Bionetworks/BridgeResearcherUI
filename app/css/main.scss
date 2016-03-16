@@ -170,14 +170,42 @@ footer p {
 .loading .inline-loader {
     display: block!important;
 }
-/* Currently used to show signature history on participant_consents.html */
-.ui.card {
-    display: inline-block;
-    margin-right: 1rem;
+
+/* participants */
+
+.pagination {
+    float:right; 
+    position:relative; 
 }
-.signature {
-    background-size: contain;
-    background-position:center;
-    background-repeat:no-repeat;
-    height: 8rem!important;
+.pagination .ui.active.loader {
+    display:none;
+}
+.pagination.loading .ui.active.loader {
+    display:block;
+}
+
+/* participant_consents */
+.signature-container {
+    @include flex-box(row);
+    @include align-items(flex-start);
+    @include flex-wrap();
+    
+    .ui.card {
+        display: inline-block;
+        margin: 0;
+        margin-right: 1rem;
+    }
+    .signature {
+        background-size: contain;
+        background-position:center;
+        background-repeat:no-repeat;
+        height: 8rem!important;
+    }
+    .ui.image {
+        border:none;
+        background:transparent;
+    }
+    .ui.message {
+        margin: 0;
+    }
 }

@@ -26,39 +26,47 @@ module.exports = function(params) {
     self.pageSizeObs(pageSize);
     self.currentPageObs(offsetBy/pageSize);
 
-// TODO: We're adding some kind of loading indicator to these actions.
-
     self.previousPage = function(vm, event) {
         var page = self.currentPageObs() -1;
         if (page >= 0) {
-            wrappedLoadingFunc(page*pageSize);
+            wrappedLoadingFunc(page*pageSize, vm, event);
         }
     }
     self.nextPage = function(vm, event) {
         var page = self.currentPageObs() +1;
         if (page <= self.totalPagesObs()-1) {
-            wrappedLoadingFunc(page*pageSize);
+            wrappedLoadingFunc(page*pageSize, vm, event);
         }
     }
     self.firstPage = function(vm, event) {
-        wrappedLoadingFunc(0);
+        wrappedLoadingFunc(0, vm, event);
     }
     self.lastPage = function(vm, event) {
-        wrappedLoadingFunc((self.totalPagesObs()-1)*pageSize);
+        wrappedLoadingFunc((self.totalPagesObs()-1)*pageSize, vm, event);
     };
     
     // Postbox allows multiple instances of a paging control to stay in sync above
     // and below the table. The 'top' control is responsible for kicking off the 
     // first page of records.
     ko.postbox.subscribe(pageKey+'-recordsPaged', updateModel);
-    
-    function wrappedLoadingFunc(offsetBy) {
-        return loadingFunc(offsetBy, pageSize).then(function(response) {
+
+    function wrappedLoadingFunc(offsetBy, vm, event) {
+        var evt;
+        if (vm) {
+            evt = {target: event.target.parentNode};
+            utils.startHandler(vm, evt);
+        }
+        var p = loadingFunc(offsetBy, pageSize).then(function(response) {
             storeService.set(pageKey, offsetBy);
             ko.postbox.publish(pageKey+'-recordsPaged', response);
             updateModel(response);
         });
+        if (vm) {
+            p.then(utils.successHandler(vm, evt))
+            .catch(utils.failureHandler(vm, evt));
+        }
     }
+
     function updateModel(response) {
         self.offsetByObs(response.offsetBy);
         self.pageSizeObs(response.pageSize);
