@@ -12,6 +12,8 @@ var FIELDS = ['offsetBy','pageSize','totalRecords','totalPages','currentPage'];
  *      the screen
  * @params top - mark one of the pagers as the top pager, and only that pager will take responsibility
  *      for calling for the first page of records.
+ * @params filterObs
+ *      model observer for any filter information added to filter this page.
  */
 module.exports = function(params) {
     var self = this;
@@ -21,10 +23,17 @@ module.exports = function(params) {
     var offsetBy = storeService.get(pageKey) || 0;
     var pageSize = 50;
 
+    if (params.filterObs) {
+        params.filterObs.extend({ rateLimit: 1000 });
+        params.filterObs.subscribe(function(newValue) {
+             wrappedLoadingFunc(Math.round(self.currentPageObs()), null, null);
+        });
+    }
+
     utils.observablesFor(self, FIELDS);
     self.offsetByObs(offsetBy);
     self.pageSizeObs(pageSize);
-    self.currentPageObs(offsetBy/pageSize);
+    self.currentPageObs(Math.round(offsetBy/pageSize));
 
     self.previousPage = function(vm, event) {
         var page = self.currentPageObs() -1;
@@ -71,7 +80,7 @@ module.exports = function(params) {
         self.offsetByObs(response.offsetBy);
         self.pageSizeObs(response.pageSize);
         self.totalRecordsObs(response.total);
-        self.currentPageObs(response.offsetBy/response.pageSize);
+        self.currentPageObs(Math.round(response.offsetBy/response.pageSize));
         self.totalPagesObs( Math.ceil(response.total/response.pageSize) );
     }
     if (params.top) {

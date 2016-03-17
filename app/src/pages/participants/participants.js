@@ -14,12 +14,6 @@ module.exports = function() {
     self.recordsObs = ko.observable("");
     self.itemsObs = ko.observableArray([]);
     self.searchObs = ko.observable();
-    self.search = function(vm, event) {
-        if (event.keyCode === 13) {
-            document.location = "#participants/" + encodeURIComponent(self.searchObs());
-        }
-        return true;
-    };
     self.formatTitleCase = utils.formatTitleCase;
     self.formatName = utils.formatName;
     self.classNameForStatus = function(user) {
@@ -31,7 +25,8 @@ module.exports = function() {
     }
     
     self.loadingFunc = function loadPage(offsetBy, pageSize) {
-        return serverService.getParticipants(offsetBy, pageSize).then(function(response) {
+        var emailFilter = self.searchObs();
+        return serverService.getParticipants(offsetBy, pageSize, emailFilter).then(function(response) {
             self.recordsObs(formatCount(response.total));
             if (response.items.length) {
                 self.itemsObs(response.items);

@@ -32,7 +32,7 @@ if (typeof window !== "undefined") {
     });
 }
 
-var NO_CACHE_PATHS = ['studies/self/emailStatus'];
+var NO_CACHE_PATHS = ['studies/self/emailStatus','participants?offsetBy='];
 var PATH_EXTS = ['/published','/recent','/revisions'];
 
 var cache = (function() {
@@ -356,8 +356,9 @@ module.exports = {
     deleteCacheKey: function(cacheKey) {
         return del(config.cache + "/" + encodeURIComponent(cacheKey));
     },
-    getParticipants: function(offsetBy, pageSize) {
-        return get(config.participants + "?offsetBy="+offsetBy+"&pageSize="+pageSize);
+    getParticipants: function(offsetBy, pageSize, emailFilter) {
+        emailFilter = emailFilter || "";
+        return get(config.participants + "?offsetBy="+offsetBy+"&pageSize="+pageSize+"&emailFilter="+emailFilter);
     },
     getParticipant: function(email) {
         return get(config.participants + "/" + encodeURIComponent(email));

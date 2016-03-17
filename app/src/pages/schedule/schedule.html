@@ -46,14 +46,13 @@
         </div>
         <div class="field" data-bind="visible: editorScheduleTypeObs() === 'cron', attr:{id:
             'strategy_'+$component.collectionName+'schedule_cronTrigger'}">
-            <label>On <a href="http://www.cronmaker.com/" target="_blank">cron expression</a></label>
+            <label>Then follow <a href="http://www.cronmaker.com/" target="_blank">cron expression</a></label>
             <div style="width:14rem">
                 <ui-text params="fieldObs: cronTriggerObs"></ui-text>
             </div>
         </div>
         <div class="field" data-bind="attr:{id:
             'strategy_'+$component.collectionName+'schedule_expires'}">
-            <!--<label>Tasks expire after</label>-->
             <label data-bind="text: (editorScheduleTypeObs() !== 'once') ? 'Tasks expire after' : 'Task expires after'"></label>
             <ui-duration params="fieldObs: expiresObs"></ui-duration>
         </div>
