@@ -11,11 +11,11 @@
     <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
     <div data-bind="visible: itemsObs().length > 0">
         <div class="ui icon input">
-            <input type="text" placeholder="Email address" data-bind="textInput: searchObs, event: {keydown: search}">
+            <input type="text" placeholder="Email address" data-bind="textInput: searchObs">
             <i class="search icon"></i>
         </div>   
         <!-- ko component: {name:'pager', params: {
-            loadingFunc:loadingFunc, pageKey: 'participants-page', top: true
+            loadingFunc:loadingFunc, pageKey: 'participants-page', top: true, filterObs: searchObs
         }} --><!-- /ko -->
         <table class="ui compact table">
             <thead>
@@ -36,7 +36,7 @@
             </tbody>
         </table>
         <!-- ko component: {name:'pager', params: {
-            loadingFunc:loadingFunc, pageKey: 'participants-page', top: false
+            loadingFunc:loadingFunc, pageKey: 'participants-page', top: false, filterObs: searchObs
         }} --><!-- /ko -->
     </div>
 </div>
