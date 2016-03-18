@@ -58,7 +58,7 @@ input[readonly] {
     @include flex-box(row);
 }
 /* The controls in a layout expand across the field region, sometimes they 
-    look dumb that large. */
+    look dumb that large. This is one attempt to rationalize it. */
 .short-input {
     width: 14rem!important;
 }

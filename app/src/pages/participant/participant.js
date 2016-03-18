@@ -6,8 +6,7 @@ var serverService = require('../../services/server_service');
 var fields = ['email','name','firstName','lastName','sharingScope','notifyByEmail',
     'dataGroups[]','healthCode','allDataGroups[]','attributes[]','externalId','languages', 'roles'];
     
-var persistedFields = ['firstName','lastName','sharingScope','notifyByEmail',
-    'dataGroups[]','languages'];
+var persistedFields = ['firstName','lastName','sharingScope','notifyByEmail','dataGroups[]','languages'];
 
 var usersEmail = null;
 
@@ -19,7 +18,7 @@ serverService.addSessionEndListener(function() {
 });
 
 function formatList(list) {
-    return list.map(function(el) {
+    return (list || []).sort().map(function(el) {
         return utils.formatTitleCase(el);
     }).join(", ");
 }
@@ -53,6 +52,7 @@ module.exports = function(params) {
         utils.startHandler(vm, event);
         var email = vm.emailObs();
 
+        // New APIs coming to update more than this. 
         serverService.updateDataGroups(email, object)
             .then(utils.successHandler(vm, event, "Data groups updates."))
             .catch(utils.failureHandler(vm, event));
@@ -77,7 +77,7 @@ module.exports = function(params) {
                 self.healthCodeObs(response.healthCode);    
             }
             self.languagesObs(response.languages.join(", "));
-            self.rolesObs(formatList(response.roles.sort()));
+            self.rolesObs(formatList(response.roles));
             var attrs = self.study.userProfileAttributes.map(function(key) {
                 self[key+"Label"] = utils.snakeToTitleCase(key,'');
                 self[key+"Obs"] = ko.observable(response.attributes[key]);
