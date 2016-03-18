@@ -364,8 +364,7 @@ module.exports = {
         return get(config.participants + "/" + encodeURIComponent(email));
     },
     updateDataGroups: function(email, dataGroups) {
-        return post(config.participants + "/dataGroups?email=" + encodeURIComponent(email), 
-            {dataGroups: dataGroups});
+        return post(config.participants + "/dataGroups?email=" + encodeURIComponent(email), dataGroups);
     },
     signOutUser: function(email) {
         return post("/v3/users/signOut?email=" + encodeURIComponent(email));  

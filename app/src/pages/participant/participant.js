@@ -3,8 +3,12 @@ var root = require('../../root');
 var utils = require('../../utils');
 var serverService = require('../../services/server_service');
 
-var fields = ['email','name','sharingScope','notifyByEmail','dataGroups[]','allDataGroups[]',
-    'attributes[]', 'healthCode', 'languages', 'roles'];
+var fields = ['email','name','firstName','lastName','sharingScope','notifyByEmail',
+    'dataGroups[]','allDataGroups[]','allProfileAttributes[]','healthCode', 'attributes[]', 
+    'languages', 'roles'];
+    
+var persistedFields = ['firstName','lastName','sharingScope','notifyByEmail','dataGroups[]', 
+    'languages'];
 
 var usersEmail = null;
 
@@ -39,32 +43,48 @@ module.exports = function(params) {
                 .catch(utils.failureHandler(vm, event));
         }
     };
-    self.updateDataGroups = function(vm, event) {
+    self.save = function(vm, event) {
+        var object = {}
+        utils.observablesToObject(vm, object, persistedFields);
+        self.allProfileAttributesObs().map(function(key) {
+            object[key] = self[key+"Obs"]();
+        });
+        
         utils.startHandler(vm, event);
         var email = vm.emailObs();
-        var dataGroups = vm.dataGroupsObs();
-        
-        serverService.updateDataGroups(email, dataGroups)
+
+        serverService.updateDataGroups(email, object)
             .then(utils.successHandler(vm, event, "Data groups updates."))
             .catch(utils.failureHandler(vm, event));
     };
     
     serverService.getStudy().then(function(study) {
+        // NOTE: probably don't have to e observables.
         self.allDataGroupsObs.pushAll(study.dataGroups);
+        self.allProfileAttributesObs(study.userProfileAttributes);
+    }).then(function(response) {
+        serverService.getParticipant(self.emailObs()).then(function(response) {
+            var scope = utils.snakeToTitleCase(response.sharingScope, "No sharing set");
+            self.nameObs(utils.formatName(response));
+            self.firstNameObs(response.firstName);
+            self.lastNameObs(response.lastName);
+            self.sharingScopeObs(scope);
+            self.notifyByEmailObs(response.notifyByEmail ? "Yes" : "No");
+            self.dataGroupsObs(response.dataGroups);
+            self.healthCodeObs(response.healthCode);
+            self.languagesObs(response.languages.join(", "));
+            self.rolesObs(formatList(response.roles.sort()));
+            
+            console.log(response.attributes);
+            response.attributes['Game Points'] = '100';
+            
+            var attrs = self.allProfileAttributesObs().map(function(key) {
+                self[key+"Label"] = utils.snakeToTitleCase(key,'');
+                self[key+"Obs"] = ko.observable(response.attributes[key]);
+                return {key: utils.snakeToTitleCase(key,''), value: response.attributes[key]}; 
+            });
+            self.attributesObs(attrs);
+        }).catch(utils.errorHandler);        
     }).catch(utils.errorHandler);
 
-    serverService.getParticipant(self.emailObs()).then(function(response) {
-        var scope = utils.snakeToTitleCase(response.sharingScope, "No sharing set");
-        self.nameObs(utils.formatName(response));
-        self.sharingScopeObs(scope);
-        self.notifyByEmailObs(response.notifyByEmail ? "Yes" : "No");
-        self.dataGroupsObs(response.dataGroups);
-        self.healthCodeObs(response.healthCode);
-        self.languagesObs(response.languages.join(", "));
-        self.rolesObs(formatList(response.roles.sort()));
-        var attrs = Object.keys(response.attributes).map(function(key) {
-            return {key: utils.snakeToTitleCase(key,''), value: response.attributes[key]};
-        });
-        self.attributesObs(attrs);
-    }).catch(utils.errorHandler);
 }
