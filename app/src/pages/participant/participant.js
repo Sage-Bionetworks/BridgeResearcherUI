@@ -4,7 +4,7 @@ var utils = require('../../utils');
 var serverService = require('../../services/server_service');
 
 var fields = ['email','name','firstName','lastName','sharingScope','notifyByEmail',
-    'dataGroups[]','allDataGroups[]','allProfileAttributes[]','healthCode', 'attributes[]', 
+    'dataGroups[]','allDataGroups[]','healthCode', 'attributes[]','externalId', 
     'languages', 'roles'];
     
 var persistedFields = ['firstName','lastName','sharingScope','notifyByEmail','dataGroups[]', 
@@ -30,6 +30,7 @@ module.exports = function(params) {
     
     utils.observablesFor(self, fields);
     self.emailObs(decodeURIComponent(params.email));
+    self.healthCodeObs('N/A');
     
     self.signOutUser = function(vm, event) {
         utils.startHandler(vm, event);
@@ -46,7 +47,7 @@ module.exports = function(params) {
     self.save = function(vm, event) {
         var object = {}
         utils.observablesToObject(vm, object, persistedFields);
-        self.allProfileAttributesObs().map(function(key) {
+        self.study.userProfileAttributes.map(function(key) {
             object[key] = self[key+"Obs"]();
         });
         
@@ -58,27 +59,28 @@ module.exports = function(params) {
             .catch(utils.failureHandler(vm, event));
     };
     
+    self.study = null;
     serverService.getStudy().then(function(study) {
+        console.log(study);
         // NOTE: probably don't have to e observables.
+        self.study = study;
         self.allDataGroupsObs.pushAll(study.dataGroups);
-        self.allProfileAttributesObs(study.userProfileAttributes);
     }).then(function(response) {
         serverService.getParticipant(self.emailObs()).then(function(response) {
             var scope = utils.snakeToTitleCase(response.sharingScope, "No sharing set");
             self.nameObs(utils.formatName(response));
             self.firstNameObs(response.firstName);
             self.lastNameObs(response.lastName);
+            self.externalIdObs(response.externalId);
             self.sharingScopeObs(scope);
             self.notifyByEmailObs(response.notifyByEmail ? "Yes" : "No");
             self.dataGroupsObs(response.dataGroups);
-            self.healthCodeObs(response.healthCode);
+            if (self.study.healthCodeExportEnabled) {
+                self.healthCodeObs(response.healthCode);    
+            }
             self.languagesObs(response.languages.join(", "));
             self.rolesObs(formatList(response.roles.sort()));
-            
-            console.log(response.attributes);
-            response.attributes['Game Points'] = '100';
-            
-            var attrs = self.allProfileAttributesObs().map(function(key) {
+            var attrs = self.study.userProfileAttributes.map(function(key) {
                 self[key+"Label"] = utils.snakeToTitleCase(key,'');
                 self[key+"Obs"] = ko.observable(response.attributes[key]);
                 return {key: utils.snakeToTitleCase(key,''), value: response.attributes[key]}; 

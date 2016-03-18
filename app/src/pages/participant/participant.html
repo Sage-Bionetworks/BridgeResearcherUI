@@ -14,18 +14,20 @@
 <div class="scrollbox">
     <errors></errors>
     <form class="ui form">
-        <div class="three fields">
+        <div class="equal width fields">
             <div class="field">
                 <label>Name</label>
-                <div class="two fields">
-                    <ui-text params="fieldObs: firstNameObs, placeholder: 'First Name'"></ui-text>
-                    &#160;&#160;
-                    <ui-text params="fieldObs: lastNameObs, placeholder: 'Last Name'"></ui-text>
+                <div class="fields">
+                    <div class="two fields">
+                        <ui-text params="fieldObs: firstNameObs, placeholder: 'First Name'"></ui-text>
+                        &#160;&#160;
+                        <ui-text params="fieldObs: lastNameObs, placeholder: 'Last Name'"></ui-text>
+                    </div>
                 </div>
             </div>
             <div class="field">
                 <label>Sharing Scope</label>
-                <select class="short-input ui dropdown" data-bind="value: sharingScopeObs">
+                <select class="ui dropdown" data-bind="value: sharingScopeObs">
                     <option value="no_sharing">No Sharing</option>
                     <option value="sponsors_and_partners">Sponsors And Partners</option>
                     <option value="all_qualified_researchers">All Qualified Researchers</option>
@@ -33,29 +35,33 @@
             </div>
             <div class="field">
                 <label>Roles</label>
-                <div class="input-field" data-bind="text: rolesObs"></div>
+                <div class="input-field" data-bind="visible: rolesObs().length &gt; 0, text: rolesObs"></div>
+                <div class="input-field" data-bind="visible: rolesObs().length === 0"><i>No assigned roles.</i></div>
             </div>
         </div>
-        <div class="three fields">
+        <div class="equal width fields">
             <div class="field">
                 <label>Data Groups</label>
-                <select class="short-input" multiple="" data-bind="semantic: 'multi-search-select', updateSelect: dataGroupsObs, foreach: allDataGroupsObs">
+                <select multiple="" data-bind="semantic: 'multi-search-select', updateSelect: dataGroupsObs, foreach: allDataGroupsObs">
                     <option data-bind="text: $data, selected: $component.dataGroupsObs().indexOf($data) > -1"></option>
                 </select>
             </div>
             <div class="field">
                 <label>Languages</label>
-                <ui-text params="fieldObs: languagesObs, className: 'short-input'"></ui-text>
+                <ui-text params="fieldObs: languagesObs"></ui-text>
                 <div class="help-text">
                     For example, "en, fr"
                 </div>
             </div>
-            <div class="field" data-bind="visible: healthCodeObs">
+            <div class="field">
                 <label>Health Code</label>
                 <div class="input-field" data-bind="text: healthCodeObs"></div>
+                <div class="help-text ui red label" data-bind="visible: healthCodeObs() !== 'N/A'">
+                    This code is confidential. Do not redistribute.
+                </div>
             </div>
         </div>
-        <div class="three fields">
+        <div class="equal width fields">
             <div class="field" style="margin-bottom:2rem">
                 <label>Preferences</label>
                 <ui-checkbox params="checkedObs: notifyByEmailObs">
@@ -63,16 +69,17 @@
                 </ui-checkbox>
             </div>
             <div class="field">
-                
+                <label>External ID</label>
+                <ui-text params="fieldObs: externalIdObs"></ui-text>
             </div>
             <div class="field">
             </div>
         </div>
-        <div class="fields">
+        <div class="equal width fields">
             <!-- ko foreach: attributesObs -->
-                <div class="field" style="margin-right: 2rem">
+                <div class="field" style="margin-right: 2rem; max-width: 12rem">
                     <label data-bind="text: $data.key"></label>
-                    <ui-text params="fieldObs: $component[$data.key+'Obs'], className: 'short-input'"></ui-text>
+                    <ui-text params="fieldObs: $component[$data.key+'Obs']"></ui-text>
                 </div>
             <!-- /ko -->
         </div>
