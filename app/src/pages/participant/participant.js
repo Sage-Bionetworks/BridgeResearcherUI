@@ -4,11 +4,10 @@ var utils = require('../../utils');
 var serverService = require('../../services/server_service');
 
 var fields = ['email','name','firstName','lastName','sharingScope','notifyByEmail',
-    'dataGroups[]','allDataGroups[]','healthCode', 'attributes[]','externalId', 
-    'languages', 'roles'];
+    'dataGroups[]','healthCode','allDataGroups[]','attributes[]','externalId','languages', 'roles'];
     
-var persistedFields = ['firstName','lastName','sharingScope','notifyByEmail','dataGroups[]', 
-    'languages'];
+var persistedFields = ['firstName','lastName','sharingScope','notifyByEmail',
+    'dataGroups[]','languages'];
 
 var usersEmail = null;
 
@@ -61,10 +60,9 @@ module.exports = function(params) {
     
     self.study = null;
     serverService.getStudy().then(function(study) {
-        console.log(study);
-        // NOTE: probably don't have to e observables.
         self.study = study;
-        self.allDataGroupsObs.pushAll(study.dataGroups);
+        // there's a timer in the control involved here, we need to use an observer
+        self.allDataGroupsObs(study.dataGroups);
     }).then(function(response) {
         serverService.getParticipant(self.emailObs()).then(function(response) {
             var scope = utils.snakeToTitleCase(response.sharingScope, "No sharing set");
