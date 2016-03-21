@@ -22,11 +22,11 @@ module.exports = function(params) {
     var pageKey = params.pageKey;
     var offsetBy = storeService.get(pageKey) || 0;
     var pageSize = 50;
-
+    
     if (params.filterObs) {
-        params.filterObs.extend({ rateLimit: 1000 });
+        params.filterObs.extend({ rateLimit: 800 });
         params.filterObs.subscribe(function(newValue) {
-             wrappedLoadingFunc(Math.round(self.currentPageObs()), null, null);
+            wrappedLoadingFunc(Math.round(self.currentPageObs()), null, null);   
         });
     }
 

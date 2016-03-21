@@ -361,7 +361,7 @@ module.exports = {
         return get(config.participants + "?offsetBy="+offsetBy+"&pageSize="+pageSize+"&emailFilter="+emailFilter);
     },
     getParticipant: function(email) {
-        return get(config.participants + "/" + encodeURIComponent(email));
+        return get(config.participants + "/member?email=" + encodeURIComponent(email));
     },
     updateDataGroups: function(email, dataGroups) {
         return post(config.participants + "/dataGroups?email=" + encodeURIComponent(email), dataGroups);
