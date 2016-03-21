@@ -1,5 +1,5 @@
 <div data-bind="visible: !$parent.hasRules()">
-    <a href="#" data-bind="click: $parent.editRules">Add Rules</a>
+    <span class="link" data-bind="click: $parent.editRules">Add Rules</span>
 </div>
 <div data-bind="visible: $parent.hasRules()">
     <div data-bind="foreach: rulesObs">
@@ -10,6 +10,6 @@
         </div>
     </div>
     <div>
-        <a href="#" data-bind="click: $parent.editRules">Edit Rules</a>
+        <span class="link" data-bind="click: $parent.editRules">Edit Rules</span>
     </div>
 </div>

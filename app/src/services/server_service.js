@@ -361,11 +361,10 @@ module.exports = {
         return get(config.participants + "?offsetBy="+offsetBy+"&pageSize="+pageSize+"&emailFilter="+emailFilter);
     },
     getParticipant: function(email) {
-        return get(config.participants + "/" + encodeURIComponent(email));
+        return get(config.participants + "/member?email=" + encodeURIComponent(email));
     },
     updateDataGroups: function(email, dataGroups) {
-        return post(config.participants + "/dataGroups?email=" + encodeURIComponent(email), 
-            {dataGroups: dataGroups});
+        return post(config.participants + "/dataGroups?email=" + encodeURIComponent(email), dataGroups);
     },
     signOutUser: function(email) {
         return post("/v3/users/signOut?email=" + encodeURIComponent(email));  

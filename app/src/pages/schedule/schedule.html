@@ -10,7 +10,7 @@
         </div>
         <div class="field">
             <label for="scheduleType">Schedule Type</label>
-            <select style="width:14rem" class="ui dropdown" data-bind="value: editorScheduleTypeObs">
+            <select class="ui short-input dropdown" data-bind="value: editorScheduleTypeObs">
                 <option value="once">Once</option>
                 <option value="interval">Recurring</option>
                 <option value="cron">Cron-based</option>
@@ -20,8 +20,8 @@
             <label>Start Time Window (UTC time)</label>
             <div style="margin: .5rem 0" data-bind="html: formatWindow($data)"></div>
             <div class="inline-editor-controls">
-                <a class="pointing" data-bind="click: editWindow"><i class="write icon"></i>Edit</a>
-                <a class="pointing" data-bind="click: clearWindow"><i class="delete icon"></i>Clear</a>
+                <span class="link" data-bind="click: editWindow"><i class="write icon"></i>Edit</span>
+                <span class="link" data-bind="click: clearWindow"><i class="delete icon"></i>Clear</span>
             </div>            
         </div>
     </div>
@@ -47,9 +47,7 @@
         <div class="field" data-bind="visible: editorScheduleTypeObs() === 'cron', attr:{id:
             'strategy_'+$component.collectionName+'schedule_cronTrigger'}">
             <label>Then follow <a href="http://www.cronmaker.com/" target="_blank">cron expression</a></label>
-            <div style="width:14rem">
-                <ui-text params="fieldObs: cronTriggerObs"></ui-text>
-            </div>
+            <ui-text params="fieldObs: cronTriggerObs, className: 'short-input'"></ui-text>
         </div>
         <div class="field" data-bind="attr:{id:
             'strategy_'+$component.collectionName+'schedule_expires'}">
@@ -95,12 +93,12 @@
                 </div>
                 <div>
                     <div class="inline-form-text activity-controls">
-                        <a href="#" data-bind="click: $component.deleteActivity">
+                        <span class="link" data-bind="click: $component.deleteActivity">
                             <i class="delete icon"></i>Delete
-                        </a>
-                        <a href="#" data-bind="click: $component.addActivityAfter">
+                        </span>
+                        <span class="link" data-bind="click: $component.addActivityAfter">
                             <i class="square add icon"></i>Add Below
-                        </a>
+                        </span>
                     </div>
                 </div>
             </div>

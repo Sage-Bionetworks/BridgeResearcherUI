@@ -8,13 +8,13 @@
             <button class="ui red small button" data-bind="disable: !anyChecked(), click: deleteRevisions">Delete</button>
         </div>
     </div>
-    <div class="ui secondary larger pointing menu">
-        <a href="#" class="item" data-bind="attr: {href: '#/schemas/'+schemaIdObs()}">
+    <div class="ui secondary pointing menu">
+        <a class="item" data-bind="attr: {href: '#/schemas/'+schemaIdObs()}">
             <i class="file outline icon"></i> Editor
         </a>
-        <a class="active item">
+        <span class="active item">
             <i class="history icon"></i> History
-        </a>
+        </span>
     </div>
 </div>
 <div class="scrollbox">
@@ -33,7 +33,7 @@
                     <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                 </td>
                 <td width="100%">
-                    <a href="#" data-bind="attr: {href: $parent.link($data)}, text: $data.name"></a>
+                    <a data-bind="attr: {href: $parent.link($data)}, text: $data.name"></a>
                 </td>
                 <td data-bind="text: $data.revision"></td>
             </tr>

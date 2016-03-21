@@ -33,7 +33,7 @@
                         <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                     </td>
                     <td>
-                        <a href="#" data-bind="attr: {'href': '#/scheduleplans/'+$data.guid}, text: $data.label"></a>
+                        <a data-bind="attr: {'href': '#/scheduleplans/'+$data.guid}, text: $data.label"></a>
                     </td>
                     <td data-bind="html: $parent.formatVersions($data.minAppVersion, $data.maxAppVersion)"></td>
                     <td data-bind="html: $parent.formatStrategy($data.strategy)"></td>
