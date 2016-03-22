@@ -35,5 +35,6 @@ module.exports = {
     verifyEmail: '/v3/studies/self/verifyEmail',
     emailStatus: '/v3/studies/self/emailStatus',
     cache: '/v3/cache',
-    participants: '/v3/participants'
+    participants: '/v3/participants',
+    participant: '/v3/participants/member'
 };

@@ -145,11 +145,6 @@ footer p {
 .action.item {
     margin-right: 1rem;
 }
-/*
-.pointing {
-    cursor: pointer;
-}
-*/
 .link, .inline-editor-controls a {
     color: #009fda!important;
     cursor: pointer;
@@ -171,6 +166,9 @@ footer p {
 }
 .loading .inline-loader {
     display: block!important;
+}
+.red {
+    color:#db2828
 }
 
 /* pagination */

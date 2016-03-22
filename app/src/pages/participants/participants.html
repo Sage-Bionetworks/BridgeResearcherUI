@@ -8,15 +8,11 @@
 </div>
 <div class="scrollbox">
     <errors></errors>
-    <div class="ui icon input" style="margin-bottom:1rem">
-        <input type="text" placeholder="Email address" data-bind="textInput: searchObs">
-        <i class="search icon"></i>
-    </div>   
+    <!-- ko component: {name:'pager', params: 
+        {loadingFunc: loadingFunc, pageKey: 'participants-page', top: true}
+    } --><!-- /ko -->
     <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
     <div data-bind="visible: itemsObs().length > 0">
-        <!-- ko component: {name:'pager', params: {
-            loadingFunc:loadingFunc, pageKey: 'participants-page', top: true, filterObs: searchObs
-        }} --><!-- /ko -->
         <table class="ui compact table">
             <thead>
                 <tr>
@@ -35,9 +31,9 @@
                 </tr>
             </tbody>
         </table>
-        <!-- ko component: {name:'pager', params: {
-            loadingFunc:loadingFunc, pageKey: 'participants-page', top: false, filterObs: searchObs
-        }} --><!-- /ko -->
+        <!-- ko component: {name:'pager', params: 
+            {loadingFunc: loadingFunc, pageKey: 'participants-page', top: false}
+        } --><!-- /ko -->
     </div>
 </div>
 

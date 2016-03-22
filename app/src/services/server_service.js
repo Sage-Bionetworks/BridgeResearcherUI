@@ -354,20 +354,33 @@ module.exports = {
         return get(config.cache);
     },
     deleteCacheKey: function(cacheKey) {
-        return del(config.cache + "/" + encodeURIComponent(cacheKey));
+        return del(config.cache+"/"+encodeURIComponent(cacheKey));
     },
     getParticipants: function(offsetBy, pageSize, emailFilter) {
         emailFilter = emailFilter || "";
-        return get(config.participants + "?offsetBy="+offsetBy+"&pageSize="+pageSize+"&emailFilter="+emailFilter);
+        // TODO: won't work to remove this then() clause until filter is returned in the response    
+        return get(config.participants+"?offsetBy="+offsetBy+"&pageSize="+pageSize+"&emailFilter="+emailFilter).then(function(response) {
+            response.filter = emailFilter;
+            return response;
+        });
     },
     getParticipant: function(email) {
-        return get(config.participants + "/member?email=" + encodeURIComponent(email));
+        return get(config.participant+"?email="+encodeURIComponent(email));
     },
-    updateDataGroups: function(email, dataGroups) {
-        return post(config.participants + "/dataGroups?email=" + encodeURIComponent(email), dataGroups);
+    updateParticipantOptions: function(email, options) {
+        return post(config.participant+"/options?email="+encodeURIComponent(email), options).then(function(response) {
+            cache.clear(config.participant+"?email="+encodeURIComponent(email));
+            return response;
+        });
+    },
+    updateParticipantProfile: function(email, profile) {
+        return post(config.participant+"/profile?email="+encodeURIComponent(email), profile).then(function(response) {
+            cache.clear(config.participant+"?email="+encodeURIComponent(email));
+            return response;
+        });
     },
     signOutUser: function(email) {
-        return post("/v3/users/signOut?email=" + encodeURIComponent(email));  
+        return post("/v3/users/signOut?email="+encodeURIComponent(email));  
     },
     getSession: function() {
         if (session) {

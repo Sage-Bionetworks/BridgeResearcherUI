@@ -3,7 +3,7 @@ require('knockout-postbox');
 var utils = require('../../utils');
 var storeService = require('../../services/store_service');
 
-var FIELDS = ['offsetBy','pageSize','totalRecords','totalPages','currentPage'];
+var FIELDS = ['filterBox','offsetBy','pageSize','totalRecords','totalPages','currentPage'];
 
 /**
  * @params loadingFunc - the function to call to load resources. The function takes the parameters 
@@ -11,47 +11,54 @@ var FIELDS = ['offsetBy','pageSize','totalRecords','totalPages','currentPage'];
  * @params pageKey - a key to make the pagination on this table unique from other pagination on 
  *      the screen
  * @params top - mark one of the pagers as the top pager, and only that pager will take responsibility
- *      for calling for the first page of records.
- * @params filterObs
- *      model observer for any filter information added to filter this page.
+ *      for calling for the first page of records. Also, search is hidden for the bottom control.
  */
 module.exports = function(params) {
     var self = this;
     var loadingFunc = params.loadingFunc;
-    
-    var pageKey = params.pageKey;
-    var offsetBy = storeService.get(pageKey) || 0;
-    var pageSize = 50;
-    
-    if (params.filterObs) {
-        params.filterObs.extend({ rateLimit: 800 });
-        params.filterObs.subscribe(function(newValue) {
-            wrappedLoadingFunc(Math.round(self.currentPageObs()), null, null);   
-        });
-    }
 
+    var pageKey = params.pageKey;
+    var pageSize = 50;
+    var offsetBy = storeService.get(pageKey) || 0;
+    var searchTerm = storeService.get(pageKey+'-filter') || '';
+    
     utils.observablesFor(self, FIELDS);
     self.offsetByObs(offsetBy);
     self.pageSizeObs(pageSize);
+    self.filterBoxObs(searchTerm);
     self.currentPageObs(Math.round(offsetBy/pageSize));
+    self.searchLoading = ko.observable(false);
+    self.pagerLoading = ko.observable(false);
+    self.top = params.top;
+    
+    self.doSearch = function(vm, event) {
+        if (event.keyCode === 13) {
+            self.searchLoading(true);
+            wrappedLoadingFunc(Math.round(self.currentPageObs()));
+        }
+    }
 
     self.previousPage = function(vm, event) {
         var page = self.currentPageObs() -1;
         if (page >= 0) {
-            wrappedLoadingFunc(page*pageSize, vm, event);
+            self.pagerLoading(true);
+            wrappedLoadingFunc(page*pageSize);
         }
     }
     self.nextPage = function(vm, event) {
         var page = self.currentPageObs() +1;
         if (page <= self.totalPagesObs()-1) {
-            wrappedLoadingFunc(page*pageSize, vm, event);
+            self.pagerLoading(true);
+            wrappedLoadingFunc(page*pageSize);
         }
     }
     self.firstPage = function(vm, event) {
+        self.pagerLoading(true);
         wrappedLoadingFunc(0, vm, event);
     }
     self.lastPage = function(vm, event) {
-        wrappedLoadingFunc((self.totalPagesObs()-1)*pageSize, vm, event);
+        self.pagerLoading(true);
+        wrappedLoadingFunc((self.totalPagesObs()-1)*pageSize);
     };
     
     // Postbox allows multiple instances of a paging control to stay in sync above
@@ -60,26 +67,22 @@ module.exports = function(params) {
     ko.postbox.subscribe(pageKey+'-recordsPaged', updateModel);
 
     function wrappedLoadingFunc(offsetBy, vm, event) {
-        var evt;
-        if (vm) {
-            evt = {target: event.target.parentNode};
-            utils.startHandler(vm, evt);
-        }
-        var p = loadingFunc(offsetBy, pageSize).then(function(response) {
+        var searchTerm = self.filterBoxObs();
+        var p = loadingFunc(offsetBy, pageSize, searchTerm).then(function(response) {
             storeService.set(pageKey, offsetBy);
+            storeService.set(pageKey+'-filter', searchTerm);
             ko.postbox.publish(pageKey+'-recordsPaged', response);
             updateModel(response);
-        });
-        if (vm) {
-            p.then(utils.successHandler(vm, evt))
-            .catch(utils.failureHandler(vm, evt));
-        }
+            self.searchLoading(false);
+            self.pagerLoading(false);
+        }).catch(utils.errorHandler);
     }
 
     function updateModel(response) {
         self.offsetByObs(response.offsetBy);
         self.pageSizeObs(response.pageSize);
         self.totalRecordsObs(response.total);
+        self.filterBoxObs(response.filter);
         self.currentPageObs(Math.round(response.offsetBy/response.pageSize));
         self.totalPagesObs( Math.ceil(response.total/response.pageSize) );
     }

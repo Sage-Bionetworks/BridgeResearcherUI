@@ -10,13 +10,50 @@
 </div>
 <div class="scrollbox">
     <errors></errors>
-    <div data-bind="foreach: subpopulationsObs">
+    <table class="ui compact table" data-bind="visible: isResearcher && !isAuditor()">
+        <thead>
+            <tr>
+                <th>Consent Group</th>
+                <th>Name</th>
+                <th>Consented On</th>
+                <th>Withdrew On</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- ko if: subpopulationsObs().length === 0 -->
+                <tr>
+                    <td style="text-align:center; font-size:larger" colspan="4">
+                        <i>No consents</i>
+                    </td>
+                </tr>
+            <!-- /ko -->
+            <!-- ko foreach: subpopulationsObs -->
+                <!-- ko if: $data.history.length === 0 -->
+                    <tr>
+                        <td style="white-space:pre" data-bind="text: $data.name"></td>
+                        <td colspan="3" width="100%">
+                            <i>No consents</i>
+                        </td>
+                    </tr>
+                <!-- /ko -->
+                <!-- ko foreach: $data.history -->
+                    <tr>
+                        <td style="white-space:pre" data-bind="text: $parent.name"></td>
+                        <td data-bind="text: $data.name"></td>
+                        <td data-bind="text: $data.signedOn"></td>
+                        <td class="red" data-bind="text: $data.withdrewOn"></td>
+                    </tr>
+                <!-- /ko -->
+            <!-- /ko -->
+        </tbody>
+    </table>    
+    <div data-bind="foreach: subpopulationsObs, visible: isAuditor">
         <h3 data-bind="text: $data.name"></h3>
         
         <div data-bind="visible: $data.history.length === 0">
             <p>No consent.</p>
         </div>
-        <div class="signature-container" data-bind="foreach: $data.history">
+        <div class="signature-container" data-bind="visible: $data.history.length > 0, foreach: $data.history">
             <div class="ui card" data-bind="css: {red: $data.withdrawnOn}">
                 <div class="ui image" style="">
                     <img class="signature" data-bind="attr:{style: 'background-image: url('+$data.imageData+')'}"/>
@@ -39,5 +76,4 @@
             </div>
         </div>
     </div>
-    
 </div>
