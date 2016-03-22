@@ -2,13 +2,15 @@ var ko = require('knockout');
 var utils = require('../../utils');
 var serverService = require('../../services/server_service');
 var Promise = require('es6-promise').Promise;
+var root = require('../../root');
 
 module.exports = function(params) {
     var self = this;
 
     self.emailObs = ko.observable(decodeURIComponent(params.email));
-
     self.subpopulationsObs = ko.observableArray([]);
+    self.isResearcher = root.isResearcher;
+    self.isAuditor = root.isAuditor;
 
     self.formatSignedOn = function(signedOn) {
         return new Date(signedOn);

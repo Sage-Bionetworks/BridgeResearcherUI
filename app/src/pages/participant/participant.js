@@ -52,9 +52,11 @@ module.exports = function(params) {
         utils.startHandler(vm, event);
         var email = vm.emailObs();
 
-        // New APIs coming to update more than this. 
-        serverService.updateDataGroups(email, object)
-            .then(utils.successHandler(vm, event, "Data groups updates."))
+        // TODO: This is broken until two PRs are accepted and merged.
+        //var p1 = serverService.updateParticipantOptions(email, object);
+        var p2 = serverService.updateParticipantProfile(email, object);
+        Promise.all([p2])
+            .then(utils.successHandler(vm, event, "Update updated."))
             .catch(utils.failureHandler(vm, event));
     };
     
@@ -63,6 +65,10 @@ module.exports = function(params) {
         self.study = study;
         // there's a timer in the control involved here, we need to use an observer
         self.allDataGroupsObs(study.dataGroups);
+        study.userProfileAttributes.map(function(key) {
+            self[key+"Label"] = utils.snakeToTitleCase(key,'');
+            self[key+"Obs"] = ko.observable();
+        });
     }).then(function(response) {
         serverService.getParticipant(self.emailObs()).then(function(response) {
             var scope = utils.snakeToTitleCase(response.sharingScope, "No sharing set");
@@ -79,9 +85,8 @@ module.exports = function(params) {
             self.languagesObs(response.languages.join(", "));
             self.rolesObs(formatList(response.roles));
             var attrs = self.study.userProfileAttributes.map(function(key) {
-                self[key+"Label"] = utils.snakeToTitleCase(key,'');
-                self[key+"Obs"] = ko.observable(response.attributes[key]);
-                return {key: utils.snakeToTitleCase(key,''), value: response.attributes[key]}; 
+                self[key+"Obs"](response.attributes[key]);
+                return {key: self[key+'Label'], value: response.attributes[key]}; 
             });
             self.attributesObs(attrs);
         }).catch(utils.errorHandler);        
