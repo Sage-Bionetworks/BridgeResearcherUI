@@ -7,23 +7,20 @@ var root = require('../../root');
 module.exports = function(params) {
     var self = this;
 
-    self.emailObs = ko.observable(decodeURIComponent(params.email));
-    self.consentHistoryObs = ko.observableArray([]);
+    self.email = decodeURIComponent(params.email);
     self.isResearcher = root.isResearcher;
+    self.consentHistoryObs = ko.observableArray([]);
 
-    self.formatSignedOn = function(signedOn) {
-        return new Date(signedOn);
-    }
-
-    serverService.getParticipant(self.emailObs()).then(function(response) {
+    serverService.getParticipant(self.email).then(function(response) {
         var histories = response.consentHistories;
         
+        // NOTE: This isn't going to tell the viewer anything about *which* of these
+        // consent groups the user should or should not be assigned to.
         var requests = Object.keys(histories).map(function(guid) {
             return serverService.getSubpopulation(guid);
         });
         Promise.all(requests).then(function(subpopulations) {
             subpopulations.forEach(function(subpop) {
-                console.log(subpop);
                 if (histories[subpop.guid].length === 0) {
                     self.consentHistoryObs.push({
                         consentGroupName: subpop.name,
@@ -32,8 +29,7 @@ module.exports = function(params) {
                     });
                 }
                 histories[subpop.guid].reverse().map(function(record, i) {
-                    var history = {};
-                    history.isFirst = (i === 0);
+                    var history = {consented:true, isFirst:(i === 0)};
                     history.consentGroupName = subpop.name;
                     history.consentURL = '/#/subpopulations/'+subpop.guid+'/consents/'+record.consentCreatedOn;
                     history.name = record.name;
@@ -47,7 +43,6 @@ module.exports = function(params) {
                     if (record.imageMimeType && record.imageData) {
                         history.imageData = "data:"+record.imageMimeType+";base64,"+record.imageData;
                     }
-                    history.consented = true;
                     self.consentHistoryObs.push(history);
                 });
             });
