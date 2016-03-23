@@ -2,7 +2,7 @@
     <div class="fixed-header-title">
         <h3>
             <a href="#/participants" class="section">Participants</a>
-            <span data-bind="text: emailObs"></span>
+            <span data-bind="text: email"></span>
         </h3>
         <div class="fixed-header-buttons">
             <button class="ui small primary button" data-bind="click: save">Save</button>
@@ -13,8 +13,6 @@
 </div>
 <div class="scrollbox">
     <errors></errors>
-    <!-- TODO: Remove this once the call to update user options is merged. -->
-    <p><i>Note: not all fields can currently be saved. This will be fully functional shortly.</i></p>
     <form class="ui form">
         <div class="equal width fields">
             <div class="field">
@@ -29,11 +27,8 @@
             </div>
             <div class="field">
                 <label>Sharing Scope</label>
-                <select class="ui dropdown" data-bind="value: sharingScopeObs">
-                    <option value="no_sharing">No Sharing</option>
-                    <option value="sponsors_and_partners">Sponsors And Partners</option>
-                    <option value="all_qualified_researchers">All Qualified Researchers</option>
-                </select>            
+                <select class="ui dropdown" data-bind="options: sharingScopeOptions, optionsText: 'label', optionsValue: 'value', value: sharingScopeObs">
+                </select>
             </div>
             <div class="field">
                 <label>Roles</label>
@@ -81,7 +76,7 @@
             <!-- ko foreach: attributesObs -->
                 <div class="field" style="margin-right: 2rem; max-width: 12rem">
                     <label data-bind="text: $data.key"></label>
-                    <ui-text params="fieldObs: $component[$data.key+'Obs']"></ui-text>
+                    <ui-text params="fieldObs: $data.obs"></ui-text>
                 </div>
             <!-- /ko -->
         </div>
