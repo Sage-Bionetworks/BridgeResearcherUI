@@ -1,0 +1,17 @@
+<div style="margin-bottom:1rem">
+    <div class="ui icon input" data-bind="css:{loading: searchLoading}, visible: top">
+        <input type="text" placeholder="Email address" data-bind="textInput: filterBoxObs, event: {keyup: doSearch}">
+        <i class="search icon"></i>
+    </div>
+    <div class="ui small pagination menu" data-bind="visible: totalPagesObs() > 1, css:{loading:pagerLoading}">
+        <a class="item" data-bind="click: firstPage, visible: currentPageObs() != 0">1</a>
+        <a class="item" data-bind="click: previousPage, visible: currentPageObs() != 0">←</a>
+        <div class="active item">
+            <div class="ui small active loader"></div>
+            <span data-bind="text: currentPageObs() + 1"></span>&nbsp;of&nbsp; 
+            <span data-bind="text: totalPagesObs()"></span>
+        </div>
+        <a class="item" data-bind="click: nextPage, visible: currentPageObs() != (totalPagesObs()-1)">→</a>
+        <a class="item" data-bind="click: lastPage, visible: currentPageObs() != (totalPagesObs()-1), text: totalPagesObs()"></a>
+    </div>
+</div>

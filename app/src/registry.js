@@ -43,6 +43,9 @@ reg('synapse', './pages/synapse/synapse');
 reg('monitor', './pages/monitor/monitor');
 reg('scheduleplans', './pages/scheduleplans/scheduleplans');
 reg('scheduleplan', './pages/scheduleplan/scheduleplan');
+reg('participants', './pages/participants/participants');
+reg('participant', './pages/participant/participant');
+reg('participant_consents', './pages/participant_consents/participant_consents');
 
 reg('schedule', './pages/schedule/schedule');
 reg('SimpleScheduleStrategy', './pages/schedule/strategies/simple_strategy');
@@ -98,6 +101,8 @@ reg('criteria', './widgets/criteria/criteria');
 regt('fire-event', './widgets/fire_event');
 regt('tag-editor', './widgets/tag_editor');
 regt('settings-tabset', './widgets/settings_tabset');
+regt('participant-tabset', './widgets/participant_tabset');
+reg('pager', './widgets/pager/pager');
 
 /* SCHEMAS */
 reg('field_definition', './pages/schema/field_definition');

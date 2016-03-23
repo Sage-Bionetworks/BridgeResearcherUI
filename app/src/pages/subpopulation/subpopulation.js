@@ -6,7 +6,9 @@ var root = require('../../root');
 
 var fields = ['name','description','required','criteria'];
 
-var newSubpop = {'name':'','description':'','criteria':criteriaUtils.newCriteria()};
+function newSubpop() {
+    return {'name':'','description':'','criteria':criteriaUtils.newCriteria()};
+}
 
 module.exports = function(params) {
     var self = this;
@@ -15,9 +17,7 @@ module.exports = function(params) {
     self.isNewObs = ko.observable(params.guid === "new");
     self.requiredObs = ko.observable(false);
     self.historyItemsObs = ko.observable([]);
-    self.newConsentLinkObs = ko.observable();
     self.isDeveloper = root.isDeveloper;
-    self.isResearcher = root.isResearcher;
 
     function updateHistoryItems(data) {
         self.historyItemsObs(data.items.slice(0, 5));
@@ -46,8 +46,8 @@ module.exports = function(params) {
                     self.subpopulation.version = response.version;
                     self.isNewObs(false);
                     params.guid = response.guid;
-                    self.newConsentLinkObs(self.formatLink());
                     serverService.getConsentHistory(params.guid).then(updateHistoryItems);
+                    self.publishedLinkObs(self.formatLink());
                 })
                 .catch(utils.failureHandler(vm, event));
         }
@@ -55,22 +55,21 @@ module.exports = function(params) {
     self.formatLink = function(item) {
         return '#/subpopulations/'+params.guid+"/consents/"+ ((item)?item.createdOn:"recent");
     }
-
     self.formatDateTime = utils.formatDateTime;
-
+    self.publishedLinkObs = ko.observable(self.formatLink());
+    
     var notFoundHandler = utils.notFoundHandler(self, "Consent group not found.", "#/subpopulations");
 
-    self.newConsentLinkObs(self.formatLink());
     serverService.getStudy().then(function(study) {
         if (params.guid === "new") {
-            loadVM(newSubpop);
+            loadVM(newSubpop());
         } else if (params.guid) {
             serverService.getStudy().then(function(study) {
                 serverService.getSubpopulation(params.guid).then(loadVM).catch(notFoundHandler);
             });
+            serverService.getConsentHistory(params.guid).then(updateHistoryItems);
         } else {
             notFoundHandler();
         }
     });
-    serverService.getConsentHistory(params.guid).then(updateHistoryItems);
 };

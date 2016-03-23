@@ -106,25 +106,46 @@ module.exports = function(params) {
     self.activityTypeOptions = ACTIVITY_TYPE_OPTIONS;
     self.activityTypeLabel = utils.makeOptionLabelFinder(ACTIVITY_TYPE_OPTIONS);
 
-    //self.surveysOptionsObs = ko.observableArray([]);
     self.surveysOptionsObs = ko.observableArray();
     self.surveysOptionsObs.extend({rateLimit: 50});
     self.surveysOptionsLabel = utils.makeOptionLabelFinder(self.surveysOptionsObs);
 
-    //self.taskOptionsObs = ko.observableArray([]);
     self.taskOptionsObs = ko.observableArray();
     self.taskOptionsObs.extend({rateLimit: 50});
     self.taskOptionsLabel = utils.makeOptionLabelFinder(self.taskOptionsObs);
+
+    // This combines the scheduleType with the difference between interval and cron-based recurring schedules
+    self.editorScheduleTypeObs = ko.observable();
+    self.editorScheduleTypeObs.subscribe(function(newValue) {
+        self.scheduleTypeObs( (newValue === "once") ? 'once' : 'recurring' );    
+    });
+    
+    function updateEditorScheduleType(schedule) {
+        console.log(schedule, schedule.scheduleType);
+        if (schedule.scheduleType === 'once') {
+            self.editorScheduleTypeObs("once");
+        } else if (schedule.scheduleType === 'recurring' && schedule.cronTrigger) {
+            self.editorScheduleTypeObs("cron");
+        } else {
+            self.editorScheduleTypeObs("interval");
+        }
+    }
 
     // This is the implementation called by the schedule plan viewModel to construct the model
     self.scheduleObs.callback = function() {
         self.activitiesObs().forEach(copyObserverValuesBackToActivity);
         utils.observablesToObject(self, self.scheduleObs(), SCHEDULE_FIELDS);
 
-        // To avoid an error, if the type is "once", remove the repeating fields (that are hidden).
+        // To avoid an error, we have to remove some fields which are hidden and assumed to be 
+        // unused
         if (self.scheduleObs().scheduleType === "once") {
             delete self.scheduleObs().interval;
             delete self.scheduleObs().cronTrigger;
+        } else if (self.editorScheduleTypeObs() === "interval") {
+            delete self.scheduleObs().cronTrigger;
+        } else if (self.editorScheduleTypeObs() === "cron") {
+            delete self.scheduleObs().interval;
+            self.scheduleObs().times = [];
         }
         return self.scheduleObs();
     };
@@ -134,6 +155,7 @@ module.exports = function(params) {
         var schedule = self.scheduleObs();
         if (schedule) {
             fixScheduleTimes(schedule);
+            updateEditorScheduleType(schedule);
             schedule.activities.forEach(addObserversToActivity);
             schedule.activities.forEach(function(activity) {
                 if (activity.survey && !self.surveysOptionsObs.loaded) {

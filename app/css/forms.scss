@@ -1,7 +1,6 @@
 .editor {
     border: none;
     border-bottom: 1px dotted #ccc;
-    width: 100%;
 }
 .require::after {
     margin: -.2em 0 0 .2em;
@@ -36,7 +35,10 @@
 }
 input[readonly] {
     border:none!important;
-    font-style: italic;
+}
+.input-field { /* For readonly divs that need to occupy the space of an input field */
+    padding: .5rem 0;
+    display: block;
 }
 
 /* Tag editor control */
@@ -51,4 +53,12 @@ input[readonly] {
     button {
         z-index:1;
     }
+}
+.button-set {
+    @include flex-box(row);
+}
+/* The controls in a layout expand across the field region, sometimes they 
+    look dumb that large. This is one attempt to rationalize it. */
+.short-input {
+    width: 14rem!important;
 }

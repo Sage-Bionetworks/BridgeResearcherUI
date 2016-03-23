@@ -1,0 +1,40 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <h3>Participants</h3>
+        <div class="fixed-header-buttons" data-bind="text: recordsObs()">
+        </div>
+    </div>
+    <div class="empty-secondary-menu"></div>
+</div>
+<div class="scrollbox">
+    <errors></errors>
+    <!-- ko component: {name:'pager', params: 
+        {loadingFunc: loadingFunc, pageKey: 'participants-page', top: true}
+    } --><!-- /ko -->
+    <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
+    <div data-bind="visible: itemsObs().length > 0">
+        <table class="ui compact table">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th width="100%">Name</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: itemsObs">
+                <tr data-bind="css: $component.classNameForStatus($data)">
+                    <td style="white-space: nowrap">
+                        <a data-bind="attr: {'href': '#/participants/'+encodeURIComponent($data.email)}, text: $data.email"></a>
+                    </td>
+                    <td data-bind="text: $component.formatName($data)"></td>
+                    <td data-bind="text: $component.formatTitleCase($data.status)"></td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- ko component: {name:'pager', params: 
+            {loadingFunc: loadingFunc, pageKey: 'participants-page', top: false}
+        } --><!-- /ko -->
+    </div>
+</div>
+
+

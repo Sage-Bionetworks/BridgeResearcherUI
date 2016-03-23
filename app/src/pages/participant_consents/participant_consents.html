@@ -1,0 +1,57 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <h3>
+            <a href="#/participants" class="section">Participants</a>
+            <span data-bind="text: email"></span>
+        </h3>
+        <div class="fixed-header-buttons"></div>
+    </div>
+    <!-- ko component: {name: 'participant-tabset', params: {active: 'consents' }} --><!-- /ko -->
+</div>
+<div class="scrollbox">
+    <errors></errors>
+    <div class="loading_status" data-bind="visible: consentHistoryObs().length === 0">Loading...</div>
+    <div data-bind="visible: consentHistoryObs().length > 0 && isResearcher">
+        <table class="ui compact table">
+            <thead>
+                <tr>
+                    <th>Consent Group</th>
+                    <th>Name</th>
+                    <th>Consented On</th>
+                    <th>Version Signed</th>
+                    <th>Withdrew On</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: consentHistoryObs">
+                <tr>
+                    <td style="white-space:pre" data-bind="text: $data.consentGroupName"></td>
+                    <td>
+                        <div data-bind="if: $data.name === 'No consent'">
+                            <i>No consent</i>
+                        </div>
+                        <div data-bind="visible: $data.name !== 'No consent', semantic: 'dropdown'">
+                            <div class="text" data-bind="html: $data.name"></div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <div class="header signature-container">
+                                    <div class="ui image">
+                                        <img class="signature" data-bind="attr:{style: 'background-image: url('+$data.imageData+')'}"/>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    Birthdate: <span class="category" data-bind="text: $data.birthdate"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td data-bind="text: $data.signedOn"></td>
+                    <td>
+                        <a target="_blank" data-bind="text: $data.consentCreatedOn, attr:{href: $data.consentURL}"></a>
+                        <i class="ui green checkmark icon" data-bind="visible: $data.consented && $data.isFirst && $data.hasSignedActiveConsent"> </i>
+                    </td>
+                    <td class="red" data-bind="text: $data.withdrewOn"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

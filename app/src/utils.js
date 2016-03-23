@@ -76,6 +76,19 @@ function clearPendingControl() {
 function num(value) {
     return (typeof value !== "number") ? 0 : value;
 }
+function notBlankName(array, value) {
+    if (typeof value !== 'undefined' && value !== '<EMPTY>' && value.length > 0) {
+        array.push(value);
+    }
+}
+function formatTitleCase(string) {
+    if (string) {
+        return string.split(" ").map(function(text) {
+            return text.substring(0,1).toUpperCase() + text.substring(1); 
+        }).join(" ");
+    }
+    return '';
+}
 /**
  * Common utility methods for ViewModels.
  */
@@ -125,6 +138,23 @@ module.exports = {
         };
     },
     /**
+     * Combine sort functions for multi-field sorting. Takes one or more sort functions (as would be 
+     * passed to an array's sort method).
+     */
+    multiFieldSorter: function() {
+        var sortFuncs = Array.prototype.slice.call(arguments);
+        return function sorter(a,b) {
+            for (var i=0; i < sortFuncs.length; i++) {
+                var sorter = sortFuncs[i];
+                var output = sorter(a,b);
+                if (output != 0) {
+                    return output;
+                }
+            }
+            return 0;
+        }
+    },
+    /**
      * A start handler called before a request to the server is made. All errors are cleared
      * and a loading indicator is shown. This is not done globally because some server requests
      * happen in the background and don't signal to the user that they are occurring.
@@ -132,8 +162,6 @@ module.exports = {
      * @param event
      */
     startHandler: function(vm, event) {
-        //just makes the UI jumpy for no reason since it should always be paired with success/failure handlers
-        //ko.postbox.publish("clearErrors");
         displayPendingControl(event.target);
     },
     /**
@@ -179,6 +207,7 @@ module.exports = {
             }
         };
     },
+    errorHandler: console.error.bind(console),
     /**
      * Create an observable for each field name provided. Will create an observableArray if the notation indicates
      * such (e.g. "entries[]" rather than "entries").
@@ -280,6 +309,28 @@ module.exports = {
         return "<i>All versions</i>";
     },
     /**
+     * label --> Label (only one word however)
+     */
+    formatTitleCase: formatTitleCase,
+    /**
+     * Format user name, removing our <EMPTY> string to work around Stormpath requirements.
+     */
+    formatName: function(person) {
+        var array = [];
+        notBlankName(array, person.firstName);
+        notBlankName(array, person.lastName);
+        return (array.length === 0) ? '—' : array.join(' ');
+    },
+    /**
+     * snake_case_label --> Snake Case Label 
+     */
+    snakeToTitleCase: function(string, defaultValue) {
+        if (string) {
+            return formatTitleCase(string.replace(/_/g, ' '));
+        }
+        return defaultValue;
+    },
+    /**
      * Create a function that will remove items from a history table once we confirm they
      * are deleted. If we've deleted everything, go to the root view for this type of item.
      * This method assumes that the viewModel holds the row model in an "itemsObs" observable.
@@ -355,10 +406,10 @@ module.exports = {
      * @returns {Function}
      */
     makeEventToPostboxListener: function(eventName) {
-        return function(element, event) {
+        return function(vm, event) {
             event.preventDefault();
             event.stopPropagation();
-            ko.postbox.publish(eventName, element);
+            ko.postbox.publish(eventName, vm);
         };
     },
     /**

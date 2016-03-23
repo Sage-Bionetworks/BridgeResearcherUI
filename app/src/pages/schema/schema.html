@@ -9,11 +9,11 @@
             <button class="ui primary small button" data-bind="click: save">Save</button>
         </div>
     </div>
-    <div class="ui secondary larger pointing menu">
-        <a class="active item">
+    <div class="ui secondary pointing menu">
+        <span class="active item">
             <i class="file outline icon"></i> Editor
-        </a>
-        <a href="#" data-bind="attr: {href: '#/schemas/'+encodeURIComponent(schemaIdObs())+'/versions'}, visible: !!revisionObs()" class="item">
+        </span>
+        <a data-bind="attr: {href: '#/schemas/'+encodeURIComponent(schemaIdObs())+'/versions'}, visible: !!revisionObs()" class="item">
             <i class="history icon"></i> History
         </a>
         <div class="right menu">
@@ -52,7 +52,7 @@
 
     <div data-bind="visible: itemsObs().length === 0">
         <p>There are currently no field definitions in this upload schema.</p>
-        <p><a href="#" class="ui primary button" data-bind="click: addFirst"><i class="add square icon"></i> Add Field</a></p>
+        <p><span class="ui primary link button" data-bind="click: addFirst"><i class="add square icon"></i> Add Field</span></p>
     </div>
     <div class="ui form schema sfieldZone" data-bind="dragula: {
         elementSelector: '.sfield',

@@ -5,11 +5,11 @@
     <title>Bridge Study Manager</title>
     <!--Not clear if this is doing anything, but what the heck-->
     <script src="//cdn.polyfill.io/v1/polyfill.min.js"></script>
-    <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+    <script src="//cdn.ckeditor.com/4.5.7/full/ckeditor.js"></script>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css"/>
 </head>
 <body style="opacity:0.0">
-    <header>
+    <header data-bind="visible: showNavigationObs">
         <h2><i class="white heartbeat icon"></i> Bridge Study Manager</h2>
         <div class="header-env">
             <span data-bind="html: studyName"></span>
@@ -20,7 +20,7 @@
     <section>
         <main data-bind="component: {name: mainPage, params: mainParams}">
         </main>
-        <nav>
+        <nav data-bind="visible: showNavigationObs">
             <div class="ui pointing menu" data-bind="visible: isEditorPanelVisible">
                 <a class="item" data-bind="css: {active: !isEditorTabVisible()}, click: toggleEditorTab">Navigation</a>
                 <a class="item" data-bind="css: {active: isEditorTabVisible}, click: toggleEditorTab">Editor</a>
@@ -35,17 +35,23 @@
                         <a href="#/info" class="item" data-bind="css:{active:isActive('info')}">
                             Settings
                         </a>
+                        <a href="#/verify_email_template" class="item" data-bind="css:{active:isActive('ve_template')}, visible: isDeveloper">
+                            Email Templates
+                        </a>
                         <a href="#/subpopulations" class="item" data-bind="css:{active:isActive('subpopulations')}">
                             Consent Groups
                         </a>
-                        <a href="#/scheduleplans" class="item" data-bind="css:{active:isActive('scheduleplans')}">
-                            Scheduling
+                        <a href="#/participants" class="item" data-bind="css:{active:isActive('participants')}, visible: isResearcher()">
+                            Participants
                         </a>
                     </div>
                 </div>
                 <div class="item" data-bind="visible: isDeveloper">
                     <i class="server icon"></i> Study Data
                     <div class="menu">
+                        <a href="#/scheduleplans" class="item" data-bind="css:{active:isActive('scheduleplans')}">
+                            Scheduling
+                        </a>
                         <a href="#/schemas" class="item" data-bind="css:{active:isActive('schemas')}">
                             Data Schemas
                         </a>
@@ -55,23 +61,6 @@
 
                         <a href="#/surveys" class="item" data-bind="css:{active:isActive('surveys')}">
                             Surveys
-                        </a>
-                    </div>
-                 </div>
-                <div class="item" data-bind="visible: isDeveloper() || isResearcher()">
-                    <i class="user icon"></i> Account Management
-                    <div class="menu">
-                        <a href="#/password_policy" class="item" data-bind="css:{active:isActive('password_policy')}, visible: isDeveloper">
-                            Password Policy
-                        </a>
-                        <a href="#/user_attributes" class="item" data-bind="css:{active:isActive('user_attributes')}, visible: isDeveloper">
-                            User Profile Attributes
-                        </a>
-                        <a href="#/verify_email_template" class="item" data-bind="css:{active:isActive('ve_template')}, visible: isDeveloper">
-                            Email Templates
-                        </a>
-                        <a href="#/actions" class="item" data-bind="css:{active:isActive('actions')}, visible: isResearcher">
-                            Participant Roster
                         </a>
                     </div>
                 </div>
@@ -90,10 +79,16 @@
         </nav>
     </section>
     <footer>
-        <p>&copy; 2015 Sage Bionetworks. </p>
+        <p>&copy; 2015-2016 Sage Bionetworks. </p>
     </footer>
     <div data-bind="modal: dialogObs"></div>
-
+    
+    <div class="nav-content" style="left: 16rem" data-bind="visible: showNavigationObs, click: hideNav">
+        <i class="content icon"> </i>
+    </div>
+    <div class="nav-content" style="top: .5rem; left: .5rem" data-bind="visible: !showNavigationObs(), click: showNav">
+        <i class="content icon"> </i>
+    </div>
     <script src="dist/bundle.js"></script>
 </body>
 </html>

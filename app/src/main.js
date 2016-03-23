@@ -33,6 +33,11 @@ function guidRoute(name) {
         root.changeView(name, {guid: guid});
     };
 }
+function emailRoute(name) {
+    return function(email) {
+        root.changeView(name, {email: email});
+    };
+}
 
 var router = new director.Router();
 router.param('guid', /([^\/]*)/);
@@ -65,6 +70,9 @@ router.on('/scheduleplans', routeTo('scheduleplans'));
 router.on('/scheduleplans/:guid', guidRoute('scheduleplan'));
 router.on('/synapse', routeTo('synapse'));
 router.on('/cache', routeTo('cache'));
+router.on('/participants/:email', emailRoute('participant'));
+router.on('/participants/:email/consents', emailRoute('participant_consents'));
+router.on('/participants', routeTo('participants'));
 
 router.configure({
     notfound: routeTo('not_found'),

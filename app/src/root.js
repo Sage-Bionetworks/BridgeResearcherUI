@@ -10,7 +10,8 @@ var pageSets = {
     'schemas': ['schemas','schema','schema_versions'],
     'scheduleplans': ['scheduleplans','scheduleplan'],
     've_template': ['ve_template', 'rp_template'],
-    'subpopulations': ['subpopulations', 'subpopulation', 'consent']
+    'subpopulations': ['subpopulations', 'subpopulation', 'consent'],
+    'participants': ['participants','participant','participant_consents']
 };
 
 toastr.options = config.toastr;
@@ -35,6 +36,14 @@ var RootViewModel = function() {
     self.editorParams = ko.observable({});
     self.isEditorPanelVisible = ko.observable(false);
     self.isEditorTabVisible = ko.observable(false);
+    self.showNavigationObs = ko.observable(true);
+
+    self.showNav = function() {
+        self.showNavigationObs(true);
+    }
+    self.hideNav = function() {
+        self.showNavigationObs(false);
+    }
 
     self.setEditorPanel = function(name, params) {
         self.editorPanel(name);
@@ -59,6 +68,8 @@ var RootViewModel = function() {
         serverService.signOut();
     };
     self.changeView = function(name, params) {
+        self.isEditorTabVisible(false);
+        self.isEditorPanelVisible(false);
         self.mainPage(name);
         self.mainParams(params);
     };

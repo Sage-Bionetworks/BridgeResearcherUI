@@ -3,7 +3,7 @@
 @import "./panel.scss";
 @import "./survey.scss";
 @import "./schema.scss";
-@import "./scheduleplan.scss";
+@import "./schedules.scss";
 
 /* HTML TAGS */
 html, body {
@@ -65,6 +65,7 @@ main {
         .fixed-header .section::after {
             content: ' » ';
             color: black;
+            width: 50%;
         }
     .scrollbox {
         @include flex(1);
@@ -89,7 +90,6 @@ header {
     @include flex-box(row);
     @include align-items(top);
     @include justify-content(space-between);
-    /*background-color: rgba(26,144,204,0.7);*/
     background-image: linear-gradient(90deg, rgb(52, 152, 219) 41%, rgb(41, 128, 185) 100%);
     background-image: -moz-linear-gradient(left, rgb(52, 152, 219) 41%, rgb(41, 128, 185) 100%);
     background-image: -webkit-linear-gradient(left, rgb(52, 152, 219) 41%, rgb(41, 128, 185) 100%);
@@ -109,6 +109,12 @@ header {
         padding: 1.5rem 2rem 0rem 0rem;
         color: white;
     }
+.nav-content {
+    position: absolute;
+    color: #bbb;
+    top: 4.5rem;
+    cursor: pointer!important;
+}
 .scrollbox dd {
     margin: 1rem;
 }
@@ -139,9 +145,6 @@ footer p {
 .action.item {
     margin-right: 1rem;
 }
-.pointing {
-    cursor: pointer;
-}
 .link, .inline-editor-controls a {
     color: #009fda!important;
     cursor: pointer;
@@ -158,4 +161,44 @@ footer p {
     font-variant: small-caps;
     white-space: pre;
 }
+.inline-loader {
+    display: none!important;
+}
+.loading .inline-loader {
+    display: block!important;
+}
+.red {
+    color:#db2828
+}
 
+/* pagination */
+
+.pagination {
+    float:right; 
+    position:relative; 
+}
+.pagination .ui.active.loader {
+    display:none;
+}
+.pagination.loading .ui.active.loader {
+    display:block;
+}
+
+/* participant_consents */
+.signature-container {
+    margin:0!important;
+    padding:0!important;
+    
+    .signature {
+        background-size: contain;
+        background-position:center;
+        background-repeat:no-repeat;
+        /* Native size: 156x311px */
+        height: 11.7rem!important;
+        width: 23.3rem!important;
+        /*
+        height: 15.6rem!important;
+        width: 31.1rem!important;
+        */
+    }
+}

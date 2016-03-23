@@ -13,9 +13,9 @@
                 <div data-bind="foreach: itemsObs" style="font-size:larger">
                     <div>
                         <span class="inline-form-text">
-                            <a href="#" data-bind="click: $component.deleteTime">
+                            <span class="link" data-bind="click: $component.deleteTime">
                                 <i class="delete icon"></i>
-                            </a>
+                            </span>
                         </span>
                         <span class="inline-form-text" data-bind="text: $component.timesLabel($data)"></span>
                     </div>

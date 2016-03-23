@@ -6,6 +6,7 @@
             <span data-bind="visible: nameObs().length === 0">New Consent Group</span>
         </h3>
         <div class="fixed-header-buttons" data-bind="visible: isDeveloper">
+            <a class="ui small button" data-bind="attr: {'href': publishedLinkObs}, visible: !isNewObs()">Edit Consent Document</a>
             <button class="ui small primary button" data-bind="click: save">Save</button>
         </div>
     </div>
@@ -37,7 +38,7 @@
                 </div>
             </div>
             <div class="ten wide field">
-                <h4>Recent Consent History</h4>
+                <h4>Consent Document Edit History</h4>
                 <p data-bind="visible: historyItemsObs().length === 0">There are no consents until you create this consent group.</p>
                 <div data-bind="visible: historyItemsObs().length > 0">
                     <table class="ui compact table">
