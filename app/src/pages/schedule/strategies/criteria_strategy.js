@@ -3,7 +3,6 @@ require('knockout-postbox');
 var utils = require('../../../utils');
 var scheduleUtils = require('../schedule_utils');
 var criteriaUtils = require('../../../criteria_utils');
-var serverService = require('../../../services/server_service');
 var root = require('../../../root');
 
 function groupToObservables(group) {

@@ -58,18 +58,10 @@ module.exports = function(params) {
         params.createdOn = consent.createdOn;
         self.initEditor(consent.documentContent);
     }
-    function publish(response) {
-        params.createdOn = response.createdOn;
-        return serverService.publishStudyConsent(params.guid, params.createdOn);
-    }
     function load() {
         return serverService.getStudyConsent(params.guid, params.createdOn);
     }
     function saveAfterPublish(response) {
-        /*
-        self.activeObs(true);
-        self.createdOnObs(self.formatDateTime(params.createdOn));
-        */
         serverService.getConsentHistory(params.guid).then(function(data) {
             self.historyItemsObs(data.items);
         }).catch(utils.errorHandler);
