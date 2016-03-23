@@ -68,7 +68,7 @@ module.exports = function(params) {
 
     function wrappedLoadingFunc(offsetBy, vm, event) {
         var searchTerm = self.filterBoxObs();
-        var p = loadingFunc(offsetBy, pageSize, searchTerm).then(function(response) {
+        loadingFunc(offsetBy, pageSize, searchTerm).then(function(response) {
             storeService.set(pageKey, offsetBy);
             storeService.set(pageKey+'-filter', searchTerm);
             ko.postbox.publish(pageKey+'-recordsPaged', response);

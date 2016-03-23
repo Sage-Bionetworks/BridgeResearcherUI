@@ -3,7 +3,6 @@ var serverService = require('../../services/server_service.js');
 var scheduleUtils = require('../schedule/schedule_utils.js');
 var utils = require('../../utils');
 var Promise = require('es6-promise').Promise;
-var optionsService = require('../../services/options_service');
 var storeService = require('../../services/store_service');
 
 var MULTI_FIELD_SORTER = utils.multiFieldSorter(

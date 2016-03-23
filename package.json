@@ -13,7 +13,6 @@
   "author": "Bridge Server Team <bridgeit@sagebase.org>",
   "license": "MIT",
   "devDependencies": {
-    "compression-webpack-plugin": "^0.2.0",
     "css-loader": "^0.12.1",
     "director": "^1.2.8",
     "dom-autoscroller": "^1.2.1",
@@ -31,8 +30,8 @@
     "sinon": "^1.17.1",
     "style-loader": "^0.12.2",
     "toastr": "^2.1.2",
-    "webpack": "^1.9.7",
-    "webpack-dev-server": "^1.8.2"
+    "webpack": "^1.12.14",
+    "webpack-dev-server": "^1.12.14"
   },
   "peerDependencies": {
     "node-sass": "^3.3.2"

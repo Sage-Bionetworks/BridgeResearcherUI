@@ -8,9 +8,8 @@ module.exports = function(params) {
     var self = this;
 
     self.emailObs = ko.observable(decodeURIComponent(params.email));
-    self.subpopulationsObs = ko.observableArray([]);
+    self.consentHistoryObs = ko.observableArray([]);
     self.isResearcher = root.isResearcher;
-    self.isAuditor = root.isAuditor;
 
     self.formatSignedOn = function(signedOn) {
         return new Date(signedOn);
@@ -24,8 +23,18 @@ module.exports = function(params) {
         });
         Promise.all(requests).then(function(subpopulations) {
             subpopulations.forEach(function(subpop) {
-                var subpopHistories = histories[subpop.guid].map(function(record) {
+                console.log(subpop);
+                if (histories[subpop.guid].length === 0) {
+                    self.consentHistoryObs.push({
+                        consentGroupName: subpop.name,
+                        name: "No consent",
+                        consented: false
+                    });
+                }
+                histories[subpop.guid].reverse().map(function(record, i) {
                     var history = {};
+                    history.isFirst = (i === 0);
+                    history.consentGroupName = subpop.name;
                     history.consentURL = '/#/subpopulations/'+subpop.guid+'/consents/'+record.consentCreatedOn;
                     history.name = record.name;
                     history.birthdate = new Date(record.birthdate).toLocaleDateString(); 
@@ -38,11 +47,8 @@ module.exports = function(params) {
                     if (record.imageMimeType && record.imageData) {
                         history.imageData = "data:"+record.imageMimeType+";base64,"+record.imageData;
                     }
-                    return history;
-                });
-                self.subpopulationsObs.push({
-                    name: subpop.name,
-                    history: subpopHistories.reverse()
+                    history.consented = true;
+                    self.consentHistoryObs.push(history);
                 });
             });
         });

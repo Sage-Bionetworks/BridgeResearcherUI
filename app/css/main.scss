@@ -186,26 +186,19 @@ footer p {
 
 /* participant_consents */
 .signature-container {
-    @include flex-box(row);
-    @include align-items(flex-start);
-    @include flex-wrap();
+    margin:0!important;
+    padding:0!important;
     
-    .ui.card {
-        display: inline-block;
-        margin: 0;
-        margin-right: 1rem;
-    }
     .signature {
         background-size: contain;
         background-position:center;
         background-repeat:no-repeat;
-        height: 8rem!important;
-    }
-    .ui.image {
-        border:none;
-        background:transparent;
-    }
-    .ui.message {
-        margin: 0;
+        /* Native size: 156x311px */
+        height: 11.7rem!important;
+        width: 23.3rem!important;
+        /*
+        height: 15.6rem!important;
+        width: 31.1rem!important;
+        */
     }
 }
