@@ -11,7 +11,8 @@ var pageSets = {
     'scheduleplans': ['scheduleplans','scheduleplan'],
     've_template': ['ve_template', 'rp_template'],
     'subpopulations': ['subpopulations', 'subpopulation', 'consent'],
-    'participants': ['participants','participant','participant_consents']
+    'participants': ['participants','participant','participant_consents'],
+    'externalIds': ['external_ids']
 };
 
 toastr.options = config.toastr;

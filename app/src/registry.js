@@ -46,7 +46,7 @@ reg('scheduleplan', './pages/scheduleplan/scheduleplan');
 reg('participants', './pages/participants/participants');
 reg('participant', './pages/participant/participant');
 reg('participant_consents', './pages/participant_consents/participant_consents');
-
+reg('external_ids', './pages/external_ids/external_ids');
 reg('schedule', './pages/schedule/schedule');
 reg('SimpleScheduleStrategy', './pages/schedule/strategies/simple_strategy');
 reg('ABTestScheduleStrategy', './pages/schedule/strategies/ab_strategy');
@@ -71,6 +71,7 @@ reg('event_id_editor', './dialogs/event_id_editor/event_id_editor');
 reg('times_editor', './dialogs/times_editor/times_editor');
 reg('rules_editor', './dialogs/rules_editor/rules_editor');
 reg('date_window_editor', './dialogs/date_window_editor/date_window_editor');
+reg('external_id_importer', './dialogs/external_id_importer/external_id_importer');
 
 /* SURVEYS */
 regt('SurveyInfoScreen', './pages/survey/survey_info');
@@ -103,6 +104,7 @@ regt('tag-editor', './widgets/tag_editor');
 regt('settings-tabset', './widgets/settings_tabset');
 regt('participant-tabset', './widgets/participant_tabset');
 reg('pager', './widgets/pager/pager');
+reg('ddb_pager', './widgets/ddb_pager/ddb_pager');
 
 /* SCHEMAS */
 reg('field_definition', './pages/schema/field_definition');

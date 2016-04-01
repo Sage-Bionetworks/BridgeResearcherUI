@@ -38,22 +38,23 @@ ko.bindingHandlers.semantic = {
         } else if (value === 'radio') {
             var input = $element.children("input[type=radio]").get(0);
             var observer = allBindings().radioObs;
-            observer.subscribe(function(newValue) {
-                if (newValue === input.value) {
+
+            function updateOnMatch(newValue) {
+                console.log("updateOnMatch", input.value, newValue);
+                if (input.value === newValue) {
                     input.checked = true;
                     $element.addClass("checked");
                 }
-            });
-            if (observer() === input.value) {
-                input.checked = true;
-                $element.addClass("checked");
             }
+            observer.subscribe(updateOnMatch);
+            updateOnMatch(observer());
+
             $element.addClass("ui radio checkbox").on('click', function() {
                 if (!input.disabled) {
                     observer(input.value);
-                    $element.addClass("checked");
+                    //$element.addClass("checked");
                 }
-            }).checkbox();
+            });
         } else if (value === 'dropdown') {
             $element.addClass("ui dropdown").dropdown();
         } else if (value === 'popup') {

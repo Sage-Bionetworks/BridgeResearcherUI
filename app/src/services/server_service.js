@@ -32,7 +32,7 @@ if (typeof window !== "undefined") {
     });
 }
 
-var NO_CACHE_PATHS = ['studies/self/emailStatus','participants?offsetBy='];
+var NO_CACHE_PATHS = ['studies/self/emailStatus','participants?offsetBy=','externalIds?'];
 var PATH_EXTS = ['/published','/recent','/revisions'];
 
 var cache = (function() {
@@ -189,11 +189,18 @@ function signOut() {
         p.fail(reject);
     });
 }
-
 function isSupportedUser() {
     return this.roles.some(function(role) {
         return ["developer","researcher","admin"].indexOf(role) > -1;
     });
+}
+function query(object) {
+    var string = Object.keys(object).filter(function(key) { 
+        return typeof object[key] !== "undefined" && object[key] !== null && object[key] !== ""; 
+    }).map(function(key) { 
+        return key + "=" + object[key]; 
+    }).join("&");
+    return (string) ? ("?"+string) : "";
 }
 
 module.exports = {
@@ -381,6 +388,12 @@ module.exports = {
     },
     signOutUser: function(email) {
         return post("/v3/users/signOut?email="+encodeURIComponent(email));  
+    },
+    getExternalIds: function(params) {
+        return get(config.externalIds + query(params || {}));
+    },
+    addExternalIds: function(identifiers) {
+        return post(config.externalIds, identifiers);
     },
     getSession: function() {
         if (session) {

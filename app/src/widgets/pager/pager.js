@@ -1,9 +1,10 @@
 var ko = require('knockout');
 require('knockout-postbox');
 var utils = require('../../utils');
-var storeService = require('../../services/store_service');
 
-var FIELDS = ['filterBox','offsetBy','pageSize','totalRecords','totalPages','currentPage'];
+var FIELDS = ['filterBox','offsetBy','pageSize','totalRecords','totalPages','currentPage',
+    'searchLoading','pagerLoading'];
+var pageSize = 25;
 
 /**
  * @params loadingFunc - the function to call to load resources. The function takes the parameters 
@@ -18,22 +19,20 @@ module.exports = function(params) {
     var loadingFunc = params.loadingFunc;
 
     var pageKey = params.pageKey;
-    var pageSize = 50;
-    var offsetBy = storeService.get(pageKey) || 0;
-    var searchTerm = storeService.get(pageKey+'-filter') || '';
+    var offsetBy = params.offsetBy || 0;
     
     utils.observablesFor(self, FIELDS);
     self.offsetByObs(offsetBy);
     self.pageSizeObs(pageSize);
-    self.filterBoxObs(searchTerm);
+    self.filterBoxObs('');
     self.currentPageObs(Math.round(offsetBy/pageSize));
-    self.searchLoading = ko.observable(false);
-    self.pagerLoading = ko.observable(false);
+    self.searchLoadingObs(false);
+    self.pagerLoadingObs(false);
     self.top = params.top;
     
     self.doSearch = function(vm, event) {
         if (event.keyCode === 13) {
-            self.searchLoading(true);
+            self.searchLoadingObs(true);
             wrappedLoadingFunc(Math.round(self.currentPageObs()));
         }
     }
@@ -41,23 +40,23 @@ module.exports = function(params) {
     self.previousPage = function(vm, event) {
         var page = self.currentPageObs() -1;
         if (page >= 0) {
-            self.pagerLoading(true);
+            self.pagerLoadingObs(true);
             wrappedLoadingFunc(page*pageSize);
         }
     }
     self.nextPage = function(vm, event) {
         var page = self.currentPageObs() +1;
         if (page <= self.totalPagesObs()-1) {
-            self.pagerLoading(true);
+            self.pagerLoadingObs(true);
             wrappedLoadingFunc(page*pageSize);
         }
     }
     self.firstPage = function(vm, event) {
-        self.pagerLoading(true);
+        self.pagerLoadingObs(true);
         wrappedLoadingFunc(0, vm, event);
     }
     self.lastPage = function(vm, event) {
-        self.pagerLoading(true);
+        self.pagerLoadingObs(true);
         wrappedLoadingFunc((self.totalPagesObs()-1)*pageSize);
     };
     
@@ -69,12 +68,10 @@ module.exports = function(params) {
     function wrappedLoadingFunc(offsetBy, vm, event) {
         var searchTerm = self.filterBoxObs();
         loadingFunc(offsetBy, pageSize, searchTerm).then(function(response) {
-            storeService.set(pageKey, offsetBy);
-            storeService.set(pageKey+'-filter', searchTerm);
             ko.postbox.publish(pageKey+'-recordsPaged', response);
             updateModel(response);
-            self.searchLoading(false);
-            self.pagerLoading(false);
+            self.searchLoadingObs(false);
+            self.pagerLoadingObs(false);
         }).catch(utils.errorHandler);
     }
 
