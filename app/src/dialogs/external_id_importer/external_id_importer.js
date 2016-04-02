@@ -39,12 +39,12 @@ module.exports = function(params) {
                 serverService.addExternalIds(submission)
                     .then(function() {
                         doSubmission(p, submissions);    
-                    }).catch(utils.errorHandler);
+                    }).catch(utils.failureHandler());
             })
         } else {
             promise
                 .then(params.vm.closeImportDialog)
-                .catch(utils.errorHandler);
+                .catch(utils.failureHandler());
         }
     }
 
