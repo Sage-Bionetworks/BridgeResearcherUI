@@ -8,6 +8,7 @@ module.exports = function() {
     
     self.itemsObs = ko.observableArray([]);
     self.recordsObs = ko.observable(0);
+    self.showRecordsObs = ko.observable(false);
     
     self.importer = function(vm, event) {
         root.openDialog('external_id_importer', {vm: self});
@@ -16,9 +17,26 @@ module.exports = function() {
         root.closeDialog();
         self.loadingFunc().then(utils.successHandler(self, {}, "Identifiers imported."));
     };
+    self.manage = function(vm, event) {
+        if (self.study != null) {
+            utils.startHandler(self, event);
+            self.study.externalIdValidationEnabled = true;
+            
+            serverService.saveStudy(self.study)
+                .then(utils.successHandler(vm, event, "External ID management enabled."))
+                .then(function() {
+                    self.showRecordsObs(true);
+                })
+                .catch(utils.failureHandler(vm, event));
+        }
+    };
+    
+    serverService.getStudy().then(function(study) {
+        self.study = study;
+        self.showRecordsObs(study.externalIdValidationEnabled);
+    });
     
     self.loadingFunc = function loadPage(params) {
-        console.log(JSON.stringify(params));
         return serverService.getExternalIds(params).then(function(response) {
             self.recordsObs(response.total);
             self.itemsObs(response.items);

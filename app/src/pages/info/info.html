@@ -26,22 +26,11 @@
                         Enable strict validation of upload files <b>(recommended)</b>
                     </ui-checkbox>
                 </div>
-                <div class="field" data-bind="visible: isAdmin">
-                    <label>Health code export <i class="admin lock icon"></i></label>
-                    <ui-checkbox params="checkedObs: healthCodeExportEnabledObs">
-                        Include participant health code in the participant roster
+                <div class="field">
+                    <label>External ID validation</label>
+                    <ui-checkbox params="checkedObs: externalIdValidationEnabledObs">
+                        Enabled Bridge management of external IDs
                     </ui-checkbox>
-                </div>
-                <div class="field" data-bind="visible: isAdmin">
-                    <label>Email verification <i class="admin lock icon"></i></label>
-                    <ui-checkbox params="checkedObs: emailVerificationEnabledObs">
-                        Require participants to verify their email address
-                    </ui-checkbox>
-                </div>
-                <div class="field" data-bind="visible: isAdmin">
-                    <label>Maximum Number of Participants <i class="admin lock icon"></i></label>
-                    <input type="range" min="0" max="5000" data-bind="value: maxNumOfParticipantsObs, valueUpdate: 'input'"/>
-                    <div class="ui large label" data-bind="text: maxParticipants"></div>
                 </div>
                 <div class="field">
                     <label>Minimum Supported App Versions</label>

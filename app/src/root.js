@@ -12,7 +12,9 @@ var pageSets = {
     've_template': ['ve_template', 'rp_template'],
     'subpopulations': ['subpopulations', 'subpopulation', 'consent'],
     'participants': ['participants','participant','participant_consents'],
-    'externalIds': ['external_ids']
+    'externalIds': ['external_ids'],
+    'admin_settings': ['admin_info'],
+    'cache': ['admin_cache']
 };
 
 toastr.options = config.toastr;
@@ -59,6 +61,7 @@ var RootViewModel = function() {
     self.dialogObs = ko.observable({name: 'none'});
 
     self.isActive = function(tag) {
+        console.log(tag, self.selected());
         if (pageSets[tag]) {
             return pageSets[tag].indexOf(self.selected()) > -1;
         }

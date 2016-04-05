@@ -41,7 +41,7 @@
                 <h4>Consent Document Edit History</h4>
                 <p data-bind="visible: historyItemsObs().length === 0">There are no consents until you create this consent group.</p>
                 <div data-bind="visible: historyItemsObs().length > 0">
-                    <table class="ui compact table">
+                    <table class="ui compact selectable table">
                         <tbody data-bind="foreach: historyItemsObs">
                         <tr data-bind="css: { positive: $data.active }">
                             <td>

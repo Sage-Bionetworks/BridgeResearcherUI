@@ -3,9 +3,11 @@ var utils = require('../../utils');
 var serverService = require('../../services/server_service');
 
 var fields = ['email','name','firstName','lastName','sharingScope','notifyByEmail',
-    'dataGroups[]','healthCode','allDataGroups[]','attributes[]','externalId','languages', 'roles'];
+    'dataGroups[]','healthCode','allDataGroups[]','attributes[]','externalId','languages',
+    'roles'];
     
-var persistedFields = ['firstName','lastName','sharingScope','notifyByEmail','dataGroups[]','languages','externalId'];
+var persistedFields = ['firstName','lastName','sharingScope','notifyByEmail',
+    'dataGroups[]','languages','externalId'];
 
 var usersEmail = null;
 
@@ -49,25 +51,26 @@ module.exports = function(params) {
         }
     };
     self.save = function(vm, event) {
-        var object = {};
-        utils.observablesToObject(vm, object, persistedFields);
+        var participant = {attributes:{}};
+        utils.observablesToObject(vm, participant, persistedFields);
         self.attributesObs().map(function(attr) {
-            object[attr.key] = attr.obs(); 
+            participant.attributes[attr.key] = attr.obs(); 
         });
         // This is not currently in an editor, so we have to coerce it to the correct form.
         if (self.languagesObs()) {
-            object.languages = self.languagesObs().split(/\W*,\W*/);    
+            participant.languages = self.languagesObs().split(/\W*,\W*/);    
+        } else {
+            delete participant.languages;
         }
-        
+        console.log(participant);
         utils.startHandler(vm, event);
-        var p1 = serverService.updateParticipantOptions(self.email, object);
-        var p2 = serverService.updateParticipantProfile(self.email, object);
-        Promise.all([p1,p2])
+        serverService.updateParticipant(self.email, participant)
             .then(utils.successHandler(vm, event, "Participant updated."))
             .catch(utils.failureHandler(vm, event));
     };
     
     serverService.getStudy().then(function(study) {
+        console.log(study);
         self.study = study;
         // there's a timer in the control involved here, we need to use an observer
         self.allDataGroupsObs(study.dataGroups);

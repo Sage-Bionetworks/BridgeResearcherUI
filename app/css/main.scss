@@ -203,3 +203,14 @@ footer p {
         */
     }
 }
+
+.message {
+    ol {
+        margin: 0!important;
+        padding: 0!important;
+        margin-left:1rem!important;
+    }
+    li {
+        margin: 1rem 0;
+    }
+}

@@ -12,7 +12,7 @@
     <errors></errors>
     <div class="loading_status" data-bind="visible: consentHistoryObs().length === 0">Loading...</div>
     <div data-bind="visible: consentHistoryObs().length > 0 && isResearcher">
-        <table class="ui compact table">
+        <table class="ui compact selectable table">
             <thead>
                 <tr>
                     <th>Consent Group</th>
