@@ -2,11 +2,11 @@
     <div class="fixed-header-title">
         <h3>
             <a href="#/participants" class="section">Participants</a>
-            <span data-bind="text: email"></span>
+            <span data-bind="text: emailObs"></span>
         </h3>
         <div class="fixed-header-buttons"></div>
     </div>
-    <!-- ko component: {name: 'participant-tabset', params: {active: 'consents' }} --><!-- /ko -->
+    <!-- ko component: {name: 'participant-tabset', params: {active: 'consents', isNewObs: isNewObs}} --><!-- /ko -->
 </div>
 <div class="scrollbox">
     <errors></errors>

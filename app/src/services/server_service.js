@@ -374,11 +374,22 @@ module.exports = {
     getParticipant: function(email) {
         return get(config.participant+"?email="+encodeURIComponent(email));
     },
-    updateParticipant: function(email, participant) {
-        return post(config.participant+"?email="+encodeURIComponent(email), participant).then(function(response) {
-             cache.clear(config.participant+"?email="+encodeURIComponent(email));
-             return response;
-        });  
+    createParticipant: function(participant) {
+        return post(config.participants, participant)
+            .then(function(response) {
+                // This can change many different pages, clear entire cache for now
+                cache.reset();
+                return response;
+            });  
+    },
+    updateParticipant: function(participant) {
+        var email = participant.email;
+        return post(config.participant+"?email="+encodeURIComponent(email), participant)
+            .then(function(response) {
+                // This can change many different pages, clear entire cache for now.
+                cache.reset();
+                return response;
+            });  
     },
     signOutUser: function(email) {
         return post("/v3/users/signOut?email="+encodeURIComponent(email));  

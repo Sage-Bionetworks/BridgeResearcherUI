@@ -61,7 +61,6 @@ var RootViewModel = function() {
     self.dialogObs = ko.observable({name: 'none'});
 
     self.isActive = function(tag) {
-        console.log(tag, self.selected());
         if (pageSets[tag]) {
             return pageSets[tag].indexOf(self.selected()) > -1;
         }

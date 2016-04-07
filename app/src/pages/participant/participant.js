@@ -2,12 +2,12 @@ var ko = require('knockout');
 var utils = require('../../utils');
 var serverService = require('../../services/server_service');
 
-var fields = ['email','name','firstName','lastName','sharingScope','notifyByEmail',
-    'dataGroups[]','healthCode','allDataGroups[]','attributes[]','externalId','languages',
+var fields = ['title','isNew','email','name','firstName','lastName','sharingScope','notifyByEmail',
+    'dataGroups[]','password','healthCode','allDataGroups[]','attributes[]','externalId','languages',
     'roles'];
     
 var persistedFields = ['firstName','lastName','sharingScope','notifyByEmail',
-    'dataGroups[]','languages','externalId'];
+    'dataGroups[]','email','password','languages','externalId'];
 
 var usersEmail = null;
 
@@ -33,11 +33,20 @@ var OPTIONS = [
 module.exports = function(params) {
     var self = this;
     
+    var email = decodeURIComponent(params.email);
     utils.observablesFor(self, fields);
-    self.email = decodeURIComponent(params.email);
     self.healthCodeObs('N/A');
     self.sharingScopeOptions = OPTIONS;
     self.study = null;
+    
+    if (email === "new") {
+        self.isNewObs(true);
+        self.titleObs('New participant');
+    } else {
+        self.isNewObs(false);
+        self.titleObs(email);
+        self.emailObs(email);
+    }
 
     self.signOutUser = function(vm, event) {
         utils.startHandler(vm, event);
@@ -54,7 +63,7 @@ module.exports = function(params) {
         var participant = {attributes:{}};
         utils.observablesToObject(vm, participant, persistedFields);
         self.attributesObs().map(function(attr) {
-            participant.attributes[attr.key] = attr.obs(); 
+            participant.attributes[attr.key] = attr.obs();
         });
         // This is not currently in an editor, so we have to coerce it to the correct form.
         if (self.languagesObs()) {
@@ -62,15 +71,27 @@ module.exports = function(params) {
         } else {
             delete participant.languages;
         }
+        // TODO: It may now be possible to remove this.
+        for (var prop in participant) {
+            if (participant[prop] === "") {
+                delete participant[prop];
+            }
+        }
         console.log(participant);
+        // END TODO
         utils.startHandler(vm, event);
-        serverService.updateParticipant(self.email, participant)
-            .then(utils.successHandler(vm, event, "Participant updated."))
-            .catch(utils.failureHandler(vm, event));
+        if (self.isNewObs()) {
+            serverService.createParticipant(participant)
+                .then(utils.successHandler(vm, event, "Participant created."))
+                .catch(utils.failureHandler(vm, event));
+        } else {
+            serverService.updateParticipant(participant)
+                .then(utils.successHandler(vm, event, "Participant updated."))
+                .catch(utils.failureHandler(vm, event));
+        }
     };
     
     serverService.getStudy().then(function(study) {
-        console.log(study);
         self.study = study;
         // there's a timer in the control involved here, we need to use an observer
         self.allDataGroupsObs(study.dataGroups);
@@ -80,7 +101,10 @@ module.exports = function(params) {
         });
         self.attributesObs(attrs);
     }).then(function(response) {
-        serverService.getParticipant(self.email).then(function(response) {
+        if (self.isNewObs()) {
+            return;
+        }
+        serverService.getParticipant(email).then(function(response) {
             self.nameObs(utils.formatName(response));
             self.firstNameObs(response.firstName);
             self.lastNameObs(response.lastName);
