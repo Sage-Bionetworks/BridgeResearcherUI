@@ -7,11 +7,12 @@ var root = require('../../root');
 module.exports = function(params) {
     var self = this;
 
-    self.email = decodeURIComponent(params.email);
+    self.emailObs = ko.observable(decodeURIComponent(params.email));
     self.isResearcher = root.isResearcher;
     self.consentHistoryObs = ko.observableArray([]);
-
-    serverService.getParticipant(self.email).then(function(response) {
+    self.isNewObs = ko.observable(false);
+    
+    serverService.getParticipant(self.emailObs()).then(function(response) {
         var histories = response.consentHistories;
         
         // NOTE: This isn't going to tell the viewer anything about *which* of these

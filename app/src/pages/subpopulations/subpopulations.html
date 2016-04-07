@@ -11,7 +11,7 @@
 <div class="scrollbox">
     <errors></errors>
     <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
-    <table class="ui compact table" data-bind="visible: itemsObs().length > 0">
+    <table class="ui compact selectable table" data-bind="visible: itemsObs().length > 0">
         <thead>
         <tr>
             <th width="10" data-bind="visible: isDeveloper"></th>

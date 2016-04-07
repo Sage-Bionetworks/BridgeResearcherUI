@@ -4,6 +4,7 @@
 @import "./survey.scss";
 @import "./schema.scss";
 @import "./schedules.scss";
+@import "./pager.scss";
 
 /* HTML TAGS */
 html, body {
@@ -200,5 +201,16 @@ footer p {
         height: 15.6rem!important;
         width: 31.1rem!important;
         */
+    }
+}
+
+.message {
+    ol {
+        margin: 0!important;
+        padding: 0!important;
+        margin-left:1rem!important;
+    }
+    li {
+        margin: 1rem 0;
     }
 }

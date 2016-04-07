@@ -1,6 +1,6 @@
 var ko = require('knockout');
-var utils = require('../../utils');
-var serverService = require('../../services/server_service');
+var utils = require('../../../utils');
+var serverService = require('../../../services/server_service');
 
 module.exports = function() {
     var self = this;

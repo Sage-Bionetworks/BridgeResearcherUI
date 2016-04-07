@@ -2,14 +2,14 @@
     <div class="fixed-header-title">
         <h3>
             <a href="#/participants" class="section">Participants</a>
-            <span data-bind="text: email"></span>
+            <span data-bind="text: titleObs"></span>
         </h3>
         <div class="fixed-header-buttons">
             <button class="ui small primary button" data-bind="click: save">Save</button>
-            <button class="ui small button" data-bind="click: signOutUser">Sign out user</button>
+            <button class="ui small button" data-bind="click: signOutUser, visible: !isNewObs()">Sign out user</button>
         </div>
     </div>
-    <!-- ko component: {name: 'participant-tabset', params: {active: 'info' }} --><!-- /ko -->
+    <!-- ko component: {name: 'participant-tabset', params: {active: 'info', isNewObs: isNewObs}} --><!-- /ko -->
 </div>
 <div class="scrollbox">
     <errors></errors>
@@ -25,18 +25,26 @@
                     </div>
                 </div>
             </div>
-            <div class="field">
-                <label>Sharing Scope</label>
-                <select class="ui dropdown" data-bind="options: sharingScopeOptions, optionsText: 'label', optionsValue: 'value', value: sharingScopeObs">
-                </select>
+            <div class="required field" data-bind="visible: isNewObs" id="email">
+                <label>Email</label>
+                <ui-text params="fieldObs: emailObs"></ui-text>
             </div>
             <div class="field">
+                <label>Sharing Scope</label>
+                <select class="ui dropdown" data-bind="options: sharingScopeOptions, optionsText: 'label', 
+                    optionsValue: 'value', value: sharingScopeObs"></select>
+            </div>
+            <div class="field" data-bind="visible: !isNewObs()">
                 <label>Roles</label>
                 <div class="input-field" data-bind="visible: rolesObs().length &gt; 0, text: rolesObs"></div>
                 <div class="input-field" data-bind="visible: rolesObs().length === 0"><i>No assigned roles.</i></div>
             </div>
         </div>
         <div class="equal width fields">
+            <div class="required field" data-bind="visible: isNewObs" id="password">
+                <label>Password</label>
+                <input type="password" data-bind="textInput: passwordObs"/>
+            </div>
             <div class="field">
                 <label>Data Groups</label>
                 <select multiple="" data-bind="semantic: 'multi-search-select', updateSelect: dataGroupsObs, foreach: allDataGroupsObs">
@@ -50,7 +58,7 @@
                     For example, "en, fr"
                 </div>
             </div>
-            <div class="field">
+            <div class="field" data-bind="visible: !isNewObs()">
                 <label>Health Code</label>
                 <div class="input-field" data-bind="text: healthCodeObs"></div>
                 <div class="help-text ui red label" data-bind="visible: healthCodeObs() !== 'N/A'">
@@ -59,15 +67,15 @@
             </div>
         </div>
         <div class="equal width fields">
+            <div class="field" id="externalId">
+                <label>External ID</label>
+                <ui-text params="fieldObs: externalIdObs"></ui-text>
+            </div>
             <div class="field" style="margin-bottom:2rem">
                 <label>Preferences</label>
                 <ui-checkbox params="checkedObs: notifyByEmailObs">
                     Consents to receive email from study
                 </ui-checkbox>
-            </div>
-            <div class="field">
-                <label>External ID</label>
-                <ui-text params="fieldObs: externalIdObs"></ui-text>
             </div>
             <div class="field">
             </div>

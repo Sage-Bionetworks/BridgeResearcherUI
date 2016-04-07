@@ -8,7 +8,7 @@
     <script src="//cdn.ckeditor.com/4.5.7/full/ckeditor.js"></script>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css"/>
 </head>
-<body style="opacity:0.0">
+<body style="opacity:0.0; color: #202020">
     <header data-bind="visible: showNavigationObs">
         <h2><i class="white heartbeat icon"></i> Bridge Study Manager</h2>
         <div class="header-env">
@@ -44,6 +44,9 @@
                         <a href="#/participants" class="item" data-bind="css:{active:isActive('participants')}, visible: isResearcher()">
                             Participants
                         </a>
+                        <a href="#/externalIds" class="item" data-bind="css:{active:isActive('externalIds')}, visible: isDeveloper()">
+                            External Identifiers
+                        </a>
                     </div>
                 </div>
                 <div class="item" data-bind="visible: isDeveloper">
@@ -67,7 +70,10 @@
                 <div class="item" data-bind="visible: isAdmin">
                     <i class="settings icon"></i> Administration
                     <div class="menu">
-                        <a href="#/cache" class="item" data-bind="css:{active:isActive('cache')}">
+                        <a href="#/admin/info" class="item" data-bind="css:{active:isActive('admin_settings')}">
+                            Study Settings
+                        </a>
+                        <a href="#/admin/cache" class="item" data-bind="css:{active:isActive('cache')}">
                             Cache Control
                         </a>
                     </div>

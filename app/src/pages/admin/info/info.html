@@ -1,0 +1,31 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <h3>Study Settings</h3>
+        <div class="fixed-header-buttons">
+            <button class="ui small primary button" data-bind="click: save">Save</button>
+        </div>
+    </div>
+    <div class="empty-secondary-menu"></div>
+</div>
+<div class="scrollbox">
+    <errors></errors>
+    <form class="ui form">
+        <div class="field">
+            <label>Health code export</label>
+            <ui-checkbox params="checkedObs: healthCodeExportEnabledObs">
+                Include participant health code in the participant roster
+            </ui-checkbox>
+        </div>
+        <div class="field">
+            <label>Email verification</label>
+            <ui-checkbox params="checkedObs: emailVerificationEnabledObs">
+                Require participants to verify their email address
+            </ui-checkbox>
+        </div>
+        <div class="field">
+            <label>Maximum Number of Participants</label>
+            <input type="range" min="0" max="5000" data-bind="value: maxNumOfParticipantsObs, valueUpdate: 'input'"/>
+            <div class="ui large label" data-bind="text: maxParticipants"></div>
+        </div>
+    </form>
+</div>

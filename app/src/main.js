@@ -69,10 +69,13 @@ router.on('/schedules', routeTo('schedules'));
 router.on('/scheduleplans', routeTo('scheduleplans'));
 router.on('/scheduleplans/:guid', guidRoute('scheduleplan'));
 router.on('/synapse', routeTo('synapse'));
-router.on('/cache', routeTo('cache'));
+router.on('/externalIds', routeTo('external_ids'));
 router.on('/participants/:email', emailRoute('participant'));
 router.on('/participants/:email/consents', emailRoute('participant_consents'));
 router.on('/participants', routeTo('participants'));
+
+router.on('/admin/info', routeTo('admin_info'));
+router.on('/admin/cache', routeTo('admin_cache'));
 
 router.configure({
     notfound: routeTo('not_found'),
