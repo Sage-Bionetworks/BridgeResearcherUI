@@ -32,7 +32,7 @@ if (typeof window !== "undefined") {
     });
 }
 
-var NO_CACHE_PATHS = ['studies/self/emailStatus','participants?offsetBy='];
+var NO_CACHE_PATHS = ['studies/self/emailStatus','participants?offsetBy=','externalIds?'];
 var PATH_EXTS = ['/published','/recent','/revisions'];
 
 var cache = (function() {
@@ -189,11 +189,18 @@ function signOut() {
         p.fail(reject);
     });
 }
-
 function isSupportedUser() {
     return this.roles.some(function(role) {
         return ["developer","researcher","admin"].indexOf(role) > -1;
     });
+}
+function query(object) {
+    var string = Object.keys(object).filter(function(key) { 
+        return typeof object[key] !== "undefined" && object[key] !== null && object[key] !== ""; 
+    }).map(function(key) { 
+        return key + "=" + object[key]; 
+    }).join("&");
+    return (string) ? ("?"+string) : "";
 }
 
 module.exports = {
@@ -367,20 +374,31 @@ module.exports = {
     getParticipant: function(email) {
         return get(config.participant+"?email="+encodeURIComponent(email));
     },
-    updateParticipantOptions: function(email, options) {
-        return post(config.participant+"/options?email="+encodeURIComponent(email), options).then(function(response) {
-            cache.clear(config.participant+"?email="+encodeURIComponent(email));
-            return response;
-        });
+    createParticipant: function(participant) {
+        return post(config.participants, participant)
+            .then(function(response) {
+                // This can change many different pages, clear entire cache for now
+                cache.reset();
+                return response;
+            });  
     },
-    updateParticipantProfile: function(email, profile) {
-        return post(config.participant+"/profile?email="+encodeURIComponent(email), profile).then(function(response) {
-            cache.clear(config.participant+"?email="+encodeURIComponent(email));
-            return response;
-        });
+    updateParticipant: function(participant) {
+        var email = participant.email;
+        return post(config.participant+"?email="+encodeURIComponent(email), participant)
+            .then(function(response) {
+                // This can change many different pages, clear entire cache for now.
+                cache.reset();
+                return response;
+            });  
     },
     signOutUser: function(email) {
         return post("/v3/users/signOut?email="+encodeURIComponent(email));  
+    },
+    getExternalIds: function(params) {
+        return get(config.externalIds + query(params || {}));
+    },
+    addExternalIds: function(identifiers) {
+        return post(config.externalIds, identifiers);
     },
     getSession: function() {
         if (session) {

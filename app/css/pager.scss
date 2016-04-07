@@ -1,0 +1,18 @@
+.line-control {
+    display: flex;
+    align-items:center;
+}
+    .line-control-radio {
+        display:flex; 
+        width:100%; 
+        padding-left:1rem; 
+    }
+    .line-control-radio .checkbox {
+        margin-left: .4rem;
+    }
+        .line-control-radio .checkbox label {
+            padding-left: 1.5rem!important;
+        }
+    .line-control .pagination {
+        cursor: pointer;
+    }

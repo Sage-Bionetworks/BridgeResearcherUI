@@ -1,0 +1,19 @@
+<div class="ui small modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Import External Identifiers
+    </div>
+    <div class="content">
+        <p>Please enter a list of identifiers, separated by commas or new lines. </p>
+        <errors></errors>
+        <div class="ui form">
+            <div class="field">
+                <textarea data-bind="textInput:importObs"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="rules-actions">
+        <a class="ui primary small button" data-bind="click: doImport">Import</a>
+        <button class="ui small button" data-bind="click: close">Close</button>
+    </div>
+</div>

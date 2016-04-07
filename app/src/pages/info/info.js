@@ -3,8 +3,7 @@ var serverService = require('../../services/server_service');
 var ko = require('knockout');
 
 var fields = ['message', 'name', 'sponsorName', 'technicalEmail', 'supportEmail', 'consentNotificationEmail',
-    'identifier', 'strictUploadValidationEnabled', 'maxNumOfParticipants', 'healthCodeExportEnabled', 'minIos',
-    'emailVerificationEnabled', 'minAndroid'];
+    'identifier', 'strictUploadValidationEnabled', 'minIos', 'minAndroid','externalIdValidationEnabled'];
 
 function updateMinAppVersion(vm, obs, name) {
     var value = parseInt(obs(),10);
@@ -22,17 +21,10 @@ function updateMinAppObservers(study, obs, name) {
 module.exports = function() {
     var self = this;
 
-    // This cannot be loaded sooner, at the top of the file. Just plain don't work.
-    // Why? WHY?!
+    // This cannot be loaded sooner, at the top of the file. Just plain don't work. Why? WHY?!
     var root = require('../../root')
 
     utils.observablesFor(self, fields);
-    self.isAdmin = root.isAdmin;
-
-    self.maxParticipants = ko.computed(function(){
-        return (self.maxNumOfParticipantsObs() === "0" || self.maxNumOfParticipantsObs() === 0) ?
-                "No limit" : self.maxNumOfParticipantsObs();
-    });
 
     self.save = function(vm, event) {
         utils.startHandler(self, event);
@@ -42,7 +34,7 @@ module.exports = function() {
         updateMinAppVersion(self, self.minIosObs, "iPhone OS");
         updateMinAppVersion(self, self.minAndroidObs, "Android");
 
-        serverService.saveStudy(self.study, self.isAdmin())
+        serverService.saveStudy(self.study, false)
             .then(function(response) {
                 self.study.version = response.version;
             })

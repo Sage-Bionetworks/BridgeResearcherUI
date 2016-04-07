@@ -1,0 +1,38 @@
+<div class="line-control">
+    <div>
+        <div class="ui icon input" data-bind="css:{loading: searchLoadingObs}, visible: top">
+            <input type="text" placeholder="Start of ID" data-bind="textInput: idFilterObs, event: {keyup: doSearch}">
+            <i class="search icon"></i>
+        </div>
+    </div>
+    <div class="line-control-radio">
+        <div class="ui form" data-bind="visible: top">
+            <label>Assigned:</label>
+            <div data-bind="semantic: 'radio', radioObs: assignmentFilterObs">
+                <input type="radio" value="all" name="assignment" class="hidden"/>
+                <label>Either</label>
+            </div>
+            <div data-bind="semantic: 'radio', radioObs: assignmentFilterObs">
+                <input type="radio" value="true" name="assignment" class="hidden"/>
+                <label>Yes</label>
+            </div>
+            <div data-bind="semantic: 'radio', radioObs: assignmentFilterObs">
+                <input type="radio" value="false" name="assignment" class="hidden"/>
+                <label>No</label>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="ui small pagination menu" data-bind="css:{loading:pagerLoadingObs}, visible: totalPagesObs() > 1">
+            <div class="item" data-bind="click: firstPage, visible: !offsetKeyObs() && idFilterObs().length === 0">1</div>
+            <div class="active item">
+                <div class="ui small active loader"></div>
+                <span data-bind="text: currentPageObs() + 1"></span>&nbsp;of&nbsp; 
+                <span data-bind="text: totalPagesObs()"></span>
+            </div>        
+            <div class="item" data-bind="click: nextPage, visible: offsetKeyObs">
+                <i class="angle right icon"></i>
+            </div>
+        </div>
+    </div>
+</div>

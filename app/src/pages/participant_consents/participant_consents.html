@@ -2,17 +2,17 @@
     <div class="fixed-header-title">
         <h3>
             <a href="#/participants" class="section">Participants</a>
-            <span data-bind="text: email"></span>
+            <span data-bind="text: emailObs"></span>
         </h3>
         <div class="fixed-header-buttons"></div>
     </div>
-    <!-- ko component: {name: 'participant-tabset', params: {active: 'consents' }} --><!-- /ko -->
+    <!-- ko component: {name: 'participant-tabset', params: {active: 'consents', isNewObs: isNewObs}} --><!-- /ko -->
 </div>
 <div class="scrollbox">
     <errors></errors>
     <div class="loading_status" data-bind="visible: consentHistoryObs().length === 0">Loading...</div>
     <div data-bind="visible: consentHistoryObs().length > 0 && isResearcher">
-        <table class="ui compact table">
+        <table class="ui compact selectable table">
             <thead>
                 <tr>
                     <th>Consent Group</th>
