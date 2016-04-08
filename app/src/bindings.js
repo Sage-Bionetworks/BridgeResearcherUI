@@ -200,3 +200,20 @@ ko.bindingHandlers.fadeRemove = {
         });
     }
 };
+
+function activeHandler(element, valueAccessor) {
+    var id = element.getAttribute("href");
+    if (id) {
+        id = id.replace('#/','');
+    }
+    var func = valueAccessor;
+    do {
+        var func = func(id);
+    } while(typeof func === "function");
+    element.classList.toggle("active", func);
+}
+
+ko.bindingHandlers.active = {
+    init: activeHandler,
+    update: activeHandler
+}

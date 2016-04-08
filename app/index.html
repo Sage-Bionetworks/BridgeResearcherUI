@@ -22,8 +22,8 @@
         </main>
         <nav data-bind="visible: showNavigationObs">
             <div class="ui pointing menu" data-bind="visible: isEditorPanelVisible">
-                <a class="item" data-bind="css: {active: !isEditorTabVisible()}, click: toggleEditorTab">Navigation</a>
-                <a class="item" data-bind="css: {active: isEditorTabVisible}, click: toggleEditorTab">Editor</a>
+                <a class="item" data-bind="active: !isEditorTabVisible(), click: toggleEditorTab">Navigation</a>
+                <a class="item" data-bind="active: isEditorTabVisible, click: toggleEditorTab">Editor</a>
             </div>
             <div data-bind="visible: isEditorTabVisible,
                 component: {name: editorPanel, params: editorParams}">
@@ -32,22 +32,22 @@
                 <div class="item" data-bind="visible: isDeveloper">
                     <i class="lab icon"></i> Study
                     <div class="menu">
-                        <a href="#/info" class="item" data-bind="css:{active:isActive('info')}">
+                        <a href="#/info" class="item" data-bind="active: isActive">
                             Settings
                         </a>
-                        <a href="#/verify_email_template" class="item" data-bind="css:{active:isActive('ve_template')}, visible: isDeveloper">
+                        <a href="#/ve_template" class="item" data-bind="active: isActive, visible: isDeveloper">
                             Email Templates
                         </a>
-                        <a href="#/subpopulations" class="item" data-bind="css:{active:isActive('subpopulations')}">
+                        <a href="#/subpopulations" class="item" data-bind="active: isActive">
                             Consent Groups
                         </a>
-                        <a href="#/participants" class="item" data-bind="css:{active:isActive('participants')}, visible: isResearcher()">
+                        <a href="#/participants" class="item" data-bind="active: isActive, visible: isResearcher">
                             Participants
                         </a>
-                        <a href="#/externalIds" class="item" data-bind="css:{active:isActive('externalIds')}, visible: isDeveloper()">
+                        <a href="#/externalIds" class="item" data-bind="active: isActive, visible: isDeveloper">
                             External Identifiers
                         </a>
-                        <a href="#/lilly" class="item" data-bind="css:{active:isActive('lilly')}, visible: studyIdentifierObs() === 'lilly-1'">
+                        <a href="#/lilly" class="item" data-bind="active: isActive, visible: studyIdentifierObs() === 'lilly-1'">
                             Eli Lilly Onboarding
                         </a>
                     </div>
@@ -55,17 +55,17 @@
                 <div class="item" data-bind="visible: isDeveloper">
                     <i class="server icon"></i> Study Data
                     <div class="menu">
-                        <a href="#/scheduleplans" class="item" data-bind="css:{active:isActive('scheduleplans')}">
+                        <a href="#/scheduleplans" class="item" data-bind="active: isActive">
                             Scheduling
                         </a>
-                        <a href="#/schemas" class="item" data-bind="css:{active:isActive('schemas')}">
+                        <a href="#/schemas" class="item" data-bind="active: isActive">
                             Data Schemas
                         </a>
-                        <a href="#/task_identifiers" class="item" data-bind="css:{active:isActive('task_identifiers')}">
+                        <a href="#/task_identifiers" class="item" data-bind="active: isActive">
                             Task Identifiers
                         </a>
 
-                        <a href="#/surveys" class="item" data-bind="css:{active:isActive('surveys')}">
+                        <a href="#/surveys" class="item" data-bind="active: isActive">
                             Surveys
                         </a>
                     </div>
@@ -73,10 +73,10 @@
                 <div class="item" data-bind="visible: isAdmin">
                     <i class="settings icon"></i> Administration
                     <div class="menu">
-                        <a href="#/admin/info" class="item" data-bind="css:{active:isActive('admin_settings')}">
+                        <a href="#/admin/info" class="item" data-bind="active: isActive">
                             Study Settings
                         </a>
-                        <a href="#/admin/cache" class="item" data-bind="css:{active:isActive('cache')}">
+                        <a href="#/admin/cache" class="item" data-bind="active: isActive">
                             Cache Control
                         </a>
                     </div>

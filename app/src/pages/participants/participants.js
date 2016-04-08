@@ -38,6 +38,6 @@ module.exports = function() {
                 }
             }
             return response;
-        });
+        }).catch(utils.failureHandler());
     }
 };

@@ -122,31 +122,33 @@ function deleteInt(url) {
         dataType: "json"
     });
 }
+
+function reloadPageWhenSessionLost(response) {
+    if (response.status === 401) {
+        storeService.remove(SESSION_KEY);
+        window.location.reload();
+    }
+    return response;
+}
+
 function makeSessionWaitingPromise(func) {
+    // Return a promise. If there's a session, execute the function and call resolve/reject.
+    // otherwise, the executor itself has a promise and can be used as a listener function.
+    // when a session is generated the promise will be called at that time and excute.
     var promise = new Promise(function(resolve, reject) {
-        // 3rd law of JavaScript... when in doubt use another function
         var executor = function() {
             var p = func();
             p.then(resolve);
             p.fail(reject);
+            return p;
         };
-        if (session) {
+        if (session && session.sessionToken) {
             executor();
         } else {
             listeners.once(SESSION_STARTED_EVENT_KEY, executor);
         }
     });
-    /* This was interferring with error reporting. Though I thought http errors did not
-        cause catch to fire, only network problems, which would mean this could be moved to a then block.
-    promise.catch(function(response) {
-        if (response.status === 401) {
-            console.error("Signed out due to 401");
-            signOut();
-            return;
-        }
-        throw response;
-    });
-    */
+    promise.catch(reloadPageWhenSessionLost);
     return promise;
 }
 function get(path) {
@@ -181,16 +183,12 @@ function del(path) {
  */
 function signOut() {
     cache.reset();
-    storeService.remove(SESSION_KEY);
     var env = session.environment;
     session = null;
+    storeService.remove(SESSION_KEY);
 
     listeners.emit(SESSION_ENDED_EVENT_KEY);
-    return new Promise(function(resolve, reject) {
-        var p = postInt(config.host[env] + config.signOut);
-        p.then(resolve);
-        p.fail(reject);
-    });
+    postInt(config.host[env] + config.signOut);
 }
 function isSupportedUser() {
     return this.roles.some(function(role) {
@@ -368,11 +366,7 @@ module.exports = {
     },
     getParticipants: function(offsetBy, pageSize, emailFilter) {
         emailFilter = emailFilter || "";
-        // TODO: won't work to remove this then() clause until filter is returned in the response    
-        return get(config.participants+"?offsetBy="+offsetBy+"&pageSize="+pageSize+"&emailFilter="+emailFilter).then(function(response) {
-            response.filter = emailFilter;
-            return response;
-        });
+        return get(config.participants+"?offsetBy="+offsetBy+"&pageSize="+pageSize+"&emailFilter="+emailFilter);
     },
     getParticipant: function(email) {
         return get(config.participant+"?email="+encodeURIComponent(email));

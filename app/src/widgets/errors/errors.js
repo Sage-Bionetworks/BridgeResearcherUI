@@ -57,7 +57,6 @@ module.exports = function() {
                 fieldEl.appendChild(div);
                 errorQueue.push(fieldEl);
             } else {
-                console.debug("Did not find",id);
                 globalErrors.push(string);
             }
         }

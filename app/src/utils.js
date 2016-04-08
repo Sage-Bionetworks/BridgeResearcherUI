@@ -186,18 +186,17 @@ module.exports = {
      * An ajax failure handler for a view model that supports the editing of a form.
      * Turns off the loading indicator, shows a global error message if there is a message
      * observable.
-     * @param vm
-     * @param event
      * @returns {Function}
      */
-    failureHandler: function(vm, event) {
+    failureHandler: function() {
         return function(response) {
             clearPendingControl();
             ko.postbox.publish("clearErrors");
             if (response.status === 412) {
                 toastr.error('You do not appear to be a developer, researcher, or admin.');
             } else if (response instanceof Error) {
-                toastr.error(response.message);
+                //toastr.error(response.message);
+                console.error(response.message);
             } else if (response.responseJSON) {
                 var payload = response.responseJSON;
                 ko.postbox.publish("showErrors", payload);
@@ -207,7 +206,6 @@ module.exports = {
             }
         };
     },
-    errorHandler: console.error.bind(console),
     /**
      * Create an observable for each field name provided. Will create an observableArray if the notation indicates
      * such (e.g. "entries[]" rather than "entries").
@@ -373,7 +371,6 @@ module.exports = {
      */
     notFoundHandler: function(vm, message, rootPath) {
         return function(response) {
-            console.error(response);
             toastr.error((message) ? message : response.statusText);
             if (rootPath) {
                 document.location = rootPath;

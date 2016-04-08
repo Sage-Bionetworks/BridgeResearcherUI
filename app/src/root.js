@@ -14,8 +14,8 @@ var pageSets = {
     'participants': ['participants','participant','participant_consents'],
     'externalIds': ['external_ids'],
     'lilly': ['lilly'],
-    'admin_settings': ['admin_info'],
-    'cache': ['admin_cache']
+    'admin/info': ['admin_info'],
+    'admin/cache': ['admin_cache']
 };
 
 toastr.options = config.toastr;

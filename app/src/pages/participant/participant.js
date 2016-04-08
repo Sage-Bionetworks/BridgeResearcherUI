@@ -9,15 +9,6 @@ var fields = ['title','isNew','email','name','firstName','lastName','sharingScop
 var persistedFields = ['firstName','lastName','sharingScope','notifyByEmail',
     'dataGroups[]','email','password','languages','externalId','status'];
 
-var usersEmail = null;
-
-serverService.addSessionStartListener(function(session) {
-    usersEmail = session.email;
-});
-serverService.addSessionEndListener(function() {
-    usersEmail = null;
-});
-
 function formatList(list) {
     return (list || []).sort().map(function(el) {
         return utils.formatTitleCase(el);
@@ -54,20 +45,9 @@ module.exports = function(params) {
         self.emailObs(email);
     }
 
-    self.signOutUser = function(vm, event) {
-        utils.startHandler(vm, event);
-        
-        if (email === usersEmail) {
-            serverService.signOut();    
-        } else {
-            serverService.signOutUser(email)
-                .then(utils.successHandler(vm, event, "User signed out."))
-                .catch(utils.failureHandler(vm, event));
-        }
-    };
-    self.save = function(vm, event) {
+    function participantFromForm() {
         var participant = {attributes:{}};
-        utils.observablesToObject(vm, participant, persistedFields);
+        utils.observablesToObject(self, participant, persistedFields);
         self.attributesObs().map(function(attr) {
             participant.attributes[attr.key] = attr.obs();
         });
@@ -77,12 +57,68 @@ module.exports = function(params) {
         } else {
             delete participant.languages;
         }
+        return participant;        
+    }
+    function loadStudy(study) {
+        self.study = study;
+        // there's a timer in the control involved here, we need to use an observer
+        self.allDataGroupsObs(study.dataGroups);
+        var attrs = self.study.userProfileAttributes.map(function(key) {
+            return {key:key, label:utils.snakeToTitleCase(key,''), obs:ko.observable()}; 
+        });
+        self.attributesObs(attrs);
+        var shouldBeEdited = !study.externalIdValidationEnabled || self.isNewObs();
+        self.externalIdEditableObs(shouldBeEdited);
+    }
+    function getParticipant(response) {
+        if (self.isNewObs()) {
+            return null;
+        }
+        return serverService.getParticipant(email);        
+    }
+    function loadParticipant(response) {
+        if (response == null) {
+            return;
+        }
+        self.nameObs(utils.formatName(response));
+        self.firstNameObs(response.firstName);
+        self.lastNameObs(response.lastName);
+        self.externalIdObs(response.externalId);
+        self.sharingScopeObs(response.sharingScope);
+        self.notifyByEmailObs(response.notifyByEmail);
+        self.dataGroupsObs(response.dataGroups);
+        self.createdOnObs(utils.formatDateTime(response.createdOn));
+        self.statusObs(response.status);
+        if (self.study.healthCodeExportEnabled) {
+            self.healthCodeObs(response.healthCode);    
+        }
+        self.languagesObs(response.languages.join(", "));
+        self.rolesObs(formatList(response.roles));
+        self.attributesObs().map(function(attr) {
+            attr.obs(response.attributes[attr.key]);
+        });
+        if (!self.externalIdObs()) {
+            self.externalIdEditableObs(true);
+        }
+    }
+    function setNew() {
+        self.isNewObs(false);
+    }
+
+    self.signOutUser = function(vm, event) {
+        utils.startHandler(vm, event);
+        
+        serverService.signOutUser(email)
+            .then(utils.successHandler(vm, event, "User signed out."))
+            .catch(utils.failureHandler(vm, event));
+    };
+    self.save = function(vm, event) {
+        var participant = participantFromForm();
+        
         utils.startHandler(vm, event);
         if (self.isNewObs()) {
             serverService.createParticipant(participant)
-                .then(function() {
-                    self.isNewObs(false);
-                })
+                .then(setNew)
                 .then(utils.successHandler(vm, event, "Participant created."))
                 .catch(utils.failureHandler(vm, event));
         } else {
@@ -92,48 +128,9 @@ module.exports = function(params) {
         }
     };
     
-    serverService.getStudy().then(function(study) {
-        console.log("study", study);
-        self.study = study;
-        // there's a timer in the control involved here, we need to use an observer
-        self.allDataGroupsObs(study.dataGroups);
-        var attrs = self.study.userProfileAttributes.map(function(key) {
-            return {
-                key: key, 
-                label: utils.snakeToTitleCase(key,''),
-                obs: ko.observable()
-            }; 
-        });
-        self.attributesObs(attrs);
-        var shouldBeEdited = !study.externalIdValidationEnabled || self.isNewObs();
-        self.externalIdEditableObs(shouldBeEdited);
-        
-    }).then(function(response) {
-        if (self.isNewObs()) {
-            return;
-        }
-        serverService.getParticipant(email).then(function(response) {
-            console.log("participant",response);
-            self.nameObs(utils.formatName(response));
-            self.firstNameObs(response.firstName);
-            self.lastNameObs(response.lastName);
-            self.externalIdObs(response.externalId);
-            self.sharingScopeObs(response.sharingScope);
-            self.notifyByEmailObs(response.notifyByEmail);
-            self.dataGroupsObs(response.dataGroups);
-            self.createdOnObs(utils.formatDateTime(response.createdOn));
-            self.statusObs(response.status);
-            if (self.study.healthCodeExportEnabled) {
-                self.healthCodeObs(response.healthCode);    
-            }
-            self.languagesObs(response.languages.join(", "));
-            self.rolesObs(formatList(response.roles));
-            self.attributesObs().map(function(attr) {
-                attr.obs(response.attributes[attr.key]);
-            });
-            if (!self.externalIdObs()) {
-                self.externalIdEditableObs(true);
-            }
-        }).catch(utils.errorHandler);        
-    }).catch(utils.errorHandler);
+    serverService.getStudy()
+        .then(loadStudy)
+        .then(getParticipant)
+        .then(loadParticipant)
+        .catch(utils.failureHandler());
 }
