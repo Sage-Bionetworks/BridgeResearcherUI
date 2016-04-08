@@ -136,14 +136,17 @@ function makeSessionWaitingPromise(func) {
             listeners.once(SESSION_STARTED_EVENT_KEY, executor);
         }
     });
+    /* This was interferring with error reporting. Though I thought http errors did not
+        cause catch to fire, only network problems, which would mean this could be moved to a then block.
     promise.catch(function(response) {
         if (response.status === 401) {
             console.error("Signed out due to 401");
             signOut();
             return;
         }
-        console.error(response);
+        throw response;
     });
+    */
     return promise;
 }
 function get(path) {

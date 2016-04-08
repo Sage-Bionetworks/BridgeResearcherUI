@@ -40,7 +40,6 @@ ko.bindingHandlers.semantic = {
             var observer = allBindings().radioObs;
 
             function updateOnMatch(newValue) {
-                console.log("updateOnMatch", input.value, newValue);
                 if (input.value === newValue) {
                     input.checked = true;
                     $element.addClass("checked");

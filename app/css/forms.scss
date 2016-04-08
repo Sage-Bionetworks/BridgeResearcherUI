@@ -1,6 +1,7 @@
 .editor {
-    border: none;
-    border-bottom: 1px dotted #ccc;
+    border: 1px solid #e5e5e5;
+    width: 100%;
+    border-radius:2px;
 }
 .require::after {
     margin: -.2em 0 0 .2em;

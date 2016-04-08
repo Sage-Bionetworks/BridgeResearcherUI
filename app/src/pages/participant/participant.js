@@ -4,7 +4,7 @@ var serverService = require('../../services/server_service');
 
 var fields = ['title','isNew','email','name','firstName','lastName','sharingScope','notifyByEmail',
     'dataGroups[]','password','healthCode','allDataGroups[]','attributes[]','externalId','languages',
-    'roles'];
+    'roles','externalIdEditable'];
     
 var persistedFields = ['firstName','lastName','sharingScope','notifyByEmail',
     'dataGroups[]','email','password','languages','externalId'];
@@ -71,14 +71,7 @@ module.exports = function(params) {
         } else {
             delete participant.languages;
         }
-        // TODO: It may now be possible to remove this.
-        for (var prop in participant) {
-            if (participant[prop] === "") {
-                delete participant[prop];
-            }
-        }
-        console.log(participant);
-        // END TODO
+
         utils.startHandler(vm, event);
         if (self.isNewObs()) {
             serverService.createParticipant(participant)
@@ -100,6 +93,9 @@ module.exports = function(params) {
             return {key: key, obs: ko.observable()}; 
         });
         self.attributesObs(attrs);
+        var shouldBeEdited = !study.externalIdValidationEnabled || self.isNewObs();
+        self.externalIdEditableObs(shouldBeEdited);
+        
     }).then(function(response) {
         if (self.isNewObs()) {
             return;
@@ -120,6 +116,9 @@ module.exports = function(params) {
             self.attributesObs().map(function(attr) {
                 attr.obs(response.attributes[attr.key]);
             });
+            if (!self.externalIdObs()) {
+                self.externalIdEditableObs(true);
+            }
         }).catch(utils.errorHandler);        
     }).catch(utils.errorHandler);
 }
