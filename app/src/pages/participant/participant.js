@@ -4,10 +4,10 @@ var serverService = require('../../services/server_service');
 
 var fields = ['title','isNew','email','name','firstName','lastName','sharingScope','notifyByEmail',
     'dataGroups[]','password','healthCode','allDataGroups[]','attributes[]','externalId','languages',
-    'roles','externalIdEditable'];
+    'roles','externalIdEditable','status','createdOn'];
     
 var persistedFields = ['firstName','lastName','sharingScope','notifyByEmail',
-    'dataGroups[]','email','password','languages','externalId'];
+    'dataGroups[]','email','password','languages','externalId','status'];
 
 var usersEmail = null;
 
@@ -29,6 +29,11 @@ var OPTIONS = [
     {value: 'sponsors_and_partners', label:'Sponsors And Partners'},
     {value: 'all_qualified_researchers', label:'All Qualified Researchers'}
 ];
+var STATUS_OPTIONS = [
+    {value: 'enabled', label:'Enabled'},
+    {value: 'disabled', label:'Disabled'},
+    {value: 'unverified', label:'Unverified'}
+];
 
 module.exports = function(params) {
     var self = this;
@@ -37,6 +42,7 @@ module.exports = function(params) {
     utils.observablesFor(self, fields);
     self.healthCodeObs('N/A');
     self.sharingScopeOptions = OPTIONS;
+    self.statusOptions = STATUS_OPTIONS;
     self.study = null;
     
     if (email === "new") {
@@ -51,10 +57,10 @@ module.exports = function(params) {
     self.signOutUser = function(vm, event) {
         utils.startHandler(vm, event);
         
-        if (self.email === usersEmail) {
+        if (email === usersEmail) {
             serverService.signOut();    
         } else {
-            serverService.signOutUser(self.email)
+            serverService.signOutUser(email)
                 .then(utils.successHandler(vm, event, "User signed out."))
                 .catch(utils.failureHandler(vm, event));
         }
@@ -71,10 +77,12 @@ module.exports = function(params) {
         } else {
             delete participant.languages;
         }
-
         utils.startHandler(vm, event);
         if (self.isNewObs()) {
             serverService.createParticipant(participant)
+                .then(function() {
+                    self.isNewObs(false);
+                })
                 .then(utils.successHandler(vm, event, "Participant created."))
                 .catch(utils.failureHandler(vm, event));
         } else {
@@ -85,12 +93,16 @@ module.exports = function(params) {
     };
     
     serverService.getStudy().then(function(study) {
+        console.log("study", study);
         self.study = study;
         // there's a timer in the control involved here, we need to use an observer
         self.allDataGroupsObs(study.dataGroups);
         var attrs = self.study.userProfileAttributes.map(function(key) {
-            self[key+"Label"] = utils.snakeToTitleCase(key,'');
-            return {key: key, obs: ko.observable()}; 
+            return {
+                key: key, 
+                label: utils.snakeToTitleCase(key,''),
+                obs: ko.observable()
+            }; 
         });
         self.attributesObs(attrs);
         var shouldBeEdited = !study.externalIdValidationEnabled || self.isNewObs();
@@ -101,6 +113,7 @@ module.exports = function(params) {
             return;
         }
         serverService.getParticipant(email).then(function(response) {
+            console.log("participant",response);
             self.nameObs(utils.formatName(response));
             self.firstNameObs(response.firstName);
             self.lastNameObs(response.lastName);
@@ -108,6 +121,8 @@ module.exports = function(params) {
             self.sharingScopeObs(response.sharingScope);
             self.notifyByEmailObs(response.notifyByEmail);
             self.dataGroupsObs(response.dataGroups);
+            self.createdOnObs(utils.formatDateTime(response.createdOn));
+            self.statusObs(response.status);
             if (self.study.healthCodeExportEnabled) {
                 self.healthCodeObs(response.healthCode);    
             }

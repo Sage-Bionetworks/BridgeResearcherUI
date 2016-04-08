@@ -395,7 +395,7 @@ module.exports = {
             });  
     },
     signOutUser: function(email) {
-        return post("/v3/users/signOut?email="+encodeURIComponent(email));  
+        return post(config.participant+"/signOut?email="+encodeURIComponent(email));  
     },
     getExternalIds: function(params) {
         return get(config.externalIds + query(params || {}));
