@@ -64,7 +64,7 @@ module.exports = function(params) {
     function saveAfterPublish(response) {
         serverService.getConsentHistory(params.guid).then(function(data) {
             self.historyItemsObs(data.items);
-        }).catch(utils.errorHandler);
+        }).catch(utils.failureHandler());
         return response;
     }
 
@@ -98,18 +98,18 @@ module.exports = function(params) {
             .then(loadIntoEditor)
             .then(function() {
                 self.tabObs('current');
-            }).catch(utils.errorHandler);
+            }).catch(utils.failureHandler());
     };
     if (params.createdOn) {
         serverService.getStudyConsent(params.guid, params.createdOn)
                 .then(loadIntoEditor)
                 .then(function() {self.tabObs('current');})
-                .catch(utils.errorHandler);
+                .catch(utils.failureHandler());
     } else {
         serverService.getMostRecentStudyConsent(params.guid)
                 .then(loadIntoEditor)
                 .then(function() {self.tabObs('current');})
-                .catch(utils.errorHandler);
+                .catch(utils.failureHandler());
     }
     serverService.getSession().then(function(session) {
         var host = config.host[session.environment] + "/" + params.guid + "/consent.";

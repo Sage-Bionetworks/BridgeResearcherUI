@@ -49,7 +49,6 @@ module.exports = function(propertyName) {
                     self.study[propertyName].length < 1) {
                 delete self.study[propertyName];
             }
-
             serverService.saveStudy(self.study)
                     .then(function(response) {
                         self.study.version = response.version;
@@ -65,8 +64,6 @@ module.exports = function(propertyName) {
                 self.study = study;
                 self.records.pushAll(study[propertyName]);
             })
-            .catch(function(request) {
-                console.error("ERROR", request);
-            });
+            .catch(utils.failureHandler());
     };
 };

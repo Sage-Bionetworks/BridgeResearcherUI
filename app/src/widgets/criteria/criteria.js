@@ -4,7 +4,6 @@ var utils = require('../../utils');
 var fields = ['minAppVersion','maxAppVersion','language','allOfGroups[]','noneOfGroups[]','dataGroupsOptions[]'];
 
 function updateVM(vm, crit) {
-    console.log("--> updateVM", JSON.stringify(crit));
     vm.languageObs(crit.language);
     vm.minAppVersionObs(crit.minAppVersion);
     vm.maxAppVersionObs(crit.maxAppVersion);

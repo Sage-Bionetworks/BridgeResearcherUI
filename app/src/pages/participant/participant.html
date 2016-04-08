@@ -100,8 +100,12 @@
                     Consents to receive email from study
                 </ui-checkbox>
             </div>
-            <div class="field">
+            <div class="field" data-bind="visible: !isNewObs()">
+                <label>Status</label>
+                <select class="ui dropdown" data-bind="options: statusOptions, optionsText: 'label', 
+                    optionsValue: 'value', value: statusObs"></select>
             </div>
+            <div class="field" data-bind="visible: isNewObs"></div>
         </div>
         
         <div class="equal width fields" data-bind="visible: !externalIdEditableObs()">
@@ -115,17 +119,28 @@
                     Consents to receive email from study
                 </ui-checkbox>
             </div>
-            <div class="field">
+            <div class="field" data-bind="visible: !isNewObs()">
+                <label>Status</label>
+                <select class="ui dropdown" data-bind="options: statusOptions, optionsText: 'label', 
+                    optionsValue: 'value', value: statusObs"></select>
             </div>
+            <div class="field" data-bind="visible: isNewObs"></div>
         </div>
         
         <div class="equal width fields">
             <!-- ko foreach: attributesObs -->
                 <div class="field" style="margin-right: 2rem; max-width: 12rem">
-                    <label data-bind="text: $data.key"></label>
+                    <label data-bind="text: $data.label"></label>
                     <ui-text params="fieldObs: $data.obs"></ui-text>
                 </div>
             <!-- /ko -->
+        </div>
+        
+        <div class="equal width fields">
+            <div class="field">
+                <label>Created On</label>
+                <div class="input-field" data-bind="text: createdOnObs"></div>
+            </div>
         </div>
     </form>
 </div>

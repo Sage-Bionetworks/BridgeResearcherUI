@@ -6,16 +6,30 @@
     <div class="empty-secondary-menu"></div>
 </div>
 <div class="scrollbox">
+    <style>
+        .identifier-emphasis {
+            font-family:monospace;
+            padding: .25rem;
+            font-size:larger;
+            border-bottom:1px solid currentColor;
+        }
+    </style>
     <errors></errors>
-    
-    <div class="ui success icon message" data-bind="visible: resultObs().length > 0" 
-        style="margin-bottom: 1.4rem">
+    <div class="ui success icon message" data-bind="visible: resultObs().length > 0" style="margin-bottom: 1.4rem">
         <i class="check sign icon"></i>
         <div class="content">
             <div class="header">Account created</div>
-            <p data-bind="text: resultObs"></p>
+            <p>User ID <span class="identifier-emphasis" data-bind="text: resultObs"></span> created. Enter this ID into the app to register the device.</p>
         </div>
     </div>    
     
-    <button class="ui small primary button" data-bind="click: createNextAccount">Create New Account from ID</button>
+    <form class="ui form">
+        <div class="field" style="width:30rem">
+            <label>Identifier</label>
+            <input type="text" data-bind="value: identifierObs"/>
+        </div>
+        <div class="field">
+            <button class="ui small primary button" data-bind="click: createNextAccount">Create New Account using this ID</button>
+        </div>
+    </form>
 </div>
