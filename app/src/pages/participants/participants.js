@@ -15,6 +15,7 @@ module.exports = function() {
     self.itemsObs = ko.observableArray([]);
     self.formatTitleCase = utils.formatTitleCase;
     self.formatName = utils.formatName;
+    self.formatDateTime = utils.formatDateTime;
     self.classNameForStatus = function(user) {
         return cssClassNameForStatus[user.status];
     };

@@ -18,7 +18,7 @@
         @include justify-content(space-between);
         text-align: center;
         padding: .5rem 1rem 1rem 1rem;
-        width: 12rem;
+        /*width: 12rem;*/
     }
         .element-callout .circular.label {
             margin-top: 1rem;
@@ -66,7 +66,10 @@
     /* The use of !important overrides semantic UI's styles. We do this elsewhere too. */
     .element-content-segment {
         padding-top: .75rem!important;
-        background-color: #f4f4f4!important;
+        /*background-color: #f4f4f4!important;*/
+        background-color:inherit!important;
+        /*border:none!important;*/
+        box-shadow:none!important;
     }
     .constraints-label {
         margin-bottom: .5rem!important;
@@ -79,13 +82,13 @@
     .element-content-prompt {
         font-size: 1.2rem;
         font-weight: bold;
+        margin-bottom: .5rem;
     }
         .element-content-prompt-detail {
             font-size: 1.1rem;
             color: #bbb;
             font-weight: normal;
             font-style: italic;
-            /*padding: .4rem 0;*/
         }
     .element-content-constraints {
         table-collapse: collapse;
@@ -142,6 +145,10 @@
     overflow-y: auto;
     max-height: 253px;
 }
+    .enum-list-server-text {
+        font-size: .8rem;
+        color: #aaa;
+    }
 .enum-scrollbox {
     max-height:16rem;
     overflow-y:auto;

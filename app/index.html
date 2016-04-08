@@ -12,9 +12,9 @@
     <header data-bind="visible: showNavigationObs">
         <h2><i class="white heartbeat icon"></i> Bridge Study Manager</h2>
         <div class="header-env">
-            <span data-bind="html: studyName"></span>
+            <span data-bind="html: studyNameObs"></span>
             <span> on </span>
-            <span data-bind="text: environment"></span>
+            <span data-bind="text: environmentObs"></span>
         </div>
     </header>
     <section>
@@ -46,6 +46,9 @@
                         </a>
                         <a href="#/externalIds" class="item" data-bind="css:{active:isActive('externalIds')}, visible: isDeveloper()">
                             External Identifiers
+                        </a>
+                        <a href="#/lilly" class="item" data-bind="css:{active:isActive('lilly')}, visible: studyIdentifierObs() === 'lilly-1'">
+                            Eli Lilly Onboarding
                         </a>
                     </div>
                 </div>

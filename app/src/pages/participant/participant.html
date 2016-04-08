@@ -17,12 +17,10 @@
         <div class="equal width fields">
             <div class="field">
                 <label>Name</label>
-                <div class="fields">
-                    <div class="two fields">
-                        <ui-text params="fieldObs: firstNameObs, placeholder: 'First Name'"></ui-text>
-                        &#160;&#160;
-                        <ui-text params="fieldObs: lastNameObs, placeholder: 'Last Name'"></ui-text>
-                    </div>
+                <div class="two fields">
+                    <ui-text params="fieldObs: firstNameObs, placeholder: 'First Name'"></ui-text>
+                    &#160;&#160;
+                    <ui-text params="fieldObs: lastNameObs, placeholder: 'Last Name'"></ui-text>
                 </div>
             </div>
             <div class="required field" data-bind="visible: isNewObs" id="email">
@@ -40,8 +38,9 @@
                 <div class="input-field" data-bind="visible: rolesObs().length === 0"><i>No assigned roles.</i></div>
             </div>
         </div>
-        <div class="equal width fields">
-            <div class="required field" data-bind="visible: isNewObs" id="password">
+        
+        <div class="equal width fields" data-bind="visible: isNewObs">
+            <div class="required field"id="password">
                 <label>Password</label>
                 <input type="password" data-bind="textInput: passwordObs"/>
             </div>
@@ -66,7 +65,31 @@
                 </div>
             </div>
         </div>
-        <div class="equal width fields">
+        
+        <div class="equal width fields" data-bind="visible: !isNewObs()">
+            <div class="field">
+                <label>Data Groups</label>
+                <select multiple="" data-bind="semantic: 'multi-search-select', updateSelect: dataGroupsObs, foreach: allDataGroupsObs">
+                    <option data-bind="text: $data, selected: $component.dataGroupsObs().indexOf($data) > -1"></option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Languages</label>
+                <ui-text params="fieldObs: languagesObs"></ui-text>
+                <div class="help-text">
+                    For example, "en, fr"
+                </div>
+            </div>
+            <div class="field">
+                <label>Health Code</label>
+                <div class="input-field" data-bind="text: healthCodeObs"></div>
+                <div class="help-text ui red label" data-bind="visible: healthCodeObs() !== 'N/A'">
+                    This code is confidential. Do not redistribute.
+                </div>
+            </div>
+        </div>        
+        
+        <div class="equal width fields" data-bind="visible: externalIdEditableObs">
             <div class="field" id="externalId">
                 <label>External ID</label>
                 <ui-text params="fieldObs: externalIdObs"></ui-text>
@@ -80,6 +103,22 @@
             <div class="field">
             </div>
         </div>
+        
+        <div class="equal width fields" data-bind="visible: !externalIdEditableObs()">
+            <div class="field" id="externalId">
+                <label>External ID</label>
+                <div class="input-field" data-bind="text: externalIdObs"></div>
+            </div>
+            <div class="field" style="margin-bottom:2rem">
+                <label>Preferences</label>
+                <ui-checkbox params="checkedObs: notifyByEmailObs">
+                    Consents to receive email from study
+                </ui-checkbox>
+            </div>
+            <div class="field">
+            </div>
+        </div>
+        
         <div class="equal width fields">
             <!-- ko foreach: attributesObs -->
                 <div class="field" style="margin-right: 2rem; max-width: 12rem">

@@ -63,6 +63,9 @@ reg('publickey', './dialogs/publickey/publickey');
 reg('admin_info', './pages/admin/info/info');
 reg('admin_cache', './pages/admin/cache/cache');
 
+// Customer-specific
+reg('lilly', './pages/lilly/lilly');
+
 // DIALOGS
 //regt('none_dialog','./dialogs/none/none');
 reg('sign_in_dialog', './dialogs/sign_in/sign_in');

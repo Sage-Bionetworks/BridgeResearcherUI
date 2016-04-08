@@ -1,9 +1,9 @@
 .line-control {
-    display: flex;
+    @include flex-box(row);
     align-items:center;
 }
     .line-control-radio {
-        display:flex; 
+        @include flex-box(row); 
         width:100%; 
         padding-left:1rem; 
     }
