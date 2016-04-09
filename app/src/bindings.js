@@ -145,7 +145,7 @@ ko.bindingHandlers.modal = {
 ko.bindingHandlers.editableDiv = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
         var observer = valueAccessor();
-        element.textContent = observer();
+        element.textContent = observer() || '';
         element.addEventListener('keydown', function(e) {
             if (e.keyCode === 13){
                 e.preventDefault();

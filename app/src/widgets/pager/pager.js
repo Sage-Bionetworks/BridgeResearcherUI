@@ -79,7 +79,7 @@ module.exports = function(params) {
         self.offsetByObs(response.offsetBy);
         self.pageSizeObs(response.pageSize);
         self.totalRecordsObs(response.total);
-        self.filterBoxObs(response.filter);
+        self.filterBoxObs(response.emailFilter);
         self.currentPageObs(Math.round(response.offsetBy/response.pageSize));
         self.totalPagesObs( Math.ceil(response.total/response.pageSize) );
     }

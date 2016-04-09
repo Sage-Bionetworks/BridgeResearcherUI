@@ -159,7 +159,8 @@
     padding: .3rem;
     overflow: hidden;
 }
-[contenteditable]:empty:before, [contentEditable]:empty:before {
+[contenteditable]:empty:before, [contenteditable] {
     content:attr(data-placeholder);
-    -webkit-user-select: auto!important;
+    -webkit-user-select: text!important;
+    user-select: text!important;
 }
