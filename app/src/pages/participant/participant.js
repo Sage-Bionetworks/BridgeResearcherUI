@@ -63,8 +63,9 @@ module.exports = function(params) {
         self.study = study;
         // there's a timer in the control involved here, we need to use an observer
         self.allDataGroupsObs(study.dataGroups);
+        
         var attrs = self.study.userProfileAttributes.map(function(key) {
-            return {key:key, label:utils.snakeToTitleCase(key,''), obs:ko.observable()}; 
+            return {key:key, label:utils.formatTitleCase(key,''), obs:ko.observable()}; 
         });
         self.attributesObs(attrs);
         var shouldBeEdited = !study.externalIdValidationEnabled || self.isNewObs();
