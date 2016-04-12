@@ -1,23 +1,10 @@
 <div class="ui small modal">
     <i class="close icon"></i>
     <div class="header">
-        Participant Account Created
+        Create Participant Using External ID
     </div>
     <div class="content" data-bind="visible: externalIdValidatedObs() && !showResultsObs()">
         <p>Create an account with the next unregistered ID.</p>
-    </div>
-    <div class="content" data-bind="visible: externalIdValidatedObs() && showResultsObs()">
-        <p>An account was created with the next unregistered ID: </p>
-        
-        <p><b>Email:</b> <span data-bind="text: emailObs"></span></p>
-        <p><b>Password:</b> <span data-bind="text: passwordObs"></span></p>
-        <p><b>External ID:</b> <span data-bind="text: externalIdObs"></span></p>
-            
-        <p>The account was created using the support email, which you can change under 
-            <a href="/#/email" target="_blank">Settings &gt; Email.</a> </p>
-                
-        <p>If your app uses an access code, note to whom you are assigning this code, then enter it 
-            into the app to configure it. You won't need the email/password credentials. </p>
     </div>
     <div class="ui form content" data-bind="visible: !externalIdValidatedObs() && !showResultsObs()">
         <div class="field" data-bind="visible: !showResultsObs()">
@@ -25,8 +12,9 @@
             <input type="text" data-bind="textInput: identifierObs"/>
         </div>
     </div>
-    <div class="content" data-bind="visible: !externalIdValidatedObs() && showResultsObs()">
-        <p>An account was created with the identifier you provided. </p>
+    <div class="content" data-bind="visible: showResultsObs">
+        <p data-bind="visible: externalIdValidatedObs">An account was created with the next unregistered ID: </p>
+        <p data-bind="visible: !externalIdValidatedObs()">An account was created with the identifier you provided. </p>
         
         <p><b>Email:</b> <span data-bind="text: emailObs"></span></p>
         <p><b>Password:</b> <span data-bind="text: passwordObs"></span></p>
