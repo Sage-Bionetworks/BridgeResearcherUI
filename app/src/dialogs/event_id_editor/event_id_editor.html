@@ -54,13 +54,13 @@
             </div>
         </div>
     </div>
-    <div class="rules-actions" data-bind="visible: !advancedEditorObs()">
+    <div class="actions" data-bind="visible: !advancedEditorObs()">
         <button class="ui primary small button" data-bind="click: saveAndCloseDialog">Save</button>
         <button class="ui small button" data-bind="click: clearAndCloseDialog">Clear</button>
         <button class="ui small button" data-bind="click: closeDialog">Cancel</button>
         <button style="float:right" class="ui small button" data-bind="click: showAdvanced">Advanced</button>
     </div>
-    <div class="rules-actions" data-bind="visible: advancedEditorObs">
+    <div class="actions" data-bind="visible: advancedEditorObs">
         <button class="ui primary small button" data-bind="click: closeDialog">Save</button>
         <button class="ui small button" data-bind="click: resetAndCloseDialog">Cancel</button>
     </div>
