@@ -30,5 +30,5 @@ module.exports = function() {
         self.study = study;
         utils.valuesToObservables(self, study, fields);
     })
-    .catch(utils.errorHandler);
+    .catch(utils.failureHandler());
 };

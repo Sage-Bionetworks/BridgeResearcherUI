@@ -89,9 +89,7 @@ module.exports = function() {
                     annotateSurveys(surveys, response.items);
                 });
             }
-        }).catch(function(response) {
-            console.error(response);
-        });
+        }).catch(utils.failureHandler());
     }
     load();
 };

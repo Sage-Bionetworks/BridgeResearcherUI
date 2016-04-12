@@ -1,0 +1,35 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <h3>Eli Lilly Onboarding</h3>
+        <div class="fixed-header-buttons"></div>
+    </div>
+    <div class="empty-secondary-menu"></div>
+</div>
+<div class="scrollbox">
+    <style>
+        .identifier-emphasis {
+            font-family:monospace;
+            padding: .25rem;
+            font-size:larger;
+            border-bottom:1px solid currentColor;
+        }
+    </style>
+    <errors></errors>
+    <div class="ui success icon message" data-bind="visible: resultObs().length > 0" style="margin-bottom: 1.4rem">
+        <i class="check sign icon"></i>
+        <div class="content">
+            <div class="header">Account created</div>
+            <p>User ID <span class="identifier-emphasis" data-bind="text: resultObs"></span> created. Enter this ID into the app to register the device.</p>
+        </div>
+    </div>    
+    
+    <form class="ui form">
+        <div class="field" style="width:30rem">
+            <label>Identifier</label>
+            <input type="text" data-bind="value: identifierObs"/>
+        </div>
+        <div class="field">
+            <button class="ui small primary button" data-bind="click: createNextAccount">Create new account using this ID</button>
+        </div>
+    </form>
+</div>

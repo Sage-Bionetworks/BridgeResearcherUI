@@ -1,0 +1,19 @@
+<div class="ui small modal">
+    <div class="header">
+        Export Participants
+    </div>
+    <div class="content">
+        <progress data-bind="attr:{ value: valueObs, max: maxObs}"></progress>
+        <div style="display: flex; justify-content: space-between; width:100%">
+            <div data-bind="text: statusObs"></div>
+            <div style="padding-left:3rem" data-bind="text: percentageObs"></div>
+        </div>
+    </div>
+    <div class="actions">
+        <button class="ui small primary button" data-bind="click: startExport, 
+            visible: !enableObs()">Start</button>
+        <button class="ui small primary button" data-bind="click: download, 
+            visible: enableObs">Download</button>
+        <button class="ui small button" data-bind="click: close">Cancel</button>
+    </div>
+</div>

@@ -121,7 +121,6 @@ module.exports = function(params) {
     });
     
     function updateEditorScheduleType(schedule) {
-        console.log(schedule, schedule.scheduleType);
         if (schedule.scheduleType === 'once') {
             self.editorScheduleTypeObs("once");
         } else if (schedule.scheduleType === 'recurring' && schedule.cronTrigger) {

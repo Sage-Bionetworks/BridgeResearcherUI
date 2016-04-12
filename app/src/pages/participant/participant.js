@@ -4,19 +4,10 @@ var serverService = require('../../services/server_service');
 
 var fields = ['title','isNew','email','name','firstName','lastName','sharingScope','notifyByEmail',
     'dataGroups[]','password','healthCode','allDataGroups[]','attributes[]','externalId','languages',
-    'roles'];
+    'roles','externalIdEditable','status','createdOn'];
     
 var persistedFields = ['firstName','lastName','sharingScope','notifyByEmail',
-    'dataGroups[]','email','password','languages','externalId'];
-
-var usersEmail = null;
-
-serverService.addSessionStartListener(function(session) {
-    usersEmail = session.email;
-});
-serverService.addSessionEndListener(function() {
-    usersEmail = null;
-});
+    'dataGroups[]','email','password','languages','externalId','status'];
 
 function formatList(list) {
     return (list || []).sort().map(function(el) {
@@ -29,6 +20,11 @@ var OPTIONS = [
     {value: 'sponsors_and_partners', label:'Sponsors And Partners'},
     {value: 'all_qualified_researchers', label:'All Qualified Researchers'}
 ];
+var STATUS_OPTIONS = [
+    {value: 'enabled', label:'Enabled'},
+    {value: 'disabled', label:'Disabled'},
+    {value: 'unverified', label:'Unverified'}
+];
 
 module.exports = function(params) {
     var self = this;
@@ -37,6 +33,7 @@ module.exports = function(params) {
     utils.observablesFor(self, fields);
     self.healthCodeObs('N/A');
     self.sharingScopeOptions = OPTIONS;
+    self.statusOptions = STATUS_OPTIONS;
     self.study = null;
     
     if (email === "new") {
@@ -48,20 +45,9 @@ module.exports = function(params) {
         self.emailObs(email);
     }
 
-    self.signOutUser = function(vm, event) {
-        utils.startHandler(vm, event);
-        
-        if (self.email === usersEmail) {
-            serverService.signOut();    
-        } else {
-            serverService.signOutUser(self.email)
-                .then(utils.successHandler(vm, event, "User signed out."))
-                .catch(utils.failureHandler(vm, event));
-        }
-    };
-    self.save = function(vm, event) {
+    function participantFromForm() {
         var participant = {attributes:{}};
-        utils.observablesToObject(vm, participant, persistedFields);
+        utils.observablesToObject(self, participant, persistedFields);
         self.attributesObs().map(function(attr) {
             participant.attributes[attr.key] = attr.obs();
         });
@@ -71,17 +57,69 @@ module.exports = function(params) {
         } else {
             delete participant.languages;
         }
-        // TODO: It may now be possible to remove this.
-        for (var prop in participant) {
-            if (participant[prop] === "") {
-                delete participant[prop];
-            }
+        return participant;        
+    }
+    function loadStudy(study) {
+        self.study = study;
+        // there's a timer in the control involved here, we need to use an observer
+        self.allDataGroupsObs(study.dataGroups);
+        
+        var attrs = self.study.userProfileAttributes.map(function(key) {
+            return {key:key, label:utils.formatTitleCase(key,''), obs:ko.observable()}; 
+        });
+        self.attributesObs(attrs);
+        var shouldBeEdited = !study.externalIdValidationEnabled || self.isNewObs();
+        self.externalIdEditableObs(shouldBeEdited);
+    }
+    function getParticipant(response) {
+        if (self.isNewObs()) {
+            return null;
         }
-        console.log(participant);
-        // END TODO
+        return serverService.getParticipant(email);        
+    }
+    function loadParticipant(response) {
+        if (response == null) {
+            return;
+        }
+        self.nameObs(utils.formatName(response));
+        self.firstNameObs(response.firstName);
+        self.lastNameObs(response.lastName);
+        self.externalIdObs(response.externalId);
+        self.sharingScopeObs(response.sharingScope);
+        self.notifyByEmailObs(response.notifyByEmail);
+        self.dataGroupsObs(response.dataGroups);
+        self.createdOnObs(utils.formatDateTime(response.createdOn));
+        self.statusObs(response.status);
+        if (self.study.healthCodeExportEnabled) {
+            self.healthCodeObs(response.healthCode);    
+        }
+        self.languagesObs(response.languages.join(", "));
+        self.rolesObs(formatList(response.roles));
+        self.attributesObs().map(function(attr) {
+            attr.obs(response.attributes[attr.key]);
+        });
+        if (!self.externalIdObs()) {
+            self.externalIdEditableObs(true);
+        }
+    }
+    function setNew() {
+        self.isNewObs(false);
+    }
+
+    self.signOutUser = function(vm, event) {
+        utils.startHandler(vm, event);
+        
+        serverService.signOutUser(email)
+            .then(utils.successHandler(vm, event, "User signed out."))
+            .catch(utils.failureHandler(vm, event));
+    };
+    self.save = function(vm, event) {
+        var participant = participantFromForm();
+        
         utils.startHandler(vm, event);
         if (self.isNewObs()) {
             serverService.createParticipant(participant)
+                .then(setNew)
                 .then(utils.successHandler(vm, event, "Participant created."))
                 .catch(utils.failureHandler(vm, event));
         } else {
@@ -91,35 +129,9 @@ module.exports = function(params) {
         }
     };
     
-    serverService.getStudy().then(function(study) {
-        self.study = study;
-        // there's a timer in the control involved here, we need to use an observer
-        self.allDataGroupsObs(study.dataGroups);
-        var attrs = self.study.userProfileAttributes.map(function(key) {
-            self[key+"Label"] = utils.snakeToTitleCase(key,'');
-            return {key: key, obs: ko.observable()}; 
-        });
-        self.attributesObs(attrs);
-    }).then(function(response) {
-        if (self.isNewObs()) {
-            return;
-        }
-        serverService.getParticipant(email).then(function(response) {
-            self.nameObs(utils.formatName(response));
-            self.firstNameObs(response.firstName);
-            self.lastNameObs(response.lastName);
-            self.externalIdObs(response.externalId);
-            self.sharingScopeObs(response.sharingScope);
-            self.notifyByEmailObs(response.notifyByEmail);
-            self.dataGroupsObs(response.dataGroups);
-            if (self.study.healthCodeExportEnabled) {
-                self.healthCodeObs(response.healthCode);    
-            }
-            self.languagesObs(response.languages.join(", "));
-            self.rolesObs(formatList(response.roles));
-            self.attributesObs().map(function(attr) {
-                attr.obs(response.attributes[attr.key]);
-            });
-        }).catch(utils.errorHandler);        
-    }).catch(utils.errorHandler);
+    serverService.getStudy()
+        .then(loadStudy)
+        .then(getParticipant)
+        .then(loadParticipant)
+        .catch(utils.failureHandler());
 }

@@ -40,7 +40,6 @@ ko.bindingHandlers.semantic = {
             var observer = allBindings().radioObs;
 
             function updateOnMatch(newValue) {
-                console.log("updateOnMatch", input.value, newValue);
                 if (input.value === newValue) {
                     input.checked = true;
                     $element.addClass("checked");
@@ -146,7 +145,7 @@ ko.bindingHandlers.modal = {
 ko.bindingHandlers.editableDiv = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
         var observer = valueAccessor();
-        element.textContent = observer();
+        element.textContent = observer() || '';
         element.addEventListener('keydown', function(e) {
             if (e.keyCode === 13){
                 e.preventDefault();
@@ -201,3 +200,20 @@ ko.bindingHandlers.fadeRemove = {
         });
     }
 };
+
+function activeHandler(element, valueAccessor) {
+    var id = element.getAttribute("href");
+    if (id) {
+        id = id.replace('#/','');
+    }
+    var func = valueAccessor;
+    do {
+        var func = func(id);
+    } while(typeof func === "function");
+    element.classList.toggle("active", func);
+}
+
+ko.bindingHandlers.active = {
+    init: activeHandler,
+    update: activeHandler
+}

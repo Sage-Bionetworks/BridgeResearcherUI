@@ -93,7 +93,7 @@ module.exports = function(params) {
             self.searchLoadingObs(false);
             self.pagerLoadingObs(false);
             return response;
-        }).catch(utils.errorHandler);
+        }).catch(utils.failureHandler());
     }
 
     function updateModel(response) {

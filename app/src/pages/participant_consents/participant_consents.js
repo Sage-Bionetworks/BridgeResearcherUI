@@ -48,6 +48,6 @@ module.exports = function(params) {
                 });
             });
         });
-    }).catch(utils.errorHandler);
+    }).catch(utils.failureHandler());
 
 };

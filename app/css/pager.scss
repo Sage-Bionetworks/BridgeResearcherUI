@@ -1,11 +1,12 @@
 .line-control {
-    display: flex;
-    align-items:center;
+    @include flex-box(row);
+    @include justify-content(space-between);
+    @include align-items(center);
 }
     .line-control-radio {
-        display:flex; 
-        width:100%; 
-        padding-left:1rem; 
+        @include flex-box(row);
+        @include flex-wrap();
+        padding-left:1rem;
     }
     .line-control-radio .checkbox {
         margin-left: .4rem;

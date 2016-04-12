@@ -72,14 +72,14 @@ module.exports = function(params) {
             updateModel(response);
             self.searchLoadingObs(false);
             self.pagerLoadingObs(false);
-        }).catch(utils.errorHandler);
+        }).catch(utils.failureHandler());
     }
 
     function updateModel(response) {
         self.offsetByObs(response.offsetBy);
         self.pageSizeObs(response.pageSize);
         self.totalRecordsObs(response.total);
-        self.filterBoxObs(response.filter);
+        self.filterBoxObs(response.emailFilter);
         self.currentPageObs(Math.round(response.offsetBy/response.pageSize));
         self.totalPagesObs( Math.ceil(response.total/response.pageSize) );
     }

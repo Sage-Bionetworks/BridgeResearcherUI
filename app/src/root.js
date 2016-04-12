@@ -13,8 +13,9 @@ var pageSets = {
     'subpopulations': ['subpopulations', 'subpopulation', 'consent'],
     'participants': ['participants','participant','participant_consents'],
     'externalIds': ['external_ids'],
-    'admin_settings': ['admin_info'],
-    'cache': ['admin_cache']
+    'lilly': ['lilly'],
+    'admin/info': ['admin_info'],
+    'admin/cache': ['admin_cache']
 };
 
 toastr.options = config.toastr;
@@ -22,8 +23,9 @@ toastr.options = config.toastr;
 var RootViewModel = function() {
     var self = this;
 
-    self.environment = ko.observable("");
-    self.studyName = ko.observable("");
+    self.environmentObs = ko.observable("");
+    self.studyNameObs = ko.observable("");
+    self.studyIdentifierObs = ko.observable();
 
     self.selected = ko.observable('info');
     self.roles = ko.observableArray([]);
@@ -104,14 +106,16 @@ var RootViewModel = function() {
         }
     };
     serverService.addSessionStartListener(function(session) {
-        self.studyName("&ldquo;" + session.studyName + "&rdquo;");
-        self.environment(session.environment);
+        self.studyNameObs("&ldquo;" + session.studyName + "&rdquo;");
+        self.environmentObs(session.environment);
+        self.studyIdentifierObs(session.studyId);
         self.roles(session.roles);
         self.closeDialog();
     });
     serverService.addSessionEndListener(function(session) {
-        self.studyName("");
-        self.environment("");
+        self.studyNameObs("");
+        self.environmentObs("");
+        self.studyIdentifierObs("");
         self.roles([]);
         self.openDialog('sign_in_dialog');
     });

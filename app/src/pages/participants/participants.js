@@ -1,6 +1,7 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
+var root = require('../../root');
 
 var cssClassNameForStatus = {
     'disabled': 'negative',
@@ -10,11 +11,15 @@ var cssClassNameForStatus = {
 
 module.exports = function() {
     var self = this;
+        
+    self.total = 0;
+    self.searchFilter = null;
 
     self.recordsObs = ko.observable("");
     self.itemsObs = ko.observableArray([]);
     self.formatTitleCase = utils.formatTitleCase;
     self.formatName = utils.formatName;
+    self.formatDateTime = utils.formatDateTime;
     self.classNameForStatus = function(user) {
         return cssClassNameForStatus[user.status];
     };
@@ -22,9 +27,17 @@ module.exports = function() {
     function formatCount(total) {
         return (total+"").replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " user records";
     }
-    
+
+    self.exportDialog = function() {
+        root.openDialog('participant_export', {searchFilter: self.searchFilter, total: self.total});    
+    };
+    self.createDialog = function(vm, event) {
+        root.openDialog('create_participant');
+    };
     self.loadingFunc = function loadPage(offsetBy, pageSize, searchFilter) {
+        self.searchFilter = searchFilter;
         return serverService.getParticipants(offsetBy, pageSize, searchFilter).then(function(response) {
+            self.total = response.total;
             self.recordsObs(formatCount(response.total));
             self.itemsObs(response.items);
             if (response.items.length === 0) {
@@ -37,6 +50,6 @@ module.exports = function() {
                 }
             }
             return response;
-        });
+        }).catch(utils.failureHandler());
     }
 };

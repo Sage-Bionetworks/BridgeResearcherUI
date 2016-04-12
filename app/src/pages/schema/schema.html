@@ -40,8 +40,8 @@
                 <ui-text params="fieldObs: schemaIdObs"></ui-text>
             </div>
             <div class="field" data-bind="visible: !!revisionObs()">
-                <label>Identifier (cannot be changed)</label>
-                <input type="text" readonly data-bind="value: schemaIdObs"/>
+                <label>Identifier</label>
+                <div class="input-field" data-bind="text: schemaIdObs"></div>
             </div>
         </div>
     </form>

@@ -81,13 +81,20 @@ function notBlankName(array, value) {
         array.push(value);
     }
 }
-function formatTitleCase(string) {
+function formatTitleCase(string, defaultValue) {
     if (string) {
-        return string.split(" ").map(function(text) {
-            return text.substring(0,1).toUpperCase() + text.substring(1); 
-        }).join(" ");
+        return string.split("").map(function(text, i) {
+            if (i === 0) {
+                return text.toUpperCase();
+            } else if (!/[a-zA-Z0-9]/.test(text)) {
+                return " ";
+            } else if (/[A-Z]/.test(text)) {
+                return " " + text;
+            }
+            return text;
+        }).join('');
     }
-    return '';
+    return defaultValue || '';
 }
 /**
  * Common utility methods for ViewModels.
@@ -186,11 +193,9 @@ module.exports = {
      * An ajax failure handler for a view model that supports the editing of a form.
      * Turns off the loading indicator, shows a global error message if there is a message
      * observable.
-     * @param vm
-     * @param event
      * @returns {Function}
      */
-    failureHandler: function(vm, event) {
+    failureHandler: function() {
         return function(response) {
             clearPendingControl();
             ko.postbox.publish("clearErrors");
@@ -207,7 +212,6 @@ module.exports = {
             }
         };
     },
-    errorHandler: console.error.bind(console),
     /**
      * Create an observable for each field name provided. Will create an observableArray if the notation indicates
      * such (e.g. "entries[]" rather than "entries").
@@ -298,6 +302,10 @@ module.exports = {
         }
         return "";
     },
+    formatISODate: function(date) {
+        date = date || new Date();
+        return date.toISOString().split("T")[0];  
+    },
     formatVersionRange: function(minValue, maxValue) {
         if (isDefined(minValue) && isDefined(maxValue)) {
             return minValue + "-" + maxValue;
@@ -320,15 +328,6 @@ module.exports = {
         notBlankName(array, person.firstName);
         notBlankName(array, person.lastName);
         return (array.length === 0) ? '—' : array.join(' ');
-    },
-    /**
-     * snake_case_label --> Snake Case Label 
-     */
-    snakeToTitleCase: function(string, defaultValue) {
-        if (string) {
-            return formatTitleCase(string.replace(/_/g, ' '));
-        }
-        return defaultValue;
     },
     /**
      * Create a function that will remove items from a history table once we confirm they
@@ -373,7 +372,6 @@ module.exports = {
      */
     notFoundHandler: function(vm, message, rootPath) {
         return function(response) {
-            console.error(response);
             toastr.error((message) ? message : response.statusText);
             if (rootPath) {
                 document.location = rootPath;
