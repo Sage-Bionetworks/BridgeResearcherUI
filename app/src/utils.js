@@ -81,13 +81,20 @@ function notBlankName(array, value) {
         array.push(value);
     }
 }
-function formatTitleCase(string) {
+function formatTitleCase(string, defaultValue) {
     if (string) {
-        return string.split(" ").map(function(text) {
-            return text.substring(0,1).toUpperCase() + text.substring(1); 
-        }).join(" ");
+        return string.split("").map(function(text, i) {
+            if (i === 0) {
+                return text.toUpperCase();
+            } else if (!/[a-zA-Z0-9]/.test(text)) {
+                return " ";
+            } else if (/[A-Z]/.test(text)) {
+                return " " + text;
+            }
+            return text;
+        }).join('');
     }
-    return '';
+    return defaultValue || '';
 }
 /**
  * Common utility methods for ViewModels.
@@ -321,15 +328,6 @@ module.exports = {
         notBlankName(array, person.firstName);
         notBlankName(array, person.lastName);
         return (array.length === 0) ? '—' : array.join(' ');
-    },
-    /**
-     * snake_case_label --> Snake Case Label 
-     */
-    snakeToTitleCase: function(string, defaultValue) {
-        if (string) {
-            return formatTitleCase(string.replace(/_/g, ' '));
-        }
-        return defaultValue;
     },
     /**
      * Create a function that will remove items from a history table once we confirm they

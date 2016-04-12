@@ -11,9 +11,12 @@ var cssClassNameForStatus = {
 
 module.exports = function() {
     var self = this;
-    
+        
+    var participant = null; // for creation of participant using external ID only
+
     self.total = 0;
     self.searchFilter = null;
+    self.study = null;
 
     self.recordsObs = ko.observable("");
     self.itemsObs = ko.observableArray([]);
@@ -48,5 +51,45 @@ module.exports = function() {
             }
             return response;
         }).catch(utils.failureHandler());
+    }
+    
+    self.showCreateFromIdObs = ko.observable();
+    self.create = function(vm, event) {
+        utils.startHandler(vm, event);
+        serverService.getExternalIds({offsetBy:0, pageSize: 1, assignmentFilter:false})
+            .then(createParticipant)
+            .then(function() {
+                console.log(arguments);
+                root.openDialog('show_participant', participant);
+            })
+            .then(utils.successHandler(vm, event))
+            .catch(utils.failureHandler(vm, event));
+    };
+    
+    serverService.getStudy().then(function(study) {
+        self.study = study;
+        self.showCreateFromIdObs(study.externalIdValidationEnabled);     
+    });
+    
+    function createParticipant(response) {
+        if (response.items.length === 0) {
+            throw new Error("There are no unassigned external IDs registered with your study. Please see the external identifers screen for more information.");
+        }
+        var nextId = response.items[0];
+        participant = {
+            email: createEmailTemplate(nextId.identifier),
+            password: nextId.identifier,
+            externalId: nextId.identifier,
+            sharingScope: "sponsors_and_partners"
+        };
+        return serverService.createParticipant(participant);
+    }
+    function createEmailTemplate(identifier) {
+        var email = self.study.supportEmail;
+        var parts = email.split("@");
+        if (parts[0].indexOf("+") > -1) {
+            parts[0] = parts[0].split("+")[0];
+        }
+        return parts[0] + "+" + identifier + "@" + parts[1];
     }
 };

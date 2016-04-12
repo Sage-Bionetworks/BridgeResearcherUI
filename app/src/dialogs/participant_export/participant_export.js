@@ -4,10 +4,6 @@ var serverService = require('../../services/server_service');
 var root = require('../../root');
 var utils = require('../../utils');
 
-/*
-    TODO: customize the columns you export? Not high priority.
-*/
-
 var TIMEOUT = 40;
 
 var fieldHandlers = {
@@ -57,7 +53,7 @@ function getHeaderLabels(fields, attrFields) {
 module.exports = function(params) {
     var self = this;
     
-    var cancel, emails, progressIndex, output, fields, attrFields;
+    var cancel, emails, progressIndex, output, fields, attrFields, errorCount;
     var total = params.total;
     var pageSize = 100;
     var numPages = Math.ceil(total/pageSize);
@@ -93,6 +89,7 @@ module.exports = function(params) {
         cancel = false;
         emails = [];
         progressIndex = 0;
+        errorCount = 0;
         output = "";
         fields = null;
         attrFields = null;
@@ -125,11 +122,15 @@ module.exports = function(params) {
             doContinueFetch();
         }
     }
+    function doContinuePageError(response) {
+        errorCount++;
+        doContinuePage(response);
+    }
     function doOnePage() {
         if (cancel) { return; }
         var offsetBy = pageOffsets.shift();
         serverService.getParticipants(offsetBy, pageSize, searchFilter)
-            .then(doContinuePage).catch(doContinuePage);
+            .then(doContinuePage).catch(doContinuePageError);
     }
     function doContinueFetch(response) {
         if (cancel) { return; }
@@ -140,15 +141,19 @@ module.exports = function(params) {
         if (emails.length > 0) {
             setTimeout(doOneFetch, TIMEOUT);
         } else {
-            self.statusObs("Export finished.");
+            self.statusObs("Export finished. There were " + errorCount + " errors.");
             self.enableObs(true);
         }
+    }
+    function doContinueFetchError(response) {
+        errorCount++;
+        doContinueFetch(response);
     }
     function doOneFetch() {
         if (cancel) { return; }
         var email = emails.shift();
         serverService.getParticipant(email)
-            .then(doContinueFetch).catch(doContinueFetch);
+            .then(doContinueFetch).catch(doContinueFetchError);
     }
     function formatOneParticipant(participant) {
         if (fields === null) {
