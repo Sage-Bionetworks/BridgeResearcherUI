@@ -218,3 +218,11 @@ footer p {
 progress {
     width: 100%;
 }
+.modal {
+    .header {
+        padding: 1rem 1.25rem!important;
+    }
+    .actions {
+        text-align:left ! important;
+    }    
+}

@@ -77,7 +77,7 @@ reg('rules_editor', './dialogs/rules_editor/rules_editor');
 reg('date_window_editor', './dialogs/date_window_editor/date_window_editor');
 reg('external_id_importer', './dialogs/external_id_importer/external_id_importer');
 reg('participant_export', './dialogs/participant_export/participant_export');
-reg('show_participant', './dialogs/show_participant/show_participant');
+reg('create_participant', './dialogs/create_participant/create_participant');
 
 /* SURVEYS */
 regt('SurveyInfoScreen', './pages/survey/survey_info');
