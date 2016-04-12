@@ -295,6 +295,10 @@ module.exports = {
         }
         return "";
     },
+    formatISODate: function(date) {
+        date = date || new Date();
+        return date.toISOString().split("T")[0];  
+    },
     formatVersionRange: function(minValue, maxValue) {
         if (isDefined(minValue) && isDefined(maxValue)) {
             return minValue + "-" + maxValue;

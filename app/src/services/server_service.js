@@ -32,7 +32,7 @@ if (typeof window !== "undefined") {
     });
 }
 
-var NO_CACHE_PATHS = ['studies/self/emailStatus','participants?offsetBy=','externalIds?'];
+var NO_CACHE_PATHS = ['studies/self/emailStatus','participants?offsetBy=','participants/member','externalIds?'];
 var PATH_EXTS = ['/published','/recent','/revisions'];
 
 var cache = (function() {
