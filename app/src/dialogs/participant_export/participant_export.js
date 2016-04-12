@@ -1,10 +1,15 @@
 var ko = require('knockout');
+var saveAs = require('../../../lib/filesaver.min.js');
 var serverService = require('../../services/server_service');
 var root = require('../../root');
 var utils = require('../../utils');
-    
+
+/*
+    TODO: customize the columns you export? Not high priority.
+*/
+
 var TIMEOUT = 40;
-    
+
 var fieldHandlers = {
     'consentHistories': function(value) {
         var consents = [];
@@ -44,50 +49,67 @@ function getPageOffsets(numPages, pageSize) {
 }
 function getHeaderLabels(fields, attrFields) {
     if (attrFields.length) {
-        return fields.join("\t") + "\t" + attrFields.join("\t") + "\n";
+        return fields.join("\t") + "\t" + attrFields.join("\t");
     }
-    return fields.join("\t") + "\n";
+    return fields.join("\t");
 }
 
 module.exports = function(params) {
     var self = this;
-
-    self.close = function(vm, event) {
-        cancel = true;
-        root.closeDialog();
-    };
     
-    var cancel = false;
+    var cancel, emails, progressIndex, output, fields, attrFields;
     var total = params.total;
     var pageSize = 100;
     var numPages = Math.ceil(total/pageSize);
     var searchFilter = params.searchFilter;
     var pageOffsets = getPageOffsets(numPages, pageSize);
-    var emails = [];
-    var participants = [];
-    var progressIndex = 0;
+
+    self.enableObs = ko.observable();
+    self.valueObs = ko.observable();
+    self.maxObs = ko.observable();
+    self.statusObs = ko.observable();
+    self.percentageObs = ko.observable();
     
-    self.enableObs = ko.observable(false);
-    self.downloadHref = ko.observable("participants-"+utils.formatISODate()+".tsv");
-    self.downloadFileName = ko.observable("");
-    self.valueObs = ko.observable(progressIndex);
-    self.maxObs = ko.observable(total+numPages+1);
-    self.statusObs = ko.observable("Press start to begin preparation of the *.tsv file.");
-    self.percentageObs = ko.observable("0%");
-    // Percentage is ((self.valueObs()/self.maxObs())*100).toFixed(0) + "%"
-    
-    function updateStatus(progressIndex) {
-        var max = total+numPages+1;
-        self.valueObs(progressIndex);
-        self.percentageObs(((progressIndex/max)*100).toFixed(0) + "%");
-    }
+    reset();
     
     self.startExport = function(vm, event) {
+        reset();
         self.statusObs("Currently preparing your *.tsv file. Retrieving summaries...");
         event.target.setAttribute("disabled","disabled");
         doContinuePage();
     };
+    self.download = function() {
+        var headers = getHeaderLabels(fields, attrFields);
+        var blob = new Blob([headers+output], {type: "text/tab-separated-values;charset=utf-8"});
+        saveAs.saveAs(blob, "participants-"+utils.formatISODate()+".tsv");
+    };
+    self.close = function(vm, event) {
+        reset();
+        cancel = true;
+        root.closeDialog();
+    };
     
+    function reset() {
+        cancel = false;
+        emails = [];
+        progressIndex = 0;
+        output = "";
+        fields = null;
+        attrFields = null;
+        self.enableObs(false);
+        self.valueObs(progressIndex);
+        self.maxObs(total+numPages+1);
+        self.statusObs("Press start to begin preparation of the *.tsv file. You may need to disable pop-up blocking for this website in order to receive the results (which will open in a new window).");
+        self.percentageObs("0%");
+    }
+    function updateStatus(progressIndex) {
+        var max = total+numPages+1;
+        self.valueObs(progressIndex);
+        
+        var perc = ((progressIndex/max)*100).toFixed(0);
+        if (perc > 100) { perc = 100; }
+        self.percentageObs(perc+"%");
+    }
     function doContinuePage(response) {
         if (cancel) { return; }
         if (response && response.items) {
@@ -112,14 +134,14 @@ module.exports = function(params) {
     function doContinueFetch(response) {
         if (cancel) { return; }
         if (response && response.email) {
-            participants.push(response);
+            output += "\n"+formatOneParticipant(response);
         }
         updateStatus(progressIndex++);
         if (emails.length > 0) {
             setTimeout(doOneFetch, TIMEOUT);
         } else {
             self.statusObs("Export finished.");
-            prepareFinalExport(participants);
+            self.enableObs(true);
         }
     }
     function doOneFetch() {
@@ -128,35 +150,26 @@ module.exports = function(params) {
         serverService.getParticipant(email)
             .then(doContinueFetch).catch(doContinueFetch);
     }
-    
-    function prepareFinalExport(records) {
-        var fields = getFieldListFor(records[0]);
-        var attrFields = getAttrFieldsFor(records[0]);
-        var string = getHeaderLabels(fields, attrFields);
-        
-        var rowArray = [];
-        string += records.map(function(record) {
-             rowArray.length = 0;
-             for (var i=0; i < fields.length; i++) {
-                 var field = fields[i];
-                 var value = record[field];
-                 if (fieldHandlers[field]) {
-                     rowArray.push(fieldHandlers[field](value));
-                 } else {
-                    rowArray.push(value);
-                 }
-             }
-             for (var i=0; i < attrFields.length; i++) {
-                 rowArray.push(record.attributes[attrFields[i]]);
-             }
-             return rowArray.join("\t");
-        }).join("\n");
-        self.downloadFileName('data:text/plain;charset=utf-8,' + encodeURIComponent(string));
-        self.enableObs(true);
+    function formatOneParticipant(participant) {
+        if (fields === null) {
+            fields = getFieldListFor(participant);
+        }
+        if (attrFields === null) {
+            attrFields = getAttrFieldsFor(participant);    
+        }
+        var array = []
+        for (var i=0; i < fields.length; i++) {
+            var field = fields[i];
+            var value = participant[field];
+            if (fieldHandlers[field]) {
+                array.push(fieldHandlers[field](value));
+            } else {
+                array.push(value);
+            }
+        }
+        for (var i=0; i < attrFields.length; i++) {
+            array.push(participant.attributes[attrFields[i]]);
+        }
+        return array.join("\t");
     }
-    /*
-    TODO:
-        - select columns to export
-        - web worker? The timeouts make this less important.
-    */
 }
