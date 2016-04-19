@@ -16,6 +16,7 @@ module.exports = function() {
     
     self.createNextAccount = function(vm, event) {
         utils.startHandler(vm, event);
+        var nextId = self.identifierObs();
         serverService.addExternalIds([nextId])
             .then(createParticipant(nextId))
             .then(utils.successHandler(vm, event))
