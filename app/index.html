@@ -25,8 +25,7 @@
                 <a class="item" data-bind="active: !isEditorTabVisible(), click: toggleEditorTab">Navigation</a>
                 <a class="item" data-bind="active: isEditorTabVisible, click: toggleEditorTab">Editor</a>
             </div>
-            <div data-bind="visible: isEditorTabVisible,
-                component: {name: editorPanel, params: editorParams}">
+            <div data-bind="visible: isEditorTabVisible, component: {name: editorPanel, params: editorParams}">
             </div>
             <div class="ui vertical menu" data-bind="visible: !isEditorTabVisible()">
                 <div class="item" data-bind="visible: isDeveloper">
