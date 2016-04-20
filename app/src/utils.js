@@ -89,9 +89,9 @@ function formatTitleCase(string, defaultValue) {
             } else if (!/[a-zA-Z0-9]/.test(text)) {
                 return " ";
             } else if (/[A-Z]/.test(text)) {
-                return " " + text;
+                return " " + text.toLowerCase();
             }
-            return text;
+            return text.toLowerCase();
         }).join('');
     }
     return defaultValue || '';
@@ -312,11 +312,11 @@ module.exports = {
         return date.toISOString().split("T")[0];  
     },
     formatVersionRange: function(minValue, maxValue) {
-        if (isDefined(minValue) && isDefined(maxValue)) {
+        if (isNotBlank(minValue) && isNotBlank(maxValue)) {
             return minValue + "-" + maxValue;
-        } else if (isDefined(minValue)) {
+        } else if (isNotBlank(minValue)) {
             return minValue + "+";
-        } else if (isDefined(maxValue)) {
+        } else if (isNotBlank(maxValue)) {
             return "0-" + maxValue;
         }
         return "<i>All versions</i>";
@@ -330,8 +330,10 @@ module.exports = {
      */
     formatName: function(person) {
         var array = [];
-        notBlankName(array, person.firstName);
-        notBlankName(array, person.lastName);
+        if (person) {
+            notBlankName(array, person.firstName);
+            notBlankName(array, person.lastName);
+        }
         return (array.length === 0) ? '—' : array.join(' ');
     },
     /**
@@ -453,13 +455,11 @@ module.exports = {
             }
         };
     },
-    queryString: function() {
-        if (document.location.href.indexOf("?") === -1) {
+    queryString: function(urlString) {
+        var href = urlString || document.location.href;
+        if (href.indexOf("?") === -1) {
             return {};
         }
-        var query = (document.location.href.indexOf("#") > -1) ?
-            document.location.hash.split("?")[1] :
-            document.location.search.substring(1);
-        return query.split("&").reduce(collectQueryPair, {});
+        return href.split("?")[1].split("&").reduce(collectQueryPair, {});
     }
 };
