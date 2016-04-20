@@ -28,16 +28,16 @@
             <div data-bind="visible: isEditorTabVisible, component: {name: editorPanel, params: editorParams}">
             </div>
             <div class="ui vertical menu" data-bind="visible: !isEditorTabVisible()">
-                <div class="item" data-bind="visible: isDeveloper">
+                <div class="item">
                     <i class="lab icon"></i> Study
                     <div class="menu">
-                        <a href="#/info" class="item" data-bind="active: isActive">
+                        <a href="#/info" class="item" data-bind="active: isActive, visible: isDeveloper">
                             Settings
                         </a>
                         <a href="#/ve_template" class="item" data-bind="active: isActive, visible: isDeveloper">
                             Email Templates
                         </a>
-                        <a href="#/subpopulations" class="item" data-bind="active: isActive">
+                        <a href="#/subpopulations" class="item" data-bind="active: isActive, visible: isDeveloper">
                             Consent Groups
                         </a>
                         <a href="#/participants" class="item" data-bind="active: isActive, visible: isResearcher">

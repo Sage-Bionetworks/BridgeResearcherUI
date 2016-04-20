@@ -21,6 +21,7 @@ function setEditor(name, template, attribute) {
 ko.components.register('none', {template: '<div class="ui modal dialog"></div>'});
 
 // PAGES
+regt('start', './pages/start/start');
 reg('errors','./widgets/errors/errors');
 reg('info','./pages/info/info');
 reg('email','./pages/email/email');
