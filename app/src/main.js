@@ -8,6 +8,7 @@ require('./bindings/dragula');
 require('./registry');
 var ko = require('knockout');
 require('knockout-postbox');
+var utils = require('./utils');
 
 var director = require('director');
 var root = require('./root');
@@ -33,9 +34,11 @@ function guidRoute(name) {
         root.changeView(name, {guid: guid});
     };
 }
-function emailRoute(name) {
-    return function(email) {
-        root.changeView(name, {email: email});
+function idRoute(name) {
+    return function(id) {
+        var params = utils.queryString();
+        params.id = id;
+        root.changeView(name, params);
     };
 }
 
@@ -71,8 +74,8 @@ router.on('/scheduleplans/:guid', guidRoute('scheduleplan'));
 router.on('/synapse', routeTo('synapse'));
 router.on('/externalIds', routeTo('external_ids'));
 router.on('/lilly', routeTo('lilly'));
-router.on('/participants/:email', emailRoute('participant'));
-router.on('/participants/:email/consents', emailRoute('participant_consents'));
+router.on('/participants/:id', idRoute('participant'));
+router.on('/participants/:id/consents', idRoute('participant_consents'));
 router.on('/participants', routeTo('participants'));
 
 router.on('/admin/info', routeTo('admin_info'));

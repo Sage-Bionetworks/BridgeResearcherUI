@@ -29,7 +29,7 @@
             <tbody data-bind="foreach: itemsObs">
                 <tr data-bind="css: $component.classNameForStatus($data)">
                     <td>
-                        <a data-bind="attr: {'href': '#/participants/'+encodeURIComponent($data.email)}, 
+                        <a data-bind="attr: {'href': '#/participants/'+$data.id+'?name='+$component.fullName($data)}, 
                             text: $data.email"></a>
                     </td>
                     <td data-bind="text: $component.formatName($data)"></td>

@@ -96,6 +96,11 @@ function formatTitleCase(string, defaultValue) {
     }
     return defaultValue || '';
 }
+function collectQueryPair(params, pair) {
+    var nameValue = pair.split("=");
+    params[decodeURIComponent(nameValue[0])] = decodeURIComponent(nameValue[1]);
+    return params;
+}
 /**
  * Common utility methods for ViewModels.
  */
@@ -447,5 +452,14 @@ module.exports = {
                 }, 510);
             }
         };
+    },
+    queryString: function() {
+        if (document.location.href.indexOf("?") === -1) {
+            return {};
+        }
+        var query = (document.location.href.indexOf("#") > -1) ?
+            document.location.hash.split("?")[1] :
+            document.location.search.substring(1);
+        return query.split("&").reduce(collectQueryPair, {});
     }
 };

@@ -368,8 +368,8 @@ module.exports = {
         emailFilter = emailFilter || "";
         return get(config.participants+"?offsetBy="+offsetBy+"&pageSize="+pageSize+"&emailFilter="+emailFilter);
     },
-    getParticipant: function(email) {
-        return get(config.participant+"?email="+encodeURIComponent(email));
+    getParticipant: function(id) {
+        return get(config.participants+"/"+id);
     },
     createParticipant: function(participant) {
         return post(config.participants, participant)
@@ -380,16 +380,15 @@ module.exports = {
             });  
     },
     updateParticipant: function(participant) {
-        var email = participant.email;
-        return post(config.participant+"?email="+encodeURIComponent(email), participant)
+        return post(config.participants+"/"+participant.id, participant)
             .then(function(response) {
                 // This can change many different pages, clear entire cache for now.
                 cache.reset();
                 return response;
             });  
     },
-    signOutUser: function(email) {
-        return post(config.participant+"/signOut?email="+encodeURIComponent(email));  
+    signOutUser: function(id) {
+        return post(config.participants+"/"+id+"/signOut");  
     },
     getExternalIds: function(params) {
         return get(config.externalIds + query(params || {}));

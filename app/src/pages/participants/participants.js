@@ -23,6 +23,9 @@ module.exports = function() {
     self.classNameForStatus = function(user) {
         return cssClassNameForStatus[user.status];
     };
+    self.fullName = function(user) {
+        return encodeURIComponent(utils.formatName(user));
+    };
     
     function formatCount(total) {
         return (total+"").replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " user records";
