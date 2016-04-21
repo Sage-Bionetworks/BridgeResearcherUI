@@ -13,7 +13,6 @@ var pageSets = {
     'subpopulations': ['subpopulations', 'subpopulation', 'consent'],
     'participants': ['participants','participant','participant_consents'],
     'externalIds': ['external_ids'],
-    'lilly': ['lilly'],
     'admin/info': ['admin_info'],
     'admin/cache': ['admin_cache']
 };
@@ -93,9 +92,6 @@ var RootViewModel = function() {
     self.closeDialog = function() {
         self.dialogObs({name: 'none'});
     };
-    self.isLilly = ko.computed(function() {
-        return self.studyIdentifierObs() === 'lilly-1' || self.studyIdentifierObs() === 'lilly';
-    });
     /**
      * Displays a message that we UI insiders like to call "a piece of toast"
      * @param severity {String} one of 'success', 'info', 'warning' or 'error'

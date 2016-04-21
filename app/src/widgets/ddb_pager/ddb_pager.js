@@ -76,6 +76,7 @@ module.exports = function(params) {
     // and below the table. The 'top' control is responsible for kicking off the 
     // first page of records.
     ko.postbox.subscribe(pageKey+'-recordsPaged', updateModel);
+    ko.postbox.subscribe(pageKey+'-refresh', wrappedLoadingFunc);
 
     function wrappedLoadingFunc() {
         var offsetKey = self.offsetKeyObs();

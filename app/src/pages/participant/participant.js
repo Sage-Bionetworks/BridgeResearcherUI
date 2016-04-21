@@ -106,8 +106,12 @@ module.exports = function(params) {
             self.externalIdEditableObs(true);
         }
     }
-    function setNew() {
+    function afterCreate(response) {
+        var statusAfterCreate = self.study.emailVerificationEnabled ? "unverified" : "enabled";
+        self.statusObs(statusAfterCreate);
         self.isNewObs(false);
+        self.idObs(response.identifier);
+        return response;
     }
 
     self.signOutUser = function(vm, event) {
@@ -123,7 +127,7 @@ module.exports = function(params) {
         utils.startHandler(vm, event);
         if (self.isNewObs()) {
             serverService.createParticipant(participant)
-                .then(setNew)
+                .then(afterCreate)
                 .then(updateName)
                 .then(utils.successHandler(vm, event, "Participant created."))
                 .catch(utils.failureHandler(vm, event));

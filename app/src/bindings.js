@@ -56,6 +56,8 @@ ko.bindingHandlers.semantic = {
             });
         } else if (value === 'dropdown') {
             $element.addClass("ui dropdown").dropdown();
+        } else if (value === 'dropdown-button') {
+            $element.addClass("ui small button dropdown").dropdown({action: 'hide'});
         } else if (value === 'popup') {
             $element.popup();
         } else if (value === 'popup-menu') {

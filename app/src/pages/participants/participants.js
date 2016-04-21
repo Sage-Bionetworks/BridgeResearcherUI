@@ -34,9 +34,6 @@ module.exports = function() {
     self.exportDialog = function() {
         root.openDialog('participant_export', {searchFilter: self.searchFilter, total: self.total});    
     };
-    self.createDialog = function(vm, event) {
-        root.openDialog('create_participant');
-    };
     self.loadingFunc = function loadPage(offsetBy, pageSize, searchFilter) {
         self.searchFilter = searchFilter;
         return serverService.getParticipants(offsetBy, pageSize, searchFilter).then(function(response) {

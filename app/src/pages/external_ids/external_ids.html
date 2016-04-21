@@ -1,9 +1,17 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
         <h3>External Identifiers</h3>
-        <div class="fixed-header-buttons" data-bind="visible: showRecordsObs">
-            Records: <span data-bind="text: recordsObs()"></span>
-            <button style="margin-left: 3rem" class="ui primary small button" data-bind="click: importer">Import</button>
+        <div class="fixed-header-buttons" data-bind="visible: managementEnabledObs">
+            Records: <span data-bind="text: totalObs()"></span>
+            <div style="margin-left: 3rem" data-bind="semantic: 'dropdown-button'">
+                <div class="text">New credentials from ID</div>
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <div class="item" data-bind="click: openNewIdDialog">Enter the ID&hellip;</div>
+                    <div class="item" data-bind="click: createFromNext">Assign next free ID</div>
+                </div>
+            </div>
+            <button class="ui primary small button" data-bind="click: openImportDialog">Import</button>
         </div>
     </div>
     <div class="empty-secondary-menu"></div>
@@ -11,13 +19,22 @@
 <div class="scrollbox">
     <div class="ui grid">
         <div class="ten wide column">
-            <div data-bind="visible: !showRecordsObs()">
+            <errors></errors>
+            <div class="ui success icon message" style="margin-bottom: 1.4rem" data-bind="visible: showResultsObs">
+                <i class="check sign icon"></i>
+                <div class="content">
+                    <div class="header">Participant credentials created</div>
+                    <p style="margin-top:1rem">Credentials created for user ID: <span class="identifier-emphasis" data-bind="text: resultObs"></span> </p>
+                    <p>Enter this ID into the app to register the device.</p>
+                </div>
+            </div>    
+            <div data-bind="visible: !managementEnabledObs()">
                 <p>External identifier management not enabled. </p>
                 <p>
-                    <button class="ui primary small button" data-bind="click: manage">Enable External ID Management</button>
+                    <button class="ui primary small button" data-bind="click: enableManagement">Enable External ID Management</button>
                 </p>
             </div>
-            <div data-bind="visible: showRecordsObs">
+            <div data-bind="visible: managementEnabledObs">
                 <!-- ko component: {name:'ddb_pager', params: 
                     {loadingFunc: loadingFunc, pageKey: 'external-ids-page', top: true}
                 } --><!-- /ko -->
@@ -33,9 +50,11 @@
                         <tr>
                             <td style="white-space: nowrap; width:100%" data-bind="text: $data.identifier"></td>
                             <td style="white-space: nowrap">
-                                <div data-bind="visible: $data.assigned">
+                                <div data-bind="visible: $data.assigned === true">
                                     <i class="green check icon"> </i> Reserved
                                 </div>
+                                <button data-bind="visible: $data.assigned == false, click: $component.createFrom" 
+                                    class="ui compact mini button">Create Participant</button>
                             </td>
                         </tr>
                     </tbody>
@@ -47,19 +66,21 @@
         </div>
         <div class="six wide column">
             <div class="ui message">
-                <p>Participants can be assigned an <em>external ID</em> that will be exported with their health data. 
-                Typically you are planning to provide this ID as part of onboarding users, though it can be added 
-                later through this application.</p>
+                <p>Participants can be assigned an <em>external ID</em> that will be exported with their health data. </p>
                   
                 <p>External IDs can be used:</p>
                 <ol>
                     <li>to re-identify participants to contact them outside the mobile study;</li>
                     <li>to relate external health data about participants to the data collected by your study.</li>
                 </ol>
-                <p>These IDs can be any string. However, if you enable ID management in Bridge, it will ensure 
-                    that an ID is assigned at sign up, never to more than one user, and that it is not changed 
-                    later through the user profile API. This feature can also help prevent users from 
-                    mistyping the identifier during sign up. <p>
+                
+                <p>This ID can be provided to users as part of onboarding, it can be added later by an external system 
+                (even a study administrator), or you can create credentials from an ID if you only intend to perform 
+                a study in a controlled and secure setting (such as a lab).</p>
+                 
+                <p>External IDs can be any string. If you enable ID management, Bridge will ensure that an ID is 
+                    assigned at sign up, it is never assigned to more than one user, and that it cannot be changed 
+                    later. This feature also ensures that users do not mistype the identifier during sign up. <p>
             </div>
         </div>
     </div>

@@ -73,7 +73,6 @@ router.on('/scheduleplans', routeTo('scheduleplans'));
 router.on('/scheduleplans/:guid', guidRoute('scheduleplan'));
 router.on('/synapse', routeTo('synapse'));
 router.on('/externalIds', routeTo('external_ids'));
-router.on('/lilly', routeTo('lilly'));
 router.on('/participants/:id', idRoute('participant'));
 router.on('/participants/:id/consents', idRoute('participant_consents'));
 router.on('/participants', routeTo('participants'));
