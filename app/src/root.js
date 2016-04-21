@@ -13,7 +13,6 @@ var pageSets = {
     'subpopulations': ['subpopulations', 'subpopulation', 'consent'],
     'participants': ['participants','participant','participant_consents'],
     'externalIds': ['external_ids'],
-    'lilly': ['lilly'],
     'admin/info': ['admin_info'],
     'admin/cache': ['admin_cache']
 };
@@ -27,10 +26,10 @@ var RootViewModel = function() {
     self.studyNameObs = ko.observable("");
     self.studyIdentifierObs = ko.observable();
 
-    self.selected = ko.observable('info');
+    self.selected = ko.observable('');
     self.roles = ko.observableArray([]);
 
-    self.mainPage = ko.observable('info');
+    self.mainPage = ko.observable('start');
     self.mainPage.subscribe(self.selected);
     self.mainPage.subscribe(function() {
         self.setEditorPanel('none',{});

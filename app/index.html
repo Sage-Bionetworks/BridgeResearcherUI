@@ -25,20 +25,19 @@
                 <a class="item" data-bind="active: !isEditorTabVisible(), click: toggleEditorTab">Navigation</a>
                 <a class="item" data-bind="active: isEditorTabVisible, click: toggleEditorTab">Editor</a>
             </div>
-            <div data-bind="visible: isEditorTabVisible,
-                component: {name: editorPanel, params: editorParams}">
+            <div data-bind="visible: isEditorTabVisible, component: {name: editorPanel, params: editorParams}">
             </div>
             <div class="ui vertical menu" data-bind="visible: !isEditorTabVisible()">
-                <div class="item" data-bind="visible: isDeveloper">
+                <div class="item">
                     <i class="lab icon"></i> Study
                     <div class="menu">
-                        <a href="#/info" class="item" data-bind="active: isActive">
+                        <a href="#/info" class="item" data-bind="active: isActive, visible: isDeveloper">
                             Settings
                         </a>
                         <a href="#/ve_template" class="item" data-bind="active: isActive, visible: isDeveloper">
                             Email Templates
                         </a>
-                        <a href="#/subpopulations" class="item" data-bind="active: isActive">
+                        <a href="#/subpopulations" class="item" data-bind="active: isActive, visible: isDeveloper">
                             Consent Groups
                         </a>
                         <a href="#/participants" class="item" data-bind="active: isActive, visible: isResearcher">
@@ -46,9 +45,6 @@
                         </a>
                         <a href="#/externalIds" class="item" data-bind="active: isActive, visible: isDeveloper">
                             External Identifiers
-                        </a>
-                        <a href="#/lilly" class="item" data-bind="active: isActive, visible: studyIdentifierObs() === 'lilly-1'">
-                            Eli Lilly Onboarding
                         </a>
                     </div>
                 </div>

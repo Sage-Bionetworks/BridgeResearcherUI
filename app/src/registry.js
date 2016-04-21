@@ -21,6 +21,7 @@ function setEditor(name, template, attribute) {
 ko.components.register('none', {template: '<div class="ui modal dialog"></div>'});
 
 // PAGES
+regt('start', './pages/start/start');
 reg('errors','./widgets/errors/errors');
 reg('info','./pages/info/info');
 reg('email','./pages/email/email');
@@ -63,9 +64,6 @@ reg('publickey', './dialogs/publickey/publickey');
 reg('admin_info', './pages/admin/info/info');
 reg('admin_cache', './pages/admin/cache/cache');
 
-// Customer-specific
-reg('lilly', './pages/lilly/lilly');
-
 // DIALOGS
 //regt('none_dialog','./dialogs/none/none');
 reg('sign_in_dialog', './dialogs/sign_in/sign_in');
@@ -77,7 +75,7 @@ reg('rules_editor', './dialogs/rules_editor/rules_editor');
 reg('date_window_editor', './dialogs/date_window_editor/date_window_editor');
 reg('external_id_importer', './dialogs/external_id_importer/external_id_importer');
 reg('participant_export', './dialogs/participant_export/participant_export');
-reg('create_participant', './dialogs/create_participant/create_participant');
+reg('new_external_id', './dialogs/new_external_id/new_external_id');
 
 /* SURVEYS */
 regt('SurveyInfoScreen', './pages/survey/survey_info');

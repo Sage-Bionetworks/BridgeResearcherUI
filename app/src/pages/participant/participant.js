@@ -4,10 +4,10 @@ var serverService = require('../../services/server_service');
 
 var fields = ['title','isNew','email','name','firstName','lastName','sharingScope','notifyByEmail',
     'dataGroups[]','password','healthCode','allDataGroups[]','attributes[]','externalId','languages',
-    'roles','externalIdEditable','status','createdOn'];
+    'roles','externalIdEditable','status','createdOn','id'];
     
 var persistedFields = ['firstName','lastName','sharingScope','notifyByEmail',
-    'dataGroups[]','email','password','languages','externalId','status'];
+    'dataGroups[]','email','password','languages','externalId','status','id'];
 
 function formatList(list) {
     return (list || []).sort().map(function(el) {
@@ -29,20 +29,20 @@ var STATUS_OPTIONS = [
 module.exports = function(params) {
     var self = this;
     
-    var email = decodeURIComponent(params.email);
+    var id = params.id;
     utils.observablesFor(self, fields);
+    self.idObs(id);
     self.healthCodeObs('N/A');
     self.sharingScopeOptions = OPTIONS;
     self.statusOptions = STATUS_OPTIONS;
     self.study = null;
     
-    if (email === "new") {
+    if (id === "new") {
         self.isNewObs(true);
         self.titleObs('New participant');
     } else {
         self.isNewObs(false);
-        self.titleObs(email);
-        self.emailObs(email);
+        self.titleObs(params.name);
     }
 
     function participantFromForm() {
@@ -75,7 +75,11 @@ module.exports = function(params) {
         if (self.isNewObs()) {
             return null;
         }
-        return serverService.getParticipant(email);        
+        return serverService.getParticipant(id);        
+    }
+    function updateName(response) {
+        self.titleObs(self.firstNameObs() + " " + self.lastNameObs());
+        return response;
     }
     function loadParticipant(response) {
         if (response == null) {
@@ -102,14 +106,18 @@ module.exports = function(params) {
             self.externalIdEditableObs(true);
         }
     }
-    function setNew() {
+    function afterCreate(response) {
+        var statusAfterCreate = self.study.emailVerificationEnabled ? "unverified" : "enabled";
+        self.statusObs(statusAfterCreate);
         self.isNewObs(false);
+        self.idObs(response.identifier);
+        return response;
     }
 
     self.signOutUser = function(vm, event) {
         utils.startHandler(vm, event);
         
-        serverService.signOutUser(email)
+        serverService.signOutUser(id)
             .then(utils.successHandler(vm, event, "User signed out."))
             .catch(utils.failureHandler(vm, event));
     };
@@ -119,11 +127,13 @@ module.exports = function(params) {
         utils.startHandler(vm, event);
         if (self.isNewObs()) {
             serverService.createParticipant(participant)
-                .then(setNew)
+                .then(afterCreate)
+                .then(updateName)
                 .then(utils.successHandler(vm, event, "Participant created."))
                 .catch(utils.failureHandler(vm, event));
         } else {
             serverService.updateParticipant(participant)
+                .then(updateName)
                 .then(utils.successHandler(vm, event, "Participant updated."))
                 .catch(utils.failureHandler(vm, event));
         }

@@ -13,6 +13,7 @@
   "author": "Bridge Server Team <bridgeit@sagebase.org>",
   "license": "MIT",
   "devDependencies": {
+    "chai": "^3.5.0",
     "css-loader": "^0.12.1",
     "director": "^1.2.8",
     "dom-autoscroller": "^1.2.1",

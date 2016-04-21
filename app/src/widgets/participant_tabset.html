@@ -1,10 +1,10 @@
 <div class="ui secondary pointing menu" data-bind="visible: !$data.isNewObs()">
     <a class="item" data-bind="css:{active:$data.active === 'info'}, 
-        attr:{'href': '#/participants/'+encodeURIComponent($parent.emailObs())}">
+        attr:{'href': '#/participants/'+$parent.idObs()+'?name='+$parent.titleObs()}">
         <i class="setting icon"></i> General
     </a>
     <a href="#/email" class="item" data-bind="css:{active:$data.active === 'consents'}, 
-        attr:{'href': '#/participants/'+encodeURIComponent($parent.emailObs())+'/consents'}">
+        attr:{'href': '#/participants/'+$parent.idObs()+'/consents?name='+$parent.titleObs()}">
         <i class="legal icon"></i> Consent
     </a>
 </div>
