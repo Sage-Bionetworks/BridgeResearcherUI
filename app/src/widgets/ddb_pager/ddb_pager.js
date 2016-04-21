@@ -30,7 +30,6 @@ module.exports = function(params) {
     var pageKey = params.pageKey;
     
     utils.observablesFor(self, FIELDS);
-    self.assignmentFilterObs('all');
     
     self.doSearch = function(vm, event) {
         if (event.keyCode === 13) {
@@ -76,11 +75,13 @@ module.exports = function(params) {
     // and below the table. The 'top' control is responsible for kicking off the 
     // first page of records.
     ko.postbox.subscribe(pageKey+'-recordsPaged', updateModel);
+    ko.postbox.subscribe(pageKey+'-refresh', wrappedLoadingFunc);
 
     function wrappedLoadingFunc() {
         var offsetKey = self.offsetKeyObs();
         var idFilter = self.idFilterObs();
         var assignmentFilter = assignToValue(self.assignmentFilterObs(), null);
+        console.log(self.assignmentFilterObs());
 
         loadingFunc({
             offsetKey: offsetKey,
@@ -89,7 +90,6 @@ module.exports = function(params) {
             assignmentFilter: assignmentFilter
         }).then(function(response) {
             ko.postbox.publish(pageKey+'-recordsPaged', response);
-            updateModel(response);
             self.searchLoadingObs(false);
             self.pagerLoadingObs(false);
             return response;
@@ -101,6 +101,7 @@ module.exports = function(params) {
         self.pageSizeObs(response.pageSize);
         self.totalRecordsObs(response.total);
         self.idFilterObs(response.idFilter || "");
+        self.assignmentFilterObs(response.assignmentFilter || "all");
         self.totalPagesObs( Math.ceil(response.total/response.pageSize) );
     }
     if (params.top) {

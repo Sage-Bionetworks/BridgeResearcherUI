@@ -3,8 +3,7 @@
         <h3>Participants</h3>
         <div class="fixed-header-buttons">
             <span class="input-field" style="display:inline-block; margin-right:2rem" data-bind="text: recordsObs()"></span>
-            <button class="ui small button" data-bind="click: exportDialog">Export</button>
-            <button class="ui small button" data-bind="click: createDialog">Create from external ID</button>
+            <button class="ui small button" data-bind="click: exportDialog">Export&hellip;</button>
             <a href="#/participants/new" class="ui primary small button">New Participant</a>
         </div>
     </div>
@@ -29,7 +28,7 @@
             <tbody data-bind="foreach: itemsObs">
                 <tr data-bind="css: $component.classNameForStatus($data)">
                     <td>
-                        <a data-bind="attr: {'href': '#/participants/'+encodeURIComponent($data.email)}, 
+                        <a data-bind="attr: {'href': '#/participants/'+$data.id+'?name='+$component.fullName($data)}, 
                             text: $data.email"></a>
                     </td>
                     <td data-bind="text: $component.formatName($data)"></td>

@@ -23,6 +23,9 @@ module.exports = function() {
     self.classNameForStatus = function(user) {
         return cssClassNameForStatus[user.status];
     };
+    self.fullName = function(user) {
+        return encodeURIComponent(utils.formatName(user));
+    };
     
     function formatCount(total) {
         return (total+"").replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " user records";
@@ -30,9 +33,6 @@ module.exports = function() {
 
     self.exportDialog = function() {
         root.openDialog('participant_export', {searchFilter: self.searchFilter, total: self.total});    
-    };
-    self.createDialog = function(vm, event) {
-        root.openDialog('create_participant');
     };
     self.loadingFunc = function loadPage(offsetBy, pageSize, searchFilter) {
         self.searchFilter = searchFilter;

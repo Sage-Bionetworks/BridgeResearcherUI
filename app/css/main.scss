@@ -226,3 +226,10 @@ progress {
         text-align:left ! important;
     }    
 }
+.identifier-emphasis {
+    font-family: monospace;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    background-color: white;
+    padding: 0 .25rem;    
+}
