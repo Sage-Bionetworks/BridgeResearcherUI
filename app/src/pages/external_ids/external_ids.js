@@ -4,6 +4,8 @@ var utils = require('../../utils');
 var root = require('../../root');
 require('knockout-postbox');
 
+var OPTIONS = {offsetBy:0, pageSize: 1, assignmentFilter:false};
+
 module.exports = function() {
     var self = this;
     
@@ -91,7 +93,7 @@ module.exports = function() {
         
         self.showResultsObs(false);
         utils.startHandler(vm, event);
-        serverService.getExternalIds({offsetBy:0, pageSize: 1, assignmentFilter:false})
+        serverService.getExternalIds(OPTIONS)
             .then(extractId)
             .then(createNewCredentials)
             .then(updatePageWithResult)

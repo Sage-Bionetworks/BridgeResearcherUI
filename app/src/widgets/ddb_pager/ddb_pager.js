@@ -30,7 +30,6 @@ module.exports = function(params) {
     var pageKey = params.pageKey;
     
     utils.observablesFor(self, FIELDS);
-    self.assignmentFilterObs('all');
     
     self.doSearch = function(vm, event) {
         if (event.keyCode === 13) {
@@ -82,6 +81,7 @@ module.exports = function(params) {
         var offsetKey = self.offsetKeyObs();
         var idFilter = self.idFilterObs();
         var assignmentFilter = assignToValue(self.assignmentFilterObs(), null);
+        console.log(self.assignmentFilterObs());
 
         loadingFunc({
             offsetKey: offsetKey,
@@ -90,7 +90,6 @@ module.exports = function(params) {
             assignmentFilter: assignmentFilter
         }).then(function(response) {
             ko.postbox.publish(pageKey+'-recordsPaged', response);
-            updateModel(response);
             self.searchLoadingObs(false);
             self.pagerLoadingObs(false);
             return response;
@@ -102,6 +101,7 @@ module.exports = function(params) {
         self.pageSizeObs(response.pageSize);
         self.totalRecordsObs(response.total);
         self.idFilterObs(response.idFilter || "");
+        self.assignmentFilterObs(response.assignmentFilter || "all");
         self.totalPagesObs( Math.ceil(response.total/response.pageSize) );
     }
     if (params.top) {

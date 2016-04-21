@@ -51,7 +51,7 @@ ko.bindingHandlers.semantic = {
             $element.addClass("ui radio checkbox").on('click', function() {
                 if (!input.disabled) {
                     observer(input.value);
-                    //$element.addClass("checked");
+                    $element.addClass("checked");
                 }
             });
         } else if (value === 'dropdown') {
