@@ -93,6 +93,7 @@ module.exports = function(params) {
         self.notifyByEmailObs(response.notifyByEmail);
         self.dataGroupsObs(response.dataGroups);
         self.createdOnObs(utils.formatDateTime(response.createdOn));
+        self.emailObs(response.email);
         self.statusObs(response.status);
         if (self.study.healthCodeExportEnabled) {
             self.healthCodeObs(response.healthCode);    

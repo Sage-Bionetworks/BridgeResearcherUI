@@ -3,7 +3,8 @@
         <h3>External Identifiers</h3>
         <div class="fixed-header-buttons" data-bind="visible: managementEnabledObs">
             Records: <span data-bind="text: totalObs()"></span>
-            <div style="margin-left: 3rem" data-bind="semantic: 'dropdown-button'">
+            <button class="ui small button" style="margin-left: 3rem" data-bind="click: openImportDialog">Import&hellip;</button>
+            <div class="primary" data-bind="semantic: 'dropdown-button'">
                 <div class="text">New credentials from ID</div>
                 <i class="dropdown icon"></i>
                 <div class="menu">
@@ -11,7 +12,7 @@
                     <div class="item" data-bind="click: createFromNext">Assign next free ID</div>
                 </div>
             </div>
-            <button class="ui primary small button" data-bind="click: openImportDialog">Import</button>
+            
         </div>
     </div>
     <div class="empty-secondary-menu"></div>

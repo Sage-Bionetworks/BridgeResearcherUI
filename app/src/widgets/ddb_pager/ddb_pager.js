@@ -81,7 +81,6 @@ module.exports = function(params) {
         var offsetKey = self.offsetKeyObs();
         var idFilter = self.idFilterObs();
         var assignmentFilter = assignToValue(self.assignmentFilterObs(), null);
-        console.log(self.assignmentFilterObs());
 
         loadingFunc({
             offsetKey: offsetKey,

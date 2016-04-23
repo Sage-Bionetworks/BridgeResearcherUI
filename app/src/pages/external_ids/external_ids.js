@@ -29,7 +29,6 @@ module.exports = function() {
         }
         return response.items[0].identifier;
     }
-    
     function createNewCredentials(identifier) {
         self.resultObs(identifier);
         var participant = {

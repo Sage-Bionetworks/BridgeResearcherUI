@@ -41,7 +41,8 @@ module.exports = function() {
     };
     self.verifyEmail = function(vm, event) {
         utils.startHandler(vm, event);
-        serverService.verifyEmail().then(updateEmailStatus)
+        serverService.verifyEmail()
+            .then(updateEmailStatus)
             .then(utils.successHandler(vm, event, "Request to verify email has been sent."))
             .catch(utils.failureHandler(vm, event));
     };

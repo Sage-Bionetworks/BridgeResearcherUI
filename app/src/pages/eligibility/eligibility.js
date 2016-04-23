@@ -9,6 +9,11 @@ module.exports = function() {
 
     self.study = null;
     utils.observablesFor(self, fields);
+    
+    function updateStudy(response) {
+        self.study.version = response.version;
+        return response;
+    }
 
     self.minAge = ko.computed(function(){
         // We want loose comparison because sometimes it's the string "121" and sometimes it's the
@@ -24,9 +29,7 @@ module.exports = function() {
             self.study.minAgeOfConsent = 0;
         }
         serverService.saveStudy(self.study)
-            .then(function(response) {
-                self.study.version = response.version;
-            })
+            .then(updateStudy)
             .then(utils.successHandler(self, event, "Study updated."))
             .catch(utils.failureHandler(self, event));
     };
