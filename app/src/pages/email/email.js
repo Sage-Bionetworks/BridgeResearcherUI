@@ -3,7 +3,8 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var root = require('../../root');
 
-var fields = ['message', 'name', 'sponsorName', 'technicalEmail', 'supportEmail', 'consentNotificationEmail', 'identifier'];
+var fields = ['message', 'name', 'sponsorName', 'technicalEmail', 
+    'supportEmail', 'consentNotificationEmail', 'identifier'];
 
 module.exports = function() {
     var self = this;
@@ -11,42 +12,45 @@ module.exports = function() {
     utils.observablesFor(self, fields);
     self.emailStatusObs = ko.observable('');
 
-    function updateEmailStatus() {
-        serverService.emailStatus().then(function(response) {
-            self.emailStatusObs(response.status);
-        });
+    function checkEmailStatus() {
+        serverService.emailStatus().then(updateEmailStatus);
+    }
+    function updateEmailStatus(response) {
+        self.emailStatusObs(response.status);
+        return response;        
+    }
+    function updateStudyVersion(response) {
+        self.study.version = response.version;
+        return response;
     }
 
     self.save = function(vm, event) {
-        utils.startHandler(self, event);
         utils.observablesToObject(self, self.study, fields);
-
+        
+        utils.startHandler(vm, event);
         serverService.saveStudy(self.study)
-            .then(function(response) {
-                self.study.version = response.version;
-            })
+            .then(updateStudyVersion)
+            .then(checkEmailStatus)
             .then(utils.successHandler(vm, event, "Study information saved."))
-            .then(updateEmailStatus)
             .catch(utils.failureHandler(vm, event));
     };
     self.publicKey = function() {
         if (self.study) {
-            // It finds this and it works...
             root.openDialog('publickey', {study: self.study});
         }
     };
     self.verifyEmail = function(vm, event) {
-        serverService.verifyEmail().then(function(response) {
-            self.emailStatusObs(response.status);
-        })
-        .then(utils.successHandler(vm, event, "Request to verify email has been sent."))
-        .catch(utils.failureHandler(vm, event));
+        utils.startHandler(vm, event);
+        serverService.verifyEmail()
+            .then(updateEmailStatus)
+            .then(utils.successHandler(vm, event, "Request to verify email has been sent."))
+            .catch(utils.failureHandler(vm, event));
     };
-    self.refreshStatus = updateEmailStatus;
+    self.refreshStatus = checkEmailStatus;
 
     serverService.getStudy().then(function(study) {
         self.study = study;
         utils.valuesToObservables(self, study, fields);
-        updateEmailStatus();
+        checkEmailStatus();
     });
 };

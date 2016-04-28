@@ -218,6 +218,15 @@ footer p {
 progress {
     width: 100%;
 }
+    .progress-status {
+        display: flex; 
+        justify-content: 
+        space-between; width:100%;
+    }
+        .progress-status-perc {
+             padding-left:3rem;
+        }
+
 .modal {
     .header {
         padding: 1rem 1.25rem!important;

@@ -138,9 +138,16 @@
         
         <div class="equal width fields">
             <div class="field">
+                <label>Email</label>
+                <div class="input-field">
+                    <a data-bind="attr:{href: 'mailto:'+emailObs()}, text: emailObs"></a>
+                </div>
+            </div>
+            <div class="field">
                 <label>Created On</label>
                 <div class="input-field" data-bind="text: createdOnObs"></div>
             </div>
+            <div class="field"></div>
         </div>
     </form>
 </div>

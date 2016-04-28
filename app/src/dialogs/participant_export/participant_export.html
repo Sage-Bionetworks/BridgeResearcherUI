@@ -4,9 +4,9 @@
     </div>
     <div class="content">
         <progress data-bind="attr:{ value: valueObs, max: maxObs}"></progress>
-        <div style="display: flex; justify-content: space-between; width:100%">
+        <div class="progress-status">
             <div data-bind="text: statusObs"></div>
-            <div style="padding-left:3rem" data-bind="text: percentageObs"></div>
+            <div class="progress-status-perc" data-bind="text: percentageObs"></div>
         </div>
     </div>
     <div class="actions">
