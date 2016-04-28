@@ -4,7 +4,7 @@ var serverService = require('../../services/server_service');
 var root = require('../../root');
 var utils = require('../../utils');
 
-var TIMEOUT = 40;
+var TIMEOUT = 1500;
 
 var fieldHandlers = {
     'consentHistories': function(value) {
@@ -53,7 +53,7 @@ function getHeaderLabels(fields, attrFields) {
 module.exports = function(params) {
     var self = this;
     
-    var cancel, emails, progressIndex, output, fields, attrFields, errorCount;
+    var cancel, identifiers, progressIndex, output, fields, attrFields, errorCount;
     var total = params.total;
     var pageSize = 100;
     var numPages = Math.ceil(total/pageSize);
@@ -87,7 +87,7 @@ module.exports = function(params) {
     
     function reset() {
         cancel = false;
-        emails = [];
+        identifiers = [];
         progressIndex = 0;
         errorCount = 0;
         output = "";
@@ -111,7 +111,7 @@ module.exports = function(params) {
         if (cancel) { return; }
         if (response && response.items) {
             response.items.forEach(function(participant) {
-                emails.push(participant.email);
+                identifiers.push(participant.id);
             });
         }
         updateStatus(progressIndex++);
@@ -138,7 +138,7 @@ module.exports = function(params) {
             output += "\n"+formatOneParticipant(response);
         }
         updateStatus(progressIndex++);
-        if (emails.length > 0) {
+        if (identifiers.length > 0) {
             setTimeout(doOneFetch, TIMEOUT);
         } else {
             self.statusObs("Export finished. There were " + errorCount + " errors.");
@@ -151,8 +151,8 @@ module.exports = function(params) {
     }
     function doOneFetch() {
         if (cancel) { return; }
-        var email = emails.shift();
-        serverService.getParticipant(email)
+        var identifier = identifiers.shift();
+        serverService.getParticipant(identifier)
             .then(doContinueFetch).catch(doContinueFetchError);
     }
     function formatOneParticipant(participant) {

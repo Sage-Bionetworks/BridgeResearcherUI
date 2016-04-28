@@ -6,9 +6,9 @@
                 Filter to version:&nbsp;
                 <input style="margin-right:2rem;font-size: smaller; width:3rem" type="text" data-bind="textInput: filterObs, event: {keydown: applyFilter}">    
             </span>
-            <a href="#/scheduleplans/new" class="ui primary small button">New Schedule Plan</a>
             <button class="ui small button" data-bind="disable: !atLeastOneChecked(), click: copySchedulePlans">Copy</button>
             <button class="ui red small button" data-bind="disable: !atLeastOneChecked(), click: deleteSchedulePlans">Delete</button>
+            <a href="#/scheduleplans/new" class="ui primary small button">New Schedule Plan</a>
         </div>
     </div>
     <div class="empty-secondary-menu"></div>

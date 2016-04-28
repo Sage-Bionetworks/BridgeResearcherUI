@@ -1,7 +1,7 @@
 {
   "name": "bridge-researcher-ui",
   "version": "0.0.2",
-  "description": "",
+  "description": "The Bridge Study Manager for the Sage Bionetworks Bridge Server",
   "main": "index.js",
   "scripts": {
     "clean": "rm -rf app/dist; mkdir app/dist",
