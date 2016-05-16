@@ -39,7 +39,7 @@ module.exports = function(params) {
             return value.length > 0;
         });
         if (identifiers.length === 0) {
-            root.message('error','Some identifiers are required');
+            root.message('error','You must enter some identifiers.');
             return;
         }
         

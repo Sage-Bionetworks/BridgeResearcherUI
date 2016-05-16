@@ -1,6 +1,8 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
-        <h3>External Identifiers</h3>
+        <div class="fixed-header-heading">
+            <h3>External Identifiers</h3>
+        </div>
         <div class="fixed-header-buttons" data-bind="visible: managementEnabledObs">
             Records: <span data-bind="text: totalObs()"></span>
             <button class="ui small button" style="margin-left: 3rem" data-bind="click: openImportDialog">Import&hellip;</button>
@@ -12,10 +14,9 @@
                     <div class="item" data-bind="click: createFromNext">Assign next free ID</div>
                 </div>
             </div>
-            
         </div>
     </div>
-    <div class="empty-secondary-menu"></div>
+    <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
     <div class="ui grid">

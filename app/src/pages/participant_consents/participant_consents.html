@@ -1,10 +1,14 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
-        <h3>
-            <a href="#/participants" class="section">Participants</a>
-            <span data-bind="text: titleObs"></span>
-        </h3>
-        <div class="fixed-header-buttons"></div>
+        <div class="fixed-header-heading">
+            <span class="section">
+                <a href="#/participants" class="section">Participants</a>
+            </span>
+            <h3 data-bind="text: titleObs">
+            </h3>
+        </div>
+        <div class="fixed-header-buttons">
+        </div>
     </div>
     <!-- ko component: {name: 'participant-tabset', params: {active: 'consents', isNewObs: isNewObs}} --><!-- /ko -->
 </div>

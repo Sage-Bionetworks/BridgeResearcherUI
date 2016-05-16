@@ -6,7 +6,7 @@ var utils = require('../../utils');
 
 var TIMEOUT = 1500;
 
-var fieldHandlers = {
+var fieldFormatters = {
     'consentHistories': function(value) {
         var consents = [];
         for (var prop in value) {
@@ -166,8 +166,9 @@ module.exports = function(params) {
         for (var i=0; i < fields.length; i++) {
             var field = fields[i];
             var value = participant[field];
-            if (fieldHandlers[field]) {
-                array.push(fieldHandlers[field](value));
+            var formatter = fieldFormatters[field];
+            if (formatter) {
+                array.push(formatter(value));
             } else {
                 array.push(value);
             }

@@ -34,6 +34,7 @@ module.exports = function() {
             .then(utils.successHandler(vm, event, "Study information saved."))
             .catch(utils.failureHandler(vm, event));
     };
+    // TODO: Why is this declared here? It should only be on the page that uses it. REMOVEME.
     self.publicKey = function() {
         if (self.study) {
             root.openDialog('publickey', {study: self.study});

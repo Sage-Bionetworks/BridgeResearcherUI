@@ -1,6 +1,8 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
-        <h3>Synapse Configuration</h3>
+        <div class="fixed-header-heading">
+            <h3>Synapse Configuration</h3>
+        </div>
         <div class="fixed-header-buttons">
             <button class="ui small primary button" data-bind="click: save">Save</button>
         </div>
@@ -12,12 +14,14 @@
         <div class="ten wide column">
             <form class="ui form">
                 <div class="six wide field">
-                    <label>Synapse Access Team ID</label>
-                    <input type="text" name="synapseDataAccessTeamId" data-bind="value: synapseDataAccessTeamIdObs"/>
-                </div>
-                <div class="six wide field">
                     <label>Synapse Project ID</label>
                     <input type="text" name="synapseProjectId" data-bind="value: synapseProjectIdObs"/>
+                    <a target="_blank" data-bind="attr:{'href': projectLinkObs}">View Project on Synapse</a>
+                </div>
+                <div class="six wide field">
+                    <label>Synapse Access Team ID</label>
+                    <input type="text" name="synapseDataAccessTeamId" data-bind="value: synapseDataAccessTeamIdObs"/>
+                    <a target="_blank" data-bind="attr:{'href': teamLinkObs}">View Team on Synapse</a>
                 </div>
             </form>
         </div>

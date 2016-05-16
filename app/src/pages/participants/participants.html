@@ -1,13 +1,15 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
-        <h3>Participants</h3>
+        <div class="fixed-header-heading">
+            <h3>Participants</h3>
+        </div>
         <div class="fixed-header-buttons">
             <span class="input-field" style="display:inline-block; margin-right:2rem" data-bind="text: recordsObs()"></span>
             <button class="ui small button" data-bind="click: exportDialog">Export&hellip;</button>
             <a href="#/participants/new" class="ui primary small button">New Participant</a>
         </div>
     </div>
-    <div class="empty-secondary-menu"></div>
+    <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
     <errors></errors>

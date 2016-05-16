@@ -1,9 +1,13 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
-        <h3>
-            <a href="#/schemas" class="section">Upload Schemas</a>
-            <span data-bind="text: nameObs">Schema Versions</span>
-        </h3>
+        <div class="fixed-header-heading">
+            <span class="section">
+                <a href="#/schemas" class="section">Upload Schemas</a>
+            </span>
+            <h3>
+                <span data-bind="text: nameObs">Schema Versions</span>
+            </h3>
+        </div>
         <div class="fixed-header-buttons">
             <button class="ui red small button" data-bind="disable: !anyChecked(), click: deleteRevisions">Delete</button>
         </div>

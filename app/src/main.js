@@ -67,7 +67,6 @@ router.on('/schemas', routeTo('schemas'));
 router.on('/schemas/:schemaId', schemaRoute('schema'));
 router.on('/schemas/:schemaId/versions', schemaRoute('schema_versions'));
 router.on('/schemas/:schemaId/versions/:revision', schemaRoute('schema'));
-router.on('/monitor', routeTo('monitor'));
 router.on('/schedules', routeTo('schedules'));
 router.on('/scheduleplans', routeTo('scheduleplans'));
 router.on('/scheduleplans/:guid', guidRoute('scheduleplan'));
@@ -89,6 +88,7 @@ router.configure({
 });
 router.init();
 
+// TODO: Move to root. Rename this file "routes.js" because that's what it is.
 window.addEventListener("load", function() {
     document.body.style.opacity = "1.0";
 }, false);
