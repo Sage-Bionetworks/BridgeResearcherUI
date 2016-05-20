@@ -42,16 +42,13 @@ module.exports = function(propertyName) {
             utils.startHandler(self, event);
             self.study[propertyName] = self.records();
 
-            // TODO: Remove once this is fixed on the server. It should be okay to
-            // send an empty array to the server.
-            console.log(self.study[propertyName]);
+/*
             if (typeof self.study[propertyName] === "undefined" ||
                     self.study[propertyName].length < 1) {
                 delete self.study[propertyName];
-            }
+            }*/
             serverService.saveStudy(self.study)
                     .then(function(response) {
-                        self.study.version = response.version;
                         self.noChanges(true);
                         self.study[propertyName] = [];
                     })

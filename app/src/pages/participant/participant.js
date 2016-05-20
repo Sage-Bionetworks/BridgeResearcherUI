@@ -91,6 +91,7 @@ module.exports = function(params) {
         return response;
     }
     function loadParticipant(response) {
+        console.log(response);
         if (response == null) {
             return;
         }

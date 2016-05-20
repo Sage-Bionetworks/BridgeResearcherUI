@@ -26,10 +26,6 @@ module.exports = function() {
 
     utils.observablesFor(self, fields);
 
-    function updateVersion(response) {
-        self.study.version = response.version;
-    }
-
     self.save = function(vm, event) {
         utils.startHandler(self, event);
         utils.observablesToObject(self, self.study, fields);
@@ -39,7 +35,6 @@ module.exports = function() {
         updateMinAppVersion(self, self.minAndroidObs, "Android");
 
         serverService.saveStudy(self.study, false)
-            .then(updateVersion)
             .then(utils.successHandler(vm, event, "Study information saved."))
             .catch(utils.failureHandler(vm, event));
     };

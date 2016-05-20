@@ -22,8 +22,8 @@
         </main>
         <nav data-bind="visible: showNavigationObs">
             <div class="ui pointing menu" data-bind="visible: isEditorPanelVisible">
-                <a class="item" data-bind="active: !isEditorTabVisible(), click: toggleEditorTab">Navigation</a>
-                <a class="item" data-bind="active: isEditorTabVisible, click: toggleEditorTab">Editor</a>
+                <a class="item" data-bind="css: {active: !isEditorTabVisible()}, click: toggleEditorTab">Navigation</a>
+                <a class="item" data-bind="css: {active: isEditorTabVisible}, click: toggleEditorTab">Editor</a>
             </div>
             <div data-bind="visible: isEditorTabVisible, component: {name: editorPanel, params: editorParams}">
             </div>
@@ -88,11 +88,11 @@
     </footer>
     <div data-bind="modal: dialogObs"></div>
     
-    <div class="nav-content" style="left: 16rem" data-bind="visible: showNavigationObs, click: hideNav">
-        <i class="content icon"> </i>
+    <div class="nav-content" style="top: 4.5rem" data-bind="visible: showNavigationObs, click: hideNav">
+        <i class="maximize icon"> </i>
     </div>
-    <div class="nav-content" style="top: .5rem; left: .5rem" data-bind="visible: !showNavigationObs(), click: showNav">
-        <i class="content icon"> </i>
+    <div class="nav-content" style="top: .5rem" data-bind="visible: !showNavigationObs(), click: showNav">
+        <i class="minimize icon"> </i>
     </div>
     <script src="dist/bundle.js"></script>
 </body>

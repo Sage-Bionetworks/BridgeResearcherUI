@@ -121,6 +121,19 @@ var RootViewModel = function() {
 };
 
 var root = new RootViewModel();
+
+root.queryParams = {};
+if (document.location.search) {
+    document.location.search.substring(1).split("&").forEach(function(pair) {
+        var fragments = pair.split("=");
+        root.queryParams[decodeURIComponent(fragments[0])] = decodeURIComponent(fragments[1]);
+    });
+}
+console.debug("root.queryParams", root.queryParams);
+
 module.exports = root;
 ko.applyBindings(root, document.body);
 
+window.addEventListener("load", function() {
+    document.body.style.opacity = "1.0";
+}, false);

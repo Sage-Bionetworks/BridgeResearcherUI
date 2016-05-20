@@ -53,10 +53,6 @@ module.exports = function() {
     function showManagementEnabled() {
         self.managementEnabledObs(true);
     } 
-    function updateVersion(response) {
-        self.study.version = response.version;
-        return response;
-    }
     
     self.openImportDialog = function(vm, event) {
         self.showResultsObs(false);
@@ -74,7 +70,6 @@ module.exports = function() {
             
             serverService.saveStudy(self.study)
                 .then(showManagementEnabled)
-                .then(updateVersion)
                 .then(utils.successHandler(vm, event, "External ID management enabled."))
                 .catch(utils.failureHandler(vm, event));
         }

@@ -1,7 +1,7 @@
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var ko = require('knockout');
-var fields = ['synapseDataAccessTeamId', 'synapseProjectId'];
+var fields = ['synapseDataAccessTeamId', 'synapseProjectId', 'usesCustomExportSchedule'];
 
 var BASE = "https://www.synapse.org/#!";
 
@@ -10,14 +10,13 @@ module.exports = function() {
 
     utils.observablesFor(self, fields);
 
-    function updateVersion(response) {
-        self.study.version = response.version;
-    }
     self.projectLinkObs = ko.computed(function() {
-        return BASE + "Synapse:" + self.synapseProjectIdObs(); 
+        var value = self.synapseProjectIdObs();
+        return (value) ? (BASE+"Synapse:"+value) : null;
     });
     self.teamLinkObs = ko.computed(function() {
-        return BASE + "Team:" + self.synapseDataAccessTeamIdObs(); 
+        var value = self.synapseDataAccessTeamIdObs();
+        return (value) ? (BASE+"Team:"+value) : null;
     });
 
     self.save = function(vm, event) {
@@ -25,7 +24,6 @@ module.exports = function() {
         utils.observablesToObject(self, self.study, fields);
 
         serverService.saveStudy(self.study)
-            .then(updateVersion)
             .then(utils.successHandler(vm, event, "Synapse information saved."))
             .catch(utils.failureHandler(vm, event));
     };

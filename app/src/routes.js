@@ -5,7 +5,7 @@ require('../lib/dragula.min');
 require('./bindings');
 require('../lib/jquery.scrollTo');
 require('./bindings/dragula');
-require('./registry');
+require('./components');
 var ko = require('knockout');
 require('knockout-postbox');
 var utils = require('./utils');
@@ -87,8 +87,3 @@ router.configure({
     ]
 });
 router.init();
-
-// TODO: Move to root. Rename this file "routes.js" because that's what it is.
-window.addEventListener("load", function() {
-    document.body.style.opacity = "1.0";
-}, false);

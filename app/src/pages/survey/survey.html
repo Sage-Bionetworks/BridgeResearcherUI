@@ -1,9 +1,10 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
-            <span class="section">
-                <a href="#/surveys" class="section">Surveys</a>
-            </span>
+            <div class="ui breadcrumb">
+                <a class="section" href="#/surveys">Surveys</a>
+                <i class="right chevron icon divider"></i>
+            </div>             
             <h3>
                 <span data-bind="visible: nameObs().length > 0, text: nameObs"></span>
                 <span data-bind="visible: nameObs().length == 0">New Survey</span>

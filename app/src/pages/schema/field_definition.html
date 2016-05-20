@@ -1,24 +1,24 @@
-<div class="sfield-content">
-    <div class="sfield-content-editor">
-        <div>
-            <div class="field" data-bind="attr:{id:'fieldDefinitions'+$index()+'_name'}">
-                <ui-text params="fieldObs: nameObs, placeholder: 'Name'"></ui-text>
-            </div>
+<div class="field_definition draggable">
+    <div class="draggable">
+        <div class="field" data-bind="attr:{id:'fieldDefinitions'+$index()+'_name'}">
+            <ui-text params="fieldObs: nameObs, placeholder: 'Name'"></ui-text>
         </div>
+    </div>
+    <div class="draggable">
         <div class="field">
             <ui-select params="fieldObs: typeObs, fieldLabel: fieldTypeLabel,
                 optionsSrc: fieldTypeOptions"></ui-select>
         </div>
-        <div class="field">
-            <ui-checkbox params="checkedObs: requiredObs">Required</ui-checkbox>
-        </div>
-        <div class="sfield-content-editor-buttons">
-            <a data-bind="fadeRemove: {selector: '.sfield', object: $data.field}">
-                <i class="delete icon"></i>Delete
-            </a>
-            <a data-bind="click: $parents[1].addBelow">
-                <i class="add icon"></i>Add Below
-            </a>
+    </div>
+    <div class="draggable">
+        <ui-checkbox params="checkedObs: requiredObs">Required</ui-checkbox>
+    </div>
+    <div class="draggable">
+        <a class="link" data-bind="fadeRemove: {selector: '.sfield', object: $data.field}">
+            <i class="delete icon"></i>Delete
+        </a>
+        <a class="link" data-bind="click: $parents[1].addBelow">
+            <i class="add icon"></i>Add Below
         </a>
     </div>
 </div>

@@ -24,9 +24,6 @@ module.exports = function() {
         self.study.resetPasswordTemplate.body = self.editor.getData();
 
         serverService.saveStudy(self.study)
-            .then(function(response) {
-                self.study.version = response.version;
-            })
             .then(utils.successHandler(vm, event, "Email saved."))
             .catch(utils.failureHandler(vm, event));
     };

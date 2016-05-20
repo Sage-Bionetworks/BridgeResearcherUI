@@ -40,7 +40,7 @@ main {
 nav {
     @include flex(0 0 18rem);
     @include order(-1);
-    padding:  2rem 1rem ! important;
+    padding:  1rem ! important;
     background-color: rgba(96,134,153,.2);
 
     .title span {
@@ -73,12 +73,6 @@ header {
         padding: 1.5rem 2rem 0rem 0rem;
         color: white;
     }
-.nav-content {
-    position: absolute;
-    color: #bbb;
-    top: 4.5rem;
-    cursor: pointer!important;
-}
 .scrollbox dd {
     margin: 1rem;
 }
@@ -191,9 +185,6 @@ progress {
         }
 
 .modal {
-    .header {
-        padding: 1rem 1.25rem!important;
-    }
     .actions {
         text-align:left ! important;
     }
@@ -210,4 +201,11 @@ progress {
 */
 .noLeftPadding {
     padding-left: 0!important;
+}
+
+.nav-content {
+    position: absolute;
+    right: 0rem;
+    color: #bbb;
+    cursor:pointer!important;
 }

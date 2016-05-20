@@ -5,34 +5,46 @@
     .fixed-header-title {
         padding: 1rem 1rem 0 2rem;
         @include flex-box(row);
-        
+
         .fixed-header-heading {
             @include flex(1);
             
             h3 {
                 @include flex-box(row);
                 @include align-items(center);
-                margin: .5rem 0 0 0;
+                margin: .75rem 0 0 0;
                     .label {
                         margin-left: 1rem;
                     }
             }
-            .section a:last-child::after {
-                content: ' » ';
-                color: black;
-                width: 50%;
+            .section {
+                font-size: 1.1rem;
+                /*
+                
+                a:last-child::after {
+                    color: black;
+                    width: 50%;
+                }*/
             }
         }
         .fixed-header-buttons {
             padding-left: 1rem;
+            padding-right: 1.5rem;
         }
     }
     .ui.menu {
         margin: .5rem 0 0 0;
     }
     .ui.secondary.pointing.menu {
+        position: relative;
         padding-left: 1rem;
-        border-bottom: 2px solid #aaa;
+        box-shadow: 1px 1px 1px #aaa;
+        border-bottom: none;
+        /*border-bottom: 1px solid #aaa;*/
+        z-index: 2;
+        .item {
+            padding: .6rem 1.6rem;
+        } 
     }
     .ui.empty.secondary.pointing.menu {
         margin: 0;

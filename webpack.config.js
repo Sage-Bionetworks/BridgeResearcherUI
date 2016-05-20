@@ -6,7 +6,7 @@
  * hot reloading.
  */
 module.exports = {
-    entry: './app/src/main.js',
+    entry: './app/src/routes.js',
     output: {
         path: './app/dist',
         filename: 'bundle.js'

@@ -5,7 +5,7 @@
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
             <span class="section">
-                <a href="#/subpopulations">Consent Groups</a> »
+                <a href="#/subpopulations">Consent Groups</a> <i class="right chevron icon"></i>
                 <a data-bind="attr:{href: '#/subpopulations/'+guidObs()}, text: nameObs"></a>
             </span>
             <h3>
@@ -22,6 +22,7 @@
             <button class="ui small primary button" data-bind="click: save">Save</button>
         </div>
     </div>
+    <!-- or "ui empty secondary pointing menu" if no tabs -->
     <div class="ui secondary pointing menu">
         <a class="item" data-bind="click: function() { tabObs('current') }, css: {active: tabObs() == 'current'}">
             <i class="file outline icon"></i> Editor

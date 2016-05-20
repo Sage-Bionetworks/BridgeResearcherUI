@@ -241,8 +241,11 @@ module.exports = {
         return get(config.getStudyPublicKey);
     },
     saveStudy: function(study, isAdmin) {
-        var url = (isAdmin) ? config.getStudy + study.identifier : config.getCurrentStudy;
-        return post(url, study);
+        var url = (isAdmin) ? (config.getStudy + study.identifier) : config.getCurrentStudy;
+        return post(url, study).then(function(response) {
+            study.version = response.version;
+            return response;
+        });
     },
     getMostRecentStudyConsent: function(guid) {
         return get(config.subpopulations + "/" + guid + "/consents/recent");

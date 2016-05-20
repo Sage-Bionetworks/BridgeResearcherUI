@@ -1,9 +1,10 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
-            <span class="section">
+            <div class="ui breadcrumb">
                 <a href="#/schemas" class="section">Upload Schemas</a>
-            </span>
+                <i class="right chevron icon divider"></i>
+            </div>             
             <h3>
                 <span data-bind="visible: nameObs().length > 0, text: nameObs"></span>
                 <span data-bind="visible: nameObs().length === 0">New Upload Schema</span>
@@ -45,7 +46,7 @@
             </div>
             <div class="field" data-bind="visible: !!revisionObs()">
                 <label>Identifier</label>
-                <div class="input-field" data-bind="text: schemaIdObs"></div>
+                <input readonly data-bind="value: schemaIdObs"/>
             </div>
         </div>
     </form>
@@ -56,13 +57,18 @@
 
     <div data-bind="visible: itemsObs().length === 0">
         <p>There are currently no field definitions in this upload schema.</p>
-        <p><span class="ui primary link button" data-bind="click: addFirst"><i class="add square icon"></i> Add Field</span></p>
+        <p>
+            <button class="ui primary button" data-bind="click: addFirst">
+                <i class="add square icon"></i> Add Field
+            </button>
+        <p>
     </div>
     <div class="ui form schema sfieldZone" data-bind="dragula: {
-        elementSelector: '.sfield',
+        elementSelector: '.field_definitions',
+        dragHandleSelector: '.draggable',
         listObs: itemsObs
     }, foreach: itemsObs">
-        <div class="sfield" data-bind="component: {
+        <div class="field_definitions" data-bind="component: {
             name: 'field_definition',
             params: { field: $data, itemsObs: $parent.itemsObs, indexObs: $index }
         }"></div>

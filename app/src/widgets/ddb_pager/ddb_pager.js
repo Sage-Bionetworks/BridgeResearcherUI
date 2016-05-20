@@ -2,19 +2,10 @@ var ko = require('knockout');
 require('knockout-postbox');
 var utils = require('../../utils');
 
-var $ = require('jquery');
-
-var FIELDS = ['idFilter','assignmentFilter','offsetKey','pageKey','pageSize','totalRecords',
+var FIELDS = ['idFilter','offsetKey','pageKey','pageSize','totalRecords',
     'currentPage','totalPages','searchLoading','pagerLoading'];
     
 var pageSize = 25;
-
-function assignToValue(assignment, defaultValue) {
-    if (assignment === 'all' || typeof assignment === 'undefined' || assignment === null) {
-        return defaultValue;
-    }
-    return assignment === true || assignment === 'true';
-}
 
 /**
  * @params loadingFunc - the function to call to load resources. The function takes the parameters 
@@ -28,6 +19,7 @@ module.exports = function(params) {
     var self = this;
     var loadingFunc = params.loadingFunc;
     var pageKey = params.pageKey;
+    var currentAssignmentFilter = null;
     
     utils.observablesFor(self, FIELDS);
     
@@ -38,27 +30,17 @@ module.exports = function(params) {
             wrappedLoadingFunc();
         }
     }
-    if (params.top) {
-        self.assignmentFilterObs.subscribe(function(newValue) {
-            self.searchLoadingObs(true);
-            self.offsetKeyObs(null);
-            self.currentPageObs(0);
-            wrappedLoadingFunc();
-            return newValue;
-        });
-    }
     self.pageSizeObs(pageSize);
     self.currentPageObs(0);
     self.totalPagesObs(0);
     self.searchLoadingObs(false);
     self.pagerLoadingObs(false);
     self.top = params.top;
-    self.assignmentFilterObs('all');
     
     self.firstPage = function(vm, event) {
+        currentAssignmentFilter = null;
         self.offsetKeyObs(null);
         self.idFilterObs("");
-        self.assignmentFilterObs(null);
         self.pagerLoadingObs(true);
         self.currentPageObs(0);
         wrappedLoadingFunc();
@@ -71,6 +53,20 @@ module.exports = function(params) {
         }
     }
     
+    function getValue(value) {
+        if (value === 'true') {
+            return 'true';
+        } else if (value === 'false') {
+            return 'false';
+        }
+        return null;
+    }
+    
+    self.assignFilter = function(vm, event) {
+        currentAssignmentFilter = getValue(event.target.value);
+        wrappedLoadingFunc();
+        return true;
+    };
     // Postbox allows multiple instances of a paging control to stay in sync above
     // and below the table. The 'top' control is responsible for kicking off the 
     // first page of records.
@@ -80,14 +76,14 @@ module.exports = function(params) {
     function wrappedLoadingFunc() {
         var offsetKey = self.offsetKeyObs();
         var idFilter = self.idFilterObs();
-        var assignmentFilter = assignToValue(self.assignmentFilterObs(), null);
 
         loadingFunc({
             offsetKey: offsetKey,
             pageSize: pageSize,
             idFilter: idFilter,
-            assignmentFilter: assignmentFilter
+            assignmentFilter: currentAssignmentFilter
         }).then(function(response) {
+            response.currentPage = self.currentPageObs();
             ko.postbox.publish(pageKey+'-recordsPaged', response);
             self.searchLoadingObs(false);
             self.pagerLoadingObs(false);
@@ -100,10 +96,13 @@ module.exports = function(params) {
         self.pageSizeObs(response.pageSize);
         self.totalRecordsObs(response.total);
         self.idFilterObs(response.idFilter || "");
-        self.assignmentFilterObs(response.assignmentFilter || "all");
+        self.currentPageObs(response.currentPage); // this was added by the component.
+        currentAssignmentFilter = response.assignmentFilter || null;
         self.totalPagesObs( Math.ceil(response.total/response.pageSize) );
     }
     if (params.top) {
         wrappedLoadingFunc();
     }
+    // why. why? why?!?!?!?!?!?!?!?
+    document.querySelector("#assignEither").checked = true;
 };

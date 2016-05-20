@@ -1,11 +1,11 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
-            <span class="section">
-                <a href="#/participants" class="section">Participants</a>
-            </span>
-            <h3 data-bind="text: titleObs">
-            </h3>
+            <div class="ui breadcrumb">
+                <a class="section" href="#/participants">Participants</a>
+                <i class="right chevron icon divider"></i>
+            </div>            
+            <h3 data-bind="text: titleObs"></h3>
         </div>
         <div class="fixed-header-buttons">
             <button class="ui small primary button" data-bind="click: save">Save</button>
@@ -59,11 +59,12 @@
                 </div>
             </div>
             <div class="field" data-bind="visible: !isNewObs()">
-                <label>Health Code</label>
-                <div class="input-field" data-bind="text: healthCodeObs"></div>
-                <div class="help-text ui red label" data-bind="visible: healthCodeObs() !== 'N/A'">
-                    This code is confidential. Do not redistribute.
-                </div>
+                <label>Health Code
+                </label>
+                <input readonly data-bind="value: healthCodeObs"/>
+                <span class="help-text ui small red text" data-bind="visible: healthCodeObs() !== 'N/A'">
+                    Confidential. Do not redistribute.
+                </span>
             </div>
         </div>
         
@@ -76,8 +77,8 @@
                 <label>External ID</label>
                 <ui-text params="fieldObs: externalIdObs"></ui-text>
             </div>
-            <div class="field" style="margin-bottom:2rem">
-                <label>Preferences</label>
+            <div class="field">
+                <label style="margin-bottom: .9rem">Email Preference</label>
                 <ui-checkbox params="checkedObs: notifyByEmailObs">
                     Consents to receive email from study
                 </ui-checkbox>
@@ -101,13 +102,13 @@
         <div class="equal width fields" data-bind="visible: !isNewObs()">
             <div class="field">
                 <label>Email</label>
-                <div class="input-field">
+                <div>
                     <a data-bind="attr:{href: 'mailto:'+emailObs()}, text: emailObs"></a>
                 </div>
             </div>
             <div class="field">
                 <label>Created On</label>
-                <div class="input-field" data-bind="text: createdOnObs"></div>
+                <div data-bind="text: createdOnObs"></div>
             </div>
             <div class="field"></div>
         </div>

@@ -1,10 +1,12 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
-            <span class="section">
-                <a href="#/subpopulations">Consent Groups</a> »
-                <a data-bind="attr:{href: '#/subpopulations/'+guidObs()}, text: nameObs"></a>
-            </span>
+            <div class="ui breadcrumb">
+                <a class="section" href="#/subpopulations">Consent Groups</a> 
+                <i class="right chevron icon divider"></i>
+                <a class="section" data-bind="attr:{href: '#/subpopulations/'+guidObs()}, text: nameObs"></a>
+                <i class="right chevron icon divider"></i>
+            </div>
             <h3>
                 <span data-bind="text: createdOnObs"></span>
                 <div class="green ui mini label" data-bind="visible: activeObs">
