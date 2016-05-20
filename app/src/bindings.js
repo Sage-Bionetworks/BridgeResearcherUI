@@ -180,8 +180,6 @@ function findItemsObs(context, collName) {
  *      the actual object to remove from the observable array
  *  collection {String}
  *      the name of the collection on a viewModel in the hierachy for this element. Defaults to 'itemsObs'
- *
- *  This binding assumes a transition that lasts 500ms.
  */
 ko.bindingHandlers.fadeRemove = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
@@ -196,8 +194,10 @@ ko.bindingHandlers.fadeRemove = {
         element.addEventListener('click', function(event) {
             event.preventDefault();
             if (confirm("Are you sure?")) {
-                itemsObs.remove(rowItem);
-                $element.remove();
+                $element.animate({height: '0px', minHeight: '0px'}, 300, 'swing', function() {
+                    itemsObs.remove(rowItem);
+                    $element.remove();
+                });
             }
         });
     }

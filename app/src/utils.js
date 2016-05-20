@@ -477,11 +477,18 @@ module.exports = {
             }
         };
     },
-    queryString: function(urlString) {
-        var href = urlString || document.location.href;
-        if (href.indexOf("?") === -1) {
-            return {};
+    atLeastOneSignedConsent: function(consentHistories) {
+        if (Object.keys(consentHistories).length === 0) {
+            return true;
         }
-        return href.split("?")[1].split("&").reduce(collectQueryPair, {});
+        // At least one consent history whose last item has not been withdrawn.
+        return Object.keys(consentHistories).some(function(guid) {
+            var history = consentHistories[guid];
+            if (history.length === 0) {
+                return true;
+            }
+            var last = history[history.length-1];
+            return (last && typeof last.withdrewOn === "undefined");
+        });
     }
 };
