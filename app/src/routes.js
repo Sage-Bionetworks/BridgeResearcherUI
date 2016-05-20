@@ -36,9 +36,7 @@ function guidRoute(name) {
 }
 function idRoute(name) {
     return function(id) {
-        var params = utils.queryString();
-        params.id = id;
-        root.changeView(name, params);
+        root.changeView(name, {id:id});
     };
 }
 

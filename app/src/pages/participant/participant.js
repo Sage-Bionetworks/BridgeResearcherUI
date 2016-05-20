@@ -87,7 +87,7 @@ module.exports = function(params) {
         return serverService.getParticipant(id);        
     }
     function updateTitle(response) {
-        self.titleObs(utils.formatName(self));
+        self.titleObs(utils.formatName(response));
         return response;
     }
     function loadParticipant(response) {
@@ -136,15 +136,14 @@ module.exports = function(params) {
         var participant = participantFromForm();
         
         utils.startHandler(vm, event);
+        updateTitle(participant);
         if (self.isNewObs()) {
             serverService.createParticipant(participant)
                 .then(afterCreate)
-                .then(updateTitle)
                 .then(utils.successHandler(vm, event, "Participant created."))
                 .catch(utils.failureHandler(vm, event));
         } else {
             serverService.updateParticipant(participant)
-                .then(updateTitle)
                 .then(utils.successHandler(vm, event, "Participant updated."))
                 .catch(utils.failureHandler(vm, event));
         }

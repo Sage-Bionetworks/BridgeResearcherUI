@@ -12,7 +12,9 @@ module.exports = function() {
 
     serverService.getAllUploadSchemas().then(function(response) {
         if (response.items.length) {
-            self.itemsObs(response.items.sort(utils.makeFieldSorter("name")));
+            self.itemsObs(response.items.filter(function(item) {
+                return item.schemaType === "ios_data";
+            }).sort(utils.makeFieldSorter("name")));
         } else {
             document.querySelector(".loading_status").textContent = "There are currently no upload schemas.";
         }

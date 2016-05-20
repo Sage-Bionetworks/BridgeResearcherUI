@@ -25,15 +25,15 @@
             <div class="three fields">
                 <div class="field">
                     <label>Name</label>
-                    <div data-bind="text: schemaObs().name"></div>
+                    <input readonly data-bind="textInput: schemaObs().name"/>
                 </div>
                 <div class="field">
                     <label>Schema Type</label>
-                    <div data-bind="text: schemaTypeLabel(schemaObs().schemaType)"></div>
+                    <input readonly data-bind="textInput: schemaTypeLabel(schemaObs().schemaType)"/>
                 </div>
                 <div class="field">
                     <label>Identifier</label>
-                    <div data-bind="text: schemaObs().schemaId"></div>
+                    <input readonly data-bind="textInput: schemaObs().schemaId"/>
                 </div>
             </div>
         </div>

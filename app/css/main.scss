@@ -13,10 +13,9 @@ html, body {
 }
 body {
     @include flex-box(column);
+    @include transition(opacity .5s ease-in-out);
     background-color: white;
     opacity: 0.0;
-    -webkit-transition: opacity .5s ease-in-out;
-    transition: opacity .5s ease-in-out;
 }
 section {
     @include flex-box(row);
@@ -104,7 +103,7 @@ footer p {
     margin-right: 1rem;
 }
 .link, .inline-editor-controls a {
-    color: #009fda!important;
+    color: #4183c4!important;
     cursor: pointer;
 }
 .admin.lock.icon {
@@ -208,4 +207,10 @@ progress {
     right: 0rem;
     color: #bbb;
     cursor:pointer!important;
+}
+/* This didn't use to be misaligned, but looks wrong now. */
+.ui.compact.table {
+    .ui.checkbox {
+        vertical-align: middle;
+    }
 }
