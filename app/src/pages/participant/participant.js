@@ -4,16 +4,10 @@ var serverService = require('../../services/server_service');
 
 var fields = ['title','isNew','email','name','firstName','lastName','sharingScope','notifyByEmail',
     'dataGroups[]','password','healthCode','allDataGroups[]','attributes[]','externalId','languages',
-    'roles','externalIdEditable','status','createdOn','id'];
+    'externalIdEditable','status','createdOn','id','roles[]','allRoles[]'];
     
 var persistedFields = ['firstName','lastName','sharingScope','notifyByEmail',
     'dataGroups[]','email','password','languages','externalId','status','id'];
-
-function formatList(list) {
-    return (list || []).sort().map(function(el) {
-        return utils.formatTitleCase(el);
-    }).join(", ");
-}
 
 var OPTIONS = [
     {value: 'no_sharing', label:'No Sharing'},
@@ -25,6 +19,18 @@ var STATUS_OPTIONS = [
     {value: 'disabled', label:'Disabled'},
     {value: 'unverified', label:'Unverified'}
 ];
+var ROLES = ['Developer','Researcher','Administrator'];
+
+function formatRoles(roles) {
+    return (roles || []).map(function(role) {
+         return (role === "admin") ? "Administrator" : utils.formatTitleCase(role);
+    });
+}
+function unformatRoles(roles) {
+    return (roles || []).map(function(role) {
+         return (role === "Administrator") ? "admin" : role.toLowerCase();
+    });
+}
 
 module.exports = function(params) {
     var self = this;
@@ -48,6 +54,8 @@ module.exports = function(params) {
     function participantFromForm() {
         var participant = {attributes:{}};
         utils.observablesToObject(self, participant, persistedFields);
+        
+        participant.roles = unformatRoles(self.rolesObs());
         self.attributesObs().map(function(attr) {
             participant.attributes[attr.key] = attr.obs();
         });
@@ -63,6 +71,7 @@ module.exports = function(params) {
         self.study = study;
         // there's a timer in the control involved here, we need to use an observer
         self.allDataGroupsObs(study.dataGroups);
+        self.allRolesObs(ROLES);
         
         var attrs = self.study.userProfileAttributes.map(function(key) {
             return {key:key, label:utils.formatTitleCase(key,''), obs:ko.observable()}; 
@@ -77,11 +86,12 @@ module.exports = function(params) {
         }
         return serverService.getParticipant(id);        
     }
-    function updateName(response) {
-        self.titleObs(self.firstNameObs() + " " + self.lastNameObs());
+    function updateTitle(response) {
+        self.titleObs(utils.formatName(self));
         return response;
     }
     function loadParticipant(response) {
+        console.log(response);
         if (response == null) {
             return;
         }
@@ -99,7 +109,7 @@ module.exports = function(params) {
             self.healthCodeObs(response.healthCode);    
         }
         self.languagesObs(response.languages.join(", "));
-        self.rolesObs(formatList(response.roles));
+        self.rolesObs(formatRoles(response.roles));
         self.attributesObs().map(function(attr) {
             attr.obs(response.attributes[attr.key]);
         });
@@ -129,12 +139,12 @@ module.exports = function(params) {
         if (self.isNewObs()) {
             serverService.createParticipant(participant)
                 .then(afterCreate)
-                .then(updateName)
+                .then(updateTitle)
                 .then(utils.successHandler(vm, event, "Participant created."))
                 .catch(utils.failureHandler(vm, event));
         } else {
             serverService.updateParticipant(participant)
-                .then(updateName)
+                .then(updateTitle)
                 .then(utils.successHandler(vm, event, "Participant updated."))
                 .catch(utils.failureHandler(vm, event));
         }

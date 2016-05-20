@@ -19,9 +19,6 @@ module.exports = function() {
         utils.observablesToObject(self, self.study, fields);
 
         serverService.saveStudy(self.study, true)
-            .then(function(response) {
-                self.study.version = response.version;
-            })
             .then(utils.successHandler(vm, event, "Study information saved."))
             .catch(utils.failureHandler(vm, event));
     };

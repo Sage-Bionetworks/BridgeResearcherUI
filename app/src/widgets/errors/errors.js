@@ -30,7 +30,7 @@ module.exports = function() {
             toastr.error(payload.message);
             return;
         }
-
+        console.log("payload",payload);
         var message = payload.message;
         var errors = payload.errors;
 
@@ -39,7 +39,7 @@ module.exports = function() {
 
         var globalErrors = [];
         // This was basically a payload with a message and no errors... so show the message.
-        if (!payload.errors) {
+        if (Object.keys(payload.errors).length === 0) {
             globalErrors.push(message);
         }
         for (var fieldName in errors) {

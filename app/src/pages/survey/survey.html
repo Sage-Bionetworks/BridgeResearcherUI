@@ -1,21 +1,22 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
-        <h3>
-            <a href="#/surveys" class="section">Surveys</a>
-            <span data-bind="visible: nameObs().length > 0, text: nameObs"></span>
-            <span data-bind="visible: nameObs().length == 0">New Survey</span>
-        </h3>
-        <div class="fixed-header-buttons">
-            <span class="action item" data-bind="visible: publishedObs">
-                <div class="green ui label">
+        <div class="fixed-header-heading">
+            <div class="ui breadcrumb">
+                <a class="section" href="#/surveys">Surveys</a>
+                <i class="right chevron icon divider"></i>
+            </div>             
+            <h3>
+                <span data-bind="visible: nameObs().length > 0, text: nameObs"></span>
+                <span data-bind="visible: nameObs().length == 0">New Survey</span>
+                <div class="green ui mini label" data-bind="visible: publishedObs">
                     <i class="checkmark icon"></i> Published
                 </div>
-            </span>
-            <span class="action item" data-bind="visible: !publishedObs()">
-                <div class="orange ui label">
+                <div class="orange ui mini label" data-bind="visible: !publishedObs()">
                     <i class="warning icon"></i> Not Published
                 </div>
-            </span>
+            </h3>
+        </div>
+        <div class="fixed-header-buttons">
             <button class="ui primary small button" data-bind="click: save">Save</button>
         </div>
     </div>

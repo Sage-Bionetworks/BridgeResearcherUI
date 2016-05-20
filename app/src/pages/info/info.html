@@ -1,7 +1,10 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
-        <h3>General</h3>
+        <div class="fixed-header-heading">
+            <h3>General</h3>
+        </div>
         <div class="fixed-header-buttons">
+            <button class="ui small button" data-bind="click: publicKey">Download CMS Public Key&hellip;</button>
             <button class="ui small primary button" data-bind="click: save">Save</button>
         </div>
     </div>
@@ -29,12 +32,11 @@
                 <div class="field">
                     <label>External ID validation</label>
                     <ui-checkbox params="checkedObs: externalIdValidationEnabledObs">
-                        Enabled Bridge management of external IDs
+                        Enable Bridge management of external IDs
                     </ui-checkbox>
                 </div>
                 <div class="field">
                     <label>Minimum Supported App Versions</label>
-                    <p class="help-text">Leave blank or set to zero if you support all versions that have been released</p>
                     <div class="six fields">
                         <div class="field">
                             <label>iPhone</label>
@@ -45,9 +47,7 @@
                             <input placeholder="#" type="number" data-bind="value: minAndroidObs"/>
                         </div>
                     </div>
-                </div>
-                <div class="field">
-                    <button class="ui small button" data-bind="click: publicKey">Download CMS Public Key</button>
+                    <p class="help-text">Leave blank or set to zero if you support all versions that have been released</p>
                 </div>
             </form>
         </div>

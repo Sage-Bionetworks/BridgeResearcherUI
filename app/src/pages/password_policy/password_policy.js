@@ -19,9 +19,6 @@ module.exports = function() {
         self.study.passwordPolicy = vm.passwordPolicyObs();
 
         serverService.saveStudy(self.study)
-            .then(function(response) {
-                self.study.version = response.version;
-            })
             .then(utils.successHandler(vm, event, "Password policy has been saved."))
             .catch(utils.failureHandler(vm, event));
     };

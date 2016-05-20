@@ -67,6 +67,7 @@ module.exports = function(params) {
             .then(utils.successHandler(vm, event, "Schema has been saved."))
             .catch(utils.failureHandler(vm, event));
     };
+    
     self.addBelow = function(vm, event) {
         var index = self.itemsObs.indexOf(vm.field);
         var field = schemaUtils.newField();

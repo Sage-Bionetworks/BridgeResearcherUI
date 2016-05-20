@@ -1,9 +1,12 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
-        <h3>
-            <a href="#/participants" class="section">Participants</a>
-            <span data-bind="text: titleObs"></span>
-        </h3>
+        <div class="fixed-header-heading">
+            <div class="ui breadcrumb">
+                <a class="section" href="#/participants">Participants</a>
+                <i class="right chevron icon divider"></i>
+            </div>            
+            <h3 data-bind="text: titleObs"></h3>
+        </div>
         <div class="fixed-header-buttons">
             <button class="ui small primary button" data-bind="click: save">Save</button>
             <button class="ui small button" data-bind="click: signOutUser, visible: !isNewObs()">Sign out user</button>
@@ -23,79 +26,59 @@
                     <ui-text params="fieldObs: lastNameObs, placeholder: 'Last Name'"></ui-text>
                 </div>
             </div>
-            <div class="required field" data-bind="visible: isNewObs" id="email">
-                <label>Email</label>
-                <ui-text params="fieldObs: emailObs"></ui-text>
-            </div>
             <div class="field">
                 <label>Sharing Scope</label>
                 <select class="ui dropdown" data-bind="options: sharingScopeOptions, optionsText: 'label', 
                     optionsValue: 'value', value: sharingScopeObs"></select>
             </div>
-            <div class="field" data-bind="visible: !isNewObs()">
+            <div class="field">
                 <label>Roles</label>
-                <div class="input-field" data-bind="visible: rolesObs().length &gt; 0, text: rolesObs"></div>
-                <div class="input-field" data-bind="visible: rolesObs().length === 0"><i>No assigned roles.</i></div>
+                
+                <select multiple="" data-bind="semantic: 'multi-search-select', updateSelect: rolesObs, foreach: allRolesObs">
+                    <option data-bind="text: $data, selected: $component.rolesObs().indexOf($data) > -1"></option>
+                </select>
             </div>
         </div>
         
-        <div class="equal width fields" data-bind="visible: isNewObs">
-            <div class="required field"id="password">
+        <div class="equal width fields">
+            <div class="required field" data-bind="visible: isNewObs" id="email">
+                <label>Email</label>
+                <ui-text params="fieldObs: emailObs"></ui-text>
+            </div>
+            <div class="field" data-bind="css:{'noLeftPadding': !isNewObs()}">
+                <label>Data Groups</label>
+                <select multiple="" data-bind="semantic: 'multi-search-select', updateSelect: dataGroupsObs, foreach: allDataGroupsObs">
+                    <option data-bind="text: $data, selected: $component.dataGroupsObs().indexOf($data) > -1"></option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Languages</label>
+                <ui-text params="fieldObs: languagesObs"></ui-text>
+                <div class="help-text">
+                    For example, "en, fr"
+                </div>
+            </div>
+            <div class="field" data-bind="visible: !isNewObs()">
+                <label>Health Code
+                </label>
+                <input readonly data-bind="value: healthCodeObs"/>
+                <span class="help-text ui small red text" data-bind="visible: healthCodeObs() !== 'N/A'">
+                    Confidential. Do not redistribute.
+                </span>
+            </div>
+        </div>
+        
+        <div class="equal width fields">
+            <div class="required field" data-bind="visible: isNewObs" id="password">
                 <label>Password</label>
                 <input type="password" data-bind="textInput: passwordObs"/>
             </div>
-            <div class="field">
-                <label>Data Groups</label>
-                <select multiple="" data-bind="semantic: 'multi-search-select', updateSelect: dataGroupsObs, foreach: allDataGroupsObs">
-                    <option data-bind="text: $data, selected: $component.dataGroupsObs().indexOf($data) > -1"></option>
-                </select>
-            </div>
-            <div class="field">
-                <label>Languages</label>
-                <ui-text params="fieldObs: languagesObs"></ui-text>
-                <div class="help-text">
-                    For example, "en, fr"
-                </div>
-            </div>
-            <div class="field" data-bind="visible: !isNewObs()">
-                <label>Health Code</label>
-                <div class="input-field" data-bind="text: healthCodeObs"></div>
-                <div class="help-text ui red label" data-bind="visible: healthCodeObs() !== 'N/A'">
-                    This code is confidential. Do not redistribute.
-                </div>
-            </div>
-        </div>
-        
-        <div class="equal width fields" data-bind="visible: !isNewObs()">
-            <div class="field">
-                <label>Data Groups</label>
-                <select multiple="" data-bind="semantic: 'multi-search-select', updateSelect: dataGroupsObs, foreach: allDataGroupsObs">
-                    <option data-bind="text: $data, selected: $component.dataGroupsObs().indexOf($data) > -1"></option>
-                </select>
-            </div>
-            <div class="field">
-                <label>Languages</label>
-                <ui-text params="fieldObs: languagesObs"></ui-text>
-                <div class="help-text">
-                    For example, "en, fr"
-                </div>
-            </div>
-            <div class="field">
-                <label>Health Code</label>
-                <div class="input-field" data-bind="text: healthCodeObs"></div>
-                <div class="help-text ui red label" data-bind="visible: healthCodeObs() !== 'N/A'">
-                    This code is confidential. Do not redistribute.
-                </div>
-            </div>
-        </div>        
-        
-        <div class="equal width fields" data-bind="visible: externalIdEditableObs">
-            <div class="field" id="externalId">
+            <div class="field" id="externalId" data-bind="css:{'noLeftPadding': !isNewObs()}">
                 <label>External ID</label>
                 <ui-text params="fieldObs: externalIdObs"></ui-text>
             </div>
-            <div class="field" style="margin-bottom:2rem">
-                <label>Preferences</label>
+            <div class="field">
+                <label style="margin-bottom: .9rem">Email Preference</label>
                 <ui-checkbox params="checkedObs: notifyByEmailObs">
                     Consents to receive email from study
                 </ui-checkbox>
@@ -105,26 +88,6 @@
                 <select class="ui dropdown" data-bind="options: statusOptions, optionsText: 'label', 
                     optionsValue: 'value', value: statusObs"></select>
             </div>
-            <div class="field" data-bind="visible: isNewObs"></div>
-        </div>
-        
-        <div class="equal width fields" data-bind="visible: !externalIdEditableObs()">
-            <div class="field" id="externalId">
-                <label>External ID</label>
-                <div class="input-field" data-bind="text: externalIdObs"></div>
-            </div>
-            <div class="field" style="margin-bottom:2rem">
-                <label>Preferences</label>
-                <ui-checkbox params="checkedObs: notifyByEmailObs">
-                    Consents to receive email from study
-                </ui-checkbox>
-            </div>
-            <div class="field" data-bind="visible: !isNewObs()">
-                <label>Status</label>
-                <select class="ui dropdown" data-bind="options: statusOptions, optionsText: 'label', 
-                    optionsValue: 'value', value: statusObs"></select>
-            </div>
-            <div class="field" data-bind="visible: isNewObs"></div>
         </div>
         
         <div class="equal width fields">
@@ -136,16 +99,16 @@
             <!-- /ko -->
         </div>
         
-        <div class="equal width fields">
+        <div class="equal width fields" data-bind="visible: !isNewObs()">
             <div class="field">
                 <label>Email</label>
-                <div class="input-field">
+                <div>
                     <a data-bind="attr:{href: 'mailto:'+emailObs()}, text: emailObs"></a>
                 </div>
             </div>
             <div class="field">
                 <label>Created On</label>
-                <div class="input-field" data-bind="text: createdOnObs"></div>
+                <div data-bind="text: createdOnObs"></div>
             </div>
             <div class="field"></div>
         </div>

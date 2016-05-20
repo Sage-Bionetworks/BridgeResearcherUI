@@ -1,18 +1,20 @@
 <div class="ui small modal">
     <div class="header">
         Sign In
+        <span style="float: right" data-bind="html: titleObs"></span>
     </div>
     <div class="content">
-        <form class="ui form">
-            <div class="field">
+        <form id="signInForm" class="ui form" action="" data-bind="submit: signIn">
+            <errors></errors>
+            <div class="field" id="username">
                 <label for="username">Email address</label>
                 <input type="text" data-bind="textInput: usernameObs"/>
             </div>
-            <div class="field">
+            <div class="field" id="password">
                 <label for="password">Password</label>
                 <input type="password" data-bind="textInput: passwordObs"/>
             </div>
-            <div class="two fields">
+            <div class="two fields" data-bind="if: !isLockedObs()">
                 <div class="field">
                     <label for="environment">Environment</label>
                     <select name="environment" class="ui dropdown" data-bind="value: environmentObs,
@@ -29,7 +31,7 @@
         </form>
     </div>
     <div class="actions">
-        <button class="ui primary small button" data-bind="click: signIn">Sign In</button>
+        <button type="submit" form="signInForm" id="signInSubmit" class="ui primary small button" data-bind="click: signIn">Sign In</button>
         <button class="ui small button" data-bind="click: forgotPassword">Forgot Password</button>
     </div>
 </div>

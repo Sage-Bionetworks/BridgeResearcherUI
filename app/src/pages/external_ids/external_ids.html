@@ -1,6 +1,8 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
-        <h3>External Identifiers</h3>
+        <div class="fixed-header-heading">
+            <h3>External Identifiers</h3>
+        </div>
         <div class="fixed-header-buttons" data-bind="visible: managementEnabledObs">
             Records: <span data-bind="text: totalObs()"></span>
             <button class="ui small button" style="margin-left: 3rem" data-bind="click: openImportDialog">Import&hellip;</button>
@@ -12,10 +14,9 @@
                     <div class="item" data-bind="click: createFromNext">Assign next free ID</div>
                 </div>
             </div>
-            
         </div>
     </div>
-    <div class="empty-secondary-menu"></div>
+    <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
     <div class="ui grid">
@@ -31,6 +32,7 @@
             </div>    
             <div data-bind="visible: !managementEnabledObs()">
                 <p>External identifier management not enabled. </p>
+                <p>You can still save an external ID for any user, but the value will not be required or constrainted (and it can be changed later). </p>
                 <p>
                     <button class="ui primary small button" data-bind="click: enableManagement">Enable External ID Management</button>
                 </p>

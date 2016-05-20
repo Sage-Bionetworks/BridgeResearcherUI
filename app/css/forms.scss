@@ -35,7 +35,8 @@
     padding: 0 .5rem;
 }
 input[readonly] {
-    border:none!important;
+    border-color:transparent!important;
+    padding-left: 0rem!important;
 }
 .input-field { /* For readonly divs that need to occupy the space of an input field */
     padding: .5rem 0;
@@ -62,4 +63,7 @@ input[readonly] {
     look dumb that large. This is one attempt to rationalize it. */
 .short-input {
     width: 14rem!important;
+}
+label[for] {
+    cursor: pointer!important;
 }
