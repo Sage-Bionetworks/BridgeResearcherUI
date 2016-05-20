@@ -10,11 +10,6 @@ module.exports = function() {
     self.study = null;
     utils.observablesFor(self, fields);
     
-    function updateStudy(response) {
-        self.study.version = response.version;
-        return response;
-    }
-
     self.minAge = ko.computed(function(){
         // We want loose comparison because sometimes it's the string "121" and sometimes it's the
         // number 121. This is due to the control being bound to a range control that returns a string.
@@ -29,7 +24,6 @@ module.exports = function() {
             self.study.minAgeOfConsent = 0;
         }
         serverService.saveStudy(self.study)
-            .then(updateStudy)
             .then(utils.successHandler(self, event, "Study updated."))
             .catch(utils.failureHandler(self, event));
     };

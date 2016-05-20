@@ -35,9 +35,6 @@ module.exports = function() {
         updateMinAppVersion(self, self.minAndroidObs, "Android");
 
         serverService.saveStudy(self.study, false)
-            .then(function(response) {
-                self.study.version = response.version;
-            })
             .then(utils.successHandler(vm, event, "Study information saved."))
             .catch(utils.failureHandler(vm, event));
     };

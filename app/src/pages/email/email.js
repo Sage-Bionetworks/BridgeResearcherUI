@@ -19,21 +19,17 @@ module.exports = function() {
         self.emailStatusObs(response.status);
         return response;        
     }
-    function updateStudyVersion(response) {
-        self.study.version = response.version;
-        return response;
-    }
 
     self.save = function(vm, event) {
         utils.observablesToObject(self, self.study, fields);
         
         utils.startHandler(vm, event);
         serverService.saveStudy(self.study)
-            .then(updateStudyVersion)
             .then(checkEmailStatus)
             .then(utils.successHandler(vm, event, "Study information saved."))
             .catch(utils.failureHandler(vm, event));
     };
+    // TODO: Why is this declared here? It should only be on the page that uses it. REMOVEME.
     self.publicKey = function() {
         if (self.study) {
             root.openDialog('publickey', {study: self.study});

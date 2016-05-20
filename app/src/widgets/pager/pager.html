@@ -4,18 +4,18 @@
         <i class="search icon"></i>
     </div>
     <div class="ui small pagination menu" data-bind="visible: totalPagesObs() > 1, css:{loading:pagerLoadingObs}">
-        <a class="item" data-bind="click: firstPage, visible: currentPageObs() != 0">1</a>
-        <a class="item" data-bind="click: previousPage, visible: currentPageObs() != 0">
-            <i class="angle left icon"></i>
+        <a class="item" title="First page" data-bind="click: firstPage, visible: currentPageObs() != 0">1</a>
+        <a class="item" title="Previous page" data-bind="click: previousPage, visible: currentPageObs() != 0" style="margin:0!important">
+            <i class="chevron left icon" style="margin:0!important"></i>
         </a>
         <div class="active item">
             <div class="ui small active loader"></div>
             <span data-bind="text: currentPageObs() + 1"></span>&nbsp;of&nbsp; 
             <span data-bind="text: totalPagesObs()"></span>
         </div>
-        <a class="item" data-bind="click: nextPage, visible: currentPageObs() != (totalPagesObs()-1)">
-            <i class="angle right icon"></i>
+        <a class="item" title="Next page" data-bind="click: nextPage, visible: currentPageObs() != (totalPagesObs()-1)" style="margin:0!important">
+            <i class="chevron right icon" style="margin:0!important"></i>
         </a>
-        <a class="item" data-bind="click: lastPage, visible: currentPageObs() != (totalPagesObs()-1), text: totalPagesObs()"></a>
+        <a class="item" title="Last page" data-bind="click: lastPage, visible: currentPageObs() != (totalPagesObs()-1), text: totalPagesObs()"></a>
     </div>
 </div>

@@ -5,6 +5,7 @@
 @import "./schema.scss";
 @import "./schedules.scss";
 @import "./pager.scss";
+@import "./fixed_header.scss";
 
 /* HTML TAGS */
 html, body {
@@ -12,10 +13,9 @@ html, body {
 }
 body {
     @include flex-box(column);
+    @include transition(opacity .5s ease-in-out);
     background-color: white;
     opacity: 0.0;
-    -webkit-transition: opacity .5s ease-in-out;
-    transition: opacity .5s ease-in-out;
 }
 section {
     @include flex-box(row);
@@ -30,44 +30,6 @@ main {
     padding: 0;
     overflow-y: auto;
 }
-/* For pages that have no secondary menu of tabs at the top of the main screen. */
-.empty-secondary-menu {
-    margin-top: 1.5rem;
-    border-bottom: 2px solid rgba(34,36,38,.15);
-}
-    .fixed-header {
-        @include flex-box(column);
-        display: block;
-
-        .ui.secondary.pointing.menu {
-            margin-top: .5rem;
-        }
-    }
-        .fixed-header-title {
-            @include flex-box(row);
-            @include align-items(space-between);
-            @include justify-content(top);
-            width: 100%;
-            padding: 1.5rem 1.5rem 0 1.5rem;
-        }
-            .fixed-header-title h3 {
-                @include flex(1);
-                font-size: 1.4rem;
-                margin: .4rem 1rem 0 1rem;
-            }
-            .fixed-header-buttons {
-                margin: 0 1rem;
-            }
-        .fixed-header .section {
-            display: block;
-            font-size: 1.1rem;
-            font-weight: normal;
-        }
-        .fixed-header .section::after {
-            content: ' » ';
-            color: black;
-            width: 50%;
-        }
     .scrollbox {
         @include flex(1);
         padding: 1.5rem;
@@ -77,7 +39,7 @@ main {
 nav {
     @include flex(0 0 18rem);
     @include order(-1);
-    padding:  2rem 1rem ! important;
+    padding:  1rem ! important;
     background-color: rgba(96,134,153,.2);
 
     .title span {
@@ -110,12 +72,6 @@ header {
         padding: 1.5rem 2rem 0rem 0rem;
         color: white;
     }
-.nav-content {
-    position: absolute;
-    color: #bbb;
-    top: 4.5rem;
-    cursor: pointer!important;
-}
 .scrollbox dd {
     margin: 1rem;
 }
@@ -147,7 +103,7 @@ footer p {
     margin-right: 1rem;
 }
 .link, .inline-editor-controls a {
-    color: #009fda!important;
+    color: #4183c4!important;
     cursor: pointer;
 }
 .admin.lock.icon {
@@ -228,12 +184,9 @@ progress {
         }
 
 .modal {
-    .header {
-        padding: 1rem 1.25rem!important;
-    }
     .actions {
         text-align:left ! important;
-    }    
+    }
 }
 .identifier-emphasis {
     font-family: monospace;
@@ -241,4 +194,23 @@ progress {
     border-radius: 2px;
     background-color: white;
     padding: 0 .25rem;    
+}
+/* For forms if you hide the first div.field, there's weird padding. This removes it. 
+    Usage example: data-bind="css:{'noLeftPadding': !isNewObs()}"
+*/
+.noLeftPadding {
+    padding-left: 0!important;
+}
+
+.nav-content {
+    position: absolute;
+    right: 0rem;
+    color: #bbb;
+    cursor:pointer!important;
+}
+/* This didn't use to be misaligned, but looks wrong now. */
+.ui.compact.table {
+    .ui.checkbox {
+        vertical-align: middle;
+    }
 }

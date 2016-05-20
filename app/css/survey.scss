@@ -9,7 +9,7 @@
 
     /* container */
     @include user-select(none);
-    border: 1px solid #e5e5e5;
+    border: 1px solid #aaa;
     border-radius: 6px;
 }
     .element-callout {
@@ -18,7 +18,6 @@
         @include justify-content(space-between);
         text-align: center;
         padding: .5rem 1rem 1rem 1rem;
-        /*width: 12rem;*/
     }
         .element-callout .circular.label {
             margin-top: 1rem;
@@ -34,11 +33,7 @@
                 .item {
                     margin: 0;
                     padding: .4rem;
-                }
-                .item:hover {
-                    color: #4183c4;
-                    background-color: rgba(0,0,0,.04);
-                    border-radius:2px;
+                    cursor:pointer;
                 }
             }
 
@@ -50,11 +45,9 @@
                 }
         .element-callout-delete {
             .item {
+                cursor:pointer;
                 width:100%;
                 padding: .4rem 0!important;
-            }
-            .item:hover {
-                color: #009fda;
             }
         }
 .element-content {

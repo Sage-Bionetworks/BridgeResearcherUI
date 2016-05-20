@@ -218,6 +218,28 @@ module.exports = {
         };
     },
     /**
+     * Some APIs return an error with a simple message, but we want to display this as 
+     * if it were a global message for a form validation view (sign in, for example). This 
+     * failure handler converts the signature of the response and cleans up just as the 
+     * failure handler does.
+     * 
+     * @param actionElement - the DOM element that is currently showing a request is pendingControl.
+     *  This is necessary for forms where a submit action has triggered the request.
+     */
+    globalToFormFailureHandler: function(actionElement) {
+        return function(response) {
+            ko.postbox.publish("clearErrors");
+            var msg = response.responseJSON.message;
+            if (response.status === 412) {
+                msg = "You do not appear to be a developer, researcher, or admin.";
+            }
+            if (actionElement) {
+                actionElement.classList.remove("loading");
+            }
+            ko.postbox.publish("showErrors", {message:msg,errors:{}});            
+        }  
+    },
+    /**
      * Create an observable for each field name provided. Will create an observableArray if the notation indicates
      * such (e.g. "entries[]" rather than "entries").
      * @param vm
@@ -455,11 +477,18 @@ module.exports = {
             }
         };
     },
-    queryString: function(urlString) {
-        var href = urlString || document.location.href;
-        if (href.indexOf("?") === -1) {
-            return {};
+    atLeastOneSignedConsent: function(consentHistories) {
+        if (Object.keys(consentHistories).length === 0) {
+            return true;
         }
-        return href.split("?")[1].split("&").reduce(collectQueryPair, {});
+        // At least one consent history whose last item has not been withdrawn.
+        return Object.keys(consentHistories).some(function(guid) {
+            var history = consentHistories[guid];
+            if (history.length === 0) {
+                return true;
+            }
+            var last = history[history.length-1];
+            return (last && typeof last.withdrewOn === "undefined");
+        });
     }
 };

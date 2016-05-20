@@ -41,7 +41,6 @@ reg('schemas', './pages/schemas/schemas');
 reg('schema', './pages/schema/schema');
 reg('schema_versions', './pages/schema/schema_versions');
 reg('synapse', './pages/synapse/synapse');
-reg('monitor', './pages/monitor/monitor');
 reg('scheduleplans', './pages/scheduleplans/scheduleplans');
 reg('scheduleplan', './pages/scheduleplan/scheduleplan');
 reg('participants', './pages/participants/participants');

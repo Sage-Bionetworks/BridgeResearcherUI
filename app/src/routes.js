@@ -5,7 +5,7 @@ require('../lib/dragula.min');
 require('./bindings');
 require('../lib/jquery.scrollTo');
 require('./bindings/dragula');
-require('./registry');
+require('./components');
 var ko = require('knockout');
 require('knockout-postbox');
 var utils = require('./utils');
@@ -36,9 +36,7 @@ function guidRoute(name) {
 }
 function idRoute(name) {
     return function(id) {
-        var params = utils.queryString();
-        params.id = id;
-        root.changeView(name, params);
+        root.changeView(name, {id:id});
     };
 }
 
@@ -67,7 +65,6 @@ router.on('/schemas', routeTo('schemas'));
 router.on('/schemas/:schemaId', schemaRoute('schema'));
 router.on('/schemas/:schemaId/versions', schemaRoute('schema_versions'));
 router.on('/schemas/:schemaId/versions/:revision', schemaRoute('schema'));
-router.on('/monitor', routeTo('monitor'));
 router.on('/schedules', routeTo('schedules'));
 router.on('/scheduleplans', routeTo('scheduleplans'));
 router.on('/scheduleplans/:guid', guidRoute('scheduleplan'));
@@ -88,7 +85,3 @@ router.configure({
     ]
 });
 router.init();
-
-window.addEventListener("load", function() {
-    document.body.style.opacity = "1.0";
-}, false);

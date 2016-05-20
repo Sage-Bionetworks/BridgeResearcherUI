@@ -182,13 +182,12 @@ function del(path) {
  * @returns {Promise}
  */
 function signOut() {
-    cache.reset();
     var env = session.environment;
+    postInt(config.host[env] + config.signOut);
+    cache.reset();
     session = null;
     storeService.remove(SESSION_KEY);
-
     listeners.emit(SESSION_ENDED_EVENT_KEY);
-    postInt(config.host[env] + config.signOut);
 }
 function isSupportedUser() {
     return this.roles.some(function(role) {
@@ -241,8 +240,11 @@ module.exports = {
         return get(config.getStudyPublicKey);
     },
     saveStudy: function(study, isAdmin) {
-        var url = (isAdmin) ? config.getStudy + study.identifier : config.getCurrentStudy;
-        return post(url, study);
+        var url = (isAdmin) ? (config.getStudy + study.identifier) : config.getCurrentStudy;
+        return post(url, study).then(function(response) {
+            study.version = response.version;
+            return response;
+        });
     },
     getMostRecentStudyConsent: function(guid) {
         return get(config.subpopulations + "/" + guid + "/consents/recent");

@@ -4,16 +4,17 @@ var serverService = require('../../services/server_service');
 var root = require('../../root');
 var utils = require('../../utils');
 
+var HEADERS = [];
+var ATTRIBUTES = [];
 var TIMEOUT = 1500;
-
-var fieldHandlers = {
-    'consentHistories': function(value) {
-        var consents = [];
-        for (var prop in value) {
-            var string = value[prop].map(formatConsentRecords).join('; ');
-            consents.push(string);
-        }
-        return consents.join("; ");
+var PAGE_SIZE = 100;
+var FIELDS = Object.freeze(["firstName","lastName","email", "sharingScope", "status", "notifyByEmail", 
+    "dataGroups", "languages", "roles", "id", "healthCode", "createdOn", "consentHistories"]);
+var FIELD_FORMATTERS = {
+    'consentHistories': function(map) {
+        return Object.keys(map).map(function(guid) {
+            return map[guid].map(formatConsentRecords).join('; ');
+        }).join('; ');
     },
     'notifyByEmail': function(value) {
         return (value+'').toLowerCase();
@@ -21,50 +22,55 @@ var fieldHandlers = {
 }
 function formatConsentRecords(record) {
     var aString = record.subpopulationGuid;
-    aString += " signedOn=" + utils.formatDateTime(record.signedOn);
+    aString += " consented=" + utils.formatDateTime(record.signedOn);
     if (record.withdrewOn) {
-        aString += ", withdrewOn=" + utils.formatDateTime(record.withdrewOn);
+        aString += ", withdrew=" + utils.formatDateTime(record.withdrewOn);
     }
     return aString;
 }
-function getAttrFieldsFor(record) {
-    return Object.keys(record.attributes).sort();
-}
-function getFieldListFor(record) {
-    var fields = Object.keys(record).sort();
-    fields.splice(fields.indexOf("type"),1);
-    fields.splice(fields.indexOf("attributes"),1);
-    return fields;
-}
-function getPageOffsets(numPages, pageSize) {
+function getPageOffsets(numPages) {
     var pages = [];
     for (var i=0; i <= numPages; i++) {
-        pages.push(i*pageSize);
+        pages.push(i*PAGE_SIZE);
     }
     return pages;
 }
-function getHeaderLabels(fields, attrFields) {
-    if (attrFields.length) {
-        return fields.join("\t") + "\t" + attrFields.join("\t");
-    }
-    return fields.join("\t");
+function canExport(participant, canContactByEmail) {
+    return participant && 
+           participant.email && 
+           (!canContactByEmail || canContact(participant));
+}
+function canContact(participant) {
+    return participant.status === "enabled" && 
+           participant.notifyByEmail === true &&
+           participant.sharingScope !== "no_sharing" &&
+           utils.atLeastOneSignedConsent(participant.consentHistories);
 }
 
 module.exports = function(params) {
     var self = this;
     
-    var cancel, identifiers, progressIndex, output, fields, attrFields, errorCount;
+    serverService.getStudy().then(function(study) {
+        study.userProfileAttributes.forEach(function(attr) {
+            ATTRIBUTES.push(attr);
+        });
+        Object.freeze(ATTRIBUTES);
+        HEADERS = Object.freeze([].concat(FIELDS).concat(ATTRIBUTES).join("\t"));
+    });
+    
     var total = params.total;
-    var pageSize = 100;
-    var numPages = Math.ceil(total/pageSize);
     var searchFilter = params.searchFilter;
-    var pageOffsets = getPageOffsets(numPages, pageSize);
+    var numPages = Math.ceil(total/PAGE_SIZE);
+    var pageOffsets = getPageOffsets(numPages);
+    var cancel, identifiers, progressIndex, output, errorCount;
 
     self.enableObs = ko.observable();
     self.valueObs = ko.observable();
     self.maxObs = ko.observable();
     self.statusObs = ko.observable();
     self.percentageObs = ko.observable();
+    self.canContactByEmailObs = ko.observable(false);
+    self.searchFilterObs = ko.observable(params.searchFilter);
     
     reset();
     
@@ -75,8 +81,7 @@ module.exports = function(params) {
         doContinuePage();
     };
     self.download = function() {
-        var headers = getHeaderLabels(fields, attrFields);
-        var blob = new Blob([headers+output], {type: "text/tab-separated-values;charset=utf-8"});
+        var blob = new Blob([HEADERS+output], {type: "text/tab-separated-values;charset=utf-8"});
         saveAs.saveAs(blob, "participants-"+utils.formatISODate()+".tsv");
     };
     self.close = function(vm, event) {
@@ -91,8 +96,6 @@ module.exports = function(params) {
         progressIndex = 0;
         errorCount = 0;
         output = "";
-        fields = null;
-        attrFields = null;
         self.enableObs(false);
         self.valueObs(progressIndex);
         self.maxObs(total+numPages+1);
@@ -129,12 +132,12 @@ module.exports = function(params) {
     function doOnePage() {
         if (cancel) { return; }
         var offsetBy = pageOffsets.shift();
-        serverService.getParticipants(offsetBy, pageSize, searchFilter)
+        serverService.getParticipants(offsetBy, PAGE_SIZE, searchFilter)
             .then(doContinuePage).catch(doContinuePageError);
     }
     function doContinueFetch(response) {
         if (cancel) { return; }
-        if (response && response.email) {
+        if (canExport(response, self.canContactByEmailObs())) {
             output += "\n"+formatOneParticipant(response);
         }
         updateStatus(progressIndex++);
@@ -146,6 +149,7 @@ module.exports = function(params) {
         }
     }
     function doContinueFetchError(response) {
+        console.error(response);
         errorCount++;
         doContinueFetch(response);
     }
@@ -156,25 +160,14 @@ module.exports = function(params) {
             .then(doContinueFetch).catch(doContinueFetchError);
     }
     function formatOneParticipant(participant) {
-        if (fields === null) {
-            fields = getFieldListFor(participant);
-        }
-        if (attrFields === null) {
-            attrFields = getAttrFieldsFor(participant);    
-        }
-        var array = []
-        for (var i=0; i < fields.length; i++) {
-            var field = fields[i];
+        var array = FIELDS.map(function(field) {
+            var formatter = FIELD_FORMATTERS[field];
             var value = participant[field];
-            if (fieldHandlers[field]) {
-                array.push(fieldHandlers[field](value));
-            } else {
-                array.push(value);
-            }
-        }
-        for (var i=0; i < attrFields.length; i++) {
-            array.push(participant.attributes[attrFields[i]]);
-        }
+            return (formatter) ? formatter(value) : value;
+        });
+        ATTRIBUTES.forEach(function(field) {
+            array.push(participant.attributes[field]);
+        });
         return array.join("\t");
     }
 }

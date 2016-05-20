@@ -1,9 +1,19 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
-        <h3>
-            <a href="#/surveys" class="section">Surveys</a>
-            <span data-bind="text: nameObs">Survey Schema</span>
-        </h3>
+        <div class="fixed-header-heading">
+            <span class="section">
+                <a href="#/surveys" class="section">Surveys</a>
+            </span>
+            <h3>
+                <span data-bind="text: nameObs">Survey Schema</span>
+                <div class="green ui mini label" data-bind="visible: publishedObs">
+                    <i class="checkmark icon"></i> Published
+                </div>
+                <div class="orange ui mini label" data-bind="visible: !publishedObs()">
+                    <i class="warning icon"></i> Not Published
+                </div>
+            </h3>
+        </div>
         <div class="fixed-header-buttons"></div>
     </div>
     <survey-tabset params="selected: 'schema', viewModel: $data"></survey-tabset>
@@ -15,15 +25,15 @@
             <div class="three fields">
                 <div class="field">
                     <label>Name</label>
-                    <div data-bind="text: schemaObs().name"></div>
+                    <input readonly data-bind="textInput: schemaObs().name"/>
                 </div>
                 <div class="field">
                     <label>Schema Type</label>
-                    <div data-bind="text: schemaTypeLabel(schemaObs().schemaType)"></div>
+                    <input readonly data-bind="textInput: schemaTypeLabel(schemaObs().schemaType)"/>
                 </div>
                 <div class="field">
                     <label>Identifier</label>
-                    <div data-bind="text: schemaObs().schemaId"></div>
+                    <input readonly data-bind="textInput: schemaObs().schemaId"/>
                 </div>
             </div>
         </div>

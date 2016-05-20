@@ -3,15 +3,21 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var config = require('../../config');
 var root = require('../../root');
+var ko = require('knockout');
+require('knockout-postbox');
 
 var STUDY_KEY = 'studyKey';
 var ENVIRONMENT = 'environment';
-var fields = ['username', 'password', 'study', 'environment', 'studyOptions[]'];
+var fields = ['title', 'username', 'password', 'study', 'environment', 'studyOptions[]', 'isLocked'];
 
 function findStudyName(studies, studyIdentifier) {
-    return (studies || []).filter(function(studyOption) {
-        return (studyOption.identifier === studyIdentifier);
-    })[0].name;
+    try {
+        return (studies || []).filter(function(studyOption) {
+            return (studyOption.identifier === studyIdentifier);
+        })[0].name;
+    } catch(e) {
+        throw new Error("Study not found");
+    }
 }
 // There will be stale data in the UI if we don't reload when changing studies or environments.
 function makeReloader(studyKey, environment) {
@@ -24,19 +30,30 @@ function makeReloader(studyKey, environment) {
 module.exports = function() {
     var self = this;
 
-    var studyKey = storeService.get(STUDY_KEY) || 'api';
-    var env = storeService.get(ENVIRONMENT) || 'production';
-
     utils.observablesFor(self, fields);
+    var signInSubmit = document.querySelector("#signInSubmit");
+    
+    if (utils.isDefined(root.queryParams.study)) {
+        self.isLockedObs(true);    
+        var studyKey = root.queryParams.study;
+        var env = 'production';
+    } else {
+        self.isLockedObs(false);
+        var studyKey = storeService.get(STUDY_KEY) || 'api';
+        var env = storeService.get(ENVIRONMENT) || 'production';
+    }
     self.studyObs(studyKey);
     self.environmentOptions = config.environments;
-
+    
     self.environmentObs.subscribe(function(newValue) {
         self.studyOptionsObs({name:'Updating...',identifier:''});
         serverService.getStudyList(newValue)
             .then(function(studies){
                 self.studyOptionsObs(studies.items);
                 self.studyObs(studyKey);
+                if (self.isLockedObs()) {
+                    self.titleObs(findStudyName(self.studyOptionsObs(), studyKey))
+                }
             }).catch(utils.failureHandler(self));
     });
     self.environmentObs(env);
@@ -66,20 +83,22 @@ module.exports = function() {
         storeService.set(STUDY_KEY, studyKey);
         storeService.set(ENVIRONMENT, environment);
 
-        utils.startHandler(self, event);
+        utils.startHandler(self, {target: signInSubmit});
 
         var studyName = findStudyName(self.studyOptionsObs(), studyKey);
-        serverService.signIn(studyName, environment, {
+        
+        var credentials = {
             username: self.usernameObs(), password: self.passwordObs(), study: studyKey
-        })
-        .then(clear)
-        .then(reloadIfNeeded)
-        .then(utils.successHandler(self, event))
-        .catch(utils.failureHandler(self, event));
+        };
+        
+        serverService.signIn(studyName, environment, credentials)
+            .then(clear)
+            .then(reloadIfNeeded)
+            .then(utils.successHandler(self, {target: signInSubmit}))
+            .catch(utils.globalToFormFailureHandler(signInSubmit));
     };
 
     self.forgotPassword = function() {
         root.openDialog('forgot_password_dialog');
     };
-
 };

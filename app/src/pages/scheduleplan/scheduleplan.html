@@ -1,15 +1,20 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
-        <h3>
-            <a href="#/scheduleplans" class="section">Scheduling</a>
-            <span data-bind="visible: labelObs().length > 0, text: labelObs"></span>
-            <span data-bind="visible: labelObs().length === 0">New Schedule Plan</span>
-        </h3>
+        <div class="fixed-header-heading">
+            <div class="ui breadcrumb">
+                <a class="section" href="#/scheduleplans">Scheduling</a>
+                <i class="right chevron icon divider"></i>
+            </div>            
+            <h3>
+                <span data-bind="visible: labelObs().length > 0, text: labelObs"></span>
+                <span data-bind="visible: labelObs().length === 0">New Schedule Plan</span>
+            </h3>
+        </div>
         <div class="fixed-header-buttons">
             <button class="ui primary small button" data-bind="click: save">Save</button>
         </div>
     </div>
-    <div class="empty-secondary-menu"></div>
+    <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
     <form class="ui form">

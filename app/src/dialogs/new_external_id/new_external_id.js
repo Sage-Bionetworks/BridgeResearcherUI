@@ -13,12 +13,12 @@ module.exports = function(params) {
     }
     self.create = function(vm, event) {
         var nextId = self.identifierObs();
-        if (utils.isNotBlank(nextId)) {
-            params.vm.createFromNew(nextId);
-            root.closeDialog();
-        } else {
+        if (!utils.isNotBlank(nextId)) {
             utils.failureHandler()(new Error("You must enter an ID."));
+            return;
         }
+        params.vm.createFromNew(nextId);
+        root.closeDialog();
     }
     
 }

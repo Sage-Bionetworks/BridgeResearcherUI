@@ -1,6 +1,8 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
-        <h3>Synapse Configuration</h3>
+        <div class="fixed-header-heading">
+            <h3>Synapse Configuration</h3>
+        </div>
         <div class="fixed-header-buttons">
             <button class="ui small primary button" data-bind="click: save">Save</button>
         </div>
@@ -10,21 +12,34 @@
 <div class="scrollbox">
     <div class="ui grid">
         <div class="ten wide column">
+            <errors></errors>
             <form class="ui form">
-                <div class="six wide field">
-                    <label>Synapse Access Team ID</label>
-                    <input type="text" name="synapseDataAccessTeamId" data-bind="value: synapseDataAccessTeamIdObs"/>
-                </div>
                 <div class="six wide field">
                     <label>Synapse Project ID</label>
                     <input type="text" name="synapseProjectId" data-bind="value: synapseProjectIdObs"/>
+                    <a target="_blank" data-bind="visible: projectLinkObs, attr:{'href': projectLinkObs}">View Project on Synapse</a>
+                </div>
+                <div class="six wide field">
+                    <label>Synapse Access Team ID</label>
+                    <input type="text" name="synapseDataAccessTeamId" data-bind="value: synapseDataAccessTeamIdObs"/>
+                    <a target="_blank" data-bind="visible: teamLinkObs, attr:{'href': teamLinkObs}">View Team on Synapse</a>
+                </div>
+                <div class="field">
+                    <label>Users custom export schedule</label>
+                    <ui-checkbox params="checkedObs: usesCustomExportScheduleObs">
+                        This study has a custom export schedule set up for it
+                    </ui-checkbox>
                 </div>
             </form>
         </div>
         <div class="six wide column">
             <div class="ui message">
-                <p>Research data is exported to Synapse. These IDs are necessary for the
-                export to be successful. More information forthcoming. </p>
+                <p>Research data is exported to Synapse, a portal for researchers to manage data, collaborate with one another, 
+                    and perform data analysis. These IDs are necessary for the export to be successful. </p>
+                    
+                <p>Links lead to projects 
+                    in Synapse where this study's data is archived (Synapse credentials are separate from Bridge credentials 
+                    so you will need a Synapse account to access). </p>
             </div>
         </div>
     </div>
