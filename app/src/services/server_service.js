@@ -182,13 +182,12 @@ function del(path) {
  * @returns {Promise}
  */
 function signOut() {
-    cache.reset();
     var env = session.environment;
+    postInt(config.host[env] + config.signOut);
+    cache.reset();
     session = null;
     storeService.remove(SESSION_KEY);
-
     listeners.emit(SESSION_ENDED_EVENT_KEY);
-    postInt(config.host[env] + config.signOut);
 }
 function isSupportedUser() {
     return this.roles.some(function(role) {
