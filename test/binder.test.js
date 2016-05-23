@@ -57,11 +57,11 @@ describe("binder", function() {
         expect(vm.fieldTwoObs()).to.be.undefined;
         expect(vm.fieldThree).to.equal("somevalue");
         
-        // Now update from a model
+        // Now update from a model. If the model does not have a field, do not update it.
         binder.update()({fieldOne: 4});
         var obj = binder.persist({});
         expect(obj.fieldOne).to.equal(8);
-        expect(obj.fieldTwo).to.equal(100);
+        expect(obj.fieldTwo).to.be.undefined;
     });
     it("obs() does not update model", function() {
         var vm = {};
