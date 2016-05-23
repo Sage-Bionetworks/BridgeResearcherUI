@@ -81,7 +81,6 @@ Binder.prototype = {
                 // This should obviate the need for fn.maintainValue so many places
                 if (typeof model[field] !== "undefined") {
                     var value = info.modelTransform(model[field], context);
-                    console.debug("Updating " + field + "Obs to", value);
                     info.observable(value);
                 }
             };
@@ -106,10 +105,8 @@ Binder.prototype = {
                 var context = {oldValue: model[info.name], model: model, vm: this.vm, observer: info.observable};
                 var value = info.obsTransform(info.observable(), context);
                 if (value != null && typeof value !== "undefined") {
-                    console.debug("Updating model field to", info.name);
                     copy[info.name] = value;    
                 } else {
-                    console.debug("Removing model field ", info.name);
                     delete copy[info.name];
                 }
             }
