@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "description": "The Bridge Study Manager for the Sage Bionetworks Bridge Server",
   "main": "index.js",
+  "engine": "node 4.0.0",
   "scripts": {
     "clean": "rm -rf app/dist; mkdir app/dist",
     "start": "webpack-dev-server --content-base app",
