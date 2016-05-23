@@ -52,7 +52,6 @@ router.on('/task_identifiers', routeTo('task_identifiers'));
 router.on('/data_groups', routeTo('data_groups'));
 router.on('/ve_template', routeTo('ve_template'));
 router.on('/rp_template', routeTo('rp_template'));
-router.on('/actions', routeTo('actions'));
 router.on('/subpopulations/:guid/consents/:createdOn', surveyRoute('consent'));
 router.on('/subpopulations/:guid', guidRoute('subpopulation'));
 router.on('/subpopulations', routeTo('subpopulations'));

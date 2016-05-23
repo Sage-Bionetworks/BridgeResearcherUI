@@ -2,14 +2,16 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var root = require('../../root');
+var bind = require('../../binder');
 
 module.exports = function(propertyName) {
     return function () {
         var self = this;
-        self.study = null;
-        self.records = ko.observableArray();
-        self.addField = ko.observable("");
-        self.noChanges = ko.observable(true);
+        
+        var binder = bind(self)
+            .obs('records[]')
+            .obs('addField')
+            .obs('noChanges', true);
 
         self.keyHandler = function(view, e) {
             if (e.keyCode === 13) {
@@ -19,47 +21,43 @@ module.exports = function(propertyName) {
             return true;
         };
         self.remove = function(attribute) {
-            self.records.remove(attribute);
-            self.noChanges(false);
+            self.recordsObs.remove(attribute);
+            self.noChangesObs(false);
         };
         self.add = function() {
-            if (!self.addField()) {
+            if (!self.addFieldObs()) {
                 return root.message('warning', 'A value is required.');
             }
-            if (self.records.contains(self.addField())) {
+            if (self.recordsObs.contains(self.addFieldObs())) {
                 return root.message('warning', 'The value must be unique.');
             }
             // If it's a dataGroup entry, it has to meet some string validation criteria.
-            if (propertyName === "dataGroups" && !/^[a-zA-Z0-9_-]+$/.test(self.addField())) {
+            if (propertyName === "dataGroups" && !/^[a-zA-Z0-9_-]+$/.test(self.addFieldObs())) {
                 return root.message('warning', 'The value can only be letters, numbers, underscores and dashes.');
             }
-
-            self.records.push(self.addField());
-            self.addField("");
-            self.noChanges(false);
+            var array = self.recordsObs();
+            array.push(self.addFieldObs());
+            array.sort(utils.lowerCaseStringSorter);
+            self.recordsObs(array);
+            self.addFieldObs("");
+            self.noChangesObs(false);
         };
         self.save = function(vm, event) {
             utils.startHandler(self, event);
-            self.study[propertyName] = self.records();
+            self.study[propertyName] = self.recordsObs();
 
-/*
-            if (typeof self.study[propertyName] === "undefined" ||
-                    self.study[propertyName].length < 1) {
-                delete self.study[propertyName];
-            }*/
             serverService.saveStudy(self.study)
-                    .then(function(response) {
-                        self.noChanges(true);
-                        self.study[propertyName] = [];
-                    })
-                    .then(utils.successHandler(self, event, "Values saved."))
-                    .catch(utils.failureHandler(vm, event));
+                .then(function(response) {
+                    self.noChangesObs(true);
+                })
+                .then(utils.successHandler(self, event, "Values saved."))
+                .catch(utils.failureHandler(vm, event));
         };
 
         serverService.getStudy()
+            .then(binder.assign('study'))
             .then(function(study) {
-                self.study = study;
-                self.records.pushAll(study[propertyName]);
+                self.recordsObs.pushAll(study[propertyName].sort());
             })
             .catch(utils.failureHandler());
     };

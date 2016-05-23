@@ -1,9 +1,6 @@
-var utils = require('../../utils');
 var serverService = require('../../services/server_service');
-var ko = require('knockout');
-
-var fields = ['message', 'name', 'sponsorName', 'technicalEmail', 'supportEmail', 'consentNotificationEmail',
-    'identifier', 'strictUploadValidationEnabled', 'minIos', 'minAndroid','externalIdValidationEnabled'];
+var utils = require('../../utils');
+var bind = require('../../binder');
 
 function updateMinAppVersion(vm, obs, name) {
     var value = parseInt(obs(),10);
@@ -24,11 +21,19 @@ module.exports = function() {
     // This cannot be loaded sooner, at the top of the file. Just plain don't work. Why? WHY?!
     var root = require('../../root')
 
-    utils.observablesFor(self, fields);
+    var binder = bind(self)
+        .obs('message')
+        .obs('identifier')
+        .obs('minIos')
+        .obs('minAndroid')
+        .bind('name')
+        .bind('sponsorName')
+        .bind('strictUploadValidationEnabled')
+        .bind('externalIdValidationEnabled');
 
     self.save = function(vm, event) {
         utils.startHandler(self, event);
-        utils.observablesToObject(self, self.study, fields);
+        self.study = binder.persist(self.study);
 
         self.study.minSupportedAppVersions = {};
         updateMinAppVersion(self, self.minIosObs, "iPhone OS");
@@ -44,10 +49,11 @@ module.exports = function() {
         }
     };
 
-    serverService.getStudy().then(function(study) {
-        self.study = study;
-        utils.valuesToObservables(self, study, fields);
-        updateMinAppObservers(study, self.minIosObs, 'iPhone OS');
-        updateMinAppObservers(study, self.minAndroidObs, 'Android');
-    });
+    serverService.getStudy()
+        .then(binder.assign('study'))
+        .then(binder.update())
+        .then(function(study) {
+            updateMinAppObservers(study, self.minIosObs, 'iPhone OS');
+            updateMinAppObservers(study, self.minAndroidObs, 'Android');
+        });
 };

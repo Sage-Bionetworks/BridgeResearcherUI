@@ -2,6 +2,7 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var root = require('../../root');
+var fn = require('../../transforms');
 
 var cssClassNameForStatus = {
     'disabled': 'negative',
@@ -17,14 +18,14 @@ module.exports = function() {
 
     self.recordsObs = ko.observable("");
     self.itemsObs = ko.observableArray([]);
-    self.formatTitleCase = utils.formatTitleCase;
-    self.formatName = utils.formatName;
+    self.formatTitleCase = fn.formatTitleCase;
+    self.formatName = fn.formatName;
     self.formatDateTime = utils.formatDateTime;
     self.classNameForStatus = function(user) {
         return cssClassNameForStatus[user.status];
     };
     self.fullName = function(user) {
-        return encodeURIComponent(utils.formatName(user));
+        return encodeURIComponent(fn.formatName(user));
     };
     
     function formatCount(total) {

@@ -4,23 +4,23 @@ var utils = require('../../utils');
 
 module.exports = function() {
     var self = this;
-
     self.study = null;
-    self.subject = ko.observable("");
     self.editor = null;
+    
+    self.subjectObs = ko.observable("");
 
     self.initEditor = function(ckeditor) {
         self.editor = ckeditor;
         serverService.getStudy().then(function(study) {
             self.study = study;
-            self.subject(study.resetPasswordTemplate.subject);
+            self.subjectObs(study.resetPasswordTemplate.subject);
             self.editor.setData(study.resetPasswordTemplate.body);
         });
     };
 
     self.save = function(vm, event) {
         utils.startHandler(self, event);
-        self.study.resetPasswordTemplate.subject = self.subject();
+        self.study.resetPasswordTemplate.subject = self.subjectObs();
         self.study.resetPasswordTemplate.body = self.editor.getData();
 
         serverService.saveStudy(self.study)

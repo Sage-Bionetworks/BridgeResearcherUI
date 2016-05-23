@@ -331,9 +331,17 @@ module.exports = {
     },
     saveSchedulePlan: function(plan) {
         if (plan.guid) {
-            return post(config.schemaPlans + "/" + plan.guid, plan);
+            return post(config.schemaPlans + "/" + plan.guid, plan).then(function(newPlan) {
+                plan.guid = newPlan.guid;
+                plan.version = newPlan.version;
+                return newPlan;
+            });
         } else {
-            return post(config.schemaPlans, plan);
+            return post(config.schemaPlans, plan).then(function(newPlan) {
+                plan.guid = newPlan.guid;
+                plan.version = newPlan.version;
+                return newPlan;
+            });
         }
     },
     deleteSchedulePlan: function(guid) {
@@ -349,7 +357,10 @@ module.exports = {
         return post(config.subpopulations, subpop);
     },
     updateSubpopulation: function(subpop) {
-        return post(config.subpopulations + "/" + subpop.guid, subpop);
+        return post(config.subpopulations + "/" + subpop.guid, subpop).then(function(response) {
+            subpop.version = response.version;
+            return response;
+        });
     },
     deleteSubpopulation: function(guid) {
         return del(config.subpopulations + "/" + guid);

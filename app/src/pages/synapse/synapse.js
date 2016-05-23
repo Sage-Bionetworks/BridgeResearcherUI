@@ -1,14 +1,17 @@
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
+var bind = require('../../binder');
 var ko = require('knockout');
-var fields = ['synapseDataAccessTeamId', 'synapseProjectId', 'usesCustomExportSchedule'];
 
 var BASE = "https://www.synapse.org/#!";
 
 module.exports = function() {
     var self = this;
 
-    utils.observablesFor(self, fields);
+    var binder = bind(self)
+        .bind('synapseDataAccessTeamId')
+        .bind('synapseProjectId')
+        .bind('usesCustomExportSchedule');
 
     self.projectLinkObs = ko.computed(function() {
         var value = self.synapseProjectIdObs();
@@ -21,15 +24,14 @@ module.exports = function() {
 
     self.save = function(vm, event) {
         utils.startHandler(self, event);
-        utils.observablesToObject(self, self.study, fields);
+        self.study = binder.persist(self.study);
 
         serverService.saveStudy(self.study)
             .then(utils.successHandler(vm, event, "Synapse information saved."))
             .catch(utils.failureHandler(vm, event));
     };
 
-    serverService.getStudy().then(function(study) {
-        self.study = study;
-        utils.valuesToObservables(self, study, fields);
-    });
+    serverService.getStudy()
+        .then(binder.assign('study'))
+        .then(binder.update());
 };

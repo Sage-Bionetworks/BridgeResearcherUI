@@ -30,12 +30,15 @@ module.exports = function(params) {
             wrappedLoadingFunc();
         }
     }
-    self.pageSizeObs(pageSize);
-    self.currentPageObs(0);
-    self.totalPagesObs(0);
-    self.searchLoadingObs(false);
-    self.pagerLoadingObs(false);
-    self.top = params.top;
+    function clear() {
+        self.pageSizeObs(pageSize);
+        self.currentPageObs(0);
+        self.totalPagesObs(0);
+        self.searchLoadingObs(false);
+        self.pagerLoadingObs(false);
+        self.top = params.top;
+    }
+    clear();
     
     self.firstPage = function(vm, event) {
         currentAssignmentFilter = null;
@@ -71,7 +74,10 @@ module.exports = function(params) {
     // and below the table. The 'top' control is responsible for kicking off the 
     // first page of records.
     ko.postbox.subscribe(pageKey+'-recordsPaged', updateModel);
-    ko.postbox.subscribe(pageKey+'-refresh', wrappedLoadingFunc);
+    ko.postbox.subscribe(pageKey+'-refresh', function() {
+        clear();
+        wrappedLoadingFunc();
+    });
 
     function wrappedLoadingFunc() {
         var offsetKey = self.offsetKeyObs();

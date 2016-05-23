@@ -3,16 +3,19 @@ var utils = require('../../utils');
 var serverService = require('../../services/server_service');
 var Promise = require('es6-promise').Promise;
 var root = require('../../root');
+var bind = require('../../binder');
 
 module.exports = function(params) {
     var self = this;
 
-    self.idObs = ko.observable(params.id);
+    var binder = bind(self)
+        .obs('id', params.id)
+        .obs('consentHistory[]')
+        .obs('isNew', false)
+        .obs('title', params.name);
+
     self.isResearcher = root.isResearcher;
-    self.consentHistoryObs = ko.observableArray([]);
-    self.isNewObs = ko.observable(false);
-    self.titleObs = ko.observable(params.name);
-    
+
     serverService.getParticipant(self.idObs()).then(function(response) {
         var histories = response.consentHistories;
         

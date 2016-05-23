@@ -5,12 +5,17 @@ var serverService = require('../../../services/server_service');
 module.exports = function() {
     var self = this;
 
+    function mapKey(cacheKey) {
+        return {key: cacheKey};
+    }
+    function deleteKey(item) {
+        return serverService.deleteCacheKey(item.key);
+    }
+    
     self.itemsObs = ko.observableArray([]);
 
     self.atLeastOneChecked = function () {
-        return self.itemsObs().some(function(item) {
-            return item.checkedObs();
-        });
+        return self.itemsObs().some(utils.hasBeenChecked);
     }
 
     self.deleteCacheKeys = function(vm, event) {
@@ -23,10 +28,7 @@ module.exports = function() {
 
         if (confirm(msg)) {
             utils.startHandler(self, event);
-            var promises = deletables.map(function(item) {
-                return serverService.deleteCacheKey(item.key);
-            });
-            Promise.all(promises)
+            Promise.all(deletables.map(deleteKey))
                 .then(utils.makeTableRowHandler(vm, deletables, "#/cache"))
                 .then(utils.successHandler(vm, event, confirmMsg))
                 .catch(utils.failureHandler(vm, event));
@@ -34,9 +36,7 @@ module.exports = function() {
     }
 
     serverService.getCacheKeys().then(function(response) {
-        var items = response.map(function(cacheKey) {
-            return {key: cacheKey};
-        });
+        var items = response.map(mapKey);
         if (items.length) {
             self.itemsObs(items.sort(utils.makeFieldSorter("key")).map(utils.addCheckedObs));
         } else {

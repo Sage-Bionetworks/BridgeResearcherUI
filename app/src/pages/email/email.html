@@ -25,14 +25,14 @@
                     </div>
                     <div class="field">
                         <label>Email Verified with Amazon's Mail Service?</label>
-                        <div class="label-field-padding" data-bind="visible: emailStatusObs() == 'verified'">
+                        <div class="label-field-padding" data-bind="visible: statusObs() == 'verified'">
                             <div class="green ui label"><i class="check circle icon"></i> Verified</div>
                         </div>
-                        <div class="label-field-padding" data-bind="visible: emailStatusObs() == 'unverified'">
+                        <div class="label-field-padding" data-bind="visible: statusObs() == 'unverified'">
                             <div class="red ui label"><i class="warning sign icon"></i> Unverified</div>
                             <div class="link" data-bind="click:verifyEmail">Send verification email</div>
                         </div>
-                        <div class="label-field-padding" data-bind="visible: emailStatusObs() == 'pending'">
+                        <div class="label-field-padding" data-bind="visible: statusObs() == 'pending'">
                             <div class="orange ui label"><i class="warning sign icon"></i> Pending</div>
                             <div class="link" data-bind="click:refreshStatus">Refresh</div>
                         </div>

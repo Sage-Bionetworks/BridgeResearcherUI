@@ -14,15 +14,29 @@
         <div class="ten wide column">
             <errors></errors>
             <form class="ui form">
-                <div class="six wide field">
-                    <label>Synapse Project ID</label>
-                    <input type="text" name="synapseProjectId" data-bind="value: synapseProjectIdObs"/>
-                    <a target="_blank" data-bind="visible: projectLinkObs, attr:{'href': projectLinkObs}">View Project on Synapse</a>
+                <div class="fields">
+                    <div class="six wide field">
+                        <label>Synapse Project ID</label>
+                        <input type="text" name="synapseProjectId" data-bind="value: synapseProjectIdObs"/>
+                    </div>
+                    <div class="eight wide field">
+                        <label>&#160;</label>
+                        <div style="margin-top:1rem">
+                            <a target="_blank" data-bind="visible: projectLinkObs, attr:{'href': projectLinkObs}">View Project on Synapse</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="six wide field">
-                    <label>Synapse Access Team ID</label>
-                    <input type="text" name="synapseDataAccessTeamId" data-bind="value: synapseDataAccessTeamIdObs"/>
-                    <a target="_blank" data-bind="visible: teamLinkObs, attr:{'href': teamLinkObs}">View Team on Synapse</a>
+                <div class="fields">
+                    <div class="six wide field">
+                        <label>Synapse Access Team ID</label>
+                        <input type="text" name="synapseDataAccessTeamId" data-bind="value: synapseDataAccessTeamIdObs"/>
+                    </div>
+                    <div class="eight wide field">
+                        <label>&#160;</label>
+                        <div style="margin-top:1rem">
+                            <a target="_blank" data-bind="visible: teamLinkObs, attr:{'href': teamLinkObs}">View Team on Synapse</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="field">
                     <label>Users custom export schedule</label>

@@ -65,25 +65,31 @@ ko.bindingHandlers.semantic = {
         } else if (value === 'adjacent-popup') {
             $element.popup({inline:true});
         } else if (value === 'multi-search-select') {
-            // Every single bit of this nightmare is required on either the subpopulation or the 
-            // scheduleCriteria object to load and save properly.
-            setTimeout(function() {
-                var collectionObs = allBindings().updateSelect;
-                $element.addClass("ui fluid search dropdown").attr("multiple","true").dropdown({
-                    onAdd: function(value) {
-                        if (!collectionObs.contains(value)) {
-                            collectionObs.push(value);    
-                        }
-                    },
-                    onRemove: function(value) {
-                        collectionObs.remove(value);
+            function init() {
+                var allOptionsObs = allBindings().foreach;
+                if (allOptionsObs() && allOptionsObs().length > 0) {
+                    clearTimeout(intervalId);
+                    
+                    $element.dropdown("set selected", collectionObs());
+                    collectionObs.subscribe(function(newValue) {
+                        $element.dropdown("set selected", newValue);
+                    });
+                } else {
+                    console.log("polling");
+                }
+            }
+            var intervalId = setInterval(init, 100);
+            var collectionObs = allBindings().updateSelect;
+            $element.addClass("ui selection dropdown").dropdown({
+                onAdd: function(value) {
+                    if (!collectionObs.contains(value)) {
+                        collectionObs.push(value);    
                     }
-                });
-                $element.dropdown("set selected", collectionObs());
-                collectionObs.subscribe(function(newValue) {
-                    $element.dropdown("set selected", newValue);
-                });
-            },1);
+                },
+                onRemove: function(value) {
+                    collectionObs.remove(value);
+                }
+            });
         }
     }
 };
