@@ -1,12 +1,5 @@
 var ko = require('knockout');
 
-// TODO: The binder is not updating observables that don't have a matching property on the 
-// model object. Which *sort* of makes sense since this prevents us from having to add
-// fn.maintainValue as a transform which copies the observer's value back to itself. Probably
-// we want 1) No model property, no transformer, don't update; 2) no model property, but there's 
-// a transformer, call the transformer (which has a context with the whole model object to do 
-// whatever).
-
 function nameInspector(string) {
     var isArray = /\[\]$/.test(string);
     var name = (isArray) ? string.match(/[^\[]*/)[0] : string;
