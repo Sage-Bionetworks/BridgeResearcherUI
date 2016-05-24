@@ -74,9 +74,10 @@ function formatTitleCase(string, defaultValue) {
     return defaultValue || '';
 }
 // For particularly difficult sub-object marshalling to the model, create a callback
-// function on the observable and call that. 
+// function on the observable and call that. Also return the original value though.
 function initObsCallback(value, context) {
     context.observer.callback = utils.identity;
+    return value;
 }
 function callObsCallback(value, context) {
     return context.observer.callback();
