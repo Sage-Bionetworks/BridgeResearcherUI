@@ -1,39 +1,33 @@
-var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
-var root = require('../../root');
-
-var fields = ['message', 'name', 'sponsorName', 'technicalEmail', 
-    'supportEmail', 'consentNotificationEmail', 'identifier'];
+var bind = require('../../binder');
 
 module.exports = function() {
     var self = this;
 
-    utils.observablesFor(self, fields);
-    self.emailStatusObs = ko.observable('');
+    var binder = bind(self)
+        .obs('status','')
+        .obs('message')
+        .obs('name')
+        .obs('sponsorName')
+        .obs('identifier')
+        .bind('technicalEmail')
+        .bind('supportEmail')
+        .bind('consentNotificationEmail');
 
     function checkEmailStatus() {
-        serverService.emailStatus().then(updateEmailStatus);
+        serverService.emailStatus()
+            .then(binder.update('status'))
     }
-    function updateEmailStatus(response) {
-        self.emailStatusObs(response.status);
-        return response;        
-    }
-
+    
     self.save = function(vm, event) {
-        utils.observablesToObject(self, self.study, fields);
-        
+        self.study = binder.persist(self.study);
+
         utils.startHandler(vm, event);
         serverService.saveStudy(self.study)
             .then(checkEmailStatus)
             .then(utils.successHandler(vm, event, "Study information saved."))
             .catch(utils.failureHandler(vm, event));
-    };
-    // TODO: Why is this declared here? It should only be on the page that uses it. REMOVEME.
-    self.publicKey = function() {
-        if (self.study) {
-            root.openDialog('publickey', {study: self.study});
-        }
     };
     self.verifyEmail = function(vm, event) {
         utils.startHandler(vm, event);
@@ -44,9 +38,8 @@ module.exports = function() {
     };
     self.refreshStatus = checkEmailStatus;
 
-    serverService.getStudy().then(function(study) {
-        self.study = study;
-        utils.valuesToObservables(self, study, fields);
-        checkEmailStatus();
-    });
+    serverService.getStudy()
+        .then(binder.assign('study'))
+        .then(binder.update())
+        .then(checkEmailStatus);
 };

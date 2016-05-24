@@ -1,22 +1,21 @@
-var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
+var bind = require('../../binder');
 
 module.exports = function() {
     var self = this;
 
-    self.study = null;
-    self.passwordPolicyObs = ko.observable();
-    self.minLengthsObs = ko.observableArray([2,3,4,5,6,7,8,9,10,11,12,13,14]);
-
-    serverService.getStudy().then(function(study) {
-        self.study = study;
-        self.passwordPolicyObs(study.passwordPolicy);
-    });
+    var binder = bind(self)
+        .obs('minLengths', [2,3,4,5,6,7,8,9,10,11,12,13,14])
+        .bind('passwordPolicy');
+        
+    serverService.getStudy()
+        .then(binder.assign('study'))
+        .then(binder.update());
 
     self.save = function(vm, event) {
         utils.startHandler(vm, event);
-        self.study.passwordPolicy = vm.passwordPolicyObs();
+        self.study = binder.persist(self.study);
 
         serverService.saveStudy(self.study)
             .then(utils.successHandler(vm, event, "Password policy has been saved."))

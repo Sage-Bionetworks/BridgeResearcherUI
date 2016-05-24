@@ -3,7 +3,7 @@
         <div class="fixed-header-heading">
             <h3>External Identifiers</h3>
         </div>
-        <div class="fixed-header-buttons" data-bind="visible: managementEnabledObs">
+        <div class="fixed-header-buttons" data-bind="visible: externalIdValidationEnabledObs">
             Records: <span data-bind="text: totalObs()"></span>
             <button class="ui small button" style="margin-left: 3rem" data-bind="click: openImportDialog">Import&hellip;</button>
             <div class="primary" data-bind="semantic: 'dropdown-button'">
@@ -30,14 +30,14 @@
                     <p>Enter this ID into the app to register the device.</p>
                 </div>
             </div>    
-            <div data-bind="visible: !managementEnabledObs()">
+            <div data-bind="visible: !externalIdValidationEnabledObs()">
                 <p>External identifier management not enabled. </p>
                 <p>You can still save an external ID for any user, but the value will not be required or constrainted (and it can be changed later). </p>
                 <p>
                     <button class="ui primary small button" data-bind="click: enableManagement">Enable External ID Management</button>
                 </p>
             </div>
-            <div data-bind="visible: managementEnabledObs">
+            <div data-bind="visible: externalIdValidationEnabledObs">
                 <!-- ko component: {name:'ddb_pager', params: 
                     {loadingFunc: loadingFunc, pageKey: 'external-ids-page', top: true}
                 } --><!-- /ko -->

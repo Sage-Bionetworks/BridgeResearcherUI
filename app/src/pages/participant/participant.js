@@ -1,13 +1,8 @@
+var serverService = require('../../services/server_service');
 var ko = require('knockout');
 var utils = require('../../utils');
-var serverService = require('../../services/server_service');
-
-var fields = ['title','isNew','email','name','firstName','lastName','sharingScope','notifyByEmail',
-    'dataGroups[]','password','healthCode','allDataGroups[]','attributes[]','externalId','languages',
-    'externalIdEditable','status','createdOn','id','roles[]','allRoles[]'];
-    
-var persistedFields = ['firstName','lastName','sharingScope','notifyByEmail',
-    'dataGroups[]','email','password','languages','externalId','status','id'];
+var bind = require('../../binder');
+var fn = require('../../transforms');
 
 var OPTIONS = [
     {value: 'no_sharing', label:'No Sharing'},
@@ -20,102 +15,53 @@ var STATUS_OPTIONS = [
     {value: 'unverified', label:'Unverified'}
 ];
 var ROLES = ['Developer','Researcher','Administrator'];
-
-function formatRoles(roles) {
-    return (roles || []).map(function(role) {
-         return (role === "admin") ? "Administrator" : utils.formatTitleCase(role);
-    });
-}
-function unformatRoles(roles) {
-    return (roles || []).map(function(role) {
-         return (role === "Administrator") ? "admin" : role.toLowerCase();
-    });
-}
+var NEW_PARTICIPANT = {attributes:{}};
 
 module.exports = function(params) {
     var self = this;
-    
     var id = params.id;
-    utils.observablesFor(self, fields);
-    self.idObs(id);
-    self.healthCodeObs('N/A');
-    self.sharingScopeOptions = OPTIONS;
-    self.statusOptions = STATUS_OPTIONS;
-    self.study = null;
-    
-    if (id === "new") {
-        self.isNewObs(true);
-        self.titleObs('New participant');
-    } else {
-        self.isNewObs(false);
-        self.titleObs(params.name);
-    }
 
-    function participantFromForm() {
-        var participant = {attributes:{}};
-        utils.observablesToObject(self, participant, persistedFields);
-        
-        participant.roles = unformatRoles(self.rolesObs());
-        self.attributesObs().map(function(attr) {
-            participant.attributes[attr.key] = attr.obs();
-        });
-        // This is not currently in an editor, so we have to coerce it to the correct form.
-        if (self.languagesObs()) {
-            participant.languages = self.languagesObs().split(/\W*,\W*/);    
-        } else {
-            delete participant.languages;
-        }
-        return participant;        
-    }
-    function loadStudy(study) {
-        self.study = study;
+    var binder = bind(self)
+        .obs('title', (id === "new") ? "New participant" : params.name, fn.formatTitle)
+        .obs('isNew', (id === "new")/*, fn.maintainValue*/)
+        .obs('name', null, fn.formatName)
+        .obs('healthCode', 'N/A', fn.formatHealthCode)
+        .obs('allDataGroups[]'/*, null, fn.maintainValue*/)
+        .obs('externalIdEditable')
+        .obs('createdOn', null, utils.formatDateTime)
+        .obs('allRoles[]', ROLES/*, fn.maintainValue*/)
+        .bind('email')
+        .bind('attributes[]', [], fn.formatAttributes, fn.persistAttributes)
+        .bind('firstName')
+        .bind('lastName')
+        .bind('sharingScope')
+        .bind('notifyByEmail')
+        .bind('dataGroups[]', [])
+        .bind('password')
+        .bind('externalId', null, fn.formatExternalId)
+        .bind('languages', null, fn.formatLanguages, fn.persistLanguages)
+        .bind('status')
+        .bind('id', id)
+        .bind('roles[]', null, fn.formatRoles, fn.persistRoles);
+    
+    function initStudy(study) {
         // there's a timer in the control involved here, we need to use an observer
-        self.allDataGroupsObs(study.dataGroups);
-        self.allRolesObs(ROLES);
+        self.allDataGroupsObs(study.dataGroups || []);
         
         var attrs = self.study.userProfileAttributes.map(function(key) {
-            return {key:key, label:utils.formatTitleCase(key,''), obs:ko.observable()}; 
+            return {key:key, label:fn.formatTitleCase(key,''), obs:ko.observable()}; 
         });
         self.attributesObs(attrs);
         var shouldBeEdited = !study.externalIdValidationEnabled || self.isNewObs();
+        
+        // External ID editing is still wrong in that I can edit the ID of an existing user, 
+        // even though the codes are being managed in the study I'm looking at.
         self.externalIdEditableObs(shouldBeEdited);
     }
     function getParticipant(response) {
-        if (self.isNewObs()) {
-            return null;
-        }
-        return serverService.getParticipant(id);        
-    }
-    function updateTitle(response) {
-        self.titleObs(utils.formatName(response));
-        return response;
-    }
-    function loadParticipant(response) {
-        console.log(response);
-        if (response == null) {
-            return;
-        }
-        self.nameObs(utils.formatName(response));
-        self.firstNameObs(response.firstName);
-        self.lastNameObs(response.lastName);
-        self.externalIdObs(response.externalId);
-        self.sharingScopeObs(response.sharingScope);
-        self.notifyByEmailObs(response.notifyByEmail);
-        self.dataGroupsObs(response.dataGroups);
-        self.createdOnObs(utils.formatDateTime(response.createdOn));
-        self.emailObs(response.email);
-        self.statusObs(response.status);
-        if (self.study.healthCodeExportEnabled) {
-            self.healthCodeObs(response.healthCode);    
-        }
-        self.languagesObs(response.languages.join(", "));
-        self.rolesObs(formatRoles(response.roles));
-        self.attributesObs().map(function(attr) {
-            attr.obs(response.attributes[attr.key]);
-        });
-        if (!self.externalIdObs()) {
-            self.externalIdEditableObs(true);
-        }
+        return (self.isNewObs()) ?
+            Promise.resolve(NEW_PARTICIPANT) :
+            serverService.getParticipant(id);
     }
     function afterCreate(response) {
         var statusAfterCreate = self.study.emailVerificationEnabled ? "unverified" : "enabled";
@@ -124,6 +70,9 @@ module.exports = function(params) {
         self.idObs(response.identifier);
         return response;
     }
+    
+    self.sharingScopeOptions = OPTIONS;
+    self.statusOptions = STATUS_OPTIONS;
 
     self.signOutUser = function(vm, event) {
         utils.startHandler(vm, event);
@@ -133,10 +82,10 @@ module.exports = function(params) {
             .catch(utils.failureHandler(vm, event));
     };
     self.save = function(vm, event) {
-        var participant = participantFromForm();
+        var participant = binder.persist(NEW_PARTICIPANT);
         
         utils.startHandler(vm, event);
-        updateTitle(participant);
+        binder.update('title')(participant);
         if (self.isNewObs()) {
             serverService.createParticipant(participant)
                 .then(afterCreate)
@@ -150,8 +99,9 @@ module.exports = function(params) {
     };
     
     serverService.getStudy()
-        .then(loadStudy)
+        .then(binder.assign('study'))
+        .then(initStudy)
         .then(getParticipant)
-        .then(loadParticipant)
+        .then(binder.update())
         .catch(utils.failureHandler());
 }

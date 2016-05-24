@@ -76,31 +76,23 @@ function clearPendingControl() {
 function num(value) {
     return (typeof value !== "number") ? 0 : value;
 }
-function notBlankName(array, value) {
-    if (typeof value !== 'undefined' && value !== '<EMPTY>' && value.length > 0) {
-        array.push(value);
+function mightyMessageFinder(response) {
+    if (response.responseJSON) {
+        return response.responseJSON.message;
+    } else if (response.message) {
+        return response.message;
+    } else if (typeof response === "string") {
+        return response;
     }
 }
-function formatTitleCase(string, defaultValue) {
-    if (string) {
-        return string.split("").map(function(text, i) {
-            if (i === 0) {
-                return text.toUpperCase();
-            } else if (!/[a-zA-Z0-9]/.test(text)) {
-                return " ";
-            } else if (/[A-Z]/.test(text)) {
-                return " " + text.toLowerCase();
-            }
-            return text.toLowerCase();
-        }).join('');
+function createEmailTemplate(email, identifier) {
+    var parts = email.split("@");
+    if (parts[0].indexOf("+") > -1) {
+        parts[0] = parts[0].split("+")[0];
     }
-    return defaultValue || '';
+    return parts[0] + "+" + identifier + "@" + parts[1];
 }
-function collectQueryPair(params, pair) {
-    var nameValue = pair.split("=");
-    params[decodeURIComponent(nameValue[0])] = decodeURIComponent(nameValue[1]);
-    return params;
-}
+
 /**
  * Common utility methods for ViewModels.
  */
@@ -146,8 +138,11 @@ module.exports = {
      */
     makeFieldSorter: function(fieldName) {
         return function sorter(a,b) {
-            return a[fieldName].toLowerCase().localeCompare(b[fieldName].toLowerCase());
+            return a[fieldName].localeCompare(b[fieldName]);
         };
+    },
+    lowerCaseStringSorter: function sorter(a,b) {
+        return a.localeCompare(b);
     },
     /**
      * Combine sort functions for multi-field sorting. Takes one or more sort functions (as would be 
@@ -202,6 +197,7 @@ module.exports = {
      */
     failureHandler: function() {
         return function(response) {
+            console.error("failureHandler", response);
             clearPendingControl();
             ko.postbox.publish("clearErrors");
             if (response.status === 412) {
@@ -228,16 +224,25 @@ module.exports = {
      */
     globalToFormFailureHandler: function(actionElement) {
         return function(response) {
+            console.error("globalToFormFailureHandler", response);
             ko.postbox.publish("clearErrors");
-            var msg = response.responseJSON.message;
+            var msg = mightyMessageFinder(response);
             if (response.status === 412) {
                 msg = "You do not appear to be a developer, researcher, or admin.";
             }
             if (actionElement) {
                 actionElement.classList.remove("loading");
             }
-            ko.postbox.publish("showErrors", {message:msg,errors:{}});            
-        }  
+            ko.postbox.publish("showErrors", {message:msg,errors:{}});
+        }
+    },
+    formFailure: function(actionElement, message) {
+        console.error("formFailure", response);
+        ko.postbox.publish("clearErrors");
+        if (actionElement) {
+            actionElement.classList.remove("loading");
+        }
+        ko.postbox.publish("showErrors", {message:message,errors:{}});
     },
     /**
      * Create an observable for each field name provided. Will create an observableArray if the notation indicates
@@ -344,21 +349,6 @@ module.exports = {
         return "<i>All versions</i>";
     },
     /**
-     * label --> Label (only one word however)
-     */
-    formatTitleCase: formatTitleCase,
-    /**
-     * Format user name, removing our <EMPTY> string to work around Stormpath requirements.
-     */
-    formatName: function(person) {
-        var array = [];
-        if (person) {
-            notBlankName(array, person.firstName);
-            notBlankName(array, person.lastName);
-        }
-        return (array.length === 0) ? '—' : array.join(' ');
-    },
-    /**
      * Create a function that will remove items from a history table once we confirm they
      * are deleted. If we've deleted everything, go to the root view for this type of item.
      * This method assumes that the viewModel holds the row model in an "itemsObs" observable.
@@ -392,8 +382,8 @@ module.exports = {
         return item.checkedObs();
     },
     /**
-     * Generic handler for pages which are loading a particular entity, that attemp to
-     * deal with 404s by redirecting to a parent page.
+     * Generic handler for pages which are loading a particular entity. If the error that is returned 
+     * is a 404 it attempts to deal with it by redirecting to a parent page.
      * @param vm
      * @param message
      * @param rootPath
@@ -401,9 +391,11 @@ module.exports = {
      */
     notFoundHandler: function(vm, message, rootPath) {
         return function(response) {
-            toastr.error((message) ? message : response.statusText);
-            if (rootPath) {
+            if (rootPath && response.status === 404) {
+                toastr.error((message) ? message : response.statusText);
                 document.location = rootPath;
+            } else {
+                toastr.error(response.statusText || response.message);
             }
         };
     },
@@ -490,5 +482,13 @@ module.exports = {
             var last = history[history.length-1];
             return (last && typeof last.withdrewOn === "undefined");
         });
+    },
+    createParticipantForID: function(email, identifier) {
+        return {
+            "email": createEmailTemplate(email, identifier),
+            "password": identifier,
+            "externalId": identifier,
+            "sharingScope": "all_qualified_researchers"
+        };
     }
 };

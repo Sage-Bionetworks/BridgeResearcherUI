@@ -9,12 +9,17 @@ module.exports = function() {
 
     schemaUtils.initSchemasVM(self);
     self.itemsObs = ko.observableArray([]);
+    /*
+    function filterIosDataItems(item) {
+        return item.schemaType === "ios_data";
+    }*/
 
     serverService.getAllUploadSchemas().then(function(response) {
-        if (response.items.length) {
-            self.itemsObs(response.items.filter(function(item) {
-                return item.schemaType === "ios_data";
-            }).sort(utils.makeFieldSorter("name")));
+        var items = response.items
+                //.filter(filterIosDataItems) there are actually people using the hand-crafted survey schemas
+                .sort(utils.makeFieldSorter("name"));
+        if (items.length) {
+            self.itemsObs(items);
         } else {
             document.querySelector(".loading_status").textContent = "There are currently no upload schemas.";
         }

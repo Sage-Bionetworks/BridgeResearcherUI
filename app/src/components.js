@@ -12,7 +12,7 @@ function regt(name, path) {
 }
 function setEditor(name, template, attribute) {
     ko.components.register(name, { template: require(template+'.html'),
-        viewModel: require('./pages/set_editor/set_editor')(attribute),
+        viewModel: require('./pages/set_editors/set_editor')(attribute),
         synchronous: false
     });
 }
@@ -30,7 +30,6 @@ reg('eligibility','./pages/eligibility/eligibility');
 reg('password_policy','./pages/password_policy/password_policy');
 reg('ve_template','./pages/ve_template/ve_template');
 reg('rp_template','./pages/rp_template/rp_template');
-reg('actions','./pages/actions/actions');
 reg('subpopulations','./pages/subpopulations/subpopulations');
 reg('subpopulation','./pages/subpopulation/subpopulation');
 reg('surveys','./pages/surveys/surveys');
@@ -111,6 +110,8 @@ reg('ddb_pager', './widgets/ddb_pager/ddb_pager');
 
 /* SCHEMAS */
 reg('field_definition', './pages/schema/field_definition');
-setEditor('user_attributes', './pages/user_attributes/user_attributes', 'userProfileAttributes');
-setEditor('task_identifiers', './pages/task_identifiers/task_identifiers', 'taskIdentifiers');
-setEditor('data_groups', './pages/data_groups/data_groups', 'dataGroups');
+
+/* Set editor pages. */
+setEditor('user_attributes', './pages/set_editors/user_attributes', 'userProfileAttributes');
+setEditor('task_identifiers', './pages/set_editors/task_identifiers', 'taskIdentifiers');
+setEditor('data_groups', './pages/set_editors/data_groups', 'dataGroups');

@@ -1,32 +1,31 @@
-var ko = require('knockout');
+var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var config = require('../../config');
-var serverService = require('../../services/server_service');
-
-var fields = ['message', 'active', 'createdOn', 'historyItems[]'];
+var bind = require('../../binder');
 
 module.exports = function(params) {
     var self = this;
+    self.editor = null;
+
+    bind(self)
+        .obs('mesage')
+        .obs('active', true)
+        .obs('createdOn')
+        .obs('historyItems[]')
+        .obs('guid', params.guid)
+        .obs('name')
+        .obs('htmlUrl')
+        .obs('pdfUrl')
+        .obs('tab', 'current');
 
     // subpopulation fields
-    self.guidObs = ko.observable(params.guid);
-    self.nameObs = ko.observable();
     serverService.getSubpopulation(params.guid).then(function(subpop) {
         self.nameObs(subpop.name);
     });
-
-    utils.observablesFor(self, fields);
-    self.activeObs = ko.observable(true);
-    self.htmlUrlObs = ko.observable('');
-    self.pdfUrlObs = ko.observable('');
-    self.editor = null;
-
-    self.tabObs = ko.observable('current');
     self.tabObs.subscribe(function(value) {
         if (value === "history") {
-            serverService.getConsentHistory(params.guid).then(function(data) {
-                self.historyItemsObs(data.items);
-            });
+            serverService.getConsentHistory(params.guid)
+                .then(updateHistoryItems);
         }
     });
 
@@ -46,6 +45,10 @@ module.exports = function(params) {
         };
     })(self);
 
+    function updateHistoryItems(response) {
+        self.historyItemsObs(response.items);
+        return response;
+    }
     function loadIntoEditor(consent) {
         if (consent.documentContent.indexOf("<html") > -1) {
             var doc = consent.documentContent;
@@ -62,10 +65,13 @@ module.exports = function(params) {
         return serverService.getStudyConsent(params.guid, params.createdOn);
     }
     function saveAfterPublish(response) {
-        serverService.getConsentHistory(params.guid).then(function(data) {
-            self.historyItemsObs(data.items);
-        }).catch(utils.failureHandler());
+        serverService.getConsentHistory(params.guid)
+            .then(updateHistoryItems)
+            .catch(utils.failureHandler());
         return response;
+    }
+    function showCurrentTab() {
+        self.tabObs('current');
     }
 
     self.formatDateTime = utils.formatDateTime;
@@ -96,21 +102,16 @@ module.exports = function(params) {
     self.loadHistoryItem = function(item) {
         serverService.getStudyConsent(params.guid, item.createdOn)
             .then(loadIntoEditor)
-            .then(function() {
-                self.tabObs('current');
-            }).catch(utils.failureHandler());
+            .then(showCurrentTab)
+            .catch(utils.failureHandler());
     };
-    if (params.createdOn) {
-        serverService.getStudyConsent(params.guid, params.createdOn)
-                .then(loadIntoEditor)
-                .then(function() {self.tabObs('current');})
-                .catch(utils.failureHandler());
-    } else {
-        serverService.getMostRecentStudyConsent(params.guid)
-                .then(loadIntoEditor)
-                .then(function() {self.tabObs('current');})
-                .catch(utils.failureHandler());
-    }
+    var promise = (params.createdOn) ?
+        serverService.getStudyConsent(params.guid, params.createdOn) :
+        serverService.getMostRecentStudyConsent(params.guid);
+    promise.then(loadIntoEditor)
+            .then(showCurrentTab)
+            .catch(utils.failureHandler());
+            
     serverService.getSession().then(function(session) {
         var host = config.host[session.environment] + "/" + params.guid + "/consent.";
         host = host.replace('https','http');
