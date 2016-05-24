@@ -50,14 +50,14 @@ describe("binder", function() {
         var vm = {fieldThree: "somevalue"};
         var binder = bind(vm);
         binder.bind('fieldOne', 2, multiply);
-        binder.bind('fieldTwo', undefined, multiply);
+        binder.bind('fieldTwo');
         
         // Initial values are not formatted:
         expect(vm.fieldOneObs()).to.equal(2);
         expect(vm.fieldTwoObs()).to.be.undefined;
         expect(vm.fieldThree).to.equal("somevalue");
         
-        // Now update from a model. If the model does not have a field, do not update it.
+        // Now update from a model. If the model does not have a field and no formatter
         binder.update()({fieldOne: 4});
         var obj = binder.persist({});
         expect(obj.fieldOne).to.equal(8);
