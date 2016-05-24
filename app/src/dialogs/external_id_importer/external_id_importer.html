@@ -6,7 +6,7 @@
         <errors></errors>
         <div class="ui form">
             <div class="field">
-                <textarea data-bind="textInput:importObs"></textarea>
+                <textarea data-bind="textInput:importObs, hasFocus: selectedObs"></textarea>
             </div>
         </div>
         <progress data-bind="attr:{ value: valueObs, max: maxObs}"></progress>
@@ -14,9 +14,17 @@
             <div data-bind="text: statusObs"></div>
             <div class="progress-status-perc" data-bind="text: percentageObs"></div>
         </div>
+        <div class="field" style="margin-top:1rem">
+            <ui-checkbox params="checkedObs: createCredentialsObs">
+                Create credentials for these IDs
+            </ui-checkbox>
+            <p style="margin: .5rem 0 0 2rem"><b>Do not check this if your  
+                participants sign up with their email addresses.</b> This is only 
+                for lab studies where devices are registered using this code.</p> 
+        </div>
     </div>
     <div class="rules-actions">
-        <a class="ui primary small button" data-bind="click: doImport">Import</a>
-        <button class="ui small button" data-bind="click: close">Cancel</button>
+        <button class="ui primary small button" data-bind="click: doImport">Import</button>
+        <button class="ui small button" data-bind="click: close, text: closeTextObs"></button>
     </div>
 </div>

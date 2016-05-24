@@ -1,7 +1,7 @@
 var ko = require('knockout');
 var utils = require('../../utils');
 var serverService = require('../../services/server_service');
-var Promise = require('es6-promise').Promise;
+var Promise = require('bluebird');
 var root = require('../../root');
 var bind = require('../../binder');
 
