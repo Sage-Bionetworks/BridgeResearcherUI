@@ -1,4 +1,3 @@
-var ko = require('knockout');
 var utils = require('../../utils');
 var serverService = require('../../services/server_service');
 var Promise = require('bluebird');
@@ -8,7 +7,7 @@ var bind = require('../../binder');
 module.exports = function(params) {
     var self = this;
 
-    var binder = bind(self)
+    bind(self)
         .obs('id', params.id)
         .obs('consentHistory[]')
         .obs('isNew', false)

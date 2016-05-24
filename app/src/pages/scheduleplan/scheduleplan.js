@@ -1,4 +1,3 @@
-var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var scheduleUtils = require('./../schedule/schedule_utils');
 var utils = require('../../utils');
