@@ -7,7 +7,7 @@ module.exports = function(params) {
     var self = this;
     self.editor = null;
 
-    var binder = bind(self)
+    bind(self)
         .obs('mesage')
         .obs('active', true)
         .obs('createdOn')

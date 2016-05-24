@@ -4,8 +4,6 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var bind = require('../../binder');
 
-var fields = ['name','description','required','criteria'];
-
 function newSubpop() {
     return {'name':'','description':'','criteria':criteriaUtils.newCriteria()};
 }

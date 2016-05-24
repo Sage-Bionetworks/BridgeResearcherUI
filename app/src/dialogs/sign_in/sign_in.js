@@ -3,8 +3,6 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var config = require('../../config');
 var root = require('../../root');
-var ko = require('knockout');
-require('knockout-postbox');
 
 var STUDY_KEY = 'studyKey';
 var ENVIRONMENT = 'environment';
