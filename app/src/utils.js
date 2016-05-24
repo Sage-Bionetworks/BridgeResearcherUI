@@ -76,6 +76,23 @@ function clearPendingControl() {
 function num(value) {
     return (typeof value !== "number") ? 0 : value;
 }
+function mightyMessageFinder(response) {
+    if (response.responseJSON) {
+        return response.responseJSON.message;
+    } else if (response.message) {
+        return response.message;
+    } else if (typeof response === "string") {
+        return response;
+    }
+}
+function createEmailTemplate(email, identifier) {
+    var parts = email.split("@");
+    if (parts[0].indexOf("+") > -1) {
+        parts[0] = parts[0].split("+")[0];
+    }
+    return parts[0] + "+" + identifier + "@" + parts[1];
+}
+
 /**
  * Common utility methods for ViewModels.
  */
@@ -207,16 +224,25 @@ module.exports = {
      */
     globalToFormFailureHandler: function(actionElement) {
         return function(response) {
+            console.error("globalToFormFailureHandler", response);
             ko.postbox.publish("clearErrors");
-            var msg = response.responseJSON.message;
+            var msg = mightyMessageFinder(response);
             if (response.status === 412) {
                 msg = "You do not appear to be a developer, researcher, or admin.";
             }
             if (actionElement) {
                 actionElement.classList.remove("loading");
             }
-            ko.postbox.publish("showErrors", {message:msg,errors:{}});            
-        }  
+            ko.postbox.publish("showErrors", {message:msg,errors:{}});
+        }
+    },
+    formFailure: function(actionElement, message) {
+        console.error("formFailure", response);
+        ko.postbox.publish("clearErrors");
+        if (actionElement) {
+            actionElement.classList.remove("loading");
+        }
+        ko.postbox.publish("showErrors", {message:message,errors:{}});
     },
     /**
      * Create an observable for each field name provided. Will create an observableArray if the notation indicates
@@ -456,5 +482,13 @@ module.exports = {
             var last = history[history.length-1];
             return (last && typeof last.withdrewOn === "undefined");
         });
+    },
+    createParticipantForID: function(email, identifier) {
+        return {
+            "email": createEmailTemplate(email, identifier),
+            "password": identifier,
+            "externalId": identifier,
+            "sharingScope": "all_qualified_researchers"
+        };
     }
 };

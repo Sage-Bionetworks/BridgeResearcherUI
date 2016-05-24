@@ -2,7 +2,7 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service.js');
 var scheduleUtils = require('../schedule/schedule_utils.js');
 var utils = require('../../utils');
-var Promise = require('es6-promise').Promise;
+var Promise = require('bluebird');
 var storeService = require('../../services/store_service');
 
 var MULTI_FIELD_SORTER = utils.multiFieldSorter(

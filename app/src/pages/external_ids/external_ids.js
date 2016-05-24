@@ -32,24 +32,12 @@ module.exports = function() {
     }
     function createNewCredentials(identifier) {
         self.resultObs(identifier);
-        var participant = {
-            "email": createEmailTemplate(identifier),
-            "password": identifier,
-            "externalId": identifier,
-            "sharingScope": "all_qualified_researchers"
-        };
+        var participant = utils.createParticipantForID(self.study.supportEmail, identifier);
         return serverService.createParticipant(participant);
     }
     function updatePageWithResult() {
         self.showResultsObs(true);
         ko.postbox.publish('external-ids-page-refresh');
-    }
-    function createEmailTemplate(identifier) {
-        var parts = self.study.supportEmail.split("@");
-        if (parts[0].indexOf("+") > -1) {
-            parts[0] = parts[0].split("+")[0];
-        }
-        return parts[0] + "+" + identifier + "@" + parts[1];
     }
     function showManagementEnabled() {
         self.externalIdValidationEnabledObs(true);
@@ -69,11 +57,6 @@ module.exports = function() {
     self.openImportDialog = function(vm, event) {
         self.showResultsObs(false);
         root.openDialog('external_id_importer', {vm: self});
-    };
-    self.closeImportDialog = function() {
-        root.closeDialog();
-        ko.postbox.publish('external-ids-page-refresh');
-        utils.successHandler(self, {}, "Identifiers imported.")();
     };
     self.enableManagement = function(vm, event) {
         if (self.study != null) {

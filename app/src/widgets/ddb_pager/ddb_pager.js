@@ -20,7 +20,7 @@ module.exports = function(params) {
     var loadingFunc = params.loadingFunc;
     var pageKey = params.pageKey;
     var currentAssignmentFilter = null;
-    
+    self.top = params.top;
     utils.observablesFor(self, FIELDS);
     
     self.doSearch = function(vm, event) {
@@ -30,15 +30,6 @@ module.exports = function(params) {
             wrappedLoadingFunc();
         }
     }
-    function clear() {
-        self.pageSizeObs(pageSize);
-        self.currentPageObs(0);
-        self.totalPagesObs(0);
-        self.searchLoadingObs(false);
-        self.pagerLoadingObs(false);
-        self.top = params.top;
-    }
-    clear();
     
     self.firstPage = function(vm, event) {
         currentAssignmentFilter = null;
@@ -74,10 +65,7 @@ module.exports = function(params) {
     // and below the table. The 'top' control is responsible for kicking off the 
     // first page of records.
     ko.postbox.subscribe(pageKey+'-recordsPaged', updateModel);
-    ko.postbox.subscribe(pageKey+'-refresh', function() {
-        clear();
-        wrappedLoadingFunc();
-    });
+    ko.postbox.subscribe(pageKey+'-refresh', self.firstPage);
 
     function wrappedLoadingFunc() {
         var offsetKey = self.offsetKeyObs();
@@ -107,7 +95,7 @@ module.exports = function(params) {
         self.totalPagesObs( Math.ceil(response.total/response.pageSize) );
     }
     if (params.top) {
-        wrappedLoadingFunc();
+        self.firstPage();
     }
     // why. why? why?!?!?!?!?!?!?!?
     document.querySelector("#assignEither").checked = true;

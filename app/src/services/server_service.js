@@ -10,7 +10,7 @@ var EventEmitter = require('../events');
 var storeService = require('./store_service');
 var config = require('../config');
 var utils = require("../utils");
-var Promise = require('es6-promise').Promise;
+var Promise = require('bluebird');
 
 var SESSION_KEY = 'session';
 var SESSION_STARTED_EVENT_KEY = 'sessionStarted';
@@ -202,6 +202,10 @@ function query(object) {
     }).join("&");
     return (string) ? ("?"+string) : "";
 }
+function resetCache(response) {
+    cache.reset();
+    return response;
+}
 
 module.exports = {
     isAuthenticated: function() {
@@ -387,20 +391,10 @@ module.exports = {
         return get(config.participants+"/"+id);
     },
     createParticipant: function(participant) {
-        return post(config.participants, participant)
-            .then(function(response) {
-                // This can change many different pages, clear entire cache for now
-                cache.reset();
-                return response;
-            });  
+        return post(config.participants, participant).then(resetCache);
     },
     updateParticipant: function(participant) {
-        return post(config.participants+"/"+participant.id, participant)
-            .then(function(response) {
-                // This can change many different pages, clear entire cache for now.
-                cache.reset();
-                return response;
-            });  
+        return post(config.participants+"/"+participant.id, participant).then(resetCache);
     },
     signOutUser: function(id) {
         return post(config.participants+"/"+id+"/signOut");  

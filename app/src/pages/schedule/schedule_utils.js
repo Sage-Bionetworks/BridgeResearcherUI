@@ -4,7 +4,7 @@ var criteriaUtils = require('../../criteria_utils');
 var optionsService = require('./../../services/options_service');
 var activitiesObs = ko.observableArray([]);
 var activityOptionsLabel = utils.makeOptionLabelFinder(activitiesObs);
-var Promise = require('es6-promise').Promise;
+var Promise = require('bluebird');
 //optionsService.getActivityOptions().then(activitiesObs);
 
 var surveysOptionsObs = ko.observableArray([]);

@@ -14,12 +14,12 @@
   "author": "Bridge Server Team <bridgeit@sagebase.org>",
   "license": "MIT",
   "devDependencies": {
+    "bluebird": "^3.4.0",
     "chai": "^3.5.0",
     "css-loader": "^0.12.1",
     "director": "^1.2.8",
     "dom-autoscroller": "^1.2.1",
     "dragula": "^3.6.3",
-    "es6-promise": "^3.0.2",
     "html-loader": "^0.3.0",
     "jquery": "^2.1.4",
     "knockout": "^3.4.0",
