@@ -3,10 +3,10 @@ var bind = require('../app/src/binder');
 
 describe("binder", function() {
     function multiply(value) {
-        return (value == null || typeof value === "undefined") ? 100 : (value * 2);
+        return value * 2;
     }
     function bang(value) {
-        return (value == null || typeof value === "undefined") ? "" : value + "!";
+        return value + "!"
     }
     
     it("can instantiate a binder object", function() {
@@ -19,17 +19,15 @@ describe("binder", function() {
         var vm = {};
         var binder = bind(vm);
         
-        binder.obs('field1')
-            .obs('field2')
-            .obs('field3[]');
+        binder.obs('any')
+            .obs('array[]');
             
-        expect(vm.field1Obs).to.be.instanceof(Function);
-        expect(vm.field2Obs).to.be.instanceof(Function);
-        expect(vm.field3Obs).to.be.instanceof(Function);
-        expect(vm.field3Obs.push).to.be.defined;
+        expect(vm.anyObs).to.be.instanceof(Function);
+        expect(vm.arrayObs).to.be.instanceof(Function);
+        expect(vm.arrayObs.push).to.be.defined;
         
-        vm.field1Obs("test");
-        expect(vm.field1Obs()).to.equal("test");
+        vm.anyObs("test");
+        expect(vm.anyObs()).to.equal("test");
     });
     it("obs() with default values", function() {
         var vm = {};
@@ -38,51 +36,85 @@ describe("binder", function() {
         binder.obs('fieldTwo', 0);
         binder.obs('fieldThree', null);
         binder.obs('fieldFour', undefined);
-        
+
         expect(vm.fieldOneObs()).to.equal(false);
         expect(vm.fieldTwoObs()).to.equal(0);
         expect(vm.fieldThreeObs()).to.equal(null);
         expect(vm.fieldFourObs()).to.equal(undefined);
     });
-    it("obs() with formatted values", function() {
-        // TODO: This is now testing bind, and the fact that init values are not
-        // formatted before they are used. Break up into separate tests.
-        var vm = {fieldThree: "somevalue"};
-        var binder = bind(vm);
-        binder.bind('fieldOne', 2, multiply);
-        binder.bind('fieldTwo');
-        
-        // Initial values are not formatted:
-        expect(vm.fieldOneObs()).to.equal(2);
-        expect(vm.fieldTwoObs()).to.be.undefined;
-        expect(vm.fieldThree).to.equal("somevalue");
-        
-        // Now update from a model. If the model does not have a field and no formatter
-        binder.update()({fieldOne: 4});
-        var obj = binder.persist({});
-        expect(obj.fieldOne).to.equal(8);
-        expect(obj.fieldTwo).to.be.undefined;
-    });
-    it("obs() does not update model", function() {
+    it("obs() with observer transform doesn't apply transform to default value", function() {
         var vm = {};
         var binder = bind(vm);
-         
-        binder.obs('fieldOne', 2);
-        binder.obs('fieldTwo', 3);
+        binder.obs("any", 2, multiply);
         
-        var results = binder.persist({fieldOne: 10, fieldTwo: 20});
-        expect(results.fieldOne).to.equal(10);
-        expect(results.fieldTwo).to.equal(20);
+        expect(vm.anyObs()).to.equal(2);
     });
-    it("bind() updates model with a formatted value", function() {
+    it("obs() with observer transform applies transform on model-based update", function() {
         var vm = {};
         var binder = bind(vm);
+        binder.obs("any", 2, multiply);
         
-        binder.bind('fieldOne', 2, null, bang);
-        
-        var results = binder.persist({});
-        expect(results.fieldOne).to.equal("2!");
+        binder.update()({any: 4});
+        expect(vm.anyObs()).to.equal(8);
     });
+    it("obs() without transform does not update model", function() {
+        var vm = {};
+        var binder = bind(vm);
+        binder.obs("any", 2);
+        
+        var result = binder.persist({});
+        expect(result.any).to.be.undefined;
+    });
+    it("obs() with model transform does not update model", function() {
+        var vm = {};
+        var binder = bind(vm);
+        binder.obs("any", 2, multiply, bang);
+        
+        var result = binder.persist({});
+        expect(result.any).to.be.undefined;
+    });
+    
+    
+     it("bind() with observer transform doesn't apply transform to default value", function() {
+        var vm = {};
+        var binder = bind(vm);
+        binder.bind("any", 2, multiply);
+        
+        expect(vm.anyObs()).to.equal(2);
+    });
+    it("bind() with observer transform applies transform on model-based update", function() {
+        var vm = {};
+        var binder = bind(vm);
+        binder.bind("any", 2, multiply);
+        
+        binder.update()({any: 4});
+        expect(vm.anyObs()).to.equal(8);
+    });
+    it("obs() without transform updates model", function() {
+        var vm = {};
+        var binder = bind(vm);
+        binder.bind("any", 2);
+        
+        var result = binder.persist({});
+        expect(result.any).to.equal(2);
+    });
+    it("bind() with model transform updates model", function() {
+        var vm = {};
+        var binder = bind(vm);
+        binder.bind("any", 2, multiply, bang);
+        
+        var result = binder.persist({});
+        expect(result.any).to.equal("2!");
+    });   
+    it("bind() with both transforms works", function() {
+        var vm = {};
+        var binder = bind(vm);
+        binder.bind("any", 2, multiply, bang);
+        binder.update()({'any':4})
+        
+        var result = binder.persist({});
+        expect(result.any).to.equal("8!");
+    });   
     it("mixes obs() and bind() correctly", function() {
         var vm = {};
         var binder = bind(vm);
@@ -98,6 +130,31 @@ describe("binder", function() {
         
     });
     it("provides a context on processing value to observable", function() {
+        var vm = {};
+        var binder = bind(vm);
+        var model = {any: 4};
+        var updateModel = {any: 3};
+        var obsTransformContext = null;
+        var modelTransformContext = null;
         
+        binder.bind('any', 2, function(value, context) {
+            obsTransformContext = context;
+        }, function(value, context) {
+            modelTransformContext = context;
+        });
+        binder.update()(model);
+        binder.persist(updateModel);
+        
+        expect(obsTransformContext).to.not.be.null;
+        expect(obsTransformContext.oldValue).to.equal(2);
+        expect(obsTransformContext.model).to.equal(model);
+        expect(obsTransformContext.vm).to.equal(binder.vm);
+        expect(obsTransformContext.observer).to.be.instanceof(Function);
+        
+        expect(modelTransformContext).to.not.be.null;
+        expect(modelTransformContext.oldValue).to.equal(3);
+        expect(modelTransformContext.model).to.equal(updateModel);
+        expect(modelTransformContext.vm).to.equal(binder.vm);
+        expect(modelTransformContext.observer).to.be.instanceof(Function);
     });
 });
