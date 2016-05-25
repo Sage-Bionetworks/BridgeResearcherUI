@@ -74,9 +74,8 @@ Binder.prototype = {
      *      - observer - the observable instance
      */
     update: function() {
-        if (arguments.length > 0 && typeof arguments[0] !== 'string') {
-            throw new Error("binder.update() returns function for updating, do not call directly with a model object.");
-        }
+        console.assert(arguments.length === 0 || typeof arguments[0] === 'string',
+            "binder.update() returns function for updating, do not call directly with a model object.");
         var fields = (arguments.length > 0) ? arguments : Object.keys(this.fields);
         return function(model) {
             for (var i=0; i < fields.length; i++) {
@@ -106,7 +105,8 @@ Binder.prototype = {
      *  - value (the value of the observable)
      *  - context - a context with these properties:
      *      - oldValue - the current value on the model
-     *      - model - the whole model object being updated (not the copy being updated!)
+     *      - copy - the whole model object being updated (not the copy being updated!)
+     *      - model - the original model object being updated
      *      - vm - the viewModel
      *      - observer - the observer
      */
@@ -115,7 +115,7 @@ Binder.prototype = {
         Object.keys(this.fields).forEach(function(field) {
             var info = this.fields[field];
             if (info.bind) {
-                var context = {oldValue: model[info.name], model: model, vm: this.vm, observer: info.observable};
+                var context = {oldValue: model[info.name], model: model, copy: copy, vm: this.vm, observer: info.observable};
                 var value = info.obsTransform(info.observable(), context);
                 if (value != null && typeof value !== "undefined") {
                     copy[info.name] = value;    
@@ -127,6 +127,7 @@ Binder.prototype = {
         return copy;
     },
     assign: function(field) {
+        console.assert(typeof field === 'string', 'string field value must be supplied');
         return function(model) {
             return this.vm[field] = model;
         }.bind(this);

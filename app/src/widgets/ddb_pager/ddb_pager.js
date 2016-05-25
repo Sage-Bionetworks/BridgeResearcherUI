@@ -1,10 +1,8 @@
 var ko = require('knockout');
 require('knockout-postbox');
 var utils = require('../../utils');
+var bind = require('../../binder');
 
-var FIELDS = ['idFilter','offsetKey','pageKey','pageSize','totalRecords',
-    'currentPage','totalPages','searchLoading','pagerLoading'];
-    
 var pageSize = 25;
 
 /**
@@ -21,7 +19,17 @@ module.exports = function(params) {
     var pageKey = params.pageKey;
     var currentAssignmentFilter = null;
     self.top = params.top;
-    utils.observablesFor(self, FIELDS);
+    
+    bind(self)
+        .obs('idFilter')
+        .obs('offsetKey')
+        .obs('pageKey')
+        .obs('pageSize')
+        .obs('totalRecords')
+        .obs('currentPage')
+        .obs('totalPages')
+        .obs('searchLoading')
+        .obs('pagerLoading');
     
     self.doSearch = function(vm, event) {
         if (event.keyCode === 13) {
