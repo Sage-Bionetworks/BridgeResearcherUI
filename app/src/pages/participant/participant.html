@@ -76,7 +76,7 @@
             </div>
             <div class="field" id="externalId" data-bind="css:{'noLeftPadding': !isNewObs()}">
                 <label>External ID</label>
-                <ui-text params="fieldObs: externalIdObs"></ui-text>
+                <input type="text" class="editor" data-bind="textInput: externalIdObs, enable: externalIdEditableObs"/>
             </div>
             <div class="field">
                 <label style="margin-bottom: .9rem">Email Preference</label>

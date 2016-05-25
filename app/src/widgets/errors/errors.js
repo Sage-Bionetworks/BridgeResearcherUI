@@ -24,7 +24,7 @@ module.exports = function() {
     self.displayObs = ko.computed(function() {
         return self.errorsObs().length > 0;
     });
-
+    
     ko.postbox.subscribe("showErrors", function(payload) {
         if (payload.message && typeof payload.errors === "undefined") {
             toastr.error(payload.message);

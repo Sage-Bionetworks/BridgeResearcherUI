@@ -1,9 +1,8 @@
 var ko = require('knockout');
 require('knockout-postbox');
 var utils = require('../../utils');
+var bind = require('../../binder');
 
-var FIELDS = ['filterBox','offsetBy','pageSize','totalRecords','totalPages','currentPage',
-    'searchLoading','pagerLoading'];
 var pageSize = 25;
 
 /**
@@ -16,19 +15,20 @@ var pageSize = 25;
  */
 module.exports = function(params) {
     var self = this;
+    self.top = params.top;
     var loadingFunc = params.loadingFunc;
-
     var pageKey = params.pageKey;
     var offsetBy = params.offsetBy || 0;
     
-    utils.observablesFor(self, FIELDS);
-    self.offsetByObs(offsetBy);
-    self.pageSizeObs(pageSize);
-    self.filterBoxObs('');
-    self.currentPageObs(Math.round(offsetBy/pageSize));
-    self.searchLoadingObs(false);
-    self.pagerLoadingObs(false);
-    self.top = params.top;
+    bind(self)
+        .obs('filterBox', '')
+        .obs('offsetBy', offsetBy)
+        .obs('pageSize', pageSize)
+        .obs('totalRecords')
+        .obs('totalPages')
+        .obs('currentPage', Math.round(offsetBy/pageSize))
+        .obs('searchLoading', false)
+        .obs('pagerLoading', false);
     
     self.doSearch = function(vm, event) {
         if (event.keyCode === 13) {

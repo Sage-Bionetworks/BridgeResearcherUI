@@ -12,14 +12,18 @@ function formatRoles(roles) {
 }
 function persistRoles(roles) {
     return (roles || []).map(function(role) {
-        return (role === "Administrator") ? "admin" : role.toLowerCase();
+        return (role === "Administrator") ? "admin" : role.toLowerCase().replace(" ","_");
     });
 }
 function formatLanguages(value) {
-    return (value) ? value.join(", ") : null;
+    return (value) ? value.join(", ") : '';
 }
 function persistLanguages(value) {
-    return (value) ? value.split(/\W*,\W*/) : null;
+    return (value) ? value.split(/\W*,\W*/).map(function(value) {
+        return value.trim(); 
+    }).filter(function(value) {
+        return value.length > 0;
+    }) : null;
 }
 function persistAttributes(value) {
     return value.reduce(function(map, value) {
@@ -40,9 +44,6 @@ function formatName(value) {
     }
     return (array.length === 0) ? '—' : array.join(' ');
 }
-function maintainValue(value, context) {
-    return (typeof value !== "undefined") ? value : context.oldValue;
-}
 function formatAttributes(value, context) {
     context.vm.attributesObs().map(function(attr) {
         attr.obs(value[attr.key]);
@@ -51,12 +52,6 @@ function formatAttributes(value, context) {
 }
 function formatHealthCode(value, context) {
     return (context.vm.study.healthCodeExportEnabled) ? value : 'N/A';
-}
-function formatExternalId(value, context) {
-    if (!value) {
-        context.vm.externalIdEditableObs(true);
-    }
-    return value;
 }
 function formatTitleCase(string, defaultValue) {
     if (string) {
@@ -73,29 +68,20 @@ function formatTitleCase(string, defaultValue) {
     }
     return defaultValue || '';
 }
-// For particularly difficult sub-object marshalling to the model, create a callback
-// function on the observable and call that. Also return the original value though.
-function initObsCallback(value, context) {
-    context.observer.callback = utils.identity;
-    return value;
-}
 function callObsCallback(value, context) {
     return context.observer.callback();
 }
 
 module.exports = {
     formatAttributes: formatAttributes,
-    formatExternalId: formatExternalId,
     formatHealthCode: formatHealthCode,
     formatLanguages: formatLanguages,
     formatName: formatName,
     formatRoles: formatRoles,
     formatTitle: formatTitle,
     formatTitleCase: formatTitleCase,
-    maintainValue: maintainValue,
     persistAttributes: persistAttributes,
     persistLanguages: persistLanguages,
     persistRoles: persistRoles,
-    initObsCallback: initObsCallback,
     callObsCallback: callObsCallback
 }

@@ -3,27 +3,58 @@ var serverService = require('../../services/server_service');
 var storeService = require('../../services/store_service');
 var config = require('../../config');
 var root = require('../../root');
+var bind = require('../../binder');
 
-var fields = ['email', 'study', 'environment', 'studyOptions[]'];
+function findStudyName(studies, studyIdentifier) {
+    try {
+        return (studies || []).filter(function(studyOption) {
+            return (studyOption.identifier === studyIdentifier);
+        })[0].name;
+    } catch(e) {
+        throw new Error("Study not found");
+    }
+}
 
 module.exports = function() {
     var self = this;
-
-    var study = storeService.get('studyKey') || 'api';
-    var env = storeService.get('environment') || 'production';
-
-    utils.observablesFor(self, fields);
-    self.studyObs(study);
+    var isLocked = utils.isDefined(root.queryParams.study);
+    var resetSubmit = document.querySelector("#resetSubmit");
+    
+    var studyKey, env;    
+    if (isLocked) {
+        studyKey = root.queryParams.study;
+        env = 'production';
+    } else {
+        studyKey = storeService.get('studyKey') || 'api';
+        env = storeService.get('environment') || 'production';
+    }
+    bind(self)
+        .obs('email')
+        .obs('title')
+        .obs('study', studyKey)
+        .obs('environment', env)
+        .obs('studyOptions[]')
+        .obs('isLocked', isLocked);
 
     self.environmentOptions = config.environments;
     self.environmentObs.subscribe(function(newValue) {
         self.studyOptionsObs({name:'Updating...',identifier:''});
-        serverService.getStudyList(newValue)
-                .then(function(studies){
-                    self.studyOptionsObs(studies.items);
-                }).catch(utils.failureHandler(self));
+        loadStudyList(newValue);
     });
-    self.environmentObs(env);
+    loadStudyList(env);
+    
+    function loadStudies(studies){
+        self.studyOptionsObs(studies.items);
+        self.studyObs(studyKey);
+        if (self.isLockedObs()) {
+            self.titleObs(findStudyName(self.studyOptionsObs(), studyKey))
+        }
+    }
+    
+    function loadStudyList(newValue) {
+        serverService.getStudyList(newValue)
+            .then(loadStudies).catch(utils.failureHandler(self));
+    }
 
     self.sendResetPasswordRequest = function(vm, event) {
         if (self.emailObs() === "") {
@@ -41,7 +72,8 @@ module.exports = function() {
             root.openDialog('sign_in_dialog');
         })
         .then(utils.successHandler(self, event, "An email has been sent to that address with instructions on changing your password."))
-        .catch(utils.failureHandler(self, event));
+        .catch(utils.globalToFormFailureHandler(resetSubmit));
+        //.catch(utils.failureHandler(self, event));
     };
     self.cancel = function() {
         root.openDialog('sign_in_dialog');

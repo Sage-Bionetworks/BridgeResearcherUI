@@ -14,7 +14,7 @@ var STATUS_OPTIONS = [
     {value: 'disabled', label:'Disabled'},
     {value: 'unverified', label:'Unverified'}
 ];
-var ROLES = ['Developer','Researcher','Administrator'];
+var ROLES = ["Developer", "Researcher", "Administrator", "Worker"]
 var NEW_PARTICIPANT = {attributes:{}};
 
 module.exports = function(params) {
@@ -23,13 +23,13 @@ module.exports = function(params) {
 
     var binder = bind(self)
         .obs('title', (id === "new") ? "New participant" : params.name, fn.formatTitle)
-        .obs('isNew', (id === "new")/*, fn.maintainValue*/)
+        .obs('isNew', (id === "new"))
         .obs('name', null, fn.formatName)
         .obs('healthCode', 'N/A', fn.formatHealthCode)
-        .obs('allDataGroups[]'/*, null, fn.maintainValue*/)
+        .obs('allDataGroups[]')
         .obs('externalIdEditable')
         .obs('createdOn', null, utils.formatDateTime)
-        .obs('allRoles[]', ROLES/*, fn.maintainValue*/)
+        .obs('allRoles[]', ROLES)
         .bind('email')
         .bind('attributes[]', [], fn.formatAttributes, fn.persistAttributes)
         .bind('firstName')
@@ -38,7 +38,7 @@ module.exports = function(params) {
         .bind('notifyByEmail')
         .bind('dataGroups[]', [])
         .bind('password')
-        .bind('externalId', null, fn.formatExternalId)
+        .bind('externalId')
         .bind('languages', null, fn.formatLanguages, fn.persistLanguages)
         .bind('status')
         .bind('id', id)
@@ -53,7 +53,7 @@ module.exports = function(params) {
         });
         self.attributesObs(attrs);
         var shouldBeEdited = !study.externalIdValidationEnabled || self.isNewObs();
-        
+        console.log("shouldBeEdited", shouldBeEdited);
         // External ID editing is still wrong in that I can edit the ID of an existing user, 
         // even though the codes are being managed in the study I'm looking at.
         self.externalIdEditableObs(shouldBeEdited);
@@ -83,7 +83,7 @@ module.exports = function(params) {
     };
     self.save = function(vm, event) {
         var participant = binder.persist(NEW_PARTICIPANT);
-        
+
         utils.startHandler(vm, event);
         binder.update('title')(participant);
         if (self.isNewObs()) {

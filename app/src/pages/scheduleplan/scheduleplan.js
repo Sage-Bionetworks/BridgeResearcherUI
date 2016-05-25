@@ -15,12 +15,13 @@ module.exports = function(params) {
     var binder = bind(self)
         // The callback function will be called when saving the schedule plan; the strategy 
         // implementation must implement this callback to return a strategy object.
-        .bind('strategy', null, fn.initObsCallback, fn.callObsCallback)
+        .bind('strategy', null, null, fn.callObsCallback)
         .bind('label', '')
         .bind('minAppVersion', '')
         .bind('maxAppVersion', '')
         .obs('schedulePlanType', 'SimpleScheduleStrategy')
 
+    self.strategyObs.callback = utils.identity;
     // Fields for this form
     self.schedulePlanTypeOptions = scheduleUtils.TYPE_OPTIONS;
     self.schedulePlanTypeLabel = utils.makeOptionLabelFinder(scheduleUtils.TYPE_OPTIONS);
