@@ -24,12 +24,8 @@
             }
         } -->
         <!-- /ko -->
-        <fieldset class="schedule-fieldset">
-            <legend class="schedule-legend">
-                <h4>Schedule</h4>
-            </legend>
-            <div data-bind="component: {name: 'schedule', params: {scheduleObs: $data.scheduleObs, collectionName: 'scheduleCriteria'+$index()+'_'}}"></div>
-        </fieldset>
+        <h4 style="margin-top:0">Schedule</h4>
+        <div data-bind="component: {name: 'schedule', params: {scheduleObs: $data.scheduleObs, collectionName: 'scheduleCriteria'+$index()+'_'}}"></div>
     </fieldset>
 </form>
 <div class="ui form">

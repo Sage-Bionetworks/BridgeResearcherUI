@@ -14,9 +14,9 @@ may vary from these percentages due to random assignment). Percentages for all g
         <div class="two fields">
             <div class="field">
                 <label>Percentage of users to receive this schedule</label>
-                <div style="width:10rem">
+                <div>
+                    <span class="ui large label" data-bind="text: $data.percentLabel"></span>
                     <input type="range" min="1" max="100" data-bind="value: $data.percentageObs, valueUpdate: 'input'"/>
-                    <div class="ui large label" data-bind="text: $data.percentLabel"></div>
                 </div>
             </div>
             <div class="field schedulegroup-field-delete">
@@ -25,14 +25,11 @@ may vary from these percentages due to random assignment). Percentages for all g
                 </a>
             </div>
         </div>
-        <fieldset class="schedule-fieldset">
-            <legend class="schedule-legend">
-                <h4>Schedule</h4>
-            </legend>
-            <div data-bind="component: {name: 'schedule', params: {
-                scheduleObs: $data.scheduleObs, collectionName: 'scheduleGroups'+$index()+'_'
-            }}"></div>
-        </fieldset>
+        
+        <h4 style="margin-top:0">Schedule</h4>
+        <div data-bind="component: {name: 'schedule', params: {
+            scheduleObs: $data.scheduleObs, collectionName: 'scheduleGroups'+$index()+'_'
+        }}"></div>
     </fieldset>
 </form>
 <div class="ui form">

@@ -56,8 +56,11 @@
         </div>
     </div>
 
-    <h5>Activities</h5>
-    <p>One or more activities can be scheduled together. They will appear as separate scheduled activities in your application. </p>
+    <h5 style="margin:0">Activities</h5>
+    
+    <p class="help-text">One or more activities can be scheduled together. They will appear as separate 
+        scheduled activities in your application. </p>
+        
     <p data-bind="visible: $component.taskOptionsObs().length == 0">
         <b>There are no task identifiers defined,</b> so you cannot schedule any tasks.
         <a href="#/task_identifiers" target="_blank">Create</a> some identifiers, then refresh this page
@@ -67,39 +70,37 @@
             <i class="add square icon"></i>Add Activity
         </a>
     </div>
-    <div data-bind="visible: activitiesObs().length > 0">
-        <div class="ui form" data-bind="foreach: activitiesObs">
-            <div class="activity">
-                <div class="field" data-bind="attr: {
-                    id: 'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_label'}">
-                    <input type="text" placeholder="Label" data-bind="textInput: $data.labelObs"/>
-                </div>
-                <div>
-                    <input type="text" placeholder="Label Detail" data-bind="textInput: $data.labelDetailObs"/>
-                </div>
-                <div>
-                    <ui-select params="fieldObs: $data.activityTypeObs, fieldLabel: $component.activityTypeLabel,
-                        optionsSrc: $component.activityTypeOptions"></ui-select>
-                </div>
-                <div style="width: 10rem" class="field" data-bind="visible: $data.activityTypeObs() == 'task', attr: {
-                    id:'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_task_identifier'}">
-                    <ui-select params="fieldObs: $data.taskIdObs, fieldLabel: $component.taskOptionsLabel,
-                        optionsSrc: $component.taskOptionsObs"></ui-select>
-                </div>
-                <div style="width: 10rem" class="field" data-bind="visible: $data.activityTypeObs() == 'survey', attr: {
-                    id:'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_survey_guid'}">
-                    <ui-select params="fieldObs: $data.surveyGuidObs, fieldLabel: $component.surveysOptionsLabel,
-                        optionsSrc: $component.surveysOptionsObs"></ui-select>
-                </div>
-                <div>
-                    <div class="inline-form-text activity-controls">
-                        <span class="link" data-bind="click: $component.deleteActivity">
-                            <i class="delete icon"></i>Delete
-                        </span>
-                        <span class="link" data-bind="click: $component.addActivityAfter">
-                            <i class="square add icon"></i>Add Below
-                        </span>
-                    </div>
+    <div data-bind="visible: activitiesObs().length > 0, foreach: activitiesObs">
+        <div class="activity">
+            <div data-bind="attr: {
+                id: 'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_label'}">
+                <input type="text" placeholder="Label" data-bind="textInput: $data.labelObs"/>
+            </div>
+            <div>
+                <input type="text" placeholder="Label Detail" data-bind="textInput: $data.labelDetailObs"/>
+            </div>
+            <div>
+                <select class="ui dropdown" data-bind="options: $component.activityTypeOptions,
+                    optionsText: 'label', optionsValue: 'value', value: $data.activityTypeObs"></select>                    
+            </div>
+            <div data-bind="visible: $data.activityTypeObs() == 'task', attr: {
+                id:'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_task_identifier'}">
+                <select class="ui dropdown" data-bind="options: $component.taskOptionsObs,
+                    optionsText: 'label', optionsValue: 'value', value: $data.taskIdObs"></select>                    
+            </div>
+            <div data-bind="visible: $data.activityTypeObs() == 'survey', attr: {
+                id:'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_survey_guid'}">
+                <select class="ui dropdown" data-bind="options: $component.surveysOptionsObs,
+                    optionsText: 'label', optionsValue: 'value', value: $data.surveyGuidObs"></select>                    
+            </div>
+            <div>
+                <div class="inline-form-text activity-controls">
+                    <span class="link" data-bind="click: $component.deleteActivity">
+                        <i class="delete icon"></i>Delete
+                    </span>
+                    <span class="link" data-bind="click: $component.addActivityAfter">
+                        <i class="square add icon"></i>Add Below
+                    </span>
                 </div>
             </div>
         </div>

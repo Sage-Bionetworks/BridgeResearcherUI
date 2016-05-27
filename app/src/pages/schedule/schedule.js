@@ -1,8 +1,8 @@
 var optionsService = require('../../services/options_service');
 var scheduleUtils = require('./schedule_utils');
-var ko = require('knockout');
 var utils = require('../../utils');
 var root = require('../../root');
+var ko = require('knockout');
 
 var SCHEDULE_TYPE_OPTIONS = Object.freeze([
     {value: 'once', label: 'Once'},
@@ -39,21 +39,43 @@ function extractActivityFromObservables(activity) {
         activityType: activity.activityTypeObs()
     };
     if (act.activityType === 'task') {
-        act.task = {
-            identifier: activity.taskIdObs()
-        };
+        act.task = {identifier: activity.taskIdObs()};
     } else if (act.activityType === 'survey') {
-        act.survey = {
-            guid: activity.surveyGuidObs()
-        };
+        act.survey = {guid: activity.surveyGuidObs()};
     }
     return act;
+}
+function observe(self, name, isArray) {
+    self[name+"Obs"] = (isArray) ? ko.observableArray() : ko.observable();
+}
+function updateView(self, schedule, fields) {
+    fields.forEach(function(field) {
+        self[field+"Obs"](schedule[field]);    
+    });
+}
+function getEditorType(schedule) {
+    if (schedule.scheduleType === 'once') {
+        return "once";
+    } else if (schedule.scheduleType === 'recurring' && schedule.cronTrigger) {
+        return "cron";
+    } else {
+        return "interval";
+    }
+}
+function getScheduleType(editorType) {
+    return (editorType === "once") ? 'once' : 'recurring';
 }
 
 module.exports = function(params) {
     var self = this;
     self.collectionName = params.collectionName;
-    
+        
+    self.scheduleTypeOptions = SCHEDULE_TYPE_OPTIONS;
+    self.scheduleTypeLabel = utils.makeOptionLabelFinder(SCHEDULE_TYPE_OPTIONS);
+
+    self.activityTypeOptions = ACTIVITY_TYPE_OPTIONS;
+    self.activityTypeLabel = utils.makeOptionLabelFinder(ACTIVITY_TYPE_OPTIONS);    
+
     observe(self, "eventId")
     observe(self, "scheduleType");
     observe(self, "startsOn");
@@ -83,31 +105,13 @@ module.exports = function(params) {
             return sch;
         },
         write: function(schedule) {
-            updateView(self, schedule, 'eventId');
-            updateView(self, schedule, 'scheduleType');
-            updateView(self, schedule, 'startsOn');
-            updateView(self, schedule, 'endsOn');
-            updateView(self, schedule, 'delay');
-            updateView(self, schedule, 'interval');
-            updateView(self, schedule, 'times');
-            updateView(self, schedule, 'cronTrigger');
-            updateView(self, schedule, 'expires');
+            console.log(schedule.scheduleType);
+            updateView(self, schedule, ['eventId','scheduleType','startsOn','endsOn','delay',
+                'interval','times','cronTrigger','expires']);
+            self.editorScheduleTypeObs(getEditorType(schedule));
             self.activitiesObs(schedule.activities.map(addObserversToActivity));
         }
     });
-    
-    function observe(self, name, isArray) {
-        self[name+"Obs"] = (isArray) ? ko.observableArray() : ko.observable();
-    }
-    function updateView (self, schedule, name) {
-        self[name+"Obs"](schedule[name]);
-    }
-    
-    self.scheduleTypeOptions = SCHEDULE_TYPE_OPTIONS;
-    self.scheduleTypeLabel = utils.makeOptionLabelFinder(SCHEDULE_TYPE_OPTIONS);
-
-    self.activityTypeOptions = ACTIVITY_TYPE_OPTIONS;
-    self.activityTypeLabel = utils.makeOptionLabelFinder(ACTIVITY_TYPE_OPTIONS);    
     
     params.scheduleObs.subscribe(self.scheduleObs);
     params.scheduleObs.callback = function() {
@@ -116,22 +120,13 @@ module.exports = function(params) {
     
     self.editorScheduleTypeObs = ko.observable();
     self.editorScheduleTypeObs.subscribe(function(newValue) {
-        self.scheduleTypeObs( (newValue === "once") ? 'once' : 'recurring' );    
+        self.scheduleTypeObs( getScheduleType(newValue) );    
     });
     
     self.formatDateTime = utils.formatDateTime;
     self.formatEventId = scheduleUtils.formatEventId;
-    
-    self.formatTimes = function() {
-        var times = self.timesObs();
-        if (typeof times !== "undefined") {
-            if (self.scheduleTypeObs() === 'recurring') {
-                return scheduleUtils.formatTimesArray([times[0]]);
-            }
-            return scheduleUtils.formatTimesArray(times);
-        }
-        return scheduleUtils.formatTimesArray([]);
-    };
+    self.formatTimes = scheduleUtils.formatTimesArray;
+
     self.editTimes = function(vm, event) {
         event.preventDefault();
         root.openDialog('times_editor', {
@@ -172,9 +167,8 @@ module.exports = function(params) {
     };
     self.editEventId = function(vm, event) {
         event.preventDefault();
-        root.openDialog('event_id_editor', {
-            'eventIdObs': self.eventIdObs,'clearEventIdFunc': self.clearEventId
-        });
+        root.openDialog('event_id_editor', 
+            {'eventIdObs': self.eventIdObs,'clearEventIdFunc': self.clearEventId});
     };
     self.clearEventId = function(vm, event) {
         event.preventDefault();
@@ -201,7 +195,7 @@ module.exports = function(params) {
     self.taskOptionsObs = ko.observableArray();
     self.taskOptionsObs.extend({rateLimit: 50});
     self.taskOptionsLabel = utils.makeOptionLabelFinder(self.taskOptionsObs);
-    
+
     // Above, when an activity with a survey is loaded, if there's no option for it,
     // it is not selected and then ends up being the first option when it comes in.
     // Put a dummy loading option in to fix that. But then, if this very first, the
