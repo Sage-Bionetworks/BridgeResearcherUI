@@ -11,17 +11,6 @@ toastr.options = config.toastr;
 function is(obj, typeName) {
     return Object.prototype.toString.call(obj) === "[object "+typeName+"]";
 }
-/**
- * We have to determine this without a source object, because sometimes
- * observables must be set up before we have loaded the object from
- * the server. So fields that are to be array should be postfixed with
- * "[]", as in "elements[]".
- */
-function nameInspector(string) {
-    var isArray = /\[\]$/.test(string);
-    var name = (isArray) ? string.match(/[^\[]*/)[0] : string;
-    return {name: name, observerName: name+"Obs", isArray: isArray};
-}
 function isNotBlank(obj) {
     return (typeof obj !== "undefined") && obj !== null && obj !== "";
 }
@@ -77,13 +66,16 @@ function num(value) {
     return (typeof value !== "number") ? 0 : value;
 }
 function mightyMessageFinder(response) {
-    if (response.responseJSON) {
+    if (response.responseJSON && response.responseJSON.message) {
         return response.responseJSON.message;
+    } if (response.responseJSON) {
+        return JSON.stringify(response.responseJSON);
     } else if (response.message) {
         return response.message;
     } else if (typeof response === "string") {
         return response;
     }
+    return JSON.stringify(response);
 }
 function createEmailTemplate(email, identifier) {
     var parts = email.split("@");
@@ -236,68 +228,14 @@ module.exports = {
             ko.postbox.publish("showErrors", {message:msg,errors:{}});
         }
     },
+    // TODO: Get rid of the need to have a reference to the dom element that has a spinner,
+    // using a binding.
     formFailure: function(actionElement, message) {
-        console.error("formFailure", response);
         ko.postbox.publish("clearErrors");
         if (actionElement) {
             actionElement.classList.remove("loading");
         }
         ko.postbox.publish("showErrors", {message:message,errors:{}});
-    },
-    /**
-     * Create an observable for each field name provided. Will create an observableArray if the notation indicates
-     * such (e.g. "entries[]" rather than "entries").
-     * @param vm
-     * @param fields
-     * @param [source] - if provided, values will be initialized from this object
-     */
-    observablesFor: function(vm, fields, source) {
-        for (var i=0; i < fields.length; i++) {
-            var insp = nameInspector(fields[i]);
-            var value = (source) ? source[insp.name] : "";
-            if (insp.isArray) {
-                vm[insp.observerName] = ko.observableArray(value);
-            } else {
-                vm[insp.observerName] = ko.observable(value);
-            }
-        }
-    },
-    /**
-     * Given a model object, update all the observables for each field name provided.
-     * Will not attempt to copy if either the observable property or the property on
-     * the object, as defined by field, do not exist.
-     *
-     * @param vm
-     * @param object
-     * @param fields
-     */
-    valuesToObservables: function(vm, object, fields) {
-        for (var i=0; i < fields.length; i++) {
-            var insp = nameInspector(fields[i]);
-
-            var obs = vm[insp.observerName];
-            var value = object[insp.name];
-            if (isDefined(obs) && isDefined(value)) {
-                obs(value);
-            }
-        }
-    },
-    /**
-     * Copy all the values of all the observables (presumably updated) back to the model object.
-     * @param vm
-     * @param object
-     * @param fields
-     */
-    observablesToObject: function(vm, object, fields) {
-        for (var i=0; i < fields.length; i++) {
-            var insp = nameInspector(fields[i]);
-
-            object[insp.name] = null;
-            var obs = vm[insp.observerName];
-            if (isDefined(obs)) {
-                object[insp.name] = obs();
-            }
-        }
     },
     /**
      * Convert a date into a locale-appropriate string (browser-dependent).
@@ -490,5 +428,6 @@ module.exports = {
             "externalId": identifier,
             "sharingScope": "all_qualified_researchers"
         };
-    }
+    },
+    mightyMessageFinder: mightyMessageFinder
 };

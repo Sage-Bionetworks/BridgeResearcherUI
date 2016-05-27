@@ -1,12 +1,12 @@
 var storeService = require('../../services/store_service');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
+var bind = require('../../binder');
 var config = require('../../config');
 var root = require('../../root');
 
 var STUDY_KEY = 'studyKey';
 var ENVIRONMENT = 'environment';
-var fields = ['title', 'username', 'password', 'study', 'environment', 'studyOptions[]', 'isLocked'];
 
 function findStudyName(studies, studyIdentifier) {
     try {
@@ -27,40 +27,51 @@ function makeReloader(studyKey, environment) {
 
 module.exports = function() {
     var self = this;
-
-    utils.observablesFor(self, fields);
     var signInSubmit = document.querySelector("#signInSubmit");
+    var isLocked = utils.isDefined(root.queryParams.study);
     
-    if (utils.isDefined(root.queryParams.study)) {
-        self.isLockedObs(true);    
-        var studyKey = root.queryParams.study;
-        var env = 'production';
+    var studyKey, env;    
+    if (isLocked) {
+        studyKey = root.queryParams.study;
+        env = 'production';
     } else {
-        self.isLockedObs(false);
-        var studyKey = storeService.get(STUDY_KEY) || 'api';
-        var env = storeService.get(ENVIRONMENT) || 'production';
+        studyKey = storeService.get(STUDY_KEY) || 'api';
+        env = storeService.get(ENVIRONMENT) || 'production';
     }
-    self.studyObs(studyKey);
-    self.environmentOptions = config.environments;
+    bind(self)
+        .obs('title')
+        .obs('username')
+        .obs('password')
+        .obs('study', studyKey)
+        .obs('environment', env)
+        .obs('studyOptions[]')
+        .obs('isLocked', isLocked);
     
+    self.environmentOptions = config.environments;
     self.environmentObs.subscribe(function(newValue) {
         self.studyOptionsObs({name:'Updating...',identifier:''});
-        serverService.getStudyList(newValue)
-            .then(function(studies){
-                self.studyOptionsObs(studies.items);
-                self.studyObs(studyKey);
-                if (self.isLockedObs()) {
-                    self.titleObs(findStudyName(self.studyOptionsObs(), studyKey))
-                }
-            }).catch(utils.failureHandler(self));
+        loadStudyList(newValue);
     });
-    self.environmentObs(env);
+    loadStudyList(env);
+    
+    function loadStudies(studies){
+        self.studyOptionsObs(studies.items);
+        self.studyObs(studyKey);
+        if (self.isLockedObs()) {
+            self.titleObs(findStudyName(self.studyOptionsObs(), studyKey))
+        }
+    }
+    
+    function loadStudyList(newValue) {
+        serverService.getStudyList(newValue)
+            .then(loadStudies).catch(utils.failureHandler(self));
+    }
 
     function clear(response) {
         self.usernameObs("");
         self.passwordObs("");
         if (!response.isSupportedUser()) {
-            root.message('error', 'You do not appear to be a developer, researcher, or admin.');
+            utils.formFailure(signInSubmit, 'You do not appear to be a developer, researcher, or admin.');
             return;
         } else {
             root.closeDialog();
@@ -70,7 +81,7 @@ module.exports = function() {
 
     self.signIn = function(vm, event) {
         if (self.usernameObs() === "" || self.passwordObs() === "") {
-            root.message('error', 'Username and/or password are required.');
+            utils.formFailure(signInSubmit, 'Username and/or password are required.');
             return;
         }
         var studyKey = self.studyObs();

@@ -1,15 +1,10 @@
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
+var bind = require('../../binder');
 
-var fields = ['minAppVersion','maxAppVersion','language','allOfGroups[]','noneOfGroups[]','dataGroupsOptions[]'];
+// TODO: There's much simpler code to do this in the password policy screen.
+// Why did that work and why can't it be used here?
 
-function updateVM(vm, crit) {
-    vm.languageObs(crit.language);
-    vm.minAppVersionObs(crit.minAppVersion);
-    vm.maxAppVersionObs(crit.maxAppVersion);
-    vm.allOfGroupsObs(crit.allOfGroups);
-    vm.noneOfGroupsObs(crit.noneOfGroups);
-}
 function partialRelayUpdater(vm, eventObj) {
     return function(func) {
         return function(newValue) {
@@ -34,17 +29,25 @@ module.exports = function(params) {
 
     self.id = params.id;
     self.criteriaObs = params.criteriaObs;
-    utils.observablesFor(self, fields);
-    
+    var binder = bind(self)
+        .bind('minAppVersion')
+        .bind('maxAppVersion')
+        .bind('language')
+        .bind('allOfGroups[]')
+        .bind('noneOfGroups[]')
+        .obs('dataGroupsOptions[]');
+
+    var updateVM = binder.update();
+
     var crit = self.criteriaObs();
     if (crit) {
-        updateVM(self, crit);    
+        updateVM(crit);    
     }
     
     var updater = partialRelayUpdater(self, params.eventObj);
     
     self.criteriaObs.subscribe(function(newValue) {
-        updateVM(self, newValue);
+        updateVM(newValue);
     });
     self.languageObs.subscribe(updater(function(crit, newValue) {
         crit.language = newValue;

@@ -4,6 +4,44 @@ var optionsService = require('../../services/options_service');
 var scheduleUtils = require('./schedule_utils');
 var root = require('../../root');
 
+function nameInspector(string) {
+    var isArray = /\[\]$/.test(string);
+    var name = (isArray) ? string.match(/[^\[]*/)[0] : string;
+    return {name: name, observerName: name+"Obs", isArray: isArray};
+}
+function observablesFor(vm, fields, source) {
+    for (var i=0; i < fields.length; i++) {
+        var insp = nameInspector(fields[i]);
+        var value = (source) ? source[insp.name] : "";
+        if (insp.isArray) {
+            vm[insp.observerName] = ko.observableArray(value);
+        } else {
+            vm[insp.observerName] = ko.observable(value);
+        }
+    }
+}
+function valuesToObservables(vm, object, fields) {
+    for (var i=0; i < fields.length; i++) {
+        var insp = nameInspector(fields[i]);
+
+        var obs = vm[insp.observerName];
+        var value = object[insp.name];
+        if (utils.isDefined(obs) && utils.isDefined(value)) {
+            obs(value);
+        }
+    }
+}
+function observablesToObject(vm, object, fields) {
+    for (var i=0; i < fields.length; i++) {
+        var insp = nameInspector(fields[i]);
+
+        object[insp.name] = null;
+        var obs = vm[insp.observerName];
+        if (utils.isDefined(obs)) {
+            object[insp.name] = obs();
+        }
+    }
+}
 /**
  * enrollment - used to calculate if enrollment should be included in the eventId.
  * When there's no eventId, enrollment is assumed; generally if there is any event,
@@ -24,8 +62,8 @@ var ACTIVITY_TYPE_OPTIONS = Object.freeze([
 ]);
 function newActivity() {
     var activity = scheduleUtils.newSchedule().activities[0];
-    utils.observablesFor(activity, ACTIVITY_FIELDS);
-    activity.activityTypeObs('task');
+    activity.activityType = "task";
+    addObserversToActivity(activity);
     return activity;
 }
 /**
@@ -95,7 +133,7 @@ module.exports = function(params) {
 
     self.scheduleObs = params.scheduleObs;
     self.collectionName = params.collectionName;
-    utils.observablesFor(self, SCHEDULE_FIELDS);
+    observablesFor(self, SCHEDULE_FIELDS);
     // this is not initialized by observablesFor, because it is often null when
     // the value is just enrollment by default.
     self.eventIdObs = ko.observable("enrollment");
@@ -133,7 +171,7 @@ module.exports = function(params) {
     // This is the implementation called by the schedule plan viewModel to construct the model
     self.scheduleObs.callback = function() {
         self.activitiesObs().forEach(copyObserverValuesBackToActivity);
-        utils.observablesToObject(self, self.scheduleObs(), SCHEDULE_FIELDS);
+        observablesToObject(self, self.scheduleObs(), SCHEDULE_FIELDS);
 
         // To avoid an error, we have to remove some fields which are hidden and assumed to be 
         // unused
@@ -150,26 +188,24 @@ module.exports = function(params) {
     };
 
     // This is fired when the parent viewModel gets a plan back from the server
-    ko.computed(function() {
-        var schedule = self.scheduleObs();
-        if (schedule) {
-            fixScheduleTimes(schedule);
-            updateEditorScheduleType(schedule);
-            schedule.activities.forEach(addObserversToActivity);
-            schedule.activities.forEach(function(activity) {
-                if (activity.survey && !self.surveysOptionsObs.loaded) {
-                    self.surveysOptionsObs.push({label: 'Loading...', value: activity.survey.guid});
-                }
-                if (activity.task && !self.taskOptionsObs.loaded) {
-                    self.taskOptionsObs.push({label: activity.task.identifier, value: activity.task.identifier});
-                }
-            });
-            if (schedule.scheduleType === "once") {
-                delete schedule.interval;
-                delete schedule.cronTrigger;
+    var subscription = self.scheduleObs.subscribe(function(schedule) {
+        fixScheduleTimes(schedule);
+        updateEditorScheduleType(schedule);
+        schedule.activities.forEach(addObserversToActivity);
+        schedule.activities.forEach(function(activity) {
+            if (activity.survey && !self.surveysOptionsObs.loaded) {
+                self.surveysOptionsObs.push({label: 'Loading...', value: activity.survey.guid});
             }
-            utils.valuesToObservables(self, schedule, SCHEDULE_FIELDS);
+            if (activity.task && !self.taskOptionsObs.loaded) {
+                self.taskOptionsObs.push({label: activity.task.identifier, value: activity.task.identifier});
+            }
+        });
+        if (schedule.scheduleType === "once") {
+            delete schedule.interval;
+            delete schedule.cronTrigger;
         }
+        valuesToObservables(self, schedule, SCHEDULE_FIELDS);
+        subscription.dispose();
     });
 
     // Above, when an activity with a survey is loaded, if there's no option for it,

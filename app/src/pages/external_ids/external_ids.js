@@ -5,6 +5,9 @@ var root = require('../../root');
 require('knockout-postbox');
 var bind = require('../../binder');
 
+// TODO: If we were really slick, we would validate the identifiers as valid passwords, because that's 
+// how they'll be used when making lab credentials.
+
 var OPTIONS = {offsetBy:0, pageSize: 1, assignmentFilter:false};
 
 module.exports = function() {
