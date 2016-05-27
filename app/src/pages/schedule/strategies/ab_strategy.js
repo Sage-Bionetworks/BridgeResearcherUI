@@ -6,7 +6,10 @@ var root = require('../../../root');
 
 function groupToObservables(group) {
     group.percentageObs = ko.observable(group.percentage);
-    group.scheduleObs = ko.observable(group.schedule);
+    group.scheduleObs = ko.observable();
+    setTimeout(function() {
+        group.scheduleObs(group.schedule);
+    },10);
     group.scheduleObs.callback = utils.identity;
     group.percentLabel = ko.computed(function(){
         return group.percentageObs()+"%";
@@ -31,26 +34,23 @@ function newGroup() {
 module.exports = function(params) {
     var self = this;
 
+    params.strategyObs;
     self.labelObs = params.labelObs;
-    self.strategyObs = params.strategyObs;
     self.scheduleGroupsObs = ko.observableArray([]).publishOn("scheduleGroupChanges");
     self.collectionName = params.collectionName;
-
+    
     root.setEditorPanel('ABTestScheduleStrategyPanel', {viewModel:self});
 
+    var subscription = params.strategyObs.subscribe(function(strategy) {
+        self.scheduleGroupsObs(strategy.scheduleGroups.map(groupToObservables));
+        console.log(self);
+        subscription.dispose();
+    });
     params.strategyObs.callback = function () {
         var strategy = params.strategyObs();
         strategy.scheduleGroups = self.scheduleGroupsObs().map(observablesToGroup);
         return strategy;
     };
-
-    // This is fired when the parent viewModel gets a plan back from the server
-    ko.computed(function () {
-        var strategy = params.strategyObs();
-        if (strategy && strategy.scheduleGroups) {
-            self.scheduleGroupsObs(strategy.scheduleGroups.map(groupToObservables));
-        }
-    });
 
     var scrollTo = utils.makeScrollTo(".schedulegroup-fieldset");
     self.fadeUp = utils.fadeUp();

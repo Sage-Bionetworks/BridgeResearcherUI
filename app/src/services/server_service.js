@@ -134,13 +134,22 @@ function reloadPageWhenSessionLost(response) {
 function makeSessionWaitingPromise(func) {
     // Return a Bluebird promise. If there's a session, execute the function and call resolve/reject.
     // otherwise, the executor itself has a promise and can be used as a listener function.
-    // when a session is generated the promise will be executed at that time. If the session goes away, 
-    // on any request, the page will reload to pick up the new state of the server.
+    // when a session is generated the promise will be executed. If the session goes away, on any 
+    // request, the page will reload to pick up the new state of the server.
     var promise = new Promise(function(resolve, reject) {
         var executor = function() {
             var p = func();
             p.done(resolve);
-            p.fail(reject);
+            // This is goofy but Bluebird throws a big ole warning because jQuery's AJAX response is 
+            // not an error. Even though we want to know what is in the response as part of the 
+            // rejection. Soooo convert it to an error and copy over key aspects of the response. 
+            p.fail(function(response) {
+                var error = new Error(response.responseJSON.message);
+                error.responseJSON = response.responseJSON;
+                error.statusText = response.statusText;
+                error.status = response.status;
+                reject(error);
+            });
         };
         if (session && session.sessionToken) {
             executor();

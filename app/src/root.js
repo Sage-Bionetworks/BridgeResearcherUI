@@ -92,6 +92,9 @@ var RootViewModel = function() {
     self.closeDialog = function() {
         self.dialogObs({name: 'none'});
     };
+    self.isDevEnvObs = ko.computed(function() {
+        return ['local','develop','staging'].indexOf(self.environmentObs()) > -1; 
+    });
     /**
      * Displays a message that we UI insiders like to call "a piece of toast"
      * @param severity {String} one of 'success', 'info', 'warning' or 'error'

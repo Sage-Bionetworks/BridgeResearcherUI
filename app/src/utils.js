@@ -363,10 +363,10 @@ module.exports = {
      * @returns {Function}
      */
     makeEventToPostboxListener: function(eventName) {
-        return function(vm, event) {
+        return function(model, event) {
             event.preventDefault();
             event.stopPropagation();
-            ko.postbox.publish(eventName, vm);
+            ko.postbox.publish(eventName, model);
         };
     },
     /**
