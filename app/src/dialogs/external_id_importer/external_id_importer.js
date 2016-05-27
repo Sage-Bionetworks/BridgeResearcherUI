@@ -41,6 +41,7 @@ module.exports = function(params) {
         .obs('percentage', '0%')
         .obs('selected', true)
         .obs('closeText', 'Close')
+        .obs('errorMessages[]', [])
         .obs('status', "Please enter a list of identifiers, separated by commas or new lines. ")
         .obs('createCredentials', false);
     
@@ -57,13 +58,24 @@ module.exports = function(params) {
         self.percentageObs(getPerc(step, self.maxObs()));
         return response;
     }
+    function tickMeterError(response) {
+        var msg = utils.mightyMessageFinder(response);
+        tickMeter(response);
+        self.errorMessagesObs.push(msg);
+    }
     function endProgressMeter(actionElement) {
         return function(response) {
+            var errorCount = self.errorMessagesObs().length;
+            var errorMsg = (errorCount === 0) ? 
+                "" : 
+                (errorCount === 1) ? 
+                    " There was an error." : 
+                    (" There were "+errorCount+" errors.");
             actionElement.disabled = true;
             self.closeTextObs('Close');
             self.valueObs(self.maxObs());
             self.percentageObs("100%");
-            self.statusObs("Identifiers imported.");
+            self.statusObs("Identifiers imported." + errorMsg);
             return response;
         }
     }
@@ -72,7 +84,7 @@ module.exports = function(params) {
             return p.then(function() {
                 if (cancel) { return; }
                 return func(workItem);
-            }).then(tickMeter).delay(SUBMISSION_DELAY); // delay. I love bluebird
+            }).then(tickMeter).catch(tickMeterError).delay(SUBMISSION_DELAY); // delay. I love bluebird
         }, promise);
     }
     function initParticipantMaker(study) {
@@ -105,6 +117,7 @@ module.exports = function(params) {
 
     self.close = function(vm, event) {
         cancel = true;
+        self.errorMessagesObs([]);
         root.closeDialog();
         ko.postbox.publish('external-ids-page-refresh');
     };

@@ -7,8 +7,11 @@ var root = require('../../../root');
 
 function groupToObservables(group) {
     group.criteriaObs = ko.observable(group.criteria);
-    group.scheduleObs = ko.observable(group.schedule);
+    group.scheduleObs = ko.observable();
     group.scheduleObs.callback = utils.identity;
+    setTimeout(function() {
+        group.scheduleObs(group.schedule);
+    }, 1);
     group.labelObs = ko.computed(function() {
         return criteriaUtils.label(group.criteriaObs());
     });
@@ -47,12 +50,12 @@ module.exports = function(params) {
     root.setEditorPanel('CriteriaScheduleStrategyPanel', {viewModel:self});
 
     // This is fired when the parent viewModel gets a plan back from the server
-    ko.computed(function () {
-        var strategy = params.strategyObs();
+    var subscription = params.strategyObs.subscribe(function(strategy) {
         if (strategy && strategy.scheduleCriteria) {
             self.scheduleCriteriaObs(strategy.scheduleCriteria.map(groupToObservables));
             root.setEditorPanel('CriteriaScheduleStrategyPanel', {viewModel:self});
         }
+        subscription.dispose(); 
     });
 
     var scrollTo = utils.makeScrollTo(".schedulegroup-fieldset");

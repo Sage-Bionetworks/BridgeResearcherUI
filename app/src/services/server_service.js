@@ -40,15 +40,15 @@ var cache = (function() {
     return {
         get: function(key) {
             var value = cachedItems[key];
-            console.info((value) ? "[json cache] hit" : "[json cache] miss",key);
-            return value;
+            console.info((value) ? "[json cache] hit" : "[json cache] miss", key);
+            return (value) ? JSON.parse(value) : null;
         },
         set: function(key, response) {
             // If the key does not match any of the paths that should not be cached...
             if (NO_CACHE_PATHS.every(function(path) {return key.indexOf(path) === -1;})) {
                 console.info("[json cache] caching",key);
-                cachedItems[key] = response;
-                console.debug("cache size", (JSON.stringify(cachedItems).length/1000).toFixed(1) + "k");
+                cachedItems[key] = JSON.stringify(response);
+                //console.debug("cache size", (JSON.stringify(cachedItems).length/1000).toFixed(1) + "k");
             }
         },
         clear: function(key) {
@@ -132,15 +132,15 @@ function reloadPageWhenSessionLost(response) {
 }
 
 function makeSessionWaitingPromise(func) {
-    // Return a promise. If there's a session, execute the function and call resolve/reject.
+    // Return a Bluebird promise. If there's a session, execute the function and call resolve/reject.
     // otherwise, the executor itself has a promise and can be used as a listener function.
-    // when a session is generated the promise will be called at that time and excute.
+    // when a session is generated the promise will be executed at that time. If the session goes away, 
+    // on any request, the page will reload to pick up the new state of the server.
     var promise = new Promise(function(resolve, reject) {
         var executor = function() {
             var p = func();
-            p.then(resolve);
+            p.done(resolve);
             p.fail(reject);
-            return p;
         };
         if (session && session.sessionToken) {
             executor();

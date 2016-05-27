@@ -428,5 +428,6 @@ module.exports = {
             "externalId": identifier,
             "sharingScope": "all_qualified_researchers"
         };
-    }
+    },
+    mightyMessageFinder: mightyMessageFinder
 };
