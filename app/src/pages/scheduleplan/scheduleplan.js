@@ -20,7 +20,7 @@ module.exports = function(params) {
         .bind('minAppVersion', '')
         .bind('maxAppVersion', '')
         .obs('schedulePlanType', 'SimpleScheduleStrategy')
-
+        
     self.strategyObs.callback = utils.identity;
     // Fields for this form
     self.schedulePlanTypeOptions = scheduleUtils.TYPE_OPTIONS;

@@ -123,13 +123,14 @@ module.exports = function(params) {
     self.formatEventId = scheduleUtils.formatEventId;
     
     self.formatTimes = function() {
-        var type = self.scheduleTypeObs();
         var times = self.timesObs();
-        if (times && times.length) {
-            return scheduleUtils.formatTimesArray(
-                (type === 'recurring') ? times : times.slice(0,1));
+        if (typeof times !== "undefined") {
+            if (self.scheduleTypeObs() === 'recurring') {
+                return scheduleUtils.formatTimesArray([times[0]]);
+            }
+            return scheduleUtils.formatTimesArray(times);
         }
-        return scheduleUtils.formatTimesArray(null);
+        return scheduleUtils.formatTimesArray([]);
     };
     self.editTimes = function(vm, event) {
         event.preventDefault();

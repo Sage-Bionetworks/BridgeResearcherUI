@@ -2,10 +2,18 @@ var ko = require('knockout');
 var scheduleUtils = require('../../pages/schedule/schedule_utils');
 var root = require('../../root');
 
+function hourMinuteValue(value) {
+    return value.replace(":00.000","");
+}
+
 module.exports = function(params) {
     var self = this;
 
-    self.itemsObs = ko.observableArray(params.timesObs());
+    console.log(params);
+
+    self.itemsObs = ko.observableArray(
+        ko.utils.arrayMap(params.timesObs(), hourMinuteValue)
+    );
     self.timesObs = params.timesObs;
     self.clearTimesFunc = params.clearTimesFunc;
     self.scheduleType = params.scheduleTypeObs();

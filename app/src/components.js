@@ -46,7 +46,7 @@ reg('participants', './pages/participants/participants');
 reg('participant', './pages/participant/participant');
 reg('participant_consents', './pages/participant_consents/participant_consents');
 reg('external_ids', './pages/external_ids/external_ids');
-reg('schedule', './pages/schedule/schedule2');
+reg('schedule', './pages/schedule/schedule');
 reg('SimpleScheduleStrategy', './pages/schedule/strategies/simple_strategy');
 reg('ABTestScheduleStrategy', './pages/schedule/strategies/ab_strategy');
 reg('CriteriaScheduleStrategy', './pages/schedule/strategies/criteria_strategy');
