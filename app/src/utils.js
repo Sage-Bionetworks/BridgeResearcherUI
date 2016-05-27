@@ -194,12 +194,11 @@ module.exports = {
             ko.postbox.publish("clearErrors");
             if (response.status === 412) {
                 toastr.error('You do not appear to be a developer, researcher, or admin.');
-            } else if (response instanceof Error) {
-                toastr.error(response.message);
             } else if (response.responseJSON) {
                 var payload = response.responseJSON;
                 ko.postbox.publish("showErrors", payload);
-                console.log(payload);
+            } else if (response instanceof Error) {
+                toastr.error(response.message);
             } else {
                 toastr.error(GENERIC_ERROR);
             }

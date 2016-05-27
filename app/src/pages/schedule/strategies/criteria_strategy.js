@@ -52,12 +52,17 @@ module.exports = function(params) {
 
     root.setEditorPanel('CriteriaScheduleStrategyPanel', {viewModel:self});
 
-    // This is fired when the parent viewModel gets a plan back from the server
+    function initStrategy(strategy) {
+        if (strategy && strategy.scheduleCriteria) {
+            self.scheduleCriteriaObs(strategy.scheduleCriteria.map(groupToObservables));
+            root.setEditorPanel('CriteriaScheduleStrategyPanel', {viewModel:self});
+        }
+    }
+    initStrategy(params.strategyObs());
     var subscription = params.strategyObs.subscribe(function(strategy) {
-        self.scheduleCriteriaObs(strategy.scheduleCriteria.map(groupToObservables));
-        root.setEditorPanel('CriteriaScheduleStrategyPanel', {viewModel:self});
-        subscription.dispose(); 
-    });
+        initStrategy(strategy);
+        subscription.dispose();
+    });    
 
     var scrollTo = utils.makeScrollTo(".schedulegroup-fieldset");
     self.fadeUp = utils.fadeUp();

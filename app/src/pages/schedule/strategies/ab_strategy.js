@@ -39,13 +39,18 @@ module.exports = function(params) {
     self.scheduleGroupsObs = ko.observableArray([]).publishOn("scheduleGroupChanges");
     self.collectionName = params.collectionName;
     
-    root.setEditorPanel('ABTestScheduleStrategyPanel', {viewModel:self});
-
+    function initStrategy(strategy) {
+        if (strategy && strategy.scheduleGroups) {
+            self.scheduleGroupsObs(strategy.scheduleGroups.map(groupToObservables));
+            root.setEditorPanel('ABTestScheduleStrategyPanel', {viewModel:self});
+        }
+    }
+    initStrategy(params.strategyObs());
     var subscription = params.strategyObs.subscribe(function(strategy) {
-        self.scheduleGroupsObs(strategy.scheduleGroups.map(groupToObservables));
-        console.log(self);
+        initStrategy(strategy);
         subscription.dispose();
     });
+   
     params.strategyObs.callback = function () {
         var strategy = params.strategyObs();
         strategy.scheduleGroups = self.scheduleGroupsObs().map(observablesToGroup);
