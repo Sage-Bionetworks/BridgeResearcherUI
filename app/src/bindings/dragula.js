@@ -13,7 +13,6 @@ ko.bindingHandlers.dragula = {
             removeOnSpill: false,
             direction: 'vertical',
             moves: function(el, container, handle) {
-                console.log(handle.classList);
                 return typeof config.dragHandleSelector === "undefined" ||
                        handle.classList.contains(config.dragHandleSelector.replace(".",""));
             }

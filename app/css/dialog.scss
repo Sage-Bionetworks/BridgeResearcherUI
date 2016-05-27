@@ -1,0 +1,15 @@
+.batch-process-errors {
+    position: relative;
+    margin-top: 1rem; 
+    border: 1px solid #ccc; 
+    padding: 0rem; 
+    max-height: 5rem; 
+    overflow-y: scroll;   
+    
+    ul {
+        position: relative; 
+        bottom: 0; 
+        margin: .25rem .5rem;
+        padding: 0;
+    } 
+}
