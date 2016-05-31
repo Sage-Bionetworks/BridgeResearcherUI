@@ -24,11 +24,33 @@ ko.observableArray.fn.contains = function(value) {
 
 ko.bindingHandlers.semantic = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var input, observer;
         var value = ko.unwrap(valueAccessor());
         var $element = $(element);
+        
+        function updateOnMatch(newValue) {
+            if (input.value === newValue) {
+                input.checked = true;
+                $element.addClass("checked");
+            }
+        }
+        function init() {
+            var allOptionsObs = allBindings().foreach;
+            if (allOptionsObs() && allOptionsObs().length > 0) {
+                clearTimeout(intervalId);
+                
+                $element.dropdown("set selected", collectionObs());
+                collectionObs.subscribe(function(newValue) {
+                    $element.dropdown("set selected", newValue);
+                });
+            } else {
+                console.log("polling");
+            }
+        }
+        
         if (value === 'checkbox') {
-            var input = $element.children("input[type=checkbox]").get(0);
-            var observer = allBindings().checkboxObs;
+            input = $element.children("input[type=checkbox]").get(0);
+            observer = allBindings().checkboxObs;
             $element.addClass("ui checkbox").on('click', function() {
                 if (!input.disabled) {
                     observer(!observer());
@@ -36,15 +58,9 @@ ko.bindingHandlers.semantic = {
                 }
             });
         } else if (value === 'radio') {
-            var input = $element.children("input[type=radio]").get(0);
-            var observer = allBindings().radioObs;
+            input = $element.children("input[type=radio]").get(0);
+            observer = allBindings().radioObs;
 
-            function updateOnMatch(newValue) {
-                if (input.value === newValue) {
-                    input.checked = true;
-                    $element.addClass("checked");
-                }
-            }
             observer.subscribe(updateOnMatch);
             updateOnMatch(observer());
 
@@ -65,19 +81,6 @@ ko.bindingHandlers.semantic = {
         } else if (value === 'adjacent-popup') {
             $element.popup({inline:true});
         } else if (value === 'multi-search-select') {
-            function init() {
-                var allOptionsObs = allBindings().foreach;
-                if (allOptionsObs() && allOptionsObs().length > 0) {
-                    clearTimeout(intervalId);
-                    
-                    $element.dropdown("set selected", collectionObs());
-                    collectionObs.subscribe(function(newValue) {
-                        $element.dropdown("set selected", newValue);
-                    });
-                } else {
-                    console.log("polling");
-                }
-            }
             var intervalId = setInterval(init, 100);
             var collectionObs = allBindings().updateSelect;
             $element.addClass("ui selection dropdown").dropdown({
@@ -129,7 +132,7 @@ ko.bindingHandlers.ckeditor = {
         ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
             if (CKEDITOR.instances[id]) {
                 CKEDITOR.remove(CKEDITOR.instances[id]);
-            };
+            }
         });
     }
 };
@@ -216,7 +219,7 @@ function activeHandler(element, valueAccessor) {
     }
     var func = valueAccessor;
     do {
-        var func = func(id);
+        func = func(id);
     } while(typeof func === "function");
     element.classList.toggle("active", func);
 }
@@ -224,4 +227,4 @@ function activeHandler(element, valueAccessor) {
 ko.bindingHandlers.active = {
     init: activeHandler,
     update: activeHandler
-}
+};

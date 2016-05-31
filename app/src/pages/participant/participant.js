@@ -14,7 +14,7 @@ var STATUS_OPTIONS = [
     {value: 'disabled', label:'Disabled'},
     {value: 'unverified', label:'Unverified'}
 ];
-var ROLES = ["Developer", "Researcher", "Administrator", "Worker"]
+var ROLES = ["Developer", "Researcher", "Administrator", "Worker"];
 var NEW_PARTICIPANT = {attributes:{}};
 
 module.exports = function(params) {
@@ -53,7 +53,6 @@ module.exports = function(params) {
         });
         self.attributesObs(attrs);
         var shouldBeEdited = !study.externalIdValidationEnabled || self.isNewObs();
-        console.log("shouldBeEdited", shouldBeEdited);
         // External ID editing is still wrong in that I can edit the ID of an existing user, 
         // even though the codes are being managed in the study I'm looking at.
         self.externalIdEditableObs(shouldBeEdited);
@@ -98,10 +97,12 @@ module.exports = function(params) {
         }
     };
     
+    var notFoundHandler = utils.notFoundHandler(self, "Participant not found.", "#/participants");
+    
     serverService.getStudy()
         .then(binder.assign('study'))
         .then(initStudy)
         .then(getParticipant)
         .then(binder.update())
-        .catch(utils.failureHandler());
-}
+        .catch(notFoundHandler);
+};

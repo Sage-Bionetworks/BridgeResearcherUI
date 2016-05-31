@@ -10,7 +10,7 @@ var pageSets = {
     'schemas': ['schemas','schema','schema_versions'],
     'scheduleplans': ['scheduleplans','scheduleplan'],
     've_template': ['ve_template', 'rp_template'],
-    'subpopulations': ['subpopulations', 'subpopulation', 'consent'],
+    'subpopulations': ['subpopulations', 'subpopulation', 'subpopulation_editor', 'subpopulation_history', 'subpopulation_download'],
     'participants': ['participants','participant','participant_consents'],
     'externalIds': ['external_ids'],
     'admin/info': ['admin_info'],
@@ -44,11 +44,10 @@ var RootViewModel = function() {
 
     self.showNav = function() {
         self.showNavigationObs(true);
-    }
+    };
     self.hideNav = function() {
         self.showNavigationObs(false);
-    }
-
+    };
     self.setEditorPanel = function(name, params) {
         self.editorPanel(name);
         self.editorParams(params);
@@ -92,6 +91,9 @@ var RootViewModel = function() {
     self.closeDialog = function() {
         self.dialogObs({name: 'none'});
     };
+    self.isDevEnvObs = ko.computed(function() {
+        return ['local','develop','staging'].indexOf(self.environmentObs()) > -1; 
+    });
     /**
      * Displays a message that we UI insiders like to call "a piece of toast"
      * @param severity {String} one of 'success', 'info', 'warning' or 'error'

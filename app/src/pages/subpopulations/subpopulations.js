@@ -1,9 +1,9 @@
-'use strict';
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var criteriaUtils = require('../../criteria_utils');
 var root = require('../../root');
+var Promise = require('bluebird');
 
 module.exports = function() {
     var self = this;

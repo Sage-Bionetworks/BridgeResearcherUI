@@ -9,7 +9,7 @@ module.exports = function(params) {
 
     self.close = function() {
         root.closeDialog();
-    }
+    };
     self.create = function(vm, event) {
         var nextId = self.identifierObs();
         if (!utils.isNotBlank(nextId)) {
@@ -18,6 +18,5 @@ module.exports = function(params) {
         }
         params.vm.createFromNew(nextId);
         root.closeDialog();
-    }
-    
-}
+    };
+};

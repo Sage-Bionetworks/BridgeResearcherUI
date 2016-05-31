@@ -1,4 +1,3 @@
-'use strict';
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
@@ -41,12 +40,12 @@ module.exports = function() {
         return survey.schedulePlanObs().map(function(obj) {
             return obj.label;
         }).join(', ');
-    }
+    };
     self.atLeastOneChecked = function () {
         return self.itemsObs().some(function(item) {
             return item.checkedObs();
         });
-    }    
+    };
     self.copySurveys = function(vm, event) {
         var copyables = self.itemsObs().filter(utils.hasBeenChecked);
         var confirmMsg = (copyables.length > 1) ?

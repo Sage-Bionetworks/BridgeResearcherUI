@@ -54,4 +54,4 @@ function newCriteria() {
 module.exports = {
     label: label,
     newCriteria: newCriteria
-}
+};

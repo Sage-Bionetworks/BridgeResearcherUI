@@ -1,56 +1,8 @@
-var ko = require('knockout');
-var utils = require('../../utils');
 var optionsService = require('../../services/options_service');
 var scheduleUtils = require('./schedule_utils');
+var utils = require('../../utils');
 var root = require('../../root');
-
-function nameInspector(string) {
-    var isArray = /\[\]$/.test(string);
-    var name = (isArray) ? string.match(/[^\[]*/)[0] : string;
-    return {name: name, observerName: name+"Obs", isArray: isArray};
-}
-function observablesFor(vm, fields, source) {
-    for (var i=0; i < fields.length; i++) {
-        var insp = nameInspector(fields[i]);
-        var value = (source) ? source[insp.name] : "";
-        if (insp.isArray) {
-            vm[insp.observerName] = ko.observableArray(value);
-        } else {
-            vm[insp.observerName] = ko.observable(value);
-        }
-    }
-}
-function valuesToObservables(vm, object, fields) {
-    for (var i=0; i < fields.length; i++) {
-        var insp = nameInspector(fields[i]);
-
-        var obs = vm[insp.observerName];
-        var value = object[insp.name];
-        if (utils.isDefined(obs) && utils.isDefined(value)) {
-            obs(value);
-        }
-    }
-}
-function observablesToObject(vm, object, fields) {
-    for (var i=0; i < fields.length; i++) {
-        var insp = nameInspector(fields[i]);
-
-        object[insp.name] = null;
-        var obs = vm[insp.observerName];
-        if (utils.isDefined(obs)) {
-            object[insp.name] = obs();
-        }
-    }
-}
-/**
- * enrollment - used to calculate if enrollment should be included in the eventId.
- * When there's no eventId, enrollment is assumed; generally if there is any event,
- * enrollment would be included last in a comma-separated list of events.
- */
-var SCHEDULE_FIELDS = ['delay','interval','scheduleType','expires','startsOn','endsOn','eventId',
-    'cronTrigger', 'times[]', 'activities[]', 'enrollment'];
-
-var ACTIVITY_FIELDS = ['label','labelDetail','activityType','taskId','guid','surveyGuid'];
+var ko = require('knockout');
 
 var SCHEDULE_TYPE_OPTIONS = Object.freeze([
     {value: 'once', label: 'Once'},
@@ -66,31 +18,6 @@ function newActivity() {
     addObserversToActivity(activity);
     return activity;
 }
-/**
- * Copy observers values in each schedule activity to that object. Slightly
- * more complicated than what ko.mapping provides.
- * @param activity
- */
-function copyObserverValuesBackToActivity(activity) {
-    activity.label = activity.labelObs();
-    activity.labelDetail = activity.labelDetailObs();
-    activity.activityType = activity.activityTypeObs();
-    delete activity.survey;
-    delete activity.task;
-    if (activity.activityType === 'task') {
-        activity.task = {
-            identifier: activity.taskIdObs()
-        };
-    } else if (activity.activityType === 'survey') {
-        activity.survey = {
-            guid: activity.surveyGuidObs()
-        };
-    }
-}
-/**
- * Copy all the activity's fields to observers.
- * @param activity
- */
 function addObserversToActivity(activity) {
     activity.labelObs = ko.observable(activity.label);
     activity.labelDetailObs = ko.observable(activity.labelDetail);
@@ -103,145 +30,101 @@ function addObserversToActivity(activity) {
     if (activity.activityType === 'survey') {
         activity.surveyGuidObs(activity.survey.guid);
     }
+    return activity;
 }
-/**
- * Times come back in "08:00:00.000" format, we only want HH:MM.
- * Not sure anything can be done about this, on the server?
- * @param schedule
- */
-function fixScheduleTimes(schedule) {
-    // TODO: These are also fixed in the formatter, but probably need to be fixed here as well.
-    schedule.times = schedule.times.map(function(time) {
-        return time.replace(":00.000","");
+function extractActivityFromObservables(activity) {
+    var act = {
+        label: activity.labelObs(),
+        labelDetail: activity.labelDetailObs(),
+        activityType: activity.activityTypeObs()
+    };
+    if (act.activityType === 'task') {
+        act.task = {identifier: activity.taskIdObs()};
+    } else if (act.activityType === 'survey') {
+        act.survey = {guid: activity.surveyGuidObs()};
+    }
+    return act;
+}
+function observe(self, name, isArray) {
+    self[name+"Obs"] = (isArray) ? ko.observableArray() : ko.observable();
+}
+function updateView(self, schedule, fields) {
+    fields.forEach(function(field) {
+        self[field+"Obs"](schedule[field]);    
     });
-    if (schedule.startsOn) {
-        schedule.startsOn = schedule.startsOn.replace(":00.000Z","");
+}
+function getEditorType(schedule) {
+    if (schedule.scheduleType === 'once') {
+        return "once";
+    } else if (schedule.scheduleType === 'recurring' && schedule.cronTrigger) {
+        return "cron";
+    } else {
+        return "interval";
     }
-    if (schedule.endsOn) {
-        schedule.endsOn = schedule.endsOn.replace(":00.000Z","");
-    }
-    schedule.times.sort();
+}
+function getScheduleType(editorType) {
+    return (editorType === "once") ? 'once' : 'recurring';
 }
 
-/**
- * Editor for a schedule (regardless of the strategy it is embedded in).
- * @param params
- *      - scheduleObs: schedule observer with a callback function attached to it.
- */
 module.exports = function(params) {
     var self = this;
-
-    self.scheduleObs = params.scheduleObs;
     self.collectionName = params.collectionName;
-    observablesFor(self, SCHEDULE_FIELDS);
-    // this is not initialized by observablesFor, because it is often null when
-    // the value is just enrollment by default.
-    self.eventIdObs = ko.observable("enrollment");
-
+        
     self.scheduleTypeOptions = SCHEDULE_TYPE_OPTIONS;
     self.scheduleTypeLabel = utils.makeOptionLabelFinder(SCHEDULE_TYPE_OPTIONS);
 
     self.activityTypeOptions = ACTIVITY_TYPE_OPTIONS;
-    self.activityTypeLabel = utils.makeOptionLabelFinder(ACTIVITY_TYPE_OPTIONS);
+    self.activityTypeLabel = utils.makeOptionLabelFinder(ACTIVITY_TYPE_OPTIONS);    
 
-    self.surveysOptionsObs = ko.observableArray();
-    self.surveysOptionsObs.extend({rateLimit: 50});
-    self.surveysOptionsLabel = utils.makeOptionLabelFinder(self.surveysOptionsObs);
-
-    self.taskOptionsObs = ko.observableArray();
-    self.taskOptionsObs.extend({rateLimit: 50});
-    self.taskOptionsLabel = utils.makeOptionLabelFinder(self.taskOptionsObs);
-
-    // This combines the scheduleType with the difference between interval and cron-based recurring schedules
-    self.editorScheduleTypeObs = ko.observable();
-    self.editorScheduleTypeObs.subscribe(function(newValue) {
-        self.scheduleTypeObs( (newValue === "once") ? 'once' : 'recurring' );    
+    observe(self, "eventId");
+    observe(self, "scheduleType");
+    observe(self, "startsOn");
+    observe(self, "endsOn");
+    observe(self, "delay");
+    observe(self, "interval");
+    observe(self, "times");
+    observe(self, "cronTrigger");
+    observe(self, "expires");
+    observe(self, "activities", true);
+    
+    self.scheduleObs = ko.pureComputed({
+        read: function() {
+            var sch = {
+                eventId: self.eventIdObs(),
+                scheduleType: self.scheduleTypeObs(),
+                startsOn: self.startsOnObs(),
+                endsOn: self.endsOnObs(),
+                delay: self.delayObs(),
+                interval: self.intervalObs(),
+                times: self.timesObs(),
+                cronTrigger: self.cronTriggerObs(),
+                expires: self.expiresObs(),
+                activities: self.activitiesObs().map(extractActivityFromObservables)
+            };
+            utils.deleteUnusedProperties(sch);
+            return sch;
+        },
+        write: function(schedule) {
+            updateView(self, schedule, ['eventId','scheduleType','startsOn','endsOn','delay',
+                'interval','times','cronTrigger','expires']);
+            self.editorScheduleTypeObs(getEditorType(schedule));
+            self.activitiesObs(schedule.activities.map(addObserversToActivity));
+        }
     });
     
-    function updateEditorScheduleType(schedule) {
-        if (schedule.scheduleType === 'once') {
-            self.editorScheduleTypeObs("once");
-        } else if (schedule.scheduleType === 'recurring' && schedule.cronTrigger) {
-            self.editorScheduleTypeObs("cron");
-        } else {
-            self.editorScheduleTypeObs("interval");
-        }
-    }
-
-    // This is the implementation called by the schedule plan viewModel to construct the model
-    self.scheduleObs.callback = function() {
-        self.activitiesObs().forEach(copyObserverValuesBackToActivity);
-        observablesToObject(self, self.scheduleObs(), SCHEDULE_FIELDS);
-
-        // To avoid an error, we have to remove some fields which are hidden and assumed to be 
-        // unused
-        if (self.scheduleObs().scheduleType === "once") {
-            delete self.scheduleObs().interval;
-            delete self.scheduleObs().cronTrigger;
-        } else if (self.editorScheduleTypeObs() === "interval") {
-            delete self.scheduleObs().cronTrigger;
-        } else if (self.editorScheduleTypeObs() === "cron") {
-            delete self.scheduleObs().interval;
-            self.scheduleObs().times = [];
-        }
+    params.scheduleObs.subscribe(self.scheduleObs);
+    params.scheduleObs.callback = function() {
         return self.scheduleObs();
     };
-
-    // This is fired when the parent viewModel gets a plan back from the server
-    var subscription = self.scheduleObs.subscribe(function(schedule) {
-        fixScheduleTimes(schedule);
-        updateEditorScheduleType(schedule);
-        schedule.activities.forEach(addObserversToActivity);
-        schedule.activities.forEach(function(activity) {
-            if (activity.survey && !self.surveysOptionsObs.loaded) {
-                self.surveysOptionsObs.push({label: 'Loading...', value: activity.survey.guid});
-            }
-            if (activity.task && !self.taskOptionsObs.loaded) {
-                self.taskOptionsObs.push({label: activity.task.identifier, value: activity.task.identifier});
-            }
-        });
-        if (schedule.scheduleType === "once") {
-            delete schedule.interval;
-            delete schedule.cronTrigger;
-        }
-        valuesToObservables(self, schedule, SCHEDULE_FIELDS);
-        subscription.dispose();
+    
+    self.editorScheduleTypeObs = ko.observable();
+    self.editorScheduleTypeObs.subscribe(function(newValue) {
+        self.scheduleTypeObs( getScheduleType(newValue) );    
     });
-
-    // Above, when an activity with a survey is loaded, if there's no option for it,
-    // it is not selected and then ends up being the first option when it comes in.
-    // Put a dummy loading option in to fix that. But then, if this very first, the
-    // loading option is not removed. So the .loaded property is used to guard against
-    // thats. In all, ugly.
-    optionsService.getSurveyOptions().then(function(surveys) {
-        self.surveysOptionsObs.removeAll();
-        self.surveysOptionsObs.push({value:"",label:"Select survey:"})
-        self.surveysOptionsObs.pushAll(surveys);
-        self.surveysOptionsObs.loaded = true;
-    });
-    optionsService.getTaskIdentifierOptions().then(function(options) {
-        // In this case as a transition, if we have an identifier that hasn't been enumerated,
-        // don't update the options because we're displaying it as a dummy option. It'll still
-        // fail when the user saves it.
-        self.taskOptionsObs.removeAll();
-        self.taskOptionsObs.push({value:"",label:"Select task:"})
-        if (options.length > 0) {
-            self.taskOptionsObs.pushAll(options);
-        }
-        self.taskOptionsObs.loaded = true;
-    });
-
+    
     self.formatDateTime = utils.formatDateTime;
-    self.formatTimes = function() {
-        var type = self.scheduleTypeObs();
-        var times = self.timesObs();
-        if (times && times.length) {
-            return scheduleUtils.formatTimesArray(
-                (type === 'recurring') ? times : times.slice(0,1));
-        }
-        return scheduleUtils.formatTimesArray(null);
-    };
     self.formatEventId = scheduleUtils.formatEventId;
+    self.formatTimes = scheduleUtils.formatTimesArray;
 
     self.editTimes = function(vm, event) {
         event.preventDefault();
@@ -250,21 +133,11 @@ module.exports = function(params) {
             scheduleTypeObs: self.scheduleTypeObs,
             clearTimesFunc: self.clearTimes
         });
-    };
+    };    
     self.clearTimes = function(vm, event) {
         event.preventDefault();
         self.timesObs([]);
-    };
-    self.editEventId = function(vm, event) {
-        event.preventDefault();
-        root.openDialog('event_id_editor', {
-            'eventIdObs': self.eventIdObs,'clearEventIdFunc': self.clearEventId
-        });
-    };
-    self.clearEventId = function(vm, event) {
-        event.preventDefault();
-        self.eventIdObs(null);
-    };
+    };    
     self.formatWindow = function() {
         if (self.startsOnObs() || self.endsOnObs()) {
             var string = "";
@@ -286,10 +159,19 @@ module.exports = function(params) {
             'endsOnObs': self.endsOnObs,
             'clearWindowFunc': self.clearWindow
         });
-    };
+    };    
     self.clearWindow = function() {
         self.startsOnObs(null);
         self.endsOnObs(null);
+    };
+    self.editEventId = function(vm, event) {
+        event.preventDefault();
+        root.openDialog('event_id_editor', 
+            {'eventIdObs': self.eventIdObs,'clearEventIdFunc': self.clearEventId});
+    };
+    self.clearEventId = function(vm, event) {
+        event.preventDefault();
+        self.eventIdObs(null);
     };
     self.addFirstActivity = function(vm, event) {
         self.activitiesObs.push(newActivity());
@@ -303,5 +185,36 @@ module.exports = function(params) {
         event.preventDefault();
         var context = ko.contextFor(event.target);
         self.activitiesObs.remove(context.$data);
-    };
+    };    
+
+    self.surveysOptionsObs = ko.observableArray();
+    self.surveysOptionsObs.extend({rateLimit: 50});
+    self.surveysOptionsLabel = utils.makeOptionLabelFinder(self.surveysOptionsObs);
+
+    self.taskOptionsObs = ko.observableArray();
+    self.taskOptionsObs.extend({rateLimit: 50});
+    self.taskOptionsLabel = utils.makeOptionLabelFinder(self.taskOptionsObs);
+
+    // Above, when an activity with a survey is loaded, if there's no option for it,
+    // it is not selected and then ends up being the first option when it comes in.
+    // Put a dummy loading option in to fix that. But then, if this very first, the
+    // loading option is not removed. So the .loaded property is used to guard against
+    // thats. In all, ugly.
+    optionsService.getSurveyOptions().then(function(surveys) {
+        self.surveysOptionsObs.removeAll();
+        self.surveysOptionsObs.push({value:"",label:"Select survey:"});
+        self.surveysOptionsObs.pushAll(surveys);
+        self.surveysOptionsObs.loaded = true;
+    });
+    optionsService.getTaskIdentifierOptions().then(function(options) {
+        // In this case as a transition, if we have an identifier that hasn't been enumerated,
+        // don't update the options because we're displaying it as a dummy option. It'll still
+        // fail when the user saves it.
+        self.taskOptionsObs.removeAll();
+        self.taskOptionsObs.push({value:"",label:"Select task:"});
+        if (options.length > 0) {
+            self.taskOptionsObs.pushAll(options);
+        }
+        self.taskOptionsObs.loaded = true;
+    });    
 };

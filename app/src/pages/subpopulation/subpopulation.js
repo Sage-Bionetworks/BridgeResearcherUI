@@ -13,61 +13,52 @@ module.exports = function(params) {
 
     var binder = bind(self)
         .obs('isNew', params.guid === "new")
-        .bind('name', '')
+        .obs('guid')
+        .obs('title', 'New Consent Group')
+        .bind('name')
         .bind('description')
-        .bind('required', false)
-        .bind('criteria')
-        .bind('historyItems[]', []);
+        .bind('required', true)
+        .bind('criteria');
 
-    function updateHistoryItems(data) {
-        self.historyItemsObs(data.items.slice(0, 5));
-    }
     function noLongerNew(response) {
         self.isNewObs(false);
+        self.guidObs(response.guid);
+        self.nameObs(self.subpopulation.name);
+        self.titleObs(self.subpopulation.name);
+        params.guid = response.guid;
         return response;
     }
+    function updateTitle(response) {
+        self.titleObs(response.name);
+        return response;
+    }
+    
     self.save = function(vm, event) {
         self.subpopulation = binder.persist(self.subpopulation);
         
         utils.startHandler(vm, event);
-        if (self.subpopulation.guid) {
-            serverService.updateSubpopulation(self.subpopulation)
-                .then(noLongerNew)
-                .then(utils.successHandler(vm, event, "Consent group has been saved."))
-                .catch(utils.failureHandler(vm, event));
-        } else {
-            serverService.createSubpopulation(self.subpopulation)
-                .then(noLongerNew)
-                .then(function(response) {
-                    params.guid = response.guid;
-                    serverService.getConsentHistory(params.guid).then(updateHistoryItems);
-                    self.publishedLinkObs(self.formatLink());
-                })
-                .then(utils.successHandler(vm, event, "Consent group has been saved."))
-                .catch(utils.failureHandler(vm, event));
-        }
+        
+        var promise = (self.subpopulation.guid) ?
+            serverService.updateSubpopulation(self.subpopulation) :
+            serverService.createSubpopulation(self.subpopulation);
+        promise.then(noLongerNew)
+            .then(utils.successHandler(vm, event, "Consent group has been saved."))
+            .catch(utils.failureHandler(vm, event));
     };
-    self.formatLink = function(item) {
-        return '#/subpopulations/'+params.guid+"/consents/"+ ((item)?item.createdOn:"recent");
-    }
-    self.formatDateTime = utils.formatDateTime;
-    self.publishedLinkObs = ko.observable(self.formatLink());
     
     var notFoundHandler = utils.notFoundHandler(self, "Consent group not found.", "#/subpopulations");
 
     serverService.getStudy()
         .then(binder.assign('study'))
         .then(function(study) {
-            var promise = (params.guid === "new") ?
-                Promise.resolve(newSubpop()) :
-                serverService.getSubpopulation(params.guid);
-            
-            promise.then(binder.assign('subpopulation'))
-                .then(binder.update())
-                .catch(notFoundHandler);
-            
-            if (params.guid !== "new") {
-                serverService.getConsentHistory(params.guid).then(updateHistoryItems);    
+            if (params.guid === "new") {
+                return Promise.resolve(newSubpop())
+                    .then(binder.assign('subpopulation'));
+            } else {
+                return serverService.getSubpopulation(params.guid)
+                    .then(binder.assign('subpopulation'))
+                    .then(binder.update())
+                    .then(updateTitle);
             }
-        });
+        }).catch(notFoundHandler);
 };

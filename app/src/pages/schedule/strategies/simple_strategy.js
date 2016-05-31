@@ -24,4 +24,4 @@ module.exports = function(params) {
     });
 
     root.setEditorPanel('SimpleScheduleStrategyPanel', {viewModel:self});
-}
+};

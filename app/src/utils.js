@@ -121,7 +121,7 @@ module.exports = {
             var maxB = num(b[fieldMax]);
             var diff = (minA - minB);
             return (diff !== 0) ? diff : (maxA - maxB);
-        }  
+        };
     },
     /**
      * Create a sort function that sorts an array of items by a specific field name
@@ -146,12 +146,12 @@ module.exports = {
             for (var i=0; i < sortFuncs.length; i++) {
                 var sorter = sortFuncs[i];
                 var output = sorter(a,b);
-                if (output != 0) {
+                if (output !== 0) {
                     return output;
                 }
             }
             return 0;
-        }
+        };
     },
     /**
      * A start handler called before a request to the server is made. All errors are cleared
@@ -194,12 +194,11 @@ module.exports = {
             ko.postbox.publish("clearErrors");
             if (response.status === 412) {
                 toastr.error('You do not appear to be a developer, researcher, or admin.');
-            } else if (response instanceof Error) {
-                toastr.error(response.message);
             } else if (response.responseJSON) {
                 var payload = response.responseJSON;
                 ko.postbox.publish("showErrors", payload);
-                console.log(payload);
+            } else if (response instanceof Error) {
+                toastr.error(response.message);
             } else {
                 toastr.error(GENERIC_ERROR);
             }
@@ -226,7 +225,7 @@ module.exports = {
                 actionElement.classList.remove("loading");
             }
             ko.postbox.publish("showErrors", {message:msg,errors:{}});
-        }
+        };
     },
     // TODO: Get rid of the need to have a reference to the dom element that has a spinner,
     // using a binding.
@@ -363,10 +362,10 @@ module.exports = {
      * @returns {Function}
      */
     makeEventToPostboxListener: function(eventName) {
-        return function(vm, event) {
+        return function(model, event) {
             event.preventDefault();
             event.stopPropagation();
-            ko.postbox.publish(eventName, vm);
+            ko.postbox.publish(eventName, model);
         };
     },
     /**

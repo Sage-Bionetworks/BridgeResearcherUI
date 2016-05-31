@@ -2,11 +2,18 @@ var ko = require('knockout');
 var utils = require('../../utils');
 var root = require('../../root');
 
+function getDate(observer) {
+    if (observer()) {
+        return observer().replace("Z","");
+    }
+    return '';
+}
+
 module.exports = function(params) {
     var self = this;
 
-    self.startsOnObs = ko.observable(params.startsOnObs());
-    self.endsOnObs = ko.observable(params.endsOnObs());
+    self.startsOnObs = ko.observable(getDate(params.startsOnObs));
+    self.endsOnObs = ko.observable(getDate(params.endsOnObs));
     self.formatDateTime = utils.formatDateTime;
 
     self.save = function() {
@@ -21,4 +28,4 @@ module.exports = function(params) {
     self.cancel = function() {
         root.closeDialog();
     };
-}
+};

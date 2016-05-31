@@ -35,7 +35,7 @@ module.exports = function(params) {
             self.searchLoadingObs(true);
             wrappedLoadingFunc(Math.round(self.currentPageObs()));
         }
-    }
+    };
 
     self.previousPage = function(vm, event) {
         var page = self.currentPageObs() -1;
@@ -43,18 +43,18 @@ module.exports = function(params) {
             self.pagerLoadingObs(true);
             wrappedLoadingFunc(page*pageSize);
         }
-    }
+    };
     self.nextPage = function(vm, event) {
         var page = self.currentPageObs() +1;
         if (page <= self.totalPagesObs()-1) {
             self.pagerLoadingObs(true);
             wrappedLoadingFunc(page*pageSize);
         }
-    }
+    };
     self.firstPage = function(vm, event) {
         self.pagerLoadingObs(true);
         wrappedLoadingFunc(0, vm, event);
-    }
+    };
     self.lastPage = function(vm, event) {
         self.pagerLoadingObs(true);
         wrappedLoadingFunc((self.totalPagesObs()-1)*pageSize);
