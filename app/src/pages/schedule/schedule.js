@@ -76,7 +76,7 @@ module.exports = function(params) {
     self.activityTypeOptions = ACTIVITY_TYPE_OPTIONS;
     self.activityTypeLabel = utils.makeOptionLabelFinder(ACTIVITY_TYPE_OPTIONS);    
 
-    observe(self, "eventId")
+    observe(self, "eventId");
     observe(self, "scheduleType");
     observe(self, "startsOn");
     observe(self, "endsOn");
@@ -100,12 +100,11 @@ module.exports = function(params) {
                 cronTrigger: self.cronTriggerObs(),
                 expires: self.expiresObs(),
                 activities: self.activitiesObs().map(extractActivityFromObservables)
-            }
+            };
             utils.deleteUnusedProperties(sch);
             return sch;
         },
         write: function(schedule) {
-            console.log(schedule.scheduleType);
             updateView(self, schedule, ['eventId','scheduleType','startsOn','endsOn','delay',
                 'interval','times','cronTrigger','expires']);
             self.editorScheduleTypeObs(getEditorType(schedule));
@@ -116,7 +115,7 @@ module.exports = function(params) {
     params.scheduleObs.subscribe(self.scheduleObs);
     params.scheduleObs.callback = function() {
         return self.scheduleObs();
-    }
+    };
     
     self.editorScheduleTypeObs = ko.observable();
     self.editorScheduleTypeObs.subscribe(function(newValue) {
@@ -203,7 +202,7 @@ module.exports = function(params) {
     // thats. In all, ugly.
     optionsService.getSurveyOptions().then(function(surveys) {
         self.surveysOptionsObs.removeAll();
-        self.surveysOptionsObs.push({value:"",label:"Select survey:"})
+        self.surveysOptionsObs.push({value:"",label:"Select survey:"});
         self.surveysOptionsObs.pushAll(surveys);
         self.surveysOptionsObs.loaded = true;
     });
@@ -212,10 +211,10 @@ module.exports = function(params) {
         // don't update the options because we're displaying it as a dummy option. It'll still
         // fail when the user saves it.
         self.taskOptionsObs.removeAll();
-        self.taskOptionsObs.push({value:"",label:"Select task:"})
+        self.taskOptionsObs.push({value:"",label:"Select task:"});
         if (options.length > 0) {
             self.taskOptionsObs.pushAll(options);
         }
         self.taskOptionsObs.loaded = true;
     });    
-}
+};

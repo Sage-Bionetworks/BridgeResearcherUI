@@ -27,7 +27,7 @@ function getPerc(step, max) {
 function createParticipantMaker(email) {
     return function(identifier) {
         return utils.createParticipantForID(email, identifier);
-    }
+    };
 }
 
 module.exports = function(params) {
@@ -77,7 +77,7 @@ module.exports = function(params) {
             self.percentageObs("100%");
             self.statusObs("Identifiers imported." + errorMsg);
             return response;
-        }
+        };
     }
     function sequence(promise, array, func) {
         return array.reduce(function(p, workItem) {
@@ -125,4 +125,4 @@ module.exports = function(params) {
     serverService.getStudy()
         .then(binder.assign('study'))
         .then(initParticipantMaker);
-}
+};

@@ -58,7 +58,7 @@ module.exports = function() {
         self.studyOptionsObs(studies.items);
         self.studyObs(studyKey);
         if (self.isLockedObs()) {
-            self.titleObs(findStudyName(self.studyOptionsObs(), studyKey))
+            self.titleObs(findStudyName(self.studyOptionsObs(), studyKey));
         }
     }
     

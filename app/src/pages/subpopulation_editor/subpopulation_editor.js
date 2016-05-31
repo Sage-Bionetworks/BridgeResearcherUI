@@ -62,7 +62,7 @@ module.exports = function(params) {
                 .then(function(response) {
                     params.createdOn = response.createdOn;
                     self.createdOnObs(response.createdOn);
-                    return serverService.publishStudyConsent(params.guid, params.createdOn)
+                    return serverService.publishStudyConsent(params.guid, params.createdOn);
                 })
                 .then(load)
                 .then(loadIntoEditor)

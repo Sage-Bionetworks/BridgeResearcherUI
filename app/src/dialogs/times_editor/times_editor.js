@@ -9,8 +9,6 @@ function hourMinuteValue(value) {
 module.exports = function(params) {
     var self = this;
 
-    console.log(params);
-
     self.itemsObs = ko.observableArray(
         ko.utils.arrayMap(params.timesObs(), hourMinuteValue)
     );
@@ -40,7 +38,7 @@ module.exports = function(params) {
         event.preventDefault();
         var context = ko.contextFor(event.target);
         self.itemsObs.remove(context.$data);
-    }
+    };
     self.save = function() {
         // Get the time from different places depending on whether
         // it's a list or a single value.

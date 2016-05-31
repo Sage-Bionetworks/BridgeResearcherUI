@@ -84,4 +84,4 @@ module.exports = {
     persistLanguages: persistLanguages,
     persistRoles: persistRoles,
     callObsCallback: callObsCallback
-}
+};

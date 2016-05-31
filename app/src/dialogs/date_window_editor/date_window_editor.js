@@ -28,4 +28,4 @@ module.exports = function(params) {
     self.cancel = function() {
         root.closeDialog();
     };
-}
+};

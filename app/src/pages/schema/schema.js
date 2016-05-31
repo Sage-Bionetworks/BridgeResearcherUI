@@ -1,4 +1,3 @@
-'use strict';
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var schemaUtils = require('../schema/schema_utils');

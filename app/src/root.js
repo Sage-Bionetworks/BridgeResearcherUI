@@ -44,11 +44,10 @@ var RootViewModel = function() {
 
     self.showNav = function() {
         self.showNavigationObs(true);
-    }
+    };
     self.hideNav = function() {
         self.showNavigationObs(false);
-    }
-
+    };
     self.setEditorPanel = function(name, params) {
         self.editorPanel(name);
         self.editorParams(params);

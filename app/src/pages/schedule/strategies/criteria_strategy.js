@@ -40,9 +40,6 @@ module.exports = function(params) {
     self.strategyObs = params.strategyObs;
     self.collectionName = params.collectionName;
     self.scheduleCriteriaObs = ko.observableArray([]).publishOn("scheduleCriteriaChanges");
-    self.scheduleCriteriaObs.subscribe(function(newValue) {
-        console.log("Items are being (re)ordered, value is", newValue); 
-    });
 
     params.strategyObs.callback = function () {
         var strategy = params.strategyObs();

@@ -34,7 +34,6 @@ function newGroup() {
 module.exports = function(params) {
     var self = this;
 
-    params.strategyObs;
     self.labelObs = params.labelObs;
     self.scheduleGroupsObs = ko.observableArray([]).publishOn("scheduleGroupChanges");
     self.collectionName = params.collectionName;

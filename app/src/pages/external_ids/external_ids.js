@@ -48,7 +48,7 @@ module.exports = function() {
     function convertToPaged(identifier) {
         return function() {
             return {items: [{identifier: identifier}]};    
-        }
+        };
     }
     function msgIfNoRecords(response) {
         if (response.items.length === 0) {
@@ -62,7 +62,7 @@ module.exports = function() {
         root.openDialog('external_id_importer', {vm: self});
     };
     self.enableManagement = function(vm, event) {
-        if (self.study != null) {
+        if (self.study !== null) {
             utils.startHandler(self, event);
             self.study.externalIdValidationEnabled = true;
             
@@ -118,5 +118,5 @@ module.exports = function() {
             .then(binder.update('total','items'))
             .then(msgIfNoRecords)
             .catch(utils.failureHandler());
-    }
-}
+    };
+};

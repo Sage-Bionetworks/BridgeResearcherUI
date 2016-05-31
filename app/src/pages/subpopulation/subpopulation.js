@@ -40,7 +40,7 @@ module.exports = function(params) {
         
         var promise = (self.subpopulation.guid) ?
             serverService.updateSubpopulation(self.subpopulation) :
-            serverService.createSubpopulation(self.subpopulation)
+            serverService.createSubpopulation(self.subpopulation);
         promise.then(noLongerNew)
             .then(utils.successHandler(vm, event, "Consent group has been saved."))
             .catch(utils.failureHandler(vm, event));
@@ -60,5 +60,5 @@ module.exports = function(params) {
                     .then(binder.update())
                     .then(updateTitle);
             }
-        }).catch(notFoundHandler)
+        }).catch(notFoundHandler);
 };

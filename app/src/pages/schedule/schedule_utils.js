@@ -39,17 +39,18 @@ var UNARY_EVENTS = Object.freeze({
 var TIME_OPTIONS = [];
 var MINUTES = ["00","30"];
 var timeFormatter = utils.makeOptionLabelFinder(TIME_OPTIONS);
+
+function fillTime(min) {
+    TIME_OPTIONS.push({
+        label: hour+":"+min+" "+meridian,
+        value: hour24+":"+min
+    });
+}
 for (var i=0; i < 24; i++) {
     var hour = (i === 0) ? 12 : (i > 12) ? i-12 : i;
     var hour24 = (i < 10) ? ("0"+i) : (""+i);
     var meridian = (i < 12) ? "AM" : "PM";
-
-    MINUTES.forEach(function(min) {
-        TIME_OPTIONS.push({
-            label: hour+":"+min+" "+meridian,
-            value: hour24+":"+min
-        });
-    });
+    MINUTES.forEach(fillTime);
 }
 
 function formatEventId(value) {

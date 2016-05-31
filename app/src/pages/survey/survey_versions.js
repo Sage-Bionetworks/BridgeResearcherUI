@@ -35,7 +35,7 @@ module.exports = function(params) {
                 .then(utils.successHandler(self, event, "Survey version deleted."))
                 .catch(utils.failureHandler(self, event));
         }
-    }
+    };
     self.publish = function(vm, event) {
         if (confirm("Are you sure you want to publish this survey version?")) {
             utils.startHandler(self, event);

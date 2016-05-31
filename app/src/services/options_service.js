@@ -73,7 +73,7 @@ function collectSurveyOptions(surveys) {
     });
 }
 function collectQuestionOptions(surveys) {
-    var questions = []
+    var questions = [];
     surveys.forEach(function(survey) {
         survey.elements.filter(filterQuestions).then(function (questions) {
             questions.forEach(function(question) {

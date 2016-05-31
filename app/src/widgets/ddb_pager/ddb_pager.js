@@ -37,7 +37,7 @@ module.exports = function(params) {
             self.currentPageObs(0);
             wrappedLoadingFunc();
         }
-    }
+    };
     
     self.firstPage = function(vm, event) {
         currentAssignmentFilter = null;
@@ -46,14 +46,14 @@ module.exports = function(params) {
         self.pagerLoadingObs(true);
         self.currentPageObs(0);
         wrappedLoadingFunc();
-    }
+    };
     self.nextPage = function(vm, event) {
         if (self.offsetKeyObs() !== null) {
             self.pagerLoadingObs(true);
             self.currentPageObs(self.currentPageObs()+1);
             wrappedLoadingFunc();
         }
-    }
+    };
     
     function getValue(value) {
         if (value === 'true') {

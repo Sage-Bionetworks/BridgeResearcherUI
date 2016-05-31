@@ -13,8 +13,8 @@ function partialRelayUpdater(vm, eventObj) {
             if (eventObj) {
                 eventObj.notifySubscribers(eventObj());
             }
-        }
-    }
+        };
+    };
 }
 
 /**

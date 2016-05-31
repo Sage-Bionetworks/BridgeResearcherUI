@@ -121,7 +121,7 @@ module.exports = {
             var maxB = num(b[fieldMax]);
             var diff = (minA - minB);
             return (diff !== 0) ? diff : (maxA - maxB);
-        }  
+        };
     },
     /**
      * Create a sort function that sorts an array of items by a specific field name
@@ -146,12 +146,12 @@ module.exports = {
             for (var i=0; i < sortFuncs.length; i++) {
                 var sorter = sortFuncs[i];
                 var output = sorter(a,b);
-                if (output != 0) {
+                if (output !== 0) {
                     return output;
                 }
             }
             return 0;
-        }
+        };
     },
     /**
      * A start handler called before a request to the server is made. All errors are cleared
@@ -225,7 +225,7 @@ module.exports = {
                 actionElement.classList.remove("loading");
             }
             ko.postbox.publish("showErrors", {message:msg,errors:{}});
-        }
+        };
     },
     // TODO: Get rid of the need to have a reference to the dom element that has a spinner,
     // using a binding.

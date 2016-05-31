@@ -19,7 +19,7 @@ module.exports = function(params) {
         .bind('label', '')
         .bind('minAppVersion', '')
         .bind('maxAppVersion', '')
-        .obs('schedulePlanType', 'SimpleScheduleStrategy')
+        .obs('schedulePlanType', 'SimpleScheduleStrategy');
         
     self.strategyObs.callback = utils.identity;
     // Fields for this form
@@ -69,4 +69,4 @@ module.exports = function(params) {
             .then(binder.update())
             .catch(notFoundHandler);
     });
-}
+};
