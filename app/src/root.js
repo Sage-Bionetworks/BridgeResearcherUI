@@ -10,7 +10,7 @@ var pageSets = {
     'schemas': ['schemas','schema','schema_versions'],
     'scheduleplans': ['scheduleplans','scheduleplan'],
     've_template': ['ve_template', 'rp_template'],
-    'subpopulations': ['subpopulations', 'subpopulation', 'consent'],
+    'subpopulations': ['subpopulations', 'subpopulation', 'subpopulation_editor', 'subpopulation_history', 'subpopulation_download'],
     'participants': ['participants','participant','participant_consents'],
     'externalIds': ['external_ids'],
     'admin/info': ['admin_info'],

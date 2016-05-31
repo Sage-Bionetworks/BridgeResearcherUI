@@ -8,25 +8,15 @@ module.exports = function(params) {
     self.editor = null;
 
     bind(self)
-        .obs('mesage')
         .obs('active', true)
         .obs('createdOn')
         .obs('historyItems[]')
         .obs('guid', params.guid)
-        .obs('name')
-        .obs('htmlUrl')
-        .obs('pdfUrl')
-        .obs('tab', 'current');
+        .obs('name');
 
     // subpopulation fields
     serverService.getSubpopulation(params.guid).then(function(subpop) {
         self.nameObs(subpop.name);
-    });
-    self.tabObs.subscribe(function(value) {
-        if (value === "history") {
-            serverService.getConsentHistory(params.guid)
-                .then(updateHistoryItems);
-        }
     });
 
     // The editor and the request for the content can arrive in any order. bind here
@@ -45,10 +35,6 @@ module.exports = function(params) {
         };
     })(self);
 
-    function updateHistoryItems(response) {
-        self.historyItemsObs(response.items);
-        return response;
-    }
     function loadIntoEditor(consent) {
         if (consent.documentContent.indexOf("<html") > -1) {
             var doc = consent.documentContent;
@@ -64,59 +50,37 @@ module.exports = function(params) {
     function load() {
         return serverService.getStudyConsent(params.guid, params.createdOn);
     }
-    function saveAfterPublish(response) {
-        serverService.getConsentHistory(params.guid)
-            .then(updateHistoryItems)
-            .catch(utils.failureHandler());
-        return response;
-    }
-    function showCurrentTab() {
-        self.tabObs('current');
-    }
 
     self.formatDateTime = utils.formatDateTime;
 
     self.publish = function(vm, event) {
-        if (confirm("Are you sure you want to publish this consent?")) {
+        if (confirm("Are you sure you want to save & publish this consent?")) {
             utils.startHandler(vm, event);
-
-            params.guid = vm.subpopulationGuid;
-            params.createdOn = vm.createdOn;
-
-            serverService.publishStudyConsent(params.guid, params.createdOn)
+            
+            utils.startHandler(vm, event);
+            serverService.saveStudyConsent(params.guid, {documentContent: self.editor.getData()})
+                .then(function(response) {
+                    params.createdOn = response.createdOn;
+                    self.createdOnObs(response.createdOn);
+                    return serverService.publishStudyConsent(params.guid, params.createdOn)
+                })
                 .then(load)
                 .then(loadIntoEditor)
-                .then(saveAfterPublish)
                 .then(utils.successHandler(vm, event, "Consent published"))
                 .catch(utils.failureHandler(vm, event));
         }
     };
-    self.save = function(passwordPolicy, event) {
+    self.save = function(vm, event) {
         utils.startHandler(self, event);
 
         serverService.saveStudyConsent(params.guid, {documentContent: self.editor.getData()})
             .then(loadIntoEditor)
-            .then(utils.successHandler(self, event, "Consent saved."))
-            .catch(utils.failureHandler(self, event));
-    };
-    self.loadHistoryItem = function(item) {
-        serverService.getStudyConsent(params.guid, item.createdOn)
-            .then(loadIntoEditor)
-            .then(showCurrentTab)
-            .catch(utils.failureHandler());
+            .then(utils.successHandler(vm, event, "Consent saved."))
+            .catch(utils.failureHandler(vm, event));
     };
     var promise = (params.createdOn) ?
         serverService.getStudyConsent(params.guid, params.createdOn) :
         serverService.getMostRecentStudyConsent(params.guid);
     promise.then(loadIntoEditor)
-            .then(showCurrentTab)
             .catch(utils.failureHandler());
-            
-    serverService.getSession().then(function(session) {
-        var host = config.host[session.environment] + "/" + params.guid + "/consent.";
-        host = host.replace('https','http');
-        host = host.replace('webservices','docs');
-        self.htmlUrlObs(host + 'html');
-        self.pdfUrlObs(host + 'pdf');
-    });
 };
