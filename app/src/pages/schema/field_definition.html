@@ -13,12 +13,12 @@
     <div class="draggable">
         <ui-checkbox params="checkedObs: requiredObs">Required</ui-checkbox>
     </div>
-    <div class="draggable schema-actions">
-        <span data-bind="fadeRemove: {selector: '.field_definition', object: $data.field}">
-            <i class="delete icon link"></i>Delete
-        </span>        
-        <span data-bind="click: $parents[1].addBelow">
-            <i class="add icon link"></i>Add Below
-        </span>        
+    <div class="draggable activity-controls">
+        <button class="ui compact mini button" data-bind="click: $parents[1].addBelow">
+            <i class="square add icon"></i>Add below
+        </button>
+        <button class="ui red compact mini button" data-bind="fadeRemove: {selector: '.field_definition', object: $data.field}">
+            <i class="delete icon"></i>Delete
+        </button>
     </div>
 </div>

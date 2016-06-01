@@ -215,3 +215,14 @@ progress {
         vertical-align: middle;
     }
 }
+
+/* Used to position the green/orange label next to version number in secondary menu. */
+.pub-status {
+    .item:first-child {
+        padding-right: 0 !important;
+    }
+    .item:not(:first-child) {
+        padding-left: .25rem !important;
+    }
+    
+}

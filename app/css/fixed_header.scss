@@ -42,4 +42,13 @@
         height: 0;
         min-height: 1rem;
     }
+    /* Used to position the green/orange label next to version number in secondary menu. */
+    .right.menu.pub-status {
+        .item:first-child {
+            padding-right: 0;
+        }
+        .item:not(:first-child) {
+            padding-left: .25rem;
+        }
+    }        
 }

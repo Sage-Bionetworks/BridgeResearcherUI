@@ -19,6 +19,8 @@ module.exports = function(params) {
     var pageKey = params.pageKey;
     var currentAssignmentFilter = null;
     self.top = params.top;
+    self.showCredentials = (typeof params.showCredentials === "boolean") ? 
+        params.showCredentials : true;
     
     bind(self)
         .obs('idFilter')
@@ -78,12 +80,13 @@ module.exports = function(params) {
     function wrappedLoadingFunc() {
         var offsetKey = self.offsetKeyObs();
         var idFilter = self.idFilterObs();
+        var requestAssign = (self.showCredentials) ? currentAssignmentFilter : true;
 
         loadingFunc({
             offsetKey: offsetKey,
             pageSize: pageSize,
             idFilter: idFilter,
-            assignmentFilter: currentAssignmentFilter
+            assignmentFilter: requestAssign
         }).then(function(response) {
             response.currentPage = self.currentPageObs();
             ko.postbox.publish(pageKey+'-recordsPaged', response);

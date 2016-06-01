@@ -22,7 +22,7 @@
         <div class="two fields">
             <div class="required field" id="label">
                 <label>Label</label>
-                <ui-text params="fieldObs: labelObs"></ui-text>
+                <input type="text" class="editor" data-bind="textInput: labelObs, hasFocus: true"/>
             </div>
             <div class="field">
                 <label>Limit schedules &amp; tasks to app version(s):</label>

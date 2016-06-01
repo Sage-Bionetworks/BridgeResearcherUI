@@ -5,15 +5,7 @@
                 <a class="section" href="#/surveys">Surveys</a>
                 <i class="right chevron icon divider"></i>
             </div> 
-            <h3>
-                <span data-bind="text: nameObs">Survey Versions</span>
-                <div class="green ui mini label" data-bind="visible: publishedObs">
-                    <i class="checkmark icon"></i> Published
-                </div>
-                <div class="orange ui mini label" data-bind="visible: !publishedObs()">
-                    <i class="warning icon"></i> Not Published
-                </div>
-            </h3>
+            <h3 data-bind="text: nameObs"></h3>
         </div>
         <div class="fixed-header-buttons"></div>
     </div>
@@ -45,8 +37,8 @@
                         <i class="checkmark icon"></i> Published
                     </div>
                     <div data-bind="visible: !$data.published" style="text-align: right">
-                        <button class="ui primary compact tiny button" data-bind="click: $component.publish">Publish</button>
-                        <button class="ui red compact tiny button" data-bind="click: $component.deleteSurvey">Delete</button>
+                        <button class="ui primary compact mini button" data-bind="click: $component.publish">Publish</button>
+                        <button class="ui red compact mini button" data-bind="click: $component.deleteSurvey">Delete</button>
                     </div>
                 </td>
             </tr>

@@ -64,9 +64,8 @@
     }
 }
 .activity-controls {
-    span {
-        padding-left: .75rem!important;
-    }
+    @include align-items(top); // just seems slightly more aligned than leaving it alone.
+    padding-left: .75rem!important; 
 }
 
 .times-label {

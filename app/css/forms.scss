@@ -37,11 +37,6 @@ input[readonly] {
     border-color:transparent!important;
     padding-left: 0rem!important;
 }
-.input-field { /* For readonly divs that need to occupy the space of an input field */
-    padding: .5rem 0;
-    display: block;
-}
-
 /* Tag editor control */
 .tag-editor label {
     white-space: nowrap;

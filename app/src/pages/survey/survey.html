@@ -5,16 +5,7 @@
                 <a class="section" href="#/surveys">Surveys</a>
                 <i class="right chevron icon divider"></i>
             </div>             
-            <h3>
-                <span data-bind="visible: nameObs().length > 0, text: nameObs"></span>
-                <span data-bind="visible: nameObs().length == 0">New Survey</span>
-                <div class="green ui mini label" data-bind="visible: publishedObs">
-                    <i class="checkmark icon"></i> Published
-                </div>
-                <div class="orange ui mini label" data-bind="visible: !publishedObs()">
-                    <i class="warning icon"></i> Not Published
-                </div>
-            </h3>
+            <h3 data-bind="text: nameObs"></h3>
         </div>
         <div class="fixed-header-buttons">
             <button class="ui primary small button" data-bind="click: save">Save</button>
@@ -28,7 +19,7 @@
         <div class="two fields">
             <div class="required field" id="name">
                 <label>Name</label>
-                <ui-text params="fieldObs: nameObs"></ui-text>
+                <input type="text" class="editor" data-bind="textInput: nameObs, hasFocus: true"/>
             </div>
             <div class="required field" id="identifier">
                 <label>Identifier</label>

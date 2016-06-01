@@ -57,7 +57,7 @@ function formatEventId(value) {
     if (!value) {
         return "On enrollment (default)";
     }
-    var str = value.split(',').reverse().map(function(value) {
+    return value.split(',').reverse().map(function(value) {
         if (UNARY_EVENTS[value]) {
             return UNARY_EVENTS[value];
         }
@@ -76,7 +76,6 @@ function formatEventId(value) {
         }
         return " " + value;
     }).join(', and ');
-    return str.substring(0,1).toUpperCase() + str.substring(1);
 }
 function formatTimesArray(times) {
     return (times && times.length) ? toList(times.map(function(time) {
@@ -190,6 +189,8 @@ function formatSchedule(sch) {
         }
         return formatEventId(event);
     }));
+    // Capitalize first letter of phrase
+    initClause = initClause.substring(0,1).toUpperCase() + initClause.substring(1);
     buffer.push(initClause);
     if (sch.scheduleType === "recurring") {
         // recurring schedules should have an interval, or a cron expression, but not both

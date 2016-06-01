@@ -94,13 +94,13 @@
                     optionsText: 'label', optionsValue: 'value', value: $data.surveyGuidObs"></select>                    
             </div>
             <div>
-                <div class="inline-form-text activity-controls">
-                    <span class="link" data-bind="click: $component.deleteActivity">
+                <div class="activity-controls">
+                    <button class="ui compact mini button" data-bind="click: $component.addActivityAfter">
+                        <i class="square add icon"></i>Add below
+                    </button>
+                    <button class="ui red compact mini button" data-bind="click: $component.deleteActivity">
                         <i class="delete icon"></i>Delete
-                    </span>
-                    <span class="link" data-bind="click: $component.addActivityAfter">
-                        <i class="square add icon"></i>Add Below
-                    </span>
+                    </button>
                 </div>
             </div>
         </div>

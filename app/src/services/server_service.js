@@ -408,6 +408,9 @@ module.exports = {
     signOutUser: function(id) {
         return post(config.participants+"/"+id+"/signOut");  
     },
+    requestResetPasswordUser: function(id) {
+        return post(config.participants+"/"+id+"/requestResetPassword");
+    },
     getExternalIds: function(params) {
         return get(config.externalIds + query(params || {}));
     },

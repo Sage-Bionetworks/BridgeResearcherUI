@@ -183,8 +183,10 @@ module.exports = function(params) {
     };
     self.deleteActivity = function(vm, event) {
         event.preventDefault();
-        var context = ko.contextFor(event.target);
-        self.activitiesObs.remove(context.$data);
+        if (confirm("Are you sure?")) {
+            var context = ko.contextFor(event.target);
+            self.activitiesObs.remove(context.$data);
+        }
     };    
 
     self.surveysOptionsObs = ko.observableArray();

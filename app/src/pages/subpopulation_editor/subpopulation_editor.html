@@ -28,16 +28,16 @@
             href: '#/subpopulations/'+guidObs()+'/consents/download'}">
             <i class="download icon"></i> Download
         </a>
-        <div class="right menu">
-            <div class="item" style="padding-right:0" data-bind="visible: !!createdOnObs()">
+        <div class="right menu pub-status">
+            <div class="item" data-bind="visible: !!createdOnObs()">
                 <i class="clock icon"></i> <span data-bind="text: createdOnObs"></span>
             </div>
-            <div class="item" style="padding-left:.25rem" data-bind="visible: activeObs">
+            <div class="item" data-bind="visible: activeObs">
                 <div class="green mini ui label">
                     <i class="checkmark icon"></i> Published
                 </div>
             </div>
-            <div class="item" style="padding-left:.25rem" data-bind="visible: !activeObs()">
+            <div class="item" data-bind="visible: !activeObs()">
                 <div class="orange ui mini label">
                     <i class="warning icon"></i> Not Published
                 </div>

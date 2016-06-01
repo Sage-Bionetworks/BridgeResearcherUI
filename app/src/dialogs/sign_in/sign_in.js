@@ -8,15 +8,6 @@ var root = require('../../root');
 var STUDY_KEY = 'studyKey';
 var ENVIRONMENT = 'environment';
 
-function findStudyName(studies, studyIdentifier) {
-    try {
-        return (studies || []).filter(function(studyOption) {
-            return (studyOption.identifier === studyIdentifier);
-        })[0].name;
-    } catch(e) {
-        throw new Error("Study not found");
-    }
-}
 // There will be stale data in the UI if we don't reload when changing studies or environments.
 function makeReloader(studyKey, environment) {
     var requiresReload = (storeService.get(STUDY_KEY) !== studyKey || 
@@ -58,13 +49,13 @@ module.exports = function() {
         self.studyOptionsObs(studies.items);
         self.studyObs(studyKey);
         if (self.isLockedObs()) {
-            self.titleObs(findStudyName(self.studyOptionsObs(), studyKey));
+            self.titleObs(utils.findStudyName(self.studyOptionsObs(), studyKey));
         }
     }
     
     function loadStudyList(newValue) {
         serverService.getStudyList(newValue)
-            .then(loadStudies).catch(utils.failureHandler(self));
+            .then(loadStudies).catch(utils.globalToFormFailureHandler());
     }
 
     function clear(response) {
@@ -94,7 +85,7 @@ module.exports = function() {
 
         utils.startHandler(self, {target: signInSubmit});
 
-        var studyName = findStudyName(self.studyOptionsObs(), studyKey);
+        var studyName = utils.findStudyName(self.studyOptionsObs(), studyKey);
         
         var credentials = {
             username: self.usernameObs(), password: self.passwordObs(), study: studyKey
