@@ -29,16 +29,19 @@
                     <form class="ui form">
                         <h4 class="ui dividing header">Add New List Item</h4>
                         <div class="field">
-                            <ui-text params="fieldObs: labelObs, placeholder: 'Label', keyHandler: handleKeyEvent"></ui-text>
+                            <input type="text" data-bind="textInput: labelObs, 
+                                event:{keydown: handleKeyEvent}" placeholder="Label"/>
                         </div>
                         <div class="field">
-                            <ui-text params="fieldObs: detailObs, placeholder: 'Detail (optional)', keyHandler: handleKeyEvent"></ui-text>
+                            <input type="text" data-bind="textInput: detailObs, 
+                                event:{keydown: handleKeyEvent}" placeholder="Detail (optional)"/>
                         </div>
                         <div class="field">
-                            <ui-text params="fieldObs: valueObs, placeholder: 'Server value (optional)', keyHandler: handleKeyEvent"></ui-text>
+                            <input type="text" data-bind="textInput: valueObs, 
+                                event:{keydown: handleKeyEvent}" placeholder="Server value (optional)"/>
                         </div>
                         <div class="field">
-                            <span class="link" data-bind="click: addListItem" class="ui small button">Add</span>
+                            <button class="ui small button" data-bind="click: addListItem">Add</button>
                         </div>
                     </form>
                 </div>

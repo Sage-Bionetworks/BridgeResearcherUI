@@ -1,6 +1,7 @@
 <div style="margin-bottom:1rem">
     <div class="ui icon input" data-bind="css:{loading: searchLoadingObs}, visible: top">
-        <input type="text" placeholder="Email address" data-bind="textInput: filterBoxObs, event: {keyup: doSearch}">
+        <input type="text" placeholder="Email address" data-bind="textInput: filterBoxObs, 
+            event: {keyup: doSearch}, hasFocus: true">
         <i class="search icon"></i>
     </div>
     <div class="ui small pagination menu" data-bind="visible: totalPagesObs() > 1, css:{loading:pagerLoadingObs}">

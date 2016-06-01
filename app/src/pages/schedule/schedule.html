@@ -47,7 +47,7 @@
         <div class="field" data-bind="visible: editorScheduleTypeObs() === 'cron', attr:{id:
             'strategy_'+$component.collectionName+'schedule_cronTrigger'}">
             <label>Then follow <a href="http://www.cronmaker.com/" target="_blank">cron expression</a></label>
-            <ui-text params="fieldObs: cronTriggerObs, className: 'short-input'"></ui-text>
+            <input type="text" class="editor short-input" data-bind="textInput: cronTriggerObs"/>
         </div>
         <div class="field" data-bind="attr:{id:
             'strategy_'+$component.collectionName+'schedule_expires'}">
@@ -94,13 +94,13 @@
                     optionsText: 'label', optionsValue: 'value', value: $data.surveyGuidObs"></select>                    
             </div>
             <div>
-                <div class="inline-form-text activity-controls">
-                    <span class="link" data-bind="click: $component.deleteActivity">
+                <div class="activity-controls">
+                    <button class="ui basic compact mini button" data-bind="click: $component.addActivityAfter">
+                        <i class="square add icon"></i>Add below
+                    </button>
+                    <button class="ui basic red compact mini button" data-bind="click: $component.deleteActivity">
                         <i class="delete icon"></i>Delete
-                    </span>
-                    <span class="link" data-bind="click: $component.addActivityAfter">
-                        <i class="square add icon"></i>Add Below
-                    </span>
+                    </button>
                 </div>
             </div>
         </div>

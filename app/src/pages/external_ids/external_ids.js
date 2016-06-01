@@ -52,7 +52,7 @@ module.exports = function() {
     }
     function msgIfNoRecords(response) {
         if (response.items.length === 0) {
-            document.querySelector(".loading_status").textContent = "There are no external IDs (or none that match your search).";
+            document.querySelector(".loading_status").textContent = "There are no external IDs (or none that start with your search string).";
         }
         return response;
     }

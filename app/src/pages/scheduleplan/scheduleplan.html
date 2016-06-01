@@ -22,16 +22,16 @@
         <div class="two fields">
             <div class="required field" id="label">
                 <label>Label</label>
-                <ui-text params="fieldObs: labelObs"></ui-text>
+                <input type="text" data-bind="textInput: labelObs, hasFocus: true"/>
             </div>
             <div class="field">
                 <label>Limit schedules &amp; tasks to app version(s):</label>
                 <div class="two fields">
                     <div class="field" id="minAppVersion">
-                        <ui-number params="fieldObs: minAppVersionObs, placeholder: 'Min'"></ui-number>
+                        <input type="number" data-bind="textInput: minAppVersionObs" placeholder="Min"/>
                     </div>
                     <div class="field" id="maxAppVersion">
-                        <ui-number params="fieldObs: maxAppVersionObs, placeholder: 'Max'"></ui-number>
+                        <input type="number" data-bind="textInput: maxAppVersionObs" placeholder="Max"/>
                     </div>
                 </div>
             </div>

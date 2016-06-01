@@ -1,16 +1,13 @@
 <div class="line-control">
     <div>
         <div class="ui icon input" data-bind="css:{loading: searchLoadingObs}, visible: top">
-            <input type="text" placeholder="Start of ID" data-bind="textInput: idFilterObs, event: {keyup: doSearch}">
+            <input type="text" placeholder="Start of ID" data-bind="textInput: idFilterObs, 
+                event: {keyup: doSearch}, hasFocus: top">
             <i class="search icon"></i>
         </div>
     </div>
-    <div class="line-control-radio" data-bind="visible: top">
-        <label>Reserved:</label>
-        <div class="ui radio checkbox">
-            <input id="assignEither" type="radio" value="all" name="assign" data-bind="click: assignFilter" checked/>
-            <label for="assignEither">Either</label>
-        </div>
+    <div class="line-control-radio" data-bind="visible: top && showCredentials">
+        <label>Credentials?</label>
         <div class="ui radio checkbox">
             <input id="assignTrue" type="radio" value="true" name="assign" data-bind="click: assignFilter"/>
             <label for="assignTrue">Yes</label>
@@ -18,6 +15,10 @@
         <div class="ui radio checkbox">
             <input id="assignFalse" type="radio" value="false" name="assign" data-bind="click: assignFilter"/>
             <label for="assignFalse">No</label>
+        </div>
+        <div class="ui radio checkbox">
+            <input id="assignEither" type="radio" value="all" name="assign" data-bind="click: assignFilter" checked/>
+            <label for="assignEither">Both</label>
         </div>
     </div>
     <div>

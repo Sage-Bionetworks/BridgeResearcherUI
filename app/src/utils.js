@@ -428,5 +428,14 @@ module.exports = {
             "sharingScope": "all_qualified_researchers"
         };
     },
-    mightyMessageFinder: mightyMessageFinder
+    mightyMessageFinder: mightyMessageFinder,
+    findStudyName: function (studies, studyIdentifier) {
+        try {
+            return (studies || []).filter(function(studyOption) {
+                return (studyOption.identifier === studyIdentifier);
+            })[0].name;
+        } catch(e) {
+            throw new Error("Study '"+studyIdentifier+"' not found.");
+        }
+    }
 };

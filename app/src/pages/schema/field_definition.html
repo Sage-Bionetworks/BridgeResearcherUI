@@ -1,7 +1,7 @@
 <div class="field_definition draggable">
     <div class="draggable">
         <div class="field" data-bind="attr:{id:'fieldDefinitions'+$index()+'_name'}">
-            <ui-text params="fieldObs: nameObs, placeholder: 'Name'"></ui-text>
+            <input type="text" data-bind="textInput: nameObs" placeholder="Name"/>
         </div>
     </div>
     <div class="draggable">
@@ -13,12 +13,12 @@
     <div class="draggable">
         <ui-checkbox params="checkedObs: requiredObs">Required</ui-checkbox>
     </div>
-    <div class="draggable schema-actions">
-        <span data-bind="fadeRemove: {selector: '.field_definition', object: $data.field}">
-            <i class="delete icon link"></i>Delete
-        </span>        
-        <span data-bind="click: $parents[1].addBelow">
-            <i class="add icon link"></i>Add Below
-        </span>        
+    <div class="draggable activity-controls">
+        <button class="ui basic compact mini button" data-bind="click: $parents[1].addBelow">
+            <i class="square add icon"></i>Add below
+        </button>
+        <button class="ui basic red compact mini button" data-bind="fadeRemove: {selector: '.field_definition', object: $data.field}">
+            <i class="delete icon"></i>Delete
+        </button>
     </div>
 </div>

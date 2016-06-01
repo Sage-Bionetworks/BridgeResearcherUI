@@ -8,9 +8,19 @@
     <a class="item" data-bind="css:{active: isActive('history')}, attr: {href: linkMaker('history')}, visible: !!createdOnObs()">
         <i class="history icon"></i> History &amp; Publication
     </a>
-    <div class="right menu">
+    <div class="right menu pub-status">
         <div class="item" data-bind="visible: !!createdOnObs()">
             <i class="clock icon"></i> <span data-bind="text: formatDateTime(createdOnObs())"></span>
+        </div>
+        <div class="item" data-bind="visible: publishedObs">
+            <span class="green ui mini label">
+                <i class="checkmark icon"></i> Published
+            </span>
+        </div>
+        <div class="item" data-bind="visible: !publishedObs()">
+            <span class="orange ui mini label">
+                <i class="warning icon"></i> Not Published
+            </span>
         </div>
     </div>
 </div>

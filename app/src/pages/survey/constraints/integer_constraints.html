@@ -6,14 +6,14 @@
         </td>
         <td class="element-content-constraints-control"
             data-bind="attr:{id: $parent.collectionName+'constraints_minValue'}">
-            <ui-text class="numeric" params="fieldObs: minValueObs"></ui-text>
+            <input class="numeric" type="text" data-bind="textInput: minValueObs"/>
         </td>
         <td class="element-content-constraints-label">
             <label>Step</label>
         </td>
         <td class="element-content-constraints-control"
             data-bind="attr:{id: $parent.collectionName+'constraints_step'}">
-            <ui-text class="numeric" params="fieldObs: stepObs"></ui-text>
+            <input class="numeric" type="text" data-bind="textInput: stepObs"/>
         </td>
         <td class="element-content-constraints-label">
             <label>Rules</label>
@@ -27,7 +27,7 @@
             <label>Maximum value</label>
         </td>
         <td class="element-content-constraints-control">
-            <ui-text class="numeric" params="fieldObs: maxValueObs"></ui-text>
+            <input class="numeric" type="text" data-bind="textInput: maxValueObs"/>
         </td>
         <td class="element-content-constraints-label">
             <label>Unit</label>
