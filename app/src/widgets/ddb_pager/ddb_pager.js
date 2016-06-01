@@ -68,6 +68,8 @@ module.exports = function(params) {
     
     self.assignFilter = function(vm, event) {
         currentAssignmentFilter = getValue(event.target.value);
+        self.offsetKeyObs(null);
+        self.currentPageObs(0);
         wrappedLoadingFunc();
         return true;
     };

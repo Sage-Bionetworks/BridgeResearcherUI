@@ -19,7 +19,7 @@
                 </div>
                 <div class="rules-table-rule-cell">
                     <div data-bind="visible: $data.operator() !== 'de'">
-                        <ui-text params="fieldObs: $data.value"></ui-text>
+                        <input type="text" data-bind="textInput: $data.value"/>                        
                     </div>
                 </div>
                 <div class="rules-table-rule-cell">

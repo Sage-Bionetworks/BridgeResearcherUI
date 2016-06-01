@@ -106,17 +106,18 @@ module.exports = function(params) {
             utils.formFailure(event.target, 'You must enter some identifiers.');
             return;
         }
+        var doCreateCredentials = self.createCredentialsObs() || self.autoCredentialsObs();
+        
         var queue = createQueue(identifiers);
         // If the user checked the create credentials checkbox, or if the dialog was opened
         // from a context where we always create the credentials in order to reduce confusion...
-        var participants = (self.createCredentialsObs() || self.autoCredentialsObs()) ? 
-            identifiers.map(self.createParticipant) : [];
+        var participants = (doCreateCredentials) ? identifiers.map(self.createParticipant) : [];
 
         utils.startHandler(vm, event);
         startProgressMeter(queue.length + participants.length);
         
         var promise = sequence(Promise.resolve(), queue, serverService.addExternalIds);
-        if (self.createCredentialsObs()) {
+        if (doCreateCredentials) {
             promise = sequence(promise, participants, serverService.createParticipant);
         }
         promise.then(endProgressMeter(event.target))

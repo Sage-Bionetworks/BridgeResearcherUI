@@ -20,10 +20,10 @@ module.exports = function(params) {
     };
     self.deleteRevisions = function(vm, event) {
         var deletables = self.itemsObs().filter(utils.hasBeenChecked);
-        var msg = (deletables.length > 2) ?
+        var msg = (deletables.length > 1) ?
                 "Are you sure you want to delete these schema versions?" :
                 "Are you sure you want to delete this schema version?";
-        var confirmMsg = (deletables.length > 2) ?
+        var confirmMsg = (deletables.length > 1) ?
                 "Upload schemas deleted." : "Upload schema deleted.";
         if (confirm(msg)) {
             utils.startHandler(self, event);

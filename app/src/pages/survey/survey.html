@@ -19,11 +19,11 @@
         <div class="two fields">
             <div class="required field" id="name">
                 <label>Name</label>
-                <input type="text" class="editor" data-bind="textInput: nameObs, hasFocus: true"/>
+                <input type="text" data-bind="textInput: nameObs, hasFocus: true"/>
             </div>
             <div class="required field" id="identifier">
                 <label>Identifier</label>
-                <ui-text params="fieldObs: identifierObs"></ui-text>
+                <input type="text" data-bind="textInput: identifierObs"/>
             </div>
         </div>
     </form>
@@ -73,7 +73,9 @@
                     </div>
                     <div class="ui compact pointing secondary vertical menu">
                         <div class="item" data-bind="semantic:'popup-menu'">
-                            <i class="add icon link"></i> Add below
+                            <button class="fluid ui compact mini basic button">
+                                <i class="add icon"></i>Add below
+                            </button>
                         </div>
                         <div class="ui flowing popup hidden" data-bind="click: $component.createElementAfter">
                             <div class="ui secondary vertical menu">
@@ -89,8 +91,23 @@
                                 <a class="item" data-type="TimeConstraints">Time</a>
                             </div>
                         </div>
+                        <div class="item">
+                            <button class="fluid ui compact mini basic button" data-bind="click: $parent.copyElement">
+                                <i class="copy icon"></i>Copy
+                            </button>
+                        </div>
+                        <div class="item">
+                            <button class="fluid ui compact red mini basic button" data-bind="click: $parent.deleteElement">
+                                <i class="delete icon"></i>Delete
+                            </button>
+                        </div>
+                        <!--
+                        <div class="item" data-bind="semantic:'popup-menu'">
+                            <i class="add icon link"></i> Add below
+                        </div>
                         <div class="item" data-bind="click: $parent.copyElement"><i class="copy icon link"></i> Copy</div>
                         <div class="item" data-bind="click: $parent.deleteElement"><i class="delete icon link"></i> Delete</div>
+                        -->
                     </div>
                 </div>
             </div>

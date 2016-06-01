@@ -28,9 +28,9 @@
             <div class="field">
                 <label>Name</label>
                 <div class="two fields">
-                    <input type="text" class="editor" data-bind="textInput: firstNameObs, hasFocus: true" placeholder="First Name"/>
+                    <input type="text" data-bind="textInput: firstNameObs, hasFocus: true" placeholder="First Name"/>
                     &#160;&#160;
-                    <input type="text" class="editor" data-bind="textInput: lastNameObs" placeholder="Last Name"/>
+                    <input type="text" data-bind="textInput: lastNameObs" placeholder="Last Name"/>
                 </div>
             </div>
             <div class="field">
@@ -50,7 +50,7 @@
         <div class="equal width fields">
             <div class="required field" data-bind="visible: isNewObs" id="email">
                 <label>Email</label>
-                <ui-text params="fieldObs: emailObs"></ui-text>
+                <input type="text" data-bind="textInput: emailObs"/>
             </div>
             <div class="field" data-bind="css:{'noLeftPadding': !isNewObs()}">
                 <label>Data Groups</label>
@@ -61,7 +61,7 @@
             </div>
             <div class="field">
                 <label>Languages</label>
-                <ui-text params="fieldObs: languagesObs"></ui-text>
+                <input type="text" data-bind="textInput: languagesObs"/>
                 <div class="help-text">
                     For example, "en, fr"
                 </div>
@@ -83,7 +83,7 @@
             </div>
             <div class="field" id="externalId" data-bind="css:{'noLeftPadding': !isNewObs()}">
                 <label>External ID</label>
-                <input type="text" class="editor" data-bind="textInput: externalIdObs, enable: externalIdEditableObs"/>
+                <input type="text" data-bind="textInput: externalIdObs, enable: externalIdEditableObs"/>
             </div>
             <div class="field">
                 <label style="margin-bottom: .9rem">Email Preference</label>
@@ -102,7 +102,7 @@
             <!-- ko foreach: attributesObs -->
                 <div class="field" style="margin-right: 2rem; max-width: 12rem">
                     <label data-bind="text: $data.label"></label>
-                    <ui-text params="fieldObs: $data.obs"></ui-text>
+                    <input type="text" data-bind="textInput: $data.obs"/>
                 </div>
             <!-- /ko -->
         </div>

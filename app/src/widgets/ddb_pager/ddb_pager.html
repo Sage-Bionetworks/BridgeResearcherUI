@@ -7,11 +7,7 @@
         </div>
     </div>
     <div class="line-control-radio" data-bind="visible: top && showCredentials">
-        <label>Reserved:</label>
-        <div class="ui radio checkbox">
-            <input id="assignEither" type="radio" value="all" name="assign" data-bind="click: assignFilter" checked/>
-            <label for="assignEither">Either</label>
-        </div>
+        <label>Credentials?</label>
         <div class="ui radio checkbox">
             <input id="assignTrue" type="radio" value="true" name="assign" data-bind="click: assignFilter"/>
             <label for="assignTrue">Yes</label>
@@ -19,6 +15,10 @@
         <div class="ui radio checkbox">
             <input id="assignFalse" type="radio" value="false" name="assign" data-bind="click: assignFilter"/>
             <label for="assignFalse">No</label>
+        </div>
+        <div class="ui radio checkbox">
+            <input id="assignEither" type="radio" value="all" name="assign" data-bind="click: assignFilter" checked/>
+            <label for="assignEither">Both</label>
         </div>
     </div>
     <div>

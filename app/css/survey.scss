@@ -1,5 +1,11 @@
 @import "./lib.scss";
-
+.survey {
+    input[type=text] {
+        border: 1px solid #e5e5e5;
+        width: 100%;
+        border-radius:2px;
+    }
+}
 .element {
     @include flex-box(row);
     width: 100%;
@@ -156,4 +162,18 @@
     content:attr(data-placeholder);
     -webkit-user-select: text!important;
     user-select: text!important;
+}
+/* We do not wrap the survey editor in .ui .form, because the inputs are styled very wrongly, so we 
+    don't get all of Semantic UI's styling, and that includes the form error styling. Emulating it here. */
+.survey {
+    .error input, .error div[contenteditable] {
+        background: #fff6f6;
+        border-color: #e0b4b4;
+        color: #9f3a38;
+        box-shadow: none;        
+    }
+    .error div[contenteditable] {
+        border: 1px solid #9f3a38;
+        border-radius: .28571429rem;
+    }
 }
