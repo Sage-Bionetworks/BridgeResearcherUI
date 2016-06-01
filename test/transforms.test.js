@@ -82,9 +82,19 @@ describe("transforms", function() {
         it("works", function() {
             var context = { model: { id: "exists", firstName: "Fred", lastName: "Flintstone" } };
             expect (fn.formatTitle(undefined, context) ).to.equal("Fred Flintstone");
-            
+
             context = { model: { firstName: "Fred", lastName: "Flintstone" } };
+            expect (fn.formatTitle(undefined, context) ).to.equal("Fred Flintstone");
+            
+            context = { model: { firstName: "Fred" } };
+            expect (fn.formatTitle(undefined, context) ).to.equal("Fred");
+            
+            context = { model: { id: "foo", email: "email@email.com" } };
+            expect (fn.formatTitle(undefined, context) ).to.equal("email@email.com");
+
+            context = { model: { id: "new" } };
             expect (fn.formatTitle(undefined, context) ).to.equal("New participant");
+
             
             context = { model: { id: "foo" } };
             expect (fn.formatTitle(undefined, context) ).to.equal("—");

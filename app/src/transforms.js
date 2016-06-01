@@ -32,7 +32,7 @@ function persistAttributes(value) {
     }, {});
 }
 function formatTitle(value, context) {
-    if (!context.model || context.model.id === "new") {
+    if (typeof context.model === "undefined" || context.model.id === "new") {
         return "New participant";
     }
     return formatName(context.model);
@@ -42,7 +42,7 @@ function formatName(participant) {
     if (participant) {
         notBlankName(array, participant.firstName);
         notBlankName(array, participant.lastName);
-        if (array.length === 0) {
+        if (array.length === 0 && participant.email) {
             return participant.email;
         }
     }
