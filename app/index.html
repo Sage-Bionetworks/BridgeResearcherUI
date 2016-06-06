@@ -18,16 +18,16 @@
         </div>
     </header>
     <section>
-        <main data-bind="component: {name: mainPage, params: mainParams}">
+        <main data-bind="component: {name: mainPageObs, params: mainParamsObs}">
         </main>
         <nav data-bind="visible: showNavigationObs">
-            <div class="ui pointing menu" data-bind="visible: isEditorPanelVisible">
-                <a class="item" data-bind="css: {active: !isEditorTabVisible()}, click: toggleEditorTab">Navigation</a>
-                <a class="item" data-bind="css: {active: isEditorTabVisible}, click: toggleEditorTab">Editor</a>
+            <div class="ui pointing menu" data-bind="visible: isEditorPanelVisibleObs">
+                <a class="item" data-bind="css: {active: !isEditorTabVisibleObs()}, click: toggleEditorTab">Navigation</a>
+                <a class="item" data-bind="css: {active: isEditorTabVisibleObs}, click: toggleEditorTab">Editor</a>
             </div>
-            <div data-bind="visible: isEditorTabVisible, component: {name: editorPanel, params: editorParams}">
+            <div data-bind="visible: isEditorTabVisibleObs, component: {name: editorPanelObs, params: editorParamsObs}">
             </div>
-            <div class="ui vertical menu" data-bind="visible: !isEditorTabVisible()">
+            <div class="ui vertical menu" data-bind="visible: !isEditorTabVisibleObs()">
                 <div class="item">
                     <i class="lab icon"></i> Study
                     <div class="menu">
@@ -40,13 +40,13 @@
                         <a href="#/subpopulations" class="item" data-bind="active: isActive, visible: isDeveloper">
                             Consent Groups
                         </a>
-                        <a href="#/participants" class="item" data-bind="active: isActive, visible: isResearcher">
+                        <a href="#/participants" class="item" data-bind="active: isActive, visible: showParticipantsObs">
                             Participants
                         </a>
-                        <a href="#/externalIds" class="item" data-bind="active: isActive, visible: isDeveloper">
+                        <a href="#/externalIds" class="item" data-bind="active: isActive, visible: showExternalIdsObs">
                             External Identifiers
                         </a>
-                        <a href="#/lab_codes" class="item" data-bind="active: isActive, visible: isDeveloper">
+                        <a href="#/lab_codes" class="item" data-bind="active: isActive, visible: showLabCodesObs">
                             Lab Codes
                         </a>
                     </div>
@@ -63,7 +63,6 @@
                         <a href="#/task_identifiers" class="item" data-bind="active: isActive">
                             Task Identifiers
                         </a>
-
                         <a href="#/surveys" class="item" data-bind="active: isActive">
                             Surveys
                         </a>

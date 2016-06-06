@@ -32,7 +32,7 @@ function persistAttributes(value) {
     }, {});
 }
 function formatTitle(value, context) {
-    if (typeof context.model === "undefined" || context.model.id === "new") {
+    if (context.model.id === "new") {
         return "New participant";
     }
     return formatName(context.model);

@@ -8,7 +8,6 @@ require('./bindings/dragula');
 require('./components');
 var ko = require('knockout');
 require('knockout-postbox');
-var utils = require('./utils');
 
 var director = require('director');
 var root = require('./root');
@@ -37,6 +36,11 @@ function guidRoute(name) {
 function idRoute(name) {
     return function(id) {
         root.changeView(name, {id:id});
+    };
+}
+function idNameRoute(routeName) {
+    return function(id, name) {
+        root.changeView(routeName, {id:id, name:name});
     };
 }
 
@@ -73,6 +77,7 @@ router.on('/synapse', routeTo('synapse'));
 router.on('/lab_codes', routeTo('lab_codes'));
 router.on('/externalIds', routeTo('external_ids'));
 router.on('/participants/:id', idRoute('participant'));
+router.on('/participants/:id/:name', idNameRoute('participant'));
 router.on('/participants/:id/consents', idRoute('participant_consents'));
 router.on('/participants', routeTo('participants'));
 
@@ -83,7 +88,7 @@ router.configure({
     notfound: routeTo('not_found'),
     'on': [
         ko.postbox.reset,
-        function() { root.isEditorTabVisible(false); }
+        function() { root.isEditorTabVisibleObs(false); }
     ]
 });
 router.init();
