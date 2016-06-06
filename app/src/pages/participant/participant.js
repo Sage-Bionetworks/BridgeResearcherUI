@@ -15,7 +15,7 @@ var STATUS_OPTIONS = [
     {value: 'unverified', label:'Unverified'}
 ];
 var ROLES = ["Developer", "Researcher", "Administrator", "Worker"];
-var NEW_PARTICIPANT = {attributes:{}};
+var NEW_PARTICIPANT = {id:"new",attributes:{}};
 
 module.exports = function(params) {
     var self = this;
@@ -23,7 +23,6 @@ module.exports = function(params) {
 
     var binder = bind(self)
         .obs('isNew', (id === "new"))
-        .obs('name', null, fn.formatName)
         .obs('healthCode', 'N/A', fn.formatHealthCode)
         .obs('allDataGroups[]')
         .obs('externalIdEditable')
@@ -42,7 +41,7 @@ module.exports = function(params) {
         .bind('status')
         .bind('id', id)
         .bind('roles[]', null, fn.formatRoles, fn.persistRoles)
-        .bind('title', (id === "new") ? "New participant" : params.name, fn.formatTitle);
+        .bind('title', (id === "new") ? "New participant" : decodeURIComponent(params.name), fn.formatTitle);
     
     function initStudy(study) {
         // there's a timer in the control involved here, we need to use an observer
@@ -53,8 +52,6 @@ module.exports = function(params) {
         });
         self.attributesObs(attrs);
         var shouldBeEdited = !study.externalIdValidationEnabled || self.isNewObs();
-        // External ID editing is still wrong in that I can edit the ID of an existing user, 
-        // even though the codes are being managed in the study I'm looking at.
         self.externalIdEditableObs(shouldBeEdited);
     }
     function getParticipant(response) {
