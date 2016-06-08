@@ -14,19 +14,20 @@
             <button class="ui small primary button" data-bind="click: save">Save</button>
         </div>
     </div>
-    <div class="ui secondary pointing menu">
+    <div class="ui secondary pointing menu" data-bind="visible: !isNewObs()">
         <span class="active item">
             <i class="file outline icon"></i> Editor
         </span>
-        <a data-bind="attr: {href: '#/schemas/'+encodeURIComponent(schemaIdObs())+'/versions'}, visible: !!revisionObs()" class="item">
+        <a data-bind="attr: {href: '#/schemas/'+encodeURIComponent(schemaIdObs())+'/versions'}" class="item">
             <i class="history icon"></i> History
         </a>
         <div class="right menu">
-            <div class="item" data-bind="visible: !!schemaIdObs()">
+            <div class="item">
                 <i class="clock icon"></i> <span data-bind="text: revisionLabel"></span>
             </div>
         </div>
     </div>
+    <div class="ui empty secondary pointing menu" data-bind="visible: isNewObs"></div>
 </div>
 <div class="scrollbox">
     <div class="ui warning icon message" style="margin-bottom: 1.4rem" data-bind="visible: showErrorObs">
