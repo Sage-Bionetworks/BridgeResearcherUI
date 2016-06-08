@@ -1,4 +1,3 @@
-'use strict';
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var schemaUtils = require('../schema/schema_utils');
@@ -9,10 +8,6 @@ module.exports = function() {
 
     schemaUtils.initSchemasVM(self);
     self.itemsObs = ko.observableArray([]);
-    /*
-    function filterIosDataItems(item) {
-        return item.schemaType === "ios_data";
-    }*/
 
     serverService.getAllUploadSchemas().then(function(response) {
         var items = response.items

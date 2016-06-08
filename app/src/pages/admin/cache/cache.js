@@ -1,6 +1,7 @@
 var ko = require('knockout');
 var utils = require('../../../utils');
 var serverService = require('../../../services/server_service');
+var Promise = require('bluebird');
 
 module.exports = function() {
     var self = this;
@@ -8,15 +9,12 @@ module.exports = function() {
     function mapKey(cacheKey) {
         return {key: cacheKey};
     }
-    function deleteKey(item) {
-        return serverService.deleteCacheKey(item.key);
-    }
     
     self.itemsObs = ko.observableArray([]);
 
     self.atLeastOneChecked = function () {
         return self.itemsObs().some(utils.hasBeenChecked);
-    }
+    };
 
     self.deleteCacheKeys = function(vm, event) {
         var deletables = self.itemsObs().filter(utils.hasBeenChecked);
@@ -28,12 +26,13 @@ module.exports = function() {
 
         if (confirm(msg)) {
             utils.startHandler(self, event);
-            Promise.all(deletables.map(deleteKey))
-                .then(utils.makeTableRowHandler(vm, deletables, "#/cache"))
+            Promise.map(deletables, function(item) {
+                return serverService.deleteCacheKey(item.key);    
+            }).then(utils.makeTableRowHandler(vm, deletables, "#/cache"))
                 .then(utils.successHandler(vm, event, confirmMsg))
                 .catch(utils.failureHandler(vm, event));
         }
-    }
+    };
 
     serverService.getCacheKeys().then(function(response) {
         var items = response.map(mapKey);
@@ -43,5 +42,4 @@ module.exports = function() {
             document.querySelector(".loading_status").textContent = "There are currently no cache keys.";
         }
     });
-
 };

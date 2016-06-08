@@ -36,7 +36,7 @@ ListsSource.prototype = {
     setCurrentEntry: function(entry) {
         this.currentListEntry = entry;
     }
-}
+};
 
 function makeListMapEntry(enumeration) {
     var name = "&lt;empty&gt;";

@@ -17,7 +17,7 @@ module.exports = function() {
 
     function checkEmailStatus() {
         serverService.emailStatus()
-            .then(binder.update('status'))
+            .then(binder.update('status'));
     }
     
     self.save = function(vm, event) {

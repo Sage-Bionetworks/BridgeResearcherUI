@@ -30,8 +30,7 @@
             <tbody data-bind="foreach: itemsObs">
                 <tr data-bind="css: $component.classNameForStatus($data)">
                     <td>
-                        <a data-bind="attr: {'href': '#/participants/'+$data.id+'?name='+$component.fullName($data)}, 
-                            text: $data.email"></a>
+                        <a data-bind="attr: {'href': '#/participants/'+$data.id+'/'+encodeURIComponent($component.formatName($data))}, text: $data.email"></a>
                     </td>
                     <td data-bind="text: $component.formatName($data)"></td>
                     <td style="white-space: nowrap" data-bind="text: $component.formatDateTime($data.createdOn)"></td>

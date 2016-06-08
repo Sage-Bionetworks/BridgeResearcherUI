@@ -34,7 +34,7 @@
         <div class="three fields">
             <div class="required field" id="name">
                 <label>Name</label>
-                <ui-text params="fieldObs: nameObs"></ui-text>
+                <input type="text" data-bind="textInput: nameObs, hasFocus: true"/>
             </div>
             <div class="required field" id="schemaType">
                 <label>Schema Type</label>
@@ -42,7 +42,7 @@
             </div>
             <div class="required field" id="schemaId" data-bind="visible: !!!revisionObs()">
                 <label>Identifier</label>
-                <ui-text params="fieldObs: schemaIdObs"></ui-text>
+                <input type="text" data-bind="textInput: schemaIdObs"/>
             </div>
             <div class="field" data-bind="visible: !!revisionObs()">
                 <label>Identifier</label>

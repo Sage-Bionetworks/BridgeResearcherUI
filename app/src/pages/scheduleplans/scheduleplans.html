@@ -6,7 +6,8 @@
         <div class="fixed-header-buttons">
             <span class="ui form field">
                 Filter to version:&nbsp;
-                <input style="margin-right:2rem;font-size: smaller; width:3rem" type="text" data-bind="textInput: filterObs, event: {keydown: applyFilter}">    
+                <input style="margin-right:2rem;font-size: smaller; width:3rem" type="text" data-bind="textInput: filterObs, 
+                    event: {keydown: applyFilter}, hasFocus: true">    
             </span>
             <button class="ui small button" data-bind="disable: !atLeastOneChecked(), click: copySchedulePlans">Copy</button>
             <button class="ui red small button" data-bind="disable: !atLeastOneChecked(), click: deleteSchedulePlans">Delete</button>

@@ -8,7 +8,6 @@ require('./bindings/dragula');
 require('./components');
 var ko = require('knockout');
 require('knockout-postbox');
-var utils = require('./utils');
 
 var director = require('director');
 var root = require('./root');
@@ -18,7 +17,7 @@ function routeTo(name) {
         root.changeView(name, {});
     };
 }
-function surveyRoute(name) {
+function guidCreatedOnRoute(name) {
     return function(guid, createdOn) {
         var date = (createdOn === "recent") ? null : createdOn;
         root.changeView(name, {guid: guid, createdOn: date});
@@ -39,6 +38,11 @@ function idRoute(name) {
         root.changeView(name, {id:id});
     };
 }
+function idNameRoute(routeName) {
+    return function(id, name) {
+        root.changeView(routeName, {id:id, name:name});
+    };
+}
 
 var router = new director.Router();
 router.param('guid', /([^\/]*)/);
@@ -52,14 +56,16 @@ router.on('/task_identifiers', routeTo('task_identifiers'));
 router.on('/data_groups', routeTo('data_groups'));
 router.on('/ve_template', routeTo('ve_template'));
 router.on('/rp_template', routeTo('rp_template'));
-router.on('/subpopulations/:guid/consents/:createdOn', surveyRoute('consent'));
+router.on('/subpopulations/:guid/consents/history', guidRoute('subpopulation_history'));
+router.on('/subpopulations/:guid/consents/download', guidRoute('subpopulation_download'));
+router.on('/subpopulations/:guid/consents/:createdOn', guidCreatedOnRoute('subpopulation_editor'));
 router.on('/subpopulations/:guid', guidRoute('subpopulation'));
 router.on('/subpopulations', routeTo('subpopulations'));
 router.on('/surveys', routeTo('surveys'));
-router.on('/surveys/:guid/:createdOn/versions', surveyRoute('survey_versions'));
-router.on('/surveys/:guid/:createdOn/schema', surveyRoute('survey_schema'));
-router.on('/surveys/:guid/:createdOn', surveyRoute('survey'));
-router.on('/surveys/:guid', surveyRoute('survey')); // always new
+router.on('/surveys/:guid/:createdOn/versions', guidCreatedOnRoute('survey_versions'));
+router.on('/surveys/:guid/:createdOn/schema', guidCreatedOnRoute('survey_schema'));
+router.on('/surveys/:guid/:createdOn', guidCreatedOnRoute('survey'));
+router.on('/surveys/:guid', guidCreatedOnRoute('survey')); // always new
 router.on('/schemas', routeTo('schemas'));
 router.on('/schemas/:schemaId', schemaRoute('schema'));
 router.on('/schemas/:schemaId/versions', schemaRoute('schema_versions'));
@@ -68,9 +74,11 @@ router.on('/schedules', routeTo('schedules'));
 router.on('/scheduleplans', routeTo('scheduleplans'));
 router.on('/scheduleplans/:guid', guidRoute('scheduleplan'));
 router.on('/synapse', routeTo('synapse'));
+router.on('/lab_codes', routeTo('lab_codes'));
 router.on('/externalIds', routeTo('external_ids'));
 router.on('/participants/:id', idRoute('participant'));
 router.on('/participants/:id/consents', idRoute('participant_consents'));
+router.on('/participants/:id/:name', idNameRoute('participant'));
 router.on('/participants', routeTo('participants'));
 
 router.on('/admin/info', routeTo('admin_info'));
@@ -80,7 +88,7 @@ router.configure({
     notfound: routeTo('not_found'),
     'on': [
         ko.postbox.reset,
-        function() { root.isEditorTabVisible(false); }
+        function() { root.isEditorTabVisibleObs(false); }
     ]
 });
 router.init();

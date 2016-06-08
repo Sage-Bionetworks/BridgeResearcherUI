@@ -19,7 +19,7 @@ var FIELD_FORMATTERS = {
     'notifyByEmail': function(value) {
         return (value+'').toLowerCase();
     }
-}
+};
 function formatConsentRecords(record) {
     var aString = record.subpopulationGuid;
     aString += " consented=" + utils.formatDateTime(record.signedOn);
@@ -170,4 +170,4 @@ module.exports = function(params) {
         });
         return array.join("\t");
     }
-}
+};

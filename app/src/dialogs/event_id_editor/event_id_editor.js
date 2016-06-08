@@ -105,5 +105,4 @@ module.exports = function(params) {
         self.eventIdObs(originalValue);
         root.closeDialog();
     };
-
-}
+};

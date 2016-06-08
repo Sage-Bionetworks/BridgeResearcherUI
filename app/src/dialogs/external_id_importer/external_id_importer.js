@@ -27,7 +27,7 @@ function getPerc(step, max) {
 function createParticipantMaker(email) {
     return function(identifier) {
         return utils.createParticipantForID(email, identifier);
-    }
+    };
 }
 
 module.exports = function(params) {
@@ -38,12 +38,19 @@ module.exports = function(params) {
         .obs('import', '')
         .obs('value', 0)
         .obs('max', 0)
+        .obs('title', 'Import External Identifiers')
         .obs('percentage', '0%')
         .obs('selected', true)
         .obs('closeText', 'Close')
+        .obs('autoCredentials', (typeof params.autoCredentials === "boolean") ? 
+            params.autoCredentials : false)
         .obs('errorMessages[]', [])
         .obs('status', "Please enter a list of identifiers, separated by commas or new lines. ")
         .obs('createCredentials', false);
+        
+    if (self.autoCredentialsObs()) {
+        self.titleObs("Import Lab Codes");
+    }
     
     function startProgressMeter(max) {
         cancel = false;
@@ -77,7 +84,7 @@ module.exports = function(params) {
             self.percentageObs("100%");
             self.statusObs("Identifiers imported." + errorMsg);
             return response;
-        }
+        };
     }
     function sequence(promise, array, func) {
         return array.reduce(function(p, workItem) {
@@ -99,15 +106,18 @@ module.exports = function(params) {
             utils.formFailure(event.target, 'You must enter some identifiers.');
             return;
         }
+        var doCreateCredentials = self.createCredentialsObs() || self.autoCredentialsObs();
+        
         var queue = createQueue(identifiers);
-        var participants = (self.createCredentialsObs()) ? 
-            identifiers.map(self.createParticipant) : [];
+        // If the user checked the create credentials checkbox, or if the dialog was opened
+        // from a context where we always create the credentials in order to reduce confusion...
+        var participants = (doCreateCredentials) ? identifiers.map(self.createParticipant) : [];
 
         utils.startHandler(vm, event);
         startProgressMeter(queue.length + participants.length);
         
         var promise = sequence(Promise.resolve(), queue, serverService.addExternalIds);
-        if (self.createCredentialsObs()) {
+        if (doCreateCredentials) {
             promise = sequence(promise, participants, serverService.createParticipant);
         }
         promise.then(endProgressMeter(event.target))
@@ -125,4 +135,4 @@ module.exports = function(params) {
     serverService.getStudy()
         .then(binder.assign('study'))
         .then(initParticipantMaker);
-}
+};

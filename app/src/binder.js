@@ -27,7 +27,7 @@ function createObservable(doBinding) {
         this.vm[info.observableName] = info.observable = obs;
         this.fields[info.name] = info;
         return this;
-    }
+    };
 }
 
 function Binder(vm) {
@@ -91,7 +91,7 @@ Binder.prototype = {
                     // no transform, no defined value, just do nothing. This should obviate 
                     // the need for fn.maintainValue many places. 
                 }
-            };
+            }
             return model;
         }.bind(this);
     },
@@ -117,7 +117,7 @@ Binder.prototype = {
             if (info.bind) {
                 var context = {oldValue: model[info.name], model: model, copy: copy, vm: this.vm, observer: info.observable};
                 var value = info.obsTransform(info.observable(), context);
-                if (value != null && typeof value !== "undefined") {
+                if (value !== null && typeof value !== "undefined") {
                     copy[info.name] = value;    
                 } else {
                     delete copy[info.name];
@@ -129,7 +129,8 @@ Binder.prototype = {
     assign: function(field) {
         console.assert(typeof field === 'string', 'string field value must be supplied');
         return function(model) {
-            return this.vm[field] = model;
+            this.vm[field] = model;
+            return model;
         }.bind(this);
     }
 };

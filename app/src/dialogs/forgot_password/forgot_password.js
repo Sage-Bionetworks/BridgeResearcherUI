@@ -5,16 +5,6 @@ var config = require('../../config');
 var root = require('../../root');
 var bind = require('../../binder');
 
-function findStudyName(studies, studyIdentifier) {
-    try {
-        return (studies || []).filter(function(studyOption) {
-            return (studyOption.identifier === studyIdentifier);
-        })[0].name;
-    } catch(e) {
-        throw new Error("Study not found");
-    }
-}
-
 module.exports = function() {
     var self = this;
     var isLocked = utils.isDefined(root.queryParams.study);
@@ -47,13 +37,13 @@ module.exports = function() {
         self.studyOptionsObs(studies.items);
         self.studyObs(studyKey);
         if (self.isLockedObs()) {
-            self.titleObs(findStudyName(self.studyOptionsObs(), studyKey))
+            self.titleObs(utils.findStudyName(self.studyOptionsObs(), studyKey));
         }
     }
     
     function loadStudyList(newValue) {
         serverService.getStudyList(newValue)
-            .then(loadStudies).catch(utils.failureHandler(self));
+            .then(loadStudies).catch(utils.globalToFormFailureHandler());
     }
 
     self.sendResetPasswordRequest = function(vm, event) {

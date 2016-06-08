@@ -1,0 +1,52 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <div class="fixed-header-heading">
+            <div class="ui breadcrumb">
+                <a href="#/subpopulations" class="section">Consent Groups</a>
+                <i class="right chevron icon divider"></i>
+            </div>
+            <h3 data-bind="text: nameObs"></h3>
+        </div>
+        <div class="fixed-header-buttons">
+            <button class="ui small button" data-bind="click: publish">Publish</button>
+            <button class="ui small primary button" data-bind="click: save">Save</button>
+        </div>
+    </div>
+    <div class="ui secondary pointing menu">
+        <a class="item" data-bind="attr:{
+            href: '#/subpopulations/'+guidObs()}">
+            <i class="setting icon"></i> General
+        </a>
+        <a class="active item">
+            <i class="file outline icon"></i> Editor
+        </a>
+        <a class="item" data-bind="attr:{
+            href: '#/subpopulations/'+guidObs()+'/consents/history'}">
+            <i class="history icon"></i> History &amp; Publication
+        </a>
+        <a class="item" data-bind="attr:{
+            href: '#/subpopulations/'+guidObs()+'/consents/download'}">
+            <i class="download icon"></i> Download
+        </a>
+        <div class="right menu pub-status">
+            <div class="item" data-bind="visible: !!createdOnObs()">
+                <i class="clock icon"></i> <span data-bind="text: createdOnObs"></span>
+            </div>
+            <div class="item" data-bind="visible: activeObs">
+                <div class="green mini ui label">
+                    <i class="checkmark icon"></i> Published
+                </div>
+            </div>
+            <div class="item" data-bind="visible: !activeObs()">
+                <div class="orange ui mini label">
+                    <i class="warning icon"></i> Not Published
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="scrollbox">
+    <textarea id="consentEditor" data-bind="ckeditor: initEditor" class="ui textarea"></textarea>
+</div>
+
+

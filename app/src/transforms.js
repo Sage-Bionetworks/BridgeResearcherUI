@@ -32,15 +32,19 @@ function persistAttributes(value) {
     }, {});
 }
 function formatTitle(value, context) {
-    return (context.model.id) ?
-        formatName(context.model) :
-        "New participant";
+    if (context.model.id === "new") {
+        return "New participant";
+    }
+    return formatName(context.model);
 }
-function formatName(value) {
+function formatName(participant) {
     var array = [];
-    if (value) {
-        notBlankName(array, value.firstName);
-        notBlankName(array, value.lastName);
+    if (participant) {
+        notBlankName(array, participant.firstName);
+        notBlankName(array, participant.lastName);
+        if (array.length === 0 && participant.email) {
+            return participant.email;
+        }
     }
     return (array.length === 0) ? '—' : array.join(' ');
 }
@@ -84,4 +88,4 @@ module.exports = {
     persistLanguages: persistLanguages,
     persistRoles: persistRoles,
     callObsCallback: callObsCallback
-}
+};

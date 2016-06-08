@@ -2,6 +2,7 @@ var ko = require('knockout');
 var serverService = require('./services/server_service');
 var config = require('./config');
 var toastr = require('toastr');
+var bind = require('./binder');
 
 // Used in navigation to keep a section highlighted as you navigate into it.
 var pageSets = {
@@ -10,88 +11,88 @@ var pageSets = {
     'schemas': ['schemas','schema','schema_versions'],
     'scheduleplans': ['scheduleplans','scheduleplan'],
     've_template': ['ve_template', 'rp_template'],
-    'subpopulations': ['subpopulations', 'subpopulation', 'consent'],
+    'subpopulations': ['subpopulations', 'subpopulation', 'subpopulation_editor', 'subpopulation_history', 'subpopulation_download'],
     'participants': ['participants','participant','participant_consents'],
     'externalIds': ['external_ids'],
     'admin/info': ['admin_info'],
     'admin/cache': ['admin_cache']
 };
+function roleFunc(observer, role) {
+    return ko.computed(function() {return observer.contains(role);});        
+}
 
 toastr.options = config.toastr;
 
 var RootViewModel = function() {
     var self = this;
 
-    self.environmentObs = ko.observable("");
-    self.studyNameObs = ko.observable("");
-    self.studyIdentifierObs = ko.observable();
+    var binder = bind(self)
+        .obs('environment', '')
+        .obs('studyName', '')
+        .obs('studyIdentifier')
+        .obs('selected', '')
+        .obs('roles[]', [])
+        .obs('mainPage', 'start')
+        .obs('mainParams', {})
+        .obs('editorPanel', 'none')
+        .obs('editorParams', {})
+        .obs('showParticipants', false)
+        .obs('showLabCodes', false)
+        .obs('showExternalIds', false)
+        .obs('isEditorPanelVisible', false)
+        .obs('isEditorTabVisible', false)
+        .obs('showNavigation', true)
+        .obs('dialog', {name: 'none'});
 
-    self.selected = ko.observable('');
-    self.roles = ko.observableArray([]);
-
-    self.mainPage = ko.observable('start');
-    self.mainPage.subscribe(self.selected);
-    self.mainPage.subscribe(function() {
+    self.mainPageObs.subscribe(self.selectedObs);
+    self.mainPageObs.subscribe(function() {
         self.setEditorPanel('none',{});
     });
-    self.mainParams = ko.observable({});
-
-    self.editorPanel = ko.observable('none');
-    self.editorParams = ko.observable({});
-    self.isEditorPanelVisible = ko.observable(false);
-    self.isEditorTabVisible = ko.observable(false);
-    self.showNavigationObs = ko.observable(true);
-
     self.showNav = function() {
         self.showNavigationObs(true);
-    }
+    };
     self.hideNav = function() {
         self.showNavigationObs(false);
-    }
-
+    };
     self.setEditorPanel = function(name, params) {
-        self.editorPanel(name);
-        self.editorParams(params);
-        self.isEditorPanelVisible(name !== 'none');
-        self.isEditorTabVisible(true);
+        self.editorPanelObs(name);
+        self.editorParamsObs(params);
+        self.isEditorPanelVisibleObs(name !== 'none');
+        self.isEditorTabVisibleObs(true);
     };
     self.toggleEditorTab = function() {
-        self.isEditorTabVisible(!self.isEditorTabVisible());
+        self.isEditorTabVisibleObs(!self.isEditorTabVisibleObs());
     };
-
-    self.dialogObs = ko.observable({name: 'none'});
-
     self.isActive = function(tag) {
         if (pageSets[tag]) {
-            return pageSets[tag].indexOf(self.selected()) > -1;
+            return pageSets[tag].indexOf(self.selectedObs()) > -1;
         }
-        return tag === self.selected();
+        return tag === self.selectedObs();
     };
     self.signOut = function() {
         console.log("Signing out.");
         serverService.signOut();
     };
     self.changeView = function(name, params) {
-        self.isEditorTabVisible(false);
-        self.isEditorPanelVisible(false);
-        self.mainPage(name);
-        self.mainParams(params);
+        self.isEditorTabVisibleObs(false);
+        self.isEditorPanelVisibleObs(false);
+        self.mainPageObs(name);
+        self.mainParamsObs(params);
     };
-    self.isResearcher = ko.computed(function() {
-        return self.roles.contains('researcher');
-    });
-    self.isDeveloper = ko.computed(function() {
-        return self.roles.contains('developer');
-    });
-    self.isAdmin = ko.computed(function() {
-        return self.roles.contains('admin');
-    });
+
+    self.isResearcher = roleFunc(self.rolesObs, 'researcher');
+    self.isDeveloper = roleFunc(self.rolesObs, 'developer');
+    self.isAdmin = roleFunc(self.rolesObs, 'admin');
+
     self.openDialog = function(dialogName, params) {
         self.dialogObs({name: dialogName, params: params});
     };
     self.closeDialog = function() {
         self.dialogObs({name: 'none'});
     };
+    self.isDevEnvObs = ko.computed(function() {
+        return ['local','develop','staging'].indexOf(self.environmentObs()) > -1; 
+    });
     /**
      * Displays a message that we UI insiders like to call "a piece of toast"
      * @param severity {String} one of 'success', 'info', 'warning' or 'error'
@@ -108,14 +109,25 @@ var RootViewModel = function() {
         self.studyNameObs("&ldquo;" + session.studyName + "&rdquo;");
         self.environmentObs(session.environment);
         self.studyIdentifierObs(session.studyId);
-        self.roles(session.roles);
+        self.rolesObs(session.roles);
         self.closeDialog();
+        serverService.getStudy().then(function(study) {
+            // show Participants if emailVerificationEnabled.
+            self.showParticipantsObs(study.emailVerificationEnabled && self.isResearcher());
+            // otherwise show Lab Codes. Note roles are different
+            self.showLabCodesObs(!study.emailVerificationEnabled && self.isDeveloper());
+            // Show external IDs if emailVerificationEnabled and externalIdValidationEnabled
+            self.showExternalIdsObs(study.emailVerificationEnabled && study.externalIdValidationEnabled && self.isDeveloper());
+        });
     });
     serverService.addSessionEndListener(function(session) {
         self.studyNameObs("");
         self.environmentObs("");
         self.studyIdentifierObs("");
-        self.roles([]);
+        self.rolesObs([]);
+        self.showParticipantsObs(false);
+        self.showLabCodesObs(false);
+        self.showExternalIdsObs(false);
         self.openDialog('sign_in_dialog');
     });
 };

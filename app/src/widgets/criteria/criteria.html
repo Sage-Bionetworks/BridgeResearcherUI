@@ -3,10 +3,10 @@
         <label>App version:</label>
         <div class="two fields">
             <div class="eight wide field" data-bind="attr:{id:$data.id+'minAppVersion'}">
-                <ui-number params="fieldObs: $data.minAppVersionObs, placeholder: 'Min'"></ui-number>
+                <input type="number" data-bind="textInput: $data.minAppVersionObs" placeholder="Min"/>
             </div>
             <div class="eight wide field" data-bind="attr:{id:$data.id+'maxAppVersion'}">
-                <ui-number params="fieldObs: $data.maxAppVersionObs, placeholder: 'Max'"></ui-number>
+                <input type="number" data-bind="textInput: $data.maxAppVersionObs" placeholder="Max"/>
             </div>
         </div>
     </div>

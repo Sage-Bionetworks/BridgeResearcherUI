@@ -5,17 +5,30 @@
                 <a href="#/subpopulations" class="section">Consent Groups</a>
                 <i class="right chevron icon divider"></i>
             </div>
-            <h3>
-                <span data-bind="visible: nameObs().length > 0, text: nameObs"></span>
-                <span data-bind="visible: nameObs().length === 0">New Consent Group</span>
-            </h3>
+            <h3 data-bind="text: titleObs"></h3>
         </div>
         <div class="fixed-header-buttons">
-            <a class="ui small button" data-bind="attr: {'href': publishedLinkObs}, visible: !isNewObs()">Edit Consent Document</a>
             <button class="ui small primary button" data-bind="click: save">Save</button>
         </div>
     </div>
-    <div class="empty ui secondary pointing menu"></div>
+    <div class="ui secondary pointing menu" data-bind="visible: !isNewObs()">
+        <a class="active item">
+            <i class="setting icon"></i> General
+        </a>
+        <a class="item" data-bind="attr:{
+            href: '#/subpopulations/'+guidObs()+'/consents/recent'}">
+            <i class="file outline icon"></i> Editor
+        </a>
+        <a class="item" data-bind="attr:{
+            href: '#/subpopulations/'+guidObs()+'/consents/history'}">
+            <i class="history icon"></i> History &amp; Publication
+        </a>
+        <a class="item" data-bind="attr:{
+            href: '#/subpopulations/'+guidObs()+'/consents/download'}">
+            <i class="download icon"></i> Download
+        </a>
+    </div>
+    <div class="ui empty secondary pointing menu" data-bind="visible: isNewObs"></div>
 </div>
 <div class="scrollbox">
     <errors></errors>
@@ -23,7 +36,7 @@
         <div class="fields">
             <div class="eight wide required field" id="name">
                 <label>Name</label>
-                <input type="text" data-bind="value: nameObs"/>
+                <input type="text" data-bind="value: nameObs, hasFocus: true"/>
             </div>
             <div class="eight wide field" id="description">
                 <label>Description</label>
@@ -40,27 +53,6 @@
                     <ui-checkbox params="checkedObs: requiredObs">
                         Required
                     </ui-checkbox>
-                </div>
-            </div>
-            <div class="ten wide field">
-                <h4>Consent Document Edit History</h4>
-                <p data-bind="visible: historyItemsObs().length === 0">There are no consents until you create this consent group.</p>
-                <div data-bind="visible: historyItemsObs().length > 0">
-                    <table class="ui compact selectable table">
-                        <tbody data-bind="foreach: historyItemsObs">
-                        <tr data-bind="css: { positive: $data.active }">
-                            <td>
-                                <a data-bind="attr: {'href': $parent.formatLink($data)},
-                                text: $parent.formatDateTime($data.createdOn)"></a>
-                            </td>
-                            <td>
-                                <div data-bind="visible: $data.active" style="text-align: right">
-                                    <i class="icon checkmark"></i> Published
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>

@@ -14,17 +14,15 @@ var STATUS_OPTIONS = [
     {value: 'disabled', label:'Disabled'},
     {value: 'unverified', label:'Unverified'}
 ];
-var ROLES = ["Developer", "Researcher", "Administrator", "Worker"]
-var NEW_PARTICIPANT = {attributes:{}};
+var ROLES = ["Developer", "Researcher", "Administrator", "Worker"];
+var NEW_PARTICIPANT = {id:"new",attributes:{}};
 
 module.exports = function(params) {
     var self = this;
     var id = params.id;
 
     var binder = bind(self)
-        .obs('title', (id === "new") ? "New participant" : params.name, fn.formatTitle)
         .obs('isNew', (id === "new"))
-        .obs('name', null, fn.formatName)
         .obs('healthCode', 'N/A', fn.formatHealthCode)
         .obs('allDataGroups[]')
         .obs('externalIdEditable')
@@ -36,13 +34,14 @@ module.exports = function(params) {
         .bind('lastName')
         .bind('sharingScope')
         .bind('notifyByEmail')
-        .bind('dataGroups[]', [])
+        .bind('dataGroups[]')
         .bind('password')
         .bind('externalId')
         .bind('languages', null, fn.formatLanguages, fn.persistLanguages)
         .bind('status')
         .bind('id', id)
-        .bind('roles[]', null, fn.formatRoles, fn.persistRoles);
+        .bind('roles[]', null, fn.formatRoles, fn.persistRoles)
+        .bind('title', (id === "new") ? "New participant" : decodeURIComponent(params.name), fn.formatTitle);
     
     function initStudy(study) {
         // there's a timer in the control involved here, we need to use an observer
@@ -53,9 +52,6 @@ module.exports = function(params) {
         });
         self.attributesObs(attrs);
         var shouldBeEdited = !study.externalIdValidationEnabled || self.isNewObs();
-        console.log("shouldBeEdited", shouldBeEdited);
-        // External ID editing is still wrong in that I can edit the ID of an existing user, 
-        // even though the codes are being managed in the study I'm looking at.
         self.externalIdEditableObs(shouldBeEdited);
     }
     function getParticipant(response) {
@@ -74,6 +70,13 @@ module.exports = function(params) {
     self.sharingScopeOptions = OPTIONS;
     self.statusOptions = STATUS_OPTIONS;
 
+    self.requestResetPassword = function(vm, event) {
+        utils.startHandler(vm, event);
+        
+        serverService.requestResetPasswordUser(id)
+            .then(utils.successHandler(vm, event, "Reset password email has been sent to user."))
+            .catch(utils.failureHandler(vm, event));
+    };
     self.signOutUser = function(vm, event) {
         utils.startHandler(vm, event);
         
@@ -83,9 +86,9 @@ module.exports = function(params) {
     };
     self.save = function(vm, event) {
         var participant = binder.persist(NEW_PARTICIPANT);
+        binder.update()(participant);
 
         utils.startHandler(vm, event);
-        binder.update('title')(participant);
         if (self.isNewObs()) {
             serverService.createParticipant(participant)
                 .then(afterCreate)
@@ -98,10 +101,12 @@ module.exports = function(params) {
         }
     };
     
+    var notFoundHandler = utils.notFoundHandler(self, "Participant not found.", "#/participants");
+    
     serverService.getStudy()
         .then(binder.assign('study'))
         .then(initStudy)
         .then(getParticipant)
         .then(binder.update())
-        .catch(utils.failureHandler());
-}
+        .catch(notFoundHandler);
+};

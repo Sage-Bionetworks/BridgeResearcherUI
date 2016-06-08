@@ -62,4 +62,4 @@ module.exports = function(params) {
             self.fieldObs(duration.replace('*',amt));
         }
     }
-}
+};

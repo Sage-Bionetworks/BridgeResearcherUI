@@ -19,12 +19,6 @@
             }
             .section {
                 font-size: 1.1rem;
-                /*
-                
-                a:last-child::after {
-                    color: black;
-                    width: 50%;
-                }*/
             }
         }
         .fixed-header-buttons {
@@ -37,14 +31,9 @@
     }
     .ui.secondary.pointing.menu {
         position: relative;
-        padding-left: 1rem;
         box-shadow: 1px 1px 1px #aaa;
         border-bottom: none;
-        /*border-bottom: 1px solid #aaa;*/
         z-index: 2;
-        .item {
-            padding: .6rem 1.6rem;
-        } 
     }
     .ui.empty.secondary.pointing.menu {
         margin: 0;
@@ -53,4 +42,13 @@
         height: 0;
         min-height: 1rem;
     }
+    /* Used to position the green/orange label next to version number in secondary menu. */
+    .right.menu.pub-status {
+        .item:first-child {
+            padding-right: 0;
+        }
+        .item:not(:first-child) {
+            padding-left: .25rem;
+        }
+    }        
 }

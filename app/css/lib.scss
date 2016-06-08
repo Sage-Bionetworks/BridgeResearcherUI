@@ -1,3 +1,9 @@
+@mixin gradient($fromColor, $fromPercent, $toColor, $toPercent) {
+    background-image: linear-gradient(90deg, $fromColor $fromPercent, $toColor $toPercent);
+    background-image: -moz-linear-gradient(left, $fromColor $fromPercent, $toColor $toPercent);
+    background-image: -webkit-linear-gradient(left, $fromColor $fromPercent, $toColor $toPercent);
+    background-image: -ms-linear-gradient(left, $fromColor $fromPercent, $toColor $toPercent);
+}
 @mixin flex-box($direction) {
     display: -webkit-flex;
     display: -ms-flexbox;

@@ -1,9 +1,9 @@
-'use strict';
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var criteriaUtils = require('../../criteria_utils');
 var root = require('../../root');
+var Promise = require('bluebird');
 
 module.exports = function() {
     var self = this;
@@ -28,11 +28,9 @@ module.exports = function() {
 
         if (confirm(msg)) {
             utils.startHandler(self, event);
-            var promises = deletables.map(function(plan) {
+            Promise.map(deletables, function(plan) {
                 return serverService.deleteSubpopulation(plan.guid);
-            });
-            Promise.all(promises)
-                .then(utils.makeTableRowHandler(vm, deletables, "#/subpopulations"))
+            }).then(utils.makeTableRowHandler(vm, deletables, "#/subpopulations"))
                 .then(utils.successHandler(vm, event, confirmMsg))
                 .catch(utils.failureHandler(vm, event));
         }

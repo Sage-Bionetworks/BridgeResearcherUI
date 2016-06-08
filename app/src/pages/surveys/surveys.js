@@ -1,8 +1,7 @@
-'use strict';
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
-
+var Promise = require('bluebird');
 var surveyFieldsToDelete = ['guid','version','createdOn','modifiedOn','published','deleted'];
 
 function addScheduleField(survey) {
@@ -41,39 +40,37 @@ module.exports = function() {
         return survey.schedulePlanObs().map(function(obj) {
             return obj.label;
         }).join(', ');
-    }
+    };
     self.atLeastOneChecked = function () {
         return self.itemsObs().some(function(item) {
             return item.checkedObs();
         });
-    }    
+    };
     self.copySurveys = function(vm, event) {
         var copyables = self.itemsObs().filter(utils.hasBeenChecked);
         var confirmMsg = (copyables.length > 1) ?
             "Surveys have been copied." : "Survey has been copied.";
 
         utils.startHandler(vm, event);
-        var promises = copyables.map(function(survey) {
-            // Get individual survey because summary survey does not have the elements
-            return serverService.getSurvey(survey.guid, survey.createdOn).then(function(fullSurvey) {
-                fullSurvey.name += " (Copy)";
-                surveyFieldsToDelete.forEach(function(field) {
-                    delete fullSurvey[field]; 
-                });
-                fullSurvey.elements.forEach(function(element) {
-                    delete element.guid;
-                });
-                return serverService.createSurvey(fullSurvey);
+        Promise.map(copyables, function(survey) {
+            return serverService.getSurvey(survey.guid, survey.createdOn);
+        }).then(function(fullSurvey) {
+            fullSurvey = fullSurvey[0];
+            fullSurvey.name += " (Copy)";
+            surveyFieldsToDelete.forEach(function(field) {
+                delete fullSurvey[field]; 
             });
-        });
-        Promise.all(promises)
-            .then(load)
+            fullSurvey.elements.forEach(function(element) {
+                delete element.guid;
+            });
+            return serverService.createSurvey(fullSurvey);
+        }).then(load)
             .then(utils.successHandler(vm, event, confirmMsg))
             .catch(utils.failureHandler(vm, event));
     };
 
     function load() {
-        serverService.getSurveys().then(function(response) {
+        return serverService.getSurveys().then(function(response) {
             if (response.items.length) {
                 response.items.sort(utils.makeFieldSorter("name"));
                 response.items.forEach(addScheduleField);
@@ -85,7 +82,7 @@ module.exports = function() {
             }
         }).then(function(surveys) {
             if (surveys.length) {
-                serverService.getSchedulePlans().then(function(response) {
+                return serverService.getSchedulePlans().then(function(response) {
                     annotateSurveys(surveys, response.items);
                 });
             }

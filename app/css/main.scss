@@ -54,11 +54,11 @@ header {
     @include flex-box(row);
     @include align-items(top);
     @include justify-content(space-between);
-    background-image: linear-gradient(90deg, rgb(52, 152, 219) 41%, rgb(41, 128, 185) 100%);
-    background-image: -moz-linear-gradient(left, rgb(52, 152, 219) 41%, rgb(41, 128, 185) 100%);
-    background-image: -webkit-linear-gradient(left, rgb(52, 152, 219) 41%, rgb(41, 128, 185) 100%);
-    background-image: -ms-linear-gradient(left, rgb(52, 152, 219) 41%, rgb(41, 128, 185) 100%);    
+    @include gradient(rgb(52, 152, 219), 41%, rgb(41, 128, 185), 100%);
 }
+    header.dev {
+        @include gradient(orange, 41%, #B22222, 100%);
+    }
     header i {
         font-size: 2rem!important;
     }
@@ -214,4 +214,15 @@ progress {
     .ui.checkbox {
         vertical-align: middle;
     }
+}
+
+/* Used to position the green/orange label next to version number in secondary menu. */
+.pub-status {
+    .item:first-child {
+        padding-right: 0 !important;
+    }
+    .item:not(:first-child) {
+        padding-left: .25rem !important;
+    }
+    
 }

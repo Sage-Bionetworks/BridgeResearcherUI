@@ -19,7 +19,7 @@ module.exports = function() {
     var self = this;
 
     // This cannot be loaded sooner, at the top of the file. Just plain don't work. Why? WHY?!
-    var root = require('../../root')
+    var root = require('../../root');
 
     var binder = bind(self)
         .obs('message')
