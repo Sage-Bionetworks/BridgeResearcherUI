@@ -21,13 +21,6 @@ var FIELD_TYPE_OPTIONS = Object.freeze([
 ]);
 
 module.exports = {
-    newField: function() {
-        return {
-            nameObs: ko.observable(""),
-            requiredObs: ko.observable(false),
-            typeObs: ko.observable('attachment_blob')
-        };
-    },
     initSchemasVM: function(vm) {
         vm.schemaTypeLabel = utils.makeOptionLabelFinder(SCHEMA_TYPE_OPTIONS);
     },

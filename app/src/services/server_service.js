@@ -44,32 +44,12 @@ var cache = (function() {
             return (value) ? JSON.parse(value) : null;
         },
         set: function(key, response) {
-            // If the key does not match any of the paths that should not be cached...
-            if (NO_CACHE_PATHS.every(function(path) {return key.indexOf(path) === -1;})) {
-                console.info("[json cache] caching",key);
-                cachedItems[key] = JSON.stringify(response);
-                //console.debug("cache size", (JSON.stringify(cachedItems).length/1000).toFixed(1) + "k");
-            }
+            console.info("[json cache] caching",key);
+            cachedItems[key] = JSON.stringify(response);
         },
         clear: function(key) {
-            // Clear all paths that are logically higher in the endpoint namespace,
-            // e.g. /foo/123 will delete /foo if it is cached, as this would be the
-            // collection that might include /foo/123
-            Object.keys(cachedItems).forEach(function(aKey) {
-                if (key.indexOf(aKey) === 0 || aKey.indexOf(key) === 0) {
-                    console.info("[json cache] deleting",aKey);
-                    delete cachedItems[aKey];
-                }
-                // There are special cases of "descendant" URLS that describe members of the collection,
-                // they are like filters... delete these too
-                PATH_EXTS.forEach(function(extension) {
-                    if (cachedItems[aKey+extension]) {
-                        console.info("[json cache] deleting",aKey+extension);
-                        delete cachedItems[aKey+extension];
-                    }
-                });
-            });
-            console.debug("cache size", (JSON.stringify(cachedItems).length/1000).toFixed(1) + "k");
+            // clear everything, this is now a fetch cache. Very simple, hard to screw up.
+            cachedItems = {};
         },
         reset: function() {
             cachedItems = {};
@@ -90,9 +70,6 @@ function postInt(url, data) {
     } else if (typeof data !== 'string') {
         data = JSON.stringify(data);
     }
-    //var dataString = data.replace(/"password":"([^"]*)"/, '"password":"[REDACTED]"');
-    //console.debug("POST", url, dataString);
-
     return $.ajax({
         method: 'POST',
         url: url,
@@ -103,7 +80,6 @@ function postInt(url, data) {
     });
 }
 function getInt(url) {
-    //console.debug("GET", url);
     return $.ajax({
         method: 'GET',
         url: url,
@@ -113,7 +89,6 @@ function getInt(url) {
     });
 }
 function deleteInt(url) {
-    //console.debug("DELETE", url);
     return $.ajax({
         method: 'DELETE',
         url: url,
@@ -130,7 +105,6 @@ function reloadPageWhenSessionLost(response) {
     }
     return response;
 }
-
 function makeSessionWaitingPromise(func) {
     // Return a Bluebird promise. If there's a session, execute the function and call resolve/reject.
     // otherwise, the executor itself has a promise and can be used as a listener function.
@@ -211,10 +185,6 @@ function query(object) {
     }).join("&");
     return (string) ? ("?"+string) : "";
 }
-function resetCache(response) {
-    cache.reset();
-    return response;
-}
 
 module.exports = {
     isAuthenticated: function() {
@@ -255,8 +225,6 @@ module.exports = {
     saveStudy: function(study, isAdmin) {
         var url = (isAdmin) ? (config.getStudy + study.identifier) : config.getCurrentStudy;
         return post(url, study).then(function(response) {
-            cache.clear(config.getStudy + study.identifier);
-            cache.clear(config.getCurrentStudy);
             study.version = response.version;
             return response;
         });
@@ -332,8 +300,19 @@ module.exports = {
     getUploadSchema: function(identifier, revision) {
         return get(config.schemas + "/" + identifier + "/revisions/" + revision);
     },
+    createUploadSchema: function(schema) {
+        return post(config.schemasV4, schema).then(function(response) {
+            schema.version = response.version;
+            return response;
+        });
+    },
     updateUploadSchema: function(schema) {
-        return post(config.schemas, schema);
+        var path = config.schemasV4 + "/" + encodeURIComponent(schema.schemaId) + 
+            "/revisions/" + encodeURIComponent(schema.revision);
+        return post(path, schema).then(function(response) {
+            schema.version = response.version;
+            return response;
+        });
     },
     deleteSchemaRevision: function(schema) {
         return del(config.schemas + "/" + schema.schemaId + "/revisions/" + schema.revision);
@@ -349,7 +328,6 @@ module.exports = {
             (config.schemaPlans + "/" + plan.guid) :
             config.schemaPlans;
         return post(path, plan).then(function(newPlan) {
-            cache.clear(path);
             plan.guid = newPlan.guid;
             plan.version = newPlan.version;
             return newPlan;
@@ -370,7 +348,6 @@ module.exports = {
     updateSubpopulation: function(subpop) {
         var path = config.subpopulations + "/" + subpop.guid;
         return post(path, subpop).then(function(response) {
-            cache.clear(path);
             subpop.version = response.version;
             return response;
         });
@@ -400,10 +377,10 @@ module.exports = {
         return get(config.participants+"/"+id);
     },
     createParticipant: function(participant) {
-        return post(config.participants, participant).then(resetCache);
+        return post(config.participants, participant);
     },
     updateParticipant: function(participant) {
-        return post(config.participants+"/"+participant.id, participant).then(resetCache);
+        return post(config.participants+"/"+participant.id, participant);
     },
     signOutUser: function(id) {
         return post(config.participants+"/"+id+"/signOut");  
