@@ -58,6 +58,7 @@ module.exports = function(params) {
     }
     function updateRevision(response) {
         self.revisionObs(response.revision);
+        self.isNewObs(false);
         return response;
     }
     function handleError(failureHandler) {
