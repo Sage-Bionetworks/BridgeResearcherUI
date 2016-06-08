@@ -18,12 +18,9 @@ module.exports = function(params) {
     serverService.getParticipant(self.idObs()).then(function(response) {
         var histories = response.consentHistories;
         
-        // NOTE: This isn't going to tell the viewer anything about *which* of these
-        // consent groups the user should or should not be assigned to.
-        var requests = Object.keys(histories).map(function(guid) {
+        return Promise.map(Object.keys(histories), function(guid) {
             return serverService.getSubpopulation(guid);
-        });
-        Promise.all(requests).then(function(subpopulations) {
+        }).then(function(subpopulations) {
             subpopulations.forEach(function(subpop) {
                 if (histories[subpop.guid].length === 0) {
                     self.consentHistoryObs.push({

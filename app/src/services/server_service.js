@@ -140,9 +140,9 @@ function makeSessionWaitingPromise(func) {
         var executor = function() {
             var p = func();
             p.done(resolve);
-            // This is goofy but Bluebird throws a big ole warning because jQuery's AJAX response is 
-            // not an error. Even though we want to know what is in the response as part of the 
-            // rejection. Soooo convert it to an error and copy over key aspects of the response. 
+            // Bluebird throws a big ole warning because jQuery's AJAX response is not an error. 
+            // Even though we want to know what is in the response as part of the rejection. 
+            // Soooo convert it to an error and copy over key aspects of the response. 
             p.fail(function(response) {
                 var error = new Error(response.responseJSON.message);
                 error.responseJSON = response.responseJSON;
@@ -255,6 +255,8 @@ module.exports = {
     saveStudy: function(study, isAdmin) {
         var url = (isAdmin) ? (config.getStudy + study.identifier) : config.getCurrentStudy;
         return post(url, study).then(function(response) {
+            cache.clear(config.getStudy + study.identifier);
+            cache.clear(config.getCurrentStudy);
             study.version = response.version;
             return response;
         });
@@ -343,19 +345,15 @@ module.exports = {
         return get(config.schemaPlans + "/" + guid);
     },
     saveSchedulePlan: function(plan) {
-        if (plan.guid) {
-            return post(config.schemaPlans + "/" + plan.guid, plan).then(function(newPlan) {
-                plan.guid = newPlan.guid;
-                plan.version = newPlan.version;
-                return newPlan;
-            });
-        } else {
-            return post(config.schemaPlans, plan).then(function(newPlan) {
-                plan.guid = newPlan.guid;
-                plan.version = newPlan.version;
-                return newPlan;
-            });
-        }
+        var path = (plan.guid) ? 
+            (config.schemaPlans + "/" + plan.guid) :
+            config.schemaPlans;
+        return post(path, plan).then(function(newPlan) {
+            cache.clear(path);
+            plan.guid = newPlan.guid;
+            plan.version = newPlan.version;
+            return newPlan;
+        });
     },
     deleteSchedulePlan: function(guid) {
         return del(config.schemaPlans + "/" + guid);
@@ -370,7 +368,9 @@ module.exports = {
         return post(config.subpopulations, subpop);
     },
     updateSubpopulation: function(subpop) {
-        return post(config.subpopulations + "/" + subpop.guid, subpop).then(function(response) {
+        var path = config.subpopulations + "/" + subpop.guid;
+        return post(path, subpop).then(function(response) {
+            cache.clear(path);
             subpop.version = response.version;
             return response;
         });

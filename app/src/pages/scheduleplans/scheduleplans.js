@@ -42,16 +42,14 @@ module.exports = function() {
             "Schedules have been copied." : "Schedule has been copied.";
 
         utils.startHandler(vm, event);
-        var promises = copyables.map(function(plan) {
+        return Promise.map(copyables, function(plan) {
             delete plan.guid;
             delete plan.version;
             plan.label += " (Copy)";
             plan.minAppVersion = 9999999;
             delete plan.maxAppVersion;
             return serverService.saveSchedulePlan(plan);
-        });
-        Promise.all(promises)
-            .then(load)
+        }).then(load)
             .then(utils.successHandler(vm, event, confirmMsg))
             .catch(utils.failureHandler(vm, event));
 
@@ -66,11 +64,9 @@ module.exports = function() {
 
         if (confirm(msg)) {
             utils.startHandler(self, event);
-            var promises = deletables.map(function(plan) {
+            Promise.map(deletables, function(plan) {
                 return serverService.deleteSchedulePlan(plan.guid);
-            });
-            Promise.all(promises)
-                .then(utils.makeTableRowHandler(vm, deletables, "#/scheduleplans"))
+            }).then(utils.makeTableRowHandler(vm, deletables, "#/scheduleplans"))
                 .then(utils.successHandler(vm, event, confirmMsg))
                 .catch(utils.failureHandler(vm, event));
         }
