@@ -77,8 +77,8 @@ router.on('/synapse', routeTo('synapse'));
 router.on('/lab_codes', routeTo('lab_codes'));
 router.on('/externalIds', routeTo('external_ids'));
 router.on('/participants/:id', idRoute('participant'));
-router.on('/participants/:id/:name', idNameRoute('participant'));
 router.on('/participants/:id/consents', idRoute('participant_consents'));
+router.on('/participants/:id/:name', idNameRoute('participant'));
 router.on('/participants', routeTo('participants'));
 
 router.on('/admin/info', routeTo('admin_info'));

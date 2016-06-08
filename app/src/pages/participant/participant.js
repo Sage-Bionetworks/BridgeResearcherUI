@@ -34,7 +34,7 @@ module.exports = function(params) {
         .bind('lastName')
         .bind('sharingScope')
         .bind('notifyByEmail')
-        .bind('dataGroups[]', [])
+        .bind('dataGroups[]')
         .bind('password')
         .bind('externalId')
         .bind('languages', null, fn.formatLanguages, fn.persistLanguages)

@@ -27,12 +27,9 @@ module.exports = function(params) {
                 "Upload schemas deleted." : "Upload schema deleted.";
         if (confirm(msg)) {
             utils.startHandler(self, event);
-
-            var promises = deletables.map(function(revision) {
+            Promise.map(deletables, function(revision) {
                 return serverService.deleteSchemaRevision(revision);
-            });
-            Promise.all(promises)
-                .then(utils.makeTableRowHandler(vm, deletables, "#/schemas"))
+            }).then(utils.makeTableRowHandler(vm, deletables, "#/schemas"))
                 .then(utils.successHandler(vm, event, confirmMsg))
                 .catch(utils.failureHandler(vm, event));
         }

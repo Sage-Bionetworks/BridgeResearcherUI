@@ -36,7 +36,7 @@ ko.bindingHandlers.semantic = {
         }
         function init() {
             var allOptionsObs = allBindings().foreach;
-            if (allOptionsObs() && allOptionsObs().length > 0) {
+            if (allOptionsObs() instanceof Array) {
                 clearTimeout(intervalId);
                 
                 $element.dropdown("set selected", collectionObs());

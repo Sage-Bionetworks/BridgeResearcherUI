@@ -114,9 +114,9 @@ var RootViewModel = function() {
         serverService.getStudy().then(function(study) {
             // show Participants if emailVerificationEnabled.
             self.showParticipantsObs(study.emailVerificationEnabled && self.isResearcher());
-            // otherwise show Lab Codes. Note roles are different though.
+            // otherwise show Lab Codes. Note roles are different
             self.showLabCodesObs(!study.emailVerificationEnabled && self.isDeveloper());
-            // Show external IDs if emailVerificationEnabled and externalIdValidationEnabled.
+            // Show external IDs if emailVerificationEnabled and externalIdValidationEnabled
             self.showExternalIdsObs(study.emailVerificationEnabled && study.externalIdValidationEnabled && self.isDeveloper());
         });
     });
@@ -125,6 +125,9 @@ var RootViewModel = function() {
         self.environmentObs("");
         self.studyIdentifierObs("");
         self.rolesObs([]);
+        self.showParticipantsObs(false);
+        self.showLabCodesObs(false);
+        self.showExternalIdsObs(false);
         self.openDialog('sign_in_dialog');
     });
 };

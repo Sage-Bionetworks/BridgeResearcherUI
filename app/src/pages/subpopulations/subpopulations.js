@@ -28,11 +28,9 @@ module.exports = function() {
 
         if (confirm(msg)) {
             utils.startHandler(self, event);
-            var promises = deletables.map(function(plan) {
+            Promise.map(deletables, function(plan) {
                 return serverService.deleteSubpopulation(plan.guid);
-            });
-            Promise.all(promises)
-                .then(utils.makeTableRowHandler(vm, deletables, "#/subpopulations"))
+            }).then(utils.makeTableRowHandler(vm, deletables, "#/subpopulations"))
                 .then(utils.successHandler(vm, event, confirmMsg))
                 .catch(utils.failureHandler(vm, event));
         }

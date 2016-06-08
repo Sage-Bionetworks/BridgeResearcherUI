@@ -1,15 +1,13 @@
 var ko = require('knockout');
 var utils = require('../../../utils');
 var serverService = require('../../../services/server_service');
+var Promise = require('bluebird');
 
 module.exports = function() {
     var self = this;
 
     function mapKey(cacheKey) {
         return {key: cacheKey};
-    }
-    function deleteKey(item) {
-        return serverService.deleteCacheKey(item.key);
     }
     
     self.itemsObs = ko.observableArray([]);
@@ -28,8 +26,9 @@ module.exports = function() {
 
         if (confirm(msg)) {
             utils.startHandler(self, event);
-            Promise.all(deletables.map(deleteKey))
-                .then(utils.makeTableRowHandler(vm, deletables, "#/cache"))
+            Promise.map(deletables, function(item) {
+                return serverService.deleteCacheKey(item.key);    
+            }).then(utils.makeTableRowHandler(vm, deletables, "#/cache"))
                 .then(utils.successHandler(vm, event, confirmMsg))
                 .catch(utils.failureHandler(vm, event));
         }
