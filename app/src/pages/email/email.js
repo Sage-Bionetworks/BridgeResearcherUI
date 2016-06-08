@@ -40,6 +40,5 @@ module.exports = function() {
     serverService.getStudy()
         .then(binder.assign('study'))
         .then(binder.update())
-        .then(checkEmailStatus)
-        .catch(function(){});
+        .then(checkEmailStatus);
 };

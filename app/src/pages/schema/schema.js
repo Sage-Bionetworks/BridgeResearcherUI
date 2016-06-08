@@ -77,7 +77,6 @@ module.exports = function(params) {
         utils.startHandler(vm, event);
 
         self.schema = binder.persist(self.schema);
-        console.log(self.schema);
         if (self.isNewObs()) {
             serverService.createUploadSchema(self.schema)
                 .then(updateRevision)

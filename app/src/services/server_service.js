@@ -48,7 +48,7 @@ var cache = (function() {
             cachedItems[key] = JSON.stringify(response);
         },
         clear: function(key) {
-            // clear everything, this is a fetch cache. Very simple, hard to screw up.
+            // clear everything, this is now a fetch cache. Very simple, hard to screw up.
             cachedItems = {};
         },
         reset: function() {
@@ -105,7 +105,6 @@ function reloadPageWhenSessionLost(response) {
     }
     return response;
 }
-
 function makeSessionWaitingPromise(func) {
     // Return a Bluebird promise. If there's a session, execute the function and call resolve/reject.
     // otherwise, the executor itself has a promise and can be used as a listener function.
