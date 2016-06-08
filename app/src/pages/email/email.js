@@ -16,8 +16,7 @@ module.exports = function() {
         .bind('consentNotificationEmail');
 
     function checkEmailStatus() {
-        serverService.emailStatus()
-            .then(binder.update('status'));
+        return serverService.emailStatus().then(binder.update('status'));
     }
     
     self.save = function(vm, event) {
@@ -41,5 +40,6 @@ module.exports = function() {
     serverService.getStudy()
         .then(binder.assign('study'))
         .then(binder.update())
-        .then(checkEmailStatus);
+        .then(checkEmailStatus)
+        .catch(function(){});
 };

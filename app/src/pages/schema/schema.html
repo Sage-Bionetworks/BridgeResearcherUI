@@ -29,6 +29,21 @@
     </div>
 </div>
 <div class="scrollbox">
+    <div class="ui warning icon message" style="margin-bottom: 1.4rem" data-bind="visible: showErrorObs">
+        <i class="check warningsign icon"></i>
+        <div class="content">
+            <div class="header">Schema is not backwards compatible</div>
+            <p style="margin-top:1rem">You&lsquo;ve made changes that are not backwards compatible. If you 
+                are sending data to Bridge using this schema revision, the server would start rejecting 
+                the data. You can save it under a new revision, or keep editing. </p>
+                
+            <p style="margin-bottom:1.5rem">(To maintain backwards compatibility, you can't delete or modify existing fields.)</p>
+            <div class="button-container">
+                <button class="ui primary button" data-bind="click: saveNewRevision">Save as new revision</button>
+                <button class="ui button" data-bind="click: closeWarning">Close</button>
+            </div>
+        </div>
+    </div>    
     <form class="ui form">
         <errors></errors>
         <div class="three fields">
@@ -55,7 +70,7 @@
 
     <p class="help-text">Drag items to reorder them. </p>
 
-    <div data-bind="visible: itemsObs().length === 0">
+    <div data-bind="visible: fieldDefinitionsObs().length === 0">
         <p>There are currently no field definitions in this upload schema.</p>
         <p>
             <button class="ui primary button" data-bind="click: addFirst">
@@ -66,8 +81,8 @@
     <div class="ui form schema sfieldZone" data-bind="dragula: {
         elementSelector: '.field_definitions',
         dragHandleSelector: '.draggable',
-        listObs: itemsObs
-    }, foreach: itemsObs">
+        listObs: fieldDefinitionsObs
+    }, foreach: fieldDefinitionsObs">
         <div class="field_definitions" data-bind="component: {
             name: 'field_definition',
             params: { field: $data, itemsObs: $parent.itemsObs, indexObs: $index }

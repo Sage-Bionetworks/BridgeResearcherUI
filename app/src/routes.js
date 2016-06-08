@@ -40,7 +40,7 @@ function idRoute(name) {
 }
 function idNameRoute(routeName) {
     return function(id, name) {
-        root.changeView(routeName, {id:id, name:name});
+        root.changeView(routeName, {id:id, name: decodeURIComponent(name)});
     };
 }
 
@@ -77,7 +77,7 @@ router.on('/synapse', routeTo('synapse'));
 router.on('/lab_codes', routeTo('lab_codes'));
 router.on('/externalIds', routeTo('external_ids'));
 router.on('/participants/:id', idRoute('participant'));
-router.on('/participants/:id/consents', idRoute('participant_consents'));
+router.on('/participants/:id/consents/:name', idNameRoute('participant_consents'));
 router.on('/participants/:id/:name', idNameRoute('participant'));
 router.on('/participants', routeTo('participants'));
 

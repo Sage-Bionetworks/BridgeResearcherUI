@@ -31,4 +31,11 @@
     a {
         margin-left: 1rem;
     }
+    .version_input {
+        width:6.5rem!important; 
+        padding-right:0!important;
+    }
+    .version_input:first-child {
+        margin-right:.5rem!important;
+    }
 }

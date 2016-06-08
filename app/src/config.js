@@ -30,6 +30,7 @@ module.exports = {
     publishedSurveys: '/v3/surveys/published',
     survey: '/v3/surveys/',
     schemas: '/v3/uploadschemas',
+    schemasV4: '/v4/uploadschemas',
     schemaPlans: '/v3/scheduleplans',
     subpopulations: '/v3/subpopulations',
     verifyEmail: '/v3/studies/self/verifyEmail',
