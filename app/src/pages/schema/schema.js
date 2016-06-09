@@ -117,7 +117,9 @@ module.exports = function(params) {
 
     var promise = null;
     if (params.schemaId === "new") {
-        promise = Promise.resolve({name:'',schemaId:'',schemaType:'ios_data',revision:null,fieldDefinitions:[]});
+        promise = Promise.resolve({name:'',schemaId:'',schemaType:'ios_data',revision:null,fieldDefinitions:[{
+            name:'', required:false, type:'attachment_blob', minAppVersion:'', maxAppVersion:''
+        }]});
     } else if (params.revision) {
         promise = serverService.getUploadSchema(params.schemaId, params.revision);
     } else {
