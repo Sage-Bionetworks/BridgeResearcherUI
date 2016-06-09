@@ -112,15 +112,20 @@ var RootViewModel = function() {
         self.rolesObs(session.roles);
         self.closeDialog();
         serverService.getStudy().then(function(study) {
-            // show Participants if emailVerificationEnabled.
-            self.showParticipantsObs(study.emailVerificationEnabled && self.isResearcher());
-            // otherwise show Lab Codes. Note roles are different. 
-            self.showLabCodesObs(!study.emailVerificationEnabled && self.isDeveloper());
-            // Show external IDs if emailVerificationEnabled and externalIdValidationEnabled. Or if you are mPower lux...
-            // which is using the creation of credentials to track usage of codes, which is GOOD, I thought no one
-            // was doing that.
-            self.showExternalIdsObs(study.identifier === "parkinson-lux" || 
-                (study.emailVerificationEnabled && study.externalIdValidationEnabled && self.isDeveloper()));
+            // sensible defaults.
+            var defaults = {
+                showParticipants: study.emailVerificationEnabled && self.isResearcher(),
+                showLabCodes: !study.emailVerificationEnabled && self.isDeveloper(),
+                showExternalIds: study.emailVerificationEnabled && study.externalIdValidationEnabled && self.isDeveloper()
+            };
+            // study-specific overrides, currently located in config.
+            var studyConfig = config.studies[study.identifier] || {};
+            var opts = Object.assign({}, defaults, studyConfig);
+            console.log("UI configuration", opts);
+
+            self.showParticipantsObs(opts.showParticipants);
+            self.showLabCodesObs(opts.showLabCodes);
+            self.showExternalIdsObs(opts.showExternalIds);
         });
     });
     serverService.addSessionEndListener(function(session) {
