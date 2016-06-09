@@ -6,6 +6,7 @@ var utils = require('../../utils');
 
 var HEADERS = [];
 var ATTRIBUTES = [];
+var PAGING_TIMEOUT = 2500;
 var TIMEOUT = 1500;
 var PAGE_SIZE = 100;
 var FIELDS = Object.freeze(["firstName","lastName","email", "sharingScope", "status", "notifyByEmail", 
@@ -36,13 +37,13 @@ function getPageOffsets(numPages) {
     return pages;
 }
 function canExport(participant, canContactByEmail) {
-    return participant && 
+    return participant &&
+           participant.status === "enabled" && 
            participant.email && 
            (!canContactByEmail || canContact(participant));
 }
 function canContact(participant) {
-    return participant.status === "enabled" && 
-           participant.notifyByEmail === true &&
+    return participant.notifyByEmail === true &&
            participant.sharingScope !== "no_sharing" &&
            utils.atLeastOneSignedConsent(participant.consentHistories);
 }
@@ -70,7 +71,7 @@ module.exports = function(params) {
     self.statusObs = ko.observable();
     self.percentageObs = ko.observable();
     self.canContactByEmailObs = ko.observable(false);
-    self.searchFilterObs = ko.observable(params.searchFilter);
+    self.searchFilterObs = ko.observable(params.searchFilter || []);
     
     reset();
     
@@ -114,12 +115,16 @@ module.exports = function(params) {
         if (cancel) { return; }
         if (response && response.items) {
             response.items.forEach(function(participant) {
-                identifiers.push(participant.id);
+                if (participant.status !== "unverified") {
+                    identifiers.push(participant.id);
+                } else {
+                    console.log("unverified, skipping", participant.email);
+                }
             });
         }
         updateStatus(progressIndex++);
         if (pageOffsets.length > 0) {
-            setTimeout(doOnePage, TIMEOUT);
+            setTimeout(doOnePage, PAGING_TIMEOUT);
         } else {
             self.statusObs("Currently preparing your *.tsv file. Retrieving records...");
             doContinueFetch();
