@@ -314,6 +314,9 @@ module.exports = {
             return response;
         });
     },
+    deleteSchema: function(schemaId) {
+        return del(config.schemas + "/" + schemaId);
+    },
     deleteSchemaRevision: function(schema) {
         return del(config.schemas + "/" + schema.schemaId + "/revisions/" + schema.revision);
     },

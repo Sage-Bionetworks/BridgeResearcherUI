@@ -4,6 +4,8 @@
             <h3>Data Schemas</h3>
         </div>
         <div class="fixed-header-buttons">
+            <button class="ui small button" data-bind="disable: !atLeastOneChecked(), click: copySchemasDialog">Copy</button>
+            <button class="ui red small button" data-bind="disable: !atLeastOneChecked(), click: deleteSchemas">Delete</button>
             <a href="#/schemas/new" class="ui primary small button">New Schema</a>
         </div>
     </div>
@@ -15,6 +17,7 @@
     <table class="ui compact selectable table" data-bind="visible: itemsObs().length > 0">
         <thead>
             <tr>
+                <th width="10"></th>
                 <th>Name</th>
                 <th>Type</th>
                 <th>Latest Revision</th>
@@ -22,6 +25,9 @@
         </thead>
         <tbody data-bind="foreach: itemsObs">
             <tr data-bind="css: { positive: $data.active }">
+                <td>
+                    <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+                </td>
                 <td>
                     <a data-bind="attr: {'href': '#/schemas/'+encodeURIComponent($data.schemaId)}, text: $data.name"></a>
                 </td>

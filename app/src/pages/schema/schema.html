@@ -56,16 +56,9 @@
                 <label>Schema Type</label>
                 <ui-select params="fieldObs: schemaTypeObs, fieldLabel: schemaTypeLabel, optionsSrc: schemaTypeOptions"></ui-select>
             </div>
-            <div class="two fields" data-bind="visible: isNewObs">
-                <div class="required field" id="schemaId">
-                    <label>Identifier</label>
-                    <input type="text" data-bind="textInput: schemaIdObs"/>
-                </div>
-                <div class="field">
-                    <label>Revision</label>
-                    <input type="text" data-bind="textInput: revisionObs, semantic: 'popup'"
-                        data-content="Leave this blank and we&rsquo;ll save it as &quot;revision 1.&quot; Which is what you want. But if you&rsquo;re some kind of Bridge server wizard, you can pick another revision to use, usually to fix a past mistake."/>
-                </div>
+            <div class="required field" id="schemaId" data-bind="visible: isNewObs">
+                <label>Identifier</label>
+                <input type="text" data-bind="textInput: schemaIdObs"/>
             </div>
             <div class="field" data-bind="visible: !isNewObs()">
                 <label>Identifier</label>

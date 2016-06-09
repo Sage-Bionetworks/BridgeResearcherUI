@@ -18,7 +18,7 @@ module.exports = function(params) {
         .bind('isNew', params.schemaId === "new")
         .bind('schemaId', params.schemaId)
         .bind('schemaType')
-        .bind('revision', params.revision ? params.revision : null)
+        .obs('revision', params.revision ? params.revision : null)
         .bind('showError', false)
         .bind('name', '')
         .bind('fieldDefinitions[]', [], fieldDefToObs, fieldObsToDef);
@@ -60,6 +60,7 @@ module.exports = function(params) {
     }
     function updateRevision(response) {
         self.revisionObs(response.revision);
+        self.schema.version = response.version;
         self.isNewObs(false);
         return response;
     }
@@ -103,11 +104,13 @@ module.exports = function(params) {
         self.fieldDefinitionsObs.push(field);
     };
     self.saveNewRevision = function(vm, event) {
-        self.schema.revision++;
-        delete self.schema.version;
-
         utils.startHandler(vm, event);
-        serverService.createUploadSchema(self.schema)
+        // Get the most recent revision, then increment that by one.
+        serverService.getMostRecentUploadSchema(params.schemaId).then(function(schema) {
+            self.schema.revision = schema.revision + 1;
+            delete self.schema.version;
+            return self.schema;
+        }).then(serverService.createUploadSchema)
             .then(updateRevision)
             .then(utils.successHandler(vm, event, "Schema has been saved at new revision."))
             .then(hideWarning)
