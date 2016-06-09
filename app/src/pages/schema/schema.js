@@ -4,6 +4,10 @@ var schemaUtils = require('../schema/schema_utils');
 var utils = require('../../utils');
 var bind = require('../../binder');
 
+var FIELD_SKELETON = {
+    name:'', required:false, type:'attachment_blob', minAppVersion:'', maxAppVersion:''
+};
+
 module.exports = function(params) {
     var self = this;
     var scrollTo = utils.makeScrollTo(".ui.warning.message");
@@ -49,9 +53,7 @@ module.exports = function(params) {
         });
     }
     function newField() {
-        return fieldDefToObs([{
-            name:'', required:false, type:'attachment_blob', minAppVersion:'', maxAppVersion:''
-        }])[0];
+        return fieldDefToObs([Object.assign({}, FIELD_SKELETON)])[0];
     }    
     function hideWarning() {
         self.showErrorObs(false);
@@ -117,7 +119,9 @@ module.exports = function(params) {
 
     var promise = null;
     if (params.schemaId === "new") {
-        promise = Promise.resolve({name:'',schemaId:'',schemaType:'ios_data',revision:null,fieldDefinitions:[]});
+        promise = Promise.resolve({name:'',schemaId:'',schemaType:'ios_data',revision:null,
+            fieldDefinitions:[Object.assign({}, FIELD_SKELETON)]
+        });
     } else if (params.revision) {
         promise = serverService.getUploadSchema(params.schemaId, params.revision);
     } else {
