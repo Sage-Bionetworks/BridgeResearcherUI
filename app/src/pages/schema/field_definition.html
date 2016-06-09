@@ -10,6 +10,14 @@
                 optionsSrc: fieldTypeOptions"></ui-select>
         </div>
     </div>
+    <div class="draggable two fields">
+        <input class="version_input" type="number" placeholder="Min vers." 
+            data-bind="value: minAppVersionObs, semantic: 'popup'"
+            data-content="Set the lowest app version that will include this field (optional)"/>
+        <input class="version_input" type="number" placeholder="Max vers." 
+            data-bind="value: maxAppVersionObs, semantic: 'popup'" 
+            data-content="Set the highest app version that will include this field (optional)"/>
+    </div>
     <div class="draggable">
         <ui-checkbox params="checkedObs: requiredObs">Required</ui-checkbox>
     </div>
@@ -17,7 +25,8 @@
         <button class="ui basic compact mini button" data-bind="click: $parents[1].addBelow">
             <i class="square add icon"></i>Add below
         </button>
-        <button class="ui basic red compact mini button" data-bind="fadeRemove: {selector: '.field_definition', object: $data.field}">
+        <button class="ui basic red compact mini button" data-bind="fadeRemove: {
+            selector: '.field_definition', object: $data.field, 'collection': 'fieldDefinitionsObs'}">
             <i class="delete icon"></i>Delete
         </button>
     </div>

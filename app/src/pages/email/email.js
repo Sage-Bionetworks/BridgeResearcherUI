@@ -16,8 +16,7 @@ module.exports = function() {
         .bind('consentNotificationEmail');
 
     function checkEmailStatus() {
-        serverService.emailStatus()
-            .then(binder.update('status'));
+        return serverService.emailStatus().then(binder.update('status'));
     }
     
     self.save = function(vm, event) {

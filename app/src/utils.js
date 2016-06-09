@@ -162,6 +162,7 @@ module.exports = {
      */
     startHandler: function(vm, event) {
         displayPendingControl(event.target);
+        ko.postbox.publish("clearErrors");
     },
     /**
      * An Ajax success handler for a view model that supports the editing of a form.
@@ -227,6 +228,7 @@ module.exports = {
             ko.postbox.publish("showErrors", {message:msg,errors:{}});
         };
     },
+    clearPendingControl: clearPendingControl,
     // TODO: Get rid of the need to have a reference to the dom element that has a spinner,
     // using a binding.
     formFailure: function(actionElement, message) {
