@@ -114,10 +114,13 @@ var RootViewModel = function() {
         serverService.getStudy().then(function(study) {
             // show Participants if emailVerificationEnabled.
             self.showParticipantsObs(study.emailVerificationEnabled && self.isResearcher());
-            // otherwise show Lab Codes. Note roles are different
+            // otherwise show Lab Codes. Note roles are different. 
             self.showLabCodesObs(!study.emailVerificationEnabled && self.isDeveloper());
-            // Show external IDs if emailVerificationEnabled and externalIdValidationEnabled
-            self.showExternalIdsObs(study.emailVerificationEnabled && study.externalIdValidationEnabled && self.isDeveloper());
+            // Show external IDs if emailVerificationEnabled and externalIdValidationEnabled. Or if you are mPower lux...
+            // which is using the creation of credentials to track usage of codes, which is GOOD, I thought no one
+            // was doing that.
+            self.showExternalIdsObs(study.identifier === "parkinson-lux" || 
+                (study.emailVerificationEnabled && study.externalIdValidationEnabled && self.isDeveloper()));
         });
     });
     serverService.addSessionEndListener(function(session) {
