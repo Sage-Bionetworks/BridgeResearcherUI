@@ -18,6 +18,7 @@ module.exports = {
         preventDuplicates: true,
         opacity: 1.0
     },
+    // options: showParticipants, showLabCodes, showExternalIds 
     studies: {
         'parkinson-lux': {
             showExternalIds: true

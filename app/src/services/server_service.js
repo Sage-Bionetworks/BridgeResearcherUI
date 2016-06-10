@@ -18,6 +18,7 @@ var SESSION_ENDED_EVENT_KEY = 'sessionEnded';
 var listeners = new EventEmitter();
 var session = null;
 var $ = require('jquery');
+var NO_CACHE_PATHS = ['studies/self/emailStatus','/participants','externalIds?'];
 
 // jQuery throws up if there's no window, even in unit tests
 if (typeof window !== "undefined") {
@@ -32,8 +33,11 @@ if (typeof window !== "undefined") {
     });
 }
 
-var NO_CACHE_PATHS = ['studies/self/emailStatus','/participants','externalIds?'];
-var PATH_EXTS = ['/published','/recent','/revisions'];
+function matchesNoCachePath(path) {
+    return NO_CACHE_PATHS.some(function(matchPath) {
+        return path.indexOf(matchPath) > -1;
+    });
+}
 
 var cache = (function() {
     var cachedItems = {};
@@ -44,8 +48,12 @@ var cache = (function() {
             return (value) ? JSON.parse(value) : null;
         },
         set: function(key, response) {
-            console.info("[json cache] caching",key);
-            cachedItems[key] = JSON.stringify(response);
+            if (!matchesNoCachePath(key)) {
+                console.info("[json cache] caching",key);
+                cachedItems[key] = JSON.stringify(response);
+            } else {
+                console.warn("[json cache] do not cache", key);
+            }
         },
         clear: function(key) {
             // clear everything, this is now a fetch cache. Very simple, hard to screw up.
@@ -105,7 +113,7 @@ function reloadPageWhenSessionLost(response) {
     }
     return response;
 }
-function makeSessionWaitingPromise(func) {
+function makeSessionWaitingPromise(httpAction, func) {
     // Return a Bluebird promise. If there's a session, execute the function and call resolve/reject.
     // otherwise, the executor itself has a promise and can be used as a listener function.
     // when a session is generated the promise will be executed. If the session goes away, on any 
@@ -128,6 +136,7 @@ function makeSessionWaitingPromise(func) {
         if (session && session.sessionToken) {
             executor();
         } else {
+            console.info("queuing", httpAction);
             listeners.once(SESSION_STARTED_EVENT_KEY, executor);
         }
     });
@@ -138,7 +147,7 @@ function get(path) {
     if (cache.get(path)) {
         return Promise.resolve(cache.get(path));
     } else {
-        return makeSessionWaitingPromise(function() {
+        return makeSessionWaitingPromise("GET " + path, function() {
             return getInt(config.host[session.environment] + path).then(function(response) {
                 cache.set(path, response);
                 return response;
@@ -148,13 +157,13 @@ function get(path) {
 }
 function post(path, body) {
     cache.clear(path);
-    return makeSessionWaitingPromise(function() {
+    return makeSessionWaitingPromise("POST " + path, function() {
         return postInt(config.host[session.environment] + path, body);
     });
 }
 function del(path) {
     cache.clear(path);
-    return makeSessionWaitingPromise(function() {
+    return makeSessionWaitingPromise("DEL " + path, function() {
         return deleteInt(config.host[session.environment] + path);
     });
 }
@@ -181,7 +190,7 @@ function query(object) {
     var string = Object.keys(object).filter(function(key) { 
         return typeof object[key] !== "undefined" && object[key] !== null && object[key] !== ""; 
     }).map(function(key) { 
-        return key + "=" + object[key]; 
+        return encodeURIComponent(key) + "=" + encodeURIComponent(object[key]); 
     }).join("&");
     return (string) ? ("?"+string) : "";
 }
