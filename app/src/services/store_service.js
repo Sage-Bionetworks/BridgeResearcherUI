@@ -1,6 +1,6 @@
 module.exports = {
     set: function(key, value) {
-        console.log("[cache] Setting", key, value);
+        console.log("[cache] Setting", key);
         localStorage.setItem(key, JSON.stringify(value));
     },
     get: function(key) {
