@@ -136,7 +136,7 @@ function makeSessionWaitingPromise(httpAction, func) {
         if (session && session.sessionToken) {
             executor();
         } else {
-            console.info("queuing", httpAction);
+            console.info("[queuing]", httpAction);
             listeners.once(SESSION_STARTED_EVENT_KEY, executor);
         }
     });
@@ -414,6 +414,19 @@ module.exports = {
                 listeners.once(SESSION_STARTED_EVENT_KEY, resolve);
             });
         }
+    },
+    getStudyReports: function() {
+        return get(config.studyReports);
+    },
+    getStudyReport: function(identifier, startDate, endDate) {
+        var queryString = query({startDate: startDate, endDate: endDate});
+        return get(config.studyReports + "/" + identifier + queryString);
+    },
+    addStudyReport: function(identifier, report) {
+        return post(config.studyReports + "/" + identifier, report);
+    },
+    deleteStudyReport: function(identifier) {
+        return del(config.studyReports + "/" + identifier);
     },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {

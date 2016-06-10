@@ -29,6 +29,8 @@ reg('eligibility','./pages/eligibility/eligibility');
 reg('password_policy','./pages/password_policy/password_policy');
 reg('ve_template','./pages/ve_template/ve_template');
 reg('rp_template','./pages/rp_template/rp_template');
+reg('reports', './pages/reports/reports');
+reg('report', './pages/report/report');
 reg('subpopulations','./pages/subpopulations/subpopulations');
 reg('subpopulation','./pages/subpopulation/subpopulation');
 reg('subpopulation_editor','./pages/subpopulation_editor/subpopulation_editor');
@@ -67,6 +69,7 @@ reg('admin_cache', './pages/admin/cache/cache');
 
 // DIALOGS
 //regt('none_dialog','./dialogs/none/none');
+reg('add_report', './dialogs/add_report/add_report');
 reg('sign_in_dialog', './dialogs/sign_in/sign_in');
 reg('forgot_password_dialog', './dialogs/forgot_password/forgot_password');
 reg('enumeration_editor', './dialogs/enumeration_editor/enumeration_editor');

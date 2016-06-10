@@ -1,0 +1,52 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <div class="fixed-header-heading">
+            <div class="ui breadcrumb">
+                <a class="section" href="#/reports">Reports</a>
+                <i class="right chevron icon divider"></i>
+            </div>
+            <h3 data-bind="text: identifierObs"></h3>
+        </div>
+        <div class="fixed-header-buttons">
+            <button class="ui small primary button" data-bind="visible: isDeveloper, click: addReport">Add report record&hellip;</button>
+        </div>
+    </div>
+    <div class="ui empty secondary pointing menu"></div>
+</div>
+<div class="scrollbox">
+    <errors></errors>
+    <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
+    <div data-bind="visible: itemsObs().length > 0">
+        <p>Last three weeks of reports:</p>
+        <table class="ui compact json table">
+            <thead>
+                <tr>
+                    <th width="100">Date</th>
+                    <th width="10"></th>
+                    <th>JSON</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: itemsObs">
+                <tr>
+                    <td style="white-space: no-wrap" data-bind="text: $data.date"></td>
+                    <td>
+                        <div class="json-expand-control" data-bind="visible: $data.checkedObs">
+                            <i class="plus square outline icon" data-bind="click: $component.toggle"></i>
+                        </div>
+                        <div class="json-expand-control" data-bind="visible: !$data.checkedObs()">
+                            <i class="minus square outline icon" data-bind="click: $component.toggle"></i>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="json-expand-control" data-bind="visible: $data.checkedObs">
+                            {&hellip;}
+                        </div>
+                        <div class="json-expand-control" data-bind="visible: !$data.checkedObs()">
+                            <pre data-bind="visible: !$data.checkedObs(), html: $data.data"></pre>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

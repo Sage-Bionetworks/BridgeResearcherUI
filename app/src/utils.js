@@ -225,7 +225,11 @@ module.exports = {
             if (actionElement) {
                 actionElement.classList.remove("loading");
             }
-            ko.postbox.publish("showErrors", {message:msg,errors:{}});
+            if (response.responseJSON && response.responseJSON.errors) {
+                ko.postbox.publish("showErrors", response.responseJSON);
+            } else {
+                ko.postbox.publish("showErrors", {message:msg,errors:{}});
+            }
         };
     },
     clearPendingControl: clearPendingControl,

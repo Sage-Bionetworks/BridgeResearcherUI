@@ -15,7 +15,8 @@ var pageSets = {
     'participants': ['participants','participant','participant_consents'],
     'externalIds': ['external_ids'],
     'admin/info': ['admin_info'],
-    'admin/cache': ['admin_cache']
+    'admin/cache': ['admin_cache'],
+    'reports': ['reports', 'report']
 };
 function roleFunc(observer, role) {
     return ko.computed(function() {return observer.contains(role);});        

@@ -61,6 +61,8 @@ router.on('/subpopulations/:guid/consents/download', guidRoute('subpopulation_do
 router.on('/subpopulations/:guid/consents/:createdOn', guidCreatedOnRoute('subpopulation_editor'));
 router.on('/subpopulations/:guid', guidRoute('subpopulation'));
 router.on('/subpopulations', routeTo('subpopulations'));
+router.on('/reports/:identifier', idRoute('report'));
+router.on('/reports', routeTo('reports'));
 router.on('/surveys', routeTo('surveys'));
 router.on('/surveys/:guid/:createdOn/versions', guidCreatedOnRoute('survey_versions'));
 router.on('/surveys/:guid/:createdOn/schema', guidCreatedOnRoute('survey_schema'));

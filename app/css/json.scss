@@ -1,0 +1,23 @@
+table.json td {
+    vertical-align: top!important;
+}
+pre {
+    padding:0;
+    margin:0;
+}
+.json-key {
+    color: brown;
+}
+.json-value {
+    color: navy;
+}
+.json-string {
+    color: olive;
+}
+.json-expand-control {
+    font-family: monospace;
+}
+.json-expand-control i.icon {
+    color: #4183c4!important;
+    cursor:pointer;
+}

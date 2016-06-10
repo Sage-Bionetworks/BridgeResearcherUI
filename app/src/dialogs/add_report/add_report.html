@@ -1,0 +1,27 @@
+<div class="ui small modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Add report record
+    </div>
+    <div class="content">
+        <errors></errors>
+        <form class="ui form">
+            <div class="field" id="identifier" data-bind="visible: showIdentifierObs">
+                <label>Report identifier</label>
+                <input type="text" data-bind="textInput: identifierObs, hasFocus: true"/>
+            </div>
+            <div class="field" id="date">
+                <label>Date</label>
+                <input type="text" placeholder="YYYY-MM-DD" data-bind="textInput: dateObs"/>
+            </div>
+            <div class="field" id="data">
+                <label>JSON</label>
+                <textarea data-bind="textInput: dataObs"></textarea>
+            </div>
+        </form>
+    </div>
+    <div class="actions">
+        <button class="ui small primary button" data-bind="click: save">Save</button>
+        <button class="ui small button" data-bind="click: close">Close</button>
+    </div>
+</div>

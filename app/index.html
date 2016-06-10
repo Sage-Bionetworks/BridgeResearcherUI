@@ -49,6 +49,9 @@
                         <a href="#/lab_codes" class="item" data-bind="active: isActive, visible: showLabCodesObs">
                             Lab Codes
                         </a>
+                        <a href="#/reports" class="item" data-bind="active: isActive, visible: isDeveloper() || isResearcher()">
+                            Reports
+                        </a>
                     </div>
                 </div>
                 <div class="item" data-bind="visible: isDeveloper">

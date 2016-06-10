@@ -21,7 +21,7 @@
     "dom-autoscroller": "^1.2.1",
     "dragula": "^3.7.1",
     "html-loader": "^0.3.0",
-    "jquery": "^2.1.4",
+    "jquery": "^3.0.0",
     "jshint": "^2.9.2",
     "jshint-loader": "^0.8.3",
     "knockout": "^3.4.0",
