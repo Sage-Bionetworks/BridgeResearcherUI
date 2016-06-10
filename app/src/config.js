@@ -18,6 +18,15 @@ module.exports = {
         preventDuplicates: true,
         opacity: 1.0
     },
+    // options: showParticipants, showLabCodes, showExternalIds 
+    studies: {
+        'fphs-lab': {
+            showParticipants: true
+        },
+        'parkinson-lux': {
+            showExternalIds: true
+        }
+    },
     signIn: '/v3/auth/signIn',
     signOut: '/v3/auth/signOut',
     getStudy: '/v3/studies/',

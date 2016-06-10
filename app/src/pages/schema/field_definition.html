@@ -13,10 +13,10 @@
     <div class="draggable two fields">
         <input class="version_input" type="number" placeholder="Min vers." 
             data-bind="value: minAppVersionObs, semantic: 'popup'"
-            data-content="Set the lowest app version that will include this field (optional)"/>
+            data-content="You can safely add required fields for later app versions by setting this value to the next app version. Optional."/>
         <input class="version_input" type="number" placeholder="Max vers." 
             data-bind="value: maxAppVersionObs, semantic: 'popup'" 
-            data-content="Set the highest app version that will include this field (optional)"/>
+            data-content="You can safely delete required fields for later app versions by setting this value to the released app version. Optional."/>
     </div>
     <div class="draggable">
         <ui-checkbox params="checkedObs: requiredObs">Required</ui-checkbox>

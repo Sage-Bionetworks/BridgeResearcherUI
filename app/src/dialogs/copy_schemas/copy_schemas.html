@@ -1,0 +1,41 @@
+<div class="ui small modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Copy upload schemas
+    </div>
+    <div class="content">
+        <p>To copy this schema, choose a new ID for your copy. You can also change the name if you wish. </p>
+        <form class="ui form">
+            <div class="fields">
+                <div class="twelve wide field required">
+                    <label>Schema ID</label>
+                    <input type="text" data-bind="textInput: schemaIdObs"/>
+                </div>
+                <div class="four wide field">
+                    <label>Schema revision</label>
+                    <input type="text" data-bind="textInput: revisionObs, semantic: 'popup'"
+                        data-content="You can force the creation of this schema at an arbitrary revision number. You can ignore this unless you are trying fix a released app pointing at a specific revision number."
+                    />
+                </div>
+            </div>
+            <div class="field">
+                <label>New schema name</label>
+                <input type="text" data-bind="textInput: nameObs"/>
+            </div>
+        </fom>
+        <p>NOTE: New schema revisions will be exported to a new Synapse table. Many schema changes can be made to an existing 
+            schema and they will not require a new table. Give it a try&mdash;the editor will stop and tell you if it needs 
+            to change the revision number. </p>
+            
+            <p>You can also set minimum and maximum application versions on specific fields, and those fields will only apply 
+                to those versions of your application. This also prevents your data from going into a new Synapse table. See 
+                <a target="_blank" href="https://sagebionetworks.jira.com/wiki/display/BRIDGE/Bridge+REST+API#BridgeRESTAPI-Subsequentappreleases">subsequent 
+                app releases</a> for more details. </p>
+    </div>
+    <div class="actions">
+        <button class="ui small button" data-bind="disable: !canGoPreviousObs(), click: previous">Previous</button>
+        <button class="ui small button" data-bind="disable: !canGoNextObs(), click: next">Next</button>
+        <button class="ui primary small button" data-bind="disable: !canCopyObs(), click: copy">Copy</button>
+        <button class="ui small button" data-bind="click: closeDialog">Cancel</button>
+    </div>
+</div>
