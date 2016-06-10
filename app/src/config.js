@@ -20,6 +20,9 @@ module.exports = {
     },
     // options: showParticipants, showLabCodes, showExternalIds 
     studies: {
+        'fphs-lab': {
+            showParticipants: true
+        },
         'parkinson-lux': {
             showExternalIds: true
         }
