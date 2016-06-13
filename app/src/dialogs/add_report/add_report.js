@@ -1,4 +1,3 @@
-var root = require('../../root');
 var bind = require('../../binder');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
@@ -28,10 +27,13 @@ module.exports = function(params) {
             });
         }
         utils.startHandler(vm, event);
-        serverService.addStudyReport(entry.identifier, entry)
-            .then(utils.successHandler(vm, event))
-            .then(self.close)
-            .catch(utils.globalToFormFailureHandler(event.target));
+
+        var promise = (params.type === "participant") ?
+            serverService.addParticipantReport(entry.identifier, params.userId, entry) :
+            serverService.addStudyReport(entry.identifier, entry);
+        promise.then(utils.successHandler(vm, event))
+                .then(self.close)
+                .catch(utils.dialogFailureHandler(vm, event));
     };
     self.close = function(response) {
         params.closeDialog();

@@ -19,10 +19,10 @@ var NEW_PARTICIPANT = {id:"new",attributes:{}};
 
 module.exports = function(params) {
     var self = this;
-    var id = params.id;
+    var userId = params.userId;
 
     var binder = bind(self)
-        .obs('isNew', (id === "new"))
+        .obs('isNew', (userId === "new"))
         .obs('healthCode', 'N/A', fn.formatHealthCode)
         .obs('allDataGroups[]')
         .obs('externalIdEditable')
@@ -39,9 +39,10 @@ module.exports = function(params) {
         .bind('externalId')
         .bind('languages', null, fn.formatLanguages, fn.persistLanguages)
         .bind('status')
-        .bind('id', id)
+        .bind('userId', userId)
+        .bind('id', userId)
         .bind('roles[]', null, fn.formatRoles, fn.persistRoles)
-        .bind('title', (id === "new") ? "New participant" : decodeURIComponent(params.name), fn.formatTitle);
+        .bind('title', (userId === "new") ? "New participant" : decodeURIComponent(params.name), fn.formatTitle);
     
     function initStudy(study) {
         // there's a timer in the control involved here, we need to use an observer
@@ -57,7 +58,7 @@ module.exports = function(params) {
     function getParticipant(response) {
         return (self.isNewObs()) ?
             Promise.resolve(NEW_PARTICIPANT) :
-            serverService.getParticipant(id);
+            serverService.getParticipant(userId);
     }
     function afterCreate(response) {
         var statusAfterCreate = self.study.emailVerificationEnabled ? "unverified" : "enabled";
@@ -73,14 +74,14 @@ module.exports = function(params) {
     self.requestResetPassword = function(vm, event) {
         utils.startHandler(vm, event);
         
-        serverService.requestResetPasswordUser(id)
+        serverService.requestResetPasswordUser(userId)
             .then(utils.successHandler(vm, event, "Reset password email has been sent to user."))
             .catch(utils.failureHandler(vm, event));
     };
     self.signOutUser = function(vm, event) {
         utils.startHandler(vm, event);
         
-        serverService.signOutUser(id)
+        serverService.signOutUser(userId)
             .then(utils.successHandler(vm, event, "User signed out."))
             .catch(utils.failureHandler(vm, event));
     };

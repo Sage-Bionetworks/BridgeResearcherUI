@@ -30,7 +30,6 @@ module.exports = function() {
             toastr.error(payload.message);
             return;
         }
-        console.log("payload",payload);
         var message = payload.message;
         var errors = payload.errors;
 

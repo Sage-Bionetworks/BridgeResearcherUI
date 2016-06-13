@@ -1,11 +1,15 @@
 <div class="ui secondary pointing menu" data-bind="visible: !$data.isNewObs()">
-    <a class="item" data-bind="css:{active:$data.active === 'info'}, attr:{'href': 
-        '#/participants/'+$parent.idObs()+'/'+encodeURIComponent($parent.titleObs())}">
+    <a class="item" data-bind="css:{active:$data.active === 'info'}, 
+        attr:{'href':'#/participants/'+$parent.userIdObs()+'/'+encodeURIComponent($parent.titleObs())}">
         <i class="setting icon"></i> General
     </a>
-    <a href="#/email" class="item" data-bind="css:{active:$data.active === 'consents'}, attr:{'href': 
-        '#/participants/'+$parent.idObs()+'/consents/'+encodeURIComponent($parent.titleObs())}">
+    <a class="item" data-bind="css:{active:$data.active === 'consents'}, 
+        attr:{'href':'#/participants/'+$parent.userIdObs()+'/consents/'+encodeURIComponent($parent.titleObs())}">
         <i class="legal icon"></i> Consent
+    </a>
+    <a class="item" data-bind="css:{active:$data.active === 'reports'}, 
+        attr:{'href':'#/participants/'+$parent.userIdObs()+'/reports/'+encodeURIComponent($parent.titleObs())}">
+        <i class="newspaper icon"></i> Reports
     </a>
 </div>
 <div class="ui empty secondary pointing menu" data-bind="visible: isNewObs"></div>

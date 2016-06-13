@@ -47,5 +47,5 @@ module.exports = {
     cache: '/v3/cache',
     participants: '/v3/participants',
     externalIds: '/v3/externalIds',
-    studyReports: '/v3/reports'
+    reports: '/v3/reports'
 };

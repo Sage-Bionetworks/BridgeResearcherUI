@@ -8,14 +8,14 @@ module.exports = function(params) {
     var self = this;
 
     bind(self)
-        .obs('id', params.id)
+        .obs('userId', params.userId)
         .obs('consentHistory[]')
         .obs('isNew', false)
         .obs('title', params.name);
 
     self.isResearcher = root.isResearcher;
 
-    serverService.getParticipant(self.idObs()).then(function(response) {
+    serverService.getParticipant(self.userIdObs()).then(function(response) {
         var histories = response.consentHistories;
         
         return Promise.map(Object.keys(histories), function(guid) {

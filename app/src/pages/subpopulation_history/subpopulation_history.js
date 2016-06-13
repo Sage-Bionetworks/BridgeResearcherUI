@@ -1,6 +1,5 @@
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
-var config = require('../../config');
 var bind = require('../../binder');
 
 module.exports = function(params) {

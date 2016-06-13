@@ -12,7 +12,7 @@ var pageSets = {
     'scheduleplans': ['scheduleplans','scheduleplan'],
     've_template': ['ve_template', 'rp_template'],
     'subpopulations': ['subpopulations', 'subpopulation', 'subpopulation_editor', 'subpopulation_history', 'subpopulation_download'],
-    'participants': ['participants','participant','participant_consents'],
+    'participants': ['participants','participant','participant_consents', 'participant_reports', 'participant_report'],
     'externalIds': ['external_ids'],
     'admin/info': ['admin_info'],
     'admin/cache': ['admin_cache'],
@@ -122,7 +122,7 @@ var RootViewModel = function() {
             // study-specific overrides, currently located in config.
             var studyConfig = config.studies[study.identifier] || {};
             var opts = Object.assign({}, defaults, studyConfig);
-            console.log("UI configuration", opts);
+            console.log("[config]", opts);
 
             self.showParticipantsObs(opts.showParticipants);
             self.showLabCodesObs(opts.showLabCodes);

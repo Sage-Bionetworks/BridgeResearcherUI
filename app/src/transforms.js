@@ -1,5 +1,3 @@
-var utils = require('./utils');
-
 function notBlankName(array, value) {
     if (typeof value !== 'undefined' && value !== '<EMPTY>' && value.length > 0) {
         array.push(value);

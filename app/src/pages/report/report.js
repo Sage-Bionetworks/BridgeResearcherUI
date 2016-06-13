@@ -1,8 +1,8 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
-var utils = require('../../utils');
 var root = require('../../root');
 var jsonFormatter = require('../../json_formatter');
+var tables = require('../../tables');
 
 function startDate() {
     var d = new Date();
@@ -17,13 +17,19 @@ module.exports = function(params) {
     var self = this;
 
     self.identifierObs = ko.observable(params.id);
-    self.itemsObs = ko.observableArray([]);
     self.isDeveloper = root.isDeveloper;
-    
+
+    function deleteItem(item) {
+        return serverService.deleteStudyReportRecord(params.id, item.date);        
+    }
+
+    tables.prepareTable(self, "report record", "#/reports", deleteItem);
+
     self.addReport = function(vm, event) {
         root.openDialog('add_report', {
             closeDialog: self.closeDialog, 
-            identifier: params.id
+            identifier: params.id,
+            type: "study"
         });
     };
     self.closeDialog = function() {
@@ -31,24 +37,15 @@ module.exports = function(params) {
         load();
     };
     self.toggle = function(model) {
-        model.checkedObs(!model.checkedObs());
+        model.collapsedObs(!model.collapsedObs());
     };
 
+    function mapResponse(response) {
+        response.items = response.items.map(jsonFormatter.mapItem);
+        self.itemsObs(response.items.sort());
+    }
     function load() {
-        serverService.getStudyReport(params.id, startDate(), endDate())
-            .then(function(response) {
-                response.items = response.items.map(utils.addCheckedObs).map(function(item) {
-                    item.checkedObs(true);
-                    try {
-                        var json = JSON.parse(item.data);
-                        item.data = jsonFormatter(json);
-                    } catch(e) {
-                        item.checkedObs(false);    
-                    }
-                    return item;
-                });
-                self.itemsObs(response.items.sort());
-            });
+        serverService.getStudyReport(params.id, startDate(), endDate()).then(mapResponse);
     }
     load();
 };

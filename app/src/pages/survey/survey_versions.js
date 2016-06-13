@@ -31,7 +31,7 @@ module.exports = function(params) {
             utils.startHandler(self, event);
             serverService.deleteSurvey(survey)
                 .then(load)
-                .then(utils.makeTableRowHandler(self, [survey], "#/surveys"))
+                .then(tables.makeTableRowHandler(self, [survey], "#/surveys", 'survey version'))
                 .then(redirectIfDeleteSelf(survey))
                 .then(utils.successHandler(self, event, "Survey version deleted."))
                 .catch(utils.failureHandler(self, event));

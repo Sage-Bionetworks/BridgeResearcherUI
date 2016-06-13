@@ -3,11 +3,11 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var Promise = require('bluebird');
 var surveyFieldsToDelete = ['guid','version','createdOn','modifiedOn','published','deleted'];
+var tables = require('../../tables');
 
 function addScheduleField(survey) {
     survey.schedulePlanObs = ko.observableArray([]);
 }
-
 function collectGuids(object, array) {
     Object.keys(object).forEach(function(prop) {
         if (prop === "survey") {
@@ -33,21 +33,20 @@ function annotateSurveys(surveys, plans) {
 module.exports = function() {
     var self = this;
 
-    self.itemsObs = ko.observableArray([]);
     self.formatDateTime = utils.formatDateTime;
+
+    // There is no delete function. We'd sorta like to do copy this way, too.
+    tables.prepareTable(self, 'survey', '#/surveys', function(survey) {
+
+    });
 
     self.formatSchedules = function(survey) {
         return survey.schedulePlanObs().map(function(obj) {
             return obj.label;
         }).join(', ');
     };
-    self.atLeastOneChecked = function () {
-        return self.itemsObs().some(function(item) {
-            return item.checkedObs();
-        });
-    };
     self.copySurveys = function(vm, event) {
-        var copyables = self.itemsObs().filter(utils.hasBeenChecked);
+        var copyables = self.itemsObs().filter(tables.hasBeenChecked);
         var confirmMsg = (copyables.length > 1) ?
             "Surveys have been copied." : "Survey has been copied.";
 
@@ -71,15 +70,10 @@ module.exports = function() {
 
     function load() {
         return serverService.getSurveys().then(function(response) {
-            if (response.items.length) {
-                response.items.sort(utils.makeFieldSorter("name"));
-                response.items.forEach(addScheduleField);
-                self.itemsObs(response.items.map(utils.addCheckedObs));
-                return response.items;
-            } else {
-                document.querySelector(".loading_status").textContent = "There are currently no surveys.";
-                return [];
-            }
+            response.items.sort(utils.makeFieldSorter("name"));
+            response.items.forEach(addScheduleField);
+            self.itemsObs(response.items);
+            return response.items;
         }).then(function(surveys) {
             if (surveys.length) {
                 return serverService.getSchedulePlans().then(function(response) {

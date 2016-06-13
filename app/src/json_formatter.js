@@ -1,7 +1,8 @@
+var ko = require('knockout');
+
 // See http://jsfiddle.net/unlsj/
 
 var formatter = {};
-
 formatter.replacer = function(match, pIndent, pKey, pVal, pEnd) {
     var key = '<span class=json-key>';
     var val = '<span class=json-value>';
@@ -20,7 +21,19 @@ formatter.prettyPrint = function(obj) {
     .replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(jsonLine, formatter.replacer);
 };
+function mapItem(item) {
+    item.collapsedObs = ko.observable(true);
+    try {
+        var json = JSON.parse(item.data);
+        item.data = formatter.prettyPrint(json);
+        item.collapsedValue = "{&hellip;}";
+    } catch(e) {
+        item.collapsedObs(false);
+        item.collapsedValue = "&hellip;";
+    }
+    return item;
+}
 
-module.exports = function(json) {
-    return formatter.prettyPrint(json);
+module.exports = {
+    mapItem: mapItem
 };
