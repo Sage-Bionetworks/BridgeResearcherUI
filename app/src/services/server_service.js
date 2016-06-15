@@ -136,7 +136,7 @@ function makeSessionWaitingPromise(httpAction, func) {
         if (session && session.sessionToken) {
             executor();
         } else {
-            console.info("queuing", httpAction);
+            console.info("[queuing]", httpAction);
             listeners.once(SESSION_STARTED_EVENT_KEY, executor);
         }
     });
@@ -242,13 +242,13 @@ module.exports = {
         return get(config.subpopulations + "/" + guid + "/consents/recent");
     },
     getStudyConsent: function(guid, createdOn) {
-        return get(config.subpopulations + "/" + guid + "/consents/" + new Date(createdOn).toISOString());
+        return get(config.subpopulations + "/" + guid + "/consents/" + createdOn);
     },
     saveStudyConsent: function(guid, consent) {
         return post(config.subpopulations + "/" + guid + "/consents", consent);
     },
     publishStudyConsent: function(guid, createdOn) {
-        return post(config.subpopulations + "/" + guid + "/consents/" + new Date(createdOn).toISOString() + "/publish");
+        return post(config.subpopulations + "/" + guid + "/consents/" + createdOn + "/publish");
     },
     getConsentHistory: function(guid) {
         return get(config.subpopulations + "/" + guid + "/consents");
@@ -266,10 +266,7 @@ module.exports = {
         return get(config.survey + guid + '/revisions');
     },
     getSurvey: function(guid, createdOn) {
-        var createdString = new Date(createdOn).toISOString();
-        var url = config.survey+guid+'/revisions/'+createdString;
-
-        return get(url);
+        return get(config.survey+guid+'/revisions/'+createdOn);
     },
     getSurveyMostRecent: function(guid) {
         return get(config.survey + guid + '/revisions/recent');
@@ -278,19 +275,15 @@ module.exports = {
         return post(config.surveys, survey);
     },
     publishSurvey: function(guid, createdOn) {
-        var createdString = new Date(createdOn).toISOString();
-        var url = config.survey + guid + '/revisions/' + createdString + '/publish';
-        return post(url);
+        return post(config.survey + guid + '/revisions/' + createdOn + '/publish');
     },
     versionSurvey: function(guid, createdOn) {
-        var createdString = new Date(createdOn).toISOString();
-        var url = config.survey + guid + '/revisions/' + createdString + '/version';
-        return post(url);
+        return post(config.survey + guid + '/revisions/' + createdOn + '/version');
     },
     updateSurvey: function(survey) {
         var createdString = new Date(survey.createdOn).toISOString();
-        var url = config.survey + survey.guid + '/revisions/' + createdString;
-        return post(url, survey);
+        var url = config.survey + survey.guid + '/revisions/' + createdOn;
+        return post(config.survey + survey.guid + '/revisions/' + createdOn, survey);
     },
     deleteSurvey: function(survey) {
         var createdString = new Date(survey.createdOn).toISOString();
@@ -414,6 +407,38 @@ module.exports = {
                 listeners.once(SESSION_STARTED_EVENT_KEY, resolve);
             });
         }
+    },
+    getStudyReports: function() {
+        return get(config.reports+query({"type":"study"}));
+    },
+    getStudyReport: function(identifier, startDate, endDate) {
+        var queryString = query({startDate: startDate, endDate: endDate});
+        return get(config.reports + "/" + identifier + queryString);
+    },
+    addStudyReport: function(identifier, report) {
+        return post(config.reports + "/" + identifier, report);
+    },
+    deleteStudyReport: function(identifier) {
+        return del(config.reports + "/" + identifier);
+    },
+    deleteStudyReportRecord: function(identifier, date) {
+        return del(config.reports + "/" + identifier + '/' + date);
+    },
+    getParticipantReports: function() {
+        return get(config.reports+query({"type":"participant"}));
+    },
+    getParticipantReport: function(userId, identifier, startDate, endDate) {
+        var queryString = query({startDate: startDate, endDate: endDate});
+        return get(config.participants + '/' + userId + '/reports/' + identifier + queryString);
+    },
+    addParticipantReport: function(userId, identifier, report) {
+        return post(config.participants + '/' + userId + '/reports/' + identifier, report);
+    },
+    deleteParticipantReport: function(identifier, userId) {
+        return del(config.participants + '/' + userId + '/reports/' + identifier);
+    },
+    deleteParticipantReportRecord: function(userId, identifier, date) {
+        return del(config.participants + '/' + userId + '/reports/' + identifier + '/' + date);
     },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {

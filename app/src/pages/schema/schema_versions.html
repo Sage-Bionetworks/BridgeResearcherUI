@@ -9,8 +9,8 @@
                 <span data-bind="text: nameObs">Schema Versions</span>
             </h3>
         </div>
-        <div class="fixed-header-buttons">
-            <button class="ui red small button" data-bind="disable: !anyChecked(), click: deleteRevisions">Delete</button>
+        <div class="fixed-header-buttons" data-bind="visible: isAdmin">
+            <button class="ui red small button" data-bind="disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
         </div>
     </div>
     <div class="ui secondary pointing menu">
@@ -27,14 +27,14 @@
     <table class="ui compact selectable table" data-bind="visible: itemsObs().length > 0">
         <thead>
             <tr>
-                <th></th>
+                <th data-bind="visible: isAdmin"></th>
                 <th>Name</th>
                 <th>Revision</th>
             </tr>
         </thead>
         <tbody data-bind="foreach: itemsObs">
             <tr>
-                <td>
+                <td data-bind="visible: $component.isAdmin">
                     <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                 </td>
                 <td width="100%">

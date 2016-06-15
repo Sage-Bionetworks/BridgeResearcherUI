@@ -210,22 +210,21 @@ module.exports = {
      * if it were a global message for a form validation view (sign in, for example). This 
      * failure handler converts the signature of the response and cleans up just as the 
      * failure handler does.
-     * 
-     * @param actionElement - the DOM element that is currently showing a request is pendingControl.
-     *  This is necessary for forms where a submit action has triggered the request.
      */
-    globalToFormFailureHandler: function(actionElement) {
+    dialogFailureHandler: function(vm, event) {
         return function(response) {
-            console.error("globalToFormFailureHandler", response);
+            console.error("dialogFailureHandler", response);
             ko.postbox.publish("clearErrors");
             var msg = mightyMessageFinder(response);
             if (response.status === 412) {
                 msg = "You do not appear to be a developer, researcher, or admin.";
             }
-            if (actionElement) {
-                actionElement.classList.remove("loading");
+            event.target.classList.remove("loading");
+            if (response.responseJSON && response.responseJSON.errors) {
+                ko.postbox.publish("showErrors", response.responseJSON);
+            } else {
+                ko.postbox.publish("showErrors", {message:msg,errors:{}});
             }
-            ko.postbox.publish("showErrors", {message:msg,errors:{}});
         };
     },
     clearPendingControl: clearPendingControl,
@@ -286,39 +285,6 @@ module.exports = {
             return "0-" + maxValue;
         }
         return "<i>All versions</i>";
-    },
-    /**
-     * Create a function that will remove items from a history table once we confirm they
-     * are deleted. If we've deleted everything, go to the root view for this type of item.
-     * This method assumes that the viewModel holds the row model in an "itemsObs" observable.
-     *
-     * @param vm
-     *  a viewModel with an "itemObs" observable array of the model objects in the table
-     * @param deletables
-     *  an array of model objects to delete (associated to the rows of the table)
-     * @param rootPath
-     *  if all items are deleted, redirect to this view.
-     * @returns {Function}
-     *  a function to assign to the success handler of a promise
-     */
-    makeTableRowHandler: function(vm, deletables, rootPath) {
-        return function() {
-            deletables.forEach(function(deletable) {
-                vm.itemsObs.remove(deletable);
-            });
-            if (vm.itemsObs().length === 0) {
-                // Yes both. There are cases where 'rootPath' is just the current page.
-                document.querySelector(".loading_status").textContent = "There are currently no items.";
-                document.location = rootPath;
-            }
-        };
-    },
-    addCheckedObs: function(item) {
-        item.checkedObs = ko.observable(false);
-        return item;
-    },
-    hasBeenChecked: function(item) {
-        return item.checkedObs();
     },
     /**
      * Generic handler for pages which are loading a particular entity. If the error that is returned 

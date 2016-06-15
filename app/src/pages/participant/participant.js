@@ -9,20 +9,16 @@ var OPTIONS = [
     {value: 'sponsors_and_partners', label:'Sponsors And Partners'},
     {value: 'all_qualified_researchers', label:'All Qualified Researchers'}
 ];
-var STATUS_OPTIONS = [
-    {value: 'enabled', label:'Enabled'},
-    {value: 'disabled', label:'Disabled'},
-    {value: 'unverified', label:'Unverified'}
-];
 var ROLES = ["Developer", "Researcher", "Administrator", "Worker"];
 var NEW_PARTICIPANT = {id:"new",attributes:{}};
 
 module.exports = function(params) {
     var self = this;
-    var id = params.id;
+    var userId = params.userId;
 
     var binder = bind(self)
-        .obs('isNew', (id === "new"))
+        .obs('showEnableAccount', false)
+        .obs('isNew', (userId === "new"))
         .obs('healthCode', 'N/A', fn.formatHealthCode)
         .obs('allDataGroups[]')
         .obs('externalIdEditable')
@@ -39,10 +35,15 @@ module.exports = function(params) {
         .bind('externalId')
         .bind('languages', null, fn.formatLanguages, fn.persistLanguages)
         .bind('status')
-        .bind('id', id)
+        .bind('userId', userId)
+        .bind('id', userId)
         .bind('roles[]', null, fn.formatRoles, fn.persistRoles)
-        .bind('title', (id === "new") ? "New participant" : decodeURIComponent(params.name), fn.formatTitle);
+        .bind('title', (userId === "new") ? "New participant" : decodeURIComponent(params.name), fn.formatTitle);
     
+    self.statusObs.subscribe(function(status) {
+        self.showEnableAccountObs(status !== "enabled");
+    });
+
     function initStudy(study) {
         // there's a timer in the control involved here, we need to use an observer
         self.allDataGroupsObs(study.dataGroups || []);
@@ -57,7 +58,7 @@ module.exports = function(params) {
     function getParticipant(response) {
         return (self.isNewObs()) ?
             Promise.resolve(NEW_PARTICIPANT) :
-            serverService.getParticipant(id);
+            serverService.getParticipant(userId);
     }
     function afterCreate(response) {
         var statusAfterCreate = self.study.emailVerificationEnabled ? "unverified" : "enabled";
@@ -68,19 +69,30 @@ module.exports = function(params) {
     }
     
     self.sharingScopeOptions = OPTIONS;
-    self.statusOptions = STATUS_OPTIONS;
 
+    self.enableAccount = function(vm, event) {
+        if (confirm("We must save any updates to enable the account. Continue? ")) {
+            self.statusObs("enabled");
+            self.save(vm, event);
+        }
+    };
+    self.disableAccount = function(vm, event) {
+        if (confirm("We must save any updates to disable the account. Continue? ")) {
+            self.statusObs("disabled");
+            self.save(vm, event);
+        }
+    };
     self.requestResetPassword = function(vm, event) {
         utils.startHandler(vm, event);
         
-        serverService.requestResetPasswordUser(id)
+        serverService.requestResetPasswordUser(userId)
             .then(utils.successHandler(vm, event, "Reset password email has been sent to user."))
             .catch(utils.failureHandler(vm, event));
     };
     self.signOutUser = function(vm, event) {
         utils.startHandler(vm, event);
         
-        serverService.signOutUser(id)
+        serverService.signOutUser(userId)
             .then(utils.successHandler(vm, event, "User signed out."))
             .catch(utils.failureHandler(vm, event));
     };

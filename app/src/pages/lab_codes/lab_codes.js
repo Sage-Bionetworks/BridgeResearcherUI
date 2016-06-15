@@ -3,8 +3,6 @@ var utils = require('../../utils');
 var root = require('../../root');
 var bind = require('../../binder');
 
-var OPTIONS = {offsetBy:0, pageSize: 1, assignmentFilter:true};
-
 module.exports = function() {
     var self = this;
     

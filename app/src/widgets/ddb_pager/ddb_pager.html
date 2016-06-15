@@ -26,6 +26,9 @@
             <div class="item" title="First page" data-bind="click: firstPage, visible: currentPageObs() > 0 && idFilterObs().length === 0">
                 <i class="backward icon" style="margin:0!important"></i>
             </div>
+            <div class="item" title="Previous page" data-bind="click: previousPage, visible: priorOffsetKeysObs().length > 0">
+                <i class="play icon" style="margin:0!important; transform: rotate(180deg)"></i>
+            </div>
             <div class="active item">
                 <div class="ui small active loader"></div>
                 <span data-bind="text: currentPageObs() + 1"></span>&nbsp;of&nbsp; 

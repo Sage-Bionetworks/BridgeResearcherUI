@@ -20,12 +20,8 @@ module.exports = function() {
         utils.startHandler(self, event);
         self.study = binder.persist(self.study);
 
-        console.log(self.study);
         serverService.saveStudy(self.study, true)
             .then(utils.successHandler(vm, event, "Study information saved."))
-            .then(function() {
-                console.log(self.study);
-            })
             .catch(utils.failureHandler(vm, event));
     };
 

@@ -9,7 +9,6 @@ module.exports = function(params) {
 
     var copyables = params.copyables;
     var specs = [];
-    var allUpdated = false;
 
     self.indexObs = ko.observable(0);
     self.nameObs = ko.observable(copyables[0].name + " (Copy)");

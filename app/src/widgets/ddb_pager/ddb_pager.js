@@ -21,7 +21,7 @@ module.exports = function(params) {
     self.top = params.top;
     self.showCredentials = (typeof params.showCredentials === "boolean") ? 
         params.showCredentials : true;
-    
+
     bind(self)
         .obs('idFilter')
         .obs('offsetKey')
@@ -31,29 +31,48 @@ module.exports = function(params) {
         .obs('currentPage')
         .obs('totalPages')
         .obs('searchLoading')
-        .obs('pagerLoading');
+        .obs('pagerLoading')
+        .obs('priorOffsetKeys[]', []);
     
+    function clear() {
+        self.offsetKeyObs(null);
+        self.currentPageObs(0);
+        self.priorOffsetKeysObs([]);
+    }
+
     self.doSearch = function(vm, event) {
         if (event.keyCode === 13) {
+            clear();
             self.searchLoadingObs(true);
-            self.currentPageObs(0);
             wrappedLoadingFunc();
         }
     };
     
     self.firstPage = function(vm, event) {
+        clear();
         currentAssignmentFilter = null;
-        self.offsetKeyObs(null);
         self.idFilterObs("");
         self.pagerLoadingObs(true);
-        self.currentPageObs(0);
         wrappedLoadingFunc();
+    };
+    self.previousPage = function(vm, event) {
+        if (self.priorOffsetKeysObs().length > 0) {
+            var offsetKey = self.priorOffsetKeysObs.pop();
+            self.offsetKeyObs(offsetKey);
+            self.pagerLoadingObs(true);
+            self.currentPageObs(self.currentPageObs()-1);
+            wrappedLoadingFunc().then(function() {
+                
+            });
+        }
     };
     self.nextPage = function(vm, event) {
         if (self.offsetKeyObs() !== null) {
             self.pagerLoadingObs(true);
             self.currentPageObs(self.currentPageObs()+1);
-            wrappedLoadingFunc();
+            wrappedLoadingFunc().then(function() {
+                self.priorOffsetKeysObs.push(self.offsetKeyObs());
+            });
         }
     };
     
@@ -67,9 +86,8 @@ module.exports = function(params) {
     }
     
     self.assignFilter = function(vm, event) {
+        clear();
         currentAssignmentFilter = getValue(event.target.value);
-        self.offsetKeyObs(null);
-        self.currentPageObs(0);
         wrappedLoadingFunc();
         return true;
     };
@@ -84,7 +102,7 @@ module.exports = function(params) {
         var idFilter = self.idFilterObs();
         var requestAssign = (self.showCredentials) ? currentAssignmentFilter : true;
 
-        loadingFunc({
+        return loadingFunc({
             offsetKey: offsetKey,
             pageSize: pageSize,
             idFilter: idFilter,

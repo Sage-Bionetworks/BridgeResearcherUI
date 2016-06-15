@@ -12,35 +12,26 @@ require('knockout-postbox');
 var director = require('director');
 var root = require('./root');
 
-function routeTo(name) {
-    return function () {
-        root.changeView(name, {});
-    };
+var GUID_CREATEDON = ['guid', 'createdOn'];
+var GUID = ['guid'];
+var ID = ['id'];
+var SCHEMAID_REVISION = ['schemaId','revisions'];
+var SCHEMAID = ['schemaId'];
+var USERID_NAME = ['userId', 'name'];
+var USERID_IDENTIFIER_NAME = ['userId','identifier','name'];
+var USERID = ['userId'];
+
+function namedParams(fields, args) {
+    return (fields || []).reduce(function(params, name, i) {
+        params[name] = decodeURIComponent(args[i]); 
+        return params;
+    }, {});
 }
-function guidCreatedOnRoute(name) {
-    return function(guid, createdOn) {
-        var date = (createdOn === "recent") ? null : createdOn;
-        root.changeView(name, {guid: guid, createdOn: date});
-    };
-}
-function schemaRoute(name) {
-    return function(schemaId, revision) {
-        root.changeView(name, {schemaId: schemaId, revision: (revision) ? revision : null});
-    };
-}
-function guidRoute(name) {
-    return function(guid) {
-        root.changeView(name, {guid: guid});
-    };
-}
-function idRoute(name) {
-    return function(id) {
-        root.changeView(name, {id:id});
-    };
-}
-function idNameRoute(routeName) {
-    return function(id, name) {
-        root.changeView(routeName, {id:id, name: decodeURIComponent(name)});
+function routeTo(routeName, fields) {
+    return function() {
+        var params = namedParams(fields, arguments);
+        console.log("routeTo", routeName, Object.keys(params).map(function(key) { return key + "=" + params[key];}).join(", "));
+        root.changeView(routeName, params);
     };
 }
 
@@ -56,39 +47,41 @@ router.on('/task_identifiers', routeTo('task_identifiers'));
 router.on('/data_groups', routeTo('data_groups'));
 router.on('/ve_template', routeTo('ve_template'));
 router.on('/rp_template', routeTo('rp_template'));
-router.on('/subpopulations/:guid/consents/history', guidRoute('subpopulation_history'));
-router.on('/subpopulations/:guid/consents/download', guidRoute('subpopulation_download'));
-router.on('/subpopulations/:guid/consents/:createdOn', guidCreatedOnRoute('subpopulation_editor'));
-router.on('/subpopulations/:guid', guidRoute('subpopulation'));
+router.on('/subpopulations/:guid/consents/history', routeTo('subpopulation_history', GUID));
+router.on('/subpopulations/:guid/consents/download', routeTo('subpopulation_download', GUID));
+router.on('/subpopulations/:guid/consents/:createdOn', routeTo('subpopulation_editor', GUID_CREATEDON));
+router.on('/subpopulations/:guid', routeTo('subpopulation', GUID));
 router.on('/subpopulations', routeTo('subpopulations'));
+router.on('/reports/:identifier', routeTo('report', ID));
+router.on('/reports', routeTo('reports'));
 router.on('/surveys', routeTo('surveys'));
-router.on('/surveys/:guid/:createdOn/versions', guidCreatedOnRoute('survey_versions'));
-router.on('/surveys/:guid/:createdOn/schema', guidCreatedOnRoute('survey_schema'));
-router.on('/surveys/:guid/:createdOn', guidCreatedOnRoute('survey'));
-router.on('/surveys/:guid', guidCreatedOnRoute('survey')); // always new
+router.on('/surveys/:guid/:createdOn/versions', routeTo('survey_versions', GUID_CREATEDON));
+router.on('/surveys/:guid/:createdOn/schema', routeTo('survey_schema', GUID_CREATEDON));
+router.on('/surveys/:guid/:createdOn', routeTo('survey', GUID_CREATEDON));
+router.on('/surveys/:guid', routeTo('survey', GUID));
 router.on('/schemas', routeTo('schemas'));
-router.on('/schemas/:schemaId', schemaRoute('schema'));
-router.on('/schemas/:schemaId/versions', schemaRoute('schema_versions'));
-router.on('/schemas/:schemaId/versions/:revision', schemaRoute('schema'));
+router.on('/schemas/:schemaId', routeTo('schema', SCHEMAID));
+router.on('/schemas/:schemaId/versions', routeTo('schema_versions', SCHEMAID));
+router.on('/schemas/:schemaId/versions/:revision', routeTo('schema', SCHEMAID_REVISION));
 router.on('/schedules', routeTo('schedules'));
 router.on('/scheduleplans', routeTo('scheduleplans'));
-router.on('/scheduleplans/:guid', guidRoute('scheduleplan'));
+router.on('/scheduleplans/:guid', routeTo('scheduleplan', GUID));
 router.on('/synapse', routeTo('synapse'));
 router.on('/lab_codes', routeTo('lab_codes'));
 router.on('/externalIds', routeTo('external_ids'));
-router.on('/participants/:id', idRoute('participant'));
-router.on('/participants/:id/consents/:name', idNameRoute('participant_consents'));
-router.on('/participants/:id/:name', idNameRoute('participant'));
+router.on('/participants/:userId/reports/:identifier/:name', routeTo('participant_report', USERID_IDENTIFIER_NAME));
+router.on('/participants/:userId/consents/:name', routeTo('participant_consents', USERID_NAME));
+router.on('/participants/:userId/reports/:name', routeTo('participant_reports', USERID_NAME));
+router.on('/participants/:userId/:name', routeTo('participant', USERID_NAME));
+router.on('/participants/:userId', routeTo('participant', USERID));
 router.on('/participants', routeTo('participants'));
-
 router.on('/admin/info', routeTo('admin_info'));
 router.on('/admin/cache', routeTo('admin_cache'));
 
 router.configure({
     notfound: routeTo('not_found'),
-    'on': [
-        ko.postbox.reset,
-        function() { root.isEditorTabVisibleObs(false); }
-    ]
+    'on': [ko.postbox.reset, function() {
+        root.isEditorTabVisibleObs(false); 
+    }]
 });
 router.init();

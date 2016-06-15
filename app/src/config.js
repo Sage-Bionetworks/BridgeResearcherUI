@@ -46,5 +46,6 @@ module.exports = {
     emailStatus: '/v3/studies/self/emailStatus',
     cache: '/v3/cache',
     participants: '/v3/participants',
-    externalIds: '/v3/externalIds'
+    externalIds: '/v3/externalIds',
+    reports: '/v3/reports'
 };
