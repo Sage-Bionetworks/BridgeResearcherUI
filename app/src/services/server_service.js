@@ -408,7 +408,6 @@ module.exports = {
             });
         }
     },
-
     getStudyReports: function() {
         return get(config.reports+query({"type":"study"}));
     },
@@ -428,19 +427,18 @@ module.exports = {
     getParticipantReports: function() {
         return get(config.reports+query({"type":"participant"}));
     },
-    getParticipantReport: function(identifier, userId, startDate, endDate) {
-        // Very confusing, but we flip the report identifier and the userId here.
+    getParticipantReport: function(userId, identifier, startDate, endDate) {
         var queryString = query({startDate: startDate, endDate: endDate});
-        return get(config.reports + '/' + identifier + '/users/' + userId + queryString);
+        return get(config.participants + '/' + userId + '/reports/' + identifier + queryString);
     },
-    addParticipantReport: function(identifier, userId, report) {
-        return post(config.reports+'/'+identifier+'/users/'+userId, report);
+    addParticipantReport: function(userId, identifier, report) {
+        return post(config.participants + '/' + userId + '/reports/' + identifier, report);
     },
     deleteParticipantReport: function(identifier, userId) {
-        return del(config.reports+'/'+identifier+'/users/'+userId);
+        return del(config.participants + '/' + userId + '/reports/' + identifier);
     },
-    deleteParticipantReportRecord: function(identifier, userId, date) {
-        return del(config.reports+'/'+identifier+'/users/'+userId+'/'+date);
+    deleteParticipantReportRecord: function(userId, identifier, date) {
+        return del(config.participants + '/' + userId + '/reports/' + identifier + '/' + date);
     },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {

@@ -14,7 +14,7 @@ function endDate() {
     return new Date().toISOString().split("T")[0];
 }
 function deleteItem(item) {
-    return serverService.deleteParticipantReportRecord(params.identifier, params.userId, item.date);
+    return serverService.deleteParticipantReportRecord(params.userId, params.identifier, item.date);
 }
 module.exports = function(params) {
     var self = this;
@@ -54,8 +54,7 @@ module.exports = function(params) {
         self.itemsObs(response.items.sort());
     }
     function load() {
-        serverService
-            .getParticipantReport(params.identifier, params.userId, startDate(), endDate())
+        serverService.getParticipantReport(params.userId, params.identifier, startDate(), endDate())
             .then(mapResponse);
     }
     load();

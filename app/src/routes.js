@@ -27,11 +27,10 @@ function namedParams(fields, args) {
         return params;
     }, {});
 }
-
 function routeTo(routeName, fields) {
     return function() {
         var params = namedParams(fields, arguments);
-        console.log("routeTo", routeName, params);
+        console.log("routeTo", routeName, Object.keys(params).map(function(key) { return key + "=" + params[key];}).join(", "));
         root.changeView(routeName, params);
     };
 }
@@ -81,6 +80,8 @@ router.on('/admin/cache', routeTo('admin_cache'));
 
 router.configure({
     notfound: routeTo('not_found'),
-    'on': [ko.postbox.reset, function() { root.isEditorTabVisibleObs(false); }]
+    'on': [ko.postbox.reset, function() {
+        root.isEditorTabVisibleObs(false); 
+    }]
 });
 router.init();

@@ -1,3 +1,5 @@
+//var webpack = require('webpack');
+
 module.exports = {
     entry: './app/src/routes.js',
     output: {
@@ -13,6 +15,16 @@ module.exports = {
             { test: /\.html$/, loader: "html?removeComments=false" }
         ]
     },
+    /*
+    plugins: [
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false,
+                drop_console: true
+            }
+        })
+    ],
+    */
     resolve: {
         extensions: ['', '.css', '.js', '.html','.scss']
     },

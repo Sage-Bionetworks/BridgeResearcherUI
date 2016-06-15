@@ -9,11 +9,6 @@ var OPTIONS = [
     {value: 'sponsors_and_partners', label:'Sponsors And Partners'},
     {value: 'all_qualified_researchers', label:'All Qualified Researchers'}
 ];
-var STATUS_OPTIONS = [
-    {value: 'enabled', label:'Enabled'},
-    {value: 'disabled', label:'Disabled'},
-    {value: 'unverified', label:'Unverified'}
-];
 var ROLES = ["Developer", "Researcher", "Administrator", "Worker"];
 var NEW_PARTICIPANT = {id:"new",attributes:{}};
 
@@ -22,6 +17,7 @@ module.exports = function(params) {
     var userId = params.userId;
 
     var binder = bind(self)
+        .obs('showEnableAccount', false)
         .obs('isNew', (userId === "new"))
         .obs('healthCode', 'N/A', fn.formatHealthCode)
         .obs('allDataGroups[]')
@@ -44,6 +40,10 @@ module.exports = function(params) {
         .bind('roles[]', null, fn.formatRoles, fn.persistRoles)
         .bind('title', (userId === "new") ? "New participant" : decodeURIComponent(params.name), fn.formatTitle);
     
+    self.statusObs.subscribe(function(status) {
+        self.showEnableAccountObs(status !== "enabled");
+    });
+
     function initStudy(study) {
         // there's a timer in the control involved here, we need to use an observer
         self.allDataGroupsObs(study.dataGroups || []);
@@ -69,8 +69,19 @@ module.exports = function(params) {
     }
     
     self.sharingScopeOptions = OPTIONS;
-    self.statusOptions = STATUS_OPTIONS;
 
+    self.enableAccount = function(vm, event) {
+        if (confirm("We must save any updates to enable the account. Continue? ")) {
+            self.statusObs("enabled");
+            self.save(vm, event);
+        }
+    };
+    self.disableAccount = function(vm, event) {
+        if (confirm("We must save any updates to disable the account. Continue? ")) {
+            self.statusObs("disabled");
+            self.save(vm, event);
+        }
+    };
     self.requestResetPassword = function(vm, event) {
         utils.startHandler(vm, event);
         

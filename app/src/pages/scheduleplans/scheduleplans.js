@@ -52,7 +52,6 @@ module.exports = function() {
         }).then(load)
             .then(utils.successHandler(vm, event, confirmMsg))
             .catch(utils.failureHandler(vm, event));
-
     };
     
     function filterItems() {

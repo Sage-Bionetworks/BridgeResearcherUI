@@ -122,8 +122,7 @@ var RootViewModel = function() {
             // study-specific overrides, currently located in config.
             var studyConfig = config.studies[study.identifier] || {};
             var opts = Object.assign({}, defaults, studyConfig);
-            console.log("[config]", opts);
-
+            console.log("[config]", Object.keys(opts).map(function(key) { return key + "=" + opts[key]; }).join(', '));
             self.showParticipantsObs(opts.showParticipants);
             self.showLabCodesObs(opts.showLabCodes);
             self.showExternalIdsObs(opts.showExternalIds);

@@ -9,7 +9,12 @@
     </a>
     <a class="item" data-bind="css:{active:$data.active === 'reports'}, 
         attr:{'href':'#/participants/'+$parent.userIdObs()+'/reports/'+encodeURIComponent($parent.titleObs())}">
-        <i class="newspaper icon"></i> Reports
+        <i class="newspaper icon"></i> Report Data
     </a>
+    <div class="right menu" data-bind="visible: $data.showEnableAccountObs && $data.showEnableAccountObs()">
+        <div class="item">
+            <span class="ui red text "><i class="warning sign icon"></i> Disabled</span>
+        </div>
+    </div>
 </div>
 <div class="ui empty secondary pointing menu" data-bind="visible: isNewObs"></div>

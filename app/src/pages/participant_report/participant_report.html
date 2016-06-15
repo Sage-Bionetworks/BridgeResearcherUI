@@ -35,7 +35,7 @@
         <table class="ui compact json table">
             <thead>
                 <tr>
-                    <th width="10"></th>
+                    <th width="10" data-bind="visible: isDeveloper"></th>
                     <th width="100">Date</th>
                     <th width="10"></th>
                     <th>JSON</th>
@@ -43,7 +43,7 @@
             </thead>
             <tbody data-bind="foreach: itemsObs">
                 <tr>
-                    <td>
+                    <td data-bind="visible: $component.isDeveloper">
                         <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                     </td>
                     <td style="white-space: no-wrap" data-bind="text: $data.date"></td>

@@ -29,7 +29,7 @@ module.exports = function(params) {
         utils.startHandler(vm, event);
 
         var promise = (params.type === "participant") ?
-            serverService.addParticipantReport(entry.identifier, params.userId, entry) :
+            serverService.addParticipantReport(params.userId, entry.identifier, entry) :
             serverService.addStudyReport(entry.identifier, entry);
         promise.then(utils.successHandler(vm, event))
                 .then(self.close)

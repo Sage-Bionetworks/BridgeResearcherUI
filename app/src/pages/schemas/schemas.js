@@ -9,6 +9,8 @@ module.exports = function() {
 
     schemaUtils.initSchemasVM(self);
 
+    self.isAdmin = root.isAdmin;
+    
     tables.prepareTable(self, "schema", "#/schemas", function(schema) {
         return serverService.deleteSchema(schema.schemaId);
     });

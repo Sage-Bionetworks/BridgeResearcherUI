@@ -14,12 +14,16 @@
                 <div class="menu">
                     <div class="item" data-bind="click: requestResetPassword">Send reset password email</div>
                     <div class="item" data-bind="click: signOutUser">Sign out user</div>
+                    <div class="item" data-bind="visible: showEnableAccountObs, click: enableAccount">Enable Account</div>
+                    <div class="item" data-bind="visible: !showEnableAccountObs(), click: disableAccount">Disable Account</div>
                 </div>
             </div>
             <button class="ui small primary button" data-bind="click: save">Save</button>
         </div>
     </div>
-    <!-- ko component: {name: 'participant-tabset', params: {active: 'info', isNewObs: isNewObs}} --><!-- /ko -->
+    <!-- ko component: {name: 'participant-tabset', params: {
+        active: 'info', isNewObs: isNewObs, showEnableAccountObs: showEnableAccountObs
+    }} --><!-- /ko -->
 </div>
 <div class="scrollbox">
     <errors></errors>
@@ -92,9 +96,6 @@
                 </ui-checkbox>
             </div>
             <div class="field" data-bind="visible: !isNewObs()">
-                <label>Status</label>
-                <select class="ui dropdown" data-bind="options: statusOptions, optionsText: 'label', 
-                    optionsValue: 'value', value: statusObs"></select>
             </div>
         </div>
         
