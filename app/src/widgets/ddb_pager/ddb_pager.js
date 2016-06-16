@@ -20,9 +20,7 @@ module.exports = function(params) {
     var pageKey = params.pageKey;
     var currentAssignmentFilter = null;
     var currentOffsetKey = null;
-    if (params.top) { // verify we're never accessing this in trailing pager
-        var history = [null];
-    }
+    var history = [null];
     var pendingRequest = false;
 
     self.top = params.top;
