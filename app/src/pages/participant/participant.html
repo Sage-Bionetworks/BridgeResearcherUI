@@ -96,6 +96,8 @@
                 </ui-checkbox>
             </div>
             <div class="field" data-bind="visible: !isNewObs()">
+                <label>User ID</label>
+                <div data-bind="text: idObs"></div>
             </div>
         </div>
         
@@ -115,11 +117,11 @@
                     <a data-bind="attr:{href: 'mailto:'+emailObs()}, text: emailObs"></a>
                 </div>
             </div>
+            <div class="field"></div>
             <div class="field">
                 <label>Created On</label>
                 <div data-bind="text: createdOnObs"></div>
             </div>
-            <div class="field"></div>
         </div>
     </form>
 </div>
