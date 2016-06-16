@@ -207,12 +207,6 @@ progress {
     color: #bbb;
     cursor:pointer!important;
 }
-/* This didn't use to be misaligned, but looks wrong now. */
-.ui.compact.table {
-    .ui.checkbox {
-        vertical-align: middle;
-    }
-}
 
 /* Used to position the green/orange label next to version number in secondary menu. */
 .pub-status {
@@ -223,4 +217,10 @@ progress {
         padding-left: .25rem !important;
     }
     
+}
+/* This didn't use to be misaligned, but looks wrong now. */
+.ui.compact.table {
+    .ui.checkbox {
+        vertical-align: middle;
+    }
 }

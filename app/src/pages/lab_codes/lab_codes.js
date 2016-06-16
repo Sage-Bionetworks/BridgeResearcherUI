@@ -29,6 +29,7 @@ module.exports = function() {
         .then(binder.update('externalIdValidationEnabled'));
     
     self.loadingFunc = function loadPage(params) {
+        params.assignmentFilter = true; // no controls for this are shown, set it here.
         return serverService.getExternalIds(params)
             .then(binder.update('total','items'))
             .then(msgIfNoRecords)
