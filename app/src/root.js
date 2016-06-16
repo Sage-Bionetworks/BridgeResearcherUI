@@ -115,7 +115,7 @@ var RootViewModel = function() {
         serverService.getStudy().then(function(study) {
             // sensible defaults.
             var defaults = {
-                showParticipants: study.emailVerificationEnabled && self.isResearcher(),
+                showParticipants: self.isAdmin() || (study.emailVerificationEnabled && self.isResearcher()),
                 showLabCodes: !study.emailVerificationEnabled && self.isDeveloper(),
                 showExternalIds: study.emailVerificationEnabled && study.externalIdValidationEnabled && self.isDeveloper()
             };

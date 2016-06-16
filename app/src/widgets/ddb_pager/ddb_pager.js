@@ -51,7 +51,12 @@ module.exports = function(params) {
         }
     }
     function addCurrentPage(response) {
+        response.hasHistory = history.length > 1;
         response.currentPage = self.currentPageObs();
+        history[response.currentPage+1] = response.offsetKey;
+        currentAssignmentFilter = response.assignmentFilter || null;
+        ko.postbox.publish(pageKey+'-recordsPaged', response);
+        console.log("addCurrentPage", response.hasHistory, history);
         return response;
     }
     function wrappedLoadingFunc(offsetKey) {
@@ -60,14 +65,11 @@ module.exports = function(params) {
             idFilter: self.idFilterObs(), assignmentFilter: currentAssignmentFilter};
         return loadingFunc(params)
             .then(addCurrentPage)
-            .then(updateModel)
             .catch(utils.failureHandler());
     }
     function updateModel(response) {
-        history[response.currentPage+1] = response.offsetKey;
-        currentAssignmentFilter = response.assignmentFilter || null;
         self.hasNextObs(!!response.offsetKey);
-        self.hasPreviousObs(history.length > 2);
+        self.hasPreviousObs(response.hasHistory);
         self.hasFirstPageObs(response.currentPage > 0);
         self.totalRecordsObs(response.total);
         self.idFilterObs(response.idFilter || "");
@@ -86,46 +88,59 @@ module.exports = function(params) {
             wrappedLoadingFunc();
         }
     };
-    self.firstPage = function(vm, event) {
-        if (!pendingRequest) {
-            clear();
-            currentAssignmentFilter = null;
-            self.idFilterObs("");
-            self.pagerLoadingObs(true);
-            wrappedLoadingFunc();
-        }
-    };
-    self.previousPage = function(vm, event) {
-        if (!pendingRequest) {
-            history.pop(); // next page key
-            history.pop(); // current page key
-            var lastKey = history.pop(); // the last page key
-            self.currentPageObs(self.currentPageObs()-1);
-            self.pagerLoadingObs(true);
-            wrappedLoadingFunc(lastKey);
-        }
-    };
-    self.nextPage = function(vm, event) {
-        if (!pendingRequest) {
-            var lastKey = history[history.length-1];        
-            self.pagerLoadingObs(true);
-            self.currentPageObs(self.currentPageObs()+1);
-            wrappedLoadingFunc(lastKey);
-        }
-    };
+    if (self.top) {
+        self.firstPage = function(vm, event) {
+            if (!pendingRequest) {
+                clear();
+                currentAssignmentFilter = null;
+                self.idFilterObs("");
+                self.pagerLoadingObs(true);
+                wrappedLoadingFunc();
+            }
+        };
+        self.previousPage = function(vm, event) {
+            if (!pendingRequest) {
+                history.pop(); // next page key
+                history.pop(); // current page key
+                var lastKey = history[history.length-1]; // the last page key
+                self.currentPageObs(self.currentPageObs()-1);
+                self.pagerLoadingObs(true);
+                wrappedLoadingFunc(lastKey);
+            }
+        };
+        self.nextPage = function(vm, event) {
+            if (!pendingRequest) {
+                var lastKey = history[history.length-1];        
+                self.pagerLoadingObs(true);
+                self.currentPageObs(self.currentPageObs()+1);
+                wrappedLoadingFunc(lastKey);
+            }
+        };
+        ko.postbox.subscribe(pageKey+'-firstPage', self.firstPage);
+        ko.postbox.subscribe(pageKey+'-previousPage', self.previousPage);
+        ko.postbox.subscribe(pageKey+'-nextPage', self.nextPage);
+    } else {
+        self.firstPage = function(vm, event) {
+            ko.postbox.publish(pageKey+'-firstPage');
+        };
+        self.previousPage = function(vm, event) {
+            ko.postbox.publish(pageKey+'-previousPage');
+        };
+        self.nextPage = function(vm, event) {
+            ko.postbox.publish(pageKey+'-nextPage');
+        };
+    }
     self.assignFilter = function(vm, event) {
         clear();
         currentAssignmentFilter = getValue(event.target.value);
         wrappedLoadingFunc();
         return true;
     };
-    // Postbox allows multiple instances of a paging control to stay in sync above
-    // and below the table. The 'top' control is responsible for kicking off the 
-    // first page of records.
     ko.postbox.subscribe(pageKey+'-recordsPaged', updateModel);
+    // parent page is resetting, go back to first page, clear filters, etc.
     ko.postbox.subscribe(pageKey+'-refresh', self.firstPage);
 
-    if (params.top) {
+    if (self.top) {
         self.firstPage();
     }
     // why. why? why?!?!?!?!?!?!?!?
