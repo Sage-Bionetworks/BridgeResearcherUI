@@ -13,9 +13,10 @@
                 <i class="dropdown icon"></i>
                 <div class="menu">
                     <div class="item" data-bind="click: requestResetPassword">Send reset password email</div>
-                    <div class="item" data-bind="click: signOutUser">Sign out user</div>
+                    <div class="divider"></div>
                     <div class="item" data-bind="visible: showEnableAccountObs, click: enableAccount">Enable Account</div>
                     <div class="item" data-bind="visible: !showEnableAccountObs(), click: disableAccount">Disable Account</div>
+                    <div class="item" data-bind="click: signOutUser">Sign out user</div>
                 </div>
             </div>
             <button class="ui small primary button" data-bind="click: save">Save</button>
@@ -97,7 +98,7 @@
             </div>
             <div class="field" data-bind="visible: !isNewObs()">
                 <label>User ID</label>
-                <div data-bind="text: idObs"></div>
+                <input type="text" readonly data-bind="value: idObs"/>
             </div>
         </div>
         

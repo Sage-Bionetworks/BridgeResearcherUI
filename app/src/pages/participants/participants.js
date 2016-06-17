@@ -31,7 +31,15 @@ module.exports = function() {
     function formatCount(total) {
         return (total+"").replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " user records";
     }
-
+    self.resendEmailVerification = function(vm, event) {
+        if (confirm("This will send email to this user.\n\nDo you wish to continue?")) {
+            var userId = vm.id;
+            utils.startHandler(vm, event);
+            serverService.resendEmailVerification(userId)
+                .then(utils.successHandler(vm, event, "Resent email to verify participant's email address."))
+                .catch(utils.failureHandler(vm, event));
+        }
+    };
     self.exportDialog = function() {
         root.openDialog('participant_export', {searchFilter: self.searchFilter, total: self.total});    
     };
