@@ -1,0 +1,53 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <div class="fixed-header-heading">
+            <div class="ui breadcrumb">
+                <a class="section" href="#/participants">Participants</a>
+                <i class="right chevron icon divider"></i>
+            </div>            
+            <h3 data-bind="text: titleObs"></h3>
+        </div>
+        <div class="fixed-header-buttons">
+        </div>
+    </div>
+    <!-- ko component: {name: 'participant-tabset', params: {active: 'activities', isNewObs: isNewObs}} --><!-- /ko -->
+</div>
+<div class="scrollbox">
+    <errors></errors>
+    <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
+    <div data-bind="visible: itemsObs().length > 0">
+        <p>These activities are what the participant should be seeing. For example, if there are no activities listed, 
+            this means the user has not contacted the server (not necessarily that you have nothing scheduled for them, 
+            since we don't create tasks until the participant contacts the server).
+        </p>
+        <!-- ko component: {name:'ddb_pager', params: {loadingFunc: loadingFunc, 
+            pageKey: 'activities', top: true, showAssignment: false, showSearch: false}
+        } --><!-- /ko -->
+        <table class="ui compact selectable table">
+            <thead>
+                <tr>
+                    <th>Activity</th>
+                    <th>Status</th>
+                    <th>Scheduled On</th>
+                    <th>Expires On</th>
+                    <th>Finished</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: itemsObs">
+                <tr data-bind="css: {hasBorder: $parent.displayBorder($data, $index)}">
+                    <td>
+                        <i data-bind="css: $parent.formatActivityClass($data)"></i>
+                        <span data-bind="text: $parent.formatActivity($data)"></span>
+                    </td>
+                    <td data-bind="text: $parent.titleCase($data.status)"></td>
+                    <td data-bind="text: $parent.formatDateTime($data.scheduledOn)"></td>
+                    <td data-bind="text: $parent.formatDateTime($data.expiresOn)"></td>
+                    <td data-bind="text: $parent.formatDateTime($data.finishedOn)"></td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- ko component: {name:'ddb_pager', params: {loadingFunc: loadingFunc, 
+            pageKey: 'activities', top: true, showAssignment: false, showSearch: false}
+        } --><!-- /ko -->
+    </div>    
+</div>

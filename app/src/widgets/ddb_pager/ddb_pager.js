@@ -26,6 +26,8 @@ module.exports = function(params) {
     self.top = params.top;
     self.showAssignment = (typeof params.showAssignment === "boolean") ? 
         params.showAssignment : true;
+    self.showSearch = (typeof params.showSearch === "boolean") ?
+        params.showSearch : false;
 
     bind(self)
         .obs('idFilter')

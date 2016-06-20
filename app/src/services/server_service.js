@@ -450,6 +450,10 @@ module.exports = {
     deleteParticipantReportRecord: function(userId, identifier, date) {
         return del(config.participants + '/' + userId + '/reports/' + identifier + '/' + date);
     },
+    getParticipantActivities: function(userId, params) {
+        var queryString = query(params);
+        return get(config.participants + '/' + userId + '/activities' + queryString);
+    },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {
             throw Error("Session listener not a function");
