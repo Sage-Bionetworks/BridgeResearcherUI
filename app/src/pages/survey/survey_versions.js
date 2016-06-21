@@ -1,12 +1,13 @@
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var bind = require('../../binder');
+var fn = require('../../transforms');
 
 module.exports = function(params) {
     var self = this;
     self.keys = params;
 
-    self.formatDateTime = utils.formatDateTime;
+    self.formatDateTime = fn.formatLocalDateTime;
     
     var binder = bind(self)
         .obs('guid', params.guid)

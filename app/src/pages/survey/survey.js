@@ -3,6 +3,7 @@ require('knockout-postbox');
 var serverService = require('../../services/server_service');
 var surveyUtils = require('./survey_utils');
 var utils = require('../../utils');
+var fn = require('../../transforms');
 var root = require('../../root');
 
 module.exports = function(params) {
@@ -10,7 +11,7 @@ module.exports = function(params) {
 
     self.isLoaded = ko.observable(false);
     self.survey = null;
-    self.formatDateTime = utils.formatDateTime;
+    self.formatDateTime = fn.formatLocalDateTime;
     surveyUtils.initSurveyVM(self);
 
     // Only one is needed

@@ -3,6 +3,7 @@ var saveAs = require('../../../lib/filesaver.min.js');
 var serverService = require('../../services/server_service');
 var root = require('../../root');
 var utils = require('../../utils');
+var fn = require('../../transforms');
 
 var HEADERS = [];
 var ATTRIBUTES = [];
@@ -23,9 +24,9 @@ var FIELD_FORMATTERS = {
 };
 function formatConsentRecords(record) {
     var aString = record.subpopulationGuid;
-    aString += " consented=" + utils.formatDateTime(record.signedOn);
+    aString += " consented=" + fn.formatLocalDateTime(record.signedOn);
     if (record.withdrewOn) {
-        aString += ", withdrew=" + utils.formatDateTime(record.withdrewOn);
+        aString += ", withdrew=" + fn.formatLocalDateTime(record.withdrewOn);
     }
     return aString;
 }
@@ -83,7 +84,8 @@ module.exports = function(params) {
     };
     self.download = function() {
         var blob = new Blob([HEADERS+output], {type: "text/tab-separated-values;charset=utf-8"});
-        saveAs.saveAs(blob, "participants-"+utils.formatISODate()+".tsv");
+        var dateString = new Date().toISOString().split("T")[0];  
+        saveAs.saveAs(blob, "participants-"+dateString+".tsv");
     };
     self.close = function(vm, event) {
         reset();

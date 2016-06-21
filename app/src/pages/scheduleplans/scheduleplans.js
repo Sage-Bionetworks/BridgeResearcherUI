@@ -2,9 +2,11 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service.js');
 var scheduleUtils = require('../schedule/schedule_utils.js');
 var utils = require('../../utils');
+var fn = require('../../transforms');
 var Promise = require('bluebird');
 var storeService = require('../../services/store_service');
 var tables = require('../../tables');
+var fn = require('../../transforms');
 
 var MULTI_FIELD_SORTER = utils.multiFieldSorter(
     utils.makeRangeSorter("minAppVersion", "maxAppVersion"),
@@ -23,9 +25,9 @@ module.exports = function() {
         return serverService.deleteSchedulePlan(plan.guid);
     });
 
-    self.formatDateTime = utils.formatDateTime;
+    self.formatDateTime = fn.formatLocalDateTime;
     self.formatScheduleType = scheduleUtils.formatScheduleStrategyType;
-    self.formatVersions = utils.formatVersionRange;
+    self.formatVersions = fn.formatVersionRange;
     self.formatStrategy = scheduleUtils.formatStrategy;
     self.filterObs = ko.observable(storeService.get('schedulePlansFilter'));
     self.applyFilter = function(vm, event) {

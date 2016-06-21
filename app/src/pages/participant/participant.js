@@ -22,7 +22,7 @@ module.exports = function(params) {
         .obs('healthCode', 'N/A', fn.formatHealthCode)
         .obs('allDataGroups[]')
         .obs('externalIdEditable')
-        .obs('createdOn', null, utils.formatDateTime)
+        .obs('createdOn', null, fn.formatLocalDateTime)
         .obs('allRoles[]', ROLES)
         .bind('email')
         .bind('attributes[]', [], fn.formatAttributes, fn.persistAttributes)

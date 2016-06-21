@@ -1,10 +1,12 @@
 <div class="line-control">
-    <div>
+    <div data-bind="visible: showSearch">
         <div class="ui icon input" data-bind="css:{loading: searchLoadingObs}, visible: top">
             <input type="text" placeholder="Start of ID" data-bind="textInput: idFilterObs, 
                 event: {keyup: doSearch}, hasFocus: top">
             <i class="search icon"></i>
         </div>
+    </div>
+    <div data-bind="visible: top && !showAssignment">
     </div>
     <div class="line-control-radio" data-bind="visible: top && showAssignment">
         <label>Credentials?</label>

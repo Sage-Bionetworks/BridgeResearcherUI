@@ -25,6 +25,7 @@
                     <th>Name</th>
                     <th style="white-space: nowrap">Created On</th>
                     <th>Status</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody data-bind="foreach: itemsObs">
@@ -35,6 +36,10 @@
                     <td data-bind="text: $component.formatName($data)"></td>
                     <td style="white-space: nowrap" data-bind="text: $component.formatDateTime($data.createdOn)"></td>
                     <td data-bind="text: $component.formatTitleCase($data.status)"></td>
+                    <td>
+                        <button data-bind="visible: $data.status === 'unverified', click: $component.resendEmailVerification"
+                            class="ui basic compact mini button">Resend email verification</button>
+                    </td>
                 </tr>
             </tbody>
         </table>

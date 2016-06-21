@@ -126,11 +126,15 @@ function makeSessionWaitingPromise(httpAction, func) {
             // Even though we want to know what is in the response as part of the rejection. 
             // Soooo convert it to an error and copy over key aspects of the response. 
             p.fail(function(response) {
-                var error = new Error(response.responseJSON.message);
-                error.responseJSON = response.responseJSON;
-                error.statusText = response.statusText;
-                error.status = response.status;
-                reject(error);
+                try {
+                    var error = new Error(response.responseJSON.message);
+                    error.responseJSON = response.responseJSON;
+                    error.statusText = response.statusText;
+                    error.status = response.status;
+                    reject(error);
+                } catch(e) {
+                    reject(e);                    
+                }
             });
         };
         if (session && session.sessionToken) {
@@ -393,6 +397,12 @@ module.exports = {
     requestResetPasswordUser: function(id) {
         return post(config.participants+"/"+id+"/requestResetPassword");
     },
+    resendConsentAgreement: function(id, subpopGuid) {
+        return post(config.participants+"/"+id+"/subpopulations/" + subpopGuid + "/resendConsent");
+    },  
+    resendEmailVerification: function(id) {
+        return post(config.participants+"/"+id+"/resendEmailVerification");
+    },
     getExternalIds: function(params) {
         return get(config.externalIds + query(params || {}));
     },
@@ -439,6 +449,13 @@ module.exports = {
     },
     deleteParticipantReportRecord: function(userId, identifier, date) {
         return del(config.participants + '/' + userId + '/reports/' + identifier + '/' + date);
+    },
+    getParticipantActivities: function(userId, params) {
+        var queryString = query(params);
+        return get(config.participants + '/' + userId + '/activities' + queryString);
+    },
+    deleteParticipantActivities: function(userId) {
+        return del(config.participants + '/' + userId + '/activities');
     },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {

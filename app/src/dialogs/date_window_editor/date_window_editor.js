@@ -1,6 +1,7 @@
 var ko = require('knockout');
 var utils = require('../../utils');
 var root = require('../../root');
+var fn = require('../../transforms');
 
 function getDate(observer) {
     if (observer()) {
@@ -14,7 +15,7 @@ module.exports = function(params) {
 
     self.startsOnObs = ko.observable(getDate(params.startsOnObs));
     self.endsOnObs = ko.observable(getDate(params.endsOnObs));
-    self.formatDateTime = utils.formatDateTime;
+    self.formatDateTime = fn.formatLocalDateTime;
 
     self.save = function() {
         params.startsOnObs(self.startsOnObs());

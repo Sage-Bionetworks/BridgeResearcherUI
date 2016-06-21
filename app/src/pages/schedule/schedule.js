@@ -1,6 +1,7 @@
 var optionsService = require('../../services/options_service');
 var scheduleUtils = require('./schedule_utils');
 var utils = require('../../utils');
+var fn = require('../../transforms');
 var root = require('../../root');
 var ko = require('knockout');
 
@@ -122,7 +123,7 @@ module.exports = function(params) {
         self.scheduleTypeObs( getScheduleType(newValue) );    
     });
     
-    self.formatDateTime = utils.formatDateTime;
+    self.formatDateTime = fn.formatLocalDateTime;
     self.formatEventId = scheduleUtils.formatEventId;
     self.formatTimes = scheduleUtils.formatTimesArray;
 

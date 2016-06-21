@@ -48,6 +48,7 @@ reg('scheduleplans', './pages/scheduleplans/scheduleplans');
 reg('scheduleplan', './pages/scheduleplan/scheduleplan');
 reg('participants', './pages/participants/participants');
 reg('participant', './pages/participant/participant');
+reg('participant_activities', './pages/participant_activities/participant_activities');
 reg('participant_consents', './pages/participant_consents/participant_consents');
 reg('participant_reports', './pages/participant_reports/participant_reports');
 reg('participant_report', './pages/participant_report/participant_report');

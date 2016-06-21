@@ -100,6 +100,29 @@ describe("transforms", function() {
             expect (fn.formatTitle(undefined, context) ).to.equal("—");
         });
     });
+    describe("formatLocalDateTime", function() {
+        it("uses default value for missing or bad values", function() {
+            expect( fn.formatLocalDateTime(null) ).to.equal("");
+            expect( fn.formatLocalDateTime("") ).to.equal("");
+            expect( fn.formatLocalDateTime("not a date") ).to.equal("");
+        });
+        it("accepts date strings", function() {
+            var string = new Date().toISOString();
+            expect( fn.formatLocalDateTime(string)).to.equal(new Date(string).toLocaleString());
+        });
+        it("accepts dates", function() {
+            var date = new Date();
+            expect( fn.formatLocalDateTime(date)).to.equal(date.toLocaleString());
+        });
+    });
+    describe("formatVersionRange", function() {
+        it("formats range", function() {
+            expect( fn.formatVersionRange(0,10) ).to.equal("0-10");
+            expect( fn.formatVersionRange(null,8) ).to.equal("0-8");
+            expect( fn.formatVersionRange(2) ).to.equal("2+");
+            expect( fn.formatVersionRange() ).to.equal("<i>All versions</i>");
+        });
+    });
     describe("persistAttributes", function() {
         it("works", function() {
             var attr = [
@@ -122,6 +145,12 @@ describe("transforms", function() {
             
             var formattedRoles = fn.persistRoles(roles);
             expect(formattedRoles).to.eql(targetRoles);
+        });
+    });
+    describe("formatLocalDateTimeWithoutZone", function() {
+        it("works", function() {
+            var millis = 1466529126481;
+            expect(fn.formatLocalDateTimeWithoutZone(new Date(millis))).to.equal("6/21/2016 @ 17:12");
         });
     });
     xdescribe("callObsCallback", function() {

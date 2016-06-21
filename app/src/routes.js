@@ -70,6 +70,7 @@ router.on('/synapse', routeTo('synapse'));
 router.on('/lab_codes', routeTo('lab_codes'));
 router.on('/externalIds', routeTo('external_ids'));
 router.on('/participants/:userId/reports/:identifier/:name', routeTo('participant_report', USERID_IDENTIFIER_NAME));
+router.on('/participants/:userId/activities/:name', routeTo('participant_activities', USERID_NAME));
 router.on('/participants/:userId/consents/:name', routeTo('participant_consents', USERID_NAME));
 router.on('/participants/:userId/reports/:name', routeTo('participant_reports', USERID_NAME));
 router.on('/participants/:userId/:name', routeTo('participant', USERID_NAME));
