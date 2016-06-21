@@ -238,55 +238,6 @@ module.exports = {
         ko.postbox.publish("showErrors", {message:message,errors:{}});
     },
     /**
-     * Convert a date into a locale-appropriate string (browser-dependent).
-     * @param date
-     * @returns {string}
-     */
-    formatDateTime: function(date) {
-        if (date) {
-            return new Date(date).toLocaleString();
-        }
-        return "";
-    },
-    /**
-     * Convert a ISO date string ("2010-01-01") to a browser-dependent, local
-     * date string, adjusting for the time zone offset on that date, to compensate
-     * for the fact that a date without a time is abstract and not expressed
-     * relative to a time zone. Otherwise the browser may shift the date to a
-     * different day when it localizes the time zone.
-     * @param date
-     * @returns {*}
-     */
-    formatDate: function(date) {
-        if (date) {
-            date = date.replace('T00:00:00.000Z','');
-            // Get the declared offset of the local time on the date in question (accounts
-            // for daylight savings at right time of year)
-            var offset = new Date(date).toString().match(/GMT([^\s]*)/)[1];
-            // If offset is +0600, on Safari this fails if you don't insert ':' as in: +06:00
-            offset = offset.replace(/00$/,":00");
-            // Now force date to a specific datetime, in local time at that time
-            var localDate = date + "T00:00:00" + offset;
-            // And return only the date portion of that date object
-            return new Date(localDate).toLocaleDateString();
-        }
-        return "";
-    },
-    formatISODate: function(date) {
-        date = date || new Date();
-        return date.toISOString().split("T")[0];  
-    },
-    formatVersionRange: function(minValue, maxValue) {
-        if (isNotBlank(minValue) && isNotBlank(maxValue)) {
-            return minValue + "-" + maxValue;
-        } else if (isNotBlank(minValue)) {
-            return minValue + "+";
-        } else if (isNotBlank(maxValue)) {
-            return "0-" + maxValue;
-        }
-        return "<i>All versions</i>";
-    },
-    /**
      * Generic handler for pages which are loading a particular entity. If the error that is returned 
      * is a 404 it attempts to deal with it by redirecting to a parent page.
      * @param vm

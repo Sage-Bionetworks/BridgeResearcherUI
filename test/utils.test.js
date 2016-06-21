@@ -2,23 +2,6 @@ var expect = require('chai').expect;
 var utils = require('../app/src/utils');
 
 describe("utils", function() {
-    describe("formatISODate", function() {
-        var dateRegExp = /\d{4}-\d{2}-\d{2}/;
-        it("formats date", function() {
-            expect( utils.formatISODate() ).to.match(dateRegExp);
-        });
-        it("formats provided date", function() {
-            expect( utils.formatISODate(new Date()) ).to.match(dateRegExp);
-        });
-    });
-    describe("formatVersionRange", function() {
-        it("formats range", function() {
-            expect( utils.formatVersionRange(0,10) ).to.equal("0-10");
-            expect( utils.formatVersionRange(null,8) ).to.equal("0-8");
-            expect( utils.formatVersionRange(2) ).to.equal("2+");
-            expect( utils.formatVersionRange() ).to.equal("<i>All versions</i>");
-        });
-    });
     describe("atLeastOneSignedConsent", function() {
         var activeConsent = {
             "subpopulationGuid": "api",

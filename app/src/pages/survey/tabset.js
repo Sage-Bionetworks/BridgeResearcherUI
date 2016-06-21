@@ -1,10 +1,11 @@
 var ko = require('knockout');
 var utils = require('../../utils');
+var fn = require('../../transforms');
 
 module.exports = function(params) {
     var self = this;
 
-    self.formatDateTime = utils.formatDateTime;
+    self.formatDateTime = fn.formatLocalDateTime;
     self.guidObs = params.viewModel.guidObs;
     self.createdOnObs = params.viewModel.createdOnObs;
     self.publishedObs = params.viewModel.publishedObs;

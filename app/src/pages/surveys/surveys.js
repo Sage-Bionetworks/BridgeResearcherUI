@@ -1,6 +1,7 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
+var fn = require('../../transforms');
 var Promise = require('bluebird');
 var surveyFieldsToDelete = ['guid','version','createdOn','modifiedOn','published','deleted'];
 var tables = require('../../tables');
@@ -23,7 +24,7 @@ function annotateSurveys(surveys, plans) {
         var allPlanGuids = collectGuids(plan, []);    
         surveys.forEach(function(survey) {
             if (allPlanGuids.indexOf(survey.guid) > -1) {
-                var lbl = plan.label + " (" + utils.formatVersionRange(plan.minAppVersion, plan.maxAppVersion)+")";
+                var lbl = plan.label + " (" + fn.formatVersionRange(plan.minAppVersion, plan.maxAppVersion)+")";
                 survey.schedulePlanObs.push({label: lbl, guid: plan.guid});
             } 
         });
@@ -33,7 +34,7 @@ function annotateSurveys(surveys, plans) {
 module.exports = function() {
     var self = this;
 
-    self.formatDateTime = utils.formatDateTime;
+    self.formatDateTime = fn.formatLocalDateTime;
 
     // There is no delete function. We'd sorta like to do copy this way, too.
     tables.prepareTable(self, 'survey', '#/surveys', function(survey) {

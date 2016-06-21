@@ -20,7 +20,7 @@ module.exports = function() {
     self.itemsObs = ko.observableArray([]);
     self.formatTitleCase = fn.formatTitleCase;
     self.formatName = fn.formatName;
-    self.formatDateTime = utils.formatDateTime;
+    self.formatDateTime = fn.formatLocalDateTime;
     self.classNameForStatus = function(user) {
         return cssClassNameForStatus[user.status];
     };

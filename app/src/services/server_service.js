@@ -454,6 +454,9 @@ module.exports = {
         var queryString = query(params);
         return get(config.participants + '/' + userId + '/activities' + queryString);
     },
+    deleteParticipantActivities: function(userId) {
+        return del(config.participants + '/' + userId + '/activities');
+    },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {
             throw Error("Session listener not a function");

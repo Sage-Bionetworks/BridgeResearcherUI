@@ -8,18 +8,18 @@
             <h3 data-bind="text: titleObs"></h3>
         </div>
         <div class="fixed-header-buttons">
+            <button class="ui red small button" data-bind="click: deleteActivities">Delete all activities</button>
         </div>
     </div>
     <!-- ko component: {name: 'participant-tabset', params: {active: 'activities', isNewObs: isNewObs}} --><!-- /ko -->
 </div>
 <div class="scrollbox">
     <errors></errors>
+    <p>This table shows the activities that were issued to the participant based on your schedules, along with any information we've received 
+        back about their status toward completion. If there are no activities (but you have schedules, and other users have 
+        activities), then this participant has not yet contacted the server. </p>
     <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
     <div data-bind="visible: itemsObs().length > 0">
-        <p>These activities are what the participant should be seeing. For example, if there are no activities listed, 
-            this means the user has not contacted the server (not necessarily that you have nothing scheduled for them, 
-            since we don't create tasks until the participant contacts the server).
-        </p>
         <!-- ko component: {name:'ddb_pager', params: {loadingFunc: loadingFunc, 
             pageKey: 'activities', top: true, showAssignment: false, showSearch: false}
         } --><!-- /ko -->
@@ -28,21 +28,31 @@
                 <tr>
                     <th>Activity</th>
                     <th>Status</th>
-                    <th>Scheduled On</th>
-                    <th>Expires On</th>
-                    <th>Finished</th>
+                    <th>Schedule Window</th>
+                    <th>Execution Time</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody data-bind="foreach: itemsObs">
                 <tr data-bind="css: {hasBorder: $parent.displayBorder($data, $index)}">
-                    <td>
+                    <td data-bind="attr: {title: $parent.formatTitleCase($data.activity.activityType)}">
                         <i data-bind="css: $parent.formatActivityClass($data)"></i>
                         <span data-bind="text: $parent.formatActivity($data)"></span>
                     </td>
-                    <td data-bind="text: $parent.titleCase($data.status)"></td>
-                    <td data-bind="text: $parent.formatDateTime($data.scheduledOn)"></td>
-                    <td data-bind="text: $parent.formatDateTime($data.expiresOn)"></td>
-                    <td data-bind="text: $parent.formatDateTime($data.finishedOn)"></td>
+                    <td data-bind="text: $parent.formatTitleCase($data.status)"></td>
+                    <td>
+                        <span data-bind="text: $parent.formatDateTime($data.scheduledOn)">
+                        </span>&mdash;<span data-bind="text: $parent.formatDateTime($data.expiresOn)">
+                        </span>
+                    </td>
+                    <td>
+                        <span data-bind="text: $parent.formatDateTime($data.startedOn)">
+                        </span>&mdash;<span data-bind="text: $parent.formatDateTime($data.finishedOn)">
+                        </span>
+                    </td>
+                    <td>
+                        <a target="_blank" data-bind="attr:{href: '#/scheduleplans/' + $data.schedulePlanGuid}">View schedule</span>
+                    </td>
                 </tr>
             </tbody>
         </table>
