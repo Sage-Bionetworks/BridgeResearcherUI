@@ -73,6 +73,7 @@ reg('admin_cache', './pages/admin/cache/cache');
 // DIALOGS
 //regt('none_dialog','./dialogs/none/none');
 reg('add_report', './dialogs/add_report/add_report');
+reg('edit_report', './dialogs/edit_report/edit_report');
 reg('sign_in_dialog', './dialogs/sign_in/sign_in');
 reg('forgot_password_dialog', './dialogs/forgot_password/forgot_password');
 reg('enumeration_editor', './dialogs/enumeration_editor/enumeration_editor');

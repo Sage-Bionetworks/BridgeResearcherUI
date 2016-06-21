@@ -26,6 +26,7 @@
                     <th width="100">Date</th>
                     <th width="10"></th>
                     <th>JSON</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody data-bind="foreach: itemsObs">
@@ -47,8 +48,11 @@
                             <span data-bind="html: $data.collapsedValue"></span>
                         </div>
                         <div class="json-expand-control" data-bind="visible: !$data.collapsedObs()">
-                            <pre data-bind="visible: !$data.collapsedObs(), html: $data.data"></pre>
+                            <pre data-bind="visible: !$data.collapsedObs(), html: $data.formattedData"></pre>
                         </div>
+                    </td>
+                    <td style="text-align:right">
+                        <button class="ui basic compact mini button" data-bind="click: $component.editReportRecord">Edit</button>
                     </td>
                 </tr>
             </tbody>
