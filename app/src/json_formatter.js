@@ -27,7 +27,7 @@ function mapItem(item) {
     item.collapsedObs = ko.observable(true);
     try {
         var json = JSON.parse(item.data);
-        item.data = prettyPrint(json);
+        item.formattedData = prettyPrint(json);
         item.collapsedValue = "{&hellip;}";
     } catch(e) {
         item.collapsedObs(false);

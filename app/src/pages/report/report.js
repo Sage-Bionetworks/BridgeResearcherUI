@@ -39,9 +39,18 @@ module.exports = function(params) {
     self.toggle = function(model) {
         model.collapsedObs(!model.collapsedObs());
     };
-
+    self.editReportRecord = function(item) {
+        root.openDialog('edit_report', {
+            closeDialog: self.closeDialog,
+            identifier: params.id,
+            date: item.date,
+            data: item.data
+        });
+        return false;
+    };
     function mapResponse(response) {
         response.items = response.items.map(jsonFormatter.mapItem);
+        console.log(response);
         self.itemsObs(response.items.sort());
     }
     function load() {
