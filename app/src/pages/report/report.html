@@ -19,7 +19,7 @@
     <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
     <div data-bind="visible: itemsObs().length > 0">
         <p>Last three weeks of reports:</p>
-        <table class="ui compact json table">
+        <table class="ui compact selectable json table">
             <thead>
                 <tr>
                     <th width="10" data-bind="visible: isDeveloper"></th>

@@ -30,14 +30,15 @@
                     <th>Status</th>
                     <th>Schedule Window</th>
                     <th>Execution Time</th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody data-bind="foreach: itemsObs">
-                <tr data-bind="css: {hasBorder: $parent.displayBorder($data, $index)}">
+                <tr data-bind="css: {hasBorder: $parent.displayBorder($data, $index),
+                    disabled: $data.status === 'expired'}">
                     <td data-bind="attr: {title: $parent.formatTitleCase($data.activity.activityType)}">
                         <i data-bind="css: $parent.formatActivityClass($data)"></i>
-                        <span data-bind="text: $parent.formatActivity($data)"></span>
+                        <a target="_blank" data-bind="text: $parent.formatActivity($data), 
+                            attr:{href: '#/scheduleplans/'+$data.schedulePlanGuid}"></a>
                     </td>
                     <td data-bind="text: $parent.formatTitleCase($data.status)"></td>
                     <td>
@@ -49,9 +50,6 @@
                         <span data-bind="text: $parent.formatDateTime($data.startedOn)">
                         </span>&mdash;<span data-bind="text: $parent.formatDateTime($data.finishedOn)">
                         </span>
-                    </td>
-                    <td>
-                        <a target="_blank" data-bind="attr:{href: '#/scheduleplans/' + $data.schedulePlanGuid}">View schedule</span>
                     </td>
                 </tr>
             </tbody>
