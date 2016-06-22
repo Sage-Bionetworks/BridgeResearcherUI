@@ -1,7 +1,7 @@
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
-var config = require('../../config');
 var bind = require('../../binder');
+var fn = require('../../transforms');
 
 module.exports = function(params) {
     var self = this;
@@ -51,7 +51,7 @@ module.exports = function(params) {
         return serverService.getStudyConsent(params.guid, params.createdOn);
     }
 
-    self.formatDateTime = utils.formatDateTime;
+    self.formatDateTime = fn.formatLocalDateTime;
 
     self.publish = function(vm, event) {
         if (confirm("Are you sure you want to save & publish this consent?")) {

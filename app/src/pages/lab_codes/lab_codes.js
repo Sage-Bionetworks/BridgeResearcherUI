@@ -3,8 +3,6 @@ var utils = require('../../utils');
 var root = require('../../root');
 var bind = require('../../binder');
 
-var OPTIONS = {offsetBy:0, pageSize: 1, assignmentFilter:true};
-
 module.exports = function() {
     var self = this;
     
@@ -31,6 +29,7 @@ module.exports = function() {
         .then(binder.update('externalIdValidationEnabled'));
     
     self.loadingFunc = function loadPage(params) {
+        params.assignmentFilter = true; // no controls for this are shown, set it here.
         return serverService.getExternalIds(params)
             .then(binder.update('total','items'))
             .then(msgIfNoRecords)

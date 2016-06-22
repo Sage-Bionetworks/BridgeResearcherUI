@@ -1,21 +1,23 @@
-var ko = require('knockout');
-var utils = require('../../utils');
 var schemaUtils = require('../../pages/schema/schema_utils');
 var serverService = require('../../services/server_service');
+var bind = require('../../binder');
+var fn = require('../../transforms');
 
 module.exports = function(params) {
     var self = this;
 
     schemaUtils.initVM(self);
 
-    self.formatDateTime = utils.formatDateTime;
-    self.guidObs = ko.observable(params.guid);
-    self.createdOnObs = ko.observable(params.createdOn);
-    self.publishedObs = ko.observable(true);
-    self.surveyObs = ko.observable();
-    self.schemaObs = ko.observable({});
-    self.itemsObs = ko.observableArray([]);
-    self.nameObs = ko.observable();
+    bind(self)
+        .obs('createdOn', params.createdOn)
+        .obs('published', true)
+        .obs('survey')
+        .obs('guid', params.guid)
+        .obs('schema', {})
+        .obs('items[]', [])
+        .obs('name');
+
+    self.formatDateTime = fn.formatLocalDateTime;
 
     function loadSchema(survey) {
         self.nameObs(survey.name);
@@ -34,5 +36,4 @@ module.exports = function(params) {
     } else {
         serverService.getSurveyMostRecent(params.guid).then(loadSchema);
     }
-
 };

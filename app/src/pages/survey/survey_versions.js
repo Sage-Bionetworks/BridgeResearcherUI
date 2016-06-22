@@ -1,12 +1,13 @@
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var bind = require('../../binder');
+var fn = require('../../transforms');
 
 module.exports = function(params) {
     var self = this;
     self.keys = params;
 
-    self.formatDateTime = utils.formatDateTime;
+    self.formatDateTime = fn.formatLocalDateTime;
     
     var binder = bind(self)
         .obs('guid', params.guid)
@@ -31,7 +32,7 @@ module.exports = function(params) {
             utils.startHandler(self, event);
             serverService.deleteSurvey(survey)
                 .then(load)
-                .then(utils.makeTableRowHandler(self, [survey], "#/surveys"))
+                .then(tables.makeTableRowHandler(self, [survey], "#/surveys", 'survey version'))
                 .then(redirectIfDeleteSelf(survey))
                 .then(utils.successHandler(self, event, "Survey version deleted."))
                 .catch(utils.failureHandler(self, event));

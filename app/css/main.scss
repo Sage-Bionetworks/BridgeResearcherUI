@@ -7,6 +7,7 @@
 @import "./schedules.scss";
 @import "./pager.scss";
 @import "./fixed_header.scss";
+@import "./json.scss";
 
 /* HTML TAGS */
 html, body {
@@ -206,12 +207,6 @@ progress {
     color: #bbb;
     cursor:pointer!important;
 }
-/* This didn't use to be misaligned, but looks wrong now. */
-.ui.compact.table {
-    .ui.checkbox {
-        vertical-align: middle;
-    }
-}
 
 /* Used to position the green/orange label next to version number in secondary menu. */
 .pub-status {
@@ -222,4 +217,16 @@ progress {
         padding-left: .25rem !important;
     }
     
+}
+/* This didn't use to be misaligned, but looks wrong now. */
+.ui.compact.table {
+    .ui.checkbox {
+        vertical-align: middle;
+    }
+}
+.hasBorder td {
+    border-bottom: 1px solid #ccc;
+}
+.disabled a {
+    opacity: .7;
 }

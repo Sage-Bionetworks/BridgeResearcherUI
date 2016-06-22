@@ -8,14 +8,23 @@ module.exports = function(params) {
     var self = this;
 
     bind(self)
-        .obs('id', params.id)
+        .obs('userId', params.userId)
         .obs('consentHistory[]')
         .obs('isNew', false)
         .obs('title', params.name);
 
     self.isResearcher = root.isResearcher;
 
-    serverService.getParticipant(self.idObs()).then(function(response) {
+    self.resendConsent = function(vm, event) {
+        var subpopGuid = vm.consentURL.split("/subpopulations/")[1].split("/consents/")[0];
+        if (confirm("This will send email to this user.\n\nDo you wish to continue?")) {
+            utils.startHandler(vm, event);
+            serverService.resendConsentAgreement(params.userId, subpopGuid)
+                .then(utils.successHandler(vm, event, "Resent consent agreement."))
+                .catch(utils.failureHandler(vm, event));
+        }
+    };
+    serverService.getParticipant(self.userIdObs()).then(function(response) {
         var histories = response.consentHistories;
         
         return Promise.map(Object.keys(histories), function(guid) {

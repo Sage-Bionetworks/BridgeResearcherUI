@@ -76,12 +76,15 @@ module.exports = function(params) {
     }
 
     function updateModel(response) {
-        self.offsetByObs(response.offsetBy);
-        self.pageSizeObs(response.pageSize);
-        self.totalRecordsObs(response.total);
-        self.filterBoxObs(response.emailFilter);
-        self.currentPageObs(Math.round(response.offsetBy/response.pageSize));
-        self.totalPagesObs( Math.ceil(response.total/response.pageSize) );
+        // If you're not a researcher, it can happen this gets called without a response.
+        if (response) {
+            self.offsetByObs(response.offsetBy);
+            self.pageSizeObs(response.pageSize);
+            self.totalRecordsObs(response.total);
+            self.filterBoxObs(response.emailFilter);
+            self.currentPageObs(Math.round(response.offsetBy/response.pageSize));
+            self.totalPagesObs( Math.ceil(response.total/response.pageSize) );
+        }
     }
     if (params.top) {
         wrappedLoadingFunc(offsetBy);

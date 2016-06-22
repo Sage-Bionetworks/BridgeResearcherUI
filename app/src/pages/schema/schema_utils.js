@@ -1,5 +1,4 @@
 var utils = require('../../utils');
-var ko = require('knockout');
 
 var SCHEMA_TYPE_OPTIONS = Object.freeze([
     {value: 'ios_survey', label: 'iOS Survey'},

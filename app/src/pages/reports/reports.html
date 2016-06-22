@@ -1,0 +1,37 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <div class="fixed-header-heading">
+            <h3>Reports</h3>
+        </div>
+        <div class="fixed-header-buttons">
+            <button class="ui red small button" data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
+            <button class="ui primary small button" data-bind="visible: isDeveloper, click: addReport">Add report&hellip;</button>
+        </div>
+    </div>
+    <div class="ui empty secondary pointing menu"></div>
+</div>
+<div class="scrollbox">
+    <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
+    <div data-bind="visible: itemsObs().length > 0">
+        <table class="ui compact selectable table">
+            <thead>
+                <tr>
+                    <th width="10" data-bind="visible: isDeveloper"></th>
+                    <th width="250">Report identifier</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: itemsObs">
+                <tr>
+                    <td data-bind="visible: $component.isDeveloper">
+                        <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+                    </td>
+                    <td width="100%">
+                        <a data-bind="attr:{'href': '#/reports/' + encodeURIComponent($data.identifier)}, text: $data.identifier">
+
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

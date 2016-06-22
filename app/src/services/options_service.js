@@ -72,6 +72,7 @@ function collectSurveyOptions(surveys) {
         return { label: survey.name, value: survey.guid };
     });
 }
+/*
 function collectQuestionOptions(surveys) {
     var questions = [];
     surveys.forEach(function(survey) {
@@ -87,6 +88,7 @@ function collectQuestionOptions(surveys) {
 function filterQuestions(element) {
     return (element.type === "SurveyQuestion");
 }
+*/
 function getTaskIdentifierOptions() {
     return serverService.getStudy().then(function(study) {
         return study.taskIdentifiers.map(function(id) {

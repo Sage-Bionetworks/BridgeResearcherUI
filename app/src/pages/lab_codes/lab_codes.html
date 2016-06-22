@@ -23,7 +23,7 @@
                 </div>
             </div>    
             <!-- ko component: {name:'ddb_pager', params: 
-                {loadingFunc: loadingFunc, pageKey: 'external-ids-page', top: true, showCredentials: false}
+                {loadingFunc: loadingFunc, pageKey: 'external-ids-page', top: true, showAssignment: false}
             } --><!-- /ko -->
             <div class="loading_status" data-bind="visible: itemsObs().length === 0" style="margin: 1rem 0">Loading...</div>
             <table class="ui compact selectable table" data-bind="visible: itemsObs().length > 0">
@@ -39,7 +39,7 @@
                 </tbody>
             </table>
             <!-- ko component: {name:'ddb_pager', params: 
-                {loadingFunc: loadingFunc, pageKey: 'external-ids-page', top: false, showCredentials: false}
+                {loadingFunc: loadingFunc, pageKey: 'external-ids-page', top: false, showAssignment: false}
             } --><!-- /ko -->
         </div>
         <div class="six wide column">

@@ -8,7 +8,6 @@ var bind = require('../../binder');
 module.exports = function() {
     var self = this;
     var isLocked = utils.isDefined(root.queryParams.study);
-    var resetSubmit = document.querySelector("#resetSubmit");
     
     var studyKey, env;    
     if (isLocked) {
@@ -43,7 +42,7 @@ module.exports = function() {
     
     function loadStudyList(newValue) {
         serverService.getStudyList(newValue)
-            .then(loadStudies).catch(utils.globalToFormFailureHandler());
+            .then(loadStudies).catch(utils.failureHandler());
     }
 
     self.sendResetPasswordRequest = function(vm, event) {
@@ -62,8 +61,7 @@ module.exports = function() {
             root.openDialog('sign_in_dialog');
         })
         .then(utils.successHandler(self, event, "An email has been sent to that address with instructions on changing your password."))
-        .catch(utils.globalToFormFailureHandler(resetSubmit));
-        //.catch(utils.failureHandler(self, event));
+        .catch(utils.dialogFailureHandler(vm, event));
     };
     self.cancel = function() {
         root.openDialog('sign_in_dialog');

@@ -1,4 +1,3 @@
-var ko = require('knockout');
 var criteriaUtils = require('../../criteria_utils');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');

@@ -29,6 +29,8 @@ reg('eligibility','./pages/eligibility/eligibility');
 reg('password_policy','./pages/password_policy/password_policy');
 reg('ve_template','./pages/ve_template/ve_template');
 reg('rp_template','./pages/rp_template/rp_template');
+reg('reports', './pages/reports/reports');
+reg('report', './pages/report/report');
 reg('subpopulations','./pages/subpopulations/subpopulations');
 reg('subpopulation','./pages/subpopulation/subpopulation');
 reg('subpopulation_editor','./pages/subpopulation_editor/subpopulation_editor');
@@ -46,7 +48,10 @@ reg('scheduleplans', './pages/scheduleplans/scheduleplans');
 reg('scheduleplan', './pages/scheduleplan/scheduleplan');
 reg('participants', './pages/participants/participants');
 reg('participant', './pages/participant/participant');
+reg('participant_activities', './pages/participant_activities/participant_activities');
 reg('participant_consents', './pages/participant_consents/participant_consents');
+reg('participant_reports', './pages/participant_reports/participant_reports');
+reg('participant_report', './pages/participant_report/participant_report');
 reg('lab_codes', './pages/lab_codes/lab_codes');
 reg('external_ids', './pages/external_ids/external_ids');
 reg('schedule', './pages/schedule/schedule');
@@ -67,6 +72,8 @@ reg('admin_cache', './pages/admin/cache/cache');
 
 // DIALOGS
 //regt('none_dialog','./dialogs/none/none');
+reg('add_report', './dialogs/add_report/add_report');
+reg('edit_report', './dialogs/edit_report/edit_report');
 reg('sign_in_dialog', './dialogs/sign_in/sign_in');
 reg('forgot_password_dialog', './dialogs/forgot_password/forgot_password');
 reg('enumeration_editor', './dialogs/enumeration_editor/enumeration_editor');

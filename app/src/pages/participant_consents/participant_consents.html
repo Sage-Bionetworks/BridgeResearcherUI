@@ -24,6 +24,7 @@
                     <th>Consented On</th>
                     <th>Version Signed</th>
                     <th>Withdrew On</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody data-bind="foreach: consentHistoryObs">
@@ -54,6 +55,10 @@
                         <i class="ui green checkmark icon" data-bind="visible: $data.consented && $data.isFirst && $data.hasSignedActiveConsent"> </i>
                     </td>
                     <td class="red" data-bind="text: $data.withdrewOn"></td>
+                    <td>
+                        <button data-bind="visible: $data.name !== 'No consent', click: $component.resendConsent"
+                            class="ui basic compact mini button">Resend consent</button>
+                    </td>
                 </tr>
             </tbody>
         </table>

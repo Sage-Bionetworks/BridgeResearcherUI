@@ -4,7 +4,7 @@
         <span style="float: right" data-bind="html: titleObs"></span>
     </div>
     <div class="content">
-        <form id="signInForm" class="ui form" action="" data-bind="submit: signIn">
+        <form id="signInForm" class="ui form" action="" data-bind="submitByButton: 'signInSubmit'">
             <errors></errors>
             <div class="field" id="username">
                 <label for="username">Email address</label>

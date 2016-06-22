@@ -3,111 +3,146 @@ require('knockout-postbox');
 var utils = require('../../utils');
 var bind = require('../../binder');
 
-var pageSize = 25;
+var PAGE_SIZE = 25;
 
 /**
  * @params loadingFunc - the function to call to load resources. The function takes the parameters 
- *      pageKey, pageSize.
+ *      pageKey
  * @params pageKey - a key to make the pagination on this table unique from other pagination on 
  *      the screen
  * @params top - mark one of the pagers as the top pager, and only that pager will take responsibility
  *      for calling for the first page of records. Also, search is hidden for the bottom control.
+ * @params showAssignment - show assignment controls (true of false, defaults to true)
  */
 module.exports = function(params) {
     var self = this;
     var loadingFunc = params.loadingFunc;
     var pageKey = params.pageKey;
     var currentAssignmentFilter = null;
+    var currentOffsetKey = null;
+    var history = [null];
+    var pendingRequest = false;
+
     self.top = params.top;
-    self.showCredentials = (typeof params.showCredentials === "boolean") ? 
-        params.showCredentials : true;
-    
+    self.showAssignment = (typeof params.showAssignment === "boolean") ? 
+        params.showAssignment : true;
+    self.showSearch = (typeof params.showSearch === "boolean") ?
+        params.showSearch : false;
+
     bind(self)
         .obs('idFilter')
-        .obs('offsetKey')
         .obs('pageKey')
-        .obs('pageSize')
         .obs('totalRecords')
         .obs('currentPage')
         .obs('totalPages')
+        .obs('hasPrevious', false)
+        .obs('hasNext', false)
+        .obs('hasFirstPage', false)
         .obs('searchLoading')
         .obs('pagerLoading');
     
+    function clear() {
+        self.currentPageObs(0);
+        history = [null];
+    }
+    function getValue(value) {
+        switch(value) {
+            case 'true': return 'true';
+            case 'false': return 'false';
+            default: return null;
+        }
+    }
+    function addCurrentPage(response) {
+        response.hasHistory = history.length > 1;
+        response.currentPage = self.currentPageObs();
+        history[response.currentPage+1] = response.offsetKey;
+        currentAssignmentFilter = response.assignmentFilter || null;
+        ko.postbox.publish(pageKey+'-recordsPaged', response);
+        console.log("addCurrentPage", response.hasHistory, history);
+        return response;
+    }
+    function wrappedLoadingFunc(offsetKey) {
+        pendingRequest = true;
+        var params = {pageSize: PAGE_SIZE, offsetKey: offsetKey,
+            idFilter: self.idFilterObs(), assignmentFilter: currentAssignmentFilter};
+        return loadingFunc(params)
+            .then(addCurrentPage)
+            .catch(utils.failureHandler());
+    }
+    function updateModel(response) {
+        self.hasNextObs(!!response.offsetKey);
+        self.hasPreviousObs(response.hasHistory);
+        self.hasFirstPageObs(response.currentPage > 0);
+        self.totalRecordsObs(response.total);
+        self.idFilterObs(response.idFilter || "");
+        self.currentPageObs(response.currentPage); // this was added in addCurrentPage()
+        self.totalPagesObs( Math.ceil(response.total/PAGE_SIZE) );
+        self.pagerLoadingObs(false);
+        self.searchLoadingObs(false);
+        pendingRequest = false;
+        return response;
+    }
+
     self.doSearch = function(vm, event) {
         if (event.keyCode === 13) {
+            clear();
             self.searchLoadingObs(true);
-            self.currentPageObs(0);
             wrappedLoadingFunc();
         }
     };
-    
-    self.firstPage = function(vm, event) {
-        currentAssignmentFilter = null;
-        self.offsetKeyObs(null);
-        self.idFilterObs("");
-        self.pagerLoadingObs(true);
-        self.currentPageObs(0);
-        wrappedLoadingFunc();
-    };
-    self.nextPage = function(vm, event) {
-        if (self.offsetKeyObs() !== null) {
-            self.pagerLoadingObs(true);
-            self.currentPageObs(self.currentPageObs()+1);
-            wrappedLoadingFunc();
-        }
-    };
-    
-    function getValue(value) {
-        if (value === 'true') {
-            return 'true';
-        } else if (value === 'false') {
-            return 'false';
-        }
-        return null;
+    if (self.top) {
+        self.firstPage = function(vm, event) {
+            if (!pendingRequest) {
+                clear();
+                currentAssignmentFilter = null;
+                self.idFilterObs("");
+                self.pagerLoadingObs(true);
+                wrappedLoadingFunc();
+            }
+        };
+        self.previousPage = function(vm, event) {
+            if (!pendingRequest) {
+                history.pop(); // next page key
+                history.pop(); // current page key
+                var lastKey = history[history.length-1]; // the last page key
+                self.currentPageObs(self.currentPageObs()-1);
+                self.pagerLoadingObs(true);
+                wrappedLoadingFunc(lastKey);
+            }
+        };
+        self.nextPage = function(vm, event) {
+            if (!pendingRequest) {
+                var lastKey = history[history.length-1];        
+                self.pagerLoadingObs(true);
+                self.currentPageObs(self.currentPageObs()+1);
+                wrappedLoadingFunc(lastKey);
+            }
+        };
+        ko.postbox.subscribe(pageKey+'-firstPage', self.firstPage);
+        ko.postbox.subscribe(pageKey+'-previousPage', self.previousPage);
+        ko.postbox.subscribe(pageKey+'-nextPage', self.nextPage);
+    } else {
+        self.firstPage = function(vm, event) {
+            ko.postbox.publish(pageKey+'-firstPage');
+        };
+        self.previousPage = function(vm, event) {
+            ko.postbox.publish(pageKey+'-previousPage');
+        };
+        self.nextPage = function(vm, event) {
+            ko.postbox.publish(pageKey+'-nextPage');
+        };
     }
-    
     self.assignFilter = function(vm, event) {
+        clear();
         currentAssignmentFilter = getValue(event.target.value);
-        self.offsetKeyObs(null);
-        self.currentPageObs(0);
         wrappedLoadingFunc();
         return true;
     };
-    // Postbox allows multiple instances of a paging control to stay in sync above
-    // and below the table. The 'top' control is responsible for kicking off the 
-    // first page of records.
     ko.postbox.subscribe(pageKey+'-recordsPaged', updateModel);
+    // parent page is resetting, go back to first page, clear filters, etc.
     ko.postbox.subscribe(pageKey+'-refresh', self.firstPage);
 
-    function wrappedLoadingFunc() {
-        var offsetKey = self.offsetKeyObs();
-        var idFilter = self.idFilterObs();
-        var requestAssign = (self.showCredentials) ? currentAssignmentFilter : true;
-
-        loadingFunc({
-            offsetKey: offsetKey,
-            pageSize: pageSize,
-            idFilter: idFilter,
-            assignmentFilter: requestAssign
-        }).then(function(response) {
-            response.currentPage = self.currentPageObs();
-            ko.postbox.publish(pageKey+'-recordsPaged', response);
-            self.searchLoadingObs(false);
-            self.pagerLoadingObs(false);
-            return response;
-        }).catch(utils.failureHandler());
-    }
-
-    function updateModel(response) {
-        self.offsetKeyObs(response.offsetKey);
-        self.pageSizeObs(response.pageSize);
-        self.totalRecordsObs(response.total);
-        self.idFilterObs(response.idFilter || "");
-        self.currentPageObs(response.currentPage); // this was added by the component.
-        currentAssignmentFilter = response.assignmentFilter || null;
-        self.totalPagesObs( Math.ceil(response.total/response.pageSize) );
-    }
-    if (params.top) {
+    if (self.top) {
         self.firstPage();
     }
     // why. why? why?!?!?!?!?!?!?!?

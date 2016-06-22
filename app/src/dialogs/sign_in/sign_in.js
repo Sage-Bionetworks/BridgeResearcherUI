@@ -55,7 +55,7 @@ module.exports = function() {
     
     function loadStudyList(newValue) {
         serverService.getStudyList(newValue)
-            .then(loadStudies).catch(utils.globalToFormFailureHandler());
+            .then(loadStudies).catch(utils.failureHandler());
     }
 
     function clear(response) {
@@ -95,7 +95,7 @@ module.exports = function() {
             .then(clear)
             .then(reloadIfNeeded)
             .then(utils.successHandler(self, {target: signInSubmit}))
-            .catch(utils.globalToFormFailureHandler(signInSubmit));
+            .catch(utils.dialogFailureHandler(vm, event));
     };
 
     self.forgotPassword = function() {

@@ -171,6 +171,19 @@ ko.bindingHandlers.editableDiv = {
         }, false);
     }
 };
+ko.bindingHandlers.submitByButton = {
+    init: function(element, valueAccessor) {
+        var buttonId = ko.unwrap(valueAccessor());
+        var button = document.getElementById(buttonId);
+        if (!button) {
+            console.error("Could not find button #" + buttonId);
+        }
+        element.onsubmit = function(event) {
+            event.preventDefault();
+            button.click();
+        };
+    }
+};
 
 function findItemsObs(context, collName) {
     for (var i = 0; i < context.$parents.length; i++) {

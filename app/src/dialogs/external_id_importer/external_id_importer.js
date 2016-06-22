@@ -122,7 +122,7 @@ module.exports = function(params) {
         }
         promise.then(endProgressMeter(event.target))
             .then(utils.successHandler(vm, event))
-            .catch(utils.globalToFormFailureHandler(event.target));
+            .catch(utils.dialogFailureHandler(vm, event));
     };
 
     self.close = function(vm, event) {
