@@ -12,7 +12,7 @@ var pageSets = {
     'scheduleplans': ['scheduleplans','scheduleplan'],
     've_template': ['ve_template', 'rp_template'],
     'subpopulations': ['subpopulations', 'subpopulation', 'subpopulation_editor', 'subpopulation_history', 'subpopulation_download'],
-    'participants': ['participants','participant','participant_consents', 'participant_reports', 'participant_report'],
+    'participants': ['participants','participant','participant_consents', 'participant_reports', 'participant_report', 'participant_activities'],
     'externalIds': ['external_ids'],
     'admin/info': ['admin_info'],
     'admin/cache': ['admin_cache'],
