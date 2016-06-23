@@ -5,10 +5,13 @@ var utils = require('../../utils');
 module.exports = function(params) {
     var self = this;
 
+    console.log("Edit report type", params.type);
+
     var binder = bind(self)
         .bind('showIdentifier', typeof params.identifier === "undefined")
         .bind('identifier', params.identifier)
         .bind('date', params.date)
+        .bind('userId', params.userId)
         .bind('data', params.data);
 
     self.save = function(vm, event) {

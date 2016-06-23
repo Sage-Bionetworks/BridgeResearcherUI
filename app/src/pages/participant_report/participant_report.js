@@ -13,9 +13,6 @@ function startDate() {
 function endDate() {
     return new Date().toISOString().split("T")[0];
 }
-function deleteItem(item) {
-    return serverService.deleteParticipantReportRecord(params.userId, params.identifier, item.date);
-}
 module.exports = function(params) {
     var self = this;
 
@@ -39,16 +36,30 @@ module.exports = function(params) {
     self.addReport = function(vm, event) {
         root.openDialog('add_report', {
             closeDialog: self.closeDialog,
-            userId: params.userId, 
             identifier: params.identifier,
+            userId: params.userId,
             type: "participant"
         });
     };
+    self.editReportRecord = function(item) {
+        root.openDialog('edit_report', {
+            closeDialog: self.closeDialog,
+            identifier: params.identifier,
+            userId: params.userId,
+            date: item.date,
+            data: item.data,
+            type: "participant"
+        });
+        return false;
+    };    
     self.closeDialog = function() {
         root.closeDialog();
         load();
     };
 
+    function deleteItem(item) {
+        return serverService.deleteParticipantReportRecord(params.userId, params.identifier, item.date);
+    }
     function mapResponse(response) {
         response.items = response.items.map(jsonFormatter.mapItem);
         self.itemsObs(response.items.sort());
