@@ -17,12 +17,12 @@ module.exports = function(params) {
 
     self.resendConsent = function(vm, event) {
         var subpopGuid = vm.consentURL.split("/subpopulations/")[1].split("/consents/")[0];
-        if (confirm("This will send email to this user.\n\nDo you wish to continue?")) {
+        utils.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
             utils.startHandler(vm, event);
             serverService.resendConsentAgreement(params.userId, subpopGuid)
                 .then(utils.successHandler(vm, event, "Resent consent agreement."))
                 .catch(utils.failureHandler(vm, event));
-        }
+        });
     };
     serverService.getParticipant(self.userIdObs()).then(function(response) {
         var histories = response.consentHistories;

@@ -25,7 +25,7 @@ module.exports = function(params) {
     self.formatDateTime = fn.formatLocalDateTime;
 
     self.publish = function(vm, event) {
-        if (confirm("Are you sure you want to publish this consent?")) {
+        utils.confirmation("Are you sure you want to publish this consent?", function() {
             utils.startHandler(vm, event);
 
             params.guid = vm.subpopulationGuid;
@@ -35,7 +35,7 @@ module.exports = function(params) {
                 .then(load)
                 .then(utils.successHandler(vm, event, "Consent published"))
                 .catch(utils.failureHandler(vm, event));
-        }
+        });
     };
     
     function load() {

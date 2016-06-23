@@ -28,7 +28,7 @@ module.exports = function(params) {
     }
 
     self.deleteSurvey = function(survey, event) {
-        if (confirm("Are you sure you want to delete this survey version?")) {
+        utils.deleteConfirmation("Are you sure you want to delete this survey version?", function() {
             utils.startHandler(self, event);
             serverService.deleteSurvey(survey)
                 .then(load)
@@ -36,16 +36,16 @@ module.exports = function(params) {
                 .then(redirectIfDeleteSelf(survey))
                 .then(utils.successHandler(self, event, "Survey version deleted."))
                 .catch(utils.failureHandler(self, event));
-        }
+        });
     };
     self.publish = function(vm, event) {
-        if (confirm("Are you sure you want to publish this survey version?")) {
+        utils.confirmation("Are you sure you want to publish this survey version?\n\nOnce published, it can't be deleted.", function() {
             utils.startHandler(self, event);
             serverService.publishSurvey(vm.guid, vm.createdOn)
                 .then(load)
                 .then(utils.successHandler(vm, event, "Survey has been published."))
                 .catch(utils.failureHandler(vm, event));
-        }
+        });
     };
     function getHistoryItems(response) {
         // Do not register an error here. Do not return the promise. We don't
