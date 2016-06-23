@@ -13,3 +13,35 @@
         padding: 0;
     } 
 }
+
+/* A smaller size for the sign in dialog, it really bugged me. */
+@media only screen and (max-width: 767px) {
+    .ui.tiny.modal {
+        width: 95%;
+        margin: 0em 0em 0em -47.5%;
+    }
+}
+@media only screen and (min-width: 768px) {
+    .ui.tiny.modal {
+        width: 50%;
+        margin: 0em 0em 0em -25%;
+    }
+}
+@media only screen and (min-width: 992px) {
+    .ui.tiny.modal {
+        width: 32rem;
+        margin: 0em 0em 0em -16rem;
+    }
+}
+@media only screen and (min-width: 1200px) {
+    .ui.tiny.modal {
+        width: 32rem;
+        margin: 0em 0em 0em -16rem;
+    }
+}
+@media only screen and (min-width: 1920px) {
+    .ui.tiny.modal {
+        width: 42rem;
+        margin: 0em 0em 0em -21rem;
+    }
+}

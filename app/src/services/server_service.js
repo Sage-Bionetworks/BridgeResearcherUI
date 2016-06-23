@@ -286,8 +286,8 @@ module.exports = {
     },
     updateSurvey: function(survey) {
         var createdString = new Date(survey.createdOn).toISOString();
-        var url = config.survey + survey.guid + '/revisions/' + createdOn;
-        return post(config.survey + survey.guid + '/revisions/' + createdOn, survey);
+        var url = config.survey + survey.guid + '/revisions/' + createdString;
+        return post(url, survey);
     },
     deleteSurvey: function(survey) {
         var createdString = new Date(survey.createdOn).toISOString();
@@ -398,7 +398,7 @@ module.exports = {
         return post(config.participants+"/"+id+"/requestResetPassword");
     },
     resendConsentAgreement: function(id, subpopGuid) {
-        return post(config.participants+"/"+id+"/subpopulations/" + subpopGuid + "/resendConsent");
+        return post(config.participants+"/"+id+"/consents/" + subpopGuid + "/resendConsent");
     },  
     resendEmailVerification: function(id) {
         return post(config.participants+"/"+id+"/resendEmailVerification");
@@ -456,6 +456,9 @@ module.exports = {
     },
     deleteParticipantActivities: function(userId) {
         return del(config.participants + '/' + userId + '/activities');
+    },
+    withdrawParticipantFromStudy: function(userId) {
+        return post(config.participants + '/' + userId + '/consents/withdraw');
     },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {

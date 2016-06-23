@@ -29,9 +29,11 @@ function mapItem(item) {
         var json = JSON.parse(item.data);
         item.formattedData = prettyPrint(json);
         item.collapsedValue = "{&hellip;}";
+        item.isJson = true;
     } catch(e) {
         item.collapsedObs(false);
         item.collapsedValue = "&hellip;";
+        item.isJson = false;
     }
     return item;
 }

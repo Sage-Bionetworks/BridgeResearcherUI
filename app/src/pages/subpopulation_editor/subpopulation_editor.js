@@ -2,6 +2,7 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var bind = require('../../binder');
 var fn = require('../../transforms');
+var alerts = require('../../widgets/alerts');
 
 module.exports = function(params) {
     var self = this;
@@ -50,25 +51,26 @@ module.exports = function(params) {
     function load() {
         return serverService.getStudyConsent(params.guid, params.createdOn);
     }
+    function loadPublishedConsent(response) {
+        params.createdOn = response.createdOn;
+        self.createdOnObs(response.createdOn);
+        return serverService.publishStudyConsent(params.guid, params.createdOn);
+    }
 
     self.formatDateTime = fn.formatLocalDateTime;
 
     self.publish = function(vm, event) {
-        if (confirm("Are you sure you want to save & publish this consent?")) {
+        alerts.confirmation("Are you sure you want to save & publish this consent?", function() {
             utils.startHandler(vm, event);
             
             utils.startHandler(vm, event);
             serverService.saveStudyConsent(params.guid, {documentContent: self.editor.getData()})
-                .then(function(response) {
-                    params.createdOn = response.createdOn;
-                    self.createdOnObs(response.createdOn);
-                    return serverService.publishStudyConsent(params.guid, params.createdOn);
-                })
+                .then(loadPublishedConsent)
                 .then(load)
                 .then(loadIntoEditor)
                 .then(utils.successHandler(vm, event, "Consent published"))
                 .catch(utils.failureHandler(vm, event));
-        }
+        });
     };
     self.save = function(vm, event) {
         utils.startHandler(self, event);

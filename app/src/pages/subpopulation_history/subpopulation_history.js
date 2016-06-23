@@ -2,6 +2,7 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var bind = require('../../binder');
 var fn = require('../../transforms');
+var alerts = require('../../widgets/alerts');
 
 module.exports = function(params) {
     var self = this;
@@ -25,7 +26,7 @@ module.exports = function(params) {
     self.formatDateTime = fn.formatLocalDateTime;
 
     self.publish = function(vm, event) {
-        if (confirm("Are you sure you want to publish this consent?")) {
+        alerts.confirmation("Are you sure you want to publish this consent?", function() {
             utils.startHandler(vm, event);
 
             params.guid = vm.subpopulationGuid;
@@ -35,7 +36,7 @@ module.exports = function(params) {
                 .then(load)
                 .then(utils.successHandler(vm, event, "Consent published"))
                 .catch(utils.failureHandler(vm, event));
-        }
+        });
     };
     
     function load() {

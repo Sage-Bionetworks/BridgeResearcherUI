@@ -4,6 +4,7 @@ var utils = require('../../utils');
 var fn = require('../../transforms');
 var root = require('../../root');
 var ko = require('knockout');
+var alerts = require('../../widgets/alerts');
 
 var SCHEDULE_TYPE_OPTIONS = Object.freeze([
     {value: 'once', label: 'Once'},
@@ -184,10 +185,10 @@ module.exports = function(params) {
     };
     self.deleteActivity = function(vm, event) {
         event.preventDefault();
-        if (confirm("Are you sure?")) {
+        alerts.deleteConfirmation("Are you sure?", function() {
             var context = ko.contextFor(event.target);
             self.activitiesObs.remove(context.$data);
-        }
+        });
     };    
 
     self.surveysOptionsObs = ko.observableArray();

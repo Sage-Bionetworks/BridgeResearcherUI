@@ -4,9 +4,9 @@ var bind = require('../../binder');
 var tables = require('../../tables');
 var fn = require('../../transforms');
 
-var deleteMsg = "Deleting all activities is recommended ONLY while developing your application.\n\n"+
-    "Activities (even finished ones) will be recreated the next time the user asks for them, "+
-    "based on your current schedules.\n\nDo you wish to continue?";
+var deleteMsg = "In development, you can delete all activities on a test account in order to work on an app.\n\n" +
+    "In production, all activity state is lost, so activities will be recreated the next time the user asks for them. " +
+    "Users can see deleted and finished activities reappear. Do you wish to continue?";
 
 module.exports = function(params) {
     var self = this;
@@ -37,13 +37,13 @@ module.exports = function(params) {
         return item.activity.label;
     };
     self.deleteActivities = function(vm, event) {
-        if (confirm(deleteMsg)) {
+        alerts.deleteConfirmation(deleteMsg, function() {
             utils.startHandler(vm, event);
             serverService.deleteParticipantActivities(self.userIdObs())
                 .then(utils.successHandler(self, event, "Activities deleted"))
                 .then(self.loadingFunc)
                 .catch(utils.failureHandler(vm, event));
-        }
+        });
     };
 
     function msgIfNoRecords(response) {
