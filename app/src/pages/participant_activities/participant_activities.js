@@ -37,7 +37,7 @@ module.exports = function(params) {
         return item.activity.label;
     };
     self.deleteActivities = function(vm, event) {
-        utils.deleteConfirmation(deleteMsg, function() {
+        alerts.deleteConfirmation(deleteMsg, function() {
             utils.startHandler(vm, event);
             serverService.deleteParticipantActivities(self.userIdObs())
                 .then(utils.successHandler(self, event, "Activities deleted"))

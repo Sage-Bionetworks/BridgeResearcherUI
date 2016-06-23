@@ -3,6 +3,7 @@ var serverService = require('../../services/server_service');
 var Promise = require('bluebird');
 var root = require('../../root');
 var bind = require('../../binder');
+var alerts = require('../../widgets/alerts');
 
 module.exports = function(params) {
     var self = this;
@@ -17,7 +18,7 @@ module.exports = function(params) {
 
     self.resendConsent = function(vm, event) {
         var subpopGuid = vm.consentURL.split("/subpopulations/")[1].split("/consents/")[0];
-        utils.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
+        alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
             utils.startHandler(vm, event);
             serverService.resendConsentAgreement(params.userId, subpopGuid)
                 .then(utils.successHandler(vm, event, "Resent consent agreement."))

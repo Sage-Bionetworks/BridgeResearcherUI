@@ -3,6 +3,7 @@ var ko = require('knockout');
 var utils = require('../../utils');
 var bind = require('../../binder');
 var fn = require('../../transforms');
+var alerts = require('../../widgets/alerts');
 
 var OPTIONS = [
     {value: 'no_sharing', label:'No Sharing'},
@@ -71,13 +72,13 @@ module.exports = function(params) {
     self.sharingScopeOptions = OPTIONS;
 
     self.enableAccount = function(vm, event) {
-        utils.confirmation("We must save any updates before enabling the account.", function() {
+        alerts.confirmation("We must save any updates before enabling the account.", function() {
             self.statusObs("enabled");
             self.save(vm, event);
         });
     };
     self.disableAccount = function(vm, event) {
-        utils.confirmation("We must save any updates before disabling the account.", function() {
+        alerts.confirmation("We must save any updates before disabling the account.", function() {
             self.statusObs("disabled");
             self.save(vm, event);
         });

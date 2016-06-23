@@ -2,6 +2,7 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var bind = require('../../binder');
 var fn = require('../../transforms');
+var alerts = require('../../widgets/alerts');
 
 module.exports = function(params) {
     var self = this;
@@ -59,7 +60,7 @@ module.exports = function(params) {
     self.formatDateTime = fn.formatLocalDateTime;
 
     self.publish = function(vm, event) {
-        utils.confirmation("Are you sure you want to save & publish this consent?", function() {
+        alerts.confirmation("Are you sure you want to save & publish this consent?", function() {
             utils.startHandler(vm, event);
             
             utils.startHandler(vm, event);
