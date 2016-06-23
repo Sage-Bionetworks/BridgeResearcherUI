@@ -8,6 +8,7 @@
             <h3 data-bind="text: titleObs"></h3>
         </div>
         <div class="fixed-header-buttons">
+            <button class="ui red small button" data-bind="click: withdraw, visible: !noConsentObs()">Withdraw from study</button>
         </div>
     </div>
     <!-- ko component: {name: 'participant-tabset', params: {active: 'consents', isNewObs: isNewObs}} --><!-- /ko -->
@@ -15,7 +16,7 @@
 <div class="scrollbox">
     <errors></errors>
     <div class="loading_status" data-bind="visible: consentHistoryObs().length === 0">Loading...</div>
-    <div data-bind="visible: consentHistoryObs().length > 0 && isResearcher">
+    <div data-bind="visible: consentHistoryObs().length > 0">
         <table class="ui compact selectable table">
             <thead>
                 <tr>
@@ -56,8 +57,8 @@
                     </td>
                     <td class="red" data-bind="text: $data.withdrewOn"></td>
                     <td>
-                        <button data-bind="visible: $data.name !== 'No consent', click: $component.resendConsent"
-                            class="ui basic compact mini button">Resend consent</button>
+                        <button data-bind="visible: $data.name !== 'No consent' && $data.withdrewOn > 0, 
+                            click: $component.resendConsent" class="ui basic compact mini button">Resend consent</button>
                     </td>
                 </tr>
             </tbody>
