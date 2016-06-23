@@ -286,8 +286,8 @@ module.exports = {
     },
     updateSurvey: function(survey) {
         var createdString = new Date(survey.createdOn).toISOString();
-        var url = config.survey + survey.guid + '/revisions/' + createdOn;
-        return post(config.survey + survey.guid + '/revisions/' + createdOn, survey);
+        var url = config.survey + survey.guid + '/revisions/' + createdString;
+        return post(url, survey);
     },
     deleteSurvey: function(survey) {
         var createdString = new Date(survey.createdOn).toISOString();

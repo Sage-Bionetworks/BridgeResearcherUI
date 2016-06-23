@@ -336,6 +336,18 @@ module.exports = {
             "sharingScope": "all_qualified_researchers"
         };
     },
+    animatedDeleter: function(scrollTo, elementsObs) {
+        return function(element) {
+            // TODO: Replace with sweetalert
+            if (confirm("Are you sure?")) {
+                var index = elementsObs.indexOf(element);
+                elementsObs.remove(element);
+                setTimeout(function() {
+                    scrollTo(index);
+                }, 510);
+            }
+        };
+    },    
     mightyMessageFinder: mightyMessageFinder,
     findStudyName: function (studies, studyIdentifier) {
         try {
