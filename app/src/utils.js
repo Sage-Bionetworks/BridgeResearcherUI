@@ -3,6 +3,8 @@ require('knockout-postbox');
 var toastr = require('toastr');
 var config = require('./config');
 var $ = require('jquery');
+var swal = require('sweetalert');
+require('../../node_modules/sweetalert/dist/sweetalert.css');
 
 var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
 var pendingControl = null;
@@ -84,7 +86,20 @@ function createEmailTemplate(email, identifier) {
     }
     return parts[0] + "+" + identifier + "@" + parts[1];
 }
-
+function confirmation(message, func) {
+    swal({ title: "Hey now", text: message, showCancelButton: true,
+        confirmButtonText: "OK", confirmButtonColor: "#2185d0",
+    }, function(isConfirm){
+        if (isConfirm) { func(); }
+    });
+}
+function deleteConfirmation(message, func) {
+    swal({ title: "Hey now", text: message, showCancelButton: true,
+        confirmButtonColor: "#db2828", confirmButtonText: "Delete"
+    }, function(isConfirm){
+        if (isConfirm) { func(); }
+    });
+}
 /**
  * Common utility methods for ViewModels.
  */
@@ -314,17 +329,6 @@ module.exports = {
             }
         };
     },
-    animatedDeleter: function(scrollTo, elementsObs) {
-        return function(element) {
-            if (confirm("Are you sure?")) {
-                var index = elementsObs.indexOf(element);
-                elementsObs.remove(element);
-                setTimeout(function() {
-                    scrollTo(index);
-                }, 510);
-            }
-        };
-    },
     atLeastOneSignedConsent: function(consentHistories) {
         if (Object.keys(consentHistories).length === 0) {
             return true;
@@ -356,5 +360,7 @@ module.exports = {
         } catch(e) {
             throw new Error("Study '"+studyIdentifier+"' not found.");
         }
-    }
+    },
+    confirmation: confirmation,
+    deleteConfirmation: deleteConfirmation
 };

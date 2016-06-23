@@ -24,9 +24,8 @@
                 <tr>
                     <th width="10" data-bind="visible: isDeveloper"></th>
                     <th width="100">Date</th>
-                    <th width="10"></th>
+                    <th width="70"></th>
                     <th>JSON</th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody data-bind="foreach: itemsObs">
@@ -35,24 +34,23 @@
                         <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                     </td>
                     <td style="white-space: no-wrap" data-bind="text: $data.date"></td>
-                    <td>
-                        <a href="" class="json-expand-control" data-bind="visible: $data.collapsedObs, click: $component.toggle">
-                            <i class="plus square outline icon"></i>
-                        </a>
-                        <a href="" class="json-expand-control" data-bind="visible: !$data.collapsedObs(), click: $component.toggle">
-                            <i class="minus square outline icon"></i>
-                        </a>
-                    </td>
-                    <td>
-                        <div class="json-expand-control" data-bind="visible: $data.collapsedObs">
-                            <span data-bind="html: $data.collapsedValue"></span>
-                        </div>
-                        <div class="json-expand-control" data-bind="visible: !$data.collapsedObs()">
-                            <pre data-bind="visible: !$data.collapsedObs(), html: $data.formattedData"></pre>
-                        </div>
-                    </td>
                     <td style="text-align:right">
                         <button class="ui basic compact mini button" data-bind="click: $component.editReportRecord">Edit</button>
+                    </td>
+                    <td>
+                        <div class="json-expand-control" data-bind="visible: $data.collapsedObs && $data.isJson">
+                            <a href="" class="json-expand-control" data-bind="visible: $data.collapsedObs, click: $component.toggle">
+                                {<i style="margin:0;padding:0" class="plus square outline icon"></i>}
+                            </a>
+                        </div>
+                        <div style="position:relative" class="json-expand-control" data-bind="visible: !$data.collapsedObs() && $data.isJson">
+                            <a href="" style="position:absolute; left:.75rem; top:.15rem" class="json-expand-control" data-bind="visible: !$data.collapsedObs(), click: $component.toggle">
+                                <i class="minus square outline icon"></i>
+                            </a>
+                            <pre data-bind="visible: !$data.collapsedObs(), html: $data.formattedData"></pre>
+                        </div>
+                        <div data-bind="visible: !$data.isJson, text: $data.data">
+                        </div>
                     </td>
                 </tr>
             </tbody>

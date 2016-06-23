@@ -9,6 +9,7 @@ module.exports = function(params) {
         .bind('showIdentifier', typeof params.identifier === "undefined")
         .bind('identifier', params.identifier)
         .bind('date', params.date)
+        .bind('userId', params.userId)
         .bind('data', params.data);
 
     self.save = function(vm, event) {

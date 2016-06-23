@@ -398,7 +398,7 @@ module.exports = {
         return post(config.participants+"/"+id+"/requestResetPassword");
     },
     resendConsentAgreement: function(id, subpopGuid) {
-        return post(config.participants+"/"+id+"/subpopulations/" + subpopGuid + "/resendConsent");
+        return post(config.participants+"/"+id+"/consents/" + subpopGuid + "/resendConsent");
     },  
     resendEmailVerification: function(id) {
         return post(config.participants+"/"+id+"/resendEmailVerification");
