@@ -1,6 +1,7 @@
 var ko = require('knockout');
 var utils = require('./utils');
 var Promise = require('bluebird');
+var alerts = require('./widgets/alerts');
 
 function hasBeenChecked(item) {
     return item.checkedObs();
@@ -60,7 +61,7 @@ module.exports = {
         vm.deleteItems = function(vm, event) {
             var del = prepareDelete(vm, objName);
 
-            utils.deleteConfirmation(del.msg, function() {
+            alerts.deleteConfirmation(del.msg, function() {
                 utils.startHandler(self, event);
                 Promise.map(del.deletables, deleteFunc)
                     .then(makeTableRowHandler(vm, del.deletables, upLink, objName))

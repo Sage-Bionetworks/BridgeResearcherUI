@@ -3,6 +3,7 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var root = require('../../root');
 var fn = require('../../transforms');
+var alerts = require('../../widgets/alerts');
 
 var cssClassNameForStatus = {
     'disabled': 'negative',
@@ -32,7 +33,7 @@ module.exports = function() {
         return (total+"").replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " user records";
     }
     self.resendEmailVerification = function(vm, event) {
-        utils.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
+        alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
             var userId = vm.id;
             utils.startHandler(vm, event);
             serverService.resendEmailVerification(userId)
