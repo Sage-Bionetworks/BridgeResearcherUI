@@ -17,6 +17,7 @@
     <errors></errors>
     <div class="loading_status" data-bind="visible: consentHistoryObs().length === 0">Loading...</div>
     <div data-bind="visible: consentHistoryObs().length > 0">
+        <p data-bind="visible: noConsentObs"><i>This user is not currently enrolled in the study.</i></p>
         <table class="ui compact selectable table">
             <thead>
                 <tr>

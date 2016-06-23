@@ -1,5 +1,3 @@
-var jsdom = require('mocha-jsdom');
-var rerequire = jsdom.rerequire;
 var expect = require('chai').expect;
 var utils = require('../app/src/utils');
 
