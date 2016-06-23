@@ -457,6 +457,9 @@ module.exports = {
     deleteParticipantActivities: function(userId) {
         return del(config.participants + '/' + userId + '/activities');
     },
+    withdrawParticipantFromStudy: function(userId) {
+        return post(config.participants + '/' + userId + '/consents/withdraw');
+    },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {
             throw Error("Session listener not a function");
