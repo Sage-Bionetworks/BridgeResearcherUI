@@ -457,8 +457,8 @@ module.exports = {
     deleteParticipantActivities: function(userId) {
         return del(config.participants + '/' + userId + '/activities');
     },
-    withdrawParticipantFromStudy: function(userId) {
-        return post(config.participants + '/' + userId + '/consents/withdraw');
+    withdrawParticipantFromStudy: function(userId, reason) {
+        return post(config.participants + '/' + userId + '/consents/withdraw', reason);
     },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {

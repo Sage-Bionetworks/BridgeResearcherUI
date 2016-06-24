@@ -8,9 +8,7 @@
             <h3 data-bind="text: titleObs"></h3>
         </div>
         <div class="fixed-header-buttons">
-            <!--
-            <button class="ui red small button" data-bind="click: withdraw, visible: !noConsentObs()">Withdraw from study</button>
-            -->
+            <button class="ui red small button" data-bind="click: withdraw, visible: !noConsentObs()">Withdraw from study&hellip;</button>
         </div>
     </div>
     <!-- ko component: {name: 'participant-tabset', params: {active: 'consents', isNewObs: isNewObs}} --><!-- /ko -->
@@ -43,9 +41,12 @@
                             <i class="dropdown icon"></i>
                             <div class="menu">
                                 <div class="header signature-container">
-                                    <div class="ui image">
+                                    <div class="ui image" data-bind="visible: !!$data.imageData">
                                         <img class="signature" data-bind="attr:{style: 'background-image: url('+$data.imageData+')'}"/>
                                     </div>
+                                </div>
+                                <div class="item" data-bind="visible: !$data.imageData">
+                                    <p><i>No signature</i></p>
                                 </div>
                                 <div class="item">
                                     Birthdate: <span class="category" data-bind="text: $data.birthdate"></span>
