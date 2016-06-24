@@ -25,14 +25,15 @@ module.exports = function(params) {
         });
     };
     self.withdraw = function(vm, event) {
-        alerts.deleteConfirmation("This person will have to go through the whole consent process again before submitting more data.\n\n "+
-            "After you do this, you should also sign the user out of the app (under the General tab).", function() {
-            utils.startHandler(vm, event);
-            serverService.withdrawParticipantFromStudy(params.userId)
-                .then(load)
-                .then(utils.successHandler(vm, event, "User has been withdrawn from the study."))
-                .catch(utils.failureHandler(vm, event));
-        }, "Withdraw");
+        root.openDialog('withdrawal', {userId: params.userId, vm: self});
+    };
+    self.finishWithdrawal = function(reasonString) {
+        var reason = {"reason": reasonString};
+        serverService.withdrawParticipantFromStudy(params.userId, reason)
+            .then(root.closeDialog)
+            .then(load)
+            .then(utils.successHandler(self, null, "User has been withdrawn from the study."))
+            .catch(utils.failureHandler());
     };
 
     // I know, ridiculous...
