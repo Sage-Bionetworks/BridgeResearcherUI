@@ -56,10 +56,6 @@ module.exports = function(params) {
     self.loadingFunc = function loadPage(params) {
         return serverService.getParticipantActivities(self.userIdObs(), params)
             .then(binder.update('total','items'))
-            .then(function(response) {
-                console.log(response);
-                return response;
-            })
             .then(msgIfNoRecords)
             .catch(utils.failureHandler());
     };    

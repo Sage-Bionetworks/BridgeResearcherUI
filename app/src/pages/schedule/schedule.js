@@ -104,6 +104,22 @@ module.exports = function(params) {
                 activities: self.activitiesObs().map(extractActivityFromObservables)
             };
             utils.deleteUnusedProperties(sch);
+            // some of these properties are mutually exclusive so based on the type of schedule,
+            // delete some fields. This comes up if you schedule one way, then change and schedule another 
+            // way.
+            switch( self.editorScheduleTypeObs() ) {
+                case 'once':
+                    delete sch.interval;
+                    delete sch.cronTrigger;
+                    break;
+                case 'interval':
+                    delete sch.cronTrigger;
+                    break;
+                case 'cron':
+                    delete sch.interval;
+                    delete sch.times;
+                    break;
+            }
             return sch;
         },
         write: function(schedule) {
