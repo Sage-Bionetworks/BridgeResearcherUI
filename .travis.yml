@@ -2,9 +2,8 @@ language: node_js
 node_js:
     - "4.0.0"
 script:
-    - mocha --recursive
+    - npm test
     - webpack -p
-    - gzip --best --stdout app/dist/bundle.js > app/dist/bundle.js.gz
 deploy:
     - provider: s3
       access_key_id: ${AWS_KEY}
