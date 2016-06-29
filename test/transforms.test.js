@@ -151,10 +151,7 @@ describe("transforms", function() {
         // This is difficult to test because it is browser dependent and dependent on the user's settings.
         xit("works", function() {
             var millis = 1466529126481;
-            expect(fn.formatLocalDateTimeWithoutZone(new Date(millis))).to.equal(expectedString/*"6/21/2016 @ 17:12"*/);
+            expect(fn.formatLocalDateTimeWithoutZone(new Date(millis))).to.equal("6/21/2016 @ 17:12");
         });
-    });
-    xdescribe("callObsCallback", function() {
-        // TODO
     });
 });
