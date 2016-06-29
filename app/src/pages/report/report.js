@@ -50,7 +50,6 @@ module.exports = function(params) {
     };
     function mapResponse(response) {
         response.items = response.items.map(jsonFormatter.mapItem);
-        console.log(response);
         self.itemsObs(response.items.sort());
     }
     function load() {

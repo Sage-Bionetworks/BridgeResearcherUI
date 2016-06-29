@@ -14,10 +14,11 @@ module.exports = function(params) {
     self.save = function(vm, event) {
         var entry = binder.persist({});
         try {
-            entry.data = JSON.stringify(JSON.parse(entry.data));
+            entry.data = JSON.parse(entry.data);
         } catch(e) {
             // not JSON.
         }
+        console.log(entry);
         utils.deleteUnusedProperties(entry);
         if (!entry.identifier) {
             // Because we're going to create an "undefined" report or something if we

@@ -10,12 +10,12 @@ module.exports = function(params) {
         .bind('identifier', params.identifier)
         .bind('date', params.date)
         .bind('userId', params.userId)
-        .bind('data', params.data);
+        .bind('data', JSON.stringify(params.data));
 
     self.save = function(vm, event) {
         var entry = binder.persist({});
         try {
-            entry.data = JSON.stringify(JSON.parse(entry.data));
+            entry.data = JSON.parse(entry.data);
         } catch(e) {
             // not JSON.
         }

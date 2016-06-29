@@ -26,8 +26,7 @@ function prettyPrint(obj) {
 function mapItem(item) {
     item.collapsedObs = ko.observable(true);
     try {
-        var json = JSON.parse(item.data);
-        item.formattedData = prettyPrint(json);
+        item.formattedData = prettyPrint(item.data);
         item.collapsedValue = "{&hellip;}";
         item.isJson = true;
     } catch(e) {
