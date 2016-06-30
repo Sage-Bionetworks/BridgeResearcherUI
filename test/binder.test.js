@@ -8,7 +8,6 @@ describe("binder", function() {
     function bang(value) {
         return value + "!"
     }
-    
     it("can instantiate a binder object", function() {
         var vm = {};
         var binder = bind(vm);

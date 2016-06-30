@@ -1,5 +1,5 @@
-function isNotBlank(obj) {
-    return (typeof obj !== "undefined") && obj !== null && obj !== "";
+function isBlank(obj) {
+    return (typeof obj === "undefined") || obj === null || obj === "";
 }
 function is(obj, typeName) {
     return Object.prototype.toString.call(obj) === "[object "+typeName+"]";
@@ -35,8 +35,11 @@ function persistAttributes(value) {
         return map;
     }, {});
 }
+function nameIsBlank(model) {
+    return isBlank(model.firstName) && isBlank(model.lastName);
+}
 function formatTitle(value, context) {
-    if (context.model.id === "new") {
+    if (context.model.id === "new" && nameIsBlank(context.model)) {
         return "New participant";
     }
     return formatName(context.model);
@@ -118,7 +121,7 @@ function formatLocalDateTimeWithoutZone(input) {
 
 function dateOrDefault(input, defaultValue) {
     var rightType = is(input, 'Date') || is(input, 'String');
-    if (rightType && isNotBlank(input)) {
+    if (rightType && !isBlank(input)) {
         var date = new Date(input);
         if (date.toString() !== 'Invalid Date') {
             return {value: date, isDate: true};
@@ -127,11 +130,11 @@ function dateOrDefault(input, defaultValue) {
     return {value: defaultValue, isDate: false};
 }
 function formatVersionRange(minValue, maxValue) {
-    if (isNotBlank(minValue) && isNotBlank(maxValue)) {
+    if (!isBlank(minValue) && !isBlank(maxValue)) {
         return minValue + "-" + maxValue;
-    } else if (isNotBlank(minValue)) {
+    } else if (!isBlank(minValue)) {
         return minValue + "+";
-    } else if (isNotBlank(maxValue)) {
+    } else if (!isBlank(maxValue)) {
         return "0-" + maxValue;
     }
     return "<i>All versions</i>";
