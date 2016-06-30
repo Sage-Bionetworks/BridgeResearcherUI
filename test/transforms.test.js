@@ -94,10 +94,15 @@ describe("transforms", function() {
 
             context = { model: { id: "new" } };
             expect (fn.formatTitle(undefined, context) ).to.equal("New participant");
-
             
             context = { model: { id: "foo" } };
             expect (fn.formatTitle(undefined, context) ).to.equal("—");
+
+            context = { model: { id: "new", firstName: "Fred" } };
+            expect (fn.formatTitle(undefined, context) ).to.equal("Fred");
+
+            context = { model: { id: "new", firstName: "Fred", lastName: "Flintstone" } };
+            expect (fn.formatTitle(undefined, context) ).to.equal("Fred Flintstone");
         });
     });
     describe("formatLocalDateTime", function() {

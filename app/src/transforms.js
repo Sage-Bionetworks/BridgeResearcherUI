@@ -1,3 +1,6 @@
+function isBlank(obj) {
+    return (typeof obj === "undefined") || obj === null || obj === "";
+}
 function isNotBlank(obj) {
     return (typeof obj !== "undefined") && obj !== null && obj !== "";
 }
@@ -35,8 +38,11 @@ function persistAttributes(value) {
         return map;
     }, {});
 }
+function nameIsBlank(model) {
+    return isBlank(model.firstName) && isBlank(model.lastName);
+}
 function formatTitle(value, context) {
-    if (context.model.id === "new") {
+    if (context.model.id === "new" && nameIsBlank(context.model)) {
         return "New participant";
     }
     return formatName(context.model);
