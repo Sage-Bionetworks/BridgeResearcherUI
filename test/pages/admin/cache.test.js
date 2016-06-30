@@ -2,20 +2,25 @@ var expect = require('chai').expect;
 var rewire =  require('rewire');
 var sinon = require('sinon');
 var Promise = require('../../dummy_promise');
-var CacheViewModel = rewire('../../../app/src/pages/admin/cache/cache');
 
-// If these are not sorted by the view AAA-CCC, test will fail
 var CACHE_KEYS = ['CCC','BBB','AAA'];
 
-// stub out serverService
+var CacheViewModel = rewire('../../../app/src/pages/admin/cache/cache');
+
+var tables = rewire('../../../app/src/tables');
+tables.__set__('alerts', {
+    deleteConfirmation: function(message, func, deleteButton) {
+        func();
+    }
+});
 var deleteStub = sinon.stub().returns(new Promise({message: "Cache key deleted."}));
 var getStub = sinon.stub().returns(new Promise(CACHE_KEYS));
 CacheViewModel.__set__("serverService", {deleteCacheKey: deleteStub, getCacheKeys: getStub});
+CacheViewModel.__set__("tables", tables);
 
 describe("Admin/CacheViewModel", function() {
     it("works", function() {
         var view = new CacheViewModel();
-        view.__noAlerts = true; // disable sweetalert confirmation
 
         expect(view.itemsObs().length).to.equal(3);
 

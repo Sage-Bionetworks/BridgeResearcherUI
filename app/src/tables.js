@@ -61,21 +61,13 @@ module.exports = {
         vm.deleteItems = function(vm, event) {
             var del = prepareDelete(vm, objName);
 
-            if (vm.__noAlerts) {
+            alerts.deleteConfirmation(del.msg, function() {
                 utils.startHandler(self, event);
                 Promise.map(del.deletables, deleteFunc)
                     .then(makeTableRowHandler(vm, del.deletables, upLink, objName))
                     .then(utils.successHandler(vm, event, del.confirmMsg))
                     .catch(utils.failureHandler(vm, event));
-            } else {
-                alerts.deleteConfirmation(del.msg, function() {
-                    utils.startHandler(self, event);
-                    Promise.map(del.deletables, deleteFunc)
-                        .then(makeTableRowHandler(vm, del.deletables, upLink, objName))
-                        .then(utils.successHandler(vm, event, del.confirmMsg))
-                        .catch(utils.failureHandler(vm, event));
-                });
-            }
+            });
         };
     },
     hasBeenChecked: function(item) {
