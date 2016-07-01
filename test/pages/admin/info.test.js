@@ -1,14 +1,16 @@
 var expect = require('chai').expect;
 var rewire =  require('rewire');
 var sinon = require('sinon');
-var Promise = require('../../dummy_promise');
-var InfoViewModel = rewire('../../../app/src/pages/admin/info/info');
+var stubs = require('../../stubs');
+var serverService = stubs.serverService;
 
-// stub out serverService
-var saveStub = sinon.stub().returns(new Promise({message: "Study saved."}));
-var getStub = sinon.stub().returns(
-    new Promise({healthCodeExportEnabled: true, emailVerificationEnabled: false}));
-InfoViewModel.__set__("serverService", {saveStudy: saveStub, getStudy: getStub});
+var STUDY = {healthCodeExportEnabled: true, emailVerificationEnabled: false};
+
+var InfoViewModel = rewire('../../../app/src/pages/admin/info/info');
+InfoViewModel.__set__("serverService", serverService
+    .doReturn('saveStudy', {message: "Study saved."})
+    .doReturn('getStudy', STUDY)
+);
 
 describe("Admin/InfoViewModel", function() {
     it("works", function() {
@@ -21,9 +23,9 @@ describe("Admin/InfoViewModel", function() {
         view.emailVerificationEnabledObs(true);
         view.save(view);
 
-        var savedStudy = saveStub.firstCall.args[0];
+        var savedStudy = serverService.saveStudy.firstCall.args[0];
         expect(savedStudy.healthCodeExportEnabled).to.be.false;
         expect(savedStudy.emailVerificationEnabled).to.be.true;
-        expect(saveStub.firstCall.args[1]).to.be.true;
+        expect(serverService.saveStudy.firstCall.args[1]).to.be.true;
     });
 });

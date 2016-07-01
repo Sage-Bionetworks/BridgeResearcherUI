@@ -1,5 +1,6 @@
 module.exports = {
-    entry: './app/src/routes.js',
+    devtool: 'source-map',
+    entry: ['./app/src/routes.js'],
     output: {
         path: './app/dist',
         filename: 'bundle.js'

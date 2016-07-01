@@ -28,6 +28,7 @@
     "karma": "^1.1.0",
     "karma-mocha": "^1.1.1",
     "karma-phantomjs-launcher": "^1.0.1",
+    "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
     "knockout": "^3.4.0",
     "knockout-postbox": "^0.5.2",

@@ -1,22 +1,18 @@
 var expect = require('chai').expect;
 var rewire =  require('rewire');
 var sinon = require('sinon');
-var Promise = require('../../dummy_promise');
+var stubs = require('../../stubs');
+var serverService = stubs.serverService;
 
 var CACHE_KEYS = ['CCC','BBB','AAA'];
 
 var CacheViewModel = rewire('../../../app/src/pages/admin/cache/cache');
-
-var tables = rewire('../../../app/src/tables');
-tables.__set__('alerts', {
-    deleteConfirmation: function(message, func, deleteButton) {
-        func();
-    }
+CacheViewModel.__set__({
+    'serverService': serverService
+        .doReturn('deleteCacheKey', {message: "Cache key deleted."})
+        .doReturn('getCacheKeys', CACHE_KEYS),
+    'tables': stubs.tables
 });
-var deleteStub = sinon.stub().returns(new Promise({message: "Cache key deleted."}));
-var getStub = sinon.stub().returns(new Promise(CACHE_KEYS));
-CacheViewModel.__set__("serverService", {deleteCacheKey: deleteStub, getCacheKeys: getStub});
-CacheViewModel.__set__("tables", tables);
 
 describe("Admin/CacheViewModel", function() {
     it("works", function() {
@@ -32,8 +28,8 @@ describe("Admin/CacheViewModel", function() {
         expect(view.atLeastOneChecked()).to.be.true;
 
         view.deleteItems(view);
-        expect(deleteStub.calledTwice).to.be.true;
-        expect(deleteStub.firstCall.args[0]).to.eql('AAA');
-        expect(deleteStub.secondCall.args[0]).to.eql('CCC');
+        expect(serverService.deleteCacheKey.calledTwice).to.be.true;
+        expect(serverService.deleteCacheKey.firstCall.args[0]).to.eql('AAA');
+        expect(serverService.deleteCacheKey.secondCall.args[0]).to.eql('CCC');
     });
 });

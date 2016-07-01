@@ -19,6 +19,10 @@ Run a server (localhost:8080)
 Rebuild when a file changes
 
     npm run watch
+
+Continuously run tests
+
+    npm run test:watch
     
 Build a release
 
