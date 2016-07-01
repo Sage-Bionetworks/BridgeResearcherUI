@@ -1,7 +1,9 @@
 var ko = require('knockout');
+require('knockout-postbox');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var root = require('../../root');
+var tables = require('../../tables');
 var fn = require('../../transforms');
 var alerts = require('../../widgets/alerts');
 
@@ -17,8 +19,12 @@ module.exports = function() {
     self.total = 0;
     self.searchFilter = null;
 
+    tables.prepareTable(self, "participant", "#/participants", function(participant) {
+        return serverService.deleteParticipant(participant.id);
+    });
+
+    self.isAdmin = root.isAdmin;
     self.recordsObs = ko.observable("");
-    self.itemsObs = ko.observableArray([]);
     self.formatTitleCase = fn.formatTitleCase;
     self.formatName = fn.formatName;
     self.formatDateTime = fn.formatLocalDateTime;
@@ -32,6 +38,14 @@ module.exports = function() {
     function formatCount(total) {
         return (total+"").replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " user records";
     }
+    function updateParticipantStatus(participant) {
+        participant.status = "enabled";
+        return serverService.updateParticipant(participant);
+    }
+    function publishPageUpdate(response) {
+        ko.postbox.publish('participants-page-refresh');
+        return response;
+    }
     self.resendEmailVerification = function(vm, event) {
         alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
             var userId = vm.id;
@@ -40,6 +54,14 @@ module.exports = function() {
                 .then(utils.successHandler(vm, event, "Resent email to verify participant's email address."))
                 .catch(utils.failureHandler(vm, event));
         });
+    };
+    self.enableAccount = function(item, event) {
+        utils.startHandler(item, event);
+        serverService.getParticipant(item.id)
+            .then(updateParticipantStatus)
+            .then(publishPageUpdate)
+            .then(utils.successHandler(item, event, "User account activated."))
+            .catch(utils.failureHandler(item, event));
     };
     self.exportDialog = function() {
         root.openDialog('participant_export', {searchFilter: self.searchFilter, total: self.total});    

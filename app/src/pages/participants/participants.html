@@ -6,6 +6,7 @@
         <div class="fixed-header-buttons">
             <input readonly data-bind="value: recordsObs()"/>
             <button class="ui small button" data-bind="click: exportDialog">Export&hellip;</button>
+            <button class="ui red small button" data-bind="visible: isAdmin, disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
             <a href="#/participants/new" class="ui primary small button">New Participant</a>
         </div>
     </div>
@@ -21,6 +22,7 @@
         <table class="ui compact selectable table">
             <thead>
                 <tr>
+                    <th width="10" data-bind="visible: isAdmin"></th>
                     <th>Email</th>
                     <th>Name</th>
                     <th style="white-space: nowrap">Created On</th>
@@ -30,15 +32,20 @@
             </thead>
             <tbody data-bind="foreach: itemsObs">
                 <tr data-bind="css: $component.classNameForStatus($data)">
+                    <td data-bind="visible: $parent.isAdmin">
+                        <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+                    </td>
                     <td>
                         <a data-bind="attr: {'href': '#/participants/'+$data.id+'/'+encodeURIComponent($component.formatName($data))}, text: $data.email"></a>
                     </td>
                     <td data-bind="text: $component.formatName($data)"></td>
                     <td style="white-space: nowrap" data-bind="text: $component.formatDateTime($data.createdOn)"></td>
                     <td data-bind="text: $component.formatTitleCase($data.status)"></td>
-                    <td>
+                    <td style="text-align:right">
                         <button data-bind="visible: $data.status === 'unverified', click: $component.resendEmailVerification"
                             class="ui basic compact mini button">Resend email verification</button>
+                        <button data-bind="visible: $data.status === 'unverified', click: $component.enableAccount"
+                            class="ui basic compact mini button">Enable account</button>
                     </td>
                 </tr>
             </tbody>

@@ -99,6 +99,8 @@ module.exports = function(params) {
     };
     self.save = function(vm, event) {
         var participant = binder.persist(NEW_PARTICIPANT);
+        // This should be updating the title, but it isn't, because the id is
+        // still "new".
         binder.update()(participant);
 
         utils.startHandler(vm, event);

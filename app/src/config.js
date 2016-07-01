@@ -33,7 +33,7 @@ module.exports = {
     getCurrentStudy: '/v3/studies/self',
     getStudyPublicKey: '/v3/studies/self/publicKey',
     getStudyList: '/v3/studies?format=summary',
-    emailRoster: '/v3/users/emailParticipantRoster',
+    users: '/v3/users',
     requestResetPassword: '/v3/auth/requestResetPassword',
     surveys: '/v3/surveys',
     publishedSurveys: '/v3/surveys/published',

@@ -258,7 +258,7 @@ module.exports = {
         return get(config.subpopulations + "/" + guid + "/consents");
     },
     emailRoster: function() {
-        return post(config.emailRoster);
+        return post(config.users + '/emailParticipantRoster');
     },
     getSurveys: function() {
         return get(config.surveys);
@@ -390,6 +390,9 @@ module.exports = {
     },
     updateParticipant: function(participant) {
         return post(config.participants+"/"+participant.id, participant);
+    },
+    deleteParticipant: function(id) {
+        return del(config.users + '/' + id);
     },
     signOutUser: function(id) {
         return post(config.participants+"/"+id+"/signOut");  

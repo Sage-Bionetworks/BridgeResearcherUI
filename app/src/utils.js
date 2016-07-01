@@ -161,7 +161,9 @@ module.exports = {
      * @param event
      */
     startHandler: function(vm, event) {
-        displayPendingControl(event.target);
+        if (event && event.target) {
+            displayPendingControl(event.target);
+        }
         ko.postbox.publish("clearErrors");
     },
     /**
