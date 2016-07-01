@@ -19,7 +19,7 @@ var pageSets = {
     'reports': ['reports', 'report']
 };
 function roleFunc(observer, role) {
-    return ko.computed(function() {return observer.contains(role);});        
+    return ko.computed(function() {return observer().indexOf(role) > -1;});        
 }
 
 toastr.options = config.toastr;
@@ -115,7 +115,7 @@ var RootViewModel = function() {
         serverService.getStudy().then(function(study) {
             // sensible defaults.
             var defaults = {
-                showParticipants: self.isAdmin() || (study.emailVerificationEnabled && self.isResearcher()),
+                showParticipants: study.emailVerificationEnabled && self.isResearcher(),
                 showLabCodes: !study.emailVerificationEnabled && self.isDeveloper(),
                 showExternalIds: study.emailVerificationEnabled && study.externalIdValidationEnabled && self.isDeveloper()
             };

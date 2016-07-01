@@ -4,14 +4,16 @@ module.exports = function(config) {
     config.set({
         files: ['./node_modules/phantomjs-polyfill-object-assign/object-assign-polyfill.js',
             'test/*.test.js', 'test/**/*.test.js'],
-        plugins: ['karma-mocha', 'karma-webpack', 'karma-phantomjs-launcher'],
+        plugins: ['karma-mocha', 'karma-webpack', 'karma-phantomjs-launcher', 'karma-sourcemap-loader'],
         frameworks: ['mocha'],        
         preprocessors: {
-            'test/*.test.js': ['webpack'],
-            'test/**/*.test.js': ['webpack']
+            'test/*.test.js': ['webpack','sourcemap'],
+            'test/**/*.test.js': ['webpack','sourcemap']
         },
+        // This should, more or less, be a copy of webpack.config.js
         webpack: {
-            entry: './app/src/routes.js',
+            devtool: 'sourcemap',
+            entry: ['./app/src/routes.js'],
             output: {path: './app/dist', filename: 'bundle.js'},
             plugins: [new RewirePlugin()],
             module: {

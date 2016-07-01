@@ -3,6 +3,7 @@ var serverService = require('../../services/server_service');
 var bind = require('../../binder');
 var tables = require('../../tables');
 var fn = require('../../transforms');
+var alerts = require('../../widgets/alerts');
 
 var deleteMsg = "In development, you can delete all activities on a test account in order to work on an app.\n\n" +
     "In production, all activity state is lost, so activities will be recreated the next time the user asks for them. " +

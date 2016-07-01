@@ -68,7 +68,9 @@ module.exports = function(params) {
         self.idObs(response.identifier);
         return response;
     }
-    
+    function signOut() {
+        return serverService.signOutUser(self.userIdObs());        
+    }    
     self.sharingScopeOptions = OPTIONS;
 
     self.enableAccount = function(vm, event) {
@@ -80,7 +82,7 @@ module.exports = function(params) {
     self.disableAccount = function(vm, event) {
         alerts.confirmation("We must save any updates before disabling the account.", function() {
             self.statusObs("disabled");
-            self.save(vm, event);
+            self.save(vm, event).then(signOut);
         });
     };
     self.requestResetPassword = function(vm, event) {
@@ -105,12 +107,12 @@ module.exports = function(params) {
 
         utils.startHandler(vm, event);
         if (self.isNewObs()) {
-            serverService.createParticipant(participant)
+            return serverService.createParticipant(participant)
                 .then(afterCreate)
                 .then(utils.successHandler(vm, event, "Participant created."))
                 .catch(utils.failureHandler(vm, event));
         } else {
-            serverService.updateParticipant(participant)
+            return serverService.updateParticipant(participant)
                 .then(utils.successHandler(vm, event, "Participant updated."))
                 .catch(utils.failureHandler(vm, event));
         }
