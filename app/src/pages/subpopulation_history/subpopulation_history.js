@@ -7,21 +7,13 @@ var alerts = require('../../widgets/alerts');
 module.exports = function(params) {
     var self = this;
 
-    bind(self)
+    var binder = bind(self)
         .obs('active', true)
         .obs('createdOn')
         .obs('historyItems[]')
         .obs('guid', params.guid)
+        .obs('publishedConsentCreatedOn')
         .obs('name');
-
-    serverService.getSubpopulation(params.guid).then(function(subpop) {
-        self.nameObs(subpop.name);
-    });
-
-    function updateHistoryItems(response) {
-        self.historyItemsObs(response.items);
-        return response;
-    }
 
     self.formatDateTime = fn.formatLocalDateTime;
 
@@ -39,9 +31,22 @@ module.exports = function(params) {
         });
     };
     
+    function getHistory() {
+        return serverService.getConsentHistory(params.guid);
+    }
+    function addActiveFlag(item) {
+        item.active = (self.publishedConsentCreatedOnObs() === item.createdOn);
+        return item;
+    }
+    function updateHistory(response) {
+        self.historyItemsObs(response.items.map(addActiveFlag));
+    }
+
     function load() {
-        return serverService.getConsentHistory(params.guid)
-            .then(updateHistoryItems);
+        return serverService.getSubpopulation(params.guid)
+            .then(binder.update('name','publishedConsentCreatedOn'))
+            .then(getHistory)
+            .then(updateHistory);
     }
     load();
 };
