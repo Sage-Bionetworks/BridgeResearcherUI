@@ -15,6 +15,11 @@ module.exports = function(params) {
         .obs('noConsent', true)
         .obs('title', params.name);
 
+    function signOut() {
+        self.noConsentObs(true);
+        return serverService.signOutUser(self.userIdObs());        
+    }
+
     self.resendConsent = function(vm, event) {
         var subpopGuid = vm.consentURL.split("/subpopulations/")[1].split("/consents/")[0];
         alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
@@ -32,6 +37,7 @@ module.exports = function(params) {
         serverService.withdrawParticipantFromStudy(params.userId, reason)
             .then(root.closeDialog)
             .then(load)
+            .then(signOut)
             .then(utils.successHandler(self, null, "User has been withdrawn from the study."))
             .catch(utils.failureHandler());
     };
