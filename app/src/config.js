@@ -25,6 +25,9 @@ module.exports = {
         },
         'parkinson-lux': {
             showExternalIds: true
+        },
+        'lilly': {
+            showParticipants: true
         }
     },
     signIn: '/v3/auth/signIn',
