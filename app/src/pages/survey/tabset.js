@@ -1,5 +1,4 @@
 var ko = require('knockout');
-var utils = require('../../utils');
 var fn = require('../../transforms');
 
 module.exports = function(params) {

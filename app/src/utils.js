@@ -84,6 +84,19 @@ function createEmailTemplate(email, identifier) {
     }
     return parts[0] + "+" + identifier + "@" + parts[1];
 }
+function getDateRange(dayOffset) {
+    dayOffset = dayOffset || 0;
+
+    var end = new Date();
+    end.setDate(end.getDate()+dayOffset);
+    end.setHours(23,59,59,999);
+
+    var start = new Date();
+    start.setDate(start.getDate()+dayOffset);
+    start.setHours(0,0,0,0);
+
+    return {startTime: start.toISOString(), endTime: end.toISOString()};
+}
 
 /**
  * Common utility methods for ViewModels.
@@ -359,5 +372,6 @@ module.exports = {
         } catch(e) {
             throw new Error("Study '"+studyIdentifier+"' not found.");
         }
-    }
+    },
+    getDateRange: getDateRange
 };

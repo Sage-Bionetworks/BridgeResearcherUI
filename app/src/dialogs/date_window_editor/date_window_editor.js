@@ -1,5 +1,4 @@
 var ko = require('knockout');
-var utils = require('../../utils');
 var root = require('../../root');
 var fn = require('../../transforms');
 
