@@ -3,6 +3,8 @@ var serverService = require('../../services/server_service');
 var bind = require('../../binder');
 var tables = require('../../tables');
 var transforms = require('../../transforms');
+var ko = require('knockout');
+var Promise = require('bluebird');
 
 var ranges = Object.freeze([
     {value: 0, label:"Today"},
@@ -13,22 +15,15 @@ var ranges = Object.freeze([
     {value:-5, label:"5 days ago"},
     {value:-6, label:"6 days ago"},
     {value:-7, label:"7 days ago"},
-]);
 
-function fakeResponse(response) {
-    response.items = [
-        {"contentLength":10000,"contentMd5":"abc","contentType":"application/json","filename":"filename.zip",
-        "recordId":"ABC","status":"succeeded","studyId":"api","requestedOn":"2016-07-20T17:10:40.067Z",
-        "completedOn":"2016-07-20T17:10:40.140Z","completedBy":"s3_worker","uploadDate":"2016-10-10",
-        "uploadId":"021a2e98-4bf0-470f-a7a5-0354137546d8","validationMessageList":["message 1","message 2"],
-        "version":2,"objectId":"DEF","type":"Upload"},
-        {"contentLength":10000,"contentMd5":"abc","contentType":"application/json","filename":"filename.zip",
-        "recordId":"ABC","status":"requested","studyId":"api","requestedOn":"2016-07-20T17:10:40.067Z",
-        "uploadId":"021a2e98-4bf0-470f-a7a5-0354137546d8","validationMessageList":["message 1","message 2"],
-        "version":2,"objectId":"DEF","type":"Upload"}        
-    ];
-    return response;
-}
+    {value:-8, label:"8 days ago"},
+    {value:-9, label:"9 days ago"},
+    {value:-10, label:"10 days ago"},
+    {value:-11, label:"11 days ago"},
+    {value:-12, label:"12 days ago"},
+    {value:-13, label:"13 days ago"},
+    {value:-14, label:"14 days ago"}
+]);
 
 module.exports = function(params) {
     var self = this;
@@ -45,6 +40,7 @@ module.exports = function(params) {
         .obs('title', params.name);
 
     self.formatLocalDateTime = transforms.formatLocalDateTime;
+    self.selectedRangeObs.subscribe(load);
 
     tables.prepareTable(self, 'upload');
 
@@ -59,36 +55,60 @@ module.exports = function(params) {
     self.priorDay = function() {
         var index = getSelectedIndex();
         self.selectedRangeObs(ranges[index+1]);
-        load();
         return false;
     };
     self.nextDay = function() {
         var index = getSelectedIndex();
         self.selectedRangeObs(ranges[index-1]);
-        load();
         return false;
     };
     self.selectRange = function(data, event) {
         self.selectedRangeObs(data);
-        load();
         return false;
     };
     self.uploadURL = function(data) {
         return '#/participants/' + self.userIdObs() + '/uploads/' + data.uploadId + '/' + encodeURIComponent(params.name);
     };
-
+    self.validationErrors = function(data) {
+        return "<ul>" + data.validationMessageList.map(function(error) {
+            return "<li>"+error+"</li>";
+        }).join('') + "</ul>";
+    };
     function getSelectedIndex() {
         return ranges.indexOf( self.selectedRangeObs() );
     }
+    function forEachItem(item, i) {
+        return getContentOfUpload(item, i*0);
+    }
+    function makeStatusCall(item) {
+        return serverService.getParticipantUploadStatus(item.uploadId);
+    }
+    function getContentOfUpload(item, ms) {
+        return Promise.delay(ms, item)
+            .then(makeStatusCall)
+            .then(function(response) {
+                var id = response.record.schemaId;
+                var rev = response.record.schemaRevision;
+                item.contentObs(id);
+                item.hrefObs('/#/schemas/'+encodeURIComponent(id)+'/versions/'+rev);
+            });
+    }
+    
     function processUploads(response) {
-        if (response.items.length === 0) {
-            response = fakeResponse(response);
-        }
         self.loadedOnceObs(true);
         var dateString = transforms.formatLocalDateTimeWithoutZone(response.startTime).split(" @ ")[0];
         self.dayObs(dateString);
+
+        var finishedItems = response.items.filter(function(item) {
+            return item.status === 'succeeded';
+        }).map(function(item) {
+            item.contentObs = ko.observable();
+            item.hrefObs = ko.observable();
+            return item;
+        });
         self.itemsObs(response.items);
         self.pagerLoadingObs(false);
+        Promise.each(finishedItems, forEachItem);
         return response;
     }
 
