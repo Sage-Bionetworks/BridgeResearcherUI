@@ -440,6 +440,13 @@ module.exports = {
     getParticipantReports: function() {
         return get(config.reports+query({"type":"participant"}));
     },
+    getParticipantUploads: function(userId, startTime, endTime) {
+        var queryString = query({startTime: startTime, endTime: endTime});
+        return get(config.participants + '/' + userId + '/uploads' + queryString);
+    },
+    getParticipantUploadStatus: function(uploadId) {
+        return get(config.uploadstatuses + '/' + uploadId);
+    },
     getParticipantReport: function(userId, identifier, startDate, endDate) {
         var queryString = query({startDate: startDate, endDate: endDate});
         return get(config.participants + '/' + userId + '/reports/' + identifier + queryString);

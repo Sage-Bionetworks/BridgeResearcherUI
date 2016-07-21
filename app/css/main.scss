@@ -87,6 +87,7 @@ footer p {
 
 .loading_status {
     font-size: larger;
+    clear: both;
 }
 .public-key {
     font-family:monospace;
@@ -96,7 +97,6 @@ footer p {
 }
 .vertical-padding {
     margin: 0 0 .5rem 0;
-    /*margin: 1rem 0;*/
 }
 .action.item {
     margin-right: 1rem;
@@ -152,10 +152,6 @@ footer p {
         /* Native size: 156x311px */
         height: 11.7rem!important;
         width: 23.3rem!important;
-        /*
-        height: 15.6rem!important;
-        width: 31.1rem!important;
-        */
     }
 }
 

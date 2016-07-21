@@ -2,7 +2,6 @@ var serverService = require('../../services/server_service');
 var bind = require('../../binder');
 var root = require('../../root');
 var jsonFormatter = require('../../json_formatter');
-var ko = require('knockout');
 var tables = require('../../tables');
 
 function startDate() {

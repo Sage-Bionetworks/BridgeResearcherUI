@@ -1,0 +1,92 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <div class="fixed-header-heading">
+            <div class="ui breadcrumb">
+                <a class="section" href="#/participants">Participants</a>
+                <i class="right chevron icon divider"></i>
+            </div>            
+            <h3 data-bind="text: titleObs"></h3>
+        </div>
+        <div class="fixed-header-buttons">
+            <p style="margin:.5rem">Uploads for: <span data-bind="text: dayObs"></span></p>
+        </div>
+    </div>
+    <!-- ko component: {name: 'participant-tabset', params: {active: 'uploads', isNewObs: isNewObs}} --><!-- /ko -->
+</div>
+<div class="scrollbox">
+    <errors></errors>
+    <div class="ui grid">
+        <div class="left floated six wide column">
+            <div style="padding: .5rem 0" class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
+        </div>
+        <div class="right floated six wide column">
+            <div class="ui small pagination menu" style="margin-bottom:1rem" 
+                data-bind="visible: loadedOnceObs, css:{loading:pagerLoadingObs}">
+                <a class="item" data-bind="click: priorDay, visible: priorVisible()">
+                    <i class="chevron left icon" style="margin:0!important"></i>
+                </a>
+                <div class="item">
+                    <div class="ui small active loader"></div>
+                    <div data-bind="semantic: 'dropdown'">
+                        <div class="text" data-bind="text: selectedRangeObs().label"></div>
+                        <i class="dropdown icon"></i>
+                        <div class="menu" data-bind="foreach: rangesObs">
+                            <a class="item" data-bind="click: $component.selectRange, text: $data.label"></a>
+                        </div>
+                    </div>
+                </div>
+                <a class="item" data-bind="click: nextDay, visible: nextVisible()">
+                    <i class="chevron right icon" style="margin:0!important"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div data-bind="visible: itemsObs().length > 0">
+        <table class="ui compact selectable table">
+            <thead>
+                <tr>
+                    <th style="width:10px"></th>
+                    <th>Upload ID</th>
+                    <th>Status</th>
+                    <th>Requested On</th>
+                    <th>Completed By</th>
+                    <th>Schema of content</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: itemsObs">
+                <tr data-bind="visible: $data.status !== 'validation_failed' && $data.status !== 'succeeded'">
+                    <td>
+                    </td>
+                    <td data-bind="text: $data.uploadId"></td>
+                    <td data-bind="text: $data.status"></td>
+                    <td data-bind="text: $component.formatLocalDateTime($data.requestedOn)"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr data-bind="visible: $data.status === 'succeeded'">
+                    <td>
+                        <i class="ui green text checkmark icon"></i>
+                    </td>
+                    <td data-bind="text: $data.uploadId"></td>
+                    <td data-bind="text: $data.status"></td>
+                    <td data-bind="text: $component.formatLocalDateTime($data.requestedOn)"></td>
+                    <td data-bind="attr:{title: $data.completedBy}, text: $component.formatLocalDateTime($data.completedOn)"></td>
+                    <td>
+                        <a target="_blank" data-bind="attr:{href: $data.hrefObs}, text: $data.contentObs"></a>
+                    </td>
+                </tr>
+                <tr data-variation="very wide" data-bind="visible: $data.status === 'validation_failed', 
+                    semantic: 'popup', attr:{'data-html': $component.validationErrors($data)}">
+                    <td>
+                        <i class="ui yellow text warning sign icon"></i>
+                    </td>
+                    <td data-bind="text: $data.uploadId"></td>
+                    <td data-bind="text: $data.status"></td>
+                    <td data-bind="text: $component.formatLocalDateTime($data.requestedOn)"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
