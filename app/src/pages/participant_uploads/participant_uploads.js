@@ -47,17 +47,13 @@ module.exports = function(params) {
     self.classFor = function(item) {
         switch(item.status) {
             case 'unknown': return 'negative';
-            //case 'requested': return '';
-            //case 'validation_in_progress': return '';
             case 'validation_failed': return 'warning';
-            //case 'succeeded': return '';
             default: return '';
         }
     };
     self.iconFor = function(item) {
         switch(item.status) {
             case 'unknown': return 'help circle icon';
-            //case 'requested': return '';
             case 'validation_in_progress': return 'refresh icon';
             case 'validation_failed': return 'ui yellow text warning sign icon';
             case 'succeeded': return 'ui green text checkmark icon';
@@ -152,7 +148,6 @@ module.exports = function(params) {
         }).filter(function(item) {
             return item.status === 'succeeded';
         });
-        self.itemsObs([]);
         self.itemsObs(response.items);
         self.pagerLoadingObs(false);
         Promise.each(finishedItems, forEachItem);
