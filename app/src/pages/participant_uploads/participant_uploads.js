@@ -3,7 +3,6 @@ var serverService = require('../../services/server_service');
 var bind = require('../../binder');
 var tables = require('../../tables');
 var transforms = require('../../transforms');
-var ko = require('knockout');
 var Promise = require('bluebird');
 
 var ranges = Object.freeze([
@@ -48,6 +47,7 @@ module.exports = function(params) {
         switch(item.status) {
             case 'unknown': return 'negative';
             case 'validation_failed': return 'warning';
+            //case 'succeeded': return '';
             default: return '';
         }
     };
@@ -60,17 +60,6 @@ module.exports = function(params) {
             default: return '';
         }
     };
-    function popupTitleFor(item) {
-        switch(item.status) {
-            case 'unknown': return 'Unknown';
-            case 'requested': return 'Requested';
-            case 'validation_in_progress': return 'Validation in progress';
-            case 'validation_failed': return 'Validation failed';
-            case 'succeeded': return 'Succeeded';
-            default: return '';
-        }
-    }
-
     self.priorVisible = function() {
         var index = getSelectedIndex();
         return (index < ranges.length-1);   
@@ -80,16 +69,20 @@ module.exports = function(params) {
         return (index > 0);
     };
     self.priorDay = function() {
+        console.log(self.pagerLoadingObs());
+        if (self.pagerLoadingObs()){ return false; }
         var index = getSelectedIndex();
         self.selectedRangeObs(ranges[index+1]);
         return false;
     };
     self.nextDay = function() {
+        if (self.pagerLoadingObs()){ return false; }
         var index = getSelectedIndex();
         self.selectedRangeObs(ranges[index-1]);
         return false;
     };
     self.selectRange = function(data, event) {
+        if (self.pagerLoadingObs()){ return false; }
         self.selectedRangeObs(data);
         return false;
     };
@@ -108,14 +101,31 @@ module.exports = function(params) {
         if (data.status === 'succeeded') {
             var start = new Date(data.requestedOn).getTime();
             var end = new Date(data.completedOn).getTime();
-            return transforms.formatLocalDateTime(data.completedOn) + 
+            var fStart = transforms.formatLocalDateTime(data.requestedOn);
+            var fEnd = transforms.formatLocalDateTime(data.completedOn);
+            if (fStart.split(', ')[0] === fEnd.split(', ')[0]) {
+                fEnd = fEnd.split(', ')[1];
+            }
+            return fEnd /*transforms.formatLocalDateTime(data.completedOn)*/ + 
                 " (" + data.completedBy + ", "+ transforms.formatMs(end-start)+")";
         }
         return '';
     };
+    self.refresh = function() {
+        if (self.pagerLoadingObs()){ return; }
+        load();
+    };
 
-    self.refresh = load;
-
+    function popupTitleFor(item) {
+        switch(item.status) {
+            case 'unknown': return 'Unknown';
+            case 'requested': return 'Requested';
+            case 'validation_in_progress': return 'Validation in progress';
+            case 'validation_failed': return 'Validation failed';
+            case 'succeeded': return 'Succeeded';
+            default: return '';
+        }
+    }
     function getSelectedIndex() {
         return ranges.indexOf( self.selectedRangeObs() );
     }
@@ -135,34 +145,29 @@ module.exports = function(params) {
                 item.hrefObs('/#/schemas/'+encodeURIComponent(id)+'/versions/'+rev);
             });
     }
-    
     function processUploads(response) {
         self.loadedOnceObs(true);
         var dateString = transforms.formatLocalDateTimeWithoutZone(response.startTime).split(" @ ")[0];
         self.dayObs(dateString);
 
         var finishedItems = response.items.map(function(item) {
-            item.contentObs = ko.observable("");
-            item.hrefObs = ko.observable();
+            bind(item).obs('content','').obs('href');
             return item;
         }).filter(function(item) {
             return item.status === 'succeeded';
         });
         self.itemsObs(response.items);
-        self.pagerLoadingObs(false);
         Promise.each(finishedItems, forEachItem);
         return response;
     }
-
     function load() {
-        if (self.pagerLoadingObs()){
-            return;
-        }
         self.pagerLoadingObs(true);
         var index = getSelectedIndex();
         var range = utils.getDateRange(ranges[index].value);
         serverService.getParticipantUploads(params.userId, range.startTime, range.endTime)
-            .then(processUploads);
+            .then(processUploads).then(function() {
+                self.pagerLoadingObs(false);
+            });
     }
     load();
 };

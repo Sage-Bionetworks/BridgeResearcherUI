@@ -43,7 +43,7 @@ ko.bindingHandlers.condPopup = {
         var data = bindingContext.$data;
         var object = ko.unwrap(valueAccessor());
         if (object.render(data)) {
-            element.setAttribute('data-variation', 'very-wide');
+            element.setAttribute('data-variation', 'very wide');
             element.setAttribute('data-html', object.html(data));
             $(element).popup();
         }
