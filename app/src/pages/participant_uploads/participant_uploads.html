@@ -8,7 +8,6 @@
             <h3 data-bind="text: titleObs"></h3>
         </div>
         <div class="fixed-header-buttons">
-            <p style="margin:.5rem">Uploads for: <span data-bind="text: dayObs"></span></p>
         </div>
     </div>
     <!-- ko component: {name: 'participant-tabset', params: {active: 'uploads', isNewObs: isNewObs}} --><!-- /ko -->
@@ -20,6 +19,11 @@
             <div style="padding: .5rem 0" class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
         </div>
         <div class="right floated six wide column">
+            <div class="ui small pagination menu" style="margin-bottom:1rem; margin-left:1rem">
+                <a class="item" data-bind="click: refresh">
+                    <i class="refresh icon" style="margin:0!important"></i>
+                </a>
+            </div>
             <div class="ui small pagination menu" style="margin-bottom:1rem" 
                 data-bind="visible: loadedOnceObs, css:{loading:pagerLoadingObs}">
                 <a class="item" data-bind="click: priorDay, visible: priorVisible()">
@@ -45,46 +49,25 @@
         <table class="ui compact selectable table">
             <thead>
                 <tr>
-                    <th style="width:10px"></th>
-                    <th>Upload ID</th>
-                    <th>Status</th>
-                    <th>Requested On</th>
-                    <th>Completed By</th>
+                    <th style="width:10px" class="no-sort"></th>
+                    <th>Uploads for: <span data-bind="text: dayObs"></span></th>
+                    <th class="sort-default">Requested On</th>
+                    <th>Completed On</th>
                     <th>Schema of content</th>
                 </tr>
             </thead>
             <tbody data-bind="foreach: itemsObs">
-                <tr data-bind="visible: $data.status !== 'validation_failed' && $data.status !== 'succeeded'">
+                <tr data-bind="condPopup: { render: $component.renderPopup,
+                    html: $component.htmlFor, className: $component.classFor}">
                     <td>
+                        <i data-bind="attr:{class:$component.iconFor($data)}"></i>
                     </td>
                     <td data-bind="text: $data.uploadId"></td>
-                    <td data-bind="text: $data.status"></td>
                     <td data-bind="text: $component.formatLocalDateTime($data.requestedOn)"></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr data-bind="visible: $data.status === 'succeeded'">
-                    <td>
-                        <i class="ui green text checkmark icon"></i>
-                    </td>
-                    <td data-bind="text: $data.uploadId"></td>
-                    <td data-bind="text: $data.status"></td>
-                    <td data-bind="text: $component.formatLocalDateTime($data.requestedOn)"></td>
-                    <td data-bind="attr:{title: $data.completedBy}, text: $component.formatLocalDateTime($data.completedOn)"></td>
-                    <td>
+                    <td data-bind="text: $component.completedBy($data)"></td>
+                    <td data-bind="attr:{'data-sort':$data.contentObs}">
                         <a target="_blank" data-bind="attr:{href: $data.hrefObs}, text: $data.contentObs"></a>
-                    </td>
-                </tr>
-                <tr data-variation="very wide" data-bind="visible: $data.status === 'validation_failed', 
-                    semantic: 'popup', attr:{'data-html': $component.validationErrors($data)}">
-                    <td>
-                        <i class="ui yellow text warning sign icon"></i>
-                    </td>
-                    <td data-bind="text: $data.uploadId"></td>
-                    <td data-bind="text: $data.status"></td>
-                    <td data-bind="text: $component.formatLocalDateTime($data.requestedOn)"></td>
-                    <td></td>
-                    <td></td>
+                    </td>                    
                 </tr>
             </tbody>
         </table>
