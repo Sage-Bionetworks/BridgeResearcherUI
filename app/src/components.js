@@ -130,10 +130,6 @@ reg('participant_uploads', {
     viewModel: require('./pages/participant_uploads/participant_uploads'),
     template: require('./pages/participant_uploads/participant_uploads.html')
 });
-reg('participant_upload', {
-    viewModel: require('./pages/participant_upload/participant_upload'),
-    template: require('./pages/participant_upload/participant_upload.html')
-});
 reg('lab_codes', {
     viewModel: require('./pages/lab_codes/lab_codes'),
     template: require('./pages/lab_codes/lab_codes.html')

@@ -2,6 +2,7 @@
 var ko = require('knockout');
 require('knockout-postbox');
 var $ = require('jquery');
+var tablesort = require('tablesort');
 
 // need to make a global out of this for semantic to work, as it's not in a package.
 // This is hacky, webpack has better support for this. Worse, semantic is a jQuery
@@ -20,6 +21,37 @@ ko.observableArray.fn.pushAll = function(valuesToPush) {
 ko.observableArray.fn.contains = function(value) {
     var underlyingArray = this();
     return underlyingArray.indexOf(value) > -1;
+};
+
+// This doesn't work because it's changing the DOM but not the underlying ko observer.
+// as a consequence, weird stuff happens and rows end up being doubled, then tripled, etc.
+ko.bindingHandlers.tablesort = {
+    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var sorter = tablesort(element);
+
+        var itemsObs = bindingContext.$component.itemsObs;
+        if (!itemsObs) {
+            throw new Error("tablesort binding expects to be on a table with an itemsObs");
+        }
+        itemsObs.subscribe(function(newValue) {
+            sorter.refresh();
+        });
+    }
+};
+ko.bindingHandlers.condPopup = {
+    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var data = bindingContext.$data;
+        var object = ko.unwrap(valueAccessor());
+        if (object.render(data)) {
+            element.setAttribute('data-variation', 'very-wide');
+            element.setAttribute('data-html', object.html(data));
+            $(element).popup();
+        }
+        var className = object.className(data);
+        if (className) {
+            element.classList.add(object.className(data));
+        }
+    }
 };
 
 ko.bindingHandlers.semantic = {

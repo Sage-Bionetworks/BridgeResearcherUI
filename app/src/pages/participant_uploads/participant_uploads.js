@@ -44,6 +44,33 @@ module.exports = function(params) {
 
     tables.prepareTable(self, 'upload');
 
+    self.classFor = function(item) {
+        switch(item.status) {
+            case 'unknown': return 'negative';
+            case 'validation_failed': return 'warning';
+            default: return '';
+        }
+    };
+    self.iconFor = function(item) {
+        switch(item.status) {
+            case 'unknown': return 'help circle icon';
+            case 'validation_in_progress': return 'refresh icon';
+            case 'validation_failed': return 'ui yellow text warning sign icon';
+            case 'succeeded': return 'ui green text checkmark icon';
+            default: return '';
+        }
+    };
+    function popupTitleFor(item) {
+        switch(item.status) {
+            case 'unknown': return 'Unknown';
+            case 'requested': return 'Requested';
+            case 'validation_in_progress': return 'Validation in progress';
+            case 'validation_failed': return 'Validation failed';
+            case 'succeeded': return 'Succeeded';
+            default: return '';
+        }
+    }
+
     self.priorVisible = function() {
         var index = getSelectedIndex();
         return (index < ranges.length-1);   
@@ -69,11 +96,26 @@ module.exports = function(params) {
     self.uploadURL = function(data) {
         return '#/participants/' + self.userIdObs() + '/uploads/' + data.uploadId + '/' + encodeURIComponent(params.name);
     };
-    self.validationErrors = function(data) {
-        return "<ul>" + data.validationMessageList.map(function(error) {
-            return "<li>"+error+"</li>";
-        }).join('') + "</ul>";
+    self.renderPopup = function(data) {
+        return data.status === 'validation_failed';
     };
+    self.htmlFor = function(data) {
+        return "<p><b>"+popupTitleFor(data)+"</b></p>" + data.validationMessageList.map(function(error) {
+            return "<p>"+error+"</p>";
+        }).join('');
+    };
+    self.completedBy = function(data) {
+        if (data.status === 'succeeded') {
+            var start = new Date(data.requestedOn).getTime();
+            var end = new Date(data.completedOn).getTime();
+            return transforms.formatLocalDateTime(data.completedOn) + 
+                " (" + data.completedBy + ", "+ transforms.formatMs(end-start)+")";
+        }
+        return '';
+    };
+
+    self.refresh = load;
+
     function getSelectedIndex() {
         return ranges.indexOf( self.selectedRangeObs() );
     }
@@ -99,12 +141,12 @@ module.exports = function(params) {
         var dateString = transforms.formatLocalDateTimeWithoutZone(response.startTime).split(" @ ")[0];
         self.dayObs(dateString);
 
-        var finishedItems = response.items.filter(function(item) {
-            return item.status === 'succeeded';
-        }).map(function(item) {
-            item.contentObs = ko.observable();
+        var finishedItems = response.items.map(function(item) {
+            item.contentObs = ko.observable("");
             item.hrefObs = ko.observable();
             return item;
+        }).filter(function(item) {
+            return item.status === 'succeeded';
         });
         self.itemsObs(response.items);
         self.pagerLoadingObs(false);
