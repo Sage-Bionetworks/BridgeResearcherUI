@@ -17,7 +17,8 @@
     <errors></errors>
     <p>This table shows the activities that were issued to the participant based on your schedules, along with any information we've received 
         back about their status toward completion. If there are no activities (but you have schedules, and other users have 
-        activities), then this participant has not yet contacted the server. </p>
+        activities), then this participant has not yet contacted the server. This view is not filtered based on any data groups or other 
+        criteria, so if these criteria change on the user, you're seeing all the tasks that have been issued, regardless of the user's state. </p>
     <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
     <div data-bind="visible: itemsObs().length > 0">
         <!-- ko component: {name:'ddb_pager', params: {loadingFunc: loadingFunc, 
