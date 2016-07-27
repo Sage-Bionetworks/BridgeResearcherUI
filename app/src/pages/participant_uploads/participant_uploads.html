@@ -1,0 +1,78 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <div class="fixed-header-heading">
+            <div class="ui breadcrumb">
+                <a class="section" href="#/participants">Participants</a>
+                <i class="right chevron icon divider"></i>
+            </div>            
+            <h3 data-bind="text: titleObs"></h3>
+        </div>
+        <div class="fixed-header-buttons">
+            <div class="label-field-padding">
+                <span data-bind="text: totalObs">0</span> records
+            </div>
+        </div>
+    </div>
+    <!-- ko component: {name: 'participant-tabset', params: {active: 'uploads', isNewObs: isNewObs}} --><!-- /ko -->
+</div>
+<div class="scrollbox">
+    <errors></errors>
+    <div class="ui grid">
+        <div class="left floated five wide column">
+            <div style="padding-top: .5rem" class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
+        </div>
+        <div class="right floated seven wide column">
+            <div class="ui small pagination menu" style="margin-bottom:1rem; margin-left:1rem">
+                <a class="item" data-bind="click: refresh">
+                    <i class="refresh icon" style="margin:0!important"></i>
+                </a>
+            </div>
+            <div class="ui small pagination menu" style="margin-bottom:1rem" 
+                data-bind="visible: loadedOnceObs, css:{loading:pagerLoadingObs}">
+                <a class="item" data-bind="click: priorDay, visible: priorVisible()">
+                    <i class="chevron left icon" style="margin:0!important"></i>
+                </a>
+                <div class="item">
+                    <div class="ui small active loader"></div>
+                    <div data-bind="semantic: 'dropdown'">
+                        <div class="text" data-bind="text: selectedRangeObs().label"></div>
+                        <i class="dropdown icon"></i>
+                        <div class="menu" data-bind="foreach: rangesObs">
+                            <a class="item" data-bind="click: $component.selectRange, text: $data.label"></a>
+                        </div>
+                    </div>
+                </div>
+                <a class="item" data-bind="click: nextDay, visible: nextVisible()">
+                    <i class="chevron right icon" style="margin:0!important"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div data-bind="visible: itemsObs().length > 0">
+        <table class="ui compact selectable table">
+            <thead>
+                <tr>
+                    <th style="width:10px"></th>
+                    <th data-bind="click: sortCol('uploadId')">Uploads for: <span data-bind="text: dayObs"></span></th>
+                    <th data-bind="click: sortCol('requestedOn')">Requested On</th>
+                    <th data-bind="click: sortCol('completedOn')">Completed On</th>
+                    <th>Schema of content</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: itemsObs">
+                <tr data-bind="condPopup: { render: $component.renderPopup,
+                    html: $component.htmlFor, className: $component.classFor}">
+                    <td>
+                        <i data-bind="attr:{class:$component.iconFor($data)}"></i>
+                    </td>
+                    <td data-bind="text: $data.uploadId"></td>
+                    <td data-bind="text: $component.formatLocalDateTime($data.requestedOn)"></td>
+                    <td data-bind="text: $data.completedByObs"></td>
+                    <td data-bind="attr:{'data-sort':$data.contentObs}">
+                        <a target="_blank" rel="noopener" data-bind="attr:{href: $data.hrefObs}, text: $data.contentObs"></a>
+                    </td>                    
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

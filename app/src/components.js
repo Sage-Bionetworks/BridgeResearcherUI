@@ -126,6 +126,10 @@ reg('participant_report', {
     viewModel: require('./pages/participant_report/participant_report'),
     template: require('./pages/participant_report/participant_report.html')
 });
+reg('participant_uploads', {
+    viewModel: require('./pages/participant_uploads/participant_uploads'),
+    template: require('./pages/participant_uploads/participant_uploads.html')
+});
 reg('lab_codes', {
     viewModel: require('./pages/lab_codes/lab_codes'),
     template: require('./pages/lab_codes/lab_codes.html')

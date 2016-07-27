@@ -2,7 +2,6 @@ var utils = require('../../utils');
 var serverService = require('../../services/server_service');
 var bind = require('../../binder');
 var root = require('../../root');
-var Promise = require('bluebird');
 var tables = require('../../tables');
 
 module.exports = function(params) {

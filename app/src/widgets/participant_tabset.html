@@ -11,6 +11,10 @@
         attr:{'href':'#/participants/'+$parent.userIdObs()+'/activities/'+encodeURIComponent($parent.titleObs())}">
         <i class="wait icon"></i> Activities
     </a>
+    <a class="item" data-bind="css:{active:$data.active === 'uploads'}, 
+        attr:{'href':'#/participants/'+$parent.userIdObs()+'/uploads/'+encodeURIComponent($parent.titleObs())}">
+        <i class="upload icon"></i> Uploads
+    </a>
     <a class="item" data-bind="css:{active:$data.active === 'reports'}, 
         attr:{'href':'#/participants/'+$parent.userIdObs()+'/reports/'+encodeURIComponent($parent.titleObs())}">
         <i class="newspaper icon"></i> Report Data

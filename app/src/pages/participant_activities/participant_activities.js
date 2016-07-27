@@ -1,7 +1,6 @@
 var utils = require('../../utils');
 var serverService = require('../../services/server_service');
 var bind = require('../../binder');
-var tables = require('../../tables');
 var fn = require('../../transforms');
 var alerts = require('../../widgets/alerts');
 

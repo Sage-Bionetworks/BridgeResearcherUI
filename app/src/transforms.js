@@ -140,6 +140,31 @@ function formatVersionRange(minValue, maxValue) {
     return "<i>All versions</i>";
 }
 
+var SECOND = 1000;
+var MINUTE = SECOND*60;
+var HOUR = MINUTE*60;
+var DAY = HOUR*24;
+var WEEK = DAY*7;
+
+function formatMs(ms) {
+    if (ms < MINUTE) {
+        var s = Math.floor(ms/SECOND);
+        return s + "s";
+    } else if (ms < HOUR) {
+        var m = Math.floor(ms/MINUTE);
+        return m + "m " + formatMs(ms%MINUTE);
+    } else if (ms < DAY) {
+        var h = Math.floor(ms/HOUR);
+        return h + "h " + formatMs(ms%HOUR);
+    } else if (ms < WEEK) {
+        var d = Math.floor(ms/DAY);
+        return d + "d " + formatMs(ms%DAY);
+    } else {
+        var w = Math.floor(ms/WEEK);
+        return w + "w " + formatMs(ms%WEEK);
+    }
+}
+
 module.exports = {
     formatAttributes: formatAttributes,
     formatHealthCode: formatHealthCode,
@@ -155,5 +180,6 @@ module.exports = {
     persistAttributes: persistAttributes,
     persistLanguages: persistLanguages,
     persistRoles: persistRoles,
-    callObsCallback: callObsCallback
+    callObsCallback: callObsCallback,
+    formatMs: formatMs
 };

@@ -73,6 +73,7 @@ router.on('/participants/:userId/reports/:identifier/:name', routeTo('participan
 router.on('/participants/:userId/activities/:name', routeTo('participant_activities', USERID_NAME));
 router.on('/participants/:userId/consents/:name', routeTo('participant_consents', USERID_NAME));
 router.on('/participants/:userId/reports/:name', routeTo('participant_reports', USERID_NAME));
+router.on('/participants/:userId/uploads/:name', routeTo('participant_uploads', USERID_NAME));
 router.on('/participants/:userId/:name', routeTo('participant', USERID_NAME));
 router.on('/participants/:userId', routeTo('participant', USERID));
 router.on('/participants', routeTo('participants'));
