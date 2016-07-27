@@ -46,7 +46,7 @@
         </div>
         <div class="field" data-bind="visible: editorScheduleTypeObs() === 'cron', attr:{id:
             'strategy_'+$component.collectionName+'schedule_cronTrigger'}">
-            <label>Then follow <a href="http://www.cronmaker.com/" target="_blank">cron expression</a></label>
+            <label>Then follow <a href="http://www.cronmaker.com/" target="_blank" rel="noopener">cron expression</a></label>
             <input type="text" class="editor short-input" data-bind="textInput: cronTriggerObs"/>
         </div>
         <div class="field" data-bind="attr:{id:
@@ -63,7 +63,7 @@
         
     <p data-bind="visible: $component.taskOptionsObs().length == 0">
         <b>There are no task identifiers defined,</b> so you cannot schedule any tasks.
-        <a href="#/task_identifiers" target="_blank">Create</a> some identifiers, then refresh this page
+        <a href="#/task_identifiers" target="_blank" rel="noopener">Create</a> some identifiers, then refresh this page
         in order to schedule tasks. </b>
     <div class="ui form" data-bind="visible: activitiesObs().length == 0">
         <a class="ui primary button" data-bind="click: addFirstActivity">

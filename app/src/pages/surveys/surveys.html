@@ -32,7 +32,7 @@
                 </td>
                 <td data-bind="text: $parent.formatDateTime($data.modifiedOn)"></td>
                 <td data-bind="foreach: $data.schedulePlanObs"><!-- ko if: $index() > 0 --><span>, </span><!-- /ko -->
-                    <a target="_blank" data-bind="attr: {href: '#/scheduleplans/'+$data.guid}, html: $data.label"></a>
+                    <a target="_blank" rel="noopener" data-bind="attr: {href: '#/scheduleplans/'+$data.guid}, html: $data.label"></a>
                 </td>
             </tr>
         </tbody>

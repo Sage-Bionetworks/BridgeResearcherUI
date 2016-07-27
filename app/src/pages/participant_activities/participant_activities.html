@@ -37,7 +37,7 @@
                     disabled: $data.status === 'expired'}">
                     <td data-bind="attr: {title: $parent.formatTitleCase($data.activity.activityType)}">
                         <i data-bind="css: $parent.formatActivityClass($data)"></i>
-                        <a target="_blank" data-bind="text: $parent.formatActivity($data), 
+                        <a target="_blank" rel="noopener" data-bind="text: $parent.formatActivity($data), 
                             attr:{href: '#/scheduleplans/'+$data.schedulePlanGuid}"></a>
                     </td>
                     <td data-bind="text: $parent.formatTitleCase($data.status)"></td>

@@ -25,7 +25,6 @@ module.exports = function() {
 
     self.isAdmin = root.isAdmin;
     self.recordsObs = ko.observable("");
-    self.formatTitleCase = fn.formatTitleCase;
     self.formatName = fn.formatName;
     self.formatDateTime = fn.formatLocalDateTime;
     self.classNameForStatus = function(user) {
