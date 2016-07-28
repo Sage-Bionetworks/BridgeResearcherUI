@@ -213,8 +213,8 @@ progress {
     .item:not(:first-child) {
         padding-left: .25rem !important;
     }
-    
 }
+
 /* This didn't use to be misaligned, but looks wrong now. */
 .ui.compact.table {
     .ui.checkbox {

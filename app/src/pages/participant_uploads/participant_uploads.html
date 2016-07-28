@@ -60,12 +60,26 @@
                 </tr>
             </thead>
             <tbody data-bind="foreach: itemsObs">
-                <tr data-bind="condPopup: { render: $component.renderPopup,
-                    html: $component.htmlFor, className: $component.classFor}">
+                <tr data-bind="attr:{class: $component.classFor($data)}">
                     <td>
                         <i data-bind="attr:{class:$component.iconFor($data)}"></i>
                     </td>
-                    <td data-bind="text: $data.uploadId"></td>
+                    <td>
+                        <span data-bind="text: $data.uploadId"></span>
+                        <span data-bind="visible: $data.status === 'validation_failed'">
+                            <span data-bind="visible: $data.collapsedObs">
+                                <a href="" data-bind="click: $component.toggle">
+                                    <i style="margin:0;padding:0" class="plus square outline icon"></i> Show Errors
+                                </a>
+                            </span>
+                            <span data-bind="visible: !$data.collapsedObs()">
+                                <a href="" data-bind="click: $component.toggle">
+                                    <i style="margin:0;padding:0" class="minus square outline icon"></i> Hide Errors
+                                </a>
+                                <div data-bind="html: $component.htmlFor($data)">
+                            </span>
+                        </span>
+                    </td>
                     <td data-bind="text: $component.formatLocalDateTime($data.requestedOn)"></td>
                     <td data-bind="text: $data.completedByObs"></td>
                     <td data-bind="attr:{'data-sort':$data.contentObs}">

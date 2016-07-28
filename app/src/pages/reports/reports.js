@@ -21,6 +21,13 @@ module.exports = function() {
         root.closeDialog();
         load();
     };
+    /*
+    self.formatTitle = function(title) {
+        return title.replace(/[-_]/g," ").split(" ").map(function(element) {
+            return element.substring(0,1).toUpperCase() + element.substring(1);
+        }).join(" ");
+    };
+    */
 
     function load() {
         serverService.getStudyReports().then(function(response) {
