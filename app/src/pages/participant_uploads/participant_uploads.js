@@ -67,7 +67,7 @@ module.exports = function(params) {
         }
     };
     self.htmlFor = function(data) {
-        return "<p><b>"+popupTitleFor(data)+"</b></p>" + data.validationMessageList.map(function(error) {
+        return /*"<p><b>"+popupTitleFor(data)+"</b></p>" +*/ data.validationMessageList.map(function(error) {
             return "<p>"+error+"</p>";
         }).join('');
     };
@@ -102,6 +102,10 @@ module.exports = function(params) {
     self.renderPopup = function(data) {
         return data.status === 'validation_failed';
     };
+    self.toggle = function(model) {
+        model.collapsedObs(!model.collapsedObs());
+    };
+    
     // TODO: This is a candidate for the tables package. Also, it needs a sorting indicator, the css
     // for table-sort.scss is very elegant and simple. It is, however, getting closer to a sorting system 
     // for tables that is friendly to knockout data bindings. Should also be able to look for a 
@@ -141,6 +145,7 @@ module.exports = function(params) {
         bind(item)
             .obs('content','')
             .obs('href','')
+            .obs('collapsed', true)
             .obs('completedBy', '');
         if (item.status === 'succeeded') {
             var id = item.schemaId;
