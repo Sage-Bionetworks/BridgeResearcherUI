@@ -6,7 +6,6 @@ var fn = require('../../transforms');
 var Promise = require('bluebird');
 var storeService = require('../../services/store_service');
 var tables = require('../../tables');
-var fn = require('../../transforms');
 
 var MULTI_FIELD_SORTER = utils.multiFieldSorter(
     utils.makeRangeSorter("minAppVersion", "maxAppVersion"),

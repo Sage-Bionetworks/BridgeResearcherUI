@@ -18,19 +18,6 @@ function getSchedules(plan) {
             });
     }
 }
-/*
-function getSchedules(object, array) {
-    array = array || [];
-    for (var prop in object) {
-        if (prop === "schedule") {
-            array.push(object[prop]);
-        } else if (typeof object[prop] === 'object') {
-            return getSchedules(object[prop], array);
-        }
-    }
-    return array;
-}
-*/
 function formatVersionRange(minValue, maxValue) {
     if (utils.isDefined(minValue) && utils.isDefined(maxValue)) {
         return " ("+minValue + "-" + maxValue + ")";
@@ -59,11 +46,6 @@ function getActivityOptions() {
 function getSurveyOptions() {
     return serverService.getPublishedSurveys().then(sortSurveys).then(collectSurveyOptions);
 }
-/*
-function getQuestionOptions() {
-    return serverService.getSurveysSummarized().then(sortSurveys).then(collectQuestionOptions);
-}
-*/
 function sortSurveys(response) {
     return response.items.sort(NAME_SORTER);
 }
@@ -72,23 +54,6 @@ function collectSurveyOptions(surveys) {
         return { label: survey.name, value: survey.guid };
     });
 }
-/*
-function collectQuestionOptions(surveys) {
-    var questions = [];
-    surveys.forEach(function(survey) {
-        survey.elements.filter(filterQuestions).then(function (questions) {
-            questions.forEach(function(question) {
-                var label = survey.name+": "+question.identifier+((question.fireEvent)?" *":"");
-                questions.push({ label: label, value: question.guid });
-            });
-        });
-    });
-    return questions;
-}
-function filterQuestions(element) {
-    return (element.type === "SurveyQuestion");
-}
-*/
 function getTaskIdentifierOptions() {
     return serverService.getStudy().then(function(study) {
         return study.taskIdentifiers.map(function(id) {

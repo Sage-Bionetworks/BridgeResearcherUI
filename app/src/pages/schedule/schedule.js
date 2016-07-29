@@ -37,6 +37,7 @@ function addObserversToActivity(activity) {
 function extractActivityFromObservables(activity) {
     var act = {
         label: activity.labelObs(),
+        guid: activity.guid,
         labelDetail: activity.labelDetailObs(),
         activityType: activity.activityTypeObs()
     };

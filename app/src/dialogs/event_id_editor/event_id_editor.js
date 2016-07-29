@@ -33,44 +33,51 @@ module.exports = function(params) {
     self.surveyObs = ko.observable();
     self.surveysOptionsObs = ko.observableArray([]);
     self.surveysLabel = utils.makeOptionLabelFinder(self.surveysOptionsObs);
-    optionsService.getSurveyOptions().then(self.surveysOptionsObs);
+    
 
     self.questionObs = ko.observable();
     self.questionsOptionsObs = ko.observableArray([]);
     self.questionsLabel = utils.makeOptionLabelFinder(self.questionsOptionsObs);
-    // Very expensive to initialize the question options, which are currently hidden.
-    // optionsService.getQuestionOptions().then(self.questionsOptionsObs);
 
     self.activityObs = ko.observable();
     self.activityOptionsObs = ko.observableArray([]);
     self.activityLabel = utils.makeOptionLabelFinder(self.activityOptionsObs);
-    optionsService.getActivityOptions().then(self.activityOptionsObs);
 
     self.advancedEditorObs = ko.observable(false);
 
-    if (self.eventIdObs()) {
-        self.eventIdObs().split(",").forEach(function(eventId) {
-            if (Object.keys(UNARY_EVENTS).indexOf(eventId) > -1 && eventId !== "enrollment") {
-                self.eventIdObs(eventId);
-                self.advancedEditorObs(true);
-            } else if (eventId === "enrollment") {
-                self.enrollmentObs(true);
-            } else {
-                var parts = eventId.split(":");
-                if (parts[0] === "question") {
-                    self.objectTypeObs("question");
-                    self.questionObs(parts[1]);
-                    self.answerObs(parts[2].replace("answered=",""));
-                } else if (parts[0] === "survey") {
-                    self.objectTypeObs("survey");
-                    self.surveyObs(parts[1]);
-                } else if (parts[0] === "activity") {
-                    self.objectTypeObs("activity");
-                    self.activityObs(parts[1]);
-                }
-            }
-        });
+    function loadActivityOptions() {
+        return optionsService.getActivityOptions();
     }
+    function initEditor() {
+        if (self.eventIdObs()) {
+            self.eventIdObs().split(",").forEach(function(eventId) {
+                if (Object.keys(UNARY_EVENTS).indexOf(eventId) > -1 && eventId !== "enrollment") {
+                    self.eventIdObs(eventId);
+                    self.advancedEditorObs(true);
+                } else if (eventId === "enrollment") {
+                    self.enrollmentObs(true);
+                } else {
+                    var parts = eventId.split(":");
+                    if (parts[0] === "question") {
+                        self.objectTypeObs("question");
+                        self.questionObs(parts[1]);
+                        self.answerObs(parts[2].replace("answered=",""));
+                    } else if (parts[0] === "survey") {
+                        self.objectTypeObs("survey");
+                        self.surveyObs(parts[1]);
+                    } else if (parts[0] === "activity") {
+                        self.objectTypeObs("activity");
+                        self.activityObs(parts[1]);
+                    }
+                }
+            });
+        }
+    }
+    optionsService.getSurveyOptions()
+        .then(self.surveysOptionsObs)
+        .then(loadActivityOptions)
+        .then(self.activityOptionsObs)
+        .then(initEditor);
 
     self.saveAndCloseDialog = function() {
         var eventId = self.objectTypeObs() + ":";
