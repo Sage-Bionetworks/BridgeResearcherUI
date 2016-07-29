@@ -38,8 +38,6 @@ module.exports = function(params) {
     self.questionObs = ko.observable();
     self.questionsOptionsObs = ko.observableArray([]);
     self.questionsLabel = utils.makeOptionLabelFinder(self.questionsOptionsObs);
-    // Very expensive to initialize the question options, which are currently hidden.
-    // optionsService.getQuestionOptions().then(self.questionsOptionsObs);
 
     self.activityObs = ko.observable();
     self.activityOptionsObs = ko.observableArray([]);

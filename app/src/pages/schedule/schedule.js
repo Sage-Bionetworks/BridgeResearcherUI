@@ -37,6 +37,7 @@ function addObserversToActivity(activity) {
 function extractActivityFromObservables(activity) {
     var act = {
         label: activity.labelObs(),
+        guid: activity.guid,
         labelDetail: activity.labelDetailObs(),
         activityType: activity.activityTypeObs()
     };
@@ -120,13 +121,16 @@ module.exports = function(params) {
                     delete sch.times;
                     break;
             }
+            console.log("schedule's updated eventId", sch.eventId);
             return sch;
         },
         write: function(schedule) {
+            console.log("This is the eventID from schedule", schedule.eventId);
             updateView(self, schedule, ['eventId','scheduleType','startsOn','endsOn','delay',
                 'interval','times','cronTrigger','expires']);
             self.editorScheduleTypeObs(getEditorType(schedule));
             self.activitiesObs(schedule.activities.map(addObserversToActivity));
+            console.log("This is the eventID set in observer", self.eventIdObs());
         }
     });
     
