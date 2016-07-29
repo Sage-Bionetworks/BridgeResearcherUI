@@ -18,7 +18,7 @@ module.exports = function() {
         
     self.total = 0;
     self.searchFilter = null;
-
+    
     tables.prepareTable(self, "participant", "#/participants", function(participant) {
         return serverService.deleteParticipant(participant.id);
     });

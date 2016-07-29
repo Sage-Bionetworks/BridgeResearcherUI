@@ -19,11 +19,17 @@
         back about their status toward completion. If there are no activities (but you have schedules, and other users have 
         activities), then this participant has not yet contacted the server. This view is not filtered based on any data groups or other 
         criteria, so if these criteria change on the user, you're seeing all the tasks that have been issued, regardless of the user's state. </p>
-    <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
+    <div class="line-control">
+        <div>
+            <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
+        </div>
+        <div>
+            <!-- ko component: {name:'ddb_pager', params: {loadingFunc: loadingFunc, 
+                pageKey: 'activities', top: true, showAssignment: false, showSearch: false}
+            } --><!-- /ko -->
+        </div>
+    </div>
     <div data-bind="visible: itemsObs().length > 0">
-        <!-- ko component: {name:'ddb_pager', params: {loadingFunc: loadingFunc, 
-            pageKey: 'activities', top: true, showAssignment: false, showSearch: false}
-        } --><!-- /ko -->
         <table class="ui compact selectable table">
             <thead>
                 <tr>

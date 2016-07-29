@@ -1,12 +1,10 @@
 <div class="line-control">
-    <div data-bind="visible: showSearch">
-        <div class="ui icon input" data-bind="css:{loading: searchLoadingObs}, visible: top">
+    <div>
+        <div class="ui icon input" data-bind="css:{loading: searchLoadingObs}, visible: top, visible: showSearch">
             <input type="text" placeholder="Start of ID" data-bind="textInput: idFilterObs, 
                 event: {keyup: doSearch}, hasFocus: top">
             <i class="search icon"></i>
         </div>
-    </div>
-    <div data-bind="visible: top && !showAssignment">
     </div>
     <div class="line-control-radio" data-bind="visible: top && showAssignment">
         <label>Credentials?</label>
@@ -32,7 +30,7 @@
                 <i class="chevron left icon"></i>
             </div>
             <div class="active item">
-                <div class="ui small active loader"></div>
+                <div data-bind="visible: pagerLoadingObs" class="ui small active loader"></div>
                 <span data-bind="text: currentPageObs() + 1"></span>&nbsp;of&nbsp; 
                 <span data-bind="text: totalPagesObs()"></span>
             </div>        
