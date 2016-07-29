@@ -3,6 +3,7 @@ var utils = require('../../utils');
 var bind = require('../../binder');
 var fn = require('../../transforms');
 var alerts = require('../../widgets/alerts');
+var tables = require('../../tables');
 
 module.exports = function(params) {
     var self = this;

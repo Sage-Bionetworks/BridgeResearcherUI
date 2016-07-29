@@ -5,6 +5,11 @@ var tables = require('../../tables');
 var transforms = require('../../transforms');
 var Promise = require('bluebird');
 
+var ranges = [{value: 0, label:"Today"}, {value:-1, label:"Yesterday"}];
+for (var i=2; i < 15; i++) {
+    ranges.push({value: -i, label: i + " days ago"});
+}
+/*
 var ranges = Object.freeze([
     {value: 0, label:"Today"},
     {value:-1, label:"Yesterday"},
@@ -23,7 +28,7 @@ var ranges = Object.freeze([
     {value:-13, label:"13 days ago"},
     {value:-14, label:"14 days ago"}
 ]);
-
+*/
 module.exports = function(params) {
     var self = this;
 
@@ -35,6 +40,7 @@ module.exports = function(params) {
         .obs('pagerLoading', false)
         .obs('day')
         .obs('loadedOnce', false)
+        .obs('total', 0)
         .obs('isNew', false)
         .obs('title', '&#160;');
 
@@ -65,6 +71,11 @@ module.exports = function(params) {
             default: return '';
         }
     };
+    self.htmlFor = function(data) {
+        return /*"<p><b>"+popupTitleFor(data)+"</b></p>" +*/ data.validationMessageList.map(function(error) {
+            return "<p>"+error+"</p>";
+        }).join('');
+    };
     self.priorVisible = function() {
         var index = getSelectedIndex();
         return (index < ranges.length-1);   
@@ -74,7 +85,6 @@ module.exports = function(params) {
         return (index > 0);
     };
     self.priorDay = function() {
-        console.log(self.pagerLoadingObs());
         if (self.pagerLoadingObs()){ return false; }
         var index = getSelectedIndex();
         self.selectedRangeObs(ranges[index+1]);
@@ -97,30 +107,32 @@ module.exports = function(params) {
     self.renderPopup = function(data) {
         return data.status === 'validation_failed';
     };
-    self.htmlFor = function(data) {
-        return "<p><b>"+popupTitleFor(data)+"</b></p>" + data.validationMessageList.map(function(error) {
-            return "<p>"+error+"</p>";
-        }).join('');
+    self.toggle = function(model) {
+        model.collapsedObs(!model.collapsedObs());
     };
-    self.completedBy = function(data) {
-        if (data.status === 'succeeded') {
-            var start = new Date(data.requestedOn).getTime();
-            var end = new Date(data.completedOn).getTime();
-            var fStart = transforms.formatLocalDateTime(data.requestedOn);
-            var fEnd = transforms.formatLocalDateTime(data.completedOn);
-            if (fStart.split(', ')[0] === fEnd.split(', ')[0]) {
-                fEnd = fEnd.split(', ')[1];
-            }
-            return fEnd /*transforms.formatLocalDateTime(data.completedOn)*/ + 
-                " (" + data.completedBy + ", "+ transforms.formatMs(end-start)+")";
-        }
-        return '';
+    
+    // TODO: This is a candidate for the tables package. Also, it needs a sorting indicator, the css
+    // for table-sort.scss is very elegant and simple. It is, however, getting closer to a sorting system 
+    // for tables that is friendly to knockout data bindings. Should also be able to look for a 
+    // fieldSortValue property on the observed item, and sort by that.
+    self.sortCol = function(col) {
+        self.itemsObs.__sort = self.itemsObs.__sort || {};
+        return function() {
+            console.log("sortCol");
+            var sort = self.itemsObs.__sort;
+            sort[col] = (typeof sort[col] !== "undefined") ? !sort[col] : true;
+            var asc = sort[col];
+            self.itemsObs.sort(function(item1,item2) {
+                var a = item1[col].toLowerCase();
+                var b = item2[col].toLowerCase();
+                return (asc) ? a.localeCompare(b) : b.localeCompare(a);
+            });
+        };
     };
     self.refresh = function() {
         if (self.pagerLoadingObs()){ return; }
         load();
     };
-
     function popupTitleFor(item) {
         switch(item.status) {
             case 'unknown': return 'Unknown';
@@ -134,35 +146,37 @@ module.exports = function(params) {
     function getSelectedIndex() {
         return ranges.indexOf( self.selectedRangeObs() );
     }
-    function forEachItem(item, i) {
-        return getContentOfUpload(item, i*0);
+    function processItem(item) {
+        bind(item)
+            .obs('content','')
+            .obs('href','')
+            .obs('collapsed', true)
+            .obs('completedBy', '');
+        if (item.status === 'succeeded') {
+            var id = item.schemaId;
+            var rev = item.schemaRevision;
+            item.contentObs(id);
+            item.hrefObs('/#/schemas/'+encodeURIComponent(id)+'/versions/'+rev);
+            item.completedByObs(formatCompletedBy(item));
+        }
     }
-    function makeStatusCall(item) {
-        return serverService.getParticipantUploadStatus(item.uploadId);
-    }
-    function getContentOfUpload(item, ms) {
-        return Promise.delay(ms, item)
-            .then(makeStatusCall)
-            .then(function(response) {
-                var id = response.record.schemaId;
-                var rev = response.record.schemaRevision;
-                item.contentObs(id);
-                item.hrefObs('/#/schemas/'+encodeURIComponent(id)+'/versions/'+rev);
-            });
+    function formatCompletedBy(item) {
+        var start = new Date(item.requestedOn).getTime();
+        var end = new Date(item.completedOn).getTime();
+        var fStart = transforms.formatLocalDateTime(item.requestedOn);
+        var fEnd = transforms.formatLocalDateTime(item.completedOn);
+        if (fStart.split(', ')[0] === fEnd.split(', ')[0]) {
+            fEnd = fEnd.split(', ')[1];
+        }
+        return fEnd+" ("+item.completedBy+", "+transforms.formatMs(end-start)+")";
     }
     function processUploads(response) {
         self.loadedOnceObs(true);
         var dateString = transforms.formatLocalDateTimeWithoutZone(response.startTime).split(" @ ")[0];
         self.dayObs(dateString);
-
-        var finishedItems = response.items.map(function(item) {
-            bind(item).obs('content','').obs('href');
-            return item;
-        }).filter(function(item) {
-            return item.status === 'succeeded';
-        });
+        self.totalObs(response.items.length);
+        response.items.map(processItem);
         self.itemsObs(response.items);
-        Promise.each(finishedItems, forEachItem);
         return response;
     }
     function load() {

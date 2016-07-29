@@ -5,16 +5,12 @@ var optionsService = require('./../../services/options_service');
 var activitiesObs = ko.observableArray([]);
 var activityOptionsLabel = utils.makeOptionLabelFinder(activitiesObs);
 var Promise = require('bluebird');
-//optionsService.getActivityOptions().then(activitiesObs);
 
 var surveysOptionsObs = ko.observableArray([]);
 var surveysOptionsLabel = utils.makeOptionLabelFinder(surveysOptionsObs);
-///optionsService.getSurveyOptions().then(surveysOptionsObs);
 
 var questionsOptionsObs = ko.observableArray([]);
 var questionsOptionsLabel = utils.makeOptionLabelFinder(questionsOptionsObs);
-// very expensive to initialize all the questions, so disable. Not currently showing in UI
-//optionsService.getQuestionOptions().then(questionsOptionsObs);
 
 var TYPE_OPTIONS = Object.freeze([
     {value: 'SimpleScheduleStrategy', label: 'Simple Schedule'},

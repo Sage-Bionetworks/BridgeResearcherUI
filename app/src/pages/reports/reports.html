@@ -17,7 +17,7 @@
             <thead>
                 <tr>
                     <th width="10" data-bind="visible: isDeveloper"></th>
-                    <th width="250">Report identifier</th>
+                    <th width="250">Report</th>
                 </tr>
             </thead>
             <tbody data-bind="foreach: itemsObs">
@@ -26,9 +26,8 @@
                         <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                     </td>
                     <td width="100%">
-                        <a data-bind="attr:{'href': '#/reports/' + encodeURIComponent($data.identifier)}, text: $data.identifier">
-
-                        </a>
+                        <a data-bind="attr:{'href': '#/reports/' + encodeURIComponent($data.identifier)}, 
+                            text: $data.identifier"></a>
                     </td>
                 </tr>
             </tbody>

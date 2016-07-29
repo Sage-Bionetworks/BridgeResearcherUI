@@ -18,14 +18,13 @@ module.exports = function() {
         
     self.total = 0;
     self.searchFilter = null;
-
+    
     tables.prepareTable(self, "participant", "#/participants", function(participant) {
         return serverService.deleteParticipant(participant.id);
     });
 
     self.isAdmin = root.isAdmin;
     self.recordsObs = ko.observable("");
-    self.formatTitleCase = fn.formatTitleCase;
     self.formatName = fn.formatName;
     self.formatDateTime = fn.formatLocalDateTime;
     self.classNameForStatus = function(user) {

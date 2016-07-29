@@ -26,7 +26,6 @@
                     <th>Email</th>
                     <th>Name</th>
                     <th style="white-space: nowrap">Created On</th>
-                    <th>Status</th>
                     <th></th>
                 </tr>
             </thead>
@@ -40,12 +39,13 @@
                     </td>
                     <td data-bind="text: $component.formatName($data)"></td>
                     <td style="white-space: nowrap" data-bind="text: $component.formatDateTime($data.createdOn)"></td>
-                    <td data-bind="text: $component.formatTitleCase($data.status)"></td>
+                    <!--<td data-bind="text: $component.formatTitleCase($data.status)"></td>-->
                     <td style="padding: 0; text-align:right">
                         <button data-bind="visible: $data.status === 'unverified', click: $component.resendEmailVerification"
                             class="ui basic compact mini button">Resend email verification</button>
                         <button data-bind="visible: $data.status === 'unverified', click: $component.enableAccount"
                             class="ui basic compact mini button">Enable account</button>
+                        <span style="padding-right:1rem" data-bind="visible: $data.status === 'disabled'"><i class="warning sign icon"></i>Disabled</span>
                     </td>
                 </tr>
             </tbody>
