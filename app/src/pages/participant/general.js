@@ -39,7 +39,9 @@ module.exports = function(params) {
         .bind('userId', userId)
         .bind('id', userId)
         .bind('roles[]', null, fn.formatRoles, fn.persistRoles)
-        .bind('title', (userId === "new") ? "New participant" : decodeURIComponent(params.name), fn.formatTitle);
+        .bind('title', (userId === "new") ? "New participant" : "&#160;", fn.formatTitle);
+    
+    serverService.getParticipantName(userId).then(self.titleObs);
     
     self.statusObs.subscribe(function(status) {
         self.showEnableAccountObs(status !== "enabled");

@@ -17,15 +17,20 @@ module.exports = function(params) {
 
     tables.prepareTable(self, 
         "report", 
-        "#/participants/"+params.userId+"/reports/"+encodeURIComponent(params.name),
+        "#/participants/"+params.userId+"/reports",
         deleteItem);
 
     bind(self)
         .obs('isNew', false)
         .obs('userId', params.userId)
-        .obs('name', params.name)
-        .obs('title', params.name)
+        .obs('name', '')
+        .obs('title', '&#160;')
         .obs('identifier', params.identifier);
+
+    serverService.getParticipantName(params.userId).then(function(name) {
+        self.titleObs(name);
+        self.nameObs(name);
+    });
 
     self.isDeveloper = root.isDeveloper;
 

@@ -9,11 +9,16 @@ module.exports = function(params) {
 
     bind(self)
         .obs('userId', params.userId)
-        .obs('name', params.name)
+        .obs('name', '')
         .obs('isNew', false)
-        .obs('title', params.name);
+        .obs('title', '&#160;');
 
-    var upLink = "#/participants/"+params.userId+"/reports/"+encodeURIComponent(params.name);
+    serverService.getParticipantName(params.userId).then(function(name) {
+        self.nameObs(name);
+        self.titleObs(name);
+    });
+
+    var upLink = "#/participants/"+params.userId+"/reports";
 
     tables.prepareTable(self, 'report', upLink, function(item) {
         return serverService.deleteParticipantReport(item.identifier, params.userId);
@@ -23,7 +28,7 @@ module.exports = function(params) {
     self.isResearcher = root.isResearcher;
 
     self.reportURL = function(item) {
-        return '#/participants/' + self.userIdObs() + '/reports/' + item.identifier + '/' + encodeURIComponent(params.name);        
+        return '#/participants/' + self.userIdObs() + '/reports/' + item.identifier;        
     };
     self.addReport = function(vm, event) {
         root.openDialog('add_report', {
