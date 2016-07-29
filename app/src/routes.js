@@ -8,18 +8,16 @@ require('./bindings/dragula');
 require('./components');
 var ko = require('knockout');
 require('knockout-postbox');
-
 var director = require('director');
 var root = require('./root');
 
-var GUID_CREATEDON = ['guid', 'createdOn'];
+var GUID_CREATEDON = ['guid','createdOn'];
 var GUID = ['guid'];
 var ID = ['id'];
 var SCHEMAID_REVISION = ['schemaId','revision'];
 var SCHEMAID = ['schemaId'];
-var USERID_NAME = ['userId', 'name'];
-var USERID_IDENTIFIER_NAME = ['userId','identifier','name'];
 var USERID = ['userId'];
+var USERID_IDENTIFIER = ['userId','identifier'];
 
 function namedParams(fields, args) {
     return (fields || []).reduce(function(params, name, i) {
@@ -69,13 +67,12 @@ router.on('/scheduleplans/:guid', routeTo('scheduleplan', GUID));
 router.on('/synapse', routeTo('synapse'));
 router.on('/lab_codes', routeTo('lab_codes'));
 router.on('/externalIds', routeTo('external_ids'));
-router.on('/participants/:userId/reports/:identifier/:name', routeTo('participant_report', USERID_IDENTIFIER_NAME));
-router.on('/participants/:userId/activities/:name', routeTo('participant_activities', USERID_NAME));
-router.on('/participants/:userId/consents/:name', routeTo('participant_consents', USERID_NAME));
-router.on('/participants/:userId/reports/:name', routeTo('participant_reports', USERID_NAME));
-router.on('/participants/:userId/uploads/:name', routeTo('participant_uploads', USERID_NAME));
-router.on('/participants/:userId/:name', routeTo('participant', USERID_NAME));
-router.on('/participants/:userId', routeTo('participant', USERID));
+router.on('/participants/:userId/reports/:identifier', routeTo('participant_report', USERID_IDENTIFIER));
+router.on('/participants/:userId/activities', routeTo('participant_activities', USERID));
+router.on('/participants/:userId/consents', routeTo('participant_consents', USERID));
+router.on('/participants/:userId/reports', routeTo('participant_reports', USERID));
+router.on('/participants/:userId/uploads', routeTo('participant_uploads', USERID));
+router.on('/participants/:userId', routeTo('participant_general', USERID));
 router.on('/participants', routeTo('participants'));
 router.on('/admin/info', routeTo('admin_info'));
 router.on('/admin/cache', routeTo('admin_cache'));

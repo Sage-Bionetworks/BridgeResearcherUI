@@ -16,7 +16,9 @@ module.exports = function(params) {
         .obs('items[]')
         .obs('total', 0)
         .obs('isNew', false)
-        .obs('title', params.name);
+        .obs('title', '&#160;');
+
+    serverService.getParticipantName(params.userId).then(self.titleObs);
 
     self.formatTitleCase = fn.formatTitleCase;
     self.formatDateTime = fn.formatLocalDateTimeWithoutZone;

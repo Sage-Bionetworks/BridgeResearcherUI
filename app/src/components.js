@@ -106,29 +106,29 @@ reg('participants', {
     viewModel: require('./pages/participants/participants'),
     template: require('./pages/participants/participants.html')
 });
-reg('participant', {
-    viewModel: require('./pages/participant/participant'),
-    template: require('./pages/participant/participant.html')
+reg('participant_general', {
+    viewModel: require('./pages/participant/general'),
+    template: require('./pages/participant/general.html')
 });
 reg('participant_activities', {
-    viewModel: require('./pages/participant_activities/participant_activities'),
-    template: require('./pages/participant_activities/participant_activities.html')
+    viewModel: require('./pages/participant/activities'),
+    template: require('./pages/participant/activities.html')
 });
 reg('participant_consents', {
-    viewModel: require('./pages/participant_consents/participant_consents'),
-    template: require('./pages/participant_consents/participant_consents.html')
+    viewModel: require('./pages/participant/consents'),
+    template: require('./pages/participant/consents.html')
 });
 reg('participant_reports', {
-    viewModel: require('./pages/participant_reports/participant_reports'),
-    template: require('./pages/participant_reports/participant_reports.html')
+    viewModel: require('./pages/participant/reports'),
+    template: require('./pages/participant/reports.html')
 });
 reg('participant_report', {
-    viewModel: require('./pages/participant_report/participant_report'),
-    template: require('./pages/participant_report/participant_report.html')
+    viewModel: require('./pages/participant/report'),
+    template: require('./pages/participant/report.html')
 });
 reg('participant_uploads', {
-    viewModel: require('./pages/participant_uploads/participant_uploads'),
-    template: require('./pages/participant_uploads/participant_uploads.html')
+    viewModel: require('./pages/participant/uploads'),
+    template: require('./pages/participant/uploads.html')
 });
 reg('lab_codes', {
     viewModel: require('./pages/lab_codes/lab_codes'),

@@ -34,15 +34,20 @@ module.exports = function(params) {
 
     bind(self)
         .obs('userId', params.userId)
-        .obs('name', params.name)
+        .obs('name', '')
         .obs('ranges[]', ranges)
         .obs('selectedRange', ranges[0])
         .obs('pagerLoading', false)
         .obs('day')
         .obs('loadedOnce', false)
-        .obs('isNew', false)
         .obs('total', 0)
-        .obs('title', params.name);
+        .obs('isNew', false)
+        .obs('title', '&#160;');
+
+    serverService.getParticipantName(params.userId).then(function(name) {
+        self.nameObs(name);
+        self.titleObs(name);
+    });
 
     self.formatLocalDateTime = transforms.formatLocalDateTime;
     self.selectedRangeObs.subscribe(load);
@@ -97,7 +102,7 @@ module.exports = function(params) {
         return false;
     };
     self.uploadURL = function(data) {
-        return '#/participants/' + self.userIdObs() + '/uploads/' + data.uploadId + '/' + encodeURIComponent(params.name);
+        return '#/participants/' + self.userIdObs() + '/uploads/' + data.uploadId;
     };
     self.renderPopup = function(data) {
         return data.status === 'validation_failed';

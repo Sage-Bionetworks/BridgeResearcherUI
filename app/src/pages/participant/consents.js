@@ -13,7 +13,9 @@ module.exports = function(params) {
         .obs('consentHistory[]')
         .obs('isNew', false)
         .obs('noConsent', true)
-        .obs('title', params.name);
+        .obs('title', '&#160;');
+
+    serverService.getParticipantName(params.userId).then(self.titleObs);
 
     function signOut() {
         self.noConsentObs(true);

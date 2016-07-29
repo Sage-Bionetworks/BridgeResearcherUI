@@ -11,6 +11,7 @@ var storeService = require('./store_service');
 var config = require('../config');
 var utils = require("../utils");
 var Promise = require('bluebird');
+var transforms = require('../transforms');
 
 var SESSION_KEY = 'session';
 var SESSION_STARTED_EVENT_KEY = 'sessionStarted';
@@ -198,6 +199,11 @@ function query(object) {
     }).join("&");
     return (string) ? ("?"+string) : "";
 }
+function cacheParticipantName(response) {
+    var name = transforms.formatName(response);
+    cache.set(response.id+':name', name);
+    return response;
+}
 
 module.exports = {
     isAuthenticated: function() {
@@ -383,15 +389,30 @@ module.exports = {
         return get(config.participants+queryString);
     },
     getParticipant: function(id) {
-        return get(config.participants+"/"+id);
+        return get(config.participants+"/"+id).then(cacheParticipantName);
+    },
+    // pseudo-service to cache the participant name, which is used in a tabset where we want it to be stable and 
+    // don't want to reload the participant each time (we don't cache that record)
+    getParticipantName: function(id) {
+        var name = cache.get(id+':name');
+        if (name) {
+            return Promise.resolve(name);
+        } else {
+            return get(config.participants+"/"+id).then(cacheParticipantName)
+                .then(function() {
+                    return Promise.resolve(cache.get(id+':name'));
+                });
+        }
     },
     createParticipant: function(participant) {
         return post(config.participants, participant);
     },
     updateParticipant: function(participant) {
+        cache.clear(participant.id+':name');
         return post(config.participants+"/"+participant.id, participant);
     },
     deleteParticipant: function(id) {
+        cache.clear(id+':name');
         return del(config.users + '/' + id);
     },
     signOutUser: function(id) {

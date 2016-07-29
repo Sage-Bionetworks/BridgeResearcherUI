@@ -35,7 +35,7 @@
                         <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                     </td>
                     <td>
-                        <a data-bind="attr: {'href': '#/participants/'+$data.id+'/'+encodeURIComponent($component.formatName($data))}, text: $data.email"></a>
+                        <a data-bind="attr: {'href': '#/participants/'+$data.id}, text: $data.email"></a>
                     </td>
                     <td data-bind="text: $component.formatName($data)"></td>
                     <td style="white-space: nowrap" data-bind="text: $component.formatDateTime($data.createdOn)"></td>
