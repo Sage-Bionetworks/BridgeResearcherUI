@@ -128,19 +128,6 @@ footer p {
     color:#db2828
 }
 
-/* pagination */
-
-.pagination {
-    float:right; 
-    position:relative; 
-}
-.pagination .ui.active.loader {
-    display:none;
-}
-.pagination.loading .ui.active.loader {
-    display:block;
-}
-
 /* participant_consents */
 .signature-container {
     margin:0!important;

@@ -18,6 +18,7 @@ module.exports = function(params) {
 
     self.identifierObs = ko.observable(params.id);
     self.isDeveloper = root.isDeveloper;
+    self.showLoaderObs = ko.observable(false);
 
     var d = new Date();
     self.currentMonth = d.getMonth();
@@ -72,16 +73,27 @@ module.exports = function(params) {
         }
         load();
     };
+    self.thisMonth = function() {
+        var d = new Date();
+        self.currentMonth = d.getMonth();
+        self.currentYear = d.getFullYear();
+        load();
+    };
 
     function mapResponse(response) {
         response.items = response.items.map(jsonFormatter.mapItem);
         self.itemsObs(response.items.sort());
     }
     function load() {
+        self.showLoaderObs(true);
         self.formatMonthObs(MONTHS[self.currentMonth] + " " + self.currentYear);
         var startDate = firstDayOfMonth(self.currentYear, self.currentMonth);
         var endDate = lastDayOfMonth(self.currentYear, self.currentMonth);
-        serverService.getStudyReport(params.id, startDate, endDate).then(mapResponse);
+        serverService.getStudyReport(params.id, startDate, endDate)
+            .then(mapResponse)
+            .then(function() {
+                self.showLoaderObs(false);
+            });
     }
     load();
 };

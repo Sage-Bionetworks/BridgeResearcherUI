@@ -21,16 +21,19 @@
             <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
         </div>
         <div class="ui small pagination menu">
-            <a class="item" title="Prior month" data-bind="click: priorMonth">
+            <div class="item" title="Prior month" data-bind="click: priorMonth">
                 <i class="chevron left icon"></i>
-            </a>
+            </div>
             <div class="active item">
-                <div class="ui small active loader"></div>
+                <div data-bind="visible: showLoaderObs" class="ui small active loader"></div>
                 <span data-bind="text: formatMonthObs"></span>
             </div>
-            <a class="item" title="Next month" data-bind="click: nextMonth">
+            <div class="item" title="Current month" data-bind="click: thisMonth">
+                <i class="refresh icon"></i>
+            </div>
+            <div class="item" title="Next month" data-bind="click: nextMonth">
                 <i class="chevron right icon"></i>
-            </a>
+            </div>
         </div>
     </div>
     <div data-bind="visible: itemsObs().length > 0">
