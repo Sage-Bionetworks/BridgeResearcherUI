@@ -8,10 +8,10 @@
         </div>
     </div>
     <div class="ui secondary pointing menu">
-        <a href="#/ve_template" class="item">
+        <a class="active item">
             <i class="file outline icon"></i> Verify Email
         </a>
-        <a class="active item">
+        <a href="#/email_templates/reset_password" class="item">
             <i class="history icon"></i> Reset Password
         </a>
     </div>
@@ -21,21 +21,21 @@
         <div class="ten wide column">
             <errors></errors>
             <form class="ui form">
-                <div class="required field" id="resetPasswordTemplate_subject">
+                <div class="required field" id="verifyEmailTemplate_subject">
                     <label>Subject</label>
-                    <input type="text" name="subject" data-bind="value: subjectObs, hasFocus: true"/>
+                    <input type="text" name="subject" data-bind="value: subject, hasFocus: true"/>
                 </div>
                 <div class="field">
-                    <textarea id="rpTemplate" data-bind="ckeditor: $component.initEditor" class="ui textarea doc"></textarea>
+                    <textarea id="veTemplate" data-bind="ckeditor: $component.initEditor" class="ui textarea doc"></textarea>
                 </div>
             </form>
         </div>
         <div class="six wide column">
             <div class="ui message">
-                <p>This is the email sent to users when they ask to reset their password. </p>
+                <p>This is the email sent to users when they sign up for your study. </p>
 
                 <p><strong>It <em>must</em> contain the value <code>${url}</code>,</strong> which is a variable that will be
-                    replaced with the address users must click to reset their passwords. </p>
+                    replaced with the address users must click to verify their email addresses. </p>
 
                 <p>There are other values available: </p>
 

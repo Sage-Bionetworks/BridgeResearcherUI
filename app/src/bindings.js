@@ -8,7 +8,7 @@ var tablesort = require('tablesort');
 // This is hacky, webpack has better support for this. Worse, semantic is a jQuery
 // plugin and adds no globals that webpack can convert to modules.
 window.$ = window.jQuery = $;
-require('../lib/semantic'); // we reference it here.
+require('../lib/semantic-2.2.min'); // we reference it here.
 
 // http://stackoverflow.com/questions/23606541/observable-array-push-multiple-objects-in-knockout-js
 ko.observableArray.fn.pushAll = function(valuesToPush) {

@@ -6,13 +6,13 @@ var bind = require('./binder');
 
 // Used in navigation to keep a section highlighted as you navigate into it.
 var pageSets = {
-    'info': ['info', 'email', 'data_groups', 'eligibility', 'synapse'],
+    'settings/general': ['general', 'email', 'data_groups', 'password_policy', 'eligibility', 'user_attributes', 'synapse'],
     'surveys': ['surveys','survey','survey_versions', "survey_schema"],
     'schemas': ['schemas','schema','schema_versions'],
     'scheduleplans': ['scheduleplans','scheduleplan'],
-    've_template': ['ve_template', 'rp_template'],
+    'email_templates': ['verify_email', 'reset_password'],
     'subpopulations': ['subpopulations', 'subpopulation', 'subpopulation_editor', 'subpopulation_history', 'subpopulation_download'],
-    'participants': ['participants','participant','participant_consents', 'participant_reports', 'participant_report', 
+    'participants': ['participants','participant_general','participant_consents', 'participant_reports', 'participant_report', 
         'participant_activities', 'participant_uploads', 'participant_upload'],
     'externalIds': ['external_ids'],
     'admin/info': ['admin_info'],
