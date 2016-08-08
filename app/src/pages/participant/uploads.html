@@ -19,15 +19,14 @@
     <errors></errors>
     <div class="line-control">
         <div>
-            <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
         </div>
         <div>
-            <div class="ui small pagination menu" data-bind="visible: loadedOnceObs && itemsObs().length > 0, css:{loading:pagerLoadingObs}">
+            <div class="ui small pagination menu" data-bind="visible: loadedOnceObs, css:{loading:pagerLoadingObs}">
                 <div class="item" data-bind="click: priorDay, visible: priorVisible()">
                     <i class="chevron left icon"></i>
                 </div>
                 <div class="active item">
-                    <div class="ui small active loader"></div>
+                    <div data-bind="visible: pagerLoadingObs" class="ui small active loader"></div>
                     <div data-bind="semantic: 'dropdown'">
                         <div class="text" data-bind="text: selectedRangeObs().label"></div>
                         <i class="dropdown icon"></i>
@@ -36,54 +35,59 @@
                         </div>
                     </div>
                 </div>
-                <div class="item" data-bind="click: refresh">
-                    <i class="refresh icon"></i>
-                </div>
                 <div class="item" data-bind="click: nextDay, visible: nextVisible()">
                     <i class="chevron right icon"></i>
                 </div>
             </div>
+            <div class="ui small pagination menu" style="margin-left:1rem!important" data-bind="visible: loadedOnceObs, css:{loading:pagerLoadingObs}">
+                <div class="item" data-bind="click: refresh">
+                    Today
+                </div>
+            </div>
         </div>
     </div>
-    <div data-bind="visible: itemsObs().length > 0">
-        <table class="ui compact selectable table">
-            <thead>
-                <tr>
-                    <th style="width:10px"></th>
-                    <th data-bind="click: sortCol('uploadId')">Uploads for: <span data-bind="text: dayObs"></span></th>
-                    <th data-bind="click: sortCol('requestedOn')">Requested On</th>
-                    <th data-bind="click: sortCol('completedOn')">Completed On</th>
-                    <th>Schema of content</th>
-                </tr>
-            </thead>
-            <tbody data-bind="foreach: itemsObs">
-                <tr data-bind="attr:{class: $component.classFor($data)}">
-                    <td>
-                        <i data-bind="attr:{class:$component.iconFor($data)}"></i>
-                    </td>
-                    <td>
-                        <span data-bind="text: $data.uploadId"></span>
-                        <span data-bind="visible: $data.status === 'validation_failed'">
-                            <span data-bind="visible: $data.collapsedObs">
-                                <a href="" data-bind="click: $component.toggle">
-                                    <i style="margin:0;padding:0" class="plus square outline icon"></i> Show Errors
-                                </a>
-                            </span>
-                            <span data-bind="visible: !$data.collapsedObs()">
-                                <a href="" data-bind="click: $component.toggle">
-                                    <i style="margin:0;padding:0" class="minus square outline icon"></i> Hide Errors
-                                </a>
-                                <div data-bind="html: $component.htmlFor($data)">
-                            </span>
+    <table class="ui compact selectable table">
+        <thead>
+            <tr>
+                <th style="width:10px"></th>
+                <th data-bind="click: sortCol('uploadId')">Uploads for: <span data-bind="text: dayObs"></span></th>
+                <th data-bind="click: sortCol('requestedOn')">Requested On</th>
+                <th data-bind="click: sortCol('completedOn')">Completed On</th>
+                <th>Schema of content</th>
+            </tr>
+        </thead>
+        <tbody class="no_records" data-bind="visible: itemsObs().length === 0">
+            <tr>
+                <td colspan="5" data-bind="html: recordsMessageObs"></td>
+            </tr>
+        </tbody>        
+        <tbody data-bind="foreach: itemsObs">
+            <tr data-bind="attr:{class: $component.classFor($data)}">
+                <td>
+                    <i data-bind="attr:{class:$component.iconFor($data)}"></i>
+                </td>
+                <td>
+                    <span data-bind="text: $data.uploadId"></span>
+                    <span data-bind="visible: $data.status === 'validation_failed'">
+                        <span data-bind="visible: $data.collapsedObs">
+                            <a href="" data-bind="click: $component.toggle">
+                                <i style="margin:0;padding:0" class="plus square outline icon"></i> Show Errors
+                            </a>
                         </span>
-                    </td>
-                    <td data-bind="text: $component.formatLocalDateTime($data.requestedOn)"></td>
-                    <td data-bind="text: $data.completedByObs"></td>
-                    <td data-bind="attr:{'data-sort':$data.contentObs}">
-                        <a target="_blank" rel="noopener" data-bind="attr:{href: $data.hrefObs}, text: $data.contentObs"></a>
-                    </td>                    
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                        <span data-bind="visible: !$data.collapsedObs()">
+                            <a href="" data-bind="click: $component.toggle">
+                                <i style="margin:0;padding:0" class="minus square outline icon"></i> Hide Errors
+                            </a>
+                            <div data-bind="html: $component.htmlFor($data)">
+                        </span>
+                    </span>
+                </td>
+                <td data-bind="text: $component.formatLocalDateTime($data.requestedOn)"></td>
+                <td data-bind="text: $data.completedByObs"></td>
+                <td data-bind="attr:{'data-sort':$data.contentObs}">
+                    <a target="_blank" rel="noopener" data-bind="attr:{href: $data.hrefObs}, text: $data.contentObs"></a>
+                </td>                    
+            </tr>
+        </tbody>
+    </table>
 </div>

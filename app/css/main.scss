@@ -88,8 +88,12 @@ footer p {
 
 .loading_status {
     font-size: larger;
-    clear: both;
 }
+    .no_records td {
+        font-size: larger;
+        padding: 1rem!important;
+        text-align: center!important;
+    }
 .public-key {
     font-family:monospace;
     white-space:pre;
@@ -117,12 +121,6 @@ footer p {
     content: "admin only";
     font-variant: small-caps;
     white-space: pre;
-}
-.inline-loader {
-    display: none!important;
-}
-.loading .inline-loader {
-    display: block!important;
 }
 .red {
     color:#db2828
@@ -213,4 +211,11 @@ progress {
 }
 .disabled a {
     opacity: .7;
+}
+/* External Identifiers page controls, there's a primary button dropdown with poor icon spacing */
+.ui.small.button.dropdown {
+    padding-right: .5rem;
+    i.icon {
+        margin-left: .5rem;
+    } 
 }

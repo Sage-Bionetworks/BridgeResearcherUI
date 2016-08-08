@@ -3,6 +3,7 @@ var serverService = require('../../services/server_service');
 var bind = require('../../binder');
 var fn = require('../../transforms');
 var alerts = require('../../widgets/alerts');
+var tables = require('../../tables');
 
 var deleteMsg = "In development, you can delete all activities on a test account in order to work on an app.\n\n" +
     "In production, all activity state is lost, so activities will be recreated the next time the user asks for them. " +
@@ -13,10 +14,12 @@ module.exports = function(params) {
 
     var binder = bind(self)
         .obs('userId', params.userId)
-        .obs('items[]')
+        .obs('items[]', [])
         .obs('total', 0)
         .obs('isNew', false)
         .obs('title', '&#160;');
+
+    tables.prepareTable(self, 'activitie');
 
     serverService.getParticipantName(params.userId).then(self.titleObs);
 
@@ -50,7 +53,7 @@ module.exports = function(params) {
 
     function msgIfNoRecords(response) {
         if (response.items.length === 0) {
-            document.querySelector(".loading_status").textContent = "There are no activities for this participant.";
+            self.recordsMessageObs("There are no activities for this participant.");
         }
         return response;
     }

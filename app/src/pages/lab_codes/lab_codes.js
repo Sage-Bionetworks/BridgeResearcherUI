@@ -2,6 +2,7 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var root = require('../../root');
 var bind = require('../../binder');
+var tables = require('../../tables');
 
 module.exports = function() {
     var self = this;
@@ -13,9 +14,11 @@ module.exports = function() {
         .obs('result', '')
         .obs('showResults', false);
 
+    tables.prepareTable(self, 'lab code');
+
     function msgIfNoRecords(response) {
         if (response.items.length === 0) {
-            document.querySelector(".loading_status").textContent = "There are no lab codes (or none that start with your search string).";
+            self.recordsMessageObs("There are no lab codes (or none that start with your search string).");
         }
         return response;
     }

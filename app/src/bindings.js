@@ -103,7 +103,9 @@ ko.bindingHandlers.semantic = {
                 }
             });
         } else if (value === 'dropdown') {
-            $element.addClass("ui dropdown").dropdown();
+            setTimeout(function() {
+                $element.addClass("ui dropdown").dropdown();
+            },0);
         } else if (value === 'dropdown-button') {
             $element.addClass("ui small button dropdown").dropdown({action: 'hide'});
         } else if (value === 'popup') {

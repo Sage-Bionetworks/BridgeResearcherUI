@@ -10,7 +10,7 @@ module.exports = function(params) {
         .obs('name')
         .obs('schemaId', params.schemaId);
 
-    tables.prepareTable(self, 'schema', '#/schemas', function(revision) {
+    tables.prepareTable(self, 'schema', function(revision) {
         return serverService.deleteSchemaRevision(revision);
     });
 

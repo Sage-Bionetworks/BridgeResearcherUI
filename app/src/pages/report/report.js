@@ -24,11 +24,7 @@ module.exports = function(params) {
     self.currentMonth = d.getMonth();
     self.currentYear = d.getFullYear();
 
-    function deleteItem(item) {
-        return serverService.deleteStudyReportRecord(params.id, item.date);        
-    }
-
-    tables.prepareTable(self, "report record", "#/reports", deleteItem);
+    tables.prepareTable(self, "report record", deleteItem);
 
     self.addReport = function(vm, event) {
         root.openDialog('add_report', {
@@ -80,9 +76,15 @@ module.exports = function(params) {
         load();
     };
 
+    function deleteItem(item) {
+        return serverService.deleteStudyReportRecord(params.id, item.date);        
+    }
     function mapResponse(response) {
         response.items = response.items.map(jsonFormatter.mapItem);
         self.itemsObs(response.items.sort());
+    }
+    function loaderOff() {
+        self.showLoaderObs(false);
     }
     function load() {
         self.showLoaderObs(true);
@@ -91,9 +93,7 @@ module.exports = function(params) {
         var endDate = lastDayOfMonth(self.currentYear, self.currentMonth);
         serverService.getStudyReport(params.id, startDate, endDate)
             .then(mapResponse)
-            .then(function() {
-                self.showLoaderObs(false);
-            });
+            .then(loaderOff);
     }
     load();
 };

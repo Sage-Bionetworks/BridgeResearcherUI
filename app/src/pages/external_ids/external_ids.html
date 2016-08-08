@@ -41,14 +41,18 @@
                 <!-- ko component: {name:'ddb_pager', params: 
                     {loadingFunc: loadingFunc, pageKey: 'external-ids-page', top: true}
                 } --><!-- /ko -->
-                <div class="loading_status" data-bind="visible: itemsObs().length === 0" style="margin: 1rem 0">Loading...</div>
-                <table class="ui compact selectable table" data-bind="visible: itemsObs().length > 0">
+                <table class="ui compact selectable table">
                     <thead>
                         <tr>
                             <th>Identifier</th>
                             <th></th>
                         </tr>
                     </thead>
+                    <tbody class="no_records" data-bind="visible: itemsObs().length === 0">
+                        <tr>
+                            <td colspan="2" data-bind="html: recordsMessageObs"></td>
+                        </tr>
+                    </tbody>                    
                     <tbody data-bind="foreach: itemsObs">
                         <tr>
                             <td style="white-space: nowrap; width:100%" data-bind="text: $data.identifier"></td>

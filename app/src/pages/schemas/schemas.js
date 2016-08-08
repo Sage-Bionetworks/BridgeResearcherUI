@@ -11,7 +11,7 @@ module.exports = function() {
 
     self.isAdmin = root.isAdmin;
     
-    tables.prepareTable(self, "schema", "#/schemas", function(schema) {
+    tables.prepareTable(self, "schema", function(schema) {
         return serverService.deleteSchema(schema.schemaId);
     });
 
