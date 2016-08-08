@@ -10,29 +10,29 @@ reg('errors', {
     viewModel: require('./widgets/errors/errors'),
     template: require('./widgets/errors/errors.html')
 });
-reg('info', {
-    viewModel: require('./pages/info/info'),
-    template: require('./pages/info/info.html')
+reg('general', {
+    viewModel: require('./pages/settings/general'),
+    template: require('./pages/settings/general.html')
 });
 reg('email', {
-    viewModel: require('./pages/email/email'),
-    template: require('./pages/email/email.html')
+    viewModel: require('./pages/settings/email'),
+    template: require('./pages/settings/email.html')
 });
 reg('eligibility', {
-    viewModel: require('./pages/eligibility/eligibility'),
-    template: require('./pages/eligibility/eligibility.html')
+    viewModel: require('./pages/settings/eligibility'),
+    template: require('./pages/settings/eligibility.html')
 });
 reg('password_policy', {
-    viewModel: require('./pages/password_policy/password_policy'),
-    template: require('./pages/password_policy/password_policy.html')
+    viewModel: require('./pages/settings/password_policy'),
+    template: require('./pages/settings/password_policy.html')
 });
-reg('ve_template', {
-    viewModel: require('./pages/ve_template/ve_template'),
-    template: require('./pages/ve_template/ve_template.html')
+reg('verify_email', {
+    viewModel: require('./pages/email_templates/verify_email'),
+    template: require('./pages/email_templates/verify_email.html')
 });
-reg('rp_template', {
-    viewModel: require('./pages/rp_template/rp_template'),
-    template: require('./pages/rp_template/rp_template.html')
+reg('reset_password', {
+    viewModel: require('./pages/email_templates/reset_password'),
+    template: require('./pages/email_templates/reset_password.html')
 });
 reg('reports', {
     viewModel: require('./pages/reports/reports'),
@@ -47,20 +47,20 @@ reg('subpopulations', {
     template: require('./pages/subpopulations/subpopulations.html')
 });
 reg('subpopulation', {
-    viewModel: require('./pages/subpopulation/subpopulation'),
-    template: require('./pages/subpopulation/subpopulation.html')
+    viewModel: require('./pages/subpopulation/general'),
+    template: require('./pages/subpopulation/general.html')
 });
 reg('subpopulation_editor', {
-    viewModel: require('./pages/subpopulation_editor/subpopulation_editor'),
-    template: require('./pages/subpopulation_editor/subpopulation_editor.html')
+    viewModel: require('./pages/subpopulation/editor'),
+    template: require('./pages/subpopulation/editor.html')
 });
 reg('subpopulation_history', {
-    viewModel: require('./pages/subpopulation_history/subpopulation_history'),
-    template: require('./pages/subpopulation_history/subpopulation_history.html')
+    viewModel: require('./pages/subpopulation/history'),
+    template: require('./pages/subpopulation/history.html')
 });
 reg('subpopulation_download', {
-    viewModel: require('./pages/subpopulation_download/subpopulation_download'),
-    template: require('./pages/subpopulation_download/subpopulation_download.html')
+    viewModel: require('./pages/subpopulation/download'),
+    template: require('./pages/subpopulation/download.html')
 });
 reg('surveys', {
     viewModel: require('./pages/surveys/surveys'),
@@ -91,8 +91,8 @@ reg('schema_versions', {
     template: require('./pages/schema/schema_versions.html')
 });
 reg('synapse', {
-    viewModel: require('./pages/synapse/synapse'),
-    template: require('./pages/synapse/synapse.html')
+    viewModel: require('./pages/settings/synapse'),
+    template: require('./pages/settings/synapse.html')
 });
 reg('scheduleplans', {
     viewModel: require('./pages/scheduleplans/scheduleplans'),
@@ -345,7 +345,7 @@ reg('withdrawal', {
 
 // Attribute editors
 reg('user_attributes', { 
-    template: require('./pages/set_editors/user_attributes.html'),
+    template: require('./pages/settings/user_attributes.html'),
     viewModel: require('./pages/set_editors/set_editor')('userProfileAttributes')
 });
 reg('task_identifiers', { 
@@ -353,6 +353,6 @@ reg('task_identifiers', {
     viewModel: require('./pages/set_editors/set_editor')('taskIdentifiers')
 });
 reg('data_groups', { 
-    template: require('./pages/set_editors/data_groups.html'),
+    template: require('./pages/settings/data_groups.html'),
     viewModel: require('./pages/set_editors/set_editor')('dataGroups')
 });
