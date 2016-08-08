@@ -5,32 +5,21 @@ var tables = require('../../tables');
 var transforms = require('../../transforms');
 var Promise = require('bluebird');
 
-var ranges = [{value: 0, label:"Today"}, {value:-1, label:"Yesterday"}];
-for (var i=2; i < 15; i++) {
-    ranges.push({value: -i, label: i + " days ago"});
-}
-/*
-var ranges = Object.freeze([
-    {value: 0, label:"Today"},
-    {value:-1, label:"Yesterday"},
-    {value:-2, label:"2 days ago"},
-    {value:-3, label:"3 days ago"},
-    {value:-4, label:"4 days ago"},
-    {value:-5, label:"5 days ago"},
-    {value:-6, label:"6 days ago"},
-    {value:-7, label:"7 days ago"},
+var ONE_DAY = 1000*60*60*24;
 
-    {value:-8, label:"8 days ago"},
-    {value:-9, label:"9 days ago"},
-    {value:-10, label:"10 days ago"},
-    {value:-11, label:"11 days ago"},
-    {value:-12, label:"12 days ago"},
-    {value:-13, label:"13 days ago"},
-    {value:-14, label:"14 days ago"}
-]);
-*/
+function createRanges() {
+    var ranges = [];
+    for (var i=0; i<15; i++) {
+        var d = new Date();
+        d.setTime(d.getTime() - (i*ONE_DAY));
+        ranges.push({value: -i, label: d.toDateString()});
+    }
+    return ranges;
+}
+
 module.exports = function(params) {
     var self = this;
+    var ranges = createRanges();
 
     bind(self)
         .obs('userId', params.userId)
@@ -72,7 +61,7 @@ module.exports = function(params) {
         }
     };
     self.htmlFor = function(data) {
-        return /*"<p><b>"+popupTitleFor(data)+"</b></p>" +*/ data.validationMessageList.map(function(error) {
+        return data.validationMessageList.map(function(error) {
             return "<p>"+error+"</p>";
         }).join('');
     };
@@ -131,6 +120,7 @@ module.exports = function(params) {
     };
     self.refresh = function() {
         if (self.pagerLoadingObs()){ return; }
+        self.selectedRangeObs(ranges[0]);
         load();
     };
     function popupTitleFor(item) {

@@ -35,11 +35,7 @@ module.exports = function() {
     var self = this;
 
     self.formatDateTime = fn.formatLocalDateTime;
-
-    // There is no delete function. We'd sorta like to do copy this way, too.
-    tables.prepareTable(self, 'survey', '#/surveys', function(survey) {
-
-    });
+    tables.prepareTable(self, 'survey');
 
     self.formatSchedules = function(survey) {
         return survey.schedulePlanObs().map(function(obj) {

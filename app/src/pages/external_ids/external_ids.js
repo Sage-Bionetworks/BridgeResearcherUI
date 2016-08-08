@@ -4,6 +4,7 @@ var utils = require('../../utils');
 var root = require('../../root');
 require('knockout-postbox');
 var bind = require('../../binder');
+var tables = require('../../tables');
 
 // TODO: If we were really slick, we would validate the identifiers as valid passwords, because that's 
 // how they'll be used when making lab credentials.
@@ -19,6 +20,8 @@ module.exports = function() {
         .obs('externalIdValidationEnabled', false)
         .obs('result', '')
         .obs('showResults', false);
+
+    tables.prepareTable(self, 'external ID');
 
     // to get a spinner on this control you need to adjust the DOM target.
     // Creating a fake event for this.
@@ -52,7 +55,7 @@ module.exports = function() {
     }
     function msgIfNoRecords(response) {
         if (response.items.length === 0) {
-            document.querySelector(".loading_status").textContent = "There are no external IDs (or none that start with your search string).";
+            self.recordsMessageObs("There are no external IDs (or none that start with your search string).");
         }
         return response;
     }

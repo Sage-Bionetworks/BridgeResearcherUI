@@ -19,7 +19,7 @@ module.exports = function() {
     self.total = 0;
     self.searchFilter = null;
     
-    tables.prepareTable(self, "participant", "#/participants", function(participant) {
+    tables.prepareTable(self, "participant", function(participant) {
         return serverService.deleteParticipant(participant.id);
     });
 
@@ -77,7 +77,7 @@ module.exports = function() {
                     // overshot the new list. So drop back and try and find the first page.
                     return self.loadingFunc(0, pageSize, searchFilter);
                 } else {
-                    document.querySelector(".loading_status").textContent = "There are no user accounts, or none that match the filter.";
+                    self.recordsMessageObs("There are no user accounts, or none that match the filter.");
                 }
             }
             return response;

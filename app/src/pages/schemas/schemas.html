@@ -13,8 +13,7 @@
     </div>
 </div>
 <div class="scrollbox">
-    <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
-    <table class="ui compact selectable table" data-bind="visible: itemsObs().length > 0">
+    <table class="ui compact selectable table">
         <thead>
             <tr>
                 <th width="10"></th>
@@ -23,6 +22,11 @@
                 <th>Latest Revision</th>
             </tr>
         </thead>
+        <tbody class="no_records" data-bind="visible: itemsObs().length === 0">
+            <tr>
+                <td colspan="4" data-bind="html: recordsMessageObs"></td>
+            </tr>
+        </tbody>        
         <tbody data-bind="foreach: itemsObs">
             <tr data-bind="css: { positive: $data.active }">
                 <td>

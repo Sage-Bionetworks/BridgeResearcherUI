@@ -145,6 +145,5 @@ module.exports = function(params) {
     if (self.top) {
         self.firstPage();
     }
-    // why. why? why?!?!?!?!?!?!?!?
     document.querySelector("#assignEither").checked = true;
 };

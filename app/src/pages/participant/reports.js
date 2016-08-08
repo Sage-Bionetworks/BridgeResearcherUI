@@ -18,9 +18,7 @@ module.exports = function(params) {
         self.titleObs(name);
     });
 
-    var upLink = "#/participants/"+params.userId+"/reports";
-
-    tables.prepareTable(self, 'report', upLink, function(item) {
+    tables.prepareTable(self, 'report', function(item) {
         return serverService.deleteParticipantReport(item.identifier, params.userId);
     });
 

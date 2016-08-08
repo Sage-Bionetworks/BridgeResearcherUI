@@ -10,7 +10,7 @@ module.exports = function() {
     self.criteriaLabel = criteriaUtils.label;
     self.isDeveloper = root.isDeveloper;
 
-    tables.prepareTable(self, "consent group", "#/subpopulations", function(plan) {
+    tables.prepareTable(self, "consent group", function(plan) {
         return serverService.deleteSubpopulation(plan.guid);
     });
 

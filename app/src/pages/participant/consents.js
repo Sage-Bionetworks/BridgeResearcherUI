@@ -4,16 +4,19 @@ var Promise = require('bluebird');
 var root = require('../../root');
 var bind = require('../../binder');
 var alerts = require('../../widgets/alerts');
+var tables = require('../../tables');
 
 module.exports = function(params) {
     var self = this;
 
     bind(self)
         .obs('userId', params.userId)
-        .obs('consentHistory[]')
+        .obs('items[]')
         .obs('isNew', false)
         .obs('noConsent', true)
         .obs('title', '&#160;');
+
+    tables.prepareTable(self, 'consent');
 
     serverService.getParticipantName(params.userId).then(self.titleObs);
 
@@ -46,7 +49,7 @@ module.exports = function(params) {
 
     // I know, ridiculous...
     function load() {
-        self.consentHistoryObs([]);
+        self.itemsObs([]);
         serverService.getParticipant(self.userIdObs()).then(function(response) {
             var histories = response.consentHistories;
             
@@ -55,7 +58,7 @@ module.exports = function(params) {
             }).then(function(subpopulations) {
                 subpopulations.forEach(function(subpop) {
                     if (histories[subpop.guid].length === 0) {
-                        self.consentHistoryObs.push({
+                        self.itemsObs.push({
                             consentGroupName: subpop.name,
                             name: "No consent",
                             consented: false
@@ -78,7 +81,7 @@ module.exports = function(params) {
                         if (record.imageMimeType && record.imageData) {
                             history.imageData = "data:"+record.imageMimeType+";base64,"+record.imageData;
                         }
-                        self.consentHistoryObs.push(history);
+                        self.itemsObs.push(history);
                     });
                 });
             });

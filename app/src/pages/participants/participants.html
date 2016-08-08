@@ -17,43 +17,45 @@
     <!-- ko component: {name:'pager', params: 
         {loadingFunc: loadingFunc, pageKey: 'participants-page', top: true}
     } --><!-- /ko -->
-    <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
-    <div data-bind="visible: itemsObs().length > 0">
-        <table class="ui compact selectable table">
-            <thead>
-                <tr>
-                    <th width="10" data-bind="visible: isAdmin"></th>
-                    <th>Email</th>
-                    <th>Name</th>
-                    <th style="white-space: nowrap">Created On</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody data-bind="foreach: itemsObs">
-                <tr data-bind="css: $component.classNameForStatus($data)">
-                    <td data-bind="visible: $parent.isAdmin">
-                        <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
-                    </td>
-                    <td>
-                        <a data-bind="attr: {'href': '#/participants/'+$data.id}, text: $data.email"></a>
-                    </td>
-                    <td data-bind="text: $component.formatName($data)"></td>
-                    <td style="white-space: nowrap" data-bind="text: $component.formatDateTime($data.createdOn)"></td>
-                    <!--<td data-bind="text: $component.formatTitleCase($data.status)"></td>-->
-                    <td style="padding: 0; text-align:right">
-                        <button data-bind="visible: $data.status === 'unverified', click: $component.resendEmailVerification"
-                            class="ui basic compact mini button">Resend email verification</button>
-                        <button data-bind="visible: $data.status === 'unverified', click: $component.enableAccount"
-                            class="ui basic compact mini button">Enable account</button>
-                        <span style="padding-right:1rem" data-bind="visible: $data.status === 'disabled'"><i class="warning sign icon"></i>Disabled</span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <!-- ko component: {name:'pager', params: 
-            {loadingFunc: loadingFunc, pageKey: 'participants-page', top: false}
-        } --><!-- /ko -->
-    </div>
+    <table class="ui compact selectable table">
+        <thead>
+            <tr>
+                <th width="10" data-bind="visible: isAdmin"></th>
+                <th>Email</th>
+                <th>Name</th>
+                <th style="white-space: nowrap">Created On</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="no_records" data-bind="visible: itemsObs().length === 0">
+            <tr>
+                <td colspan="5" data-bind="html: recordsMessageObs"></td>
+            </tr>
+        </tbody>
+        <tbody data-bind="foreach: itemsObs">
+            <tr data-bind="css: $component.classNameForStatus($data)">
+                <td data-bind="visible: $parent.isAdmin">
+                    <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+                </td>
+                <td>
+                    <a data-bind="attr: {'href': '#/participants/'+$data.id}, text: $data.email"></a>
+                </td>
+                <td data-bind="text: $component.formatName($data)"></td>
+                <td style="white-space: nowrap" data-bind="text: $component.formatDateTime($data.createdOn)"></td>
+                <!--<td data-bind="text: $component.formatTitleCase($data.status)"></td>-->
+                <td style="padding: 0; text-align:right">
+                    <button data-bind="visible: $data.status === 'unverified', click: $component.resendEmailVerification"
+                        class="ui basic compact mini button">Resend email verification</button>
+                    <button data-bind="visible: $data.status === 'unverified', click: $component.enableAccount"
+                        class="ui basic compact mini button">Enable account</button>
+                    <span style="padding-right:1rem" data-bind="visible: $data.status === 'disabled'"><i class="warning sign icon"></i>Disabled</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <!-- ko component: {name:'pager', params: 
+        {loadingFunc: loadingFunc, pageKey: 'participants-page', top: false}
+    } --><!-- /ko -->
 </div>
 
 
