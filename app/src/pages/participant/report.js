@@ -28,11 +28,12 @@ module.exports = function(params) {
         .obs('formatMonth')
         .obs('showLoader', false);
 
-    serverService.getParticipantName(params.userId).then(function(name) {
-        self.titleObs(name);
-        self.nameObs(name);
-    });
-
+    serverService.getParticipantName(params.userId).then(function(part) {
+        self.titleObs(root.isPublicObs() ? part.name : part.externalId);
+        self.nameObs(root.isPublicObs() ? part.name : part.externalId);
+    }).catch(utils.failureHandler());
+    
+    self.isPublicObs = root.isPublicObs;
     self.isDeveloper = root.isDeveloper;
 
     var d = new Date();

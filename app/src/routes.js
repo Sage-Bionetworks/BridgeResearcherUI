@@ -10,6 +10,7 @@ var ko = require('knockout');
 require('knockout-postbox');
 var director = require('director');
 var root = require('./root');
+var serverService = require('./services/server_service');
 
 var GUID_CREATEDON = ['guid','createdOn'];
 var GUID = ['guid'];
@@ -28,9 +29,15 @@ function namedParams(fields, args) {
 function routeTo(routeName, fields) {
     return function() {
         var params = namedParams(fields, arguments);
-        console.log("routeTo", routeName, Object.keys(params).map(function(key) { return key + "=" + params[key];}).join(", "));
+        //console.log("routeTo", routeName, Object.keys(params).map(function(key) { return key + "=" + params[key];}).join(", "));
         root.changeView(routeName, params);
     };
+}
+function redirectTo(response) {
+    router.setRoute('/participants/' + response.items[0].id);
+}
+function redirectToParticipant(externalId) {
+    serverService.getParticipants(0,5,"+"+externalId+"@").then(redirectTo);
 }
 
 var router = new director.Router();
@@ -66,8 +73,6 @@ router.on('/schemas/:schemaId/versions/:revision', routeTo('schema', SCHEMAID_RE
 router.on('/schedules', routeTo('schedules'));
 router.on('/scheduleplans', routeTo('scheduleplans'));
 router.on('/scheduleplans/:guid', routeTo('scheduleplan', GUID));
-router.on('/lab_codes', routeTo('lab_codes'));
-router.on('/externalIds', routeTo('external_ids'));
 router.on('/participants/:userId/reports/:identifier', routeTo('participant_report', USERID_IDENTIFIER));
 router.on('/participants/:userId/activities', routeTo('participant_activities', USERID));
 router.on('/participants/:userId/consents', routeTo('participant_consents', USERID));
@@ -75,6 +80,8 @@ router.on('/participants/:userId/reports', routeTo('participant_reports', USERID
 router.on('/participants/:userId/uploads', routeTo('participant_uploads', USERID));
 router.on('/participants/:userId', routeTo('participant_general', USERID));
 router.on('/participants', routeTo('participants'));
+router.on('/enrollees/:externalId', redirectToParticipant);
+router.on('/enrollees', routeTo('enrollees'));
 router.on('/admin/info', routeTo('admin_info'));
 router.on('/admin/cache', routeTo('admin_cache'));
 

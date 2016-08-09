@@ -6,7 +6,7 @@
             <i class="search icon"></i>
         </div>
     </div>
-    <div class="line-control-radio" data-bind="visible: top && showAssignment">
+    <div class="line-control-radio line-control-stretch" data-bind="visible: top && showAssignment">
         <label>Credentials?</label>
         <div class="ui radio checkbox">
             <input id="assignTrue" type="radio" value="true" name="assign" data-bind="click: assignFilter"/>
@@ -21,7 +21,7 @@
             <label for="assignEither">Both</label>
         </div>
     </div>
-    <div>
+    <div data-bind="visible: totalPagesObs() > 1">
         <div class="ui small pagination menu" data-bind="css:{loading:showLoaderObs}, visible: totalPagesObs() > 1">
             <div class="item" title="First page" data-bind="click: firstPage, visible: hasFirstPageObs">
                 1

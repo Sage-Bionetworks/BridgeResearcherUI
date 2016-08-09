@@ -4,6 +4,7 @@ var bind = require('../../binder');
 var fn = require('../../transforms');
 var alerts = require('../../widgets/alerts');
 var tables = require('../../tables');
+var root = require('../../root');
 
 var deleteMsg = "In development, you can delete all activities on a test account in order to work on an app.\n\n" +
     "In production, all activity state is lost, so activities will be recreated the next time the user asks for them. " +
@@ -20,9 +21,11 @@ module.exports = function(params) {
         .obs('title', '&#160;');
 
     tables.prepareTable(self, 'activitie');
+    serverService.getParticipantName(params.userId).then(function(part) {
+        self.titleObs(root.isPublicObs() ? part.name : part.externalId);
+    }).catch(utils.failureHandler());
 
-    serverService.getParticipantName(params.userId).then(self.titleObs);
-
+    self.isPublicObs = root.isPublicObs;
     self.formatTitleCase = fn.formatTitleCase;
     self.formatDateTime = fn.formatLocalDateTimeWithoutZone;
     

@@ -43,17 +43,9 @@
                         <a href="#/participants" class="item" data-bind="active: isActive, visible: isPublicObs() && isResearcher()">
                             Participants
                         </a>
-                        <a href="#/subjects" class="item" data-bind="active: isActive, visible: !isPublicObs() && isResearcher()">
+                        <a href="#/enrollees" class="item" data-bind="active: isActive, visible: !isPublicObs() && isResearcher()">
                             Participants
                         </a>
-                        <!--
-                        <a href="#/externalIds" class="item" data-bind="active: isActive, visible: codeRequiredObs">
-                            External Identifiers
-                        </a>
-                        <a href="#/lab_codes" class="item" data-bind="active: isActive, visible: codesEnumeratedObs">
-                            Lab Codes
-                        </a>
-                        -->
                         <a href="#/reports" class="item" data-bind="active: isActive, visible: isDeveloper() || isResearcher()">
                             Report Data
                         </a>

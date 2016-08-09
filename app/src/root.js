@@ -5,6 +5,10 @@ var toastr = require('toastr');
 var bind = require('./binder');
 
 // Used in navigation to keep a section highlighted as you navigate into it.
+var participantPages = ['enrollees','participants','participant_general','participant_consents', 
+    'participant_reports', 'participant_report', 'participant_activities', 'participant_uploads', 
+    'participant_upload'];
+
 var pageSets = {
     'settings/general': ['general', 'email', 'data_groups', 'password_policy', 'eligibility', 'user_attributes', 'synapse'],
     'surveys': ['surveys','survey','survey_versions', "survey_schema"],
@@ -12,9 +16,8 @@ var pageSets = {
     'scheduleplans': ['scheduleplans','scheduleplan'],
     'email_templates': ['verify_email', 'reset_password'],
     'subpopulations': ['subpopulations', 'subpopulation', 'subpopulation_editor', 'subpopulation_history', 'subpopulation_download'],
-    'participants': ['participants','participant_general','participant_consents', 'participant_reports', 'participant_report', 
-        'participant_activities', 'participant_uploads', 'participant_upload'],
-    'externalIds': ['external_ids'],
+    'participants': participantPages,
+    'enrollees': participantPages,
     'admin/info': ['admin_info'],
     'admin/cache': ['admin_cache'],
     'reports': ['reports', 'report']
@@ -114,9 +117,7 @@ var RootViewModel = function() {
         self.rolesObs(session.roles);
         self.closeDialog();
         serverService.getStudy().then(function(study) {
-            // Until we can support on server, enumerating the codes is the same as requiring the 
-            // code at sign up. But these are logically distinct and will be separated on the 
-            // server.
+            // Until we can support on server, enumerating the codes is the same as requiring the code at sign up.
             // isPublic = emailVerificationEnabled
             // codesEumerated = externalIdValidationEnabled
             // codeRequired = requiresExternalIdOnSignUp (doesn't exist) 

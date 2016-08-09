@@ -29,8 +29,7 @@ module.exports = function() {
         .obs('minAndroid')
         .bind('name')
         .bind('sponsorName')
-        .bind('strictUploadValidationEnabled')
-        .bind('externalIdValidationEnabled');
+        .bind('strictUploadValidationEnabled');
 
     self.isPublicObs = root.isPublicObs;
     self.save = function(vm, event) {

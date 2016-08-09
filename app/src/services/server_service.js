@@ -202,7 +202,7 @@ function query(object) {
 function cacheParticipantName(response) {
     if (response && response.id) {
         var name = transforms.formatName(response);
-        cache.set(response.id+':name', name);
+        cache.set(response.id+':name', {name:name,externalId:response.externalId});
     }
     return response;
 }
@@ -393,8 +393,6 @@ module.exports = {
     getParticipant: function(id) {
         return get(config.participants+"/"+id).then(cacheParticipantName);
     },
-    // pseudo-service to cache the participant name, which is used in a tabset where we want it to be stable and 
-    // don't want to reload the participant each time (we don't cache that record)
     getParticipantName: function(id) {
         var name = cache.get(id+':name');
         if (name) {

@@ -13,15 +13,15 @@ module.exports = function(params) {
         .obs('isNew', false)
         .obs('title', '&#160;');
 
-    serverService.getParticipantName(params.userId).then(function(name) {
-        self.nameObs(name);
-        self.titleObs(name);
-    });
+    serverService.getParticipantName(params.userId).then(function(part) {
+        self.titleObs(root.isPublicObs() ? part.name : part.externalId);
+        self.nameObs(root.isPublicObs() ? part.name : part.externalId);
+    }).catch(utils.failureHandler());
 
     tables.prepareTable(self, 'report', function(item) {
         return serverService.deleteParticipantReport(item.identifier, params.userId);
     });
-
+    self.isPublicObs = root.isPublicObs;
     self.isDeveloper = root.isDeveloper;
     self.isResearcher = root.isResearcher;
 

@@ -1,8 +1,8 @@
 .line-control {
     @include flex-box(row);
-    @include justify-content(space-between);
+    @include justify-content(space-after);
     @include align-items(center);
-    margin-bottom: 1rem;
+    /*margin-bottom: 1rem;*/
 
     .pagination {
         cursor: pointer;
@@ -12,9 +12,13 @@
         @include flex-wrap();
     }
 }
+.line-control-stretch {
+    flex: 1;
+}
 .line-control-radio {
+    padding-left: 1rem;
     label {
-        padding-right:1rem;
+        padding-right:.75rem;
     }
     .checkbox {
         margin-left: 0;

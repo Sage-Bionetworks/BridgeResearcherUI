@@ -2,7 +2,8 @@
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
             <div class="ui breadcrumb">
-                <a class="section" href="#/participants">Participants</a>
+                <a class="section" href="#/participants" data-bind="visible: isPublicObs">Participants</a>
+                <a class="section" href="#/enrollees" data-bind="visible: !isPublicObs()">Participants</a>
                 <i class="right chevron icon divider"></i>
             </div>            
             <h3 data-bind="html: titleObs"></h3>
@@ -11,7 +12,8 @@
             <button class="ui red small button" data-bind="click: deleteActivities, disable: itemsObs().length === 0">Delete all activities</button>
         </div>
     </div>
-    <!-- ko component: {name: 'participant-tabset', params: {active: 'activities', isNewObs: isNewObs}} --><!-- /ko -->
+    <!-- ko component: {name: 'participant-tabset', params: {active: 'activities', isNewObs: isNewObs,
+        isPublicObs: isPublicObs}} --><!-- /ko -->
 </div>
 <div class="scrollbox">
     <errors></errors>
@@ -20,7 +22,7 @@
         activities), then this participant has not yet contacted the server. This view is not filtered based on any data groups or other 
         criteria, so if these criteria change on the user, you're seeing all the tasks that have been issued, regardless of the user's state. </p>
     <div class="line-control">
-        <div>
+        <div class="line-control-stretch">
         </div>
         <div>
             <!-- ko component: {name:'ddb_pager', params: {loadingFunc: loadingFunc, 

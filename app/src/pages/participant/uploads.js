@@ -3,6 +3,7 @@ var serverService = require('../../services/server_service');
 var bind = require('../../binder');
 var tables = require('../../tables');
 var transforms = require('../../transforms');
+var root = require('../../root');
 
 var ONE_DAY = 1000*60*60*24;
 
@@ -32,11 +33,12 @@ module.exports = function(params) {
         .obs('isNew', false)
         .obs('title', '&#160;');
 
-    serverService.getParticipantName(params.userId).then(function(name) {
-        self.nameObs(name);
-        self.titleObs(name);
+    serverService.getParticipantName(params.userId).then(function(part) {
+        self.titleObs(root.isPublicObs() ? part.name : part.externalId);
+        self.nameObs(root.isPublicObs() ? part.name : part.externalId);
     }).catch(utils.failureHandler());
 
+    self.isPublicObs = root.isPublicObs;
     self.formatLocalDateTime = transforms.formatLocalDateTime;
     self.selectedRangeObs.subscribe(load);
 

@@ -2,7 +2,8 @@
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
             <div class="ui breadcrumb">
-                <a class="section" href="#/participants">Participants</a>
+                <a class="section" href="#/participants" data-bind="visible: isPublicObs">Participants</a>
+                <a class="section" href="#/enrollees" data-bind="visible: !isPublicObs()">Participants</a>
                 <i class="right chevron icon divider"></i>
             </div>            
             <h3 data-bind="html: titleObs"></h3>
@@ -13,12 +14,13 @@
             </div>
         </div>
     </div>
-    <!-- ko component: {name: 'participant-tabset', params: {active: 'uploads', isNewObs: isNewObs}} --><!-- /ko -->
+    <!-- ko component: {name: 'participant-tabset', params: {active: 'uploads', isNewObs: isNewObs,
+        isPublicObs: isPublicObs}} --><!-- /ko -->
 </div>
 <div class="scrollbox">
     <errors></errors>
     <div class="line-control">
-        <div>
+        <div class="line-control-stretch">
         </div>
         <div>
             <div class="ui small pagination menu" data-bind="visible: loadedOnceObs, css:{loading:showLoaderObs}">
