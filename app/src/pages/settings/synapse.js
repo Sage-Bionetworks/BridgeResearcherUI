@@ -2,6 +2,7 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var bind = require('../../binder');
 var ko = require('knockout');
+var root = require('../../root');
 
 var BASE = "https://www.synapse.org/#!";
 
@@ -13,6 +14,7 @@ module.exports = function() {
         .bind('synapseProjectId')
         .bind('usesCustomExportSchedule');
 
+    self.isPublicObs = root.isPublicObs;
     self.projectLinkObs = ko.computed(function() {
         var value = self.synapseProjectIdObs();
         return (value) ? (BASE+"Synapse:"+value) : null;

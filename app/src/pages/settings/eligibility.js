@@ -2,6 +2,7 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var bind = require('../../binder');
+var root = require('../../root');
     
 function zeroToMax(value) {
     return (value === 0) ? 121 : value;
@@ -17,6 +18,7 @@ module.exports = function() {
     var binder = bind(self)
         .bind('minAgeOfConsent', null, zeroToMax, maxToZero);
     
+    self.isPublicObs = root.isPublicObs;
     self.minAgeLabel = ko.computed(function(){
         return (self.minAgeOfConsentObs() == "121") ? "No age limit" : self.minAgeOfConsentObs();
     });

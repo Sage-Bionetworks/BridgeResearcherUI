@@ -1,6 +1,7 @@
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var bind = require('../../binder');
+var root = require('../../root');
 
 module.exports = function() {
     var self = this;
@@ -19,6 +20,7 @@ module.exports = function() {
         return serverService.emailStatus().then(binder.update('status'));
     }
     
+    self.isPublicObs = root.isPublicObs;
     self.save = function(vm, event) {
         self.study = binder.persist(self.study);
 
