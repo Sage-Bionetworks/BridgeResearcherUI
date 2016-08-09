@@ -7,7 +7,8 @@ module.exports = function() {
 
     var binder = bind(self)
         .bind('healthCodeExportEnabled')
-        .bind('emailVerificationEnabled');
+        .bind('emailVerificationEnabled')
+        .bind('externalIdValidationEnabled');
 
     self.save = function(vm, event) {
         self.study = binder.persist(self.study);

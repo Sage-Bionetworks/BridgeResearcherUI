@@ -2,7 +2,8 @@
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
             <div class="ui breadcrumb">
-                <a class="section" href="#/participants">Participants</a>
+                <a class="section" href="#/participants" data-bind="visible: isPublicObs">Participants</a>
+                <a class="section" href="#/enrollees" data-bind="visible: !isPublicObs()">Participants</a>
                 <i class="right chevron icon divider"></i>
             </div>            
             <h3 data-bind="html: titleObs"></h3>
@@ -12,7 +13,8 @@
             <button class="ui primary small button" data-bind="visible: isDeveloper, click: addReport">Add report&hellip;</button>
         </div>
     </div>
-    <!-- ko component: {name: 'participant-tabset', params: {active: 'reports', isNewObs: isNewObs}} --><!-- /ko -->
+    <!-- ko component: {name: 'participant-tabset', params: {active: 'reports', isNewObs: isNewObs,
+        isPublicObs: isPublicObs}} --><!-- /ko -->
 </div>
 <div class="scrollbox">
     <errors></errors>

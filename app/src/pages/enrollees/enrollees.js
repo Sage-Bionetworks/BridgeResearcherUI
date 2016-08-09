@@ -17,10 +17,10 @@ module.exports = function() {
     var binder = bind(self)
         .obs('items[]', [])
         .obs('total', 0)
-        .obs('externalIdValidationEnabled', false)
         .obs('result', '')
         .obs('showResults', false);
 
+    self.codesEnumeratedObs = root.codesEnumeratedObs;
     tables.prepareTable(self, 'external ID');
 
     // to get a spinner on this control you need to adjust the DOM target.
@@ -45,9 +45,6 @@ module.exports = function() {
         self.showResultsObs(true);
         ko.postbox.publish('external-ids-page-refresh');
     }
-    function showManagementEnabled() {
-        self.externalIdValidationEnabledObs(true);
-    } 
     function convertToPaged(identifier) {
         return function() {
             return {items: [{identifier: identifier}]};    
@@ -55,25 +52,13 @@ module.exports = function() {
     }
     function msgIfNoRecords(response) {
         if (response.items.length === 0) {
-            self.recordsMessageObs("There are no external IDs (or none that start with your search string).");
+            self.recordsMessageObs("There are no participants (or none that start with your search string).");
         }
         return response;
     }
-    
     self.openImportDialog = function(vm, event) {
         self.showResultsObs(false);
         root.openDialog('external_id_importer', {vm: self});
-    };
-    self.enableManagement = function(vm, event) {
-        if (self.study !== null) {
-            utils.startHandler(self, event);
-            self.study.externalIdValidationEnabled = true;
-            
-            serverService.saveStudy(self.study)
-                .then(showManagementEnabled)
-                .then(utils.successHandler(vm, event, "External ID management enabled."))
-                .catch(utils.failureHandler(vm, event));
-        }
     };
     self.createFrom = function(data, event) {
         self.showResultsObs(false);
@@ -112,9 +97,7 @@ module.exports = function() {
             .catch(utils.failureHandler());
     };
     
-    serverService.getStudy()
-        .then(binder.assign('study'))
-        .then(binder.update('externalIdValidationEnabled'));
+    serverService.getStudy().then(binder.assign('study'));
     
     self.loadingFunc = function loadPage(params) {
         return serverService.getExternalIds(params)

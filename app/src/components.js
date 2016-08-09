@@ -102,6 +102,10 @@ reg('scheduleplan', {
     viewModel: require('./pages/scheduleplan/scheduleplan'),
     template: require('./pages/scheduleplan/scheduleplan.html')
 });
+reg('enrollees', {
+    viewModel: require('./pages/enrollees/enrollees'),
+    template: require('./pages/enrollees/enrollees.html')
+});
 reg('participants', {
     viewModel: require('./pages/participants/participants'),
     template: require('./pages/participants/participants.html')
@@ -129,14 +133,6 @@ reg('participant_report', {
 reg('participant_uploads', {
     viewModel: require('./pages/participant/uploads'),
     template: require('./pages/participant/uploads.html')
-});
-reg('lab_codes', {
-    viewModel: require('./pages/lab_codes/lab_codes'),
-    template: require('./pages/lab_codes/lab_codes.html')
-});
-reg('external_ids', {
-    viewModel: require('./pages/external_ids/external_ids'),
-    template: require('./pages/external_ids/external_ids.html')
 });
 reg('schedule', {
     viewModel: require('./pages/schedule/schedule'),
@@ -272,10 +268,10 @@ reg('tag-editor', {
     template: require('./widgets/tag_editor.html')
 });
 reg('settings-tabset', {
-    template: require('./widgets/settings_tabset.html')
+    template: require('./pages/settings/settings_tabset.html')
 });
 reg('participant-tabset', {
-    template: require('./widgets/participant_tabset.html')
+    template: require('./pages/participant/participant_tabset.html')
 });
 reg('not_found', {
     template: require('./pages/not_found/not_found.html')

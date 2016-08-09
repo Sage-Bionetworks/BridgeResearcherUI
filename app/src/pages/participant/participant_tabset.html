@@ -4,7 +4,8 @@
         <i class="setting icon"></i> General
     </a>
     <a class="item" data-bind="css:{active:$data.active === 'consents'}, 
-        attr:{'href':'#/participants/'+$parent.userIdObs()+'/consents'}">
+        attr:{'href':'#/participants/'+$parent.userIdObs()+'/consents'},
+        visible: $data.isPublicObs">
         <i class="legal icon"></i> Consent
     </a>
     <a class="item" data-bind="css:{active:$data.active === 'activities'}, 

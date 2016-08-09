@@ -17,8 +17,10 @@ module.exports = function(params) {
         .obs('title', '&#160;');
 
     tables.prepareTable(self, 'consent');
-
-    serverService.getParticipantName(params.userId).then(self.titleObs);
+    self.isPublicObs = root.isPublicObs;
+    serverService.getParticipantName(params.userId).then(function(part) {
+        self.titleObs(root.isPublicObs() ? part.name : part.externalId);
+    }).catch(utils.failureHandler());
 
     function signOut() {
         self.noConsentObs(true);

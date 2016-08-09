@@ -1,6 +1,7 @@
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var bind = require('../../binder');
+var root = require('../../root');
 
 function updateMinAppVersion(vm, obs, name) {
     var value = parseInt(obs(),10);
@@ -28,9 +29,9 @@ module.exports = function() {
         .obs('minAndroid')
         .bind('name')
         .bind('sponsorName')
-        .bind('strictUploadValidationEnabled')
-        .bind('externalIdValidationEnabled');
+        .bind('strictUploadValidationEnabled');
 
+    self.isPublicObs = root.isPublicObs;
     self.save = function(vm, event) {
         utils.startHandler(self, event);
         self.study = binder.persist(self.study);

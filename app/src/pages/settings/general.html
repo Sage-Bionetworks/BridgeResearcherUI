@@ -8,7 +8,7 @@
             <button class="ui small primary button" data-bind="click: save">Save</button>
         </div>
     </div>
-    <!-- ko component: {name: 'settings-tabset', params: {active: 'info' }} --><!-- /ko -->
+    <!-- ko component: {name: 'settings-tabset', params: {active: 'info', isPublicObs: isPublicObs}} --><!-- /ko -->
 </div>
 <div class="scrollbox">
     <div class="ui grid">
@@ -27,12 +27,6 @@
                     <label>Data Validation</label>
                     <ui-checkbox params="checkedObs: strictUploadValidationEnabledObs">
                         Enable strict validation of upload files <b>(recommended)</b>
-                    </ui-checkbox>
-                </div>
-                <div class="field">
-                    <label>External ID validation</label>
-                    <ui-checkbox params="checkedObs: externalIdValidationEnabledObs">
-                        Enable Bridge management of external IDs
                     </ui-checkbox>
                 </div>
                 <div class="field">

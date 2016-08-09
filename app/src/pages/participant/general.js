@@ -4,6 +4,7 @@ var utils = require('../../utils');
 var bind = require('../../binder');
 var fn = require('../../transforms');
 var alerts = require('../../widgets/alerts');
+var root = require('../../root');
 
 var OPTIONS = [
     {value: 'no_sharing', label:'No Sharing'},
@@ -39,9 +40,12 @@ module.exports = function(params) {
         .bind('userId', userId)
         .bind('id', userId)
         .bind('roles[]', null, fn.formatRoles, fn.persistRoles)
-        .bind('title', (userId === "new") ? "New participant" : "&#160;", fn.formatTitle);
+        .obs('title', (userId === "new") ? "New participant" : "&#160;");
     
-    serverService.getParticipantName(userId).then(self.titleObs);
+    self.isPublicObs = root.isPublicObs;
+    serverService.getParticipantName(userId).then(function(part) {
+        self.titleObs(root.isPublicObs() ? part.name : part.externalId);
+    }).catch(utils.failureHandler());
     
     self.statusObs.subscribe(function(status) {
         self.showEnableAccountObs(status !== "enabled");

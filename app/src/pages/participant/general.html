@@ -2,7 +2,8 @@
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
             <div class="ui breadcrumb">
-                <a class="section" href="#/participants">Participants</a>
+                <a class="section" href="#/participants" data-bind="visible: isPublicObs">Participants</a>
+                <a class="section" href="#/enrollees" data-bind="visible: !isPublicObs()">Participants</a>
                 <i class="right chevron icon divider"></i>
             </div>            
             <h3 data-bind="html: titleObs"></h3>
@@ -12,8 +13,8 @@
                 <div class="text">Actions</div>
                 <i class="dropdown icon"></i>
                 <div class="menu">
-                    <div class="item" data-bind="click: requestResetPassword">Send reset password email</div>
-                    <div class="divider"></div>
+                    <div class="item" data-bind="click: requestResetPassword, visible: isPublicObs">Send reset password email</div>
+                    <div class="divider" data-bind="visible: isPublicObs"></div>
                     <div class="item" data-bind="visible: showEnableAccountObs, click: enableAccount">Enable Account</div>
                     <div class="item" data-bind="visible: !showEnableAccountObs(), click: disableAccount">Disable Account</div>
                     <div class="item" data-bind="click: signOutUser">Sign out user</div>
@@ -22,21 +23,25 @@
             <button class="ui small primary button" data-bind="click: save">Save</button>
         </div>
     </div>
-    <!-- ko component: {name: 'participant-tabset', params: {
-        active: 'info', isNewObs: isNewObs, showEnableAccountObs: showEnableAccountObs
+    <!-- ko component: {name: 'participant-tabset', params: { active: 'info', 
+        isNewObs: isNewObs, showEnableAccountObs: showEnableAccountObs, isPublicObs: isPublicObs
     }} --><!-- /ko -->
 </div>
 <div class="scrollbox">
     <errors></errors>
     <form class="ui form">
         <div class="equal width fields">
-            <div class="field">
+            <div class="field" data-bind="visible: isPublicObs">
                 <label>Name</label>
-                <div class="two fields">
+                <div class="two fields" style="margin-right:.1rem">
                     <input type="text" data-bind="textInput: firstNameObs, hasFocus: true" placeholder="First Name"/>
                     &#160;&#160;
                     <input type="text" data-bind="textInput: lastNameObs" placeholder="Last Name"/>
                 </div>
+            </div>
+            <div class="field noLeftPadding" data-bind="visible: !isPublicObs()">
+                <label>External ID</label>
+                <input type="text" readonly data-bind="value: externalIdObs"/>
             </div>
             <div class="field">
                 <label>Sharing Scope</label>
@@ -86,11 +91,11 @@
                 <label>Password</label>
                 <input type="password" data-bind="textInput: passwordObs"/>
             </div>
-            <div class="field" id="externalId" data-bind="css:{'noLeftPadding': !isNewObs()}">
+            <div class="field" id="externalId" data-bind="css:{'noLeftPadding': !isNewObs()}, visible: isPublicObs">
                 <label>External ID</label>
                 <input type="text" data-bind="textInput: externalIdObs, enable: externalIdEditableObs"/>
             </div>
-            <div class="field">
+            <div class="field" data-bind="visible: isPublicObs">
                 <label style="margin-bottom: .9rem">Email Preference</label>
                 <ui-checkbox params="checkedObs: notifyByEmailObs">
                     Consents to receive email from study
@@ -100,6 +105,12 @@
                 <label>User ID</label>
                 <input type="text" readonly data-bind="value: idObs"/>
             </div>
+            <div class="field" data-bind="visible: !isPublicObs()">
+            </div>
+            <div class="field" data-bind="visible: !isPublicObs()">
+                <label>Created On</label>
+                <div data-bind="text: createdOnObs"></div>
+            </div>            
         </div>
         
         <div class="equal width fields">
@@ -111,7 +122,7 @@
             <!-- /ko -->
         </div>
         
-        <div class="equal width fields" data-bind="visible: !isNewObs()">
+        <div class="equal width fields" data-bind="visible: !isNewObs() && isPublicObs">
             <div class="field">
                 <label>Email</label>
                 <div>

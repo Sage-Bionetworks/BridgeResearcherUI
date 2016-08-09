@@ -5,6 +5,10 @@ var toastr = require('toastr');
 var bind = require('./binder');
 
 // Used in navigation to keep a section highlighted as you navigate into it.
+var participantPages = ['enrollees','participants','participant_general','participant_consents', 
+    'participant_reports', 'participant_report', 'participant_activities', 'participant_uploads', 
+    'participant_upload'];
+
 var pageSets = {
     'settings/general': ['general', 'email', 'data_groups', 'password_policy', 'eligibility', 'user_attributes', 'synapse'],
     'surveys': ['surveys','survey','survey_versions', "survey_schema"],
@@ -12,9 +16,8 @@ var pageSets = {
     'scheduleplans': ['scheduleplans','scheduleplan'],
     'email_templates': ['verify_email', 'reset_password'],
     'subpopulations': ['subpopulations', 'subpopulation', 'subpopulation_editor', 'subpopulation_history', 'subpopulation_download'],
-    'participants': ['participants','participant_general','participant_consents', 'participant_reports', 'participant_report', 
-        'participant_activities', 'participant_uploads', 'participant_upload'],
-    'externalIds': ['external_ids'],
+    'participants': participantPages,
+    'enrollees': participantPages,
     'admin/info': ['admin_info'],
     'admin/cache': ['admin_cache'],
     'reports': ['reports', 'report']
@@ -38,9 +41,9 @@ var RootViewModel = function() {
         .obs('mainParams', {})
         .obs('editorPanel', 'none')
         .obs('editorParams', {})
-        .obs('showParticipants', false)
-        .obs('showLabCodes', false)
-        .obs('showExternalIds', false)
+        .obs('isPublic', false)
+        .obs('codesEnumerated', false)
+        .obs('codeRequired', false)
         .obs('isEditorPanelVisible', false)
         .obs('isEditorTabVisible', false)
         .obs('showNavigation', true)
@@ -114,19 +117,22 @@ var RootViewModel = function() {
         self.rolesObs(session.roles);
         self.closeDialog();
         serverService.getStudy().then(function(study) {
-            // sensible defaults.
+            // Until we can support on server, enumerating the codes is the same as requiring the code at sign up.
+            // isPublic = emailVerificationEnabled
+            // codesEumerated = externalIdValidationEnabled
+            // codeRequired = requiresExternalIdOnSignUp (doesn't exist) 
             var defaults = {
-                showParticipants: study.emailVerificationEnabled && self.isResearcher(),
-                showLabCodes: !study.emailVerificationEnabled && self.isDeveloper(),
-                showExternalIds: study.emailVerificationEnabled && study.externalIdValidationEnabled && self.isDeveloper()
+                isPublic: study.emailVerificationEnabled && self.isResearcher(),
+                codesEnumerated: study.externalIdValidationEnabled && self.isDeveloper(),
+                codeRequired: study.externalIdValidationEnabled && self.isDeveloper()
             };
-            // study-specific overrides, currently located in config.
             var studyConfig = config.studies[study.identifier] || {};
             var opts = Object.assign({}, defaults, studyConfig);
+            
+            self.isPublicObs(opts.isPublic);
+            self.codesEnumeratedObs(opts.codesEnumerated);
+            self.codeRequiredObs(opts.codeRequired);
             console.log("[config]", Object.keys(opts).map(function(key) { return key + "=" + opts[key]; }).join(', '));
-            self.showParticipantsObs(opts.showParticipants);
-            self.showLabCodesObs(opts.showLabCodes);
-            self.showExternalIdsObs(opts.showExternalIds);
         });
     });
     serverService.addSessionEndListener(function(session) {
@@ -134,9 +140,9 @@ var RootViewModel = function() {
         self.environmentObs("");
         self.studyIdentifierObs("");
         self.rolesObs([]);
-        self.showParticipantsObs(false);
-        self.showLabCodesObs(false);
-        self.showExternalIdsObs(false);
+        self.isPublicObs(false);
+        self.codesEnumeratedObs(false);
+        self.codeRequiredObs(false);
         self.openDialog('sign_in_dialog');
     });
 };
