@@ -52,8 +52,6 @@ module.exports = function(params) {
         }
     };
 
-    var notFoundHandler = utils.notFoundHandler(self, "Schedule plan not found.", "#/scheduleplans");
-
     // binder doesn't know how to update an observable from a completely different, nested property...
     function updateScheduleTypeObs(plan) {
         self.schedulePlanTypeObs(plan.strategy.type);
@@ -67,6 +65,6 @@ module.exports = function(params) {
         promise.then(binder.assign('plan'))
             .then(updateScheduleTypeObs)
             .then(binder.update())
-            .catch(notFoundHandler);
+            .catch(utils.notFoundHandler("Schedule plan.", "scheduleplans"));
     });
 };

@@ -62,6 +62,6 @@ module.exports = function(params) {
         return serverService.getParticipantActivities(self.userIdObs(), params)
             .then(binder.update('total','items'))
             .then(msgIfNoRecords)
-            .catch(utils.failureHandler());
+            .catch(utils.notFoundHandler("Participant", "participants"));
     };    
 };

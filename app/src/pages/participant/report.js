@@ -3,6 +3,7 @@ var bind = require('../../binder');
 var root = require('../../root');
 var jsonFormatter = require('../../json_formatter');
 var tables = require('../../tables');
+var utils = require('../../utils');
 
 var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
@@ -100,14 +101,20 @@ module.exports = function(params) {
     function loaderOff() {
         self.showLoaderObs(false);
     }
+    function loadReport() {
+        var startDate = firstDayOfMonth(self.currentYear, self.currentMonth);
+        var endDate = lastDayOfMonth(self.currentYear, self.currentMonth);
+        return serverService.getParticipantReport(params.userId, params.identifier, startDate, endDate);
+    }
+
     function load() {
         self.showLoaderObs(true);
         self.formatMonthObs(MONTHS[self.currentMonth] + " " + self.currentYear);
-        var startDate = firstDayOfMonth(self.currentYear, self.currentMonth);
-        var endDate = lastDayOfMonth(self.currentYear, self.currentMonth);
-        serverService.getParticipantReport(params.userId, params.identifier, startDate, endDate)
+        serverService.getParticipant(params.userId)
+            .then(loadReport)
             .then(mapResponse)
-            .then(loaderOff);
+            .then(loaderOff)
+            .catch(utils.notFoundHandler("Participant", "participants"));
     }
     load();
 };

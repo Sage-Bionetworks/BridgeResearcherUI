@@ -200,8 +200,10 @@ function query(object) {
     return (string) ? ("?"+string) : "";
 }
 function cacheParticipantName(response) {
-    var name = transforms.formatName(response);
-    cache.set(response.id+':name', name);
+    if (response && response.id) {
+        var name = transforms.formatName(response);
+        cache.set(response.id+':name', name);
+    }
     return response;
 }
 

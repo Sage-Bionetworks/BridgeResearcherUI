@@ -28,7 +28,7 @@ toastr.options = config.toastr;
 var RootViewModel = function() {
     var self = this;
 
-    var binder = bind(self)
+    bind(self)
         .obs('environment', '')
         .obs('studyName', '')
         .obs('studyIdentifier')

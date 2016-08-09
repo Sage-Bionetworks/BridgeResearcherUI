@@ -40,10 +40,18 @@ module.exports = function(params) {
         load();
     };
 
+    function loadItems(response) {
+        self.itemsObs(response.items.sort(utils.makeFieldSorter("identifier")));
+    }
+    function loadParticipantReports() {
+        return serverService.getParticipantReports();
+    }
+
     function load() {
-        serverService.getParticipantReports().then(function(response) {
-            self.itemsObs(response.items.sort(utils.makeFieldSorter("identifier")));
-        });
+        serverService.getParticipant(params.userId)
+            .then(loadParticipantReports)
+            .then(loadItems)
+            .catch(utils.notFoundHandler("Participant", "participants"));
     }
     load();
 };

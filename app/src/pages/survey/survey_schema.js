@@ -3,7 +3,6 @@ var serverService = require('../../services/server_service');
 var bind = require('../../binder');
 var fn = require('../../transforms');
 var tables = require('../../tables');
-var root = require('../../root');
 
 module.exports = function(params) {
     var self = this;

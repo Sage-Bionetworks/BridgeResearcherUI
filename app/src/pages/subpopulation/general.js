@@ -45,8 +45,6 @@ module.exports = function(params) {
             .catch(utils.failureHandler(vm, event));
     };
     
-    var notFoundHandler = utils.notFoundHandler(self, "Consent group not found.", "#/subpopulations");
-
     serverService.getStudy()
         .then(binder.assign('study'))
         .then(function(study) {
@@ -59,5 +57,5 @@ module.exports = function(params) {
                     .then(binder.update())
                     .then(updateTitle);
             }
-        }).catch(notFoundHandler);
+        }).catch(utils.notFoundHandler("Consent group", "subpopulations"));
 };

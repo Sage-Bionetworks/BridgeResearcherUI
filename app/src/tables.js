@@ -1,7 +1,6 @@
 var ko = require('knockout');
 var utils = require('./utils');
 var alerts = require('./widgets/alerts');
-var root = require('./root');
 var Promise = require('bluebird');
 
 function hasBeenChecked(item) {

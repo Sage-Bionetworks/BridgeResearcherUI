@@ -255,16 +255,17 @@ module.exports = {
     /**
      * Generic handler for pages which are loading a particular entity. If the error that is returned 
      * is a 404 it attempts to deal with it by redirecting to a parent page.
-     * @param vm
      * @param message
-     * @param rootPath
+     * @param componentName
      * @returns {Function}
      */
-    notFoundHandler: function(vm, message, rootPath) {
+    notFoundHandler: function(message, componentName) {
         return function(response) {
-            if (rootPath && response.status === 404) {
-                toastr.error((message) ? message : response.statusText);
-                document.location = rootPath;
+            if (componentName && response.status === 404) {
+                // Again we can't load this earlier for some reason
+                var root = require('./root');
+                toastr.error((message) ? message + " not found." : response.statusText);
+                root.changeView(componentName);
             } else {
                 toastr.error(response.statusText || response.message);
             }

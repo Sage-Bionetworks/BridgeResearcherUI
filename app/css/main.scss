@@ -86,14 +86,11 @@ footer p {
 
 /* GENERAL */
 
-.loading_status {
+.no_records td {
     font-size: larger;
+    padding: 1rem!important;
+    text-align: center!important;
 }
-    .no_records td {
-        font-size: larger;
-        padding: 1rem!important;
-        text-align: center!important;
-    }
 .public-key {
     font-family:monospace;
     white-space:pre;

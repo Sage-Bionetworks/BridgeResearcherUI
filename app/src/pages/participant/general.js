@@ -120,12 +120,10 @@ module.exports = function(params) {
         }
     };
     
-    var notFoundHandler = utils.notFoundHandler(self, "Participant not found.", "#/participants");
-    
     serverService.getStudy()
         .then(binder.assign('study'))
         .then(initStudy)
         .then(getParticipant)
         .then(binder.update())
-        .catch(notFoundHandler);
+        .catch(utils.notFoundHandler("Participant", "participants"));
 };

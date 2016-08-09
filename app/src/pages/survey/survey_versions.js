@@ -63,7 +63,7 @@ module.exports = function(params) {
             .then(binder.update())
             .then(getHistoryItems)
             .then(binder.update())
-            .catch(utils.notFoundHandler(self, "Survey not found."));
+            .catch(utils.notFoundHandler("Survey", "surveys"));
     }
     load(params);
 };

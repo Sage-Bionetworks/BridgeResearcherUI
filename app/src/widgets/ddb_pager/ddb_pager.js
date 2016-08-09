@@ -19,7 +19,6 @@ module.exports = function(params) {
     var loadingFunc = params.loadingFunc;
     var pageKey = params.pageKey;
     var currentAssignmentFilter = null;
-    var currentOffsetKey = null;
     var history = [null];
     var pendingRequest = false;
 
@@ -39,7 +38,7 @@ module.exports = function(params) {
         .obs('hasNext', false)
         .obs('hasFirstPage', false)
         .obs('searchLoading')
-        .obs('pagerLoading');
+        .obs('showLoader');
     
     function clear() {
         self.currentPageObs(0);
@@ -53,13 +52,14 @@ module.exports = function(params) {
         }
     }
     function addCurrentPage(response) {
-        response.hasHistory = history.length > 1;
-        response.currentPage = self.currentPageObs();
-        history[response.currentPage+1] = response.offsetKey;
-        currentAssignmentFilter = response.assignmentFilter || null;
-        ko.postbox.publish(pageKey+'-recordsPaged', response);
-        console.log("addCurrentPage", response.hasHistory, history);
-        return response;
+        if (response) {
+            response.hasHistory = history.length > 1;
+            response.currentPage = self.currentPageObs();
+            history[response.currentPage+1] = response.offsetKey;
+            currentAssignmentFilter = response.assignmentFilter || null;
+            ko.postbox.publish(pageKey+'-recordsPaged', response);
+            return response;
+        }
     }
     function wrappedLoadingFunc(offsetKey) {
         pendingRequest = true;
@@ -77,7 +77,7 @@ module.exports = function(params) {
         self.idFilterObs(response.idFilter || "");
         self.currentPageObs(response.currentPage); // this was added in addCurrentPage()
         self.totalPagesObs( Math.ceil(response.total/PAGE_SIZE) );
-        self.pagerLoadingObs(false);
+        self.showLoaderObs(false);
         self.searchLoadingObs(false);
         pendingRequest = false;
         return response;
@@ -96,7 +96,7 @@ module.exports = function(params) {
                 clear();
                 currentAssignmentFilter = null;
                 self.idFilterObs("");
-                self.pagerLoadingObs(true);
+                self.showLoaderObs(true);
                 wrappedLoadingFunc();
             }
         };
@@ -106,14 +106,14 @@ module.exports = function(params) {
                 history.pop(); // current page key
                 var lastKey = history[history.length-1]; // the last page key
                 self.currentPageObs(self.currentPageObs()-1);
-                self.pagerLoadingObs(true);
+                self.showLoaderObs(true);
                 wrappedLoadingFunc(lastKey);
             }
         };
         self.nextPage = function(vm, event) {
             if (!pendingRequest) {
                 var lastKey = history[history.length-1];        
-                self.pagerLoadingObs(true);
+                self.showLoaderObs(true);
                 self.currentPageObs(self.currentPageObs()+1);
                 wrappedLoadingFunc(lastKey);
             }
