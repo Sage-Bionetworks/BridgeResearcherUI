@@ -131,8 +131,6 @@ var RootViewModel = function() {
             self.isPublicObs(opts.isPublic);
             self.codesEnumeratedObs(opts.codesEnumerated);
             self.codeRequiredObs(opts.codeRequired);
-            // REMOVEME
-            //self.isPublicObs(false);
             console.log("[config]", Object.keys(opts).map(function(key) { return key + "=" + opts[key]; }).join(', '));
         });
     });

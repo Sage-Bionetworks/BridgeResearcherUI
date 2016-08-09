@@ -272,10 +272,10 @@ reg('tag-editor', {
     template: require('./widgets/tag_editor.html')
 });
 reg('settings-tabset', {
-    template: require('./widgets/settings_tabset.html')
+    template: require('./pages/settings/settings_tabset.html')
 });
 reg('participant-tabset', {
-    template: require('./widgets/participant_tabset.html')
+    template: require('./pages/participant/participant_tabset.html')
 });
 reg('not_found', {
     template: require('./pages/not_found/not_found.html')
