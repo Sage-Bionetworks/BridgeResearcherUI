@@ -3,7 +3,6 @@ var serverService = require('../../services/server_service');
 var bind = require('../../binder');
 var tables = require('../../tables');
 var transforms = require('../../transforms');
-var Promise = require('bluebird');
 
 var ONE_DAY = 1000*60*60*24;
 
@@ -26,7 +25,7 @@ module.exports = function(params) {
         .obs('name', '')
         .obs('ranges[]', ranges)
         .obs('selectedRange', ranges[0])
-        .obs('pagerLoading', false)
+        .obs('showLoader', false)
         .obs('day')
         .obs('loadedOnce', false)
         .obs('total', 0)
@@ -36,7 +35,7 @@ module.exports = function(params) {
     serverService.getParticipantName(params.userId).then(function(name) {
         self.nameObs(name);
         self.titleObs(name);
-    });
+    }).catch(utils.failureHandler());
 
     self.formatLocalDateTime = transforms.formatLocalDateTime;
     self.selectedRangeObs.subscribe(load);
@@ -74,19 +73,19 @@ module.exports = function(params) {
         return (index > 0);
     };
     self.priorDay = function() {
-        if (self.pagerLoadingObs()){ return false; }
+        if (self.showLoaderObs()){ return false; }
         var index = getSelectedIndex();
         self.selectedRangeObs(ranges[index+1]);
         return false;
     };
     self.nextDay = function() {
-        if (self.pagerLoadingObs()){ return false; }
+        if (self.showLoaderObs()){ return false; }
         var index = getSelectedIndex();
         self.selectedRangeObs(ranges[index-1]);
         return false;
     };
     self.selectRange = function(data, event) {
-        if (self.pagerLoadingObs()){ return false; }
+        if (self.showLoaderObs()){ return false; }
         self.selectedRangeObs(data);
         return false;
     };
@@ -119,10 +118,11 @@ module.exports = function(params) {
         };
     };
     self.refresh = function() {
-        if (self.pagerLoadingObs()){ return; }
+        if (self.showLoaderObs()){ return; }
         self.selectedRangeObs(ranges[0]);
         load();
     };
+    /*
     function popupTitleFor(item) {
         switch(item.status) {
             case 'unknown': return 'Unknown';
@@ -133,6 +133,7 @@ module.exports = function(params) {
             default: return '';
         }
     }
+    */
     function getSelectedIndex() {
         return ranges.indexOf( self.selectedRangeObs() );
     }
@@ -170,13 +171,17 @@ module.exports = function(params) {
         return response;
     }
     function load() {
-        self.pagerLoadingObs(true);
+        self.showLoaderObs(true);
         var index = getSelectedIndex();
         var range = utils.getDateRange(ranges[index].value);
         serverService.getParticipantUploads(params.userId, range.startTime, range.endTime)
             .then(processUploads).then(function() {
-                self.pagerLoadingObs(false);
-            });
+                self.showLoaderObs(false);
+            })
+            .catch(function() {
+                self.showLoaderObs(false);
+            })
+            .catch(utils.failureHandler());
     }
     load();
 };

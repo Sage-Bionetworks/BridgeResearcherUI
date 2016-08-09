@@ -50,6 +50,7 @@ module.exports = function(params) {
     // I know, ridiculous...
     function load() {
         self.itemsObs([]);
+        self.recordsMessageObs("Loading&hellip;");
         serverService.getParticipant(self.userIdObs()).then(function(response) {
             var histories = response.consentHistories;
             
@@ -85,7 +86,7 @@ module.exports = function(params) {
                     });
                 });
             });
-        }).catch(utils.failureHandler());
+        }).catch(utils.notFoundHandler("Participant", "participants"));
     }
     load();
 };

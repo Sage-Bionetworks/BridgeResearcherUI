@@ -21,12 +21,12 @@
         <div>
         </div>
         <div>
-            <div class="ui small pagination menu" data-bind="visible: loadedOnceObs, css:{loading:pagerLoadingObs}">
+            <div class="ui small pagination menu" data-bind="visible: loadedOnceObs, css:{loading:showLoaderObs}">
                 <div class="item" data-bind="click: priorDay, visible: priorVisible()">
                     <i class="chevron left icon"></i>
                 </div>
                 <div class="active item">
-                    <div data-bind="visible: pagerLoadingObs" class="ui small active loader"></div>
+                    <div data-bind="visible: showLoaderObs" class="ui small active loader"></div>
                     <div data-bind="semantic: 'dropdown'">
                         <div class="text" data-bind="text: selectedRangeObs().label"></div>
                         <i class="dropdown icon"></i>
@@ -39,7 +39,7 @@
                     <i class="chevron right icon"></i>
                 </div>
             </div>
-            <div class="ui small pagination menu" style="margin-left:1rem!important" data-bind="visible: loadedOnceObs, css:{loading:pagerLoadingObs}">
+            <div class="ui small pagination menu" style="margin-left:1rem!important" data-bind="visible: loadedOnceObs, css:{loading:showLoaderObs}">
                 <div class="item" data-bind="click: refresh">
                     Today
                 </div>

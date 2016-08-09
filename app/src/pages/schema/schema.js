@@ -118,8 +118,6 @@ module.exports = function(params) {
     };
     self.closeWarning = hideWarning;
 
-    var notFoundHandler = utils.notFoundHandler(self, "Upload schema not found.", "#/schemas");
-
     var promise = null;
     if (params.schemaId === "new") {
         promise = Promise.resolve({name:'',schemaId:'',schemaType:'ios_data',revision:null,
@@ -132,5 +130,5 @@ module.exports = function(params) {
     }
     promise.then(binder.assign('schema'))
         .then(binder.update())
-        .catch(notFoundHandler);
+        .catch(utils.notFoundHandler("Upload schema", "schemas"));
 };
