@@ -85,6 +85,10 @@ module.exports = function() {
             .then(utils.successHandler(vm, event))
             .catch(utils.failureHandler(vm, event));
     };
+    self.showLinkLoading = function(vm, event) {
+        event.target.nextElementSibling.classList.add("active");
+        return true;
+    };
     
     // This is called from the dialog that allows a user to enter a new external identifier.
     self.createFromNew = function(identifier) {
