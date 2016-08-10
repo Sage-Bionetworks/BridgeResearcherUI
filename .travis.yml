@@ -11,7 +11,7 @@ deploy:
       bucket: "research-staging.sagebridge.org"
       skip_cleanup: true
       acl: public_read
-      detect_encoding: true
+      detect_encoding: false
       endpoint: research-staging.sagebridge.org.s3-website-us-west-2.amazonaws.com
       region: "us-west-2"
       local_dir: app
@@ -23,7 +23,7 @@ deploy:
       bucket: "research.sagebridge.org"
       skip_cleanup: true
       acl: public_read
-      detect_encoding: true
+      detect_encoding: false
       endpoint: research.sagebridge.org.s3-website-us-west-2.amazonaws.com
       region: "us-west-2"
       local_dir: app
