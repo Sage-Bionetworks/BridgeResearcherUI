@@ -5,7 +5,7 @@
   "main": "index.js",
   "engine": "node 4.0.0",
   "scripts": {
-    "clean": "rm -rf app/dist; mkdir app/dist",
+    "clean": "rm app/index.html; rm -rf app/dist; mkdir app/dist",
     "start": "webpack-dev-server --content-base app",
     "watch": "webpack --progress --colors --watch",
     "release": "webpack -p",
@@ -22,6 +22,7 @@
     "dom-autoscroller": "^1.2.1",
     "dragula": "^3.7.1",
     "html-loader": "^0.3.0",
+    "html-webpack-plugin": "^2.22.0",
     "jquery": "^3.0.0",
     "jshint": "^2.9.2",
     "jshint-loader": "^0.8.3",

@@ -1,9 +1,11 @@
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
     devtool: 'source-map',
     entry: ['./app/src/routes.js'],
     output: {
         path: './app/dist',
-        filename: 'bundle.js'
+        filename: 'bundle.[hash].js'
     },
     module: {
         preLoaders: [
@@ -14,6 +16,11 @@ module.exports = {
             { test: /\.html$/, loader: "html?removeComments=false" }
         ]
     },
+    plugins: [new HtmlWebpackPlugin({
+        title: "This is the title",
+        template: "app/template.html",
+        filename: "../index.html"
+    })],
     resolve: {
         extensions: ['', '.css', '.js', '.html','.scss']
     },
