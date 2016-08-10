@@ -46,8 +46,11 @@
             <tr>
                 <td style="white-space: nowrap; width:100%">
                     <span data-bind="text: $data.identifier, visible: !$data.assigned"></span>
-                    <a data-bind="attr: {'href': '#/enrollees/'+$data.identifier}, 
-                        text: $data.identifier, visible: $data.assigned"></a>
+                    <span data-bind="visible: $data.assigned">
+                        <a data-bind="attr: {'href': '#/enrollees/'+$data.identifier}, 
+                            text: $data.identifier, click: $component.showLinkLoading"></a>
+                        <span class="ui tiny inline loader"></span>
+                    </span>
                 </td>
                 <td style="white-space: nowrap">
                     <div data-bind="visible: $data.assigned === true">
