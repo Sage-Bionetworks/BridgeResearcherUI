@@ -28,7 +28,6 @@ module.exports = function(params) {
         .obs('selectedRange', ranges[0])
         .obs('showLoader', false)
         .obs('day')
-        .obs('loadedOnce', false)
         .obs('total', 0)
         .obs('isNew', false)
         .obs('title', '&#160;');
@@ -164,7 +163,6 @@ module.exports = function(params) {
         return fEnd+" ("+item.completedBy+", "+transforms.formatMs(end-start)+")";
     }
     function processUploads(response) {
-        self.loadedOnceObs(true);
         var dateString = transforms.formatLocalDateTimeWithoutZone(response.startTime).split(" @ ")[0];
         self.dayObs(dateString);
         self.totalObs(response.items.length);
