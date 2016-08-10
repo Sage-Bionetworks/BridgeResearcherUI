@@ -2,6 +2,7 @@ node_modules
 note.txt
 .idea
 nbproject
+app/index.html
 dist/
 npm-debug.log
 .vscode
