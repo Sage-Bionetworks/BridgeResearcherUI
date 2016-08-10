@@ -52,7 +52,7 @@ module.exports = function(params) {
     // I know, ridiculous...
     function load() {
         self.itemsObs([]);
-        self.recordsMessageObs("Loading&hellip;");
+        self.recordsMessageObs("<div class='ui tiny active inline loader'></div>");
         serverService.getParticipant(self.userIdObs()).then(function(response) {
             var histories = response.consentHistories;
             

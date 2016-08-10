@@ -55,7 +55,7 @@ module.exports = {
         if (!vm.itemsObs) {
             vm.itemsObs = ko.observableArray([]);
         }
-        vm.recordsMessageObs = ko.observable("Loading&hellip;");
+        vm.recordsMessageObs = ko.observable("<div class='ui tiny active inline loader'></div>");
         vm.itemsObs.subscribe(arrayListener(vm.recordsMessageObs, objName));
 
         vm.atLeastOneChecked = function () {
