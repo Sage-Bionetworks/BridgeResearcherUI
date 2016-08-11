@@ -11,6 +11,7 @@ var storeService = require('./store_service');
 var config = require('../config');
 var utils = require("../utils");
 var Promise = require('bluebird');
+var transforms = require('../transforms');
 
 var SESSION_KEY = 'session';
 var SESSION_STARTED_EVENT_KEY = 'sessionStarted';
@@ -198,6 +199,13 @@ function query(object) {
     }).join("&");
     return (string) ? ("?"+string) : "";
 }
+function cacheParticipantName(response) {
+    if (response && response.id) {
+        var name = transforms.formatName(response);
+        cache.set(response.id+':name', {name:name,externalId:response.externalId});
+    }
+    return response;
+}
 
 module.exports = {
     isAuthenticated: function() {
@@ -383,15 +391,28 @@ module.exports = {
         return get(config.participants+queryString);
     },
     getParticipant: function(id) {
-        return get(config.participants+"/"+id);
+        return get(config.participants+"/"+id).then(cacheParticipantName);
+    },
+    getParticipantName: function(id) {
+        var name = cache.get(id+':name');
+        if (name) {
+            return Promise.resolve(name);
+        } else {
+            return get(config.participants+"/"+id).then(cacheParticipantName)
+                .then(function() {
+                    return Promise.resolve(cache.get(id+':name'));
+                });
+        }
     },
     createParticipant: function(participant) {
         return post(config.participants, participant);
     },
     updateParticipant: function(participant) {
+        cache.clear(participant.id+':name');
         return post(config.participants+"/"+participant.id, participant);
     },
     deleteParticipant: function(id) {
+        cache.clear(id+':name');
         return del(config.users + '/' + id);
     },
     signOutUser: function(id) {

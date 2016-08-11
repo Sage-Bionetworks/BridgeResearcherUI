@@ -1,0 +1,95 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <div class="fixed-header-heading">
+            <div class="ui breadcrumb">
+                <a class="section" href="#/participants" data-bind="visible: isPublicObs">Participants</a>
+                <a class="section" href="#/enrollees" data-bind="visible: !isPublicObs()">Participants</a>
+                <i class="right chevron icon divider"></i>
+            </div>            
+            <h3 data-bind="html: titleObs"></h3>
+        </div>
+        <div class="fixed-header-buttons">
+            <div class="label-field-padding">
+                <span data-bind="text: totalObs">0</span> records
+            </div>
+        </div>
+    </div>
+    <!-- ko component: {name: 'participant-tabset', params: {active: 'uploads', isNewObs: isNewObs,
+        isPublicObs: isPublicObs}} --><!-- /ko -->
+</div>
+<div class="scrollbox">
+    <errors></errors>
+    <div class="line-control">
+        <div class="line-control-stretch">
+        </div>
+        <div>
+            <div class="ui small pagination menu">
+                <div class="item" data-bind="click: priorDay, visible: priorVisible()">
+                    <i class="chevron left icon"></i>
+                </div>
+                <div class="active item">
+                    <div data-bind="visible: showLoaderObs" class="ui small active loader"></div>
+                    <div data-bind="semantic: 'dropdown'">
+                        <div class="text" data-bind="text: selectedRangeObs().label"></div>
+                        <i class="dropdown icon"></i>
+                        <div class="menu" data-bind="foreach: rangesObs">
+                            <a class="item" data-bind="click: $component.selectRange, text: $data.label"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="item" data-bind="click: nextDay, visible: nextVisible()">
+                    <i class="chevron right icon"></i>
+                </div>
+            </div>
+            <div class="ui small pagination menu" style="margin-left:1rem!important">
+                <div class="item" data-bind="click: refresh">
+                    Today
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="ui compact selectable table">
+        <thead>
+            <tr>
+                <th style="width:10px"></th>
+                <th data-bind="click: sortCol('uploadId')">Uploads for: <span data-bind="text: dayObs"></span></th>
+                <th data-bind="click: sortCol('requestedOn')">Requested On</th>
+                <th data-bind="click: sortCol('completedOn')">Completed On</th>
+                <th>Schema of content</th>
+            </tr>
+        </thead>
+        <tbody class="no_records" data-bind="visible: itemsObs().length === 0">
+            <tr>
+                <td colspan="5" data-bind="html: recordsMessageObs"></td>
+            </tr>
+        </tbody>        
+        <tbody data-bind="foreach: itemsObs">
+            <tr data-bind="attr:{class: $component.classFor($data)}">
+                <td>
+                    <i data-bind="attr:{class:$component.iconFor($data)}"></i>
+                </td>
+                <td>
+                    <span data-bind="text: $data.uploadId"></span>
+                    <span data-bind="visible: $data.status === 'validation_failed'">
+                        <span data-bind="visible: $data.collapsedObs">
+                            <a href="" data-bind="click: $component.toggle">
+                                <i style="margin:0;padding:0" class="plus square outline icon"></i> Show Errors
+                            </a>
+                        </span>
+                        <span data-bind="visible: !$data.collapsedObs()">
+                            <a href="" data-bind="click: $component.toggle">
+                                <i style="margin:0;padding:0" class="minus square outline icon"></i> Hide Errors
+                            </a>
+                            <div data-bind="html: $component.htmlFor($data)">
+                        </span>
+                    </span>
+                </td>
+                <td data-bind="text: $component.formatLocalDateTime($data.requestedOn)"></td>
+                <td data-bind="text: $data.completedByObs"></td>
+                <td data-bind="attr:{'data-sort':$data.contentObs}">
+                    <a target="_blank" rel="noopener" data-bind="attr:{href: $data.hrefObs}, text: $data.contentObs"></a>
+                </td>                    
+            </tr>
+        </tbody>
+    </table>
+</div>

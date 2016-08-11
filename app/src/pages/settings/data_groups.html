@@ -1,0 +1,45 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <div class="fixed-header-heading">
+            <h3>Data Groups</h3>
+        </div>
+        <div class="fixed-header-buttons">
+            <button class="ui small primary button" data-bind="disable: $component.noChangesObs, click: $component.save">Save</button>
+        </div>
+    </div>
+    <!-- ko component: {name: 'settings-tabset', params: {active: 'data_groups', isPublicObs: isPublicObs}} --><!-- /ko -->
+</div>
+<div class="scrollbox">
+    <div class="ui grid">
+        <div class="ten wide column">
+
+            <div class="ui large labels" data-bind="foreach: recordsObs">
+                <div class="ui label">
+                    <span data-bind="text: $data"></span> <i class="icon close" data-bind="click: $component.remove"></i>
+                </div><br/>
+            </div>
+            <div class="ui action input">
+                <input type="text" data-bind="textInput: $component.addFieldObs, 
+                    event: {keypress: $component.keyHandler}, hasFocus: true"/>
+                <button class="ui button" data-bind="click: $component.add">Add</button>
+            </div>
+        </div>
+        <div class="six wide column">
+            <div class="ui message">
+                <p>Individual user accounts can be tagged with one or more data groups through the profile API. </p>
+
+                <p>These tags allow to process the data from participants. For example, you may wish to define a
+                    "test_users" data group and assign testers to this group, so you can filter out their data when
+                    analyzing results. </p>
+
+                <p>You can also use these tags to filter scheduled activities for groups of users, generating different
+                    data for different study participants. </p>
+
+                <p><b>These tags cannot include identifying information about specific users.</b> They are exported
+                    with the study data set. If you need to identify users, please use the external identifier API. </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+

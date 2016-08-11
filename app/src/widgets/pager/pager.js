@@ -28,7 +28,7 @@ module.exports = function(params) {
         .obs('totalPages')
         .obs('currentPage', Math.round(offsetBy/pageSize))
         .obs('searchLoading', false)
-        .obs('pagerLoading', false);
+        .obs('showLoader', false);
     
     self.doSearch = function(vm, event) {
         if (event.keyCode === 13) {
@@ -40,14 +40,14 @@ module.exports = function(params) {
     self.previousPage = function(vm, event) {
         var page = self.currentPageObs() -1;
         if (page >= 0) {
-            self.pagerLoadingObs(true);
+            self.showLoaderObs(true);
             wrappedLoadingFunc(page*pageSize);
         }
     };
     self.nextPage = function(vm, event) {
         var page = self.currentPageObs() +1;
         if (page <= self.totalPagesObs()-1) {
-            self.pagerLoadingObs(true);
+            self.showLoaderObs(true);
             wrappedLoadingFunc(page*pageSize);
         }
     };
@@ -55,11 +55,11 @@ module.exports = function(params) {
         wrappedLoadingFunc(self.currentPageObs()*pageSize);
     };
     self.firstPage = function(vm, event) {
-        self.pagerLoadingObs(true);
+        self.showLoaderObs(true);
         wrappedLoadingFunc(0, vm, event);
     };
     self.lastPage = function(vm, event) {
-        self.pagerLoadingObs(true);
+        self.showLoaderObs(true);
         wrappedLoadingFunc((self.totalPagesObs()-1)*pageSize);
     };
     
@@ -75,7 +75,7 @@ module.exports = function(params) {
             ko.postbox.publish(pageKey+'-recordsPaged', response);
             updateModel(response);
             self.searchLoadingObs(false);
-            self.pagerLoadingObs(false);
+            self.showLoaderObs(false);
         }).catch(utils.failureHandler());
     }
 

@@ -8,18 +8,17 @@ require('./bindings/dragula');
 require('./components');
 var ko = require('knockout');
 require('knockout-postbox');
-
 var director = require('director');
 var root = require('./root');
+var serverService = require('./services/server_service');
 
-var GUID_CREATEDON = ['guid', 'createdOn'];
+var GUID_CREATEDON = ['guid','createdOn'];
 var GUID = ['guid'];
 var ID = ['id'];
 var SCHEMAID_REVISION = ['schemaId','revision'];
 var SCHEMAID = ['schemaId'];
-var USERID_NAME = ['userId', 'name'];
-var USERID_IDENTIFIER_NAME = ['userId','identifier','name'];
 var USERID = ['userId'];
+var USERID_IDENTIFIER = ['userId','identifier'];
 
 function namedParams(fields, args) {
     return (fields || []).reduce(function(params, name, i) {
@@ -30,23 +29,31 @@ function namedParams(fields, args) {
 function routeTo(routeName, fields) {
     return function() {
         var params = namedParams(fields, arguments);
-        console.log("routeTo", routeName, Object.keys(params).map(function(key) { return key + "=" + params[key];}).join(", "));
+        //console.log("routeTo", routeName, Object.keys(params).map(function(key) { return key + "=" + params[key];}).join(", "));
         root.changeView(routeName, params);
     };
+}
+function redirectTo(response) {
+    router.setRoute('/participants/' + response.items[0].id);
+}
+function redirectToParticipant(externalId) {
+    serverService.getParticipants(0,5,"+"+externalId+"@").then(redirectTo);
 }
 
 var router = new director.Router();
 router.param('guid', /([^\/]*)/);
 router.param('createdOn', /([^\/]*)/);
-router.on('/info', routeTo('info'));
-router.on('/email', routeTo('email'));
-router.on('/eligibility', routeTo('eligibility'));
-router.on('/password_policy', routeTo('password_policy'));
-router.on('/user_attributes', routeTo('user_attributes'));
+router.on('/settings/general', routeTo('general'));
+router.on('/settings/email', routeTo('email'));
+router.on('/settings/eligibility', routeTo('eligibility'));
+router.on('/settings/data_groups', routeTo('data_groups'));
+router.on('/settings/password_policy', routeTo('password_policy'));
+router.on('/settings/user_attributes', routeTo('user_attributes'));
+router.on('/settings/synapse', routeTo('synapse'));
 router.on('/task_identifiers', routeTo('task_identifiers'));
-router.on('/data_groups', routeTo('data_groups'));
-router.on('/ve_template', routeTo('ve_template'));
-router.on('/rp_template', routeTo('rp_template'));
+router.on('/email_templates', routeTo('verify_email'));
+router.on('/email_templates/verify_email', routeTo('verify_email'));
+router.on('/email_templates/reset_password', routeTo('reset_password'));
 router.on('/subpopulations/:guid/consents/history', routeTo('subpopulation_history', GUID));
 router.on('/subpopulations/:guid/consents/download', routeTo('subpopulation_download', GUID));
 router.on('/subpopulations/:guid/consents/:createdOn', routeTo('subpopulation_editor', GUID_CREATEDON));
@@ -66,17 +73,15 @@ router.on('/schemas/:schemaId/versions/:revision', routeTo('schema', SCHEMAID_RE
 router.on('/schedules', routeTo('schedules'));
 router.on('/scheduleplans', routeTo('scheduleplans'));
 router.on('/scheduleplans/:guid', routeTo('scheduleplan', GUID));
-router.on('/synapse', routeTo('synapse'));
-router.on('/lab_codes', routeTo('lab_codes'));
-router.on('/externalIds', routeTo('external_ids'));
-router.on('/participants/:userId/reports/:identifier/:name', routeTo('participant_report', USERID_IDENTIFIER_NAME));
-router.on('/participants/:userId/activities/:name', routeTo('participant_activities', USERID_NAME));
-router.on('/participants/:userId/consents/:name', routeTo('participant_consents', USERID_NAME));
-router.on('/participants/:userId/reports/:name', routeTo('participant_reports', USERID_NAME));
-router.on('/participants/:userId/uploads/:name', routeTo('participant_uploads', USERID_NAME));
-router.on('/participants/:userId/:name', routeTo('participant', USERID_NAME));
-router.on('/participants/:userId', routeTo('participant', USERID));
+router.on('/participants/:userId/reports/:identifier', routeTo('participant_report', USERID_IDENTIFIER));
+router.on('/participants/:userId/activities', routeTo('participant_activities', USERID));
+router.on('/participants/:userId/consents', routeTo('participant_consents', USERID));
+router.on('/participants/:userId/reports', routeTo('participant_reports', USERID));
+router.on('/participants/:userId/uploads', routeTo('participant_uploads', USERID));
+router.on('/participants/:userId', routeTo('participant_general', USERID));
 router.on('/participants', routeTo('participants'));
+router.on('/enrollees/:externalId', redirectToParticipant);
+router.on('/enrollees', routeTo('enrollees'));
 router.on('/admin/info', routeTo('admin_info'));
 router.on('/admin/cache', routeTo('admin_cache'));
 

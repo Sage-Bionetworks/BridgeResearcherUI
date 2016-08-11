@@ -1,7 +1,7 @@
 var ko = require('knockout');
 var utils = require('./utils');
-var Promise = require('bluebird');
 var alerts = require('./widgets/alerts');
+var Promise = require('bluebird');
 
 function hasBeenChecked(item) {
     return item.checkedObs();
@@ -24,24 +24,23 @@ function prepareDelete(vm, objName) {
             titleCase(objName)+"s deleted." : titleCase(objName)+" deleted.";
     return {deletables: deletables, msg: msg, confirmMsg: confirmMsg};        
 }
-function makeTableRowHandler(vm, deletables, rootPath, objName) {
+function makeTableRowHandler(vm, deletables, objName) {
     return function() {
         deletables.forEach(function(deletable) {
             vm.itemsObs.remove(deletable);
+            vm.recordsMessageObs("");
         });
         if (vm.itemsObs().length === 0) {
-            // Yes both. There are cases where 'rootPath' is just the current page.
-            document.querySelector(".loading_status").textContent = "There are currently no "+objName+".";
-            document.location = rootPath;
+            vm.recordsMessageObs("There are currently no "+objName+".");
         }
     };
 }
-function arrayListener(objName) {
+function arrayListener(recordsMessageObs, objName) {
     return function(array) {
         if (array.length) {
             return array.map(makeChecked);
         } else {
-            document.querySelector(".loading_status").textContent = "There are currently no "+objName+"s.";
+            recordsMessageObs("There are currently no "+objName+"s.");
         }
     };
 }
@@ -51,24 +50,30 @@ function arrayListener(objName) {
  * weren't a nightmare to turn into components. Better to take a mix-in approach.
  */
 module.exports = {
-    prepareTable: function(vm, objName, upLink, deleteFunc) {
-        vm.itemsObs = ko.observableArray([]);
-        vm.itemsObs.subscribe(arrayListener(objName));
+    prepareTable: function(vm, objName, deleteFunc) {
+        // Sometimes we set this in the binder so the binder can update it. Not a problem.
+        if (!vm.itemsObs) {
+            vm.itemsObs = ko.observableArray([]);
+        }
+        vm.recordsMessageObs = ko.observable("<div class='ui tiny active inline loader'></div>");
+        vm.itemsObs.subscribe(arrayListener(vm.recordsMessageObs, objName));
 
         vm.atLeastOneChecked = function () {
             return vm.itemsObs().some(hasBeenChecked);
         };
-        vm.deleteItems = function(vm, event) {
-            var del = prepareDelete(vm, objName);
+        if (deleteFunc) {
+            vm.deleteItems = function(vm, event) {
+                var del = prepareDelete(vm, objName);
 
-            alerts.deleteConfirmation(del.msg, function() {
-                utils.startHandler(self, event);
-                Promise.map(del.deletables, deleteFunc)
-                    .then(makeTableRowHandler(vm, del.deletables, upLink, objName))
-                    .then(utils.successHandler(vm, event, del.confirmMsg))
-                    .catch(utils.failureHandler(vm, event));
-            });
-        };
+                alerts.deleteConfirmation(del.msg, function() {
+                    utils.startHandler(self, event);
+                    Promise.map(del.deletables, deleteFunc)
+                        .then(makeTableRowHandler(vm, del.deletables, objName))
+                        .then(utils.successHandler(vm, event, del.confirmMsg))
+                        .catch(utils.failureHandler(vm, event));
+                });
+            };
+        }
     },
     hasBeenChecked: function(item) {
         return item.checkedObs();

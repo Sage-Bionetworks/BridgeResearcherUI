@@ -11,40 +11,42 @@
     <survey-tabset params="selected: 'schema', viewModel: $data"></survey-tabset>
 </div>
 <div class="scrollbox">
-    <p class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</p>
-    <td data-bind="visible: itemsObs().length > 0">
-        <div class="ui form">
-            <div class="three fields">
-                <div class="field">
-                    <label>Name</label>
-                    <input readonly data-bind="textInput: schemaObs().name"/>
-                </div>
-                <div class="field">
-                    <label>Schema Type</label>
-                    <input readonly data-bind="textInput: schemaTypeLabel(schemaObs().schemaType)"/>
-                </div>
-                <div class="field">
-                    <label>Identifier</label>
-                    <input readonly data-bind="textInput: schemaObs().schemaId"/>
-                </div>
+    <div class="ui form">
+        <div class="three fields">
+            <div class="field">
+                <label>Name</label>
+                <input readonly data-bind="textInput: schemaObs().name"/>
+            </div>
+            <div class="field">
+                <label>Schema Type</label>
+                <input readonly data-bind="textInput: schemaTypeLabel(schemaObs().schemaType)"/>
+            </div>
+            <div class="field">
+                <label>Identifier</label>
+                <input readonly data-bind="textInput: schemaObs().schemaId"/>
             </div>
         </div>
-        <h4>Field Definitions</h4>
-        <table class="ui compact selectable table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Required?</th>
-                </tr>
-            </thead>
-            <tbody data-bind="foreach: itemsObs">
-                <tr>
-                    <td data-bind="text: $data.name"></td>
-                    <td data-bind="text: $parent.fieldTypeLabel($data.type)"></td>
-                    <td data-bind="text: $data.required ? 'Yes' : 'No'"></td>
-                </tr>
-            </tbody>
-        </table>
     </div>
+    <h4>Field Definitions</h4>
+    <table class="ui compact selectable table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Required?</th>
+            </tr>
+        </thead>
+        <tbody class="no_records" data-bind="visible: itemsObs().length === 0">
+            <tr>
+                <td colspan="3" data-bind="html: recordsMessageObs"></td>
+            </tr>
+        </tbody>        
+        <tbody data-bind="foreach: itemsObs">
+            <tr>
+                <td data-bind="text: $data.name"></td>
+                <td data-bind="text: $parent.fieldTypeLabel($data.type)"></td>
+                <td data-bind="text: $data.required ? 'Yes' : 'No'"></td>
+            </tr>
+        </tbody>
+    </table>
 </div>

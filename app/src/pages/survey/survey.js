@@ -111,13 +111,15 @@ module.exports = function(params) {
 
     };
 
-    var notFoundHandler = utils.notFoundHandler(self, "Survey not found", "#/surveys");
-
     if (params.guid === "new") {
         loadVM(surveyUtils.newSurvey());
     } else if (params.createdOn) {
-        serverService.getSurvey(params.guid, params.createdOn).then(loadVM).catch(notFoundHandler);
+        serverService.getSurvey(params.guid, params.createdOn)
+            .then(loadVM)
+            .catch(utils.notFoundHandler("Survey", "surveys"));
     } else {
-        serverService.getSurveyMostRecent(params.guid).then(loadVM).catch(notFoundHandler);
+        serverService.getSurveyMostRecent(params.guid)
+            .then(loadVM)
+            .catch(utils.notFoundHandler("Survey", "surveys"));
     }
 };

@@ -12,17 +12,21 @@
 </div>
 <div class="scrollbox">
     <errors></errors>
-    <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
-    <table class="ui compact selectable table" data-bind="visible: itemsObs().length > 0">
+    <table class="ui compact selectable table">
         <thead>
-        <tr>
-            <th width="10" data-bind="visible: isDeveloper"></th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Matching Criteria</th>
-            <th width="100"></th>
-        </tr>
+            <tr>
+                <th width="10" data-bind="visible: isDeveloper"></th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Matching Criteria</th>
+                <th width="100"></th>
+            </tr>
         </thead>
+        <tbody class="no_records" data-bind="visible: itemsObs().length === 0">
+            <tr>
+                <td data-bind="attr:{colspan: $parent.isDeveloper ? 5 : 4}, html: recordsMessageObs"></td>
+            </tr>
+        </tbody>  
         <tbody data-bind="foreach: itemsObs">
             <tr data-bind="css: { positive: $data.active }">
                 <td data-bind="visible: $parent.isDeveloper">

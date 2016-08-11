@@ -12,16 +12,20 @@
     <survey-tabset params="selected: 'history', viewModel: $data"></survey-tabset>
 </div>
 <div class="scrollbox">
-    <div class="loading_status" data-bind="visible: itemsObs().length === 0">Loading...</div>
-    <table class="ui table" data-bind="visible: itemsObs().length > 0">
+    <table class="ui table">
         <thead>
-        <tr>
-            <th>Name</th>
-            <th>Created On</th>
-            <th>Upload Schema</th>
-            <th>&nbsp;</th>
-        </tr>
+            <tr>
+                <th>Name</th>
+                <th>Created On</th>
+                <th>Upload Schema</th>
+                <th>&nbsp;</th>
+            </tr>
         </thead>
+        <tbody class="no_records" data-bind="visible: itemsObs().length === 0">
+            <tr>
+                <td colspan="4" data-bind="html: recordsMessageObs"></td>
+            </tr>
+        </tbody>        
         <tbody data-bind="foreach: itemsObs">
             <tr data-bind="css: { positive: $data.published }">
                 <td>

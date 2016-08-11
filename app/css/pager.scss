@@ -1,24 +1,30 @@
 .line-control {
     @include flex-box(row);
-    @include justify-content(space-between);
+    @include justify-content(space-after);
     @include align-items(center);
-}
-    .line-control-radio {
-        @include flex-box(row);
-        @include flex-wrap();
-        padding-left:1rem;
-    }
-    .line-control-radio .checkbox {
-        margin-left: .4rem;
-    }
-        .line-control-radio .checkbox label {
-            padding-left: 1.5rem!important;
-        }
-    .line-control .pagination {
+    /*margin-bottom: 1rem;*/
+
+    .pagination {
         cursor: pointer;
     }
-.ui.small.pagination.menu {
-    i {
-        margin: 0!important
+    > * {
+        @include flex-box(row);
+        @include flex-wrap();
     }
+}
+.line-control-stretch {
+    flex: 1;
+}
+.line-control-radio {
+    padding-left: 1rem;
+    label {
+        padding-right:.75rem;
+    }
+    .checkbox {
+        margin-left: 0;
+    }
+}
+.ui.small.pagination.menu {
+    margin: 0!important;
+    i { margin: 0!important; }
 }

@@ -19,6 +19,8 @@ module.exports = function(params) {
         .obs('selected', null)
         .obs('name');
 
+    tables.prepareTable(self, 'survey version');
+
     // redirect, you just deleted the record you last loaded in the tabset.
     function redirectIfDeleteSelf(thisSurvey) {
         return function(response) {
@@ -61,7 +63,7 @@ module.exports = function(params) {
             .then(binder.update())
             .then(getHistoryItems)
             .then(binder.update())
-            .catch(utils.notFoundHandler(self, "Survey not found."));
+            .catch(utils.notFoundHandler("Survey", "surveys"));
     }
     load(params);
 };

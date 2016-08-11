@@ -20,7 +20,7 @@ module.exports = function() {
     var self = this;
     self.allItems = [];
 
-    tables.prepareTable(self, "schedule", "#/scheduleplans", function(plan) {
+    tables.prepareTable(self, "schedule", function(plan) {
         return serverService.deleteSchedulePlan(plan.guid);
     });
 

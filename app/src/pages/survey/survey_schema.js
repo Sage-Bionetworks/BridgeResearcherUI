@@ -2,6 +2,7 @@ var schemaUtils = require('../../pages/schema/schema_utils');
 var serverService = require('../../services/server_service');
 var bind = require('../../binder');
 var fn = require('../../transforms');
+var tables = require('../../tables');
 
 module.exports = function(params) {
     var self = this;
@@ -17,6 +18,8 @@ module.exports = function(params) {
         .obs('items[]', [])
         .obs('name');
 
+    tables.prepareTable(self, 'schema');
+
     self.formatDateTime = fn.formatLocalDateTime;
 
     function loadSchema(survey) {
@@ -26,7 +29,7 @@ module.exports = function(params) {
             self.itemsObs.pushAll(schema.fieldDefinitions);
         }).catch(function(response) {
             if (response.status === 404) {
-                document.querySelector(".loading_status").textContent = "The schema for this survey version cannot be found. It may have been deleted.";
+                self.recordsMessageObs("The schema for this survey version cannot be found. It may have been deleted.");
             }
         });
     }

@@ -86,9 +86,10 @@ footer p {
 
 /* GENERAL */
 
-.loading_status {
+.no_records td {
     font-size: larger;
-    clear: both;
+    padding: 1rem!important;
+    text-align: center!important;
 }
 .public-key {
     font-family:monospace;
@@ -118,27 +119,8 @@ footer p {
     font-variant: small-caps;
     white-space: pre;
 }
-.inline-loader {
-    display: none!important;
-}
-.loading .inline-loader {
-    display: block!important;
-}
 .red {
     color:#db2828
-}
-
-/* pagination */
-
-.pagination {
-    float:right; 
-    position:relative; 
-}
-.pagination .ui.active.loader {
-    display:none;
-}
-.pagination.loading .ui.active.loader {
-    display:block;
 }
 
 /* participant_consents */
@@ -226,4 +208,11 @@ progress {
 }
 .disabled a {
     opacity: .7;
+}
+/* External Identifiers page controls, there's a primary button dropdown with poor icon spacing */
+.ui.small.button.dropdown {
+    padding-right: .5rem;
+    i.icon {
+        margin-left: .5rem;
+    } 
 }

@@ -12,6 +12,7 @@ module.exports = function(propertyName) {
             .obs('addField')
             .obs('noChanges', true);
 
+        self.isPublicObs = root.isPublicObs;
         self.keyHandler = function(view, e) {
             if (e.keyCode === 13) {
                 self.add();

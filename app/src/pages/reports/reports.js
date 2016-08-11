@@ -8,7 +8,7 @@ module.exports = function() {
 
     self.isDeveloper = root.isDeveloper;
 
-    tables.prepareTable(self, "report", "#/reports", function(item) {
+    tables.prepareTable(self, "report", function(item) {
         return serverService.deleteStudyReport(item.identifier);
     });
     self.addReport = function(vm, event) {

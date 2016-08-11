@@ -9,14 +9,12 @@ function mapKey(cacheKey) {
 module.exports = function() {
     var self = this;
     
-    tables.prepareTable(self, 'cache key', '#/cache', function(item) {
+    tables.prepareTable(self, 'cache key', function(item) {
         return serverService.deleteCacheKey(item.key); 
     });
 
     serverService.getCacheKeys().then(function(response) {
         var items = response.map(mapKey);
-        if (items.length) {
-            self.itemsObs(items.sort(utils.makeFieldSorter("key")));
-        }
+        self.itemsObs(items.sort(utils.makeFieldSorter("key")));
     });
 };
