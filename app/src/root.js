@@ -63,7 +63,7 @@ var RootViewModel = function() {
         self.editorPanelObs(name);
         self.editorParamsObs(params);
         self.isEditorPanelVisibleObs(name !== 'none');
-        self.isEditorTabVisibleObs(true);
+        self.isEditorTabVisibleObs(name !== 'none');
     };
     self.toggleEditorTab = function() {
         self.isEditorTabVisibleObs(!self.isEditorTabVisibleObs());
