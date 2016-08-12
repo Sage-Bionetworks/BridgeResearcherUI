@@ -2,7 +2,8 @@
 var ko = require('knockout');
 require('knockout-postbox');
 var $ = require('jquery');
-var tablesort = require('tablesort');
+var flatpickr = require('flatpickr');
+require('../../node_modules/flatpickr/dist/flatpickr.min.css');
 
 // need to make a global out of this for semantic to work, as it's not in a package.
 // This is hacky, webpack has better support for this. Worse, semantic is a jQuery
@@ -23,21 +24,29 @@ ko.observableArray.fn.contains = function(value) {
     return underlyingArray.indexOf(value) > -1;
 };
 
-// This doesn't work because it's changing the DOM but not the underlying ko observer.
-// as a consequence, weird stuff happens and rows end up being doubled, then tripled, etc.
-ko.bindingHandlers.tablesort = {
+ko.bindingHandlers.flatpickr = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-        var sorter = tablesort(element);
+        var observer = valueAccessor();
+        var timeout = allBindings().timeout;
 
-        var itemsObs = bindingContext.$component.itemsObs;
-        if (!itemsObs) {
-            throw new Error("tablesort binding expects to be on a table with an itemsObs");
+        function updateObserver(date) {
+            observer(date.toISOString());
         }
-        itemsObs.subscribe(function(newValue) {
-            sorter.refresh();
-        });
+        function createPicker() {
+            flatpickr(element, {enableTime: true, defaultDate: new Date(observer()), 
+                onChange: updateObserver });
+        }
+        // You must delay initialization in a modal until after the modal is open, or 
+        // the picker works... but spontaneously opens. Just add timeout: 600 to the 
+        // binding, or however long you want to delay.
+        if (timeout) {
+            setTimeout(createPicker, timeout);    
+        } else {
+            createPicker();
+        }
     }
 };
+
 ko.bindingHandlers.condPopup = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
         var data = bindingContext.$data;
