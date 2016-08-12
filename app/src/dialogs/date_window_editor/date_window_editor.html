@@ -1,24 +1,24 @@
 <div class="ui small modal">
     <i class="close icon"></i>
     <div class="header">
-        Start Time Window (UTC time)
+        Execution Window
     </div>
     <div class="content">
         <div class="ui form">
             <div class="two fields">
                 <div class="field">
                     <label>Schedule tasks from date</label>
-                    <ui-datetime params="fieldObs: startsOnObs"></ui-datetime>
+                    <input data-enableTime="true" data-bind="flatpickr: startsOnObs, timeout: 600"/>
                 </div>
                 <div class="field">
                     <label>to date</label>
-                    <ui-datetime params="fieldObs: endsOnObs"></ui-datetime>
+                    <input data-enableTime="true" data-bind="flatpickr: endsOnObs, timeout: 600"/>
                 </div>
             </div>
         </div>
-        <p class="help-text">If set, tasks will not be scheduled if they start outside of this time window. The 
-            times are in UTC and apply to all participants in the study at the same time, wherever they are located. </p>
-        <p class="help-text"><b>The entire date and time must be specified or nothing will be set.</b></p>
+        <p class="help-text"><b>Dates and times are shown in your local timezone, but will be savd in UTC time.</b></p> 
+        <p class="help-text">If set, tasks will not be scheduled if they start outside of this time window.  
+            The window applies to all participants in the study at the same time, regardless of their time zone. </p> 
     </div>
     <div class="actions">
         <button class="ui primary small button" data-bind="click: save">Save</button>
