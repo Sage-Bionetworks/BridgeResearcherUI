@@ -1,7 +1,6 @@
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var bind = require('../../binder');
-var root = require('../../root');
 
 function updateMinAppVersion(vm, obs, name) {
     var value = parseInt(obs(),10);
