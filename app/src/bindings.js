@@ -28,13 +28,16 @@ ko.bindingHandlers.flatpickr = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
         var observer = valueAccessor();
         var timeout = allBindings().timeout;
+        var includeTime = element.hasAttribute("data-enableTime");
 
         function updateObserver(date) {
             observer(date.toISOString());
+            element.value = date[includeTime ? "toLocaleString" : "toLocaleDateString"]();
         }
         function createPicker() {
-            flatpickr(element, {enableTime: true, defaultDate: new Date(observer()), 
-                onChange: updateObserver });
+            var d = (observer()) ? new Date(observer()) : null;
+            flatpickr(element, {defaultDate: d, onChange: updateObserver});
+            element.value = d[includeTime ? "toLocaleString" : "toLocaleDateString"]();
         }
         // You must delay initialization in a modal until after the modal is open, or 
         // the picker works... but spontaneously opens. Just add timeout: 600 to the 
