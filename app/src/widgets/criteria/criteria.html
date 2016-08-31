@@ -2,7 +2,7 @@
     <!-- Doesn't handle errors targeted for minAppVersions_iphone_os -->
     <div data-bind="attr:{class:'three wide field '+$data.id+'minAppVersions_iphone_os ' + $data.id+'maxAppVersions_iphone_os'}">
         <label>Version (on iOS):</label>
-        <div class="field range-control-border">
+        <div class="field range-control-border" data-bind="focusable">
             <input type="text" placeholder="Min" data-bind="textInput: $data.iosMinObs"/>
             <span>&mdash;</span>
             <input type="text" placeholder="Max" data-bind="textInput: $data.iosMaxObs"/>
@@ -10,7 +10,7 @@
     </div>
     <div data-bind="attr:{class:'three wide field '+$data.id+'minAppVersions_android ' + $data.id+'maxAppVersions_android'}">
         <label>Version (on Android):</label>
-        <div class="field range-control-border">
+        <div class="field range-control-border" data-bind="focusable">
             <input type="text" placeholder="Min" data-bind="textInput: $data.androidMinObs"/>
             <span>&mdash;</span>
             <input type="text" placeholder="Max" data-bind="textInput: $data.androidMaxObs"/>

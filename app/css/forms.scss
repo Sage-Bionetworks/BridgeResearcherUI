@@ -71,6 +71,7 @@ label[for] {
     border-radius: .28571429rem;
     box-shadow: 0 0 0 0 transparent inset;
     display: inline-block!important;
+    text-align:center!important;
 }
 .range-control-border input, .range-control-border input:focus {
     text-align:center!important;
@@ -79,4 +80,7 @@ label[for] {
     display: inline-block!important;
     width:3rem!important;
     padding: .2rem!important;
+}
+.range-control-border-active {
+    border-color:#85B7D9!important;
 }

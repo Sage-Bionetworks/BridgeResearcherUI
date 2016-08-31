@@ -20,6 +20,9 @@
     border-radius: .28571429rem;
     box-shadow: 0 0 0 0 transparent inset;
 }
+.synthetic-control-border:focus {
+    outline: 1px solid red;
+}
 .synthetic-control-border input, .synthetic-control-border input:focus {
     border: none!important;
     box-shadow: none!important;
@@ -30,7 +33,7 @@
 </style>
 <body style="padding: 3rem">
     <form class="ui form">
-        <div class="synthetic-control-border">
+        <div class="synthetic-control-border" tabindex="0">
             <input style="text-align:right" type="text" placeholder="Min"/><span>&mdash;</span><input type="text" placeholder="Max"/>
         </div>
     </form>
