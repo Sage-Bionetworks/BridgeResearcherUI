@@ -1,12 +1,23 @@
 <div class="fields">
-    <div class="four wide field">
-        <label>App version:</label>
+    <div class="three wide field">
+        <label>App version (on iOS):</label>
         <div class="two fields">
             <div class="eight wide field" data-bind="attr:{id:$data.id+'minAppVersion'}">
-                <input type="number" data-bind="textInput: $data.minAppVersionObs" placeholder="Min"/>
+                <input type="number" data-bind="textInput: $data.iosMinObs" placeholder="Min"/>
             </div>
             <div class="eight wide field" data-bind="attr:{id:$data.id+'maxAppVersion'}">
-                <input type="number" data-bind="textInput: $data.maxAppVersionObs" placeholder="Max"/>
+                <input type="number" data-bind="textInput: $data.iosMaxObs" placeholder="Max"/>
+            </div>
+        </div>
+    </div>
+    <div class="three wide field">
+        <label>App version (on Android):</label>
+        <div class="two fields">
+            <div class="eight wide field" data-bind="attr:{id:$data.id+'minAppVersion'}">
+                <input type="number" data-bind="textInput: $data.androidMinObs" placeholder="Min"/>
+            </div>
+            <div class="eight wide field" data-bind="attr:{id:$data.id+'maxAppVersion'}">
+                <input type="number" data-bind="textInput: $data.androidMaxObs" placeholder="Max"/>
             </div>
         </div>
     </div>
@@ -14,7 +25,7 @@
         <label>Language</label>
         <input type="text" class="field" data-bind="textInput: $data.languageObs"/>
     </div>
-    <div class="six wide field tag-editor" data-bind="attr:{id: $data.id+'allOfGroups'}">
+    <div class="five wide field tag-editor" data-bind="attr:{id: $data.id+'allOfGroups'}">
         <label>User has all these data group(s):</label>
         <!-- ko component: {
             name: "tag-editor",
@@ -24,7 +35,7 @@
             }
         } --><!-- /ko -->
     </div>
-    <div class="six wide field tag-editor" data-bind="attr:{id: $data.id+'noneOfGroups'}">
+    <div class="five wide field tag-editor" data-bind="attr:{id: $data.id+'noneOfGroups'}">
         <label>And none of these group(s):</label>
         <!-- ko component: {
             name: "tag-editor",
