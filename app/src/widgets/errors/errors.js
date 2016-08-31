@@ -44,8 +44,15 @@ module.exports = function() {
         for (var fieldName in errors) {
             var string = errors[fieldName].map(truncateErrorFieldKey).join("; ");
 
+            // This now attempts to find a class token because the range controls have one field
+            // border and two controls, both of which can have server errors. Were I to redo this, 
+            // I might be inclined to switch over entirely to class tokens rather than IDs to 
+            // simplify this, but it introduces new difficulties.
             var id = errorFieldKeyToId(fieldName);
             var fieldEl = document.getElementById(id);
+            if (!fieldEl) {
+                fieldEl = document.querySelector("."+id);
+            }
             if (fieldEl) {
                 var div = document.createElement("div");
                 div.className = "ui basic red pointing prompt label transition visible";
