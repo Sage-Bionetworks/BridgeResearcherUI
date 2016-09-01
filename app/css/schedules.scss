@@ -66,6 +66,7 @@
 .activity-controls {
     @include align-items(top); // just seems slightly more aligned than leaving it alone.
     padding-left: .75rem!important; 
+    white-space: nowrap;
 }
 
 .times-label {

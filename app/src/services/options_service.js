@@ -32,10 +32,9 @@ function getActivityOptions() {
     return serverService.getSchedulePlans().then(function(response) {
         var activities = [];
         response.items.forEach(function(plan) {
-            var versionString = formatVersionRange(plan.minAppVersion, plan.maxAppVersion);
             getSchedules(plan).forEach(function(schedule) {
                 schedule.activities.forEach(function(activity) {
-                    var actLabel = activity.label + versionString;
+                    var actLabel = activity.label + " (" + plan.label + ")";
                     activities.push({label: actLabel, "value": activity.guid});
                 });
             });

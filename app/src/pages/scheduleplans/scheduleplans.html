@@ -4,12 +4,6 @@
             <h3>Scheduling</h3>
         </div>
         <div class="fixed-header-buttons">
-            <span class="ui form field">
-                Filter to version:&nbsp;
-                <input style="margin-right:2rem;font-size: smaller; width:3rem" type="text" data-bind="textInput: filterObs, 
-                    event: {keydown: applyFilter}, hasFocus: true">    
-            </span>
-            <button class="ui small button" data-bind="disable: !atLeastOneChecked(), click: copySchedulePlans">Copy</button>
             <button class="ui red small button" data-bind="disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
             <a href="#/scheduleplans/new" class="ui primary small button">New Schedule Plan</a>
         </div>
@@ -24,13 +18,12 @@
             <tr>
                 <th width="10"></th>
                 <th width="250">Schedule</th>
-                <th style="white-space:nowrap">Limit to app versions</th>
                 <th>Description</th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="visible: itemsObs().length === 0">
             <tr>
-                <td colspan="4" data-bind="html: recordsMessageObs"></td>
+                <td colspan="3" data-bind="html: recordsMessageObs"></td>
             </tr>
         </tbody>            
         <tbody data-bind="foreach: itemsObs">
@@ -41,7 +34,6 @@
                 <td>
                     <a data-bind="attr: {'href': '#/scheduleplans/'+$data.guid}, text: $data.label"></a>
                 </td>
-                <td data-bind="html: $parent.formatVersions($data.minAppVersion, $data.maxAppVersion)"></td>
                 <td data-bind="html: $parent.formatStrategy($data.strategy)"></td>
             </tr>
         </tbody>
