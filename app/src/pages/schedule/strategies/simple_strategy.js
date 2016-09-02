@@ -15,13 +15,17 @@ module.exports = function(params) {
         return strategy;
     };
 
-    // This is fired when the parent viewModel gets a plan back from the server
-    ko.computed(function () {
-        var strategy = params.strategyObs();
+    function initStrategy(strategy) {
         if (strategy && strategy.schedule) {
-            self.scheduleObs(strategy.schedule);
+            setTimeout(function() {
+                self.scheduleObs(strategy.schedule);
+            }, 1);
+            root.setEditorPanel('SimpleScheduleStrategyPanel', {viewModel:self});
         }
-    });
-
-    root.setEditorPanel('SimpleScheduleStrategyPanel', {viewModel:self});
+    }
+    initStrategy(params.strategyObs());
+    var subscription = params.strategyObs.subscribe(function(strategy) {
+        initStrategy(strategy);
+        subscription.dispose();
+    });    
 };

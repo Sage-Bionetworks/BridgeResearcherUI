@@ -33,6 +33,10 @@ Promise.prototype = {
         }
     }
 }
+Promise.map = function(array, func) {
+    array.map(func);
+    return new Promise();
+}
 
 // Don't pause to prompt user for input, just execute confirmation function.
 var alerts = {
@@ -47,6 +51,7 @@ var alerts = {
 // Tables reference alerts, so we will need to stub that part out frequently.
 var tables = rewire('../app/src/tables');
 tables.__set__('alerts', alerts);
+tables.__set__('Promise', Promise);
 
 module.exports = {
     serverService: serverService,
