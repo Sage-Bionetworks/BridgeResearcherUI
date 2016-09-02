@@ -25,7 +25,6 @@ function deleteUnusedProperties(object) {
     } else if (is(object, 'Object')) {
         for (var prop in object) {
             if (typeof object[prop] === 'undefined' || object[prop] === "" || object[prop] === null) {
-                console.log(prop,object[prop]);
                 delete object[prop];
             } else {
                 deleteUnusedProperties(object[prop]);
