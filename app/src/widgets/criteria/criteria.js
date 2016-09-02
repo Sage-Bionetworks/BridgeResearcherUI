@@ -2,9 +2,6 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var bind = require('../../binder');
 
-// TODO: There's much simpler code to do this in the password policy screen.
-// Why did that work and why can't it be used here?
-
 function partialRelayUpdater(vm, eventObj) {
     return function(func) {
         return function(newValue) {
@@ -30,14 +27,24 @@ module.exports = function(params) {
     self.id = params.id;
     self.criteriaObs = params.criteriaObs;
     var binder = bind(self)
-        .bind('minAppVersion')
-        .bind('maxAppVersion')
         .bind('language')
         .bind('allOfGroups[]')
         .bind('noneOfGroups[]')
+        .obs('iosMin')
+        .obs('iosMax')
+        .obs('androidMin')
+        .obs('androidMax')
         .obs('dataGroupsOptions[]');
 
-    var updateVM = binder.update();
+    function updateVM(crit) {
+        crit.minAppVersions = crit.minAppVersions || {};
+        crit.maxAppVersions = crit.maxAppVersions || {};
+        binder.update()(crit);
+        self.iosMinObs(crit.minAppVersions.iphone_os);
+        self.iosMaxObs(crit.maxAppVersions.iphone_os);
+        self.androidMinObs(crit.minAppVersions.android);
+        self.androidMaxObs(crit.maxAppVersions.android);
+    }
 
     var crit = self.criteriaObs();
     if (crit) {
@@ -58,12 +65,22 @@ module.exports = function(params) {
     self.noneOfGroupsObs.subscribe(updater(function(crit, newValue) {
         crit.noneOfGroups = newValue;
     }));
-    self.minAppVersionObs.subscribe(updater(function(crit, newValue) {
-        crit.minAppVersion = (utils.isNotBlank(newValue)) ? parseInt(newValue,10) : null;
+    self.iosMinObs.subscribe(updater(function(crit, newValue) {
+        crit.minAppVersions.iphone_os = intValue(newValue);
     }));
-    self.maxAppVersionObs.subscribe(updater(function(crit, newValue) {
-        crit.maxAppVersion = (utils.isNotBlank(newValue)) ? parseInt(newValue,10) : null;
+    self.iosMaxObs.subscribe(updater(function(crit, newValue) {
+        crit.maxAppVersions.iphone_os = intValue(newValue);
     }));
+    self.androidMinObs.subscribe(updater(function(crit, newValue) {
+        crit.minAppVersions.android = intValue(newValue);
+    }));
+    self.androidMaxObs.subscribe(updater(function(crit, newValue) {
+        crit.maxAppVersions.android = intValue(newValue);
+    }));
+
+    function intValue(newValue) {
+        return (utils.isNotBlank(newValue)) ? parseInt(newValue,10) : null;
+    }
 
     serverService.getStudy().then(function(study) {
         self.dataGroupsOptionsObs(study.dataGroups);

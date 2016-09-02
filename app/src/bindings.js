@@ -24,6 +24,15 @@ ko.observableArray.fn.contains = function(value) {
     return underlyingArray.indexOf(value) > -1;
 };
 
+ko.bindingHandlers.focusable = {
+    init: function(element) {
+        $(element).find('input').on('focus', function() {
+            element.classList.add("range-control-border-active");
+        }).on('blur', function() {
+            element.classList.remove("range-control-border-active");
+        });
+    }
+};
 ko.bindingHandlers.flatpickr = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
         var observer = valueAccessor();
