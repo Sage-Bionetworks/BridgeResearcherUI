@@ -10,7 +10,7 @@
         <legend class="schedulegroup-fieldset-legend">
             <h4>Assignment based on</h4>
         </legend>
-        <div style="text-align:right; margin-bottom: 1rem; margin-top: -1rem">
+        <div class="schedulegroup-fieldset-remove">
             <a class="link" data-bind="click: $parent.removeCriteria">
                 <i class="delete square icon"></i>Remove Schedule
             </a>
@@ -24,7 +24,7 @@
             }
         } -->
         <!-- /ko -->
-        <h4 style="margin-top:0">Schedule</h4>
+        <h4 class="schedulegroup-fieldset-h4">Schedule</h4>
         <div data-bind="component: {name: 'schedule', params: {scheduleObs: $data.scheduleObs, collectionName: 'scheduleCriteria'+$index()+'_'}}"></div>
     </fieldset>
 </form>

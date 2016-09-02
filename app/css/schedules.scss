@@ -21,6 +21,11 @@
         padding:1rem!important;
         margin-bottom:2rem!important;
     }
+    .schedulegroup-fieldset-remove {
+        text-align:right; 
+        margin-bottom: 1rem; 
+        margin-top: -1rem;
+    }
     .schedulegroup-fieldset-legend {
         background-color: white;
         font-size: 120%;
@@ -30,8 +35,11 @@
         text-align: right;
         padding-right: 1rem;
     }
-    
-    /* Schedule criteria schedules */
+    .schedulegroup-fieldset-h4 {
+        border-top:1px dotted #aaa; 
+        margin-top:1rem; 
+        padding-top: 1rem;
+    }
     .scheduleCriteria-fieldset {
         margin: 4rem 0 1rem 0;
         @include flex-box(row);
@@ -66,6 +74,7 @@
 .activity-controls {
     @include align-items(top); // just seems slightly more aligned than leaving it alone.
     padding-left: .75rem!important; 
+    white-space: nowrap;
 }
 
 .times-label {

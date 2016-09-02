@@ -352,3 +352,6 @@ reg('data_groups', {
     template: require('./pages/settings/data_groups.html'),
     viewModel: require('./pages/set_editors/set_editor')('dataGroups')
 });
+reg('empty', {
+    template: '<span></span>'
+});

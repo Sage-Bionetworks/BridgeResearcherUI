@@ -24,8 +24,7 @@ function annotateSurveys(surveys, plans) {
         var allPlanGuids = collectGuids(plan, []);    
         surveys.forEach(function(survey) {
             if (allPlanGuids.indexOf(survey.guid) > -1) {
-                var lbl = plan.label + " (" + fn.formatVersionRange(plan.minAppVersion, plan.maxAppVersion)+")";
-                survey.schedulePlanObs.push({label: lbl, guid: plan.guid});
+                survey.schedulePlanObs.push({label: plan.label, guid: plan.guid});
             } 
         });
     });
