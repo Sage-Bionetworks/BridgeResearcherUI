@@ -56,3 +56,31 @@ input[readonly] {
 label[for] {
     cursor: pointer!important;
 }
+
+/* For creating range controls in criteria editor. */
+.range-control-border {
+    font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+    margin: 0;
+    outline: 0;
+    -webkit-appearance: none;
+    padding: .47rem .2rem!important;
+    font-size: 1em;
+    background: #FFF;
+    border: 1px solid rgba(34,36,38,.15);
+    color: rgba(0,0,0,.87);
+    border-radius: .28571429rem;
+    box-shadow: 0 0 0 0 transparent inset;
+    display: inline-block!important;
+    text-align:center!important;
+}
+.range-control-border input, .range-control-border input:focus {
+    text-align:center!important;
+    border: none!important;
+    box-shadow: none!important;
+    display: inline-block!important;
+    width:3rem!important;
+    padding: .2rem!important;
+}
+.range-control-border-active {
+    border-color:#85B7D9!important;
+}
