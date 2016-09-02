@@ -17,7 +17,7 @@ module.exports = function(params) {
         // implementation must implement this callback to return a strategy object.
         .bind('strategy', null, null, fn.callObsCallback)
         .bind('label', '')
-        .obs('schedulePlanType', 'SimpleScheduleStrategy');
+        .obs('schedulePlanType', (params.guid==="new") ? 'SimpleScheduleStrategy' : 'empty');
         
     self.strategyObs.callback = utils.identity;
     // Fields for this form
