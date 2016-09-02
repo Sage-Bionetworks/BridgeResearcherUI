@@ -15,6 +15,8 @@ function valueForObs(criteria, field) {
 function formatVersionRange(minAppVersion, maxAppVersion) {
     if (minAppVersion === 0 && maxAppVersion === 0) {
         return "never";
+    } else if (minAppVersion === 0 && !utils.isNotBlank(maxAppVersion)) {
+        return "always";
     } else if (utils.isNotBlank(minAppVersion) && utils.isNotBlank(maxAppVersion)) {
         return "v" + minAppVersion + "-" + maxAppVersion;
     } else if (utils.isNotBlank(minAppVersion)) {
