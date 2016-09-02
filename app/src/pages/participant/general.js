@@ -43,9 +43,11 @@ module.exports = function(params) {
         .obs('title', (userId === "new") ? "New participant" : "&#160;");
     
     self.isPublicObs = root.isPublicObs;
-    serverService.getParticipantName(userId).then(function(part) {
-        self.titleObs(root.isPublicObs() ? part.name : part.externalId);
-    }).catch(utils.failureHandler());
+    if (!self.isNewObs()) {
+        serverService.getParticipantName(userId).then(function(part) {
+            self.titleObs(root.isPublicObs() ? part.name : part.externalId);
+        }).catch(utils.failureHandler());
+    }
     
     self.statusObs.subscribe(function(status) {
         self.showEnableAccountObs(status !== "enabled");

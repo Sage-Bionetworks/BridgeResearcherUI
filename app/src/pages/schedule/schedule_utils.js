@@ -147,14 +147,48 @@ function toList(array) {
         return array.join(", ");
     }
 }
-function newSimpleStrategy() {
-    return { schedule: newSchedule(), type: 'SimpleScheduleStrategy' };
+function newStrategy(type, existingStrategy) {
+    var schedules = (existingStrategy) ? extractSchedules(existingStrategy) : [newSchedule()];
+    switch(type) {
+        case 'SimpleScheduleStrategy':
+            return cloneSimpleStrategy(schedules);
+        case 'ABTestScheduleStrategy':
+            return cloneABTestStrategy(schedules);
+        case 'CriteriaScheduleStrategy':
+            return cloneCriteriaStrategy(schedules);
+        default:
+            throw new Error("Strategy type " + type + " not mapped.");
+    }
 }
-function newABTestStrategy() {
-    return { scheduleGroups: [], type: 'ABTestScheduleStrategy' };
+function extractSchedules(strategy) {
+    switch(strategy.type) {
+        case 'SimpleScheduleStrategy':
+            return [strategy.schedule];
+        case 'ABTestScheduleStrategy':
+            return strategy.scheduleGroups.map(scheduleFromGroup);
+        case 'CriteriaScheduleStrategy':
+            return strategy.scheduleCriteria.map(scheduleFromGroup);
+    }
 }
-function newCriteriaStrategy() {
-    return { scheduleCriteria: [], type: 'CriteriaScheduleStrategy' };
+function scheduleFromGroup(group) { 
+    return group.schedule; 
+}
+function cloneSimpleStrategy(schedules) {
+    return { type: 'SimpleScheduleStrategy', schedule: schedules[0] };
+}
+function cloneABTestStrategy(schedules) {
+    return { type: 'ABTestScheduleStrategy',
+        scheduleGroups: schedules.map(function(schedule) {
+            return {percentage: 0, schedule: schedule};
+        })
+    };
+}
+function cloneCriteriaStrategy(schedules) {
+    return { type: 'CriteriaScheduleStrategy',
+        scheduleCriteria: schedules.map(function(schedule) {
+            return {criteria: criteriaUtils.newCriteria(), schedule: schedule};
+        })
+    };
 }
 function newSchedule() {
     return {
@@ -164,7 +198,7 @@ function newSchedule() {
     };
 }
 function newSchedulePlan() {
-    return {type: 'SchedulePlan', label: "", strategy: newSimpleStrategy()};
+    return {type: 'SchedulePlan', label: "", strategy: cloneSimpleStrategy([newSchedule()])};
 }
 function formatSchedule(sch) {
     if (!sch) {
@@ -246,9 +280,7 @@ function formatScheduleStrategyType(type) {
 module.exports = {
     newSchedule: newSchedule,
     newSchedulePlan: newSchedulePlan,
-    newSimpleStrategy: newSimpleStrategy,
-    newABTestStrategy: newABTestStrategy,
-    newCriteriaStrategy: newCriteriaStrategy,
+    newStrategy: newStrategy,
     formatEventId: formatEventId,
     formatTimesArray: formatTimesArray,
     formatStrategy: formatStrategy,

@@ -60,8 +60,8 @@ function label(criteria) {
 }
 function newCriteria() {
     return {
-        minAppVersion:null,
-        maxAppVersion:null,
+        minAppVersions:{},
+        maxAppVersions:{},
         language:null,
         allOfGroups:[],
         noneOfGroups:[]
