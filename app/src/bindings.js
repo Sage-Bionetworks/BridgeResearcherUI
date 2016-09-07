@@ -24,6 +24,15 @@ ko.observableArray.fn.contains = function(value) {
     return underlyingArray.indexOf(value) > -1;
 };
 
+ko.bindingHandlers.focusable = {
+    init: function(element) {
+        $(element).find('input').on('focus', function() {
+            element.classList.add("range-control-border-active");
+        }).on('blur', function() {
+            element.classList.remove("range-control-border-active");
+        });
+    }
+};
 ko.bindingHandlers.flatpickr = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
         var observer = valueAccessor();
@@ -37,7 +46,9 @@ ko.bindingHandlers.flatpickr = {
         function createPicker() {
             var d = (observer()) ? new Date(observer()) : null;
             flatpickr(element, {defaultDate: d, onChange: updateObserver});
-            element.value = d[includeTime ? "toLocaleString" : "toLocaleDateString"]();
+            if (d) {
+                element.value = d[includeTime ? "toLocaleString" : "toLocaleDateString"]();
+            }
         }
         // You must delay initialization in a modal until after the modal is open, or 
         // the picker works... but spontaneously opens. Just add timeout: 600 to the 

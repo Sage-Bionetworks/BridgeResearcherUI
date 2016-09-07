@@ -61,7 +61,8 @@ module.exports = function(params) {
         subscription.dispose();
     });    
 
-    var scrollTo = utils.makeScrollTo(".scheduleCriteria-fieldset");
+
+    var scrollTo = utils.makeScrollTo(".schedulegroup-fieldset");
     self.fadeUp = utils.fadeUp();
 
     self.addCriteria = function(vm, event) {

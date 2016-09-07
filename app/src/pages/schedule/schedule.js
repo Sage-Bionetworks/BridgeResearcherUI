@@ -8,7 +8,8 @@ var alerts = require('../../widgets/alerts');
 
 var SCHEDULE_TYPE_OPTIONS = Object.freeze([
     {value: 'once', label: 'Once'},
-    {value: 'recurring', label: 'Recurring'}
+    {value: 'recurring', label: 'Recurring'},
+    {value: 'cron', label: 'Cron-based'}
 ]);
 var ACTIVITY_TYPE_OPTIONS = Object.freeze([
     {value: 'task', label: 'Do Task'},

@@ -12,20 +12,44 @@ function valueForObs(criteria, field) {
     }
     return criteria[field];
 }
+function formatVersionRange(minAppVersion, maxAppVersion) {
+    if (minAppVersion === 0 && maxAppVersion === 0) {
+        return "never";
+    } else if (minAppVersion === 0 && !utils.isNotBlank(maxAppVersion)) {
+        return "always";
+    } else if (utils.isNotBlank(minAppVersion) && utils.isNotBlank(maxAppVersion)) {
+        return "v" + minAppVersion + "-" + maxAppVersion;
+    } else if (utils.isNotBlank(minAppVersion)) {
+        return "v" + minAppVersion + "+";
+    } else if (utils.isNotBlank(maxAppVersion)) {
+        return "v" + "0-" + maxAppVersion;
+    }
+    return null;
+}
 function label(criteria) {
-    var minAppVersion = valueForObs(criteria, "minAppVersion");
-    var maxAppVersion = valueForObs(criteria, "maxAppVersion");
+    // These properties don't necessarily exist, which throws reference errors. So init them.
+    criteria.minAppVersions = criteria.minAppVersions || {};
+    criteria.maxAppVersions = criteria.maxAppVersions || {};
+    var iosMin = valueForObs(criteria.minAppVersions, "iphone_os");
+    var iosMax = valueForObs(criteria.maxAppVersions, "iphone_os");
+    var androidMin = valueForObs(criteria.minAppVersions, "android");
+    var androidMax = valueForObs(criteria.maxAppVersions, "android");
     var language = valueForObs(criteria, "language");
     var allOfGroups = valueForObs(criteria, "allOfGroups");
     var noneOfGroups = valueForObs(criteria, "noneOfGroups");
+    var iosRange = formatVersionRange(iosMin, iosMax);
+    var androidRange = formatVersionRange(androidMin, androidMax);
 
     var arr = [];
-    if (utils.isNotBlank(minAppVersion) && utils.isNotBlank(maxAppVersion)) {
-        arr.push("v" + minAppVersion + "-" + maxAppVersion);
-    } else if (utils.isNotBlank(minAppVersion)) {
-        arr.push("v" + minAppVersion + "+");
-    } else if (utils.isNotBlank(maxAppVersion)) {
-        arr.push("v" + "0-" + maxAppVersion);
+    if (iosRange !== null && iosRange === androidRange) {
+        arr.push(iosRange);
+    } else {
+        if (iosRange !== null) {
+            arr.push(iosRange + " (on iOS)");
+        }
+        if (androidRange !== null) {
+            arr.push(androidRange + " (on Android)");
+        }
     }
     if (utils.isNotBlank(language)) {
         arr.push("'" + language + "' language");
@@ -40,8 +64,8 @@ function label(criteria) {
 }
 function newCriteria() {
     return {
-        minAppVersion:null,
-        maxAppVersion:null,
+        minAppVersions:{},
+        maxAppVersions:{},
         language:null,
         allOfGroups:[],
         noneOfGroups:[]

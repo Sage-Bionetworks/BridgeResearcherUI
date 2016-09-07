@@ -17,23 +17,16 @@ module.exports = function(params) {
         // implementation must implement this callback to return a strategy object.
         .bind('strategy', null, null, fn.callObsCallback)
         .bind('label', '')
-        .bind('minAppVersion', '')
-        .bind('maxAppVersion', '')
-        .obs('schedulePlanType', 'SimpleScheduleStrategy');
+        .obs('schedulePlanType', (params.guid==="new") ? 'SimpleScheduleStrategy' : 'empty');
         
     self.strategyObs.callback = utils.identity;
     // Fields for this form
     self.schedulePlanTypeOptions = scheduleUtils.TYPE_OPTIONS;
     self.schedulePlanTypeLabel = utils.makeOptionLabelFinder(scheduleUtils.TYPE_OPTIONS);
-    
-    self.schedulePlanTypeObs.subscribe(function(newValue) {
-        if (newValue === 'SimpleScheduleStrategy') {
-            self.strategyObs(scheduleUtils.newSimpleStrategy());
-        } else if (newValue === 'ABTestScheduleStrategy') {
-            self.strategyObs(scheduleUtils.newABTestStrategy());
-        } else if (newValue === 'CriteriaScheduleStrategy') {
-            self.strategyObs(scheduleUtils.newCriteriaStrategy());
-        }
+
+    self.schedulePlanTypeObs.subscribe(function(newType) {
+        var newStrategy = scheduleUtils.newStrategy(newType, self.strategyObs.callback());
+        self.strategyObs(newStrategy);
     });
 
     self.save = function(vm, event) {
