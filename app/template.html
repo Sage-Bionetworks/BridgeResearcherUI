@@ -37,7 +37,7 @@
                         <a href="#/email_templates" class="item" data-bind="active: isActive, visible: isDeveloper">
                             Email Templates
                         </a>
-                        <a href="#/subpopulations" class="item" data-bind="active: isActive, visible: isDeveloper && isPublicObs">
+                        <a href="#/subpopulations" class="item" data-bind="active: isActive, visible: isPublicObs() && isDeveloper()">
                             Consent Groups
                         </a>
                         <a href="#/participants" class="item" data-bind="active: isActive, visible: isPublicObs() && isResearcher()">
