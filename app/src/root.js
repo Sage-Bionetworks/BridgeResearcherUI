@@ -122,9 +122,9 @@ var RootViewModel = function() {
             // codesEumerated = externalIdValidationEnabled
             // codeRequired = requiresExternalIdOnSignUp (doesn't exist) 
             var defaults = {
-                isPublic: study.emailVerificationEnabled && self.isResearcher(),
-                codesEnumerated: study.externalIdValidationEnabled && self.isDeveloper(),
-                codeRequired: study.externalIdValidationEnabled && self.isDeveloper()
+                isPublic: study.emailVerificationEnabled,
+                codesEnumerated: study.externalIdValidationEnabled,
+                codeRequired: study.externalIdValidationEnabled
             };
             var studyConfig = config.studies[study.identifier] || {};
             var opts = Object.assign({}, defaults, studyConfig);
