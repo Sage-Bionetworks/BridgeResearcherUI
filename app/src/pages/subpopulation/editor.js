@@ -46,7 +46,6 @@ module.exports = function(params) {
         self.consent = consent;
         // This could be "recent" but we don't want that after we get a real version
         params.createdOn = consent.createdOn;
-        console.log(consent.documentContent);
         self.initEditor(consent.documentContent);
     }
     function load() {
