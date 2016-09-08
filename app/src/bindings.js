@@ -166,24 +166,33 @@ ko.bindingHandlers.ckeditor = {
         if (!CKEDITOR) {
             throw new Error("CK editor has not been loaded in the page");
         }
+        CKEDITOR.on('dialogDefinition', function(event) {
+            if (['image','table','link'].indexOf( event.data.name ) > -1) {
+                var dialogDefinition = event.data.definition;
+                dialogDefinition.removeContents('Link');
+                dialogDefinition.removeContents('advanced');
+            }
+        });
         var id = element.getAttribute("id");
         var config = {
             height: "25rem",
             resize_dir: "vertical",
-            toolbarGroups: [
-                { name: 'clipboard', groups: ['clipboard','undo']},
-                {"name":"basicstyles","groups":["basicstyles"]},
-                {"name":"paragraph","groups":["indent","align","list","blocks"]},
-                {"name":"insert","groups":["insert"]},
-                {"name":"styles","groups":["styles"]},
-                {"name":"links","groups":["links"]}
-            ],
             on: {
                 instanceReady: function(event) {
                     var callback = valueAccessor();
                     callback(event.editor);
                 }
-            }
+            },
+            toolbar: [
+                { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+                { name: 'editing', items: [ 'Find', 'Replace', '-', 'SelectAll' ] },
+                { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
+                { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+                { name: 'insert', items: [ 'Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar' ] },
+                { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
+                { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
+                { name: 'colors', items: [ 'TextColor', 'BGColor' ] }
+            ]            
         };
         CKEDITOR.replace(element, config);
         ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
