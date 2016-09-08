@@ -30,10 +30,10 @@ function label(criteria) {
     // These properties don't necessarily exist, which throws reference errors. So init them.
     criteria.minAppVersions = criteria.minAppVersions || {};
     criteria.maxAppVersions = criteria.maxAppVersions || {};
-    var iosMin = valueForObs(criteria.minAppVersions, "iphone_os");
-    var iosMax = valueForObs(criteria.maxAppVersions, "iphone_os");
-    var androidMin = valueForObs(criteria.minAppVersions, "android");
-    var androidMax = valueForObs(criteria.maxAppVersions, "android");
+    var iosMin = valueForObs(criteria.minAppVersions, "iPhone OS");
+    var iosMax = valueForObs(criteria.maxAppVersions, "iPhone OS");
+    var androidMin = valueForObs(criteria.minAppVersions, "Android");
+    var androidMax = valueForObs(criteria.maxAppVersions, "Android");
     var language = valueForObs(criteria, "language");
     var allOfGroups = valueForObs(criteria, "allOfGroups");
     var noneOfGroups = valueForObs(criteria, "noneOfGroups");

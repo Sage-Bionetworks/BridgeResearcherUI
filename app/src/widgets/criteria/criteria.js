@@ -40,10 +40,10 @@ module.exports = function(params) {
         crit.minAppVersions = crit.minAppVersions || {};
         crit.maxAppVersions = crit.maxAppVersions || {};
         binder.update()(crit);
-        self.iosMinObs(crit.minAppVersions.iphone_os);
-        self.iosMaxObs(crit.maxAppVersions.iphone_os);
-        self.androidMinObs(crit.minAppVersions.android);
-        self.androidMaxObs(crit.maxAppVersions.android);
+        self.iosMinObs(crit.minAppVersions['iPhone OS']);
+        self.iosMaxObs(crit.maxAppVersions['iPhone OS']);
+        self.androidMinObs(crit.minAppVersions.Android);
+        self.androidMaxObs(crit.maxAppVersions.Android);
     }
 
     var crit = self.criteriaObs();
@@ -66,16 +66,16 @@ module.exports = function(params) {
         crit.noneOfGroups = newValue;
     }));
     self.iosMinObs.subscribe(updater(function(crit, newValue) {
-        crit.minAppVersions.iphone_os = intValue(newValue);
+        crit.minAppVersions['iPhone OS'] = intValue(newValue);
     }));
     self.iosMaxObs.subscribe(updater(function(crit, newValue) {
-        crit.maxAppVersions.iphone_os = intValue(newValue);
+        crit.maxAppVersions['iPhone OS'] = intValue(newValue);
     }));
     self.androidMinObs.subscribe(updater(function(crit, newValue) {
-        crit.minAppVersions.android = intValue(newValue);
+        crit.minAppVersions.Android = intValue(newValue);
     }));
     self.androidMaxObs.subscribe(updater(function(crit, newValue) {
-        crit.maxAppVersions.android = intValue(newValue);
+        crit.maxAppVersions.Android = intValue(newValue);
     }));
 
     function intValue(newValue) {
