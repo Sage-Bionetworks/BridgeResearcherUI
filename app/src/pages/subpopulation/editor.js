@@ -79,7 +79,7 @@ module.exports = function(params) {
             .then(loadIntoEditor)
             .then(utils.successHandler(vm, event, "Consent saved."))
             .catch(utils.failureHandler(vm, event));
-    };
+    };  
     var promise = (params.createdOn) ?
         serverService.getStudyConsent(params.guid, params.createdOn) :
         serverService.getMostRecentStudyConsent(params.guid);
