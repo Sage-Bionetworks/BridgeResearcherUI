@@ -8,9 +8,13 @@ var root = require('../../root');
  * @returns {{operator: *, value: *, skipTo: *}}
  */
 function createRule(rule) {
+    // This copy into new observables allows you to close the dialog without altering the underlying survey.
+    // Knockout also does not do well with a boolean value, so we have to convert that to a string, and convert
+    // it back again when closing the dialog.
     return {
         operator: ko.observable(ko.unwrap(rule.operator)),
         value: ko.observable(ko.unwrap(rule.value)),
+        endSurvey: ko.observable(ko.unwrap(rule.endSurvey) ? 'true' : 'false'),
         skipTo: ko.observable(ko.unwrap(rule.skipTo))
     };
 }
@@ -24,6 +28,11 @@ function filterOutRulesWithNoValues(rule) {
         rule.value(null);
     }
     return (rule.operator() === 'de' || rule.value());
+}
+
+function convertBackToBoolean(rule) {
+    rule.endSurvey(rule.endSurvey() === "true");
+    return rule;
 }
 
 /**
@@ -68,7 +77,7 @@ module.exports = function(params) {
 
     self.addRule = function() {
         var id = (self.identifierOptions.length) ? self.identifierOptions[0].value : "";
-        self.rulesObs.push(createRule({operator: "eq", value: "", skipTo: id}));
+        self.rulesObs.push(createRule({operator: "eq", value: "", skipTo: id, endSurvey: false}));
     };
     self.deleteRule = function(rule, event) {
         event.preventDefault();
@@ -76,7 +85,7 @@ module.exports = function(params) {
         self.rulesObs.remove(rule);
     };
     self.saveRules = function() {
-        var rules = self.rulesObs().filter(filterOutRulesWithNoValues);
+        var rules = self.rulesObs().filter(filterOutRulesWithNoValues).map(convertBackToBoolean);
         self.element.constraints.rulesObs(rules);
         root.closeDialog();
     };
