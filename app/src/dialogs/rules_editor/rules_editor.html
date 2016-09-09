@@ -15,19 +15,33 @@
                     When value
                 </div>
                 <div class="rules-table-rule-cell">
-                    <ui-select params="fieldObs: $data.operator, fieldLabel: $parent.operatorLabel, optionsSrc: $parent.operatorOptions"></ui-select>
+                    <select class="ui dropdown" data-bind="options: $parent.operatorOptions,
+                        optionsText: 'label', optionsValue: 'value', value: $data.operator"></select>                    
                 </div>
                 <div class="rules-table-rule-cell">
-                    <div data-bind="visible: $data.operator() !== 'de'">
-                        <input type="text" data-bind="textInput: $data.value"/>                        
-                    </div>
+                    <input type="text" data-bind="textInput: $data.value, css: {hidden: $data.operator() === 'de'}"/>                        
                 </div>
                 <div class="rules-table-rule-cell">
-                    then skip to later question:
+                    then
                 </div>
                 <div class="rules-table-rule-cell">
-                    <ui-select params="fieldObs: $data.skipTo, fieldLabel: $parent.identifierLabel,
-                            optionsSrc: $parent.identifierOptions"></ui-select>
+                    <input type="radio" data-bind="checkedValue: 'true', checked: endSurvey,  
+                        attr:{name: 'r'+$index(), id: 'rl'+$index()}" class="rules-table-rule-cell"/>
+                </div>
+                <div class="rules-table-rule-cell">
+                     <label data-bind="attr:{for: 'rl'+$index()}">end the survey, or</label>
+                </div>
+                <div class="rules-table-rule-cell">
+                    <input type="radio" data-bind="checkedValue: 'false', checked: endSurvey,  
+                        attr:{name: 'r'+$index(), id: 'rr'+$index()}" class="rules-table-rule-cell"/>
+                </div>
+                <div class="rules-table-rule-cell">
+                     <label data-bind="attr:{for: 'rr'+$index()}">skip to later question</label>
+                </div>
+                <div class="rules-table-rule-cell">
+                    <select class="ui dropdown" data-bind="css: {hidden: $data.endSurvey() === 'true'}, 
+                        options: $parent.identifierOptions, optionsText: 'label', optionsValue: 'value', 
+                        value: $data.skipTo"></select>                    
                 </div>
                 <div class="rules-table-rule-cell">
                     <div class="link" data-bind="click: $parent.deleteRule"><i class="delete icon"></i></div>
