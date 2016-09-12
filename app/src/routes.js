@@ -3,6 +3,7 @@ require('../lib/toastr.min');
 require('../lib/dragula.min');
 
 require('./bindings');
+require('./bindings/semantic');
 require('../lib/jquery.scrollTo');
 require('./bindings/dragula');
 require('./components');

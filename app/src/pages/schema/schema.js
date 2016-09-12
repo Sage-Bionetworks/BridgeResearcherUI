@@ -5,7 +5,7 @@ var utils = require('../../utils');
 var bind = require('../../binder');
 
 var FIELD_SKELETON = {
-    name:'', required:false, type:'attachment_blob', minAppVersion:'', maxAppVersion:''
+    name:'', required:false, type:null, unboundedText:true, maxLength:'', fileExtension:'', mimeType:''
 };
 
 module.exports = function(params) {
@@ -35,24 +35,44 @@ module.exports = function(params) {
             bind(def)
                 .bind('name', def.name)
                 .bind('required', def.required)
-                .bind('minAppVersion', def.minAppVersion)
-                .bind('maxAppVersion', def.maxAppVersion)
-                .bind('type', def.type);
+                .bind('type', def.type)
+                .bind('unboundedText', def.unboundedText)
+                .bind('maxLength', def.maxLength)
+                .bind('fileExtension', def.fileExtension)
+                .bind('mimeType', def.mimeType);
             return def;
         });
     }
     function fieldObsToDef(fieldDefinitions) {
-        return fieldDefinitions.map(function(item) {
-            return {
+        var fields = [];
+        fieldDefinitions.forEach(function(item) {
+            var type = item.typeObs();
+            if (!type) {
+                return;
+            }
+            var field = {
                 name: item.nameObs(),
                 required: item.requiredObs(),
-                type: item.typeObs(),
-                minAppVersion: item.minAppVersionObs(),
-                maxAppVersion: item.maxAppVersionObs()
+                type: type
             };
+            if (type === "string") {
+                field.unboundedText = item.unboundedTextObs();
+                if (!field.unboundedText) {
+                    field.maxLength = item.maxLengthObs();
+                }
+            } else if (type === "attachment_v2") {
+                field.mimeType = item.mimeTypeObs();
+                var ext = item.fileExtensionObs();
+                if (!/^\./.test(ext)) {
+                    ext = "." + ext;
+                }
+                field.fileExtension = ext;
+            }
+            fields.push(field);
         });
+        return fields;
     }
-    function newField() {
+    function makeNewField() {
         return fieldDefToObs([Object.assign({}, FIELD_SKELETON)])[0];
     }    
     function hideWarning() {
@@ -94,13 +114,13 @@ module.exports = function(params) {
         }
     };
 
-    self.addBelow = function(vm, event) {
-        var index = self.fieldDefinitionsObs.indexOf(vm.field);
-        var field = newField();
-        self.fieldDefinitionsObs.splice(index+1,0,field);
+    self.addBelow = function(field, event) {
+        var index = self.fieldDefinitionsObs.indexOf(field);
+        var newField = makeNewField();
+        self.fieldDefinitionsObs.splice(index+1,0,newField);
     };
     self.addFirst = function(vm, event) {
-        var field = newField();
+        var field = makeNewField();
         self.fieldDefinitionsObs.push(field);
     };
     self.saveNewRevision = function(vm, event) {

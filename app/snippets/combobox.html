@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>ComboBox Text</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2/semantic.min.css"/>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <script src="https://cdn.ckeditor.com/4.5.7/full/ckeditor.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
+</head>
+<body style="padding:5rem">
+    <p>A control that's a select control OR a text field if the value isn't in the list. There needs to be an "Other" option which toggles over. If the value is in the list, 
+        it needs to go back to the select control.</p>
+
+    <form class="ui form" style="width:30rem">
+        <div class="field">
+            <label>Type</label>
+            <select class="ui dropdown", data-bind="options: optionsObs,
+                optionsText: 'label', optionsValue: 'value', optionsCaption: 'Select a type',
+                value: selectedObs, visible: showEnumObs">
+            </select>
+
+            <div class="ui left action input" data-bind="visible: !showEnumObs()">
+                <button class="ui icon button" data-bind="click: flip">
+                    <i class="list icon"></i>
+                </button>
+                <input data-bind="textInput: otherObs"/>
+            </div>            
+        </div>
+    </form>
+
+    <p data-bind="text: outputValueObs"></p> 
+
+<script>
+function ModelView() {
+    var self = this;
+
+    self.showEnumObs = ko.observable(true);
+
+    self.otherObs = ko.observable();
+    self.outputValueObs = self.otherObs;
+    
+    self.optionsObs = ko.observableArray([]);
+    self.optionsObs.subscribe(function(newValue) {
+        newValue.push({label:"Other...", value:"__OTHER__"});
+    });
+
+    self.selectedObs = ko.observable();
+    self.selectedObs.subscribe(function(newValue) {
+        self.showEnumObs("__OTHER__" !== newValue);
+    });
+
+    self.flip = function() {
+        self.showEnumObs(!self.showEnumObs());
+    };
+
+    self.optionsObs([
+        {label:"A", value: "A"},
+        {label:"B", value: "B"},
+        {label:"C", value: "C"},
+        {label:"D", value: "D"}
+    ])
+}
+ko.applyBindings(ModelView, document.body);
+
+</script>
+</body>
+</html>
