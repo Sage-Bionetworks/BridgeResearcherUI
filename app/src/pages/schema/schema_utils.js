@@ -35,9 +35,8 @@ var FIELD_TYPE_OPTIONS = Object.freeze(ALL_FIELD_TYPE_OPTIONS.filter(function(op
 var MIME_TYPES = Object.freeze([
     {title:"application/json", ext:".json"},
     {title:"application/octet-stream", ext:".bin"},
-    {title:"image/png", ext:".png"},
     {title:"image/jpeg", ext:".jpg"},
-    {title:"jpg", ext:""},
+    {title:"image/png", ext:".png"},
     {title:"text/csv", ext:".csv"},
     {title:"text/plain", ext:".txt"},
     {title:"text/tab-separated-values", ext:".tsv"}

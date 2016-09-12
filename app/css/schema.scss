@@ -25,11 +25,6 @@
     a {
         margin-left: 1rem;
     }
-    .results > * {
-        overflow: visible ! important;
-        overflow-x: visible ! important;
-        overflow-y: visible ! important;
-    }
     .ui.checkbox input.hidden+label { /* Semantic UI's selector for this label element. */
         display: inline;
     }
