@@ -20,7 +20,8 @@
         </div>
         <div class="draggable extra">
             <input placeholder="Max length" data-bind="textInput: maxLengthObs, 
-                disable: unboundedTextObs(), hasFocus: $parent.focusObs"></input>
+                disable: unboundedTextObs(), hasFocus: $parent.focusObs"
+                style="width:8rem"></input>
         </div>
     <!-- /ko -->
     <!-- ko if: $parent.extraObs() === 'attachment' -->
@@ -31,7 +32,7 @@
             </div>
         </div>
         <div class="draggable extra">
-            <input placeholder="File ext" data-bind="textInput: fileExtensionObs"></input>
+            <input placeholder="File ext" data-bind="textInput: fileExtensionObs" style="width:8rem"></input>
         </div>
     <!-- /ko -->
     <div class="draggable">
