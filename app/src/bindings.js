@@ -1,4 +1,4 @@
-// jquery and semantic-ui are loaded globally (for now) from CDNs.
+// jquery loaded globally (for now) from CDNs.
 var ko = require('knockout');
 require('knockout-postbox');
 var $ = require('jquery');
@@ -9,7 +9,6 @@ require('../../node_modules/flatpickr/dist/flatpickr.min.css');
 // This is hacky, webpack has better support for this. Worse, semantic is a jQuery
 // plugin and adds no globals that webpack can convert to modules.
 window.$ = window.jQuery = $;
-require('../lib/semantic-2.2.min'); // we reference it here.
 
 // http://stackoverflow.com/questions/23606541/observable-array-push-multiple-objects-in-knockout-js
 ko.observableArray.fn.pushAll = function(valuesToPush) {
@@ -73,83 +72,6 @@ ko.bindingHandlers.condPopup = {
         var className = object.className(data);
         if (className) {
             element.classList.add(object.className(data));
-        }
-    }
-};
-
-ko.bindingHandlers.semantic = {
-    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-        var input, observer;
-        var value = ko.unwrap(valueAccessor());
-        var $element = $(element);
-        
-        function updateOnMatch(newValue) {
-            if (input.value === newValue) {
-                input.checked = true;
-                $element.addClass("checked");
-            }
-        }
-        function init() {
-            var allOptionsObs = allBindings().foreach;
-            if (allOptionsObs() instanceof Array) {
-                clearTimeout(intervalId);
-                
-                $element.dropdown("set selected", collectionObs());
-                collectionObs.subscribe(function(newValue) {
-                    $element.dropdown("set selected", newValue);
-                });
-            } else {
-                console.log("polling");
-            }
-        }
-        
-        if (value === 'checkbox') {
-            input = $element.children("input[type=checkbox]").get(0);
-            observer = allBindings().checkboxObs;
-            $element.addClass("ui checkbox").on('click', function() {
-                if (!input.disabled) {
-                    observer(!observer());
-                    $element.toggleClass('checked', observer());
-                }
-            });
-        } else if (value === 'radio') {
-            input = $element.children("input[type=radio]").get(0);
-            observer = allBindings().radioObs;
-
-            observer.subscribe(updateOnMatch);
-            updateOnMatch(observer());
-
-            $element.addClass("ui radio checkbox").on('click', function() {
-                if (!input.disabled) {
-                    observer(input.value);
-                    $element.addClass("checked");
-                }
-            });
-        } else if (value === 'dropdown') {
-            setTimeout(function() {
-                $element.addClass("ui dropdown").dropdown();
-            },0);
-        } else if (value === 'dropdown-button') {
-            $element.addClass("ui small button dropdown").dropdown({action: 'hide'});
-        } else if (value === 'popup') {
-            $element.popup();
-        } else if (value === 'popup-menu') {
-            $element.popup({on: 'click', hideOnScroll:true, position: 'left center', duration: 100});
-        } else if (value === 'adjacent-popup') {
-            $element.popup({inline:true});
-        } else if (value === 'multi-search-select') {
-            var intervalId = setInterval(init, 100);
-            var collectionObs = allBindings().updateSelect;
-            $element.addClass("ui selection dropdown").dropdown({
-                onAdd: function(value) {
-                    if (!collectionObs.contains(value)) {
-                        collectionObs.push(value);    
-                    }
-                },
-                onRemove: function(value) {
-                    collectionObs.remove(value);
-                }
-            });
         }
     }
 };
@@ -282,7 +204,6 @@ ko.bindingHandlers.fadeRemove = {
         var context = ko.contextFor(element);
         var itemsObs = findItemsObs(context, collName);
         var $element = $(element).closest(selector);
-
         element.addEventListener('click', function(event) {
             event.preventDefault();
             if (confirm("Are you sure?")) {
