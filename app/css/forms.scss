@@ -56,6 +56,9 @@ input[readonly] {
 label[for] {
     cursor: pointer!important;
 }
+.hidden {
+    visibility: hidden!important;
+}
 
 /* For creating range controls in criteria editor. */
 .range-control-border {

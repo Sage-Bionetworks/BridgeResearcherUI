@@ -1,4 +1,4 @@
-<div class="field_definition draggable">
+<div class="field_definition draggable" data-bind="with: field">
     <div class="draggable">
         <div class="field" data-bind="attr:{id:'fieldDefinitions'+$index()+'_name'}">
             <input type="text" data-bind="textInput: nameObs" placeholder="Name"/>
@@ -6,30 +6,50 @@
     </div>
     <div class="draggable">
         <div class="field">
-            <ui-select params="fieldObs: typeObs, fieldLabel: fieldTypeLabel,
-                optionsSrc: fieldTypeOptions"></ui-select>
+            <ui-select params="fieldObs: typeObs, fieldLabel: $parent.fieldTypeLabel,
+                optionsSrc: $parent.fieldTypeOptions, optionsCaption: 'Select type...'"></ui-select>
         </div>
     </div>
-    <div class="draggable">
-        <div class="field">
-            <input class="version_input" type="number" placeholder="Min vers." 
-                data-bind="value: minAppVersionObs, semantic: 'popup'"
-                data-content="You can safely add required fields for later app versions by setting this value to the next app version. Optional."/>
-            <input class="version_input" type="number" placeholder="Max vers." 
-                data-bind="value: maxAppVersionObs, semantic: 'popup'" 
-                data-content="You can safely delete required fields for later app versions by setting this value to the released app version. Optional."/>
+    <!-- ko if: $parent.extraObs() === 'none' -->
+        <div class="draggable extra">
         </div>
-    </div>
+    <!-- /ko -->
+    <!-- ko if: $parent.extraObs() === 'string' -->
+        <div class="draggable">
+            <ui-checkbox params="checkedObs: unboundedTextObs">Any length, or</ui-checkbox>
+        </div>
+        <div class="draggable extra">
+            <input placeholder="Max length" data-bind="textInput: maxLengthObs, 
+                disable: unboundedTextObs(), hasFocus: $parent.focusObs"
+                style="width:8rem"></input>
+        </div>
+    <!-- /ko -->
+    <!-- ko if: $parent.extraObs() === 'attachment' -->
+        <div class="draggable">
+            <div class="ui search" data-bind="semantic: 'search', source: $parent.mimeTypes, observer: mimeTypeObs">
+                <input class="prompt" placeholder="Mime type" 
+                    data-bind="textInput: mimeTypeObs, event:{selectedItem: $parent.updateExt}">
+            </div>
+        </div>
+        <div class="draggable extra">
+            <input placeholder="File ext" data-bind="textInput: fileExtensionObs" style="width:8rem"></input>
+        </div>
+    <!-- /ko -->
     <div class="draggable">
         <ui-checkbox params="checkedObs: requiredObs">Required</ui-checkbox>
     </div>
     <div class="draggable activity-controls">
-        <button class="ui basic compact mini button" data-bind="click: $parents[1].addBelow">
-            <i class="square add icon"></i>Add below
-        </button>
-        <button class="ui basic red compact mini button" data-bind="fadeRemove: {
-            selector: '.field_definition', object: $data.field, 'collection': 'fieldDefinitionsObs'}">
-            <i class="delete icon"></i>Delete
-        </button>
+        <div class="ui icon buttons">
+            <button class="ui compact basic mini button" 
+                data-bind="click: $parents[2].addBelow, semantic: 'popup'"
+                data-content="Add below">
+                <i class="square add icon"></i>
+            </button>
+            <button class="ui compact basic mini button" data-content="Delete this field" 
+                data-bind="fadeRemove: { selector: '.field_definition', object: $data, 
+                    'collection': 'fieldDefinitionsObs'}, semantic: 'popup'">
+                <i class="delete icon"></i>
+            </button>
+        </div>        
     </div>
 </div>

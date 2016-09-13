@@ -2,7 +2,6 @@
     @include flex-box(row);
     @include align-items(center);
     width: 100%;
-    overflow: hidden;
     border-radius: 4px;
     cursor: grab;
     cursor: -moz-grab;
@@ -13,23 +12,21 @@
     }
     > div {
         padding: .25rem .5rem .25rem 0;
-        
-        input, select {
-            width: 100%;
-        }
     }
     > div:nth-child(1) {
-        @include flex(1);
         padding-left: 1rem;
-    }
-    > div:nth-child(2) {
-        @include flex(1);
     }
     > div:last-child {
         padding-right: 1rem;
     }
+    > div.extra {
+        @include flex(1);
+    }
     a {
         margin-left: 1rem;
+    }
+    .ui.checkbox input.hidden+label { /* Semantic UI's selector for this label element. */
+        display: inline;
     }
     .version_input {
         width:6.5rem!important; 

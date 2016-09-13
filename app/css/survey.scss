@@ -127,9 +127,13 @@
     }
         .rules-table-rule-cell {
             padding: .2rem .2rem;
+            white-space: nowrap;
         }
-        .rules-table-rule-cell input, .rules-table-rule-cell select {
+        .rules-table-rule-cell input[text], .rules-table-rule-cell select {
             width: 10rem ! important;
+        }
+        .rules-table-rule-cell input[radio] {
+            width:1rem!important;
         }
         .rules-table-rule-cell:last-child {
             @include flex(2);

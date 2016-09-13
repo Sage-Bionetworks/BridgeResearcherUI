@@ -156,6 +156,7 @@ function elementToObservables(element) {
             return {
                 operator: ko.observable(rule.operator),
                 value: ko.observable(rule.value),
+                endSurvey: ko.observable(!!rule.endSurvey),
                 skipTo: ko.observable(rule.skipTo)
             };
         }));
@@ -183,11 +184,13 @@ function observablesToElement(element) {
             updateModelField(con, field);
         });
         element.constraints.rules = con.rulesObs().map(function(rule) {
-            return {
-                operator: rule.operator(),
-                value: rule.value(),
-                skipTo: rule.skipTo()
-            };
+            var newRule = {operator: rule.operator(), value: rule.value()};
+            if (rule.endSurvey()) {
+                newRule.endSurvey = true;
+            } else {
+                newRule.skipTo = rule.skipTo();
+            }
+            return newRule;
         });
     }
     return element;

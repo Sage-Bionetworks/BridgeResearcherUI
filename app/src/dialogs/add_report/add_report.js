@@ -18,7 +18,6 @@ module.exports = function(params) {
         } catch(e) {
             // not JSON.
         }
-        console.log(entry);
         utils.deleteUnusedProperties(entry);
         if (!entry.identifier) {
             // Because we're going to create an "undefined" report or something if we

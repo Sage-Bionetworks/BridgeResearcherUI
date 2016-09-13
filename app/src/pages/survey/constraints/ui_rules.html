@@ -4,7 +4,12 @@
 <div data-bind="visible: $parent.hasRules()">
     <div data-bind="foreach: rulesObs">
         <div>
-            skip to <span data-bind="text: $data.skipTo()"></span> when answer
+            <span data-bind="visible: !endSurvey()">
+                skip to <span data-bind="text: $data.skipTo()"></span> when answer is 
+            </span>
+            <span data-bind="visible: endSurvey()">
+                end the survey when answer is 
+            </span>
             <span data-bind="text: $parents[1].operatorLabel($data.operator())"></span>
             <span data-bind="visible: $data.operator() != 'de', text: $data.value()"></span>
         </div>
