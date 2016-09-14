@@ -21,9 +21,17 @@ var handlers = {
             observer(object.title);
         }});        
     },
-    'dropdown': function($element) {
+    // TODO: Does this direct binding of an observer fix anything outside of changing constraints?
+    'dropdown': function($element, allBindings) {
+        var params = {action:'activate'};
+        var dropdownChange = allBindings().dropdownChange;
+        if (dropdownChange) {
+            params.onChange = function(value, text, $selectedItem) {
+                dropdownChange($selectedItem.get(0));
+            };
+        }
         setTimeout(function() {
-            $element.addClass("ui dropdown").dropdown();
+            $element.addClass("ui dropdown").dropdown(params);
         },0);
     },
     'dropdown-button': function($element) {
