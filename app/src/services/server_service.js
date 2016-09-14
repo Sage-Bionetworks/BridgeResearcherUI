@@ -405,7 +405,7 @@ module.exports = {
         }
     },
     createParticipant: function(participant) {
-        return post(config.participants, participant);
+        return post(config.participants + "?verifyEmail=false", participant);
     },
     updateParticipant: function(participant) {
         cache.clear(participant.id+':name');
