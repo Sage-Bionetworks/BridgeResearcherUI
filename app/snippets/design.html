@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Bridge Study Manager</title>
+    <!--Not clear if this is doing anything, but what the heck-->
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2/semantic.min.css" />
+    <script src="http://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <script src="http://code.jquery.com/jquery-3.1.0.min.js"></script>
+</head>
+
+<body>
+
+    <div class="ui small modal">
+        <i class="close icon"></i>
+        <div class="header">
+            Edit Scheduling Events
+        </div>
+        <div class="content">
+            <div class="ui grid">
+                <div class="eight wide column">
+                    <form class="ui form">
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" tabindex="0" class="hidden">
+                                <label>Schedule:</label>
+                            </div>
+                        </div>
+                        <div style="margin-left: 2rem" class="grouped fields">
+                            <div class="field">
+                                <div class="ui radio checkbox">
+                                    <input type="radio" name="fruit" tabindex="0" class="hidden">
+                                    <label>At time of enrollment</label>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui radio checkbox">
+                                    <input type="radio" name="fruit" tabindex="0" class="hidden">
+                                    <label>Two weeks before enrollment<span style="color:#B22222"> *</span></label>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui radio checkbox">
+                                    <input type="radio" name="fruit" tabindex="0" class="hidden">
+                                    <label>A month before enrollment<span style="color:#B22222"> *</span></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fields">
+                            <div class="field">
+                                <div class="ui checkbox">
+                                    <input type="checkbox" tabindex="0" class="hidden">
+                                    <label>When this activity is finished:</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-left: 2rem" class="grouped fields">
+                            <div class="field">
+                                <select style="width: 20rem" class="ui dropdown" data-bind="options: optionsSrc,
+                        optionsText: 'label', optionsValue: 'value', value: fieldObs,
+                        optionsCaption: $data.optionsCaption"></select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="eight wide column">
+                    <div style="text-indent: -.6rem; margin-left: .6rem">
+                        <span style="color:#B22222">* </span> For activities that run for a specific time on the calendar
+                        (e.g. a survey for the week of September 4-10, 2016), these events start before the &ldquo;event 
+                        in progress&rdquo; to ensure that participants who join the study during that time period will be 
+                        scheduled to do this activity, even though it started before they joined.<br><br> (This is a niche use 
+                        case. &ldquo;At time of enrollment&rdquo; is usually best.)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="actions" style="text-align:left" data-bind="visible: !advancedEditorObs()">
+            <button class="ui primary small button" data-bind="click: saveAndCloseDialog">Save</button>
+            <button class="ui small button" data-bind="click: clearAndCloseDialog">Clear</button>
+            <button class="ui small button" data-bind="click: closeDialog">Cancel</button>
+        </div>
+    </div>
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2/semantic.min.js"></script>
+    <script>
+$('.ui.modal').modal('show');
+</script>
+</body>
+
+</html>
