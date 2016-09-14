@@ -1,6 +1,7 @@
 var ko = require('knockout');
 var root = require('../../root');
 var utils = require('../../utils');
+var serverService = require('../../services/server_service');
 
 module.exports = function(params) {
     var self = this;
@@ -12,11 +13,19 @@ module.exports = function(params) {
     };
     self.create = function(vm, event) {
         var nextId = self.identifierObs();
+
+        utils.startHandler(vm, event);
         if (!utils.isNotBlank(nextId)) {
-            utils.failureHandler()(new Error("You must enter an ID."));
-            return;
+            return utils.formFailure(event.target, 'You must enter an ID.');
+        } else if (!/^[a-zA-Z0-9-_]+$/.test(nextId)) {
+            return utils.formFailure(event.target, 'ID must contain only digits, letters, underscores and dashes.');
         }
-        params.vm.createFromNew(nextId);
-        root.closeDialog();
+        serverService.getParticipants(0, 5, "+"+nextId+"@").then(function(response) {
+            if (response.items.length > 0) {
+                return utils.formFailure(event.target, "ID '"+nextId+"' already exists.");
+            }
+            params.vm.createFromNew(nextId);
+            root.closeDialog();
+        });
     };
 };

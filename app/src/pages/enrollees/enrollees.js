@@ -41,9 +41,10 @@ module.exports = function() {
         var participant = utils.createParticipantForID(self.study.supportEmail, identifier);
         return serverService.createParticipant(participant);
     }
-    function updatePageWithResult() {
+    function updatePageWithResult(response) {
         self.showResultsObs(true);
         ko.postbox.publish('external-ids-page-refresh');
+        return response;
     }
     function convertToPaged(identifier) {
         return function() {
