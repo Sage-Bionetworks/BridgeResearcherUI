@@ -66,6 +66,19 @@ module.exports = function(params) {
 
         scrollTo(index+1);
     };
+    self.changeElementType = function(domEl) {
+        var newType = domEl.getAttribute("data-type");
+        var index = ko.contextFor(domEl).$index();
+        var oldElement = self.elementsObs()[index];
+        var newElement = surveyUtils.newField(newType);
+
+        newElement = surveyUtils.elementToObservables(newElement);
+        newElement.constraints.rulesObs(oldElement.constraints.rulesObs());
+        oldElement.uiHint = newElement.uiHint;
+        oldElement.uiHintObs(newElement.uiHintObs());
+        oldElement.constraints = newElement.constraints;
+        oldElement.constraintsTypeObs(newType);
+    };
     self.copyElement = function(element) {
         var index = self.elementsObs.indexOf(element);
         surveyUtils.observablesToElement(element);

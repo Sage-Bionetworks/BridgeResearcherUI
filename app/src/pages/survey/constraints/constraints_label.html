@@ -1,1 +1,17 @@
-<span class="ui medium gray ribbon label constraints-label" data-bind="text: title"></span>
+<span class="ui medium gray ribbon label constraints-label">
+    <div data-bind="semantic: 'dropdown', dropdownChange: $parents[3].changeElementType">
+        <div data-bind="text: title">File</div>
+        <i class="dropdown icon"></i>
+        <div class="menu">
+            <a class="item" data-type="BooleanConstraints">Boolean</a>
+            <a class="item" data-type="DateConstraints">Date</a>
+            <a class="item" data-type="DateTimeConstraints">Date & Time</a>
+            <a class="item" data-type="DecimalConstraints">Decimal</a>
+            <a class="item" data-type="DurationConstraints">Duration</a>
+            <a class="item" data-type="IntegerConstraints">Integer</a>
+            <a class="item" data-type="MultiValueConstraints">Multi-Choice</a>
+            <a class="item" data-type="StringConstraints">String</a>
+            <a class="item" data-type="TimeConstraints">Time</a>            
+        </div>
+    </div>
+</span>
