@@ -4,11 +4,11 @@
         New credentials from ID
     </div>
     <div class="content">
+        <errors></errors>
         <form id="newExternalId" class="ui form" action="" data-bind="submit: create">
-            <errors></errors>
             <div class="field">
                 <label>Identifier</label>
-                <input type="text" data-bind="textInput: identifierObs, hasFocus: true"/>
+                <input type="text" data-bind="textInput: identifierObs" autofocus/>
             </div>
         </form>
     </div>
