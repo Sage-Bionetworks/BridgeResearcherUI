@@ -182,7 +182,6 @@ module.exports = function(params) {
         return (self.indexObs() !== null) ? 'Update' : 'Add';
     });
     self.cancelEditMode = function() {
-        console.log("cancelEditMode");
         self.labelObs("");
         self.detailObs("");
         self.valueObs("");
