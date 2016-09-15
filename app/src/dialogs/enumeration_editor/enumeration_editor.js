@@ -28,6 +28,7 @@ function hash(array) {
             total += checksum(value);
         }
     }
+    console.log(total);
     return total;
 }
 
@@ -213,7 +214,7 @@ module.exports = function(params) {
         if (self.copyToAllEnumsObs()) {
             self.elementsObs().forEach(function (element) {
                 var enumeration = getEnumeration(element);
-                if (enumeration && hash.MD5(enumeration) === oldMD5) {
+                if (enumeration && hash(enumeration) === oldMD5) {
                     copyEntry(element, entry);
                 }
             });
