@@ -1,5 +1,6 @@
 var utils = require('../../utils');
 var ko = require('knockout');
+require('knockout-postbox');
 var root = require('../../root');
 
 /**
@@ -28,7 +29,6 @@ function hash(array) {
             total += checksum(value);
         }
     }
-    console.log(total);
     return total;
 }
 
@@ -48,7 +48,7 @@ function ListsSource(elements, element) {
     elements.forEach(function(anElement) {
         var enumeration = getEnumeration(anElement);
         if (enumeration) {
-            var entry = makeListMapEntry(enumeration);
+            var entry = makeListMapEntry(enumeration, anElement === element);
             if (!md5s[entry.md5]) {
                 md5s[entry.md5] = entry;
             } else {
@@ -76,7 +76,7 @@ ListsSource.prototype = {
     }
 };
 
-function makeListMapEntry(enumeration) {
+function makeListMapEntry(enumeration, isSelectedEnumeration) {
     var name = "&lt;empty&gt;";
     if (enumeration.length === 1) {
         name = itemLabel(enumeration[0]);
@@ -89,7 +89,16 @@ function makeListMapEntry(enumeration) {
     enumeration.forEach(function(item) {
         item.detail = item.detail || null;
     });
-    return {name: name, md5: hash(enumeration), enumeration: JSON.parse(JSON.stringify(enumeration)), occurrences: 1};
+    if (isSelectedEnumeration) {
+        enumeration = copyEnum(enumeration);
+    }
+    return {name: name, md5: hash(enumeration), enumeration: enumeration, occurrences: 1};
+}
+
+function copyEnum(enumeration) {
+    return enumeration.map(function(item) {
+        return {label: item.label, value: item.value, detail: item.detail};
+    });
 }
 
 function itemLabel(item) {
@@ -136,7 +145,6 @@ module.exports = function(params) {
     // Should we copy edits over to all the same lists.
     self.copyToAllEnumsObs = ko.observable(true);
 
-    console.log("creating listsSource");
     var listsSource = new ListsSource(self.elementsObs(), self.element);
     self.allLists = ko.observableArray(listsSource.getAllLists());
 
@@ -229,6 +237,7 @@ module.exports = function(params) {
 
     self.currentTabObs = ko.observable('editor');
     self.isActive = function(tag) {
+        self.cancelEditMode();
         return tag === self.currentTabObs();
     };
     self.setTab = function(tabName) {
@@ -237,4 +246,6 @@ module.exports = function(params) {
             self.currentTabObs(tabName);
         };
     };
+
+    ko.postbox.subscribe("listChanged", self.cancelEditMode);
 };

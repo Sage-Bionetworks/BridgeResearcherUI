@@ -13,9 +13,9 @@
             </div>
         </div>
         <div data-bind="visible: isActive('editor')">
-            <div class="ui two column grid">
+            <div class="ui two column grid" style="padding-left: 1rem; padding-right: 1rem">
                 <div class="column enum-list" data-bind="foreach: listObs, dragula: {
-                    elementSelector: '.vs-item', listObs: listObs}">
+                    elementSelector: '.vs-item', listObs: listObs, eventName: 'listChanged'}">
                     <div class="vs-item">
                         <div class="vs-item-content" data-bind="click: $component.moveToEditor">
                             <span data-bind="text: $data.label"></span>
@@ -53,13 +53,11 @@
                 </div>
             </div>
         </div>
-        <div data-bind="visible: isActive('existing')">
-            <div data-bind="foreach: allLists" class="ui list enum-scrollbox">
-                <div class="item">
-                    <i class="list layout icon"></i>
-                    <div class="content">
-                        <span class="link" data-bind="click: $parent.selectList, html: $data.name"></span> (<span data-bind="text: $data.occurrences"></span>)
-                    </div>
+        <div data-bind="visible: isActive('existing'), foreach: allLists" class="ui list enum-scrollbox">
+            <div class="item">
+                <i class="list layout icon"></i>
+                <div class="content">
+                    <span class="link" data-bind="click: $parent.selectList, html: $data.name"></span> (<span data-bind="text: $data.occurrences"></span>)
                 </div>
             </div>
         </div>

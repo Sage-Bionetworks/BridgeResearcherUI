@@ -21,7 +21,6 @@ module.exports = function(params) {
         .obs('activity')
         .obs('activityOptions[]');
 
-    var originalValue = params.eventIdObs();
     self.clearEventIdFunc = params.clearEventIdFunc;
     self.eventIdObs = params.eventIdObs;
     self.activityLabel = utils.makeOptionLabelFinder(self.activityOptionsObs);

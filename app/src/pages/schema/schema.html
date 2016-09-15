@@ -78,13 +78,11 @@
         <p>
     </div>
     <div class="ui form schema sfieldZone" data-bind="dragula: {
-        elementSelector: '.field_definitions',
-        dragHandleSelector: '.draggable',
-        listObs: fieldDefinitionsObs
-    }, foreach: fieldDefinitionsObs">
+        elementSelector: '.field_definitions', dragHandleSelector: '.draggable',
+        listObs: fieldDefinitionsObs }, foreach: fieldDefinitionsObs">
         <div class="field_definitions" data-bind="component: {
-            name: 'field_definition',
-            params: { field: $data, itemsObs: $parent.itemsObs, indexObs: $index }
+            name: 'field_definition', params: { field: $data, 
+                itemsObs: $parent.itemsObs, indexObs: $index }
         }"></div>
     </div>
 </div>

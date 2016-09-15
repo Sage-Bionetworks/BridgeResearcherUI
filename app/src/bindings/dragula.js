@@ -34,9 +34,7 @@ ko.bindingHandlers.dragula = {
             }
         }).on('cloned', function(mirror, item, type) {
             _item = item;
-        })/*.on('out', function(el, container, source) {
-            drake.cancel(true);
-        })*/;
+        });
         autoScroll([element],{
             margin: 100,
             pixels: 40,

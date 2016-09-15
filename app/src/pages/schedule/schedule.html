@@ -98,7 +98,8 @@
                     <button class="ui basic compact mini button" data-bind="click: $component.addActivityAfter">
                         <i class="square add icon"></i>Add below
                     </button>
-                    <button class="ui basic red compact mini button" data-bind="click: $component.deleteActivity">
+                    <button class="ui basic red compact mini button" data-bind="fadeRemove: { 
+                        selector: '.activity', object: $data, 'collection': 'activitiesObs'}">
                         <i class="delete icon"></i>Delete
                     </button>
                 </div>
