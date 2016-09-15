@@ -3,6 +3,7 @@ require('knockout-postbox');
 var toastr = require('toastr');
 var config = require('./config');
 var $ = require('jquery');
+var alerts = require('./widgets/alerts');
 
 var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
 var pendingControl = null;
@@ -352,16 +353,18 @@ module.exports = {
             "sharingScope": "all_qualified_researchers"
         };
     },
+    // TODO: There is also the binding fadeRemove, ostensibly to do the same thing.
     animatedDeleter: function(scrollTo, elementsObs) {
         return function(element) {
-            // TODO: Replace with sweetalert
-            if (confirm("Are you sure?")) {
-                var index = elementsObs.indexOf(element);
-                elementsObs.remove(element);
+            alerts.deleteConfirmation("Are you sure you want to delete this?", function() {
                 setTimeout(function() {
-                    scrollTo(index);
-                }, 510);
-            }
+                    var index = elementsObs.indexOf(element);
+                    elementsObs.remove(element);
+                    setTimeout(function() {
+                        scrollTo(index);
+                    }, 510);
+                }, 200);
+            });
         };
     },    
     mightyMessageFinder: mightyMessageFinder,

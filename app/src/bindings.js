@@ -4,6 +4,7 @@ require('knockout-postbox');
 var $ = require('jquery');
 var flatpickr = require('flatpickr');
 require('../../node_modules/flatpickr/dist/flatpickr.min.css');
+var alert = require('./widgets/alerts');
 
 // need to make a global out of this for semantic to work, as it's not in a package.
 // This is hacky, webpack has better support for this. Worse, semantic is a jQuery
@@ -202,12 +203,12 @@ ko.bindingHandlers.fadeRemove = {
         var $element = $(element).closest(selector);
         element.addEventListener('click', function(event) {
             event.preventDefault();
-            if (confirm("Are you sure?")) {
+            alert.deleteConfirmation("Are you sure you want to delete this?", function() {
                 $element.animate({height: '0px', minHeight: '0px'}, 300, 'swing', function() {
                     itemsObs.remove(rowItem);
                     $element.remove();
                 });
-            }
+            });
         });
     }
 };
