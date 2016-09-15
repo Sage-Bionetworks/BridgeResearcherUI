@@ -6,8 +6,7 @@ var bind = require('../../binder');
 var serverService = require('../../services/server_service');
 var Promise = require("bluebird");
 
-var SUBMISSION_SIZE = 5;
-var SUBMISSION_DELAY = 1200;
+var SUBMISSION_DELAY = 500;
 var SPLIT_REGEX = /[,\s\t\r\n]+/;
 
 function getPerc(step, max) {
