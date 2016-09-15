@@ -33,8 +33,10 @@ function getActivityOptions() {
         var activities = [];
         response.items.forEach(function(plan) {
             getSchedules(plan).forEach(function(schedule) {
-                schedule.activities.forEach(function(activity) {
-                    var actLabel = activity.label + " (" + plan.label + ")";
+                var multi = schedule.activities.length > 1;
+                schedule.activities.forEach(function(activity, i) {
+                    var actLabel = (multi) ? 
+                        (activity.label + " ("+plan.label+" activity #"+(i+1)+")") : activity.label; 
                     activities.push({label: actLabel, "value": activity.guid});
                 });
             });

@@ -6,19 +6,9 @@ var bind = require('../../binder');
 var serverService = require('../../services/server_service');
 var Promise = require("bluebird");
 
-var SUBMISSION_SIZE = 5;
-var SUBMISSION_DELAY = 1200;
+var SUBMISSION_DELAY = 500;
 var SPLIT_REGEX = /[,\s\t\r\n]+/;
 
-function createQueue(identifiers) {
-    var queue = [];
-    while (identifiers.length > SUBMISSION_SIZE) {
-        queue.push(identifiers.slice(0,SUBMISSION_SIZE));
-        identifiers = identifiers.slice(SUBMISSION_SIZE);
-    }
-    queue.push(identifiers);
-    return queue;    
-}
 function getPerc(step, max) {
     var perc = ((step/max)*100).toFixed(0);
     if (perc > 100) { perc = 100; }
@@ -86,16 +76,30 @@ module.exports = function(params) {
             return response;
         };
     }
-    function sequence(promise, array, func) {
-        return array.reduce(function(p, workItem) {
-            return p.then(function() {
-                if (cancel) { return; }
-                return func(workItem);
-            }).then(tickMeter).catch(tickMeterError).delay(SUBMISSION_DELAY); // delay. I love bluebird
-        }, promise);
-    }
     function initParticipantMaker(study) {
         self.createParticipant = createParticipantMaker(self.study.supportEmail);
+    }
+    function addIdentifier(promise, identifier, doCreateCredentials) {
+        promise = promise.then(function() {
+            if (cancel) { return; }
+            return serverService.addExternalIds([identifier])
+                .catch(tickMeterError);
+        });
+        if (doCreateCredentials) {
+            serverService.getParticipants(0, 5, "+"+identifier+"@").then(function(response) {
+                if (cancel) { return; }
+                if (response.items.length === 0) {
+                    return promise.then(function() {
+                        var participant = self.createParticipant(identifier);
+                        return serverService.createParticipant(participant)
+                            .catch(tickMeterError);
+                    });
+                } else {
+                    return Promise.resolve();
+                }
+            });
+        }
+        return promise.then(tickMeter, tickMeterError).delay(SUBMISSION_DELAY);
     }
  
     self.doImport = function(vm, event) {
@@ -107,22 +111,17 @@ module.exports = function(params) {
             return;
         }
         var doCreateCredentials = self.createCredentialsObs() || self.autoCredentialsObs();
-        
-        var queue = createQueue(identifiers);
-        // If the user checked the create credentials checkbox, or if the dialog was opened
-        // from a context where we always create the credentials in order to reduce confusion...
-        var participants = (doCreateCredentials) ? identifiers.map(self.createParticipant) : [];
 
         utils.startHandler(vm, event);
-        startProgressMeter(queue.length + participants.length);
-        
-        var promise = sequence(Promise.resolve(), queue, serverService.addExternalIds);
-        if (doCreateCredentials) {
-            promise = sequence(promise, participants, serverService.createParticipant);
+        startProgressMeter(identifiers.length+1);
+
+        var promise = Promise.resolve();
+        while(identifiers.length) {
+            promise = addIdentifier(promise, identifiers.shift(), doCreateCredentials);
         }
         promise.then(endProgressMeter(event.target))
             .then(utils.successHandler(vm, event))
-            .catch(utils.dialogFailureHandler(vm, event));
+            .catch(utils.dialogFailureHandler(vm, event));        
     };
 
     self.close = function(vm, event) {

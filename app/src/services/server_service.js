@@ -128,8 +128,11 @@ function makeSessionWaitingPromise(httpAction, func) {
             // Soooo convert it to an error and copy over key aspects of the response. 
             p.fail(function(response) {
                 try {
-                    var error = new Error(response.responseJSON.message);
-                    error.responseJSON = response.responseJSON;
+                    var error = new Error();
+                    if (response.responseJSON) {
+                        error.message = response.responseJSON.message;
+                        error.responseJSON = response.responseJSON;
+                    }
                     error.statusText = response.statusText;
                     error.status = response.status;
                     reject(error);
@@ -405,7 +408,7 @@ module.exports = {
         }
     },
     createParticipant: function(participant) {
-        return post(config.participants, participant);
+        return post(config.participants + "?verifyEmail=false", participant);
     },
     updateParticipant: function(participant) {
         cache.clear(participant.id+':name');

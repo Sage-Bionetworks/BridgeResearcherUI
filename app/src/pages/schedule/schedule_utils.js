@@ -207,12 +207,12 @@ function formatSchedule(sch) {
     var buffer = [];
 
     var initClause = "";
+    var events = (sch.eventId) ? sch.eventId.split(",").reverse() : ["enrollment"];
     if (sch.delay) {
         initClause = periodToWords(sch.delay) + " after ";
-    } else {
+    } else if (events[0] === "enrollment") {
         initClause = "upon ";
     }
-    var events = (sch.eventId) ? sch.eventId.split(",").reverse() : ["enrollment"];
     initClause += toList(events.map(function(event) {
         if (Object.keys(UNARY_EVENTS).indexOf(event) > -1) {
             return event.replace(/_/g, " ");

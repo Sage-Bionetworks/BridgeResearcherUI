@@ -1,67 +1,71 @@
 <div class="ui small modal">
     <i class="close icon"></i>
     <div class="header">
-        Edit Scheduling Event
+        Edit Scheduling Events
     </div>
-    <div class="content" data-bind="visible: !advancedEditorObs()">
-        <div class="ui form">
-            <div class="field">
-                <ui-select params="fieldObs: objectTypeObs, fieldLabel: objectTypeLabel, optionsSrc: objectTypeOptions"></ui-select>
+    <div class="content">
+        <div class="ui grid">
+            <div class="eight wide column">
+                <form class="ui form">
+                    <div class="field">
+                        <ui-checkbox params="checkedObs: enrollmentObs">
+                            Schedule these activities when:
+                        </ui-checkbox>
+                    </div>
+                    <div style="margin-left: 2rem" class="grouped fields" data-bind="css:{disabled: !enrollmentObs()}">
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="enrollment_offset" value="enrollment" 
+                                     id="e1" data-bind="checked: enrollmentPeriodObs">
+                                <label for="e1">Participant enrolls</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="enrollment_offset" value="two_weeks_before_enrollment"  
+                                    id="e2" data-bind="checked: enrollmentPeriodObs">
+                                <label for="e2">Two weeks before participant enrolls<span style="color:#B22222"> *</span></label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="enrollment_offset" value="two_months_before_enrollment"  
+                                    id="e3" data-bind="checked: enrollmentPeriodObs">
+                                <label for="e3">Two months before participant enrolls<span style="color:#B22222"> *</span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui horizontal divider">and / or</div>
+                    <div class="fields">
+                        <div class="field">
+                            <ui-checkbox params="checkedObs: activityFinishedObs">
+                                When this activity is finished:
+                            </ui-checkbox>
+                        </div>
+                    </div>
+                    <div style="margin-left: 2rem" class="grouped fields">
+                        <div class="field">
+                            <select class="ui dropdown" data-bind="options: activityOptionsObs,
+                                optionsText: 'label', optionsValue: 'value', value: activityObs,
+                                optionsCaption: 'Select activity...', css:{disabled: !activityFinishedObs()}"></select>                                
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="two fields">
-                <div class="field">
-                    <div data-bind="visible: objectTypeObs() == 'question'">
-                        <ui-select params="fieldObs: questionObs, fieldLabel: questionsLabel, optionsSrc: questionsOptionsObs"></ui-select>
-                    </div>
-                    <div data-bind="visible: objectTypeObs() == 'survey'">
-                        <ui-select params="fieldObs: surveyObs, fieldLabel: surveysLabel, optionsSrc: surveysOptionsObs"></ui-select>
-                    </div>
-                    <div data-bind="visible: objectTypeObs() == 'activity'">
-                        <ui-select params="fieldObs: activityObs, fieldLabel: activityLabel, optionsSrc: activityOptionsObs"></ui-select>
-                    </div>
+            <div class="eight wide column">
+                <div style="text-indent: -.6rem; margin-left: .6rem">
+                    <span style="color:#B22222">* </span> For activities that run for a specific time on the calendar
+                    (e.g. a survey for the week of September 4-10, 2016), these events start before the &ldquo;event 
+                    in progress&rdquo; to ensure that participants who join the study during that time period will be 
+                    scheduled to do this activity, even though it started before they joined.<br><br> (This is a niche use 
+                    case. &ldquo;At time of enrollment&rdquo; is usually best.)
                 </div>
-                <div class="field">
-                    <div class="inline-form-text" data-bind="visible: objectTypeObs() == 'question'">
-                        is answered as
-                    </div>
-                    <div class="inline-form-text" data-bind="visible: objectTypeObs() == 'survey'">
-                        is finished
-                    </div>
-                    <div class="inline-form-text" data-bind="visible: objectTypeObs() == 'activity'">
-                        is finished
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="inline-form-text" data-bind="visible: objectTypeObs() == 'question'">
-                        <input type="text" data-bind="textInput: answerObs"/>
-                    </div>
-                </div>
-            </div>
-            <div class="field">
-                <ui-checkbox params="checkedObs: enrollmentObs">
-                    And on enrollment
-                </ui-checkbox>
             </div>
         </div>
     </div>
-    <div class="content" data-bind="visible: advancedEditorObs">
-        <p>If you clicked the "advanced" button, your study has unusual scheduling requirements. You have probably
-            discussed it with Sage engineers, and you should know what to enter as the event ID for this schedule.</p>
-        <div class="ui form">
-            <div class="field">
-                <label>Schedule Event ID</label>
-                <input type="text" data-bind="textInput: eventIdObs"/>
-            </div>
-        </div>
-    </div>
-    <div class="actions" data-bind="visible: !advancedEditorObs()">
+    <div class="actions">
         <button class="ui primary small button" data-bind="click: saveAndCloseDialog">Save</button>
         <button class="ui small button" data-bind="click: clearAndCloseDialog">Clear</button>
         <button class="ui small button" data-bind="click: closeDialog">Cancel</button>
-        <button style="float:right" class="ui small button" data-bind="click: showAdvanced">Advanced</button>
-    </div>
-    <div class="actions" data-bind="visible: advancedEditorObs">
-        <button class="ui primary small button" data-bind="click: closeDialog">Save</button>
-        <button class="ui small button" data-bind="click: resetAndCloseDialog">Cancel</button>
     </div>
 </div>

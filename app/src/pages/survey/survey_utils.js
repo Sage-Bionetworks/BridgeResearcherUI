@@ -160,6 +160,7 @@ function elementToObservables(element) {
                 skipTo: ko.observable(rule.skipTo)
             };
         }));
+        element.constraintsTypeObs = ko.observable(con.type);
     }
     return element;
 }

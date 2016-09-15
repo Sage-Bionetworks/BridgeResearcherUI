@@ -11,7 +11,9 @@
 .element {
     @include flex-box(row);
     width: 100%;
-    overflow: hidden;
+    /*hides the pulldown menu to change type, but undoubtedly also cleans up the formatting
+        in some cases as well. Oh well. */
+    /*overflow: hidden;*/
     margin-bottom: 1rem;
     max-height: 50rem;
 
@@ -36,7 +38,7 @@
 
             .ui.compact.secondary.menu {
                 border:none;
-                margin-top: 1.5rem;
+                margin-top: .5rem;
 
                 .item {
                     margin: 0;
@@ -67,13 +69,18 @@
     /* The use of !important overrides semantic UI's styles. We do this elsewhere too. */
     .element-content-segment {
         padding-top: .75rem!important;
-        /*background-color: #f4f4f4!important;*/
         background-color:inherit!important;
-        /*border:none!important;*/
         box-shadow:none!important;
     }
     .constraints-label {
         margin-bottom: .5rem!important;
+
+        .menu {
+            display: none;
+        }
+        * {
+            display: inline-block;
+        }
     }
     .element-content-title {
         font-size: 1.2rem;

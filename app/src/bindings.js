@@ -132,12 +132,8 @@ ko.bindingHandlers.modal = {
             var $modal = $(".ui.modal");
             if ($modal.modal) {
                 if (newConfig.name !== "none") {
-                    $modal.modal({"closable": false, "detachable": false, "notify": 'always'});
-                    $modal.modal('show');
-                    // not sure how much this helps
-                    setTimeout(function() {
-                        $modal.modal("refresh"); 
-                    },100);
+                    $modal.modal({closable: false, detachable: false, notify: 'always', observeChanges: true});
+                    $modal.modal("show");
                 } else {
                     $modal.modal('hide');
                 }
