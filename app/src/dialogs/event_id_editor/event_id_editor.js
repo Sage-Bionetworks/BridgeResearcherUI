@@ -20,6 +20,7 @@ module.exports = function(params) {
     self.enrollmentPeriodObs = ko.observable(Object.keys(UNARY_EVENTS)[0]);
     self.answerObs = ko.observable();
 
+    self.hasActivitiesObs = ko.observable(true);
     self.activityFinishedObs = ko.observable(false);
     self.activityObs = ko.observable();
     self.activityOptionsObs = ko.observableArray([]);
@@ -27,7 +28,7 @@ module.exports = function(params) {
 
     self.saveAndCloseDialog = function() {
         var events = [];
-        if (self.activityFinishedObs()) {
+        if (self.activityFinishedObs() && self.activityObs()) {
             events.push("activity:" + self.activityObs() + ":finished");
         }
         if (self.enrollmentObs()) {
@@ -48,6 +49,9 @@ module.exports = function(params) {
         return optionsService.getActivityOptions();
     }
     function initEditor() {
+        if (self.activityOptionsObs().length === 0) {
+            self.hasActivitiesObs(false);
+        }
         if (self.eventIdObs()) {
             self.enrollmentObs(false);
             self.activityFinishedObs(false);
