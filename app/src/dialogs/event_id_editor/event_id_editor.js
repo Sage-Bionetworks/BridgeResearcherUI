@@ -1,8 +1,8 @@
-var ko = require('knockout');
 var utils = require('../../utils');
 var optionsService = require('./../../services/options_service');
 var root = require('../../root');
 var UNARY_EVENTS = require('../../pages/schedule/schedule_utils').UNARY_EVENTS;
+var bind = require('../../binder');
 
 /**
  * This editor no longer allows you to edit survey or question triggered events, although these 
@@ -12,18 +12,18 @@ var UNARY_EVENTS = require('../../pages/schedule/schedule_utils').UNARY_EVENTS;
 module.exports = function(params) {
     var self = this;
 
+    bind(self)
+        .obs('enrollment', true)
+        .obs('enrollmentPeriod', Object.keys(UNARY_EVENTS)[0])
+        .obs('answer')
+        .obs('hasActivities', true)
+        .obs('activityFinished', false)
+        .obs('activity')
+        .obs('activityOptions[]');
+
     var originalValue = params.eventIdObs();
     self.clearEventIdFunc = params.clearEventIdFunc;
     self.eventIdObs = params.eventIdObs;
-    
-    self.enrollmentObs = ko.observable(true);
-    self.enrollmentPeriodObs = ko.observable(Object.keys(UNARY_EVENTS)[0]);
-    self.answerObs = ko.observable();
-
-    self.hasActivitiesObs = ko.observable(true);
-    self.activityFinishedObs = ko.observable(false);
-    self.activityObs = ko.observable();
-    self.activityOptionsObs = ko.observableArray([]);
     self.activityLabel = utils.makeOptionLabelFinder(self.activityOptionsObs);
 
     self.saveAndCloseDialog = function() {

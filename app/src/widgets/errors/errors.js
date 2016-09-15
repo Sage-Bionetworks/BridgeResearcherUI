@@ -3,11 +3,32 @@ require('knockout-postbox');
 var toastr = require('toastr');
 var $ = require('jquery');
 
+var ENUM_ERROR = ["Enumeration values can only contain alphanumeric characters (they can also have spaces, dashes, underscores and periods in the middle, but not more than one of these special characters in a row)."];
+
 function truncateErrorFieldKey(errorString) {
     var parts = errorString.split(" ");
     var keyParts = parts[0].split(".");
     parts[0] = keyParts[keyParts.length-1];
     return parts.join(" ").replace(/([a-z\d])([A-Z])/g, '$1 $2').toLowerCase();
+}
+
+/**
+ * The survey editor creates detailed error messages for enumeration values that we can't display in the
+ * editor. Collapse and simplify these messages so we can point to the right questions.
+ */
+function fixEnumErrorsForTopLevelEditor(errors) {
+    var adjErrorFields = [];
+    for (var prop in errors) {
+        if (prop.indexOf(".enumeration[") > -1) {
+            var adjProp = prop.split(".enumeration[")[0] + ".enumeration";
+            adjErrorFields.push(adjProp);
+            delete errors[prop];
+        }
+    }
+    // Duplicates are eliminated in this copy back using field names as prop names.
+    adjErrorFields.forEach(function(newProp) {
+        errors[newProp] = ENUM_ERROR;
+    });
 }
 
 function errorFieldKeyToId(errorKey) {
@@ -32,6 +53,7 @@ module.exports = function() {
         }
         var message = payload.message;
         var errors = payload.errors;
+        fixEnumErrorsForTopLevelEditor(errors);
 
         // Scroll to top of scrollbox. jQuery is included globally in the page
         $(".scrollbox").scrollTo(0);

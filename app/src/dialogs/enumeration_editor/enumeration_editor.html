@@ -3,7 +3,7 @@
     <div class="header">
         Enumerated Values
     </div>
-    <div class="content">
+    <div class="content" style="padding-top:.2rem">
         <div class="ui secondary pointing menu">
             <div class="item" data-bind="css:{active:isActive('editor')}, click: setTab('editor')">
                 Edit List
@@ -17,7 +17,7 @@
                 <div class="column enum-list" data-bind="foreach: listObs, dragula: {
                     elementSelector: '.vs-item', listObs: listObs}">
                     <div class="vs-item">
-                        <div class="vs-item-content">
+                        <div class="vs-item-content" data-bind="click: $component.moveToEditor">
                             <span data-bind="text: $data.label"></span>
                             <span data-bind="visible: $parent.hasDetail($data)">&mdash;<span data-bind="text: $data.detail"></span></span>
                             <div class="enum-list-server-text" data-bind="visible: $data.label !== $data.value, text: 'Value sent to server: '+$data.value"></div>
@@ -27,10 +27,10 @@
                 </div>
                 <div class="column">
                     <form class="ui form">
-                        <h4 class="ui dividing header">Add New List Item</h4>
+                        <h4 class="ui dividing header" data-bind="text: editorTitleObs"></h4>
                         <div class="field">
                             <input type="text" data-bind="textInput: labelObs, 
-                                event:{keydown: handleKeyEvent}" placeholder="Label"/>
+                                event:{keydown: handleKeyEvent}" placeholder="Label" autofocus/>
                         </div>
                         <div class="field">
                             <input type="text" data-bind="textInput: detailObs, 
@@ -41,7 +41,13 @@
                                 event:{keydown: handleKeyEvent}" placeholder="Server value (optional)"/>
                         </div>
                         <div class="field">
-                            <button class="ui small button" data-bind="click: addListItem">Add</button>
+                            <button class="ui small primary button" data-bind="click: addListItem, disable: newListItemValid,
+                                text: editorCommandObs">Add</button>
+                            <button class="ui small button" data-bind="click: cancelEditMode, visible: indexObs() !== null">Clear</button>
+                            <p class="help-text" style="margin-top:.5rem">The server value (or the label if there is none) can only contain 
+                                alphanumeric characters. It can also have spaces, dashes, 
+                                underscores and periods in the middle, but not more than one 
+                                at a time.</p>
                         </div>
                     </form>
                 </div>
