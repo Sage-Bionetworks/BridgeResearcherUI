@@ -38,7 +38,7 @@
         <div class="field" data-bind="attr:{id:
             'strategy_'+$component.collectionName+'schedule_times'}, visible: editorScheduleTypeObs() !== 'cron'">
             <label data-bind="text: (scheduleTypeObs() === 'recurring') ? 'At these times' : 'At this time'"></label>
-            <div class=text" style="margin: .5rem 0" data-bind="text: formatTimes(timesObs())"></div>
+            <div class="text" style="margin: .5rem 0" data-bind="text: formatTimes(timesObs())"></div>
             <div class="inline-editor-controls">
                 <a class="pointing" data-bind="click: editTimes"><i class="write icon"></i>Edit&hellip;</a>
                 <a class="pointing" data-bind="click: clearTimes"><i class="delete icon"></i>Clear</a>
@@ -64,7 +64,8 @@
     <p data-bind="visible: $component.taskOptionsObs().length == 0">
         <b>There are no task identifiers defined,</b> so you cannot schedule any tasks.
         <a href="#/task_identifiers" target="_blank" rel="noopener">Create</a> some identifiers, then refresh this page
-        in order to schedule tasks. </b>
+        in order to schedule tasks.
+    </p>
     <div class="ui form" data-bind="visible: activitiesObs().length == 0">
         <a class="ui primary button" data-bind="click: addFirstActivity">
             <i class="add square icon"></i>Add Activity
