@@ -15,14 +15,18 @@
         <div data-bind="visible: isActive('editor')">
             <div class="ui two column grid" style="padding-left: 1rem; padding-right: 1rem">
                 <div class="column enum-list" data-bind="foreach: listObs, dragula: {
-                    elementSelector: '.vs-item', listObs: listObs, eventName: 'listChanged'}">
-                    <div class="vs-item">
+                    elementSelector: '.vs-item', listObs: listObs, eventName: 'listChanged'},
+                    css: {'list-being-edited': $component.indexObs() !== null}">
+                    <div class="vs-item" data-bind="css:{'item-being-edited': $component.indexObs() == $index()}">
                         <div class="vs-item-content" data-bind="click: $component.moveToEditor">
                             <span data-bind="text: $data.label"></span>
                             <span data-bind="visible: $parent.hasDetail($data)">&mdash;<span data-bind="text: $data.detail"></span></span>
                             <div class="enum-list-server-text" data-bind="visible: $data.label !== $data.value, text: 'Value sent to server: '+$data.value"></div>
                         </div>
-                        <div class="vs-item-delete link"><i class="delete icon" data-bind="click: $parent.removeListItem"></i></div>
+                        <div class="vs-item-delete">
+                            <i class="delete icon link" data-bind="click: $parent.removeListItem"></i>
+                            <i class="angle right icon" data-bind="click: $parent.removeListItem"></i>
+                        </div>
                     </div>
                 </div>
                 <div class="column">
