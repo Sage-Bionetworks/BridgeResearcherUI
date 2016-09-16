@@ -4,7 +4,7 @@
             <label>When to start schedule</label>
             <div style="margin: .5rem 0" data-bind="text: formatEventId(eventIdObs())"></div>
             <div class="inline-editor-controls">
-                <a data-bind="click: editEventId"><i class="write icon"></i>Edit&#133;</a>
+                <a data-bind="click: editEventId"><i class="write icon"></i>Edit&hellip;</a>
                 <a data-bind="click: clearEventId"><i class="delete icon"></i>Clear</a>
             </div>
         </div>
@@ -20,7 +20,7 @@
             <label>Execution Window (UTC time)</label>
             <div style="margin: .5rem 0" data-bind="html: formatWindow($data)"></div>
             <div class="inline-editor-controls">
-                <span class="link" data-bind="click: editWindow"><i class="write icon"></i>Edit&#133;</span>
+                <span class="link" data-bind="click: editWindow"><i class="write icon"></i>Edit&hellip;</span>
                 <span class="link" data-bind="click: clearWindow"><i class="delete icon"></i>Clear</span>
             </div>
         </div>
@@ -40,7 +40,7 @@
             <label data-bind="text: (scheduleTypeObs() === 'recurring') ? 'At these times' : 'At this time'"></label>
             <div class="text" style="margin: .5rem 0" data-bind="text: formatTimes(timesObs())"></div>
             <div class="inline-editor-controls">
-                <a class="pointing" data-bind="click: editTimes"><i class="write icon"></i>Edit&#133;</a>
+                <a class="pointing" data-bind="click: editTimes"><i class="write icon"></i>Edit&hellip;</a>
                 <a class="pointing" data-bind="click: clearTimes"><i class="delete icon"></i>Clear</a>
             </div>
         </div>
