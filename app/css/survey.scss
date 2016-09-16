@@ -196,3 +196,20 @@
         border-radius: .28571429rem;
     }
 }
+.list-being-edited .vs-item:not(.item-being-edited), .list-being-edited .vs-item:not(.item-being-edited):hover {
+    opacity: .5;
+    background-color: #e5e5e5;
+}
+.vs-item {
+    opacity: 1;
+    transition: opacity .4s ease-in-out, background-color .4s ease-in-out;
+}
+    .item-being-edited:hover {
+        background-color: #fff;
+    }
+    .vs-item .angle.right.icon, .item-being-edited .delete.icon {
+        display: none;
+    }
+    .item-being-edited .angle.right.icon {
+        display: block;
+    }
