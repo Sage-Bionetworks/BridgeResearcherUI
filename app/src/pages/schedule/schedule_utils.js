@@ -92,12 +92,24 @@ function formatActivities(buffer, activities) {
         } else if (act.activityType === "survey" && act.survey) {
             label = "do survey '"+activityOptionsLabel(act.guid)+"'";
         }
-        /*
+        actMap[label] = ++actMap[label] || 1;
+    });
+    Object.keys(actMap).forEach(function(label) {
+        return buffer.push(label + " " + (actMap[label] === 1 ? "" : (actMap[label] + " times")));
+    });
+}
+function formatActivitiesAvailable(buffer, activities) {
+    var actMap = {};
+    activities.map(function(act) {
+        var label = 'a task (not specified)';
+
+        // This may be way too complicated, it still does not show the underlying *real* name
+        // of the thing being linked to in the schedule
         if (act.activityType === "task" && act.task) {
-            label = "do task '"+act.label+"'";
+            label = "the task '"+activityOptionsLabel(act.guid)+"'";
         } else if (act.activityType === "survey" && act.survey) {
-            label = "do survey '"+act.label+"'";
-        } */
+            label = "the survey '"+activityOptionsLabel(act.guid)+"'";
+        }
         actMap[label] = ++actMap[label] || 1;
     });
     Object.keys(actMap).forEach(function(label) {
@@ -222,19 +234,26 @@ function formatSchedule(sch) {
     // Capitalize first letter of phrase
     initClause = initClause.substring(0,1).toUpperCase() + initClause.substring(1);
     buffer.push(initClause);
-    if (sch.scheduleType === "recurring") {
-        // recurring schedules should have an interval, or a cron expression, but not both
-        if (sch.interval && !sch.cronTrigger) {
-            buffer.push("and every " + periodToWordsNoArticle(sch.interval) + " thereafter");
-            if (sch.times && sch.times.length) {
-                buffer.push("at " + formatTimesArray(sch.times));
+
+    if (sch.scheduleType === "persistent") {
+        var inner = [];
+        formatActivitiesAvailable(inner, sch.activities);
+        buffer.push("make " + inner.join(", ") + " permanently available to the user");
+    } else {
+        if (sch.scheduleType === "recurring") {
+            // recurring schedules should have an interval, or a cron expression, but not both
+            if (sch.interval && !sch.cronTrigger) {
+                buffer.push("and every " + periodToWordsNoArticle(sch.interval) + " thereafter");
+                if (sch.times && sch.times.length) {
+                    buffer.push("at " + formatTimesArray(sch.times));
+                }
+            } else {
+                buffer.push("and thereafter on the cron expression '"+sch.cronTrigger+"'");
             }
-        } else {
-            buffer.push("and thereafter on the cron expression '"+sch.cronTrigger+"'");
         }
-    }
-    if (sch.activities && sch.activities.length) {
-        formatActivities(buffer, sch.activities);
+        if (sch.activities && sch.activities.length) {
+            formatActivities(buffer, sch.activities);
+        }
     }
     var phrase = buffer.join(", ") + ".";
     if (sch.expires) {

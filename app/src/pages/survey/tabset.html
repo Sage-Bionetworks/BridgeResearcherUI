@@ -2,7 +2,7 @@
     <a class="item", data-bind="css:{active: isActive('editor')}, attr: {href: linkMaker('editor')}">
         <i class="file outline icon"></i> Editor
     </a>
-    <a class="item" data-bind="css:{active: isActive('schema')}, attr: {href: linkMaker('schema')}, visible: !!publishedObs()">
+    <a class="item" data-bind="css:{active: isActive('schema')}, attr: {href: linkMaker('schema')}, visible: !!createdOnObs()">
         <i class="puzzle icon"></i> Schema
     </a>
     <a class="item" data-bind="css:{active: isActive('history')}, attr: {href: linkMaker('history')}, visible: !!createdOnObs()">

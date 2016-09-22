@@ -60,8 +60,15 @@
                 </td>
                 <td data-bind="text: $data.signedOn"></td>
                 <td>
-                    <a target="_blank" rel="noopener" data-bind="text: $data.consentCreatedOn, attr:{href: $data.consentURL}"></a>
-                    <i class="ui green checkmark icon" data-bind="visible: $data.consented && $data.isFirst && $data.hasSignedActiveConsent"> </i>
+                    <span data-bind="visible: !$data.consented || !$data.isFirst || !$data.hasSignedActiveConsent,
+                        semantic: 'popup'" data-content="Participant signed an older version of this consent (not currently published).">
+                        <a target="_blank" rel="noopener" data-bind="text: $data.consentCreatedOn, attr:{href: $data.consentURL}"></a>
+                    </span>
+                    <span data-bind="visible: $data.consented && $data.isFirst && $data.hasSignedActiveConsent,
+                        semantic: 'popup'" data-content="The currently published version of this consent has been signed.">
+                        <a target="_blank" rel="noopener" data-bind="text: $data.consentCreatedOn, attr:{href: $data.consentURL}"></a>
+                        <i class="ui green checkmark icon"> </i>
+                    </span>
                 </td>
                 <td class="red" data-bind="text: $data.withdrewOn"></td>
                 <td>
