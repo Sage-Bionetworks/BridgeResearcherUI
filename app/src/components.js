@@ -134,6 +134,10 @@ reg('participant_uploads', {
     viewModel: require('./pages/participant/uploads'),
     template: require('./pages/participant/uploads.html')
 });
+reg('participant_request_info', {
+    viewModel: require('./pages/participant/request_info'),
+    template: require('./pages/participant/request_info.html')
+});
 reg('schedule', {
     viewModel: require('./pages/schedule/schedule'),
     template: require('./pages/schedule/schedule.html')

@@ -8,7 +8,8 @@ var ko = require('knockout');
 var SCHEDULE_TYPE_OPTIONS = Object.freeze([
     {value: 'once', label: 'Once'},
     {value: 'recurring', label: 'Recurring'},
-    {value: 'cron', label: 'Cron-based'}
+    {value: 'cron', label: 'Cron-based'},
+    {value: 'persistent', label: 'Persistent'}
 ]);
 var ACTIVITY_TYPE_OPTIONS = Object.freeze([
     {value: 'task', label: 'Do Task'},
@@ -61,12 +62,13 @@ function getEditorType(schedule) {
         return "once";
     } else if (schedule.scheduleType === 'recurring' && schedule.cronTrigger) {
         return "cron";
-    } else {
+    } else if (schedule.scheduleType === 'recurring') {
         return "interval";
     }
+    return "persistent";
 }
 function getScheduleType(editorType) {
-    return (editorType === "once") ? 'once' : 'recurring';
+    return (editorType === "cron" || editorType === "interval") ? 'recurring' : editorType;
 }
 
 module.exports = function(params) {
@@ -120,6 +122,12 @@ module.exports = function(params) {
                     delete sch.interval;
                     delete sch.times;
                     break;
+                case 'persistent':
+                    delete sch.interval;
+                    delete sch.cronTrigger;
+                    delete sch.times;
+                    delete sch.delay;
+                    delete sch.expires;
             }
             return sch;
         },

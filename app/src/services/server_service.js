@@ -407,6 +407,9 @@ module.exports = {
                 });
         }
     },
+    getParticipantRequestInfo: function(id) {
+        return get(config.participants+"/"+id+"/requestInfo");
+    },
     createParticipant: function(participant) {
         return post(config.participants + "?verifyEmail=false", participant);
     },
