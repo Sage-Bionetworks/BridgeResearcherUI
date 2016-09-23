@@ -7,7 +7,14 @@ function joiner(value) {
     return (value && value.length) ? value.join(", ") : "<none>";
 }
 function stringer(value) {
-    return (value) ? JSON.stringify(value) : "<none>";
+    var array = [];
+    if (value) {
+        delete value.type;
+        for (var prop in value) {
+            array.push(prop + " = " + value[prop]);
+        }
+    }
+    return array.join("<br>");
 }
 function dater(value) {
     return (value) ? new Date(value).toString() : "<none>";
