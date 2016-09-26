@@ -5,7 +5,7 @@ var utils = require('../../utils');
 var bind = require('../../binder');
 
 var FIELD_SKELETON = {
-    name:'', required:false, type:null, unboundedText:true, maxLength:'', fileExtension:'', mimeType:''
+    name:'', required:false, type:null, unboundedText:false, maxLength:'100', fileExtension:'', mimeType:''
 };
 
 module.exports = function(params) {

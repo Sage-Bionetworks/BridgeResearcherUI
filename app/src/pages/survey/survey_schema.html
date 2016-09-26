@@ -1,9 +1,10 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
-            <span class="section">
-                <a href="#/surveys" class="section">Surveys</a>
-            </span>
+            <div class="ui breadcrumb">
+                <a class="section" href="#/surveys">Surveys</a>
+                <i class="right chevron icon divider"></i>
+            </div> 
             <h3 data-bind="text: nameObs"></h3>
         </div>
         <div class="fixed-header-buttons"></div>
@@ -11,42 +12,47 @@
     <survey-tabset params="selected: 'schema', viewModel: $data"></survey-tabset>
 </div>
 <div class="scrollbox">
-    <div class="ui form">
-        <div class="three fields">
-            <div class="field">
-                <label>Name</label>
-                <input readonly data-bind="textInput: schemaObs().name"/>
-            </div>
-            <div class="field">
-                <label>Schema Type</label>
-                <input readonly data-bind="textInput: schemaTypeLabel(schemaObs().schemaType)"/>
-            </div>
-            <div class="field">
-                <label>Identifier</label>
-                <input readonly data-bind="textInput: schemaObs().schemaId"/>
+    <div data-bind="if: !publishedObs()">
+        <p>This is a draft version of the survey. It has not been published, so there is no schema for it. </p>
+    </div>
+    <div data-bind="if: publishedObs">
+        <div class="ui form">
+            <div class="three fields">
+                <div class="field">
+                    <label>Name</label>
+                    <input readonly data-bind="textInput: schemaObs().name"/>
+                </div>
+                <div class="field">
+                    <label>Schema Type</label>
+                    <input readonly data-bind="textInput: schemaTypeLabel(schemaObs().schemaType)"/>
+                </div>
+                <div class="field">
+                    <label>Identifier</label>
+                    <input readonly data-bind="textInput: schemaObs().schemaId"/>
+                </div>
             </div>
         </div>
+        <h4>Field Definitions</h4>
+        <table class="ui compact selectable table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Required?</th>
+                </tr>
+            </thead>
+            <tbody class="no_records" data-bind="visible: itemsObs().length === 0">
+                <tr>
+                    <td colspan="3" data-bind="html: recordsMessageObs"></td>
+                </tr>
+            </tbody>        
+            <tbody data-bind="foreach: itemsObs">
+                <tr>
+                    <td data-bind="text: $data.name"></td>
+                    <td data-bind="text: $parent.fieldTypeLabel($data.type)"></td>
+                    <td data-bind="text: $data.required ? 'Yes' : 'No'"></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <h4>Field Definitions</h4>
-    <table class="ui compact selectable table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Required?</th>
-            </tr>
-        </thead>
-        <tbody class="no_records" data-bind="visible: itemsObs().length === 0">
-            <tr>
-                <td colspan="3" data-bind="html: recordsMessageObs"></td>
-            </tr>
-        </tbody>        
-        <tbody data-bind="foreach: itemsObs">
-            <tr>
-                <td data-bind="text: $data.name"></td>
-                <td data-bind="text: $parent.fieldTypeLabel($data.type)"></td>
-                <td data-bind="text: $data.required ? 'Yes' : 'No'"></td>
-            </tr>
-        </tbody>
-    </table>
 </div>

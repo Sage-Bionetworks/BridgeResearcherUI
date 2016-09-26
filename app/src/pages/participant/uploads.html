@@ -48,13 +48,13 @@
             </div>
         </div>
     </div>
-    <table class="ui compact selectable table">
+    <table class="ui compact selectable table non-breaking-rows">
         <thead>
             <tr>
                 <th style="width:10px"></th>
-                <th data-bind="click: sortCol('uploadId')">Uploads for: <span data-bind="text: dayObs"></span></th>
-                <th data-bind="click: sortCol('requestedOn')">Requested On</th>
-                <th data-bind="click: sortCol('completedOn')">Completed On</th>
+                <th>Requested On</th>
+                <th>Upload ID</th>
+                <th>Completed On</th>
                 <th>Schema of content</th>
             </tr>
         </thead>
@@ -68,25 +68,25 @@
                 <td>
                     <i data-bind="attr:{class:$component.iconFor($data)}"></i>
                 </td>
+                <td data-bind="text: $component.formatLocalDateTime($data.requestedOn)"></td>
                 <td>
-                    <span data-bind="text: $data.uploadId"></span>
                     <span data-bind="visible: $data.status === 'validation_failed'">
                         <span data-bind="visible: $data.collapsedObs">
                             <a href="" data-bind="click: $component.toggle">
-                                <i style="margin:0;padding:0" class="plus square outline icon"></i> Show Errors
+                                <i style="margin:0;padding:0" class="plus square outline icon"></i>
                             </a>
                         </span>
                         <span data-bind="visible: !$data.collapsedObs()">
                             <a href="" data-bind="click: $component.toggle">
-                                <i style="margin:0;padding:0" class="minus square outline icon"></i> Hide Errors
+                                <i style="margin:0;padding:0" class="minus square outline icon"></i>
                             </a>
-                            <div data-bind="html: $component.htmlFor($data)">
                         </span>
                     </span>
+                    <span data-bind="html: $data.uploadId"></span>
+                    <div style="position:relative" data-bind="html: $component.htmlFor($data), visible: !$data.collapsedObs()">
                 </td>
-                <td data-bind="text: $component.formatLocalDateTime($data.requestedOn)"></td>
-                <td data-bind="text: $data.completedByObs"></td>
-                <td data-bind="attr:{'data-sort':$data.contentObs}">
+                <td data-bind="html: $data.completedByObs"></td>
+                <td>
                     <a target="_blank" rel="noopener" data-bind="attr:{href: $data.hrefObs}, text: $data.contentObs"></a>
                 </td>                    
             </tr>

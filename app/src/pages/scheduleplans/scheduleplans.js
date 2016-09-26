@@ -1,10 +1,7 @@
-var ko = require('knockout');
 var serverService = require('../../services/server_service.js');
 var scheduleUtils = require('../schedule/schedule_utils.js');
 var utils = require('../../utils');
 var fn = require('../../transforms');
-var Promise = require('bluebird');
-var storeService = require('../../services/store_service');
 var tables = require('../../tables');
 
 var SORTER = utils.makeFieldSorter("label");

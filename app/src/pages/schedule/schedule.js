@@ -4,12 +4,12 @@ var utils = require('../../utils');
 var fn = require('../../transforms');
 var root = require('../../root');
 var ko = require('knockout');
-var alerts = require('../../widgets/alerts');
 
 var SCHEDULE_TYPE_OPTIONS = Object.freeze([
     {value: 'once', label: 'Once'},
     {value: 'recurring', label: 'Recurring'},
-    {value: 'cron', label: 'Cron-based'}
+    {value: 'cron', label: 'Cron-based'},
+    {value: 'persistent', label: 'Persistent'}
 ]);
 var ACTIVITY_TYPE_OPTIONS = Object.freeze([
     {value: 'task', label: 'Do Task'},
@@ -62,12 +62,13 @@ function getEditorType(schedule) {
         return "once";
     } else if (schedule.scheduleType === 'recurring' && schedule.cronTrigger) {
         return "cron";
-    } else {
+    } else if (schedule.scheduleType === 'recurring') {
         return "interval";
     }
+    return "persistent";
 }
 function getScheduleType(editorType) {
-    return (editorType === "once") ? 'once' : 'recurring';
+    return (editorType === "cron" || editorType === "interval") ? 'recurring' : editorType;
 }
 
 module.exports = function(params) {
@@ -121,6 +122,12 @@ module.exports = function(params) {
                     delete sch.interval;
                     delete sch.times;
                     break;
+                case 'persistent':
+                    delete sch.interval;
+                    delete sch.cronTrigger;
+                    delete sch.times;
+                    delete sch.delay;
+                    delete sch.expires;
             }
             return sch;
         },
@@ -201,13 +208,6 @@ module.exports = function(params) {
         var context = ko.contextFor(event.target);
         self.activitiesObs.splice(context.$index()+1,0,newActivity());
     };
-    self.deleteActivity = function(vm, event) {
-        event.preventDefault();
-        alerts.deleteConfirmation("Are you sure?", function() {
-            var context = ko.contextFor(event.target);
-            self.activitiesObs.remove(context.$data);
-        });
-    };    
 
     self.surveysOptionsObs = ko.observableArray();
     self.surveysOptionsObs.extend({rateLimit: 50});

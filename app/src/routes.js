@@ -80,6 +80,7 @@ router.on('/participants/:userId/consents', routeTo('participant_consents', USER
 router.on('/participants/:userId/reports', routeTo('participant_reports', USERID));
 router.on('/participants/:userId/uploads', routeTo('participant_uploads', USERID));
 router.on('/participants/:userId', routeTo('participant_general', USERID));
+router.on('/participants/:userId/requestInfo', routeTo('participant_request_info', USERID));
 router.on('/participants', routeTo('participants'));
 router.on('/enrollees/:externalId', redirectToParticipant);
 router.on('/enrollees', routeTo('enrollees'));

@@ -11,7 +11,7 @@ module.exports = function(params) {
 
     bind(self)
         .obs('createdOn', params.createdOn)
-        .obs('published', true)
+        .obs('published', false)
         .obs('survey')
         .obs('guid', params.guid)
         .obs('schema', {})
@@ -24,6 +24,7 @@ module.exports = function(params) {
 
     function loadSchema(survey) {
         self.nameObs(survey.name);
+        self.publishedObs(survey.published);
         serverService.getUploadSchema(survey.identifier, survey.schemaRevision).then(function(schema) {
             self.schemaObs(schema);
             self.itemsObs.pushAll(schema.fieldDefinitions);

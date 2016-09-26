@@ -10,7 +10,8 @@ function confirmation(message, func) {
 }
 function deleteConfirmation(message, func, deleteButton) {
     swal({ title: "Hey now", text: message, showCancelButton: true,
-        confirmButtonColor: "#db2828", confirmButtonText: deleteButton || "Delete"
+        allowEscapeKey: true, confirmButtonColor: "#db2828", 
+        confirmButtonText: deleteButton || "Delete"
     }, function(isConfirm){
         if (isConfirm) { func(); }
     });

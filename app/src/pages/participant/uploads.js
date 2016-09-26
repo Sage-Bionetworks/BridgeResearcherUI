@@ -16,6 +16,9 @@ function createRanges() {
     }
     return ranges;
 }
+function sortUploads(b,a) {
+    return (a.requestedOn < b.requestedOn) ? -1 : (a.requestedOn > b.requestedOn) ? 1 : 0;
+}
 
 module.exports = function(params) {
     var self = this;
@@ -47,7 +50,7 @@ module.exports = function(params) {
         switch(item.status) {
             case 'unknown': return 'negative';
             case 'validation_failed': return 'warning';
-            //case 'succeeded': return '';
+            case 'duplicate': return 'warning';
             default: return '';
         }
     };
@@ -56,13 +59,14 @@ module.exports = function(params) {
             case 'unknown': return 'help circle icon';
             case 'validation_in_progress': return 'refresh icon';
             case 'validation_failed': return 'ui yellow text warning sign icon';
+            case 'duplicate': return 'ui yellow text copy icon';
             case 'succeeded': return 'ui green text checkmark icon';
             default: return '';
         }
     };
     self.htmlFor = function(data) {
         return data.validationMessageList.map(function(error) {
-            return "<p>"+error+"</p>";
+            return "<p class='ui segment error-message'>"+error+"</p>";
         }).join('');
     };
     self.priorVisible = function() {
@@ -93,52 +97,20 @@ module.exports = function(params) {
     self.uploadURL = function(data) {
         return '#/participants/' + self.userIdObs() + '/uploads/' + data.uploadId;
     };
-    self.renderPopup = function(data) {
-        return data.status === 'validation_failed';
-    };
     self.toggle = function(model) {
         model.collapsedObs(!model.collapsedObs());
-    };
-    
-    // TODO: This is a candidate for the tables package. Also, it needs a sorting indicator, the css
-    // for table-sort.scss is very elegant and simple. It is, however, getting closer to a sorting system 
-    // for tables that is friendly to knockout data bindings. Should also be able to look for a 
-    // fieldSortValue property on the observed item, and sort by that.
-    self.sortCol = function(col) {
-        self.itemsObs.__sort = self.itemsObs.__sort || {};
-        return function() {
-            console.log("sortCol");
-            var sort = self.itemsObs.__sort;
-            sort[col] = (typeof sort[col] !== "undefined") ? !sort[col] : true;
-            var asc = sort[col];
-            self.itemsObs.sort(function(item1,item2) {
-                var a = item1[col].toLowerCase();
-                var b = item2[col].toLowerCase();
-                return (asc) ? a.localeCompare(b) : b.localeCompare(a);
-            });
-        };
     };
     self.refresh = function() {
         if (self.showLoaderObs()){ return; }
         self.selectedRangeObs(ranges[0]);
         load();
     };
-    /*
-    function popupTitleFor(item) {
-        switch(item.status) {
-            case 'unknown': return 'Unknown';
-            case 'requested': return 'Requested';
-            case 'validation_in_progress': return 'Validation in progress';
-            case 'validation_failed': return 'Validation failed';
-            case 'succeeded': return 'Succeeded';
-            default: return '';
-        }
-    }
-    */
     function getSelectedIndex() {
         return ranges.indexOf( self.selectedRangeObs() );
     }
     function processItem(item) {
+        var shortId = transforms.truncateGUID(item.uploadId);
+        item.uploadId = "<span class='upload-id' title='"+item.uploadId+"'>"+shortId+"</span>";
         bind(item)
             .obs('content','')
             .obs('href','')
@@ -149,23 +121,31 @@ module.exports = function(params) {
             var rev = item.schemaRevision;
             item.contentObs(id);
             item.hrefObs('/#/schemas/'+encodeURIComponent(id)+'/versions/'+rev);
-            item.completedByObs(formatCompletedBy(item));
         }
+        item.completedByObs(formatCompletedBy(item));
     }
     function formatCompletedBy(item) {
-        var start = new Date(item.requestedOn).getTime();
-        var end = new Date(item.completedOn).getTime();
-        var fStart = transforms.formatLocalDateTime(item.requestedOn);
-        var fEnd = transforms.formatLocalDateTime(item.completedOn);
-        if (fStart.split(', ')[0] === fEnd.split(', ')[0]) {
-            fEnd = fEnd.split(', ')[1];
+        if (item.status === 'succeeded') {
+            var start = new Date(item.requestedOn).getTime();
+            var end = new Date(item.completedOn).getTime();
+            var fStart = transforms.formatLocalDateTime(item.requestedOn);
+            var fEnd = transforms.formatLocalDateTime(item.completedOn);
+            if (fStart.split(', ')[0] === fEnd.split(', ')[0]) {
+                fEnd = fEnd.split(', ')[1];
+            }
+            return fEnd+" ("+item.completedBy+", "+transforms.formatMs(end-start)+")";
+        } else if (item.status === 'duplicate') {
+            var shortDup = transforms.truncateGUID(item.duplicateUploadId);
+            return "duplicates <span class='upload-id' title='"+item.duplicateUploadId+"'>"+
+                shortDup+"</span>";
         }
-        return fEnd+" ("+item.completedBy+", "+transforms.formatMs(end-start)+")";
+        return '';
     }
     function processUploads(response) {
         var dateString = transforms.formatLocalDateTimeWithoutZone(response.startTime).split(" @ ")[0];
         self.dayObs(dateString);
         self.totalObs(response.items.length);
+        response.items.sort(sortUploads);
         response.items.map(processItem);
         self.itemsObs(response.items);
         return response;

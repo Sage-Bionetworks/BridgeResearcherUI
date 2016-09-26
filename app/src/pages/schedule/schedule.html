@@ -13,7 +13,8 @@
             <select class="ui short-input dropdown" data-bind="value: editorScheduleTypeObs">
                 <option value="once">Once</option>
                 <option value="interval">Recurring</option>
-                <option value="cron">Cron-based</option>
+                <option value="cron">Recurring on cron schedule</option>
+                <option value="persistent">Persistent</option>
             </select>            
         </div>
         <div class="field">
@@ -25,7 +26,7 @@
             </div>
         </div>
     </div>
-    <div class="three fields">
+    <div class="three fields" data-bind="visible: editorScheduleTypeObs() !== 'persistent'">
         <div class="field">
             <label>Delay first task by</label>
             <ui-duration params="fieldObs: delayObs"></ui-duration>
@@ -38,7 +39,7 @@
         <div class="field" data-bind="attr:{id:
             'strategy_'+$component.collectionName+'schedule_times'}, visible: editorScheduleTypeObs() !== 'cron'">
             <label data-bind="text: (scheduleTypeObs() === 'recurring') ? 'At these times' : 'At this time'"></label>
-            <div class=text" style="margin: .5rem 0" data-bind="text: formatTimes(timesObs())"></div>
+            <div class="text" style="margin: .5rem 0" data-bind="text: formatTimes(timesObs())"></div>
             <div class="inline-editor-controls">
                 <a class="pointing" data-bind="click: editTimes"><i class="write icon"></i>Edit&hellip;</a>
                 <a class="pointing" data-bind="click: clearTimes"><i class="delete icon"></i>Clear</a>
@@ -64,7 +65,8 @@
     <p data-bind="visible: $component.taskOptionsObs().length == 0">
         <b>There are no task identifiers defined,</b> so you cannot schedule any tasks.
         <a href="#/task_identifiers" target="_blank" rel="noopener">Create</a> some identifiers, then refresh this page
-        in order to schedule tasks. </b>
+        in order to schedule tasks.
+    </p>
     <div class="ui form" data-bind="visible: activitiesObs().length == 0">
         <a class="ui primary button" data-bind="click: addFirstActivity">
             <i class="add square icon"></i>Add Activity
@@ -98,7 +100,8 @@
                     <button class="ui basic compact mini button" data-bind="click: $component.addActivityAfter">
                         <i class="square add icon"></i>Add below
                     </button>
-                    <button class="ui basic red compact mini button" data-bind="click: $component.deleteActivity">
+                    <button class="ui basic red compact mini button" data-bind="fadeRemove: { 
+                        selector: '.activity', object: $data, 'collection': 'activitiesObs'}">
                         <i class="delete icon"></i>Delete
                     </button>
                 </div>

@@ -155,7 +155,9 @@
 .enum-list {
     padding:0!important;
     overflow-y: auto;
-    max-height: 253px;
+    max-height: 315px;
+    border: 1px solid #e5e5e5;
+    border-top: none;
 }
     .enum-list-server-text {
         font-size: .8rem;
@@ -164,6 +166,10 @@
 .enum-scrollbox {
     max-height:16rem;
     overflow-y:auto;
+    border: 1px solid #e5e5e5;
+    border-top: none;
+    padding: 1rem!important;
+    margin-top: -14px!important;
 }
 .textarea {
     display: block;
@@ -190,3 +196,15 @@
         border-radius: .28571429rem;
     }
 }
+.enum-list.list-being-edited {
+    background-color: rgba(229,229,229,.5);
+}
+    .item-being-edited, .item-being-edited:hover {
+        background-color: #fff;
+    }
+    .vs-item .angle.right.icon, .item-being-edited .delete.icon {
+        display: none;
+    }
+    .item-being-edited .angle.right.icon {
+        display: block;
+    }
