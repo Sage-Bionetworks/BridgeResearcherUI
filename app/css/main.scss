@@ -220,3 +220,15 @@ progress {
     padding: .4rem .8rem!important;
     margin-bottom: -.1rem!important;
 }
+
+.non-breaking-rows td, .non-breaking-rows th {
+    white-space: nowrap;
+
+    .error-message {
+        position:absolute;
+        margin: .5rem .5rem 0 1rem;
+    }
+}
+.upload-id {
+    font-family: monospace;
+}

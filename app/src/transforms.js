@@ -103,6 +103,10 @@ function formatLocalDateWithoutZone(input) {
     return (result.isDate) ? result.value.split(" @ ")[0] : result.value; 
 }
 
+function truncateGUID(guid) {
+    return guid.split("-")[0];
+}
+
 function formatLocalDateTimeWithoutZone(input) {
     var result = dateOrDefault(input, "");
     if (result.isDate) {
@@ -181,5 +185,6 @@ module.exports = {
     persistLanguages: persistLanguages,
     persistRoles: persistRoles,
     callObsCallback: callObsCallback,
-    formatMs: formatMs
+    formatMs: formatMs,
+    truncateGUID: truncateGUID
 };
