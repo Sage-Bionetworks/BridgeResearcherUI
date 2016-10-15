@@ -65,7 +65,7 @@ module.exports = function(params) {
         }
     };
     self.htmlFor = function(data) {
-        if (data.validationMessageList == undefined) return null;
+        if (data.validationMessageList === undefined) return null;
         return data.validationMessageList.map(function(error) {
             return "<p class='ui segment error-message'>"+error+"</p>";
         }).join('');
@@ -118,22 +118,21 @@ module.exports = function(params) {
             .obs('collapsed', true)
             .obs('completedBy', '');
             
-        item.isUploadRequested = "completed step";
+        item.uploadProgress = "1";
+        item.uploadProgressLabel = "Upload Requested";
         if (item.status === 'succeeded') {
             var id = item.schemaId;
             var rev = item.schemaRevision;
             item.contentObs(id);
             item.hrefObs('/#/schemas/'+encodeURIComponent(id)+'/versions/'+rev);
-            item.isUploadCompleted = "completed step";
-        } else {
-            item.isUploadCompleted = "active step";
-        }
+            item.uploadProgress = "2";
+            item.uploadProgressLabel = "Upload Completed";
+        } 
         if (item.status === 'succeeded' && item.healthRecordExporterStatus === 'succeeded') {
-            item.isExportCompleted = "completed step";  
-        } else {
-            item.isExportCompleted = "active step";
-        }
-        
+            item.uploadProgress = "3";  
+            item.uploadProgressLabel = "Export Completed";
+        } 
+
         item.completedByObs(formatCompletedBy(item));
     }
     function formatCompletedBy(item) {
@@ -154,6 +153,41 @@ module.exports = function(params) {
         return '';
     }
     function processUploads(response) {
+        response = {
+            "items": [
+                {
+                    "status": "succeeded",
+                    "schemaId": "123",
+                    "schemaRevision": "abc",
+                    "requestedOn": "2016-10-14T19:29:22.174Z",
+                    "completedOn": "2016-10-14T19:29:22.174Z",
+                    "completedBy": "abc",
+                    "uploadId": "abd123",
+                    "healthRecordExporterStatus": "succeeded"
+                },
+                {
+                    "status": "af",
+                    "schemaId": "123",
+                    "schemaRevision": "abc",
+                    "requestedOn": "2016-10-14T19:29:22.174Z",
+                    "completedOn": "2016-10-14T19:29:22.174Z",
+                    "completedBy": "abc",
+                    "uploadId": "abd123",
+                    "healthRecordExporterStatus": "succeeded"
+                },
+                {
+                    "status": "succeeded",
+                    "schemaId": "123",
+                    "schemaRevision": "abc",
+                    "requestedOn": "2016-10-14T19:29:22.174Z",
+                    "completedOn": "2016-10-14T19:29:22.174Z",
+                    "completedBy": "abc",
+                    "uploadId": "abd123",
+                    "healthRecordExporterStatus": "asdfas"
+                }
+            ],
+            "startTime": "2016-10-14T19:29:22.174Z"
+        };
         var dateString = transforms.formatLocalDateTimeWithoutZone(response.startTime).split(" @ ")[0];
         self.dayObs(dateString);
         self.totalObs(response.items.length);
@@ -168,6 +202,7 @@ module.exports = function(params) {
         var range = utils.getDateRange(ranges[index].value);
         serverService.getParticipantUploads(params.userId, range.startTime, range.endTime)
             .then(processUploads).then(function() {
+                $('.ui .progress').progress();
                 self.showLoaderObs(false);
             })
             .catch(function() {

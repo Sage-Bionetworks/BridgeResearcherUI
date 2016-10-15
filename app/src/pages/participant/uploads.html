@@ -91,19 +91,9 @@
                     <a target="_blank" rel="noopener" data-bind="attr:{href: $data.hrefObs}, text: $data.contentObs"></a>
                 </td>
                 <td>
-                    <div class="ui mini ordered steps" >
-                        <div data-tooltip="upload requested" data-position="top left">
-                            <div data-bind="attr:{class:$data.isUploadRequested}">
-                            </div>
-                        </div>
-                        <div data-tooltip="upload succeeded" data-position="top center">
-                            <div data-bind="attr:{class:$data.isUploadCompleted}">
-                            </div>
-                        </div>
-                        <div data-tooltip="export succeeded" data-position="top right">
-                            <div data-bind="attr:{class:$data.isExportCompleted}">
-                            </div>
-                        </div>
+                    <div class="ui tiny indicating progress" data-bind="attr: { 'data-value': $data.uploadProgress }" data-total="3">
+                        <div class="bar"></div>
+                        <div class="label" data-bind="text: $data.uploadProgressLabel"></div>
                     </div>
                 </td>                    
             </tr>
