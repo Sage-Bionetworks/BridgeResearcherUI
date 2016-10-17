@@ -202,7 +202,6 @@ module.exports = function(params) {
         var range = utils.getDateRange(ranges[index].value);
         serverService.getParticipantUploads(params.userId, range.startTime, range.endTime)
             .then(processUploads).then(function() {
-                $('.ui .progress').progress();
                 self.showLoaderObs(false);
             })
             .catch(function() {

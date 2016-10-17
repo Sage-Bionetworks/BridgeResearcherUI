@@ -56,7 +56,7 @@
                 <th>Upload ID</th>
                 <th>Completed On</th>
                 <th>Schema of content</th>
-                <th>Exporter Status</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="visible: itemsObs().length === 0">
@@ -91,7 +91,7 @@
                     <a target="_blank" rel="noopener" data-bind="attr:{href: $data.hrefObs}, text: $data.contentObs"></a>
                 </td>
                 <td>
-                    <div class="ui tiny indicating progress" data-bind="attr: { 'data-value': $data.uploadProgress }" data-total="3">
+                    <div data-bind="attr: { 'data-value': $data.uploadProgress }, semantic: 'progress'" data-total="3">
                         <div class="bar"></div>
                         <div class="label" data-bind="text: $data.uploadProgressLabel"></div>
                     </div>
