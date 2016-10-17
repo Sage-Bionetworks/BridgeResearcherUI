@@ -153,41 +153,6 @@ module.exports = function(params) {
         return '';
     }
     function processUploads(response) {
-        response = {
-            "items": [
-                {
-                    "status": "succeeded",
-                    "schemaId": "123",
-                    "schemaRevision": "abc",
-                    "requestedOn": "2016-10-14T19:29:22.174Z",
-                    "completedOn": "2016-10-14T19:29:22.174Z",
-                    "completedBy": "abc",
-                    "uploadId": "abd123",
-                    "healthRecordExporterStatus": "succeeded"
-                },
-                {
-                    "status": "af",
-                    "schemaId": "123",
-                    "schemaRevision": "abc",
-                    "requestedOn": "2016-10-14T19:29:22.174Z",
-                    "completedOn": "2016-10-14T19:29:22.174Z",
-                    "completedBy": "abc",
-                    "uploadId": "abd123",
-                    "healthRecordExporterStatus": "succeeded"
-                },
-                {
-                    "status": "succeeded",
-                    "schemaId": "123",
-                    "schemaRevision": "abc",
-                    "requestedOn": "2016-10-14T19:29:22.174Z",
-                    "completedOn": "2016-10-14T19:29:22.174Z",
-                    "completedBy": "abc",
-                    "uploadId": "abd123",
-                    "healthRecordExporterStatus": "asdfas"
-                }
-            ],
-            "startTime": "2016-10-14T19:29:22.174Z"
-        };
         var dateString = transforms.formatLocalDateTimeWithoutZone(response.startTime).split(" @ ")[0];
         self.dayObs(dateString);
         self.totalObs(response.items.length);
