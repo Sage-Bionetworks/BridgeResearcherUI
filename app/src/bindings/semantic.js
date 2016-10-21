@@ -2,6 +2,16 @@ var ko = require('knockout');
 require('../../lib/semantic-2.2.min'); // we reference it here.
 
 var handlers = {
+    'progress': function($element, allBindings) {
+        $element.addClass("ui tiny progress");
+        var dataValue = allBindings().attr["data-value"];
+        console.log(dataValue);
+        if (dataValue === "3") {
+            $element.addClass("green");
+        }
+
+        $element.progress();
+    },
     'checkbox': function($element, allBindings) {
         var input = $element.children("input[type=checkbox]").get(0);
         var observer = allBindings().checkboxObs;

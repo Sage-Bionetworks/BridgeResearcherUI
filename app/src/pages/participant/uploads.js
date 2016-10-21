@@ -65,6 +65,7 @@ module.exports = function(params) {
         }
     };
     self.htmlFor = function(data) {
+        if (data.validationMessageList === undefined) return null;
         return data.validationMessageList.map(function(error) {
             return "<p class='ui segment error-message'>"+error+"</p>";
         }).join('');
@@ -116,12 +117,22 @@ module.exports = function(params) {
             .obs('href','')
             .obs('collapsed', true)
             .obs('completedBy', '');
+            
+        item.uploadProgress = "1";
+        item.uploadProgressLabel = "Upload Requested";
         if (item.status === 'succeeded') {
             var id = item.schemaId;
             var rev = item.schemaRevision;
             item.contentObs(id);
             item.hrefObs('/#/schemas/'+encodeURIComponent(id)+'/versions/'+rev);
-        }
+            item.uploadProgress = "2";
+            item.uploadProgressLabel = "Upload Completed";
+        } 
+        if (item.status === 'succeeded' && item.healthRecordExporterStatus === 'succeeded') {
+            item.uploadProgress = "3";  
+            item.uploadProgressLabel = "Export Completed";
+        } 
+
         item.completedByObs(formatCompletedBy(item));
     }
     function formatCompletedBy(item) {
