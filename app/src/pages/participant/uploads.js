@@ -5,30 +5,16 @@ var tables = require('../../tables');
 var transforms = require('../../transforms');
 var root = require('../../root');
 
-var ONE_DAY = 1000*60*60*24;
-
-function createRanges() {
-    var ranges = [];
-    for (var i=0; i<15; i++) {
-        var d = new Date();
-        d.setTime(d.getTime() - (i*ONE_DAY));
-        ranges.push({value: -i, label: d.toDateString()});
-    }
-    return ranges;
-}
 function sortUploads(b,a) {
     return (a.requestedOn < b.requestedOn) ? -1 : (a.requestedOn > b.requestedOn) ? 1 : 0;
 }
 
 module.exports = function(params) {
     var self = this;
-    var ranges = createRanges();
-
     bind(self)
         .obs('userId', params.userId)
         .obs('name', '')
-        .obs('ranges[]', ranges)
-        .obs('selectedRange', ranges[0])
+        .obs('selectedRange', new Date())
         .obs('showLoader', false)
         .obs('day')
         .obs('total', 0)
@@ -65,33 +51,14 @@ module.exports = function(params) {
         }
     };
     self.htmlFor = function(data) {
+        if (data.validationMessageList === undefined) return null;
         return data.validationMessageList.map(function(error) {
             return "<p class='ui segment error-message'>"+error+"</p>";
         }).join('');
     };
-    self.priorVisible = function() {
-        var index = getSelectedIndex();
-        return (index < ranges.length-1);   
-    };
-    self.nextVisible = function() {
-        var index = getSelectedIndex();
-        return (index > 0);
-    };
-    self.priorDay = function() {
-        if (self.showLoaderObs()){ return false; }
-        var index = getSelectedIndex();
-        self.selectedRangeObs(ranges[index+1]);
-        return false;
-    };
-    self.nextDay = function() {
-        if (self.showLoaderObs()){ return false; }
-        var index = getSelectedIndex();
-        self.selectedRangeObs(ranges[index-1]);
-        return false;
-    };
     self.selectRange = function(data, event) {
-        if (self.showLoaderObs()){ return false; }
-        self.selectedRangeObs(data);
+        var date = event.currentTarget._flatpickr.selectedDateObj;
+        self.selectedRangeObs(date);
         return false;
     };
     self.uploadURL = function(data) {
@@ -100,14 +67,6 @@ module.exports = function(params) {
     self.toggle = function(model) {
         model.collapsedObs(!model.collapsedObs());
     };
-    self.refresh = function() {
-        if (self.showLoaderObs()){ return; }
-        self.selectedRangeObs(ranges[0]);
-        load();
-    };
-    function getSelectedIndex() {
-        return ranges.indexOf( self.selectedRangeObs() );
-    }
     function processItem(item) {
         var shortId = transforms.truncateGUID(item.uploadId);
         item.uploadId = "<span class='upload-id' title='"+item.uploadId+"'>"+shortId+"</span>";
@@ -116,14 +75,35 @@ module.exports = function(params) {
             .obs('href','')
             .obs('collapsed', true)
             .obs('completedBy', '');
+            
         if (item.status === 'succeeded') {
             var id = item.schemaId;
             var rev = item.schemaRevision;
             item.contentObs(id);
             item.hrefObs('/#/schemas/'+encodeURIComponent(id)+'/versions/'+rev);
         }
+        item.progressState = getSemanticControlState(item);
         item.completedByObs(formatCompletedBy(item));
     }
+    function getSemanticControlState(item) {
+        var obj = {type: 'progress', color: 'gray', value: 1, label: 'Upload Requested', total:3};
+        if (item.status === 'succeeded') {
+            obj.value = 2;
+            obj.label = "Upload Completed";
+            if (item.healthRecordExporterStatus === 'succeeded') {
+                obj.value = 3;  
+                obj.label = "Export Completed";
+                obj.color = "green";
+            } else if (typeof item.healthRecordExporterStatus === 'undefined') {
+                obj.color = "green";
+            }
+        } else if (item.status === 'duplicate') {
+            obj.value = 2;
+            obj.label = "Upload Error";
+        }
+        return obj;
+    }
+
     function formatCompletedBy(item) {
         if (item.status === 'succeeded') {
             var start = new Date(item.requestedOn).getTime();
@@ -152,13 +132,10 @@ module.exports = function(params) {
     }
     function load() {
         self.showLoaderObs(true);
-        var index = getSelectedIndex();
-        var range = utils.getDateRange(ranges[index].value);
+        var range = utils.getDateRange( self.selectedRangeObs() );
         serverService.getParticipantUploads(params.userId, range.startTime, range.endTime)
-            .then(processUploads).then(function() {
-                self.showLoaderObs(false);
-            })
-            .catch(function() {
+            .then(processUploads)
+            .then(function() {
                 self.showLoaderObs(false);
             })
             .catch(utils.failureHandler());

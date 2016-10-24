@@ -2,6 +2,13 @@ var ko = require('knockout');
 require('../../lib/semantic-2.2.min'); // we reference it here.
 
 var handlers = {
+    'progress': function($element, allBindings, config) {
+        $element.addClass("ui tiny progress")
+            .attr('data-value', config.value)
+            .attr('data-total', config.total);
+        $element.addClass(config.color);
+        $element.progress();
+    },
     'checkbox': function($element, allBindings) {
         var input = $element.children("input[type=checkbox]").get(0);
         var observer = allBindings().checkboxObs;
@@ -106,7 +113,13 @@ var handlers = {
 ko.bindingHandlers.semantic = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
         var value = ko.unwrap(valueAccessor());
-        if (handlers[value]) {
+        // If it's an object, it's passed as a third argument and it must have a 'type' property
+        // to select the correct semantic control.
+        if (typeof value === 'object') {
+            handlers[value.type]($(element), allBindings, value);
+        }
+        // Otherwise it's just the name of a semantic control.
+        else if (handlers[value]) {
             handlers[value]($(element), allBindings);
         } else {
             throw new Error("Semantic binding not found: " + value);

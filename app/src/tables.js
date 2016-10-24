@@ -58,6 +58,10 @@ module.exports = {
         vm.recordsMessageObs = ko.observable("<div class='ui tiny active inline loader'></div>");
         vm.itemsObs.subscribe(arrayListener(vm.recordsMessageObs, objName));
 
+        vm.resetRecordMessageObs = function() {
+            vm.recordsMessageObs = ko.observable("<div class='ui tiny active inline loader'></div>");
+        };
+
         vm.atLeastOneChecked = function () {
             return vm.itemsObs().some(hasBeenChecked);
         };

@@ -20,35 +20,16 @@
 <div class="scrollbox">
     <errors></errors>
     <div class="line-control">
+        <div class="ui form">
+            <input class="ui input" data-bind="flatpickr: selectedRangeObs, timeout: 50" />
+        </div>
+        <div style="position: relative; width: 4rem">
+            <div data-bind="visible: showLoaderObs" class="ui small active loader"></div>
+        </div>
         <div class="line-control-stretch">
         </div>
-        <div>
-            <div class="ui small pagination menu">
-                <div class="item" data-bind="click: priorDay, visible: priorVisible()">
-                    <i class="chevron left icon"></i>
-                </div>
-                <div class="active item">
-                    <div data-bind="visible: showLoaderObs" class="ui small active loader"></div>
-                    <div data-bind="semantic: 'dropdown'">
-                        <div class="text" data-bind="text: selectedRangeObs().label"></div>
-                        <i class="dropdown icon"></i>
-                        <div class="menu" data-bind="foreach: rangesObs">
-                            <a class="item" data-bind="click: $component.selectRange, text: $data.label"></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="item" data-bind="click: nextDay, visible: nextVisible()">
-                    <i class="chevron right icon"></i>
-                </div>
-            </div>
-            <div class="ui small pagination menu" style="margin-left:1rem!important">
-                <div class="item" data-bind="click: refresh">
-                    Today
-                </div>
-            </div>
-        </div>
     </div>
-    <table class="ui compact selectable table non-breaking-rows">
+    <table class="ui compact selectable table">
         <thead>
             <tr>
                 <th style="width:10px"></th>
@@ -56,11 +37,12 @@
                 <th>Upload ID</th>
                 <th>Completed On</th>
                 <th>Schema of content</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="visible: itemsObs().length === 0">
             <tr>
-                <td colspan="5" data-bind="html: recordsMessageObs"></td>
+                <td colspan="6" data-bind="html: recordsMessageObs"></td>
             </tr>
         </tbody>        
         <tbody data-bind="foreach: itemsObs">
@@ -88,6 +70,12 @@
                 <td data-bind="html: $data.completedByObs"></td>
                 <td>
                     <a target="_blank" rel="noopener" data-bind="attr:{href: $data.hrefObs}, text: $data.contentObs"></a>
+                </td>
+                <td style="width:12rem">
+                    <div data-bind="semantic: $data.progressState">
+                        <div class="bar"></div>
+                        <div class="label" data-bind="text: $data.progressState.label"></div>
+                    </div>
                 </td>                    
             </tr>
         </tbody>
