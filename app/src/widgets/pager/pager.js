@@ -22,6 +22,8 @@ module.exports = function(params) {
     
     bind(self)
         .obs('filterBox', '')
+        .obs('startDate')
+        .obs('endDate')
         .obs('offsetBy', offsetBy)
         .obs('pageSize', pageSize)
         .obs('totalRecords')
@@ -36,7 +38,10 @@ module.exports = function(params) {
             wrappedLoadingFunc(Math.round(self.currentPageObs()));
         }
     };
-
+    self.doCalSearch = function() {
+        self.searchLoadingObs(true);
+        wrappedLoadingFunc(Math.round(self.currentPageObs()));
+    };
     self.previousPage = function(vm, event) {
         var page = self.currentPageObs() -1;
         if (page >= 0) {
@@ -71,7 +76,9 @@ module.exports = function(params) {
 
     function wrappedLoadingFunc(offsetBy, vm, event) {
         var searchTerm = self.filterBoxObs();
-        loadingFunc(offsetBy, pageSize, searchTerm).then(function(response) {
+        var startDate = self.startDateObs();
+        var endDate = self.endDateObs();
+        loadingFunc(offsetBy, pageSize, searchTerm, startDate, endDate).then(function(response) {
             ko.postbox.publish(pageKey+'-recordsPaged', response);
             updateModel(response);
             self.searchLoadingObs(false);
@@ -86,6 +93,8 @@ module.exports = function(params) {
             self.pageSizeObs(response.pageSize);
             self.totalRecordsObs(response.total);
             self.filterBoxObs(response.emailFilter);
+            self.startDateObs(response.startDate);
+            self.endDateObs(response.endDate);
             self.currentPageObs(Math.round(response.offsetBy/response.pageSize));
             self.totalPagesObs( Math.ceil(response.total/response.pageSize) );
         }

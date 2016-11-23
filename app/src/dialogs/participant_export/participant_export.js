@@ -7,8 +7,8 @@ var fn = require('../../transforms');
 
 var HEADERS = [];
 var ATTRIBUTES = [];
-var PAGING_TIMEOUT = 2500;
-var TIMEOUT = 1500;
+var PAGING_TIMEOUT = 2000;
+var TIMEOUT = 1000;
 var PAGE_SIZE = 100;
 var FIELDS = Object.freeze(["firstName","lastName","email", "sharingScope", "status", "notifyByEmail", 
     "dataGroups", "languages", "roles", "id", "healthCode", "createdOn", "consentHistories"]);
@@ -53,15 +53,14 @@ module.exports = function(params) {
     var self = this;
     
     serverService.getStudy().then(function(study) {
-        study.userProfileAttributes.forEach(function(attr) {
-            ATTRIBUTES.push(attr);
-        });
-        Object.freeze(ATTRIBUTES);
+        ATTRIBUTES = Object.freeze([].concat(study.userProfileAttributes)); 
         HEADERS = Object.freeze([].concat(FIELDS).concat(ATTRIBUTES).join("\t"));
     });
     
     var total = params.total;
     var searchFilter = params.searchFilter;
+    var startDate = params.startDate;
+    var endDate = params.endDate;
     var numPages = Math.ceil(total/PAGE_SIZE);
     var pageOffsets = getPageOffsets(numPages);
     var cancel, identifiers, progressIndex, output, errorCount;
@@ -73,7 +72,9 @@ module.exports = function(params) {
     self.percentageObs = ko.observable();
     self.canContactByEmailObs = ko.observable(false);
     self.searchFilterObs = ko.observable(params.searchFilter || []);
-    
+    self.startDateObs = ko.observable(params.startDate || []);
+    self.endDateObs = ko.observable(params.endDate || []);
+
     reset();
     
     self.startExport = function(vm, event) {
@@ -91,6 +92,9 @@ module.exports = function(params) {
         reset();
         cancel = true;
         root.closeDialog();
+    };
+    self.formatLocalDateTime = function(date) {
+        return new Date(date).toLocaleDateString();
     };
     
     function reset() {
@@ -139,7 +143,7 @@ module.exports = function(params) {
     function doOnePage() {
         if (cancel) { return; }
         var offsetBy = pageOffsets.shift();
-        serverService.getParticipants(offsetBy, PAGE_SIZE, searchFilter)
+        serverService.getParticipants(offsetBy, PAGE_SIZE, searchFilter, startDate, endDate)
             .then(doContinuePage).catch(doContinuePageError);
     }
     function doContinueFetch(response) {

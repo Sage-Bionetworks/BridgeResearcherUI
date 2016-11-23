@@ -387,9 +387,10 @@ module.exports = {
     deleteCacheKey: function(cacheKey) {
         return del(config.cache+"/"+encodeURIComponent(cacheKey));
     },
-    getParticipants: function(offsetBy, pageSize, emailFilter) {
+    getParticipants: function(offsetBy, pageSize, emailFilter, startDate, endDate) {
         var queryString = query({
-            offsetBy: offsetBy, pageSize: pageSize, emailFilter: emailFilter
+            offsetBy: offsetBy, pageSize: pageSize, emailFilter: emailFilter,
+            startDate: startDate, endDate: endDate
         });
         return get(config.participants+queryString);
     },
