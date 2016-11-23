@@ -5,6 +5,16 @@
                 event: {keyup: doSearch}, hasFocus: true">
             <i class="search icon"></i>
         </div>
+        <div class="ui action input" data-bind="visible: top, flatpickr: startDateObs, timeout: 50, wrap: true, onChange: doCalSearch">
+            <input type="text" placeholder="Created on or after" data-input>
+            <div data-toggle></div>
+            <button class="ui icon button" data-clear data-bind="click: setTimeout(doCalSearch,1)"><i class="remove circle icon"></i></button>
+        </div>
+        <div class="ui action input" data-bind="visible: top, flatpickr: endDateObs, timeout: 50, wrap: true, onChange: doCalSearch">
+            <input type="text" placeholder="Created before" data-input>
+            <div data-toggle></div>
+            <button class="ui icon button" data-clear data-bind="click: setTimeout(doCalSearch,1)"><i class="remove circle icon"></i></button>
+        </div>
     </div>
     <div>
         <div class="ui small pagination menu" data-bind="visible: totalPagesObs() > 1, css:{loading:showLoaderObs}">

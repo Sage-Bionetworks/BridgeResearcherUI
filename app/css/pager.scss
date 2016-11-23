@@ -14,7 +14,21 @@
 }
 .line-control-stretch {
     flex: 1;
+
+    input[data-input] {
+        width: 10.5rem;
+    }
+    div[data-toggle] {
+        position: absolute; 
+        top: 0; 
+        bottom: 0; 
+        z-index:2; 
+        width: 11rem;
+    }    
 }
+    .line-control-stretch > div {
+        margin-right: .5rem;
+    }
 .line-control-radio {
     padding-left: 1rem;
     label {

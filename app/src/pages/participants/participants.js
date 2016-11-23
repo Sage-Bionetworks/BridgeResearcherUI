@@ -18,7 +18,9 @@ module.exports = function() {
         
     self.total = 0;
     self.searchFilter = null;
-    
+    self.startDate = null;
+    self.endDate = null;
+
     tables.prepareTable(self, "participant", function(participant) {
         return serverService.deleteParticipant(participant.id);
     });
@@ -63,11 +65,14 @@ module.exports = function() {
             .catch(utils.failureHandler(item, event));
     };
     self.exportDialog = function() {
-        root.openDialog('participant_export', {searchFilter: self.searchFilter, total: self.total});    
+        root.openDialog('participant_export', {searchFilter: self.searchFilter, 
+            startDate: self.startDate, endDate: self.endDate, total: self.total});    
     };
-    self.loadingFunc = function loadPage(offsetBy, pageSize, searchFilter) {
+    self.loadingFunc = function loadPage(offsetBy, pageSize, searchFilter, startDate, endDate) {
         self.searchFilter = searchFilter;
-        return serverService.getParticipants(offsetBy, pageSize, searchFilter).then(function(response) {
+        self.startDate = startDate;
+        self.endDate = endDate;
+        return serverService.getParticipants(offsetBy, pageSize, searchFilter, startDate, endDate).then(function(response) {
             self.total = response.total;
             self.recordsObs(formatCount(response.total));
             self.itemsObs(response.items);

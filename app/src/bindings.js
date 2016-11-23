@@ -37,15 +37,23 @@ ko.bindingHandlers.flatpickr = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
         var observer = valueAccessor();
         var timeout = allBindings().timeout;
+        var onChange = allBindings().onChange || function() {};
+        var wrap = (allBindings().wrap === true);
         var includeTime = element.hasAttribute("data-enableTime");
 
         function updateObserver(date) {
-            observer(date.toISOString());
-            element.value = date[includeTime ? "toLocaleString" : "toLocaleDateString"]();
+            if (date) {
+                observer(date.toISOString());
+                element.value = date[includeTime ? "toLocaleString" : "toLocaleDateString"]();
+            } else {
+                observer(null);
+                element.value = "";    
+            }
+            onChange();
         }
         function createPicker() {
             var d = (observer()) ? new Date(observer()) : null;
-            flatpickr(element, {defaultDate: d, onChange: updateObserver});
+            flatpickr(element, {defaultDate: d, onChange: updateObserver, wrap: wrap, clickOpens: !wrap});
             if (d) {
                 element.value = d[includeTime ? "toLocaleString" : "toLocaleDateString"]();
             }
