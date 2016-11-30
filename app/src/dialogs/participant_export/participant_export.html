@@ -5,7 +5,7 @@
     <div class="content">
         <p>Any search filters you create will be used when exporting. You can limit export to certain email addresses, or a date range. </p>
         <div class="red text" style="margin-top: 0; margin-bottom:.75rem">
-            <div data-bind="visible: searchFilterObs().length > 0">Only exporting accounts that have email matching the string &ldquo;<span data-bind="text: searchFilterObs"></span>&rdquo;</div>
+            <div data-bind="visible: emailFilterObs().length > 0">Only exporting accounts that have email matching the string &ldquo;<span data-bind="text: emailFilterObs"></span>&rdquo;</div>
             <div data-bind="visible: startDateObs().length > 0">Only exporting accounts that were created on or after &ldquo;<span data-bind="text: formatLocalDateTime(startDateObs())"></span>&rdquo;</div>
             <div data-bind="visible: endDateObs().length > 0">Only exporting accounts that were created on or before &ldquo;<span data-bind="text: formatLocalDateTime(endDateObs())"></span>&rdquo;</div>
         </div>

@@ -2,6 +2,7 @@ var ko = require('knockout');
 require('knockout-postbox');
 var utils = require('../../utils');
 var bind = require('../../binder');
+var storeService = require('../../services/store_service');
 
 var pageSize = 25;
 
@@ -16,14 +17,15 @@ var pageSize = 25;
 module.exports = function(params) {
     var self = this;
     self.top = params.top;
-    var loadingFunc = params.loadingFunc;
     var pageKey = params.pageKey;
-    var offsetBy = params.offsetBy || 0;
-    
+    var loadingFunc = params.loadingFunc;
+    var query = storeService.restoreQuery(pageKey);
+    var offsetBy = query.offsetBy;
+
     bind(self)
-        .obs('filterBox', '')
-        .obs('startDate')
-        .obs('endDate')
+        .obs('emailFilter', query.emailFilter)
+        .obs('startDate', query.startDate)
+        .obs('endDate', query.endDate)
         .obs('offsetBy', offsetBy)
         .obs('pageSize', pageSize)
         .obs('totalRecords')
@@ -32,7 +34,7 @@ module.exports = function(params) {
         .obs('searchLoading', false)
         .obs('showLoader', false);
     
-    self.doSearch = function(vm, event) {
+    self.doEmailSearch = function(vm, event) {
         if (event.keyCode === 13) {
             self.searchLoadingObs(true);
             wrappedLoadingFunc(Math.round(self.currentPageObs()));
@@ -75,10 +77,13 @@ module.exports = function(params) {
     ko.postbox.subscribe(pageKey+'-refresh', self.thisPage);
 
     function wrappedLoadingFunc(offsetBy, vm, event) {
-        var searchTerm = self.filterBoxObs();
+        var emailFilter = self.emailFilterObs();
         var startDate = self.startDateObs();
         var endDate = self.endDateObs();
-        loadingFunc(offsetBy, pageSize, searchTerm, startDate, endDate).then(function(response) {
+        storeService.persistQuery(pageKey, {emailFilter: emailFilter, 
+            startDate: startDate, endDate: endDate, offsetBy: offsetBy});
+
+        loadingFunc(offsetBy, pageSize, emailFilter, startDate, endDate).then(function(response) {
             ko.postbox.publish(pageKey+'-recordsPaged', response);
             updateModel(response);
             self.searchLoadingObs(false);
@@ -92,7 +97,7 @@ module.exports = function(params) {
             self.offsetByObs(response.offsetBy);
             self.pageSizeObs(response.pageSize);
             self.totalRecordsObs(response.total);
-            self.filterBoxObs(response.emailFilter);
+            self.emailFilterObs(response.emailFilter);
             self.startDateObs(response.startDate);
             self.endDateObs(response.endDate);
             self.currentPageObs(Math.round(response.offsetBy/response.pageSize));

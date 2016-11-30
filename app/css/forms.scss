@@ -28,7 +28,7 @@
     color: #666;
     padding: 0 .5rem;
 }
-input[readonly] {
+input[readonly]:not([data-input]) {
     border-color:transparent!important;
     padding-left: 0rem!important;
 }

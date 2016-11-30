@@ -58,7 +58,7 @@ module.exports = function(params) {
     });
     
     var total = params.total;
-    var searchFilter = params.searchFilter;
+    var emailFilter = params.emailFilter;
     var startDate = params.startDate;
     var endDate = params.endDate;
     var numPages = Math.ceil(total/PAGE_SIZE);
@@ -71,9 +71,9 @@ module.exports = function(params) {
     self.statusObs = ko.observable();
     self.percentageObs = ko.observable();
     self.canContactByEmailObs = ko.observable(false);
-    self.searchFilterObs = ko.observable(params.searchFilter || []);
-    self.startDateObs = ko.observable(params.startDate || []);
-    self.endDateObs = ko.observable(params.endDate || []);
+    self.emailFilterObs = ko.observable(params.emailFilter || "");
+    self.startDateObs = ko.observable(params.startDate || "");
+    self.endDateObs = ko.observable(params.endDate || "");
 
     reset();
     
@@ -143,7 +143,7 @@ module.exports = function(params) {
     function doOnePage() {
         if (cancel) { return; }
         var offsetBy = pageOffsets.shift();
-        serverService.getParticipants(offsetBy, PAGE_SIZE, searchFilter, startDate, endDate)
+        serverService.getParticipants(offsetBy, PAGE_SIZE, emailFilter, startDate, endDate)
             .then(doContinuePage).catch(doContinuePageError);
     }
     function doContinueFetch(response) {

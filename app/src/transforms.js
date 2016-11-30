@@ -168,6 +168,14 @@ function formatMs(ms) {
         return w + "w " + formatMs(ms%WEEK);
     }
 }
+function queryString(object) {
+    var string = Object.keys(object).filter(function(key) { 
+        return typeof object[key] !== "undefined" && object[key] !== null && object[key] !== ""; 
+    }).map(function(key) { 
+        return encodeURIComponent(key) + "=" + encodeURIComponent(object[key]); 
+    }).join("&");
+    return (string) ? ("?"+string) : "";
+}
 
 module.exports = {
     formatAttributes: formatAttributes,
@@ -186,5 +194,6 @@ module.exports = {
     persistRoles: persistRoles,
     callObsCallback: callObsCallback,
     formatMs: formatMs,
-    truncateGUID: truncateGUID
+    truncateGUID: truncateGUID,
+    queryString: queryString
 };
