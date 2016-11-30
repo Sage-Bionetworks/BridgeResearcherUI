@@ -1,5 +1,7 @@
 var transforms = require('../transforms');
 
+// This has to be here so that these filter values can be removed in the url to update the page.
+// This is very hacky...
 localStorage.removeItem('participants-page');
 
 module.exports = {
