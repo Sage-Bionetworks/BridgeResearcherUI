@@ -17,7 +17,7 @@ module.exports = function() {
     var self = this;
         
     self.total = 0;
-    self.searchFilter = null;
+    self.emailFilter = null;
     self.startDate = null;
     self.endDate = null;
 
@@ -65,14 +65,14 @@ module.exports = function() {
             .catch(utils.failureHandler(item, event));
     };
     self.exportDialog = function() {
-        root.openDialog('participant_export', {searchFilter: self.searchFilter, 
+        root.openDialog('participant_export', {emailFilter: self.emailFilter, 
             startDate: self.startDate, endDate: self.endDate, total: self.total});    
     };
-    self.loadingFunc = function loadPage(offsetBy, pageSize, searchFilter, startDate, endDate) {
-        self.searchFilter = searchFilter;
+    self.loadingFunc = function loadPage(offsetBy, pageSize, emailFilter, startDate, endDate) {
+        self.emailFilter = emailFilter;
         self.startDate = startDate;
         self.endDate = endDate;
-        return serverService.getParticipants(offsetBy, pageSize, searchFilter, startDate, endDate).then(function(response) {
+        return serverService.getParticipants(offsetBy, pageSize, emailFilter, startDate, endDate).then(function(response) {
             self.total = response.total;
             self.recordsObs(formatCount(response.total));
             self.itemsObs(response.items);
@@ -80,7 +80,7 @@ module.exports = function() {
                 if (offsetBy > 0) {
                     // You can't switch studies or environments unless you reset this when it has 
                     // overshot the new list. So drop back and try and find the first page.
-                    return self.loadingFunc(0, pageSize, searchFilter);
+                    return self.loadingFunc(0, pageSize, emailFilter);
                 } else {
                     self.recordsMessageObs("There are no user accounts, or none that match the filter.");
                 }

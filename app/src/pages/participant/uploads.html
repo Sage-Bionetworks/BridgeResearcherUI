@@ -20,8 +20,11 @@
 <div class="scrollbox">
     <errors></errors>
     <div class="line-control">
+        <div class="ui form" style="padding-right: .5rem">
+            Uploads for day: 
+        </div>
         <div class="ui form">
-            <input class="ui input" data-bind="flatpickr: selectedRangeObs, timeout: 50" />
+            <input class="ui input" readonly data-input data-bind="flatpickr: selectedRangeObs, timeout: 50" />
         </div>
         <div style="position: relative; width: 4rem">
             <div data-bind="visible: showLoaderObs" class="ui small active loader"></div>
