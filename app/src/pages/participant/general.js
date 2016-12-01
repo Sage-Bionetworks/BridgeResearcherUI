@@ -73,6 +73,7 @@ module.exports = function(params) {
         self.statusObs("enabled");
         self.isNewObs(false);
         self.idObs(response.identifier);
+        userId = response.identifier;
         return response;
     }
     function signOut() {
