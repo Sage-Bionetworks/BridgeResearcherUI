@@ -194,14 +194,6 @@ function isSupportedUser() {
         return ["developer","researcher","admin"].indexOf(role) > -1;
     });
 }
-function query(object) {
-    var string = Object.keys(object).filter(function(key) { 
-        return typeof object[key] !== "undefined" && object[key] !== null && object[key] !== ""; 
-    }).map(function(key) { 
-        return encodeURIComponent(key) + "=" + encodeURIComponent(object[key]); 
-    }).join("&");
-    return (string) ? ("?"+string) : "";
-}
 function cacheParticipantName(response) {
     if (response && response.id) {
         var name = transforms.formatName(response);
@@ -387,9 +379,10 @@ module.exports = {
     deleteCacheKey: function(cacheKey) {
         return del(config.cache+"/"+encodeURIComponent(cacheKey));
     },
-    getParticipants: function(offsetBy, pageSize, emailFilter) {
-        var queryString = query({
-            offsetBy: offsetBy, pageSize: pageSize, emailFilter: emailFilter
+    getParticipants: function(offsetBy, pageSize, emailFilter, startDate, endDate) {
+        var queryString = transforms.queryString({
+            offsetBy: offsetBy, pageSize: pageSize, emailFilter: emailFilter,
+            startDate: startDate, endDate: endDate
         });
         return get(config.participants+queryString);
     },
@@ -434,7 +427,7 @@ module.exports = {
         return post(config.participants+"/"+id+"/resendEmailVerification");
     },
     getExternalIds: function(params) {
-        return get(config.externalIds + query(params || {}));
+        return get(config.externalIds + transforms.queryString(params || {}));
     },
     addExternalIds: function(identifiers) {
         return post(config.externalIds, identifiers);
@@ -449,10 +442,10 @@ module.exports = {
         }
     },
     getStudyReports: function() {
-        return get(config.reports+query({"type":"study"}));
+        return get(config.reports+transforms.queryString({"type":"study"}));
     },
     getStudyReport: function(identifier, startDate, endDate) {
-        var queryString = query({startDate: startDate, endDate: endDate});
+        var queryString = transforms.queryString({startDate: startDate, endDate: endDate});
         return get(config.reports + "/" + identifier + queryString);
     },
     addStudyReport: function(identifier, report) {
@@ -465,17 +458,17 @@ module.exports = {
         return del(config.reports + "/" + identifier + '/' + date);
     },
     getParticipantReports: function() {
-        return get(config.reports+query({"type":"participant"}));
+        return get(config.reports+transforms.queryString({"type":"participant"}));
     },
     getParticipantUploads: function(userId, startTime, endTime) {
-        var queryString = query({startTime: startTime, endTime: endTime});
+        var queryString = transforms.queryString({startTime: startTime, endTime: endTime});
         return get(config.participants + '/' + userId + '/uploads' + queryString);
     },
     getParticipantUploadStatus: function(uploadId) {
         return get(config.uploadstatuses + '/' + uploadId);
     },
     getParticipantReport: function(userId, identifier, startDate, endDate) {
-        var queryString = query({startDate: startDate, endDate: endDate});
+        var queryString = transforms.queryString({startDate: startDate, endDate: endDate});
         return get(config.participants + '/' + userId + '/reports/' + identifier + queryString);
     },
     addParticipantReport: function(userId, identifier, report) {
@@ -488,7 +481,7 @@ module.exports = {
         return del(config.participants + '/' + userId + '/reports/' + identifier + '/' + date);
     },
     getParticipantActivities: function(userId, params) {
-        var queryString = query(params);
+        var queryString = transforms.queryString(params);
         return get(config.participants + '/' + userId + '/activities' + queryString);
     },
     deleteParticipantActivities: function(userId) {

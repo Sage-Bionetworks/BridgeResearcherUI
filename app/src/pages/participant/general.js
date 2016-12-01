@@ -70,8 +70,7 @@ module.exports = function(params) {
             serverService.getParticipant(userId);
     }
     function afterCreate(response) {
-        var statusAfterCreate = self.study.emailVerificationEnabled ? "unverified" : "enabled";
-        self.statusObs(statusAfterCreate);
+        self.statusObs("enabled");
         self.isNewObs(false);
         self.idObs(response.identifier);
         return response;
@@ -113,14 +112,20 @@ module.exports = function(params) {
         // still "new".
         binder.update()(participant);
 
+        var updatedTitle = self.isPublicObs() ? fn.formatName(participant) : participant.externalId;
+        function updateName() {
+            self.titleObs(updatedTitle);
+        }
         utils.startHandler(vm, event);
         if (self.isNewObs()) {
             return serverService.createParticipant(participant)
                 .then(afterCreate)
+                .then(updateName)
                 .then(utils.successHandler(vm, event, "Participant created."))
                 .catch(utils.failureHandler(vm, event));
         } else {
             return serverService.updateParticipant(participant)
+                .then(updateName)
                 .then(utils.successHandler(vm, event, "Participant updated."))
                 .catch(utils.failureHandler(vm, event));
         }

@@ -76,13 +76,15 @@ module.exports = function() {
                 fieldEl = document.querySelector("."+id);
             }
             if (fieldEl) {
-                var div = document.createElement("div");
-                div.className = "ui basic red pointing prompt label transition visible";
+                var div = fieldEl.querySelector(".ui.basic.red.pointing.prompt");
+                if (!div) {
+                    div = document.createElement("div");
+                    div.className = "ui basic red pointing prompt label transition visible";
+                    errorLabelQueue.push(div);
+                    fieldEl.appendChild(div);
+                }
                 div.innerHTML = string;
-                errorLabelQueue.push(div);
-
                 fieldEl.classList.add("error");
-                fieldEl.appendChild(div);
                 errorQueue.push(fieldEl);
             } else {
                 globalErrors.push(string);

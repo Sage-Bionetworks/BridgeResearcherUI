@@ -85,24 +85,23 @@ function createEmailTemplate(email, identifier) {
     }
     return parts[0] + "+" + identifier + "@" + parts[1];
 }
+// This creates a date range in the user's local (browser) timezone.
 function getDateRange(date) {
     date = (date) ? new Date(date) : new Date();
-    var obj = {
+    return {
         startTime: formatLocalDate(date, "00:00:00.000"), 
         endTime: formatLocalDate(date, "23:59:59.999")
     };
-    console.log(obj);
-    return obj;
-}
-function pad(num) {
-    var norm = Math.abs(Math.floor(num));
-    return (norm < 10 ? '0' : '') + norm;
 }
 function formatLocalDate(now, timePortion) {
     var tzo = -now.getTimezoneOffset(), dif = tzo >= 0 ? '+' : '-';
 
     return now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate()) +
         'T' + timePortion + dif + pad(tzo / 60) + ':' + pad(tzo % 60);
+}
+function pad(num) {
+    var norm = Math.abs(Math.floor(num));
+    return (norm < 10 ? '0' : '') + norm;
 }
 
 /**

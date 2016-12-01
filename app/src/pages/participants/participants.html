@@ -20,7 +20,9 @@
     <table class="ui compact selectable table">
         <thead>
             <tr>
-                <th width="10" data-bind="visible: isAdmin"></th>
+                <th width="10" data-bind="visible: isAdmin">
+                    <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+                </th>
                 <th>Email</th>
                 <th>Name</th>
                 <th style="white-space: nowrap">Created On</th>
@@ -42,7 +44,6 @@
                 </td>
                 <td data-bind="text: $component.formatName($data)"></td>
                 <td style="white-space: nowrap" data-bind="text: $component.formatDateTime($data.createdOn)"></td>
-                <!--<td data-bind="text: $component.formatTitleCase($data.status)"></td>-->
                 <td style="padding: 0; text-align:right">
                     <button data-bind="visible: $data.status === 'unverified', click: $component.resendEmailVerification"
                         class="ui basic compact mini button">Resend email verification</button>

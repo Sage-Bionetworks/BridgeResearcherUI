@@ -57,14 +57,19 @@ module.exports = {
         }
         vm.recordsMessageObs = ko.observable("<div class='ui tiny active inline loader'></div>");
         vm.itemsObs.subscribe(arrayListener(vm.recordsMessageObs, objName));
-
-        vm.resetRecordMessageObs = function() {
-            vm.recordsMessageObs = ko.observable("<div class='ui tiny active inline loader'></div>");
-        };
-
+        
         vm.atLeastOneChecked = function () {
             return vm.itemsObs().some(hasBeenChecked);
         };
+
+        // Control on left side of header row that checks/unchecks all boxes on the page. 
+        vm.checkAllObs = ko.observable();
+        vm.checkAllObs.subscribe(function(newValue) {
+            vm.itemsObs().map(function(item) {
+                item.checkedObs(newValue);
+            });
+        });
+        
         if (deleteFunc) {
             vm.deleteItems = function(vm, event) {
                 var del = prepareDelete(vm, objName);
@@ -74,6 +79,9 @@ module.exports = {
                     Promise.map(del.deletables, deleteFunc)
                         .then(makeTableRowHandler(vm, del.deletables, objName))
                         .then(utils.successHandler(vm, event, del.confirmMsg))
+                        .then(function() {
+                            vm.checkAllObs(false);
+                        })
                         .catch(utils.failureHandler(vm, event));
                 });
             };

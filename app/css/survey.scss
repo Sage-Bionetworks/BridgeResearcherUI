@@ -177,6 +177,9 @@
     padding: .3rem;
     overflow: hidden;
 }
+[contenteditable] {
+    white-space: pre;
+}
 [contenteditable]:empty:before, [contenteditable] {
     content:attr(data-placeholder);
     -webkit-user-select: text!important;
