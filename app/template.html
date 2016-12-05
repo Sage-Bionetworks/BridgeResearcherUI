@@ -21,66 +21,97 @@
         <main data-bind="component: {name: mainPageObs, params: mainParamsObs}">
         </main>
         <nav data-bind="visible: showNavigationObs">
-            <div class="ui pointing menu" data-bind="visible: isEditorPanelVisibleObs">
-                <a class="item" data-bind="css: {active: !isEditorTabVisibleObs()}, click: toggleEditorTab">Navigation</a>
-                <a class="item" data-bind="css: {active: isEditorTabVisibleObs}, click: toggleEditorTab">Editor</a>
+            <div class="tabset" data-bind="click: setSidebarPanel">
+                <a data-bind="css: {active: isSidebarActive('navigation')}">Navigation</a>
+                <a data-bind="css: {active: isSidebarActive('clipboard')}">Clipboard</a>
+                <a data-bind="css: {active: isAdmin && isSidebarActive('editor')}, visible: isEditorTabVisibleObs">Editor</a>
             </div>
-            <div data-bind="visible: isEditorTabVisibleObs, component: {name: editorPanelObs, params: editorParamsObs}">
+            <div data-bind="visible: isSidebarActive('editor'), component: {name: editorPanelObs, params: editorParamsObs}"></div>
+            <div data-bind="visible: isSidebarActive('clipboard')">
+                <div class="ui vertical menu">
+                    <div class="title item">
+                        <i class="paste icon"></i>
+                        <span>Cross-Study Clipboard</span>
+                    </div>
+                    <div class="item vertical-scrollbox" data-bind="foreach: clipboard.entries">
+                        <div class="vs-item">
+                            <div class="vs-item-content" data-bind="text: $data.label"></div>
+                            <div class="vs-item-delete link" data-bind="click: $parent.clipboard.cut">
+                                <i class="delete icon"></i>
+                            </div>
+                            <div class="vs-item-delete link" data-bind="click: $parent.clipboard.paste">
+                                <i class="paste icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="item">
+                        <div style="text-align: center; margin-bottom: .5rem">
+                            <button data-bind="click: clipboard.pasteAll, disable: clipboard.entries().length === 0" class="ui compact mini button">
+                                <i class="paste icon"></i>Paste All
+                            </button>
+                        </div>
+                        <i>Clipboard items persist between studies. Copy from one study, sign in to another study, and paste the items there.</i>
+                    </div>
+                </div>
             </div>
-            <div class="ui vertical menu" data-bind="visible: !isEditorTabVisibleObs()">
-                <div class="item">
-                    <i class="lab icon"></i> Study
-                    <div class="menu">
-                        <a href="#/settings/general" class="item" data-bind="active: isActive, visible: isDeveloper">
-                            Settings
-                        </a>
-                        <a href="#/email_templates" class="item" data-bind="active: isActive, visible: isDeveloper">
-                            Email Templates
-                        </a>
-                        <a href="#/subpopulations" class="item" data-bind="active: isActive, visible: isPublicObs() && isDeveloper()">
-                            Consent Groups
-                        </a>
-                        <a href="#/participants" class="item" data-bind="active: isActive, visible: isPublicObs() && isResearcher()">
-                            Participants
-                        </a>
-                        <a href="#/enrollees" class="item" data-bind="active: isActive, visible: !isPublicObs() && isResearcher()">
-                            Participants
-                        </a>
-                        <a href="#/reports" class="item" data-bind="active: isActive, visible: isDeveloper() || isResearcher()">
-                            Report Data
-                        </a>
+            <div data-bind="visible: isSidebarActive('navigation')">
+                <div class="ui vertical menu">
+                    <div class="item">
+                        <i class="lab icon"></i> Study
+                        <div class="menu">
+                            <a href="#/settings/general" class="item" data-bind="active: isActive, visible: isDeveloper">
+                                Settings
+                            </a>
+                            <a href="#/email_templates" class="item" data-bind="active: isActive, visible: isDeveloper">
+                                Email Templates
+                            </a>
+                            <a href="#/subpopulations" class="item" data-bind="active: isActive, visible: isPublicObs() && isDeveloper()">
+                                Consent Groups
+                            </a>
+                            <a href="#/participants" class="item" data-bind="active: isActive, visible: isPublicObs() && isResearcher()">
+                                Participants
+                            </a>
+                            <a href="#/enrollees" class="item" data-bind="active: isActive, visible: !isPublicObs() && isResearcher()">
+                                Participants
+                            </a>
+                            <a href="#/reports" class="item" data-bind="active: isActive, visible: isDeveloper() || isResearcher()">
+                                Report Data
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="item" data-bind="visible: isDeveloper">
-                    <i class="server icon"></i> Study Data
-                    <div class="menu">
-                        <a href="#/scheduleplans" class="item" data-bind="active: isActive">
-                            Scheduling
-                        </a>
-                        <a href="#/schemas" class="item" data-bind="active: isActive">
-                            Data Schemas
-                        </a>
-                        <a href="#/task_identifiers" class="item" data-bind="active: isActive">
-                            Task Identifiers
-                        </a>
-                        <a href="#/surveys" class="item" data-bind="active: isActive">
-                            Surveys
-                        </a>
+                    <div class="item" data-bind="visible: isDeveloper">
+                        <i class="server icon"></i> Study Data
+                        <div class="menu">
+                            <a href="#/scheduleplans" class="item" data-bind="active: isActive">
+                                Scheduling
+                            </a>
+                            <a href="#/schemas" class="item" data-bind="active: isActive">
+                                Data Schemas
+                            </a>
+                            <a href="#/task_identifiers" class="item" data-bind="active: isActive">
+                                Task Identifiers
+                            </a>
+                            <a href="#/surveys" class="item" data-bind="active: isActive">
+                                Surveys
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="item" data-bind="visible: isAdmin">
-                    <i class="settings icon"></i> Administration
-                    <div class="menu">
-                        <a href="#/admin/info" class="item" data-bind="active: isActive">
-                            Study Settings
-                        </a>
-                        <a href="#/admin/cache" class="item" data-bind="active: isActive">
-                            Cache Control
-                        </a>
+                    <div class="item" data-bind="visible: isAdmin">
+                        <i class="settings icon"></i> Administration
+                        <div class="menu">
+                            <a href="#/admin/info" class="item" data-bind="active: isActive">
+                                Study Settings
+                            </a>
+                            <a href="#/admin/cache" class="item" data-bind="active: isActive">
+                                Cache Control
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="item">
-                    <i class="sign out icon"></i> <a href="#" data-bind="click: signOut">Sign Out</a>
+                    <div class="item">
+                        <i class="sign out icon"></i> <a href="#" data-bind="click: signOut">Sign Out</a>
+                    </div>
                 </div>
             </div>
         </nav>

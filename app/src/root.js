@@ -3,6 +3,7 @@ var serverService = require('./services/server_service');
 var config = require('./config');
 var toastr = require('toastr');
 var bind = require('./binder');
+var clipboard = require('./widgets/clipboard/clipboard');
 
 // Used in navigation to keep a section highlighted as you navigate into it.
 var participantPages = ['enrollees','participants','participant_general','participant_consents', 
@@ -44,10 +45,12 @@ var RootViewModel = function() {
         .obs('isPublic', false)
         .obs('codesEnumerated', false)
         .obs('codeRequired', false)
-        .obs('isEditorPanelVisible', false)
         .obs('isEditorTabVisible', false)
+        .obs('sidePanel', 'navigation')
         .obs('showNavigation', true)
         .obs('dialog', {name: 'none'});
+
+    self.clipboard = clipboard;
 
     self.mainPageObs.subscribe(self.selectedObs);
     self.mainPageObs.subscribe(function() {
@@ -62,11 +65,13 @@ var RootViewModel = function() {
     self.setEditorPanel = function(name, params) {
         self.editorPanelObs(name);
         self.editorParamsObs(params);
-        self.isEditorPanelVisibleObs(name !== 'none');
         self.isEditorTabVisibleObs(name !== 'none');
+        self.sidePanelObs('editor');
     };
-    self.toggleEditorTab = function() {
-        self.isEditorTabVisibleObs(!self.isEditorTabVisibleObs());
+    self.setSidebarPanel = function(vm, event) {
+        if (event.target.nodeName === "A") {
+            self.sidePanelObs(event.target.textContent.toLowerCase());
+        }
     };
     self.isActive = function(tag) {
         if (pageSets[tag]) {
@@ -74,13 +79,16 @@ var RootViewModel = function() {
         }
         return tag === self.selectedObs();
     };
+    self.isSidebarActive = function(tag) {
+        return self.sidePanelObs() === tag;
+    };
     self.signOut = function() {
         console.log("Signing out.");
         serverService.signOut();
     };
     self.changeView = function(name, params) {
         self.isEditorTabVisibleObs(false);
-        self.isEditorPanelVisibleObs(false);
+        self.sidePanelObs('navigation');
         self.mainPageObs(name);
         self.mainParamsObs(params);
     };

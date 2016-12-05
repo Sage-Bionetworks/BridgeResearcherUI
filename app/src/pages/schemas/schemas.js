@@ -13,7 +13,7 @@ module.exports = function() {
     
     tables.prepareTable(self, "schema", function(schema) {
         return serverService.deleteSchema(schema.schemaId);
-    });
+    }, load);
 
     function closeCopySchemasDialog() {
         root.closeDialog();

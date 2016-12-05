@@ -1,7 +1,10 @@
 var ko = require('knockout');
 var utils = require('./utils');
 var alerts = require('./widgets/alerts');
+var clipboard = require('./widgets/clipboard/clipboard');
+var root = require('./root');
 var Promise = require('bluebird');
+require('knockout-postbox');
 
 function hasBeenChecked(item) {
     return item.checkedObs();
@@ -50,7 +53,7 @@ function arrayListener(recordsMessageObs, objName) {
  * weren't a nightmare to turn into components. Better to take a mix-in approach.
  */
 module.exports = {
-    prepareTable: function(vm, objName, deleteFunc) {
+    prepareTable: function(vm, objName, deleteFunc, loadFunc) {
         // Sometimes we set this in the binder so the binder can update it. Not a problem.
         if (!vm.itemsObs) {
             vm.itemsObs = ko.observableArray([]);
@@ -69,14 +72,26 @@ module.exports = {
                 item.checkedObs(newValue);
             });
         });
-        
+
+        vm.copyToClipboard = function() {
+            root.sidePanelObs('clipboard');
+            vm.itemsObs().forEach(function(item) {
+                if (item.checkedObs()) {
+                    clipboard.copy(objName, item);
+                    item.checkedObs(false);
+                }
+            });
+        };
+        if (loadFunc) {
+            ko.postbox.subscribe(objName+"-created", loadFunc);
+        }
         if (deleteFunc) {
             vm.deleteItems = function(vm, event) {
                 var del = prepareDelete(vm, objName);
 
                 alerts.deleteConfirmation(del.msg, function() {
                     utils.startHandler(self, event);
-                    Promise.map(del.deletables, deleteFunc)
+                    Promise.each(del.deletables, deleteFunc)
                         .then(makeTableRowHandler(vm, del.deletables, objName))
                         .then(utils.successHandler(vm, event, del.confirmMsg))
                         .then(function() {

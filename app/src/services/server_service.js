@@ -292,9 +292,10 @@ module.exports = {
         var url = config.survey + survey.guid + '/revisions/' + createdString;
         return post(url, survey);
     },
-    deleteSurvey: function(survey) {
+    deleteSurvey: function(survey, physical) {
+        var queryString = transforms.queryString({physical:(physical === true)});
         var createdString = new Date(survey.createdOn).toISOString();
-        var url = config.survey + survey.guid + '/revisions/' + createdString;
+        var url = config.survey + survey.guid + '/revisions/' + createdString + queryString;
         return del(url);
     },
     getAllUploadSchemas: function() {
@@ -335,6 +336,14 @@ module.exports = {
     getSchedulePlan: function(guid) {
         return get(config.schemaPlans + "/" + guid);
     },
+    createSchedulePlan: function(plan) {
+        return post(config.schemaPlans, plan).then(function(newPlan) {
+            plan.guid = newPlan.guid;
+            plan.version = newPlan.version;
+            return newPlan;
+        });
+    },
+    // TODO: Remove this
     saveSchedulePlan: function(plan) {
         var path = (plan.guid) ? 
             (config.schemaPlans + "/" + plan.guid) :

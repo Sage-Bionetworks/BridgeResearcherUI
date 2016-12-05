@@ -1,6 +1,7 @@
 @import "./lib.scss";
 @import "./forms.scss";
 @import "./dialog.scss";
+@import "./nav.scss";
 @import "./panel.scss";
 @import "./survey.scss";
 @import "./schema.scss";
@@ -38,19 +39,6 @@ main {
         overflow-y: auto;
         margin:0;
     }
-nav {
-    @include flex(0 0 18rem);
-    @include order(-1);
-    padding:  1rem ! important;
-    background-color: rgba(96,134,153,.2);
-
-    .title span {
-        font-weight: bold;
-    }
-    .ui.vertical.menu {
-        width: 100%;
-    }
-}
 header {
     @include flex-box(row);
     @include align-items(top);
@@ -105,18 +93,6 @@ footer p {
 .link, .inline-editor-controls a {
     color: #4183c4!important;
     cursor: pointer;
-}
-.admin.lock.icon {
-    padding-left: .5rem;
-}
-.admin.lock.icon, .admin.lock.icon::after {
-    color: #aaa;
-}
-.admin.lock.icon::after {
-    padding-left: .25rem;
-    content: "admin only";
-    font-variant: small-caps;
-    white-space: pre;
 }
 .red {
     color:#db2828

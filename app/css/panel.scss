@@ -27,6 +27,10 @@
 .vs-item-delete {
   padding: .5rem 0;
 }
+.vs-item-delete-disabled {
+  opacity: .2;
+}
+
 .vs-one-line-label {
     white-space:nowrap;
     display:inline-block;

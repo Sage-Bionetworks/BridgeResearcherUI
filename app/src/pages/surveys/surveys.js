@@ -5,6 +5,7 @@ var fn = require('../../transforms');
 var Promise = require('bluebird');
 var surveyFieldsToDelete = ['guid','version','createdOn','modifiedOn','published','deleted'];
 var tables = require('../../tables');
+var root = require('../../root');
 
 function addScheduleField(survey) {
     survey.schedulePlanObs = ko.observableArray([]);
@@ -34,7 +35,11 @@ module.exports = function() {
     var self = this;
 
     self.formatDateTime = fn.formatLocalDateTime;
-    tables.prepareTable(self, 'survey');
+    self.isAdmin = root.isAdmin;
+
+    tables.prepareTable(self, 'survey', function(survey) {
+        return serverService.deleteSurvey(survey, true);
+    }, load);
 
     self.formatSchedules = function(survey) {
         return survey.schedulePlanObs().map(function(obj) {
@@ -47,21 +52,20 @@ module.exports = function() {
             "Surveys have been copied." : "Survey has been copied.";
 
         utils.startHandler(vm, event);
-        Promise.map(copyables, function(survey) {
-            return serverService.getSurvey(survey.guid, survey.createdOn);
-        }).then(function(fullSurvey) {
-            fullSurvey = fullSurvey[0];
-            fullSurvey.name += " (Copy)";
-            surveyFieldsToDelete.forEach(function(field) {
-                delete fullSurvey[field]; 
+        Promise.mapSeries(copyables, function(survey) {
+            return serverService.getSurvey(survey.guid, survey.createdOn).then(function(fullSurvey) {
+                fullSurvey.name += " (Copy)";
+                surveyFieldsToDelete.forEach(function(field) {
+                    delete fullSurvey[field]; 
+                });
+                fullSurvey.elements.forEach(function(element) {
+                    delete element.guid;
+                });
+                return serverService.createSurvey(fullSurvey);
             });
-            fullSurvey.elements.forEach(function(element) {
-                delete element.guid;
-            });
-            return serverService.createSurvey(fullSurvey);
         }).then(load)
             .then(utils.successHandler(vm, event, confirmMsg))
-            .catch(utils.failureHandler(vm, event));
+            .catch(utils.listFailureHandler());
     };
 
     function load() {

@@ -9,12 +9,16 @@ module.exports = function() {
 
     self.criteriaLabel = criteriaUtils.label;
     self.isDeveloper = root.isDeveloper;
+    self.isAdmin = root.isAdmin;
 
     tables.prepareTable(self, "consent group", function(plan) {
         return serverService.deleteSubpopulation(plan.guid);
-    });
+    }, load);
 
-    serverService.getAllSubpopulations().then(function(response) {
-        self.itemsObs(response.items.sort(utils.makeFieldSorter("name")));
-    });
+    function load() {
+        serverService.getAllSubpopulations().then(function(response) {
+            self.itemsObs(response.items.sort(utils.makeFieldSorter("name")));
+        });
+    }
+    load();
 };

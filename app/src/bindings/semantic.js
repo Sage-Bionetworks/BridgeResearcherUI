@@ -42,7 +42,7 @@ var handlers = {
         },0);
     },
     'dropdown-button': function($element) {
-        $element.addClass("ui small button dropdown")
+        $element.addClass("ui tiny button dropdown")
             .dropdown({action: 'hide'});
     },
     'popup': function($element) {
