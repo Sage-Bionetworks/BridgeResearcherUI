@@ -13,7 +13,9 @@ var MSG = "Are you sure you want to sign out everyone in this study?";
 function mapKey(cacheKey) {
     return {key: cacheKey};
 }
-
+function deleteItem(item) {
+    return serverService.deleteCacheKey(item.key);
+}
 serverService.addSessionStartListener(function(session) {
     adminEmail = session.email; 
 });
@@ -26,8 +28,9 @@ module.exports = function() {
     
     self.signOutStatusObs = ko.observable();
 
-    tables.prepareTable(self, 'cache key', function(item) {
-        return serverService.deleteCacheKey(item.key); 
+    tables.prepareTable(self, {
+        name: 'cache key',
+        delete: deleteItem
     });
 
     serverService.getCacheKeys().then(function(response) {

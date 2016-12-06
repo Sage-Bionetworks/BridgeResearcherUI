@@ -16,8 +16,12 @@ function deleteConfirmation(message, func, deleteButton) {
         if (isConfirm) { func(); }
     });
 }
+function warn(message) {
+    swal({ title: "", text: message, type: "warning", confirmButtonText: "OK", confirmButtonColor: "#2185d0"});
+}
 
 module.exports = {
+    warn: warn,
     confirmation: confirmation,
     deleteConfirmation: deleteConfirmation
 };

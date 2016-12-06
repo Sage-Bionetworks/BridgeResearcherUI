@@ -4,6 +4,10 @@ var utils = require('../../utils');
 var root = require('../../root');
 var tables = require('../../tables');
 
+function deleteItem(schema) {
+    return serverService.deleteSchema(schema.schemaId);
+}
+
 module.exports = function() {
     var self = this;
 
@@ -11,9 +15,12 @@ module.exports = function() {
 
     self.isAdmin = root.isAdmin;
     
-    tables.prepareTable(self, "schema", function(schema) {
-        return serverService.deleteSchema(schema.schemaId);
-    }, load);
+    tables.prepareTable(self, {
+        name: "schema", 
+        type: "UploadSchema",
+        delete: deleteItem,
+        refresh: load
+    });
 
     function closeCopySchemasDialog() {
         root.closeDialog();

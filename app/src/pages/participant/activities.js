@@ -20,7 +20,8 @@ module.exports = function(params) {
         .obs('isNew', false)
         .obs('title', '&#160;');
 
-    tables.prepareTable(self, 'activitie');
+    tables.prepareTable(self, {name:'activitie'});
+
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(root.isPublicObs() ? part.name : part.externalId);
     }).catch(utils.failureHandler());

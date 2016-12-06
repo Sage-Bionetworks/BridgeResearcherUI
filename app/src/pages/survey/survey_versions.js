@@ -19,7 +19,7 @@ module.exports = function(params) {
         .obs('selected', null)
         .obs('name');
 
-    tables.prepareTable(self, 'survey version');
+    tables.prepareTable(self, {name:'survey version'});
 
     // redirect, you just deleted the record you last loaded in the tabset.
     function redirectIfDeleteSelf(thisSurvey) {

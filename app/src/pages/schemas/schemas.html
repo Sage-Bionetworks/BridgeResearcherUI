@@ -14,10 +14,13 @@
     </div>
 </div>
 <div class="scrollbox">
+    <errors></errors>
     <table class="ui compact selectable table">
         <thead>
             <tr>
-                <th width="10"></th>
+                <th width="10">
+                    <ui-checkbox params="checkedObs: checkAllObs, visible: isAdmin"></ui-checkbox>
+                </th>
                 <th>Name</th>
                 <th>Type</th>
                 <th>Latest Revision</th>

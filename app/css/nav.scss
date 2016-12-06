@@ -19,13 +19,18 @@ nav {
 
         a {
             cursor: pointer;
-            margin-bottom: -1px;
         }
         a.active {
             font-weight: bold; 
             color: black;
-            /*border-bottom: 1px solid rgba(96, 134, 153, 0.6);*/
+            border-bottom: 2px solid rgba(34,36,38,.15);
+            padding-bottom: 3px;
+            margin-bottom: -4px;
         }
 
     }
+}
+/* Super-specific style applied to the clipboard to fix it. */
+.clipboard .ui.vertical.menu.vertical-scrollbox > .item:last-child {
+    padding-bottom: 1rem;
 }

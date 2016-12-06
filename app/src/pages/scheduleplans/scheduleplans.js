@@ -7,15 +7,22 @@ var root = require('../../root');
 
 var SORTER = utils.makeFieldSorter("label");
 
+function deleteItem(plan) {
+    return serverService.deleteSchedulePlan(plan.guid);
+}
+
 module.exports = function() {
     var self = this;
     self.allItems = [];
 
     self.isAdmin = root.isAdmin;
     
-    tables.prepareTable(self, "schedule", function(plan) {
-        return serverService.deleteSchedulePlan(plan.guid);
-    }, load);
+    tables.prepareTable(self, {
+        name: "schedule",
+        type: "SchedulePlan", 
+        delete: deleteItem, 
+        refresh: load
+    });
 
     self.formatDateTime = fn.formatLocalDateTime;
     self.formatScheduleType = scheduleUtils.formatScheduleStrategyType;

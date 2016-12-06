@@ -30,6 +30,9 @@ function annotateSurveys(surveys, plans) {
         });
     });
 }
+function deleteItem(survey) {
+    return serverService.deleteSurvey(survey, true);
+}
 
 module.exports = function() {
     var self = this;
@@ -37,9 +40,12 @@ module.exports = function() {
     self.formatDateTime = fn.formatLocalDateTime;
     self.isAdmin = root.isAdmin;
 
-    tables.prepareTable(self, 'survey', function(survey) {
-        return serverService.deleteSurvey(survey, true);
-    }, load);
+    tables.prepareTable(self, {
+        name: 'survey',
+        type: 'Survey',
+        delete: deleteItem,
+        refresh: load
+    });
 
     self.formatSchedules = function(survey) {
         return survey.schedulePlanObs().map(function(obj) {

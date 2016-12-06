@@ -92,6 +92,9 @@ var RootViewModel = function() {
         self.mainPageObs(name);
         self.mainParamsObs(params);
     };
+    self.readAboutClipboard = function() {
+        self.openDialog('read_about_clipboard');
+    };
 
     self.isResearcher = roleFunc(self.rolesObs, 'researcher');
     self.isDeveloper = roleFunc(self.rolesObs, 'developer');

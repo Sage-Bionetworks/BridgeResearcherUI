@@ -4,6 +4,10 @@ var bind = require('../../binder');
 var root = require('../../root');
 var tables = require('../../tables');
 
+function deleteItem(item) {
+    return serverService.deleteParticipantReport(item.identifier, params.userId);
+}
+
 module.exports = function(params) {
     var self = this;
 
@@ -18,8 +22,9 @@ module.exports = function(params) {
         self.nameObs(root.isPublicObs() ? part.name : part.externalId);
     }).catch(utils.failureHandler());
 
-    tables.prepareTable(self, 'report', function(item) {
-        return serverService.deleteParticipantReport(item.identifier, params.userId);
+    tables.prepareTable(self, {
+        name:'report', 
+        delete: deleteItem
     });
     self.isPublicObs = root.isPublicObs;
     self.isDeveloper = root.isDeveloper;
