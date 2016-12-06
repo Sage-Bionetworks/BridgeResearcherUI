@@ -128,7 +128,6 @@ function createDataGroup(dataGroup) {
 function createSurvey(survey) {
     var originalGUID = survey.guid;
     var activities = findAllSchedulePlanActivities();
-    survey.published = false;
 
     return serverService.createSurvey(survey).then(function(response) {
         return serverService.publishSurvey(response.guid, response.createdOn);
