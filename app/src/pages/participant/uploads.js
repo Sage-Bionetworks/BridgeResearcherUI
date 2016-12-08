@@ -30,7 +30,7 @@ module.exports = function(params) {
     self.formatLocalDateTime = transforms.formatLocalDateTime;
     self.selectedRangeObs.subscribe(load);
 
-    tables.prepareTable(self, 'upload');
+    tables.prepareTable(self, {name:'upload'});
 
     self.classFor = function(item) {
         switch(item.status) {

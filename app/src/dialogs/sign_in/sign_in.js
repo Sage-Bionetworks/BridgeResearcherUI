@@ -11,9 +11,11 @@ var ENVIRONMENT = 'environment';
 // There will be stale data in the UI if we don't reload when changing studies or environments.
 function makeReloader(studyKey, environment) {
     var requiresReload = (storeService.get(STUDY_KEY) !== studyKey || 
-                          storeService.get(ENVIRONMENT) !== environment);    
+                          storeService.get(ENVIRONMENT) !== environment);
     return (requiresReload) ?
-        function(response) { window.location.reload(); } : utils.identity;
+        function(response) {
+            window.location.reload(); 
+        } : utils.identity;
 }
 
 module.exports = function() {

@@ -33,6 +33,10 @@ Promise.prototype = {
         }
     }
 }
+Promise.each = function(array, func) {
+    array.map(func);
+    return new Promise();
+}
 Promise.map = function(array, func) {
     array.map(func);
     return new Promise();

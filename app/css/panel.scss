@@ -8,6 +8,11 @@
   padding: 0!important;
   margin: 0!important;
 }
+.ui.vertical.menu.vertical-scrollbox {
+  border-bottom-right-radius: 0px!important;
+  border-bottom-left-radius: 0px!important;
+  box-shadow: none;
+}
 .vs-item {
   display: table-row;
   padding: 0;
@@ -27,6 +32,10 @@
 .vs-item-delete {
   padding: .5rem 0;
 }
+.vs-item-delete-disabled {
+  opacity: .2;
+}
+
 .vs-one-line-label {
     white-space:nowrap;
     display:inline-block;

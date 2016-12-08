@@ -21,7 +21,7 @@ module.exports = function() {
         .obs('showResults', false);
 
     self.codesEnumeratedObs = root.codesEnumeratedObs;
-    tables.prepareTable(self, 'external ID');
+    tables.prepareTable(self, {name: 'external ID'});
 
     // to get a spinner on this control you need to adjust the DOM target.
     // Creating a fake event for this.

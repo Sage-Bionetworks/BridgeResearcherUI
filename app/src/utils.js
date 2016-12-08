@@ -226,6 +226,18 @@ module.exports = {
             }
         };
     },
+    listFailureHandler: function() {
+        return function(response) {
+            console.error("failureHandler", response);
+            clearPendingControl();
+            ko.postbox.publish("clearErrors");
+            if (response.status === 412) {
+                toastr.error('You do not appear to be a developer, researcher, or admin.');
+            } else if (response.responseJSON) {
+                toastr.error(response.message);
+            }
+        };
+    },
     /**
      * Some APIs return an error with a simple message, but we want to display this as 
      * if it were a global message for a form validation view (sign in, for example). This 

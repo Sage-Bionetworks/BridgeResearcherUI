@@ -16,7 +16,8 @@ module.exports = function(params) {
         .obs('noConsent', true)
         .obs('title', '&#160;');
 
-    tables.prepareTable(self, 'consent');
+    tables.prepareTable(self, {name:'consent'});
+
     self.isPublicObs = root.isPublicObs;
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(root.isPublicObs() ? part.name : part.externalId);

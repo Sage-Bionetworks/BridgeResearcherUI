@@ -19,7 +19,7 @@ module.exports = function(params) {
         .obs('selected', null)
         .obs('name');
 
-    tables.prepareTable(self, 'survey version');
+    tables.prepareTable(self, {name:'survey version'});
 
     // redirect, you just deleted the record you last loaded in the tabset.
     function redirectIfDeleteSelf(thisSurvey) {
@@ -35,8 +35,8 @@ module.exports = function(params) {
         alerts.deleteConfirmation("Are you sure you want to delete this survey version?", function() {
             utils.startHandler(self, event);
             serverService.deleteSurvey(survey)
-                .then(load)
-                .then(tables.makeTableRowHandler(self, [survey], "#/surveys", 'survey version'))
+                //.then(load)
+                .then(tables.makeTableRowHandler(self, [survey], 'survey versions'))
                 .then(redirectIfDeleteSelf(survey))
                 .then(utils.successHandler(self, event, "Survey version deleted."))
                 .catch(utils.failureHandler(self, event));

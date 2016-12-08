@@ -13,7 +13,7 @@ function EventEmitter() {
     this.events = {};
 }
 EventEmitter.prototype = {
-    on: function(event, callback) {
+    on: function(event, callback        ) {
         validate.call(this, event, callback);
         this.events[event].push(callback);
         return this;
@@ -23,7 +23,7 @@ EventEmitter.prototype = {
         this.events[event].push(function callee() {
             this.off(event, callee); // clever
             callback.apply(this, arguments);
-        }, this);
+        }.bind(this));
         return this;
     },
     off: function(event, callback){

@@ -17,7 +17,10 @@ function lastDayOfMonth(year, month) {
 module.exports = function(params) {
     var self = this;
 
-    tables.prepareTable(self, "report", deleteItem);
+    tables.prepareTable(self, {
+        name: "report", 
+        delete: deleteItem
+    });
 
     bind(self)
         .obs('isNew', false)
