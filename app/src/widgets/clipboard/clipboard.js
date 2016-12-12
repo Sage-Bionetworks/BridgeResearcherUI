@@ -245,20 +245,26 @@ function subpopDependencies(subpop) {
     }).then(function(subpop) {
         if (subpop.criteria) {
             var dataGroups = subpop.criteria.allOfGroups.concat(subpop.criteria.noneOfGroups);
-            dataGroups.forEach(function(dataGroup) {
-                clipboard.copy("DataGroup", {
-                    value: dataGroup, 
-                    label: "Data group: " + dataGroup, 
-                    type: "DataGroup"
-                });
-            });
+            dataGroups.forEach(copyDataGroupToClipboard);
         }
         return subpop;
+    });
+}
+function copyDataGroupToClipboard(dataGroup) {
+    clipboard.copy("DataGroup", {
+        value: dataGroup, 
+        label: "Data group: " + dataGroup, 
+        type: "DataGroup"
     });
 }
 function notifyListOfUpdate(response) {
     ko.postbox.publish("list-updated");
     return response;
+}
+function copyToClipboard(response) {
+    response._label = response[MODEL_METADATA[response.type].label];
+    clipboardEntries.push(response);
+    storeService.set('clipboard', clipboardEntries());
 }
 
 serverService.addSessionStartListener(function() {
@@ -284,11 +290,7 @@ var clipboard = {
         if (!entryExists(model)) {
             MODEL_METADATA[type].getMethod(model)
                 .then(addDependents)
-                .then(function(response) {
-                    response._label = response[MODEL_METADATA[type].label];
-                    clipboardEntries.push(response);
-                    storeService.set('clipboard', clipboardEntries());
-                });
+                .then(copyToClipboard);
         }
     },
     pasteAll: function(vm, event) {

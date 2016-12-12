@@ -81,13 +81,13 @@ module.exports = function(params) {
     self.sharingScopeOptions = OPTIONS;
 
     self.enableAccount = function(vm, event) {
-        alerts.confirmation("We must save any updates before enabling the account.", function() {
+        alerts.confirmation("Are you sure?\nWe will save any updates before enabling the account.", function() {
             self.statusObs("enabled");
             self.save(vm, event);
         });
     };
     self.disableAccount = function(vm, event) {
-        alerts.confirmation("We must save any updates before disabling the account.", function() {
+        alerts.confirmation("Are you sure?\nWe will save any updates before disabling the account.", function() {
             self.statusObs("disabled");
             self.save(vm, event).then(signOut);
         });

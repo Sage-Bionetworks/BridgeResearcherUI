@@ -56,7 +56,7 @@ module.exports = function() {
     }
     
     function loadStudyList(newValue) {
-        serverService.getStudyList(newValue)
+        return serverService.getStudyList(newValue)
             .then(loadStudies).catch(utils.failureHandler());
     }
 

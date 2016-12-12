@@ -19,9 +19,23 @@ function deleteConfirmation(message, func, deleteButton) {
 function warn(message) {
     swal({ title: "", text: message, type: "warning", confirmButtonText: "OK", confirmButtonColor: "#2185d0"});
 }
+function prompt(message, okFunc) {
+    swal({title: "", text: message, type: "input", showCancelButton: true, closeOnConfirm: false}, function(inputValue) {
+        if (inputValue === false) {
+            return false;
+        }
+        if (inputValue === "") {
+            swal.showInputError("Please enter a value");
+            return false;
+        }
+        okFunc(inputValue);
+        swal.close();
+    });
+}
 
 module.exports = {
     warn: warn,
     confirmation: confirmation,
-    deleteConfirmation: deleteConfirmation
+    deleteConfirmation: deleteConfirmation,
+    prompt: prompt
 };

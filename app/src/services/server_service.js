@@ -245,6 +245,10 @@ module.exports = {
             return response;
         });
     },
+    createSynapseProject: function(synapseUserId) {
+        var query = transforms.queryString({synapseUserId:synapseUserId});
+        return post(config.getCurrentStudy + "/synapseProject" + query);
+    },
     getMostRecentStudyConsent: function(guid) {
         return get(config.subpopulations + "/" + guid + "/consents/recent");
     },
@@ -325,7 +329,7 @@ module.exports = {
         });
     },
     deleteSchema: function(schemaId) {
-        return del(config.schemas + "/" + schemaId);
+        return del(config.getStudy+session.studyId+"/uploadschemas/"+schemaId);
     },
     deleteSchemaRevision: function(schema) {
         return del(config.schemas + "/" + schema.schemaId + "/revisions/" + schema.revision);
