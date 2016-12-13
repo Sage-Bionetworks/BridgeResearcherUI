@@ -23,7 +23,7 @@
                 <th width="100"></th>
             </tr>
         </thead>
-        <tbody class="no_records" data-bind="visible: itemsObs().length === 0">
+        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
                 <td data-bind="attr:{colspan: $parent.isDeveloper ? 5 : 4}, html: recordsMessageObs"></td>
             </tr>

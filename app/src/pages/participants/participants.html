@@ -29,7 +29,7 @@
                 <th></th>
             </tr>
         </thead>
-        <tbody class="no_records" data-bind="visible: itemsObs().length === 0">
+        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
                 <td colspan="5" data-bind="html: recordsMessageObs"></td>
             </tr>
