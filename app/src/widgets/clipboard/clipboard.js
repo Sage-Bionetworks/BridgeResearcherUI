@@ -112,7 +112,7 @@ function createUploadSchema(model) {
 function createSchedulePlan(model) { 
     return serverService.createSchedulePlan(model); 
 }
-function createStudyConsent(coInsent) {
+function createStudyConsent(consent) {
     return serverService.saveStudyConsent(consent.subpopulationGuid, consent).then(function(response) {
         return serverService.publishStudyConsent(response.subpopulationGuid, response.createdOn);
     });
