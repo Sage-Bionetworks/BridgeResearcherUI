@@ -16,6 +16,7 @@ module.exports = function() {
     self.allItems = [];
 
     self.isAdmin = root.isAdmin;
+    self.isDeveloper = root.isDeveloper;
     
     tables.prepareTable(self, {
         name: "schedule",
