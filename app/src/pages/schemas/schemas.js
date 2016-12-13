@@ -14,6 +14,7 @@ module.exports = function() {
     schemaUtils.initSchemasVM(self);
 
     self.isAdmin = root.isAdmin;
+    self.isDeveloper = root.isDeveloper;
     
     tables.prepareTable(self, {
         name: "schema", 
