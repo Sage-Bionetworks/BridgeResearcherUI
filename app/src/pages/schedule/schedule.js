@@ -209,34 +209,11 @@ module.exports = function(params) {
         self.activitiesObs.splice(context.$index()+1,0,newActivity());
     };
 
-    self.surveysOptionsObs = ko.observableArray();
-    self.surveysOptionsObs.extend({rateLimit: 50});
-    self.surveysOptionsLabel = utils.makeOptionLabelFinder(self.surveysOptionsObs);
-
-    self.taskOptionsObs = ko.observableArray();
-    self.taskOptionsObs.extend({rateLimit: 50});
-    self.taskOptionsLabel = utils.makeOptionLabelFinder(self.taskOptionsObs);
-
-    // Above, when an activity with a survey is loaded, if there's no option for it,
-    // it is not selected and then ends up being the first option when it comes in.
-    // Put a dummy loading option in to fix that. But then, if this very first, the
-    // loading option is not removed. So the .loaded property is used to guard against
-    // thats. In all, ugly.
-    optionsService.getSurveyOptions().then(function(surveys) {
-        self.surveysOptionsObs.removeAll();
-        self.surveysOptionsObs.push({value:"",label:"Select survey:"});
-        self.surveysOptionsObs.pushAll(surveys);
-        self.surveysOptionsObs.loaded = true;
-    });
-    optionsService.getTaskIdentifierOptions().then(function(options) {
-        // In this case as a transition, if we have an identifier that hasn't been enumerated,
-        // don't update the options because we're displaying it as a dummy option. It'll still
-        // fail when the user saves it.
-        self.taskOptionsObs.removeAll();
-        self.taskOptionsObs.push({value:"",label:"Select task:"});
-        if (options.length > 0) {
-            self.taskOptionsObs.pushAll(options);
-        }
-        self.taskOptionsObs.loaded = true;
-    });    
+    // These are all loaded as part of the schedule plan, and cached in scheduleUtils,
+    // so these should always render correctly when the schedule plan loads from the 
+    // server.
+    self.surveysOptionsObs = scheduleUtils.surveysOptionsObs;
+    self.surveysOptionsLabel = scheduleUtils.surveysOptionsLabel;
+    self.taskOptionsObs = scheduleUtils.taskOptionsObs;
+    self.taskOptionsLabel = scheduleUtils.taskOptionsLabel;
 };

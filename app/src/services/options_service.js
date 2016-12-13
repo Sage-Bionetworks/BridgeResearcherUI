@@ -35,27 +35,30 @@ function getActivityOptions() {
     });
 }
 function getSurveyOptions() {
-    return serverService.getPublishedSurveys().then(sortSurveys).then(collectSurveyOptions);
+    return serverService.getPublishedSurveys()
+        .then(sortSurveys)
+        .then(collectSurveyOptions);
 }
 function sortSurveys(response) {
     return response.items.sort(NAME_SORTER);
 }
 function collectSurveyOptions(surveys) {
-    return surveys.map(function(survey) {
+    var surveyOpts = surveys.map(function(survey) {
         return { label: survey.name, value: survey.guid };
     });
+    return [{value:"",label:"Select survey:"}].concat(surveyOpts);
 }
 function getTaskIdentifierOptions() {
     return serverService.getStudy().then(function(study) {
-        return study.taskIdentifiers.map(function(id) {
+        var taskOpts = study.taskIdentifiers.map(function(id) {
             return { label:id, value:id };
         });
+        return [{value:"",label:"Select task:"}].concat(taskOpts);
     });
 }
 
 module.exports = {
     getActivityOptions: getActivityOptions,
     getSurveyOptions: getSurveyOptions,
-    //getQuestionOptions: getQuestionOptions,
     getTaskIdentifierOptions: getTaskIdentifierOptions
 };

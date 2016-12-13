@@ -27,6 +27,13 @@ require('knockout-postbox');
  * - when schedules are updated, then the labels for the scheduleplan don't have the labels
  */
 var DEPENDENCY_ORDER = ['DataGroup','Subpopulation','StudyConsent','Survey','TaskReference','SchedulePlan','UploadSchema'];
+var RESERVED_WORDS = ("access add all alter and any as asc audit between by char check cluster column column_value comment compress " +
+    "connect create current date decimal default delete desc distinct drop else exclusive exists false file float for from " +
+    "grant group having identified immediate in increment index initial insert integer intersect into is level like lock long" +
+    "maxextents minus mlslabel mode modify nested_table_id noaudit nocompress not nowait null number of offline on online option" +
+    "or order pctfree prior public raw rename resource revoke row row_id row_version rowid rownum rows select session set share " +
+    "size smallint start successful synonym sysdate table then time to trigger true uid union unique update user validate values " +
+    "varchar varchar2 view whenever where with").split(' ');
 var clipboardEntries = ko.observableArray();
 
 var MODEL_METADATA = {
@@ -52,7 +59,7 @@ var MODEL_METADATA = {
         createMethod: createSchedulePlan
     },
     "Survey": {
-        primaryKeys:["guid","createdOn"],
+        primaryKeys:["guid"],
         label: "name",
         getMethod: getSurvey,
         addDependents: getSame,
@@ -90,9 +97,15 @@ function getSame(model) {
     return Promise.resolve(model);
 }
 function getSurvey(model) { 
-    return serverService.getSurvey(model.guid, model.createdOn); 
+    return serverService.getSurvey(model.guid, model.createdOn);
 }
-
+function incrementCopyInteger(value) {
+    if (/-[0-9]+$/.test(value)) {
+        var int = Math.abs(parseInt(value.match(/-[0-9]+$/),10));
+        return value + "-" + (++int);
+    }
+    return value + "-1";
+}
 function createUploadSchema(model) {
     return serverService.createUploadSchema(model);
 }
@@ -126,6 +139,10 @@ function createDataGroup(dataGroup) {
     });
 }
 function createSurvey(survey) {
+    survey.identifier = sanitizeSurveyString(survey.identifier);
+    scrubAllSurveyOptions(survey);
+    survey.identifier = incrementCopyInteger(survey.identifier);
+
     var originalGUID = survey.guid;
     var activities = findAllSchedulePlanActivities();
 
@@ -148,6 +165,7 @@ function entriesAreEqual(entry1, entry2) {
     }
     var primaryKeys = MODEL_METADATA[entry1.type].primaryKeys;
     return primaryKeys.every(function(primaryKey) {
+        console.log(entry1[primaryKey] === entry2[primaryKey]);
         return (entry1[primaryKey] === entry2[primaryKey]);
     });
 }
@@ -183,7 +201,6 @@ function findAllSchedulePlanActivities() {
         return array;
     }, []);
 }
-
 function findActivities(survey) {
     var strategy = survey.strategy;
     var allActivities = [];
@@ -211,6 +228,32 @@ function findDataGroups(survey) {
     }
     return Object.keys(dataGroups);
 }
+function scrubAllSurveyOptions(survey) {
+    survey.elements.forEach(function(element) {
+        element.identifier = sanitizeSurveyString(element.identifier);
+        if (element.constraints && element.constraints.enumeration) {
+            element.constraints.enumeration.forEach(sanitizeOption);
+        }
+    });
+}
+function sanitizeOption(option) {
+    var string = option.value || option.label;
+    option.value = sanitizeSurveyString(string);
+}
+function sanitizeSurveyString(string) {
+    // reduce multi sequence non-alphanumeric sequences to one
+    string = string.replace(/[^a-zA-Z0-9]{2,}/g, function() { return arguments[0].trim().charAt(0); });
+    // strip out non-alphanumeric characters from beginning and end
+    string = string.replace(/^[^a-zA-Z0-9]*([\sa-zA-Z0-9_-]*)[^a-zA-Z0-9]*$/g, function() { return arguments[1]; });
+    // strip out all remaining illegal characters.
+    string = string.replace(/[^\sa-zA-Z0-9_-]*/g, '');
+    if (RESERVED_WORDS.indexOf(string) > -1) {
+        string += "-id";
+    }
+    console.log(string);
+    return string;
+}
+
 function addDependents(model) {
     return MODEL_METADATA[model.type].addDependents(model);
 }
@@ -245,20 +288,26 @@ function subpopDependencies(subpop) {
     }).then(function(subpop) {
         if (subpop.criteria) {
             var dataGroups = subpop.criteria.allOfGroups.concat(subpop.criteria.noneOfGroups);
-            dataGroups.forEach(function(dataGroup) {
-                clipboard.copy("DataGroup", {
-                    value: dataGroup, 
-                    label: "Data group: " + dataGroup, 
-                    type: "DataGroup"
-                });
-            });
+            dataGroups.forEach(copyDataGroupToClipboard);
         }
         return subpop;
+    });
+}
+function copyDataGroupToClipboard(dataGroup) {
+    clipboard.copy("DataGroup", {
+        value: dataGroup, 
+        label: "Data group: " + dataGroup, 
+        type: "DataGroup"
     });
 }
 function notifyListOfUpdate(response) {
     ko.postbox.publish("list-updated");
     return response;
+}
+function copyToClipboard(response) {
+    response._label = response[MODEL_METADATA[response.type].label];
+    clipboardEntries.push(response);
+    storeService.set('clipboard', clipboardEntries());
 }
 
 serverService.addSessionStartListener(function() {
@@ -284,11 +333,7 @@ var clipboard = {
         if (!entryExists(model)) {
             MODEL_METADATA[type].getMethod(model)
                 .then(addDependents)
-                .then(function(response) {
-                    response._label = response[MODEL_METADATA[type].label];
-                    clipboardEntries.push(response);
-                    storeService.set('clipboard', clipboardEntries());
-                });
+                .then(copyToClipboard);
         }
     },
     pasteAll: function(vm, event) {

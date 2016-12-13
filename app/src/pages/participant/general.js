@@ -81,13 +81,13 @@ module.exports = function(params) {
     self.sharingScopeOptions = OPTIONS;
 
     self.enableAccount = function(vm, event) {
-        alerts.confirmation("We must save any updates before enabling the account.", function() {
+        alerts.confirmation("Are you sure?\nWe will save any updates before enabling the account.", function() {
             self.statusObs("enabled");
             self.save(vm, event);
         });
     };
     self.disableAccount = function(vm, event) {
-        alerts.confirmation("We must save any updates before disabling the account.", function() {
+        alerts.confirmation("Are you sure?\nWe will save any updates before disabling the account.", function() {
             self.statusObs("disabled");
             self.save(vm, event).then(signOut);
         });
@@ -110,7 +110,7 @@ module.exports = function(params) {
         var participant = binder.persist(NEW_PARTICIPANT);
         // This should be updating the title, but it isn't, because the id is
         // still "new".
-        binder.update()(participant);
+        binder.persist(participant);
 
         var updatedTitle = self.isPublicObs() ? fn.formatName(participant) : participant.externalId;
         function updateName() {

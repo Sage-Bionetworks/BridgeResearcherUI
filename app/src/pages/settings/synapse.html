@@ -4,6 +4,7 @@
             <h3>Synapse Configuration</h3>
         </div>
         <div class="fixed-header-buttons">
+            <button class="ui tiny button" data-bind="click: createSynapseProject, disable: isLinked">Create Synapse Project&hellip;</button>
             <button class="ui tiny primary button" data-bind="click: save">Save</button>
         </div>
     </div>
@@ -49,7 +50,10 @@
         <div class="six wide column">
             <div class="ui message">
                 <p>Research data is exported to Synapse, a portal for researchers to manage data, collaborate with one another, 
-                    and perform data analysis. These IDs are necessary for the export to be successful. </p>
+                    and perform data analysis. </p>
+                    
+                <p>Use the <em>Link to Synapse</em> button to create a project and access team. Or if created manually, you 
+                    can enter these IDs here. They are necessary for the export to be successful. </p>
                     
                 <p>Links lead to projects 
                     in Synapse where this study's data is archived (Synapse credentials are separate from Bridge credentials 

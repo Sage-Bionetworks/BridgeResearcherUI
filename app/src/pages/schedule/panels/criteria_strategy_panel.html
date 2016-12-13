@@ -1,4 +1,9 @@
 <div class="ui vertical menu">
+    <div class="tabset" data-bind="click: $root.setSidebarPanel">
+        <a>Navigation</a>
+        <a data-bind="visible: $root.isAdmin">Clipboard</a>
+        <a class="active" data-bind="visible: $root.isEditorTabVisibleObs">Editor</a>
+    </div>
     <div class="title item">
         <i class="calendar icon"></i>
         <span data-bind="visible: labelObs().length > 0, text: labelObs"></span>
