@@ -5,8 +5,7 @@
     <title>Bridge Study Manager</title>
     <!--Not clear if this is doing anything, but what the heck-->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2/semantic.min.css"/>
-    <script src="//cdn.polyfill.io/v2/polyfill.min.js"></script>
-    <script src="//cdn.ckeditor.com/4.5.7/full/ckeditor.js"></script>
+    <script src="//cdn.ckeditor.com/4.6.1/full/ckeditor.js"></script>
 </head>
 <body style="opacity:0.0; color: #202020">
     <header data-bind="visible: showNavigationObs, css: {dev: isDevEnvObs}">
@@ -21,66 +20,103 @@
         <main data-bind="component: {name: mainPageObs, params: mainParamsObs}">
         </main>
         <nav data-bind="visible: showNavigationObs">
-            <div class="ui pointing menu" data-bind="visible: isEditorPanelVisibleObs">
-                <a class="item" data-bind="css: {active: !isEditorTabVisibleObs()}, click: toggleEditorTab">Navigation</a>
-                <a class="item" data-bind="css: {active: isEditorTabVisibleObs}, click: toggleEditorTab">Editor</a>
+            <div data-bind="visible: isSidebarActive('editor'), component: {name: editorPanelObs, params: editorParamsObs}"></div>
+            <div data-bind="visible: isSidebarActive('clipboard')">
+                <div class="ui vertical menu clipboard">
+                    <div class="tabset" data-bind="click: setSidebarPanel">
+                        <a>Navigation</a>
+                        <a class="active" data-bind="visible: isAdmin">Clipboard</a>
+                        <a data-bind="visible: isEditorTabVisibleObs">Editor</a>
+                    </div>
+                    <div class="title item">
+                        <i class="paste icon"></i>
+                        <span>Cross-Study Clipboard</span>
+                    </div>
+                    <div class="ui vertical menu vertical-scrollbar" style="border:none" data-bind="visible: clipboard.entries().length === 0">
+                        <div class="item">
+                            <i>No items in clipboard.</i>
+                        </div>
+                    </div>
+                    <div class="ui vertical menu vertical-scrollbox" style="border:none" data-bind="visible: clipboard.entries().length > 0, foreach: clipboard.entries">
+                        <div class="item" data-bind="text: $data._label"></div>
+                    </div>
+                    <div class="item">
+                        <div style="text-align: center; margin-bottom: .5rem">
+                            <button data-bind="click: clipboard.clearAll, disable: clipboard.entries().length === 0" class="ui compact mini button">
+                                <i class="remove icon"></i>Clear All
+                            </button>
+                            <button data-bind="click: clipboard.pasteAll, disable: clipboard.entries().length === 0" class="ui compact mini button">
+                                <i class="paste icon"></i>Paste All
+                            </button>
+                        </div>
+                        <i style="font-size:smaller">Clipboard items can be transferred between studies. <a class="link" data-bind="click: readAboutClipboard">Read More</a></i>
+                    </div>
+                    <div class="item">
+                        <i class="sign out icon"></i> <a href="#" data-bind="click: signOut">Sign Out</a>
+                    </div>
+                </div>
             </div>
-            <div data-bind="visible: isEditorTabVisibleObs, component: {name: editorPanelObs, params: editorParamsObs}">
-            </div>
-            <div class="ui vertical menu" data-bind="visible: !isEditorTabVisibleObs()">
-                <div class="item">
-                    <i class="lab icon"></i> Study
-                    <div class="menu">
-                        <a href="#/settings/general" class="item" data-bind="active: isActive, visible: isDeveloper">
-                            Settings
-                        </a>
-                        <a href="#/email_templates" class="item" data-bind="active: isActive, visible: isDeveloper">
-                            Email Templates
-                        </a>
-                        <a href="#/subpopulations" class="item" data-bind="active: isActive, visible: isPublicObs() && isDeveloper()">
-                            Consent Groups
-                        </a>
-                        <a href="#/participants" class="item" data-bind="active: isActive, visible: isPublicObs() && isResearcher()">
-                            Participants
-                        </a>
-                        <a href="#/enrollees" class="item" data-bind="active: isActive, visible: !isPublicObs() && isResearcher()">
-                            Participants
-                        </a>
-                        <a href="#/reports" class="item" data-bind="active: isActive, visible: isDeveloper() || isResearcher()">
-                            Report Data
-                        </a>
+            <div data-bind="visible: isSidebarActive('navigation')">
+                <div class="ui vertical menu">
+                    <div class="tabset" data-bind="click: setSidebarPanel">
+                        <a class="active">Navigation</a>
+                        <a data-bind="visible: isAdmin">Clipboard</a>
+                        <a data-bind="visible: isEditorTabVisibleObs">Editor</a>
                     </div>
-                </div>
-                <div class="item" data-bind="visible: isDeveloper">
-                    <i class="server icon"></i> Study Data
-                    <div class="menu">
-                        <a href="#/scheduleplans" class="item" data-bind="active: isActive">
-                            Scheduling
-                        </a>
-                        <a href="#/schemas" class="item" data-bind="active: isActive">
-                            Data Schemas
-                        </a>
-                        <a href="#/task_identifiers" class="item" data-bind="active: isActive">
-                            Task Identifiers
-                        </a>
-                        <a href="#/surveys" class="item" data-bind="active: isActive">
-                            Surveys
-                        </a>
+                    <div class="item">
+                        <i class="lab icon"></i> Study
+                        <div class="menu">
+                            <a href="#/settings/general" class="item" data-bind="active: isActive, visible: isDeveloper">
+                                Settings
+                            </a>
+                            <a href="#/email_templates" class="item" data-bind="active: isActive, visible: isDeveloper">
+                                Email Templates
+                            </a>
+                            <a href="#/subpopulations" class="item" data-bind="active: isActive, visible: isPublicObs() && isDeveloper()">
+                                Consent Groups
+                            </a>
+                            <a href="#/participants" class="item" data-bind="active: isActive, visible: isPublicObs() && isResearcher()">
+                                Participants
+                            </a>
+                            <a href="#/enrollees" class="item" data-bind="active: isActive, visible: !isPublicObs() && isResearcher()">
+                                Participants
+                            </a>
+                            <a href="#/reports" class="item" data-bind="active: isActive, visible: isDeveloper() || isResearcher()">
+                                Report Data
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="item" data-bind="visible: isAdmin">
-                    <i class="settings icon"></i> Administration
-                    <div class="menu">
-                        <a href="#/admin/info" class="item" data-bind="active: isActive">
-                            Study Settings
-                        </a>
-                        <a href="#/admin/cache" class="item" data-bind="active: isActive">
-                            Cache Control
-                        </a>
+                    <div class="item" data-bind="visible: isDeveloper">
+                        <i class="server icon"></i> Study Data
+                        <div class="menu">
+                            <a href="#/scheduleplans" class="item" data-bind="active: isActive">
+                                Scheduling
+                            </a>
+                            <a href="#/schemas" class="item" data-bind="active: isActive">
+                                Data Schemas
+                            </a>
+                            <a href="#/task_identifiers" class="item" data-bind="active: isActive">
+                                Task Identifiers
+                            </a>
+                            <a href="#/surveys" class="item" data-bind="active: isActive">
+                                Surveys
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="item">
-                    <i class="sign out icon"></i> <a href="#" data-bind="click: signOut">Sign Out</a>
+                    <div class="item" data-bind="visible: isAdmin">
+                        <i class="settings icon"></i> Administration
+                        <div class="menu">
+                            <a href="#/admin/info" class="item" data-bind="active: isActive">
+                                Study Settings
+                            </a>
+                            <a href="#/admin/cache" class="item" data-bind="active: isActive">
+                                Cache Control
+                            </a>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <i class="sign out icon"></i> <a href="#" data-bind="click: signOut">Sign Out</a>
+                    </div>
                 </div>
             </div>
         </nav>

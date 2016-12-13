@@ -286,6 +286,10 @@ reg('publickey', {
     viewModel: require('./dialogs/publickey/publickey'),
     template: require('./dialogs/publickey/publickey.html'), synchronous: true
 });
+reg('read_about_clipboard', {
+    viewModel: require('./dialogs/read_about_clipboard/read_about_clipboard'),
+    template: require('./dialogs/read_about_clipboard/read_about_clipboard.html'), synchronous: true
+});
 reg('add_report', {
     viewModel: require('./dialogs/add_report/add_report'),
     template: require('./dialogs/add_report/add_report.html'), synchronous: true

@@ -74,7 +74,7 @@ module.exports = function(params) {
         updateSpecsFromObservers();
         utils.startHandler(vm, event);
 
-        Promise.map(specs, function(schema) {
+        Promise.each(specs, function(schema) {
             return serverService.createUploadSchema(schema);
         }).then(function() {
             params.closeCopySchemasDialog();

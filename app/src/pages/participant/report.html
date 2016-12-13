@@ -9,8 +9,8 @@
             <h3 data-bind="text: titleObs"></h3>
         </div>
         <div class="fixed-header-buttons">
-            <button class="ui small red button" data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: deleteItems">Delete records</button>
-            <button class="ui small primary button" data-bind="visible: isDeveloper, click: addReport">Add report record&hellip;</button>
+            <button class="ui tiny red button" data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: deleteItems">Delete records</button>
+            <button class="ui tiny primary button" data-bind="visible: isDeveloper, click: addReport">Add report record&hellip;</button>
         </div>
     </div>
     <!-- ko component: {name: 'participant-tabset', params: {active: 'reports', isNewObs: isNewObs,
@@ -55,7 +55,7 @@
                 <th>JSON</th>
             </tr>
         </thead>
-        <tbody class="no_records" data-bind="visible: itemsObs().length === 0">
+        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
                 <td colspan="4" data-bind="html: recordsMessageObs"></td>
             </tr>

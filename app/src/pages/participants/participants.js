@@ -13,6 +13,10 @@ var cssClassNameForStatus = {
     'verified': ''
 };
 
+function deleteItem(participant) {
+    return serverService.deleteParticipant(participant.id);
+}
+
 module.exports = function() {
     var self = this;
         
@@ -21,8 +25,9 @@ module.exports = function() {
     self.startDate = null;
     self.endDate = null;
 
-    tables.prepareTable(self, "participant", function(participant) {
-        return serverService.deleteParticipant(participant.id);
+    tables.prepareTable(self, {
+        name: "participant", 
+        delete: deleteItem
     });
 
     self.isAdmin = root.isAdmin;

@@ -16,11 +16,10 @@ var NEW_PARTICIPANT = {id:"new",attributes:{}};
 
 module.exports = function(params) {
     var self = this;
-    var userId = params.userId;
 
     var binder = bind(self)
         .obs('showEnableAccount', false)
-        .obs('isNew', (userId === "new"))
+        .obs('isNew', (params.userId === "new"))
         .obs('healthCode', 'N/A', fn.formatHealthCode)
         .obs('allDataGroups[]')
         .obs('externalIdEditable')
@@ -37,14 +36,14 @@ module.exports = function(params) {
         .bind('externalId')
         .bind('languages', null, fn.formatLanguages, fn.persistLanguages)
         .bind('status')
-        .bind('userId', userId)
-        .bind('id', userId)
+        .bind('userId', params.userId)
+        .bind('id', params.userId)
         .bind('roles[]', null, fn.formatRoles, fn.persistRoles)
-        .obs('title', (userId === "new") ? "New participant" : "&#160;");
+        .obs('title', (params.userId === "new") ? "New participant" : "&#160;");
     
     self.isPublicObs = root.isPublicObs;
     if (!self.isNewObs()) {
-        serverService.getParticipantName(userId).then(function(part) {
+        serverService.getParticipantName(self.userIdObs()).then(function(part) {
             self.titleObs(root.isPublicObs() ? part.name : part.externalId);
         }).catch(utils.failureHandler());
     }
@@ -67,12 +66,13 @@ module.exports = function(params) {
     function getParticipant(response) {
         return (self.isNewObs()) ?
             Promise.resolve(NEW_PARTICIPANT) :
-            serverService.getParticipant(userId);
+            serverService.getParticipant(self.userIdObs());
     }
     function afterCreate(response) {
         self.statusObs("enabled");
         self.isNewObs(false);
         self.idObs(response.identifier);
+        self.userIdObs(response.identifier);
         return response;
     }
     function signOut() {
@@ -81,13 +81,13 @@ module.exports = function(params) {
     self.sharingScopeOptions = OPTIONS;
 
     self.enableAccount = function(vm, event) {
-        alerts.confirmation("We must save any updates before enabling the account.", function() {
+        alerts.confirmation("Are you sure?\nWe will save any updates before enabling the account.", function() {
             self.statusObs("enabled");
             self.save(vm, event);
         });
     };
     self.disableAccount = function(vm, event) {
-        alerts.confirmation("We must save any updates before disabling the account.", function() {
+        alerts.confirmation("Are you sure?\nWe will save any updates before disabling the account.", function() {
             self.statusObs("disabled");
             self.save(vm, event).then(signOut);
         });
@@ -95,14 +95,14 @@ module.exports = function(params) {
     self.requestResetPassword = function(vm, event) {
         utils.startHandler(vm, event);
         
-        serverService.requestResetPasswordUser(userId)
+        serverService.requestResetPasswordUser(self.userIdObs())
             .then(utils.successHandler(vm, event, "Reset password email has been sent to user."))
             .catch(utils.failureHandler(vm, event));
     };
     self.signOutUser = function(vm, event) {
         utils.startHandler(vm, event);
         
-        serverService.signOutUser(userId)
+        serverService.signOutUser(self.userIdObs())
             .then(utils.successHandler(vm, event, "User signed out."))
             .catch(utils.failureHandler(vm, event));
     };
@@ -110,7 +110,7 @@ module.exports = function(params) {
         var participant = binder.persist(NEW_PARTICIPANT);
         // This should be updating the title, but it isn't, because the id is
         // still "new".
-        binder.update()(participant);
+        binder.persist(participant);
 
         var updatedTitle = self.isPublicObs() ? fn.formatName(participant) : participant.externalId;
         function updateName() {

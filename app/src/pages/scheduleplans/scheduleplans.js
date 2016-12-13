@@ -3,15 +3,25 @@ var scheduleUtils = require('../schedule/schedule_utils.js');
 var utils = require('../../utils');
 var fn = require('../../transforms');
 var tables = require('../../tables');
+var root = require('../../root');
 
 var SORTER = utils.makeFieldSorter("label");
+
+function deleteItem(plan) {
+    return serverService.deleteSchedulePlan(plan.guid);
+}
 
 module.exports = function() {
     var self = this;
     self.allItems = [];
 
-    tables.prepareTable(self, "schedule", function(plan) {
-        return serverService.deleteSchedulePlan(plan.guid);
+    self.isAdmin = root.isAdmin;
+    
+    tables.prepareTable(self, {
+        name: "schedule",
+        type: "SchedulePlan", 
+        delete: deleteItem, 
+        refresh: load
     });
 
     self.formatDateTime = fn.formatLocalDateTime;

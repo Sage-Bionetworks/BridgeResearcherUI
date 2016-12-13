@@ -3,6 +3,10 @@ var tables = require('../../tables');
 var bind = require('../../binder');
 var root = require('../../root');
 
+function deleteItem(revision) {
+    return serverService.deleteSchemaRevision(revision);
+}
+
 module.exports = function(params) {
     var self = this;
 
@@ -10,8 +14,9 @@ module.exports = function(params) {
         .obs('name')
         .obs('schemaId', params.schemaId);
 
-    tables.prepareTable(self, 'schema', function(revision) {
-        return serverService.deleteSchemaRevision(revision);
+    tables.prepareTable(self, {
+        name: 'schema', 
+        delete: deleteItem
     });
 
     self.isAdmin = root.isAdmin;

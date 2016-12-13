@@ -24,7 +24,10 @@ module.exports = function(params) {
     self.currentMonth = d.getMonth();
     self.currentYear = d.getFullYear();
 
-    tables.prepareTable(self, "report record", deleteItem);
+    tables.prepareTable(self, { 
+        name:"report record", 
+        delete: deleteItem
+    });
 
     self.addReport = function(vm, event) {
         root.openDialog('add_report', {

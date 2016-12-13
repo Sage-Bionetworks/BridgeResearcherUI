@@ -2,15 +2,19 @@ var ko = require('knockout');
 var utils = require('../../utils');
 var criteriaUtils = require('../../criteria_utils');
 var optionsService = require('./../../services/options_service');
+var Promise = require('bluebird');
+
 var activitiesObs = ko.observableArray([]);
 var activityOptionsLabel = utils.makeOptionLabelFinder(activitiesObs);
-var Promise = require('bluebird');
 
 var surveysOptionsObs = ko.observableArray([]);
 var surveysOptionsLabel = utils.makeOptionLabelFinder(surveysOptionsObs);
 
 var questionsOptionsObs = ko.observableArray([]);
 var questionsOptionsLabel = utils.makeOptionLabelFinder(questionsOptionsObs);
+
+var taskOptionsObs = ko.observableArray([]);
+var taskOptionsLabel = utils.makeOptionLabelFinder(taskOptionsObs);
 
 var TYPE_OPTIONS = Object.freeze([
     {value: 'SimpleScheduleStrategy', label: 'Simple Schedule'},
@@ -308,11 +312,18 @@ module.exports = {
     formatScheduleStrategyType: formatScheduleStrategyType,
     timeOptionsLabel: utils.makeOptionLabelFinder(TIME_OPTIONS),
     timeOptionsFinder: utils.makeOptionFinder(TIME_OPTIONS),
+    activitiesObs: activitiesObs,
+    activityOptionsLabel: activityOptionsLabel,
+    surveysOptionsObs: surveysOptionsObs,
+    surveysOptionsLabel: surveysOptionsLabel,
+    taskOptionsObs: taskOptionsObs,
+    taskOptionsLabel: taskOptionsLabel,
     TYPE_OPTIONS: TYPE_OPTIONS,
     UNARY_EVENTS: UNARY_EVENTS,
     loadOptions: function() {
         var p1 = optionsService.getActivityOptions().then(activitiesObs);
         var p2 = optionsService.getSurveyOptions().then(surveysOptionsObs);
-        return Promise.all([p1, p2]);
+        var p3 = optionsService.getTaskIdentifierOptions().then(taskOptionsObs);
+        return Promise.all([p1, p2, p3]);
     }
 };

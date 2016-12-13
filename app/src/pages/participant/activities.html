@@ -9,7 +9,7 @@
             <h3 data-bind="html: titleObs"></h3>
         </div>
         <div class="fixed-header-buttons">
-            <button class="ui red small button" data-bind="click: deleteActivities, disable: itemsObs().length === 0">Delete all activities</button>
+            <button class="ui red tiny button" data-bind="click: deleteActivities, disable: itemsObs().length === 0">Delete all activities</button>
         </div>
     </div>
     <!-- ko component: {name: 'participant-tabset', params: {active: 'activities', isNewObs: isNewObs,
@@ -39,7 +39,7 @@
                 <th>Execution Time</th>
             </tr>
         </thead>
-        <tbody class="no_records" data-bind="visible: itemsObs().length === 0">
+        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
                 <td colspan="4" data-bind="html: recordsMessageObs"></td>
             </tr>

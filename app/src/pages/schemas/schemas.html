@@ -4,27 +4,32 @@
             <h3>Data Schemas</h3>
         </div>
         <div class="fixed-header-buttons">
-            <button class="ui small button" data-bind="disable: !atLeastOneChecked(), click: copySchemasDialog">Copy&hellip;</button>
-            <button class="ui red small button" data-bind="visible: isAdmin, disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
-            <a href="#/schemas/new" class="ui primary small button">New Schema</a>
+            <button class="ui tiny button" data-bind="disable: !atLeastOneChecked(), click: copySchemasDialog">Copy&hellip;</button>
+            <button class="ui tiny button" data-bind="visible: isAdmin, disable: !atLeastOneChecked(), click: copyToClipboard">Copy to Clipboard</button>
+            <button class="ui red tiny button" data-bind="visible: isAdmin, disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
+            <a href="#/schemas/new" class="ui primary tiny button">New Schema</a>
         </div>
     </div>
     <div class="ui empty secondary pointing menu">
     </div>
 </div>
 <div class="scrollbox">
+    <errors></errors>
     <table class="ui compact selectable table">
         <thead>
             <tr>
-                <th width="10"></th>
+                <th width="10">
+                    <ui-checkbox params="checkedObs: checkAllObs, visible: isAdmin"></ui-checkbox>
+                </th>
                 <th>Name</th>
+                <th>Identifier</th>
                 <th>Type</th>
                 <th>Latest Revision</th>
             </tr>
         </thead>
-        <tbody class="no_records" data-bind="visible: itemsObs().length === 0">
+        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
-                <td colspan="4" data-bind="html: recordsMessageObs"></td>
+                <td colspan="5" data-bind="html: recordsMessageObs"></td>
             </tr>
         </tbody>        
         <tbody data-bind="foreach: itemsObs">
@@ -35,6 +40,7 @@
                 <td>
                     <a data-bind="attr: {'href': '#/schemas/'+encodeURIComponent($data.schemaId)}, text: $data.name"></a>
                 </td>
+                <td data-bind="text: schemaId"></td>
                 <td data-bind="text: $parent.schemaTypeLabel($data.schemaType)"></td>
                 <td data-bind="text: $data.revision"></td>
             </tr>

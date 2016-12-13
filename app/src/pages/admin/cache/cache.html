@@ -4,8 +4,8 @@
             <h3>Cache Control</h3>
         </div>
         <div class="fixed-header-buttons">
-            <button class="ui red small button" data-bind="disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
-            <button class="ui small button" data-bind="click: signEveryoneOut">Sign Out Everyone</button>
+            <button class="ui red tiny button" data-bind="disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
+            <button class="ui tiny button" data-bind="click: signEveryoneOut">Sign Out Everyone</button>
         </div>
     </div>
     <div class="ui empty secondary pointing menu"></div>
@@ -20,7 +20,7 @@
                 <th width="250">Cache key</th>
             </tr>
         </thead>
-        <tbody class="no_records" data-bind="visible: itemsObs().length === 0">
+        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
                 <td colspan="2" data-bind="html: recordsMessageObs"></td>
             </tr>

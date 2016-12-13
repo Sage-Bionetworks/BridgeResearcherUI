@@ -18,7 +18,7 @@ module.exports = function(params) {
         .obs('items[]', [])
         .obs('name');
 
-    tables.prepareTable(self, 'schema');
+    tables.prepareTable(self, {name:'schema'});
 
     self.formatDateTime = fn.formatLocalDateTime;
 

@@ -1,0 +1,36 @@
+nav {
+    @include flex(0 0 18rem);
+    @include order(-1);
+    padding:  1rem ! important;
+    background-color: rgba(96,134,153,.2);
+
+    .title span {
+        font-weight: bold;
+    }
+    .ui.vertical.menu {
+        width: 100%;
+    }
+
+    .tabset {
+        margin-bottom: .2rem;
+        margin-top: .5rem; 
+        display: flex; 
+        justify-content: space-around;
+
+        a {
+            cursor: pointer;
+        }
+        a.active {
+            font-weight: bold; 
+            color: black;
+            border-bottom: 2px solid rgba(34,36,38,.15);
+            padding-bottom: 3px;
+            margin-bottom: -4px;
+        }
+
+    }
+}
+/* Super-specific style applied to the clipboard to fix it. */
+.clipboard .ui.vertical.menu.vertical-scrollbox > .item:last-child {
+    padding-bottom: 1rem;
+}

@@ -9,7 +9,7 @@
             <h3 data-bind="html: titleObs"></h3>
         </div>
         <div class="fixed-header-buttons">
-            <button class="ui red small button" data-bind="click: withdraw, visible: !noConsentObs()">Withdraw from study&hellip;</button>
+            <button class="ui red tiny button" data-bind="click: withdraw, visible: !noConsentObs()">Withdraw from study&hellip;</button>
         </div>
     </div>
     <!-- ko component: {name: 'participant-tabset', params: {active: 'consents', isNewObs: isNewObs, 
@@ -28,7 +28,7 @@
                 <th></th>
             </tr>
         </thead>
-    <tbody class="no_records" data-bind="visible: itemsObs().length === 0">
+    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
             <td colspan="6" data-bind="html: recordsMessageObs"></td>
         </tr>
