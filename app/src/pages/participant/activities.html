@@ -39,7 +39,7 @@
                 <th>Execution Time</th>
             </tr>
         </thead>
-        <tbody class="no_records" data-bind="visible: itemsObs().length === 0">
+        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
                 <td colspan="4" data-bind="html: recordsMessageObs"></td>
             </tr>
