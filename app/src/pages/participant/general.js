@@ -110,7 +110,7 @@ module.exports = function(params) {
         var participant = binder.persist(NEW_PARTICIPANT);
         // This should be updating the title, but it isn't, because the id is
         // still "new".
-        binder.update()(participant);
+        binder.persist(participant);
 
         var updatedTitle = self.isPublicObs() ? fn.formatName(participant) : participant.externalId;
         function updateName() {

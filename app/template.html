@@ -20,14 +20,14 @@
         <main data-bind="component: {name: mainPageObs, params: mainParamsObs}">
         </main>
         <nav data-bind="visible: showNavigationObs">
-            <div class="tabset" data-bind="click: setSidebarPanel">
-                <a data-bind="css: {active: isSidebarActive('navigation')}">Navigation</a>
-                <a data-bind="css: {active: isSidebarActive('clipboard')}, visible: isAdmin">Clipboard</a>
-                <a data-bind="css: {active: isSidebarActive('editor')}, visible: isEditorTabVisibleObs">Editor</a>
-            </div>
             <div data-bind="visible: isSidebarActive('editor'), component: {name: editorPanelObs, params: editorParamsObs}"></div>
             <div data-bind="visible: isSidebarActive('clipboard')">
                 <div class="ui vertical menu clipboard">
+                    <div class="tabset" data-bind="click: setSidebarPanel">
+                        <a>Navigation</a>
+                        <a class="active" data-bind="visible: isAdmin">Clipboard</a>
+                        <a data-bind="visible: isEditorTabVisibleObs">Editor</a>
+                    </div>
                     <div class="title item">
                         <i class="paste icon"></i>
                         <span>Cross-Study Clipboard</span>
@@ -58,6 +58,11 @@
             </div>
             <div data-bind="visible: isSidebarActive('navigation')">
                 <div class="ui vertical menu">
+                    <div class="tabset" data-bind="click: setSidebarPanel">
+                        <a class="active">Navigation</a>
+                        <a data-bind="visible: isAdmin">Clipboard</a>
+                        <a data-bind="visible: isEditorTabVisibleObs">Editor</a>
+                    </div>
                     <div class="item">
                         <i class="lab icon"></i> Study
                         <div class="menu">

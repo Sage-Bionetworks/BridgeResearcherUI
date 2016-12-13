@@ -22,6 +22,7 @@
                     <ui-checkbox params="checkedObs: checkAllObs, visible: isAdmin"></ui-checkbox>
                 </th>
                 <th>Name</th>
+                <th>Identifier</th>
                 <th>Type</th>
                 <th>Latest Revision</th>
             </tr>
@@ -39,6 +40,7 @@
                 <td>
                     <a data-bind="attr: {'href': '#/schemas/'+encodeURIComponent($data.schemaId)}, text: $data.name"></a>
                 </td>
+                <td data-bind="text: schemaId"></td>
                 <td data-bind="text: $parent.schemaTypeLabel($data.schemaType)"></td>
                 <td data-bind="text: $data.revision"></td>
             </tr>

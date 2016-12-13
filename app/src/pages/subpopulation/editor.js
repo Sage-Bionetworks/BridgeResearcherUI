@@ -11,6 +11,7 @@ module.exports = function(params) {
     bind(self)
         .obs('active', true)
         .obs('createdOn')
+        .obs('publishedConsentCreatedOn')
         .obs('historyItems[]')
         .obs('guid', params.guid)
         .obs('name');
@@ -18,6 +19,7 @@ module.exports = function(params) {
     // subpopulation fields
     serverService.getSubpopulation(params.guid).then(function(subpop) {
         self.nameObs(subpop.name);
+        self.publishedConsentCreatedOnObs(subpop.publishedConsentCreatedOn);
     });
 
     // The editor and the request for the content can arrive in any order. bind here
@@ -42,18 +44,18 @@ module.exports = function(params) {
             consent.documentContent = doc.split(/<body[^>]*\>/)[1].split(/<\/body\>.*/)[0].trim();
         }
         self.createdOnObs(self.formatDateTime(consent.createdOn));
-        self.activeObs(consent.active);
+        self.activeObs(consent.createdOn === self.publishedConsentCreatedOnObs());
         self.consent = consent;
-        // This could be "recent" but we don't want that after we get a real version
         params.createdOn = consent.createdOn;
         self.initEditor(consent.documentContent);
     }
     function load() {
         return serverService.getStudyConsent(params.guid, params.createdOn);
     }
-    function loadPublishedConsent(response) {
+    function publishConsent(response) {
         params.createdOn = response.createdOn;
-        self.createdOnObs(response.createdOn);
+        self.createdOnObs(self.formatDateTime(response.createdOn));
+        self.publishedConsentCreatedOnObs(response.createdOn);
         return serverService.publishStudyConsent(params.guid, params.createdOn);
     }
 
@@ -65,7 +67,7 @@ module.exports = function(params) {
             
             utils.startHandler(vm, event);
             serverService.saveStudyConsent(params.guid, {documentContent: self.editor.getData()})
-                .then(loadPublishedConsent)
+                .then(publishConsent)
                 .then(load)
                 .then(loadIntoEditor)
                 .then(utils.successHandler(vm, event, "Consent published"))
