@@ -4,7 +4,7 @@
             <h3>Scheduling</h3>
         </div>
         <div class="fixed-header-buttons">
-            <button class="ui tiny button" data-bind="visible: isAdmin, disable: !atLeastOneChecked(), click: copyToClipboard">Copy to Clipboard</button>
+            <button class="ui tiny button" data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: copyToClipboard">Copy to Clipboard</button>
             <button class="ui red tiny button" data-bind="disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
             <a href="#/scheduleplans/new" class="ui primary tiny button">New Schedule Plan</a>
         </div>
@@ -18,7 +18,7 @@
         <thead>
             <tr>
                 <th width="10">
-                    <ui-checkbox params="checkedObs: checkAllObs, visible: isAdmin"></ui-checkbox>
+                    <ui-checkbox params="checkedObs: checkAllObs, visible: isDeveloper"></ui-checkbox>
                 </th>
                 <th width="250">Schedule</th>
                 <th>Description</th>
