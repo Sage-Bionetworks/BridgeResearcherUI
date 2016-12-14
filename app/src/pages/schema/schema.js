@@ -149,10 +149,6 @@ module.exports = function(params) {
         promise = serverService.getMostRecentUploadSchema(params.schemaId);
     }
     promise.then(binder.assign('schema'))
-    .then(function(response) {
-        console.log(response);
-        return response;
-    })
         .then(binder.update())
         .catch(utils.notFoundHandler("Upload schema", "schemas"));
 };
