@@ -177,6 +177,11 @@ progress {
     .ui.checkbox {
         vertical-align: middle;
     }
+    .curtail-overflow {
+        max-width: 200px; 
+        text-overflow: ellipsis; 
+        overflow: hidden;
+    }
 }
 .hasBorder td {
     border-bottom: 1px solid #ccc;

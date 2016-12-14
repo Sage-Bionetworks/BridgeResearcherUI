@@ -66,6 +66,11 @@ module.exports = function(params) {
 
         scrollTo(index+1);
     };
+    self.changeUiHint = function(domEl) {
+        console.log(arguments);
+        var newHint = domEl.getAttribute("data-type");
+        console.log(newHint);
+    };
     self.changeElementType = function(domEl) {
         var newType = domEl.getAttribute("data-type");
         var index = ko.contextFor(domEl).$index();

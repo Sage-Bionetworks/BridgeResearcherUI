@@ -55,7 +55,7 @@ module.exports = function(params) {
                 required: item.requiredObs(),
                 type: type
             };
-            if (type === "string") {
+            if (type === "string" || type === "inline_json_blob") {
                 field.unboundedText = item.unboundedTextObs();
                 if (!field.unboundedText) {
                     field.maxLength = item.maxLengthObs();
