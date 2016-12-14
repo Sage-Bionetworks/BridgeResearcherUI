@@ -2,7 +2,6 @@
     @include flex-box(row);
     @include justify-content(space-after);
     @include align-items(center);
-    /*margin-bottom: 1rem;*/
 
     .pagination {
         cursor: pointer;

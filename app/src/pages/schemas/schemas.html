@@ -43,7 +43,7 @@
                 <td>
                     <a data-bind="attr: {'href': '#/schemas/'+encodeURIComponent($data.schemaId)}, text: $data.name"></a>
                 </td>
-                <td data-bind="text: schemaId"></td>
+                <td class="curtail-overflow" data-bind="text: schemaId"></td>
                 <td data-bind="text: $parent.schemaTypeLabel($data.schemaType)"></td>
                 <td data-bind="text: $data.revision"></td>
             </tr>
