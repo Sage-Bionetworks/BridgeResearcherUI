@@ -45,9 +45,12 @@
                                 event:{keydown: handleKeyEvent}" placeholder="Server value (optional)"/>
                         </div>
                         <div class="field">
-                            <button class="ui small primary button" data-bind="click: addListItem, disable: newListItemValid,
-                                text: editorCommandObs">Add</button>
-                            <button class="ui small button" data-bind="click: cancelEditMode, visible: indexObs() !== null">Cancel</button>
+                            <button class="ui small primary button" data-bind="click: addListItem, text: editorCommandObs">
+                                Add
+                            </button>
+                            <button class="ui small button" data-bind="click: cancelEditMode, visible: indexObs() !== null">
+                                Cancel
+                            </button>
                             <p class="help-text" style="margin-top:.5rem">The server value (or the label if there is none) can only contain 
                                 alphanumeric characters. It can also have spaces, dashes, 
                                 underscores and periods in the middle, but not more than one 
