@@ -178,7 +178,7 @@
     overflow: hidden;
 }
 [contenteditable] {
-    white-space: pre;
+    white-space: pre-wrap;
 }
 [contenteditable]:empty:before, [contenteditable] {
     content:attr(data-placeholder);
