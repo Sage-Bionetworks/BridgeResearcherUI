@@ -5,6 +5,13 @@ var fn = require('../../transforms');
 
 var UNIT_OPTIONS = Object.freeze([
     {value: null, label: '<none>'},
+    {value: 'seconds', label: 'Seconds'},
+    {value: 'minutes', label: 'Minutes'},
+    {value: 'hours', label: 'Hours'},
+    {value: 'days', label: 'Days'},
+    {value: 'weeks', label: 'Weeks'},
+    {value: 'months', label: 'Months'},
+    {value: 'years', label: 'Years'},
     {value: 'centimeters', label: 'Centimeters'},
     {value: 'cubic_centimeters', label: 'Cubic Centimeters'},
     {value: 'cubic_meters', label: 'Cubic Meters'},
@@ -24,6 +31,7 @@ var UNIT_OPTIONS = Object.freeze([
     {value: 'quarts', label: 'Quarts'},
     {value: 'yards', label: 'Yards'}
 ]);
+/*
 var DURATION_OPTIONS = Object.freeze([
     {value: null, label: '<none>'},
     {value: 'seconds', label: 'Seconds'},
@@ -34,6 +42,7 @@ var DURATION_OPTIONS = Object.freeze([
     {value: 'months', label: 'Months'},
     {value: 'years', label: 'Years'}
 ]);
+*/
 var OPERATOR_OPTIONS = Object.freeze([
     {value: 'eq', label: '='},
     {value: 'ne', label: '!='},
@@ -49,14 +58,14 @@ var uiHintLabels = {
     'datepicker':'Date Picker',
     'datetimepicker':'Date & Time Picker',
     'list':'List',
-    'multilinetext':'Multiline Text',
+    'multilinetext':'Multiline Text Field',
     'numberfield':'Number Field',
     'radiobutton':'Radio Button',
-    'select':'Select',
+    'select':'Select Control',
     'slider':'Slider',
     'textfield':'Text Field',
     'timepicker':'Time Picker',
-    'toggle':'Toggle'
+    'toggle':'Toggle Button'
 };
 var UI_HINT_OPTIONS = Object.freeze(Object.keys(uiHintLabels).reduce(function(object, key) {
     object[key] = {value: key, label: uiHintLabels[key]};
@@ -68,7 +77,7 @@ var SELECT_OPTIONS_BY_TYPE = Object.freeze({
     'DateConstraints':[UI_HINT_OPTIONS.datepicker],
     'DateTimeConstraints':[UI_HINT_OPTIONS.datetimepicker],
     'DecimalConstraints':[UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider],
-    'DurationConstraints':[UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider],
+    /*'DurationConstraints':[UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider],*/
     'MultiValueConstraints':[UI_HINT_OPTIONS.checkbox, UI_HINT_OPTIONS.combobox, UI_HINT_OPTIONS.list,
         UI_HINT_OPTIONS.radiobutton, UI_HINT_OPTIONS.select, UI_HINT_OPTIONS.slider],
     'IntegerConstraints':[UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider],
@@ -85,7 +94,7 @@ var DATA_TYPE_OPTIONS = Object.freeze([
     {label: 'Date', value: 'date'},
     {label: 'Date & Time', value: 'datetime'},
     {label: 'Time', value: 'time'},
-    {label: 'Duration', value: 'duration'},
+    /*{label: 'Duration', value: 'duration'},*/
     {label: 'Integer', value: 'integer'},
     {label: 'Decimal', value: 'decimal'}
 ]);
@@ -93,7 +102,7 @@ var CONSTRAINTS_TEMPLATES = Object.freeze({
     'BooleanConstraints': {dataType:'boolean', rules:[]},
     'DateConstraints': {dataType:'date', rules:[], allowFuture:false, earliestValue:'', latestValue:'' },
     'DateTimeConstraints': {dataType:'datetime', rules:[], allowFuture:false, earliestValue:'', latestValue:'' },
-    'DurationConstraints': {dataType:'duration', rules:[], minValue:0, maxValue:0, unit: '', step:1.0},
+    /*'DurationConstraints': {dataType:'duration', rules:[], minValue:0, maxValue:0, unit: '', step:1.0},*/
     'TimeConstraints': {dataType:'time', rules:[]},
     'IntegerConstraints': {dataType:'integer', rules:[], minValue:0, maxValue:255, unit: '', step:1.0},
     'DecimalConstraints': {dataType:'decimal', rules: [], minValue:0, maxValue:255, unit: '', step:1.0},
@@ -104,12 +113,12 @@ var UI_HINT_FOR_CONSTRAINTS = Object.freeze({
     'BooleanConstraints': 'checkbox',
     'DateConstraints': 'datepicker',
     'DateTimeConstraints': 'datetimepicker',
-    'DurationConstraints': 'numberfield',
+    /*'DurationConstraints': 'numberfield',*/
     'TimeConstraints': 'timepicker',
     'IntegerConstraints': 'numberfield',
     'DecimalConstraints': 'numberfield',
-    'StringConstraints': 'multilinetext',
-    'MultiValueConstraints': 'radiobutton'
+    'StringConstraints': 'textfield',
+    'MultiValueConstraints': 'list'
 });
 
 var SURVEY_FIELDS = ['name','createdOn','guid','identifier','published','version'];
@@ -162,6 +171,10 @@ function elementToObservables(element) {
         }));
         element.constraintsTypeObs = ko.observable(con.type);
     }
+    element.changeUiHint = function(domEl) {
+        var newHint = domEl.getAttribute("data-type");
+        element.uiHintObs(newHint);
+    };
     return element;
 }
 /**
@@ -278,7 +291,7 @@ module.exports = {
                 root.openDialog('rules_editor', {parentViewModel: vm, element: vm.element});
             };
 
-            vm.durationOptions = DURATION_OPTIONS;
+            //vm.durationOptions = DURATION_OPTIONS;
             vm.rulesObs = params.element.constraints.rulesObs;
             vm.uiHintObs = params.element.uiHintObs;
             vm.fireEventObs = params.element.fireEventObs;
@@ -289,8 +302,8 @@ module.exports = {
             vm.unitOptions = UNIT_OPTIONS;
             vm.unitLabel = utils.makeOptionLabelFinder(UNIT_OPTIONS);
 
-            vm.durationOptions = DURATION_OPTIONS;
-            vm.durationLabel = utils.makeOptionLabelFinder(DURATION_OPTIONS);
+            //vm.durationOptions = DURATION_OPTIONS;
+            //vm.durationLabel = utils.makeOptionLabelFinder(DURATION_OPTIONS);
 
             vm.operatorOptions = OPERATOR_OPTIONS;
             vm.operatorLabel = utils.makeOptionLabelFinder(OPERATOR_OPTIONS);

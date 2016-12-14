@@ -34,6 +34,7 @@ var RESERVED_WORDS = ("access add all alter and any as asc audit between by char
     "or order pctfree prior public raw rename resource revoke row row_id row_version rowid rownum rows select session set share " +
     "size smallint start successful synonym sysdate table then time to trigger true uid union unique update user validate values " +
     "varchar varchar2 view whenever where with").split(' ');
+
 var clipboardEntries = ko.observableArray();
 
 var MODEL_METADATA = {
@@ -325,11 +326,6 @@ serverService.addSessionEndListener(function() {
 var clipboard = {
     entries: clipboardEntries,
     copy: function(type, model) {
-        if (type === "UploadSchema" && model.schemaType === "ios_survey") {
-            alerts.warn("Survey schemas are created when you publish a survey, so these aren't copied to the clipboard.\n\n"+
-                        "Just copy any surveys you want, and we'll handle the schemas for you.");
-            return;
-        }
         if (!entryExists(model)) {
             MODEL_METADATA[type].getMethod(model)
                 .then(addDependents)

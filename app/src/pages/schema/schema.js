@@ -55,7 +55,7 @@ module.exports = function(params) {
                 required: item.requiredObs(),
                 type: type
             };
-            if (type === "string") {
+            if (type === "string" || type === "inline_json_blob") {
                 field.unboundedText = item.unboundedTextObs();
                 if (!field.unboundedText) {
                     field.maxLength = item.maxLengthObs();
@@ -149,6 +149,10 @@ module.exports = function(params) {
         promise = serverService.getMostRecentUploadSchema(params.schemaId);
     }
     promise.then(binder.assign('schema'))
+    .then(function(response) {
+        console.log(response);
+        return response;
+    })
         .then(binder.update())
         .catch(utils.notFoundHandler("Upload schema", "schemas"));
 };

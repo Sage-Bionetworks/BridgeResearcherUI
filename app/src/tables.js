@@ -34,7 +34,7 @@ function makeTableRowHandler(vm, deletables, objName) {
             vm.recordsMessageObs("");
         });
         if (vm.itemsObs().length === 0) {
-            vm.recordsMessageObs("There are currently no "+objName+".");
+            vm.recordsMessageObs("There are currently no "+objName+"s.");
         }
     };
 }

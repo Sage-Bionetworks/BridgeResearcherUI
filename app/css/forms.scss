@@ -3,6 +3,7 @@
     content: '*';
     color: #d95c5c;
 }
+/*
 .duration-control {
     @include flex-box(row);
 }
@@ -13,6 +14,7 @@
         margin-left: .5rem;
         width: 6rem!important;
     }
+*/
 /* This is a magic number that aligns text with Semantic UI controls. */
 /* As such I have a special class for it. */
 .inline-form-text {
