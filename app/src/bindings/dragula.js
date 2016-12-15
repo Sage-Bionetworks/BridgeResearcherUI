@@ -4,6 +4,34 @@ var dragula = require('dragula');
 var autoScroll = require('dom-autoscroller');
 require('knockout-postbox');
 
+ko.bindingHandlers.dragula2 = {
+    init: function(element, valueAccessor) {
+        var config = ko.unwrap(valueAccessor());
+
+        var drake = dragula([element], {
+            removeOnSpill: false,
+            direction: 'vertical',
+            moves: function(el, container, handle) {
+                return typeof config.dragHandleSelector === "undefined" ||
+                       handle.classList.contains(config.dragHandleSelector.replace(".",""));
+            }
+        }).on('drop', function(el, zone) {
+            var data = ko.contextFor(el).$data;
+            var index = [].indexOf.call(zone.children, el);
+            config.indexObs(index);
+            config.listObs.splice(index,1,data);
+        });
+        autoScroll([element],{
+            margin: 100,
+            pixels: 40,
+            scrollWhenOutside: true,
+            autoScroll: function(){
+                return this.down && drake.dragging;
+            }
+        });
+    }
+};
+/*
 ko.bindingHandlers.dragula = {
     init: function(element, valueAccessor) {
         var _item = null;
@@ -44,4 +72,4 @@ ko.bindingHandlers.dragula = {
             }
         });
     }
-};
+};*/

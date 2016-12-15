@@ -9,10 +9,9 @@
         <span data-bind="visible: nameObs().length > 0, text: nameObs"></span>
         <span data-bind="visible: nameObs().length === 0">New Survey</span>
     </div>
-    <div class="item vertical-scrollbox" data-bind="foreach: elementsObs, dragula: {
-        dragHandleSelector: '.vs-item-content', elementSelector: '.vs-item',
-        eventName: 'elementsSelect', listObs: elementsObs}">
-        <div class="vs-item" data-bind="click: $component.selectElement, attr: {title: $data.identifier}">
+    <div class="item vertical-scrollbox" data-bind="foreach: elementsObs, dragula2: {
+        dragHandleSelector: '.vs-item-content', indexObs: selectedElementObs, listObs: elementsObs}">
+        <div class="vs-item" data-bind="click: $component.selectElement">
             <div class="vs-item-content" data-bind="html: $component.truncate($data.titleObs() || $data.promptObs())"></div>
             <div class="vs-item-delete link"><i class="delete icon" data-bind="click: $component.removeElement"></i></div>
         </div>

@@ -40,7 +40,8 @@ module.exports = function(params) {
     self.strategyObs = params.strategyObs;
     self.collectionName = params.collectionName;
     self.scheduleCriteriaObs = ko.observableArray([]).publishOn("scheduleCriteriaChanges");
-
+    self.selectedElementObs = ko.observable(0);
+    
     params.strategyObs.callback = function () {
         var strategy = params.strategyObs();
         strategy.scheduleCriteria = self.scheduleCriteriaObs().map(observablesToGroup);
@@ -61,7 +62,6 @@ module.exports = function(params) {
         subscription.dispose();
     });    
 
-
     var scrollTo = utils.makeScrollTo(".schedulegroup-fieldset");
     self.fadeUp = utils.fadeUp();
 
@@ -75,8 +75,4 @@ module.exports = function(params) {
         var index = self.scheduleCriteriaObs.indexOf(group);
         scrollTo(index);
     };
-
-    ko.postbox.subscribe("scheduleCriteriaAdd", self.addCriteria);
-    ko.postbox.subscribe("scheduleCriteriaRemove", self.removeCriteria);
-    ko.postbox.subscribe("scheduleCriteriaSelect", self.selectCriteria);
 };

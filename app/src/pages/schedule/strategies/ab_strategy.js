@@ -37,7 +37,8 @@ module.exports = function(params) {
     self.labelObs = params.labelObs;
     self.scheduleGroupsObs = ko.observableArray([]).publishOn("scheduleGroupChanges");
     self.collectionName = params.collectionName;
-    
+    self.selectedElementObs = ko.observable(0);
+
     function initStrategy(strategy) {
         if (strategy && strategy.scheduleGroups) {
             self.scheduleGroupsObs(strategy.scheduleGroups.map(groupToObservables));
