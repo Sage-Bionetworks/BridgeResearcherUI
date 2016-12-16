@@ -46,16 +46,12 @@ module.exports = function(params) {
 
     root.setEditorPanel('CriteriaScheduleStrategyPanel', {viewModel:self});
 
-    function initStrategy(strategy) {
+    var subscription = params.strategyObs.subscribe(function(strategy) {
         if (strategy && strategy.scheduleCriteria) {
             self.scheduleCriteriaObs(strategy.scheduleCriteria.map(groupToObservables));
             root.setEditorPanel('CriteriaScheduleStrategyPanel', {viewModel:self});
+            subscription.dispose();
         }
-    }
-    initStrategy(params.strategyObs());
-    var subscription = params.strategyObs.subscribe(function(strategy) {
-        initStrategy(strategy);
-        subscription.dispose();
     });    
 
     var scrollTo = utils.makeScrollTo(".schedulegroup-fieldset");
