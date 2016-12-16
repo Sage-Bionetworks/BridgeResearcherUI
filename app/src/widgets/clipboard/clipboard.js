@@ -166,7 +166,6 @@ function entriesAreEqual(entry1, entry2) {
     }
     var primaryKeys = MODEL_METADATA[entry1.type].primaryKeys;
     return primaryKeys.every(function(primaryKey) {
-        console.log(entry1[primaryKey] === entry2[primaryKey]);
         return (entry1[primaryKey] === entry2[primaryKey]);
     });
 }
@@ -251,7 +250,6 @@ function sanitizeSurveyString(string) {
     if (RESERVED_WORDS.indexOf(string) > -1) {
         string += "-id";
     }
-    console.log(string);
     return string;
 }
 

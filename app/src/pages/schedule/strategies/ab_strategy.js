@@ -1,5 +1,4 @@
 var ko = require('knockout');
-require('knockout-postbox');
 var utils = require('../../../utils');
 var scheduleUtils = require('../schedule_utils');
 var root = require('../../../root');
@@ -35,19 +34,16 @@ module.exports = function(params) {
     var self = this;
 
     self.labelObs = params.labelObs;
-    self.scheduleGroupsObs = ko.observableArray([]).publishOn("scheduleGroupChanges");
+    self.scheduleGroupsObs = ko.observableArray([]);
     self.collectionName = params.collectionName;
-    
-    function initStrategy(strategy) {
+    self.selectedElementObs = ko.observable(0);
+
+    var subscription = params.strategyObs.subscribe(function(strategy) {
         if (strategy && strategy.scheduleGroups) {
             self.scheduleGroupsObs(strategy.scheduleGroups.map(groupToObservables));
             root.setEditorPanel('ABTestScheduleStrategyPanel', {viewModel:self});
+            subscription.dispose();
         }
-    }
-    initStrategy(params.strategyObs());
-    var subscription = params.strategyObs.subscribe(function(strategy) {
-        initStrategy(strategy);
-        subscription.dispose();
     });
    
     params.strategyObs.callback = function () {
@@ -68,8 +64,4 @@ module.exports = function(params) {
         var index = self.scheduleGroupsObs.indexOf(group);
         scrollTo(index);
     };
-
-    ko.postbox.subscribe("scheduleGroupAdd", self.addGroup);
-    ko.postbox.subscribe("scheduleGroupRemove", self.removeGroup);
-    ko.postbox.subscribe("scheduleGroupSelect", self.selectGroup);
 };

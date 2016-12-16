@@ -5,6 +5,9 @@ var toastr = require('toastr');
 var bind = require('./binder');
 var clipboard = require('./widgets/clipboard/clipboard');
 
+// When you enable this, 1) everything is a bit faster, and 2) the UI is completely broken.
+// ko.options.deferUpdates = true;
+
 // Used in navigation to keep a section highlighted as you navigate into it.
 var participantPages = ['enrollees','participants','participant_general','participant_consents', 
     'participant_reports', 'participant_report', 'participant_activities', 'participant_uploads', 
@@ -143,7 +146,7 @@ var RootViewModel = function() {
             self.isPublicObs(opts.isPublic);
             self.codesEnumeratedObs(opts.codesEnumerated);
             self.codeRequiredObs(opts.codeRequired);
-            console.log("[config]", Object.keys(opts).map(function(key) { return key + "=" + opts[key]; }).join(', '));
+            console.debug("[config]", Object.keys(opts).map(function(key) { return key + "=" + opts[key]; }).join(', '));
         });
     });
     serverService.addSessionEndListener(function(session) {

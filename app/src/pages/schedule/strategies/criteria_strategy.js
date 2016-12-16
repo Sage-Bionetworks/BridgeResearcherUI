@@ -1,5 +1,4 @@
 var ko = require('knockout');
-require('knockout-postbox');
 var utils = require('../../../utils');
 var scheduleUtils = require('../schedule_utils');
 var criteriaUtils = require('../../../criteria_utils');
@@ -7,14 +6,11 @@ var root = require('../../../root');
 
 function groupToObservables(group) {
     group.criteriaObs = ko.observable(group.criteria);
-    group.scheduleObs = ko.observable();
+    group.scheduleObs = ko.observable(group.schedule);
     group.scheduleObs.callback = utils.identity;
     group.labelObs = ko.computed(function() {
         return criteriaUtils.label(group.criteriaObs());
     });
-    setTimeout(function() {
-        group.scheduleObs(group.schedule);
-    }, 1);
     return group;
 }
 
@@ -39,8 +35,9 @@ module.exports = function(params) {
     self.labelObs = params.labelObs;
     self.strategyObs = params.strategyObs;
     self.collectionName = params.collectionName;
-    self.scheduleCriteriaObs = ko.observableArray([]).publishOn("scheduleCriteriaChanges");
-
+    self.scheduleCriteriaObs = ko.observableArray([]);
+    self.selectedElementObs = ko.observable(0);
+    
     params.strategyObs.callback = function () {
         var strategy = params.strategyObs();
         strategy.scheduleCriteria = self.scheduleCriteriaObs().map(observablesToGroup);
@@ -49,18 +46,13 @@ module.exports = function(params) {
 
     root.setEditorPanel('CriteriaScheduleStrategyPanel', {viewModel:self});
 
-    function initStrategy(strategy) {
+    var subscription = params.strategyObs.subscribe(function(strategy) {
         if (strategy && strategy.scheduleCriteria) {
             self.scheduleCriteriaObs(strategy.scheduleCriteria.map(groupToObservables));
             root.setEditorPanel('CriteriaScheduleStrategyPanel', {viewModel:self});
+            subscription.dispose();
         }
-    }
-    initStrategy(params.strategyObs());
-    var subscription = params.strategyObs.subscribe(function(strategy) {
-        initStrategy(strategy);
-        subscription.dispose();
     });    
-
 
     var scrollTo = utils.makeScrollTo(".schedulegroup-fieldset");
     self.fadeUp = utils.fadeUp();
@@ -75,8 +67,4 @@ module.exports = function(params) {
         var index = self.scheduleCriteriaObs.indexOf(group);
         scrollTo(index);
     };
-
-    ko.postbox.subscribe("scheduleCriteriaAdd", self.addCriteria);
-    ko.postbox.subscribe("scheduleCriteriaRemove", self.removeCriteria);
-    ko.postbox.subscribe("scheduleCriteriaSelect", self.selectCriteria);
 };

@@ -72,24 +72,10 @@
                         <div class="require element-callout-identifier-label">Identifier</div>
                     </div>
                     <div class="ui compact pointing secondary vertical menu">
-                        <div class="item" data-bind="semantic:'popup-menu'">
-                            <button class="fluid ui compact mini basic button">
+                        <div class="item">
+                            <button class="fluid ui compact mini basic button" data-bind="click: $component.createElementAfter">
                                 <i class="add icon"></i>Add below
                             </button>
-                        </div>
-                        <div class="ui flowing popup hidden" data-bind="click: $component.createElementAfter">
-                            <div class="ui secondary vertical menu">
-                                <a class="item" data-type="BooleanConstraints">Boolean</a>
-                                <a class="item" data-type="DateConstraints">Date</a>
-                                <a class="item" data-type="DateTimeConstraints">Date & Time</a>
-                                <a class="item" data-type="DecimalConstraints">Decimal</a>
-                                <!--<a class="item" data-type="DurationConstraints">Duration</a>-->
-                                <a class="item" data-type="SurveyInfoScreen">Information Only</a>
-                                <a class="item" data-type="IntegerConstraints">Integer</a>
-                                <a class="item" data-type="MultiValueConstraints">Multi-Choice</a>
-                                <a class="item" data-type="StringConstraints">String</a>
-                                <a class="item" data-type="TimeConstraints">Time</a>
-                            </div>
                         </div>
                         <div class="item">
                             <button class="fluid ui compact mini basic button" data-bind="click: $parent.copyElement">

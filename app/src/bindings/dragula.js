@@ -2,11 +2,11 @@
 var ko = require('knockout');
 var dragula = require('dragula');
 var autoScroll = require('dom-autoscroller');
-require('knockout-postbox');
+
+var indexOf = [].indexOf;
 
 ko.bindingHandlers.dragula = {
     init: function(element, valueAccessor) {
-        var _item = null;
         var config = ko.unwrap(valueAccessor());
 
         var drake = dragula([element], {
@@ -16,24 +16,20 @@ ko.bindingHandlers.dragula = {
                 return typeof config.dragHandleSelector === "undefined" ||
                        handle.classList.contains(config.dragHandleSelector.replace(".",""));
             }
-        }).on('drop', function(el, zone) {
-            var elements = element.querySelectorAll(config.elementSelector);
-            // This utility handles node lists
-            var index = ko.utils.arrayIndexOf(elements, el);
+        })
+        .on('drop', function(el, zone) {
             var data = ko.contextFor(el).$data;
+            var index = indexOf.call(zone.children, el);
+
+            // Despite the fact that we're manipulating the array this way, it still
+            // recreates all the HTML of all the list items... It may be because the 
+            // list is bound to two different sections of HTML, I'm not sure. On schedule
+            // pages this wipes out the schedule component embedded in the scheduleCriteria/
+            // scheduleGroup arrays.
+            el.parentNode.removeChild(el);
             config.listObs.remove(data);
             config.listObs.splice(index,0,data);
-            if (_item && _item.parentNode) {
-                _item.parentNode.removeChild(_item);
-                _item = null;
-            }
-            if (config.eventName) {
-                setTimeout(function() {
-                    ko.postbox.publish(config.eventName, data);
-                }, 1);
-            }
-        }).on('cloned', function(mirror, item, type) {
-            _item = item;
+            config.indexObs(index);
         });
         autoScroll([element],{
             margin: 100,
