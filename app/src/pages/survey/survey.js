@@ -1,5 +1,4 @@
 var ko = require('knockout');
-require('knockout-postbox');
 var serverService = require('../../services/server_service');
 var surveyUtils = require('./survey_utils');
 var utils = require('../../utils');
@@ -91,7 +90,6 @@ module.exports = function(params) {
         scrollTo(index+1);
     };
     self.selectedElementObs.subscribe(function(index) {
-        console.log("scrollTo index", index);
         scrollTo( index );
     });
 

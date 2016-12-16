@@ -161,7 +161,6 @@ module.exports = function(params) {
         self.listObs.remove(item);
     };
     self.selectList = function(entry, event) {
-        console.log(entry);
         self.listObs(entry.enumeration);
         listsSource.setCurrentEntry(entry);
         self.currentTabObs('editor');

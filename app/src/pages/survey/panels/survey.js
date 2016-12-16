@@ -1,5 +1,4 @@
 var utils = require('../../../utils');
-var ko = require('knockout');
 var MAX_LENGTH = 65;
 
 module.exports = function(params) {

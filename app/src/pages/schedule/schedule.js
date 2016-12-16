@@ -72,7 +72,6 @@ function getScheduleType(editorType) {
 }
 
 module.exports = function(params) {
-    console.trace("new schedule viewModel", params.scheduleObs());
     var self = this;
     self.collectionName = params.collectionName;
         
@@ -93,6 +92,15 @@ module.exports = function(params) {
     observe(self, "expires");
     observe(self, "activities", true);
     
+    if (params.scheduleHolder) {
+        self.dispose = function() {
+            var holder = params.scheduleHolder;
+            var sch = readEditor();
+            holder.schedule = sch;
+            holder.scheduleObs(sch);
+        };
+    }
+
     function updateEditor(schedule) {
         updateView(self, schedule, ['eventId','scheduleType','startsOn','endsOn','delay',
             'interval','times','cronTrigger','expires']);

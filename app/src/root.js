@@ -143,7 +143,7 @@ var RootViewModel = function() {
             self.isPublicObs(opts.isPublic);
             self.codesEnumeratedObs(opts.codesEnumerated);
             self.codeRequiredObs(opts.codeRequired);
-            console.log("[config]", Object.keys(opts).map(function(key) { return key + "=" + opts[key]; }).join(', '));
+            console.debug("[config]", Object.keys(opts).map(function(key) { return key + "=" + opts[key]; }).join(', '));
         });
     });
     serverService.addSessionEndListener(function(session) {

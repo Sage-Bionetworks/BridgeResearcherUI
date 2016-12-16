@@ -31,7 +31,6 @@ function newGroup() {
 }
 
 module.exports = function(params) {
-    console.log("new ab_strategy", params);
     var self = this;
 
     self.labelObs = params.labelObs;

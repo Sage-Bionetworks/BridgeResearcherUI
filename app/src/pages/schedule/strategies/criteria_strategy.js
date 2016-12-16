@@ -1,5 +1,4 @@
 var ko = require('knockout');
-require('knockout-postbox');
 var utils = require('../../../utils');
 var scheduleUtils = require('../schedule_utils');
 var criteriaUtils = require('../../../criteria_utils');
@@ -7,14 +6,11 @@ var root = require('../../../root');
 
 function groupToObservables(group) {
     group.criteriaObs = ko.observable(group.criteria);
-    group.scheduleObs = ko.observable();
+    group.scheduleObs = ko.observable(group.schedule);
     group.scheduleObs.callback = utils.identity;
     group.labelObs = ko.computed(function() {
         return criteriaUtils.label(group.criteriaObs());
     });
-    setTimeout(function() {
-        group.scheduleObs(group.schedule);
-    }, 1);
     return group;
 }
 
@@ -39,7 +35,7 @@ module.exports = function(params) {
     self.labelObs = params.labelObs;
     self.strategyObs = params.strategyObs;
     self.collectionName = params.collectionName;
-    self.scheduleCriteriaObs = ko.observableArray([]).publishOn("scheduleCriteriaChanges");
+    self.scheduleCriteriaObs = ko.observableArray([]);
     self.selectedElementObs = ko.observable(0);
     
     params.strategyObs.callback = function () {

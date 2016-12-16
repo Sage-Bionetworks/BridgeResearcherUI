@@ -27,7 +27,7 @@ ko.bindingHandlers.dragula = {
             // list is bound to two different sections of HTML, I'm not sure. On schedule
             // pages this wipes out the schedule component embedded in the scheduleCriteria/
             // scheduleGroup arrays.
-            el.parentNode.removeChild(el); 
+            el.parentNode.removeChild(el);
             config.listObs.remove(data);
             config.listObs.splice(index,0,data);
             config.indexObs(index);
