@@ -1,5 +1,4 @@
 var ko = require('knockout');
-require('knockout-postbox');
 var serverService = require('../../services/server_service');
 var surveyUtils = require('./survey_utils');
 var utils = require('../../utils');
@@ -54,23 +53,20 @@ module.exports = function(params) {
         var el = surveyUtils.newField(type);
         self.elementsObs.push(el);
         var index = self.elementsObs().length-1;
-
-        scrollTo(index);
+        self.selectedElementObs(index);
     };
     self.createElementAfter = function(element, event) {
-        var type = event.target.getAttribute("data-type");
         var index = self.elementsObs.indexOf(element);
-
-        var el = surveyUtils.newField(type);
+        var el = surveyUtils.newField("MultiValueConstraints");
         self.elementsObs.splice(index+1,0,el);
+        self.selectedElementObs(index+1);
+    };
+    self.selectElement = function(data, event) {
+        var index = self.elementsObs().indexOf(data);
+        self.selectedElementObs(index);
+    };
+    self.deleteElement = utils.animatedDeleter(scrollTo, self.elementsObs, self.selectedElementObs);
 
-        scrollTo(index+1);
-    };
-    self.changeUiHint = function(domEl) {
-        console.log(arguments);
-        var newHint = domEl.getAttribute("data-type");
-        console.log(newHint);
-    };
     self.changeElementType = function(domEl) {
         var newType = domEl.getAttribute("data-type");
         var index = ko.contextFor(domEl).$index();
@@ -93,11 +89,7 @@ module.exports = function(params) {
         self.elementsObs.splice(index+1, 0, newElement);
         scrollTo(index+1);
     };
-    self.deleteElement = utils.animatedDeleter(scrollTo, self.elementsObs);
-
-    ko.postbox.subscribe("elementsRemove", self.deleteElement);
-    ko.postbox.subscribe("elementsSelect", function(element) {
-        var index = self.elementsObs().indexOf(element);
+    self.selectedElementObs.subscribe(function(index) {
         scrollTo( index );
     });
 

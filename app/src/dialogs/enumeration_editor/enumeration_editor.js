@@ -1,6 +1,5 @@
 var utils = require('../../utils');
 var ko = require('knockout');
-require('knockout-postbox');
 var root = require('../../root');
 
 /**
@@ -141,6 +140,10 @@ module.exports = function(params) {
     self.detailObs = ko.observable();
     self.valueObs = ko.observable();
     self.indexObs = ko.observable(null);
+    self.selectedIndexObs = ko.observable(0);
+    self.selectedIndexObs.subscribe(function() {
+        self.cancelEditMode();
+    });
 
     // Should we copy edits over to all the same lists.
     self.copyToAllEnumsObs = ko.observable(true);
@@ -246,6 +249,4 @@ module.exports = function(params) {
             self.currentTabObs(tabName);
         };
     };
-
-    ko.postbox.subscribe("listChanged", self.cancelEditMode);
 };

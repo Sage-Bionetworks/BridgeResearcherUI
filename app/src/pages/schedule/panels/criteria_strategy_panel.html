@@ -10,8 +10,8 @@
         <span data-bind="visible: labelObs().length === 0">New Schedule Plan</span>
     </div>
     <div class="item vertical-scrollbox" data-bind="foreach: scheduleCriteriaObs, dragula: {
-            dragHandleSelector: '.vs-item-content', elementSelector: '.vs-item',
-            eventName: 'scheduleCriteriaSelect', listObs: scheduleCriteriaObs}">
+        dragHandleSelector: '.vs-item-content', indexObs: selectedElementObs,  
+        listObs: scheduleCriteriaObs}">
         <div class="vs-item" data-bind="click: $component.selectCriteria">
             <div class="vs-item-content" data-bind="text: $data.labelObs"></div>
             <div class="vs-item-delete link"><i class="delete icon" data-bind="click: $component.removeCriteria"></i></div>

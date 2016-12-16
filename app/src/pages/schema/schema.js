@@ -21,6 +21,7 @@ module.exports = function(params) {
         .obs('revision', params.revision ? params.revision : null)
         .bind('showError', false)
         .bind('name', '')
+        .bind('index', 0)
         .bind('fieldDefinitions[]', [], fieldDefToObs, fieldObsToDef);
 
     self.revisionLabel = ko.computed(function() {

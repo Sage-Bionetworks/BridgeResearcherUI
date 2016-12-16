@@ -263,6 +263,7 @@ module.exports = {
      * @param params
      */
     initSurveyVM: function(vm) {
+        vm.selectedElementObs = ko.observable(0);
         SURVEY_FIELDS.forEach(function(field) {
             vm[field+"Obs"] = ko.observable("");
         });
@@ -291,7 +292,6 @@ module.exports = {
                 root.openDialog('rules_editor', {parentViewModel: vm, element: vm.element});
             };
 
-            //vm.durationOptions = DURATION_OPTIONS;
             vm.rulesObs = params.element.constraints.rulesObs;
             vm.uiHintObs = params.element.uiHintObs;
             vm.fireEventObs = params.element.fireEventObs;
@@ -301,9 +301,6 @@ module.exports = {
             vm.dataTypeLabel = utils.makeOptionLabelFinder(vm.dataTypeOptions);
             vm.unitOptions = UNIT_OPTIONS;
             vm.unitLabel = utils.makeOptionLabelFinder(UNIT_OPTIONS);
-
-            //vm.durationOptions = DURATION_OPTIONS;
-            //vm.durationLabel = utils.makeOptionLabelFinder(DURATION_OPTIONS);
 
             vm.operatorOptions = OPERATOR_OPTIONS;
             vm.operatorLabel = utils.makeOptionLabelFinder(OPERATOR_OPTIONS);

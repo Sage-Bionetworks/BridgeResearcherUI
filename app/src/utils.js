@@ -371,16 +371,21 @@ module.exports = {
         };
     },
     // TODO: There is also the binding fadeRemove, ostensibly to do the same thing.
-    animatedDeleter: function(scrollTo, elementsObs) {
-        return function(element) {
+    animatedDeleter: function(scrollTo, elementsObs, selectedElementObs) {
+        return function(element, event) {
+            event.stopPropagation();
             alerts.deleteConfirmation("Are you sure you want to delete this?", function() {
                 setTimeout(function() {
                     var index = elementsObs.indexOf(element);
-                    elementsObs.remove(element);
+                    elementsObs.splice(index,1);
                     setTimeout(function() {
-                        scrollTo(index);
-                    }, 510);
-                }, 200);
+                        if (selectedElementObs) {
+                            selectedElementObs(index);
+                        } else {
+                            scrollTo(index);
+                        }
+                    }, 300);
+                }, 500);
             });
         };
     },    

@@ -1,5 +1,4 @@
 var utils = require('../../../utils');
-
 var MAX_LENGTH = 65;
 
 module.exports = function(params) {
@@ -7,6 +6,12 @@ module.exports = function(params) {
 
     self.nameObs = params.viewModel.nameObs;
     self.elementsObs = params.viewModel.elementsObs;
+    self.selectedElementObs = params.viewModel.selectedElementObs;
+    self.selectElement = params.viewModel.selectElement;
+    self.removeElement = function(data, event) {
+        event.stopPropagation();
+        params.viewModel.deleteElement(data, event);
+    };
 
     self.truncate = function(value) {
         if (value && value.length > MAX_LENGTH) {
@@ -19,6 +24,4 @@ module.exports = function(params) {
         }
         return value;
     };
-    self.selectElement = utils.makeEventToPostboxListener("elementsSelect");
-    self.removeElement = utils.makeEventToPostboxListener("elementsRemove");
 };

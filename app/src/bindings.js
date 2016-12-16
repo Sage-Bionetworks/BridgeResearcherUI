@@ -1,6 +1,5 @@
 // jquery loaded globally (for now) from CDNs.
 var ko = require('knockout');
-require('knockout-postbox');
 var $ = require('jquery');
 var flatpickr = require('flatpickr');
 require('../../node_modules/flatpickr/dist/flatpickr.min.css');

@@ -2,14 +2,12 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var bind = require('../../binder');
 
-function partialRelayUpdater(vm, eventObj) {
+function partialRelay(criteriaObs) {
     return function(func) {
         return function(newValue) {
-            var crit = vm.criteriaObs();
+            var crit = criteriaObs();
             func(crit, newValue);
-            if (eventObj) {
-                eventObj.notifySubscribers(eventObj());
-            }
+            criteriaObs(crit);
         };
     };
 }
@@ -46,35 +44,31 @@ module.exports = function(params) {
         self.androidMaxObs(crit.maxAppVersions.Android);
     }
 
-    var crit = self.criteriaObs();
-    if (crit) {
-        updateVM(crit);    
-    }
-    
-    var updater = partialRelayUpdater(self, params.eventObj);
-    
-    self.criteriaObs.subscribe(function(newValue) {
-        updateVM(newValue);
-    });
-    self.languageObs.subscribe(updater(function(crit, newValue) {
+    var relay = partialRelay(self.criteriaObs);
+
+    self.languageObs.subscribe(relay(function(crit, newValue) {
         crit.language = newValue;
     }));
-    self.allOfGroupsObs.subscribe(updater(function(crit, newValue) {
+
+    self.languageObs.subscribe(relay(function(crit, newValue) {
+        crit.language = newValue;
+    }));
+    self.allOfGroupsObs.subscribe(relay(function(crit, newValue) {
         crit.allOfGroups = newValue;
     }));
-    self.noneOfGroupsObs.subscribe(updater(function(crit, newValue) {
+    self.noneOfGroupsObs.subscribe(relay(function(crit, newValue) {
         crit.noneOfGroups = newValue;
     }));
-    self.iosMinObs.subscribe(updater(function(crit, newValue) {
+    self.iosMinObs.subscribe(relay(function(crit, newValue) {
         crit.minAppVersions['iPhone OS'] = intValue(newValue);
     }));
-    self.iosMaxObs.subscribe(updater(function(crit, newValue) {
+    self.iosMaxObs.subscribe(relay(function(crit, newValue) {
         crit.maxAppVersions['iPhone OS'] = intValue(newValue);
     }));
-    self.androidMinObs.subscribe(updater(function(crit, newValue) {
+    self.androidMinObs.subscribe(relay(function(crit, newValue) {
         crit.minAppVersions.Android = intValue(newValue);
     }));
-    self.androidMaxObs.subscribe(updater(function(crit, newValue) {
+    self.androidMaxObs.subscribe(relay(function(crit, newValue) {
         crit.maxAppVersions.Android = intValue(newValue);
     }));
 
@@ -84,5 +78,14 @@ module.exports = function(params) {
 
     serverService.getStudy().then(function(study) {
         self.dataGroupsOptionsObs(study.dataGroups);
+
+        var crit = self.criteriaObs();
+        if (crit) {
+            updateVM(crit);    
+        }
+        var sub = self.criteriaObs.subscribe(function(newValue) {
+            sub.dispose();
+            updateVM(newValue);
+        });
     });
 };
