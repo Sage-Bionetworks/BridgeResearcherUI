@@ -1,6 +1,5 @@
 var utils = require('../../utils');
 var ko = require('knockout');
-require('knockout-postbox');
 var root = require('../../root');
 
 /**

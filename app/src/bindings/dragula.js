@@ -2,7 +2,6 @@
 var ko = require('knockout');
 var dragula = require('dragula');
 var autoScroll = require('dom-autoscroller');
-require('knockout-postbox');
 
 var indexOf = [].indexOf;
 
