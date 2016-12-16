@@ -141,6 +141,10 @@ module.exports = function(params) {
     self.detailObs = ko.observable();
     self.valueObs = ko.observable();
     self.indexObs = ko.observable(null);
+    self.selectedIndexObs = ko.observable(0);
+    self.selectedIndexObs.subscribe(function() {
+        self.cancelEditMode();
+    });
 
     // Should we copy edits over to all the same lists.
     self.copyToAllEnumsObs = ko.observable(true);
@@ -157,6 +161,7 @@ module.exports = function(params) {
         self.listObs.remove(item);
     };
     self.selectList = function(entry, event) {
+        console.log(entry);
         self.listObs(entry.enumeration);
         listsSource.setCurrentEntry(entry);
         self.currentTabObs('editor');
@@ -246,6 +251,4 @@ module.exports = function(params) {
             self.currentTabObs(tabName);
         };
     };
-
-    ko.postbox.subscribe("listChanged", self.cancelEditMode);
 };

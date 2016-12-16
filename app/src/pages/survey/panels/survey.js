@@ -8,7 +8,7 @@ module.exports = function(params) {
     self.nameObs = params.viewModel.nameObs;
     self.elementsObs = params.viewModel.elementsObs;
     self.selectedElementObs = params.viewModel.selectedElementObs;
-    self.selectElement = params.vewModel.selectElement;
+    self.selectElement = params.viewModel.selectElement;
     self.removeElement = function(data, event) {
         event.stopPropagation();
         params.viewModel.deleteElement(data, event);

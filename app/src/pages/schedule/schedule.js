@@ -72,6 +72,7 @@ function getScheduleType(editorType) {
 }
 
 module.exports = function(params) {
+    console.trace("new schedule viewModel", params.scheduleObs());
     var self = this;
     self.collectionName = params.collectionName;
         
@@ -92,57 +93,52 @@ module.exports = function(params) {
     observe(self, "expires");
     observe(self, "activities", true);
     
-    self.scheduleObs = ko.pureComputed({
-        read: function() {
-            var sch = {
-                eventId: self.eventIdObs(),
-                scheduleType: self.scheduleTypeObs(),
-                startsOn: self.startsOnObs(),
-                endsOn: self.endsOnObs(),
-                delay: self.delayObs(),
-                interval: self.intervalObs(),
-                times: self.timesObs(),
-                cronTrigger: self.cronTriggerObs(),
-                expires: self.expiresObs(),
-                activities: self.activitiesObs().map(extractActivityFromObservables)
-            };
-            utils.deleteUnusedProperties(sch);
-            // some of these properties are mutually exclusive so based on the type of schedule,
-            // delete some fields. This comes up if you schedule one way, then change and schedule another 
-            // way.
-            switch( self.editorScheduleTypeObs() ) {
-                case 'once':
-                    delete sch.interval;
-                    delete sch.cronTrigger;
-                    break;
-                case 'interval':
-                    delete sch.cronTrigger;
-                    break;
-                case 'cron':
-                    delete sch.interval;
-                    delete sch.times;
-                    break;
-                case 'persistent':
-                    delete sch.interval;
-                    delete sch.cronTrigger;
-                    delete sch.times;
-                    delete sch.delay;
-                    delete sch.expires;
-            }
-            return sch;
-        },
-        write: function(schedule) {
-            updateView(self, schedule, ['eventId','scheduleType','startsOn','endsOn','delay',
-                'interval','times','cronTrigger','expires']);
-            self.editorScheduleTypeObs(getEditorType(schedule));
-            self.activitiesObs(schedule.activities.map(addObserversToActivity));
+    function updateEditor(schedule) {
+        updateView(self, schedule, ['eventId','scheduleType','startsOn','endsOn','delay',
+            'interval','times','cronTrigger','expires']);
+        self.editorScheduleTypeObs(getEditorType(schedule));
+        self.activitiesObs(schedule.activities.map(addObserversToActivity));
+    }
+    function readEditor() {
+        var sch = {
+            eventId: self.eventIdObs(),
+            scheduleType: self.scheduleTypeObs(),
+            startsOn: self.startsOnObs(),
+            endsOn: self.endsOnObs(),
+            delay: self.delayObs(),
+            interval: self.intervalObs(),
+            times: self.timesObs(),
+            cronTrigger: self.cronTriggerObs(),
+            expires: self.expiresObs(),
+            activities: self.activitiesObs().map(extractActivityFromObservables)
+        };
+        utils.deleteUnusedProperties(sch);
+        // some of these properties are mutually exclusive so based on the type of schedule,
+        // delete some fields. This comes up if you schedule one way, then change and schedule another 
+        // way.
+        switch( self.editorScheduleTypeObs() ) {
+            case 'once':
+                delete sch.interval;
+                delete sch.cronTrigger;
+                break;
+            case 'interval':
+                delete sch.cronTrigger;
+                break;
+            case 'cron':
+                delete sch.interval;
+                delete sch.times;
+                break;
+            case 'persistent':
+                delete sch.interval;
+                delete sch.cronTrigger;
+                delete sch.times;
+                delete sch.delay;
+                delete sch.expires;
         }
-    });
-    
-    params.scheduleObs.subscribe(self.scheduleObs);
-    params.scheduleObs.callback = function() {
-        return self.scheduleObs();
-    };
+        return sch;
+    }
+    params.scheduleObs.subscribe(updateEditor);
+    params.scheduleObs.callback = readEditor;
     
     self.editorScheduleTypeObs = ko.observable();
     self.editorScheduleTypeObs.subscribe(function(newValue) {
@@ -216,4 +212,10 @@ module.exports = function(params) {
     self.surveysOptionsLabel = scheduleUtils.surveysOptionsLabel;
     self.taskOptionsObs = scheduleUtils.taskOptionsObs;
     self.taskOptionsLabel = scheduleUtils.taskOptionsLabel;
+
+    // Finally... update with the schedule if we already have it from the server, as knockout 
+    // recreates the views when you use dragula to reorder the list of scheduleCriteria. 
+    if (params.scheduleObs()) {
+        updateEditor(params.scheduleObs());
+    }
 };

@@ -233,7 +233,6 @@ module.exports = {
         return Promise.resolve(postInt(config.host[env] + config.requestResetPassword, data));
     },
     getStudy: function() {
-        console.trace();
         return get(config.getCurrentStudy);
     },
     getStudyPublicKey: function() {

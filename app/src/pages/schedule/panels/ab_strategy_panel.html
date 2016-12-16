@@ -9,7 +9,7 @@
         <span data-bind="visible: labelObs().length > 0, text: labelObs"></span>
         <span data-bind="visible: labelObs().length === 0">New Schedule Plan</span>
     </div>
-    <div class="item vertical-scrollbox" data-bind="foreach: scheduleGroupsObs, dragula2: {
+    <div class="item vertical-scrollbox" data-bind="foreach: scheduleGroupsObs, dragula: {
             dragHandleSelector: '.vs-item-content', indexObs: selectedElementObs, 
             listObs: scheduleGroupsObs}">
         <div class="vs-item" data-bind="click: $component.selectGroup">

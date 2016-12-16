@@ -9,7 +9,7 @@
         <span data-bind="visible: nameObs().length > 0, text: nameObs"></span>
         <span data-bind="visible: nameObs().length === 0">New Survey</span>
     </div>
-    <div class="item vertical-scrollbox" data-bind="foreach: elementsObs, dragula2: {
+    <div class="item vertical-scrollbox" data-bind="foreach: elementsObs, dragula: {
         dragHandleSelector: '.vs-item-content', indexObs: selectedElementObs, listObs: elementsObs}">
         <div class="vs-item" data-bind="click: $component.selectElement">
             <div class="vs-item-content" data-bind="html: $component.truncate($data.titleObs() || $data.promptObs())"></div>

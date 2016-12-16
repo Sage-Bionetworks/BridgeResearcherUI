@@ -64,7 +64,7 @@ module.exports = function(params) {
     };
     self.selectElement = function(data, event) {
         var index = self.elementsObs().indexOf(data);
-        params.viewModel.selectedElementObs(index);
+        self.selectedElementObs(index);
     };
     self.deleteElement = utils.animatedDeleter(scrollTo, self.elementsObs, self.selectedElementObs);
 
@@ -91,6 +91,7 @@ module.exports = function(params) {
         scrollTo(index+1);
     };
     self.selectedElementObs.subscribe(function(index) {
+        console.log("scrollTo index", index);
         scrollTo( index );
     });
 
