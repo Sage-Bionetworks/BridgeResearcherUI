@@ -22,6 +22,9 @@
     border: 1px solid #aaa;
     border-radius: 6px;
 }
+    .element:nth-child(odd) {
+        background-color: rgba(0,0,0,.03);
+    }
     .element-callout {
         @include flex-box(column);
         @include align-content(flex-end);
@@ -91,15 +94,19 @@
         font-size: 1.2rem;
         font-weight: bold;
         margin-bottom: .5rem;
+        background-color: white;
+        border: 1px solid #e5e5e5;
     }
         .element-content-prompt-detail {
             font-size: 1.1rem;
             color: #bbb;
             font-weight: normal;
             font-style: italic;
+            background-color: white;
+            border: 1px solid #e5e5e5;
         }
     .element-content-constraints {
-        table-collapse: collapse;
+        border-collapse: collapse;
     }
         .element-content-constraints td {
             vertical-align: baseline;
