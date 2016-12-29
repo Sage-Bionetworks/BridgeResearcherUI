@@ -36,6 +36,8 @@ var handlers = {
             params.onChange = function(value, text, $selectedItem) {
                 dropdownChange($selectedItem.get(0));
             };
+        } else {
+            console.error("No dropdownChange function", allBindings().dropdownChange);
         }
         setTimeout(function() {
             $element.addClass("ui dropdown").dropdown(params);

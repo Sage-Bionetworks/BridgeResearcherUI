@@ -239,6 +239,7 @@ function newField(type) {
 }
 
 module.exports = {
+    ELEMENT_FIELDS: ELEMENT_FIELDS,
     newSurvey: newSurvey,
     newField: newField,
     observablesToElement: observablesToElement,
