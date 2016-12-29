@@ -72,13 +72,23 @@ module.exports = function(params) {
         var index = ko.contextFor(domEl).$index();
         var oldElement = self.elementsObs()[index];
         var newElement = surveyUtils.newField(newType);
-
         newElement = surveyUtils.elementToObservables(newElement);
-        newElement.constraints.rulesObs(oldElement.constraints.rulesObs());
-        oldElement.uiHint = newElement.uiHint;
-        oldElement.uiHintObs(newElement.uiHintObs());
-        oldElement.constraints = newElement.constraints;
-        oldElement.constraintsTypeObs(newType);
+
+        var switchingElements = (newType !== oldElement.type);
+        var bothQuestions = (oldElement.type !== "SurveyInfoScreen" && newElement.type !== "SurveyInfoScreen");
+        if (switchingElements) {
+            self.elementsObs.splice(index, 1, newElement);
+        }
+        surveyUtils.ELEMENT_FIELDS.forEach(function(field) {
+            newElement[field+"Obs"](oldElement[field+"Obs"]());
+        });
+        if (bothQuestions) {
+            newElement.constraints.rulesObs(oldElement.constraints.rulesObs());
+            oldElement.uiHint = newElement.uiHint;
+            oldElement.uiHintObs(newElement.uiHintObs());
+            oldElement.constraints = newElement.constraints;
+            oldElement.constraintsTypeObs(newType);
+        }
     };
     self.copyElement = function(element) {
         var index = self.elementsObs.indexOf(element);
