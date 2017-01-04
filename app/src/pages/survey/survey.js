@@ -47,6 +47,10 @@ module.exports = function(params) {
         surveyUtils.observablesToSurvey(self, self.survey);
         return serverService.updateSurvey(self.survey);
     }
+    function unpublish() {
+        self.publishedObs(false);
+        self.survey.published = false;
+    }
 
     self.createNewElement = function(vm, event) {
         var type = event.target.getAttribute("data-type");
@@ -68,26 +72,13 @@ module.exports = function(params) {
     self.deleteElement = utils.animatedDeleter(scrollTo, self.elementsObs, self.selectedElementObs);
 
     self.changeElementType = function(domEl) {
-        var newType = domEl.getAttribute("data-type");
         var index = ko.contextFor(domEl).$index();
         var oldElement = self.elementsObs()[index];
-        var newElement = surveyUtils.newField(newType);
-        newElement = surveyUtils.elementToObservables(newElement);
+        var newType = domEl.getAttribute("data-type");
 
-        var switchingElements = (newType !== oldElement.type);
-        var bothQuestions = (oldElement.type !== "SurveyInfoScreen" && newElement.type !== "SurveyInfoScreen");
-        if (switchingElements) {
+        var newElement = surveyUtils.changeElementType(oldElement, newType);
+        if (newType !== oldElement.type) {
             self.elementsObs.splice(index, 1, newElement);
-        }
-        surveyUtils.ELEMENT_FIELDS.forEach(function(field) {
-            newElement[field+"Obs"](oldElement[field+"Obs"]());
-        });
-        if (bothQuestions) {
-            newElement.constraints.rulesObs(oldElement.constraints.rulesObs());
-            oldElement.uiHint = newElement.uiHint;
-            oldElement.uiHintObs(newElement.uiHintObs());
-            oldElement.constraints = newElement.constraints;
-            oldElement.constraintsTypeObs(newType);
         }
     };
     self.copyElement = function(element) {
@@ -112,11 +103,10 @@ module.exports = function(params) {
         utils.startHandler(self, event);
 
         if (self.survey.published) {
-            version(self.survey).then(updateVM).then(save).then(updateVM)
-                .then(function() {
-                    self.publishedObs(false);
-                    self.survey.published = false;
-                })
+            version(self.survey).then(updateVM)
+                .then(save)
+                .then(updateVM)
+                .then(unpublish)
                 .then(utils.successHandler(vm, event, "New version of survey saved."))
                 .catch(utils.failureHandler(vm, event));
         } else if (self.survey.guid) {
