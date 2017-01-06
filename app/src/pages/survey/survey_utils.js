@@ -102,7 +102,6 @@ var CONSTRAINTS_TEMPLATES = Object.freeze({
     'BooleanConstraints': {dataType:'boolean', rules:[]},
     'DateConstraints': {dataType:'date', rules:[], allowFuture:false, earliestValue:'', latestValue:'' },
     'DateTimeConstraints': {dataType:'datetime', rules:[], allowFuture:false, earliestValue:'', latestValue:'' },
-    /*'DurationConstraints': {dataType:'duration', rules:[], minValue:0, maxValue:0, unit: '', step:1.0},*/
     'TimeConstraints': {dataType:'time', rules:[]},
     'IntegerConstraints': {dataType:'integer', rules:[], minValue:0, maxValue:255, unit: '', step:1.0},
     'DecimalConstraints': {dataType:'decimal', rules: [], minValue:0, maxValue:255, unit: '', step:1.0},
@@ -113,7 +112,6 @@ var UI_HINT_FOR_CONSTRAINTS = Object.freeze({
     'BooleanConstraints': 'checkbox',
     'DateConstraints': 'datepicker',
     'DateTimeConstraints': 'datetimepicker',
-    /*'DurationConstraints': 'numberfield',*/
     'TimeConstraints': 'timepicker',
     'IntegerConstraints': 'numberfield',
     'DecimalConstraints': 'numberfield',
@@ -237,13 +235,34 @@ function newField(type) {
     }
     return elementToObservables(newEl);
 }
+function changeElementType(oldElement, newType) {
+    var newElement = newField(newType);
+    newElement = elementToObservables(newElement);
+    ELEMENT_FIELDS.forEach(function(field) {
+        newElement[field+"Obs"](oldElement[field+"Obs"]());
+    });
+    // except for UI hint which is bound to constraints, but not in constraints...
+    newElement.uiHintObs(newElement.uiHint);
+
+    var bothQuestions = (oldElement.type !== "SurveyInfoScreen" && 
+                         newElement.type !== "SurveyInfoScreen");
+    if (bothQuestions) {
+        newElement.constraints.rulesObs(oldElement.constraints.rulesObs());
+        // Because they are not going to be swapped out...
+        oldElement.uiHint = newElement.uiHint;
+        oldElement.uiHintObs(newElement.uiHintObs());
+        oldElement.constraints = newElement.constraints;
+        oldElement.constraintsTypeObs(newType);
+    }
+    return newElement;
+}
 
 module.exports = {
-    ELEMENT_FIELDS: ELEMENT_FIELDS,
     newSurvey: newSurvey,
     newField: newField,
     observablesToElement: observablesToElement,
     elementToObservables: elementToObservables,
+    changeElementType: changeElementType,
     surveyToObservables: function(vm, survey) {
         SURVEY_FIELDS.forEach(function(field) {
             vm[field+"Obs"](survey[field]);
