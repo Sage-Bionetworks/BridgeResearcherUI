@@ -115,41 +115,13 @@ function reloadPageWhenSessionLost(response) {
     return response;
 }
 function makeSessionWaitingPromise(httpAction, func) {
-    // Return a Bluebird promise. If there's a session, execute the function and call resolve/reject.
-    // otherwise, the executor itself has a promise and can be used as a listener function.
-    // when a session is generated the promise will be executed. If the session goes away, on any 
-    // request, the page will reload to pick up the new state of the server.
-    var promise = new Promise(function(resolve, reject) {
-        var executor = function() {
-            var p = func();
-            p.done(resolve);
-            // Bluebird throws a big ole warning because jQuery's AJAX response is not an error. 
-            // Even though we want to know what is in the response as part of the rejection. 
-            // Soooo convert it to an error and copy over key aspects of the response. 
-            p.fail(function(response) {
-                try {
-                    var error = new Error();
-                    if (response.responseJSON) {
-                        error.message = response.responseJSON.message;
-                        error.responseJSON = response.responseJSON;
-                    }
-                    error.statusText = response.statusText;
-                    error.status = response.status;
-                    reject(error);
-                } catch(e) {
-                    reject(e);                    
-                }
-            });
-        };
-        if (session && session.sessionToken) {
-            executor();
-        } else {
-            console.info("[queuing]", httpAction);
-            listeners.once(SESSION_STARTED_EVENT_KEY, executor);
-        }
-    });
-    promise.catch(reloadPageWhenSessionLost);
-    return promise;
+    if (session && session.sessionToken) {
+        return func();
+    }
+    console.info("[queuing]", httpAction);
+    return new Promise(function(resolve, reject) {
+        listeners.once(SESSION_STARTED_EVENT_KEY, resolve);
+    }).then(func).catch(reloadPageWhenSessionLost);
 }
 function get(path) {
     if (cache.get(path)) {
@@ -469,6 +441,12 @@ module.exports = {
     },
     deleteStudyReportRecord: function(identifier, date) {
         return del(config.reports + "/" + identifier + '/' + date);
+    },
+    getStudyReportIndex: function(identifier) {
+        return get(config.reports + "/" + identifier + "/index");
+    },
+    updateStudyReportIndex: function(index) {
+        return post(config.reports + "/" + index.identifier + "/index", index);
     },
     getParticipantReports: function() {
         return get(config.reports+transforms.queryString({"type":"participant"}));
