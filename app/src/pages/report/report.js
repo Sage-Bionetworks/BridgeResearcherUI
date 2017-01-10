@@ -3,6 +3,8 @@ var serverService = require('../../services/server_service');
 var root = require('../../root');
 var jsonFormatter = require('../../json_formatter');
 var tables = require('../../tables');
+var utils = require('../../utils');
+var config = require('../../config');
 
 var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
@@ -19,6 +21,29 @@ module.exports = function(params) {
     self.identifierObs = ko.observable(params.id);
     self.isDeveloper = root.isDeveloper;
     self.showLoaderObs = ko.observable(false);
+    self.publicObs = ko.observable(false);
+    self.toggleObs = ko.observable();
+
+    function publicToggled(newValue) {
+        utils.startHandler(self, event);
+        serverService.updateStudyReportIndex({
+            identifier: params.id, public: newValue
+        }).then(function(response) {
+            self.publicObs(newValue);
+            self.toggleObs(newValue);
+            return response;
+        })
+        .then(utils.successHandler(self, event, "Report updated."))
+        .catch(utils.failureHandler(self, event));
+    }
+    function loadIndex() {
+        return serverService.getStudyReportIndex(params.id).then(function(response) {
+            self.publicObs(response.public);
+            self.toggleObs(response.public);
+            self.toggleObs.subscribe(publicToggled, null, 'change');
+        });
+    }
+    loadIndex();
 
     var d = new Date();
     self.currentMonth = d.getMonth();

@@ -18,6 +18,15 @@
     <errors></errors>
     <div class="line-control">
         <div class="line-control-stretch">
+            <b style="margin-right:1rem">Visibility: </b>
+            <div class="ui toggle checkbox" data-bind="semantic: 'checkbox', 
+                checkboxObs: toggleObs, visible: isDeveloper">
+                <input type="checkbox" name="gift" tabindex="0" 
+                    class="hidden" data-bind="attr: {checked: toggleObs}">
+                <label data-bind="text: publicObs() ? 'Public' : 'Signed in users only'"></label>
+            </div>
+            <div data-bind="visible: !isDeveloper(), 
+                text: publicObs() ? 'Public' : 'Signed in users only'"></div>
         </div>
         <div>
             <div class="ui small pagination menu">
