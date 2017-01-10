@@ -24,6 +24,7 @@ var ReportViewModel = rewire('../../app/src/pages/report/report');
 ReportViewModel.__set__({
     "serverService": serverService
         .doReturn('deleteStudyReportRecord', {message: "Report deleted."})
+        .doReturn('getStudyReportIndex', {identifier:'test-report',public:false})
         .doReturn('getStudyReport', ITEMS),
     "tables": stubs.tables
 });
