@@ -29,12 +29,15 @@ function createObservable(doBinding) {
         return this;
     };
 }
-
+// Retrieve the value of a property to the property of an object on the model (rather 
+// than directly as a property of the model);
 function fromObjectField(fieldName, objFieldName) {
     return function(value, context) {
         return context.model[fieldName][objFieldName];
     };
 }
+// Write the observer to the property of an object that is a property of the model 
+// object (rather than directly on the model);
 function toObjectField(fieldName, objFieldName) {
     return function(value, context)  {
         if (value) {
