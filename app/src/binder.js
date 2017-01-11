@@ -29,6 +29,24 @@ function createObservable(doBinding) {
         return this;
     };
 }
+// Retrieve the value of a property to the property of an object on the model (rather 
+// than directly as a property of the model);
+function fromObjectField(fieldName, objFieldName) {
+    return function(value, context) {
+        return context.model[fieldName][objFieldName];
+    };
+}
+// Write the observer to the property of an object that is a property of the model 
+// object (rather than directly on the model);
+function toObjectField(fieldName, objFieldName) {
+    return function(value, context)  {
+        if (value) {
+            context.model[fieldName][objFieldName] = value;
+        } else {
+            delete context.model[fieldName][objFieldName];
+        }
+    };
+}
 
 function Binder(vm) {
     this.vm = vm;
@@ -137,4 +155,10 @@ Binder.prototype = {
 
 module.exports = function(vm) {
     return new Binder(vm);
+};
+module.exports.objPropDelegates = function(fieldName, objFieldName) {
+    return {
+        toObject: toObjectField(fieldName, objFieldName),
+        fromObject: fromObjectField(fieldName, objFieldName)
+    };
 };

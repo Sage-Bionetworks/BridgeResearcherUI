@@ -18,7 +18,7 @@ module.exports = {
         preventDuplicates: true,
         opacity: 1.0
     },
-    // options: isPublic, codesEnumerated, codeRequired 
+    // options: isPublic, codesEnumerated, codeRequired, notificationsEnabled, under studyId
     studies: {
     },
     signIn: '/v3/auth/signIn',

@@ -49,6 +49,7 @@ var RootViewModel = function() {
         .obs('codesEnumerated', false)
         .obs('codeRequired', false)
         .obs('isEditorTabVisible', false)
+        .obs('notificationsEnabled', false)
         .obs('sidePanel', 'navigation')
         .obs('showNavigation', true)
         .obs('dialog', {name: 'none'});
@@ -138,7 +139,8 @@ var RootViewModel = function() {
             var defaults = {
                 isPublic: study.emailVerificationEnabled,
                 codesEnumerated: study.externalIdValidationEnabled,
-                codeRequired: study.externalIdValidationEnabled
+                codeRequired: study.externalIdValidationEnabled,
+                notificationsEnabled: Object.keys(study.pushNotificationARNs).length > 0
             };
             var studyConfig = config.studies[study.identifier] || {};
             var opts = Object.assign({}, defaults, studyConfig);
@@ -146,6 +148,7 @@ var RootViewModel = function() {
             self.isPublicObs(opts.isPublic);
             self.codesEnumeratedObs(opts.codesEnumerated);
             self.codeRequiredObs(opts.codeRequired);
+            self.notificationsEnabledObs(opts.notificationsEnabled);
             console.debug("[config]", Object.keys(opts).map(function(key) { return key + "=" + opts[key]; }).join(', '));
         });
     });
