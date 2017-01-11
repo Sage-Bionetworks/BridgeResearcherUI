@@ -30,6 +30,21 @@ function createObservable(doBinding) {
     };
 }
 
+function fromObjectField(fieldName, objFieldName) {
+    return function(value, context) {
+        return context.model[fieldName][objFieldName];
+    };
+}
+function toObjectField(fieldName, objFieldName) {
+    return function(value, context)  {
+        if (value) {
+            context.model[fieldName][objFieldName] = value;
+        } else {
+            delete context.model[fieldName][objFieldName];
+        }
+    };
+}
+
 function Binder(vm) {
     this.vm = vm;
     this.fields = {};
@@ -137,4 +152,10 @@ Binder.prototype = {
 
 module.exports = function(vm) {
     return new Binder(vm);
+};
+module.exports.objPropDelegates = function(fieldName, objFieldName) {
+    return {
+        toObject: toObjectField(fieldName, objFieldName),
+        fromObject: fromObjectField(fieldName, objFieldName)
+    };
 };
