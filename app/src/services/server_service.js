@@ -388,6 +388,12 @@ module.exports = {
     getParticipantRequestInfo: function(id) {
         return get(config.participants+"/"+id+"/requestInfo");
     },
+    getParticipantNotifications: function(id) {
+        return get(config.participants+"/"+id+"/notifications");
+    },
+    sendNotification: function(id, message) {
+        return post(config.participants+"/"+id+"/sendNotification", message);
+    },
     createParticipant: function(participant) {
         return post(config.participants + "?verifyEmail=false", participant);
     },

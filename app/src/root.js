@@ -11,7 +11,7 @@ var clipboard = require('./widgets/clipboard/clipboard');
 // Used in navigation to keep a section highlighted as you navigate into it.
 var participantPages = ['enrollees','participants','participant_general','participant_consents', 
     'participant_reports', 'participant_report', 'participant_activities', 'participant_uploads', 
-    'participant_upload'];
+    'participant_upload', 'participant_notifications', 'participant_request_info'];
 
 var pageSets = {
     'settings/general': ['general', 'email', 'data_groups', 'password_policy', 'eligibility', 'user_attributes', 'synapse'],

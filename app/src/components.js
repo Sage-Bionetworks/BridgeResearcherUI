@@ -126,6 +126,10 @@ reg('participant_reports', {
     viewModel: require('./pages/participant/reports'),
     template: require('./pages/participant/reports.html')
 });
+reg('participant_notifications', {
+    viewModel: require('./pages/participant/notifications'),
+    template: require('./pages/participant/notifications.html')
+});
 reg('participant_report', {
     viewModel: require('./pages/participant/report'),
     template: require('./pages/participant/report.html')
@@ -347,6 +351,10 @@ reg('copy_schemas', {
 reg('withdrawal', {
     viewModel: require('./dialogs/withdrawal/withdrawal'),
     template: require('./dialogs/withdrawal/withdrawal.html'), synchronous: true
+});
+reg('send_notification', {
+    viewModel: require('./dialogs/send_notification/send_notification'),
+    template: require('./dialogs/send_notification/send_notification.html'), synchronous: true
 });
 
 // Attribute editors

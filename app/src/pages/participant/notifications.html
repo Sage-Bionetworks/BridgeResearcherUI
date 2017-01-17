@@ -1,0 +1,64 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <div class="fixed-header-heading">
+            <div class="ui breadcrumb">
+                <a class="section" href="#/participants" data-bind="visible: isPublicObs">Participants</a>
+                <a class="section" href="#/enrollees" data-bind="visible: !isPublicObs()">Participants</a>
+                <i class="right chevron icon divider"></i>
+            </div>            
+            <h3 data-bind="html: titleObs"></h3>
+        </div>
+        <div class="fixed-header-buttons">
+            <button class="ui primary tiny button" data-bind="visible: isResearcher, enable: isRegisteredObs, click: sendNotification">Send Notification</button>
+        </div>
+    </div>
+    <!-- ko component: {name: 'participant-tabset', params: {active: 'notifications', isNewObs: isNewObs,
+        isPublicObs: isPublicObs}} --><!-- /ko -->
+</div>
+<div class="scrollbox">
+    <div class="ui grid">
+        <div class="ten wide column">
+            <div class="ui warning message" data-bind="visible: notificationsEnabledObs">
+                <p>No notification services have been configured (APNS, GCM). Client applications cannot register for 
+                    notifications until this is done. Contact Bridge server administration if you wish to include push 
+                    notifications into your Bridge participant management. </p>
+            </div>
+            <table class="ui compact selectable table" data-bind="visible: isResearcher">
+                <thead>
+                    <tr>
+                        <th>Registration</th>
+                        <th>Platform</th>
+                        <th>Last Modified</th>
+                    </tr>
+                </thead>
+                <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+                    <tr>
+                        <td colspan="3" data-bind="html: recordsMessageObs"></td>
+                    </tr>
+                </tbody>
+                <tbody data-bind="foreach: itemsObs">
+                    <tr>
+                        <td data-bind="text: $data.guid"></td>
+                        <td data-bind="text: $data.osName"></td>
+                        <td data-bind="text: $parent.formatDate($data.modifiedOn)"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="six wide column">
+            <div class="ui message">
+                <p>If the client application has registered with the Bridge server, there will be a record here 
+                    of the registration. You can attempt to send a push notification directly to this user. </p>
+
+                <p>If there is more than one record here, the user has installed your app on more than one device. If 
+                    you message the user, we will send the message to all devices. </p>
+
+                <p>The user is not guaranteed to receive your message. If they turn off notifications or delete the app 
+                    without telling Bridge, there will still be a registration record here, but the notification will 
+                    be rejected by the push notification services. </p>
+            </div>
+        </div>
+    </div>
+    
+
+</div>
