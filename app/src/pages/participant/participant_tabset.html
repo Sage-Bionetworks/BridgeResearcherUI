@@ -16,6 +16,10 @@
         attr:{'href':'#/participants/'+$parent.userIdObs()+'/uploads'}">
         <i class="upload icon"></i> Uploads
     </a>
+    <a class="item" data-bind="css:{active:$data.active === 'notifications'},
+        attr:{'href':'#/participants/'+$parent.userIdObs()+'/notifications'}">
+        <i class="announcement icon"></i> Push Notifications
+    </a>
     <a class="item" data-bind="css:{active:$data.active === 'reports'}, 
         attr:{'href':'#/participants/'+$parent.userIdObs()+'/reports'}">
         <i class="newspaper icon"></i> Reports
