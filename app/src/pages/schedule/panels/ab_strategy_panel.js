@@ -1,4 +1,3 @@
-var utils = require('../../../utils');
 
 module.exports = function(params) {
     var self = this;

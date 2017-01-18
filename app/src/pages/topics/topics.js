@@ -1,6 +1,5 @@
 var serverService = require('../../services/server_service');
 var tables = require('../../tables');
-var utils = require('../../utils');
 var root = require('../../root');
 
 function deleteTopic(topic) {
