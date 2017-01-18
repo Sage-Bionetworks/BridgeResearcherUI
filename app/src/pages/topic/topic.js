@@ -23,26 +23,19 @@ module.exports = function(params) {
     self.isResearcher = root.isResearcher;
     
     self.sendNotification = function(vm, event) {
-        root.openDialog('send_notification', {
-            topicId: self.guidObs()
-        });
+        root.openDialog('send_notification', {topicId: self.guidObs()});
     };
 
     self.save = function(vm, event) {
         utils.startHandler(vm, event);
 
         self.topic = binder.persist(self.topic);
-        if (self.isNewObs()) {
-            serverService.createTopic(self.topic)
-                .then(updateTopic)
-                .then(utils.successHandler(vm, event, "Topic has been saved."))
-                .catch(utils.failureHandler(vm, event));
-        } else {
-            serverService.updateTopic(self.topic)
-                .then(updateTopic)
-                .then(utils.successHandler(vm, event, "Topic has been saved."))
-                .catch(utils.failureHandler(vm, event));
-        }
+        var promise = self.isNewObs() ?
+            serverService.createTopic(self.topic) :
+            serverService.updateTopic(self.topic);
+        promise.then(updateTopic)
+            .then(utils.successHandler(vm, event, "Topic has been saved."))
+            .catch(utils.failureHandler(vm, event));
     };
 
     function updateTitle(response) {

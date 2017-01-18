@@ -394,12 +394,11 @@ module.exports = {
     sendUserNotification: function(id, message) {
         return post(config.participants+"/"+id+"/sendNotification", message);
     },
-    sendTopicNotification: function(id, message) {
-        return Promise.resolve();
-        //return post(config.participants+"/"+id+"/sendNotification", message);
+    sendTopicNotification: function(guid, message) {
+        return post(config.topics+"/"+guid+"/sendNotification", message);
     },
     createParticipant: function(participant) {
-        return post(config.participants + "?verifyEmail=false", participant);
+        return post(config.participants+"?verifyEmail=false", participant);
     },
     updateParticipant: function(participant) {
         cache.clear(participant.id+':name');
