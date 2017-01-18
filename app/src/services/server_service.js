@@ -391,8 +391,12 @@ module.exports = {
     getParticipantNotifications: function(id) {
         return get(config.participants+"/"+id+"/notifications");
     },
-    sendNotification: function(id, message) {
+    sendUserNotification: function(id, message) {
         return post(config.participants+"/"+id+"/sendNotification", message);
+    },
+    sendTopicNotification: function(id, message) {
+        return Promise.resolve();
+        //return post(config.participants+"/"+id+"/sendNotification", message);
     },
     createParticipant: function(participant) {
         return post(config.participants + "?verifyEmail=false", participant);
@@ -486,6 +490,21 @@ module.exports = {
     },
     withdrawParticipantFromStudy: function(userId, reason) {
         return post(config.participants + '/' + userId + '/consents/withdraw', reason);
+    },
+    getAllTopics: function() {
+        return get(config.topics);
+    },
+    getTopic: function(guid) {
+        return get(config.topics + "/" + guid);
+    },
+    createTopic: function(topic) {
+        return post(config.topics, topic);
+    },
+    updateTopic: function(topic) {
+        return post(config.topics + "/" + topic.guid, topic);
+    },
+    deleteTopic: function(guid) {
+        return del(config.topics + "/" + guid);
     },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {

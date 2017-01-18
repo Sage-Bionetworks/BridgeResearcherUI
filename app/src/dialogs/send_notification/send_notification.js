@@ -19,12 +19,20 @@ module.exports = function(params) {
         var subject = self.subjectObs();
         var message = self.messageObs();
         utils.startHandler(vm, event);
-        serverService.sendNotification(params.userId, {
-            subject: subject, message: message
-        })
-        .then(utils.successHandler(vm, event, "Notification has been sent."))
-        .then(self.cancel)
-        .catch(utils.dialogFailureHandler(vm, event));        
+
+        var promise = null;
+        if (params.userId) {
+            promise = serverService.sendUserNotification(params.userId, {
+                subject: subject, message: message
+            });
+        } else if (params.topicId) {
+            promise = serverService.sendTopicNotification(params.topicId, {
+                subject: subject, message: message
+            });
+        }
+        promise.then(utils.successHandler(vm, event, "Notification has been sent."))
+            .then(self.cancel)
+            .catch(utils.dialogFailureHandler(vm, event));        
     };
     self.cancel = function(vm, event) {
         root.closeDialog();

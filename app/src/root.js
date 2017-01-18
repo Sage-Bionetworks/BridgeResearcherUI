@@ -24,7 +24,8 @@ var pageSets = {
     'enrollees': participantPages,
     'admin/info': ['admin_info'],
     'admin/cache': ['admin_cache'],
-    'reports': ['reports', 'report']
+    'reports': ['reports', 'report'],
+    'topics': ['topics', 'topic']
 };
 function roleFunc(observer, role) {
     return ko.computed(function() {return observer().indexOf(role) > -1;});        
