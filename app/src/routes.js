@@ -82,6 +82,8 @@ router.on('/participants/:userId/uploads', routeTo('participant_uploads', USERID
 router.on('/participants/:userId', routeTo('participant_general', USERID));
 router.on('/participants/:userId/requestInfo', routeTo('participant_request_info', USERID));
 router.on('/participants', routeTo('participants'));
+router.on('/topics/:guid', routeTo('topic', GUID));
+router.on('/topics', routeTo('topics'));
 router.on('/enrollees/:externalId', redirectToParticipant);
 router.on('/enrollees', routeTo('enrollees'));
 router.on('/admin/info', routeTo('admin_info'));

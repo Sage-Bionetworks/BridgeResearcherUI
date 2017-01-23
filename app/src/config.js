@@ -36,6 +36,7 @@ module.exports = {
     schemasV4: '/v4/uploadschemas',
     schemaPlans: '/v3/scheduleplans',
     subpopulations: '/v3/subpopulations',
+    topics: '/v3/topics',
     verifyEmail: '/v3/studies/self/verifyEmail',
     emailStatus: '/v3/studies/self/emailStatus',
     cache: '/v3/cache',

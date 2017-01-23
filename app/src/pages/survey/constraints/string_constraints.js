@@ -6,4 +6,5 @@ module.exports = function(params) {
     self.minLengthObs = self.element.constraints.minLengthObs;
     self.maxLengthObs = self.element.constraints.maxLengthObs;
     self.patternObs = self.element.constraints.patternObs;
+    self.uiHintLimitedObs = self.element.uiHintLimitedObs;
 };

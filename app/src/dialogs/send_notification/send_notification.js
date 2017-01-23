@@ -1,4 +1,3 @@
-var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var root = require('../../root');
 var bind = require('../../binder');
@@ -19,12 +18,19 @@ module.exports = function(params) {
         var subject = self.subjectObs();
         var message = self.messageObs();
         utils.startHandler(vm, event);
-        serverService.sendNotification(params.userId, {
-            subject: subject, message: message
-        })
-        .then(utils.successHandler(vm, event, "Notification has been sent."))
-        .then(self.cancel)
-        .catch(utils.dialogFailureHandler(vm, event));        
+
+        var msgObj = {subject: subject, message: message};
+        var promise = null;
+        if (params.userId) {
+            promise = serverService.sendUserNotification(params.userId, msgObj);
+        } else if (params.topicId) {
+            promise = serverService.sendTopicNotification(params.topicId, msgObj);
+        } else {
+            throw new Error("No type of notification provided.");
+        }
+        promise.then(utils.successHandler(vm, event, "Notification has been sent."))
+            .then(self.cancel)
+            .catch(utils.dialogFailureHandler(vm, event));        
     };
     self.cancel = function(vm, event) {
         root.closeDialog();
