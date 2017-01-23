@@ -17,7 +17,6 @@ module.exports = function() {
 
     function load() {
         serverService.getAllTopics().then(function(response) {
-            console.log(response.items);
             self.itemsObs(response.items);
         });
     }
