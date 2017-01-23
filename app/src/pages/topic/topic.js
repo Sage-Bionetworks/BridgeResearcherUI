@@ -1,5 +1,6 @@
 var serverService = require('../../services/server_service');
 var bind = require('../../binder');
+var tx = require('../../transforms');
 var utils = require('../../utils');
 var root = require('../../root');
 
@@ -10,11 +11,19 @@ module.exports = function(params) {
         .obs('isNew', params.guid === "new")
         .obs('title', 'New Topic')
         .bind('guid', '')
-        .bind('name', '');
+        .bind('name', '')
+        .bind('createdOn', '', tx.formatLocalDateTime)
+        .bind('modifiedOn', '', tx.formatLocalDateTime)
+        .bind('description', '');
+
+    function updateTitle(response) {
+        self.titleObs(response.name);
+        return response;
+    }
 
     function updateTopic(response) {
-        self.isNewObs(false);
         self.titleObs(self.topic.name);
+        self.isNewObs(false);
         self.guidObs(response.guid);
         return response;
     }
@@ -38,17 +47,12 @@ module.exports = function(params) {
             .catch(utils.failureHandler(vm, event));
     };
 
-    function updateTitle(response) {
-        self.titleObs(response.name);
-        return response;
-    }
-
     if (params.guid !== "new") {
         serverService.getTopic(params.guid)
             .then(updateTitle)
             .then(binder.assign('topic'))
             .then(binder.update());
     } else {
-        self.topic = {guid:'', name:''};
+        self.topic = {guid:'', name:'', description: ''};
     }
 };

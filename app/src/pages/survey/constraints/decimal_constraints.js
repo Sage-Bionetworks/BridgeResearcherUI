@@ -7,4 +7,5 @@ module.exports = function(params) {
     self.maxValueObs = self.element.constraints.maxValueObs;
     self.stepObs = self.element.constraints.stepObs;
     self.unitObs = self.element.constraints.unitObs;
+    self.uiHintLimitedObs = self.element.uiHintLimitedObs;
 };

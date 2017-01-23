@@ -4,6 +4,7 @@
             <h3>Push Notifications</h3>
         </div>
         <div class="fixed-header-buttons" data-bind="visible: isDeveloper">
+            <button class="ui tiny button" data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: copyToClipboard">Copy to Clipboard</button>
             <button class="ui red tiny button" data-bind="disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
             <a href="#/topics/new" class="ui primary tiny button">New Topic</a>
         </div>
@@ -25,11 +26,12 @@
                             <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
                         </th>
                         <th>Topic Name</th>
+                        <th>Description</th>
                     </tr>
                 </thead>
                 <tbody class="no_records" data-bind="if: itemsObs().length === 0">
                     <tr>
-                        <td data-bind="attr:{colspan: isDeveloper() ? 2 : 1}, html: recordsMessageObs"></td>
+                        <td data-bind="attr:{colspan: isDeveloper() ? 3 : 2}, html: recordsMessageObs"></td>
                     </tr>
                 </tbody>
                 <tbody data-bind="foreach: itemsObs">
@@ -41,6 +43,7 @@
                             <a data-bind="attr:{'href': '#/topics/' + encodeURIComponent($data.guid)}, 
                                 text: $data.name"></a>
                         </td>
+                        <td data-bind="value: $data.description"></td>
                     </tr>
                 </tbody>
             </table>
@@ -55,6 +58,9 @@
                 <p>The user always has a choice to receive notifications or not (this relates to registering the device through the 
                     Bridge API). It is up to your application's design whether to expose topic subscriptions as a user preference, 
                     but these can be likened to selecting the <em>kinds</em> of topics a participant would like to receive. </p>
+
+                <p>It is strongly recommended you create a "General" topic and subscribe all users to it who agree to notifications, 
+                    in the event you wish to message your entire community of participants. </p>
             </div>
         </div>
     </div>

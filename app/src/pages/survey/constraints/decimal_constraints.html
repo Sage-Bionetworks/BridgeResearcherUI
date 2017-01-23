@@ -1,39 +1,40 @@
 <constraints-label params="title: 'Decimal Question', element: element"></constraints-label>
 <table class="element-content-constraints">
     <tr>
-        <td class="element-content-constraints-label">
+        <td class="element-content-constraints-label" data-bind="visible: !uiHintLimitedObs()">
             <label>Min value</label>
         </td>
         <td class="element-content-constraints-control" data-bind="attr:{id:
-            $parent.collectionName+'constraints_minValue'}">
+            $parent.collectionName+'constraints_minValue'}, visible: !uiHintLimitedObs()">
             <input class="numeric" type="text" data-bind="textInput: minValueObs"/>
         </td>
-        <td class="element-content-constraints-label">
+        <td class="element-content-constraints-label" data-bind="visible: !uiHintLimitedObs()">
             <label>Step</label>
         </td>
         <td class="element-content-constraints-control" data-bind="attr:{id:
-            $parent.collectionName+'constraints_step'}">
+            $parent.collectionName+'constraints_step'}, visible: !uiHintLimitedObs()">
             <input class="numeric" type="text" data-bind="textInput: stepObs"/>
+        </td>
+        <td class="element-content-constraints-label">
+            <label>Unit</label>
+        </td>
+        <td class="element-content-constraints-control" data-bind="attr:{id:
+            $parent.collectionName+'constraints_unit'}">
+            <ui-select params="fieldObs: unitObs, fieldLabel: unitLabel, optionsSrc: unitOptions"></ui-select>
+        </td>
+    </tr>
+    <tr>
+        <td class="element-content-constraints-label" data-bind="visible: !uiHintLimitedObs()">
+            <label>Max value</label>
+        </td>
+        <td class="element-content-constraints-control" data-bind="visible: !uiHintLimitedObs()">
+            <input class="numeric" type="text" data-bind="textInput: maxValueObs"/>
         </td>
         <td class="element-content-constraints-label">
             <label>Rules</label>
         </td>
         <td class="element-content-constraints-control" rowspan="2">
             <ui-rules params="rulesObs: rulesObs, elementsObs: elementsObs"></ui-rules>
-        </td>
-    </tr>
-    <tr>
-        <td class="element-content-constraints-label">
-            <label>Max value</label>
-        </td>
-        <td class="element-content-constraints-control">
-            <input class="numeric" type="text" data-bind="textInput: maxValueObs"/>
-        </td>
-        <td class="element-content-constraints-label">
-            <label>Unit</label>
-        </td>
-        <td class="element-content-constraints-control">
-            <ui-select params="fieldObs: unitObs, fieldLabel: unitLabel, optionsSrc: unitOptions"></ui-select>
         </td>
     </tr>
 </table>

@@ -116,7 +116,7 @@ function reloadPageWhenSessionLost(response) {
 }
 function makeSessionWaitingPromise(httpAction, func) {
     if (session && session.sessionToken) {
-        return func();
+        return func().catch(reloadPageWhenSessionLost);
     }
     console.info("[queuing]", httpAction);
     return new Promise(function(resolve, reject) {

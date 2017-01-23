@@ -17,9 +17,32 @@
 <div class="scrollbox">
     <errors> </errors>
     <form class="ui form">
-        <div class="required field" id="name">
-            <label>Topic name</label>
-            <input style="width: 30rem" type="text" data-bind="value: nameObs, hasFocus: true, attr:{readonly: !isDeveloper()}"/>
+        <div class="ui grid">
+            <div class="eight wide column">
+                <div class="required field" id="name">
+                    <label>Topic name</label>
+                    <input type="text" data-bind="textInput: nameObs, hasFocus: true, attr:{readonly: !isDeveloper()}"/>
+                </div>
+                <div class="field" data-bind="visible: !isNewObs()">
+                    <label>GUID</label>
+                    <input type="text" readonly data-bind="value: guidObs"/>
+                </div>
+                <div class="field" data-bind="visible: !isNewObs()">
+                    <label>Created On</label>
+                    <input type="text" readonly data-bind="value: createdOnObs"/>
+                </div>
+                <div class="field" data-bind="visible: !isNewObs()">
+                    <label>Modified On</label>
+                    <input type="text" readonly data-bind="value: modifiedOnObs"/>
+                </div>
+            </div>
+            <div class="eight wide column">
+                <div class="field">
+                    <label>Description</label>
+                    <textarea data-bind="textInput: descriptionObs">
+                    </textarea>
+                </div>
+            </div>
         </div>
     </form>
 </div>
