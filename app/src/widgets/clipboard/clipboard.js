@@ -26,6 +26,9 @@ require('knockout-postbox');
  *  and then the study consent for that subpopulation.
  * - when schedules are updated, then the labels for the scheduleplan don't have the labels
  */
+
+// Add new stuff to the DEPENDENCY_ORDER and MODEL_METADATA objects, and then don't forget to update your 
+// tables.prepareTable() call to include type and refresh config keys.
 var DEPENDENCY_ORDER = ['DataGroup','Subpopulation','StudyConsent','Survey','TaskReference','SchedulePlan','UploadSchema', 'NotificationTopic'];
 var RESERVED_WORDS = ("access add all alter and any as asc audit between by char check cluster column column_value comment compress " +
     "connect create current date decimal default delete desc distinct drop else exclusive exists false file float for from " +
