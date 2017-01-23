@@ -12,12 +12,8 @@ module.exports = function() {
     self.isDeveloper = root.isDeveloper;
     self.notificationsEnabledObs = root.notificationsEnabledObs;
     
-    tables.prepareTable(self, {
-        name: 'topic', 
-        type: 'NotificationTopic', 
-        delete: deleteTopic,
-        refresh: load
-    });
+    tables.prepareTable(self, {name: 'topic', type: 'NotificationTopic', 
+        delete: deleteTopic, refresh: load});
 
     function load() {
         serverService.getAllTopics().then(function(response) {
