@@ -10,10 +10,10 @@ module.exports = function(params) {
     var binder = bind(self)
         .obs('isNew', params.guid === "new")
         .obs('title', 'New Topic')
-        .bind('guid', '')
+        .obs('createdOn', '', tx.formatLocalDateTime)
+        .obs('modifiedOn', '', tx.formatLocalDateTime)
         .bind('name', '')
-        .bind('createdOn', '', tx.formatLocalDateTime)
-        .bind('modifiedOn', '', tx.formatLocalDateTime)
+        .bind('guid', '')
         .bind('description', '');
 
     function updateTitle(response) {
@@ -25,6 +25,11 @@ module.exports = function(params) {
         self.titleObs(self.topic.name);
         self.isNewObs(false);
         self.guidObs(response.guid);
+        var d = tx.formatLocalDateTime(new Date());
+        if (!self.createdOnObs()) { // Just fake this
+            self.createdOnObs(d);
+        }
+        self.modifiedOnObs(d);
         return response;
     }
 
