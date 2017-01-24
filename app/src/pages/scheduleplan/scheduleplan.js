@@ -25,8 +25,11 @@ module.exports = function(params) {
     self.schedulePlanTypeLabel = utils.makeOptionLabelFinder(scheduleUtils.TYPE_OPTIONS);
 
     self.schedulePlanTypeObs.subscribe(function(newType) {
-        var newStrategy = scheduleUtils.newStrategy(newType, self.strategyObs.callback());
-        self.strategyObs(newStrategy);
+        // Well, this gets set, then that doesn't work, and a time out fixe it... surprise!
+        setTimeout(function() {
+            var newStrategy = scheduleUtils.newStrategy(newType, self.strategyObs.callback());
+            self.strategyObs(newStrategy);
+        }, 1);
     });
 
     self.save = function(vm, event) {
