@@ -1,12 +1,13 @@
 <constraints-label params="title: 'String Question', element: element"></constraints-label>
 <table class="element-content-constraints">
     <tr>
-        <td class="element-content-constraints-label">
+        <td class="element-content-constraints-label" data-bind="visible: !uiHintLimitedObs()">
             <label>Min length</label>
         </td>
         <td class="element-content-constraints-control"
-            data-bind="attr:{id:$parent.collectionName+'constraints_minLength'}">
-            <input type="text" data-bind="textInput: minLengthObs"/>
+            data-bind="attr:{id:$parent.collectionName+'constraints_minLength'},
+             visible: !uiHintLimitedObs()">
+            <input type="text" data-bind="textInput: minLengthObs, disable: uiHintLimitedObs"/>
         </td>
         <td class="element-content-constraints-label">
             <label>Rules</label>
@@ -15,7 +16,7 @@
             <ui-rules params="rulesObs: rulesObs, elementsObs: elementsObs"></ui-rules>
         </td>
     </tr>
-    <tr>
+    <tr data-bind="visible: !uiHintLimitedObs()">
         <td class="element-content-constraints-label">
             <label>Max length</label>
         </td>
@@ -23,7 +24,7 @@
             <input type="text" data-bind="textInput: maxLengthObs"/>
         </td>
     </tr>
-    <tr>
+    <tr data-bind="visible: !uiHintLimitedObs()">
         <td class="element-content-constraints-label">
             <label>Pattern</label>
         </td>

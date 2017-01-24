@@ -26,7 +26,10 @@ require('knockout-postbox');
  *  and then the study consent for that subpopulation.
  * - when schedules are updated, then the labels for the scheduleplan don't have the labels
  */
-var DEPENDENCY_ORDER = ['DataGroup','Subpopulation','StudyConsent','Survey','TaskReference','SchedulePlan','UploadSchema'];
+
+// Add new stuff to the DEPENDENCY_ORDER and MODEL_METADATA objects, and then don't forget to update your 
+// tables.prepareTable() call to include type and refresh config keys.
+var DEPENDENCY_ORDER = ['DataGroup','Subpopulation','StudyConsent','Survey','TaskReference','SchedulePlan','UploadSchema', 'NotificationTopic'];
 var RESERVED_WORDS = ("access add all alter and any as asc audit between by char check cluster column column_value comment compress " +
     "connect create current date decimal default delete desc distinct drop else exclusive exists false file float for from " +
     "grant group having identified immediate in increment index initial insert integer intersect into is level like lock long" +
@@ -80,6 +83,13 @@ var MODEL_METADATA = {
         addDependents: getSame,
         createMethod: createStudyConsent
     },
+    "NotificationTopic": {
+        primaryKeys: ["guid"],
+        label: "name",
+        getMethod: getSame,
+        addDependents: getSame,
+        createMethod: createTopic
+    },
     // Not really an entity, but given this form:
     // {"value":"theValue","type":"DataGroup"}
     "DataGroup": {
@@ -117,6 +127,9 @@ function createStudyConsent(consent) {
     return serverService.saveStudyConsent(consent.subpopulationGuid, consent).then(function(response) {
         return serverService.publishStudyConsent(response.subpopulationGuid, response.createdOn);
     });
+}
+function createTopic(topic) {
+    return serverService.createTopic(topic);
 }
 function createSubpopulation(subpop) {
     var studyConsent = clipboardEntries().filter(function(model) {

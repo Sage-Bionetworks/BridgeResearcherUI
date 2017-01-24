@@ -1,0 +1,67 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <div class="fixed-header-heading">
+            <h3>Push Notifications</h3>
+        </div>
+        <div class="fixed-header-buttons" data-bind="visible: isDeveloper">
+            <button class="ui tiny button" data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: copyToClipboard">Copy to Clipboard</button>
+            <button class="ui red tiny button" data-bind="disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
+            <a href="#/topics/new" class="ui primary tiny button">New Topic</a>
+        </div>
+    </div>
+    <div class="ui empty secondary pointing menu"></div>
+</div>
+<div class="scrollbox">
+    <div class="ui grid">
+        <div class="ten wide column">
+            <div class="ui warning message" data-bind="visible: !notificationsEnabledObs()">
+                <p>No notification services have been configured (APNS, GCM). Client applications cannot register for 
+                    notifications until this is done. Please contact the Bridge server team if you wish to include push 
+                    notifications in your app. </p>
+            </div>
+            <table class="ui compact selectable table" style="margin-top: 0">
+                <thead>
+                    <tr>
+                        <th width="10" data-bind="visible: isDeveloper">
+                            <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+                        </th>
+                        <th>Topic Name</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+                    <tr>
+                        <td data-bind="attr:{colspan: isDeveloper() ? 3 : 2}, html: recordsMessageObs"></td>
+                    </tr>
+                </tbody>
+                <tbody data-bind="foreach: itemsObs">
+                    <tr>
+                        <td data-bind="visible: $parent.isDeveloper">
+                            <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+                        </td>
+                        <td>
+                            <a data-bind="attr:{'href': '#/topics/' + encodeURIComponent($data.guid)}, 
+                                text: $data.name"></a>
+                        </td>
+                        <td data-bind="text: $data.description"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="six wide column">
+            <div class="ui message">
+                <p><b>To send a push notification to a group of users, send the message through a topic.</b> </p>
+
+                <p>You can define any topics you want for your study. Then, if an app has registered to receive notifications, 
+                    <em>and</em> subscribed to a specific topic, that user will receive any notifications you send to that topic. </p>
+
+                <p>The user always has a choice to receive notifications or not (this relates to registering the device through the 
+                    Bridge API). It is up to your application's design whether to expose topic subscriptions as a user preference, 
+                    but these can be likened to selecting the <em>kinds</em> of topics a participant would like to receive. </p>
+
+                <p>It is strongly recommended you create a "General" topic and subscribe all users to it who agree to notifications, 
+                    in the event you wish to message your entire community of participants. </p>
+            </div>
+        </div>
+    </div>
+</div>

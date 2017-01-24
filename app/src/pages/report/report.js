@@ -4,7 +4,6 @@ var root = require('../../root');
 var jsonFormatter = require('../../json_formatter');
 var tables = require('../../tables');
 var utils = require('../../utils');
-var config = require('../../config');
 
 var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 

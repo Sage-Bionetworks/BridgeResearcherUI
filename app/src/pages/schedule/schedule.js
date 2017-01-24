@@ -1,4 +1,3 @@
-var optionsService = require('../../services/options_service');
 var scheduleUtils = require('./schedule_utils');
 var utils = require('../../utils');
 var fn = require('../../transforms');

@@ -31,18 +31,6 @@ var UNIT_OPTIONS = Object.freeze([
     {value: 'quarts', label: 'Quarts'},
     {value: 'yards', label: 'Yards'}
 ]);
-/*
-var DURATION_OPTIONS = Object.freeze([
-    {value: null, label: '<none>'},
-    {value: 'seconds', label: 'Seconds'},
-    {value: 'minutes', label: 'Minutes'},
-    {value: 'hours', label: 'Hours'},
-    {value: 'days', label: 'Days'},
-    {value: 'weeks', label: 'Weeks'},
-    {value: 'months', label: 'Months'},
-    {value: 'years', label: 'Years'}
-]);
-*/
 var OPERATOR_OPTIONS = Object.freeze([
     {value: 'eq', label: '='},
     {value: 'ne', label: '!='},
@@ -65,7 +53,10 @@ var uiHintLabels = {
     'slider':'Slider',
     'textfield':'Text Field',
     'timepicker':'Time Picker',
-    'toggle':'Toggle Button'
+    'toggle':'Toggle Button',
+    'bloodpressure':'Blood Pressure',
+    'height':'Height',
+    'weight':'Weight'
 };
 var UI_HINT_OPTIONS = Object.freeze(Object.keys(uiHintLabels).reduce(function(object, key) {
     object[key] = {value: key, label: uiHintLabels[key]};
@@ -76,12 +67,11 @@ var SELECT_OPTIONS_BY_TYPE = Object.freeze({
     'BooleanConstraints':[UI_HINT_OPTIONS.checkbox, UI_HINT_OPTIONS.toggle],
     'DateConstraints':[UI_HINT_OPTIONS.datepicker],
     'DateTimeConstraints':[UI_HINT_OPTIONS.datetimepicker],
-    'DecimalConstraints':[UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider],
-    /*'DurationConstraints':[UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider],*/
+    'DecimalConstraints':[UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider, UI_HINT_OPTIONS.height, UI_HINT_OPTIONS.weight],
     'MultiValueConstraints':[UI_HINT_OPTIONS.checkbox, UI_HINT_OPTIONS.combobox, UI_HINT_OPTIONS.list,
         UI_HINT_OPTIONS.radiobutton, UI_HINT_OPTIONS.select, UI_HINT_OPTIONS.slider],
     'IntegerConstraints':[UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider],
-    'StringConstraints':[UI_HINT_OPTIONS.multilinetext, UI_HINT_OPTIONS.textfield],
+    'StringConstraints':[UI_HINT_OPTIONS.multilinetext, UI_HINT_OPTIONS.textfield, UI_HINT_OPTIONS.bloodpressure],
     'TimeConstraints':[UI_HINT_OPTIONS.timepicker]
 });
 var ELEMENT_TEMPLATE = Object.freeze({
@@ -94,7 +84,6 @@ var DATA_TYPE_OPTIONS = Object.freeze([
     {label: 'Date', value: 'date'},
     {label: 'Date & Time', value: 'datetime'},
     {label: 'Time', value: 'time'},
-    /*{label: 'Duration', value: 'duration'},*/
     {label: 'Integer', value: 'integer'},
     {label: 'Decimal', value: 'decimal'}
 ]);
@@ -121,6 +110,7 @@ var UI_HINT_FOR_CONSTRAINTS = Object.freeze({
 
 var SURVEY_FIELDS = ['name','createdOn','guid','identifier','published','version'];
 var ELEMENT_FIELDS = ['prompt','promptDetail', 'title', 'uiHint','identifier','fireEvent'];
+var LIMITED_HINTS = ['height','weight','bloodpressure'];
 
 function getConstraints(type) {
     var con = {type: type};
@@ -149,6 +139,7 @@ function makeObservable(obj, field) {
  * @returns {*}
  */
 function elementToObservables(element) {
+    element.uiHintLimitedObs = ko.observable(false);
     ELEMENT_FIELDS.forEach(function(field) {
         element[field+"Obs"] = makeObservable(element, field);
     });
@@ -169,6 +160,11 @@ function elementToObservables(element) {
         }));
         element.constraintsTypeObs = ko.observable(con.type);
     }
+    element.uiHintObs.subscribe(function(newValue) {
+        element.uiHintLimitedObs(LIMITED_HINTS.indexOf(newValue) > -1);
+    });
+    element.uiHintLimitedObs(LIMITED_HINTS.indexOf(element.uiHint) > -1);
+
     element.changeUiHint = function(domEl) {
         var newHint = domEl.getAttribute("data-type");
         element.uiHintObs(newHint);
