@@ -1,18 +1,18 @@
 <constraints-label params="title: 'Decimal Question', element: element"></constraints-label>
 <table class="element-content-constraints">
     <tr>
-        <td class="element-content-constraints-label" data-bind="visible: !uiHintLimitedObs()">
+        <td class="element-content-constraints-label">
             <label>Min value</label>
         </td>
         <td class="element-content-constraints-control" data-bind="attr:{id:
-            $parent.collectionName+'constraints_minValue'}, visible: !uiHintLimitedObs()">
+            $parent.collectionName+'constraints_minValue'}">
             <input class="numeric" type="text" data-bind="textInput: minValueObs"/>
         </td>
-        <td class="element-content-constraints-label" data-bind="visible: !uiHintLimitedObs()">
+        <td class="element-content-constraints-label">
             <label>Step</label>
         </td>
         <td class="element-content-constraints-control" data-bind="attr:{id:
-            $parent.collectionName+'constraints_step'}, visible: !uiHintLimitedObs()">
+            $parent.collectionName+'constraints_step'}">
             <input class="numeric" type="text" data-bind="textInput: stepObs"/>
         </td>
         <td class="element-content-constraints-label">
@@ -24,10 +24,10 @@
         </td>
     </tr>
     <tr>
-        <td class="element-content-constraints-label" data-bind="visible: !uiHintLimitedObs()">
+        <td class="element-content-constraints-label">
             <label>Max value</label>
         </td>
-        <td class="element-content-constraints-control" data-bind="visible: !uiHintLimitedObs()">
+        <td class="element-content-constraints-control">
             <input class="numeric" type="text" data-bind="textInput: maxValueObs"/>
         </td>
         <td class="element-content-constraints-label">

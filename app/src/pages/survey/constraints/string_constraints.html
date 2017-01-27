@@ -1,13 +1,19 @@
 <constraints-label params="title: 'String Question', element: element"></constraints-label>
 <table class="element-content-constraints">
     <tr>
-        <td class="element-content-constraints-label" data-bind="visible: !uiHintLimitedObs()">
+        <td class="element-content-constraints-label">
+            <label>Pattern</label>
+        </td>
+        <td class="element-content-constraints-control"
+            data-bind="attr:{id:$parent.collectionName+'constraints_pattern'}">
+            <input type="text" placeholder="Regular expression" data-bind="textInput: patternObs"/>
+        </td>
+        <td class="element-content-constraints-label">
             <label>Min length</label>
         </td>
         <td class="element-content-constraints-control"
-            data-bind="attr:{id:$parent.collectionName+'constraints_minLength'},
-             visible: !uiHintLimitedObs()">
-            <input type="text" data-bind="textInput: minLengthObs, disable: uiHintLimitedObs"/>
+            data-bind="attr:{id:$parent.collectionName+'constraints_minLength'}">
+            <input type="text" style="width: 4rem" data-bind="textInput: minLengthObs"/>
         </td>
         <td class="element-content-constraints-label">
             <label>Rules</label>
@@ -16,21 +22,28 @@
             <ui-rules params="rulesObs: rulesObs, elementsObs: elementsObs"></ui-rules>
         </td>
     </tr>
-    <tr data-bind="visible: !uiHintLimitedObs()">
+    <tr>
+        <td class="element-content-constraints-label">
+            <label>Pattern Placeholder</label>
+        </td>
+        <td class="element-content-constraints-control"
+            data-bind="attr:{id:$parent.collectionName+'constraints_patternPlaceholder'}">
+            <input type="text" data-bind="textInput: patternPlaceholderObs"/>
+        </td>
         <td class="element-content-constraints-label">
             <label>Max length</label>
         </td>
         <td class="element-content-constraints-control">
-            <input type="text" data-bind="textInput: maxLengthObs"/>
+            <input type="text" style="width: 4rem" data-bind="textInput: maxLengthObs"/>
         </td>
     </tr>
-    <tr data-bind="visible: !uiHintLimitedObs()">
+    <tr>
         <td class="element-content-constraints-label">
-            <label>Pattern</label>
+            <label>Pattern Error Message</label>
         </td>
         <td class="element-content-constraints-control"
-            data-bind="attr:{id:$parent.collectionName+'constraints_pattern'}">
-            <input type="text" data-bind="textInput: patternObs"/>
+            data-bind="attr:{id:$parent.collectionName+'constraints_patternErrorMessage'}">
+            <input type="text" data-bind="textInput: patternErrorMessageObs"/>
         </td>
     </tr>
 </table>
