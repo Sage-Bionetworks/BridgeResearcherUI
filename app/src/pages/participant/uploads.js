@@ -16,6 +16,7 @@ module.exports = function(params) {
         .obs('name', '')
         .obs('selectedRange', new Date())
         .obs('showLoader', false)
+        .obs('showLongId', false)
         .obs('day')
         .obs('total', 0)
         .obs('isNew', false)
@@ -64,12 +65,14 @@ module.exports = function(params) {
     self.uploadURL = function(data) {
         return '#/participants/' + self.userIdObs() + '/uploads/' + data.uploadId;
     };
+    self.toggleShowLongId = function() {
+        self.showLongIdObs(!self.showLongIdObs());
+    };
     self.toggle = function(model) {
         model.collapsedObs(!model.collapsedObs());
     };
     function processItem(item) {
-        var shortId = transforms.truncateGUID(item.uploadId);
-        item.uploadId = "<span class='upload-id' title='"+item.uploadId+"'>"+shortId+"</span>";
+        item.shortId = transforms.truncateGUID(item.uploadId);
         bind(item)
             .obs('content','')
             .obs('href','')

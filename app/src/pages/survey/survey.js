@@ -32,9 +32,6 @@ module.exports = function(params) {
         self.createdOnObs(keys.createdOn);
         self.versionObs(keys.version);
         self.isLoaded(true);
-        if (message) {
-            root.message('success', message);
-        }
     }
     function version(keys) {
         return serverService.versionSurvey(keys.guid, keys.createdOn);
