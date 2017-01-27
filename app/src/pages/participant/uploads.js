@@ -65,9 +65,7 @@ module.exports = function(params) {
     self.uploadURL = function(data) {
         return '#/participants/' + self.userIdObs() + '/uploads/' + data.uploadId;
     };
-    self.toggleShowLongId = function(vm, event) {
-        console.log(arguments);
-        event.preventDefault();
+    self.toggleShowLongId = function() {
         self.showLongIdObs(!self.showLongIdObs());
     };
     self.toggle = function(model) {
