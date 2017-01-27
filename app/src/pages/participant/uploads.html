@@ -37,7 +37,19 @@
             <tr>
                 <th style="width:10px"></th>
                 <th>Requested On</th>
-                <th>Upload ID</th>
+                <th>
+                    Upload ID
+                    <a style="cursor:pointer" 
+                        data-bind="visible: showLongIdObs, click: toggleShowLongId, semantic: 'popup'"
+                        data-content="Show short version of upload ID">
+                        <i style="margin:0;padding:0" class="minus square outline icon"></i>
+                    </a>
+                    <a style="cursor:pointer" 
+                        data-bind="visible: !showLongIdObs(), click: toggleShowLongId, semantic: 'popup'"
+                        data-content="Show the entire upload ID">
+                        <i style="margin:0;padding:0" class="plus square outline icon"></i>
+                    </a>
+                </th>
                 <th>Completed On</th>
                 <th>Schema of content</th>
                 <th>Status</th>
@@ -67,7 +79,8 @@
                             </a>
                         </span>
                     </span>
-                    <span data-bind="html: $data.uploadId"></span>
+                    <span data-bind="visible: $parent.showLongIdObs, text: $data.uploadId"></span>
+                    <span data-bind="visible: !$parent.showLongIdObs(), text: $data.shortId"></span>
                     <div style="position:relative" data-bind="html: $component.htmlFor($data), visible: !$data.collapsedObs()">
                 </td>
                 <td data-bind="html: $data.completedByObs"></td>
