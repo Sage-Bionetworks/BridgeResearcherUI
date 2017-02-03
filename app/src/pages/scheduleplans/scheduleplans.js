@@ -30,10 +30,12 @@ module.exports = function() {
     self.formatStrategy = scheduleUtils.formatStrategy;
 
     function load() {
-        serverService.getSchedulePlans().then(function(response) {
+        scheduleUtils.loadOptions().then(function() {
+            return serverService.getSchedulePlans();    
+        }).then(function(response) {
             response.items.sort(SORTER);
             self.itemsObs(response.items);
         });
     }
-    scheduleUtils.loadOptions().then(load);
+    load();
 };

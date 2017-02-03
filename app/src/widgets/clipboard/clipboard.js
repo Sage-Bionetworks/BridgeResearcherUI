@@ -1,8 +1,8 @@
 var serverService = require('../../services/server_service');
 var storeService = require('../../services/store_service');
+var optionsService = require('../../services/options_service');
 var ko = require('knockout');
 var utils = require('../../utils');
-var alerts = require('../../widgets/alerts');
 var Promise = require('bluebird');
 require('knockout-postbox');
 
@@ -14,22 +14,27 @@ require('knockout-postbox');
  * = when copying, depending on the type, we'll add dependencies to the clipboard. They are:
  *      - subpopulations, also add published study consent
  *      - schedules, add task identifiers and surveys
+ *      - schedules with eventIds pointing to other schedules, add in that schedule
  *      - subpopulations and schedule plans, add referenced data groups
  * 
- * - when creating surveys, we keep a record of their new guid/createdOn keys in the new study
+ * = when creating surveys, we keep a record of their new guid/createdOn keys in the new study
+ * 
+ * = when creating schedule plans, we keep a record of the new guids for activities
  * 
  * = also when creating surveys, you're copying the most recently published, for the moment.
  * 
- * - when creating schedules, we first publish any surveys that are referenced in the schedule
+ * = when creating schedules, we first publish any surveys that are referenced in the schedule
  * 
- * - when pasting, we work in a specific order: add task identifiers, surveys, schedules, subpopulations, 
+ * = when pasting, we work in a specific order: add task identifiers, surveys, schedules, subpopulations, 
  *  and then the study consent for that subpopulation.
- * - when schedules are updated, then the labels for the scheduleplan don't have the labels
+ * 
+ * = when schedules are updated, then the labels for the scheduleplan don't have the labels [BUG?]
  */
 
 // Add new stuff to the DEPENDENCY_ORDER and MODEL_METADATA objects, and then don't forget to update your 
 // tables.prepareTable() call to include type and refresh config keys.
 var DEPENDENCY_ORDER = ['DataGroup','Subpopulation','StudyConsent','Survey','TaskReference','SchedulePlan','UploadSchema', 'NotificationTopic'];
+
 var RESERVED_WORDS = ("access add all alter and any as asc audit between by char check cluster column column_value comment compress " +
     "connect create current date decimal default delete desc distinct drop else exclusive exists false file float for from " +
     "grant group having identified immediate in increment index initial insert integer intersect into is level like lock long" +
@@ -40,138 +45,261 @@ var RESERVED_WORDS = ("access add all alter and any as asc audit between by char
 
 var clipboardEntries = ko.observableArray();
 
-var MODEL_METADATA = {
-    "UploadSchema": {
-        primaryKeys:["schemaId", "revision"],
-        label: "name",
-        getMethod: getCopy,
-        addDependents: getSame,
-        createMethod: createUploadSchema
-    },
-    "Subpopulation": {
-        primaryKeys:["guid"],
-        label: "name",
-        getMethod: getCopy,
-        addDependents: subpopDependencies,
-        createMethod: createSubpopulation
-    },
-    "SchedulePlan": {
-        primaryKeys:["guid"],
-        label: "label",
-        getMethod: getCopy,
-        addDependents: scheduleDependencies,
-        createMethod: createSchedulePlan
-    },
-    "Survey": {
-        primaryKeys:["guid"],
-        label: "name",
-        getMethod: getSurvey,
-        addDependents: getSame,
-        createMethod: createSurvey
-    },
-    "TaskReference": {
-        primaryKeys:["identifier"],
-        label: "label",
-        getMethod: getSame,
-        addDependents: getSame,
-        createMethod: createTaskIdentifier
-    },
-    "StudyConsent": {
-        primaryKeys: ["subpopulationGuid", "createdOn"],
-        label: "label",
-        getMethod: getSame,
-        addDependents: getSame,
-        createMethod: createStudyConsent
-    },
-    "NotificationTopic": {
-        primaryKeys: ["guid"],
-        label: "name",
-        getMethod: getSame,
-        addDependents: getSame,
-        createMethod: createTopic
-    },
-    // Not really an entity, but given this form:
-    // {"value":"theValue","type":"DataGroup"}
-    "DataGroup": {
-        primaryKeys: ["value"],
-        label: "label",
-        getMethod: getSame,
-        addDependents: getSame,
-        createMethod: createDataGroup
-    }
-};
-
 function getCopy(model) {
     return Promise.resolve(JSON.parse(JSON.stringify(model)));
 }
 function getSame(model) {
     return Promise.resolve(model);
 }
-function getSurvey(model) { 
-    return serverService.getSurvey(model.guid, model.createdOn);
-}
-function incrementCopyInteger(value) {
-    if (/-[0-9]+$/.test(value)) {
-        var int = Math.abs(parseInt(value.match(/-[0-9]+$/),10));
-        return value + "-" + (++int);
+
+var MODEL_METADATA = {};
+/**
+ * MODEL_METADATA entries contain the following information:
+ * primaryKeys: each of these fields will be tested for equality with existing models and if all keys are 
+ *      equal on one of the models, it should not be added to the clipboard
+ * label: the field that will be used to display the entity in the clipboard
+ * getMethod: method to retrieve a clean copy of the model to copy. In some cases it is necessary to query
+ *      the server to get a complete object rather than a partial object used for list views
+ * copyMethod: add this item and any dependents to the clipboard. In theory these can be added in any 
+ *      order, because we have logic to do the paste from the bottom of the dependency tree upwards.
+ * pasteMethod: the method to call to "paste" the item into the new target study, usually a create method.
+ */
+MODEL_METADATA.UploadSchema = {
+    primaryKeys:["schemaId", "revision"],
+    label: "name",
+    getMethod: getCopy,
+    pasteMethod: serverService.createUploadSchema
+};
+MODEL_METADATA.Subpopulation = {
+    primaryKeys:["guid"],
+    label: "name",
+    getMethod: getCopy,
+    copyMethod: function(subpop) {
+        if (subpop.criteria) {
+            subpop.criteria.allOfGroups.forEach(copyDataGroupToClipboard);
+            subpop.criteria.noneOfGroups.forEach(copyDataGroupToClipboard);
+        }
+        var createdOn = subpop.publishedConsentCreatedOn;
+        return serverService.getStudyConsent(subpop.guid, createdOn).then(function(response) {
+            response.label = "Consent for " + subpop.name;
+            clipboard.copy("StudyConsent", response);
+            return subpop;
+        });
+    },
+    pasteMethod: function(subpop) {
+        // After creating subpopulation copy, get the new guid and set it for the study consent
+        // so it will pass when it is copied.
+        var studyConsent = clipboardEntries().filter(function(model) {
+            return (model.type === "StudyConsent" && model.subpopulationGuid === subpop.guid);
+        })[0];
+        return serverService.createSubpopulation(subpop).then(function(response) {
+            studyConsent.subpopulationGuid = response.guid;
+            return response;
+        });
     }
-    return value + "-1";
-}
-function createUploadSchema(model) {
-    return serverService.createUploadSchema(model);
-}
-function createSchedulePlan(model) { 
-    return serverService.createSchedulePlan(model); 
-}
-function createStudyConsent(consent) {
-    return serverService.saveStudyConsent(consent.subpopulationGuid, consent).then(function(response) {
-        return serverService.publishStudyConsent(response.subpopulationGuid, response.createdOn);
-    });
-}
-function createTopic(topic) {
-    return serverService.createTopic(topic);
-}
-function createSubpopulation(subpop) {
-    var studyConsent = clipboardEntries().filter(function(model) {
-        return (model.type === "StudyConsent" && model.subpopulationGuid === subpop.guid);
-    })[0];
-    return serverService.createSubpopulation(subpop).then(function(response) {
-        studyConsent.subpopulationGuid = response.guid;
-        return response;
-    });
-}
-function createTaskIdentifier(task) {
-    return serverService.getStudy().then(function(study) {
-        study.taskIdentifiers.push(task.identifier);
-        return serverService.saveStudy(study, false);
-    });
-}
-function createDataGroup(dataGroup) {
-    return serverService.getStudy().then(function(study) {
-        study.dataGroups.push(dataGroup.value);
-        return serverService.saveStudy(study, false);
-    });
-}
-function createSurvey(survey) {
-    survey.identifier = sanitizeSurveyString(survey.identifier);
-    scrubAllSurveyOptions(survey);
-    survey.identifier = incrementCopyInteger(survey.identifier);
+};
 
-    var originalGUID = survey.guid;
-    var activities = findAllSchedulePlanActivities();
+MODEL_METADATA.SchedulePlan = {
+    primaryKeys:["guid"],
+    label: "label",
+    getMethod: getCopy,
+    copyMethod: function(plan) {
+        // Add criteria data groups referenced by schedules.
+        findDataGroups(plan).forEach(function(dataGroup) {
+            clipboard.copy("DataGroup", {
+                value: dataGroup, label: "Data group: " + dataGroup, type:"DataGroup"});
+        });
+        var schedules = optionsService.getSchedules(plan);
+        var activities = schedules.reduce(function(array, schedule) {
+            return [].concat(schedule.activities);
+        }, []);
 
-    return serverService.createSurvey(survey).then(function(response) {
-        return serverService.publishSurvey(response.guid, response.createdOn);
-    }).then(function(response) {
-        activities.forEach(function(activity) {
-            if (activity.survey && activity.survey.guid === originalGUID) {
-                activity.survey.guid = response.guid;
-                activity.survey.createdOn = response.createdOn;
+        // Add tasks and schedules referenced in activities
+        activities.forEach(function(act) {
+            if (act.task) {
+                act.task.label = "Task ID for " + act.label;
+                clipboard.copy("TaskReference", act.task);
+            } else if (act.survey) {
+                // this is missing when survey is published, we need it though for proper URL
+                act.survey.createdOn = act.survey.createdOn || "published";
+                MODEL_METADATA.Survey.getMethod(act.survey).then(function(survey) {
+                    delete act.survey.createdOn;
+                    clipboard.copy("Survey", survey);
+                });
             }
         });
-        return response;
-    });
-}
+
+        // Add the activity referenced in any eventIds
+        schedules.forEach(function(schedule) {
+            if (/^activity:/.test(schedule.eventId)) {
+                var guid = schedule.eventId.split(":")[1];
+                findSchedulePlanByActivityGuid(guid).then(function(foundPlan) {
+                    clipboard.copy("SchedulePlan", foundPlan);
+                });
+            }
+        });
+        return plan;
+
+        function findDataGroups(survey) {
+            if (!survey.strategy.scheduleCriteria) { 
+                return []; 
+            }
+            return survey.strategy.scheduleCriteria.map(function(scheduleCriteria) {
+                return scheduleCriteria.criteria;
+            }).reduce(function(array, criteria) {
+                return array.concat(criteria.allOfGroups).concat(criteria.noneOfGroups);
+            }, []).filter(function(item, i, array) {
+                return array.indexOf(item) === i;
+            });
+        }
+        function findSchedulePlanByActivityGuid(guid) {
+            return serverService.getSchedulePlans().then(function(response) {
+                return response.items.filter(function(plan) {
+                    return optionsService.getActivities(plan).some(function(act) {
+                        return act.guid === guid;
+                    });
+                })[0];
+            });
+        }    
+    },
+    pasteMethod: function(plan) {
+        // get the original activity guids, in order
+        var activityGuids = optionsService.getActivities(plan).map(function(act) { 
+            return act.guid; 
+        });
+        return serverService.createSchedulePlan(plan).then(function(result) {
+            return serverService.getSchedulePlan(result.guid);
+        }).then(function(plan) {
+            // get and iterate through the new activity GUIDs, add them to a map.
+            optionsService.getActivities(plan).forEach(function(activity, i) {
+                var oldGuid = activityGuids[i];
+                activityGuidMap[oldGuid] = activity.guid;
+                console.log("adding to activity GUID map", JSON.stringify(activityGuidMap));
+            });
+            return plan;
+        });
+    },
+    afterPasteMethod: function(plan) {
+        var schedules = optionsService.getSchedules(plan).filter(function(schedule) {
+            return (/^activity:/.test(schedule.eventId));
+        });
+        schedules.forEach(function(schedule) {
+            var parts = schedule.eventId.split(":");
+            console.log("this schedule plan has an activity finished eventId:", parts[1], JSON.stringify(activityGuidMap));
+            if (activityGuidMap[parts[1]]) {
+                parts[1] = activityGuidMap[parts[1]];
+                console.log("createSchedulePlan updated eventId from", schedule.eventId,"to",parts.join(':'));
+                schedule.eventId = parts.join(":");
+            }
+        });
+        if (schedules.length > 0) {
+            return serverService.saveSchedulePlan(plan);
+        }
+        return getSame(plan);
+    }
+};
+MODEL_METADATA.Survey = {
+    primaryKeys:["guid"],
+    label: "name",
+    getMethod: function(survey) { 
+        return serverService.getSurvey(survey.guid, survey.createdOn);
+    },
+    pasteMethod: function(survey) {
+        survey.identifier = sanitizeSurveyString(survey.identifier);
+        scrubAllSurveyOptions(survey);
+        survey.identifier = incrementCopyInteger(survey.identifier);
+
+        var originalGUID = survey.guid;
+        var activities = findAllSchedulePlanActivities();
+
+        return serverService.createSurvey(survey).then(function(response) {
+            return serverService.publishSurvey(response.guid, response.createdOn);
+        }).then(function(response) {
+            activities.filter(function(activity) {
+                return (activity.survey && activity.survey.guid === originalGUID);
+            }).forEach(function(activity) {
+                activity.survey.guid = response.guid;
+                activity.survey.createdOn = response.createdOn;
+            });
+            return response;
+        });
+        function findAllSchedulePlanActivities() {
+            return clipboardEntries().reduce(function(array, model) {
+                if (model.type === "SchedulePlan") {
+                    var acts = optionsService.getActivities(model);
+                    return array.concat(acts);
+                }
+                return array;
+            }, []);
+        }
+        function incrementCopyInteger(value) {
+            if (/-[0-9]+$/.test(value)) {
+                var int = Math.abs(parseInt(value.match(/-[0-9]+$/),10));
+                return value + "-" + (++int);
+            }
+            return value + "-1";
+        }
+        function scrubAllSurveyOptions(survey) {
+            survey.elements.forEach(function(element) {
+                element.identifier = sanitizeSurveyString(element.identifier);
+                if (element.constraints && element.constraints.enumeration) {
+                    element.constraints.enumeration.forEach(sanitizeOption);
+                }
+            });
+        }
+        function sanitizeOption(option) {
+            var string = option.value || option.label;
+            option.value = sanitizeSurveyString(string);
+        }
+        function sanitizeSurveyString(string) {
+            // reduce multi sequence non-alphanumeric sequences to one
+            string = string.replace(/[^a-zA-Z0-9]{2,}/g, function() { return arguments[0].trim().charAt(0); });
+            // strip out non-alphanumeric characters from beginning and end
+            string = string.replace(/^[^a-zA-Z0-9]*([\sa-zA-Z0-9_-]*)[^a-zA-Z0-9]*$/g, function() { return arguments[1]; });
+            // strip out all remaining illegal characters.
+            string = string.replace(/[^\sa-zA-Z0-9_-]*/g, '');
+            if (RESERVED_WORDS.indexOf(string) > -1) {
+                string += "-id";
+            }
+            return string;
+        }
+    }
+};
+MODEL_METADATA.TaskReference = {
+    primaryKeys:["identifier"],
+    label: "label",
+    pasteMethod: function(task) {
+        return serverService.getStudy().then(function(study) {
+            study.taskIdentifiers.push(task.identifier);
+            return serverService.saveStudy(study, false);
+        });
+    }
+};
+MODEL_METADATA.StudyConsent = {
+    primaryKeys: ["subpopulationGuid", "createdOn"],
+    label: "label",
+    pasteMethod: function(consent) {
+        return serverService.saveStudyConsent(consent.subpopulationGuid, consent).then(function(response) {
+            return serverService.publishStudyConsent(response.subpopulationGuid, response.createdOn);
+        });
+    }
+};
+MODEL_METADATA.NotificationTopic = {
+    primaryKeys: ["guid"],
+    label: "name",
+    pasteMethod: serverService.createTopic
+};
+// Not really an entity, but given this form: {"value":"theValue","type":"DataGroup"}
+MODEL_METADATA.DataGroup = {
+    primaryKeys: ["value"],
+    label: "label",
+    pasteMethod: function(dataGroup) {
+        return serverService.getStudy().then(function(study) {
+            study.dataGroups.push(dataGroup.value);
+            return serverService.saveStudy(study, false);
+        });
+    }
+};
 
 function entriesAreEqual(entry1, entry2) {
     if (entry1.type !== entry2.type) {
@@ -188,122 +316,22 @@ function entryExists(entry2) {
     });
 }
 function clipboardEntriesByDependencies() {
-    var entries = [];
-    DEPENDENCY_ORDER.forEach(function(type) {
-        clipboardEntries().forEach(function(model) {
-            if (model.type === type) {
-                entries.push(model);
-            }
+    return DEPENDENCY_ORDER.reduce(function(array, type) {
+        var entries = clipboardEntries().filter(function(model) {
+            return (model.type === type);
         });
-    });
-    return entries;
+        return array.concat(entries);
+    }, []);
 }
 function pasteItem(model) {
-    return MODEL_METADATA[model.type].createMethod(model).then(function(response) {
+    var pasteMethod = MODEL_METADATA[model.type].pasteMethod;
+    var afterPasteMethod = MODEL_METADATA[model.type].afterPasteMethod || getSame;
+
+    return pasteMethod(model).then(afterPasteMethod).then(function(response) {
         clipboardEntries.remove(model);
         storeService.set('clipboard', clipboardEntries());
         return response;
     }).catch(utils.listFailureHandler());
-}
-function findAllSchedulePlanActivities() {
-    return clipboardEntries().reduce(function(array, model) {
-        if (model.type === "SchedulePlan") {
-            var acts = findActivities(model);
-            return array.concat(acts);
-        }
-        return array;
-    }, []);
-}
-function findActivities(survey) {
-    var strategy = survey.strategy;
-    var allActivities = [];
-    if (strategy.schedule) {
-        allActivities = strategy.schedule.activities;
-    }
-    ["scheduleGroups","scheduleCriteria"].forEach(function(groupName) {
-        if (strategy[groupName]) {
-            strategy[groupName].forEach(function(group) {
-                allActivities = allActivities.concat(group.schedule.activities);
-            });
-        }
-    });
-    return allActivities;
-}
-function findDataGroups(survey) {
-    var dataGroups = {};
-    if (survey.strategy.scheduleCriteria) {
-        survey.strategy.scheduleCriteria.map(function(scheduleCriteria) {
-            return scheduleCriteria.criteria;
-        }).forEach(function(criteria) {
-            criteria.allOfGroups.forEach(function(dg) { dataGroups[dg] = true; });
-            criteria.noneOfGroups.forEach(function(dg) { dataGroups[dg] = true; });
-        });
-    }
-    return Object.keys(dataGroups);
-}
-function scrubAllSurveyOptions(survey) {
-    survey.elements.forEach(function(element) {
-        element.identifier = sanitizeSurveyString(element.identifier);
-        if (element.constraints && element.constraints.enumeration) {
-            element.constraints.enumeration.forEach(sanitizeOption);
-        }
-    });
-}
-function sanitizeOption(option) {
-    var string = option.value || option.label;
-    option.value = sanitizeSurveyString(string);
-}
-function sanitizeSurveyString(string) {
-    // reduce multi sequence non-alphanumeric sequences to one
-    string = string.replace(/[^a-zA-Z0-9]{2,}/g, function() { return arguments[0].trim().charAt(0); });
-    // strip out non-alphanumeric characters from beginning and end
-    string = string.replace(/^[^a-zA-Z0-9]*([\sa-zA-Z0-9_-]*)[^a-zA-Z0-9]*$/g, function() { return arguments[1]; });
-    // strip out all remaining illegal characters.
-    string = string.replace(/[^\sa-zA-Z0-9_-]*/g, '');
-    if (RESERVED_WORDS.indexOf(string) > -1) {
-        string += "-id";
-    }
-    return string;
-}
-
-function addDependents(model) {
-    return MODEL_METADATA[model.type].addDependents(model);
-}
-function scheduleDependencies(model) {
-    findDataGroups(model).forEach(function(dataGroup) {
-        clipboard.copy("DataGroup", {
-            value: dataGroup, 
-            label: "Data group: " + dataGroup, 
-            type:"DataGroup"
-        });
-    });
-    findActivities(model).forEach(function(act) {
-        if (act.task) {
-            act.task.label = "Task ID for " + act.label;
-            clipboard.copy("TaskReference", act.task);
-        } else if (act.survey) {
-            // this is missing when survey is published, we need it though for proper URL
-            act.survey.createdOn = act.survey.createdOn || "published";
-            MODEL_METADATA.Survey.getMethod(act.survey).then(function(response) {
-                delete act.survey.createdOn;
-                clipboard.copy("Survey", response);
-            });
-        }
-    });
-    return model;
-}
-function subpopDependencies(subpop) {
-    return serverService.getStudyConsent(subpop.guid, subpop.publishedConsentCreatedOn).then(function(response) {
-        response.label = "Consent for " + subpop.name;
-        clipboard.copy("StudyConsent", response);
-        return subpop;
-    }).then(function(subpop) {
-        if (subpop.criteria) {
-            var dataGroups = subpop.criteria.allOfGroups.concat(subpop.criteria.noneOfGroups);
-            dataGroups.forEach(copyDataGroupToClipboard);
-        }
-        return subpop;
-    });
 }
 function copyDataGroupToClipboard(dataGroup) {
     clipboard.copy("DataGroup", {
@@ -334,24 +362,27 @@ serverService.addSessionEndListener(function() {
     clipboardEntries([]);
 });
 
+var activityGuidMap = {};
 var clipboard = {
     entries: clipboardEntries,
     copy: function(type, model) {
         if (!entryExists(model)) {
-            MODEL_METADATA[type].getMethod(model)
-                .then(addDependents)
-                .then(copyToClipboard);
+            var getMethod = MODEL_METADATA[type].getMethod || getSame;
+            var copyMethod = MODEL_METADATA[type].copyMethod || getSame;
+            getMethod(model).then(copyMethod).then(copyToClipboard);
         }
     },
     pasteAll: function(vm, event) {
         utils.startHandler(vm, event);
 
+        activityGuidMap = {};
         Promise.mapSeries(clipboardEntriesByDependencies(), pasteItem)
             .then(notifyListOfUpdate)
             .then(utils.successHandler(vm, event, "Items copied."))
             .catch(utils.listFailureHandler());
     },
     clearAll: function() {
+        activityGuidMap = {};
         clipboardEntries([]);
         storeService.set('clipboard', []);
     }
