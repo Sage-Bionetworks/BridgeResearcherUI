@@ -4,25 +4,25 @@ var utils = require('../utils');
 var NAME_SORTER = utils.makeFieldSorter('name');
 var LABEL_SORTER = utils.makeFieldSorter('label');
 
+function getSchedule(group) {
+    return group.schedule;
+}
 function getSchedules(plan) {
     switch(plan.strategy.type) {
         case 'SimpleScheduleStrategy':
             return [plan.strategy.schedule];
         case 'ABTestScheduleStrategy':
-            return plan.strategy.scheduleGroups.map(function(group) {
-                return group.schedule;
-            });
+            return plan.strategy.scheduleGroups.map(getSchedule);
         case 'CriteriaScheduleStrategy':
-            return plan.strategy.scheduleCriteria.map(function(group) {
-                return group.schedule;
-            });
+            return plan.strategy.scheduleCriteria.map(getSchedule);
     }
 }
 function getActivityOptions() {
     return serverService.getSchedulePlans().then(function(response) {
         var activities = [];
         response.items.forEach(function(plan) {
-            getSchedules(plan).forEach(function(schedule) {
+            var schedules = getSchedules(plan);
+            schedules.forEach(function(schedule) {
                 var multi = schedule.activities.length > 1;
                 schedule.activities.forEach(function(activity, i) {
                     var actLabel = (multi) ? 
@@ -30,7 +30,7 @@ function getActivityOptions() {
                     activities.push({label: actLabel, "value": activity.guid});
                 });
             });
-        });
+        }, []);
         return activities.sort(LABEL_SORTER);
     });
 }
@@ -56,8 +56,15 @@ function getTaskIdentifierOptions() {
         return [{value:"",label:"Select task:"}].concat(taskOpts);
     });
 }
+function getActivities(plan) {
+    return getSchedules(plan).reduce(function(array, schedule) {
+        return [].concat(schedule.activities);
+    }, []);
+}
 
 module.exports = {
+    getActivities: getActivities,
+    getSchedules: getSchedules,
     getActivityOptions: getActivityOptions,
     getSurveyOptions: getSurveyOptions,
     getTaskIdentifierOptions: getTaskIdentifierOptions

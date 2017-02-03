@@ -319,7 +319,6 @@ module.exports = {
             return newPlan;
         });
     },
-    // TODO: Remove this
     saveSchedulePlan: function(plan) {
         var path = (plan.guid) ? 
             (config.schemaPlans + "/" + plan.guid) :
@@ -461,7 +460,7 @@ module.exports = {
         return get(config.reports+transforms.queryString({"type":"participant"}));
     },
     getParticipantUploads: function(userId, startTime, endTime) {
-        var queryString = transforms.queryString({startTime: startTime, endTime: endTime, pageSize: 100});
+        var queryString = transforms.queryString({startTime: startTime, endTime: endTime});
         return get(config.participants + '/' + userId + '/uploads' + queryString);
     },
     getParticipantUploadStatus: function(uploadId) {
