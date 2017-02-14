@@ -34,6 +34,10 @@ reg('reset_password', {
     viewModel: require('./pages/email_templates/reset_password'),
     template: require('./pages/email_templates/reset_password.html')
 });
+reg('external_ids', {
+    viewModel: require('./pages/external_ids/external_ids'),
+    template: require('./pages/external_ids/external_ids.html')
+});
 reg('reports', {
     viewModel: require('./pages/reports/reports'),
     template: require('./pages/reports/reports.html')

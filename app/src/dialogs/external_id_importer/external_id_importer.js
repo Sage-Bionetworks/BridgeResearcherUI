@@ -30,6 +30,7 @@ module.exports = function(params) {
         .obs('max', 0)
         .obs('title', 'Import External Identifiers')
         .obs('percentage', '0%')
+        .obs('showCreateCredentials', params.showCreateCredentials)
         .obs('selected', true)
         .obs('closeText', 'Close')
         .obs('autoCredentials', (typeof params.autoCredentials === "boolean") ? 
