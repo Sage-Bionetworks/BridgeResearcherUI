@@ -54,6 +54,7 @@ router.on('/task_identifiers', routeTo('task_identifiers'));
 router.on('/email_templates', routeTo('verify_email'));
 router.on('/email_templates/verify_email', routeTo('verify_email'));
 router.on('/email_templates/reset_password', routeTo('reset_password'));
+router.on('/external_ids', routeTo('external_ids'));
 router.on('/subpopulations/:guid/consents/history', routeTo('subpopulation_history', GUID));
 router.on('/subpopulations/:guid/consents/download', routeTo('subpopulation_download', GUID));
 router.on('/subpopulations/:guid/consents/:createdOn', routeTo('subpopulation_editor', GUID_CREATEDON));

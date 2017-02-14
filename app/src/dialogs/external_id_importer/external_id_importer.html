@@ -19,7 +19,7 @@
                     <li data-bind="text: $data"></li>
                 </ul>
             </div>
-            <div class="field" style="margin-top:1rem" data-bind="visible: !autoCredentialsObs()">
+            <div class="field" style="margin-top:1rem" data-bind="visible: !autoCredentialsObs() && showCreateCredentialsObs()">
                 <ui-checkbox params="checkedObs: createCredentialsObs">
                     Create credentials for these IDs
                 </ui-checkbox>

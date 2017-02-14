@@ -136,11 +136,11 @@ var RootViewModel = function() {
             // Until we can support on server, enumerating the codes is the same as requiring the code at sign up.
             // isPublic = emailVerificationEnabled
             // codesEumerated = externalIdValidationEnabled
-            // codeRequired = requiresExternalIdOnSignUp (doesn't exist) 
+            // codeRequired = externalIdRequiredOnSignUp
             var defaults = {
                 isPublic: study.emailVerificationEnabled,
                 codesEnumerated: study.externalIdValidationEnabled,
-                codeRequired: study.externalIdValidationEnabled,
+                codeRequired: study.externalIdRequiredOnSignUp,
                 notificationsEnabled: Object.keys(study.pushNotificationARNs).length > 0
             };
             var studyConfig = config.studies[study.identifier] || {};
