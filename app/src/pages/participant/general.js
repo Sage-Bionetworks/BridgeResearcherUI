@@ -22,7 +22,6 @@ module.exports = function(params) {
         .obs('isNew', (params.userId === "new"))
         .obs('healthCode', 'N/A', fn.formatHealthCode)
         .obs('allDataGroups[]')
-        .obs('externalIdEditable')
         .obs('createdOn', null, fn.formatLocalDateTime)
         .obs('allRoles[]', ROLES)
         .bind('email')
@@ -60,8 +59,6 @@ module.exports = function(params) {
             return {key:key, label:fn.formatTitleCase(key,''), obs:ko.observable()}; 
         });
         self.attributesObs(attrs);
-        var shouldBeEdited = !study.externalIdValidationEnabled || self.isNewObs();
-        self.externalIdEditableObs(shouldBeEdited);
     }
     function getParticipant(response) {
         return (self.isNewObs()) ?

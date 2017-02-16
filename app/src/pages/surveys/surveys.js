@@ -31,14 +31,13 @@ function annotateSurveys(surveys, plans) {
     });
 }
 function deleteItem(survey) {
-    return serverService.deleteSurvey(survey, true);
+    return serverService.deleteSurvey(survey, false);
 }
 
 module.exports = function() {
     var self = this;
 
     self.formatDateTime = fn.formatLocalDateTime;
-    self.isAdmin = root.isAdmin;
     self.isDeveloper = root.isDeveloper;
 
     tables.prepareTable(self, {

@@ -39,10 +39,6 @@
                     <input type="text" data-bind="textInput: lastNameObs" placeholder="Last Name"/>
                 </div>
             </div>
-            <div class="field noLeftPadding" data-bind="visible: !isPublicObs()">
-                <label>External ID</label>
-                <input type="text" readonly data-bind="value: externalIdObs"/>
-            </div>
             <div class="field">
                 <label>Sharing Scope</label>
                 <select class="ui dropdown" data-bind="options: sharingScopeOptions, optionsText: 'label', 
@@ -90,9 +86,9 @@
                 <label>Password</label>
                 <input type="password" data-bind="textInput: passwordObs"/>
             </div>
-            <div class="field" id="externalId" data-bind="css:{'noLeftPadding': !isNewObs()}, visible: isPublicObs">
+            <div class="field" id="externalId" data-bind="css:{'noLeftPadding': !isNewObs()}">
                 <label>External ID</label>
-                <input type="text" data-bind="textInput: externalIdObs, enable: externalIdEditableObs"/>
+                <input type="text" data-bind="textInput: externalIdObs"/>
             </div>
             <div class="field" data-bind="visible: isPublicObs">
                 <label style="margin-bottom: .9rem">Email Preference</label>

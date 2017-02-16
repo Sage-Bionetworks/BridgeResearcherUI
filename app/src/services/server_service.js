@@ -504,6 +504,21 @@ module.exports = {
     deleteTopic: function(guid) {
         return del(config.topics + "/" + guid);
     },
+    getTaskDefinitions: function() {
+        return get(config.compoundactivitydefinitions);
+    },
+    createTaskDefinition: function(task) {
+        return post(config.compoundactivitydefinitions, task);
+    },
+    getTaskDefinition: function(taskId) {
+        return get(config.compoundactivitydefinitions + "/" + taskId);
+    },
+    updateTaskDefinition: function(task) {
+        return post(config.compoundactivitydefinitions + "/" + task.taskId, task);
+    },
+    deleteTaskDefinition: function(taskId) {
+        return del(config.compoundactivitydefinitions + "/" + taskId);
+    },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {
             throw Error("Session listener not a function");
