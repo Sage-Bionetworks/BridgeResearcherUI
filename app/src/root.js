@@ -25,7 +25,8 @@ var pageSets = {
     'admin/info': ['admin_info'],
     'admin/cache': ['admin_cache'],
     'reports': ['reports', 'report'],
-    'topics': ['topics', 'topic']
+    'topics': ['topics', 'topic'],
+    'tasks': ['tasks','task']
 };
 function roleFunc(observer, role) {
     return ko.computed(function() {return observer().indexOf(role) > -1;});        

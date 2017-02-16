@@ -43,5 +43,6 @@ module.exports = {
     participants: '/v3/participants',
     externalIds: '/v3/externalIds',
     reports: '/v3/reports',
-    uploadstatuses: '/v3/uploadstatuses'
+    uploadstatuses: '/v3/uploadstatuses',
+    compoundactivitydefinitions: '/v3/compoundactivitydefinitions'
 };

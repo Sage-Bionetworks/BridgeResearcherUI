@@ -107,10 +107,11 @@ module.exports = {
                 alerts.deleteConfirmation(del.msg, function() {
                     utils.startHandler(self, event);
                     Promise.each(del.deletables, deleteFunc)
-                        .then(makeTableRowHandler(vm, del.deletables, objName))
                         .then(utils.successHandler(vm, event, del.confirmMsg))
                         .then(uncheckAll(vm))
-                        .catch(utils.failureHandler(vm, event));
+                        .then(makeTableRowHandler(vm, del.deletables, objName))
+                        .catch(utils.listFailureHandler());
+                        //.catch(utils.failureHandler(vm, event));
                 });
             };
         }

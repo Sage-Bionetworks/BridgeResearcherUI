@@ -18,6 +18,7 @@ var GUID = ['guid'];
 var ID = ['id'];
 var SCHEMAID_REVISION = ['schemaId','revision'];
 var SCHEMAID = ['schemaId'];
+var TASKID = ['taskId'];
 var USERID = ['userId'];
 var USERID_IDENTIFIER = ['userId','identifier'];
 
@@ -83,6 +84,8 @@ router.on('/participants/:userId/uploads', routeTo('participant_uploads', USERID
 router.on('/participants/:userId', routeTo('participant_general', USERID));
 router.on('/participants/:userId/requestInfo', routeTo('participant_request_info', USERID));
 router.on('/participants', routeTo('participants'));
+router.on('/tasks', routeTo('tasks'));
+router.on('/tasks/:taskId', routeTo('task', TASKID));
 router.on('/topics/:guid', routeTo('topic', GUID));
 router.on('/topics', routeTo('topics'));
 router.on('/enrollees/:externalId', redirectToParticipant);
