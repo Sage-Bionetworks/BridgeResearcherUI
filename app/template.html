@@ -32,12 +32,14 @@
                         <i class="paste icon"></i>
                         <span>Cross-Study Clipboard</span>
                     </div>
-                    <div class="ui vertical menu vertical-scrollbar" style="border:none" data-bind="visible: clipboard.entries().length === 0">
+                    <div class="ui vertical menu vertical-scrollbar" style="border:none" 
+                        data-bind="visible: clipboard.entries().length === 0">
                         <div class="item">
                             <i>No items in clipboard.</i>
                         </div>
                     </div>
-                    <div class="ui vertical menu vertical-scrollbox" style="border:none" data-bind="visible: clipboard.entries().length > 0, foreach: clipboard.entries">
+                    <div class="ui vertical menu vertical-scrollbox" style="border:none" 
+                            data-bind="visible: clipboard.entries().length > 0, foreach: clipboard.entries">
                         <div class="item" data-bind="text: $data._label"></div>
                     </div>
                     <div class="item">
@@ -81,6 +83,9 @@
                             <a href="#/enrollees" class="item" data-bind="active: isActive, visible: !isPublicObs() && isResearcher()">
                                 Participants
                             </a>
+                            <a href="#/external_ids" class="item" data-bind="active: isActive, visible: isPublicObs() && codesEnumeratedObs() && isDeveloper()">
+                                External IDs
+                            </a>
                             <a href="#/reports" class="item" data-bind="active: isActive, visible: isDeveloper() || isResearcher()">
                                 Study Reports
                             </a>
@@ -101,6 +106,11 @@
                             <a href="#/task_identifiers" class="item" data-bind="active: isActive">
                                 Task Identifiers
                             </a>
+                            <!--
+                            <a href="#/tasks" class="item" data-bind="active: isActive">
+                                Tasks [new]
+                            </a>
+                            -->
                             <a href="#/surveys" class="item" data-bind="active: isActive">
                                 Surveys
                             </a>

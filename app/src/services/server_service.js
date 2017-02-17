@@ -319,7 +319,6 @@ module.exports = {
             return newPlan;
         });
     },
-    // TODO: Remove this
     saveSchedulePlan: function(plan) {
         var path = (plan.guid) ? 
             (config.schemaPlans + "/" + plan.guid) :
@@ -461,7 +460,7 @@ module.exports = {
         return get(config.reports+transforms.queryString({"type":"participant"}));
     },
     getParticipantUploads: function(userId, startTime, endTime) {
-        var queryString = transforms.queryString({startTime: startTime, endTime: endTime, pageSize: 100});
+        var queryString = transforms.queryString({startTime: startTime, endTime: endTime});
         return get(config.participants + '/' + userId + '/uploads' + queryString);
     },
     getParticipantUploadStatus: function(uploadId) {
@@ -504,6 +503,21 @@ module.exports = {
     },
     deleteTopic: function(guid) {
         return del(config.topics + "/" + guid);
+    },
+    getTaskDefinitions: function() {
+        return get(config.compoundactivitydefinitions);
+    },
+    createTaskDefinition: function(task) {
+        return post(config.compoundactivitydefinitions, task);
+    },
+    getTaskDefinition: function(taskId) {
+        return get(config.compoundactivitydefinitions + "/" + taskId);
+    },
+    updateTaskDefinition: function(task) {
+        return post(config.compoundactivitydefinitions + "/" + task.taskId, task);
+    },
+    deleteTaskDefinition: function(taskId) {
+        return del(config.compoundactivitydefinitions + "/" + taskId);
     },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {

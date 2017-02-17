@@ -228,13 +228,13 @@ module.exports = {
     },
     listFailureHandler: function() {
         return function(response) {
-            console.error("failureHandler", response);
+            console.error("listFailureHandler", response);
             clearPendingControl();
             ko.postbox.publish("clearErrors");
             if (response.status === 412) {
                 toastr.error('You do not appear to be a developer, researcher, or admin.');
             } else if (response.responseJSON) {
-                toastr.error(response.message);
+                toastr.error(response.responseJSON.message);
             }
         };
     },

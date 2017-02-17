@@ -18,6 +18,7 @@ var GUID = ['guid'];
 var ID = ['id'];
 var SCHEMAID_REVISION = ['schemaId','revision'];
 var SCHEMAID = ['schemaId'];
+var TASKID = ['taskId'];
 var USERID = ['userId'];
 var USERID_IDENTIFIER = ['userId','identifier'];
 
@@ -54,6 +55,7 @@ router.on('/task_identifiers', routeTo('task_identifiers'));
 router.on('/email_templates', routeTo('verify_email'));
 router.on('/email_templates/verify_email', routeTo('verify_email'));
 router.on('/email_templates/reset_password', routeTo('reset_password'));
+router.on('/external_ids', routeTo('external_ids'));
 router.on('/subpopulations/:guid/consents/history', routeTo('subpopulation_history', GUID));
 router.on('/subpopulations/:guid/consents/download', routeTo('subpopulation_download', GUID));
 router.on('/subpopulations/:guid/consents/:createdOn', routeTo('subpopulation_editor', GUID_CREATEDON));
@@ -82,6 +84,8 @@ router.on('/participants/:userId/uploads', routeTo('participant_uploads', USERID
 router.on('/participants/:userId', routeTo('participant_general', USERID));
 router.on('/participants/:userId/requestInfo', routeTo('participant_request_info', USERID));
 router.on('/participants', routeTo('participants'));
+router.on('/tasks', routeTo('tasks'));
+router.on('/tasks/:taskId', routeTo('task', TASKID));
 router.on('/topics/:guid', routeTo('topic', GUID));
 router.on('/topics', routeTo('topics'));
 router.on('/enrollees/:externalId', redirectToParticipant);
