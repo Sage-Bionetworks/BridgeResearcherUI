@@ -16,6 +16,21 @@ var questionsOptionsLabel = utils.makeOptionLabelFinder(questionsOptionsObs);
 var taskOptionsObs = ko.observableArray([]);
 var taskOptionsLabel = utils.makeOptionLabelFinder(taskOptionsObs);
 
+var compoundActivityOptionsObs = ko.observableArray([]);
+// this one is hard because we're storing the whole object, not a string that's easily
+// compared using the === operator. So implementing it here.
+var compoundActivityOptionsLabel = function(task) {
+    var options = ko.unwrap(compoundActivityOptionsObs);
+    for (var i= 0; i < options.length; i++) {
+        var option = options[i];
+        console.log(option, task);
+        if (option.value === task.taskIdentifier) {
+            return option.label;
+        }
+    }
+    return "";
+};
+
 var TYPE_OPTIONS = Object.freeze([
     {value: 'SimpleScheduleStrategy', label: 'Simple Schedule'},
     {value: 'ABTestScheduleStrategy', label: 'A/B Test Schedule'},
@@ -309,6 +324,7 @@ module.exports = {
     formatStrategy: formatStrategy,
     formatSchedule: formatSchedule,
     timeOptions: TIME_OPTIONS,
+    // TODO: Are the *Label properties used anywhere?
     formatScheduleStrategyType: formatScheduleStrategyType,
     timeOptionsLabel: utils.makeOptionLabelFinder(TIME_OPTIONS),
     timeOptionsFinder: utils.makeOptionFinder(TIME_OPTIONS),
@@ -318,12 +334,15 @@ module.exports = {
     surveysOptionsLabel: surveysOptionsLabel,
     taskOptionsObs: taskOptionsObs,
     taskOptionsLabel: taskOptionsLabel,
+    compoundActivityOptionsObs: compoundActivityOptionsObs,
+    compoundActivityOptionsLabel: compoundActivityOptionsLabel,
     TYPE_OPTIONS: TYPE_OPTIONS,
     UNARY_EVENTS: UNARY_EVENTS,
     loadOptions: function() {
         var p1 = optionsService.getActivityOptions().then(activitiesObs);
         var p2 = optionsService.getSurveyOptions().then(surveysOptionsObs);
         var p3 = optionsService.getTaskIdentifierOptions().then(taskOptionsObs);
-        return Promise.all([p1, p2, p3]);
+        var p4 = optionsService.getCompoundActivityOptions().then(compoundActivityOptionsObs);
+        return Promise.all([p1, p2, p3, p4]);
     }
 };

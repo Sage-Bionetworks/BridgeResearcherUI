@@ -95,6 +95,11 @@
                 <select class="ui dropdown" data-bind="options: $component.surveysOptionsObs,
                     optionsText: 'label', optionsValue: 'value', value: $data.surveyGuidObs"></select>                    
             </div>
+            <div data-bind="visible: $data.activityTypeObs() == 'compound', attr: {
+                id:'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_compoundActivity'}">
+                <select class="ui dropdown" data-bind="options: $component.compoundActivityOptionsObs,
+                    optionsText: 'label', optionsValue: 'value', value: $data.compoundTaskIdObs"></select>                    
+            </div>
             <div>
                 <div class="activity-controls">
                     <button class="ui basic compact mini button" data-bind="click: $component.addActivityAfter">

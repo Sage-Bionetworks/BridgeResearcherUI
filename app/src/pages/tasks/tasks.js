@@ -1,10 +1,8 @@
-var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var fn = require('../../transforms');
 var Promise = require('bluebird');
 var tables = require('../../tables');
-var root = require('../../root');
 
 function deleteItem(task) {
     return serverService.deleteTaskDefinition(task.taskId);

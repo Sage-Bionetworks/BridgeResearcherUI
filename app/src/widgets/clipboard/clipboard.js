@@ -308,7 +308,7 @@ MODEL_METADATA.CompoundActivityDefinition = {
             identifier: task.taskId,
             type: "TaskReference"
         });
-        var p1 = Promise.map(task.schemaList, function(schemaRef) {
+        Promise.map(task.schemaList, function(schemaRef) {
             var p = (schemaRef.revision) ? 
                 serverService.getUploadSchema(schemaRef.id, schemaRef.revision) :
                 serverService.getMostRecentUploadSchema(schemaRef.id);
@@ -316,7 +316,7 @@ MODEL_METADATA.CompoundActivityDefinition = {
                 clipboard.copy("UploadSchema", schema);
             });
         });
-        var p2 = Promise.map(task.surveyList, function(surveyRef) {
+        Promise.map(task.surveyList, function(surveyRef) {
             var p = (surveyRef.createdOn) ?
                 serverService.getSurvey(surveyRef.guid, surveyRef.createdOn) :
                 serverService.getMostRecentlyPublishedSurvey(surveyRef.guid);
