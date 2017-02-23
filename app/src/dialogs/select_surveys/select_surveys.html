@@ -1,0 +1,29 @@
+<div class="ui small modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Select Surveys
+    </div>
+    <div data-bind="visible: itemsObs().length === 0, html: recordsMessageObs"
+        class="selector-loading-indicator">
+        <div class='ui tiny active inline loader'></div>
+    </div>
+    <div class="ui form content" data-bind="visible: itemsObs().length > 0" 
+        style="max-height: 25rem; overflow-y: auto; padding: .5rem">
+        <table class="ui compact selectable table">
+            <tbody data-bind="foreach: itemsObs">
+                <tr>
+                    <td>
+                        <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+                    </td>
+                    <td width="100%">
+                        <div style="cursor:pointer" data-bind="click: $parent.toggleChecked, text: $data.name"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="actions">
+        <button class="ui small primary button" data-bind="click: select">Select</button>
+        <button class="ui small button" data-bind="click: cancel">Cancel</button>
+    </div>
+</div>

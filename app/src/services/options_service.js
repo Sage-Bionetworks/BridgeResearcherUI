@@ -61,11 +61,19 @@ function getActivities(plan) {
         return [].concat(schedule.activities);
     }, []);
 }
-
+function getCompoundActivityOptions() {
+    return serverService.getTaskDefinitions().then(function(response) {
+        var opts = response.items.map(function(task) {
+            return {label: task.taskId, value: task.taskId, compoundActivity: task};
+        });
+        return [{value:"",label:"Select compound task:"}].concat(opts);
+    });
+}
 module.exports = {
     getActivities: getActivities,
     getSchedules: getSchedules,
     getActivityOptions: getActivityOptions,
     getSurveyOptions: getSurveyOptions,
-    getTaskIdentifierOptions: getTaskIdentifierOptions
+    getTaskIdentifierOptions: getTaskIdentifierOptions,
+    getCompoundActivityOptions: getCompoundActivityOptions
 };

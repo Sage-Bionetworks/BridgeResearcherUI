@@ -1,12 +1,8 @@
-var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var root = require('../../root');
-require('knockout-postbox');
 var bind = require('../../binder');
 var tables = require('../../tables');
-
-var OPTIONS = {offsetBy:0, pageSize: 1, assignmentFilter:false};
 
 module.exports = function() {
     var self = this;
