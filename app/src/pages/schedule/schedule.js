@@ -228,11 +228,8 @@ module.exports = function(params) {
     // so these should always render correctly when the schedule plan loads from the 
     // server.
     self.surveysOptionsObs = scheduleUtils.surveysOptionsObs;
-    //self.surveysOptionsLabel = scheduleUtils.surveysOptionsLabel;
     self.taskOptionsObs = scheduleUtils.taskOptionsObs;
-    //self.taskOptionsLabel = scheduleUtils.taskOptionsLabel;
     self.compoundActivityOptionsObs = scheduleUtils.compoundActivityOptionsObs;
-    //self.compoundActivityOptionsLabel = scheduleUtils.compoundActivityOptionsLabel;
 
     // Finally... update with the schedule if we already have it from the server, as knockout 
     // recreates the views when you use dragula to reorder the list of scheduleCriteria. 
