@@ -212,3 +212,8 @@ progress {
 .upload-id {
     font-family: monospace;
 }
+.dragHandle {
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+}

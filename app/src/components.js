@@ -376,6 +376,14 @@ reg('send_notification', {
     viewModel: require('./dialogs/send_notification/send_notification'),
     template: require('./dialogs/send_notification/send_notification.html'), synchronous: true
 });
+reg('select_schemas', {
+    viewModel: require('./dialogs/select_schemas/select_schemas'),
+    template: require('./dialogs/select_schemas/select_schemas.html'), synchronous: true
+});
+reg('select_surveys', {
+    viewModel: require('./dialogs/select_surveys/select_surveys'),
+    template: require('./dialogs/select_surveys/select_surveys.html'), synchronous: true
+});
 
 // Attribute editors
 reg('user_attributes', { 

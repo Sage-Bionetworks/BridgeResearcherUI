@@ -33,7 +33,7 @@ require('knockout-postbox');
 
 // Add new stuff to the DEPENDENCY_ORDER and MODEL_METADATA objects, and then don't forget to update your 
 // tables.prepareTable() call to include type and refresh config keys.
-var DEPENDENCY_ORDER = ['DataGroup','Subpopulation','StudyConsent','Survey','TaskReference','SchedulePlan','UploadSchema', 'NotificationTopic'];
+var DEPENDENCY_ORDER = ['DataGroup','Subpopulation','StudyConsent','Survey','TaskReference','CompoundActivityDefinition','UploadSchema','SchedulePlan','NotificationTopic'];
 
 var RESERVED_WORDS = ("access add all alter and any as asc audit between by char check cluster column column_value comment compress " +
     "connect create current date decimal default delete desc distinct drop else exclusive exists false file float for from " +
@@ -174,7 +174,6 @@ MODEL_METADATA.SchedulePlan = {
             optionsService.getActivities(plan).forEach(function(activity, i) {
                 var oldGuid = activityGuids[i];
                 activityGuidMap[oldGuid] = activity.guid;
-                console.log("adding to activity GUID map", JSON.stringify(activityGuidMap));
             });
             return plan;
         });
@@ -188,7 +187,6 @@ MODEL_METADATA.SchedulePlan = {
             console.log("this schedule plan has an activity finished eventId:", parts[1], JSON.stringify(activityGuidMap));
             if (activityGuidMap[parts[1]]) {
                 parts[1] = activityGuidMap[parts[1]];
-                console.log("createSchedulePlan updated eventId from", schedule.eventId,"to",parts.join(':'));
                 schedule.eventId = parts.join(":");
             }
         });
@@ -215,6 +213,7 @@ MODEL_METADATA.Survey = {
         return serverService.createSurvey(survey).then(function(response) {
             return serverService.publishSurvey(response.guid, response.createdOn);
         }).then(function(response) {
+            activityGuidMap[originalGUID] = response.guid; // add new survey to map.
             activities.filter(function(activity) {
                 return (activity.survey && activity.survey.guid === originalGUID);
             }).forEach(function(activity) {
@@ -300,6 +299,45 @@ MODEL_METADATA.DataGroup = {
         });
     }
 };
+MODEL_METADATA.CompoundActivityDefinition = {
+    primaryKeys: ["taskId"],
+    label: "taskId",
+    copyMethod: function(task) {
+        clipboard.copy("TaskReference", {
+            label: "Task ID for " + task.taskId,
+            identifier: task.taskId,
+            type: "TaskReference"
+        });
+        var p1 = Promise.map(task.schemaList, function(schemaRef) {
+            var p = (schemaRef.revision) ? 
+                serverService.getUploadSchema(schemaRef.id, schemaRef.revision) :
+                serverService.getMostRecentUploadSchema(schemaRef.id);
+            return p.then(function(schema) {
+                clipboard.copy("UploadSchema", schema);
+            });
+        });
+        var p2 = Promise.map(task.surveyList, function(surveyRef) {
+            var p = (surveyRef.createdOn) ?
+                serverService.getSurvey(surveyRef.guid, surveyRef.createdOn) :
+                serverService.getMostRecentlyPublishedSurvey(surveyRef.guid);
+            return p.then(function(survey) {
+                clipboard.copy("Survey", survey);
+            });
+        });
+        return task;
+    },
+    pasteMethod: function(task) {
+        delete task.version;
+        task.surveyList.forEach(function(surveyRef) {
+            surveyRef.guid = activityGuidMap[surveyRef.guid];
+            delete surveyRef.createdOn;
+        });
+        task.schemaList.forEach(function(schemaRef) {
+            delete schemaRef.revision;
+        });
+        return serverService.createTaskDefinition(task);
+    }
+};
 
 function entriesAreEqual(entry1, entry2) {
     if (entry1.type !== entry2.type) {
@@ -369,7 +407,9 @@ var clipboard = {
         if (!entryExists(model)) {
             var getMethod = MODEL_METADATA[type].getMethod || getSame;
             var copyMethod = MODEL_METADATA[type].copyMethod || getSame;
-            getMethod(model).then(copyMethod).then(copyToClipboard);
+            getMethod(model).then(copyMethod).then(copyToClipboard).catch(function(e) {
+                console.log(type, model);
+            });
         }
     },
     pasteAll: function(vm, event) {

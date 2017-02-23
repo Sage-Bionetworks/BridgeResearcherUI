@@ -218,8 +218,7 @@ module.exports = {
         });
     },
     createSynapseProject: function(synapseUserId) {
-        var query = transforms.queryString({synapseUserId:synapseUserId});
-        return post(config.getCurrentStudy + "/synapseProject" + query);
+        return post(config.getCurrentStudy + "/synapseProject", [synapseUserId]);
     },
     getMostRecentStudyConsent: function(guid) {
         return get(config.subpopulations + "/" + guid + "/consents/recent");
@@ -244,6 +243,9 @@ module.exports = {
     },
     getPublishedSurveys: function() {
         return get(config.publishedSurveys);
+    },
+    getMostRecentlyPublishedSurvey: function(guid) {
+        return get(config.survey + guid + '/revisions/published');
     },
     getSurveyAllRevisions: function(guid) {
         return get(config.survey + guid + '/revisions');
