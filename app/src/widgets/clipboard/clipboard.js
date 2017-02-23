@@ -407,9 +407,7 @@ var clipboard = {
         if (!entryExists(model)) {
             var getMethod = MODEL_METADATA[type].getMethod || getSame;
             var copyMethod = MODEL_METADATA[type].copyMethod || getSame;
-            getMethod(model).then(copyMethod).then(copyToClipboard).catch(function(e) {
-                console.log(type, model);
-            });
+            getMethod(model).then(copyMethod).then(copyToClipboard);
         }
     },
     pasteAll: function(vm, event) {
