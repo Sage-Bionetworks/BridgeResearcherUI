@@ -50,7 +50,7 @@ module.exports = function() {
             }).then(function() {
                 response.items.sort(SORTER);
                 self.itemsObs(response.items);
-            }).catch(utils.listFailureHandler();
+            }).catch(utils.listFailureHandler());
         });
     }
     load();

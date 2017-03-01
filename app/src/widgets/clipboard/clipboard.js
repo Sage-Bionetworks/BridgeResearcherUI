@@ -302,11 +302,6 @@ MODEL_METADATA.CompoundActivityDefinition = {
     primaryKeys: ["taskId"],
     label: "taskId",
     copyMethod: function(task) {
-        clipboard.copy("TaskReference", {
-            label: "Task ID for " + task.taskId,
-            identifier: task.taskId,
-            type: "TaskReference"
-        });
         Promise.map(task.schemaList, function(schemaRef) {
             var p = (schemaRef.revision) ? 
                 serverService.getUploadSchema(schemaRef.id, schemaRef.revision) :

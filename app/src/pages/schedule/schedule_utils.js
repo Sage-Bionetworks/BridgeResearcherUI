@@ -98,6 +98,7 @@ function formatActivities(buffer, activities, verb) {
         // This may be way too complicated, it still does not show the underlying *real* name
         // of the thing being linked to in the schedule
         if (act.activityType === "task" && act.task) {
+            console.log(act.task);
             label = verb + " task '"+taskOptionsLabel(act.task.taskId || act.task.identifier)+"'";
         } else if (act.activityType === "survey" && act.survey) {
             label = verb + " survey '"+surveysOptionsLabel(act.survey.guid)+"'";
@@ -315,9 +316,6 @@ function loadFormatCompoundActivity() {
         });
     });
 }
-
-utils.makeOptionLabelFinder(surveysOptionsObs)
-    timesLabel: utils.makeOptionFinder(TIME_OPTIONS),
 
 module.exports = {
     newSchedule: newSchedule,

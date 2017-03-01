@@ -92,6 +92,7 @@ module.exports = function(params) {
         return response;
     }
     function updateId(response) {
+        self.nameObs(response.taskId);
         params.taskId = response.taskId; 
         self.task.version = response.version;
     }
