@@ -31,6 +31,16 @@ var UNIT_OPTIONS = Object.freeze([
     {value: 'quarts', label: 'Quarts'},
     {value: 'yards', label: 'Yards'}
 ]);
+var DURATION_OPTIONS = Object.freeze([
+    {value: null, label: '<none>'},
+    {value: 'seconds', label: 'Seconds'},
+    {value: 'minutes', label: 'Minutes'},
+    {value: 'hours', label: 'Hours'},
+    {value: 'days', label: 'Days'},
+    {value: 'weeks', label: 'Weeks'},
+    {value: 'months', label: 'Months'},
+    {value: 'years', label: 'Years'}
+]);
 var OPERATOR_OPTIONS = Object.freeze([
     {value: 'eq', label: '='},
     {value: 'ne', label: '!='},
@@ -65,6 +75,7 @@ var SELECT_OPTIONS_BY_TYPE = Object.freeze({
     'DateConstraints':[UI_HINT_OPTIONS.datepicker],
     'DateTimeConstraints':[UI_HINT_OPTIONS.datetimepicker],
     'DecimalConstraints':[UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider],
+    'DurationConstraints': [UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider],
     'MultiValueConstraints':[UI_HINT_OPTIONS.checkbox, UI_HINT_OPTIONS.combobox, UI_HINT_OPTIONS.list,
         UI_HINT_OPTIONS.radiobutton, UI_HINT_OPTIONS.select, UI_HINT_OPTIONS.slider],
     'IntegerConstraints':[UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider],
@@ -80,6 +91,7 @@ var DATA_TYPE_OPTIONS = Object.freeze([
     {label: 'Boolean', value: 'boolean'},
     {label: 'Date', value: 'date'},
     {label: 'Date & Time', value: 'datetime'},
+    {label: 'Duration', value: 'duration'},
     {label: 'Time', value: 'time'},
     {label: 'Integer', value: 'integer'},
     {label: 'Decimal', value: 'decimal'}
@@ -91,6 +103,7 @@ var CONSTRAINTS_TEMPLATES = Object.freeze({
     'TimeConstraints': {dataType:'time', rules:[]},
     'IntegerConstraints': {dataType:'integer', rules:[], minValue:0, maxValue:255, unit: '', step:1.0},
     'DecimalConstraints': {dataType:'decimal', rules: [], minValue:0, maxValue:255, unit: '', step:1.0},
+    'DurationConstraints': {dataType: 'duration', rules: [], minValue:0, maxValue:255, unit: '', step:1.0},
     'StringConstraints': {dataType:'string', rules: [], minLength:0, maxLength:255, pattern:'',patternPlaceholder:'',patternErrorMessage:''},
     'MultiValueConstraints': {dataType:'string', enumeration:[], rules:[], allowOther:false, allowMultiple:false}
 });
@@ -101,6 +114,7 @@ var UI_HINT_FOR_CONSTRAINTS = Object.freeze({
     'TimeConstraints': 'timepicker',
     'IntegerConstraints': 'numberfield',
     'DecimalConstraints': 'numberfield',
+    'DurationConstrains': 'numberfield',
     'StringConstraints': 'textfield',
     'MultiValueConstraints': 'list'
 });
@@ -299,6 +313,9 @@ module.exports = {
                 root.openDialog('rules_editor', {parentViewModel: vm, element: vm.element});
             };
 
+            vm.durationOptions = DURATION_OPTIONS;
+            vm.durationLabel = utils.makeOptionLabelFinder(DURATION_OPTIONS);
+            
             vm.rulesObs = params.element.constraints.rulesObs;
             vm.uiHintObs = params.element.uiHintObs;
             vm.fireEventObs = params.element.fireEventObs;

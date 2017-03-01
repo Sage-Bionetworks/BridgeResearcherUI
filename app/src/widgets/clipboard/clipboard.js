@@ -184,7 +184,6 @@ MODEL_METADATA.SchedulePlan = {
         });
         schedules.forEach(function(schedule) {
             var parts = schedule.eventId.split(":");
-            console.log("this schedule plan has an activity finished eventId:", parts[1], JSON.stringify(activityGuidMap));
             if (activityGuidMap[parts[1]]) {
                 parts[1] = activityGuidMap[parts[1]];
                 schedule.eventId = parts.join(":");
