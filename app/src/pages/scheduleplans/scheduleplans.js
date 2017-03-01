@@ -48,11 +48,9 @@ module.exports = function() {
                     return Promise.resolve(activity);
                 });
             }).then(function() {
-                return response;
-            });
-        }).then(function(response) {
-            response.items.sort(SORTER);
-            self.itemsObs(response.items);
+                response.items.sort(SORTER);
+                self.itemsObs(response.items);
+            }).catch(utils.listFailureHandler();
         });
     }
     load();
