@@ -226,7 +226,7 @@ module.exports = {
             }
         };
     },
-    listFailureHandler: function(itemsObs) {
+    listFailureHandler: function() {
         return function(response) {
             console.error("listFailureHandler", response);
             clearPendingControl();
@@ -235,9 +235,6 @@ module.exports = {
                 toastr.error('You do not appear to be a developer, researcher, or admin.');
             } else if (response.responseJSON) {
                 toastr.error(response.responseJSON.message);
-            }
-            if (itemsObs) {
-                itemsObs([]);
             }
         };
     },

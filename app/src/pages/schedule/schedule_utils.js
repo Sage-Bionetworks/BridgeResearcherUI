@@ -306,7 +306,7 @@ function formatCompoundActivity(task) {
     if (surveys) {
         phrase.push(surveys);
     }
-    return phrase.join('. ');
+    return phrase.join('; ');
 }
 function loadFormatCompoundActivity() {
     return serverService.getPublishedSurveys().then(function(response) {
