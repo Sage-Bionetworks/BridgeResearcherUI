@@ -214,12 +214,10 @@ reg('DateTimeConstraints', {
     viewModel: require('./pages/survey/constraints/datetime_constraints'),
     template: require('./pages/survey/constraints/datetime_constraints.html')
 });
-/*
 reg('DurationConstraints', {
     viewModel: require('./pages/survey/constraints/duration_constraints'),
     template: require('./pages/survey/constraints/duration_constraints.html')
 });
-*/
 reg('TimeConstraints', {
     viewModel: require('./pages/survey/constraints/time_constraints'),
     template: require('./pages/survey/constraints/time_constraints.html')

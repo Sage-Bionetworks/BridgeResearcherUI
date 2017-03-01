@@ -35,7 +35,7 @@ function addObserversToActivity(activity) {
     }
     activity.compoundTaskIdObs = ko.observable();
     if (activity.activityType === 'compound') {
-        activity.compoundTaskIdObs(activity.compoundActivity.taskIdentifier);
+        activity.compoundTaskIdObs(activity.compoundActivity.taskId);
     }
     return activity;
 }
@@ -51,12 +51,7 @@ function extractActivityFromObservables(activity) {
     } else if (act.activityType === 'survey') {
         act.survey = {guid: activity.surveyGuidObs()};
     } else if (act.activityType === 'compound') {
-        var option = scheduleUtils.compoundActivityOptionsObs().filter(function (option) {
-            return (option.value === activity.compoundTaskIdObs());
-        })[0];
-        act.compoundActivity = option.compoundActivity;
-        // These are not matched in the API.
-        act.compoundActivity.taskIdentifier = act.compoundActivity.taskId;
+        act.compoundActivity = {taskIdentifier: activity.compoundTaskIdObs()};
     }
     return act;
 }

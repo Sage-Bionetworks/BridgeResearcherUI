@@ -2,7 +2,11 @@ var ko = require('knockout');
 var utils = require('../../utils');
 var criteriaUtils = require('../../criteria_utils');
 var optionsService = require('./../../services/options_service');
+var serverService = require('../../services/server_service');
 var Promise = require('bluebird');
+var fn = require('../../transforms');
+
+var surveyNameMap = {};
 
 var activitiesObs = ko.observableArray([]);
 var activityOptionsLabel = utils.makeOptionLabelFinder(activitiesObs);
@@ -14,20 +18,9 @@ var questionsOptionsObs = ko.observableArray([]);
 var questionsOptionsLabel = utils.makeOptionLabelFinder(questionsOptionsObs);
 
 var taskOptionsObs = ko.observableArray([]);
+var taskOptionsLabel = utils.makeOptionLabelFinder(taskOptionsObs);
 
 var compoundActivityOptionsObs = ko.observableArray([]);
-// this one is different because we're storing the whole object, not a string that's compable
-// using the === operator. So implementing something for that here.
-var compoundActivityOptionsLabel = function(task) {
-    var options = ko.unwrap(compoundActivityOptionsObs);
-    for (var i= 0; i < options.length; i++) {
-        var option = options[i];
-        if (option.value === task.taskIdentifier) {
-            return option.label;
-        }
-    }
-    return "";
-};
 
 var TYPE_OPTIONS = Object.freeze([
     {value: 'SimpleScheduleStrategy', label: 'Simple Schedule'},
@@ -97,35 +90,19 @@ function formatTimesArray(times) {
         return timeFormatter(time) || time;
     })) : "<None>";
 }
-function formatActivities(buffer, activities) {
+function formatActivities(buffer, activities, verb) {
     var actMap = {};
     activities.map(function(act) {
-        var label = 'do task (not specified)';
+        var label = verb + ' task (not specified)';
 
         // This may be way too complicated, it still does not show the underlying *real* name
         // of the thing being linked to in the schedule
         if (act.activityType === "task" && act.task) {
-            label = "do task '"+activityOptionsLabel(act.guid)+"'";
+            label = verb + " task '"+taskOptionsLabel(act.task.taskId || act.task.identifier)+"'";
         } else if (act.activityType === "survey" && act.survey) {
-            label = "do survey '"+activityOptionsLabel(act.guid)+"'";
-        }
-        actMap[label] = ++actMap[label] || 1;
-    });
-    Object.keys(actMap).forEach(function(label) {
-        return buffer.push(label + " " + (actMap[label] === 1 ? "" : (actMap[label] + " times")));
-    });
-}
-function formatActivitiesAvailable(buffer, activities) {
-    var actMap = {};
-    activities.map(function(act) {
-        var label = 'a task (not specified)';
-
-        // This may be way too complicated, it still does not show the underlying *real* name
-        // of the thing being linked to in the schedule
-        if (act.activityType === "task" && act.task) {
-            label = "the task '"+activityOptionsLabel(act.guid)+"'";
-        } else if (act.activityType === "survey" && act.survey) {
-            label = "the survey '"+activityOptionsLabel(act.guid)+"'";
+            label = verb + " survey '"+surveysOptionsLabel(act.survey.guid)+"'";
+        } else if (act.activityType === "compound" && act.compoundActivity) {
+            label = verb + " tasks '"+formatCompoundActivity(act.compoundActivity)+"'";
         }
         actMap[label] = ++actMap[label] || 1;
     });
@@ -254,7 +231,7 @@ function formatSchedule(sch) {
 
     if (sch.scheduleType === "persistent") {
         var inner = [];
-        formatActivitiesAvailable(inner, sch.activities);
+        formatActivities(inner, sch.activities, "the");
         buffer.push("make " + inner.join(", ") + " permanently available to the user");
     } else {
         if (sch.scheduleType === "recurring") {
@@ -269,7 +246,7 @@ function formatSchedule(sch) {
             }
         }
         if (sch.activities && sch.activities.length) {
-            formatActivities(buffer, sch.activities);
+            formatActivities(buffer, sch.activities, "do");
         }
     }
     var phrase = buffer.join(", ") + ".";
@@ -313,6 +290,35 @@ function formatStrategy(strategy) {
 function formatScheduleStrategyType(type) {
     return TYPE_OPTIONS[type].label;
 }
+function formatCompoundActivity(task) {
+    var phrase = [];
+    var schemas = task.schemaList.map(function(schema) {
+        return schema.id + ((schema.revision) ? 
+            ' <i>(rev. ' + schema.revision + ')</i>' : '');
+    }).join(', ');
+    if (schemas) {
+        phrase.push(schemas);
+    }
+    var surveys = task.surveyList.map(function(survey) {
+        return surveyNameMap[survey.guid] + ((survey.createdOn) ? 
+            ' <i>(pub. ' + fn.formatLocalDateTime(survey.createdOn) + ')</i>' : '');
+    }).join(', ');
+    if (surveys) {
+        phrase.push(surveys);
+    }
+    return phrase.join('; ');
+}
+function loadFormatCompoundActivity() {
+    return serverService.getPublishedSurveys().then(function(response) {
+        response.items.forEach(function(survey) {
+            surveyNameMap[survey.guid] = survey.name;
+        });
+    });
+}
+
+utils.makeOptionLabelFinder(surveysOptionsObs)
+    timesLabel: utils.makeOptionFinder(TIME_OPTIONS),
+
 module.exports = {
     newSchedule: newSchedule,
     newSchedulePlan: newSchedulePlan,
@@ -321,7 +327,9 @@ module.exports = {
     formatTimesArray: formatTimesArray,
     formatStrategy: formatStrategy,
     formatSchedule: formatSchedule,
+    formatCompoundActivity: formatCompoundActivity,
     timeOptions: TIME_OPTIONS,
+    timeOptionsLabel: utils.makeOptionLabelFinder(TIME_OPTIONS),
     formatScheduleStrategyType: formatScheduleStrategyType,
     timeOptionsFinder: utils.makeOptionFinder(TIME_OPTIONS),
     activitiesObs: activitiesObs,
@@ -335,6 +343,7 @@ module.exports = {
         var p2 = optionsService.getSurveyOptions().then(surveysOptionsObs);
         var p3 = optionsService.getTaskIdentifierOptions().then(taskOptionsObs);
         var p4 = optionsService.getCompoundActivityOptions().then(compoundActivityOptionsObs);
-        return Promise.all([p1, p2, p3, p4]);
+        var p5 = loadFormatCompoundActivity();
+        return Promise.all([p1, p2, p3, p4, p5]);
     }
 };

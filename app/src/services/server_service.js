@@ -513,13 +513,13 @@ module.exports = {
         return post(config.compoundactivitydefinitions, task);
     },
     getTaskDefinition: function(taskId) {
-        return get(config.compoundactivitydefinitions + "/" + taskId);
+        return get(config.compoundactivitydefinitions + "/" + encodeURIComponent(taskId));
     },
     updateTaskDefinition: function(task) {
-        return post(config.compoundactivitydefinitions + "/" + task.taskId, task);
+        return post(config.compoundactivitydefinitions + "/" + encodeURIComponent(task.taskId), task);
     },
     deleteTaskDefinition: function(taskId) {
-        return del(config.compoundactivitydefinitions + "/" + taskId);
+        return del(config.compoundactivitydefinitions + "/" + encodeURIComponent(taskId));
     },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {

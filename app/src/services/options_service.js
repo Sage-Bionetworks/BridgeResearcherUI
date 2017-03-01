@@ -64,7 +64,7 @@ function getActivities(plan) {
 function getCompoundActivityOptions() {
     return serverService.getTaskDefinitions().then(function(response) {
         var opts = response.items.map(function(task) {
-            return {label: task.taskId, value: task.taskId, compoundActivity: task};
+            return {label: task.taskId, value: task.taskId};
         });
         return [{value:"",label:"Select compound task:"}].concat(opts);
     });
