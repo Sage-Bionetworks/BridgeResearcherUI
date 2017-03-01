@@ -316,9 +316,6 @@ function loadFormatCompoundActivity() {
     });
 }
 
-utils.makeOptionLabelFinder(surveysOptionsObs)
-    timesLabel: utils.makeOptionFinder(TIME_OPTIONS),
-
 module.exports = {
     newSchedule: newSchedule,
     newSchedulePlan: newSchedulePlan,
