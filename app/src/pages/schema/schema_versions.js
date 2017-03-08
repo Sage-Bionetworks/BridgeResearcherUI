@@ -1,4 +1,5 @@
 var serverService = require('../../services/server_service');
+var criteriaUtils = require('../../criteria_utils');
 var tables = require('../../tables');
 var bind = require('../../binder');
 var root = require('../../root');
@@ -19,6 +20,7 @@ module.exports = function(params) {
         delete: deleteItem
     });
 
+    self.criteriaLabel = criteriaUtils.label;
     self.isAdmin = root.isAdmin;
 
     self.link = function(item) {

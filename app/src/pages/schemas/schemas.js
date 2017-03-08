@@ -1,5 +1,6 @@
 var serverService = require('../../services/server_service');
 var schemaUtils = require('../schema/schema_utils');
+var criteriaUtils = require('../../criteria_utils');
 var utils = require('../../utils');
 var root = require('../../root');
 var tables = require('../../tables');
@@ -13,6 +14,7 @@ module.exports = function() {
 
     schemaUtils.initSchemasVM(self);
 
+    self.criteriaLabel = criteriaUtils.label;
     self.isAdmin = root.isAdmin;
     self.isDeveloper = root.isDeveloper;
     

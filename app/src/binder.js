@@ -33,6 +33,7 @@ function createObservable(doBinding) {
 // than directly as a property of the model);
 function fromObjectField(fieldName, objFieldName) {
     return function(value, context) {
+        context.model[fieldName] = context.model[fieldName] || {};
         return context.model[fieldName][objFieldName];
     };
 }
@@ -40,7 +41,8 @@ function fromObjectField(fieldName, objFieldName) {
 // object (rather than directly on the model);
 function toObjectField(fieldName, objFieldName) {
     return function(value, context)  {
-        if (value) {
+        context.model[fieldName] = context.model[fieldName] || {};
+        if (typeof value !== "undefined") {
             context.model[fieldName][objFieldName] = value;
         } else {
             delete context.model[fieldName][objFieldName];

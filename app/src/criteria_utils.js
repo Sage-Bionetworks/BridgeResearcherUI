@@ -54,10 +54,10 @@ function label(criteria) {
     if (utils.isNotBlank(language)) {
         arr.push("'" + language + "' language");
     }
-    if (allOfGroups.length) {
+    if (allOfGroups && allOfGroups.length) {
         arr.push(quotedList(allOfGroups) + " required");
     }
-    if (noneOfGroups.length) {
+    if (noneOfGroups && noneOfGroups.length) {
         arr.push(quotedList(noneOfGroups) + " prohibited");
     }
     return (arr.length) ? arr.join("; ") : "No criteria";

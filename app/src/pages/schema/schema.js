@@ -14,14 +14,23 @@ module.exports = function(params) {
 
     schemaUtils.initVM(self);
 
+    var minIos = bind.objPropDelegates('minAppVersions', 'iPhone OS');
+    var minAnd = bind.objPropDelegates('minAppVersions', 'Android');
+    var maxIos = bind.objPropDelegates('maxAppVersions', 'iPhone OS');
+    var maxAnd = bind.objPropDelegates('maxAppVersions', 'Android');
+
     var binder = bind(self)
-        .bind('isNew', params.schemaId === "new")
+        .obs('isNew', params.schemaId === "new")
         .bind('schemaId', params.schemaId)
         .bind('schemaType')
         .obs('revision', params.revision ? params.revision : null)
-        .bind('showError', false)
+        .obs('showError', false)
         .bind('name', '')
-        .bind('index', 0)
+        .obs('index', 0)
+        .bind('iosMin', '', minIos.fromObject, minIos.toObject)
+        .bind('iosMax', '', maxIos.fromObject, maxIos.toObject)
+        .bind('androidMin', '', minAnd.fromObject, minAnd.toObject)
+        .bind('androidMax', '', maxAnd.fromObject, maxAnd.toObject)
         .bind('fieldDefinitions[]', [], fieldDefToObs, fieldObsToDef);
 
     self.revisionLabel = ko.computed(function() {
