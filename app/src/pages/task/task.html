@@ -20,7 +20,8 @@
             <form class="ui form">
                 <div class="required field" id="taskId">
                     <label>Task ID</label>
-                    <input type="text" data-bind="textInput: taskIdObs, hasFocus: true"/>
+                    <input type="text" data-bind="attr: {readonly: !isNewObs()}, 
+                        textInput: taskIdObs, hasFocus: true"/>
                 </div>
             </form>
 
