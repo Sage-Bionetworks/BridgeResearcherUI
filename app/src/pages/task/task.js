@@ -78,6 +78,7 @@ module.exports = function(params) {
     self.task = {};
 
     var binder = bind(self)
+        .bind('isNew', params.taskId === "new")
         .bind('taskId', params.taskId === "new" ? null : params.taskId)
         .bind('schemaList[]', [], schemaListToView, schemaListToTask)
         .bind('surveyList[]', [], surveyListToView, surveyListToTask)
@@ -93,6 +94,7 @@ module.exports = function(params) {
     }
     function updateId(response) {
         self.nameObs(response.taskId);
+        self.isNewObs(false);
         params.taskId = response.taskId; 
         self.task.version = response.version;
     }

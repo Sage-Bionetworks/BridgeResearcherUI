@@ -29,11 +29,12 @@
                 <th data-bind="visible: isAdmin"></th>
                 <th>Name</th>
                 <th>Revision</th>
+                <th>Matching Criteria</th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
-                <td colspan="3" data-bind="html: recordsMessageObs"></td>
+                <td colspan="4" data-bind="html: recordsMessageObs"></td>
             </tr>
         </tbody>        
         <tbody data-bind="foreach: itemsObs">
@@ -41,10 +42,11 @@
                 <td data-bind="visible: $component.isAdmin">
                     <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                 </td>
-                <td width="100%">
+                <td width="50%">
                     <a data-bind="attr: {href: $parent.link($data)}, text: $data.name"></a>
                 </td>
                 <td data-bind="text: $data.revision"></td>
+                <td style="white-space: nowrap" data-bind="html: $parent.criteriaLabel($data)"></td>
             </tr>
         </tbody>
     </table>
