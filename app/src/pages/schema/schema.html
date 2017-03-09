@@ -65,25 +65,32 @@
         </div>
         <div class="three fields">
             <div class="field">
-                <h4>Assignment based on:</h4>
+                <label>Assignment based on:</label>
                 <div class="fields">
-                    <div data-bind="attr:{class:'eight wide field '+$data.id+'minAppVersions_iphone_os ' + $data.id+'maxAppVersions_iphone_os'}">
+                    <div class="eight wide field" id="minAppVersionsiPhoneOS">
                         <label>iOS version</label>
                         <div class="field range-control-border" data-bind="focusable">
-                            <input type="text" placeholder="Min" data-bind="textInput: $data.iosMinObs"/>
+                            <input type="number" placeholder="Min" data-bind="textInput: $data.iosMinObs"/>
                             <span>&mdash;</span>
-                            <input type="text" placeholder="Max" data-bind="textInput: $data.iosMaxObs"/>
+                            <input type="number" placeholder="Max" data-bind="textInput: $data.iosMaxObs"/>
                         </div>
                     </div>
-                    <div data-bind="attr:{class:'eight wide field '+$data.id+'minAppVersions_android ' + $data.id+'maxAppVersions_android'}">
+                    <div class="eight wide field" id="minAppVersionsAndroid">
                         <label>Android version</label>
                         <div class="field range-control-border" data-bind="focusable">
-                            <input type="text" placeholder="Min" data-bind="textInput: $data.androidMinObs"/>
+                            <input placeholder="Min" data-bind="textInput: $data.androidMinObs"/>
                             <span>&mdash;</span>
-                            <input type="text" placeholder="Max" data-bind="textInput: $data.androidMaxObs"/>
+                            <input placeholder="Max" data-bind="textInput: $data.androidMaxObs"/>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="field">
+                <label>&#160;</label>
+                <label>Revision Number <a data-bind="semantic: 'popup'"
+                    data-content="If you have no reason to set the revision number, you can safely ignore it."
+                ><i class="ui warning sign icon"></i></a></label>
+                <input type="number" style="width: 8rem" type="text" data-bind="textInput: $data.revisionObs"/>
             </div>
         </div>
     </form>
