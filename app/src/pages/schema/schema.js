@@ -23,7 +23,7 @@ module.exports = function(params) {
         .obs('isNew', params.schemaId === "new")
         .bind('schemaId', params.schemaId)
         .bind('schemaType')
-        .obs('revision', params.revision ? params.revision : null)
+        .bind('revision', params.revision ? params.revision : null)
         .obs('showError', false)
         .bind('name', '')
         .obs('index', 0)
@@ -96,11 +96,14 @@ module.exports = function(params) {
     }
     function handleError(failureHandler) {
         return function(response) {
-            if (response.status === 400 && typeof response.responseJSON.errors === "undefined") {
+            var json = response.responseJSON;
+            if (/Can\'t\supdate/.test(json.message)) {
+                // This is a schema version mismatch
                 self.showErrorObs(true);
                 utils.clearPendingControl();
                 scrollTo(0);
             } else {
+                json.errors = json.errors || [];
                 failureHandler(response);
             }
         };
@@ -114,7 +117,7 @@ module.exports = function(params) {
             serverService.createUploadSchema(self.schema)
                 .then(updateRevision)
                 .then(utils.successHandler(vm, event, "Schema has been saved."))
-                .catch(utils.failureHandler(vm, event));            
+                .catch(handleError(utils.failureHandler(vm, event)));
         } else {
             // Try and save. If it fails, offer the opportunity to the user to create a new revision.
             serverService.updateUploadSchema(self.schema)
