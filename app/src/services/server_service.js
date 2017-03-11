@@ -481,9 +481,9 @@ module.exports = {
     deleteParticipantReportRecord: function(userId, identifier, date) {
         return del(config.participants + '/' + userId + '/reports/' + identifier + '/' + date);
     },
-    getParticipantActivities: function(userId, params) {
+    getParticipantActivities: function(userId, activityGuid, params) {
         var queryString = transforms.queryString(params);
-        return get(config.participants + '/' + userId + '/activities' + queryString);
+        return get(config.participants + '/' + userId + '/activities/' + activityGuid + queryString);
     },
     deleteParticipantActivities: function(userId) {
         return del(config.participants + '/' + userId + '/activities');

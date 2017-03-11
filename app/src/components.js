@@ -122,6 +122,10 @@ reg('participant_activities', {
     viewModel: require('./pages/participant/activities'),
     template: require('./pages/participant/activities.html')
 });
+reg('participant_activity', {
+    viewModel: require('./pages/participant/activity'),
+    template: require('./pages/participant/activity.html')
+});
 reg('participant_consents', {
     viewModel: require('./pages/participant/consents'),
     template: require('./pages/participant/consents.html')
@@ -253,6 +257,10 @@ reg('criteria', {
 reg('pager', {
     viewModel: require('./widgets/pager/pager'),
     template: require('./widgets/pager/pager.html')
+});
+reg('activity_pager', {
+    viewModel: require('./widgets/activity_pager/activity_pager'),
+    template: require('./widgets/activity_pager/activity_pager.html')
 });
 reg('ddb_pager', {
     viewModel: require('./widgets/ddb_pager/ddb_pager'),

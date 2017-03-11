@@ -39,7 +39,13 @@ ko.bindingHandlers.flatpickr = {
         var onChange = allBindings().onChange || function() {};
         var wrap = (allBindings().wrap === true);
         var includeTime = element.hasAttribute("data-enableTime");
+        var input = element.querySelector("input");
 
+        observer.subscribe(function(newValue) {
+            console.log("newValue",newValue);
+            input.value = new Date(newValue)[includeTime ? "toLocaleString" : "toLocaleDateString"]();
+            //element.value = newValue;
+        });
         function updateObserver(date) {
             if (date) {
                 observer(date.toISOString());

@@ -315,7 +315,41 @@ function loadFormatCompoundActivity() {
         });
     });
 }
-
+function getActivitiesWithStrategyInfo(plan) {
+    var activities = [];
+    switch(plan.strategy.type) {
+        case 'SimpleScheduleStrategy':
+            plan.strategy.schedule.activities.forEach(function(activity) {
+                activities.push({
+                    label: "“"+plan.label+"”, activity “" + activity.label + "”", 
+                    guid: activity.guid
+                });
+            });
+            break;
+        case 'ABTestScheduleStrategy':
+            plan.strategy.scheduleGroups.forEach(function(group, index) {
+                group.activities.forEach(function(activity) {
+                    activities.push({
+                        label:"“"+plan.label+"”, Group #"+index+", activity “" + activity.label + "”",
+                        guid: activity.guid
+                    });
+                });
+            });
+            break;
+        case 'CriteriaScheduleStrategy':
+            plan.strategy.scheduleCriteria.forEach(function(group) {
+                group.schedule.activities.forEach(function(activity) {
+                    var critLabel = criteriaUtils.label(group.criteria);
+                    activities.push({
+                        label:"“"+plan.label+"”, "+critLabel+", activity “" + activity.label + "”",
+                        guid: activity.guid
+                    });
+                });
+            });
+            break;
+    }
+    return activities;
+}
 module.exports = {
     newSchedule: newSchedule,
     newSchedulePlan: newSchedulePlan,
@@ -333,6 +367,7 @@ module.exports = {
     surveysOptionsObs: surveysOptionsObs,
     taskOptionsObs: taskOptionsObs,
     compoundActivityOptionsObs: compoundActivityOptionsObs,
+    getActivitiesWithStrategyInfo: getActivitiesWithStrategyInfo,
     TYPE_OPTIONS: TYPE_OPTIONS,
     UNARY_EVENTS: UNARY_EVENTS,
     loadOptions: function() {
