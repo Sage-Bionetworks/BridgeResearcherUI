@@ -1,5 +1,3 @@
-var ko = require('knockout');
-require('knockout-postbox');
 var utils = require('../../utils');
 var bind = require('../../binder');
 
@@ -48,11 +46,6 @@ module.exports = function(params) {
             wrappedLoadingFunc();
         }
     };
-    
-    // Postbox allows multiple instances of a paging control to stay in sync above
-    // and below the table.
-    //ko.postbox.subscribe(pageKey+'-recordsPaged', updateModel);
-    //ko.postbox.subscribe(pageKey+'-refresh', self.thisPage);
 
     function bothOrNeither(startDate, endDate) {
         return (startDate === null && endDate === null) || (startDate !== null && endDate !== null);
@@ -70,9 +63,6 @@ module.exports = function(params) {
         self.showLoaderObs(true);
         loadingFunc(offsetBy, pageSize, startDate, endDate).then(function(response) {
             response.pageCount = self.pageCountObs()+1;
-            //ko.postbox.publish(pageKey+'-recordsPaged', response);
-            // NOTE: this is a duplicate call because ^^^ is going to call updateModel.
-            // TODO: change the participant list grid because this code comes from there.
             updateModel(response);
             self.showLoaderObs(false);
         }).catch(utils.failureHandler());

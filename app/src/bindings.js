@@ -41,10 +41,9 @@ ko.bindingHandlers.flatpickr = {
         var includeTime = element.hasAttribute("data-enableTime");
         var input = element.querySelector("input");
 
+        // Note, this is a bit experimental. Does not seem to loop though.
         observer.subscribe(function(newValue) {
-            console.log("newValue",newValue);
             input.value = new Date(newValue)[includeTime ? "toLocaleString" : "toLocaleDateString"]();
-            //element.value = newValue;
         });
         function updateObserver(date) {
             if (date) {
