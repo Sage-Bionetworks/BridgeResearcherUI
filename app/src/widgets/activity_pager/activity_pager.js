@@ -72,8 +72,8 @@ module.exports = function(params) {
         if (response) {
             self.pageCountObs(response.pageCount);
             self.offsetByObs(response.offsetBy);
-            self.startDateObs(response.scheduledOnOrAfter);
-            self.endDateObs(response.scheduledOnOrBefore);
+            self.startDateObs(response.scheduledOnStart);
+            self.endDateObs(response.scheduledOnEnd);
         }
     }
     wrappedLoadingFunc();

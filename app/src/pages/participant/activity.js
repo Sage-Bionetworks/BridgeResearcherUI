@@ -64,8 +64,8 @@ module.exports = function(params) {
         return serverService.getParticipantActivities(self.userIdObs(), params.guid, {
             offsetBy: offsetBy,
             pageSize: pageSize,
-            scheduledOnOrAfter: startDate,
-            scheduledOnOrBefore: endDate
+            scheduledOnStart: startDate,
+            scheduledOnEnd: endDate
         }).then(binder.update('items'))
           .catch(utils.notFoundHandler("Participant", "participants"));
     };
