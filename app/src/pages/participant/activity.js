@@ -15,11 +15,18 @@ module.exports = function(params) {
     self.endDate = null;
     self.formatTitleCase = fn.formatTitleCase;
     self.formatDateTime = fn.formatLocalDateTimeWithoutZone;
+    self.formatDateTime = fn.formatLocalDateTime;
+
     self.formatActivityClass = function(item) {
-        return (item.activity.activityType === "task") ? "child icon" : "tasks icon";
+        return (item.activity.activityType === "survey") ? "tasks icon" : "child icon";
     };
     self.formatActivity = function(item) {
-        return item.activity.label;
+        var act = item.activity;
+        var string = act.label;
+        if (act.detail) {
+            string += " (" + act.detail + ") ";
+        }
+        return string;
     };
 
     var binder = bind(self)
@@ -54,7 +61,6 @@ module.exports = function(params) {
     }).catch(utils.notFoundHandler("Participant", "participants"));
 
     self.loadingFunc = function(offsetBy, pageSize, startDate, endDate) {
-        console.log("offsetBy", offsetBy, "pageSize", pageSize, "startDate", startDate, "endDate", endDate);
         return serverService.getParticipantActivities(self.userIdObs(), params.guid, {
             offsetBy: offsetBy,
             pageSize: pageSize,

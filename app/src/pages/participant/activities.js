@@ -7,6 +7,8 @@ var root = require('../../root');
 var optionsService = require('../../services/options_service');
 var tables = require('../../tables');
 
+var ACTIVITY_SORTER = utils.makeFieldSorter("label");
+
 module.exports = function(params) {
     var self = this;
 
@@ -30,7 +32,6 @@ module.exports = function(params) {
                 array.push(spec);
             });
         });
-        console.log(array);
-        self.itemsObs(array);
+        self.itemsObs(array.sort(ACTIVITY_SORTER));
     }).catch(utils.notFoundHandler("Participant", "participants"));
 };

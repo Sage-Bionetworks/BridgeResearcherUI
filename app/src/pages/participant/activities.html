@@ -20,11 +20,12 @@
         <thead>
             <tr>
                 <th>Activity</th>
+                <th>In Schedule</th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
-                <td data-bind="html: recordsMessageObs"></td>
+                <td colspan="2" data-bind="html: recordsMessageObs"></td>
             </tr>
         </tbody>
         <tbody data-bind="foreach: itemsObs">
@@ -32,6 +33,10 @@
                 <td>
                     <a data-bind="text: $data.label, attr: {
                         'href': '#/participants/'+$parent.userIdObs()+'/activities/'+$data.guid}"></a>
+                </td>
+                <td>
+                    <a target="_blank" data-bind="text: $data.plan, attr: {
+                        'href': '#/scheduleplans/'+$data.planGuid}"></a>
                 </td>
             </tr>
         </tbody>
