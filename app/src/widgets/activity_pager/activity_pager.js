@@ -22,13 +22,18 @@ module.exports = function(params) {
         .obs('offsetBy', null)
         .obs('showLoader', false);
 
+    console.log(params);
+    self.itemsObs = params.itemsObs;
+
     self.clearStart = function() {
         self.startDateObs(null);
+        self.offsetByObs(null);
         self.pageCountObs(0);
         wrappedLoadingFunc();
     };
     self.clearEnd = function() {
         self.endDateObs(null);
+        self.offsetByObs(null);
         self.pageCountObs(0);
         wrappedLoadingFunc();
     };

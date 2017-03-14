@@ -32,7 +32,6 @@ module.exports = function(params) {
     var binder = bind(self)
         .obs('userId', params.userId)
         .obs('isNew', false)
-        .obs('items[]', [])
         .obs('title', '&#160;')
         .obs('guid', params.guid)
         .obs('activityLabel', '&#160;');
@@ -42,7 +41,6 @@ module.exports = function(params) {
         type: "Activity",
         refresh: self.loadingFunc
     });
-    self.itemsObs([]);
     
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(root.isPublicObs() ? part.name : part.externalId);
@@ -66,7 +64,10 @@ module.exports = function(params) {
             pageSize: pageSize,
             scheduledOnStart: startDate,
             scheduledOnEnd: endDate
-        }).then(binder.update('items'))
-          .catch(utils.notFoundHandler("Participant", "participants"));
+        }).then(function(response) {
+            self.itemsObs(response.items);
+            return response;
+        })
+        .catch(utils.notFoundHandler("Participant", "participants"));
     };
 };

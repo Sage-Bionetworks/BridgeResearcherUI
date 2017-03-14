@@ -27,8 +27,8 @@
         </div>
     </div>
     <errors></errors>
-   <!-- ko component: {name:'activity_pager', params: 
-        {loadingFunc: loadingFunc, pageKey: 'activity-page', top: true}
+   <!-- ko component: {name:'activity_pager', params: {
+       itemsObs: itemsObs, loadingFunc: loadingFunc, pageKey: 'activity-page', top: true}
     } --><!-- /ko -->    
     <table class="ui compact selectable table">
         <thead>
@@ -54,8 +54,7 @@
                 <td data-bind="text: $parent.formatTitleCase($data.status)"></td>
                 <td>
                     <span data-bind="text: $parent.formatDateTime($data.scheduledOn)">
-                    </span>&mdash;
-                    <span data-bind="text: $parent.formatDateTime($data.expiresOn)">
+                    </span>&mdash;<span data-bind="text: $parent.formatDateTime($data.expiresOn)">
                     </span>
                 </td>
                 <td>
