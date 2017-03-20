@@ -30,10 +30,6 @@ module.exports = function(params) {
         }
         return string;
     };
-    self.deleteClientData = function(model) {
-        delete model.clientData;
-        
-    };
 
     var binder = bind(self)
         .obs('userId', params.userId)
