@@ -85,15 +85,16 @@
                 <select class="ui dropdown" data-bind="options: $component.activityTypeOptions,
                     optionsText: 'label', optionsValue: 'value', value: $data.activityTypeObs"></select>                    
             </div>
-            <div data-bind="visible: $data.activityTypeObs() == 'task', attr: {
-                id:'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_task_identifier'}">
-                <select class="ui dropdown" data-bind="options: $component.taskOptionsObs,
+            <div data-bind="attr:{id:'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_activity'}">
+                <select class="ui dropdown" data-bind="visible: $data.activityTypeObs() == 'task', 
+                    options: $component.taskOptionsObs,
                     optionsText: 'label', optionsValue: 'value', value: $data.taskIdObs"></select>                    
-            </div>
-            <div data-bind="visible: $data.activityTypeObs() == 'survey', attr: {
-                id:'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_survey_guid'}">
-                <select class="ui dropdown" data-bind="options: $component.surveysOptionsObs,
+                <select class="ui dropdown" data-bind="visible: $data.activityTypeObs() == 'survey',
+                    options: $component.surveysOptionsObs,
                     optionsText: 'label', optionsValue: 'value', value: $data.surveyGuidObs"></select>                    
+                <select class="ui dropdown" data-bind="visible: $data.activityTypeObs() == 'compound',
+                    options: $component.compoundActivityOptionsObs,
+                    optionsText: 'label', optionsValue: 'value', value: $data.compoundTaskIdObs"></select>                    
             </div>
             <div>
                 <div class="activity-controls">

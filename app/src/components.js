@@ -122,6 +122,10 @@ reg('participant_activities', {
     viewModel: require('./pages/participant/activities'),
     template: require('./pages/participant/activities.html')
 });
+reg('participant_activity', {
+    viewModel: require('./pages/participant/activity'),
+    template: require('./pages/participant/activity.html')
+});
 reg('participant_consents', {
     viewModel: require('./pages/participant/consents'),
     template: require('./pages/participant/consents.html')
@@ -214,12 +218,10 @@ reg('DateTimeConstraints', {
     viewModel: require('./pages/survey/constraints/datetime_constraints'),
     template: require('./pages/survey/constraints/datetime_constraints.html')
 });
-/*
 reg('DurationConstraints', {
     viewModel: require('./pages/survey/constraints/duration_constraints'),
     template: require('./pages/survey/constraints/duration_constraints.html')
 });
-*/
 reg('TimeConstraints', {
     viewModel: require('./pages/survey/constraints/time_constraints'),
     template: require('./pages/survey/constraints/time_constraints.html')
@@ -255,6 +257,10 @@ reg('criteria', {
 reg('pager', {
     viewModel: require('./widgets/pager/pager'),
     template: require('./widgets/pager/pager.html')
+});
+reg('activity_pager', {
+    viewModel: require('./widgets/activity_pager/activity_pager'),
+    template: require('./widgets/activity_pager/activity_pager.html')
 });
 reg('ddb_pager', {
     viewModel: require('./widgets/ddb_pager/ddb_pager'),
@@ -375,6 +381,14 @@ reg('withdrawal', {
 reg('send_notification', {
     viewModel: require('./dialogs/send_notification/send_notification'),
     template: require('./dialogs/send_notification/send_notification.html'), synchronous: true
+});
+reg('select_schemas', {
+    viewModel: require('./dialogs/select_schemas/select_schemas'),
+    template: require('./dialogs/select_schemas/select_schemas.html'), synchronous: true
+});
+reg('select_surveys', {
+    viewModel: require('./dialogs/select_surveys/select_surveys'),
+    template: require('./dialogs/select_surveys/select_surveys.html'), synchronous: true
 });
 
 // Attribute editors

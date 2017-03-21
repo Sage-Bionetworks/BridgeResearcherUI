@@ -14,14 +14,23 @@ module.exports = function(params) {
 
     schemaUtils.initVM(self);
 
+    var minIos = bind.objPropDelegates('minAppVersions', 'iPhone OS');
+    var minAnd = bind.objPropDelegates('minAppVersions', 'Android');
+    var maxIos = bind.objPropDelegates('maxAppVersions', 'iPhone OS');
+    var maxAnd = bind.objPropDelegates('maxAppVersions', 'Android');
+
     var binder = bind(self)
-        .bind('isNew', params.schemaId === "new")
+        .obs('isNew', params.schemaId === "new")
         .bind('schemaId', params.schemaId)
         .bind('schemaType')
-        .obs('revision', params.revision ? params.revision : null)
-        .bind('showError', false)
+        .bind('revision', params.revision ? params.revision : null)
+        .obs('showError', false)
         .bind('name', '')
-        .bind('index', 0)
+        .obs('index', 0)
+        .bind('iosMin', '', minIos.fromObject, minIos.toObject)
+        .bind('iosMax', '', maxIos.fromObject, maxIos.toObject)
+        .bind('androidMin', '', minAnd.fromObject, minAnd.toObject)
+        .bind('androidMax', '', maxAnd.fromObject, maxAnd.toObject)
         .bind('fieldDefinitions[]', [], fieldDefToObs, fieldObsToDef);
 
     self.revisionLabel = ko.computed(function() {
@@ -87,11 +96,14 @@ module.exports = function(params) {
     }
     function handleError(failureHandler) {
         return function(response) {
-            if (response.status === 400 && typeof response.responseJSON.errors === "undefined") {
+            var json = response.responseJSON;
+            if (/Can\'t\supdate/.test(json.message)) {
+                // This is a schema version mismatch
                 self.showErrorObs(true);
                 utils.clearPendingControl();
                 scrollTo(0);
             } else {
+                json.errors = json.errors || [];
                 failureHandler(response);
             }
         };
@@ -105,7 +117,7 @@ module.exports = function(params) {
             serverService.createUploadSchema(self.schema)
                 .then(updateRevision)
                 .then(utils.successHandler(vm, event, "Schema has been saved."))
-                .catch(utils.failureHandler(vm, event));            
+                .catch(handleError(utils.failureHandler(vm, event)));
         } else {
             // Try and save. If it fails, offer the opportunity to the user to create a new revision.
             serverService.updateUploadSchema(self.schema)

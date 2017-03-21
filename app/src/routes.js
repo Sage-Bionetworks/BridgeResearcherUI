@@ -21,6 +21,7 @@ var SCHEMAID = ['schemaId'];
 var TASKID = ['taskId'];
 var USERID = ['userId'];
 var USERID_IDENTIFIER = ['userId','identifier'];
+var USERID_GUID = ['userId','guid'];
 
 function namedParams(fields, args) {
     return (fields || []).reduce(function(params, name, i) {
@@ -76,6 +77,7 @@ router.on('/schedules', routeTo('schedules'));
 router.on('/scheduleplans', routeTo('scheduleplans'));
 router.on('/scheduleplans/:guid', routeTo('scheduleplan', GUID));
 router.on('/participants/:userId/reports/:identifier', routeTo('participant_report', USERID_IDENTIFIER));
+router.on('/participants/:userId/activities/:guid', routeTo('participant_activity', USERID_GUID));
 router.on('/participants/:userId/activities', routeTo('participant_activities', USERID));
 router.on('/participants/:userId/consents', routeTo('participant_consents', USERID));
 router.on('/participants/:userId/notifications', routeTo('participant_notifications', USERID));

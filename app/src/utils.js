@@ -283,6 +283,7 @@ module.exports = {
                 // Again we can't load this earlier for some reason
                 var root = require('./root');
                 toastr.error((message) ? message + " not found." : response.statusText);
+                document.location = "#/" + componentName;
                 root.changeView(componentName);
             } else {
                 toastr.error(response.statusText || response.message);

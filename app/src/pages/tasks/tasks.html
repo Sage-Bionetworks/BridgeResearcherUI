@@ -1,9 +1,12 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
-            <h3>Tasks</h3>
+            <h3>Compound Tasks</h3>
         </div>
         <div class="fixed-header-buttons">
+            <!--<button class="ui tiny button" data-bind="disable: !atLeastOneChecked(), click: copy">Copy</button>-->
+            <button class="ui tiny button" data-bind="disable: !atLeastOneChecked(), click: copyToClipboard">Copy to Clipboard</button>
+            <button class="ui red tiny button" data-bind="disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
             <a href="#/tasks/new" class="ui primary tiny button">New Task</a>
         </div>
     </div>
@@ -18,11 +21,12 @@
                     <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
                 </th>
                 <th>Task ID</th>
+                <th>Description</th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
-                <td colspan="2" data-bind="html: recordsMessageObs"></td>
+                <td colspan="3" data-bind="html: recordsMessageObs"></td>
             </tr>
         </tbody>        
         <tbody data-bind="foreach: itemsObs">
@@ -30,9 +34,10 @@
                 <td>
                     <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                 </td>
-                <td>
-                    <a data-bind="attr: {'href': '#/tasks/'+$data.taskId}, text: $data.taskId"></a>
+                <td style="white-space: nowrap">
+                    <a data-bind="attr: {'href': '#/tasks/'+ encodeURIComponent($data.taskId)}, text: $data.taskId"></a>
                 </td>
+                <td data-bind="html: $parent.formatDescription($data)"></td>
             </tr>
         </tbody>
     </table>

@@ -218,8 +218,7 @@ module.exports = {
         });
     },
     createSynapseProject: function(synapseUserId) {
-        var query = transforms.queryString({synapseUserId:synapseUserId});
-        return post(config.getCurrentStudy + "/synapseProject" + query);
+        return post(config.getCurrentStudy + "/synapseProject", [synapseUserId]);
     },
     getMostRecentStudyConsent: function(guid) {
         return get(config.subpopulations + "/" + guid + "/consents/recent");
@@ -244,6 +243,9 @@ module.exports = {
     },
     getPublishedSurveys: function() {
         return get(config.publishedSurveys);
+    },
+    getMostRecentlyPublishedSurvey: function(guid) {
+        return get(config.survey + guid + '/revisions/published');
     },
     getSurveyAllRevisions: function(guid) {
         return get(config.survey + guid + '/revisions');
@@ -479,9 +481,9 @@ module.exports = {
     deleteParticipantReportRecord: function(userId, identifier, date) {
         return del(config.participants + '/' + userId + '/reports/' + identifier + '/' + date);
     },
-    getParticipantActivities: function(userId, params) {
+    getParticipantActivities: function(userId, activityGuid, params) {
         var queryString = transforms.queryString(params);
-        return get(config.participants + '/' + userId + '/activities' + queryString);
+        return get(config.participants + '/' + userId + '/activities/' + activityGuid + queryString);
     },
     deleteParticipantActivities: function(userId) {
         return del(config.participants + '/' + userId + '/activities');
@@ -511,13 +513,13 @@ module.exports = {
         return post(config.compoundactivitydefinitions, task);
     },
     getTaskDefinition: function(taskId) {
-        return get(config.compoundactivitydefinitions + "/" + taskId);
+        return get(config.compoundactivitydefinitions + "/" + encodeURIComponent(taskId));
     },
     updateTaskDefinition: function(task) {
-        return post(config.compoundactivitydefinitions + "/" + task.taskId, task);
+        return post(config.compoundactivitydefinitions + "/" + encodeURIComponent(task.taskId), task);
     },
     deleteTaskDefinition: function(taskId) {
-        return del(config.compoundactivitydefinitions + "/" + taskId);
+        return del(config.compoundactivitydefinitions + "/" + encodeURIComponent(taskId));
     },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {

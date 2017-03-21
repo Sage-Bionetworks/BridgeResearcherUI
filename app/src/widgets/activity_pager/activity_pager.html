@@ -1,0 +1,31 @@
+<div class="line-control">
+    <div class="line-control-stretch">
+        <div class="ui action input" data-bind="flatpickr: startDateObs, 
+            timeout: 50, wrap: true, onChange: doCalSearch">
+            <input type="text" placeholder="Created on or after" readonly data-input>
+            <div data-toggle></div>
+            <button class="ui icon button" data-clear data-bind="click: clearStart"><i class="remove circle icon"></i></button>
+        </div>
+        <div class="ui action input" data-bind="flatpickr: endDateObs, 
+            timeout: 50, wrap: true, onChange: doCalSearch">
+            <input type="text" placeholder="Created before" readonly data-input>
+            <div data-toggle></div>
+            <button class="ui icon button" data-clear data-bind="click: clearEnd"><i class="remove circle icon"></i></button>
+        </div>
+    </div>
+    <div>
+        <div class="ui small pagination menu" data-bind="css:{loading:showLoaderObs}, visible: itemsObs().length > 0">
+            <a class="item" title="First page" 
+                data-bind="visible: offsetByObs() !== null && pageCountObs() !== 1, click: firstPage">
+                <i class="step backward icon"></i>
+            </a>
+            <div class="item">
+                <div data-bind="visible: showLoaderObs" class="ui small active loader"></div>
+                <div data-bind="visible: !showLoaderObs(), text: pageCountObs"></div>
+            </div>
+            <a class="item" title="Next page" data-bind="visible: offsetByObs(), click: nextPage">
+                <i class="chevron right icon"></i>
+            </a>
+        </div>
+    </div>
+</div>

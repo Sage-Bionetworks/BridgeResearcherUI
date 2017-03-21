@@ -1,9 +1,11 @@
 var serverService = require('../../services/server_service.js');
+var optionsService = require('../../services/options_service.js');
 var scheduleUtils = require('../schedule/schedule_utils.js');
 var utils = require('../../utils');
 var fn = require('../../transforms');
 var tables = require('../../tables');
 var root = require('../../root');
+var Promise = require('bluebird');
 
 var SORTER = utils.makeFieldSorter("label");
 
@@ -31,10 +33,24 @@ module.exports = function() {
 
     function load() {
         scheduleUtils.loadOptions().then(function() {
-            return serverService.getSchedulePlans();    
+            return serverService.getSchedulePlans();
         }).then(function(response) {
-            response.items.sort(SORTER);
-            self.itemsObs(response.items);
+            return Promise.map(response.items, function(plan) {
+                return Promise.map(optionsService.getActivities(plan), function(activity) {
+                    if (activity.activityType === "compound") {
+                        return serverService.getTaskDefinition(activity.compoundActivity.taskIdentifier)
+                            .then(function(task) {
+                                activity.compoundActivity = task;
+                                activity.compoundActivity.taskIdentifier = task.taskId;
+                                return activity;
+                            });
+                    }
+                    return Promise.resolve(activity);
+                });
+            }).then(function() {
+                response.items.sort(SORTER);
+                self.itemsObs(response.items);
+            }).catch(utils.listFailureHandler());
         });
     }
     load();

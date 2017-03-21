@@ -34,30 +34,19 @@
     </div>
     <table class="ui compact selectable table">
         <thead>
-            <tr>
+            <tr class="non-breaking-rows">
                 <th style="width:10px"></th>
                 <th>Requested On</th>
-                <th>
-                    Upload ID
-                    <a style="cursor:pointer" 
-                        data-bind="visible: showLongIdObs, click: toggleShowLongId, semantic: 'popup'"
-                        data-content="Show short version of upload ID">
-                        <i style="margin:0;padding:0" class="minus square outline icon"></i>
-                    </a>
-                    <a style="cursor:pointer" 
-                        data-bind="visible: !showLongIdObs(), click: toggleShowLongId, semantic: 'popup'"
-                        data-content="Show the entire upload ID">
-                        <i style="margin:0;padding:0" class="plus square outline icon"></i>
-                    </a>
-                </th>
+                <th>Upload ID</th>
                 <th>Completed On</th>
+                <th>Record ID</th>
                 <th>Schema of content</th>
                 <th>Status</th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
-                <td colspan="6" data-bind="html: recordsMessageObs"></td>
+                <td colspan="7" data-bind="html: recordsMessageObs"></td>
             </tr>
         </tbody>        
         <tbody data-bind="foreach: itemsObs">
@@ -79,11 +68,11 @@
                             </a>
                         </span>
                     </span>
-                    <span data-bind="visible: $parent.showLongIdObs, text: $data.uploadId"></span>
-                    <span data-bind="visible: !$parent.showLongIdObs(), text: $data.shortId"></span>
+                    <span data-bind="text: $data.uploadId"></span>
                     <div style="position:relative" data-bind="html: $component.htmlFor($data), visible: !$data.collapsedObs()">
                 </td>
                 <td data-bind="html: $data.completedByObs"></td>
+                <td data-bind="text: $data.recordId"></td>
                 <td>
                     <a target="_blank" rel="noopener" data-bind="attr:{href: $data.hrefObs}, text: $data.contentObs"></a>
                 </td>

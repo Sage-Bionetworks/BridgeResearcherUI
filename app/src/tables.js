@@ -111,7 +111,6 @@ module.exports = {
                         .then(uncheckAll(vm))
                         .then(makeTableRowHandler(vm, del.deletables, objName))
                         .catch(utils.listFailureHandler());
-                        //.catch(utils.failureHandler(vm, event));
                 });
             };
         }

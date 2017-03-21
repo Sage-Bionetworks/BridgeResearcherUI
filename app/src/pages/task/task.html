@@ -2,7 +2,7 @@
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
             <div class="ui breadcrumb">
-                <a class="section" href="#/tasks">Tasks</a>
+                <a class="section" href="#/tasks">Compound Tasks</a>
                 <i class="right chevron icon divider"></i>
             </div>             
             <h3 data-bind="text: nameObs"></h3>
@@ -14,26 +14,63 @@
     <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
-    <errors></errors>
-    <form class="ui form">
-        <div class="two fields">
-            <div class="required field" id="taskId">
-                <label>Task ID</label>
-                <input type="text" data-bind="textInput: taskIdObs, hasFocus: true"/>
+    <div class="ui grid">
+        <div class="ten wide column">
+            <errors></errors>
+            <form class="ui form">
+                <div class="required field" id="taskId">
+                    <label>Task ID</label>
+                    <input type="text" data-bind="attr: {readonly: !isNewObs()}, 
+                        textInput: taskIdObs, hasFocus: true"/>
+                </div>
+            </form>
+
+            <h3>Schemas (Tasks)</h3>
+            <table class="ui compact table" data-bind="visible: schemaListObs().length > 0">
+                <tbody data-bind="foreach: schemaListObs, 
+                    dragula: {listObs: schemaListObs, indexObs: schemaIndexObs, dragHandleSelector: 'dragHandle'}">
+                    <tr>
+                        <td width="100%" class="dragHandle" data-bind="text: $data.id"></td>
+                        <td><ui-select params="fieldObs: $data.revisionObs, optionsSrc: $data.revisionList, 
+                                optionsCaption: 'Most Recent Revision'"></ui-select></td>
+                        <td><button class="ui basic red compact mini button" 
+                                data-bind="click: $component.removeSchema">Delete</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="ui tiny button" data-bind="click: openSchemaSelector">Add Schema</button>
+
+            <h3>Surveys</h3>
+            <table class="ui compact table" data-bind="visible: surveyListObs().length > 0">
+                <tbody data-bind="foreach: surveyListObs, 
+                    dragula: {listObs: surveyListObs, indexObs: surveyIndexObs, dragHandleSelector: 'dragHandle'}">
+                    <tr>
+                        <td width="100%" class="dragHandle" data-bind="text: $data.name"></td>
+                        <td><ui-select params="fieldObs: $data.createdOnObs, optionsSrc: $data.createdOnList, 
+                                optionsCaption: 'Most Recently Published'"></ui-select></td>
+                        <td><button class="ui basic red compact mini button" 
+                                data-bind="click: $component.removeSurvey">Delete</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="ui tiny button" data-bind="click: openSurveySelector">Add Survey</button>
+        </div>
+        <div class="six wide column">
+            <div class="ui message">
+                <p>Compound tasks can replace task ID strings and direct survey references. </p>
+
+                <p>You can now name a task, and then specify the schemas and surveys that are part of 
+                    that task. Or you can let the references return the most recent schema or 
+                    most recently published survey. </p>
+
+                <p>This allows you to send the specific schema revisions or published 
+                    versions of a survey to your app, without having to hard code these values in the 
+                    app itself. </p>
+
+                <p>These schemas and surveys are independently ordered, and the order can provide
+                    direction to the client about the order in which activities should be undertaken 
+                    as part of a task. </p>
             </div>
         </div>
-    </form>
-
-    <h3>Schemas</h3>
-    
-    <div data-bind="foreach: schemaListObs">
-        <div>
-            <input type="text" data-bind="textInput: $data.id">
-            <input type="text" data-bind="textInput: $data.revision">
-            <button data-bind="click: $componet.remove">Delete</button>
-        </div>
     </div>
-    <button data-bind="click: addSchema">Add Schema</button>
-
-    <h3>Surveys</h3>
 </div>

@@ -9,7 +9,11 @@ function truncateErrorFieldKey(errorString) {
     var parts = errorString.split(" ");
     var keyParts = parts[0].split(".");
     parts[0] = keyParts[keyParts.length-1];
-    return parts.join(" ").replace(/([a-z\d])([A-Z])/g, '$1 $2').toLowerCase();
+    return parts.join(" ")
+        .replace(/([a-z\d])([A-Z])/g, '$1 $2')
+        .replace("Versions{Android}","version") // schema IEE strangeness
+        .replace("Versions{i Phone OS}", "version") // schema IEE strangeness
+        .toLowerCase();
 }
 
 /**
@@ -32,7 +36,7 @@ function fixEnumErrorsForTopLevelEditor(errors) {
 }
 
 function errorFieldKeyToId(errorKey) {
-    return errorKey.replace(/[\[\]]/g,"").replace(/\./g,"_");
+    return errorKey.replace(/[\s{\[\]]/g,"").replace(/\./g,"_").replace(/}/g,'');
 }
 
 module.exports = function() {

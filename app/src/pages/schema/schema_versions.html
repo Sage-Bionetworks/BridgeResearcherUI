@@ -9,8 +9,7 @@
                 <span data-bind="text: nameObs">Schema Versions</span>
             </h3>
         </div>
-        <div class="fixed-header-buttons" data-bind="visible: isAdmin">
-            <button class="ui red tiny button" data-bind="disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
+        <div class="fixed-header-buttons">
         </div>
     </div>
     <div class="ui secondary pointing menu">
@@ -26,9 +25,9 @@
     <table class="ui compact selectable table">
         <thead>
             <tr>
-                <th data-bind="visible: isAdmin"></th>
                 <th>Name</th>
                 <th>Revision</th>
+                <th>Matching Criteria</th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
@@ -38,13 +37,11 @@
         </tbody>        
         <tbody data-bind="foreach: itemsObs">
             <tr>
-                <td data-bind="visible: $component.isAdmin">
-                    <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
-                </td>
-                <td width="100%">
+                <td width="50%">
                     <a data-bind="attr: {href: $parent.link($data)}, text: $data.name"></a>
                 </td>
                 <td data-bind="text: $data.revision"></td>
+                <td style="white-space: nowrap" data-bind="html: $parent.criteriaLabel($data)"></td>
             </tr>
         </tbody>
     </table>

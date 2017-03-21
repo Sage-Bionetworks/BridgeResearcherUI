@@ -12,6 +12,7 @@ var SCHEDULE_TYPE_OPTIONS = Object.freeze([
 ]);
 var ACTIVITY_TYPE_OPTIONS = Object.freeze([
     {value: 'task', label: 'Do Task'},
+    {value: 'compound', label: 'Do Compound Task'},
     {value: 'survey', label: 'Take Survey'}
 ]);
 function newActivity() {
@@ -32,6 +33,10 @@ function addObserversToActivity(activity) {
     if (activity.activityType === 'survey') {
         activity.surveyGuidObs(activity.survey.guid);
     }
+    activity.compoundTaskIdObs = ko.observable();
+    if (activity.activityType === 'compound') {
+        activity.compoundTaskIdObs(activity.compoundActivity.taskId);
+    }
     return activity;
 }
 function extractActivityFromObservables(activity) {
@@ -45,6 +50,8 @@ function extractActivityFromObservables(activity) {
         act.task = {identifier: activity.taskIdObs()};
     } else if (act.activityType === 'survey') {
         act.survey = {guid: activity.surveyGuidObs()};
+    } else if (act.activityType === 'compound') {
+        act.compoundActivity = {taskIdentifier: activity.compoundTaskIdObs()};
     }
     return act;
 }
@@ -216,9 +223,8 @@ module.exports = function(params) {
     // so these should always render correctly when the schedule plan loads from the 
     // server.
     self.surveysOptionsObs = scheduleUtils.surveysOptionsObs;
-    self.surveysOptionsLabel = scheduleUtils.surveysOptionsLabel;
     self.taskOptionsObs = scheduleUtils.taskOptionsObs;
-    self.taskOptionsLabel = scheduleUtils.taskOptionsLabel;
+    self.compoundActivityOptionsObs = scheduleUtils.compoundActivityOptionsObs;
 
     // Finally... update with the schedule if we already have it from the server, as knockout 
     // recreates the views when you use dragula to reorder the list of scheduleCriteria. 

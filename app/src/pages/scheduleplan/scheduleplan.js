@@ -3,6 +3,8 @@ var scheduleUtils = require('./../schedule/schedule_utils');
 var utils = require('../../utils');
 var bind = require('../../binder');
 var fn = require('../../transforms');
+var optionsService = require('../../services/options_service');
+var Promise = require('bluebird');
 
 /**
  * The complexity of this view comes from the fact that the entire data model is in the strategy,
@@ -53,11 +55,31 @@ module.exports = function(params) {
         return plan;
     }
 
+    function resolveActivity(activity) {
+        return serverService.getTaskDefinition(activity.compoundActivity.taskIdentifier)
+            .then(function(task) {
+                activity.compoundActivity = task;
+                activity.compoundActivity.taskIdentifier = task.taskId;
+                return activity;
+            });
+    }
+
+    // These are not actually filled out on the server.
+    function addCompoundActivitiesToPlan(plan) {
+        var activities = optionsService.getActivities(plan).filter(function(activity) {
+            return activity.activityType === "compound";
+        });
+        return Promise.map(activities, resolveActivity).then(function() {
+            return plan;
+        });
+    }
+
     scheduleUtils.loadOptions().then(function() {
         var promise = (params.guid !== "new") ?
             serverService.getSchedulePlan(params.guid) :
             Promise.resolve(scheduleUtils.newSchedulePlan());
-        promise.then(binder.assign('plan'))
+        promise.then(addCompoundActivitiesToPlan)
+            .then(binder.assign('plan'))
             .then(updateScheduleTypeObs)
             .then(binder.update())
             .catch(utils.notFoundHandler("Schedule plan.", "scheduleplans"));
