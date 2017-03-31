@@ -21,6 +21,7 @@ module.exports = function() {
         .obs('showResults', false);
 
     self.codesEnumeratedObs = root.codesEnumeratedObs;
+    self.isDeveloper = root.isDeveloper;
     tables.prepareTable(self, {name: 'external ID'});
 
     // to get a spinner on this control you need to adjust the DOM target.
@@ -43,7 +44,7 @@ module.exports = function() {
     }
     function updatePageWithResult(response) {
         self.showResultsObs(true);
-        ko.postbox.publish('external-ids-page-refresh');
+        ko.postbox.publish('enrollees-page-refresh');
         return response;
     }
     function convertToPaged(identifier) {
