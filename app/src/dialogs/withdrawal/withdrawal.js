@@ -2,10 +2,7 @@ var ko = require('knockout');
 var root = require('../../root');
 var utils = require('../../utils');
 
-/**
- *  userId, vm, closeMethod, subpopGuid
- */
-module.exports = function(params) {
+module.exports = function(params /*userId, vm, closeMethod, subpopGuid */) {
     var self = this;
 
     self.reasonObs = ko.observable();
