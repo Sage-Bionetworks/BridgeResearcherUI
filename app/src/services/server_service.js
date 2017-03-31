@@ -491,6 +491,9 @@ module.exports = {
     withdrawParticipantFromStudy: function(userId, reason) {
         return post(config.participants + '/' + userId + '/consents/withdraw', reason);
     },
+    withdrawParticipantFromSubpopulation: function(userId, subpopGuid, reason) {
+        return post(config.participants + '/' + userId + '/consents/' + subpopGuid + '/withdraw', reason);
+    },
     getAllTopics: function() {
         return get(config.topics);
     },
