@@ -38,6 +38,7 @@ module.exports = function(params) {
         wrappedLoadingFunc();
     };
     self.doCalSearch = function() {
+        self.offsetByObs(null);
         self.pageCountObs(0);
         wrappedLoadingFunc();
     };

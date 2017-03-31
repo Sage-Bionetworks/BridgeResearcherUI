@@ -4,8 +4,10 @@ var optionsService = require('../../services/options_service');
 var scheduleUtils = require('../../pages/schedule/schedule_utils');
 var bind = require('../../binder');
 var root = require('../../root');
+var jsonFormatter = require('../../json_formatter');
 var tables = require('../../tables');
 var fn = require('../../transforms');
+var ko = require('knockout');
 
 module.exports = function(params) {
     var self = this;
@@ -48,6 +50,10 @@ module.exports = function(params) {
 
     self.isPublicObs = root.isPublicObs;
 
+    self.toggle = function(model) {
+        model.collapsedObs(!model.collapsedObs());
+    };
+
     serverService.getSchedulePlans().then(function(response) {
         response.items.forEach(function(plan) {
             scheduleUtils.getActivitiesWithStrategyInfo(plan).forEach(function(spec) {
@@ -65,6 +71,7 @@ module.exports = function(params) {
             scheduledOnStart: startDate,
             scheduledOnEnd: endDate
         }).then(function(response) {
+            response.items = response.items.map(jsonFormatter.mapClientDataItem);
             self.itemsObs(response.items);
             return response;
         })

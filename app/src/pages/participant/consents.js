@@ -23,11 +23,6 @@ module.exports = function(params) {
         self.titleObs(root.isPublicObs() ? part.name : part.externalId);
     }).catch(utils.failureHandler());
 
-    function signOut() {
-        self.noConsentObs(true);
-        return serverService.signOutUser(self.userIdObs());        
-    }
-
     self.resendConsent = function(vm, event) {
         var subpopGuid = vm.consentURL.split("/subpopulations/")[1].split("/consents/")[0];
         alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
@@ -38,15 +33,27 @@ module.exports = function(params) {
         });
     };
     self.withdraw = function(vm, event) {
-        root.openDialog('withdrawal', {userId: params.userId, vm: self});
+        root.openDialog('withdrawal', {
+            userId: params.userId, vm: self, closeMethod: 'finishWithdrawal'});
     };
     self.finishWithdrawal = function(reasonString) {
-        var reason = {"reason": reasonString};
+        var reason = (reasonString) ? {"reason": reasonString} : {};
         serverService.withdrawParticipantFromStudy(params.userId, reason)
             .then(root.closeDialog)
             .then(load)
-            .then(signOut)
             .then(utils.successHandler(self, null, "User has been withdrawn from the study."))
+            .catch(utils.failureHandler());
+    };
+    self.withdrawFromSubpopulation = function(model, event) {
+        root.openDialog('withdrawal', {
+            userId: params.userId, vm: self, closeMethod: 'finishSubpopWithdrawal', subpopGuid: model.subpopulationGuid});
+    };
+    self.finishSubpopWithdrawal = function(reasonString, subpopGuid) {
+        var reason = (reasonString) ? {"reason": reasonString} : {};
+        serverService.withdrawParticipantFromSubpopulation(params.userId, subpopGuid, reason)
+            .then(root.closeDialog)
+            .then(load)
+            .then(utils.successHandler(self, null, "User has been withdrawn from this consent group."))
             .catch(utils.failureHandler());
     };
 
@@ -65,13 +72,15 @@ module.exports = function(params) {
                         self.itemsObs.push({
                             consentGroupName: subpop.name,
                             name: "No consent",
-                            consented: false
+                            consented: false,
+                            eligibleToWithdraw: false
                         });
                     }
                     histories[subpop.guid].reverse().map(function(record, i) {
                         var history = {consented:true, isFirst:(i === 0)};
                         history.consentGroupName = subpop.name;
                         history.consentURL = '/#/subpopulations/'+subpop.guid+'/consents/'+record.consentCreatedOn;
+                        history.subpopulationGuid = subpop.guid;
                         history.name = record.name;
                         history.birthdate = new Date(record.birthdate).toLocaleDateString(); 
                         history.signedOn = new Date(record.signedOn).toLocaleString();
@@ -81,6 +90,7 @@ module.exports = function(params) {
                             history.withdrewOn = new Date(record.withdrewOn).toLocaleString();
                         } else {
                             self.noConsentObs(false);
+                            history.eligibleToWithdraw = true;
                         }
                         if (record.imageMimeType && record.imageData) {
                             history.imageData = "data:"+record.imageMimeType+";base64,"+record.imageData;
