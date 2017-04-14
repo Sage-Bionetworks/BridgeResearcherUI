@@ -85,8 +85,7 @@ function postInt(url, data) {
         headers: getHeaders(),
         data: data,
         type: "application/json",
-        dataType: "json",
-        xhrFields: {withCredentials: true}
+        dataType: "json"
     });
 }
 function getInt(url) {
@@ -95,8 +94,7 @@ function getInt(url) {
         url: url,
         headers: getHeaders(),
         type: "application/json",
-        dataType: "json",
-        xhrFields: {withCredentials: true}
+        dataType: "json"
     });
 }
 function deleteInt(url) {
@@ -106,7 +104,6 @@ function deleteInt(url) {
         headers: getHeaders(),
         type: "application/json",
         dataType: "json",
-        xhrFields: {withCredentials: true}
     });
 }
 
