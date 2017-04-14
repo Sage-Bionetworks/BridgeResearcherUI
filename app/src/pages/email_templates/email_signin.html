@@ -4,17 +4,17 @@
             <h3>Email Templates</h3>
         </div>
         <div class="fixed-header-buttons">
-            <button class="ui primary tiny button" data-bind="click: save">Save</button>
+            <button class="ui tiny small button" data-bind="click: save">Save</button>
         </div>
     </div>
     <div class="ui secondary pointing menu">
-        <a class="active item">
+        <a href="#/email_templates/verify_email" class="item">
             <i class="file outline icon"></i> Verify Email
         </a>
         <a href="#/email_templates/reset_password" class="item">
             <i class="history icon"></i> Reset Password
         </a>
-        <a href="#/email_templates/email_signin" class="item">
+        <a class="active item">
             <i class="sign in icon"></i> Email Sign In
         </a>
     </div>
@@ -24,23 +24,23 @@
         <div class="ten wide column">
             <errors></errors>
             <form class="ui form">
-                <div class="required field" id="verifyEmailTemplate_subject">
+                <div class="required field" id="resetPasswordTemplate_subject">
                     <label>Subject</label>
-                    <input type="text" name="subject" data-bind="value: subject, hasFocus: true"/>
+                    <input type="text" name="subject" data-bind="value: subjectObs, hasFocus: true"/>
                 </div>
                 <div class="field">
-                    <textarea id="veTemplate" data-bind="ckeditor: $component.initEditor" class="ui textarea doc"></textarea>
+                    <textarea id="rpTemplate" data-bind="ckeditor: $component.initEditor" class="ui textarea doc"></textarea>
                 </div>
             </form>
         </div>
         <div class="six wide column">
             <div class="ui message">
-                <p>This is the email sent to users when they sign up for your study. </p>
+                <p>This is the email sent to a user that will contain a link to sign in to the app. This requires coordination with the app itself to capture the link and process the token accordingly. </p>
 
-                <p><strong>It <em>must</em> contain the value <code>${url}</code>,</strong> which is a variable that will be
-                    replaced with the address users must click to verify their email addresses. You cannot link the ${url} 
-                    variable. Most web email clients will link it automatically. </p>
+                <p><strong>It <em>must</em> contain the value <code>${token}</code>,</strong> which is a value the app must parse out of the URL and return to the server to complete sign in. </p>
 
+                <p>You will also need to change the URL to use a custom host. If you used the default <code>${host}</code> value it will conflict with other apps built on the Bridge server. The initial <code>${host}</code> value is for testing purposes. </p>
+                
                 <p>There are other values available: </p>
 
                 <dl>

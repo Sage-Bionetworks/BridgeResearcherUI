@@ -13,6 +13,7 @@ module.exports = function() {
         .bind('healthCodeExportEnabled')
         .bind('emailVerificationEnabled')
         .bind('externalIdValidationEnabled')
+        .bind('emailSignInEnabled')
         .bind('externalIdRequiredOnSignup')
         .bind('iosArn', null, ios.fromObject, ios.toObject)
         .bind('androidArn', null, android.fromObject, android.toObject);
