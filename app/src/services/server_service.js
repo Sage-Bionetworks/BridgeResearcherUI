@@ -103,7 +103,7 @@ function deleteInt(url) {
         url: url,
         headers: getHeaders(),
         type: "application/json",
-        dataType: "json",
+        dataType: "json"
     });
 }
 
