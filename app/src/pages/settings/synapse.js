@@ -14,7 +14,8 @@ module.exports = function() {
     var binder = bind(self)
         .bind('synapseDataAccessTeamId')
         .bind('synapseProjectId')
-        .bind('usesCustomExportSchedule');
+        .bind('usesCustomExportSchedule')
+        .bind('disableExport');
 
     self.isLinked = ko.computed(function() {
         return utils.isNotBlank(self.synapseProjectIdObs()) || 
