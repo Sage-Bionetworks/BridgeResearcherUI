@@ -86,6 +86,9 @@ module.exports = function(params) {
         .obs('surveyIndex')
         .obs('name', params.taskId === "new" ? "New Task" : params.taskId);
 
+    // Once a survey is saved as part of a task, the name is not preserved, so we need to 
+    // retrieve that from the list of published surveys, and reference it when constructing
+    // the UI.
     function updateSurveyNameMap(response) {
         response.items.forEach(function(survey) {
             surveyNameMap[survey.guid] = survey.name;
@@ -154,14 +157,15 @@ module.exports = function(params) {
         }
     };
 
-    if (params.taskId !== "new") {
-        serverService.getPublishedSurveys()
-            .then(updateSurveyNameMap)
-            .then(function() {
-                return serverService.getTaskDefinition(params.taskId)
-                    .then(binder.assign('task'))
-                    .then(binder.update())
-                    .catch(utils.notFoundHandler("Task", "tasks"));
-            });
+    function loadTaskDefinition() {
+        if (params.taskId !== "new") {
+            return serverService.getTaskDefinition(params.taskId)
+                .then(binder.assign('task'))
+                .then(binder.update())
+                .catch(utils.notFoundHandler("Task", "tasks"));
+        }
     }
+    serverService.getPublishedSurveys()
+        .then(updateSurveyNameMap)
+        .then(loadTaskDefinition);
 };

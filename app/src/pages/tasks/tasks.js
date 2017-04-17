@@ -1,6 +1,5 @@
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
-var fn = require('../../transforms');
 var Promise = require('bluebird');
 var tables = require('../../tables');
 var scheduleUtils = require('../schedule/schedule_utils');

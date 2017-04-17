@@ -1,13 +1,11 @@
 var utils = require('../../utils');
 var serverService = require('../../services/server_service');
-var optionsService = require('../../services/options_service');
 var scheduleUtils = require('../../pages/schedule/schedule_utils');
 var bind = require('../../binder');
 var root = require('../../root');
 var jsonFormatter = require('../../json_formatter');
 var tables = require('../../tables');
 var fn = require('../../transforms');
-var ko = require('knockout');
 
 module.exports = function(params) {
     var self = this;
@@ -31,7 +29,7 @@ module.exports = function(params) {
         return string;
     };
 
-    var binder = bind(self)
+    bind(self)
         .obs('userId', params.userId)
         .obs('isNew', false)
         .obs('title', '&#160;')

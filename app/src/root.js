@@ -19,7 +19,7 @@ var pageSets = {
     'surveys': ['surveys','survey','survey_versions', "survey_schema"],
     'schemas': ['schemas','schema','schema_versions'],
     'scheduleplans': ['scheduleplans','scheduleplan'],
-    'email_templates': ['verify_email', 'reset_password'],
+    'email_templates': ['verify_email', 'reset_password', 'email_signin'],
     'subpopulations': ['subpopulations', 'subpopulation', 'subpopulation_editor', 'subpopulation_history', 'subpopulation_download'],
     'participants': participantPages,
     'enrollees': participantPages,
