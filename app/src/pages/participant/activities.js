@@ -1,10 +1,8 @@
 var utils = require('../../utils');
 var serverService = require('../../services/server_service');
-var criteriaUtils = require('../../criteria_utils');
 var scheduleUtils = require('../../pages/schedule/schedule_utils');
 var bind = require('../../binder');
 var root = require('../../root');
-var optionsService = require('../../services/options_service');
 var tables = require('../../tables');
 
 var ACTIVITY_SORTER = utils.makeFieldSorter("label");
@@ -12,7 +10,7 @@ var ACTIVITY_SORTER = utils.makeFieldSorter("label");
 module.exports = function(params) {
     var self = this;
 
-    var binder = bind(self)
+    bind(self)
         .obs('userId', params.userId)
         .obs('items[]', [])
         .obs('isNew', false)

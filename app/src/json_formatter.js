@@ -27,16 +27,23 @@ function mapItem(item) {
     item.collapsedObs = ko.observable(true);
     try {
         item.formattedData = prettyPrint(item.data);
-        item.collapsedValue = "{&hellip;}";
         item.isJson = true;
     } catch(e) {
         item.collapsedObs(false);
-        item.collapsedValue = "&hellip;";
         item.isJson = false;
+    }
+    return item;
+}
+function mapClientDataItem(item) {
+    item.collapsedObs = ko.observable(true);
+    item.isDisabled = (item.status === 'expired');
+    if (item.clientData) {
+        item.formattedData = prettyPrint(item.clientData);
     }
     return item;
 }
 
 module.exports = {
-    mapItem: mapItem
+    mapItem: mapItem,
+    mapClientDataItem: mapClientDataItem
 };

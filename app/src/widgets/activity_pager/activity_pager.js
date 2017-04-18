@@ -6,14 +6,10 @@ var pageSize = 25;
 /**
  * @params loadingFunc - the function to call to load resources. The function takes the parameters 
  *      offsetBy, pageSize.
- * @params pageKey - a key to make the pagination on this table unique from other pagination on 
- *      the screen
  */
 module.exports = function(params) {
     var self = this;
-    var pageKey = params.pageKey;
     var loadingFunc = params.loadingFunc;
-    var query = {};
 
     bind(self)
         .obs('startDate', '')
@@ -38,6 +34,7 @@ module.exports = function(params) {
         wrappedLoadingFunc();
     };
     self.doCalSearch = function() {
+        self.offsetByObs(null);
         self.pageCountObs(0);
         wrappedLoadingFunc();
     };
