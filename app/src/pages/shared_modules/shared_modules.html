@@ -1,0 +1,35 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <div class="fixed-header-heading">
+            <h3>Shared Modules</h3>
+        </div>
+        <div class="fixed-header-buttons">
+            <a href="#/shared_modules/new" class="ui primary tiny button">New Shared Module</a>
+        </div>
+    </div>
+    <div class="ui empty secondary pointing menu"></div>
+</div>
+<div class="scrollbox">
+    <errors></errors>
+
+    <div class="no_records" data-bind="if: itemsObs().length === 0">
+        <p data-bind="html: recordsMessageObs"></p>
+    </div>                    
+    <!-- ko foreach: itemsObs -->
+        <div class="ui card" style="width: 100%">
+            <div class="content">
+                <a class="header" data-bind="attr: {
+                    'href': '#/shared_modules/'+encodeURIComponent($data.id)+'/versions/'+$data.version}, text: $data.name"></a>
+                <div class="meta" data-bind="text: $component.formatDescription($data)"></div>
+                <div class="description" data-bind="html: $data.notes"></div>
+            </div>
+            <div class="extra content">
+                <span data-bind="text: $component.formatVersions($data)"></span>
+                <button style="float:right" class="ui compact red mini basic button"
+                    data-bind="click: $parent.deleteItem">
+                    <i class="delete icon"></i>Delete
+                </button>
+            </div>
+        </div>
+    <!-- /ko -->
+</div>

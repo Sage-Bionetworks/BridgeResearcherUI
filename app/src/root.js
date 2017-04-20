@@ -27,10 +27,11 @@ var pageSets = {
     'admin/cache': ['admin_cache'],
     'reports': ['reports', 'report'],
     'topics': ['topics', 'topic'],
-    'tasks': ['tasks','task']
+    'tasks': ['tasks','task'],
+    'shared_modules': ['shared_modules','shared_module','shared_module_versions']
 };
 function roleFunc(observer, role) {
-    return ko.computed(function() {return observer().indexOf(role) > -1;});        
+    return ko.computed(function() {return observer().indexOf(role) > -1;});
 }
 
 toastr.options = config.toastr;
@@ -106,6 +107,9 @@ var RootViewModel = function() {
     self.isResearcher = roleFunc(self.rolesObs, 'researcher');
     self.isDeveloper = roleFunc(self.rolesObs, 'developer');
     self.isAdmin = roleFunc(self.rolesObs, 'admin');
+    self.isSharedStudy = ko.computed(function() {
+        return self.studyIdentifierObs() === 'shared';
+    });
 
     self.openDialog = function(dialogName, params) {
         self.dialogObs({name: dialogName, params: params});

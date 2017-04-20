@@ -37,11 +37,7 @@ module.exports = function() {
 
     function load() {
         serverService.getAllUploadSchemas().then(function(response) {
-            // Remove schemas produced when a survey was published.
-            var items = response.items.filter(function(item) {
-                return (!item.surveyGuid && !item.surveyCreatedOn);
-            });
-            self.itemsObs(items.sort(utils.makeFieldSorter("name")));
+            self.itemsObs(response.items.sort(utils.makeFieldSorter("name")));
         });
     }
     load();

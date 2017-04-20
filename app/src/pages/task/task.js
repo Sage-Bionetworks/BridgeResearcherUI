@@ -1,3 +1,4 @@
+var sharedModuleUtils = require('../../shared_module_utils');
 var serverService = require('../../services/server_service');
 var bind = require('../../binder');
 var utils = require('../../utils');
@@ -6,6 +7,7 @@ var fn = require('../../transforms');
 var ko = require('knockout');
 
 var surveyNameMap = {};
+var schemaNameMap = {};
 
 function schemaListToView(schemaList, context) {
     return schemaList.map(schemaToView).map(loadSchemaRevisions);
@@ -13,6 +15,7 @@ function schemaListToView(schemaList, context) {
 function schemaToView(schema) {
     return {
         id: schema.schemaId || schema.id, 
+        name: schemaNameMap[schema.schemaId || schema.id],
         revision: schema.revision,
         revisionObs: ko.observable(schema.revision),
         revisionList: ko.observableArray([schemaToOption(schema)])
@@ -31,14 +34,13 @@ function surveyListToView(surveyList, context) {
     return surveyList.map(surveyToView).map(loadSurveyRevisions);
 }
 function surveyToView(survey) {
-    var obj = {
+    return {
         name: surveyNameMap[survey.guid],
         guid: survey.guid,
         createdOn: survey.createdOn,
         createdOnObs: ko.observable(survey.createdOn),
         createdOnList: ko.observableArray([surveyToOption(survey)])
     };
-    return obj;
 }
 function surveyListToTask(surveyList, context) {
     return surveyList.map(function(survey) {
@@ -86,12 +88,6 @@ module.exports = function(params) {
         .obs('surveyIndex')
         .obs('name', params.taskId === "new" ? "New Task" : params.taskId);
 
-    function updateSurveyNameMap(response) {
-        response.items.forEach(function(survey) {
-            surveyNameMap[survey.guid] = survey.name;
-        });
-        return response;
-    }
     function updateId(response) {
         self.nameObs(response.taskId);
         self.isNewObs(false);
@@ -103,6 +99,7 @@ module.exports = function(params) {
         self.task = binder.persist(self.task);
         root.openDialog('select_schemas',{
             addSchemas: self.addSchemas,
+            allowMostRecent: true,
             selected: self.task.schemaList
         });
     };
@@ -110,6 +107,7 @@ module.exports = function(params) {
         self.task = binder.persist(self.task);
         root.openDialog('select_surveys',{
             addSurveys: self.addSurveys,
+            allowMostRecent: true,
             selected: self.task.surveyList
         });
     };
@@ -140,23 +138,17 @@ module.exports = function(params) {
     self.save = function(vm, event) {
         utils.startHandler(vm, event);
 
+        var methodName = (params.taskId === "new") ? "createTaskDefinition" : "updateTaskDefinition";
         self.task = binder.persist(self.task);
-        if (params.taskId === "new") {
-            serverService.createTaskDefinition(self.task)
-                .then(updateId)
-                .then(utils.successHandler(vm, event, "Task created."))
-                .catch(utils.failureHandler());
-        } else {
-            serverService.updateTaskDefinition(self.task)
-                .then(updateId)
-                .then(utils.successHandler(vm, event, "Task created."))
-                .catch(utils.failureHandler());
-        }
+
+        serverService[methodName](self.task)
+            .then(updateId)
+            .then(utils.successHandler(vm, event, "Task saved."))
+            .catch(utils.failureHandler());
     };
 
     if (params.taskId !== "new") {
-        serverService.getPublishedSurveys()
-            .then(updateSurveyNameMap)
+        sharedModuleUtils.loadNameMaps(surveyNameMap, schemaNameMap)
             .then(function() {
                 return serverService.getTaskDefinition(params.taskId)
                     .then(binder.assign('task'))

@@ -70,7 +70,7 @@ footer p {
 
 /* GENERAL */
 
-.no_records td {
+.no_records td, .no_records p {
     font-size: larger;
     padding: 1rem!important;
     text-align: center!important;
@@ -213,4 +213,20 @@ progress {
     cursor: grab;
     cursor: -moz-grab;
     cursor: -webkit-grab;
+}
+.metadata-notes {
+    height: 10rem;
+    margin: 0;
+    outline: 0;
+    -webkit-appearance: none;
+    padding: .47rem;
+    font-size: 1em;
+    background: #FFF;
+    border: 1px solid rgba(34,36,38,.15);
+    color: rgba(0,0,0,.87);
+    border-radius: .28571429rem;
+    box-shadow: 0 0 0 0 transparent inset;
+}
+.metadata-notes:focus {
+    border-color:#85B7D9;
 }
