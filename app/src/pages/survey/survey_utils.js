@@ -74,11 +74,11 @@ var SELECT_OPTIONS_BY_TYPE = Object.freeze({
     'BooleanConstraints':[UI_HINT_OPTIONS.checkbox, UI_HINT_OPTIONS.toggle],
     'DateConstraints':[UI_HINT_OPTIONS.datepicker],
     'DateTimeConstraints':[UI_HINT_OPTIONS.datetimepicker],
-    'DecimalConstraints':[UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider],
-    'DurationConstraints': [UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider],
+    'DecimalConstraints':[UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider, UI_HINT_OPTIONS.select],
+    'DurationConstraints': [UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider, UI_HINT_OPTIONS.select],
     'MultiValueConstraints':[UI_HINT_OPTIONS.checkbox, UI_HINT_OPTIONS.combobox, UI_HINT_OPTIONS.list,
         UI_HINT_OPTIONS.radiobutton, UI_HINT_OPTIONS.select, UI_HINT_OPTIONS.slider],
-    'IntegerConstraints':[UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider],
+    'IntegerConstraints':[UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider, UI_HINT_OPTIONS.select],
     'StringConstraints':[UI_HINT_OPTIONS.multilinetext, UI_HINT_OPTIONS.textfield],
     'TimeConstraints':[UI_HINT_OPTIONS.timepicker]
 });
