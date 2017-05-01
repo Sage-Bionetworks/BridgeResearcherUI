@@ -4,8 +4,8 @@ var tables = require('../../tables');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var alerts = require('../../widgets/alerts');
+var config = require('../../config');
 
-var PUBLISH_MSG = "Are you sure you want to publish this shared module version?";
 var DELETE_MSG = "Are you sure you want to delete this shared module version?";
 
 function deleteItem(item) {
@@ -35,7 +35,7 @@ module.exports = function(params) {
     self.formatVersions = sharedModuleUtils.formatVersions;
 
     self.publishItem = function(item, event) {
-        alerts.confirmation(PUBLISH_MSG, function() {
+        alerts.confirmation(config.msgs.shared_modules.PUBLISH, function() {
             utils.startHandler(self, event);
             item.published = true;
             serverService.updateMetadata(item)

@@ -21,9 +21,7 @@ function loadSurveyRevisions(vm, survey) {
     return serverService.getSurveyAllRevisions(survey.guid).then(function(response) {
         // Need to confirm, but if you link to unpublished survey, it is just published
         // when you publish the metadata... ?
-        var dates = response.items/*.filter(function(oneSurvey) {
-            return oneSurvey.published;  
-        })*/.map(function(oneSurvey) {
+        var dates = response.items.map(function(oneSurvey) {
             var d = fn.formatLocalDateTime(oneSurvey.createdOn);
             return {value: oneSurvey.createdOn, label: d};
         });

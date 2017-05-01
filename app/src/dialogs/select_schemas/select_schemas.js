@@ -41,12 +41,6 @@ module.exports = function(params) {
         refresh: load
     });
 
-    function isSelected(schema) {
-        return !!match(schema);
-    }
-    function notSelected(schema) {
-        return !isSelected(schema);
-    }
     function match(schema) {
         return params.selected.filter(function(selectedSchema) {
             return (selectedSchema.id === schema.schemaId);

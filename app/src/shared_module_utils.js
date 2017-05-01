@@ -70,6 +70,6 @@ module.exports = {
     formatTags: formatTags,
     formatVersions: formatVersions,
     getSurveyName: getSurveyName,
-    getSchemaName: getSurveyName
+    getSchemaName: getSchemaName
 };
 

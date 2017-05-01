@@ -2,7 +2,6 @@ var ko = require('knockout');
 var saveAs = require('../../../lib/filesaver.min.js');
 var serverService = require('../../services/server_service');
 var root = require('../../root');
-var utils = require('../../utils');
 var fn = require('../../transforms');
 
 var HEADERS = [];

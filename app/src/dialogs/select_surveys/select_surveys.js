@@ -41,12 +41,6 @@ module.exports = function(params) {
         refresh: load
     });
 
-    function isSelected(survey) {
-        return !!match(survey);
-    }
-    function notSelected(survey) {
-        return !isSelected(survey);
-    }
     function match(survey) {
         return params.selected.filter(function(selectedSurvey) {
             return (selectedSurvey.guid === survey.guid);

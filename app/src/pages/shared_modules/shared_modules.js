@@ -1,15 +1,10 @@
 var sharedModuleUtils = require('../../shared_module_utils');
 var serverService = require('../../services/server_service');
-var tables = require('../../tables');
 var utils = require('../../utils');
 var ko = require('knockout');
 var alerts = require('../../widgets/alerts');
-var fn = require('../../transforms');
+var config = require('../../config');
 
-function deleteItem(item) {
-    return serverService.deleteMetadataVersion(item.id, item.version);
-}
-var PUBLISH_MSG = "Are you sure you want to publish this shared module version?"; // TODO
 var NO_ITEMS_MSG = "There are currently no shared modules (or none with those search terms).";
 var DELETE_CONFIRM_MSG = "This deletes ALL revisions of the module.\n\n"+
     "Use the module's history page to delete a single revision.\n\n"+
@@ -61,7 +56,7 @@ module.exports = function() {
         });
     };
     self.publishItem = function(item, event) {
-        alerts.confirmation(PUBLISH_MSG, function() {
+        alerts.confirmation(config.msgs.shared_modules.PUBLISH, function() {
             utils.startHandler(self, event);
             item.published = true;
             serverService.updateMetadata(item)

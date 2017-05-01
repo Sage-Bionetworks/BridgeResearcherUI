@@ -15,11 +15,9 @@ module.exports = function(params) {
     self.linkMaker = function(tabName) {
         return ko.computed(function() {
             var url = '#/shared_modules/'+encodeURIComponent(self.idObs());
-            if (tabName == 'editor') {
-                url += '/versions/'+self.atObs();
-            } else {
-                url += '/versions/at/'+self.versionObs();
-            }
+            url += (tabName == 'editor') ?
+                ('/versions/'+self.atObs()) :
+                ('/versions/at/'+self.versionObs());
             return url;
         });
     };
