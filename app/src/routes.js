@@ -42,7 +42,7 @@ function redirectTo(response) {
     router.setRoute('/participants/' + response.items[0].id);
 }
 function redirectToParticipant(externalId) {
-    serverService.getParticipants(0,5,"+"+externalId+"@").then(redirectTo);
+    serverService.getParticipants(null,5,"+"+externalId+"@").then(redirectTo);
 }
 
 var router = new director.Router();

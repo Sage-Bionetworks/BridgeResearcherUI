@@ -5,6 +5,7 @@ var toastr = require('toastr');
 var bind = require('./binder');
 var clipboard = require('./widgets/clipboard/clipboard');
 
+window.ko = ko;
 // When you enable this, 1) everything is a bit faster, and 2) the UI is completely broken.
 // ko.options.deferUpdates = true;
 

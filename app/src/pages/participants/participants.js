@@ -82,7 +82,7 @@ module.exports = function() {
             self.recordsObs(formatCount(response.total));
             self.itemsObs(response.items);
             if (response.items.length === 0) {
-                if (offsetBy > 0) {
+                if (offsetBy !== null) {
                     // You can't switch studies or environments unless you reset this when it has 
                     // overshot the new list. So drop back and try and find the first page.
                     return self.loadingFunc(0, pageSize, emailFilter);

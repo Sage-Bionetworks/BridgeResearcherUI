@@ -12,20 +12,7 @@
                 data-bind="disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
         </div>
     </div>
-    <div class="ui secondary pointing menu" data-bind="visible: !isNewObs()">
-        <a data-bind="attr: {href: '#/shared_modules/'+encodeURIComponent(idObs())+'/versions/'+atObs()}" class="item">
-            <i class="file outline icon"></i> Editor
-        </a>
-        <span class="active item">
-            <i class="history icon"></i> History
-        </span>
-        <div class="right menu">
-            <div class="item">
-                <i class="clock icon"></i> <span data-bind="text: versionObs"></span>
-            </div>
-        </div>
-    </div>
-    <div class="ui empty secondary pointing menu" data-bind="visible: isNewObs"></div>
+    <sharedmodule-tabset params="selected: 'history', viewModel: $data"></sharedmodule-tabset>
 </div>
 <div class="scrollbox">
     <table class="ui compact selectable table">
@@ -37,23 +24,32 @@
                 <th>Name</th>
                 <th>Description</th>
                 <th>Version</th>
+                <th></th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
-                <td colspan="4" data-bind="html: recordsMessageObs"></td>
+                <td colspan="5" data-bind="html: recordsMessageObs"></td>
             </tr>
         </tbody>        
         <tbody data-bind="foreach: itemsObs">
             <tr data-bind="css: { positive: $data.published }">
                 <td>
-                    <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+                    <ui-checkbox params="checkedObs: $data.checkedObs, 
+                        disabled: $data.published"></ui-checkbox>
                 </td>
                 <td>
                     <a data-bind="attr: {'href': '#/shared_modules/'+encodeURIComponent($data.id)+'/versions/'+$data.version}, text: $data.name"></a>
                 </td>
                 <td data-bind="text: $component.formatDescription($data)"></td>
                 <td data-bind="text: $component.formatVersions($data)"></td>
+                <td style="text-align: right">
+                    <button class="ui basic compact mini button" 
+                        data-bind="visible: !$data.published, click: $parent.publishItem">Publish</button>
+                    <div data-bind="visible: $data.published">
+                        <i class="checkmark icon"></i> Published
+                    </div>
+                </td>
             </tr>
         </tbody>
     </table>    

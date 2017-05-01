@@ -531,9 +531,10 @@ module.exports = {
     deleteTaskDefinition: function(taskId) {
         return del(config.compoundactivitydefinitions + "/" + esc(taskId));
     },
-    getMetadata: function() {
+    getMetadata: function(searchString) {
+        searchString = searchString || "";
         // mostrecent: "true", published: "false", where: null, tags: null
-        return get(config.metadata);
+        return get(config.metadata + searchString);
     },
     createMetadata: function(metadata) {
         return post(config.metadata, metadata);

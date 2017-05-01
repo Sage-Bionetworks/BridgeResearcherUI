@@ -11,24 +11,41 @@
 </div>
 <div class="scrollbox">
     <errors></errors>
+    <div class="ui action input" style="margin-right: 1.5rem">
+        <input type="text" placeholder="Search all versions" data-bind="textInput: searchObs">
+        <div data-toggle></div>
+        <button class="ui icon button" data-bind="click: clearSearch">
+            <i class="remove circle icon"></i>
+        </button>
+    </div>
+
+    <ui-checkbox params="checkedObs: tagsOnlyObs">
+        Search tags
+    </ui-checkbox>
 
     <div class="no_records" data-bind="if: itemsObs().length === 0">
         <p data-bind="html: recordsMessageObs"></p>
-    </div>                    
+    </div>
     <!-- ko foreach: itemsObs -->
         <div class="ui card" style="width: 100%">
             <div class="content">
+                <div class="right floated" data-bind="text: tags"></div>
                 <a class="header" data-bind="attr: {
                     'href': '#/shared_modules/'+encodeURIComponent($data.id)+'/versions/'+$data.version}, text: $data.name"></a>
                 <div class="meta" data-bind="text: $component.formatDescription($data)"></div>
                 <div class="description" data-bind="html: $data.notes"></div>
             </div>
-            <div class="extra content">
+            <div class="extra" style="display: flex; justify-content:space-between; align-items: center">
                 <span data-bind="text: $component.formatVersions($data)"></span>
-                <button style="float:right" class="ui compact red mini basic button"
-                    data-bind="click: $parent.deleteItem">
-                    <i class="delete icon"></i>Delete
-                </button>
+                <span>
+                    <span class="ui mini green label" data-bind="visible: $data.published">
+                        <i class="checkmark icon"></i> Published
+                    </span>
+                    <button class="ui basic compact mini button" 
+                        data-bind="visible: !$data.published, click: $parent.publishItem">Publish</button>
+                    <button class="ui basic red compact mini button" 
+                        data-bind="click: $parent.deleteItem">Delete</button>
+                </span>
             </div>
         </div>
     <!-- /ko -->

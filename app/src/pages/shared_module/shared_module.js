@@ -10,8 +10,6 @@ var OPTIONS = [
     {value: 'Android', label: 'Android'},
     {value: 'iOS', label: 'iOS'}
 ];
-var surveyNameMap = {};
-var schemaNameMap = {};
 
 function tagsToView(tags) {
     return (tags || []).join(", ");
@@ -47,6 +45,8 @@ module.exports = function(params) {
 
     var binder = bind(self)
         .obs('isNew', params.id === "new")
+        .obs('at', params.id)
+        .bind('published', false)
         .bind('id')
         .bind('licenseRestricted', false)
         .bind('name', '')
@@ -79,23 +79,23 @@ module.exports = function(params) {
         self.isNewObs(false);
         self.idObs(metadata.id);
         self.versionObs(metadata.version);
+        self.publishedObs(metadata.published);
         self.metadata.id = metadata.id;
         self.metadata.version = metadata.version;
+        self.metadata.published = metadata.published;
         return metadata;
     }
     function updateSharedModuleWithNames(metadata) {
+        self.linkedNameObs(sharedModuleUtils.formatMetadataLinkedItem(metadata));
         if (metadata.surveyGuid) {
-            self.linkedNameObs("Survey: " + surveyNameMap[metadata.surveyGuid]);
             loadSurveyRevisions(self, {guid: metadata.surveyGuid}).then(function() {
                 self.linkedVersionObs(metadata.surveyCreatedOn);
             });
         } else if (metadata.schemaId) {
-            self.linkedNameObs("Schema: " + schemaNameMap[metadata.schemaId]);
             loadSchemaRevisions(self, {schemaId: metadata.schemaId}).then(function() {
                 self.linkedVersionObs(metadata.revision);
             });
         } else {
-            self.linkedNameObs('&lt;None&gt;');
             self.linkedVersionOptionsObs([]);
         }
         return metadata;
@@ -172,7 +172,11 @@ module.exports = function(params) {
     self.save = function(vm, event) {
         var oldVersion = self.metadata.version; // prior to updating from model
         self.metadata = binder.persist(self.metadata);
-        var methodName = (params.id === "new" || self.metadata.version !== oldVersion) ? "createMetadata" : "updateMetadata";
+        var methodName = (params.id === "new" || self.metadata.version !== oldVersion) ?
+            "createMetadata" : "updateMetadata";
+        if (oldVersion !== self.versionObs()) {
+            self.metadata.published = false;
+        }
 
         utils.startHandler(vm, event);
         serverService[methodName](self.metadata)
@@ -181,11 +185,11 @@ module.exports = function(params) {
             .catch(utils.failureHandler(vm, event));
     };
     if (params.id !== "new") {
-        sharedModuleUtils.loadNameMaps(surveyNameMap, schemaNameMap)
+        sharedModuleUtils.loadNameMaps()
             .then(loadMetadata)
             .then(binder.assign('metadata'))
             .then(binder.update())
             .then(updateSharedModuleWithNames)
-            .catch(utils.failureHandler());
+            .catch(utils.notFoundHandler("Shared module", "shared_modules"));
     }
 };

@@ -1,45 +1,40 @@
 var serverService = require('./services/server_service');
 var fn = require('./transforms');
 
-function updateSurveyNameMap(surveyNameMap) {
-    return function(response) {
-        response.items.forEach(function(survey) {
-            surveyNameMap[survey.guid] = survey.name;
-        });
-        return response;
-    };
+var surveyNameMap = {};
+var schemaNameMap = {};
+
+function updateSurveyNameMap(response) {
+    response.items.forEach(function(survey) {
+        surveyNameMap[survey.guid] = survey.name;
+    });
 }
-function updateSchemaNameMap(schemaNameMap) {
-    return function(response) {
-        response.items.forEach(function(schema) {
-            schemaNameMap[schema.schemaId] = schema.name;
-        });
-        return response;
-    };
+function updateSchemaNameMap(response) {
+    response.items.forEach(function(schema) {
+        schemaNameMap[schema.schemaId] = schema.name;
+    });
 }
-function loadMaps(surveyNameMap, schemaNameMap) {
+function loadMaps() {
     return serverService.getPublishedSurveys()
-        .then(updateSurveyNameMap(surveyNameMap))
+        .then(updateSurveyNameMap)
         .then(serverService.getAllUploadSchemas)
-        .then(updateSchemaNameMap(schemaNameMap));
+        .then(updateSchemaNameMap);
 }
-function makeFormatDescription(surveyNameMap, schemaNameMap) {
-    return function formatDescription(metadata) {
-        var array = [];
-        if (metadata.surveyGuid) {
-            array.push("Survey: " + surveyNameMap[metadata.surveyGuid]);
-        }
-        if (metadata.schemaId) {
-            array.push("Schema: " + schemaNameMap[metadata.schemaId]);
-        }
-        if (metadata.licenseRestricted) {
-            array.push("some licensing restrictions (see notes)");
-        }
-        if (metadata.os) {
-            array.push(metadata.os + " only");
-        }
-        return array.join("; ");
-    };
+function formatDescription(metadata) {
+    var array = [];
+    if (metadata.surveyGuid) {
+        array.push("Survey: " + surveyNameMap[metadata.surveyGuid]);
+    }
+    if (metadata.schemaId) {
+        array.push("Schema: " + schemaNameMap[metadata.schemaId]);
+    }
+    if (metadata.licenseRestricted) {
+        array.push("some licensing restrictions (see notes)");
+    }
+    if (metadata.os) {
+        array.push(metadata.os + " only");
+    }
+    return array.join("; ");
 }
 function formatTags(metadata) {
     return metadata.tags.join(", ");
@@ -53,10 +48,28 @@ function formatVersions(metadata) {
     }
     return array.join(', ');
 }
+function formatMetadataLinkedItem(metadata) {
+    if (metadata.surveyGuid) {
+        return "Survey: " + surveyNameMap[metadata.surveyGuid];
+    } else if (metadata.schemaId) {
+        return "Schema: " + schemaNameMap[metadata.schemaId];
+    }
+    return "&lt;None&gt;";
+}
+function getSurveyName(guid) {
+    return surveyNameMap[guid];
+}
+function getSchemaName(id) {
+    return schemaNameMap[id];
+}
+
 module.exports = {
     loadNameMaps: loadMaps,
-    formatDescription: makeFormatDescription,
+    formatDescription: formatDescription,
+    formatMetadataLinkedItem: formatMetadataLinkedItem,
     formatTags: formatTags,
-    formatVersions: formatVersions
+    formatVersions: formatVersions,
+    getSurveyName: getSurveyName,
+    getSchemaName: getSurveyName
 };
 

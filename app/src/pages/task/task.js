@@ -6,16 +6,13 @@ var root = require('../../root');
 var fn = require('../../transforms');
 var ko = require('knockout');
 
-var surveyNameMap = {};
-var schemaNameMap = {};
-
 function schemaListToView(schemaList, context) {
     return schemaList.map(schemaToView).map(loadSchemaRevisions);
 }
 function schemaToView(schema) {
     return {
         id: schema.schemaId || schema.id, 
-        name: schemaNameMap[schema.schemaId || schema.id],
+        name: sharedModuleUtils.getSchemaName(schema.schemaId || schema.id),
         revision: schema.revision,
         revisionObs: ko.observable(schema.revision),
         revisionList: ko.observableArray([schemaToOption(schema)])
@@ -35,7 +32,7 @@ function surveyListToView(surveyList, context) {
 }
 function surveyToView(survey) {
     return {
-        name: surveyNameMap[survey.guid],
+        name: sharedModuleUtils.getSurveyName(survey.guid),
         guid: survey.guid,
         createdOn: survey.createdOn,
         createdOnObs: ko.observable(survey.createdOn),
@@ -88,15 +85,6 @@ module.exports = function(params) {
         .obs('surveyIndex')
         .obs('name', params.taskId === "new" ? "New Task" : params.taskId);
 
-    // Once a survey is saved as part of a task, the name is not preserved, so we need to 
-    // retrieve that from the list of published surveys, and reference it when constructing
-    // the UI.
-    function updateSurveyNameMap(response) {
-        response.items.forEach(function(survey) {
-            surveyNameMap[survey.guid] = survey.name;
-        });
-        return response;
-    }
     function updateId(response) {
         self.nameObs(response.taskId);
         self.isNewObs(false);
@@ -165,6 +153,7 @@ module.exports = function(params) {
         }
     }
     serverService.getPublishedSurveys()
-        .then(updateSurveyNameMap)
+        .then(sharedModuleUtils.loadNameMaps)
+        .then(serverService.getPublishedSurveys)
         .then(loadTaskDefinition);
 };

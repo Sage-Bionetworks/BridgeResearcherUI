@@ -30,7 +30,7 @@ module.exports = function(params) {
         .obs('pageSize', pageSize)
         .obs('totalRecords')
         .obs('totalPages')
-        .obs('currentPage', Math.round((offsetBy || 0)/pageSize))
+        .obs('currentPage', 1)
         .obs('searchLoading', false)
         .obs('showLoader', false);
     

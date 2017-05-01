@@ -85,14 +85,6 @@ function createEmailTemplate(email, identifier) {
     }
     return parts[0] + "+" + identifier + "@" + parts[1];
 }
-// This creates a date range in the user's local (browser) timezone.
-function getDateRange(date) {
-    date = (date) ? new Date(date) : new Date();
-    return {
-        startTime: formatLocalDate(date, "00:00:00.000"), 
-        endTime: formatLocalDate(date, "23:59:59.999")
-    };
-}
 function formatLocalDate(now, timePortion) {
     var tzo = -now.getTimezoneOffset(), dif = tzo >= 0 ? '+' : '-';
 
@@ -132,16 +124,6 @@ module.exports = {
     identity: function(arg) {
         return arg;
     },
-    makeRangeSorter: function(fieldMin, fieldMax) {
-        return function sorter(a,b) {
-            var minA = num(a[fieldMin]);
-            var maxA = num(a[fieldMax]);
-            var minB = num(b[fieldMin]);
-            var maxB = num(b[fieldMax]);
-            var diff = (minA - minB);
-            return (diff !== 0) ? diff : (maxA - maxB);
-        };
-    },
     /**
      * Create a sort function that sorts an array of items by a specific field name
      * (must be a string, will be sorted ignoring case).Sort items by a property of each object (must be a string)
@@ -154,23 +136,6 @@ module.exports = {
     },
     lowerCaseStringSorter: function sorter(a,b) {
         return a.localeCompare(b);
-    },
-    /**
-     * Combine sort functions for multi-field sorting. Takes one or more sort functions (as would be 
-     * passed to an array's sort method).
-     */
-    multiFieldSorter: function() {
-        var sortFuncs = Array.prototype.slice.call(arguments);
-        return function sorter(a,b) {
-            for (var i=0; i < sortFuncs.length; i++) {
-                var sorter = sortFuncs[i];
-                var output = sorter(a,b);
-                if (output !== 0) {
-                    return output;
-                }
-            }
-            return 0;
-        };
     },
     /**
      * A start handler called before a request to the server is made. All errors are cleared
@@ -309,20 +274,6 @@ module.exports = {
      */
     deleteUnusedProperties: deleteUnusedProperties,
     /**
-     * The panel editors are sibling views to the main view, so they convert user
-     * UI events into postbox events on the main collection being edited. This is
-     * a convenience method to generate those.
-     * @param eventName
-     * @returns {Function}
-     */
-    makeEventToPostboxListener: function(eventName) {
-        return function(model, event) {
-            event.preventDefault();
-            event.stopPropagation();
-            ko.postbox.publish(eventName, model);
-        };
-    },
-    /**
      * The logic for the scrollbox scrolling is not idea so isolate it here where we
      * can fix it everywhere it is used.
      * @param itemSelector
@@ -348,20 +299,6 @@ module.exports = {
                 $div.slideUp(function() { $div.remove(); });
             }
         };
-    },
-    atLeastOneSignedConsent: function(consentHistories) {
-        if (Object.keys(consentHistories).length === 0) {
-            return true;
-        }
-        // At least one consent history whose last item has not been withdrawn.
-        return Object.keys(consentHistories).some(function(guid) {
-            var history = consentHistories[guid];
-            if (history.length === 0) {
-                return true;
-            }
-            var last = history[history.length-1];
-            return (last && typeof last.withdrewOn === "undefined");
-        });
     },
     createParticipantForID: function(email, identifier) {
         return {
@@ -399,6 +336,5 @@ module.exports = {
         } catch(e) {
             throw new Error("Study '"+studyIdentifier+"' not found.");
         }
-    },
-    getDateRange: getDateRange
+    }
 };

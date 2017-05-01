@@ -19,8 +19,12 @@ reg('shared_module', {
     template: require('./pages/shared_module/shared_module.html')
 });
 reg('shared_module_versions', {
-    viewModel: require('./pages/shared_module_versions/shared_module_versions'),
-    template: require('./pages/shared_module_versions/shared_module_versions.html')
+    viewModel: require('./pages/shared_module/shared_module_versions'),
+    template: require('./pages/shared_module/shared_module_versions.html')
+});
+reg('sharedmodule-tabset', {
+    viewModel: require('./pages/shared_module/tabset'),
+    template: require('./pages/shared_module/tabset.html')
 });
 reg('general', {
     viewModel: require('./pages/settings/general'),
