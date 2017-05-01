@@ -11,9 +11,8 @@ var handlers = {
     },
     'checkbox': function($element, allBindings) {
         var input = $element.children("input[type=checkbox]").get(0);
-        if (allBindings().disabled) {
-            input.disabled = true;
-        }
+        input.disabled = !!allBindings().disabled;
+
         var observer = allBindings().checkboxObs;
         $element.addClass("ui checkbox").on('click', function() {
             if (!input.disabled) {
