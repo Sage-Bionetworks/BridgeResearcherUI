@@ -3,17 +3,13 @@
         href: linkMaker('editor')}">
         <i class="file outline icon"></i> Editor
     </a>
-    <a class="item" data-bind="css:{active: isActive('schema')}, attr: {
-        href: linkMaker('schema')}, visible: !!createdOnObs()">
-        <i class="puzzle icon"></i> Schema
-    </a>
     <a class="item" data-bind="css:{active: isActive('history')}, attr: {
-        href: linkMaker('history')}, visible: !!createdOnObs()">
+        href: linkMaker('history')}, visible: !isNewObs()">
         <i class="history icon"></i> History &amp; Publication
     </a>
     <div class="right menu pub-status">
-        <div class="item" data-bind="visible: !!createdOnObs()">
-            <i class="clock icon"></i> <span data-bind="text: formatDateTime(createdOnObs())"></span>
+        <div class="item" data-bind="visible: !isNewObs()">
+            <i class="clock icon"></i> <span data-bind="text: versionObs"></span>
         </div>
         <div class="item" data-bind="visible: publishedObs">
             <span class="green ui mini label">

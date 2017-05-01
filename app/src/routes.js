@@ -16,6 +16,9 @@ var serverService = require('./services/server_service');
 var GUID_CREATEDON = ['guid','createdOn'];
 var GUID = ['guid'];
 var ID = ['id'];
+var ID_AT = ['id','at'];
+var ID_VERSION = ['id','version'];
+var ID_VERSION_AT = ['id','version','at'];
 var SCHEMAID_REVISION = ['schemaId','revision'];
 var SCHEMAID = ['schemaId'];
 var TASKID = ['taskId'];
@@ -39,7 +42,7 @@ function redirectTo(response) {
     router.setRoute('/participants/' + response.items[0].id);
 }
 function redirectToParticipant(externalId) {
-    serverService.getParticipants(0,5,"+"+externalId+"@").then(redirectTo);
+    serverService.getParticipants(null,5,"+"+externalId+"@").then(redirectTo);
 }
 
 var router = new director.Router();
@@ -95,6 +98,12 @@ router.on('/enrollees/:externalId', redirectToParticipant);
 router.on('/enrollees', routeTo('enrollees'));
 router.on('/admin/info', routeTo('admin_info'));
 router.on('/admin/cache', routeTo('admin_cache'));
+router.on('/shared_modules/:id/versions/:version/at/:at', routeTo('shared_module', ID_VERSION_AT));
+router.on('/shared_modules/:id/versions/:version', routeTo('shared_module', ID_VERSION));
+router.on('/shared_modules/:id/versions/at/:at', routeTo('shared_module_versions', ID_AT));
+router.on('/shared_modules/:id/versions', routeTo('shared_module_versions', ID));
+router.on('/shared_modules/:id', routeTo('shared_module', ID));
+router.on('/shared_modules', routeTo('shared_modules'));
 
 router.configure({
     notfound: routeTo('not_found'),

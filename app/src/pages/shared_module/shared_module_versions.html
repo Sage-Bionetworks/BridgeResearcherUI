@@ -1,0 +1,56 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <div class="fixed-header-heading">
+            <div class="ui breadcrumb">
+                <a href="#/shared_modules" class="section">Shared Modules</a>
+                <i class="right chevron icon divider"></i>
+            </div>             
+            <h3 data-bind="text: nameObs"></h3>
+        </div>
+        <div class="fixed-header-buttons">
+            <button class="ui red tiny button" 
+                data-bind="disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
+        </div>
+    </div>
+    <sharedmodule-tabset params="selected: 'history', viewModel: $data"></sharedmodule-tabset>
+</div>
+<div class="scrollbox">
+    <table class="ui compact selectable table">
+        <thead>
+            <tr>
+                <th width="10">
+                    <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+                </th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Version</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+            <tr>
+                <td colspan="5" data-bind="html: recordsMessageObs"></td>
+            </tr>
+        </tbody>        
+        <tbody data-bind="foreach: itemsObs">
+            <tr data-bind="css: { positive: $data.published }">
+                <td>
+                    <ui-checkbox params="checkedObs: $data.checkedObs, 
+                        disabled: $data.published"></ui-checkbox>
+                </td>
+                <td>
+                    <a data-bind="attr: {'href': '#/shared_modules/'+encodeURIComponent($data.id)+'/versions/'+$data.version}, text: $data.name"></a>
+                </td>
+                <td data-bind="text: $component.formatDescription($data)"></td>
+                <td data-bind="text: $component.formatVersions($data)"></td>
+                <td style="text-align: right">
+                    <button class="ui basic compact mini button" 
+                        data-bind="visible: !$data.published, click: $parent.publishItem">Publish</button>
+                    <div data-bind="visible: $data.published">
+                        <i class="checkmark icon"></i> Published
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>    
+</div>

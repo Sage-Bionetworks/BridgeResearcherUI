@@ -65,7 +65,7 @@
                         <a data-bind="visible: isDeveloper">Clipboard</a>
                         <a data-bind="visible: isEditorTabVisibleObs">Editor</a>
                     </div>
-                    <div class="item">
+                    <div class="item" data-bind="visible: !isSharedStudy()">
                         <i class="lab icon"></i> Study
                         <div class="menu">
                             <a href="#/settings/general" class="item" data-bind="active: isActive, visible: isDeveloper">
@@ -94,7 +94,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="item" data-bind="visible: isDeveloper">
+                    <div class="item" data-bind="visible: isDeveloper && !isSharedStudy()">
                         <i class="server icon"></i> Study Data
                         <div class="menu">
                             <a href="#/scheduleplans" class="item" data-bind="active: isActive">
@@ -114,7 +114,21 @@
                             </a>
                         </div>
                     </div>
-                    <div class="item" data-bind="visible: isAdmin">
+                    <div class="item" data-bind="visible: isDeveloper && isSharedStudy">
+                        <i class="server icon"></i> Shared Study Data
+                        <div class="menu">
+                            <a href="#/shared_modules" class="item" data-bind="active: isActive">
+                                Shared Modules
+                            </a>
+                            <a href="#/schemas" class="item" data-bind="active: isActive">
+                                Data Schemas
+                            </a>
+                            <a href="#/surveys" class="item" data-bind="active: isActive">
+                                Surveys
+                            </a>
+                        </div>
+                    </div>
+                    <div class="item" data-bind="visible: isAdmin && !isSharedStudy()">
                         <i class="settings icon"></i> Administration
                         <div class="menu">
                             <a href="#/admin/info" class="item" data-bind="active: isActive">

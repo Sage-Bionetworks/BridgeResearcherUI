@@ -127,7 +127,8 @@ ko.bindingHandlers.ckeditor = {
                 { name: 'insert', items: [ 'Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar' ] },
                 { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
                 { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
-                { name: 'colors', items: [ 'TextColor', 'BGColor' ] }
+                { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+                { name: 'document', items: ['-', 'Source']}
             ]            
         };
         CKEDITOR.replace(element, config);

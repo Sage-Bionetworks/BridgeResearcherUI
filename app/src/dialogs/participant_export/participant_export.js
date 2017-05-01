@@ -2,7 +2,6 @@ var ko = require('knockout');
 var saveAs = require('../../../lib/filesaver.min.js');
 var serverService = require('../../services/server_service');
 var root = require('../../root');
-var utils = require('../../utils');
 var fn = require('../../transforms');
 
 var HEADERS = [];
@@ -46,8 +45,23 @@ function canExport(participant, canContactByEmail) {
 function canContact(participant) {
     return participant.notifyByEmail === true &&
            participant.sharingScope !== "no_sharing" &&
-           utils.atLeastOneSignedConsent(participant.consentHistories);
+           atLeastOneSignedConsent(participant.consentHistories);
 }
+function atLeastOneSignedConsent(consentHistories) {
+    if (Object.keys(consentHistories).length === 0) {
+        return true;
+    }
+    // At least one consent history whose last item has not been withdrawn.
+    return Object.keys(consentHistories).some(function(guid) {
+        var history = consentHistories[guid];
+        if (history.length === 0) {
+            return true;
+        }
+        var last = history[history.length-1];
+        return (last && typeof last.withdrewOn === "undefined");
+    });
+}
+
 
 module.exports = function(params) {
     var self = this;

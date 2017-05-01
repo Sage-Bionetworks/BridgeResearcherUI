@@ -18,6 +18,11 @@ module.exports = {
         preventDuplicates: true,
         opacity: 1.0
     },
+    msgs: {
+        shared_modules: {
+            PUBLISH: "Are you sure you want to publish this shared module version?"
+        }
+    },
     // options: isPublic, codesEnumerated, codeRequired, notificationsEnabled, under studyId
     studies: {
     },
@@ -44,5 +49,6 @@ module.exports = {
     externalIds: '/v3/externalIds',
     reports: '/v3/reports',
     uploadstatuses: '/v3/uploadstatuses',
+    metadata: '/v3/sharedmodules/metadata',
     compoundactivitydefinitions: '/v3/compoundactivitydefinitions'
 };

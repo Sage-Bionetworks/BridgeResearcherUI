@@ -52,6 +52,13 @@ function uncheckAll(vm) {
         vm.checkAllObs(false);
     };
 }
+function redirectHandler(vm, redirect) {
+    return function(request) {
+        if (vm.itemsObs().length === 0 && !!redirect) {
+            document.location = redirect;
+        }
+    };
+}
 
 /**
  * Set up a bunch of repetitive stuff for tables. This could be a component if data-driven tables
@@ -70,6 +77,7 @@ module.exports = {
         var objType = options.type;
         var deleteFunc = options.delete;
         var loadFunc = options.refresh;
+        var redirectTo = options.redirect;
 
         if (!vm.itemsObs) {
             vm.itemsObs = ko.observableArray([]);
@@ -110,6 +118,7 @@ module.exports = {
                         .then(utils.successHandler(vm, event, del.confirmMsg))
                         .then(uncheckAll(vm))
                         .then(makeTableRowHandler(vm, del.deletables, objName))
+                        .then(redirectHandler(vm, redirectTo))
                         .catch(utils.listFailureHandler());
                 });
             };

@@ -11,6 +11,8 @@ var handlers = {
     },
     'checkbox': function($element, allBindings) {
         var input = $element.children("input[type=checkbox]").get(0);
+        input.disabled = !!allBindings().disabled;
+
         var observer = allBindings().checkboxObs;
         $element.addClass("ui checkbox").on('click', function() {
             if (!input.disabled) {
@@ -87,26 +89,6 @@ var handlers = {
                 collectionObs.remove(value);
             }
         });
-    },
-    'radio': function($element, allBindings) {
-        var input = $element.children("input[type=radio]").get(0);
-        var observer = allBindings().radioObs;
-
-        function updateOnMatch(newValue) {
-            if (input.value === newValue) {
-                input.checked = true;
-                $element.addClass("checked");
-            }
-        }
-        observer.subscribe(updateOnMatch);
-        updateOnMatch(observer());
-
-        $element.addClass("ui radio checkbox").on('click', function() {
-            if (!input.disabled) {
-                observer(input.value);
-                $element.addClass("checked");
-            }
-        });        
     }
 };
 
