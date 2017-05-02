@@ -45,23 +45,9 @@ function canExport(participant, canContactByEmail) {
 function canContact(participant) {
     return participant.notifyByEmail === true &&
            participant.sharingScope !== "no_sharing" &&
-           atLeastOneSignedConsent(participant.consentHistories);
+           utils.atLeastOneSignedConsent(participant.consentHistories);
+           // atLeastOneSignedConsent moved out to utils to test
 }
-function atLeastOneSignedConsent(consentHistories) {
-    if (Object.keys(consentHistories).length === 0) {
-        return true;
-    }
-    // At least one consent history whose last item has not been withdrawn.
-    return Object.keys(consentHistories).some(function(guid) {
-        var history = consentHistories[guid];
-        if (history.length === 0) {
-            return true;
-        }
-        var last = history[history.length-1];
-        return (last && typeof last.withdrewOn === "undefined");
-    });
-}
-
 
 module.exports = function(params) {
     var self = this;

@@ -95,6 +95,20 @@ function pad(num) {
     var norm = Math.abs(Math.floor(num));
     return (norm < 10 ? '0' : '') + norm;
 }
+function atLeastOneSignedConsent(consentHistories) {
+    if (Object.keys(consentHistories).length === 0) {
+        return true;
+    }
+    // At least one consent history whose last item has not been withdrawn.
+    return Object.keys(consentHistories).some(function(guid) {
+        var history = consentHistories[guid];
+        if (history.length === 0) {
+            return true;
+        }
+        var last = history[history.length-1];
+        return (last && typeof last.withdrewOn === "undefined");
+    });
+}
 
 /**
  * Common utility methods for ViewModels.
@@ -336,5 +350,6 @@ module.exports = {
         } catch(e) {
             throw new Error("Study '"+studyIdentifier+"' not found.");
         }
-    }
+    },
+    atLeastOneSignedConsent: atLeastOneSignedConsent
 };
