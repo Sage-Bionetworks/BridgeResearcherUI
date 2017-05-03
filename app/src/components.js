@@ -337,6 +337,10 @@ reg('not_found', {
 });
 
 // Dialogs. These must be synchronous.
+reg('module_browser', {
+    viewModel: require('./dialogs/module_browser/module_browser'),
+    template: require('./dialogs/module_browser/module_browser.html'), synchronous: true
+});
 reg('publickey', {
     viewModel: require('./dialogs/publickey/publickey'),
     template: require('./dialogs/publickey/publickey.html'), synchronous: true

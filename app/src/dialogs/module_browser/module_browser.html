@@ -1,0 +1,40 @@
+<div class="ui small modal">
+    <i class="close icon"></i>
+    <div class="header">
+        <span data-bind="text: title">Shared Modules</span>
+        <div class="ui icon input" style="float:right; font-size: 12px">
+            <input type="text" placeholder="Search text" data-bind="textInput: searchObs">
+            <i class="search icon"></i>
+        </div>
+    </div>
+    <div class="content scrollbox" style="max-height: 25rem; overflow-y: auto">
+        <errors></errors>
+        <div data-bind="visible: itemsObs().length === 0">
+            <p>No shared items found.</p>
+        </div>
+        <!-- ko foreach: itemsObs -->
+            <div class="ui card" style="width: 100%; margin-top: 0">
+                <div class="content">
+                    <div class="right floated" data-bind="text: $component.formatVersions($data)"></div>
+                    <a class="header" data-bind="text: $data.name"></a>
+                    <div class="meta" data-bind="text: $component.formatDescription($data)"></div>
+                    <div class="description" data-bind="html: $data.notes"></div>
+                </div>
+                <div class="extra" style="display: flex; justify-content:space-between; align-items: center">
+                    <span data-bind="text: $component.formatTags($data)"></span>
+                    <span>
+                        <span class="ui green text" data-bind="visible: $data.published"
+                            style="padding-right:1rem">
+                            <i class="green checkmark icon"></i> Published
+                        </span>
+                        <button class="ui primary compact mini button" 
+                            data-bind="click: $parent.importItem">Import</button>
+                    </span>
+                </div>
+            </div>
+        <!-- /ko -->
+    </div>
+    <div class="actions">
+        <button class="ui small button" data-bind="click: cancel">Cancel</button>
+    </div>
+</div>

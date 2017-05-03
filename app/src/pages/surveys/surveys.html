@@ -4,14 +4,35 @@
             <h3>Surveys</h3>
         </div>
         <div class="fixed-header-buttons">
-            <button class="ui tiny button" data-bind="disable: !atLeastOneChecked(), click: copySurveys">Copy</button>
-            <button class="ui tiny button" data-bind="disable: !atLeastOneChecked(), click: copyToClipboard">Copy to Clipboard</button>
-            <button class="ui red tiny button" data-bind="disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
-            <a href="#/surveys/new" class="ui primary tiny button">New Survey</a>
+            <div class="ui tiny buttons">
+                <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()}, 
+                    semantic: 'dropdown-button-toggle'">Copy</div>
+                <div class="ui tiny floating dropdown icon button" 
+                    data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item" data-bind="click: copySurveys">Copy</div>
+                        <div class="item" data-bind="click: copyToClipboard">Copy to Clipboard</div>
+                    </div>
+                </div>
+            </div>
+            <button data-bind="disable: !atLeastOneChecked(), click: deleteItems" 
+                style="margin: 0 .25em" class="ui red tiny button">Delete</button>
+            <div class="ui primary tiny buttons">
+                <div class="ui primary tiny button" data-bind="semantic: 'dropdown-button-toggle'">
+                    Create Survey</div>
+                <div class="ui primary tiny floating dropdown icon button" 
+                    data-bind="semantic: 'dropdown-button'">
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a href="#/surveys/new" class="item">New Survey</a>
+                        <div class="item" data-bind="click: openModuleBrowser">Import Survey&hellip;</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="ui empty secondary pointing menu">
-    </div>
+    <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
     <table class="ui compact selectable table">
@@ -23,6 +44,7 @@
                 <th>Name</th>
                 <th>Last Updated</th>
                 <th>Schedule(s)</th>
+                <th>Shared</th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
@@ -42,6 +64,8 @@
                 <td data-bind="foreach: $data.schedulePlanObs"><!-- ko if: $index() > 0 --><span>, </span><!-- /ko -->
                     <a target="_blank" rel="noopener" data-bind="attr: {href: '#/scheduleplans/'+$data.guid}, html: $data.label"></a>
                 </td>
+                <td data-bind="attr: {'data-html': $parent.moduleHTML($data)}, 
+                    semantic: 'popup', html: $parent.formatModuleLink($data)"></td>
             </tr>
         </tbody>
     </table>

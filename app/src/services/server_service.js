@@ -303,7 +303,7 @@ module.exports = {
         });
     },
     updateUploadSchema: function(schema) {
-        var path = config.schemasV4 + "/" + esc(schema.schemaId) + "/revisions/" + esc(schema.revision);
+        var path = config.schemasV4+"/"+esc(schema.schemaId)+"/revisions/"+esc(schema.revision);
         return post(path, schema).then(function(response) {
             schema.version = response.version;
             return response;
@@ -531,10 +531,17 @@ module.exports = {
     deleteTaskDefinition: function(taskId) {
         return del(config.compoundactivitydefinitions + "/" + esc(taskId));
     },
-    getMetadata: function(searchString) {
+    getMetadata: function(searchString, modType) {
         searchString = searchString || "";
         // mostrecent: "true", published: "false", where: null, tags: null
-        return get(config.metadata + searchString);
+        return get(config.metadata + searchString).then(function(response) {
+            if (modType === "survey" || modType === "schema") {
+                response.items = response.items.filter(function(item) {
+                    return item.moduleType === modType;
+                });
+            }
+            return response;
+        });
     },
     createMetadata: function(metadata) {
         return post(config.metadata, metadata);
@@ -557,6 +564,12 @@ module.exports = {
     },
     deleteMetadataVersion: function(id, version) {
         return del(config.metadata+'/'+esc(id)+'/versions/'+esc(version));
+    },
+    importMetadata: function(id, version) {
+        var url = (typeof version === "number") ?
+            (config.sharedmodules+'/'+esc(id)+'/versions/'+esc(version)+'/import') :
+            (config.sharedmodules+'/'+esc(id)+'/import');
+        return post(url);
     },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {

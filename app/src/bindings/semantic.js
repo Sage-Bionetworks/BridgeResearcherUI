@@ -45,7 +45,12 @@ var handlers = {
     },
     'dropdown-button': function($element) {
         $element.addClass("ui tiny button dropdown")
-            .dropdown({action: 'hide'});
+            .dropdown({action: 'hide', transition: 'drop'});
+    },
+    'dropdown-button-toggle': function($element) {
+        $element.on('click', function(){ 
+            $element.next('.dropdown.button').dropdown('toggle');
+        });
     },
     'popup': function($element) {
         $element.popup();

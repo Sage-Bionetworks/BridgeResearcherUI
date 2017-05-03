@@ -18,8 +18,8 @@
             <i class="remove circle icon"></i>
         </button>
     </div>
-
-    <ui-checkbox params="checkedObs: tagsOnlyObs">
+    <ui-select params="fieldObs: moduleTypeFilterObs, optionsSrc: moduleTypeOptions"></ui-select>
+    <ui-checkbox params="checkedObs: tagsOnlyObs" style="margin-left: 1.5rem">
         Search tags
     </ui-checkbox>
 
@@ -29,17 +29,18 @@
     <!-- ko foreach: itemsObs -->
         <div class="ui card" style="width: 100%">
             <div class="content">
-                <div class="right floated" data-bind="text: tags"></div>
+                <div class="right floated" data-bind="text: $component.formatVersions($data)"></div>
                 <a class="header" data-bind="attr: {
                     'href': '#/shared_modules/'+encodeURIComponent($data.id)+'/versions/'+$data.version}, text: $data.name"></a>
                 <div class="meta" data-bind="text: $component.formatDescription($data)"></div>
                 <div class="description" data-bind="html: $data.notes"></div>
             </div>
             <div class="extra" style="display: flex; justify-content:space-between; align-items: center">
-                <span data-bind="text: $component.formatVersions($data)"></span>
+                <span data-bind="text: $component.formatTags($data)"></span>
                 <span>
-                    <span class="ui mini green label" data-bind="visible: $data.published">
-                        <i class="checkmark icon"></i> Published
+                    <span class="ui green text" data-bind="visible: $data.published"
+                        style="padding-right:1rem">
+                        <i class="green checkmark icon"></i> Published
                     </span>
                     <button class="ui basic compact mini button" 
                         data-bind="visible: !$data.published, click: $parent.publishItem">Publish</button>

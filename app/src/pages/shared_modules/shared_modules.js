@@ -9,41 +9,50 @@ var NO_ITEMS_MSG = "There are currently no shared modules (or none with those se
 var DELETE_CONFIRM_MSG = "This deletes ALL revisions of the module.\n\n"+
     "Use the module's history page to delete a single revision.\n\n"+
     "Are you sure you want to delete this shared module?";
-
+var OPTIONS = [
+    {label: "Surveys only", value: "survey"},
+    {label: "Upload schemas only", value: "schema"},
+    {label: "Both", value: "both"}
+];
 module.exports = function() {
     var self = this;
 
-    function doSearch(text, tagsOnly) {
-        var query = "";
-        if (text !== "") {
-            if (tagsOnly) {
-                query = "?mostrecent=false&tags=" + encodeURIComponent(text);
-            } else {
-                var str = "name like '%"+text+"%' or notes like '%"+text+"%'";
-                query = "?mostrecent=false&where=" + encodeURIComponent(str);
-            }
+    function doSearch() {
+        var text = self.searchObs();
+        var tagsOnly = self.tagsOnlyObs();
+        var modType = self.moduleTypeFilterObs();
+
+        var query = "?mostrecent=false";
+        if (text === "") {
+            query = "?mostrecent=true";
+        } else if (tagsOnly) {
+            query += "&tags=" + encodeURIComponent(text);
+        } else {
+            var str = "name like '%"+text+"%' or notes like '%"+text+"%'";
+            query += "&where=" + encodeURIComponent(str);
         }
-        serverService.getMetadata(query)
+        serverService.getMetadata(query, modType)
             .then(updateTable)
             .catch(utils.failureHandler());
     }
 
+    self.moduleTypeOptions = OPTIONS;
     self.itemsObs = ko.observableArray([]);
     self.recordsMessageObs = ko.observable("<div class='ui tiny active inline loader'></div>");
     self.formatDescription = sharedModuleUtils.formatDescription;
     self.formatTags = sharedModuleUtils.formatTags;
     self.formatVersions = sharedModuleUtils.formatVersions;
     self.tagsOnlyObs = ko.observable(false).extend({ rateLimit: 300 });
-    self.tagsOnlyObs.subscribe(function(newValue) {
-        doSearch(self.searchObs(), newValue);
-    });
+    self.tagsOnlyObs.subscribe(doSearch);
     self.searchObs = ko.observable("").extend({ rateLimit: 300 });
-    self.searchObs.subscribe(function(newValue) {
-        doSearch(newValue, self.tagsOnlyObs());
-    });
+    self.searchObs.subscribe(doSearch);
+    self.moduleTypeFilterObs = ko.observable('both');
+    self.moduleTypeFilterObs.subscribe(doSearch);
+
     self.clearSearch = function() {
         self.searchObs("");
         self.tagsOnlyObs(false);
+        self.moduleTypeFilterObs("both");
     };
 
     self.deleteItem = function(item, event) {
@@ -67,10 +76,11 @@ module.exports = function() {
     };
 
     function updateTable(response) {
-        if (response.items.length === 0) {
+        var items = response.items;
+        if (items.length === 0) {
             self.recordsMessageObs(NO_ITEMS_MSG);
         }
-        self.itemsObs(response.items);
+        self.itemsObs(items.reverse());
     }
 
     function load() {

@@ -223,13 +223,16 @@ module.exports = {
      * failure handler converts the signature of the response and cleans up just as the 
      * failure handler does.
      */
-    dialogFailureHandler: function(vm, event) {
+    dialogFailureHandler: function(vm, event, scrollTo) {
         return function(response) {
             console.error("dialogFailureHandler", response);
             ko.postbox.publish("clearErrors");
             var msg = mightyMessageFinder(response);
             if (response.status === 412) {
                 msg = "You do not appear to be a developer, researcher, or admin.";
+            }
+            if (scrollTo) {
+                scrollTo(1);
             }
             event.target.classList.remove("loading");
             if (response.responseJSON && response.responseJSON.errors) {
