@@ -29,7 +29,7 @@ function loadSurveyRevisions(vm, survey) {
     });
 }
 function loadSchemaRevisions(vm, schema) {
-    return serverService.getUploadSchemaAllRevisions(schema.id).then(function(response) {
+    return serverService.getUploadSchemaAllRevisions(schema.schemaId).then(function(response) {
         var revisions = response.items.map(function(oneSchema) {
             return {value: oneSchema.revision, label: oneSchema.revision};
         });
