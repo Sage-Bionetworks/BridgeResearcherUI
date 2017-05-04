@@ -5,10 +5,12 @@ var sharedModuleNameMap = {};
 var sharedModuleHTMLMap = {};
 var surveyNameMap = {};
 var schemaNameMap = {};
+var objImported = {};
 var allLoaded = false;
 
 function updateSharedModuleNameMap(response) {
     response.items.forEach(function(metadata) {
+        objImported[metadata.id+"/"+metadata.version] = true;
         sharedModuleNameMap[metadata.id] = metadata.name;
         var str = "<p><b>"+metadata.name+"</b></p>";
         str += "<p><i>"+formatDescription(metadata, true)+"</i></p>";
@@ -84,7 +86,6 @@ function formatModuleLink(object) {
     return "";
 }
 function moduleHTML(object) {
-    console.log(sharedModuleHTMLMap[object.moduleId]);
     return sharedModuleHTMLMap[object.moduleId];
 }
 

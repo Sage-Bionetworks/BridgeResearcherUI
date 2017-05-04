@@ -13,25 +13,9 @@
             <p>No shared items found.</p>
         </div>
         <!-- ko foreach: itemsObs -->
-            <div class="ui card" style="width: 100%; margin-top: 0">
-                <div class="content">
-                    <div class="right floated" data-bind="text: $component.formatVersions($data)"></div>
-                    <a class="header" data-bind="text: $data.name"></a>
-                    <div class="meta" data-bind="text: $component.formatDescription($data)"></div>
-                    <div class="description" data-bind="html: $data.notes"></div>
-                </div>
-                <div class="extra" style="display: flex; justify-content:space-between; align-items: center">
-                    <span data-bind="text: $component.formatTags($data)"></span>
-                    <span>
-                        <span class="ui green text" data-bind="visible: $data.published"
-                            style="padding-right:1rem">
-                            <i class="green checkmark icon"></i> Published
-                        </span>
-                        <button class="ui primary compact mini button" 
-                            data-bind="click: $parent.importItem">Import</button>
-                    </span>
-                </div>
-            </div>
+            <!-- ko component: { name: 'shared-module', params: { 
+                    model: $data, importFunc: $parent.importItem, isImported: $parent.isImported
+            }} --><!-- /ko -->
         <!-- /ko -->
     </div>
     <div class="actions">

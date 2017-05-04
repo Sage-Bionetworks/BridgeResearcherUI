@@ -335,6 +335,10 @@ reg('participant-tabset', {
 reg('not_found', {
     template: require('./pages/not_found/not_found.html')
 });
+reg('shared-module', {
+    viewModel: require('./widgets/shared_module/shared_module'),
+    template: require('./widgets/shared_module/shared_module.html')
+});
 
 // Dialogs. These must be synchronous.
 reg('module_browser', {

@@ -12,6 +12,9 @@ var ko = require('knockout');
 */
 module.exports = function(params) {
     var self = this;
+    var importedMods = {};
+    var methName = (params.type === "survey") ? "getSurveys" : "getAllUploadSchemas";
+    var scrollTo = utils.makeScrollTo(".item");
 
     self.title = "Shared " + params.type + "s";
     self.formatDescription = sharedModuleUtils.formatDescription;
@@ -20,11 +23,7 @@ module.exports = function(params) {
     self.searchObs = ko.observable("").extend({ rateLimit: 300 });
     self.searchObs.subscribe(load);
 
-    tables.prepareTable(self, {
-        name: params.type
-    });
-
-    var scrollTo = utils.makeScrollTo(".item");
+    tables.prepareTable(self, {name: params.type});
 
     self.importItem = function(item, event) {
         utils.startHandler(self, event);
@@ -32,6 +31,9 @@ module.exports = function(params) {
             .then(params.closeModuleBrowser)
             .then(utils.successHandler(self, event))
             .catch(utils.dialogFailureHandler(self, event, scrollTo));
+    };
+    self.isImported = function(metadata) {
+        return importedMods[metadata.id+"/"+metadata.version];
     };
     self.cancel = params.closeModuleBrowser;
 
@@ -49,8 +51,18 @@ module.exports = function(params) {
     function loadItems(response) {
         self.itemsObs(response.items.reverse());
     }
+    function addImportedModules(response) {
+        response.items.filter(function(item) {
+            return item.moduleId;
+        }).forEach(function(item) {
+            importedMods[item.moduleId+"/"+item.moduleVersion] = true;
+        });
+    }
+
     function load() {
-        sharedModuleUtils.loadNameMaps()
+        serverService[methName]()
+            .then(addImportedModules)
+            .then(sharedModuleUtils.loadNameMaps)
             .then(searchForModules)
             .then(loadItems);
     }
