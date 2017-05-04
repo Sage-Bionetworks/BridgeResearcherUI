@@ -1,0 +1,13 @@
+div[sm] {
+    width: 100%!important;
+    margin-top: 0!important;
+
+    .extra {
+        display: flex; 
+        justify-content:space-between; 
+        align-items: center;
+    }
+    .ui.green.text {
+        padding-right: 1rem;
+    }
+}

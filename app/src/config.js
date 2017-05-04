@@ -49,6 +49,7 @@ module.exports = {
     externalIds: '/v3/externalIds',
     reports: '/v3/reports',
     uploadstatuses: '/v3/uploadstatuses',
+    sharedmodules: '/v3/sharedmodules',
     metadata: '/v3/sharedmodules/metadata',
     compoundactivitydefinitions: '/v3/compoundactivitydefinitions'
 };

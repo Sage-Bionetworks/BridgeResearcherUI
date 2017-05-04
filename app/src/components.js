@@ -335,8 +335,16 @@ reg('participant-tabset', {
 reg('not_found', {
     template: require('./pages/not_found/not_found.html')
 });
+reg('shared-module', {
+    viewModel: require('./widgets/shared_module/shared_module'),
+    template: require('./widgets/shared_module/shared_module.html')
+});
 
 // Dialogs. These must be synchronous.
+reg('module_browser', {
+    viewModel: require('./dialogs/module_browser/module_browser'),
+    template: require('./dialogs/module_browser/module_browser.html'), synchronous: true
+});
 reg('publickey', {
     viewModel: require('./dialogs/publickey/publickey'),
     template: require('./dialogs/publickey/publickey.html'), synchronous: true
