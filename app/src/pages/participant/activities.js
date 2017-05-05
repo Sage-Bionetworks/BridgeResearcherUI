@@ -5,7 +5,7 @@ var bind = require('../../binder');
 var root = require('../../root');
 var tables = require('../../tables');
 
-var ACTIVITY_SORTER = utils.makeFieldSorter("label");
+var ACTIVITY_SORTER = utils.makeFieldSorter("plan");
 
 module.exports = function(params) {
     var self = this;

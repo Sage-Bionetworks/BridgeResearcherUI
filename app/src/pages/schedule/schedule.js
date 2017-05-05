@@ -218,6 +218,9 @@ module.exports = function(params) {
         var context = ko.contextFor(event.target);
         self.activitiesObs.splice(context.$index()+1,0,newActivity());
     };
+    self.copyGuid = function(item, event) { 
+        utils.clipString(item.guid);
+    };
 
     // These are all loaded as part of the schedule plan, and cached in scheduleUtils,
     // so these should always render correctly when the schedule plan loads from the 

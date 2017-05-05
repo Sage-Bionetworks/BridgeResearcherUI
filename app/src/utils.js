@@ -109,6 +109,36 @@ function atLeastOneSignedConsent(consentHistories) {
         return (last && typeof last.withdrewOn === "undefined");
     });
 }
+function clipString(value) {
+    var p = document.createElement("textarea");
+    p.style = "position:fixed;top:0;left:0;width:2em;height:2em;padding:0;background:transparent";
+    /*
+    p.style.position = 'fixed';
+    p.style.top = 0;
+    p.style.left = 0;  
+    p.style.width = '2em';
+    p.style.height = '2em';
+    p.style.padding = 0;
+    p.style.border = 'none';
+    p.style.outline = 'none';
+    p.style.boxShadow = 'none';    
+    p.style.background = 'transparent';
+    */
+    p.value = value;
+    document.body.appendChild(p);
+    p.select();
+    try {
+        var successful = document.execCommand('copy');
+        if (successful) {
+            toastr.success("Copied: " + value);
+        } else {
+            toastr.error("Could not copy value.");        
+        }
+    } catch (err) {
+        toastr.error("Could not copy value.");
+    }
+    document.body.removeChild(p);
+}
 
 /**
  * Common utility methods for ViewModels.
@@ -354,5 +384,6 @@ module.exports = {
             throw new Error("Study '"+studyIdentifier+"' not found.");
         }
     },
-    atLeastOneSignedConsent: atLeastOneSignedConsent
+    atLeastOneSignedConsent: atLeastOneSignedConsent,
+    clipString: clipString
 };
