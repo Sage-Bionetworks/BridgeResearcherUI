@@ -176,6 +176,16 @@ function queryString(object) {
     }).join("&");
     return (string) ? ("?"+string) : "";
 }
+function formatLocalDate(now, timePortion) {
+    var tzo = -now.getTimezoneOffset(), dif = tzo >= 0 ? '+' : '-';
+
+    return now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate()) +
+        'T' + timePortion + dif + pad(tzo / 60) + ':' + pad(tzo % 60);
+}
+function pad(num) {
+    var norm = Math.abs(Math.floor(num));
+    return (norm < 10 ? '0' : '') + norm;
+}
 
 module.exports = {
     formatAttributes: formatAttributes,
@@ -185,6 +195,7 @@ module.exports = {
     formatRoles: formatRoles,
     formatTitle: formatTitle,
     formatTitleCase: formatTitleCase,
+    formatLocalDate: formatLocalDate,
     formatLocalDateTime: formatLocalDateTime,
     formatVersionRange: formatVersionRange,
     formatLocalDateWithoutZone: formatLocalDateWithoutZone,

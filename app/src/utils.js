@@ -85,16 +85,6 @@ function createEmailTemplate(email, identifier) {
     }
     return parts[0] + "+" + identifier + "@" + parts[1];
 }
-function formatLocalDate(now, timePortion) {
-    var tzo = -now.getTimezoneOffset(), dif = tzo >= 0 ? '+' : '-';
-
-    return now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate()) +
-        'T' + timePortion + dif + pad(tzo / 60) + ':' + pad(tzo % 60);
-}
-function pad(num) {
-    var norm = Math.abs(Math.floor(num));
-    return (norm < 10 ? '0' : '') + norm;
-}
 function atLeastOneSignedConsent(consentHistories) {
     if (Object.keys(consentHistories).length === 0) {
         return true;
@@ -108,6 +98,19 @@ function atLeastOneSignedConsent(consentHistories) {
         var last = history[history.length-1];
         return (last && typeof last.withdrewOn === "undefined");
     });
+}
+function clipString(value) {
+    var p = document.createElement("textarea");
+    p.style = "position:fixed;top:0;left:0";
+    p.value = value;
+    document.body.appendChild(p);
+    p.select();
+    if (document.execCommand && document.execCommand('copy')) {
+        toastr.success("Copied: " + value);
+    } else {
+        toastr.error("Could not copy value.");        
+    }
+    document.body.removeChild(p);
 }
 
 /**
@@ -354,5 +357,6 @@ module.exports = {
             throw new Error("Study '"+studyIdentifier+"' not found.");
         }
     },
-    atLeastOneSignedConsent: atLeastOneSignedConsent
+    atLeastOneSignedConsent: atLeastOneSignedConsent,
+    clipString: clipString
 };

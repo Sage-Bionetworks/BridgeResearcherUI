@@ -58,20 +58,23 @@
     
     div:nth-child(1) {
         padding-right: .5rem;
+        flex:2;
     }
     div:nth-child(2) {
         padding-right: .5rem;
+        flex:2;
     }
     div:nth-child(3) {
         padding-right: .5rem;
-        width: 10rem;
+        width: 8rem;
+        
     }
     div:nth-child(4), div:nth-child(5) {
         padding-right: .5rem;
-        width: 20rem;
+        width: 15rem;
     }
     div:last-child {
-        width: 13rem;
+        width: 20rem;
     }
 }
 .activity-controls {

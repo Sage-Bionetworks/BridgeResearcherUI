@@ -289,6 +289,9 @@ module.exports = {
             vm[field+"Obs"] = ko.observable("");
         });
         vm.elementsObs = ko.observableArray([]);
+        vm.titleObs = ko.computed(function() {
+            return (vm.nameObs()) ? vm.nameObs() : "New Survey";
+        });
     },
     /**
      * Constraints have a *lot* of common elements, initialize them all here. This is basically a mixin where there's

@@ -131,8 +131,8 @@ module.exports = function(params) {
     function getDateRange(date) {
         date = (date) ? new Date(date) : new Date();
         return {
-            startTime: formatLocalDate(date, "00:00:00.000"), 
-            endTime: formatLocalDate(date, "23:59:59.999")
+            startTime: fn.formatLocalDate(date, "00:00:00.000"), 
+            endTime: fn.formatLocalDate(date, "23:59:59.999")
         };
     }
     function load() {

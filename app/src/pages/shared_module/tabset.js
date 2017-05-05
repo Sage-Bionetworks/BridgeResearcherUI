@@ -5,7 +5,6 @@ module.exports = function(params) {
     
     self.versionObs = params.viewModel.versionObs;
     self.idObs = params.viewModel.idObs;
-    self.atObs = params.viewModel.atObs;
     self.isNewObs = params.viewModel.isNewObs;
     self.publishedObs = params.viewModel.publishedObs;
 
