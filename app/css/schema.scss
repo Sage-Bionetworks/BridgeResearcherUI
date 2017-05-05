@@ -15,12 +15,13 @@
     }
     > div:nth-child(1) {
         padding-left: 1rem;
+        @include flex(2);
     }
-    > div:last-child {
-        padding-right: 1rem;
+    > div:last-child(-1) {
+        outline: 1px solid blue;
     }
-    > div.extra {
-        @include flex(1);
+    > div.required {
+        padding-left: 1rem;
     }
     a {
         margin-left: 1rem;

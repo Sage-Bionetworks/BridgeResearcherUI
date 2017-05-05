@@ -119,7 +119,7 @@ var UI_HINT_FOR_CONSTRAINTS = Object.freeze({
     'MultiValueConstraints': 'list'
 });
 
-var SURVEY_FIELDS = ['name','createdOn','guid','identifier','published','version'];
+var SURVEY_FIELDS = ['name','createdOn','guid','identifier','published','version','copyrightNotice'];
 var ELEMENT_FIELDS = ['prompt','promptDetail', 'title', 'uiHint','identifier','fireEvent'];
 
 function getConstraints(type) {
