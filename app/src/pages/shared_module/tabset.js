@@ -2,7 +2,7 @@ var ko = require('knockout');
 
 module.exports = function(params) {
     var self = this;
-
+    
     self.versionObs = params.viewModel.versionObs;
     self.idObs = params.viewModel.idObs;
     self.atObs = params.viewModel.atObs;
@@ -14,10 +14,8 @@ module.exports = function(params) {
     };
     self.linkMaker = function(tabName) {
         return ko.computed(function() {
-            var url = '#/shared_modules/'+encodeURIComponent(self.idObs());
-            url += (tabName == 'editor') ?
-                ('/versions/'+self.atObs()) :
-                ('/versions/at/'+self.versionObs());
+            var url = '#/shared_modules/'+encodeURIComponent(self.idObs())+'/versions/'+self.versionObs();
+            url += (tabName == 'editor') ? '/editor' : '/history';
             return url;
         });
     };

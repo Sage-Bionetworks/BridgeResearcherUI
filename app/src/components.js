@@ -349,6 +349,10 @@ reg('publickey', {
     viewModel: require('./dialogs/publickey/publickey'),
     template: require('./dialogs/publickey/publickey.html'), synchronous: true
 });
+reg('json_editor', {
+    viewModel: require('./dialogs/json_editor/json_editor'),
+    template: require('./dialogs/json_editor/json_editor.html'), synchronous: true
+});
 reg('read_about_clipboard', {
     viewModel: require('./dialogs/read_about_clipboard/read_about_clipboard'),
     template: require('./dialogs/read_about_clipboard/read_about_clipboard.html'), synchronous: true
