@@ -85,16 +85,6 @@ function createEmailTemplate(email, identifier) {
     }
     return parts[0] + "+" + identifier + "@" + parts[1];
 }
-function formatLocalDate(now, timePortion) {
-    var tzo = -now.getTimezoneOffset(), dif = tzo >= 0 ? '+' : '-';
-
-    return now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate()) +
-        'T' + timePortion + dif + pad(tzo / 60) + ':' + pad(tzo % 60);
-}
-function pad(num) {
-    var norm = Math.abs(Math.floor(num));
-    return (norm < 10 ? '0' : '') + norm;
-}
 function atLeastOneSignedConsent(consentHistories) {
     if (Object.keys(consentHistories).length === 0) {
         return true;
@@ -111,31 +101,14 @@ function atLeastOneSignedConsent(consentHistories) {
 }
 function clipString(value) {
     var p = document.createElement("textarea");
-    p.style = "position:fixed;top:0;left:0;width:2em;height:2em;padding:0;background:transparent";
-    /*
-    p.style.position = 'fixed';
-    p.style.top = 0;
-    p.style.left = 0;  
-    p.style.width = '2em';
-    p.style.height = '2em';
-    p.style.padding = 0;
-    p.style.border = 'none';
-    p.style.outline = 'none';
-    p.style.boxShadow = 'none';    
-    p.style.background = 'transparent';
-    */
+    p.style = "position:fixed;top:0;left:0";
     p.value = value;
     document.body.appendChild(p);
     p.select();
-    try {
-        var successful = document.execCommand('copy');
-        if (successful) {
-            toastr.success("Copied: " + value);
-        } else {
-            toastr.error("Could not copy value.");        
-        }
-    } catch (err) {
-        toastr.error("Could not copy value.");
+    if (document.execCommand && document.execCommand('copy')) {
+        toastr.success("Copied: " + value);
+    } else {
+        toastr.error("Could not copy value.");        
     }
     document.body.removeChild(p);
 }
