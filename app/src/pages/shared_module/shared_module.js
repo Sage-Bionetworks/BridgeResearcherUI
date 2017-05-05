@@ -43,7 +43,6 @@ module.exports = function(params) {
 
     var binder = bind(self)
         .obs('isNew', params.id === "new")
-        .obs('at', params.id)
         .bind('published', false)
         .bind('id')
         .bind('licenseRestricted', false)
@@ -114,7 +113,11 @@ module.exports = function(params) {
         return (self.metadata.surveyGuid) ? [{guid: self.metadata.surveyGuid}] : [];
     }
     function loadMetadata() {
-         return serverService.getMetadataVersion(params.id, params.version);
+        if (params.version) {
+            return serverService.getMetadataVersion(params.id, params.version);
+        } else {
+            return serverService.getMetadataLatestVersion(params.id);
+        }
     }
 
     self.osOptions = OPTIONS;

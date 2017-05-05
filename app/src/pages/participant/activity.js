@@ -51,6 +51,19 @@ module.exports = function(params) {
     self.toggle = function(model) {
         model.collapsedObs(!model.collapsedObs());
     };
+    self.editReportRecord = function(item, event) {
+        root.openDialog('json_editor', {
+            saveFunc: self.saveFunc,
+            closeFunc: root.closeDialog,
+            item: item,
+            data: item.data
+        });
+        return false;
+    };
+    self.saveFunc = function(item, data) {
+        item.clientData = data;
+        root.closeDialog();
+    };
 
     serverService.getSchedulePlans().then(function(response) {
         response.items.forEach(function(plan) {

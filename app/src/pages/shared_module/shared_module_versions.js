@@ -23,7 +23,6 @@ module.exports = function(params) {
     });
 
     var binder = bind(self)
-        .obs('at', params.at)
         .obs('published')
         .obs('name')
         .obs('isNew')
@@ -55,7 +54,7 @@ module.exports = function(params) {
     };
 
     function load() {
-        return serverService.getMetadataVersion(params.id, params.at)
+        return serverService.getMetadataVersion(params.id, params.version)
             .then(binder.update())
             .then(binder.assign('metadata'))
             .then(sharedModuleUtils.loadNameMaps)

@@ -12,7 +12,7 @@ module.exports = function(params) {
     
     self.model = params.model;
     self.isImported = !!params.importFunc && params.isImported(params.model);
-    var url = '#/shared_modules/'+encodeURIComponent(self.model.id)+'/versions/'+self.model.version;
+    var url = '#/shared_modules/'+encodeURIComponent(self.model.id);
 
     Object.assign(self, sharedModuleUtils);
 

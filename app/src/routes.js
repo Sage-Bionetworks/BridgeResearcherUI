@@ -19,8 +19,8 @@ var ID = ['id'];
 var ID_AT = ['id','at'];
 var ID_VERSION = ['id','version'];
 var ID_VERSION_AT = ['id','version','at'];
-var SCHEMAID_REVISION = ['schemaId','revision'];
 var SCHEMAID = ['schemaId'];
+var SCHEMAID_REVISION = ['schemaId','revision'];
 var TASKID = ['taskId'];
 var USERID = ['userId'];
 var USERID_IDENTIFIER = ['userId','identifier'];
@@ -75,8 +75,8 @@ router.on('/surveys/:guid/:createdOn', routeTo('survey', GUID_CREATEDON));
 router.on('/surveys/:guid', routeTo('survey', GUID));
 router.on('/schemas', routeTo('schemas'));
 router.on('/schemas/:schemaId', routeTo('schema', SCHEMAID));
-router.on('/schemas/:schemaId/versions', routeTo('schema_versions', SCHEMAID));
-router.on('/schemas/:schemaId/versions/:revision', routeTo('schema', SCHEMAID_REVISION));
+router.on('/schemas/:schemaId/versions/:revision/editor', routeTo('schema', SCHEMAID_REVISION));
+router.on('/schemas/:schemaId/versions/:revision/history', routeTo('schema_versions', SCHEMAID_REVISION));
 router.on('/schedules', routeTo('schedules'));
 router.on('/scheduleplans', routeTo('scheduleplans'));
 router.on('/scheduleplans/:guid', routeTo('scheduleplan', GUID));
@@ -98,12 +98,10 @@ router.on('/enrollees/:externalId', redirectToParticipant);
 router.on('/enrollees', routeTo('enrollees'));
 router.on('/admin/info', routeTo('admin_info'));
 router.on('/admin/cache', routeTo('admin_cache'));
-router.on('/shared_modules/:id/versions/:version/at/:at', routeTo('shared_module', ID_VERSION_AT));
-router.on('/shared_modules/:id/versions/:version', routeTo('shared_module', ID_VERSION));
-router.on('/shared_modules/:id/versions/at/:at', routeTo('shared_module_versions', ID_AT));
-router.on('/shared_modules/:id/versions', routeTo('shared_module_versions', ID));
-router.on('/shared_modules/:id', routeTo('shared_module', ID));
 router.on('/shared_modules', routeTo('shared_modules'));
+router.on('/shared_modules/:id', routeTo('shared_module', ID));
+router.on('/shared_modules/:id/versions/:version/editor', routeTo('shared_module', ID_VERSION));
+router.on('/shared_modules/:id/versions/:version/history', routeTo('shared_module_versions', ID_VERSION));
 
 router.configure({
     notfound: routeTo('not_found'),

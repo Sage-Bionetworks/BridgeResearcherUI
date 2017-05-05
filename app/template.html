@@ -25,7 +25,7 @@
                 <div class="ui vertical menu clipboard">
                     <div class="tabset" data-bind="click: setSidebarPanel">
                         <a>Navigation</a>
-                        <a class="active" data-bind="visible: isDeveloper">Clipboard</a>
+                        <a class="active" data-bind="visible: isDeveloper()">Clipboard</a>
                         <a data-bind="visible: isEditorTabVisibleObs">Editor</a>
                     </div>
                     <div class="title item">
@@ -62,16 +62,16 @@
                 <div class="ui vertical menu">
                     <div class="tabset" data-bind="click: setSidebarPanel">
                         <a class="active">Navigation</a>
-                        <a data-bind="visible: isDeveloper">Clipboard</a>
+                        <a data-bind="visible: isDeveloper()">Clipboard</a>
                         <a data-bind="visible: isEditorTabVisibleObs">Editor</a>
                     </div>
                     <div class="item" data-bind="visible: !isSharedStudy()">
                         <i class="lab icon"></i> Study
                         <div class="menu">
-                            <a href="#/settings/general" class="item" data-bind="active: isActive, visible: isDeveloper">
+                            <a href="#/settings/general" class="item" data-bind="active: isActive, visible: isDeveloper()">
                                 Settings
                             </a>
-                            <a href="#/email_templates" class="item" data-bind="active: isActive, visible: isDeveloper">
+                            <a href="#/email_templates" class="item" data-bind="active: isActive, visible: isDeveloper()">
                                 Email Templates
                             </a>
                             <a href="#/subpopulations" class="item" data-bind="active: isActive, visible: isPublicObs() && isDeveloper()">
@@ -94,7 +94,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="item" data-bind="visible: isDeveloper && !isSharedStudy()">
+                    <div class="item" data-bind="visible: isDeveloper() && !isSharedStudy()">
                         <i class="server icon"></i> Study Data
                         <div class="menu">
                             <a href="#/scheduleplans" class="item" data-bind="active: isActive">
@@ -114,7 +114,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="item" data-bind="visible: isDeveloper && isSharedStudy">
+                    <div class="item" data-bind="visible: isDeveloper() && isSharedStudy()">
                         <i class="server icon"></i> Shared Study Data
                         <div class="menu">
                             <a href="#/shared_modules" class="item" data-bind="active: isActive">
@@ -128,7 +128,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="item" data-bind="visible: isAdmin && !isSharedStudy()">
+                    <div class="item" data-bind="visible: isAdmin() && !isSharedStudy()">
                         <i class="settings icon"></i> Administration
                         <div class="menu">
                             <a href="#/admin/info" class="item" data-bind="active: isActive">
