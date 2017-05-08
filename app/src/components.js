@@ -274,9 +274,9 @@ reg('criteria', {
     viewModel: require('./widgets/criteria/criteria'),
     template: require('./widgets/criteria/criteria.html')
 });
-reg('pager', {
-    viewModel: require('./widgets/pager/pager'),
-    template: require('./widgets/pager/pager.html')
+reg('participants_pager', {
+    viewModel: require('./widgets/participants_pager/participants_pager'),
+    template: require('./widgets/participants_pager/participants_pager.html')
 });
 reg('activity_pager', {
     viewModel: require('./widgets/activity_pager/activity_pager'),
