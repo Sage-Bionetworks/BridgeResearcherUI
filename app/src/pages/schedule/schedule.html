@@ -98,12 +98,18 @@
             </div>
             <div>
                 <div class="activity-controls">
-                    <button class="ui basic compact mini button" data-bind="click: $component.addActivityAfter">
+                    <button class="ui compact mini button" 
+                        data-bind="click: $component.addActivityAfter">
                         <i class="square add icon"></i>Add below
                     </button>
-                    <button class="ui basic red compact mini button" data-bind="fadeRemove: { 
-                        selector: '.activity', object: $data, 'collection': 'activitiesObs'}">
+                    <button class="ui red compact mini button" 
+                        data-bind="fadeRemove: {selector: '.activity', 
+                        object: $data, 'collection': 'activitiesObs'}">
                         <i class="delete icon"></i>Delete
+                    </button>
+                    <button class="ui primary compact mini button"
+                        data-bind="click: $component.copyGuid">
+                        <i class="copy icon"></i>Copy GUID
                     </button>
                 </div>
             </div>

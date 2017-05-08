@@ -173,6 +173,9 @@ function cacheParticipantName(response) {
     }
     return response;
 }
+function esc(string) {
+    return encodeURIComponent(string);
+}
 
 module.exports = {
     isAuthenticated: function() {
@@ -277,7 +280,12 @@ module.exports = {
         return del(url);
     },
     getAllUploadSchemas: function() {
-        return get(config.schemas);
+        return get(config.schemas).then(function(response) {
+            response.items = response.items.filter(function(schema) {
+                return (!schema.surveyGuid && !schema.surveyRevision);
+            });
+            return response;
+        });
     },
     getMostRecentUploadSchema: function(identifier) {
         return get(config.schemas + "/" + identifier + '/recent');
@@ -295,8 +303,7 @@ module.exports = {
         });
     },
     updateUploadSchema: function(schema) {
-        var path = config.schemasV4 + "/" + encodeURIComponent(schema.schemaId) + 
-            "/revisions/" + encodeURIComponent(schema.revision);
+        var path = config.schemasV4+"/"+esc(schema.schemaId)+"/revisions/"+esc(schema.revision);
         return post(path, schema).then(function(response) {
             schema.version = response.version;
             return response;
@@ -363,7 +370,7 @@ module.exports = {
         return get(config.cache);
     },
     deleteCacheKey: function(cacheKey) {
-        return del(config.cache+"/"+encodeURIComponent(cacheKey));
+        return del(config.cache+"/"+esc(cacheKey));
     },
     getParticipants: function(offsetBy, pageSize, emailFilter, startDate, endDate) {
         var queryString = transforms.queryString({
@@ -516,13 +523,53 @@ module.exports = {
         return post(config.compoundactivitydefinitions, task);
     },
     getTaskDefinition: function(taskId) {
-        return get(config.compoundactivitydefinitions + "/" + encodeURIComponent(taskId));
+        return get(config.compoundactivitydefinitions + "/" + esc(taskId));
     },
     updateTaskDefinition: function(task) {
-        return post(config.compoundactivitydefinitions + "/" + encodeURIComponent(task.taskId), task);
+        return post(config.compoundactivitydefinitions + "/" + esc(task.taskId), task);
     },
     deleteTaskDefinition: function(taskId) {
-        return del(config.compoundactivitydefinitions + "/" + encodeURIComponent(taskId));
+        return del(config.compoundactivitydefinitions + "/" + esc(taskId));
+    },
+    getMetadata: function(searchString, modType) {
+        searchString = searchString || "";
+        // mostrecent: "true", published: "false", where: null, tags: null
+        return get(config.metadata + searchString).then(function(response) {
+            if (modType === "survey" || modType === "schema") {
+                response.items = response.items.filter(function(item) {
+                    return item.moduleType === modType;
+                });
+            }
+            return response;
+        });
+    },
+    createMetadata: function(metadata) {
+        return post(config.metadata, metadata);
+    },
+    getMetadataLatestVersion: function(id) {
+        return get(config.metadata + '/' + esc(id));
+    },
+    getMetadataVersion: function(id, version) {
+        return get(config.metadata + '/' + esc(id) + '/versions/' + esc(version));
+    },
+    getMetadataAllVersions: function(id) {
+        // id, mostrecent: "true", published: "false", where: null, tags: null
+        return get(config.metadata+'/'+esc(id)+'/versions?mostrecent=false');
+    },
+    updateMetadata: function(metadata) {
+        return post(config.metadata+'/'+esc(metadata.id)+'/versions/'+esc(metadata.version), metadata);
+    },
+    deleteMetadata: function(id) {
+        return del(config.metadata+'/'+esc(id)+'/versions');
+    },
+    deleteMetadataVersion: function(id, version) {
+        return del(config.metadata+'/'+esc(id)+'/versions/'+esc(version));
+    },
+    importMetadata: function(id, version) {
+        var url = (typeof version === "number") ?
+            (config.sharedmodules+'/'+esc(id)+'/versions/'+esc(version)+'/import') :
+            (config.sharedmodules+'/'+esc(id)+'/import');
+        return post(url);
     },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {

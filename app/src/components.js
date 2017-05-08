@@ -10,6 +10,22 @@ reg('errors', {
     viewModel: require('./widgets/errors/errors'),
     template: require('./widgets/errors/errors.html')
 });
+reg('shared_modules', {
+    viewModel: require('./pages/shared_modules/shared_modules'),
+    template: require('./pages/shared_modules/shared_modules.html')
+});
+reg('shared_module', {
+    viewModel: require('./pages/shared_module/shared_module'),
+    template: require('./pages/shared_module/shared_module.html')
+});
+reg('shared_module_versions', {
+    viewModel: require('./pages/shared_module/shared_module_versions'),
+    template: require('./pages/shared_module/shared_module_versions.html')
+});
+reg('sharedmodule-tabset', {
+    viewModel: require('./pages/shared_module/tabset'),
+    template: require('./pages/shared_module/tabset.html')
+});
 reg('general', {
     viewModel: require('./pages/settings/general'),
     template: require('./pages/settings/general.html')
@@ -258,9 +274,9 @@ reg('criteria', {
     viewModel: require('./widgets/criteria/criteria'),
     template: require('./widgets/criteria/criteria.html')
 });
-reg('pager', {
-    viewModel: require('./widgets/pager/pager'),
-    template: require('./widgets/pager/pager.html')
+reg('participants_pager', {
+    viewModel: require('./widgets/participants_pager/participants_pager'),
+    template: require('./widgets/participants_pager/participants_pager.html')
 });
 reg('activity_pager', {
     viewModel: require('./widgets/activity_pager/activity_pager'),
@@ -289,6 +305,9 @@ reg('ui-rules', {
 reg('ui-checkbox', {
     template: require('./widgets/form/ui_checkbox.html')
 });
+reg('ui-radio', {
+    template: require('./widgets/form/ui_radio.html')
+});
 reg('ui-date', {
     template: require('./widgets/form/ui_date.html')
 });
@@ -316,11 +335,23 @@ reg('participant-tabset', {
 reg('not_found', {
     template: require('./pages/not_found/not_found.html')
 });
+reg('shared-module', {
+    viewModel: require('./widgets/shared_module/shared_module'),
+    template: require('./widgets/shared_module/shared_module.html')
+});
 
 // Dialogs. These must be synchronous.
+reg('module_browser', {
+    viewModel: require('./dialogs/module_browser/module_browser'),
+    template: require('./dialogs/module_browser/module_browser.html'), synchronous: true
+});
 reg('publickey', {
     viewModel: require('./dialogs/publickey/publickey'),
     template: require('./dialogs/publickey/publickey.html'), synchronous: true
+});
+reg('json_editor', {
+    viewModel: require('./dialogs/json_editor/json_editor'),
+    template: require('./dialogs/json_editor/json_editor.html'), synchronous: true
 });
 reg('read_about_clipboard', {
     viewModel: require('./dialogs/read_about_clipboard/read_about_clipboard'),

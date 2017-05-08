@@ -19,25 +19,31 @@
     <table class="ui compact selectable table">
         <thead>
             <tr>
-                <th>Activity</th>
                 <th>In Schedule</th>
+                <th>Activity</th>
+                <th>Qualifier</th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
-                <td colspan="2" data-bind="html: recordsMessageObs"></td>
+                <td colspan="3" data-bind="html: recordsMessageObs"></td>
             </tr>
         </tbody>
         <tbody data-bind="foreach: itemsObs">
             <tr>
+                <td data-bind="text: $data.plan">
+                    <!--
+                    <span data-bind="text: $data.plan"></span>
+                    <a target="_blank" data-bind="attr: {'href': '#/scheduleplans/'+$data.planGuid}">
+                        <i class="ui linkify icon"></i>
+                    </a>
+                    -->
+                </td>
                 <td>
                     <a data-bind="text: $data.label, attr: {
                         'href': '#/participants/'+$parent.userIdObs()+'/activities/'+$data.guid}"></a>
                 </td>
-                <td>
-                    <a target="_blank" data-bind="text: $data.plan, attr: {
-                        'href': '#/scheduleplans/'+$data.planGuid}"></a>
-                </td>
+                <td data-bind="text: $data.qualifier"></td>
             </tr>
         </tbody>
     </table> 

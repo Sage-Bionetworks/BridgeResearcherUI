@@ -73,24 +73,25 @@ module.exports = function() {
         root.openDialog('participant_export', {emailFilter: self.emailFilter, 
             startDate: self.startDate, endDate: self.endDate, total: self.total});    
     };
-    self.loadingFunc = function loadPage(offsetBy, pageSize, emailFilter, startDate, endDate) {
+    self.loadingFunc = function(offsetBy, pageSize, emailFilter, startDate, endDate) {
         self.emailFilter = emailFilter;
         self.startDate = startDate;
         self.endDate = endDate;
-        return serverService.getParticipants(offsetBy, pageSize, emailFilter, startDate, endDate).then(function(response) {
-            self.total = response.total;
-            self.recordsObs(formatCount(response.total));
-            self.itemsObs(response.items);
-            if (response.items.length === 0) {
-                if (offsetBy > 0) {
-                    // You can't switch studies or environments unless you reset this when it has 
-                    // overshot the new list. So drop back and try and find the first page.
-                    return self.loadingFunc(0, pageSize, emailFilter);
-                } else {
-                    self.recordsMessageObs("There are no user accounts, or none that match the filter.");
+        return serverService.getParticipants(offsetBy, pageSize, emailFilter, startDate, endDate)
+            .then(function(response) {
+                self.total = response.total;
+                self.recordsObs(formatCount(response.total));
+                self.itemsObs(response.items);
+                if (response.items.length === 0) {
+                    if (offsetBy !== null) {
+                        // You can't switch studies or environments unless you reset this when it has 
+                        // overshot the new list. So drop back and try and find the first page.
+                        return self.loadingFunc(0, pageSize, emailFilter);
+                    } else {
+                        self.recordsMessageObs("There are no user accounts, or none that match the filter.");
+                    }
                 }
-            }
-            return response;
-        }).catch(utils.failureHandler());
+                return response;
+            }).catch(utils.failureHandler());
     };
 };

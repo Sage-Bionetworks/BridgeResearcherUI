@@ -1,0 +1,78 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <div class="fixed-header-heading">
+            <div class="ui breadcrumb">
+                <a href="#/shared_modules" class="section">Shared Modules</a>
+                <i class="right chevron icon divider"></i>
+            </div>             
+            <h3>
+                <span data-bind="visible: nameObs().length > 0, text: nameObs"></span>
+                <span data-bind="visible: nameObs().length === 0">New Shared Module</span>
+            </h3>
+        </div>
+        <div class="fixed-header-buttons">
+            <button class="ui tiny primary button" data-bind="click: save">Save</button>
+        </div>
+    </div>
+    <sharedmodule-tabset params="selected: 'editor', viewModel: $data"></sharedmodule-tabset>
+</div>
+<div class="scrollbox">
+    <form class="ui form">
+        <errors></errors>
+        <div class="three fields">
+            <div class="required field" id="name">
+                <label>Name</label>
+                <input type="text" data-bind="textInput: nameObs, hasFocus: true"/>
+            </div>
+            <div class="required field" id="id" data-bind="visible: isNewObs">
+                <label>Identifier</label>
+                <input type="text" data-bind="textInput: idObs"/>
+            </div>
+            <div class="field" data-bind="visible: !isNewObs()">
+                <label>Identifier</label>
+                <input readonly data-bind="value: idObs"/>
+            </div>
+            <div class="field" id="version" data-bind="visible: !isNewObs()">
+                <label>Version</label>
+                <input type="text" data-bind="textInput: versionObs"/>
+            </div>
+        </div>
+        <div class="three fields">
+            <div class="field" id="os">
+                <label>For Operating System</label>
+                <select class="ui dropdown" data-bind="options: osOptions, 
+                    optionsText: 'label', optionsValue: 'value', value: osObs"></select>
+            </div>
+            <div class="field">
+                <label>Tags</label>
+                <input data-bind="value: tagsObs"/>
+                <p class="help-text">Comma separated</p>
+            </div>
+            <div class="field">
+                <label>Copyright status</label>
+                <div class="label-field-padding">
+                    <ui-checkbox params="checkedObs: licenseRestrictedObs">
+                        The shared module has licensing restrictions
+                    </ui-checkbox>
+                </div>
+            </div>
+        </div>
+        <div class="field required">
+            <label>Module shares:</label>
+            <div style="font-size: 17px; font-weight: bold; margin-bottom: .75rem">
+                <span data-bind="html: linkedNameObs"></span>
+                <select style="display:inline-block; margin-left:1rem; width:15rem" class="ui dropdown" 
+                    data-bind="options: linkedVersionOptionsObs, optionsText: 'label', 
+                        optionsValue: 'value', value: linkedVersionObs"></select>
+            </div>
+            <div>
+                <button class="ui tiny button" data-bind="click: openSchemaSelector">Add Schema&hellip;</button>
+                <button class="ui tiny button" data-bind="click: openSurveySelector">Add Survey&hellip;</button>
+            </div>
+        </div>
+        <div class="field" id="notes">
+            <label>Notes</label>
+            <textarea id="notes" data-bind="ckeditor: $component.initEditor" class="ui textarea doc"></textarea>                
+        </div>
+    </form>
+</div>

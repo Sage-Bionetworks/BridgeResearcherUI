@@ -9,6 +9,7 @@
 @import "./pager.scss";
 @import "./fixed_header.scss";
 @import "./json.scss";
+@import "./shared_module.scss";
 
 /* HTML TAGS */
 html, body {
@@ -70,7 +71,7 @@ footer p {
 
 /* GENERAL */
 
-.no_records td {
+.no_records td, .no_records p {
     font-size: larger;
     padding: 1rem!important;
     text-align: center!important;

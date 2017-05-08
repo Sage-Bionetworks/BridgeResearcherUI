@@ -1,5 +1,6 @@
 var ko = require('knockout');
 var serverService = require('../../services/server_service');
+var sharedModuleUtils = require('../../shared_module_utils');
 var utils = require('../../utils');
 var fn = require('../../transforms');
 var Promise = require('bluebird');
@@ -39,7 +40,9 @@ module.exports = function() {
 
     self.formatDateTime = fn.formatLocalDateTime;
     self.isDeveloper = root.isDeveloper;
-
+    self.formatModuleLink = sharedModuleUtils.formatModuleLink;
+    self.moduleHTML = sharedModuleUtils.moduleHTML;
+    
     tables.prepareTable(self, {
         name: 'survey',
         type: 'Survey',
@@ -73,20 +76,29 @@ module.exports = function() {
             .then(utils.successHandler(vm, event, confirmMsg))
             .catch(utils.listFailureHandler());
     };
+    self.openModuleBrowser = function() {
+        root.openDialog('module_browser', {type: 'survey', closeModuleBrowser: self.closeModuleBrowser});
+    };
+    self.closeModuleBrowser = function() {
+        root.closeDialog();
+        load();
+    };
 
     function load() {
-        return serverService.getSurveys().then(function(response) {
-            response.items.sort(utils.makeFieldSorter("name"));
-            response.items.forEach(addScheduleField);
-            self.itemsObs(response.items);
-            return response.items;
-        }).then(function(surveys) {
-            if (surveys.length) {
-                return serverService.getSchedulePlans().then(function(response) {
-                    annotateSurveys(surveys, response.items);
-                });
-            }
-        }).catch(utils.failureHandler());
+        return sharedModuleUtils.loadNameMaps()
+            .then(serverService.getSurveys)
+            .then(function(response) {
+                response.items.sort(utils.makeFieldSorter("name"));
+                response.items.forEach(addScheduleField);
+                self.itemsObs(response.items);
+                return response.items;
+            }).then(function(surveys) {
+                if (surveys.length) {
+                    return serverService.getSchedulePlans().then(function(response) {
+                        annotateSurveys(surveys, response.items);
+                    });
+                }
+            }).catch(utils.failureHandler());
     }
     load();
 };

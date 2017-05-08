@@ -35,9 +35,10 @@
             <tr>
                 <th>Activity</th>
                 <th>Status</th>
-                <th>Client Data</th>
                 <th>Schedule Window</th>
                 <th>Execution Time</th>
+                <!--<th></th>-->
+                <th>Client Data</th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
@@ -54,21 +55,7 @@
                         attr:{href: '#/scheduleplans/'+$data.schedulePlanGuid}"></a>
                 </td>
                 <td data-bind="text: $parent.formatTitleCase($data.status), 
-                    css: {disabled: $data.isDisabled}"></td>
-                <td>
-                    <div data-bind="visible: $data.clientData">
-                        <div class="json-expand-control" data-bind="visible: $data.collapsedObs">
-                            <a href="" class="json-expand-control" data-bind="visible: $data.collapsedObs, click: $component.toggle">
-                                {<i style="margin:0;padding:0" class="plus square outline icon"></i>}
-                            </a>
-                        </div>
-                        <div style="position:relative" class="json-expand-control" data-bind="visible: !$data.collapsedObs()">
-                            <a href="" style="position:absolute; left:.75rem; top:.15rem" class="json-expand-control" data-bind="visible: !$data.collapsedObs(), click: $component.toggle">
-                                <i class="minus square outline icon"></i>
-                            </a>
-                            <pre data-bind="visible: !$data.collapsedObs(), html: $data.formattedData"></pre>
-                        </div>
-                    </div>
+                    css: {disabled: $data.isDisabled}">
                 </td>
                 <td data-bind="css: {disabled: $data.isDisabled}">
                     <span data-bind="text: $parent.formatDateTime($data.scheduledOn)">
@@ -79,6 +66,27 @@
                     <span data-bind="text: $parent.formatDateTime($data.startedOn)">
                     </span>&mdash;<span data-bind="text: $parent.formatDateTime($data.finishedOn)">
                     </span>
+                </td>
+                <!--
+                <td style="text-align:right">
+                    <button class="ui basic compact mini button" data-bind="click: $component.editReportRecord">Edit</button>
+                </td>
+                -->
+                <td>
+                    <div data-bind="visible: $data.clientData">
+                        <div class="json-expand-control" data-bind="visible: $data.collapsedObs">
+                            <a href="" class="json-expand-control" data-bind="visible: $data.collapsedObs, click: $component.toggle">
+                                {<i style="margin:0;padding:0" class="plus square outline icon"></i>}
+                            </a>
+                        </div>
+                        <div style="position:relative" class="json-expand-control" data-bind="visible: !$data.collapsedObs()">
+                            <a href="" style="position:absolute; left:.75rem; top:.15rem" 
+                                class="json-expand-control" data-bind="visible: !$data.collapsedObs(), click: $component.toggle">
+                                <i class="minus square outline icon"></i>
+                            </a>
+                            <pre data-bind="visible: !$data.collapsedObs(), html: $data.formattedData"></pre>
+                        </div>
+                    </div>
                 </td>
             </tr>
         </tbody>

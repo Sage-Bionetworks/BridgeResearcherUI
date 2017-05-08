@@ -324,6 +324,7 @@ function getActivitiesWithStrategyInfo(plan) {
                     plan: plan.label,
                     planGuid: plan.guid,
                     label: activity.label, 
+                    qualifier: "",
                     guid: activity.guid
                 });
             });
@@ -334,7 +335,8 @@ function getActivitiesWithStrategyInfo(plan) {
                     activities.push({
                         plan: plan.label,
                         planGuid: plan.guid,
-                        label: activity.label + " (Group #"+index+")",
+                        label: activity.label,
+                        qualifier: "Group #"+index,
                         guid: activity.guid
                     });
                 });
@@ -347,7 +349,8 @@ function getActivitiesWithStrategyInfo(plan) {
                     activities.push({
                         plan: plan.label,
                         planGuid: plan.guid,
-                        label: activity.label + " (" + critLabel+")",
+                        label: activity.label,
+                        qualifier: critLabel,
                         guid: activity.guid
                     });
                 });

@@ -1,0 +1,35 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <div class="fixed-header-heading">
+            <h3>Shared Modules</h3>
+        </div>
+        <div class="fixed-header-buttons">
+            <a href="#/shared_modules/new" class="ui primary tiny button">New Shared Module</a>
+        </div>
+    </div>
+    <div class="ui empty secondary pointing menu"></div>
+</div>
+<div class="scrollbox">
+    <errors></errors>
+    <div class="ui action input" style="margin-right: 1.5rem; margin-bottom: 1rem">
+        <input type="text" placeholder="Search all versions" data-bind="textInput: searchObs">
+        <div data-toggle></div>
+        <button class="ui icon button" data-bind="click: clearSearch">
+            <i class="remove circle icon"></i>
+        </button>
+    </div>
+    <ui-select params="fieldObs: moduleTypeFilterObs, optionsSrc: moduleTypeOptions"></ui-select>
+    <ui-checkbox params="checkedObs: tagsOnlyObs" style="margin-left: 1.5rem">
+        Search tags
+    </ui-checkbox>
+
+    <div class="no_records" data-bind="if: itemsObs().length === 0">
+        <p data-bind="html: recordsMessageObs"></p>
+    </div>
+    <!-- ko foreach: itemsObs -->
+        <!-- ko component: { name: 'shared-module', params: { 
+                model: $data, importFunc: $parent.importItem, publishFunc: $parent.publishItem, 
+                    deleteFunc: $parent.deleteItem 
+        }} --><!-- /ko -->
+    <!-- /ko -->
+</div>

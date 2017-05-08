@@ -74,11 +74,11 @@ var SELECT_OPTIONS_BY_TYPE = Object.freeze({
     'BooleanConstraints':[UI_HINT_OPTIONS.checkbox, UI_HINT_OPTIONS.toggle],
     'DateConstraints':[UI_HINT_OPTIONS.datepicker],
     'DateTimeConstraints':[UI_HINT_OPTIONS.datetimepicker],
-    'DecimalConstraints':[UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider],
-    'DurationConstraints': [UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider],
+    'DecimalConstraints':[UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider, UI_HINT_OPTIONS.select],
+    'DurationConstraints': [UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider, UI_HINT_OPTIONS.select],
     'MultiValueConstraints':[UI_HINT_OPTIONS.checkbox, UI_HINT_OPTIONS.combobox, UI_HINT_OPTIONS.list,
         UI_HINT_OPTIONS.radiobutton, UI_HINT_OPTIONS.select, UI_HINT_OPTIONS.slider],
-    'IntegerConstraints':[UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider],
+    'IntegerConstraints':[UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider, UI_HINT_OPTIONS.select],
     'StringConstraints':[UI_HINT_OPTIONS.multilinetext, UI_HINT_OPTIONS.textfield],
     'TimeConstraints':[UI_HINT_OPTIONS.timepicker]
 });
@@ -119,7 +119,7 @@ var UI_HINT_FOR_CONSTRAINTS = Object.freeze({
     'MultiValueConstraints': 'list'
 });
 
-var SURVEY_FIELDS = ['name','createdOn','guid','identifier','published','version'];
+var SURVEY_FIELDS = ['name','createdOn','guid','identifier','published','version','copyrightNotice'];
 var ELEMENT_FIELDS = ['prompt','promptDetail', 'title', 'uiHint','identifier','fireEvent'];
 
 function getConstraints(type) {
@@ -289,6 +289,9 @@ module.exports = {
             vm[field+"Obs"] = ko.observable("");
         });
         vm.elementsObs = ko.observableArray([]);
+        vm.titleObs = ko.computed(function() {
+            return (vm.nameObs()) ? vm.nameObs() : "New Survey";
+        });
     },
     /**
      * Constraints have a *lot* of common elements, initialize them all here. This is basically a mixin where there's

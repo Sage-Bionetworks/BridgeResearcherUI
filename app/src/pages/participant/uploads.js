@@ -2,7 +2,7 @@ var utils = require('../../utils');
 var serverService = require('../../services/server_service');
 var bind = require('../../binder');
 var tables = require('../../tables');
-var transforms = require('../../transforms');
+var fn = require('../../transforms');
 var root = require('../../root');
 
 function sortUploads(b,a) {
@@ -27,7 +27,7 @@ module.exports = function(params) {
     }).catch(utils.failureHandler());
 
     self.isPublicObs = root.isPublicObs;
-    self.formatLocalDateTime = transforms.formatLocalDateTime;
+    self.formatLocalDateTime = fn.formatLocalDateTime;
     self.selectedRangeObs.subscribe(load);
 
     tables.prepareTable(self, {name:'upload'});
@@ -106,31 +106,38 @@ module.exports = function(params) {
         if (item.status === 'succeeded') {
             var start = new Date(item.requestedOn).getTime();
             var end = new Date(item.completedOn).getTime();
-            var fStart = transforms.formatLocalDateTime(item.requestedOn);
-            var fEnd = transforms.formatLocalDateTime(item.completedOn);
+            var fStart = fn.formatLocalDateTime(item.requestedOn);
+            var fEnd = fn.formatLocalDateTime(item.completedOn);
             if (fStart.split(', ')[0] === fEnd.split(', ')[0]) {
                 fEnd = fEnd.split(', ')[1];
             }
-            return fEnd+" ("+item.completedBy+", "+transforms.formatMs(end-start)+")";
+            return fEnd+" ("+item.completedBy+", "+fn.formatMs(end-start)+")";
         } else if (item.status === 'duplicate') {
-            var shortDup = transforms.truncateGUID(item.duplicateUploadId);
+            var shortDup = fn.truncateGUID(item.duplicateUploadId);
             return "duplicates <span class='upload-id' title='"+item.duplicateUploadId+"'>"+
                 shortDup+"</span>";
         }
         return '';
     }
     function processUploads(response) {
-        var dateString = transforms.formatLocalDateTimeWithoutZone(response.startTime).split(" @ ")[0];
+        var dateString = fn.formatLocalDateTimeWithoutZone(response.startTime).split(" @ ")[0];
         self.dayObs(dateString);
         self.totalObs(response.items.length);
         response.items.sort(sortUploads);
-        response.items.map(processItem);
+        response.items.forEach(processItem);
         self.itemsObs(response.items);
         return response;
     }
+    function getDateRange(date) {
+        date = (date) ? new Date(date) : new Date();
+        return {
+            startTime: fn.formatLocalDate(date, "00:00:00.000"), 
+            endTime: fn.formatLocalDate(date, "23:59:59.999")
+        };
+    }
     function load() {
         self.showLoaderObs(true);
-        var range = utils.getDateRange( self.selectedRangeObs() );
+        var range = getDateRange( self.selectedRangeObs() );
         serverService.getParticipantUploads(params.userId, range.startTime, range.endTime)
             .then(processUploads)
             .then(function() {

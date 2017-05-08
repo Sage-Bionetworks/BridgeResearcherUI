@@ -30,7 +30,7 @@
                 <tbody data-bind="foreach: schemaListObs, 
                     dragula: {listObs: schemaListObs, indexObs: schemaIndexObs, dragHandleSelector: 'dragHandle'}">
                     <tr>
-                        <td width="100%" class="dragHandle" data-bind="text: $data.id"></td>
+                        <td width="100%" class="dragHandle" data-bind="text: $data.name"></td>
                         <td><ui-select params="fieldObs: $data.revisionObs, optionsSrc: $data.revisionList, 
                                 optionsCaption: 'Most Recent Revision'"></ui-select></td>
                         <td><button class="ui basic red compact mini button" 

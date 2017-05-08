@@ -10,10 +10,6 @@
                 optionsSrc: $parent.fieldTypeOptions, optionsCaption: 'Select type...'"></ui-select>
         </div>
     </div>
-    <!-- ko if: $parent.extraObs() === 'none' -->
-        <div class="draggable extra">
-        </div>
-    <!-- /ko -->
     <!-- ko if: $parent.extraObs() === 'string' -->
         <div class="draggable">
             <ui-checkbox params="checkedObs: unboundedTextObs">Any length, or</ui-checkbox>
@@ -21,21 +17,23 @@
         <div class="draggable extra">
             <input placeholder="Max length" data-bind="textInput: maxLengthObs, 
                 disable: unboundedTextObs(), hasFocus: $parent.focusObs"
-                style="width:8rem"></input>
+                style="width:7rem"></input>
         </div>
     <!-- /ko -->
     <!-- ko if: $parent.extraObs() === 'attachment' -->
         <div class="draggable">
-            <div class="ui search" data-bind="semantic: 'search', source: $parent.mimeTypes, observer: mimeTypeObs">
+            <div class="ui search" style="width:8rem" data-bind="semantic: 'search', 
+                source: $parent.mimeTypes, observer: mimeTypeObs">
                 <input class="prompt" placeholder="Mime type" 
                     data-bind="textInput: mimeTypeObs, event:{selectedItem: $parent.updateExt}">
             </div>
         </div>
         <div class="draggable extra">
-            <input placeholder="File ext" data-bind="textInput: fileExtensionObs" style="width:8rem"></input>
+            <input placeholder="File ext" 
+                data-bind="textInput: fileExtensionObs" style="width:6rem"></input>
         </div>
     <!-- /ko -->
-    <div class="draggable">
+    <div class="draggable required">
         <ui-checkbox params="checkedObs: requiredObs">Required</ui-checkbox>
     </div>
     <div class="draggable activity-controls">

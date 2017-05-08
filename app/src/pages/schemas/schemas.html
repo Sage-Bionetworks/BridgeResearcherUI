@@ -1,13 +1,35 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
-            <h3>Data Schemas</h3>
+            <h3>Upload Schemas</h3>
         </div>
         <div class="fixed-header-buttons">
-            <button class="ui tiny button" data-bind="disable: !atLeastOneChecked(), click: copySchemasDialog">Copy&hellip;</button>
-            <button class="ui tiny button" data-bind="disable: !atLeastOneChecked(), click: copyToClipboard">Copy to Clipboard</button>
-            <button class="ui red tiny button" data-bind="visible: isAdmin, disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
-            <a href="#/schemas/new" class="ui primary tiny button">New Schema</a>
+            <div class="ui tiny buttons">
+                <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()}, 
+                    semantic: 'dropdown-button-toggle'">Copy</div>
+                <div class="ui tiny floating dropdown icon button" 
+                    data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item" data-bind="click: copySchemasDialog">Copy</div>
+                        <div class="item" data-bind="click: copyToClipboard">Copy to Clipboard</div>
+                    </div>
+                </div>
+            </div>
+            <button style="margin: 0 .25em" class="ui red tiny button" data-bind="visible: isAdmin, 
+                disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
+            <div class="ui primary tiny buttons">
+                <div class="ui primary tiny button" data-bind="semantic: 'dropdown-button-toggle'">
+                    Create Schema</div>
+                <div class="ui primary tiny floating dropdown icon button" 
+                    data-bind="semantic: 'dropdown-button'">
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a href="#/schemas/new" class="item">New Schema</a>
+                        <div class="item" data-bind="click: openModuleBrowser">Import Upload Schema&hellip;</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="ui empty secondary pointing menu">
@@ -25,10 +47,10 @@
                     <ui-checkbox params="checkedObs: checkAllObs, visible: isDeveloper"></ui-checkbox>
                 </th>
                 <th>Name</th>
-                <th>Identifier</th>
                 <th>Type</th>
                 <th>Latest Revision</th>
                 <th>Matching Criteria</th>
+                <th>Shared</th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
@@ -44,10 +66,11 @@
                 <td>
                     <a data-bind="attr: {'href': '#/schemas/'+encodeURIComponent($data.schemaId)}, text: $data.name"></a>
                 </td>
-                <td class="curtail-overflow" data-bind="text: schemaId"></td>
                 <td data-bind="text: $parent.schemaTypeLabel($data.schemaType)"></td>
                 <td data-bind="text: $data.revision"></td>
                 <td data-bind="html: $parent.criteriaLabel($data)"></td>
+                <td data-bind="attr: {'data-html': $parent.moduleHTML($data)}, 
+                    semantic: 'popup', html: $parent.formatModuleLink($data)"></td>
             </tr>
         </tbody>
     </table>

@@ -41,18 +41,11 @@ ko.bindingHandlers.flatpickr = {
         var includeTime = element.hasAttribute("data-enableTime");
         var input = element.querySelector("input");
 
-        if (input) {
-            observer.subscribe(function(newValue) {
-                input.value = new Date(newValue)[includeTime ? "toLocaleString" : "toLocaleDateString"]();
-            });
-        }
         function updateObserver(date) {
             if (date) {
                 observer(date.toISOString());
-                element.value = date[includeTime ? "toLocaleString" : "toLocaleDateString"]();
             } else {
                 observer(null);
-                element.value = "";    
             }
             onChange();
         }
@@ -127,7 +120,8 @@ ko.bindingHandlers.ckeditor = {
                 { name: 'insert', items: [ 'Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar' ] },
                 { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
                 { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
-                { name: 'colors', items: [ 'TextColor', 'BGColor' ] }
+                { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+                { name: 'document', items: ['-', 'Source']}
             ]            
         };
         CKEDITOR.replace(element, config);

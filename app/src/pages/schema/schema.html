@@ -18,7 +18,8 @@
         <span class="active item">
             <i class="file outline icon"></i> Editor
         </span>
-        <a data-bind="attr: {href: '#/schemas/'+encodeURIComponent(schemaIdObs())+'/versions'}" class="item">
+        <a data-bind="attr: {href: '#/schemas/'+encodeURIComponent(schemaIdObs())+
+            '/versions/'+revisionObs()+'/history'}" class="item">
             <i class="history icon"></i> History
         </a>
         <div class="right menu">

@@ -12,11 +12,26 @@ module.exports = {
         'production': 'https://webservices.sagebridge.org'
     },
     toastr: {
-        positionClass: "toast-top-right",
+        closeButton: true,
+        debug: false,
+        newestOnTop: true,
+        progressBar: true,
+        positionClass: "toast-bottom-center",
+        preventDuplicates: true,
+        showDuration: "300",
         hideDuration: 300,
         timeOut: 7000,
-        preventDuplicates: true,
+        extendedTimeOut: "1000",
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "fadeOut",
         opacity: 1.0
+    },
+    msgs: {
+        shared_modules: {
+            PUBLISH: "Are you sure you want to publish this shared module version?"
+        }
     },
     // options: isPublic, codesEnumerated, codeRequired, notificationsEnabled, under studyId
     studies: {
@@ -44,5 +59,7 @@ module.exports = {
     externalIds: '/v3/externalIds',
     reports: '/v3/reports',
     uploadstatuses: '/v3/uploadstatuses',
+    sharedmodules: '/v3/sharedmodules',
+    metadata: '/v3/sharedmodules/metadata',
     compoundactivitydefinitions: '/v3/compoundactivitydefinitions'
 };

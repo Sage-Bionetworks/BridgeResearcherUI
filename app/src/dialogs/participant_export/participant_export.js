@@ -2,7 +2,6 @@ var ko = require('knockout');
 var saveAs = require('../../../lib/filesaver.min.js');
 var serverService = require('../../services/server_service');
 var root = require('../../root');
-var utils = require('../../utils');
 var fn = require('../../transforms');
 
 var HEADERS = [];
@@ -11,7 +10,7 @@ var PAGING_TIMEOUT = 2000;
 var TIMEOUT = 1000;
 var PAGE_SIZE = 100;
 var FIELDS = Object.freeze(["firstName","lastName","email", "sharingScope", "status", "notifyByEmail", 
-    "dataGroups", "languages", "roles", "id", "healthCode", "createdOn", "consentHistories"]);
+    "dataGroups", "languages", "roles", "id", "healthCode", "externalId", "createdOn", "consentHistories"]);
 var FIELD_FORMATTERS = {
     'consentHistories': function(map) {
         return Object.keys(map).map(function(guid) {
@@ -47,6 +46,7 @@ function canContact(participant) {
     return participant.notifyByEmail === true &&
            participant.sharingScope !== "no_sharing" &&
            utils.atLeastOneSignedConsent(participant.consentHistories);
+           // atLeastOneSignedConsent moved out to utils to test
 }
 
 module.exports = function(params) {
