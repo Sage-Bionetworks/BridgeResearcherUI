@@ -3,7 +3,7 @@ require('knockout-postbox');
 var utils = require('../../utils');
 var bind = require('../../binder');
 
-var PAGE_SIZE = 25;
+var PAGE_SIZE = 5;
 
 /**
  * @params loadingFunc - the function to call to load resources. The function takes the parameters 

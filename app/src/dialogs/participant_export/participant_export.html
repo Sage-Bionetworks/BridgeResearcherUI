@@ -4,8 +4,7 @@
     </div>
     <div class="content">
         <p>Any search filters you create will be used when exporting. You can limit export to certain email addresses, or a date range. </p>
-        <div class="ui info message" 
-            data-bind="visible: filterMessageObs().length > 0" 
+        <div class="ui info message" data-bind="visible: filterMessageObs().length > 0" 
             style="margin-top: 0; margin-bottom:.75rem">
             <!-- ko foreach: filterMessageObs -->
                 <div data-bind="html: $data"></div>

@@ -4,14 +4,7 @@ var root = require('../../root');
 var fn = require('../../transforms');
 var Promise = require('bluebird');
 var bind = require('../../binder');
-
-// Worker
-// * calculateSteps --> calculateSteps()
-// * hasWork --> hasWorkItem()
-// * performWork --> next()
-// * workDescription --> currentDescription()
-// * lastWorkItem --> currentWorkItem()
-// * postFetch --> postFetch()
+var batchDialogUtils = require('../../batch_dialog_utils');
 
 var PREMSG = "Only exporting accounts that ";
 var FETCH_DELAY = 100;
@@ -46,7 +39,7 @@ var CollectParticipantsWorker = function(params) {
     this.endDate = params.endDate;
     this.identifiers = [];
     var pages = [];
-    var numPages = Math.ceil(this.total/PAGE_SIZE);
+    var numPages = Math.floor(this.total/PAGE_SIZE);
     for (var i=0; i <= numPages; i++) {
         pages.push(i*PAGE_SIZE);
     }
@@ -151,22 +144,17 @@ FetchParticipantWorker.prototype = {
 module.exports = function(params) {
     var self = this;
     
+    batchDialogUtils.initBatchDialog(self);
+
     serverService.getStudy().then(function(study) {
         ATTRIBUTES = Object.freeze([].concat(study.userProfileAttributes)); 
         HEADERS = Object.freeze([].concat(FIELDS).concat(ATTRIBUTES).join("\t"));
     });
     
-    var cancel, progressIndex;
-
     bind(self)
         .obs('enable')
-        .obs('value', 0)
-        .obs('max')
-        .obs('status')
-        .obs('percentage')
         .obs('canContactByEmail', false)
-        .obs('filterMessage[]', [])
-        .obs('errorMessages[]', []);
+        .obs('filterMessage[]', []);
 
     if (params.emailFilter) {
         self.filterMessageObs.push(PREMSG+"have email matching the string &ldquo;"+params.emailFilter+"&rdquo;");
@@ -180,65 +168,17 @@ module.exports = function(params) {
             new Date(params.endDate).toLocaleDateString()+"&rdquo;");
     }
 
-    function errorMessage(e) {
-        if (e.status === 0) {
-            return "Could not connect to the server for ";
-        } else if (e.message) {
-            return e.message + "; ";
-        }
-        return "An error occurred while processing ";
-    }
-
-    function promiseHandler(worker, workerFunc, isErrorHandler) {
-        return function(e) {
-            updateStatus(++self.progressIndex, self.steps);
-            if (isErrorHandler) {
-                self.errorMessagesObs( errorMessage(e)+worker.currentWorkItem() );
-            }
-            if (cancel) {
-                return Promise.resolve();
-            }
-            if (worker.hasWork()) {
-                self.statusObs(worker.workDescription());
-                return workerFunc(worker, worker.performWork());
-            } else {
-                return worker.postFetch();
-            }
-        };
-    }
-    function updateStatus(progressIndex, steps) {
-        self.valueObs(progressIndex);
-        self.maxObs(steps);
-        var perc = ((progressIndex/steps)*100).toFixed(0);
-        if (perc > 100) { perc = 100; }
-        self.percentageObs(perc+"%");
-    }
-    function work(worker, promise) {
-        return promise.then(promiseHandler(worker, work))
-            .catch(promiseHandler(worker, work, true));
-    }
-
     self.startExport = function(vm, event) {
         self.statusObs("Currently preparing your *.tsv file...");
         event.target.setAttribute("disabled","disabled");
 
         var collectWorker = new CollectParticipantsWorker(params);
 
-        self.progressIndex = 1;
-        self.steps = collectWorker.calculateSteps();
-        updateStatus(self.progressIndex, self.steps);
-        self.statusObs(collectWorker.workDescription());
-
-        work(collectWorker, collectWorker.performWork()).then(function(identifiers) {
+        self.run(collectWorker).then(function(identifiers) {
             var fetchWorker = new FetchParticipantWorker(identifiers, self.canContactByEmailObs());
-        
             var totalParticipants = identifiers.length;
-            self.progressIndex = 1;
-            self.steps = fetchWorker.calculateSteps();
-            updateStatus(self.progressIndex, self.steps);
-            self.statusObs(fetchWorker.workDescription());
 
-            work(fetchWorker, fetchWorker.performWork()).then(function(output) {
+            self.run(fetchWorker).then(function(output) {
                 self.exportData = output;
                 self.statusObs("Export finished. There were " + totalParticipants + 
                     " participants, and " + self.errorMessagesObs().length + " errors.");
@@ -247,12 +187,14 @@ module.exports = function(params) {
         });
     };
     self.download = function() {
-        var blob = new Blob([HEADERS+self.exportData], {type: "text/tab-separated-values;charset=utf-8"});
+        var blob = new Blob([HEADERS+self.exportData], {
+            type: "text/tab-separated-values;charset=utf-8"
+        });
         var dateString = new Date().toISOString().split("T")[0];  
         saveAs.saveAs(blob, "participants-"+dateString+".tsv");
     };
     self.close = function(vm, event) {
-        cancel = true;
+        self.cancel();
         root.closeDialog();
     };
     self.formatLocalDateTime = function(date) {

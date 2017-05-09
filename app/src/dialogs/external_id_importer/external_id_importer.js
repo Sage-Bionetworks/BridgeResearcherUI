@@ -5,134 +5,115 @@ var utils = require('../../utils');
 var bind = require('../../binder');
 var serverService = require('../../services/server_service');
 var Promise = require("bluebird");
+var batchDialogUtils = require('../../batch_dialog_utils');
 
-var SUBMISSION_DELAY = 500;
-var SPLIT_REGEX = /[,\s\t\r\n]+/;
+// Worker
+// * calculateSteps: int
+// * hasWork: boolean
+// * performWork: Promise
+// * workDescription: String, description what is processed by performWork
+// * currentWorkItem: Object, the item just processed by performWork
+// * postFetch: Promise: results of worker's sequential execution
 
-function getPerc(step, max) {
-    var perc = ((step/max)*100).toFixed(0);
-    if (perc > 100) { perc = 100; }
-    return perc + "%";
+function IdImportWorker(input) {
+    this.identifiers = input.split(/[,\s\t\r\n]+/).filter(function(value) {
+        return value.length > 0;
+    });
+    this.importedIdentifiers = [];
 }
-function createParticipantMaker(email) {
-    return function(identifier) {
-        return utils.createParticipantForID(email, identifier);
-    };
+IdImportWorker.prototype = {
+    calculateSteps: function(){ 
+        return this.identifiers.length;
+    },
+    hasWork: function(){ 
+        return this.identifiers.length > 0;
+    },
+    workDescription: function() { 
+        return "Importing " + this.identifiers[0];
+    },
+    performWork: function(){ 
+        this.currentId = this.identifiers.shift();
+        return serverService.addExternalIds([this.currentId]).then(this._success.bind(this));
+    },
+    _success: function(response) {
+        this.importedIdentifiers.push(this.currentId);
+    },
+    currentWorkItem: function() { 
+        return this.currentId;
+    },
+    postFetch: function() { 
+        return Promise.resolve(this.importedIdentifiers);
+    }
+};
+
+function CreateCredentialsWorker(supportEmail, identifiers) {
+    this.supportEmail = supportEmail;
+    this.identifiers = identifiers;
 }
+CreateCredentialsWorker.prototype = {
+    calculateSteps: function(){ 
+        return this.identifiers.length;
+    },
+    hasWork: function(){ 
+        return this.identifiers.length > 0;
+    },
+    workDescription: function() { 
+        return "Creating credentials for " + this.identifiers[0];
+    },
+    performWork: function(){ 
+        this.currentId = this.identifiers.shift();
+        var participant = utils.createParticipantForID(this.supportEmail, this.currentId);
+        return serverService.createParticipant(participant);
+    },
+    currentWorkItem: function() { 
+        return this.currentId;
+    },
+    postFetch: function() { 
+        Promise.resolve();
+    }
+};
 
 module.exports = function(params) {
     var self = this;
-    var cancel = false;
-    
-    var binder = bind(self)
+
+    batchDialogUtils.initBatchDialog(self);
+
+    bind(self)
         .obs('import', '')
-        .obs('value', 0)
-        .obs('max', 0)
-        .obs('title', 'Import External Identifiers')
-        .obs('percentage', '0%')
-        .obs('showCreateCredentials', params.showCreateCredentials)
-        .obs('selected', true)
-        .obs('closeText', 'Close')
-        .obs('autoCredentials', (typeof params.autoCredentials === "boolean") ? 
-            params.autoCredentials : false)
-        .obs('errorMessages[]', [])
-        .obs('status', "Please enter a list of identifiers, separated by commas or new lines. ")
-        .obs('createCredentials', false);
-        
-    if (self.autoCredentialsObs()) {
-        self.titleObs("Import Lab Codes");
-    }
+        .obs('enable', true);
+
+    var supportEmail;
+
+    self.statusObs("Please enter a list of identifiers, separated by commas or new lines.");
     
-    function startProgressMeter(max) {
-        cancel = false;
-        self.closeTextObs('Cancel');
-        self.valueObs(0);
-        self.maxObs(max);
-        self.statusObs("Importing. This can take awhile.");
-    }
-    function tickMeter(response) {
-        var step = self.valueObs()+1;
-        self.valueObs(step);
-        self.percentageObs(getPerc(step, self.maxObs()));
-        return response;
-    }
-    function tickMeterError(response) {
-        var msg = utils.mightyMessageFinder(response);
-        tickMeter(response);
-        self.errorMessagesObs.push(msg);
-    }
-    function endProgressMeter(actionElement) {
-        return function(response) {
-            var errorCount = self.errorMessagesObs().length;
-            var errorMsg = (errorCount === 0) ? 
-                "" : 
-                (errorCount === 1) ? 
-                    " There was an error." : 
-                    (" There were "+errorCount+" errors.");
-            actionElement.disabled = true;
-            self.closeTextObs('Close');
-            self.valueObs(self.maxObs());
-            self.percentageObs("100%");
-            self.statusObs("Identifiers imported." + errorMsg);
-            return response;
-        };
-    }
-    function initParticipantMaker(study) {
-        self.createParticipant = createParticipantMaker(self.study.supportEmail);
-    }
-    function addIdentifier(promise, identifier, doCreateCredentials) {
-        promise = promise.then(function() {
-            if (cancel) { return; }
-            return serverService.addExternalIds([identifier])
-                .catch(tickMeterError);
-        });
-        if (doCreateCredentials) {
-            serverService.getParticipants(0, 5, "+"+identifier+"@").then(function(response) {
-                if (cancel) { return; }
-                if (response.items.length === 0) {
-                    return promise.then(function() {
-                        var participant = self.createParticipant(identifier);
-                        return serverService.createParticipant(participant)
-                            .catch(tickMeterError);
-                    });
-                } else {
-                    return Promise.resolve();
-                }
-            });
-        }
-        return promise.then(tickMeter, tickMeterError).delay(SUBMISSION_DELAY);
-    }
- 
-    self.doImport = function(vm, event) {
-        var identifiers = self.importObs().split(SPLIT_REGEX).filter(function(value) {
-            return value.length > 0;
-        });
-        if (identifiers.length === 0) {
-            utils.formFailure(event.target, 'You must enter some identifiers.');
+    serverService.getStudy().then(function(study) {
+        supportEmail = study.supportEmail;
+    });
+
+    self.startImport = function(vm, event) {
+        self.statusObs("Preparing to import...");
+
+        var importWorker = new IdImportWorker(self.importObs());
+        if (!importWorker.hasWork()) {
+            self.errorMessagesObs.unshift("You must enter some identifiers.");
             return;
+        } else {
+            self.errorMessagesObs([]);
+            self.enableObs(false);
         }
-        var doCreateCredentials = self.createCredentialsObs() || self.autoCredentialsObs();
 
-        utils.startHandler(vm, event);
-        startProgressMeter(identifiers.length+1);
-
-        var promise = Promise.resolve();
-        while(identifiers.length) {
-            promise = addIdentifier(promise, identifiers.shift(), doCreateCredentials);
-        }
-        promise.then(endProgressMeter(event.target))
-            .then(utils.successHandler(vm, event))
-            .catch(utils.dialogFailureHandler(vm, event));        
+        self.run(importWorker).then(function(identifiers) {
+            var credentialsWorker = new CreateCredentialsWorker(supportEmail, identifiers);
+        
+            self.run(credentialsWorker).then(function(output) {
+                self.statusObs("Import finished. There were " + 
+                    self.errorMessagesObs().length + " errors.");
+            });
+        });
     };
-
-    self.close = function(vm, event) {
-        cancel = true;
-        self.errorMessagesObs([]);
+    self.cancelDialog = function() {
+        self.cancel();
+        params.reload();
         root.closeDialog();
-        ko.postbox.publish('external-ids-page-refresh');
     };
-    
-    serverService.getStudy()
-        .then(binder.assign('study'))
-        .then(initParticipantMaker);
 };
