@@ -1,13 +1,15 @@
-var ko = require('knockout');
 var saveAs = require('../../../lib/filesaver.min.js');
 var serverService = require('../../services/server_service');
 var root = require('../../root');
 var fn = require('../../transforms');
+var Promise = require('bluebird');
+var bind = require('../../binder');
+var batchDialogUtils = require('../../batch_dialog_utils');
 
+var PREMSG = "Only exporting accounts that ";
+var FETCH_DELAY = 100;
 var HEADERS = [];
 var ATTRIBUTES = [];
-var PAGING_TIMEOUT = 2000;
-var TIMEOUT = 1000;
 var PAGE_SIZE = 100;
 var FIELDS = Object.freeze(["firstName","lastName","email", "sharingScope", "status", "notifyByEmail", 
     "dataGroups", "languages", "roles", "id", "healthCode", "externalId", "createdOn", "consentHistories"]);
@@ -29,156 +31,173 @@ function formatConsentRecords(record) {
     }
     return aString;
 }
-function getPageOffsets(numPages) {
+
+var CollectParticipantsWorker = function(params) {
+    this.total = params.total;
+    this.emailFilter = params.emailFilter;
+    this.startDate = params.startDate;
+    this.endDate = params.endDate;
+    this.identifiers = [];
     var pages = [];
+    var numPages = Math.floor(this.total/PAGE_SIZE);
     for (var i=0; i <= numPages; i++) {
         pages.push(i*PAGE_SIZE);
     }
-    return pages;
-}
-function canExport(participant, canContactByEmail) {
-    return participant &&
-           participant.status === "enabled" && 
-           participant.email && 
-           (!canContactByEmail || canContact(participant));
-}
-function canContact(participant) {
-    return participant.notifyByEmail === true &&
-           participant.sharingScope !== "no_sharing" &&
-           utils.atLeastOneSignedConsent(participant.consentHistories);
-           // atLeastOneSignedConsent moved out to utils to test
-}
+    this.pageOffsets = pages;
+};
+CollectParticipantsWorker.prototype = {
+    calculateSteps: function() {
+        return this.pageOffsets.length;
+    },
+    hasWork: function() {
+        return this.pageOffsets.length > 0;
+    },
+    workDescription: function() {
+        return "Retrieving records " + this.pageOffsets[0] + " to " + (this.pageOffsets[0]+PAGE_SIZE);
+    },
+    currentWorkItem: function() {
+        return this.offsetBy;
+    },
+    performWork: function(promise) {
+        this.offsetBy = this.pageOffsets.shift();
+        return serverService
+            .getParticipants(this.offsetBy, PAGE_SIZE, this.emailFilter, this.startDate, this.endDate)
+            .then(this._success.bind(this));
+    },
+    _success: function(response) {
+        if (response && response.items) {
+            response.items.forEach(function(participant) {
+                if (participant.status !== "unverified") {
+                    this.identifiers.push(participant.id);
+                }
+            }, this);
+        }
+        return Promise.resolve();
+    },
+    postFetch: function() {
+        return Promise.resolve(this.identifiers);
+    }
+};
+var FetchParticipantWorker = function(identifiers, canContactByEmail) {
+    this.identifiers = identifiers;
+    this.canContactByEmail = canContactByEmail;
+    this.fields = FIELDS;
+    this.attributes = ATTRIBUTES;
+    this.formatters = FIELD_FORMATTERS;
+    this.output = "";
+};
+FetchParticipantWorker.prototype = {
+    calculateSteps: function() {
+        return this.identifiers.length;
+    },
+    hasWork: function() {
+        return this.identifiers.length > 0;
+    },
+    workDescription: function() {
+        return "Retrieving participant " + this.identifiers[0];
+    },
+    currentWorkItem: function() {
+        return this.identifier;
+    },
+    performWork: function() {
+        if (!this.hasWork()) {
+            return Promise.resolve();
+        }
+        this.identifier = this.identifiers.shift();
+        return Promise.delay(FETCH_DELAY).then(function() {
+            return serverService.getParticipant(this.identifier).then(this._success.bind(this));
+        }.bind(this));
+    },
+    _success: function(response) {
+        if (this._canExport(response)) {
+            this.output += "\n"+this._formatOneParticipant(response);
+        }
+        return Promise.resolve();
+    },
+    _canExport: function(participant) {
+        return participant &&
+            participant.status === "enabled" && 
+            participant.email && 
+            (!this.canContactByEmail || this._canContact(participant));
+    },
+    _canContact: function(participant) {
+        return participant.notifyByEmail === true &&
+            participant.sharingScope !== "no_sharing" &&
+            utils.atLeastOneSignedConsent(participant.consentHistories);
+    },
+    _formatOneParticipant: function(participant) {
+        var array = this.fields.map(function(field) {
+            var formatter = this.formatters[field];
+            var value = participant[field];
+            return (formatter) ? formatter(value) : value;
+        }, this);
+        this.attributes.forEach(function(field) {
+            array.push(participant.attributes[field]);
+        });
+        return array.join("\t");
+    },
+    postFetch: function() {
+        return Promise.resolve(this.output);
+    }
+};
 
 module.exports = function(params) {
     var self = this;
     
+    batchDialogUtils.initBatchDialog(self);
+
     serverService.getStudy().then(function(study) {
         ATTRIBUTES = Object.freeze([].concat(study.userProfileAttributes)); 
         HEADERS = Object.freeze([].concat(FIELDS).concat(ATTRIBUTES).join("\t"));
     });
     
-    var total = params.total;
-    var emailFilter = params.emailFilter;
-    var startDate = params.startDate;
-    var endDate = params.endDate;
-    var numPages = Math.ceil(total/PAGE_SIZE);
-    var pageOffsets = getPageOffsets(numPages);
-    var cancel, identifiers, progressIndex, output, errorCount;
+    bind(self)
+        .obs('enable')
+        .obs('canContactByEmail', false)
+        .obs('filterMessage[]', []);
 
-    self.enableObs = ko.observable();
-    self.valueObs = ko.observable();
-    self.maxObs = ko.observable();
-    self.statusObs = ko.observable();
-    self.percentageObs = ko.observable();
-    self.canContactByEmailObs = ko.observable(false);
-    self.emailFilterObs = ko.observable(params.emailFilter || "");
-    self.startDateObs = ko.observable(params.startDate || "");
-    self.endDateObs = ko.observable(params.endDate || "");
+    if (params.emailFilter) {
+        self.filterMessageObs.push(PREMSG+"have email matching the string &ldquo;"+params.emailFilter+"&rdquo;");
+    }
+    if (params.startDate) {
+        self.filterMessageObs.push(PREMSG+"were created on or after &ldquo;"+
+            new Date(params.startDate).toLocaleDateString()+"&rdquo;");
+    }
+    if (params.endDate) {
+        self.filterMessageObs.push(PREMSG+"were created on or before &ldquo;"+
+            new Date(params.endDate).toLocaleDateString()+"&rdquo;");
+    }
 
-    reset();
-    
     self.startExport = function(vm, event) {
-        reset();
-        self.statusObs("Currently preparing your *.tsv file. Retrieving summaries...");
+        self.statusObs("Currently preparing your *.tsv file...");
         event.target.setAttribute("disabled","disabled");
-        doContinuePage();
+
+        var collectWorker = new CollectParticipantsWorker(params);
+
+        self.run(collectWorker).then(function(identifiers) {
+            var fetchWorker = new FetchParticipantWorker(identifiers, self.canContactByEmailObs());
+            var totalParticipants = identifiers.length;
+
+            self.run(fetchWorker).then(function(output) {
+                self.exportData = output;
+                self.statusObs("Export finished. There were " + totalParticipants + 
+                    " participants, and " + self.errorMessagesObs().length + " errors.");
+                self.enableObs(true);
+            });
+        });
     };
     self.download = function() {
-        var blob = new Blob([HEADERS+output], {type: "text/tab-separated-values;charset=utf-8"});
+        var blob = new Blob([HEADERS+self.exportData], {
+            type: "text/tab-separated-values;charset=utf-8"
+        });
         var dateString = new Date().toISOString().split("T")[0];  
         saveAs.saveAs(blob, "participants-"+dateString+".tsv");
     };
     self.close = function(vm, event) {
-        reset();
-        cancel = true;
+        self.cancel();
         root.closeDialog();
     };
     self.formatLocalDateTime = function(date) {
         return new Date(date).toLocaleDateString();
     };
-    
-    function reset() {
-        cancel = false;
-        identifiers = [];
-        progressIndex = 0;
-        errorCount = 0;
-        output = "";
-        self.enableObs(false);
-        self.valueObs(progressIndex);
-        self.maxObs(total+numPages+1);
-        self.statusObs("Press start to begin preparation of the *.tsv file. You may need to disable pop-up blocking for this website in order to receive the results (which will open in a new window).");
-        self.percentageObs("0%");
-    }
-    function updateStatus(progressIndex) {
-        var max = total+numPages+1;
-        self.valueObs(progressIndex);
-        
-        var perc = ((progressIndex/max)*100).toFixed(0);
-        if (perc > 100) { perc = 100; }
-        self.percentageObs(perc+"%");
-    }
-    function doContinuePage(response) {
-        if (cancel) { return; }
-        if (response && response.items) {
-            response.items.forEach(function(participant) {
-                if (participant.status !== "unverified") {
-                    identifiers.push(participant.id);
-                } else {
-                    console.log("unverified, skipping", participant.email);
-                }
-            });
-        }
-        updateStatus(progressIndex++);
-        if (pageOffsets.length > 0) {
-            setTimeout(doOnePage, PAGING_TIMEOUT);
-        } else {
-            self.statusObs("Currently preparing your *.tsv file. Retrieving records...");
-            doContinueFetch();
-        }
-    }
-    function doContinuePageError(response) {
-        errorCount++;
-        doContinuePage(response);
-    }
-    function doOnePage() {
-        if (cancel) { return; }
-        var offsetBy = pageOffsets.shift();
-        serverService.getParticipants(offsetBy, PAGE_SIZE, emailFilter, startDate, endDate)
-            .then(doContinuePage).catch(doContinuePageError);
-    }
-    function doContinueFetch(response) {
-        if (cancel) { return; }
-        if (canExport(response, self.canContactByEmailObs())) {
-            output += "\n"+formatOneParticipant(response);
-        }
-        updateStatus(progressIndex++);
-        if (identifiers.length > 0) {
-            setTimeout(doOneFetch, TIMEOUT);
-        } else {
-            self.statusObs("Export finished. There were " + errorCount + " errors.");
-            self.enableObs(true);
-        }
-    }
-    function doContinueFetchError(response) {
-        console.error(response);
-        errorCount++;
-        doContinueFetch(response);
-    }
-    function doOneFetch() {
-        if (cancel) { return; }
-        var identifier = identifiers.shift();
-        serverService.getParticipant(identifier)
-            .then(doContinueFetch).catch(doContinueFetchError);
-    }
-    function formatOneParticipant(participant) {
-        var array = FIELDS.map(function(field) {
-            var formatter = FIELD_FORMATTERS[field];
-            var value = participant[field];
-            return (formatter) ? formatter(value) : value;
-        });
-        ATTRIBUTES.forEach(function(field) {
-            array.push(participant.attributes[field]);
-        });
-        return array.join("\t");
-    }
 };

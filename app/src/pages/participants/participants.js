@@ -52,6 +52,15 @@ module.exports = function() {
         ko.postbox.publish('participants-page-refresh');
         return response;
     }
+    function load(response) {
+        self.total = response.total;
+        self.recordsObs(formatCount(response.total));
+        self.itemsObs(response.items);
+        if (response.items.length === 0) {
+            self.recordsMessageObs("There are no user accounts, or none that match the filter.");
+        }
+        return response;
+    }
     self.resendEmailVerification = function(vm, event) {
         alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
             var userId = vm.id;
@@ -77,21 +86,9 @@ module.exports = function() {
         self.emailFilter = emailFilter;
         self.startDate = startDate;
         self.endDate = endDate;
+
         return serverService.getParticipants(offsetBy, pageSize, emailFilter, startDate, endDate)
-            .then(function(response) {
-                self.total = response.total;
-                self.recordsObs(formatCount(response.total));
-                self.itemsObs(response.items);
-                if (response.items.length === 0) {
-                    if (offsetBy !== null) {
-                        // You can't switch studies or environments unless you reset this when it has 
-                        // overshot the new list. So drop back and try and find the first page.
-                        return self.loadingFunc(0, pageSize, emailFilter);
-                    } else {
-                        self.recordsMessageObs("There are no user accounts, or none that match the filter.");
-                    }
-                }
-                return response;
-            }).catch(utils.failureHandler());
+            .then(load)
+            .catch(utils.failureHandler());
     };
 };
