@@ -81,16 +81,8 @@ module.exports = function(params) {
     bind(self)
         .obs('import', '')
         .obs('enable', true)
-        .obs('title', 'Import External Identifiers')
-        .obs('showCreateCredentials', params.showCreateCredentials)
         .obs('closeText', 'Close')
-        .obs('autoCredentials', (typeof params.autoCredentials === "boolean") ? 
-            params.autoCredentials : false)
-        .obs('createCredentials', false);
-
-    if (self.autoCredentialsObs()) {
-        self.titleObs("Import Lab Codes");
-    }
+        .obs('createCredentials', !root.isPublicObs());
 
     var supportEmail;
 

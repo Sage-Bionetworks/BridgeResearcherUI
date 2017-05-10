@@ -22,6 +22,7 @@ module.exports = function() {
 
     self.codesEnumeratedObs = root.codesEnumeratedObs;
     self.isDeveloper = root.isDeveloper;
+    self.isResearcher = root.isResearcher;
     tables.prepareTable(self, {name: 'external ID'});
 
     // to get a spinner on this control you need to adjust the DOM target.
@@ -71,14 +72,7 @@ module.exports = function() {
             .then(utils.successHandler(self, event))
             .catch(utils.failureHandler(self, event));
     };
-    // createFromNew
-    self.openNewIdDialog = function(vm, event) {
-        self.showResultsObs(false);
-        root.openDialog('new_external_id', {vm: self});
-    };
     self.createFromNext = function(vm, event) {
-        event = adjustDropDownButtonTarget(event);
-        
         self.showResultsObs(false);
         utils.startHandler(vm, event);
         serverService.getExternalIds(OPTIONS)

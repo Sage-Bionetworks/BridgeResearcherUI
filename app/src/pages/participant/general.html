@@ -3,7 +3,7 @@
         <div class="fixed-header-heading">
             <div class="ui breadcrumb">
                 <a class="section" href="#/participants" data-bind="visible: isPublicObs">Participants</a>
-                <a class="section" href="#/enrollees" data-bind="visible: !isPublicObs()">Participants</a>
+                <a class="section" href="#/enrollees" data-bind="visible: !isPublicObs()">External Identifiers</a>
                 <i class="right chevron icon divider"></i>
             </div>            
             <h3 data-bind="html: titleObs"></h3>
@@ -24,7 +24,8 @@
         </div>
     </div>
     <!-- ko component: {name: 'participant-tabset', params: { active: 'info', 
-        isNewObs: isNewObs, showEnableAccountObs: showEnableAccountObs, isPublicObs: isPublicObs
+        isNewObs: isNewObs, showEnableAccountObs: showEnableAccountObs, isPublicObs: isPublicObs,
+        userIdObs: userIdObs
     }} --><!-- /ko -->
 </div>
 <div class="scrollbox">

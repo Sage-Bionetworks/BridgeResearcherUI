@@ -39,8 +39,7 @@ function routeTo(routeName, fields) {
     };
 }
 function redirectTo(response) {
-    console.log(response.items[0]);
-    router.setRoute('/participants/' + response.items[0].id);
+    router.setRoute('/enrollees/' + response.items[0].id+'/general');
 }
 function redirectToParticipant(externalId) {
     serverService.getParticipants(null,5,"+"+externalId+"@").then(redirectTo);
@@ -95,6 +94,15 @@ router.on('/tasks', routeTo('tasks'));
 router.on('/tasks/:taskId', routeTo('task', TASKID));
 router.on('/topics/:guid', routeTo('topic', GUID));
 router.on('/topics', routeTo('topics'));
+router.on('/enrollees/:userId/reports/:identifier', routeTo('participant_report', USERID_IDENTIFIER));
+router.on('/enrollees/:userId/activities/:guid', routeTo('participant_activity', USERID_GUID));
+router.on('/enrollees/:userId/activities', routeTo('participant_activities', USERID));
+router.on('/enrollees/:userId/consents', routeTo('participant_consents', USERID));
+router.on('/enrollees/:userId/notifications', routeTo('participant_notifications', USERID));
+router.on('/enrollees/:userId/reports', routeTo('participant_reports', USERID));
+router.on('/enrollees/:userId/uploads', routeTo('participant_uploads', USERID));
+router.on('/enrollees/:userId/requestInfo', routeTo('participant_request_info', USERID));
+router.on('/enrollees/:userId/general', routeTo('participant_general', USERID));
 router.on('/enrollees/:externalId', redirectToParticipant);
 router.on('/enrollees', routeTo('enrollees'));
 router.on('/admin/info', routeTo('admin_info'));

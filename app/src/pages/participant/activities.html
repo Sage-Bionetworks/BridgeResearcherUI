@@ -3,7 +3,7 @@
         <div class="fixed-header-heading">
             <div class="ui breadcrumb">
                 <a class="section" href="#/participants" data-bind="visible: isPublicObs">Participants</a>
-                <a class="section" href="#/enrollees" data-bind="visible: !isPublicObs()">Participants</a>
+                <a class="section" href="#/enrollees" data-bind="visible: !isPublicObs()">External Identifiers</a>
                 <i class="right chevron icon divider"></i>
             </div>            
             <h3 data-bind="html: titleObs"></h3>
@@ -11,7 +11,7 @@
         <div class="fixed-header-buttons"></div>
     </div>
     <!-- ko component: {name: 'participant-tabset', params: {active: 'activities', isNewObs: isNewObs,
-        isPublicObs: isPublicObs}} --><!-- /ko -->
+        isPublicObs: isPublicObs, userIdObs: userIdObs}} --><!-- /ko -->
 </div>
 <div class="scrollbox">
     <errors></errors>
@@ -32,16 +32,10 @@
         <tbody data-bind="foreach: itemsObs">
             <tr>
                 <td data-bind="text: $data.plan">
-                    <!--
-                    <span data-bind="text: $data.plan"></span>
-                    <a target="_blank" data-bind="attr: {'href': '#/scheduleplans/'+$data.planGuid}">
-                        <i class="ui linkify icon"></i>
-                    </a>
-                    -->
                 </td>
                 <td>
                     <a data-bind="text: $data.label, attr: {
-                        'href': '#/participants/'+$parent.userIdObs()+'/activities/'+$data.guid}"></a>
+                        'href': $parent.linkMaker($parent.userIdObs(), $data.guid)}"></a>
                 </td>
                 <td data-bind="text: $data.qualifier"></td>
             </tr>
