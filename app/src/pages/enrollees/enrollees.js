@@ -60,7 +60,8 @@ module.exports = function() {
     }
     self.openImportDialog = function(vm, event) {
         self.showResultsObs(false);
-        root.openDialog('external_id_importer', {vm: self, showCreateCredentials: true});
+        root.openDialog('external_id_importer', {vm: self, showCreateCredentials: true,
+            reload: self.loadingFunc});
     };
     self.createFrom = function(data, event) {
         self.showResultsObs(false);

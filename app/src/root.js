@@ -10,7 +10,11 @@ window.ko = ko;
 // ko.options.deferUpdates = true;
 
 // Used in navigation to keep a section highlighted as you navigate into it.
-var participantPages = ['enrollees','participants','participant_general','participant_consents', 
+var participantPages = ['participants','participant_general','participant_consents', 
+    'participant_reports', 'participant_report', 'participant_activities', 'participant_uploads', 
+    'participant_upload', 'participant_notifications', 'participant_request_info', 
+    'participant_activity'];
+var enrolleePages = ['enrollees','participant_general','participant_consents', 
     'participant_reports', 'participant_report', 'participant_activities', 'participant_uploads', 
     'participant_upload', 'participant_notifications', 'participant_request_info', 
     'participant_activity'];

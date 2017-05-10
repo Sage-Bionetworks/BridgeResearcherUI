@@ -39,6 +39,7 @@ function routeTo(routeName, fields) {
     };
 }
 function redirectTo(response) {
+    console.log(response.items[0]);
     router.setRoute('/participants/' + response.items[0].id);
 }
 function redirectToParticipant(externalId) {
