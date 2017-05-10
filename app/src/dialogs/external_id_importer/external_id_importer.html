@@ -1,5 +1,6 @@
 <div class="ui small modal">
-    <div class="header" data-bind="text: titleObs">
+    <div class="header">
+        Import External Identifiers
     </div>
     <div class="content">
         <form id="importExternalId" class="ui form" action="" data-bind="submit: startImport">
@@ -19,8 +20,7 @@
                     <li data-bind="text: $data"></li>
                 </ul>
             </div>
-            <div class="field" data-bind="visible: !autoCredentialsObs() && showCreateCredentialsObs()"
-                style="margin-top:1rem">
+            <div class="field" style="margin-top:1rem">
                 <ui-checkbox params="checkedObs: createCredentialsObs">
                     Create credentials for these IDs
                 </ui-checkbox>

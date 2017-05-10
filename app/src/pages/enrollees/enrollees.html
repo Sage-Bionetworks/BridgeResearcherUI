@@ -1,19 +1,12 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
-            <h3>Lab Codes</h3>
+            <h3>External Identifiers</h3>
         </div>
         <div class="fixed-header-buttons" data-bind="visible: codesEnumeratedObs && isDeveloper">
             Records: <span data-bind="text: totalObs()"></span>
             <button class="ui tiny button" style="margin-left: 3rem" data-bind="click: openImportDialog">Import&hellip;</button>
-            <div class="primary" data-bind="semantic: 'dropdown-button'">
-                <div class="text">New credentials from ID</div>
-                <i class="dropdown icon"></i>
-                <div class="menu">
-                    <div class="item" data-bind="click: openNewIdDialog">Enter an ID&hellip;</div>
-                    <div class="item" data-bind="click: createFromNext">Assign next free ID</div>
-                </div>
-            </div>
+            <button class="ui tiny button" data-bind="click: createFromNext">Assign Next ID</button>
         </div>
     </div>
     <div class="ui empty secondary pointing menu"></div>
@@ -46,7 +39,8 @@
                 <td style="white-space: nowrap; width:100%">
                     <span data-bind="text: $data.identifier, visible: !$data.assigned"></span>
                     <span data-bind="visible: $data.assigned">
-                        <a data-bind="attr: {'href': '#/enrollees/'+$data.identifier}, 
+                        <span data-bind="visible: !$parent.isResearcher(), text: $data.identifier"></span>
+                        <a data-bind="visible: $parent.isResearcher, attr: {'href': '#/enrollees/'+$data.identifier}, 
                             text: $data.identifier, click: $component.showLinkLoading"></a>
                         <span class="ui tiny inline loader"></span>
                     </span>
@@ -61,6 +55,4 @@
             </tr>
         </tbody>
     </table>
-    <!-- ko component: {name:'ddb_pager', params: {loadingFunc: loadingFunc, 
-        pageKey: 'enrollees-page', top: false} } --><!-- /ko -->
 </div>

@@ -23,6 +23,10 @@ module.exports = function(params) {
     self.isPublicObs = root.isPublicObs;
     tables.prepareTable(self, {name:'activitie'});
 
+    self.linkMaker = function(userId, guid) {
+        return root.userPath()+userId+'/activities/'+guid;
+    };
+
     serverService.getSchedulePlans().then(function(response) {
         var array = [];
         response.items.forEach(function(plan) {
