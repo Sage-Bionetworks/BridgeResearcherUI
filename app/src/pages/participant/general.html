@@ -51,6 +51,8 @@
                     <option data-bind="text: $data, selected: $component.rolesObs().indexOf($data) > -1"></option>
                 </select>
             </div>
+            <div class="field" data-bind="visible: !isPublicObs()">
+            </div>
         </div>
         
         <div class="equal width fields">
@@ -99,8 +101,6 @@
             <div class="field" data-bind="visible: !isNewObs()">
                 <label>User ID</label>
                 <input type="text" readonly data-bind="value: idObs"/>
-            </div>
-            <div class="field" data-bind="visible: !isPublicObs()">
             </div>
             <div class="field" data-bind="visible: !isPublicObs()">
                 <label>Created On</label>

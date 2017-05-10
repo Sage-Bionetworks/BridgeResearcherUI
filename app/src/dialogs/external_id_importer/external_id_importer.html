@@ -1,6 +1,5 @@
 <div class="ui small modal">
-    <div class="header">
-        Import External Identifiers
+    <div class="header" data-bind="text: titleObs">
     </div>
     <div class="content">
         <form id="importExternalId" class="ui form" action="" data-bind="submit: startImport">
@@ -20,10 +19,17 @@
                     <li data-bind="text: $data"></li>
                 </ul>
             </div>
+            <div class="field" data-bind="visible: !autoCredentialsObs() && showCreateCredentialsObs()"
+                style="margin-top:1rem">
+                <ui-checkbox params="checkedObs: createCredentialsObs">
+                    Create credentials for these IDs
+                </ui-checkbox>
+            </div>            
         </form>
     </div>
     <div class="rules-actions">
-        <button form="importExternalId" class="ui primary small button" data-bind="enable: enableObs, click: startImport">Import</button>
-        <button class="ui small button" data-bind="click: cancelDialog">Cancel</button>
+        <button form="importExternalId" class="ui primary small button" 
+            data-bind="enable: enableObs, click: startImport">Import</button>
+        <button class="ui small button" data-bind="click: cancelDialog, text: closeTextObs"></button>
     </div>
 </div>
