@@ -16,6 +16,7 @@ var transforms = require('../transforms');
 var SESSION_KEY = 'session';
 var SESSION_STARTED_EVENT_KEY = 'sessionStarted';
 var SESSION_ENDED_EVENT_KEY = 'sessionEnded';
+var TIMEOUT = 10000;
 var listeners = new EventEmitter();
 var session = null;
 var $ = require('jquery');
@@ -85,7 +86,8 @@ function postInt(url, data) {
         headers: getHeaders(),
         data: data,
         type: "application/json",
-        dataType: "json"
+        dataType: "json",
+        timeout: TIMEOUT
     });
 }
 function getInt(url) {
@@ -94,7 +96,8 @@ function getInt(url) {
         url: url,
         headers: getHeaders(),
         type: "application/json",
-        dataType: "json"
+        dataType: "json",
+        timeout: TIMEOUT
     });
 }
 function deleteInt(url) {
@@ -103,7 +106,8 @@ function deleteInt(url) {
         url: url,
         headers: getHeaders(),
         type: "application/json",
-        dataType: "json"
+        dataType: "json",
+        timeout: TIMEOUT
     });
 }
 

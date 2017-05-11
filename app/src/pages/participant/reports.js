@@ -31,7 +31,7 @@ module.exports = function(params) {
     self.isResearcher = root.isResearcher;
 
     self.reportURL = function(item) {
-        return '#/participants/' + self.userIdObs() + '/reports/' + item.identifier;        
+        return root.userPath() + self.userIdObs() + '/reports/' + item.identifier;        
     };
     self.addReport = function(vm, event) {
         root.openDialog('add_report', {

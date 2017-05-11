@@ -24,7 +24,7 @@ module.exports = function() {
     }
     self.openImportDialog = function(vm, event) {
         self.showResultsObs(false);
-        root.openDialog('external_id_importer', {vm: self, showCreateCredentials: false});
+        root.openDialog('external_id_importer', {vm: self, showCreateCredentials: false, reload: self.loadingFunc, autoCredentials: true});
     };
     
     serverService.getStudy().then(binder.assign('study'));

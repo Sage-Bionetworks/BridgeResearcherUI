@@ -1,15 +1,16 @@
 <div class="ui small modal">
-    <div class="header" data-bind="text: titleObs">
+    <div class="header">
+        Import External Identifiers
     </div>
     <div class="content">
-        <form id="importExternalId" class="ui form" action="" data-bind="submit: doImport">
+        <form id="importExternalId" class="ui form" action="" data-bind="submit: startImport">
             <errors></errors>
             <div class="ui form">
                 <div class="field">
                     <textarea data-bind="textInput:importObs, hasFocus: true"></textarea>
                 </div>
             </div>
-            <progress data-bind="attr:{ value: valueObs, max: maxObs}"></progress>
+            <progress data-bind="attr:{ value: valueObs, max: maxObs }"></progress>
             <div class="progress-status">
                 <div data-bind="text: statusObs"></div>
                 <div class="progress-status-perc" data-bind="text: percentageObs"></div>
@@ -19,21 +20,16 @@
                     <li data-bind="text: $data"></li>
                 </ul>
             </div>
-            <div class="field" style="margin-top:1rem" data-bind="visible: !autoCredentialsObs() && showCreateCredentialsObs()">
+            <div class="field" style="margin-top:1rem">
                 <ui-checkbox params="checkedObs: createCredentialsObs">
                     Create credentials for these IDs
                 </ui-checkbox>
-                <!-- Until we can determine if codes are additional to signing up with email address,
-                    hide this. It's assumed not to apply.
-                <p style="margin: .5rem 0 0 2rem"><b>Do not check this if your  
-                    participants sign up with their email addresses.</b> This is only 
-                    for lab studies where devices are registered using this code.</p>
-                -->
-            </div>
+            </div>            
         </form>
     </div>
     <div class="rules-actions">
-        <button form="importExternalId" class="ui primary small button" data-bind="click: doImport">Import</button>
-        <button class="ui small button" data-bind="click: close, text: closeTextObs"></button>
+        <button form="importExternalId" class="ui primary small button" 
+            data-bind="enable: enableObs, click: startImport">Import</button>
+        <button class="ui small button" data-bind="click: cancelDialog, text: closeTextObs"></button>
     </div>
 </div>
