@@ -52,12 +52,7 @@ ko.bindingHandlers.flatpickr = {
         }
         function createPicker() {
             var d = (observer()) ? new Date(observer()) : null;
-            flatpickr(element, {
-                defaultDate: d, 
-                onChange: updateObserver, 
-                wrap: wrap, 
-                clickOpens: !wrap
-            });
+            flatpickr(element, {defaultDate: d, onChange: updateObserver, wrap: wrap, clickOpens: !wrap});
             if (d) {
                 element.value = d[includeTime ? "toLocaleString" : "toLocaleDateString"]();
             }
