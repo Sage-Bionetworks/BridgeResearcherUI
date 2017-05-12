@@ -16,6 +16,7 @@ module.exports = function(params) {
         .obs('endDate', '')
         .obs('pageCount', 0)
         .obs('offsetBy', null)
+        .obs('warn', false)
         .obs('showLoader', false);
 
     self.itemsObs = params.itemsObs;
@@ -59,8 +60,11 @@ module.exports = function(params) {
 
         if (!bothOrNeither(startDate, endDate)) {
             self.showLoaderObs(false);
+            self.warnObs(true);
             return; // can't do this, have to set both dates.
         }
+        self.warnObs(false);
+        
         self.showLoaderObs(true);
         loadingFunc(offsetBy, pageSize, startDate, endDate).then(function(response) {
             response.pageCount = self.pageCountObs()+1;
