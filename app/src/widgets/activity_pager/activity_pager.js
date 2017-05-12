@@ -55,6 +55,7 @@ module.exports = function(params) {
     function wrappedLoadingFunc() {
         var startDate = self.startDateObs();
         var endDate = self.endDateObs();
+        console.log("Straight from the observers:", typeof startDate, typeof endDate);
         var offsetBy = self.offsetByObs();
 
         if (!bothOrNeither(startDate, endDate)) {

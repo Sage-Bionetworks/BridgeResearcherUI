@@ -493,6 +493,7 @@ module.exports = {
         return del(config.participants + '/' + userId + '/reports/' + identifier + '/' + date);
     },
     getParticipantActivities: function(userId, activityGuid, params) {
+        console.log(JSON.stringify(params));
         var queryString = transforms.queryString(params);
         return get(config.participants + '/' + userId + '/activities/' + activityGuid + queryString);
     },
