@@ -84,7 +84,6 @@ module.exports = function(params) {
             response.items = response.items.map(jsonFormatter.mapClientDataItem);
             self.itemsObs(response.items);
             return response;
-        })
-        .catch(utils.notFoundHandler("Participant", "participants"));
+        });
     };
 };
