@@ -14,7 +14,6 @@ module.exports = function(params) {
     self.startDate = null;
     self.endDate = null;
     self.formatTitleCase = fn.formatTitleCase;
-    self.formatDateTime = fn.formatLocalDateTimeWithoutZone;
     self.formatDateTime = fn.formatLocalDateTime;
 
     self.formatActivityClass = function(item) {

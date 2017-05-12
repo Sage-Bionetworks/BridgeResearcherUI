@@ -4,6 +4,7 @@ var $ = require('jquery');
 var flatpickr = require('flatpickr');
 require('../../node_modules/flatpickr/dist/flatpickr.min.css');
 var alert = require('./widgets/alerts');
+var fn = require('./transforms');
 
 // need to make a global out of this for semantic to work, as it's not in a package.
 // This is hacky, webpack has better support for this. Worse, semantic is a jQuery
@@ -43,7 +44,7 @@ ko.bindingHandlers.flatpickr = {
 
         function updateObserver(date) {
             if (date) {
-                observer(date.toISOString());
+                observer(fn.formatLocalDate(date, "00:00:00.000"));
             } else {
                 observer(null);
             }
