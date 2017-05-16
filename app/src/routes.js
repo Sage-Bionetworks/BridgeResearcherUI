@@ -48,6 +48,7 @@ function redirectToParticipant(externalId) {
 var router = new director.Router();
 router.param('guid', /([^\/]*)/);
 router.param('createdOn', /([^\/]*)/);
+router.on('/overview', routeTo('start'));
 router.on('/settings/general', routeTo('general'));
 router.on('/settings/email', routeTo('email'));
 router.on('/settings/eligibility', routeTo('eligibility'));

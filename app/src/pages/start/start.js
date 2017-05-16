@@ -27,7 +27,7 @@ module.exports = function() {
         var duplicates = [];
         var succeeded = [];
         response.items.forEach(function(item) {
-            labels.push(item.date);
+            labels.push(new Date(item.date).toLocaleDateString());
             succeeded.push(item.data.succeeded || 0);
             requested.push(item.data.requested || 0);
             duplicates.push(item.date.duplicate || 0);
@@ -36,13 +36,13 @@ module.exports = function() {
 
         var datasets = [];
         if (Math.max.apply(null,succeeded) > 0) {
-            datasets.push(dataSet('Successful Uploads', succeeded, 'rgba(75,192,192,1.0)'));
+            datasets.push(dataSet('Successful', succeeded, 'rgba(75,192,192,1.0)'));
         }
         if (Math.max.apply(null,requested) > 0) {
-            datasets.push(dataSet('Incomplete Uploads', requested, 'rgba(54,162,235,1.0)'));
+            datasets.push(dataSet('Failed Attempts', requested, 'rgba(54,162,235,1.0)'));
         }
         if (Math.max.apply(null,duplicates) > 0) {
-            datasets.push(dataSet('Duplicate Uploads', duplicates, 'rgba(255,206,86,1.0)'));
+            datasets.push(dataSet('Duplicates', duplicates, 'rgba(255,206,86,1.0)'));
         }
 
         self.chartObs({
