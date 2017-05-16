@@ -69,12 +69,15 @@
                         </span>
                     </span>
                     <span data-bind="text: $data.uploadId"></span>
-                    <div style="position:relative" data-bind="html: $component.htmlFor($data), visible: !$data.collapsedObs()">
+                    <div style="position:relative" data-bind="html: $component.htmlFor($data), 
+                        visible: !$data.collapsedObs()"></div>
                 </td>
                 <td data-bind="html: $data.completedByObs"></td>
                 <td data-bind="text: $data.recordId"></td>
                 <td>
-                    <a target="_blank" rel="noopener" data-bind="attr:{href: $data.hrefObs}, text: $data.contentObs"></a>
+                    <span data-bind="visible: !$parent.isDeveloper(), text: $data.contentObs"></span>
+                    <a target="_blank" rel="noopener" data-bind="visible: $parent.isDeveloper, 
+                        attr:{href: $data.hrefObs}, text: $data.contentObs"></a>
                 </td>
                 <td style="width:12rem">
                     <div data-bind="semantic: $data.progressState">

@@ -27,6 +27,7 @@ module.exports = function(params) {
     }).catch(utils.failureHandler());
 
     self.isPublicObs = root.isPublicObs;
+    self.isDeveloper = root.isDeveloper;
     self.formatLocalDateTime = fn.formatLocalDateTime;
     self.selectedRangeObs.subscribe(function(newValue) {
         // TODO: This is called one time without a value, and then one time with a value.
