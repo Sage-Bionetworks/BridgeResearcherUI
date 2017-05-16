@@ -14,7 +14,6 @@ module.exports = function(params) {
     self.startDate = null;
     self.endDate = null;
     self.formatTitleCase = fn.formatTitleCase;
-    self.formatDateTime = fn.formatLocalDateTimeWithoutZone;
     self.formatDateTime = fn.formatLocalDateTime;
 
     self.formatActivityClass = function(item) {
@@ -85,7 +84,6 @@ module.exports = function(params) {
             response.items = response.items.map(jsonFormatter.mapClientDataItem);
             self.itemsObs(response.items);
             return response;
-        })
-        .catch(utils.notFoundHandler("Participant", "participants"));
+        });
     };
 };

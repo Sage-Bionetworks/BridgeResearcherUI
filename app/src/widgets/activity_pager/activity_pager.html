@@ -12,6 +12,9 @@
             <div data-toggle></div>
             <button class="ui icon button" data-clear data-bind="click: clearEnd"><i class="remove circle icon"></i></button>
         </div>
+        <div class="label-field-padding" data-bind="visible: warnObs">
+            <i class="ui yellow warning sign icon"></i> Set both dates to filter.
+        </div>
     </div>
     <div>
         <div class="ui small pagination menu" data-bind="css:{loading:showLoaderObs}, visible: itemsObs().length > 0">

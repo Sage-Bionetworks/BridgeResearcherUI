@@ -4,6 +4,8 @@ var $ = require('jquery');
 var flatpickr = require('flatpickr');
 require('../../node_modules/flatpickr/dist/flatpickr.min.css');
 var alert = require('./widgets/alerts');
+var fn = require('./transforms');
+var Chart = require('chart.js');
 
 // need to make a global out of this for semantic to work, as it's not in a package.
 // This is hacky, webpack has better support for this. Worse, semantic is a jQuery
@@ -21,6 +23,16 @@ ko.observableArray.fn.pushAll = function(valuesToPush) {
 ko.observableArray.fn.contains = function(value) {
     var underlyingArray = this();
     return underlyingArray.indexOf(value) > -1;
+};
+
+ko.bindingHandlers.chart = {
+    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var context = element.getContext("2d");
+        var observer = valueAccessor();
+        observer.subscribe(function(config) {
+            new Chart(context, config);
+        });
+    }
 };
 
 ko.bindingHandlers.focusable = {
@@ -42,19 +54,21 @@ ko.bindingHandlers.flatpickr = {
         var input = element.querySelector("input");
 
         function updateObserver(date) {
+            observer(null);
             if (date) {
-                observer(date.toISOString());
-            } else {
+                observer(fn.formatLocalDate(date, "00:00:00.000"));
+            }/* else {
                 observer(null);
-            }
+            }*/
             onChange();
         }
         function createPicker() {
-            var d = (observer()) ? new Date(observer()) : null;
-            flatpickr(element, {defaultDate: d, onChange: updateObserver, wrap: wrap, clickOpens: !wrap});
+            //var d = (observer()) ? new Date(observer()) : null;
+            flatpickr(element, {/*defaultDate: d, */onChange: updateObserver, wrap: wrap, clickOpens: !wrap});
+            /*
             if (d) {
                 element.value = d[includeTime ? "toLocaleString" : "toLocaleDateString"]();
-            }
+            }*/
         }
         // You must delay initialization in a modal until after the modal is open, or 
         // the picker works... but spontaneously opens. Just add timeout: 600 to the 

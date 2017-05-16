@@ -69,7 +69,8 @@
                 </td>
                 <td style="white-space: no-wrap" data-bind="text: $data.date"></td>
                 <td style="text-align:right">
-                    <button class="ui basic compact mini button" data-bind="click: $component.editReportRecord">Edit</button>
+                    <button class="ui basic compact mini button" data-bind="
+                        visible: $component.isDeveloper, click: $component.editReportRecord">Edit</button>
                 </td>
                 <td>
                     <div class="json-expand-control" data-bind="visible: $data.collapsedObs && $data.isJson">
