@@ -44,6 +44,7 @@ module.exports = function() {
         if (Math.max.apply(null,duplicates) > 0) {
             datasets.push(dataSet('Duplicates', duplicates, 'rgba(255,206,86,1.0)'));
         }
+        var stepSize = Math.pow(10, Math.floor(Math.log10(max)));
 
         self.chartObs({
             type: 'line',
@@ -52,7 +53,7 @@ module.exports = function() {
                 title: {display: true, text: "Daily Uploads"},
                 scales: {
                     yAxes: [{
-                        ticks: {beginAtZero:true, suggestedMax: Math.ceil(max*1.1)},
+                        ticks: {fixedStepSize: stepSize, beginAtZero:true, suggestedMax: Math.ceil(max*1.1)},
                     }]
                 }
             }

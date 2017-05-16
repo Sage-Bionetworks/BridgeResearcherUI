@@ -13,10 +13,7 @@
             <i class="white heartbeat icon"></i> 
             <a style="color:white" href="#/overview">Bridge Study Manager</a>
         </h2>
-        <div class="header-env">
-            <span data-bind="html: studyNameObs"></span>
-            <span> on </span>
-            <span data-bind="text: environmentObs"></span>
+        <div class="header-env" data-bind="html: studyNameObs">
         </div>
     </header>
     <section>
@@ -152,7 +149,7 @@
         </nav>
     </section>
     <footer>
-        <p>&copy; 2015-2017 Sage Bionetworks. </p>
+        <p>&copy; 2015-2017 Sage Bionetworks. Env: <span data-bind="text: environmentObs"></span>.</p>
     </footer>
     <div data-bind="modal: dialogObs"></div>
     
