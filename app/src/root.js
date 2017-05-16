@@ -93,7 +93,6 @@ var RootViewModel = function() {
         return self.sidePanelObs() === tag;
     };
     self.signOut = function() {
-        console.log("Signing out.");
         serverService.signOut();
     };
     self.changeView = function(name, params) {

@@ -4,6 +4,7 @@ var reg = ko.components.register;
 reg('none', {template: '<div class="ui modal dialog"></div>'});
 
 reg('start', {
+    viewModel: require('./pages/start/start'),
     template: require('./pages/start/start.html')
 });
 reg('errors', {

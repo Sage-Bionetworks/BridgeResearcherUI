@@ -5,6 +5,7 @@ var jsonFormatter = require('../../json_formatter');
 var tables = require('../../tables');
 var utils = require('../../utils');
 
+var SORTER = utils.makeFieldSorter("date");
 var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
 function firstDayOfMonth(year, month) {
@@ -103,7 +104,7 @@ module.exports = function(params) {
     }
     function mapResponse(response) {
         response.items = response.items.map(jsonFormatter.mapItem);
-        self.itemsObs(response.items.sort());
+        self.itemsObs(response.items.sort(SORTER).reverse());
     }
     function loaderOff() {
         self.showLoaderObs(false);
