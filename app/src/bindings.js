@@ -57,18 +57,11 @@ ko.bindingHandlers.flatpickr = {
             observer(null);
             if (date) {
                 observer(fn.formatLocalDate(date, "00:00:00.000"));
-            }/* else {
-                observer(null);
-            }*/
+            }
             onChange();
         }
         function createPicker() {
-            //var d = (observer()) ? new Date(observer()) : null;
             flatpickr(element, {/*defaultDate: d, */onChange: updateObserver, wrap: wrap, clickOpens: !wrap});
-            /*
-            if (d) {
-                element.value = d[includeTime ? "toLocaleString" : "toLocaleDateString"]();
-            }*/
         }
         // You must delay initialization in a modal until after the modal is open, or 
         // the picker works... but spontaneously opens. Just add timeout: 600 to the 
