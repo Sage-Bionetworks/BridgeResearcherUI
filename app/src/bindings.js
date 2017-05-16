@@ -5,6 +5,7 @@ var flatpickr = require('flatpickr');
 require('../../node_modules/flatpickr/dist/flatpickr.min.css');
 var alert = require('./widgets/alerts');
 var fn = require('./transforms');
+var Chart = require('chart.js');
 
 // need to make a global out of this for semantic to work, as it's not in a package.
 // This is hacky, webpack has better support for this. Worse, semantic is a jQuery
@@ -22,6 +23,16 @@ ko.observableArray.fn.pushAll = function(valuesToPush) {
 ko.observableArray.fn.contains = function(value) {
     var underlyingArray = this();
     return underlyingArray.indexOf(value) > -1;
+};
+
+ko.bindingHandlers.chart = {
+    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var context = element.getContext("2d");
+        var observer = valueAccessor();
+        observer.subscribe(function(config) {
+            new Chart(context, config);
+        });
+    }
 };
 
 ko.bindingHandlers.focusable = {

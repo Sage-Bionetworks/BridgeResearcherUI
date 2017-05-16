@@ -50,5 +50,8 @@
   },
   "peerDependencies": {
     "node-sass": "^3.3.2"
+  },
+  "dependencies": {
+    "chart.js": "^2.5.0"
   }
 }
