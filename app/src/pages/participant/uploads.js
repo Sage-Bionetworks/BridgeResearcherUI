@@ -143,10 +143,8 @@ module.exports = function(params) {
         };
     }
     function load() {
-        self.itemsObs([]);
         self.showLoaderObs(true);
         var range = getDateRange( self.selectedRangeObs() );
-        console.log("load", JSON.stringify(arguments), JSON.stringify(range));
         serverService.getParticipantUploads(params.userId, range.startTime, range.endTime)
             .then(processUploads)
             .then(function() {
