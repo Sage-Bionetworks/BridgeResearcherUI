@@ -28,7 +28,14 @@ module.exports = function(params) {
 
     self.isPublicObs = root.isPublicObs;
     self.formatLocalDateTime = fn.formatLocalDateTime;
-    self.selectedRangeObs.subscribe(load);
+    self.selectedRangeObs.subscribe(function(newValue) {
+        // TODO: This is called one time without a value, and then one time with a value.
+        // this breaks the UI in subtle ways, so these subscribers are probably not
+        // the best way to update from the flatpickr control.
+        if (newValue) {
+            load();
+        }
+    });
 
     tables.prepareTable(self, {name:'upload'});
 
@@ -78,7 +85,7 @@ module.exports = function(params) {
             var id = item.schemaId;
             var rev = item.schemaRevision;
             item.contentObs(id);
-            item.hrefObs('/#/schemas/'+encodeURIComponent(id)+'/versions/'+rev);
+            item.hrefObs('/#/schemas/'+encodeURIComponent(id)+'/versions/'+rev+'/editor');
         }
         item.progressState = getSemanticControlState(item);
         item.completedByObs(formatCompletedBy(item));
@@ -136,8 +143,10 @@ module.exports = function(params) {
         };
     }
     function load() {
+        self.itemsObs([]);
         self.showLoaderObs(true);
         var range = getDateRange( self.selectedRangeObs() );
+        console.log("load", JSON.stringify(arguments), JSON.stringify(range));
         serverService.getParticipantUploads(params.userId, range.startTime, range.endTime)
             .then(processUploads)
             .then(function() {
