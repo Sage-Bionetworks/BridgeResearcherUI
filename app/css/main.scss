@@ -42,27 +42,41 @@ main {
     }
 header {
     @include flex-box(row);
-    @include align-items(top);
+    @include align-items(center);
     @include justify-content(space-between);
     @include gradient(rgb(52, 152, 219), 41%, rgb(41, 128, 185), 100%);
-}
-    header.dev {
+    
+    .dev {
         @include gradient(orange, 41%, #B22222, 100%);
     }
-    header i {
+    i {
         font-size: 2rem!important;
     }
-    header h2 {
-        font-variant: small-caps;
+    h2 {
+        font-weight: normal;
         letter-spacing: 2px;
         color: white;
         padding: 1rem 2rem 0rem 1.5rem;
     }
-    .header-env {
-        font-size: 1.25rem!important;
-        padding: 1.5rem 2rem 0rem 0rem;
+    a {
         color: white;
     }
+    .header-study-name {
+        font-size: 1.5rem;
+        padding: 0 4.5rem 0rem 1.5rem;
+        color: white;
+        position: relative;
+        span {
+            font-variant: small-caps;
+            letter-spacing: 2px;
+        }
+        i {
+            position: absolute; 
+            right: 1rem; 
+            top: .2rem;
+        }
+    }
+}
 footer p {
     border-top: 1px solid #e5e5e5;
     padding: .5rem;
