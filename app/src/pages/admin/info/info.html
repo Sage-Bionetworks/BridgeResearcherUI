@@ -19,30 +19,31 @@
             </ui-checkbox>
         </div>
         <div class="field">
-            <label>Email verification</label>
-            <ui-checkbox params="checkedObs: emailVerificationEnabledObs">
-                Require participants to verify their email address
-            </ui-checkbox>
-        </div>
-        <div class="field">
-            <label>External ID validation</label>
-            <ui-checkbox params="checkedObs: externalIdValidationEnabledObs">
-                Enable Bridge management of external IDs
-            </ui-checkbox>
-        </div>
-        <div class="field">
             <label>Sign in via email</label>
             <ui-checkbox params="checkedObs: emailSignInEnabledObs">
                 Enable users to generate sign in links via email
             </ui-checkbox>
         </div>
+        <h4 class="ui dividing header">Public/Clinical Studies</h4>
         <div class="field">
+            <label>Email verification</label>
+            <ui-checkbox params="checkedObs: emailVerificationEnabledObs">
+                Require participants to verify their email address
+            </ui-checkbox>
+        </div>
+        <div class="field" id="externalIdValidationEnabled">
+            <label>External ID validation</label>
+            <ui-checkbox style="display:block" params="checkedObs: externalIdValidationEnabledObs">
+                Enable Bridge management of external IDs
+            </ui-checkbox>
+        </div>
+        <div class="field" id="externalIdRequiredOnSignup">
             <label>Require external ID on sign up</label>
-            <ui-checkbox params="checkedObs: externalIdRequiredOnSignupObs">
+            <ui-checkbox style="display:block" params="checkedObs: externalIdRequiredOnSignupObs">
                 External ID is required when user submits initial sign up
             </ui-checkbox>
         </div>
-        <h4>Notifications</h4>
+        <h4 class="ui dividing header">Notifications</h4>
         <div class="field">
             <label>iOS Platform ARN</label>
             <input style="width:40rem" type="text" data-bind="textInput: iosArnObs"/>
