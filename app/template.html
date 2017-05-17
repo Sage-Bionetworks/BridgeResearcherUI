@@ -10,10 +10,11 @@
 <body style="opacity:0.0; color: #202020">
     <header data-bind="visible: showNavigationObs, css: {dev: isDevEnvObs}">
         <h2>
-            <i class="white heartbeat icon"></i> 
-            <a style="color:white" href="#/overview">Bridge Study Manager</a>
+            <a href="#/overview" data-bind="text: studyNameObs"></a>
         </h2>
-        <div class="header-env" data-bind="html: studyNameObs">
+        <div class="header-study-name">
+            <span>Bridge Study Manager</span>
+            <i class="white heartbeat icon"></i> 
         </div>
     </header>
     <section>
