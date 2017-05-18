@@ -1,7 +1,19 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
-        <h3 style="margin: 1rem auto">Study Activity</h3>
-        <div class="fixed-header-buttons"></div>
+        <div class="fixed-header-heading">
+            <h3>Study Activity</h3>
+        </div>
+        <div class="fixed-header-buttons">
+            <div style="margin-right:1rem" data-bind="css:{active:isLoadingObs}" class="ui small inline loader"></div>
+            <div class="ui tiny buttons">
+                <button data-bind="click: selectRange, css:{active: isActive('2')}" 
+                    data-range="2" class="ui tiny button">2 weeks</button>
+                <button data-bind="click: selectRange, css:{active: isActive('4')}" 
+                    data-range="4" class="ui tiny button">4 weeks</button>
+                <button data-bind="click: selectRange, css:{active: isActive('6')}" 
+                    data-range="6" class="ui tiny button">6 weeks</button>
+            </div>
+        </div>
     </div>
     <div class="empty-secondary-menu"></div>
 </div>

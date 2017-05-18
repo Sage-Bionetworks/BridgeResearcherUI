@@ -1,7 +1,10 @@
 var serverService = require('../../services/server_service');
 var ko = require('knockout');
+var utils = require('../../utils');
 
-var TWO_WEEKS = 1000*60*60*24*14;
+var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var WEEK = 7*1000*60*60*24;
+var STUDY_NAME = 'Bridge-Reporter-Scheduler-prod-daily-upload-report';
 
 function dataSet(label, array, color) {
     return {
@@ -12,14 +15,35 @@ function dataSet(label, array, color) {
         backgroundColor: color
     };
 }
+function formatDate(date) {
+    var parts = date.split("-");
+    return MONTHS[parseInt(parts[1])-1] + " " + parseInt(parts[2]);
+}
+function getDateRange(range) {
+    var millis = new Date().getTime();
+    var rangeOffset = WEEK * parseInt(range);
+    return {
+        startDate: new Date(millis - rangeOffset).toISOString().split("T")[0],
+        endDate: new Date().toISOString().split("T")[0]
+    };
+}
 
 module.exports = function() {
-    self.chartObs = ko.observable();
+    var self = this;
 
-    var startDate = new Date(new Date().getTime() - TWO_WEEKS).toISOString().split("T")[0];
-    var endDate = new Date().toISOString().split("T")[0];
-    serverService.getStudyReport('Bridge-Reporter-Scheduler-prod-daily-upload-report', startDate, endDate)
-        .then(makeChart);
+    self.isLoadingObs = ko.observable(false);
+    self.chartObs = ko.observable();
+    self.rangeObs = ko.observable('2');
+    self.isActive = function(value) {
+        return ko.computed(function() {
+            return self.rangeObs() === value;
+        });
+    };
+    self.selectRange = function(vm, event) {
+        var rangeNum = event.target.getAttribute('data-range');
+        self.rangeObs(rangeNum);
+        loadChart(rangeNum);
+    };
 
     function makeChart(response) {
         var labels = [];
@@ -27,7 +51,7 @@ module.exports = function() {
         var duplicates = [];
         var succeeded = [];
         response.items.forEach(function(item) {
-            labels.push(new Date(item.date).toLocaleDateString());
+            labels.push(formatDate(item.date));
             succeeded.push(item.data.succeeded || 0);
             requested.push(item.data.requested || 0);
             duplicates.push(item.date.duplicate || 0);
@@ -48,15 +72,44 @@ module.exports = function() {
 
         self.chartObs({
             type: 'line',
-            data: {labels: labels, datasets: datasets},
+            data: {
+                labels: labels, 
+                datasets: datasets
+            },
             options: {
-                title: {display: true, text: "Daily Uploads"},
+                title: {
+                    text: "Daily Uploads",
+                    display: true
+                },
                 scales: {
                     yAxes: [{
-                        ticks: {fixedStepSize: stepSize, beginAtZero:true, suggestedMax: Math.ceil(max*1.1)},
+                        ticks: {
+                            fixedStepSize: stepSize, 
+                            beginAtZero:true, 
+                            suggestedMax: Math.ceil(max*1.1)
+                        },
                     }]
                 }
             }
         });
     }
+    function loadingOff(response) {
+        self.isLoadingObs(false);
+        return response;
+    }
+    function loadChart(rangeNum) {
+        utils.startHandler(self);
+        self.isLoadingObs(true);
+        var range = getDateRange(rangeNum);
+        serverService.getStudyReport(STUDY_NAME, range.startDate, range.endDate)
+            .then(loadingOff)
+            .then(function(response) {
+                if (self.rangeObs() === rangeNum) {
+                    makeChart(response);
+                }
+            })
+            .then(utils.successHandler(self))
+            .catch(utils.failureHandler());
+    }
+    loadChart('2');
 };
