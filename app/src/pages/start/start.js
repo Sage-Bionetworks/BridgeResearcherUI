@@ -101,7 +101,7 @@ module.exports = function() {
         utils.startHandler(self);
         self.isLoadingObs(true);
         var range = getDateRange(rangeNum);
-        serverService.getStudyReport(STUDY_NAME, range.startDate, range.endDate)
+        xhr = serverService.getStudyReport(STUDY_NAME, range.startDate, range.endDate)
             .then(loadingOff)
             .then(function(response) {
                 if (self.rangeObs() === rangeNum) {
