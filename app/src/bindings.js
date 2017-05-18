@@ -30,7 +30,10 @@ ko.bindingHandlers.chart = {
         var context = element.getContext("2d");
         var observer = valueAccessor();
         observer.subscribe(function(config) {
-            new Chart(context, config);
+            if (element._chart) {
+                element._chart.destroy();
+            }
+            element._chart = new Chart(context, config);
         });
     }
 };
