@@ -14,6 +14,12 @@ function updateMinAppObservers(study, obs, name) {
         obs(study.minSupportedAppVersions[name]);
     }
 }
+function zeroToMax(value) {
+    return (value === 0) ? 121 : value;
+}
+function maxToZero(value) {
+    return (value === "121") ? 0 : parseInt(value);
+}
 
 module.exports = function() {
     var self = this;
@@ -28,7 +34,11 @@ module.exports = function() {
         .obs('minAndroid')
         .bind('name')
         .bind('sponsorName')
-        .bind('strictUploadValidationEnabled');
+        .bind('minAgeOfConsent', null, zeroToMax, maxToZero);
+    
+    self.minAgeLabel = ko.computed(function(){
+        return (self.minAgeOfConsentObs() == "121") ? "No age limit" : self.minAgeOfConsentObs();
+    });
 
     self.isPublicObs = root.isPublicObs;
     self.save = function(vm, event) {

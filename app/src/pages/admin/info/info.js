@@ -15,8 +15,14 @@ module.exports = function() {
         .bind('externalIdValidationEnabled')
         .bind('emailSignInEnabled')
         .bind('externalIdRequiredOnSignup')
+        .bind('strictUploadValidationEnabled')
+        .bind('accountLimit', 0, null, parseInt)
         .bind('iosArn', null, ios.fromObject, ios.toObject)
         .bind('androidArn', null, android.fromObject, android.toObject);
+
+    self.accountLimitLabel = ko.computed(function(){
+        return (self.accountLimitObs() == "0") ? "None" : self.accountLimitObs();
+    });
 
     self.save = function(vm, event) {
         self.study = binder.persist(self.study);

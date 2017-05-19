@@ -34,7 +34,10 @@
                         </div>
                         <div class="label-field-padding" data-bind="visible: statusObs() == 'pending'">
                             <div class="orange ui label"><i class="warning sign icon"></i> Pending</div>
-                            <div class="link" data-bind="click:refreshStatus">Refresh</div>
+                            <div>
+                            <span class="link" data-bind="click:verifyEmail">Send verification email</span> &bull; 
+                            <span class="link" data-bind="click:refreshStatus">Refresh</span>
+                            </div>
                         </div>
                     </div>
                 </div>

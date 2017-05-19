@@ -24,10 +24,10 @@
                     <input type="text" data-bind="value: sponsorNameObs"/>
                 </div>
                 <div class="field">
-                    <label>Data Validation</label>
-                    <ui-checkbox params="checkedObs: strictUploadValidationEnabledObs">
-                        Enable strict validation of upload files <b>(recommended)</b>
-                    </ui-checkbox>
+                    <label>Youngest allowable age for participants</label>
+                    <input type="range" min="18" max="121" 
+                        data-bind="value: minAgeOfConsentObs, valueUpdate: 'input'"/>
+                    <div class="ui large label" data-bind="text: minAgeLabel"></div>
                 </div>
                 <div class="field">
                     <label>Minimum Supported App Versions</label>

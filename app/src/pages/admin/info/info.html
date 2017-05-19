@@ -13,6 +13,12 @@
     <errors></errors>
     <form class="ui form">
         <div class="field">
+            <label>Data Validation</label>
+            <ui-checkbox params="checkedObs: strictUploadValidationEnabledObs">
+                Enable strict validation of upload files
+            </ui-checkbox>
+        </div>
+        <div class="field">
             <label>Health code export</label>
             <ui-checkbox params="checkedObs: healthCodeExportEnabledObs">
                 Include participant health code on the participant information page
@@ -23,6 +29,12 @@
             <ui-checkbox params="checkedObs: emailSignInEnabledObs">
                 Enable users to generate sign in links via email
             </ui-checkbox>
+        </div>
+        <div class="field">
+            <label>Account limit</label>
+            <input type="range" min="0" max="200" 
+                data-bind="value: accountLimitObs, valueUpdate: 'input'"/>
+            <div class="ui large label" data-bind="text: accountLimitLabel"></div>
         </div>
         <h4 class="ui dividing header">Public/Clinical Studies</h4>
         <div class="field">

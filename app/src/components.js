@@ -35,10 +35,6 @@ reg('email', {
     viewModel: require('./pages/settings/email'),
     template: require('./pages/settings/email.html')
 });
-reg('eligibility', {
-    viewModel: require('./pages/settings/eligibility'),
-    template: require('./pages/settings/eligibility.html')
-});
 reg('password_policy', {
     viewModel: require('./pages/settings/password_policy'),
     template: require('./pages/settings/password_policy.html')
