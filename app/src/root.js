@@ -11,8 +11,8 @@ window.ko = ko;
 // ko.options.deferUpdates = true;
 
 // Used in navigation to keep a section highlighted as you navigate into it.
-var participantPages = ['enrollees','participants','participant_general','participant_consents', 
-    'participant_reports', 'participant_report', 'participant_activities', 'participant_uploads', 
+var participantPages = ['participant_general','participant_consents',  'participant_reports',
+    'participant_report', 'participant_activities', 'participant_uploads', 
     'participant_upload', 'participant_notifications', 'participant_request_info', 
     'participant_activity'];
 
@@ -23,8 +23,8 @@ var pageSets = {
     'scheduleplans': ['scheduleplans','scheduleplan'],
     'email_templates': ['verify_email', 'reset_password', 'email_signin'],
     'subpopulations': ['subpopulations', 'subpopulation', 'subpopulation_editor', 'subpopulation_history', 'subpopulation_download'],
-    'participants': participantPages,
-    'enrollees': participantPages,
+    'participants': ['participants'].concat(participantPages),
+    'enrollees': ['enrollees'].concat(participantPages),
     'admin/info': ['admin_info'],
     'admin/cache': ['admin_cache'],
     'reports': ['reports', 'report'],
@@ -95,6 +95,7 @@ var RootViewModel = function() {
     };
     self.isActive = function(tag) {
         if (pageSets[tag]) {
+            console.log(tag, self.selectedObs(), pageSets[tag].indexOf(self.selectedObs()) > -1);
             return pageSets[tag].indexOf(self.selectedObs()) > -1;
         }
         return tag === self.selectedObs();
@@ -113,6 +114,9 @@ var RootViewModel = function() {
     };
     self.readAboutClipboard = function() {
         self.openDialog('read_about_clipboard');
+    };
+    self.userPath = function() {
+        return (/enrollees/.test(document.location.hash)) ? '#/enrollees/' : '#/participants/';
     };
 
     self.isResearcher = roleFunc(self.rolesObs, 'researcher');

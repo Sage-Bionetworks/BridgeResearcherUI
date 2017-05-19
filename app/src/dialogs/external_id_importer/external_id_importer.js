@@ -80,7 +80,9 @@ module.exports = function(params) {
 
     bind(self)
         .obs('import', '')
-        .obs('enable', true);
+        .obs('enable', true)
+        .obs('closeText', 'Close')
+        .obs('createCredentials', !root.isPublicObs());
 
     var supportEmail;
 
@@ -89,7 +91,9 @@ module.exports = function(params) {
     serverService.getStudy().then(function(study) {
         supportEmail = study.supportEmail;
     });
-
+    function displayComplete() {
+        self.statusObs("Import finished. There were " + self.errorMessagesObs().length + " errors.");
+    }
     self.startImport = function(vm, event) {
         self.statusObs("Preparing to import...");
 
@@ -103,12 +107,12 @@ module.exports = function(params) {
         }
 
         self.run(importWorker).then(function(identifiers) {
-            var credentialsWorker = new CreateCredentialsWorker(supportEmail, identifiers);
-        
-            self.run(credentialsWorker).then(function(output) {
-                self.statusObs("Import finished. There were " + 
-                    self.errorMessagesObs().length + " errors.");
-            });
+            if (self.createCredentialsObs()) {
+                var credentialsWorker = new CreateCredentialsWorker(supportEmail, identifiers);
+                self.run(credentialsWorker).then(displayComplete);
+            } else {
+                displayComplete();
+            }
         });
     };
     self.cancelDialog = function() {

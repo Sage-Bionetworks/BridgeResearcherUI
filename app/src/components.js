@@ -327,6 +327,7 @@ reg('settings-tabset', {
     template: require('./pages/settings/settings_tabset.html')
 });
 reg('participant-tabset', {
+    viewModel: require('./pages/participant/participant_tabset'),
     template: require('./pages/participant/participant_tabset.html')
 });
 reg('not_found', {

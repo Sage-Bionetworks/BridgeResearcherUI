@@ -20,10 +20,16 @@
                     <li data-bind="text: $data"></li>
                 </ul>
             </div>
+            <div class="field" style="margin-top:1rem">
+                <ui-checkbox params="checkedObs: createCredentialsObs">
+                    Create credentials for these IDs
+                </ui-checkbox>
+            </div>            
         </form>
     </div>
     <div class="rules-actions">
-        <button form="importExternalId" class="ui primary small button" data-bind="enable: enableObs, click: startImport">Import</button>
-        <button class="ui small button" data-bind="click: cancelDialog">Cancel</button>
+        <button form="importExternalId" class="ui primary small button" 
+            data-bind="enable: enableObs, click: startImport">Import</button>
+        <button class="ui small button" data-bind="click: cancelDialog, text: closeTextObs"></button>
     </div>
 </div>

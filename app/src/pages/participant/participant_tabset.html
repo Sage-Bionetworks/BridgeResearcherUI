@@ -1,31 +1,31 @@
 <div class="ui secondary pointing menu" data-bind="visible: !$data.isNewObs()">
     <a class="item" data-bind="css:{active:$data.active === 'info'}, 
-        attr:{'href':'#/participants/'+$parent.userIdObs()}">
+        attr:{'href':linkMaker('general')}">
         <i class="setting icon"></i> General
     </a>
     <a class="item" data-bind="css:{active:$data.active === 'consents'}, 
-        attr:{'href':'#/participants/'+$parent.userIdObs()+'/consents'},
+        attr:{'href':linkMaker('consents')},
         visible: $data.isPublicObs">
         <i class="legal icon"></i> Consent
     </a>
     <a class="item" data-bind="css:{active:$data.active === 'activities'}, 
-        attr:{'href':'#/participants/'+$parent.userIdObs()+'/activities'}">
+        attr:{'href':linkMaker('activities')}">
         <i class="wait icon"></i> Activities
     </a>
     <a class="item" data-bind="css:{active:$data.active === 'uploads'}, 
-        attr:{'href':'#/participants/'+$parent.userIdObs()+'/uploads'}">
+        attr:{'href':linkMaker('uploads')}">
         <i class="upload icon"></i> Uploads
     </a>
     <a class="item" data-bind="css:{active:$data.active === 'notifications'},
-        attr:{'href':'#/participants/'+$parent.userIdObs()+'/notifications'}">
+        attr:{'href':linkMaker('notifications')}">
         <i class="announcement icon"></i> Push Notifications
     </a>
     <a class="item" data-bind="css:{active:$data.active === 'reports'}, 
-        attr:{'href':'#/participants/'+$parent.userIdObs()+'/reports'}">
+        attr:{'href':linkMaker('reports')}">
         <i class="newspaper icon"></i> Reports
     </a>
     <a class="item" data-bind="css:{active:$data.active === 'requestInfo'}, 
-        attr:{'href':'#/participants/'+$parent.userIdObs()+'/requestInfo'}">
+        attr:{'href':linkMaker('requestInfo')}">
         <i class="world icon"></i> Request Info
     </a>
     

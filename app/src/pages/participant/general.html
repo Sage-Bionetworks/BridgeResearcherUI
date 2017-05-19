@@ -3,7 +3,7 @@
         <div class="fixed-header-heading">
             <div class="ui breadcrumb">
                 <a class="section" href="#/participants" data-bind="visible: isPublicObs">Participants</a>
-                <a class="section" href="#/enrollees" data-bind="visible: !isPublicObs()">Participants</a>
+                <a class="section" href="#/enrollees" data-bind="visible: !isPublicObs()">External Identifiers</a>
                 <i class="right chevron icon divider"></i>
             </div>            
             <h3 data-bind="html: titleObs"></h3>
@@ -24,7 +24,8 @@
         </div>
     </div>
     <!-- ko component: {name: 'participant-tabset', params: { active: 'info', 
-        isNewObs: isNewObs, showEnableAccountObs: showEnableAccountObs, isPublicObs: isPublicObs
+        isNewObs: isNewObs, showEnableAccountObs: showEnableAccountObs, isPublicObs: isPublicObs,
+        userIdObs: userIdObs
     }} --><!-- /ko -->
 </div>
 <div class="scrollbox">
@@ -50,6 +51,8 @@
                     updateSelect: rolesObs, foreach: allRolesObs">
                     <option data-bind="text: $data, selected: $component.rolesObs().indexOf($data) > -1"></option>
                 </select>
+            </div>
+            <div class="field" data-bind="visible: !isPublicObs()">
             </div>
         </div>
         
@@ -99,8 +102,6 @@
             <div class="field" data-bind="visible: !isNewObs()">
                 <label>User ID</label>
                 <input type="text" readonly data-bind="value: idObs"/>
-            </div>
-            <div class="field" data-bind="visible: !isPublicObs()">
             </div>
             <div class="field" data-bind="visible: !isPublicObs()">
                 <label>Created On</label>
