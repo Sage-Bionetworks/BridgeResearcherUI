@@ -13,6 +13,12 @@
     <errors></errors>
     <form class="ui form">
         <div class="field">
+            <label>Data Validation</label>
+            <ui-checkbox params="checkedObs: strictUploadValidationEnabledObs">
+                Enable strict validation of upload files
+            </ui-checkbox>
+        </div>
+        <div class="field">
             <label>Health code export</label>
             <ui-checkbox params="checkedObs: healthCodeExportEnabledObs">
                 Include participant health code on the participant information page

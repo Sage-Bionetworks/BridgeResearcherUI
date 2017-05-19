@@ -46,7 +46,7 @@ header {
     @include justify-content(space-between);
     @include gradient(rgb(52, 152, 219), 41%, rgb(41, 128, 185), 100%);
     
-    .dev {
+    &.dev {
         @include gradient(orange, 41%, #B22222, 100%);
     }
     i {
