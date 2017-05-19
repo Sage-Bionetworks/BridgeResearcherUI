@@ -15,9 +15,7 @@ module.exports = function() {
         .bind('externalIdValidationEnabled')
         .bind('emailSignInEnabled')
         .bind('externalIdRequiredOnSignup')
-        .bind('accountLimit', 0, null, function(value) {
-            return parseInt(value);
-        })
+        .bind('accountLimit', 0, null, parseInt)
         .bind('iosArn', null, ios.fromObject, ios.toObject)
         .bind('androidArn', null, android.fromObject, android.toObject);
 
