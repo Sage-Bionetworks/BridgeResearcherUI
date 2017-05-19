@@ -1,31 +1,30 @@
 <div class="ui secondary pointing menu" data-bind="visible: !$data.isNewObs()">
-    <a class="item" data-bind="css:{active:$data.active === 'info'}, 
-        attr:{'href':linkMaker('general')}">
+    <a class="item" data-tab="info" 
+        data-bind="tab: $data.active, href: linkMaker('general')">
         <i class="setting icon"></i> General
     </a>
-    <a class="item" data-bind="css:{active:$data.active === 'consents'}, 
-        attr:{'href':linkMaker('consents')},
-        visible: $data.isPublicObs">
+    <a class="item" data-tab="consents" 
+        data-bind="tab: $data.active, href: linkMaker('consents'), visible: $data.isPublicObs">
         <i class="legal icon"></i> Consent
     </a>
-    <a class="item" data-bind="css:{active:$data.active === 'activities'}, 
-        attr:{'href':linkMaker('activities')}">
+    <a class="item" data-tab="activities" 
+        data-bind="tab: $data.active, href: linkMaker('activities')">
         <i class="wait icon"></i> Activities
     </a>
-    <a class="item" data-bind="css:{active:$data.active === 'uploads'}, 
-        attr:{'href':linkMaker('uploads')}">
+    <a class="item" data-tab="uploads" 
+        data-bind="tab: $data.active, href: linkMaker('uploads')">
         <i class="upload icon"></i> Uploads
     </a>
-    <a class="item" data-bind="css:{active:$data.active === 'notifications'},
-        attr:{'href':linkMaker('notifications')}">
+    <a class="item" data-tab="notifications" 
+        data-bind="tab: $data.active, href: linkMaker('notifications')">
         <i class="announcement icon"></i> Push Notifications
     </a>
-    <a class="item" data-bind="css:{active:$data.active === 'reports'}, 
-        attr:{'href':linkMaker('reports')}">
+    <a class="item" data-tab="reports" 
+        data-bind="tab: $data.active, href: linkMaker('reports')">
         <i class="newspaper icon"></i> Reports
     </a>
-    <a class="item" data-bind="css:{active:$data.active === 'requestInfo'}, 
-        attr:{'href':linkMaker('requestInfo')}">
+    <a class="item" data-tab="requestInfo" 
+        data-bind="tab: $data.active, href: linkMaker('requestInfo')">
         <i class="world icon"></i> Request Info
     </a>
     

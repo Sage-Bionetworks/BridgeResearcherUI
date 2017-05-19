@@ -25,14 +25,17 @@ module.exports = function(params) {
     function loadSchema(survey) {
         self.nameObs(survey.name);
         self.publishedObs(survey.published);
-        serverService.getUploadSchema(survey.identifier, survey.schemaRevision).then(function(schema) {
-            self.schemaObs(schema);
-            self.itemsObs.pushAll(schema.fieldDefinitions);
-        }).catch(function(response) {
-            if (response.status === 404) {
-                self.recordsMessageObs("The schema for this survey version cannot be found. It may have been deleted.");
-            }
-        });
+        if (survey.published) {
+            serverService.getUploadSchema(survey.identifier, survey.schemaRevision)
+                .then(function(schema) {
+                    self.schemaObs(schema);
+                    self.itemsObs.pushAll(schema.fieldDefinitions);
+                }).catch(function(response) {
+                    if (response.status === 404) {
+                        self.recordsMessageObs("The schema for this survey version cannot be found. It may have been deleted.");
+                    }
+                });
+        }
     }
 
     if (params.createdOn) {

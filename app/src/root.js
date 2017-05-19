@@ -95,7 +95,6 @@ var RootViewModel = function() {
     };
     self.isActive = function(tag) {
         if (pageSets[tag]) {
-            console.log(tag, self.selectedObs(), pageSets[tag].indexOf(self.selectedObs()) > -1);
             return pageSets[tag].indexOf(self.selectedObs()) > -1;
         }
         return tag === self.selectedObs();

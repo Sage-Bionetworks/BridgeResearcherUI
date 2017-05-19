@@ -8,10 +8,8 @@ module.exports = function(params) {
     self.guidObs = params.viewModel.guidObs;
     self.createdOnObs = params.viewModel.createdOnObs;
     self.publishedObs = params.viewModel.publishedObs;
+    self.selected = params.selected;
 
-    self.isActive = function(tabName) {
-        return params.selected === tabName;
-    };
     self.linkMaker = function(tabName) {
         return ko.computed(function() {
             var url = '#/surveys/'+self.guidObs();

@@ -7,10 +7,8 @@ module.exports = function(params) {
     self.idObs = params.viewModel.idObs;
     self.isNewObs = params.viewModel.isNewObs;
     self.publishedObs = params.viewModel.publishedObs;
-
-    self.isActive = function(tabName) {
-        return params.selected === tabName;
-    };
+    self.selected = params.selected;
+    
     self.linkMaker = function(tabName) {
         return ko.computed(function() {
             var url = '#/shared_modules/'+encodeURIComponent(self.idObs())+'/versions/'+self.versionObs();
