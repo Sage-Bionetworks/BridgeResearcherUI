@@ -40,7 +40,10 @@ function checkVerifyStatus() {
 }
 function unverifiedEmailAlert(response) {
     if (response.status !== 'verified') {
-        alerts.warn("The email address used to send email\nhas not been verified by the address owner.");
+        alerts.warn("To send email, the owner of your support email address\n"+
+            "must verify the address.\n\n"+
+            "See under Settings > Email to resend a request.\n\n"+
+            "You will not be able to send email until this step is completed.");
     }
 }
 toastr.options = config.toastr;
