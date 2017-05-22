@@ -4,6 +4,7 @@ var config = require('./config');
 var toastr = require('toastr');
 var bind = require('./binder');
 var clipboard = require('./widgets/clipboard/clipboard');
+var alerts = require('./widgets/alerts');
 
 window.ko = ko;
 // When you enable this, 1) everything is a bit faster, and 2) the UI is completely broken.
@@ -34,7 +35,17 @@ var pageSets = {
 function roleFunc(observer, role) {
     return ko.computed(function() {return observer().indexOf(role) > -1;});
 }
-
+function checkVerifyStatus() {
+    serverService.emailStatus().then(unverifiedEmailAlert);
+}
+function unverifiedEmailAlert(response) {
+    if (response.status !== 'verified') {
+        alerts.warn("To send email, the owner of your support email address\n"+
+            "must verify the address.\n\n"+
+            "See under Settings > Email to resend a request.\n\n"+
+            "You will not be able to send email until this step is completed.");
+    }
+}
 toastr.options = config.toastr;
 
 var RootViewModel = function() {
@@ -84,7 +95,6 @@ var RootViewModel = function() {
     };
     self.isActive = function(tag) {
         if (pageSets[tag]) {
-            console.log(tag, self.selectedObs(), pageSets[tag].indexOf(self.selectedObs()) > -1);
             return pageSets[tag].indexOf(self.selectedObs()) > -1;
         }
         return tag === self.selectedObs();
@@ -174,6 +184,7 @@ var RootViewModel = function() {
         self.codeRequiredObs(false);
         self.openDialog('sign_in_dialog');
     });
+    setTimeout(checkVerifyStatus, 1000);
 };
 
 var root = new RootViewModel();

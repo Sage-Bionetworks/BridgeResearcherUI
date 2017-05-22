@@ -30,7 +30,10 @@ ko.bindingHandlers.chart = {
         var context = element.getContext("2d");
         var observer = valueAccessor();
         observer.subscribe(function(config) {
-            new Chart(context, config);
+            if (element._chart) {
+                element._chart.destroy();
+            }
+            element._chart = new Chart(context, config);
         });
     }
 };
@@ -238,3 +241,32 @@ ko.bindingHandlers.active = {
     init: activeHandler,
     update: activeHandler
 };
+
+ko.bindingHandlers.tab = {
+    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var tab = element.getAttribute('data-tab');
+        updateElement(element, valueAccessor, function(element, value) {
+            element.classList.toggle("active", value === tab);
+        });
+    }
+};
+
+ko.bindingHandlers.href = {
+    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        updateElement(element, valueAccessor, function(element, value) {
+            element.setAttribute('href', value);
+        });
+    }
+};
+
+function updateElement(element, valueAccessor, func) {
+    var accessor = valueAccessor();
+    if (ko.isObservable(accessor) || ko.isComputed(accessor)) {
+        func(element, accessor());
+        accessor.subscribe(function(newValue) {
+            func(element, newValue);
+        });
+    } else {
+        func(element, accessor);
+    }        
+}

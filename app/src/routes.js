@@ -51,7 +51,6 @@ router.param('createdOn', /([^\/]*)/);
 router.on('/overview', routeTo('start'));
 router.on('/settings/general', routeTo('general'));
 router.on('/settings/email', routeTo('email'));
-router.on('/settings/eligibility', routeTo('eligibility'));
 router.on('/settings/data_groups', routeTo('data_groups'));
 router.on('/settings/password_policy', routeTo('password_policy'));
 router.on('/settings/user_attributes', routeTo('user_attributes'));
