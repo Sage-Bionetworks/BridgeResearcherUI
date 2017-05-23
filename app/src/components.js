@@ -259,6 +259,18 @@ reg('MultiValueConstraints', {
     viewModel: require('./pages/survey/constraints/multi_constraints'),
     template: require('./pages/survey/constraints/multi_constraints.html')
 });
+reg('WeightConstraints', {
+    viewModel: require('./pages/survey/constraints/weight_constraints'),
+    template: require('./pages/survey/constraints/weight_constraints.html')
+});
+reg('HeightConstraints', {
+    viewModel: require('./pages/survey/constraints/height_constraints'),
+    template: require('./pages/survey/constraints/height_constraints.html')
+});
+reg('BloodPressureConstraints', {
+    viewModel: require('./pages/survey/constraints/bloodpressure_constraints.js'),
+    template: require('./pages/survey/constraints/bloodpressure_constraints.html')
+});
 reg('ui-duration', {
     viewModel: require('./widgets/form/ui_duration'),
     template: require('./widgets/form/ui_duration.html')
