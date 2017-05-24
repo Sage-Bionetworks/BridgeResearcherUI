@@ -32,21 +32,7 @@ function callObsCallback(value, context) {
 module.exports = {
     formatAttributes: formatAttributes,
     formatHealthCode: formatHealthCode,
-    formatName: funcs.formatName,
     formatTitle: formatTitle,
     persistAttributes: persistAttributes,
-    callObsCallback: callObsCallback/*,
-    formatRoles: funcs.formatRoles,
-    persistRoles: funcs.persistRoles,
-    formatLanguages: funcs.formatLanguages,
-    persistLanguages: funcs.persistLanguages,
-    formatTitleCase: funcs.formatTitleCase,
-    formatDate: funcs.formatDate,
-    formatDateTime: funcs.formatDateTime,
-    formatVersionRange: funcs.formatVersionRange,
-    formatMs: funcs.formatMs,
-    queryString: funcs.queryString,
-    localDateTimeToUTC: funcs.localDateTimeToUTC,
-    utcTolocalDateTime: funcs.utcTolocalDateTime,
-    dateTimeString: funcs.dateTimeString*/
+    callObsCallback: callObsCallback
 };

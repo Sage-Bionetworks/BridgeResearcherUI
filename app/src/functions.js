@@ -151,6 +151,7 @@ var formatDate = seq(checkArgs, asDate, formatDateString, blankInvalidDateString
 var formatDateTime = seq(checkArgs, asDate, formatDateTimeString, blankInvalidDateString);
 
 module.exports = {
+    seq: seq,
     formatDate: formatDate,
     formatDateTime: formatDateTime,
     formatMs: formatMs,
