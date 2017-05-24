@@ -1,12 +1,13 @@
 var expect = require('chai').expect;
 var fn = require('../app/src/functions');
 
+// Note that date formatting functions are locale-sensitive and will fail on machines configured
+// differently than in the United States.
+var TIME = new Date(1495562263000); // Tue May 23 2017 10:57:43 GMT-0700 (PDT)
+
 describe("functions", function() {
 
 describe("date & time formatting", function() {
-    // Note that date formatting functions are locale-sensitive and will fail on machines configured
-    // differently than in the United States.
-    var TIME = new Date(1495562263000); // Tue May 23 2017 10:57:43 GMT-0700 (PDT)
     describe("formatDate", function() {
         it("formats date string", function() {
             expect(fn.formatDate(TIME.toString())).to.equal("5/23/2017");
@@ -142,6 +143,14 @@ describe("formatName", function() {
         expect(fn.formatName({lastName:"Last"})).to.equal("Last");
         expect(fn.formatName({})).to.equal("—");
         expect(fn.formatName()).to.equal("—");
+    });
+});
+describe("dateTimeString", function() {
+    it("safely converts date without nulls", function() {
+        expect(fn.dateTimeString(null)).to.be.null;
+    });
+    it("safely converts date without nulls", function() {
+        expect(fn.dateTimeString(TIME)).to.equal(TIME.toISOString());
     });
 });
 

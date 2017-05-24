@@ -140,6 +140,12 @@ function checkArgs(value) {
     if (arguments.length !== 1) { throw new Error(arguments); }
     return value;
 }
+function dateTimeString(date) {
+    if (is(date, 'Date')) {
+        return date.toISOString();
+    }
+    return null;
+}
 
 var formatDate = seq(checkArgs, asDate, formatDateString, blankInvalidDateString);
 var formatDateTime = seq(checkArgs, asDate, formatDateTimeString, blankInvalidDateString);
@@ -158,10 +164,5 @@ module.exports = {
     formatName: formatName,
     localDateTimeToUTC: seq(asDate, localDateTimeToUTC),
     utcTolocalDateTime: seq(asDate, utcTolocalDateTime),
-    dateTimeString: function(date) {
-        if (is(date, 'Date')) {
-            return date.toISOString();
-        }
-        return null;
-    }
+    dateTimeString: dateTimeString
 };
