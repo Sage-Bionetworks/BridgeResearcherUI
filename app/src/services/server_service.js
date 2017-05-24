@@ -11,7 +11,7 @@ var storeService = require('./store_service');
 var config = require('../config');
 var utils = require("../utils");
 var Promise = require('bluebird');
-var transforms = require('../transforms');
+var tx = require('../transforms');
 
 var SESSION_KEY = 'session';
 var SESSION_STARTED_EVENT_KEY = 'sessionStarted';
@@ -172,7 +172,7 @@ function isSupportedUser() {
 }
 function cacheParticipantName(response) {
     if (response && response.id) {
-        var name = transforms.formatName(response);
+        var name = tx.formatName(response);
         cache.set(response.id+':name', {name:name,externalId:response.externalId});
     }
     return response;
@@ -278,7 +278,7 @@ module.exports = {
         return post(url, survey);
     },
     deleteSurvey: function(survey, physical) {
-        var queryString = transforms.queryString({physical:(physical === true)});
+        var queryString = tx.queryString({physical:(physical === true)});
         var createdString = new Date(survey.createdOn).toISOString();
         var url = config.survey + survey.guid + '/revisions/' + createdString + queryString;
         return del(url);
@@ -377,7 +377,7 @@ module.exports = {
         return del(config.cache+"/"+esc(cacheKey));
     },
     getParticipants: function(offsetBy, pageSize, emailFilter, startDate, endDate) {
-        var queryString = transforms.queryString({
+        var queryString = tx.queryString({
             offsetBy: offsetBy, pageSize: pageSize, emailFilter: emailFilter,
             startDate: startDate, endDate: endDate
         });
@@ -433,7 +433,7 @@ module.exports = {
         return post(config.participants+"/"+id+"/resendEmailVerification");
     },
     getExternalIds: function(params) {
-        return get(config.externalIds + transforms.queryString(params || {}));
+        return get(config.externalIds + tx.queryString(params || {}));
     },
     addExternalIds: function(identifiers) {
         return post(config.externalIds, identifiers);
@@ -448,10 +448,10 @@ module.exports = {
         }
     },
     getStudyReports: function() {
-        return get(config.reports+transforms.queryString({"type":"study"}));
+        return get(config.reports+tx.queryString({"type":"study"}));
     },
     getStudyReport: function(identifier, startDate, endDate) {
-        var queryString = transforms.queryString({startDate: startDate, endDate: endDate});
+        var queryString = tx.queryString({startDate: startDate, endDate: endDate});
         return get(config.reports + "/" + identifier + queryString);
     },
     addStudyReport: function(identifier, report) {
@@ -470,17 +470,17 @@ module.exports = {
         return post(config.reports + "/" + index.identifier + "/index", index);
     },
     getParticipantReports: function() {
-        return get(config.reports+transforms.queryString({"type":"participant"}));
+        return get(config.reports+tx.queryString({"type":"participant"}));
     },
     getParticipantUploads: function(userId, startTime, endTime) {
-        var queryString = transforms.queryString({startTime: startTime, endTime: endTime});
+        var queryString = tx.queryString({startTime: startTime, endTime: endTime});
         return get(config.participants + '/' + userId + '/uploads' + queryString);
     },
     getParticipantUploadStatus: function(uploadId) {
         return get(config.uploadstatuses + '/' + uploadId);
     },
     getParticipantReport: function(userId, identifier, startDate, endDate) {
-        var queryString = transforms.queryString({startDate: startDate, endDate: endDate});
+        var queryString = tx.queryString({startDate: startDate, endDate: endDate});
         return get(config.participants + '/' + userId + '/reports/' + identifier + queryString);
     },
     addParticipantReport: function(userId, identifier, report) {
@@ -493,7 +493,7 @@ module.exports = {
         return del(config.participants + '/' + userId + '/reports/' + identifier + '/' + date);
     },
     getParticipantActivities: function(userId, activityGuid, params) {
-        var queryString = transforms.queryString(params);
+        var queryString = tx.queryString(params);
         return get(config.participants + '/' + userId + '/activities/' + activityGuid + queryString);
     },
     deleteParticipantActivities: function(userId) {

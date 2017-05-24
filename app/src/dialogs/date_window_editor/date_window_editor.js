@@ -1,24 +1,22 @@
 var ko = require('knockout');
 var root = require('../../root');
-var fn = require('../../transforms');
-
-function getDate(observer) {
-    if (observer()) {
-        return observer().replace("Z","");
-    }
-    return '';
-}
+var tx = require('../../transforms');
+var fn = require('../../functions');
 
 module.exports = function(params) {
     var self = this;
 
-    self.startsOnObs = ko.observable(getDate(params.startsOnObs));
-    self.endsOnObs = ko.observable(getDate(params.endsOnObs));
-    self.formatDateTime = fn.formatLocalDateTime;
+    var startsOnLocal = tx.utcTolocalDateTime(params.startsOnObs());
+    var endsOnLocal = tx.utcTolocalDateTime(params.endsOnObs());
+    self.startsOnObs = ko.observable(startsOnLocal);
+    self.endsOnObs = ko.observable(endsOnLocal);
+    self.formatDateTime = fn.formatDateTime;
 
     self.save = function() {
-        params.startsOnObs(self.startsOnObs());
-        params.endsOnObs(self.endsOnObs());
+        var startsOnUTC = tx.localDateTimeToUTC(self.startsOnObs());
+        var endsOnUTC = tx.localDateTimeToUTC(self.endsOnObs());
+        params.startsOnObs(startsOnUTC);
+        params.endsOnObs(endsOnUTC);
         root.closeDialog();
     };
     self.clear = function() {

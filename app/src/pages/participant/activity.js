@@ -5,16 +5,14 @@ var bind = require('../../binder');
 var root = require('../../root');
 var jsonFormatter = require('../../json_formatter');
 var tables = require('../../tables');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 
 module.exports = function(params) {
     var self = this;
     // params.guid, params.userId
 
-    self.startDate = null;
-    self.endDate = null;
     self.formatTitleCase = fn.formatTitleCase;
-    self.formatDateTime = fn.formatLocalDateTime;
+    self.formatDateTime = fn.formatDateTime;
 
     self.formatActivityClass = function(item) {
         return (item.activity.activityType === "survey") ? "tasks icon" : "child icon";

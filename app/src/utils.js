@@ -6,6 +6,7 @@ var $ = require('jquery');
 var alerts = require('./widgets/alerts');
 
 var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
+var TIMEOUT_ERROR = "The request timed out. Please verify you have an internet connection, and try again.";
 var pendingControl = null;
 toastr.options = config.toastr;
 
@@ -201,6 +202,8 @@ module.exports = {
             } else if (response.responseJSON) {
                 var payload = response.responseJSON;
                 ko.postbox.publish("showErrors", payload);
+            } else if (response.statusText === "timeout") {
+                toastr.error(TIMEOUT_ERROR);
             } else if (response instanceof Error) {
                 toastr.error(response.message);
             } else {
@@ -208,6 +211,7 @@ module.exports = {
             }
         };
     },
+    // This is identical in every way to failureHandler... TODO: REMOVEME
     listFailureHandler: function() {
         return function(response) {
             console.error("listFailureHandler", response);
@@ -217,6 +221,10 @@ module.exports = {
                 toastr.error('You do not appear to be a developer, researcher, or admin.');
             } else if (response.responseJSON) {
                 toastr.error(response.responseJSON.message);
+            } else if (response.statusTest === "timeout") {
+                toastr.error(TIMEOUT_ERROR);
+            } else {
+                toastr.error(GENERIC_ERROR);
             }
         };
     },

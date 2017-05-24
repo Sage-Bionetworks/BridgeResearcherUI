@@ -1,6 +1,6 @@
 var serverService = require('../../services/server_service');
 var bind = require('../../binder');
-var tx = require('../../transforms');
+var fn = require('../../functions');
 var utils = require('../../utils');
 var root = require('../../root');
 
@@ -10,8 +10,8 @@ module.exports = function(params) {
     var binder = bind(self)
         .obs('isNew', params.guid === "new")
         .obs('title', 'New Topic')
-        .obs('createdOn', '', tx.formatLocalDateTime)
-        .obs('modifiedOn', '', tx.formatLocalDateTime)
+        .obs('createdOn', '', fn.formatDateTime)
+        .obs('modifiedOn', '', fn.formatDateTime)
         .bind('name', '')
         .bind('guid', '')
         .bind('description', '');
@@ -25,7 +25,7 @@ module.exports = function(params) {
         self.titleObs(self.topic.name);
         self.isNewObs(false);
         self.guidObs(response.guid);
-        var d = tx.formatLocalDateTime(new Date());
+        var d = fn.formatDateTime(new Date());
         if (!self.createdOnObs()) { // Just fake this
             self.createdOnObs(d);
         }

@@ -1,4 +1,3 @@
-var root = require('../../root');
 var tables = require('../../tables');
 var serverService = require('../../services/server_service');
 var sharedModuleUtils = require('../../shared_module_utils');

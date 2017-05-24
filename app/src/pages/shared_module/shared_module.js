@@ -3,7 +3,7 @@ var serverService = require('../../services/server_service');
 var bind = require('../../binder');
 var utils = require('../../utils');
 var root = require('../../root');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 
 var OPTIONS = [
     {value: null, label:'Both'},
@@ -22,7 +22,7 @@ function loadSurveyRevisions(vm, survey) {
         // Need to confirm, but if you link to unpublished survey, it is just published
         // when you publish the metadata... ?
         var dates = response.items.map(function(oneSurvey) {
-            var d = fn.formatLocalDateTime(oneSurvey.createdOn);
+            var d = fn.formatDateTime(oneSurvey.createdOn);
             return {value: oneSurvey.createdOn, label: d};
         });
         vm.linkedVersionOptionsObs(dates);

@@ -2,7 +2,7 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var sharedModuleUtils = require('../../shared_module_utils');
 var utils = require('../../utils');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 var Promise = require('bluebird');
 var surveyFieldsToDelete = ['guid','version','createdOn','modifiedOn','published','deleted'];
 var tables = require('../../tables');
@@ -38,7 +38,7 @@ function deleteItem(survey) {
 module.exports = function() {
     var self = this;
 
-    self.formatDateTime = fn.formatLocalDateTime;
+    self.formatDateTime = fn.formatDateTime;
     self.isDeveloper = root.isDeveloper;
     self.formatModuleLink = sharedModuleUtils.formatModuleLink;
     self.moduleHTML = sharedModuleUtils.moduleHTML;

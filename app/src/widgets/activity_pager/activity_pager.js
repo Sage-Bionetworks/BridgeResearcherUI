@@ -1,5 +1,6 @@
 var utils = require('../../utils');
 var bind = require('../../binder');
+var tx = require('../../transforms');
 
 var pageSize = 25;
 
@@ -12,8 +13,8 @@ module.exports = function(params) {
     var loadingFunc = params.loadingFunc;
 
     bind(self)
-        .obs('startDate', '')
-        .obs('endDate', '')
+        .obs('startDate')
+        .obs('endDate')
         .obs('pageCount', 0)
         .obs('offsetBy', null)
         .obs('warn', false)
@@ -54,8 +55,8 @@ module.exports = function(params) {
     }
 
     function wrappedLoadingFunc() {
-        var startDate = self.startDateObs();
-        var endDate = self.endDateObs();
+        var startDate = tx.dateTimeString(self.startDateObs());
+        var endDate = tx.dateTimeString(self.endDateObs());
         var offsetBy = self.offsetByObs();
 
         if (!bothOrNeither(startDate, endDate)) {
@@ -77,8 +78,6 @@ module.exports = function(params) {
         if (response) {
             self.pageCountObs(response.pageCount);
             self.offsetByObs(response.offsetBy);
-            self.startDateObs(response.scheduledOnStart);
-            self.endDateObs(response.scheduledOnEnd);
         }
     }
     wrappedLoadingFunc();

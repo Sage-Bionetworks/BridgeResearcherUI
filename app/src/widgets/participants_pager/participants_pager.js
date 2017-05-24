@@ -65,11 +65,18 @@ module.exports = function(params) {
         self.showLoaderObs(true);
         wrappedLoadingFunc((self.totalPagesObs()-1)*pageSize);
     };
+
+    function makeDate(date) {
+        if (date) {
+            return new Date(date).toISOString();
+        }
+        return null;
+    }
     
     function wrappedLoadingFunc(offsetBy, vm, event) {
         var emailFilter = self.emailFilterObs();
-        var startDate = self.startDateObs();
-        var endDate = self.endDateObs();
+        var startDate = makeDate(self.startDateObs());
+        var endDate = makeDate(self.endDateObs());
 
         storeService.persistQuery(pageKey, {emailFilter: emailFilter, 
             startDate: startDate, endDate: endDate, offsetBy: offsetBy});

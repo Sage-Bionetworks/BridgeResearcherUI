@@ -25,13 +25,6 @@ module.exports = function() {
     self.isResearcher = root.isResearcher;
     tables.prepareTable(self, {name: 'external ID'});
 
-    // to get a spinner on this control you need to adjust the DOM target.
-    // Creating a fake event for this.
-    function adjustDropDownButtonTarget(event) {
-        return {
-            target: event.target.parentNode.parentNode
-        };
-    }    
     function extractId(response) {
         if (response.items.length === 0) {
             throw new Error("There are no unassigned external IDs registered with your study. Please import more IDs to create more credentials.");

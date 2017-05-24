@@ -54,7 +54,7 @@
                 <td>
                     <i data-bind="attr:{class:$component.iconFor($data)}"></i>
                 </td>
-                <td data-bind="text: $component.formatLocalDateTime($data.requestedOn)"></td>
+                <td data-bind="text: $component.formatDateTime($data.requestedOn)"></td>
                 <td>
                     <span data-bind="visible: $data.status === 'validation_failed'">
                         <span data-bind="visible: $data.collapsedObs">

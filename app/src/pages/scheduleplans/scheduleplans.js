@@ -2,7 +2,7 @@ var serverService = require('../../services/server_service.js');
 var optionsService = require('../../services/options_service.js');
 var scheduleUtils = require('../schedule/schedule_utils.js');
 var utils = require('../../utils');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 var tables = require('../../tables');
 var root = require('../../root');
 var Promise = require('bluebird');
@@ -27,7 +27,7 @@ module.exports = function() {
         refresh: load
     });
 
-    self.formatDateTime = fn.formatLocalDateTime;
+    self.formatDateTime = fn.formatDateTime;
     self.formatScheduleType = scheduleUtils.formatScheduleStrategyType;
     self.formatStrategy = scheduleUtils.formatStrategy;
 
