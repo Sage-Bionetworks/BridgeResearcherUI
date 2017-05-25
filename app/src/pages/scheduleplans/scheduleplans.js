@@ -7,8 +7,6 @@ var tables = require('../../tables');
 var root = require('../../root');
 var Promise = require('bluebird');
 
-var SORTER = utils.makeFieldSorter("label");
-
 function deleteItem(plan) {
     return serverService.deleteSchedulePlan(plan.guid);
 }
@@ -47,10 +45,10 @@ module.exports = function() {
                     }
                     return Promise.resolve(activity);
                 });
-            }).then(function() {
-                response.items.sort(SORTER);
-                self.itemsObs(response.items);
-            }).catch(utils.listFailureHandler());
+            })
+            .then(fn.handleSort('items', 'label'))
+            .then(fn.handleObsUpdate(self.itemsObs, 'items'))
+            .catch(utils.listFailureHandler());
         });
     }
     load();

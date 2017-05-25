@@ -1,5 +1,6 @@
 var serverService = require('../../services/server_service');
 var ko = require('knockout');
+var fn = require('../../functions');
 var utils = require('../../utils');
 
 var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -72,15 +73,9 @@ module.exports = function() {
 
         self.chartObs({
             type: 'line',
-            data: {
-                labels: labels, 
-                datasets: datasets
-            },
+            data: {labels: labels, datasets: datasets},
             options: {
-                title: {
-                    text: "Daily Uploads",
-                    display: true
-                },
+                title: {text: "Daily Uploads",display: true},
                 scales: {
                     yAxes: [{
                         ticks: {
@@ -93,16 +88,12 @@ module.exports = function() {
             }
         });
     }
-    function loadingOff(response) {
-        self.isLoadingObs(false);
-        return response;
-    }
     function loadChart(rangeNum) {
         utils.startHandler(self);
         self.isLoadingObs(true);
         var range = getDateRange(rangeNum);
         serverService.getStudyReport(STUDY_NAME, range.startDate, range.endDate)
-            .then(loadingOff)
+            .then(fn.handleStaticObsUpdate(self.isLoadingObs, false))
             .then(function(response) {
                 if (self.rangeObs() === rangeNum) {
                     makeChart(response);

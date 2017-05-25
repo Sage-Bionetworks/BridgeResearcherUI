@@ -203,7 +203,7 @@ module.exports = {
     getStudyList: function(env) {
         var request = Promise.resolve(getInt(config.host[env] + config.getStudyList));
         request.then(function(response) {
-            return response.items.sort(utils.makeFieldSorter("name"));
+            return response.items.sort(fn.makeFieldSorter("name"));
         });
         return request;
     },

@@ -148,7 +148,9 @@ function dateTimeString(date) {
 }
 function makeFieldSorter(fieldName) {
     return function sorter(a,b) {
-        return a[fieldName].localeCompare(b[fieldName]);
+
+        return (a[fieldName] && b[fieldName]) ?
+            a[fieldName].localeCompare(b[fieldName]) : 0;
     };
 }
 function handleObsUpdate(obs, fieldName) {
@@ -193,6 +195,22 @@ function handleCopyProps(target) {
         return response;
     };
 }
+function handleSort(fieldName, sortField, reverse) {
+    return function(response) {
+        response[fieldName].sort(makeFieldSorter(sortField));
+        if (reverse) {
+            response[fieldName].reverse();
+        }
+        return response;
+    };
+}
+function handleMap(fieldName, func) {
+    return function(response) {
+        response[fieldName] = response[fieldName].map(func);
+        return response;
+    };
+}
+
 function copyProps(target, source) {
     console.assert(arguments.length >= 3, "insufficient arguments to copyProps");
     var args = Array.prototype.slice.call(arguments,2);
@@ -204,6 +222,20 @@ function returning(object) {
     return function() {
         return object;
     };
+}
+function isDefined(value) {
+    return typeof value !== "undefined";
+}
+function makeFieldSorter(fieldName) {
+    return function sorter(a,b) {
+        if (isDefined(a[fieldName]) && isDefined(b[fieldName])) {
+            return a[fieldName].localeCompare(b[fieldName]);
+        }
+        return 0;
+    };
+}
+function lowerCaseStringSorter(a,b) {
+    return a.localeCompare(b);
 }
 
 var formatDate = seq(checkArgs, asDate, formatDateString, blankInvalidDateString);
@@ -231,5 +263,9 @@ module.exports = {
     handleSortItems: handleSortItems,
     handleForEach: handleForEach,
     handleCopyProps: handleCopyProps,
-    returning: returning
+    handleMap: handleMap,
+    returning: returning,
+    makeFieldSorter: makeFieldSorter,
+    lowerCaseStringSorter: lowerCaseStringSorter,
+    handleSort: handleSort
 };

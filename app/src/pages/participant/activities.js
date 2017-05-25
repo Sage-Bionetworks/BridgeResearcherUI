@@ -4,8 +4,9 @@ var scheduleUtils = require('../../pages/schedule/schedule_utils');
 var bind = require('../../binder');
 var root = require('../../root');
 var tables = require('../../tables');
+var fn = require('../../functions');
 
-var ACTIVITY_SORTER = utils.makeFieldSorter("plan");
+var ACTIVITY_SORTER = fn.makeFieldSorter("plan");
 
 module.exports = function(params) {
     var self = this;
@@ -35,5 +36,6 @@ module.exports = function(params) {
             });
         });
         self.itemsObs(array.sort(ACTIVITY_SORTER));
-    }).catch(utils.notFoundHandler("Participant", "participants"));
+    })
+    .catch(utils.notFoundHandler("Participant", "participants"));
 };

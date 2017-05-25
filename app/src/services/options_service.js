@@ -1,8 +1,9 @@
 var serverService = require('./server_service');
 var utils = require('../utils');
+var fn = require('../functions');
 
-var NAME_SORTER = utils.makeFieldSorter('name');
-var LABEL_SORTER = utils.makeFieldSorter('label');
+var NAME_SORTER = fn.makeFieldSorter('name');
+var LABEL_SORTER = fn.makeFieldSorter('label');
 
 function getSchedule(group) {
     return group.schedule;

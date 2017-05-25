@@ -5,17 +5,20 @@ var fn = require('../app/src/functions');
 // Note that date formatting functions are locale-sensitive and will fail on machines configured
 // differently than in the United States.
 var TIME = new Date(1495562263000); // Tue May 23 2017 10:57:43 GMT-0700 (PDT)
+function getArray() {
+    return [{foo:"Dates"},{foo:"apples"},{foo:"carrots"},{foo:"Bananas"}];
+}
 
 describe("functions", function() {
 
 describe("date & time formatting", function() {
     describe("formatDate", function() {
         it("formats date string", function() {
-            expect(fn.formatDate(TIME.toString())).to.equal("5/23/2017");
-            expect(fn.formatDate(TIME.toISOString())).to.equal("5/23/2017");
+            expect(fn.formatDate(TIME.toString())).to.equal(TIME.toLocaleDateString());
+            expect(fn.formatDate(TIME.toISOString())).to.equal(TIME.toLocaleDateString());
         });
         it ("formats date object", function() {
-            expect(fn.formatDate(TIME)).to.equal("5/23/2017");
+            expect(fn.formatDate(TIME)).to.equal(TIME.toLocaleDateString());
         });
         it ("handles malformed input", function() {
             expect(fn.formatDate("asdf")).to.equal("");
@@ -23,11 +26,11 @@ describe("date & time formatting", function() {
     });
     describe("formatDateTime", function() {
         it("formats datetime string", function() {
-            expect(fn.formatDateTime(TIME.toString())).to.equal("5/23/2017, 10:57:43 AM");
-            expect(fn.formatDateTime(TIME.toISOString())).to.equal("5/23/2017, 10:57:43 AM");
+            expect(fn.formatDateTime(TIME.toString())).to.equal(TIME.toLocaleString());
+            expect(fn.formatDateTime(TIME.toISOString())).to.equal(TIME.toLocaleString());
         });
         it ("formats datetime object", function() {
-            expect(fn.formatDateTime(TIME)).to.equal("5/23/2017, 10:57:43 AM");
+            expect(fn.formatDateTime(TIME)).to.equal(TIME.toLocaleString());
         });
         it ("handles malformed input", function() {
             expect(fn.formatDateTime("asdf")).to.equal("");
@@ -216,4 +219,59 @@ describe("returning", function() {
         expect(result).to.equal(obj);
     });
 });
+describe("makeFieldSorter", function() {
+    it("works", function() {
+        var array = getArray();
+        var sorter = fn.makeFieldSorter('foo');
+
+        array.sort(sorter);
+        expect(array[0].foo).to.equal("apples");
+        expect(array[1].foo).to.equal("Bananas");
+        expect(array[2].foo).to.equal("carrots");
+        expect(array[3].foo).to.equal("Dates");
+    });
+    it("fails silently if field missing", function() {
+        var array = getArray();
+        var sorter = fn.makeFieldSorter('bar');
+
+        array.sort(sorter);
+        expect(array[0].foo).to.equal("Dates");
+        expect(array[1].foo).to.equal("apples");
+        expect(array[2].foo).to.equal("carrots");
+        expect(array[3].foo).to.equal("Bananas");
+    });
+});
+describe("lowerCaseStringSorter", function() {
+    it("works", function() {
+        var array = ["Dates","apples","carrots","Bananas"];
+        array.sort(fn.lowerCaseStringSorter);
+        expect(array).to.have.members(["apples","Bananas","carrots","Dates"]);
+    });
+});
+describe("handleSort", function() {
+    it("works", function() {
+        var object = {items: getArray()};
+        var func = fn.handleSort('items', 'foo');
+        func(object);
+        expect(object.items[0].foo).to.equal("apples");
+        expect(object.items[1].foo).to.equal("Bananas");
+        expect(object.items[2].foo).to.equal("carrots");
+        expect(object.items[3].foo).to.equal("Dates");
+    });
+});
+describe("handleMap", function() {
+    it("works", function() {
+        var mapper = function(item) {
+            return "b";
+        };
+        var func = fn.handleMap('items', mapper);
+
+        var object = {items: ["a","a","a"]};
+        var result = func(object);
+        expect(object.items[0]).to.equal("b");
+        expect(object.items[1]).to.equal("b");
+        expect(object.items[2]).to.equal("b");
+    });
+});
+
 });
