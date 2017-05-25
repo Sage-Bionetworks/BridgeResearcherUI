@@ -16,11 +16,6 @@ module.exports = function(params) {
         .bind('guid', '')
         .bind('description', '');
 
-    function updateTitle(response) {
-        self.titleObs(response.name);
-        return response;
-    }
-
     function updateTopic(response) {
         self.titleObs(self.topic.name);
         self.isNewObs(false);
@@ -33,8 +28,7 @@ module.exports = function(params) {
         return response;
     }
 
-    self.isDeveloper = root.isDeveloper;
-    self.isResearcher = root.isResearcher;
+    fn.copyProps(self, root, 'isDeveloper', 'isResearcher');
     
     self.sendNotification = function(vm, event) {
         root.openDialog('send_notification', {topicId: self.guidObs()});
@@ -51,10 +45,9 @@ module.exports = function(params) {
             .then(utils.successHandler(vm, event, "Topic has been saved."))
             .catch(utils.failureHandler(vm, event));
     };
-
     if (params.guid !== "new") {
         serverService.getTopic(params.guid)
-            .then(updateTitle)
+            .then(fn.handleObsUpdate(self.titleObs, 'name'))
             .then(binder.assign('topic'))
             .then(binder.update());
     } else {

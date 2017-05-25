@@ -1,6 +1,8 @@
 var serverService = require('../../services/server_service');
 var tables = require('../../tables');
 var root = require('../../root');
+var utils = require('../../utils');
+var fn = require('../../functions');
 
 function deleteTopic(topic) {
     return serverService.deleteTopic(topic.guid);
@@ -9,16 +11,16 @@ function deleteTopic(topic) {
 module.exports = function() {
     var self = this;
 
-    self.isDeveloper = root.isDeveloper;
-    self.notificationsEnabledObs = root.notificationsEnabledObs;
+    fn.copyProps(self, root, 'isDeveloper', 'notificationsEnabledObs');
     
     tables.prepareTable(self, {name: 'topic', type: 'NotificationTopic', 
         delete: deleteTopic, refresh: load});
 
     function load() {
-        serverService.getAllTopics().then(function(response) {
-            self.itemsObs(response.items);
-        });
+        serverService.getAllTopics()
+            .then(fn.handleSortItems('name'))
+            .then(fn.handleObsUpdate(self.itemsObs, 'items'))
+            .catch(utils.failureHandler());
     }
     load();
 };

@@ -33,13 +33,13 @@ module.exports = function() {
 
     self.isAdmin = root.isAdmin;
     self.recordsObs = ko.observable("");
-    self.formatName = tx.formatName;
+    self.formatName = fn.formatName;
     self.formatDateTime = fn.formatDateTime;
     self.classNameForStatus = function(user) {
         return cssClassNameForStatus[user.status];
     };
     self.fullName = function(user) {
-        return encodeURIComponent(tx.formatName(user));
+        return encodeURIComponent(fn.formatName(user));
     };
     
     function formatCount(total) {

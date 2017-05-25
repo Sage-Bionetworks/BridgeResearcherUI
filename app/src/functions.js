@@ -146,6 +146,65 @@ function dateTimeString(date) {
     }
     return null;
 }
+function makeFieldSorter(fieldName) {
+    return function sorter(a,b) {
+        return a[fieldName].localeCompare(b[fieldName]);
+    };
+}
+function handleObsUpdate(obs, fieldName) {
+    return function(response) {
+        obs(response[fieldName]);
+        return response;
+    };
+}
+function handleStaticObsUpdate(obs, value) {
+    return function(response) {
+        obs(value);
+        return response;
+    };
+}
+function handleSortItems(fieldName) {
+    return function(response) {
+        response.items.sort(makeFieldSorter(fieldName));
+        return response;
+    };
+}
+function handleForEach(fieldName, func) {
+    return function(response) {
+        response[fieldName].forEach(func);
+        return response;
+    };
+}
+function fieldUpdater(source, fieldName) {
+    if (fieldName.indexOf("->") > -1) {
+        var fields = fieldName.split("->");
+        this[fields[1]] = source[fields[0]];
+    } else {
+        this[fieldName] = source[fieldName];
+    }
+}
+function handleCopyProps(target) {
+    console.assert(arguments.length >= 2, "insufficient arguments to handleCopyProps");
+    var args = Array.prototype.slice.call(arguments,1);
+    return function(response) {
+        args.forEach(function(fieldName) {
+            fieldUpdater.call(target, response, fieldName);
+        });
+        return response;
+    };
+}
+function copyProps(target, source) {
+    console.assert(arguments.length >= 3, "insufficient arguments to copyProps");
+    var args = Array.prototype.slice.call(arguments,2);
+    args.forEach(function(fieldName) {
+        fieldUpdater.call(target, source, fieldName);
+    });
+}
+function returning(object) {
+    return function() {
+        return object;
+    };
+}
 
 var formatDate = seq(checkArgs, asDate, formatDateString, blankInvalidDateString);
 var formatDateTime = seq(checkArgs, asDate, formatDateTimeString, blankInvalidDateString);
@@ -165,5 +224,12 @@ module.exports = {
     formatName: formatName,
     localDateTimeToUTC: seq(asDate, localDateTimeToUTC),
     utcTolocalDateTime: seq(asDate, utcTolocalDateTime),
-    dateTimeString: dateTimeString
+    dateTimeString: dateTimeString,
+    copyProps: copyProps,
+    handleObsUpdate: handleObsUpdate,
+    handleStaticObsUpdate: handleStaticObsUpdate,
+    handleSortItems: handleSortItems,
+    handleForEach: handleForEach,
+    handleCopyProps: handleCopyProps,
+    returning: returning
 };

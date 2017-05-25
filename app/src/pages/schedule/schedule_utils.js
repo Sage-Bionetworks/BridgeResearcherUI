@@ -4,7 +4,6 @@ var criteriaUtils = require('../../criteria_utils');
 var optionsService = require('./../../services/options_service');
 var serverService = require('../../services/server_service');
 var Promise = require('bluebird');
-var tx = require('../../transforms');
 var fn = require('../../functions');
 
 var surveyNameMap = {};

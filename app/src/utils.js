@@ -7,6 +7,7 @@ var alerts = require('./widgets/alerts');
 
 var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
 var TIMEOUT_ERROR = "The request timed out. Please verify you have an internet connection, and try again.";
+var ROLE_ERROR = 'You do not appear to be a developer, researcher, or admin.';
 var pendingControl = null;
 toastr.options = config.toastr;
 
@@ -52,7 +53,6 @@ function makeOptionLabelFinder(arrayOrObs) {
         return option ? option.label : "";
     };
 }
-
 function displayPendingControl(control) {
     clearPendingControl();
     control.classList.add("loading");
@@ -112,6 +112,26 @@ function clipString(value) {
         toastr.error("Could not copy value.");        
     }
     document.body.removeChild(p);
+}
+function makeFailureHandler() {
+    return function(response) {
+        console.error("failureHandler", response);
+        clearPendingControl();
+        ko.postbox.publish("clearErrors");
+
+        if (response.status === 412) {
+            toastr.error(ROLE_ERROR);
+        } else if (response.statusTest === "timeout") {
+            toastr.error(TIMEOUT_ERROR);
+        } else if (response.responseJSON) {
+            var payload = response.responseJSON;
+            ko.postbox.publish("showErrors", payload);
+        } else if (response instanceof Error) {
+            toastr.error(response.message);
+        } else {
+            toastr.error(GENERIC_ERROR);
+        }
+    };    
 }
 
 /**
@@ -193,40 +213,10 @@ module.exports = {
      * @returns {Function}
      */
     failureHandler: function() {
-        return function(response) {
-            console.error("failureHandler", response);
-            clearPendingControl();
-            ko.postbox.publish("clearErrors");
-            if (response.status === 412) {
-                toastr.error('You do not appear to be a developer, researcher, or admin.');
-            } else if (response.responseJSON) {
-                var payload = response.responseJSON;
-                ko.postbox.publish("showErrors", payload);
-            } else if (response.statusText === "timeout") {
-                toastr.error(TIMEOUT_ERROR);
-            } else if (response instanceof Error) {
-                toastr.error(response.message);
-            } else {
-                toastr.error(GENERIC_ERROR);
-            }
-        };
+        return makeFailureHandler();
     },
-    // This is identical in every way to failureHandler... TODO: REMOVEME
     listFailureHandler: function() {
-        return function(response) {
-            console.error("listFailureHandler", response);
-            clearPendingControl();
-            ko.postbox.publish("clearErrors");
-            if (response.status === 412) {
-                toastr.error('You do not appear to be a developer, researcher, or admin.');
-            } else if (response.responseJSON) {
-                toastr.error(response.responseJSON.message);
-            } else if (response.statusTest === "timeout") {
-                toastr.error(TIMEOUT_ERROR);
-            } else {
-                toastr.error(GENERIC_ERROR);
-            }
-        };
+        return makeFailureHandler();
     },
     /**
      * Some APIs return an error with a simple message, but we want to display this as 

@@ -1,6 +1,6 @@
 var utils = require('../../utils');
 var bind = require('../../binder');
-var tx = require('../../transforms');
+var fn = require('../../functions');
 
 var pageSize = 25;
 
@@ -53,10 +53,20 @@ module.exports = function(params) {
     function bothOrNeither(startDate, endDate) {
         return (startDate === null && endDate === null) || (startDate !== null && endDate !== null);
     }
-
+    function incrementPage(response) {
+        response.pageCount = self.pageCountObs()+1;
+        return response;
+    }
+    function updateModel(response) {
+        if (response) {
+            self.pageCountObs(response.pageCount);
+            self.offsetByObs(response.offsetBy);
+        }
+    }
+    
     function wrappedLoadingFunc() {
-        var startDate = tx.dateTimeString(self.startDateObs());
-        var endDate = tx.dateTimeString(self.endDateObs());
+        var startDate = fn.dateTimeString(self.startDateObs());
+        var endDate = fn.dateTimeString(self.endDateObs());
         var offsetBy = self.offsetByObs();
 
         if (!bothOrNeither(startDate, endDate)) {
@@ -65,20 +75,12 @@ module.exports = function(params) {
             return; // can't do this, have to set both dates.
         }
         self.warnObs(false);
-        
         self.showLoaderObs(true);
-        loadingFunc(offsetBy, pageSize, startDate, endDate).then(function(response) {
-            response.pageCount = self.pageCountObs()+1;
-            updateModel(response);
-            self.showLoaderObs(false);
-        }).catch(utils.failureHandler());
-    }
-
-    function updateModel(response) {
-        if (response) {
-            self.pageCountObs(response.pageCount);
-            self.offsetByObs(response.offsetBy);
-        }
+        loadingFunc(offsetBy, pageSize, startDate, endDate)
+            .then(incrementPage)
+            .then(updateModel)
+            .then(fn.handleStaticObsUpdate(self.showLoaderObs, false))
+            .catch(utils.failureHandler());
     }
     wrappedLoadingFunc();
 };

@@ -3,22 +3,6 @@ var tx = require('../app/src/transforms');
 var ko = require('knockout');
 
 describe("transforms", function() {
-    describe("formatName", function() {
-        it("formats name", function() {
-            expect( tx.formatName({firstName:"First",lastName:"Last"}) ).to.equal("First Last");
-        });
-        it("formats name with <EMPTY> values", function() {
-            expect( tx.formatName({firstName:"<EMPTY>",lastName:"<EMPTY>"}) ).to.equal("—");
-            expect( tx.formatName({firstName:"<EMPTY>",lastName:"Last"}) ).to.equal("Last");
-            expect( tx.formatName({firstName:"First",lastName:"<EMPTY>"}) ).to.equal("First");
-        });
-        it("formats name with missing properties", function() {
-            expect( tx.formatName({firstName:"First"}) ).to.equal("First");
-            expect( tx.formatName({lastName:"Last"}) ).to.equal("Last");
-            expect( tx.formatName({}) ).to.equal("—");
-            expect( tx.formatName() ).to.equal("—");
-        });
-    });
     describe("formatAttributes", function() {
         it("works", function() {
             var context = {

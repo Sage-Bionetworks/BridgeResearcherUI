@@ -73,7 +73,8 @@ function schemaToOption(schema) {
 module.exports = function(params) {
     var self = this;
 
-    self.formatDateTime = fn.formatDateTime;
+    fn.copyProps(self, fn, 'formatDateTime');
+
     self.task = {};
 
     var binder = bind(self)

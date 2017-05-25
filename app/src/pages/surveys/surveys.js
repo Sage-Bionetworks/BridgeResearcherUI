@@ -38,10 +38,9 @@ function deleteItem(survey) {
 module.exports = function() {
     var self = this;
 
-    self.formatDateTime = fn.formatDateTime;
-    self.isDeveloper = root.isDeveloper;
-    self.formatModuleLink = sharedModuleUtils.formatModuleLink;
-    self.moduleHTML = sharedModuleUtils.moduleHTML;
+    fn.copyProps(self, fn, 'formatDateTime');
+    fn.copyProps(self, root, 'isDeveloper');
+    fn.copyProps(self, sharedModuleUtils, 'formatModuleLink', 'moduleHTML');
     
     tables.prepareTable(self, {
         name: 'survey',
@@ -77,28 +76,31 @@ module.exports = function() {
             .catch(utils.listFailureHandler());
     };
     self.openModuleBrowser = function() {
-        root.openDialog('module_browser', {type: 'survey', closeModuleBrowser: self.closeModuleBrowser});
+        root.openDialog('module_browser', {
+            type: 'survey', 
+            closeModuleBrowser: self.closeModuleBrowser
+        });
     };
     self.closeModuleBrowser = function() {
         root.closeDialog();
         load();
     };
-
+    function getSchedulePlans(response) {
+        if (response.items.length) {
+            var surveys = response.items;
+            return serverService.getSchedulePlans().then(function(res) {
+                annotateSurveys(surveys, res.items);
+            });
+        }
+    }
     function load() {
         return sharedModuleUtils.loadNameMaps()
             .then(serverService.getSurveys)
-            .then(function(response) {
-                response.items.sort(utils.makeFieldSorter("name"));
-                response.items.forEach(addScheduleField);
-                self.itemsObs(response.items);
-                return response.items;
-            }).then(function(surveys) {
-                if (surveys.length) {
-                    return serverService.getSchedulePlans().then(function(response) {
-                        annotateSurveys(surveys, response.items);
-                    });
-                }
-            }).catch(utils.failureHandler());
+            .then(fn.handleSortItems('name'))
+            .then(fn.handleForEach('items', addScheduleField))
+            .then(fn.handleObsUpdate(self.itemsObs, 'items'))
+            .then(getSchedulePlans)
+            .catch(utils.failureHandler());
     }
     load();
 };

@@ -1,4 +1,5 @@
 var expect = require('chai').expect;
+var sinon = require('sinon');
 var fn = require('../app/src/functions');
 
 // Note that date formatting functions are locale-sensitive and will fail on machines configured
@@ -153,5 +154,66 @@ describe("dateTimeString", function() {
         expect(fn.dateTimeString(TIME)).to.equal(TIME.toISOString());
     });
 });
+describe("updateObs", function() {
+    it("works", function() {
+        var observer = sinon.spy();
+        var func = fn.handleObsUpdate(observer, 'name');
+        var obj = {name:'foo'};
+        var result = func(obj);
 
+        expect(result).to.equal(obj);
+        expect(observer.calledWith('foo')).to.be.true;
+    });
+});
+describe("handleStaticObsUpdate", function() {
+    it("works", function() {
+        var observer = sinon.spy();
+        var func = fn.handleStaticObsUpdate(observer, 10);
+        var result = func('foo');
+        
+        expect(result).to.equal('foo');
+        expect(observer.calledWith(10)).to.be.true;
+    });
+});
+describe("handleForEach", function() {
+    it("works", function() {
+        var count = 0;
+        var processor = function() {
+            count++;
+        }
+        var func = fn.handleForEach('items', processor)
+        var object = {items: ['a','b','c']};
+
+        var result = func(object);
+        expect(result).to.equal(object);
+        expect(count).to.equal(3);
+    });
+});
+describe("copyProps", function() {
+    it("works", function() {
+        var source = {prop1:10, prop2:false};
+        var target = {};
+
+        fn.copyProps(target, source, 'prop1', 'prop2');
+        expect(target.prop1).to.equal(10);
+        expect(target.prop2).to.equal(false);
+    });
+    it("renames variables", function() {
+        var source = {prop1:10, prop2:false};
+        var target = {};
+
+        fn.copyProps(target, source, 'prop1->prop3', 'prop2->prop4');
+        expect(target.prop3).to.equal(10);
+        expect(target.prop4).to.equal(false);
+    });
+});
+describe("returning", function() {
+    it("works", function() {
+        var obj = {};
+        var func = fn.returning(obj);
+
+        var result = func("Some other value");
+        expect(result).to.equal(obj);
+    });
+});
 });

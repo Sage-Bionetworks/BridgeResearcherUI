@@ -1,7 +1,6 @@
 var utils = require('../../utils');
 var ko = require('knockout');
 var root = require('../../root');
-var tx = require('../../transforms');
 var fn = require('../../functions');
 
 var UNIT_OPTIONS = Object.freeze([
