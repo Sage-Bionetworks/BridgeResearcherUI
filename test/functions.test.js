@@ -1,10 +1,26 @@
 var expect = require('chai').expect;
 var sinon = require('sinon');
 var fn = require('../app/src/functions');
+if (!String.prototype.padStart) {
+    String.prototype.padStart = function padStart(targetLength,padString) {
+        targetLength = targetLength>>0; //floor if number or convert non-number to 0;
+        padString = String(padString || ' ');
+        if (this.length > targetLength) {
+            return String(this);
+        }
+        else {
+            targetLength = targetLength-this.length;
+            if (targetLength > padString.length) {
+                padString += padString.repeat(targetLength/padString.length); //append to original to ensure we are longer than needed
+            }
+            return padString.slice(0,targetLength) + String(this);
+        }
+    };
+}
 
 // Note that date formatting functions are locale-sensitive and will fail on machines configured
 // differently than in the United States.
-var TIME = new Date(1495562263000); // Tue May 23 2017 10:57:43 GMT-0700 (PDT)
+var TIME = new Date(1495562263000);
 function getArray() {
     return [{foo:"Dates"},{foo:"apples"},{foo:"carrots"},{foo:"Bananas"}];
 }
@@ -59,10 +75,17 @@ describe("date & time formatting", function() {
             }).to.throw();
         });
     });
+    function pad(number, padding) {
+        return (number+"").padStart(padding, "00000");
+    }
     describe("localDateTimeToUTC", function() {
         it("converts our test time to UCT", function() {
+            var utcValue = TIME.getFullYear() + "-" + pad(TIME.getMonth()+1,2) + 
+                "-" + TIME.getDate() + "T" + pad(TIME.getHours(),2) + ":" + 
+                TIME.getMinutes() + ":" + TIME.getSeconds() + "." + 
+                pad(TIME.getMilliseconds(),3) + "Z";
             expect(fn.localDateTimeToUTC(TIME).toISOString())
-                .to.equal("2017-05-23T10:57:43.000Z");
+                .to.equal(utcValue);
         });
     });
 });
