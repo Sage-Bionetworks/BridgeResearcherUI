@@ -1,7 +1,7 @@
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var bind = require('../../binder');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 var alerts = require('../../widgets/alerts');
 var tables = require('../../tables');
 
@@ -9,7 +9,7 @@ module.exports = function(params) {
     var self = this;
     self.keys = params;
 
-    self.formatDateTime = fn.formatLocalDateTime;
+    self.formatDateTime = fn.formatDateTime;
     
     var binder = bind(self)
         .obs('guid', params.guid)

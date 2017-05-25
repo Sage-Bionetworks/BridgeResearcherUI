@@ -1,7 +1,7 @@
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var bind = require('../../binder');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 var alerts = require('../../widgets/alerts');
 
 module.exports = function(params) {
@@ -16,11 +16,12 @@ module.exports = function(params) {
         .obs('guid', params.guid)
         .obs('name');
 
+    fn.copyProps(self, fn, 'formatDateTime');
+
     // subpopulation fields
-    serverService.getSubpopulation(params.guid).then(function(subpop) {
-        self.nameObs(subpop.name);
-        self.publishedConsentCreatedOnObs(subpop.publishedConsentCreatedOn);
-    });
+    serverService.getSubpopulation(params.guid)
+        .then(fn.handleObsUpdate(self.nameObs, 'name'))
+        .then(fn.handleObsUpdate(self.publishedConsentCreatedOnObs, 'publishedConsentCreatedOn'));
 
     // The editor and the request for the content can arrive in any order. bind here
     self.initEditor = (function(vm) {
@@ -43,30 +44,28 @@ module.exports = function(params) {
             var doc = consent.documentContent;
             consent.documentContent = doc.split(/<body[^>]*\>/)[1].split(/<\/body\>.*/)[0].trim();
         }
-        self.createdOnObs(self.formatDateTime(consent.createdOn));
+        self.createdOnObs(consent.createdOn);
         self.activeObs(consent.createdOn === self.publishedConsentCreatedOnObs());
         self.consent = consent;
         params.createdOn = consent.createdOn;
         self.initEditor(consent.documentContent);
     }
+
     function load() {
         return serverService.getStudyConsent(params.guid, params.createdOn);
     }
     function publishConsent(response) {
-        params.createdOn = response.createdOn;
-        self.createdOnObs(self.formatDateTime(response.createdOn));
-        self.publishedConsentCreatedOnObs(response.createdOn);
         return serverService.publishStudyConsent(params.guid, params.createdOn);
     }
-
-    self.formatDateTime = fn.formatLocalDateTime;
 
     self.publish = function(vm, event) {
         alerts.confirmation("Are you sure you want to save & publish this consent?", function() {
             utils.startHandler(vm, event);
             
-            utils.startHandler(vm, event);
             serverService.saveStudyConsent(params.guid, {documentContent: self.editor.getData()})
+                .then(fn.handleCopyProps(params, 'createdOn'))
+                .then(fn.handleObsUpdate(self.createdOnObs, 'createdOn'))
+                .then(fn.handleObsUpdate(self.publishedConsentCreatedOnObs, 'createdOn'))
                 .then(publishConsent)
                 .then(load)
                 .then(loadIntoEditor)
@@ -86,5 +85,5 @@ module.exports = function(params) {
         serverService.getStudyConsent(params.guid, params.createdOn) :
         serverService.getMostRecentStudyConsent(params.guid);
     promise.then(loadIntoEditor)
-            .catch(utils.failureHandler());
+        .catch(utils.failureHandler());
 };

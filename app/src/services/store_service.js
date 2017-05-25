@@ -1,4 +1,4 @@
-var transforms = require('../transforms');
+var fn = require('../functions');
 
 // This has to be here so that these filter values can be removed in the url to update the page.
 // This is very hacky...
@@ -21,7 +21,7 @@ module.exports = {
         localStorage.removeItem(key);
     },
     persistQuery: function(key, object) {
-        var queryString = transforms.queryString(object);
+        var queryString = fn.queryString(object);
         localStorage.setItem(key, queryString);
         var url = document.location.pathname + queryString + document.location.hash;
         window.history.replaceState(null, null, url);

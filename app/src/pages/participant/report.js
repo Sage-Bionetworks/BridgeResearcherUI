@@ -4,8 +4,9 @@ var root = require('../../root');
 var jsonFormatter = require('../../json_formatter');
 var tables = require('../../tables');
 var utils = require('../../utils');
+var fn = require('../../functions');
 
-var SORTER = utils.makeFieldSorter("date");
+var SORTER = fn.makeFieldSorter("date");
 var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
 function firstDayOfMonth(year, month) {

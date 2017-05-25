@@ -1,7 +1,7 @@
 var saveAs = require('../../../lib/filesaver.min.js');
 var serverService = require('../../services/server_service');
 var root = require('../../root');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 var Promise = require('bluebird');
 var bind = require('../../binder');
 var batchDialogUtils = require('../../batch_dialog_utils');
@@ -25,9 +25,9 @@ var FIELD_FORMATTERS = {
 };
 function formatConsentRecords(record) {
     var aString = record.subpopulationGuid;
-    aString += " consented=" + fn.formatLocalDateTime(record.signedOn);
+    aString += " consented=" + fn.formatDateTime(record.signedOn);
     if (record.withdrewOn) {
-        aString += ", withdrew=" + fn.formatLocalDateTime(record.withdrewOn);
+        aString += ", withdrew=" + fn.formatDateTime(record.withdrewOn);
     }
     return aString;
 }
@@ -197,7 +197,5 @@ module.exports = function(params) {
         self.cancel();
         root.closeDialog();
     };
-    self.formatLocalDateTime = function(date) {
-        return new Date(date).toLocaleDateString();
-    };
+    self.formatDateTime = fn.formatDateTime;
 };

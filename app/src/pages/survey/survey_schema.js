@@ -1,7 +1,7 @@
 var schemaUtils = require('../../pages/schema/schema_utils');
 var serverService = require('../../services/server_service');
 var bind = require('../../binder');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 var tables = require('../../tables');
 
 module.exports = function(params) {
@@ -20,7 +20,7 @@ module.exports = function(params) {
 
     tables.prepareTable(self, {name:'schema'});
 
-    self.formatDateTime = fn.formatLocalDateTime;
+    self.formatDateTime = fn.formatDateTime;
 
     function loadSchema(survey) {
         self.nameObs(survey.name);

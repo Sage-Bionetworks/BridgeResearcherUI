@@ -5,6 +5,7 @@ var criteriaUtils = require('../../criteria_utils');
 var utils = require('../../utils');
 var root = require('../../root');
 var tables = require('../../tables');
+var fn = require('../../functions');
 
 function deleteItem(schema) {
     return serverService.deleteSchema(schema.schemaId);
@@ -52,7 +53,7 @@ module.exports = function() {
         sharedModuleUtils.loadNameMaps()
             .then(serverService.getAllUploadSchemas)
             .then(function(response) {
-                self.itemsObs(response.items.sort(utils.makeFieldSorter("name")));
+                self.itemsObs(response.items.sort(fn.makeFieldSorter("name")));
             });
     }
     load();

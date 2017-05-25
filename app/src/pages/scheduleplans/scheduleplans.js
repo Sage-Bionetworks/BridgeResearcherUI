@@ -2,12 +2,10 @@ var serverService = require('../../services/server_service.js');
 var optionsService = require('../../services/options_service.js');
 var scheduleUtils = require('../schedule/schedule_utils.js');
 var utils = require('../../utils');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 var tables = require('../../tables');
 var root = require('../../root');
 var Promise = require('bluebird');
-
-var SORTER = utils.makeFieldSorter("label");
 
 function deleteItem(plan) {
     return serverService.deleteSchedulePlan(plan.guid);
@@ -27,7 +25,7 @@ module.exports = function() {
         refresh: load
     });
 
-    self.formatDateTime = fn.formatLocalDateTime;
+    self.formatDateTime = fn.formatDateTime;
     self.formatScheduleType = scheduleUtils.formatScheduleStrategyType;
     self.formatStrategy = scheduleUtils.formatStrategy;
 
@@ -47,10 +45,10 @@ module.exports = function() {
                     }
                     return Promise.resolve(activity);
                 });
-            }).then(function() {
-                response.items.sort(SORTER);
-                self.itemsObs(response.items);
-            }).catch(utils.listFailureHandler());
+            })
+            .then(fn.handleSort('items', 'label'))
+            .then(fn.handleObsUpdate(self.itemsObs, 'items'))
+            .catch(utils.listFailureHandler());
         });
     }
     load();

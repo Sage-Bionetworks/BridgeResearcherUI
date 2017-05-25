@@ -3,6 +3,7 @@ var utils = require('../../utils');
 var criteriaUtils = require('../../criteria_utils');
 var root = require('../../root');
 var tables = require('../../tables');
+var fn = require('../../functions');
 
 function deleteItem(plan) {
     return serverService.deleteSubpopulation(plan.guid);
@@ -11,9 +12,8 @@ function deleteItem(plan) {
 module.exports = function() {
     var self = this;
 
+    fn.copyProps(self, root, 'isDeveloper', 'isAdmin');
     self.criteriaLabel = criteriaUtils.label;
-    self.isDeveloper = root.isDeveloper;
-    self.isAdmin = root.isAdmin;
 
     tables.prepareTable(self, {
         name: "consent group",
@@ -23,9 +23,10 @@ module.exports = function() {
     });
 
     function load() {
-        serverService.getAllSubpopulations().then(function(response) {
-            self.itemsObs(response.items.sort(utils.makeFieldSorter("name")));
-        });
+        serverService.getAllSubpopulations()
+            .then(fn.handleSortItems('name'))
+            .then(fn.handleObsUpdate(self.itemsObs, 'items'))
+            .catch(utils.failureHandler());
     }
     load();
 };

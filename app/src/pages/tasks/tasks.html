@@ -4,7 +4,6 @@
             <h3>Compound Tasks</h3>
         </div>
         <div class="fixed-header-buttons">
-            <!--<button class="ui tiny button" data-bind="disable: !atLeastOneChecked(), click: copy">Copy</button>-->
             <button class="ui tiny button" data-bind="disable: !atLeastOneChecked(), click: copyToClipboard">Copy to Clipboard</button>
             <button class="ui red tiny button" data-bind="disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
             <a href="#/tasks/new" class="ui primary tiny button">New Task</a>
@@ -37,7 +36,7 @@
                 <td style="white-space: nowrap">
                     <a data-bind="attr: {'href': '#/tasks/'+ encodeURIComponent($data.taskId)}, text: $data.taskId"></a>
                 </td>
-                <td data-bind="html: $parent.formatDescription($data)"></td>
+                <td data-bind="html: $parent.formatCompoundActivity($data)"></td>
             </tr>
         </tbody>
     </table>

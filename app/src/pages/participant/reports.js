@@ -3,6 +3,7 @@ var serverService = require('../../services/server_service');
 var bind = require('../../binder');
 var root = require('../../root');
 var tables = require('../../tables');
+var fn = require('../../functions');
 
 function deleteItem(item) {
     return serverService.deleteParticipantReport(item.identifier, params.userId);
@@ -46,7 +47,7 @@ module.exports = function(params) {
     };
 
     function loadItems(response) {
-        self.itemsObs(response.items.sort(utils.makeFieldSorter("identifier")));
+        self.itemsObs(response.items.sort(fn.makeFieldSorter("identifier")));
     }
     function loadParticipantReports() {
         return serverService.getParticipantReports();
