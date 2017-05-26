@@ -1,7 +1,7 @@
 var utils = require('../../utils');
 var ko = require('knockout');
 var root = require('../../root');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 
 var UNIT_OPTIONS = Object.freeze([
     {value: null, label: '<none>'},
@@ -302,8 +302,8 @@ module.exports = {
     initConstraintsVM: function(vm, params) {
         vm.element = params.element;
         vm.elementsObs = params.elementsObs;
-        vm.formatDate = fn.formatLocalDateWithoutZone;
-        vm.formatDateTime = fn.formatLocalDateTime;
+        vm.formatDate = fn.formatDate;
+        vm.formatDateTime = fn.formatDateTime;
 
         if (params.element.type === "SurveyQuestion") {
             vm.hasRules = function() {

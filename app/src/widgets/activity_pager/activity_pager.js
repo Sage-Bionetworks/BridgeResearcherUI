@@ -1,5 +1,6 @@
 var utils = require('../../utils');
 var bind = require('../../binder');
+var fn = require('../../functions');
 
 var pageSize = 25;
 
@@ -12,8 +13,8 @@ module.exports = function(params) {
     var loadingFunc = params.loadingFunc;
 
     bind(self)
-        .obs('startDate', '')
-        .obs('endDate', '')
+        .obs('startDate')
+        .obs('endDate')
         .obs('pageCount', 0)
         .obs('offsetBy', null)
         .obs('warn', false)
@@ -52,10 +53,20 @@ module.exports = function(params) {
     function bothOrNeither(startDate, endDate) {
         return (startDate === null && endDate === null) || (startDate !== null && endDate !== null);
     }
-
+    function incrementPage(response) {
+        response.pageCount = self.pageCountObs()+1;
+        return response;
+    }
+    function updateModel(response) {
+        if (response) {
+            self.pageCountObs(response.pageCount);
+            self.offsetByObs(response.offsetBy);
+        }
+    }
+    
     function wrappedLoadingFunc() {
-        var startDate = self.startDateObs();
-        var endDate = self.endDateObs();
+        var startDate = fn.dateTimeString(self.startDateObs());
+        var endDate = fn.dateTimeString(self.endDateObs());
         var offsetBy = self.offsetByObs();
 
         if (!bothOrNeither(startDate, endDate)) {
@@ -64,22 +75,12 @@ module.exports = function(params) {
             return; // can't do this, have to set both dates.
         }
         self.warnObs(false);
-        
         self.showLoaderObs(true);
-        loadingFunc(offsetBy, pageSize, startDate, endDate).then(function(response) {
-            response.pageCount = self.pageCountObs()+1;
-            updateModel(response);
-            self.showLoaderObs(false);
-        }).catch(utils.failureHandler());
-    }
-
-    function updateModel(response) {
-        if (response) {
-            self.pageCountObs(response.pageCount);
-            self.offsetByObs(response.offsetBy);
-            self.startDateObs(response.scheduledOnStart);
-            self.endDateObs(response.scheduledOnEnd);
-        }
+        loadingFunc(offsetBy, pageSize, startDate, endDate)
+            .then(incrementPage)
+            .then(updateModel)
+            .then(fn.handleStaticObsUpdate(self.showLoaderObs, false))
+            .catch(utils.failureHandler());
     }
     wrappedLoadingFunc();
 };

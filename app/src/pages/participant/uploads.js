@@ -2,8 +2,8 @@ var utils = require('../../utils');
 var serverService = require('../../services/server_service');
 var bind = require('../../binder');
 var tables = require('../../tables');
-var fn = require('../../transforms');
 var root = require('../../root');
+var fn = require('../../functions');
 
 function sortUploads(b,a) {
     return (a.requestedOn < b.requestedOn) ? -1 : (a.requestedOn > b.requestedOn) ? 1 : 0;
@@ -26,17 +26,9 @@ module.exports = function(params) {
         self.nameObs(root.isPublicObs() ? part.name : part.externalId);
     }).catch(utils.failureHandler());
 
-    self.isPublicObs = root.isPublicObs;
-    self.isDeveloper = root.isDeveloper;
-    self.formatLocalDateTime = fn.formatLocalDateTime;
-    self.selectedRangeObs.subscribe(function(newValue) {
-        // TODO: This is called one time without a value, and then one time with a value.
-        // this breaks the UI in subtle ways, so these subscribers are probably not
-        // the best way to update from the flatpickr control.
-        if (newValue) {
-            load();
-        }
-    });
+    fn.copyProps(self, root, 'isPublicObs');
+    fn.copyProps(self, fn, 'formatDateTime');
+    self.selectedRangeObs.subscribe(load);
 
     tables.prepareTable(self, {name:'upload'});
 
@@ -86,7 +78,7 @@ module.exports = function(params) {
             var id = item.schemaId;
             var rev = item.schemaRevision;
             item.contentObs(id);
-            item.hrefObs('/#/schemas/'+encodeURIComponent(id)+'/versions/'+rev+'/editor');
+            item.hrefObs('/#/schemas/'+encodeURIComponent(id)+'/versions/'+rev);
         }
         item.progressState = getSemanticControlState(item);
         item.completedByObs(formatCompletedBy(item));
@@ -114,43 +106,39 @@ module.exports = function(params) {
         if (item.status === 'succeeded') {
             var start = new Date(item.requestedOn).getTime();
             var end = new Date(item.completedOn).getTime();
-            var fStart = fn.formatLocalDateTime(item.requestedOn);
-            var fEnd = fn.formatLocalDateTime(item.completedOn);
+            var fStart = fn.formatDateTime(item.requestedOn);
+            var fEnd = fn.formatDateTime(item.completedOn);
             if (fStart.split(', ')[0] === fEnd.split(', ')[0]) {
                 fEnd = fEnd.split(', ')[1];
             }
             return fEnd+" ("+item.completedBy+", "+fn.formatMs(end-start)+")";
         } else if (item.status === 'duplicate') {
-            var shortDup = fn.truncateGUID(item.duplicateUploadId);
-            return "duplicates <span class='upload-id' title='"+item.duplicateUploadId+"'>"+
-                shortDup+"</span>";
+            return "duplicates <span class='upload-id'>"+shortDup+"</span>";
         }
         return '';
     }
     function processUploads(response) {
-        var dateString = fn.formatLocalDateTimeWithoutZone(response.startTime).split(" @ ")[0];
+        var dateString = fn.formatDate(response.startTime);
         self.dayObs(dateString);
         self.totalObs(response.items.length);
         response.items.sort(sortUploads);
-        response.items.forEach(processItem);
+        response.items.map(processItem);
         self.itemsObs(response.items);
         return response;
     }
     function getDateRange(date) {
         date = (date) ? new Date(date) : new Date();
         return {
-            startTime: fn.formatLocalDate(date, "00:00:00.000"), 
-            endTime: fn.formatLocalDate(date, "23:59:59.999")
+            startTime: date.toISOString().split("T")[0] + "T00:00:00.000Z", 
+            endTime: date.toISOString().split("T")[0] + "T23:59:59.999Z"
         };
-    }
+    }    
     function load() {
         self.showLoaderObs(true);
         var range = getDateRange( self.selectedRangeObs() );
         serverService.getParticipantUploads(params.userId, range.startTime, range.endTime)
             .then(processUploads)
-            .then(function() {
-                self.showLoaderObs(false);
-            })
+            .then(fn.handleStaticObsUpdate(self.showLoaderObs, false))
             .catch(utils.failureHandler());
     }
     load();

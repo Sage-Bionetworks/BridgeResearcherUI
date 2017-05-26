@@ -1,6 +1,7 @@
 var utils = require('../../utils');
 var bind = require('../../binder');
 var storeService = require('../../services/store_service');
+var fn = require('../../functions');
 
 var pageSize = 25;
 
@@ -65,22 +66,13 @@ module.exports = function(params) {
         self.showLoaderObs(true);
         wrappedLoadingFunc((self.totalPagesObs()-1)*pageSize);
     };
-    
-    function wrappedLoadingFunc(offsetBy, vm, event) {
-        var emailFilter = self.emailFilterObs();
-        var startDate = self.startDateObs();
-        var endDate = self.endDateObs();
 
-        storeService.persistQuery(pageKey, {emailFilter: emailFilter, 
-            startDate: startDate, endDate: endDate, offsetBy: offsetBy});
-
-        loadingFunc(offsetBy, pageSize, emailFilter, startDate, endDate).then(function(response) {
-            updateModel(response);
-            self.searchLoadingObs(false);
-            self.showLoaderObs(false);
-        }).catch(utils.failureHandler());
+    function makeDate(date) {
+        if (date) {
+            return new Date(date).toISOString();
+        }
+        return null;
     }
-
     function updateModel(response) {
         // If you're not a researcher, it can happen this gets called without a response.
         if (response) {
@@ -93,6 +85,21 @@ module.exports = function(params) {
             self.currentPageObs(Math.round(response.offsetBy/response.pageSize));
             self.totalPagesObs( Math.ceil(response.total/response.pageSize) );
         }
+    }
+    
+    function wrappedLoadingFunc(offsetBy, vm, event) {
+        var emailFilter = self.emailFilterObs();
+        var startDate = makeDate(self.startDateObs());
+        var endDate = makeDate(self.endDateObs());
+
+        storeService.persistQuery(pageKey, {emailFilter: emailFilter, 
+            startDate: startDate, endDate: endDate, offsetBy: offsetBy});
+
+        loadingFunc(offsetBy, pageSize, emailFilter, startDate, endDate)
+            .then(updateModel)
+            .then(fn.handleStaticObsUpdate(self.searchLoadingObs, false))
+            .then(fn.handleStaticObsUpdate(self.showLoaderObs, false))
+            .catch(utils.failureHandler());
     }
     wrappedLoadingFunc(offsetBy);
 };

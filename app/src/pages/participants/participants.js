@@ -4,7 +4,7 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var root = require('../../root');
 var tables = require('../../tables');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 var alerts = require('../../widgets/alerts');
 
 var cssClassNameForStatus = {
@@ -33,7 +33,7 @@ module.exports = function() {
     self.isAdmin = root.isAdmin;
     self.recordsObs = ko.observable("");
     self.formatName = fn.formatName;
-    self.formatDateTime = fn.formatLocalDateTime;
+    self.formatDateTime = fn.formatDateTime;
     self.classNameForStatus = function(user) {
         return cssClassNameForStatus[user.status];
     };

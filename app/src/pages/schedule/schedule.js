@@ -1,6 +1,6 @@
 var scheduleUtils = require('./schedule_utils');
 var utils = require('../../utils');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 var root = require('../../root');
 var ko = require('knockout');
 
@@ -79,7 +79,11 @@ function getScheduleType(editorType) {
 
 module.exports = function(params) {
     var self = this;
-    self.collectionName = params.collectionName;
+    
+    fn.copyProps(self, params, 'collectionName');
+    fn.copyProps(self, fn, 'formatDateTime');
+    fn.copyProps(self, scheduleUtils, 'surveysOptionsObs', 'taskOptionsObs', 
+        'compoundActivityOptionsObs', 'formatEventId', 'formatTimesArray->formatTimes');
         
     self.scheduleTypeOptions = SCHEDULE_TYPE_OPTIONS;
     self.scheduleTypeLabel = utils.makeOptionLabelFinder(SCHEDULE_TYPE_OPTIONS);
@@ -158,10 +162,6 @@ module.exports = function(params) {
     self.editorScheduleTypeObs.subscribe(function(newValue) {
         self.scheduleTypeObs( getScheduleType(newValue) );    
     });
-    
-    self.formatDateTime = fn.formatLocalDateTime;
-    self.formatEventId = scheduleUtils.formatEventId;
-    self.formatTimes = scheduleUtils.formatTimesArray;
 
     self.editTimes = function(vm, event) {
         event.preventDefault();
@@ -221,13 +221,6 @@ module.exports = function(params) {
     self.copyGuid = function(item, event) { 
         utils.clipString(item.guid);
     };
-
-    // These are all loaded as part of the schedule plan, and cached in scheduleUtils,
-    // so these should always render correctly when the schedule plan loads from the 
-    // server.
-    self.surveysOptionsObs = scheduleUtils.surveysOptionsObs;
-    self.taskOptionsObs = scheduleUtils.taskOptionsObs;
-    self.compoundActivityOptionsObs = scheduleUtils.compoundActivityOptionsObs;
 
     // Finally... update with the schedule if we already have it from the server, as knockout 
     // recreates the views when you use dragula to reorder the list of scheduleCriteria. 

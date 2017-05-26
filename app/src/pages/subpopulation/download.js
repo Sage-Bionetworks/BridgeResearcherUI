@@ -1,6 +1,7 @@
 var serverService = require('../../services/server_service');
 var config = require('../../config');
 var bind = require('../../binder');
+var fn = require('../../functions');
 
 module.exports = function(params) {
     var self = this;
@@ -11,14 +12,14 @@ module.exports = function(params) {
         .obs('htmlUrl')
         .obs('pdfUrl');
     
-    serverService.getSubpopulation(params.guid).then(function(subpop) {
-        self.nameObs(subpop.name);
-    });
-    serverService.getSession().then(function(session) {
-        var host = config.host[session.environment] + "/" + params.guid + "/consent.";
-        host = host.replace('https','http');
-        host = host.replace('webservices','docs');
-        self.htmlUrlObs(host + 'html');
-        self.pdfUrlObs(host + 'pdf');
-    });    
+    serverService.getSubpopulation(params.guid)
+        .then(fn.handleObsUpdate(self.nameObs, 'name'))
+        .then(serverService.getSession)
+        .then(function(session) {
+            var host = config.host[session.environment] + "/" + params.guid + "/consent.";
+            host = host.replace('https','http');
+            host = host.replace('webservices','docs');
+            self.htmlUrlObs(host + 'html');
+            self.pdfUrlObs(host + 'pdf');
+        });    
 };

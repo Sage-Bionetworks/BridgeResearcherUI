@@ -1,4 +1,7 @@
+var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+
+// The ignore plugin in is removing moment.js localization, which takes a lot of room.
 
 module.exports = {
     devtool: 'source-map',
@@ -16,10 +19,10 @@ module.exports = {
             { test: /\.html$/, loader: "html?removeComments=false" }
         ]
     },
-    plugins: [new HtmlWebpackPlugin({
-        template: "app/template.html",
-        filename: "../index.html"
-    })],
+    plugins: [
+        new HtmlWebpackPlugin({template: "app/template.html",filename: "../index.html"}),
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+    ],
     resolve: {
         extensions: ['', '.css', '.js', '.html','.scss']
     },

@@ -3,6 +3,7 @@ var serverService = require('../../services/server_service');
 var bind = require('../../binder');
 var root = require('../../root');
 var tables = require('../../tables');
+var fn = require('../../functions');
 
 function deleteItem(item) {
     return serverService.deleteParticipantReport(item.identifier, params.userId);
@@ -17,6 +18,8 @@ module.exports = function(params) {
         .obs('isNew', false)
         .obs('title', '&#160;');
 
+    fn.copyProps(self, root, 'isPublicObs', 'isDeveloper', 'isResearcher');
+
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(root.isPublicObs() ? part.name : part.externalId);
         self.nameObs(root.isPublicObs() ? part.name : part.externalId);
@@ -26,9 +29,6 @@ module.exports = function(params) {
         name:'report', 
         delete: deleteItem
     });
-    self.isPublicObs = root.isPublicObs;
-    self.isDeveloper = root.isDeveloper;
-    self.isResearcher = root.isResearcher;
 
     self.reportURL = function(item) {
         return root.userPath() + self.userIdObs() + '/reports/' + item.identifier;        
@@ -45,17 +45,11 @@ module.exports = function(params) {
         load();
     };
 
-    function loadItems(response) {
-        self.itemsObs(response.items.sort(utils.makeFieldSorter("identifier")));
-    }
-    function loadParticipantReports() {
-        return serverService.getParticipantReports();
-    }
-
     function load() {
         serverService.getParticipant(params.userId)
-            .then(loadParticipantReports)
-            .then(loadItems)
+            .then(serverService.getParticipantReports)
+            .then(fn.handleSort('items', 'identifier'))
+            .then(fn.handleObsUpdate(self.itemsObs, 'items'))
             .catch(utils.notFoundHandler("Participant", "participants"));
     }
     load();

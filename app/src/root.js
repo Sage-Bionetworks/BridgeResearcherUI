@@ -27,7 +27,7 @@ var pageSets = {
     'enrollees': ['enrollees'].concat(participantPages),
     'admin/info': ['admin_info'],
     'admin/cache': ['admin_cache'],
-    'reports': ['reports', 'report'],
+    'reports': ['','dailyUploads','uploads','reports', 'report','signUps'],
     'topics': ['topics', 'topic'],
     'tasks': ['tasks','task'],
     'shared_modules': ['shared_modules','shared_module','shared_module_versions']
@@ -57,7 +57,7 @@ var RootViewModel = function() {
         .obs('studyIdentifier')
         .obs('selected', '')
         .obs('roles[]', [])
-        .obs('mainPage', 'start')
+        .obs('mainPage', 'dailyUploads')
         .obs('mainParams', {})
         .obs('editorPanel', 'none')
         .obs('editorParams', {})

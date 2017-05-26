@@ -1,6 +1,6 @@
-var utils = require('../../utils');
 var ko = require('knockout');
 var root = require('../../root');
+var fn = require('../../functions');
 
 /**
  * This is a simpler replacement for the object-hash library.
@@ -61,7 +61,7 @@ function ListsSource(elements, element) {
     for (var key in md5s) {
         this.listSet.push(md5s[key]);
     }
-    this.listSet.sort(utils.makeFieldSorter('name'));
+    this.listSet.sort(fn.makeFieldSorter('name'));
 }
 ListsSource.prototype = {
     getAllLists: function() {

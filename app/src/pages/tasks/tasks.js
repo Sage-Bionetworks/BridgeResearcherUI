@@ -3,6 +3,7 @@ var utils = require('../../utils');
 var Promise = require('bluebird');
 var tables = require('../../tables');
 var scheduleUtils = require('../schedule/schedule_utils');
+var fn = require('../../functions');
 
 function deleteItem(task) {
     return serverService.deleteTaskDefinition(task.taskId);
@@ -18,7 +19,7 @@ module.exports = function() {
         refresh: load
     });
 
-    self.formatDescription = scheduleUtils.formatCompoundActivity;
+    fn.copyProps(self, scheduleUtils, 'formatCompoundActivity');
 
     self.copy = function(vm, event) {
         var copyables = self.itemsObs().filter(tables.hasBeenChecked);
@@ -35,13 +36,11 @@ module.exports = function() {
     };
 
     function load() {
-        scheduleUtils.loadOptions().then(function() {
-            return serverService.getTaskDefinitions().then(function(response) {
-                response.items.sort(utils.makeFieldSorter("taskId"));
-                self.itemsObs(response.items);
-                return response.items;
-            });
-        }).catch(utils.failureHandler());
+        scheduleUtils.loadOptions()
+            .then(serverService.getTaskDefinitions)
+            .then(fn.handleSort('items','taskId'))
+            .then(fn.handleObsUpdate(self.itemsObs, 'items'))
+            .catch(utils.failureHandler());
     }
     load();
 };

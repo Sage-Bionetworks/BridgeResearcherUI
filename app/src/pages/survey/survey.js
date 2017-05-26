@@ -2,7 +2,7 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var surveyUtils = require('./survey_utils');
 var utils = require('../../utils');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 var root = require('../../root');
 
 module.exports = function(params) {
@@ -10,7 +10,7 @@ module.exports = function(params) {
 
     self.isLoaded = ko.observable(false);
     self.survey = null;
-    self.formatDateTime = fn.formatLocalDateTime;
+    self.formatDateTime = fn.formatDateTime;
     surveyUtils.initSurveyVM(self);
 
     // Only one is needed
