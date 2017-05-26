@@ -96,7 +96,7 @@ module.exports = function() {
     function load() {
         return sharedModuleUtils.loadNameMaps()
             .then(serverService.getSurveys)
-            .then(fn.handleSortItems('name'))
+            .then(fn.handleSort('items','name'))
             .then(fn.handleForEach('items', addScheduleField))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))
             .then(getSchedulePlans)

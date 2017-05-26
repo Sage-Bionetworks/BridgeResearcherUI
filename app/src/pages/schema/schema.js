@@ -3,6 +3,7 @@ var serverService = require('../../services/server_service');
 var schemaUtils = require('../schema/schema_utils');
 var utils = require('../../utils');
 var bind = require('../../binder');
+var fn = require('../../functions');
 
 var FIELD_SKELETON = {
     name:'', required:false, type:null, unboundedText:false, maxLength:'100', fileExtension:'', mimeType:''
@@ -18,6 +19,12 @@ module.exports = function(params) {
     var minAnd = bind.objPropDelegates('minAppVersions', 'Android');
     var maxIos = bind.objPropDelegates('maxAppVersions', 'iPhone OS');
     var maxAnd = bind.objPropDelegates('maxAppVersions', 'Android');
+    var hideWarning = fn.handleStaticObsUpdate(self.showErrorObs, false);
+    var updateRevision = fn.seq(
+        fn.handleObsUpdate(self.revisionObs, 'revision'),
+        fn.handleCopyProps(self.schema, 'version'),
+        fn.handleStaticObsUpdate(self.isNewObs, false)
+    );
 
     var binder = bind(self)
         .obs('isNew', params.schemaId === "new")
@@ -85,15 +92,7 @@ module.exports = function(params) {
     function makeNewField() {
         return fieldDefToObs([Object.assign({}, FIELD_SKELETON)])[0];
     }    
-    function hideWarning() {
-        self.showErrorObs(false);
-    }
-    function updateRevision(response) {
-        self.revisionObs(response.revision);
-        self.schema.version = response.version;
-        self.isNewObs(false);
-        return response;
-    }
+    
     function handleError(failureHandler) {
         return function(response) {
             var json = response.responseJSON;

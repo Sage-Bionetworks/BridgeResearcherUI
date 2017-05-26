@@ -1,10 +1,9 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
-            <h3>Study Activity</h3>
+            <h3>Study Reports</h3>
         </div>
         <div class="fixed-header-buttons">
-            <div style="margin-right:1rem" data-bind="css:{active:isLoadingObs}" class="ui small inline loader"></div>
             <div class="ui tiny buttons">
                 <button data-bind="click: selectRange, css:{active: isActive('2')}" 
                     data-range="2" class="ui tiny button">2 weeks</button>
@@ -15,10 +14,21 @@
             </div>
         </div>
     </div>
-    <div class="empty-secondary-menu"></div>
+    <div class="ui secondary pointing menu">
+        <div  class="active item">
+            <i class="upload icon"></i> Daily Uploads
+        </div>
+        <a href="#/reports/signUps" class="item">
+            <i class="users icon"></i> Sign Ups
+        </a>
+        <a href="#/reports/raw" class="item">
+            <i class="table icon"></i> Raw Data
+        </a>
+    </div>    
 </div>
 <div class="scrollbox">
     <div style="padding: 0 2rem">
-        <canvas data-bind="chart: chartObs"></canvas>
+        <p data-bind="visible: !hasDataObs()">No data available.</p>
+        <canvas data-bind="visible: hasDataObs, chart: chartObs"></canvas>
     </div>
 </div>

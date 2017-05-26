@@ -35,6 +35,8 @@ module.exports = function() {
     self.isLoadingObs = ko.observable(false);
     self.chartObs = ko.observable();
     self.rangeObs = ko.observable('2');
+    self.hasDataObs = ko.observable(false);
+
     self.isActive = function(value) {
         return ko.computed(function() {
             return self.rangeObs() === value;
@@ -71,11 +73,12 @@ module.exports = function() {
         }
         var stepSize = Math.pow(10, Math.floor(Math.log10(max)));
 
+        self.hasDataObs(datasets.length > 0);
+
         self.chartObs({
             type: 'line',
             data: {labels: labels, datasets: datasets},
             options: {
-                title: {text: "Daily Uploads",display: true},
                 scales: {
                     yAxes: [{
                         ticks: {

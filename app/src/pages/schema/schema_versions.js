@@ -2,6 +2,7 @@ var serverService = require('../../services/server_service');
 var criteriaUtils = require('../../criteria_utils');
 var tables = require('../../tables');
 var bind = require('../../binder');
+var fn = require('../../functions');
 
 module.exports = function(params) {
     var self = this;
@@ -15,7 +16,8 @@ module.exports = function(params) {
         name: 'schema'
     });
 
-    self.criteriaLabel = criteriaUtils.label;
+    fn.copyProps(self, criteriaUtils, 'label->criteriaLabel');
+
     self.revisionLabel = ko.computed(function() {
         if (self.revisionObs()) {
             return 'v' + self.revisionObs();
@@ -25,10 +27,11 @@ module.exports = function(params) {
     self.link = function(item) {
         return "#/schemas/"+encodeURIComponent(item.schemaId)+"/versions/"+item.revision+'/editor';
     };
-    serverService.getUploadSchemaAllRevisions(params.schemaId).then(function(response) {
-        self.itemsObs(response.items);
-        if (response.items.length) {
-            self.nameObs(response.items[0].name);
-        }
-    });
+    serverService.getUploadSchemaAllRevisions(params.schemaId)
+        .then(fn.handleObsUpdate(self.itemsObs, 'items'))
+        .then(function(response) {
+            if (response.items.length) {
+                self.nameObs(response.items[0].name);
+            }
+        });
 };

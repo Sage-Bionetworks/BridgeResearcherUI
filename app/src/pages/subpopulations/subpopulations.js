@@ -24,7 +24,7 @@ module.exports = function() {
 
     function load() {
         serverService.getAllSubpopulations()
-            .then(fn.handleSortItems('name'))
+            .then(fn.handleSort('items','name'))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))
             .catch(utils.failureHandler());
     }

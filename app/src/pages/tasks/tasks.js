@@ -38,7 +38,7 @@ module.exports = function() {
     function load() {
         scheduleUtils.loadOptions()
             .then(serverService.getTaskDefinitions)
-            .then(fn.handleSortItems('taskId'))
+            .then(fn.handleSort('items','taskId'))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))
             .catch(utils.failureHandler());
     }
