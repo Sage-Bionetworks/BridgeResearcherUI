@@ -46,8 +46,6 @@ module.exports = function(params) {
             return (selectedSchema.id === schema.schemaId);
         })[0];
     }
-    // TODO: This is not used anywhere.... ? Test this.
-    // Same with surveys... did I change this behavior and not remove these?
     function schemaToView(schema) {
         var selectedSchema = match(schema);
         var obj = {
