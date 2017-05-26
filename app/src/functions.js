@@ -165,12 +165,6 @@ function handleStaticObsUpdate(obs, value) {
         return response;
     };
 }
-function handleSortItems(fieldName) {
-    return function(response) {
-        response.items.sort(makeFieldSorter(fieldName));
-        return response;
-    };
-}
 function handleForEach(fieldName, func) {
     return function(response) {
         response[fieldName].forEach(func);
@@ -260,12 +254,11 @@ module.exports = {
     copyProps: copyProps,
     handleObsUpdate: handleObsUpdate,
     handleStaticObsUpdate: handleStaticObsUpdate,
-    handleSortItems: handleSortItems,
+    handleSort: handleSort,
     handleForEach: handleForEach,
     handleCopyProps: handleCopyProps,
     handleMap: handleMap,
     returning: returning,
     makeFieldSorter: makeFieldSorter,
-    lowerCaseStringSorter: lowerCaseStringSorter,
-    handleSort: handleSort
+    lowerCaseStringSorter: lowerCaseStringSorter
 };

@@ -2,7 +2,6 @@ var serverService = require('../../services/server_service');
 var root = require('../../root');
 var utils = require('../../utils');
 var tables = require('../../tables');
-var ko = require('knockout');
 var fn = require('../../functions');
 
 /**
@@ -47,6 +46,8 @@ module.exports = function(params) {
             return (selectedSchema.id === schema.schemaId);
         })[0];
     }
+    // TODO: This is not used anywhere.... ? Test this.
+    // Same with surveys... did I change this behavior and not remove these?
     function schemaToView(schema) {
         var selectedSchema = match(schema);
         var obj = {
@@ -64,6 +65,7 @@ module.exports = function(params) {
 
     function load() { 
         serverService.getAllUploadSchemas()
+            .then(fn.handleMap('items', schemaToView))
             .then(fn.handleSort('items','name'))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))
             .catch(utils.failureHandler());

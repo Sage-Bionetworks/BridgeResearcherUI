@@ -1,4 +1,3 @@
-var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var root = require('../../root');
 var jsonFormatter = require('../../json_formatter');

@@ -9,7 +9,6 @@
 var EventEmitter = require('../events');
 var storeService = require('./store_service');
 var config = require('../config');
-var utils = require("../utils");
 var Promise = require('bluebird');
 var fn = require('../functions');
 
@@ -201,11 +200,8 @@ module.exports = {
         return request;
     },
     getStudyList: function(env) {
-        var request = Promise.resolve(getInt(config.host[env] + config.getStudyList));
-        request.then(function(response) {
-            return response.items.sort(fn.makeFieldSorter("name"));
-        });
-        return request;
+        return Promise.resolve(getInt(config.host[env] + config.getStudyList))
+            .then(fn.handleSort('items', 'name'));
     },
     signOut: signOut,
     requestResetPassword: function(env, data) {

@@ -15,8 +15,9 @@ module.exports = function() {
     var self = this;
     self.allItems = [];
 
-    self.isAdmin = root.isAdmin;
-    self.isDeveloper = root.isDeveloper;
+    fn.copyProps(self, root, 'isAdmin', 'isDeveloper');
+    fn.copyProps(self, fn, 'formatDateTime');
+    fn.copyProps(self, scheduleUtils, 'formatScheduleStrategyType->formatScheduleType', 'formatStrategy');
     
     tables.prepareTable(self, {
         name: "schedule",
@@ -25,31 +26,28 @@ module.exports = function() {
         refresh: load
     });
 
-    self.formatDateTime = fn.formatDateTime;
-    self.formatScheduleType = scheduleUtils.formatScheduleStrategyType;
-    self.formatStrategy = scheduleUtils.formatStrategy;
+    function processActivity(activity) {
+        if (activity.activityType !== "compound") {
+            return Promise.resolve(activity);
+        }
+        return serverService.getTaskDefinition(activity.compoundActivity.taskIdentifier)
+            .then(function(task) {
+                activity.compoundActivity = task;
+                activity.compoundActivity.taskIdentifier = task.taskId;
+                return activity;
+            });
+    }
 
     function load() {
-        scheduleUtils.loadOptions().then(function() {
-            return serverService.getSchedulePlans();
-        }).then(function(response) {
-            return Promise.map(response.items, function(plan) {
-                return Promise.map(optionsService.getActivities(plan), function(activity) {
-                    if (activity.activityType === "compound") {
-                        return serverService.getTaskDefinition(activity.compoundActivity.taskIdentifier)
-                            .then(function(task) {
-                                activity.compoundActivity = task;
-                                activity.compoundActivity.taskIdentifier = task.taskId;
-                                return activity;
-                            });
-                    }
-                    return Promise.resolve(activity);
-                });
-            })
+        scheduleUtils.loadOptions()
+            .then(serverService.getSchedulePlans)
             .then(fn.handleSort('items', 'label'))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))
-            .catch(utils.listFailureHandler());
-        });
+            .then(function(response) {
+                return Promise.map(response.items, function(plan) {
+                    return Promise.map(optionsService.getActivities(plan), processActivity);
+                });
+            }).catch(utils.listFailureHandler());
     }
     load();
 };

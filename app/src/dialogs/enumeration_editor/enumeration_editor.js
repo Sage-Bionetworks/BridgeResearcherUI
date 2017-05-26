@@ -1,4 +1,3 @@
-var utils = require('../../utils');
 var ko = require('knockout');
 var root = require('../../root');
 var fn = require('../../functions');
