@@ -64,9 +64,6 @@ function clearPendingControl() {
         pendingControl = null;
     }
 }
-function num(value) {
-    return (typeof value !== "number") ? 0 : value;
-}
 function mightyMessageFinder(response) {
     if (response.responseJSON && response.responseJSON.message) {
         return response.responseJSON.message;

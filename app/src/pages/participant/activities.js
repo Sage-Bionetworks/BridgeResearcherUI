@@ -15,11 +15,12 @@ module.exports = function(params) {
         .obs('isNew', false)
         .obs('title', '&#160;');
 
+    fn.copyProps(self, root, 'isPublicObs');
+
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(root.isPublicObs() ? part.name : part.externalId);
     }).catch(utils.failureHandler());
 
-    self.isPublicObs = root.isPublicObs;
     tables.prepareTable(self, {name:'activitie'});
 
     self.linkMaker = function(userId, guid) {
@@ -32,7 +33,7 @@ module.exports = function(params) {
                 array.push(spec);
             });
         });
-        return response;
+        return {items: array};
     }
     serverService.getSchedulePlans()
         .then(processActivities)

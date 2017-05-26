@@ -9,7 +9,6 @@
 var EventEmitter = require('../events');
 var storeService = require('./store_service');
 var config = require('../config');
-var utils = require("../utils");
 var Promise = require('bluebird');
 var fn = require('../functions');
 

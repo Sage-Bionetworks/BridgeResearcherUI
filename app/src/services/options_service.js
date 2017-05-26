@@ -1,5 +1,4 @@
 var serverService = require('./server_service');
-var utils = require('../utils');
 var fn = require('../functions');
 
 var LABEL_SORTER = fn.makeFieldSorter('label');

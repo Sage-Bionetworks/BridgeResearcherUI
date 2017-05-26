@@ -1,4 +1,3 @@
-var utils = require('../../../utils');
 var serverService = require('../../../services/server_service');
 var tables = require('../../../tables');
 var alerts = require('../../../widgets/alerts');

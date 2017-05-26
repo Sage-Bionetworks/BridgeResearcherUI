@@ -4,7 +4,6 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var root = require('../../root');
 var tables = require('../../tables');
-var tx = require('../../transforms');
 var fn = require('../../functions');
 var alerts = require('../../widgets/alerts');
 

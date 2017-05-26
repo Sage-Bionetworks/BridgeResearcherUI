@@ -2,7 +2,6 @@ var serverService = require('../../services/server_service');
 var root = require('../../root');
 var utils = require('../../utils');
 var tables = require('../../tables');
-var ko = require('knockout');
 var fn = require('../../functions');
 
 /**
@@ -64,6 +63,7 @@ module.exports = function(params) {
 
     function load() { 
         serverService.getPublishedSurveys()
+            .then(fn.handleMap('items', surveyToView))
             .then(fn.handleSort('items', 'name'))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))
             .catch(utils.failureHandler());  
