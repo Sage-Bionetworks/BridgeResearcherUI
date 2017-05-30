@@ -204,7 +204,6 @@ function handleMap(fieldName, func) {
         return response;
     };
 }
-
 function copyProps(target, source) {
     console.assert(arguments.length >= 3, "insufficient arguments to copyProps");
     var args = Array.prototype.slice.call(arguments,2);
@@ -230,6 +229,12 @@ function makeFieldSorter(fieldName) {
 }
 function lowerCaseStringSorter(a,b) {
     return a.localeCompare(b);
+}
+function log(label) {
+    return function(response) {
+        console.log(label, response);
+        return response;
+    };
 }
 
 var formatDate = seq(checkArgs, asDate, formatDateString, blankInvalidDateString);
@@ -260,5 +265,6 @@ module.exports = {
     handleMap: handleMap,
     returning: returning,
     makeFieldSorter: makeFieldSorter,
-    lowerCaseStringSorter: lowerCaseStringSorter
+    lowerCaseStringSorter: lowerCaseStringSorter,
+    log: log
 };

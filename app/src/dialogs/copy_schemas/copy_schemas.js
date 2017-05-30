@@ -14,6 +14,7 @@ module.exports = function(params) {
     self.nameObs = ko.observable(copyables[0].name + " (Copy)");
     self.schemaIdObs = ko.observable(copyables[0].schemaId);
     self.revisionObs = ko.observable(1);
+    self.closeDialog = root.closeDialog;
 
     function updateObserversFromCopyables() {
         var index = self.indexObs();
@@ -70,19 +71,16 @@ module.exports = function(params) {
             updateObserversFromCopyables();
         }
     };
+
     self.copy = function(vm, event) {
         updateSpecsFromObservers();
         utils.startHandler(vm, event);
 
         Promise.each(specs, function(schema) {
             return serverService.createUploadSchema(schema);
-        }).then(function() {
-            params.closeCopySchemasDialog();
         })
+        .then(params.closeCopySchemasDialog)
         .then(utils.successHandler(vm, event))
         .catch(utils.failureHandler(vm, event));
-    };
-    self.closeDialog = function() {
-        root.closeDialog();
     };
 };

@@ -1,54 +1,39 @@
-
 @import "./lib.scss";
 
 .fixed-header {
     .fixed-header-title {
-        padding: 1rem 1rem 0 2rem;
-        @include flex-box(row);
+        display:flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        padding: 1rem 2.5rem .7rem 1.5rem;
 
-        .fixed-header-heading {
-            @include flex(1);
-            
-            h3 {
-                @include flex-box(row);
-                @include align-items(center);
-                margin: .75rem 0 0 0;
-                    .label {
-                        margin-left: 1rem;
-                    }
-            }
-            .section {
-                font-size: 1.1rem;
-            }
+        .section {
+            font-size: 1.1rem;
+            line-height: 1.8;
         }
-        .fixed-header-buttons {
-            padding-left: 1rem;
-            padding-right: 1.5rem;
+        h3 {
+             padding:0;
+             line-height:inherit!important;
+             margin:0;
+             margin-bottom:-.2rem;
         }
     }
-    .ui.menu {
-        margin: .5rem 0 0 0;
-    }
-    .ui.secondary.pointing.menu {
+    .ui.secondary.pointing.menu, .ui.empty.secondary.pointing.menu {
         position: relative;
-        box-shadow: 1px 1px 1px #aaa;
+        box-shadow: 0 2px 1px -1px #aaa;
+        min-height:.3rem; 
+        margin:0;
+        padding:0;
         border-bottom: none;
         z-index: 2;
+
+        .item {
+            padding-bottom: .75rem;
+        }
     }
-    .ui.empty.secondary.pointing.menu {
-        margin: 0;
-        margin-top: .1rem;
-        line-height: 0;
-        height: 0;
-        min-height: 1rem;
-    }
-    /* Used to position the green/orange label next to version number in secondary menu. */
     .right.menu.pub-status {
-        .item:first-child {
-            padding-right: 0;
+        .item {
+            max-height: 2.75rem;
         }
-        .item:not(:first-child) {
-            padding-left: .25rem;
-        }
-    }        
+    }    
 }

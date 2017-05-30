@@ -12,6 +12,14 @@ module.exports = function(params) {
         .bind('userId', params.userId)
         .bind('data', JSON.stringify(params.data));
 
+    self.close = params.closeDialog;
+
+    function addReport(entry) {
+        return (params.type === "participant") ?
+            serverService.addParticipantReport(params.userId, entry.identifier, entry) :
+            serverService.addStudyReport(entry.identifier, entry);
+    }
+
     self.save = function(vm, event) {
         var entry = binder.persist({});
         try {
@@ -27,17 +35,11 @@ module.exports = function(params) {
                 responseJSON: {errors: {identifier: ["identifier is required"]}}
             });
         }
-        utils.startHandler(vm, event);
 
-        var promise = (params.type === "participant") ?
-            serverService.addParticipantReport(params.userId, entry.identifier, entry) :
-            serverService.addStudyReport(entry.identifier, entry);
-        promise.then(utils.successHandler(vm, event))
-                .then(self.close)
-                .catch(utils.dialogFailureHandler(vm, event));
-    };
-    self.close = function(response) {
-        params.closeDialog();
-        return response;
+        utils.startHandler(vm, event);
+        addReport(entry)
+            .then(self.close)
+            .then(utils.successHandler(vm, event))
+            .catch(utils.dialogFailureHandler(vm, event));
     };
 };

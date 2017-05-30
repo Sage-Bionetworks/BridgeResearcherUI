@@ -57,7 +57,7 @@ module.exports = function() {
             labels.push(formatDate(item.date));
             succeeded.push(item.data.succeeded || 0);
             requested.push(item.data.requested || 0);
-            duplicates.push(item.date.duplicate || 0);
+            duplicates.push(item.data.duplicate || 0);
         });
         var max = Math.max.apply(null, succeeded);
 

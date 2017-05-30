@@ -53,7 +53,7 @@ module.exports = function(params) {
             name: survey.name, 
             checkedObs: ko.observable(!!selectedSurvey)
         };
-        if (params.allowMostRecent || selectedSurvey) {
+        if (params.allowMostRecent && selectedSurvey) {
             obj.createdOn = selectedSurvey.createdOn;
         } else if (!params.allowMostRecent) {
             obj.createdOn = survey.createdOn;
