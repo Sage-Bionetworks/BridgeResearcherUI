@@ -296,5 +296,32 @@ describe("handleMap", function() {
         expect(object.items[2]).to.equal("b");
     });
 });
+describe("handleIf", function() {
+    it("passes over function when false", function() {
+        var func = sinon.stub();
+        var bound = fn.handleIf(false, func);
+
+        bound();
+        expect(func.called).to.be.false;
+    });
+    it("executes function and returns value when true", function() {
+        var func = sinon.stub().returns(1);
+
+        var bound = fn.handleIf(true, func);
+
+        var result = bound(2);
+        expect(func.called).to.be.true;
+        expect(result).to.equal(2);
+    });
+    it("executes function and returns original argument when true", function() {
+        var func = sinon.stub().returns(1);
+
+        var bound = fn.handleIf(true, func, true);
+
+        var result = bound(2);
+        expect(func.called).to.be.true;
+        expect(result).to.equal(1);
+    });
+});
 
 });
