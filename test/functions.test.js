@@ -51,11 +51,6 @@ describe("date & time formatting", function() {
         it ("handles malformed input", function() {
             expect(fn.formatDateTime("asdf")).to.equal("");
         });
-        it ("handles null input", function() {
-            expect(function(){
-                fn.formatDateTime(null);
-            }).to.throw();
-        });
     });
     describe("formatMs", function() {
         it("formats long milliseconds", function() {
