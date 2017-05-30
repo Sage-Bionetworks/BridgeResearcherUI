@@ -51,13 +51,13 @@ module.exports = function() {
     function makeChart(response) {
         var labels = [];
         var requested = [];
-        var duplicates = [];
+        var duplicate = [];
         var succeeded = [];
         response.items.forEach(function(item) {
             labels.push(formatDate(item.date));
             succeeded.push(item.data.succeeded || 0);
             requested.push(item.data.requested || 0);
-            duplicates.push(item.data.duplicate || 0);
+            duplicate.push(item.data.duplicate || 0);
         });
         var max = Math.max.apply(null, succeeded);
 
@@ -68,8 +68,8 @@ module.exports = function() {
         if (Math.max.apply(null,requested) > 0) {
             datasets.push(dataSet('Failed Attempts', requested, 'rgba(54,162,235,1.0)'));
         }
-        if (Math.max.apply(null,duplicates) > 0) {
-            datasets.push(dataSet('Duplicates', duplicates, 'rgba(255,206,86,1.0)'));
+        if (Math.max.apply(null,duplicate) > 0) {
+            datasets.push(dataSet('Duplicates', duplicate, 'rgba(255,206,86,1.0)'));
         }
         var stepSize = Math.pow(10, Math.floor(Math.log10(max)));
 

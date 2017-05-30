@@ -47,9 +47,6 @@ module.exports = function(params) {
         }
         return serverService.getMetadata(query, params.type);
     }
-    function loadItems(response) {
-        self.itemsObs(response.items.reverse());
-    }
     function addImportedModules(response) {
         response.items.filter(function(item) {
             return item.moduleId;
@@ -63,7 +60,8 @@ module.exports = function(params) {
             .then(addImportedModules)
             .then(sharedModuleUtils.loadNameMaps)
             .then(searchForModules)
-            .then(loadItems);
+            .then(fn.handleReverse('items'))
+            .then(fn.handleObsUpdate(self.itemsObs, 'items'));
     }
     load();
 };

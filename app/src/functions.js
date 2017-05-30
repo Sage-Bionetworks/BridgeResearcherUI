@@ -20,9 +20,6 @@ function seq() {
     };
 }
 function asDate(value) {
-    if (value === null) {
-        throw Error('asDate cannot format a null value');
-    }
     return is(value, 'Date') ? value : new Date(value);
 }
 function blankInvalidDateString(string) {
@@ -135,7 +132,6 @@ function localDateTimeToUTC(date) {
 function utcTolocalDateTime(date) {
     return new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
 }
-
 function checkArgs(value) {
     if (arguments.length !== 1) { throw new Error(arguments); }
     return value;
@@ -236,35 +232,60 @@ function log(label) {
         return response;
     };
 }
+function handleIf(bool, func, returnFuncValue) {
+    return function(response) {
+        if (bool) { 
+            var result = func(); 
+            if (returnFuncValue) {
+                return result;
+            }
+        }
+        return response;
+    };
+}
+function handlePromise(func) {
+    return function(arg) {
+        return func(arg);
+    };
+}
+function handleReverse(property) {
+    return function(response) {
+        response[property].reverse();
+        return response;
+    };
+}
 
 var formatDate = seq(checkArgs, asDate, formatDateString, blankInvalidDateString);
 var formatDateTime = seq(checkArgs, asDate, formatDateTimeString, blankInvalidDateString);
 
 module.exports = {
-    seq: seq,
+    copyProps: copyProps,
+    dateTimeString: dateTimeString,
     formatDate: formatDate,
     formatDateTime: formatDateTime,
+    formatLanguages: formatLanguages,
     formatMs: formatMs,
+    formatName: formatName,
+    formatRoles: formatRoles,
     formatTitleCase: formatTitleCase,
     formatVersionRange: formatVersionRange,
-    queryString: queryString,
-    formatLanguages: formatLanguages,
-    persistLanguages: persistLanguages,
-    formatRoles: formatRoles,
-    persistRoles: persistRoles,
-    formatName: formatName,
-    localDateTimeToUTC: seq(asDate, localDateTimeToUTC),
-    utcTolocalDateTime: seq(asDate, utcTolocalDateTime),
-    dateTimeString: dateTimeString,
-    copyProps: copyProps,
-    handleObsUpdate: handleObsUpdate,
-    handleStaticObsUpdate: handleStaticObsUpdate,
-    handleSort: handleSort,
-    handleForEach: handleForEach,
     handleCopyProps: handleCopyProps,
+    handleForEach: handleForEach,
+    handleIf: handleIf,
     handleMap: handleMap,
-    returning: returning,
-    makeFieldSorter: makeFieldSorter,
+    handleObsUpdate: handleObsUpdate,
+    handlePromise: handlePromise,
+    handleReverse: handleReverse,
+    handleSort: handleSort,
+    handleStaticObsUpdate: handleStaticObsUpdate,
+    localDateTimeToUTC: seq(asDate, localDateTimeToUTC),
+    log: log,
     lowerCaseStringSorter: lowerCaseStringSorter,
-    log: log
+    makeFieldSorter: makeFieldSorter,
+    persistLanguages: persistLanguages,
+    persistRoles: persistRoles,
+    queryString: queryString,
+    returning: returning,
+    seq: seq,
+    utcTolocalDateTime: seq(asDate, utcTolocalDateTime)
 };

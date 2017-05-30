@@ -14,9 +14,9 @@ var Promise = require('bluebird');
 module.exports = function(params) {
     var self = this;
     
+    // The callback function will be called when saving the schedule plan; the strategy 
+    // implementation must implement this callback to return a strategy object.
     var binder = bind(self)
-        // The callback function will be called when saving the schedule plan; the strategy 
-        // implementation must implement this callback to return a strategy object.
         .bind('strategy', null, null, tx.callObsCallback)
         .bind('label', '')
         .obs('schedulePlanType', (params.guid==="new") ? 'SimpleScheduleStrategy' : 'empty');
@@ -54,7 +54,6 @@ module.exports = function(params) {
         self.schedulePlanTypeObs(plan.strategy.type);
         return plan;
     }
-
     function resolveActivity(activity) {
         return serverService.getTaskDefinition(activity.compoundActivity.taskIdentifier)
             .then(function(task) {
@@ -63,22 +62,24 @@ module.exports = function(params) {
                 return activity;
             });
     }
-
+    function isCompoundActivity(activity) {
+        return activity.activityType === "compound";
+    }
     // These are not actually filled out on the server.
     function addCompoundActivitiesToPlan(plan) {
-        var activities = optionsService.getActivities(plan).filter(function(activity) {
-            return activity.activityType === "compound";
-        });
+        var activities = optionsService.getActivities(plan).filter(isCompoundActivity);
         return Promise.map(activities, resolveActivity).then(function() {
             return plan;
         });
     }
-
-    scheduleUtils.loadOptions().then(function() {
-        var promise = (params.guid !== "new") ?
+    function schedulePlan() {
+        return (params.guid !== "new") ?
             serverService.getSchedulePlan(params.guid) :
             Promise.resolve(scheduleUtils.newSchedulePlan());
-        promise.then(addCompoundActivitiesToPlan)
+    }
+
+    scheduleUtils.loadOptions().then(function() {
+        schedulePlan().then(addCompoundActivitiesToPlan)
             .then(binder.assign('plan'))
             .then(updateScheduleTypeObs)
             .then(binder.update())
