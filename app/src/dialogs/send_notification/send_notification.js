@@ -6,33 +6,33 @@ var utils = require('../../utils');
 module.exports = function(params) {
     var self = this;
 
+    self.cancel = root.closeDialog;
+
     bind(self)
         .bind('subject', '')
         .bind('message', '');
 
+    function sendNotification(msgObj) {
+        if (params.userId) {
+            return serverService.sendUserNotification(params.userId, msgObj);
+        } else if (params.topicId) {
+            return serverService.sendTopicNotification(params.topicId, msgObj);
+        }
+    }
+
     self.send = function(vm, event) {
-        if (self.subjectObs() === "" || self.messageObs() === "") {
+        var subject = self.subjectObs();
+        var message = self.messageObs();
+        if (subject === "" || message === "") {
             utils.formFailure(event.target, 'Subject and message are both required.');
             return;
         }
-        var subject = self.subjectObs();
-        var message = self.messageObs();
-        utils.startHandler(vm, event);
-
         var msgObj = {subject: subject, message: message};
-        var promise = null;
-        if (params.userId) {
-            promise = serverService.sendUserNotification(params.userId, msgObj);
-        } else if (params.topicId) {
-            promise = serverService.sendTopicNotification(params.topicId, msgObj);
-        } else {
-            throw new Error("No type of notification provided.");
-        }
-        promise.then(utils.successHandler(vm, event, "Notification has been sent."))
+
+        utils.startHandler(vm, event);
+        var promise = sendNotification(msgObj)
+            .then(utils.successHandler(vm, event, "Notification has been sent."))
             .then(self.cancel)
             .catch(utils.dialogFailureHandler(vm, event));        
-    };
-    self.cancel = function(vm, event) {
-        root.closeDialog();
     };
 };

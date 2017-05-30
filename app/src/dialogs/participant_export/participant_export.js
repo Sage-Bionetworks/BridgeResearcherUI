@@ -33,10 +33,8 @@ function formatConsentRecords(record) {
 }
 
 var CollectParticipantsWorker = function(params) {
-    this.total = params.total;
-    this.emailFilter = params.emailFilter;
-    this.startDate = params.startDate;
-    this.endDate = params.endDate;
+
+    fn.copyProps(this, params, 'total', 'emailFilter', 'startDate', 'endDate');
     this.identifiers = [];
     var pages = [];
     var numPages = Math.floor(this.total/PAGE_SIZE);
@@ -145,6 +143,8 @@ module.exports = function(params) {
     var self = this;
     
     batchDialogUtils.initBatchDialog(self);
+    fn.copyProps(self, fn, 'formatDateTime');
+    self.close = fn.seq(self.cancel, root.closeDialog);
 
     serverService.getStudy().then(function(study) {
         ATTRIBUTES = Object.freeze([].concat(study.userProfileAttributes)); 
@@ -193,9 +193,4 @@ module.exports = function(params) {
         var dateString = new Date().toISOString().split("T")[0];  
         saveAs.saveAs(blob, "participants-"+dateString+".tsv");
     };
-    self.close = function(vm, event) {
-        self.cancel();
-        root.closeDialog();
-    };
-    self.formatDateTime = fn.formatDateTime;
 };

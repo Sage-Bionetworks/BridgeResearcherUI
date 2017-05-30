@@ -54,12 +54,10 @@ module.exports = function() {
             self.titleObs(utils.findStudyName(self.studyOptionsObs(), studyKey));
         }
     }
-    
     function loadStudyList(newValue) {
         return serverService.getStudyList(newValue)
             .then(loadStudies).catch(utils.failureHandler());
     }
-
     function clear(response) {
         self.usernameObs("");
         self.passwordObs("");

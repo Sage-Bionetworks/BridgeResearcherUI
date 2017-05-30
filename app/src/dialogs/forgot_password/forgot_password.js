@@ -42,7 +42,8 @@ module.exports = function() {
     
     function loadStudyList(newValue) {
         serverService.getStudyList(newValue)
-            .then(loadStudies).catch(utils.failureHandler());
+            .then(loadStudies)
+            .catch(utils.failureHandler());
     }
 
     self.sendResetPasswordRequest = function(vm, event) {

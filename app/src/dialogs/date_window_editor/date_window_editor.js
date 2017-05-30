@@ -9,6 +9,8 @@ module.exports = function(params) {
     self.startsOnObs = input(params.startsOnObs());
     self.endsOnObs = input(params.endsOnObs());
     self.formatDateTime = fn.formatDateTime;
+    self.cancel = root.closeDialog;
+    self.clear = fn.seq(params.clearWindowFunc, root.closeDialog);
 
     self.save = function() {
         var startsOnUTC = fn.localDateTimeToUTC(self.startsOnObs());
@@ -17,11 +19,5 @@ module.exports = function(params) {
         params.endsOnObs(endsOnUTC);
         root.closeDialog();
     };
-    self.clear = function() {
-        params.clearWindowFunc();
-        root.closeDialog();
-    };
-    self.cancel = function() {
-        root.closeDialog();
-    };
+    
 };

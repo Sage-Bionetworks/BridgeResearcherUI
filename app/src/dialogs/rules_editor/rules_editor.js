@@ -1,6 +1,7 @@
 var ko = require('knockout');
 var utils = require('../../utils');
 var root = require('../../root');
+var fn = require('../../functions');
 
 /**
  * Create a rule object with new observables.
@@ -64,32 +65,25 @@ function getIdentifierOptions(elementsArray, startIdentifier) {
 module.exports = function(params) {
     var self = this;
     var parent = params.parentViewModel;
-    self.element = parent.element;
-    self.elementsObs = parent.elementsObs;
-
     var con = params.element.constraints;
-    self.rulesObs = ko.observableArray(con.rulesObs().map(createRule));
 
+    fn.copyProps(self, parent, 'element', 'elementsObs', 'operatorOptions', 'operatorLabel');
+
+    self.rulesObs = ko.observableArray(con.rulesObs().map(createRule));
     self.identifierOptions = getIdentifierOptions(self.elementsObs(), self.element.identifier);
     self.identifierLabel = utils.identity;
-    self.operatorOptions = parent.operatorOptions;
-    self.operatorLabel = parent.operatorLabel;
+    self.cancelRules = root.closeDialog;
 
     self.addRule = function() {
         var id = (self.identifierOptions.length) ? self.identifierOptions[0].value : "";
         self.rulesObs.push(createRule({operator: "eq", value: "", skipTo: id, endSurvey: false}));
     };
-    self.deleteRule = function(rule, event) {
-        event.preventDefault();
-        event.stopPropagation();
+    self.deleteRule = function(rule) {
         self.rulesObs.remove(rule);
     };
     self.saveRules = function() {
         var rules = self.rulesObs().filter(filterOutRulesWithNoValues).map(convertBackToBoolean);
         self.element.constraints.rulesObs(rules);
-        root.closeDialog();
-    };
-    self.cancelRules = function() {
         root.closeDialog();
     };
 };

@@ -1,6 +1,7 @@
 var bind = require('../../binder');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
+var fn = require('../../functions');
 
 module.exports = function(params) {
     var self = this;
@@ -10,6 +11,14 @@ module.exports = function(params) {
         .bind('identifier', params.identifier)
         .bind('date', new Date().toISOString().split("T")[0])
         .bind('data');
+
+    self.close = params.closeDialog;
+
+    function addReport(entry) {
+        return (params.type === "participant") ?
+            serverService.addParticipantReport(params.userId, entry.identifier, entry) :
+            serverService.addStudyReport(entry.identifier, entry);
+    }
 
     self.save = function(vm, event) {
         var entry = binder.persist({});
@@ -28,15 +37,10 @@ module.exports = function(params) {
         }
         utils.startHandler(vm, event);
 
-        var promise = (params.type === "participant") ?
-            serverService.addParticipantReport(params.userId, entry.identifier, entry) :
-            serverService.addStudyReport(entry.identifier, entry);
-        promise.then(utils.successHandler(vm, event))
-                .then(self.close)
-                .catch(utils.dialogFailureHandler(vm, event));
+        addReport(entry)
+            .then(self.close)
+            .then(utils.successHandler(vm, event))
+            .catch(utils.dialogFailureHandler(vm, event));
     };
-    self.close = function(response) {
-        params.closeDialog();
-        return response;
-    };
+    
 };
