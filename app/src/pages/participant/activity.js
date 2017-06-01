@@ -7,6 +7,11 @@ var jsonFormatter = require('../../json_formatter');
 var tables = require('../../tables');
 var fn = require('../../functions');
 
+var failureHandler = utils.failureHandler({
+    redirectTo: "participants",
+    redirectMsg: "Participant not found"
+});
+
 module.exports = function(params) {
     var self = this;
     // params.guid, params.userId
@@ -41,7 +46,7 @@ module.exports = function(params) {
     
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(root.isPublicObs() ? part.name : part.externalId);
-    }).catch(utils.failureHandler());
+    }).catch(failureHandler);
 
     self.isPublicObs = root.isPublicObs;
 
@@ -70,7 +75,7 @@ module.exports = function(params) {
                 }
             });
         });
-    }).catch(utils.notFoundHandler("Participant", "participants"));
+    }).catch(failureHandler);
 
     self.loadingFunc = function(offsetBy, pageSize, startDate, endDate) {
         return serverService.getParticipantActivities(self.userIdObs(), params.guid, {

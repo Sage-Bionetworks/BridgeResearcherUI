@@ -33,7 +33,7 @@ module.exports = function(params) {
             .then(fn.handleStaticObsUpdate(self.publicObs, newValue))
             .then(fn.handleStaticObsUpdate(self.toggleObs, newValue))
             .then(utils.successHandler(self, event, "Report updated."))
-            .catch(utils.failureHandler(self, event));
+            .catch(utils.failureHandler());
     }
     function loadIndex() {
         return serverService.getStudyReportIndex(params.id)

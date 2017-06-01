@@ -4,6 +4,11 @@ var bind = require('../../binder');
 var fn = require('../../functions');
 var alerts = require('../../widgets/alerts');
 
+var failureHandler = utils.failureHandler({
+    redirectMsg:"Consent group not found.", 
+    redirectTo:"subpopulations"
+});
+
 module.exports = function(params) {
     var self = this;
 
@@ -25,7 +30,7 @@ module.exports = function(params) {
             serverService.publishStudyConsent(params.guid, params.createdOn)
                 .then(load)
                 .then(utils.successHandler(self, event, "Consent published"))
-                .catch(utils.failureHandler(self, event));
+                .catch(failureHandler);
         });
     };
     
@@ -42,7 +47,7 @@ module.exports = function(params) {
             .then(getHistory)
             .then(fn.handleForEach('items', addActiveFlag))
             .then(fn.handleObsUpdate(self.historyItemsObs, 'items'))
-            .catch(utils.failureHandler());
+            .catch(failureHandler);
     }
     load();
 };

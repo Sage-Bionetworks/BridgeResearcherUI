@@ -24,17 +24,18 @@ module.exports = function() {
     self.copy = function(vm, event) {
         var copyables = self.itemsObs().filter(tables.hasBeenChecked);
         var confirmMsg = (copyables.length > 1) ?
-            "Compound tasks have been copied." : "Compound task has been copied.";
+            "Tasks have been copied." : "Task has been copied.";
 
         utils.startHandler(vm, event);
         Promise.mapSeries(copyables, function(task) {
+            task.taskId += "-copy";
             delete task.version;
+            console.log(JSON.stringify(task));
             return serverService.createTaskDefinition(task);
         }).then(load)
             .then(utils.successHandler(vm, event, confirmMsg))
-            .catch(utils.listFailureHandler());
+            .catch(utils.failureHandler({transient:false}));
     };
-
     function load() {
         scheduleUtils.loadOptions()
             .then(serverService.getTaskDefinitions)

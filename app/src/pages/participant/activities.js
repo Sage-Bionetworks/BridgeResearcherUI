@@ -6,6 +6,11 @@ var root = require('../../root');
 var tables = require('../../tables');
 var fn = require('../../functions');
 
+var failureHandler = utils.failureHandler({
+    redirectTo: "participants",
+    redirectMsg: "Participant not found"
+});
+
 module.exports = function(params) {
     var self = this;
 
@@ -19,7 +24,7 @@ module.exports = function(params) {
 
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(root.isPublicObs() ? part.name : part.externalId);
-    }).catch(utils.failureHandler());
+    }).catch(failureHandler);
 
     tables.prepareTable(self, {name:'activitie'});
 
@@ -39,5 +44,5 @@ module.exports = function(params) {
         .then(processActivities)
         .then(fn.handleSort('items', 'plan'))
         .then(fn.handleObsUpdate(self.itemsObs, 'items'))
-        .catch(utils.notFoundHandler("Participant", "participants"));
+        .catch(failureHandler);
 };

@@ -5,12 +5,92 @@ var config = require('./config');
 var $ = require('jquery');
 var alerts = require('./widgets/alerts');
 
+var FAILURE_HANDLER = failureHandler({transient:true});
 var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
 var TIMEOUT_ERROR = "The request timed out. Please verify you have an internet connection, and try again.";
 var ROLE_ERROR = 'You do not appear to be a developer, researcher, or admin.';
 var pendingControl = null;
 toastr.options = config.toastr;
 
+var statusHandlers = {
+    400: badResponseHandler,
+    409: badResponseHandler,
+    0: function(response) {
+        var error = (response.statusText === "timeout") ? TIMEOUT_ERROR : GENERIC_ERROR;
+        toastr.error(error);
+    },
+    404: function(response, params) {
+        if (params.redirectTo) {
+            var root = require('./root'); // insane, but has to happen here.
+            document.location = "#/" + params.redirectTo;
+            root.changeView(params.redirectTo);
+            if (params.redirectMsg) {
+                setTimeout(function() {
+                    toastr.warning(params.redirectMsg);
+                },500);
+            }
+        } else {
+            badResponseHandler(response, params);
+        }
+    },
+    412: function(response) {
+        toastr.error(ROLE_ERROR);
+    },
+    500: function(response) {
+        toastr.error(JSON.stringify(response.responseJSON));
+    }
+};
+function badResponseHandler(response, params) {
+    var payload = response.responseJSON;
+    if (!params.transient && !payload.errors) {
+        payload.errors = {};
+    }
+    ko.postbox.publish("showErrors", payload);
+}
+function errorMessageHandler(message, params) {
+    if (params.transient) {
+        toastr.error(message);
+    } else {
+        var payload = {"message":message};
+        ko.postbox.publish("showErrors", payload);
+    }
+}
+function statusNotHandled(res) {
+    console.error("Response code not handled", res.status);
+}
+/**
+ * params:
+ *  transient: boolean, default: true
+ *  redirectTo: string, default null
+ *  redirectMsg: message
+ *  scrollTo: scrollTo function to execute.
+ */
+function failureHandler(params) {
+    if (arguments.length === 0) {
+        return FAILURE_HANDLER;
+    }
+    if (typeof params.transient !== "boolean") {
+        params.transient = true;
+    }
+    return function(response) {
+        clearPendingControl();
+        ko.postbox.publish("clearErrors");
+
+        if (typeof response === "string") {
+            errorMessageHandler(response, params);
+        } else if (is(response.status,'Number')) {
+            var handler = statusHandlers[ response.status ] || statusNotHandled;
+            handler(response, params);
+        } else if (response.message) {
+            errorMessageHandler(response.message, params);
+        } else {
+            console.error("Response object shape not handled", response);
+        }
+        if (params.scrollTo) {
+            scrollTo(1);
+        }
+    };
+}
 function is(obj, typeName) {
     return Object.prototype.toString.call(obj) === "[object "+typeName+"]";
 }
@@ -64,18 +144,6 @@ function clearPendingControl() {
         pendingControl = null;
     }
 }
-function mightyMessageFinder(response) {
-    if (response.responseJSON && response.responseJSON.message) {
-        return response.responseJSON.message;
-    } if (response.responseJSON) {
-        return JSON.stringify(response.responseJSON);
-    } else if (response.message) {
-        return response.message;
-    } else if (typeof response === "string") {
-        return response;
-    }
-    return JSON.stringify(response);
-}
 function createEmailTemplate(email, identifier) {
     var parts = email.split("@");
     if (parts[0].indexOf("+") > -1) {
@@ -110,26 +178,6 @@ function clipString(value) {
     }
     document.body.removeChild(p);
 }
-function makeFailureHandler() {
-    return function(response) {
-        console.error("failureHandler", response);
-        clearPendingControl();
-        ko.postbox.publish("clearErrors");
-
-        if (response.status === 412) {
-            toastr.error(ROLE_ERROR);
-        } else if (response.statusTest === "timeout") {
-            toastr.error(TIMEOUT_ERROR);
-        } else if (response.responseJSON) {
-            var payload = response.responseJSON;
-            ko.postbox.publish("showErrors", payload);
-        } else if (response instanceof Error) {
-            toastr.error(response.message);
-        } else {
-            toastr.error(GENERIC_ERROR);
-        }
-    };    
-}
 
 /**
  * Common utility methods for ViewModels.
@@ -158,19 +206,6 @@ module.exports = {
      */
     identity: function(arg) {
         return arg;
-    },
-    /**
-     * Create a sort function that sorts an array of items by a specific field name
-     * (must be a string, will be sorted ignoring case).Sort items by a property of each object (must be a string)
-     * @param listener
-     */
-    makeFieldSorter: function(fieldName) {
-        return function sorter(a,b) {
-            return a[fieldName].localeCompare(b[fieldName]);
-        };
-    },
-    lowerCaseStringSorter: function sorter(a,b) {
-        return a.localeCompare(b);
     },
     /**
      * A start handler called before a request to the server is made. All errors are cleared
@@ -203,43 +238,6 @@ module.exports = {
             return response;
         };
     },
-    /**
-     * An ajax failure handler for a view model that supports the editing of a form.
-     * Turns off the loading indicator, shows a global error message if there is a message
-     * observable.
-     * @returns {Function}
-     */
-    failureHandler: function() {
-        return makeFailureHandler();
-    },
-    listFailureHandler: function() {
-        return makeFailureHandler();
-    },
-    /**
-     * Some APIs return an error with a simple message, but we want to display this as 
-     * if it were a global message for a form validation view (sign in, for example). This 
-     * failure handler converts the signature of the response and cleans up just as the 
-     * failure handler does.
-     */
-    dialogFailureHandler: function(vm, event, scrollTo) {
-        return function(response) {
-            console.error("dialogFailureHandler", response);
-            ko.postbox.publish("clearErrors");
-            var msg = mightyMessageFinder(response);
-            if (response.status === 412) {
-                msg = "You do not appear to be a developer, researcher, or admin.";
-            }
-            if (scrollTo) {
-                scrollTo(1);
-            }
-            event.target.classList.remove("loading");
-            if (response.responseJSON && response.responseJSON.errors) {
-                ko.postbox.publish("showErrors", response.responseJSON);
-            } else {
-                ko.postbox.publish("showErrors", {message:msg,errors:{}});
-            }
-        };
-    },
     clearPendingControl: clearPendingControl,
     // TODO: Get rid of the need to have a reference to the dom element that has a spinner,
     // using a binding.
@@ -249,26 +247,6 @@ module.exports = {
             actionElement.classList.remove("loading");
         }
         ko.postbox.publish("showErrors", {message:message,errors:{}});
-    },
-    /**
-     * Generic handler for pages which are loading a particular entity. If the error that is returned 
-     * is a 404 it attempts to deal with it by redirecting to a parent page.
-     * @param message
-     * @param componentName
-     * @returns {Function}
-     */
-    notFoundHandler: function(message, componentName) {
-        return function(response) {
-            if (componentName && response.status === 404) {
-                // Again we can't load this earlier for some reason
-                var root = require('./root');
-                toastr.error((message) ? message + " not found." : response.statusText);
-                document.location = "#/" + componentName;
-                root.changeView(componentName);
-            } else {
-                toastr.error(response.statusText || response.message);
-            }
-        };
     },
     /**
      * Given an array of option objects (with the properties "label" and "value"),
@@ -342,7 +320,6 @@ module.exports = {
             });
         };
     },    
-    mightyMessageFinder: mightyMessageFinder,
     findStudyName: function (studies, studyIdentifier) {
         try {
             return (studies || []).filter(function(studyOption) {
@@ -353,5 +330,6 @@ module.exports = {
         }
     },
     atLeastOneSignedConsent: atLeastOneSignedConsent,
-    clipString: clipString
+    clipString: clipString,
+    failureHandler: failureHandler
 };

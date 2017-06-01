@@ -8,6 +8,11 @@ var fn = require('../../functions');
 var FIELD_SKELETON = {
     name:'', required:false, type:null, unboundedText:false, maxLength:'100', fileExtension:'', mimeType:''
 };
+var failureHandler = utils.failureHandler({
+    redirectTo: "schemas",
+    redirectMsg: "Upload schema not found.",
+    transient: false
+});
 
 module.exports = function(params) {
     var self = this;
@@ -92,21 +97,6 @@ module.exports = function(params) {
     function makeNewField() {
         return fieldDefToObs([Object.assign({}, FIELD_SKELETON)])[0];
     }    
-    function handleError(failureHandler) {
-        return function(response) {
-            console.log(response);
-            var json = response.responseJSON;
-            if (/Can\'t\supdate/.test(json.message)) {
-                // This is a schema version mismatch
-                self.showErrorObs(true);
-                utils.clearPendingControl();
-                scrollTo(0);
-            } else {
-                json.errors = json.errors || [];
-                failureHandler(response);
-            }
-        };
-    }
     function uploadSchema() {
         if (self.isNewObs() || self.revisionObs() !== params.schemaId) {
             return serverService.createUploadSchema(self.schema);
@@ -122,7 +112,7 @@ module.exports = function(params) {
         uploadSchema()
             .then(updateRevision)
             .then(utils.successHandler(vm, event, "Schema has been saved."))
-            .catch(handleError(utils.failureHandler(vm, event)));
+            .catch(failureHandler);
     };
 
     self.addBelow = function(field, event) {
@@ -145,7 +135,7 @@ module.exports = function(params) {
             .then(updateRevision)
             .then(utils.successHandler(vm, event, "Schema has been saved at new revision."))
             .then(hideWarning)
-            .catch(utils.failureHandler(vm, event));
+            .catch(failureHandler);
     };
     self.closeWarning = hideWarning;
 
@@ -163,5 +153,5 @@ module.exports = function(params) {
 
     loadSchema().then(binder.assign('schema'))
         .then(binder.update())
-        .catch(utils.notFoundHandler("Upload schema", "schemas"));
+        .catch(failureHandler);
 };

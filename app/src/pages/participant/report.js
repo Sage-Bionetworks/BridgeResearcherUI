@@ -117,7 +117,10 @@ module.exports = function(params) {
             .then(fn.handleSort('items', 'date', true))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))
             .then(fn.handleStaticObsUpdate(self.showLoaderObs, false))
-            .catch(utils.notFoundHandler("Participant", "participants"));
+            .catch(utils.failureHandler({
+                redirectTo: "participants",
+                redirectMsg: "Participant not found."
+            }));
     }
     load();
 };

@@ -41,11 +41,14 @@ module.exports = function(params) {
 
     self.isPublicObs = root.isPublicObs;
 
+    function requestInfo() {
+        return serverService.getParticipantRequestInfo(params.userId);
+    }
+
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(root.isPublicObs() ? part.name : part.externalId);
         self.nameObs(root.isPublicObs() ? part.name : part.externalId);
-    }).then(function() {
-        return serverService.getParticipantRequestInfo(params.userId);
-    }).then(binder.update())
-    .catch(utils.failureHandler());
+    }).then(requestInfo)
+        .then(binder.update())
+        .catch(utils.failureHandler());
 };

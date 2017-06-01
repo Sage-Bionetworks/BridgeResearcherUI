@@ -4,7 +4,21 @@
             <h3>Compound Tasks</h3>
         </div>
         <div class="fixed-header-buttons">
+            <div class="ui tiny buttons">
+                <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()}, 
+                    semantic: 'dropdown-button-toggle'">Copy</div>
+                <div class="ui tiny floating dropdown icon button" 
+                    data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item" data-bind="click: copy">Copy</div>
+                        <div class="item" data-bind="click: copyToClipboard">Copy to Clipboard</div>
+                    </div>
+                </div>
+            </div>
+            <!--
             <button class="ui tiny button" data-bind="disable: !atLeastOneChecked(), click: copyToClipboard">Copy to Clipboard</button>
+            -->
             <button class="ui red tiny button" data-bind="disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
             <a href="#/tasks/new" class="ui primary tiny button">New Task</a>
         </div>
@@ -13,6 +27,7 @@
     </div>
 </div>
 <div class="scrollbox">
+    <errors></errors>
     <table class="ui compact selectable table">
         <thead>
             <tr>

@@ -7,6 +7,10 @@ var fn = require('../../functions');
 var alerts = require('../../widgets/alerts');
 var root = require('../../root');
 
+var failureHandler = utils.failureHandler({
+    redirectTo: "participants",
+    redirectMsg: "Participant not found"
+});
 var OPTIONS = [
     {value: 'no_sharing', label:'No Sharing'},
     {value: 'sponsors_and_partners', label:'Sponsors And Partners'},
@@ -45,7 +49,7 @@ module.exports = function(params) {
     if (!self.isNewObs()) {
         serverService.getParticipantName(self.userIdObs()).then(function(part) {
             self.titleObs(root.isPublicObs() ? part.name : part.externalId);
-        }).catch(utils.failureHandler());
+        }).catch(failureHandler);
     }
     
     self.statusObs.subscribe(function(status) {
@@ -75,7 +79,16 @@ module.exports = function(params) {
     }
     function signOut() {
         return serverService.signOutUser(self.userIdObs());        
-    }    
+    }
+    function saveParticipant(participant) {
+        if (self.isNewObs()) {
+            return serverService.createParticipant(participant)
+                .then(afterCreate);
+        } else {
+            return serverService.updateParticipant(participant);
+        }
+    }
+
     self.sharingScopeOptions = OPTIONS;
 
     self.enableAccount = function(vm, event) {
@@ -95,38 +108,31 @@ module.exports = function(params) {
         
         serverService.requestResetPasswordUser(self.userIdObs())
             .then(utils.successHandler(vm, event, "Reset password email has been sent to user."))
-            .catch(utils.failureHandler(vm, event));
+            .catch(failureHandler);
     };
     self.signOutUser = function(vm, event) {
         utils.startHandler(vm, event);
         
         serverService.signOutUser(self.userIdObs())
             .then(utils.successHandler(vm, event, "User signed out."))
-            .catch(utils.failureHandler(vm, event));
+            .catch(failureHandler);
     };
     self.save = function(vm, event) {
         var participant = binder.persist(NEW_PARTICIPANT);
-        // This should be updating the title, but it isn't, because the id is
-        // still "new".
+        // This should be updating the title, but it isn't, because the id is still "new".
         binder.persist(participant);
 
-        var updatedTitle = self.isPublicObs() ? fn.formatName(participant) : participant.externalId;
+        var updatedTitle = self.isPublicObs() ? 
+            fn.formatName(participant) : participant.externalId;
         function updateName() {
             self.titleObs(updatedTitle);
         }
+
         utils.startHandler(vm, event);
-        if (self.isNewObs()) {
-            return serverService.createParticipant(participant)
-                .then(afterCreate)
-                .then(updateName)
-                .then(utils.successHandler(vm, event, "Participant created."))
-                .catch(utils.failureHandler(vm, event));
-        } else {
-            return serverService.updateParticipant(participant)
-                .then(updateName)
-                .then(utils.successHandler(vm, event, "Participant updated."))
-                .catch(utils.failureHandler(vm, event));
-        }
+        saveParticipant(participant)
+            .then(updateName)
+            .then(utils.successHandler(vm, event, "Participant created."))
+            .catch(failureHandler);
     };
     
     serverService.getStudy()
@@ -134,5 +140,5 @@ module.exports = function(params) {
         .then(initStudy)
         .then(getParticipant)
         .then(binder.update())
-        .catch(utils.notFoundHandler("Participant", "participants"));
+        .catch(failureHandler);
 };

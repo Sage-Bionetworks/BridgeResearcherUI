@@ -30,7 +30,7 @@ module.exports = function(params) {
         serverService.importMetadata(item.id, item.version)
             .then(params.closeModuleBrowser)
             .then(utils.successHandler(self, event))
-            .catch(utils.dialogFailureHandler(self, event, scrollTo));
+            .then(utils.listFailure2({scrollTo: scrollTo}));
     };
     self.isImported = function(metadata) {
         return importedMods[metadata.id+"/"+metadata.version];

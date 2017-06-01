@@ -4,6 +4,9 @@ var storeService = require('../../services/store_service');
 var config = require('../../config');
 var root = require('../../root');
 var bind = require('../../binder');
+var BridgeError = require('../../error');
+
+var SUCCESS_MSG = "An email has been sent to that address with instructions on changing your password.";
 
 module.exports = function() {
     var self = this;
@@ -45,26 +48,34 @@ module.exports = function() {
             .then(loadStudies)
             .catch(utils.failureHandler());
     }
+    function openSignInDialog() {
+        root.openDialog('sign_in_dialog');
+    }
 
     self.sendResetPasswordRequest = function(vm, event) {
-        if (self.emailObs() === "") {
-            root.message('error', "Email address is required.");
-            return;
+        var env = self.environmentObs();
+        var model = {email: self.emailObs(), study: self.studyObs()};
+        
+        var error = new BridgeError();
+        if (!model.email) {
+            error.addError("email", "is required");
         }
+        if (!model.study) {
+            error.addError("study", "is required");
+        }
+        if (error.hasErrors()) {
+            return utils.failureHandler()(error);
+        }
+
         storeService.set('environment', self.environmentObs());
         storeService.set('studyKey', self.studyObs());
 
         utils.startHandler(self, event);
-        serverService.requestResetPassword(self.environmentObs(), {
-            email: self.emailObs(), study: self.studyObs()
-        })
-        .then(function() {
-            root.openDialog('sign_in_dialog');
-        })
-        .then(utils.successHandler(self, event, "An email has been sent to that address with instructions on changing your password."))
-        .catch(utils.dialogFailureHandler(vm, event));
+        serverService.requestResetPassword(env, model)
+            .then(openSignInDialog)
+            .then(utils.successHandler(self, event, SUCCESS_MSG))
+            .catch(utils.failureHandler());
     };
-    self.cancel = function() {
-        root.openDialog('sign_in_dialog');
-    };
+
+    self.cancel = openSignInDialog;
 };

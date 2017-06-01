@@ -4,6 +4,7 @@ var alerts = require('../../../widgets/alerts');
 var Promise = require('bluebird');
 var ko = require('knockout');
 var fn = require('../../../functions');
+var utils = require('../../../utils');
 
 var PAGE_SIZE = 100;
 var DELAY = 200;
@@ -36,7 +37,7 @@ module.exports = function() {
     serverService.getCacheKeys().then(function(response) {
         var items = response.map(mapKey);
         self.itemsObs(items.sort(fn.makeFieldSorter("key")));
-    });
+    }).catch(utils.failureHandler());
 
     self.signEveryoneOut = function() {
         alerts.deleteConfirmation(MSG, function() {

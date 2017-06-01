@@ -61,7 +61,7 @@ module.exports = function() {
             serverService.deleteMetadata(item.id)
                 .then(load)
                 .then(utils.successHandler(self, event, "Shared module deleted."))
-                .catch(utils.failureHandler(self, event));
+                .catch(utils.failureHandler());
         });
     };
     self.publishItem = function(item, event) {

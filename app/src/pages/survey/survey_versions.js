@@ -38,7 +38,7 @@ module.exports = function(params) {
                 .then(tables.makeTableRowHandler(self, [survey], 'survey versions'))
                 .then(redirectIfDeleteSelf(survey))
                 .then(utils.successHandler(self, event, "Survey version deleted."))
-                .catch(utils.failureHandler(self, event));
+                .catch(utils.failureHandler());
         });
     };
     self.publish = function(vm, event) {
@@ -47,7 +47,7 @@ module.exports = function(params) {
             serverService.publishSurvey(vm.guid, vm.createdOn)
                 .then(load)
                 .then(utils.successHandler(vm, event, "Survey has been published."))
-                .catch(utils.failureHandler(vm, event));
+                .catch(utils.failureHandler());
         });
     };
     function getHistoryItems(response) {
@@ -62,7 +62,10 @@ module.exports = function(params) {
             .then(binder.update())
             .then(getHistoryItems)
             .then(binder.update())
-            .catch(utils.notFoundHandler("Survey", "surveys"));
+            .catch(utils.failureHandler({
+                redirectTo: "surveys",
+                redirectMsg: "Survey not found."
+            }));
     }
     load(params);
 };

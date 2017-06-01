@@ -59,7 +59,7 @@ module.exports = function() {
         createNewCredentials(data.identifier)
             .then(updatePageWithResult)
             .then(utils.successHandler(self, event))
-            .catch(utils.failureHandler(self, event));
+            .catch(utils.failureHandler());
     };
     self.createFromNext = function(vm, event) {
         self.showResultsObs(false);
@@ -69,7 +69,7 @@ module.exports = function() {
             .then(createNewCredentials)
             .then(updatePageWithResult)
             .then(utils.successHandler(vm, event))
-            .catch(utils.failureHandler(vm, event));
+            .catch(utils.failureHandler());
     };
     self.showLinkLoading = function(vm, event) {
         event.target.nextElementSibling.classList.add("active");
