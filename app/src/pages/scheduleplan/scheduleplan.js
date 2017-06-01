@@ -2,7 +2,7 @@ var serverService = require('../../services/server_service');
 var scheduleUtils = require('./../schedule/schedule_utils');
 var utils = require('../../utils');
 var bind = require('../../binder');
-var tx = require('../../transforms');
+var fn = require('../../functions');
 var optionsService = require('../../services/options_service');
 var Promise = require('bluebird');
 
@@ -22,11 +22,11 @@ module.exports = function(params) {
     // The callback function will be called when saving the schedule plan; the strategy 
     // implementation must implement this callback to return a strategy object.
     var binder = bind(self)
-        .bind('strategy', null, null, tx.callObsCallback)
+        .bind('strategy', null, null, bind.callObsCallback)
         .bind('label', '')
         .obs('schedulePlanType', (params.guid==="new") ? 'SimpleScheduleStrategy' : 'empty');
         
-    self.strategyObs.callback = utils.identity;
+    self.strategyObs.callback = fn.identity;
     // Fields for this form
     self.schedulePlanTypeOptions = scheduleUtils.TYPE_OPTIONS;
     self.schedulePlanTypeLabel = utils.makeOptionLabelFinder(scheduleUtils.TYPE_OPTIONS);
@@ -40,7 +40,7 @@ module.exports = function(params) {
 
     self.save = function(vm, event) {
         self.plan = binder.persist(self.plan);
-        utils.deleteUnusedProperties(self.plan);
+        fn.deleteUnusedProperties(self.plan);
 
         utils.startHandler(self, event);
         serverService.saveSchedulePlan(self.plan)

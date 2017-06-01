@@ -1,6 +1,7 @@
 var storeService = require('../../services/store_service');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
+var fn = require('../../functions');
 var bind = require('../../binder');
 var config = require('../../config');
 var root = require('../../root');
@@ -15,13 +16,13 @@ function makeReloader(studyKey, environment) {
     return (requiresReload) ?
         function(response) {
             window.location.reload(); 
-        } : utils.identity;
+        } : fn.identity;
 }
 
 module.exports = function() {
     var self = this;
     var signInSubmit = document.querySelector("#signInSubmit");
-    var isLocked = utils.isDefined(root.queryParams.study);
+    var isLocked = fn.isNotBlank(root.queryParams.study);
     
     var studyKey, env;    
     if (isLocked) {

@@ -16,7 +16,6 @@ var failureHandler = utils.failureHandler({
 
 module.exports = function(params) {
     var self = this;
-    var scrollTo = utils.makeScrollTo(".ui.warning.message");
 
     schemaUtils.initVM(self);
     var minIos = bind.objPropDelegates('minAppVersions', 'iPhone OS');

@@ -1,5 +1,4 @@
 var ko = require('knockout');
-var utils = require('../../utils');
 var root = require('../../root');
 var fn = require('../../functions');
 
@@ -71,7 +70,7 @@ module.exports = function(params) {
 
     self.rulesObs = ko.observableArray(con.rulesObs().map(createRule));
     self.identifierOptions = getIdentifierOptions(self.elementsObs(), self.element.identifier);
-    self.identifierLabel = utils.identity;
+    self.identifierLabel = fn.identity;
     self.cancelRules = root.closeDialog;
 
     self.addRule = function() {

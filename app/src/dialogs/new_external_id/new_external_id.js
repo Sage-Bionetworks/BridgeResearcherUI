@@ -1,6 +1,7 @@
 var ko = require('knockout');
 var root = require('../../root');
 var utils = require('../../utils');
+var fn = require('../../functions');
 var serverService = require('../../services/server_service');
 
 module.exports = function(params) {
@@ -13,7 +14,7 @@ module.exports = function(params) {
         var nextId = self.identifierObs();
 
         utils.startHandler(vm, event);
-        if (!utils.isNotBlank(nextId)) {
+        if (!fn.isNotBlank(nextId)) {
             return utils.formFailure(event.target, 'You must enter an ID.');
         } else if (!/^[a-zA-Z0-9-_]+$/.test(nextId)) {
             return utils.formFailure(event.target, 'ID must contain only digits, letters, underscores and dashes.');

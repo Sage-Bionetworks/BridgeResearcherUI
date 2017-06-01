@@ -1,5 +1,5 @@
 var ko = require('knockout');
-var utils = require('../../../utils');
+var fn = require('../../../functions');
 var root = require('../../../root');
 
 module.exports = function(params) {
@@ -7,7 +7,7 @@ module.exports = function(params) {
 
     self.labelObs = params.labelObs;
     self.scheduleObs = ko.observable();
-    self.scheduleObs.callback = utils.identity;
+    self.scheduleObs.callback = fn.identity;
 
     params.strategyObs.callback = function () {
         var strategy = params.strategyObs();

@@ -130,7 +130,7 @@ module.exports = function(params) {
             expires: self.expiresObs(),
             activities: self.activitiesObs().map(extractActivityFromObservables)
         };
-        utils.deleteUnusedProperties(sch);
+        fn.deleteUnusedProperties(sch);
         // some of these properties are mutually exclusive so based on the type of schedule,
         // delete some fields. This comes up if you schedule one way, then change and schedule another 
         // way.
@@ -219,7 +219,7 @@ module.exports = function(params) {
         self.activitiesObs.splice(context.$index()+1,0,newActivity());
     };
     self.copyGuid = function(item, event) { 
-        utils.clipString(item.guid);
+        utils.copyString(item.guid);
     };
 
     // Finally... update with the schedule if we already have it from the server, as knockout 

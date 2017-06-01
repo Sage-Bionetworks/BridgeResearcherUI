@@ -1,5 +1,6 @@
 var ko = require('knockout');
 var utils = require('../../../utils');
+var utils = require('../../../functions');
 var scheduleUtils = require('../schedule_utils');
 var criteriaUtils = require('../../../criteria_utils');
 var root = require('../../../root');
@@ -7,7 +8,7 @@ var root = require('../../../root');
 function groupToObservables(group) {
     group.criteriaObs = ko.observable(group.criteria);
     group.scheduleObs = ko.observable(group.schedule);
-    group.scheduleObs.callback = utils.identity;
+    group.scheduleObs.callback = fn.identity;
     group.labelObs = ko.computed(function() {
         return criteriaUtils.label(group.criteriaObs());
     });

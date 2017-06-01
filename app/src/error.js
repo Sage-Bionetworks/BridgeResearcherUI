@@ -1,3 +1,8 @@
+/**
+ * Creates an object structure similar to an EntityNotFoundException sent from the 
+ * server. Can be used for client-side validation (although we rarely do this, 
+ * leaving most of it to the server for now).
+ */
 function BridgeError() {
     this.status = 400;
     this.responseJSON = {

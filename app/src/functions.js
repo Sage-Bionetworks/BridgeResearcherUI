@@ -1,15 +1,22 @@
-// Functions that return functions end in "Fn", e.g. makeSomethingFn
+// The only requirement for this module is that it have zero dependencies.
+
 var SECOND = 1000;
 var MINUTE = SECOND*60;
 var HOUR = MINUTE*60;
 var DAY = HOUR*24;
 var WEEK = DAY*7;
 
+function identity(arg) {
+    return arg;
+}
 function is(obj, typeName) {
     return Object.prototype.toString.call(obj) === "[object "+typeName+"]";
 }
 function isBlank(obj) {
     return (typeof obj === "undefined") || obj === null || obj === "";
+}
+function isNotBlank(obj) {
+    return (typeof obj !== "undefined") && obj !== null && obj !== "";
 }
 function seq() {
     var args = Array.prototype.slice.call(arguments);
@@ -254,6 +261,21 @@ function handleReverse(property) {
         return response;
     };
 }
+function deleteUnusedProperties(object) {
+    if (is(object, 'Array')) {
+        for (var i=0; i < object.length; i++) {
+            deleteUnusedProperties(object[i]);
+        }
+    } else if (is(object, 'Object')) {
+        for (var prop in object) {
+            if (typeof object[prop] === 'undefined' || object[prop] === "" || object[prop] === null) {
+                delete object[prop];
+            } else {
+                deleteUnusedProperties(object[prop]);
+            }
+        }
+    }
+}
 
 var formatDate = seq(checkArgs, asDate, formatDateString, blankInvalidDateString);
 var formatDateTime = seq(checkArgs, asDate, formatDateTimeString, blankInvalidDateString);
@@ -261,6 +283,7 @@ var formatDateTime = seq(checkArgs, asDate, formatDateTimeString, blankInvalidDa
 module.exports = {
     copyProps: copyProps,
     dateTimeString: dateTimeString,
+    deleteUnusedProperties: deleteUnusedProperties,
     formatDate: formatDate,
     formatDateTime: formatDateTime,
     formatLanguages: formatLanguages,
@@ -278,6 +301,10 @@ module.exports = {
     handleReverse: handleReverse,
     handleSort: handleSort,
     handleStaticObsUpdate: handleStaticObsUpdate,
+    identity: identity,
+    is: is,
+    isBlank: isBlank,
+    isNotBlank: isNotBlank,
     localDateTimeToUTC: seq(asDate, localDateTimeToUTC),
     log: log,
     lowerCaseStringSorter: lowerCaseStringSorter,

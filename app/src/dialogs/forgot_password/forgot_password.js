@@ -1,4 +1,5 @@
 var utils = require('../../utils');
+var fn = require('../../functions');
 var serverService = require('../../services/server_service');
 var storeService = require('../../services/store_service');
 var config = require('../../config');
@@ -10,7 +11,7 @@ var SUCCESS_MSG = "An email has been sent to that address with instructions on c
 
 module.exports = function() {
     var self = this;
-    var isLocked = utils.isDefined(root.queryParams.study);
+    var isLocked = fn.isNotBlank(root.queryParams.study);
     
     var studyKey, env;    
     if (isLocked) {

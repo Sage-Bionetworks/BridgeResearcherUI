@@ -318,5 +318,14 @@ describe("handleIf", function() {
         expect(result).to.equal(1);
     });
 });
+describe("is", function() {
+    //TODO
+});
+describe("isBlank", function() {
+    //TODO
+});
+describe("deleteUnusedProperties", function() {
+    //TODO
+});
 
 });
