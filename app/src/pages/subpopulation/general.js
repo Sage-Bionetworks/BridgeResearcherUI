@@ -3,7 +3,6 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var bind = require('../../binder');
 var fn = require('../../functions');
-var config = require('../../config');
 
 var failureHandler = utils.failureHandler({
     redirectMsg:"Consent group not found.", 

@@ -1,7 +1,6 @@
 var bind = require('../../binder');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
-var fn = require('../../functions');
 var BridgeError = require('../../error');
 
 module.exports = function(params) {

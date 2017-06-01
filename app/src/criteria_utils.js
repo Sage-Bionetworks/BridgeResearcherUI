@@ -1,4 +1,4 @@
-var utils = require('./utils');
+var fn = require('./functions');
 
 function quote(a) {
     return '"'+a+'"';
@@ -15,13 +15,13 @@ function valueForObs(criteria, field) {
 function formatVersionRange(minAppVersion, maxAppVersion) {
     if (minAppVersion === 0 && maxAppVersion === 0) {
         return "never";
-    } else if (minAppVersion === 0 && !utils.isNotBlank(maxAppVersion)) {
+    } else if (minAppVersion === 0 && !fn.isNotBlank(maxAppVersion)) {
         return "always";
-    } else if (utils.isNotBlank(minAppVersion) && utils.isNotBlank(maxAppVersion)) {
+    } else if (fn.isNotBlank(minAppVersion) && fn.isNotBlank(maxAppVersion)) {
         return "v" + minAppVersion + "-" + maxAppVersion;
-    } else if (utils.isNotBlank(minAppVersion)) {
+    } else if (fn.isNotBlank(minAppVersion)) {
         return "v" + minAppVersion + "+";
-    } else if (utils.isNotBlank(maxAppVersion)) {
+    } else if (fn.isNotBlank(maxAppVersion)) {
         return "v" + "0-" + maxAppVersion;
     }
     return null;
@@ -51,7 +51,7 @@ function label(criteria) {
             arr.push(androidRange + " (on Android)");
         }
     }
-    if (utils.isNotBlank(language)) {
+    if (fn.isNotBlank(language)) {
         arr.push("'" + language + "' language");
     }
     if (allOfGroups && allOfGroups.length) {

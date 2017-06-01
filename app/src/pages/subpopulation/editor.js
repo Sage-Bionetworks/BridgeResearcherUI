@@ -3,7 +3,6 @@ var utils = require('../../utils');
 var bind = require('../../binder');
 var fn = require('../../functions');
 var alerts = require('../../widgets/alerts');
-var config = require('../../config');
 
 var failureHandler = utils.failureHandler({
     redirectMsg:"Consent group not found.", 

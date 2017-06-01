@@ -2,7 +2,6 @@ var serverService = require('../../services/server_service');
 var ko = require('knockout');
 var utils = require('../../utils');
 var bind = require('../../binder');
-var tx = require('../../transforms');
 var fn = require('../../functions');
 var alerts = require('../../widgets/alerts');
 var root = require('../../root');
@@ -25,12 +24,12 @@ module.exports = function(params) {
     var binder = bind(self)
         .obs('showEnableAccount', false)
         .obs('isNew', (params.userId === "new"))
-        .obs('healthCode', 'N/A', tx.formatHealthCode)
+        .obs('healthCode', 'N/A', bind.formatHealthCode)
         .obs('allDataGroups[]')
         .obs('createdOn', null, fn.formatDateTime)
         .obs('allRoles[]', ROLES)
         .bind('email')
-        .bind('attributes[]', [], tx.formatAttributes, tx.persistAttributes)
+        .bind('attributes[]', [], bind.formatAttributes, bind.persistAttributes)
         .bind('firstName')
         .bind('lastName')
         .bind('sharingScope')

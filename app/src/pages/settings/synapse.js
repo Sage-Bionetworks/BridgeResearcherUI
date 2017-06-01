@@ -1,5 +1,6 @@
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
+var fn = require('../../functions');
 var bind = require('../../binder');
 var ko = require('knockout');
 var root = require('../../root');
@@ -18,8 +19,8 @@ module.exports = function() {
         .bind('disableExport');
 
     self.isLinked = ko.computed(function() {
-        return utils.isNotBlank(self.synapseProjectIdObs()) || 
-               utils.isNotBlank(self.synapseDataAccessTeamIdObs());
+        return fn.isNotBlank(self.synapseProjectIdObs()) || 
+               fn.isNotBlank(self.synapseDataAccessTeamIdObs());
     });
 
     self.isPublicObs = root.isPublicObs;

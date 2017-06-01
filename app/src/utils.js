@@ -4,6 +4,7 @@ var toastr = require('toastr');
 var config = require('./config');
 var $ = require('jquery');
 var alerts = require('./widgets/alerts');
+var fn = require('./functions');
 
 var FAILURE_HANDLER = failureHandler({transient:true});
 var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
@@ -13,39 +14,43 @@ var pendingControl = null;
 toastr.options = config.toastr;
 
 var statusHandlers = {
-    400: badResponseHandler,
-    409: badResponseHandler,
-    0: function(response) {
-        var error = (response.statusText === "timeout") ? TIMEOUT_ERROR : GENERIC_ERROR;
-        toastr.error(error);
-    },
-    404: function(response, params) {
-        if (params.redirectTo) {
-            var root = require('./root'); // insane, but has to happen here.
-            document.location = "#/" + params.redirectTo;
-            root.changeView(params.redirectTo);
-            if (params.redirectMsg) {
-                setTimeout(function() {
-                    toastr.warning(params.redirectMsg);
-                },500);
-            }
-        } else {
-            badResponseHandler(response, params);
-        }
-    },
-    412: function(response) {
-        toastr.error(ROLE_ERROR);
-    },
-    500: function(response) {
-        toastr.error(JSON.stringify(response.responseJSON));
-    }
+      0: localError,
+    400: badResponse,
+    404: notFound,
+    409: badResponse,
+    412: notAdmin,
+    500: serverError
 };
-function badResponseHandler(response, params) {
+function badResponse(response, params) {
     var payload = response.responseJSON;
     if (!params.transient && !payload.errors) {
         payload.errors = {};
     }
     ko.postbox.publish("showErrors", payload);
+}
+function localError(response) {
+    var error = (response.statusText === "timeout") ? TIMEOUT_ERROR : GENERIC_ERROR;
+    toastr.error(error);
+}
+function notAdmin(response) {
+    toastr.error(ROLE_ERROR);
+}
+function notFound(response, params) {
+    if (params.redirectTo) {
+        var root = require('./root'); // insane, but has to happen here.
+        document.location = "#/" + params.redirectTo;
+        root.changeView(params.redirectTo);
+        if (params.redirectMsg) {
+            setTimeout(function() {
+                toastr.warning(params.redirectMsg);
+            },500);
+        }
+    } else {
+        badResponseHandler(response, params);
+    }
+}
+function serverError(response) {
+    toastr.error(JSON.stringify(response.responseJSON));
 }
 function errorMessageHandler(message, params) {
     if (params.transient) {
@@ -78,42 +83,18 @@ function failureHandler(params) {
 
         if (typeof response === "string") {
             errorMessageHandler(response, params);
-        } else if (is(response.status,'Number')) {
+        } else if (fn.is(response.status,'Number')) {
             var handler = statusHandlers[ response.status ] || statusNotHandled;
             handler(response, params);
         } else if (response.message) {
             errorMessageHandler(response.message, params);
         } else {
-            console.error("Response object shape not handled", response);
+            console.error("Response object not handled", response);
         }
         if (params.scrollTo) {
             scrollTo(1);
         }
     };
-}
-function is(obj, typeName) {
-    return Object.prototype.toString.call(obj) === "[object "+typeName+"]";
-}
-function isNotBlank(obj) {
-    return (typeof obj !== "undefined") && obj !== null && obj !== "";
-}
-function isDefined(obj) {
-    return (typeof obj !== "undefined");
-}
-function deleteUnusedProperties(object) {
-    if (is(object, 'Array')) {
-        for (var i=0; i < object.length; i++) {
-            deleteUnusedProperties(object[i]);
-        }
-    } else if (is(object, 'Object')) {
-        for (var prop in object) {
-            if (typeof object[prop] === 'undefined' || object[prop] === "" || object[prop] === null) {
-                delete object[prop];
-            } else {
-                deleteUnusedProperties(object[prop]);
-            }
-        }
-    }
 }
 function makeOptionFinder(arrayOrObs) {
     return function(value) {
@@ -165,7 +146,7 @@ function atLeastOneSignedConsent(consentHistories) {
         return (last && typeof last.withdrewOn === "undefined");
     });
 }
-function clipString(value) {
+function copyString(value) {
     var p = document.createElement("textarea");
     p.style = "position:fixed;top:0;left:0";
     p.value = value;
@@ -183,30 +164,6 @@ function clipString(value) {
  * Common utility methods for ViewModels.
  */
 module.exports = {
-    /**
-     * Determine type of object
-     * @param object - object to test
-     * @param string - the type name to verify, e.g. 'Date' or 'Array'
-     */
-    is: is,
-    /**
-     * Is this variable defined?
-     * @param object - the variable being tested
-     */
-    isDefined: isDefined,
-    /**
-     * Is this variable defined, not null and not blank?
-     * @param object - the variable being tested
-     */
-    isNotBlank: isNotBlank,
-    /**
-     * f(x) = x
-     * @param arg
-     * @returns {*}
-     */
-    identity: function(arg) {
-        return arg;
-    },
     /**
      * A start handler called before a request to the server is made. All errors are cleared
      * and a loading indicator is shown. This is not done globally because some server requests
@@ -262,10 +219,6 @@ module.exports = {
      * @returns {Function}
      */
     makeOptionLabelFinder: makeOptionLabelFinder,
-    /**
-     * Walk object and remove any properties that are set to null or an empty string.
-     */
-    deleteUnusedProperties: deleteUnusedProperties,
     /**
      * The logic for the scrollbox scrolling is not idea so isolate it here where we
      * can fix it everywhere it is used.
@@ -330,6 +283,6 @@ module.exports = {
         }
     },
     atLeastOneSignedConsent: atLeastOneSignedConsent,
-    clipString: clipString,
+    copyString: copyString,
     failureHandler: failureHandler
 };
