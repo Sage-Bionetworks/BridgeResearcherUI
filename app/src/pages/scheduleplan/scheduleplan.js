@@ -6,6 +6,11 @@ var tx = require('../../transforms');
 var optionsService = require('../../services/options_service');
 var Promise = require('bluebird');
 
+var failureHandler = utils.failureHandler({
+    redirectTo: "scheduleplans",
+    redirectMsg: "Schedule plan not found."
+});
+
 /**
  * The complexity of this view comes from the fact that the entire data model is in the strategy,
  * and the strategy can entirely change the data model.
@@ -40,7 +45,7 @@ module.exports = function(params) {
         utils.startHandler(self, event);
         serverService.saveSchedulePlan(self.plan)
             .then(utils.successHandler(self, event, "The schedule plan has been saved."))
-            .catch(utils.failureHandler(self, event));
+            .catch(failureHandler);
     };
     self.updateType = function(vm, event) {
         var spType = event.target.getAttribute('data-type');
@@ -60,7 +65,8 @@ module.exports = function(params) {
                 activity.compoundActivity = task;
                 activity.compoundActivity.taskIdentifier = task.taskId;
                 return activity;
-            });
+            })
+            .catch(failureHandler);
     }
     function isCompoundActivity(activity) {
         return activity.activityType === "compound";
@@ -83,6 +89,6 @@ module.exports = function(params) {
             .then(binder.assign('plan'))
             .then(updateScheduleTypeObs)
             .then(binder.update())
-            .catch(utils.notFoundHandler("Schedule plan.", "scheduleplans"));
+            .catch(failureHandler);
     });
 };

@@ -17,11 +17,11 @@
             <form class="ui form">
                 <div class="required field" id="name">
                     <label>Study name</label>
-                    <input type="text" data-bind="value: nameObs, hasFocus: true"/>
+                    <input type="text" data-bind="textInput: nameObs, hasFocus: true"/>
                 </div>
                 <div class="required field" id="sponsorName">
                     <label>Sponsor name</label>
-                    <input type="text" data-bind="value: sponsorNameObs"/>
+                    <input type="text" data-bind="textInput: sponsorNameObs"/>
                 </div>
                 <div class="field">
                     <label>Youngest allowable age for participants</label>
@@ -34,11 +34,11 @@
                     <div class="six fields">
                         <div class="field">
                             <label>iPhone</label>
-                            <input placeholder="#" type="number" data-bind="value: minIosObs"/>
+                            <input placeholder="#" type="number" data-bind="textInput: minIosObs"/>
                         </div>
                         <div class="field">
                             <label>Android</label>
-                            <input placeholder="#" type="number" data-bind="value: minAndroidObs"/>
+                            <input placeholder="#" type="number" data-bind="textInput: minAndroidObs"/>
                         </div>
                     </div>
                     <p class="help-text">Leave blank or set to zero if you support all versions that have been released</p>

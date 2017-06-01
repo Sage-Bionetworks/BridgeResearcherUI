@@ -16,12 +16,12 @@
             <form class="ui form">
                 <div class="required field" id="technicalEmail">
                     <label>Technical contact email</label>
-                    <input type="text" data-bind="value: technicalEmailObs, hasFocus: true"/>
+                    <input type="text" data-bind="textInput: technicalEmailObs, hasFocus: true"/>
                 </div>
                 <div class="two fields">
                     <div class="required field" id="supportEmail">
                         <label>Support email</label>
-                        <input type="text" data-bind="value: supportEmailObs"/>
+                        <input type="text" data-bind="textInput: supportEmailObs"/>
                     </div>
                     <div class="field">
                         <label>Email Verified with Amazon's Mail Service?</label>
@@ -43,7 +43,7 @@
                 </div>
                 <div class="required field" id="consentNotificationEmail">
                     <label>Consent notification email</label>
-                    <input type="text" data-bind="value: consentNotificationEmailObs"/>
+                    <input type="text" data-bind="textInput: consentNotificationEmailObs"/>
                 </div>
             </form>
         </div>

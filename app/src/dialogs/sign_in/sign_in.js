@@ -56,7 +56,8 @@ module.exports = function() {
     }
     function loadStudyList(newValue) {
         return serverService.getStudyList(newValue)
-            .then(loadStudies).catch(utils.failureHandler());
+            .then(loadStudies)
+            .catch(utils.failureHandler());
     }
     function clear(response) {
         self.usernameObs("");
@@ -95,7 +96,7 @@ module.exports = function() {
             .then(clear)
             .then(reloadIfNeeded)
             .then(utils.successHandler(self, {target: signInSubmit}))
-            .catch(utils.dialogFailureHandler(vm, event));
+            .catch(utils.failureHandler({transient:false}));
     };
 
     self.forgotPassword = function() {

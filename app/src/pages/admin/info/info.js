@@ -34,7 +34,7 @@ module.exports = function() {
         utils.startHandler(self, event);
         serverService.saveStudy(self.study, true)
             .then(utils.successHandler(vm, event, "Study information saved."))
-            .catch(utils.failureHandler(vm, event));
+            .catch(utils.failureHandler());
     };
 
     serverService.getStudy()

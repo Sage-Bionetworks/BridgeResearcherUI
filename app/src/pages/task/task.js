@@ -150,11 +150,15 @@ module.exports = function(params) {
             return serverService.getTaskDefinition(params.taskId)
                 .then(binder.assign('task'))
                 .then(binder.update())
-                .catch(utils.notFoundHandler("Task", "tasks"));
+                .catch(utils.failureHandler({
+                    redirectTo: "tasks",
+                    redirectMsg: "Task not found."
+                }));
         }
     }
     serverService.getPublishedSurveys()
         .then(sharedModuleUtils.loadNameMaps)
         .then(serverService.getPublishedSurveys)
-        .then(loadTaskDefinition);
+        .then(loadTaskDefinition)
+        .catch(utils.failureHandler());
 };

@@ -82,6 +82,6 @@ module.exports = function(params) {
         Promise.each(specs, fn.handlePromise(serverService.createUploadSchema))
             .then(params.closeCopySchemasDialog)
             .then(utils.successHandler(vm, event))
-            .catch(utils.failureHandler(vm, event));
+            .catch(utils.failureHandler());
     };
 };

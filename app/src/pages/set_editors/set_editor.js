@@ -50,7 +50,7 @@ module.exports = function(propertyName) {
             serverService.saveStudy(self.study)
                 .then(fn.handleStaticObsUpdate(self.noChangesObs, true))
                 .then(utils.successHandler(self, event, "Values saved."))
-                .catch(utils.failureHandler(vm, event));
+                .catch(utils.failureHandler());
         };
 
         serverService.getStudy()

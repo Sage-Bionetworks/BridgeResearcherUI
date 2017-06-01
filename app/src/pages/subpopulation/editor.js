@@ -3,6 +3,12 @@ var utils = require('../../utils');
 var bind = require('../../binder');
 var fn = require('../../functions');
 var alerts = require('../../widgets/alerts');
+var config = require('../../config');
+
+var failureHandler = utils.failureHandler({
+    redirectMsg:"Consent group not found.", 
+    redirectTo:"subpopulations"
+});
 
 module.exports = function(params) {
     var self = this;
@@ -70,7 +76,7 @@ module.exports = function(params) {
                 .then(load)
                 .then(loadIntoEditor)
                 .then(utils.successHandler(vm, event, "Consent published"))
-                .catch(utils.failureHandler(vm, event));
+                .catch(failureHandler);
         });
     };
     self.save = function(vm, event) {
@@ -79,11 +85,14 @@ module.exports = function(params) {
         serverService.saveStudyConsent(params.guid, {documentContent: self.editor.getData()})
             .then(loadIntoEditor)
             .then(utils.successHandler(vm, event, "Consent saved."))
-            .catch(utils.failureHandler(vm, event));
+            .catch(failureHandler);
     };  
-    var promise = (params.createdOn) ?
-        serverService.getStudyConsent(params.guid, params.createdOn) :
-        serverService.getMostRecentStudyConsent(params.guid);
-    promise.then(loadIntoEditor)
-        .catch(utils.failureHandler());
+
+    function studyConsent() {
+        return (params.createdOn) ?
+            serverService.getStudyConsent(params.guid, params.createdOn) :
+            serverService.getMostRecentStudyConsent(params.guid);
+    }
+    studyConsent().then(loadIntoEditor)
+        .catch(failureHandler);
 };

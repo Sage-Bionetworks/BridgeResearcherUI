@@ -34,22 +34,29 @@ module.exports = function(params) {
         root.openDialog('send_notification', {topicId: self.guidObs()});
     };
 
-    self.save = function(vm, event) {
-        utils.startHandler(vm, event);
+    function saveTopic(topic) {
+        return self.isNewObs() ?
+            serverService.createTopic(topic) :
+            serverService.updateTopic(topic);
+    }
 
+    self.save = function(vm, event) {
         self.topic = binder.persist(self.topic);
-        var promise = self.isNewObs() ?
-            serverService.createTopic(self.topic) :
-            serverService.updateTopic(self.topic);
-        promise.then(updateTopic)
+
+        utils.startHandler(vm, event);
+        saveTopic(self.topic).then(updateTopic)
             .then(utils.successHandler(vm, event, "Topic has been saved."))
-            .catch(utils.failureHandler(vm, event));
+            .catch(utils.failureHandler());
     };
     if (params.guid !== "new") {
         serverService.getTopic(params.guid)
             .then(fn.handleObsUpdate(self.titleObs, 'name'))
             .then(binder.assign('topic'))
-            .then(binder.update());
+            .then(binder.update())
+            .catch(utils.failureHandler({
+                redirectTo: "topics",
+                redirectMsg: "Push notification topic not found."
+            }));
     } else {
         self.topic = {guid:'', name:'', description: ''};
     }

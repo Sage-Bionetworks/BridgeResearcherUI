@@ -47,7 +47,7 @@ module.exports = function() {
                 return Promise.map(response.items, function(plan) {
                     return Promise.map(optionsService.getActivities(plan), processActivity);
                 });
-            }).catch(utils.listFailureHandler());
+            }).catch(utils.failureHandler());
     }
     load();
 };

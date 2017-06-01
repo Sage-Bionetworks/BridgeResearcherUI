@@ -25,6 +25,6 @@ module.exports = function() {
 
         serverService.saveStudy(self.study)
             .then(utils.successHandler(vm, event, "Email saved."))
-            .catch(utils.failureHandler(vm, event));
+            .catch(utils.failureHandler());
     };
 };

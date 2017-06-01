@@ -28,19 +28,20 @@ module.exports = function() {
         serverService.saveStudy(self.study)
             .then(checkEmailStatus)
             .then(utils.successHandler(vm, event, "Study information saved."))
-            .catch(utils.failureHandler(vm, event));
+            .catch(utils.failureHandler());
     };
     self.verifyEmail = function(vm, event) {
         utils.startHandler(vm, event);
         serverService.verifyEmail()
             .then(binder.update('status'))
             .then(utils.successHandler(vm, event, "Request to verify email has been sent."))
-            .catch(utils.failureHandler(vm, event));
+            .catch(utils.failureHandler());
     };
     self.refreshStatus = checkEmailStatus;
 
     serverService.getStudy()
         .then(binder.assign('study'))
         .then(binder.update())
-        .then(checkEmailStatus);
+        .then(checkEmailStatus)
+        .catch(utils.failureHandler());
 };

@@ -39,7 +39,7 @@ module.exports = function() {
                 self.synapseDataAccessTeamIdObs(response.teamId);
                 self.synapseProjectIdObs(response.projectId);
             }).then(utils.successHandler(vm, event, "Synapse information created."))
-            .catch(utils.dialogFailureHandler(vm, event));
+            .catch(utils.failureHandler({transient:false}));
         });
     };
     self.save = function(vm, event) {
@@ -48,10 +48,11 @@ module.exports = function() {
 
         serverService.saveStudy(self.study)
             .then(utils.successHandler(vm, event, "Synapse information saved."))
-            .catch(utils.failureHandler(vm, event));
+            .catch(utils.failureHandler());
     };
 
     serverService.getStudy()
         .then(binder.assign('study'))
-        .then(binder.update());
+        .then(binder.update())
+        .catch(utils.failureHandler());
 };

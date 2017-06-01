@@ -73,7 +73,7 @@ module.exports = function() {
             });
         }).then(load)
             .then(utils.successHandler(vm, event, confirmMsg))
-            .catch(utils.listFailureHandler());
+            .catch(utils.failureHandler());
     };
     self.openModuleBrowser = function() {
         root.openDialog('module_browser', {

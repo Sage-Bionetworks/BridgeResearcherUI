@@ -10,6 +10,10 @@ var OPTIONS = [
     {value: 'Android', label: 'Android'},
     {value: 'iOS', label: 'iOS'}
 ];
+var failureHandler = utils.failureHandler({
+    redirectTo: "shared_modules",
+    redirectMsg: "Shared module not found."
+});
 
 function tagsToView(tags) {
     return (tags || []).join(", ");
@@ -183,7 +187,7 @@ module.exports = function(params) {
         serverService[methodName](self.metadata)
             .then(updateId)
             .then(utils.successHandler(vm, event, "Shared module saved."))
-            .catch(utils.failureHandler(vm, event));
+            .catch(utils.failureHandler());
     };
     if (params.id !== "new") {
         sharedModuleUtils.loadNameMaps()
@@ -191,6 +195,6 @@ module.exports = function(params) {
             .then(binder.assign('metadata'))
             .then(binder.update())
             .then(updateSharedModuleWithNames)
-            .catch(utils.notFoundHandler("Shared module", "shared_modules"));
+            .catch(failureHandler);
     }
 };

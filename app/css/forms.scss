@@ -96,3 +96,8 @@ label[for] {
 .range-control-border-active {
     border-color:#85B7D9!important;
 }
+
+.error .editor.textarea {
+    border-color: #E0B4B4;
+    background-color: rgb(255, 246, 246);
+}

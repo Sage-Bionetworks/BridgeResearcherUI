@@ -67,7 +67,7 @@ module.exports = function() {
             utils.startHandler(vm, event);
             serverService.resendEmailVerification(userId)
                 .then(utils.successHandler(vm, event, "Resent email to verify participant's email address."))
-                .catch(utils.failureHandler(vm, event));
+                .catch(utils.failureHandler());
         });
     };
     self.enableAccount = function(item, event) {
@@ -76,7 +76,7 @@ module.exports = function() {
             .then(updateParticipantStatus)
             .then(publishPageUpdate)
             .then(utils.successHandler(item, event, "User account activated."))
-            .catch(utils.failureHandler(item, event));
+            .catch(utils.failureHandler());
     };
     self.exportDialog = function() {
         root.openDialog('participant_export', {emailFilter: self.emailFilter, 

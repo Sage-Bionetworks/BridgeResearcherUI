@@ -363,7 +363,7 @@ function pasteItem(model) {
         clipboardEntries.remove(model);
         storeService.set('clipboard', clipboardEntries());
         return response;
-    }).catch(utils.listFailureHandler());
+    }).catch(utils.failureHandler());
 }
 function copyDataGroupToClipboard(dataGroup) {
     clipboard.copy("DataGroup", {
@@ -411,7 +411,7 @@ var clipboard = {
         Promise.mapSeries(clipboardEntriesByDependencies(), pasteItem)
             .then(notifyListOfUpdate)
             .then(utils.successHandler(vm, event, "Items copied."))
-            .catch(utils.listFailureHandler());
+            .catch(utils.failureHandler());
     },
     clearAll: function() {
         activityGuidMap = {};

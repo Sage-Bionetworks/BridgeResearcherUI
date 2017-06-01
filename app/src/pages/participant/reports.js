@@ -5,10 +5,6 @@ var root = require('../../root');
 var tables = require('../../tables');
 var fn = require('../../functions');
 
-function deleteItem(item) {
-    return serverService.deleteParticipantReport(item.identifier, params.userId);
-}
-
 module.exports = function(params) {
     var self = this;
 
@@ -45,12 +41,18 @@ module.exports = function(params) {
         load();
     };
 
+    function deleteItem(item) {
+        return serverService.deleteParticipantReport(item.identifier, params.userId);
+    }
     function load() {
         serverService.getParticipant(params.userId)
             .then(serverService.getParticipantReports)
             .then(fn.handleSort('items', 'identifier'))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))
-            .catch(utils.notFoundHandler("Participant", "participants"));
+            .catch(utils.failureHandler({
+                redirectTo: "participants",
+                redirectMsg: "Participant not found."
+            }));
     }
     load();
 };

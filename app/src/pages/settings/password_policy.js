@@ -13,7 +13,8 @@ module.exports = function() {
     self.isPublicObs = root.isPublicObs;
     serverService.getStudy()
         .then(binder.assign('study'))
-        .then(binder.update());
+        .then(binder.update())
+        .catch(utils.failureHandler());
 
     self.save = function(vm, event) {
         utils.startHandler(vm, event);
@@ -21,6 +22,6 @@ module.exports = function() {
 
         serverService.saveStudy(self.study)
             .then(utils.successHandler(vm, event, "Password policy has been saved."))
-            .catch(utils.failureHandler(vm, event));
+            .catch(utils.failureHandler());
     };
 };
