@@ -4,14 +4,11 @@
 <title>Consent To Research</title>
 <script src="vue.min.js"></script>
 <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+<link href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2/semantic.min.css" rel="stylesheet" />
 <style>
-    html, body {
-        margin: 0;
-        padding: 0;
-    }
-    * {
-        font: 14px/18px Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
-        box-sizing: border-box;
+    table td { 
+        padding: 3px 8px; 
+        vertical-align: top; 
     }
     #document {
         position: relative;
@@ -56,15 +53,16 @@
         -o-transform: skew(5deg) rotate(5deg);
         transform: skew(5deg) rotate(5deg);
     }
-    table {
+    .signature-block {
         width: 100%;
+        visibility: hidden;
+        page-break-inside: avoid;
     }
+        .signature-block td {
+            padding: 2 0;
+        }
     .line {
         border-top: 2px solid #333;
-    }
-    .loader {
-        padding: 50px 0;
-        text-align: center;
     }
     img {
         width: calc(334px * .6);
@@ -80,14 +78,20 @@
             margin: 0;
         }
     }
+    .ui.warning.message {
+        max-width: 8.5in;
+        margin: 1in auto;
+    }
 </style>
 </head>
 <body>
 <div id="document">
     <div v-html="document">
-        <div class="loader">Loading&hellip;</div>
+        <div class="ui active inverted dimmer">
+            <div class="ui text loader">Loading</div>
+        </div>
     </div>
-    <table cellspacing="0">
+    <table class="signature-block" cellspacing="0" :style="sigStyle">
         <tr>
             <td nowrap="nowrap" valign="bottom">{{name}}</td>
             <td></td>
@@ -132,7 +136,7 @@
 </div>
 <script>
 function showError() {
-    document.body.innerHTML = '<p class="loader">You are signed out of the Bridge Study Manager. Sign back in to view content.</p>';
+    document.body.innerHTML = '<div class="ui warning message"><div class="header">Cannot load document</div>You are signed out of the Bridge Study Manager. Sign back in to view content.</div>';
 }
 var session = JSON.parse(localStorage.getItem('session'));
 if (!session) {
@@ -168,7 +172,8 @@ function config(url) {
 
 $.ajax(config('/v3/participants/' + queryParams.userId)).done(function(response) {
     var user = response;
-    var history = user.consentHistories[queryParams.guid][queryParams.index];
+    // The index references the consents in reverse order, so we must reverse them here as well.
+    var history = user.consentHistories[queryParams.guid].reverse()[queryParams.index];
     var signedOn = (history.signedOn) ? new Date(history.signedOn).toLocaleString() : '';
     var withdrewOn = (history.withdrewOn) ? new Date(history.withdrewOn).toLocaleString() : '';
     var signature = (history.imageData) ? "data:"+history.imageMimeType+";base64,"+history.imageData : '';
@@ -183,7 +188,8 @@ $.ajax(config('/v3/participants/' + queryParams.userId)).done(function(response)
         date: history.birthdate,
         email: user.email,
         sharing_status: sharing[user.sharingScope],
-        imgStyle: {visibility: "visible"}
+        imgStyle: {visibility: (history.imageData) ? "visible" : "hidden"},
+        sigStyle: {visibility: "visible"}
     };
     var url = '/v3/subpopulations/' + queryParams.guid + '/consents/' + history.consentCreatedOn;
     return $.ajax(config(url)).done(function(response) {
