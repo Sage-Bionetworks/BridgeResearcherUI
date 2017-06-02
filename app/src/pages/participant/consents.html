@@ -26,11 +26,12 @@
                 <th>Version Signed</th>
                 <th>Withdrew On</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
-                <td colspan="6" data-bind="html: recordsMessageObs"></td>
+                <td colspan="7" data-bind="html: recordsMessageObs"></td>
             </tr>
         </tbody>        
         <tbody data-bind="foreach: itemsObs">
@@ -40,23 +41,7 @@
                     <div data-bind="if: $data.name === 'No consent'">
                         <i>No consent</i>
                     </div>
-                    <div data-bind="visible: $data.name !== 'No consent', semantic: 'dropdown'">
-                        <div class="text" data-bind="html: $data.name"></div>
-                        <i class="dropdown icon"></i>
-                        <div class="menu">
-                            <div class="header signature-container">
-                                <div class="ui image" data-bind="visible: !!$data.imageData">
-                                    <img class="signature" data-bind="attr:{style: 'background-image: url('+$data.imageData+')'}"/>
-                                </div>
-                            </div>
-                            <div class="item" data-bind="visible: !$data.imageData">
-                                <p><i>No signature</i></p>
-                            </div>
-                            <div class="item">
-                                Birthdate: <span class="category" data-bind="text: $data.birthdate"></span>
-                            </div>
-                        </div>
-                    </div>
+                    <div data-bind="visible: $data.name !== 'No consent', text: $data.name"></div>
                 </td>
                 <td data-bind="text: $data.signedOn"></td>
                 <td>
@@ -78,6 +63,12 @@
                 <td>
                     <button data-bind="visible: $data.name !== 'No consent' && $data.withdrewOn > 0, 
                         click: $component.resendConsent" class="ui basic compact mini button">Resend consent</button>
+                </td>
+                <td>
+                    <a target="_blank" data-bind="visible: $data.name !== 'No consent', 
+                        attr: {'href': $parent.linkToDocument($data)}">
+                        View document <i class="ui external icon"> </i>
+                    </a>
                 </td>
             </tr>
         </tbody>
