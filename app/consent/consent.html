@@ -56,8 +56,9 @@
         -o-transform: skew(5deg) rotate(5deg);
         transform: skew(5deg) rotate(5deg);
     }
-    table {
+    .signature-block {
         width: 100%;
+        visibility: hidden;
     }
     .line {
         border-top: 2px solid #333;
@@ -87,7 +88,7 @@
     <div v-html="document">
         <div class="loader">Loading&hellip;</div>
     </div>
-    <table cellspacing="0">
+    <table class="signature-block" cellspacing="0" :style="sigVisible">
         <tr>
             <td nowrap="nowrap" valign="bottom">{{name}}</td>
             <td></td>
@@ -168,7 +169,8 @@ function config(url) {
 
 $.ajax(config('/v3/participants/' + queryParams.userId)).done(function(response) {
     var user = response;
-    var history = user.consentHistories[queryParams.guid][queryParams.index];
+    // The index references the consents in reverse order, so we must reverse them here as well.
+    var history = user.consentHistories[queryParams.guid].reverse()[queryParams.index];
     var signedOn = (history.signedOn) ? new Date(history.signedOn).toLocaleString() : '';
     var withdrewOn = (history.withdrewOn) ? new Date(history.withdrewOn).toLocaleString() : '';
     var signature = (history.imageData) ? "data:"+history.imageMimeType+";base64,"+history.imageData : '';
@@ -183,7 +185,8 @@ $.ajax(config('/v3/participants/' + queryParams.userId)).done(function(response)
         date: history.birthdate,
         email: user.email,
         sharing_status: sharing[user.sharingScope],
-        imgStyle: {visibility: "visible"}
+        imgStyle: {visibility: (history.imageData) ? "visible" : "hidden"},
+        sigVisible: {visibility: "visible"}
     };
     var url = '/v3/subpopulations/' + queryParams.guid + '/consents/' + history.consentCreatedOn;
     return $.ajax(config(url)).done(function(response) {
