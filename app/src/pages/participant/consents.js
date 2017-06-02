@@ -5,10 +5,20 @@ var root = require('../../root');
 var bind = require('../../binder');
 var alerts = require('../../widgets/alerts');
 var tables = require('../../tables');
+var fn = require('../../functions');
 
 var failureHandler = utils.failureHandler({
     redirectTo: "participants",
     redirectMsg: "Participant not found"
+});
+
+var session = null;
+
+serverService.addSessionStartListener(function(sess) {
+    session = sess;
+});
+serverService.addSessionEndListener(function() {
+    session = null;
 });
 
 module.exports = function(params) {
@@ -61,6 +71,15 @@ module.exports = function(params) {
             .then(utils.successHandler(self, null, "User has been withdrawn from this consent group."))
             .catch(failureHandler);
     };
+    self.linkToDocument = function($data) {
+        var query = fn.queryString({
+            userId: self.userIdObs(),
+            index: $data.subpopulationGuidIndex,
+            guid: $data.subpopulationGuid,
+            host: session.host
+        });
+        return '/consent/consent.html' + query;
+    };
 
     // I know, ridiculous...
     function load() {
@@ -86,6 +105,7 @@ module.exports = function(params) {
                         history.consentGroupName = subpop.name;
                         history.consentURL = '/#/subpopulations/'+subpop.guid+'/consents/'+record.consentCreatedOn;
                         history.subpopulationGuid = subpop.guid;
+                        history.subpopulationGuidIndex = i;
                         history.name = record.name;
                         history.birthdate = new Date(record.birthdate).toLocaleDateString(); 
                         history.signedOn = new Date(record.signedOn).toLocaleString();
