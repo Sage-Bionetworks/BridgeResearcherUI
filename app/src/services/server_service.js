@@ -188,9 +188,8 @@ module.exports = {
         var request = Promise.resolve(postInt(config.host[env] + config.signIn, data));
         request.then(function(sess) {
             sess.isSupportedUser = isSupportedUser;
-            // in some installations the server environment is "wrong" in that it's 
-            // not enough to determine the host. Use the environment selected by 
-            // the user.
+            // in some installations the server environment is "wrong" in that it's not enough 
+            // to determine the host. Set a host property and use that for future requests.
             if (sess.isSupportedUser()) {
                 sess.studyName = studyName;
                 sess.studyId = data.study;
