@@ -88,7 +88,7 @@
     <div v-html="document">
         <div class="loader">Loading&hellip;</div>
     </div>
-    <table class="signature-block" cellspacing="0" :style="sigVisible">
+    <table class="signature-block" cellspacing="0" :style="sigStyle">
         <tr>
             <td nowrap="nowrap" valign="bottom">{{name}}</td>
             <td></td>
@@ -186,7 +186,7 @@ $.ajax(config('/v3/participants/' + queryParams.userId)).done(function(response)
         email: user.email,
         sharing_status: sharing[user.sharingScope],
         imgStyle: {visibility: (history.imageData) ? "visible" : "hidden"},
-        sigVisible: {visibility: "visible"}
+        sigStyle: {visibility: "visible"}
     };
     var url = '/v3/subpopulations/' + queryParams.guid + '/consents/' + history.consentCreatedOn;
     return $.ajax(config(url)).done(function(response) {
