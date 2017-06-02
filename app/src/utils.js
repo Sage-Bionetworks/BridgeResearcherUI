@@ -22,7 +22,10 @@ var statusHandlers = {
     500: serverError
 };
 function badResponse(response, params) {
-    var payload = response.responseJSON;
+    // If the error does not return JSON, we have to hunt around for what happened, 
+    // and that gets sorted out here.
+    var payload = response.responseJSON || {};
+    payload.message = payload.message || response.responseText;
     if (!params.transient && !payload.errors) {
         payload.errors = {};
     }
@@ -46,7 +49,7 @@ function notFound(response, params) {
             },500);
         }
     } else {
-        badResponseHandler(response, params);
+        badResponse(response, params);
     }
 }
 function serverError(response) {
@@ -81,6 +84,7 @@ function failureHandler(params) {
         clearPendingControl();
         ko.postbox.publish("clearErrors");
 
+        console.error(response);
         if (typeof response === "string") {
             errorMessageHandler(response, params);
         } else if (fn.is(response.status,'Number')) {

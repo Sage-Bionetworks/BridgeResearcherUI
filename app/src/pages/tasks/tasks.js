@@ -30,7 +30,6 @@ module.exports = function() {
         Promise.mapSeries(copyables, function(task) {
             task.taskId += "-copy";
             delete task.version;
-            console.log(JSON.stringify(task));
             return serverService.createTaskDefinition(task);
         }).then(load)
             .then(utils.successHandler(vm, event, confirmMsg))
