@@ -58,7 +58,6 @@
     }
     table {
         width: 100%;
-        margin: .75in 0 0 0;
     }
     .line {
         border-top: 2px solid black;
@@ -109,11 +108,11 @@
             <td nowrap="nowrap">{{birthdate}}</td>
         </tr>
         <tr>
-            <td width="30%" class="line">Email</td>
-            <td width="5%"></td>
-            <td width="30%" class="line">Sharing Option</td>
-            <td width="5%"></td>
-            <td width="30%" class="line">Birth Date</td>
+            <td width="31%" class="line">Email</td>
+            <td width="3%">&#160;&#160;&#160;</td>
+            <td width="32%" class="line">Sharing Option</td>
+            <td width="3%">&#160;&#160;&#160;</td>
+            <td width="31%" class="line">Birth Date</td>
         </tr>
         <tr>
             <td colspan="5"><br /></td>
@@ -180,10 +179,10 @@ $.ajax(config('/v3/participants/' + queryParams.userId)).done(function(response)
         email: user.email,
         sharing_status: sharing[user.sharingScope]
     };
-    var url = '/v3/subpopulations/'+queryParams.guid+'/consents/'+history.consentCreatedOn;
+    var url = '/v3/subpopulations/' + queryParams.guid + '/consents/' + history.consentCreatedOn;
     return $.ajax(config(url)).done(function(response) {
         data.document = response.documentContent;
-        new Vue({el: document.getElementById('document'),data: data});
+        new Vue({el: document.getElementById('document'), data: data});
     }).fail(showError);
 }).fail(showError);
 </script>
