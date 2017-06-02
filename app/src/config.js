@@ -3,12 +3,16 @@ module.exports = {
         {value: "local", label: "Local"},
         {value: "develop", label: "Development"},
         {value: "staging", label: "Staging"},
-        {value: "production", label: "Production"}
+        {value: "production", label: "Production"},
+        {value: "develop_aws", label: "Development (AWS)"},
+        {value: "staging_aws", label: "Staging (AWS)"}
     ],
     host: {
         'local': 'http://localhost:9000',
         'develop': 'https://webservices-develop.sagebridge.org',
+        'develop_aws': 'https://dev.sagebridge.org',
         'staging': 'https://webservices-staging.sagebridge.org',
+        'staging_aws': 'https://uat.sagebridge.org',
         'production': 'https://webservices.sagebridge.org'
     },
     toastr: {
