@@ -55,7 +55,7 @@ module.exports = function() {
             toastr.error(payload.message);
             return;
         }
-        var message = payload.message;
+        var message = payload.message || payload.responseText;
         var errors = payload.errors;
         fixEnumErrorsForTopLevelEditor(errors);
 

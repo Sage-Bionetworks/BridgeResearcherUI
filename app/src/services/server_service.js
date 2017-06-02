@@ -131,7 +131,7 @@ function get(path) {
         return Promise.resolve(cache.get(path));
     } else {
         return makeSessionWaitingPromise("GET " + path, function() {
-            return getInt(config.host[session.environment] + path).then(function(response) {
+            return getInt(session.host + path).then(function(response) {
                 cache.set(path, response);
                 return response;
             });
@@ -141,13 +141,13 @@ function get(path) {
 function post(path, body) {
     cache.clear(path);
     return makeSessionWaitingPromise("POST " + path, function() {
-        return postInt(config.host[session.environment] + path, body);
+        return postInt(session.host + path, body);
     });
 }
 function del(path) {
     cache.clear(path);
     return makeSessionWaitingPromise("DEL " + path, function() {
-        return deleteInt(config.host[session.environment] + path);
+        return deleteInt(session.host + path);
     });
 }
 /**
@@ -158,7 +158,7 @@ function del(path) {
  */
 function signOut() {
     var env = session.environment;
-    postInt(config.host[env] + config.signOut);
+    postInt(session.host + config.signOut);
     cache.reset();
     session = null;
     storeService.remove(SESSION_KEY);
@@ -188,10 +188,14 @@ module.exports = {
         var request = Promise.resolve(postInt(config.host[env] + config.signIn, data));
         request.then(function(sess) {
             sess.isSupportedUser = isSupportedUser;
+            // in some installations the server environment is "wrong" in that it's 
+            // not enough to determine the host. Use the environment selected by 
+            // the user.
             if (sess.isSupportedUser()) {
                 sess.studyName = studyName;
                 sess.studyId = data.study;
                 session = sess;
+                session.host = config.host[env];
                 storeService.set(SESSION_KEY, session);
                 listeners.emit(SESSION_STARTED_EVENT_KEY, sess);
             }
