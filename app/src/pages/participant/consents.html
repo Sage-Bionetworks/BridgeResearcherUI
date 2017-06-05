@@ -23,7 +23,6 @@
                 <th>Consent Group</th>
                 <th>Name</th>
                 <th>Consented On</th>
-                <th>Version Signed</th>
                 <th>Withdrew On</th>
                 <th></th>
                 <th></th>
@@ -31,7 +30,7 @@
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
-                <td colspan="7" data-bind="html: recordsMessageObs"></td>
+                <td colspan="6" data-bind="html: recordsMessageObs"></td>
             </tr>
         </tbody>        
         <tbody data-bind="foreach: itemsObs">
@@ -39,21 +38,20 @@
                 <td style="white-space:pre" data-bind="text: $data.consentGroupName"></td>
                 <td>
                     <div data-bind="if: $data.name === 'No consent'">
-                        <i>No consent</i>
+                        <i>Not consented</i>
                     </div>
                     <div data-bind="visible: $data.name !== 'No consent', text: $data.name"></div>
                 </td>
-                <td data-bind="text: $data.signedOn"></td>
                 <td>
-                    <span data-bind="visible: !$data.consented || !$data.isFirst || !$data.hasSignedActiveConsent,
-                        semantic: 'popup'" data-content="Participant signed an older version of this consent (not currently published).">
-                        <a target="_blank" rel="noopener" data-bind="text: $data.consentCreatedOn, attr:{href: $data.consentURL}"></a>
-                    </span>
-                    <span data-bind="visible: $data.consented && $data.isFirst && $data.hasSignedActiveConsent,
-                        semantic: 'popup'" data-content="The currently published version of this consent has been signed.">
-                        <a target="_blank" rel="noopener" data-bind="text: $data.consentCreatedOn, attr:{href: $data.consentURL}"></a>
+                    <div data-bind="visible: !$parent.isUpToDateConsent($data), semantic: 'popup'" 
+                        data-content="Participant signed an older version of this consent (not currently published).">
+                        <span data-bind="text: $data.signedOn"></span>
+                    </div>
+                    <div data-bind="visible: $parent.isUpToDateConsent($data), semantic: 'popup'" 
+                        data-content="The currently published version of this consent has been signed.">
+                        <span data-bind="text: $data.signedOn"></span>
                         <i class="ui green checkmark icon"> </i>
-                    </span>
+                    </div>
                 </td>
                 <td>
                     <button data-bind="visible: $data.eligibleToWithdraw, click: $component.withdrawFromSubpopulation"

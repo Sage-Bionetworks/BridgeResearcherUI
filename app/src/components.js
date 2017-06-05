@@ -403,10 +403,6 @@ reg('participant_export', {
     viewModel: require('./dialogs/participant_export/participant_export'),
     template: require('./dialogs/participant_export/participant_export.html'), synchronous: true
 });
-reg('new_external_id', {
-    viewModel: require('./dialogs/new_external_id/new_external_id'),
-    template: require('./dialogs/new_external_id/new_external_id.html'), synchronous: true
-});
 reg('copy_schemas', {
     viewModel: require('./dialogs/copy_schemas/copy_schemas'),
     template: require('./dialogs/copy_schemas/copy_schemas.html'), synchronous: true
