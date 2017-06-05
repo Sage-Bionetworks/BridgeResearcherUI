@@ -84,15 +84,6 @@ module.exports = function(params) {
         return item.consented && item.isFirst && item.hasSignedActiveConsent;
     };
 
-
-/*
-                    <div data-bind="visible: !$data.consented || !$data.isFirst || !$data.hasSignedActiveConsent,
-                        semantic: 'popup'" data-content="Participant signed an older version of this consent (not currently published).">
-                        <span data-bind="text: $data.signedOn"></span>
-                    </div>
-                    <div data-bind="visible: $data.consented && $data.isFirst && $data.hasSignedActiveConsent,
-*/
-
     // I know, ridiculous...
     function load() {
         self.itemsObs([]);
