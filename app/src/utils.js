@@ -163,10 +163,80 @@ function copyString(value) {
     }
     document.body.removeChild(p);
 }
+function findStudyName(studies, studyIdentifier) {
+    try {
+        return (studies || []).filter(function(studyOption) {
+            return (studyOption.identifier === studyIdentifier);
+        })[0].name;
+    } catch(e) {
+        throw new Error("Study '"+studyIdentifier+"' not found.");
+    }
+}
+function startHandler(vm, event) {
+    if (event && event.target) {
+        displayPendingControl(event.target);
+    }
+    ko.postbox.publish("clearErrors");
+}
+function successHandler(vm, event, message) {
+    return function(response) {
+        clearPendingControl();
+        ko.postbox.publish("clearErrors");
+        if (message) {
+            toastr.success(message);
+        }
+        return response;
+    };
+}
+function makeScrolTo(itemSelector) {
+    return function scrollTo(index) {
+        var offset = $(".fixed-header").outerHeight() * 1.75;
+        var $scrollbox = $(".scrollbox");
+        var $element = $scrollbox.find(itemSelector).eq(index);
+        if ($scrollbox.length && $element.length) {
+            $scrollbox.scrollTo($element, {offsetTop: offset});
+            setTimeout(function() {
+                $element.find(".focus").focus().click();
+            },20);
+        }
+    };
+}
+function createParticipantForID(email, identifier) {
+    return {
+        "email": createEmailTemplate(email, identifier),
+        "password": identifier,
+        "externalId": identifier,
+        "sharingScope": "all_qualified_researchers"
+    };
+}
+function fadeUp() {
+    return function(div) {
+        if (div.nodeType === 1) {
+            var $div = $(div);
+            $div.slideUp(function() { $div.remove(); });
+        }
+    };
+}
+// TODO: Can we consolidate with fadeRemove binding?
+function animatedDeleter(scrollTo, elementsObs, selectedElementObs) {
+    return function(element, event) {
+        event.stopPropagation();
+        alerts.deleteConfirmation("Are you sure you want to delete this?", function() {
+            setTimeout(function() {
+                var index = elementsObs.indexOf(element);
+                elementsObs.splice(index,1);
+                setTimeout(function() {
+                    if (selectedElementObs) {
+                        selectedElementObs(index);
+                    } else {
+                        scrollTo(index);
+                    }
+                }, 300);
+            }, 500);
+        });
+    };
+}
 
-/**
- * Common utility methods for ViewModels.
- */
 module.exports = {
     /**
      * A start handler called before a request to the server is made. All errors are cleared
@@ -175,12 +245,7 @@ module.exports = {
      * @param vm
      * @param event
      */
-    startHandler: function(vm, event) {
-        if (event && event.target) {
-            displayPendingControl(event.target);
-        }
-        ko.postbox.publish("clearErrors");
-    },
+    startHandler: startHandler,
     /**
      * An Ajax success handler for a view model that supports the editing of a form.
      * Turns off the loading indicator on the button used to submit the form, and
@@ -189,26 +254,8 @@ module.exports = {
      * @param event
      * @returns {Function}
      */
-    successHandler: function(vm, event, message) {
-        return function(response) {
-            clearPendingControl();
-            ko.postbox.publish("clearErrors");
-            if (message) {
-                toastr.success(message);
-            }
-            return response;
-        };
-    },
+    successHandler: successHandler,
     clearPendingControl: clearPendingControl,
-    // TODO: Get rid of the need to have a reference to the dom element that has a spinner,
-    // using a binding.
-    formFailure: function(actionElement, message) {
-        ko.postbox.publish("clearErrors");
-        if (actionElement) {
-            actionElement.classList.remove("loading");
-        }
-        ko.postbox.publish("showErrors", {message:message,errors:{}});
-    },
     /**
      * Given an array of option objects (with the properties "label" and "value"),
      * return a function that will return a specific option given a value.
@@ -229,63 +276,11 @@ module.exports = {
      * @param itemSelector
      * @returns {scrollTo}
      */
-    makeScrollTo: function(itemSelector) {
-        return function scrollTo(index) {
-            var offset = $(".fixed-header").outerHeight() * 1.75;
-            var $scrollbox = $(".scrollbox");
-            var $element = $scrollbox.find(itemSelector).eq(index);
-            if ($scrollbox.length && $element.length) {
-                $scrollbox.scrollTo($element, {offsetTop: offset});
-                setTimeout(function() {
-                    $element.find(".focus").focus().click();
-                },20);
-            }
-        };
-    },
-    fadeUp: function() {
-        return function(div) {
-            if (div.nodeType === 1) {
-                var $div = $(div);
-                $div.slideUp(function() { $div.remove(); });
-            }
-        };
-    },
-    createParticipantForID: function(email, identifier) {
-        return {
-            "email": createEmailTemplate(email, identifier),
-            "password": identifier,
-            "externalId": identifier,
-            "sharingScope": "all_qualified_researchers"
-        };
-    },
-    // TODO: There is also the binding fadeRemove, ostensibly to do the same thing.
-    animatedDeleter: function(scrollTo, elementsObs, selectedElementObs) {
-        return function(element, event) {
-            event.stopPropagation();
-            alerts.deleteConfirmation("Are you sure you want to delete this?", function() {
-                setTimeout(function() {
-                    var index = elementsObs.indexOf(element);
-                    elementsObs.splice(index,1);
-                    setTimeout(function() {
-                        if (selectedElementObs) {
-                            selectedElementObs(index);
-                        } else {
-                            scrollTo(index);
-                        }
-                    }, 300);
-                }, 500);
-            });
-        };
-    },    
-    findStudyName: function (studies, studyIdentifier) {
-        try {
-            return (studies || []).filter(function(studyOption) {
-                return (studyOption.identifier === studyIdentifier);
-            })[0].name;
-        } catch(e) {
-            throw new Error("Study '"+studyIdentifier+"' not found.");
-        }
-    },
+    makeScrollTo: makeScrolTo,
+    fadeUp: fadeUp,
+    createParticipantForID: createParticipantForID,
+    animatedDeleter: animatedDeleter,
+    findStudyName: findStudyName,
     atLeastOneSignedConsent: atLeastOneSignedConsent,
     copyString: copyString,
     failureHandler: failureHandler

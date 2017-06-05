@@ -80,6 +80,9 @@ module.exports = function(params) {
         });
         return '/consent/consent.html' + query;
     };
+    self.isUpToDateConsent = function(item) {
+        return item.consented && item.isFirst && item.hasSignedActiveConsent;
+    };
 
     // I know, ridiculous...
     function load() {

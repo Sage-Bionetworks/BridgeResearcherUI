@@ -177,6 +177,9 @@ $.ajax(config('/v3/participants/' + queryParams.userId)).done(function(response)
     var signedOn = (history.signedOn) ? new Date(history.signedOn).toLocaleString() : '';
     var withdrewOn = (history.withdrewOn) ? new Date(history.withdrewOn).toLocaleString() : '';
     var signature = (history.imageData) ? "data:"+history.imageMimeType+";base64,"+history.imageData : '';
+
+    // Unfortunately, if the birthdate is 0, it is stored as 1969-12-31. So... we *could* 
+    // hide that and if you were born on December 31, 1969, you're just out of luck... ?
     
     var data = {
         name: history.name,
