@@ -115,9 +115,9 @@ var CONSTRAINTS_TEMPLATES = Object.freeze({
     'DurationConstraints': {dataType: 'duration', rules: [], minValue:0, maxValue:255, unit: '', step:1.0},
     'StringConstraints': {dataType:'string', rules: [], minLength:0, maxLength:255, pattern:'',patternPlaceholder:'',patternErrorMessage:''},
     'MultiValueConstraints': {dataType:'string', enumeration:[], rules:[], allowOther:false, allowMultiple:false},
-    'BloodPressureConstraints': {dataType:'string', rules:[]},
-    'HeightConstraints': {dataType:'decimal', rules:[], forInfant:false},
-    'WeightConstraints': {dataType:'decimal', rules:[], forInfant:false},
+    'BloodPressureConstraints': {dataType:'bloodpressure', rules:[]},
+    'HeightConstraints': {dataType:'height', rules:[], forInfant:false},
+    'WeightConstraints': {dataType:'weight', rules:[], forInfant:false},
 });
 var UI_HINT_FOR_CONSTRAINTS = Object.freeze({
     'BooleanConstraints': 'checkbox',
