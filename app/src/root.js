@@ -147,7 +147,6 @@ var RootViewModel = function() {
         }
     };
     serverService.addSessionStartListener(function(session) {
-        //self.studyNameObs("&ldquo;" + session.studyName + "&rdquo;");
         self.studyNameObs(session.studyName);
         self.environmentObs(session.environment);
         self.studyIdentifierObs(session.studyId);
