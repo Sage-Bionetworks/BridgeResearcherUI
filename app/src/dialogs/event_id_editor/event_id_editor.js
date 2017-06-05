@@ -22,7 +22,7 @@ module.exports = function(params) {
         .obs('activity')
         .obs('activityOptions[]');
     
-    fn.copyParams(self, params, 'clearEventIdFunc', 'eventIdObs');
+    fn.copyProps(self, params, 'clearEventIdFunc', 'eventIdObs');
     self.activityLabel = utils.makeOptionLabelFinder(self.activityOptionsObs);
     self.closeDialog = root.closeDialog;
 
