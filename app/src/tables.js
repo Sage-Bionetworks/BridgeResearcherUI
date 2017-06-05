@@ -119,7 +119,7 @@ module.exports = {
                         .then(uncheckAll(vm))
                         .then(makeTableRowHandler(vm, del.deletables, objName))
                         .then(redirectHandler(vm, redirectTo))
-                        .catch(utils.failureHandler());
+                        .catch(utils.failureHandler(/*{transient:false}*/));
                 });
             };
         }

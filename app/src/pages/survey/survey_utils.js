@@ -63,7 +63,10 @@ var uiHintLabels = {
     'slider':'Slider',
     'textfield':'Text Field',
     'timepicker':'Time Picker',
-    'toggle':'Toggle Button'
+    'toggle':'Toggle Button',
+    'weight':'Weight',
+    'height':'Height',
+    'bloodpressure':'Blood Pressure'
 };
 var UI_HINT_OPTIONS = Object.freeze(Object.keys(uiHintLabels).reduce(function(object, key) {
     object[key] = {value: key, label: uiHintLabels[key]};
@@ -80,7 +83,10 @@ var SELECT_OPTIONS_BY_TYPE = Object.freeze({
         UI_HINT_OPTIONS.radiobutton, UI_HINT_OPTIONS.select, UI_HINT_OPTIONS.slider],
     'IntegerConstraints':[UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider, UI_HINT_OPTIONS.select],
     'StringConstraints':[UI_HINT_OPTIONS.multilinetext, UI_HINT_OPTIONS.textfield],
-    'TimeConstraints':[UI_HINT_OPTIONS.timepicker]
+    'TimeConstraints':[UI_HINT_OPTIONS.timepicker],
+    'BloodPressureConstraints':[UI_HINT_OPTIONS.bloodpressure],
+    'HeightConstraints':[UI_HINT_OPTIONS.height],
+    'WeightConstraints':[UI_HINT_OPTIONS.weight]
 });
 var ELEMENT_TEMPLATE = Object.freeze({
     'SurveyInfoScreen': {type:'SurveyInfoScreen', title:'', prompt:'', promptDetail:'', identifier:''},
@@ -94,7 +100,10 @@ var DATA_TYPE_OPTIONS = Object.freeze([
     {label: 'Duration', value: 'duration'},
     {label: 'Time', value: 'time'},
     {label: 'Integer', value: 'integer'},
-    {label: 'Decimal', value: 'decimal'}
+    {label: 'Decimal', value: 'decimal'},
+    {label: 'Blood Pressure', value: 'bloodpressure'},
+    {label: 'Height', value: 'height'},
+    {label: 'Weight', value: 'weight'}
 ]);
 var CONSTRAINTS_TEMPLATES = Object.freeze({
     'BooleanConstraints': {dataType:'boolean', rules:[]},
@@ -105,7 +114,10 @@ var CONSTRAINTS_TEMPLATES = Object.freeze({
     'DecimalConstraints': {dataType:'decimal', rules: [], minValue:0, maxValue:255, unit: '', step:1.0},
     'DurationConstraints': {dataType: 'duration', rules: [], minValue:0, maxValue:255, unit: '', step:1.0},
     'StringConstraints': {dataType:'string', rules: [], minLength:0, maxLength:255, pattern:'',patternPlaceholder:'',patternErrorMessage:''},
-    'MultiValueConstraints': {dataType:'string', enumeration:[], rules:[], allowOther:false, allowMultiple:false}
+    'MultiValueConstraints': {dataType:'string', enumeration:[], rules:[], allowOther:false, allowMultiple:false},
+    'BloodPressureConstraints': {dataType:'bloodpressure', rules:[]},
+    'HeightConstraints': {dataType:'height', rules:[], forInfant:false},
+    'WeightConstraints': {dataType:'weight', rules:[], forInfant:false},
 });
 var UI_HINT_FOR_CONSTRAINTS = Object.freeze({
     'BooleanConstraints': 'checkbox',
@@ -116,7 +128,10 @@ var UI_HINT_FOR_CONSTRAINTS = Object.freeze({
     'DecimalConstraints': 'numberfield',
     'DurationConstrains': 'numberfield',
     'StringConstraints': 'textfield',
-    'MultiValueConstraints': 'list'
+    'MultiValueConstraints': 'list',
+    'BloodPressureConstraints': 'bloodpressure',
+    'HeightConstraints': 'height',
+    'WeightConstraints': 'weight'
 });
 
 var SURVEY_FIELDS = ['name','createdOn','guid','identifier','published','version','copyrightNotice'];
