@@ -1,9 +1,11 @@
 var storeService = require('../../services/store_service');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
+var fn = require('../../functions');
 var bind = require('../../binder');
 var config = require('../../config');
 var root = require('../../root');
+var BridgeError = require('../../error');
 
 var STUDY_KEY = 'studyKey';
 var ENVIRONMENT = 'environment';
@@ -15,13 +17,13 @@ function makeReloader(studyKey, environment) {
     return (requiresReload) ?
         function(response) {
             window.location.reload(); 
-        } : utils.identity;
+        } : fn.identity;
 }
 
 module.exports = function() {
     var self = this;
     var signInSubmit = document.querySelector("#signInSubmit");
-    var isLocked = utils.isDefined(root.queryParams.study);
+    var isLocked = fn.isNotBlank(root.queryParams.study);
     
     var studyKey, env;    
     if (isLocked) {
@@ -54,29 +56,35 @@ module.exports = function() {
             self.titleObs(utils.findStudyName(self.studyOptionsObs(), studyKey));
         }
     }
-    
     function loadStudyList(newValue) {
         return serverService.getStudyList(newValue)
-            .then(loadStudies).catch(utils.failureHandler());
+            .then(loadStudies)
+            .catch(utils.failureHandler());
     }
-
     function clear(response) {
         self.usernameObs("");
         self.passwordObs("");
-        if (!response.isSupportedUser()) {
-            utils.formFailure(signInSubmit, 'You do not appear to be a developer, researcher, or admin.');
-            return;
-        } else {
-            root.closeDialog();
-        }
+        root.closeDialog();
         return response;
     }
 
     self.signIn = function(vm, event) {
-        if (self.usernameObs() === "" || self.passwordObs() === "") {
-            utils.formFailure(signInSubmit, 'Username and/or password are required.');
-            return;
+        var credentials = {
+            username: self.usernameObs(), 
+            password: self.passwordObs(), 
+            study: self.studyObs()
+        };
+        var error = new BridgeError();
+        if (credentials.username === "") {
+            error.addError("email", "is required");
         }
+        if (credentials.password === "") {
+            error.addError("password", "is required");
+        }
+        if (error.hasErrors()) {
+            return utils.failureHandler({transient:false})(error);
+        }
+
         var studyKey = self.studyObs();
         var environment = self.environmentObs();
         var reloadIfNeeded = makeReloader(studyKey, environment);
@@ -86,18 +94,13 @@ module.exports = function() {
         storeService.set(ENVIRONMENT, environment);
 
         utils.startHandler(self, {target: signInSubmit});
-
         var studyName = utils.findStudyName(self.studyOptionsObs(), studyKey);
-        
-        var credentials = {
-            username: self.usernameObs(), password: self.passwordObs(), study: studyKey
-        };
         
         serverService.signIn(studyName, environment, credentials)
             .then(clear)
             .then(reloadIfNeeded)
             .then(utils.successHandler(self, {target: signInSubmit}))
-            .catch(utils.dialogFailureHandler(vm, event));
+            .catch(utils.failureHandler({transient:false}));
     };
 
     self.forgotPassword = function() {

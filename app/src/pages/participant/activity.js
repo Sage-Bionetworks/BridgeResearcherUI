@@ -5,16 +5,19 @@ var bind = require('../../binder');
 var root = require('../../root');
 var jsonFormatter = require('../../json_formatter');
 var tables = require('../../tables');
-var fn = require('../../transforms');
+var fn = require('../../functions');
+
+var failureHandler = utils.failureHandler({
+    redirectTo: "participants",
+    redirectMsg: "Participant not found"
+});
 
 module.exports = function(params) {
     var self = this;
     // params.guid, params.userId
 
-    self.startDate = null;
-    self.endDate = null;
     self.formatTitleCase = fn.formatTitleCase;
-    self.formatDateTime = fn.formatLocalDateTime;
+    self.formatDateTime = fn.formatDateTime;
 
     self.formatActivityClass = function(item) {
         return (item.activity.activityType === "survey") ? "tasks icon" : "child icon";
@@ -43,7 +46,7 @@ module.exports = function(params) {
     
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(root.isPublicObs() ? part.name : part.externalId);
-    }).catch(utils.failureHandler());
+    }).catch(failureHandler);
 
     self.isPublicObs = root.isPublicObs;
 
@@ -72,7 +75,7 @@ module.exports = function(params) {
                 }
             });
         });
-    }).catch(utils.notFoundHandler("Participant", "participants"));
+    }).catch(failureHandler);
 
     self.loadingFunc = function(offsetBy, pageSize, startDate, endDate) {
         return serverService.getParticipantActivities(self.userIdObs(), params.guid, {

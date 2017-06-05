@@ -1,5 +1,6 @@
 var ko = require('knockout');
 var utils = require('../../../utils');
+var utils = require('../../../functions');
 var scheduleUtils = require('../schedule_utils');
 var root = require('../../../root');
 
@@ -9,7 +10,7 @@ function groupToObservables(group) {
     setTimeout(function() {
         group.scheduleObs(group.schedule);
     },10);
-    group.scheduleObs.callback = utils.identity;
+    group.scheduleObs.callback = fn.identity;
     group.percentLabel = ko.computed(function(){
         return group.percentageObs()+"%";
     });

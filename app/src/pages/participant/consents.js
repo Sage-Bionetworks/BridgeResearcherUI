@@ -5,6 +5,21 @@ var root = require('../../root');
 var bind = require('../../binder');
 var alerts = require('../../widgets/alerts');
 var tables = require('../../tables');
+var fn = require('../../functions');
+
+var failureHandler = utils.failureHandler({
+    redirectTo: "participants",
+    redirectMsg: "Participant not found"
+});
+
+var session = null;
+
+serverService.addSessionStartListener(function(sess) {
+    session = sess;
+});
+serverService.addSessionEndListener(function() {
+    session = null;
+});
 
 module.exports = function(params) {
     var self = this;
@@ -21,7 +36,7 @@ module.exports = function(params) {
     self.isPublicObs = root.isPublicObs;
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(root.isPublicObs() ? part.name : part.externalId);
-    }).catch(utils.failureHandler());
+    }).catch(failureHandler);
 
     self.resendConsent = function(vm, event) {
         var subpopGuid = vm.consentURL.split("/subpopulations/")[1].split("/consents/")[0];
@@ -29,7 +44,7 @@ module.exports = function(params) {
             utils.startHandler(vm, event);
             serverService.resendConsentAgreement(params.userId, subpopGuid)
                 .then(utils.successHandler(vm, event, "Resent consent agreement."))
-                .catch(utils.failureHandler(vm, event));
+                .catch(failureHandler);
         });
     };
     self.withdraw = function(vm, event) {
@@ -42,7 +57,7 @@ module.exports = function(params) {
             .then(root.closeDialog)
             .then(load)
             .then(utils.successHandler(self, null, "User has been withdrawn from the study."))
-            .catch(utils.failureHandler());
+            .catch(failureHandler);
     };
     self.withdrawFromSubpopulation = function(model, event) {
         root.openDialog('withdrawal', {
@@ -54,7 +69,19 @@ module.exports = function(params) {
             .then(root.closeDialog)
             .then(load)
             .then(utils.successHandler(self, null, "User has been withdrawn from this consent group."))
-            .catch(utils.failureHandler());
+            .catch(failureHandler);
+    };
+    self.linkToDocument = function($data) {
+        var query = fn.queryString({
+            userId: self.userIdObs(),
+            index: $data.subpopulationGuidIndex,
+            guid: $data.subpopulationGuid,
+            host: session.host
+        });
+        return '/consent/consent.html' + query;
+    };
+    self.isUpToDateConsent = function(item) {
+        return item.consented && item.isFirst && item.hasSignedActiveConsent;
     };
 
     // I know, ridiculous...
@@ -81,6 +108,7 @@ module.exports = function(params) {
                         history.consentGroupName = subpop.name;
                         history.consentURL = '/#/subpopulations/'+subpop.guid+'/consents/'+record.consentCreatedOn;
                         history.subpopulationGuid = subpop.guid;
+                        history.subpopulationGuidIndex = i;
                         history.name = record.name;
                         history.birthdate = new Date(record.birthdate).toLocaleDateString(); 
                         history.signedOn = new Date(record.signedOn).toLocaleString();
@@ -99,7 +127,7 @@ module.exports = function(params) {
                     });
                 });
             });
-        }).catch(utils.notFoundHandler("Participant", "participants"));
+        }).catch(failureHandler);
     }
     load();
 };

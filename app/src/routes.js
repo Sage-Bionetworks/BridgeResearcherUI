@@ -16,9 +16,7 @@ var serverService = require('./services/server_service');
 var GUID_CREATEDON = ['guid','createdOn'];
 var GUID = ['guid'];
 var ID = ['id'];
-var ID_AT = ['id','at'];
 var ID_VERSION = ['id','version'];
-var ID_VERSION_AT = ['id','version','at'];
 var SCHEMAID = ['schemaId'];
 var SCHEMAID_REVISION = ['schemaId','revision'];
 var TASKID = ['taskId'];
@@ -48,7 +46,6 @@ function redirectToParticipant(externalId) {
 var router = new director.Router();
 router.param('guid', /([^\/]*)/);
 router.param('createdOn', /([^\/]*)/);
-router.on('/overview', routeTo('start'));
 router.on('/settings/general', routeTo('general'));
 router.on('/settings/email', routeTo('email'));
 router.on('/settings/data_groups', routeTo('data_groups'));
@@ -66,8 +63,13 @@ router.on('/subpopulations/:guid/consents/download', routeTo('subpopulation_down
 router.on('/subpopulations/:guid/consents/:createdOn', routeTo('subpopulation_editor', GUID_CREATEDON));
 router.on('/subpopulations/:guid', routeTo('subpopulation', GUID));
 router.on('/subpopulations', routeTo('subpopulations'));
-router.on('/reports/:identifier', routeTo('report', ID));
-router.on('/reports', routeTo('reports'));
+
+router.on('/reports', routeTo('dailyUploads'));
+router.on('/reports/uploads', routeTo('dailyUploads'));
+router.on('/reports/signUps', routeTo('signUps'));
+router.on('/reports/raw/:identifier', routeTo('report', ID));
+router.on('/reports/raw', routeTo('reports'));
+
 router.on('/surveys', routeTo('surveys'));
 router.on('/surveys/:guid/:createdOn/versions', routeTo('survey_versions', GUID_CREATEDON));
 router.on('/surveys/:guid/:createdOn/schema', routeTo('survey_schema', GUID_CREATEDON));

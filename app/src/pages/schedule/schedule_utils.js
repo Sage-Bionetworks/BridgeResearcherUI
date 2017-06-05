@@ -4,7 +4,7 @@ var criteriaUtils = require('../../criteria_utils');
 var optionsService = require('./../../services/options_service');
 var serverService = require('../../services/server_service');
 var Promise = require('bluebird');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 
 var surveyNameMap = {};
 
@@ -84,7 +84,7 @@ function formatEventId(value) {
     }).join(', and ');
 }
 function formatTimesArray(times) {
-    return (times && times.length) ? toList(times.map(function(time) {
+    return (fn.is(times,'Array') && times.length) ? toList(times.map(function(time) {
         time = time.replace(":00.000","");
         // If there's no label, it's an odd time. Just leave it for now.
         return timeFormatter(time) || time;
@@ -301,7 +301,7 @@ function formatCompoundActivity(task) {
     }
     var surveys = task.surveyList.map(function(survey) {
         return surveyNameMap[survey.guid] + ((survey.createdOn) ? 
-            ' <i>(pub. ' + fn.formatLocalDateTime(survey.createdOn) + ')</i>' : '');
+            ' <i>(pub. ' + fn.formatDateTime(survey.createdOn) + ')</i>' : '');
     }).join(', ');
     if (surveys) {
         phrase.push(surveys);

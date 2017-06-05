@@ -3,7 +3,7 @@ var bind = require('../../binder');
 var root = require('../../root');
 var utils = require('../../utils');
 var tables = require('../../tables');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 
 module.exports = function(params) {
     var self = this;
@@ -28,7 +28,7 @@ module.exports = function(params) {
     self.isDeveloper = root.isDeveloper;
     self.isResearcher = root.isResearcher;
     self.notificationsEnabledObs = root.notificationsEnabledObs;
-    self.formatDate = fn.formatLocalDateTimeWithoutZone;
+    self.formatDate = fn.formatDateTime;
 
     self.sendNotification = function() {
         root.openDialog('send_notification', {

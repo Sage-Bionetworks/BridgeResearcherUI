@@ -3,7 +3,7 @@ var serverService = require('../../services/server_service');
 var bind = require('../../binder');
 var utils = require('../../utils');
 var root = require('../../root');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 var ko = require('knockout');
 
 function schemaListToView(schemaList, context) {
@@ -65,7 +65,7 @@ function loadSchemaRevisions(newSchema) {
     return newSchema;
 }
 function surveyToOption(survey) {
-    return {label: fn.formatLocalDateTime(survey.createdOn), value: survey.createdOn};
+    return {label: fn.formatDateTime(survey.createdOn), value: survey.createdOn};
 }
 function schemaToOption(schema) {
     return {label: schema.revision, value: schema.revision};
@@ -73,7 +73,8 @@ function schemaToOption(schema) {
 module.exports = function(params) {
     var self = this;
 
-    self.formatDateTime = fn.formatLocalDateTime;
+    fn.copyProps(self, fn, 'formatDateTime');
+
     self.task = {};
 
     var binder = bind(self)
@@ -149,11 +150,15 @@ module.exports = function(params) {
             return serverService.getTaskDefinition(params.taskId)
                 .then(binder.assign('task'))
                 .then(binder.update())
-                .catch(utils.notFoundHandler("Task", "tasks"));
+                .catch(utils.failureHandler({
+                    redirectTo: "tasks",
+                    redirectMsg: "Task not found."
+                }));
         }
     }
     serverService.getPublishedSurveys()
         .then(sharedModuleUtils.loadNameMaps)
         .then(serverService.getPublishedSurveys)
-        .then(loadTaskDefinition);
+        .then(loadTaskDefinition)
+        .catch(utils.failureHandler());
 };

@@ -1,0 +1,205 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8"/>
+<title>Consent To Research</title>
+<script src="vue.min.js"></script>
+<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+<link href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2/semantic.min.css" rel="stylesheet" />
+<style>
+    table:not(.signature-block) td { 
+        padding: 3px 8px; 
+        vertical-align: top; 
+    }
+    #document {
+        position: relative;
+        margin: .25in auto;
+        max-width: 8.5in;
+        background-color: white;
+        padding: 1in;
+        -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2), inset 0 0 20px rgba(0, 0, 0, 0.1);
+        -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2), inset 0 0 20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2), inset 0 0 20px rgba(0, 0, 0, 0.1);        
+    }
+    #document div *:first-child {
+        margin-top: 0;
+    }
+    #document div *:last-child {
+        margin-bottom: 0;
+    }
+    #document:before, #document:after {
+        position: absolute;
+        width: 40%;
+        height: 10px;
+        content: ' ';
+        left: 12px;
+        bottom: 14px;
+        background: transparent;
+        -webkit-transform: skew(-5deg) rotate(-5deg);
+        -moz-transform: skew(-5deg) rotate(-5deg);
+        -ms-transform: skew(-5deg) rotate(-5deg);
+        -o-transform: skew(-5deg) rotate(-5deg);
+        transform: skew(-5deg) rotate(-5deg);
+        -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        -moz-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        z-index: -1;
+    } 
+    #document:after {
+        left: auto;
+        right: 12px;
+        -webkit-transform: skew(5deg) rotate(5deg);
+        -moz-transform: skew(5deg) rotate(5deg);
+        -ms-transform: skew(5deg) rotate(5deg);
+        -o-transform: skew(5deg) rotate(5deg);
+        transform: skew(5deg) rotate(5deg);
+    }
+    .signature-block {
+        width: 100%;
+        visibility: hidden;
+        page-break-inside: avoid;
+    }
+        .signature-block td {
+            padding: 2 0;
+        }
+    .line {
+        border-top: 2px solid #333;
+    }
+    img {
+        width: calc(334px * .6);
+        height: calc(156px * .6);
+        visibility: hidden;
+    }
+    @media print {
+        body {
+            margin: .5in;
+        }
+        #document {
+            padding: 0;
+            margin: 0;
+        }
+    }
+    .ui.warning.message {
+        max-width: 8.5in;
+        margin: 1in auto;
+    }
+</style>
+</head>
+<body>
+<div id="document">
+    <div v-html="document">
+        <div class="ui active inverted dimmer">
+            <div class="ui text loader">Loading</div>
+        </div>
+    </div>
+    <table class="signature-block" cellspacing="0" :style="sigStyle">
+        <tr>
+            <td nowrap="nowrap" valign="bottom">{{name}}</td>
+            <td></td>
+            <td nowrap="nowrap"><img :style="imgStyle" :src="signature" /></td>
+            <td></td>
+            <td nowrap="nowrap" valign="bottom">{{signedOn}}</td>
+        </tr>
+        <tr>
+            <td class="line">Name of Participant</td>
+            <td></td>
+            <td class="line">Signature</td>
+            <td></td>
+            <td class="line">Date</td>
+        </tr>
+        <tr>
+            <td colspan="5"><br /></td>
+        </tr>
+        <tr>
+            <td>{{email}}</td>
+            <td></td>
+            <td>{{sharing_status}}</td>
+            <td></td>
+            <td>{{birthdate}}</td>
+        </tr>
+        <tr>
+            <td width="31%" class="line">Email</td>
+            <td width="3%">&#160;&#160;&#160;</td>
+            <td width="32%" class="line">Sharing Option</td>
+            <td width="3%">&#160;&#160;&#160;</td>
+            <td width="31%" class="line">Birth Date</td>
+        </tr>
+        <tr>
+            <td colspan="5"><br /></td>
+        </tr>
+        <tr>
+            <td width="15%">{{withdrewOn}}</td>
+        </tr>
+        <tr>
+            <td width="15%"  class="line" v-show="hasWithdrawn">Withdrew On</td>
+        </tr>
+    </table>    
+</div>
+<script>
+function showError() {
+    document.body.innerHTML = '<div class="ui warning message"><div class="header">Cannot load document</div>You are signed out of the Bridge Study Manager. Sign back in to view content.</div>';
+}
+var session = JSON.parse(localStorage.getItem('session'));
+if (!session) {
+    showError();
+}
+var queryParams = {};
+if (document.location.search) {
+    document.location.search.substring(1).split("&").forEach(function(pair) {
+        var fragments = pair.split("=");
+        var key = decodeURIComponent(fragments[0]);
+        var value = decodeURIComponent(fragments[1]);
+        queryParams[key] = value;
+    });
+}
+var sharing = {
+    'no_sharing': 'Not Sharing',
+    'sponsors_and_partners': 'Sponsors and Partners Only',
+    'all_qualified_researchers': 'All Qualified Researchers'
+};
+var HEADERS = {
+    'Bridge-Session': session.sessionToken,
+    'Content-Type': 'application/json'
+};
+function config(url) {
+    return {
+        method: 'GET',
+        url: queryParams.host + url,
+        headers: {'Bridge-Session': session.sessionToken,'Content-Type': 'application/json'},
+        type: "application/json",
+        dataType: "json"
+    };
+}
+
+$.ajax(config('/v3/participants/' + queryParams.userId)).done(function(response) {
+    var user = response;
+    // The index references the consents in reverse order, so we must reverse them here as well.
+    var history = user.consentHistories[queryParams.guid].reverse()[queryParams.index];
+    var signedOn = (history.signedOn) ? new Date(history.signedOn).toLocaleString() : '';
+    var withdrewOn = (history.withdrewOn) ? new Date(history.withdrewOn).toLocaleString() : '';
+    var signature = (history.imageData) ? "data:"+history.imageMimeType+";base64,"+history.imageData : '';
+
+    // Unfortunately, if the birthdate is 0, it is stored as 1969-12-31. So... we *could* 
+    // hide that and if you were born on December 31, 1969, you're just out of luck... ?
+    
+    var data = {
+        name: history.name,
+        signature: signature,
+        signedOn: signedOn,
+        birthdate: history.birthdate,
+        hasWithdrawn: typeof history.withdrewOn === "string",
+        withdrewOn: withdrewOn,
+        date: history.birthdate,
+        email: user.email,
+        sharing_status: sharing[user.sharingScope],
+        imgStyle: {visibility: (history.imageData) ? "visible" : "hidden"},
+        sigStyle: {visibility: "visible"}
+    };
+    var url = '/v3/subpopulations/' + queryParams.guid + '/consents/' + history.consentCreatedOn;
+    return $.ajax(config(url)).done(function(response) {
+        data.document = response.documentContent;
+        new Vue({el: document.getElementById('document'), data: data});
+    }).fail(showError);
+}).fail(showError);
+</script>
+</body>
+</html>

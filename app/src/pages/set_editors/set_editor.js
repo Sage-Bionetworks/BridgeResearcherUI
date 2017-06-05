@@ -2,6 +2,7 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var root = require('../../root');
 var bind = require('../../binder');
+var fn = require('../../functions');
 
 module.exports = function(propertyName) {
     return function () {
@@ -37,7 +38,7 @@ module.exports = function(propertyName) {
             }
             var array = self.recordsObs();
             array.push(self.addFieldObs());
-            array.sort(utils.lowerCaseStringSorter);
+            array.sort(fn.lowerCaseStringSorter);
             self.recordsObs(array);
             self.addFieldObs("");
             self.noChangesObs(false);
@@ -47,11 +48,9 @@ module.exports = function(propertyName) {
             self.study[propertyName] = self.recordsObs();
 
             serverService.saveStudy(self.study)
-                .then(function(response) {
-                    self.noChangesObs(true);
-                })
+                .then(fn.handleStaticObsUpdate(self.noChangesObs, true))
                 .then(utils.successHandler(self, event, "Values saved."))
-                .catch(utils.failureHandler(vm, event));
+                .catch(utils.failureHandler());
         };
 
         serverService.getStudy()

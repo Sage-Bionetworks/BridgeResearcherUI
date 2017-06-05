@@ -9,9 +9,8 @@
 var EventEmitter = require('../events');
 var storeService = require('./store_service');
 var config = require('../config');
-var utils = require("../utils");
 var Promise = require('bluebird');
-var transforms = require('../transforms');
+var fn = require('../functions');
 
 var SESSION_KEY = 'session';
 var SESSION_STARTED_EVENT_KEY = 'sessionStarted';
@@ -132,7 +131,7 @@ function get(path) {
         return Promise.resolve(cache.get(path));
     } else {
         return makeSessionWaitingPromise("GET " + path, function() {
-            return getInt(config.host[session.environment] + path).then(function(response) {
+            return getInt(session.host + path).then(function(response) {
                 cache.set(path, response);
                 return response;
             });
@@ -142,13 +141,13 @@ function get(path) {
 function post(path, body) {
     cache.clear(path);
     return makeSessionWaitingPromise("POST " + path, function() {
-        return postInt(config.host[session.environment] + path, body);
+        return postInt(session.host + path, body);
     });
 }
 function del(path) {
     cache.clear(path);
     return makeSessionWaitingPromise("DEL " + path, function() {
-        return deleteInt(config.host[session.environment] + path);
+        return deleteInt(session.host + path);
     });
 }
 /**
@@ -159,7 +158,7 @@ function del(path) {
  */
 function signOut() {
     var env = session.environment;
-    postInt(config.host[env] + config.signOut);
+    postInt(session.host + config.signOut);
     cache.reset();
     session = null;
     storeService.remove(SESSION_KEY);
@@ -172,7 +171,7 @@ function isSupportedUser() {
 }
 function cacheParticipantName(response) {
     if (response && response.id) {
-        var name = transforms.formatName(response);
+        var name = fn.formatName(response);
         cache.set(response.id+':name', {name:name,externalId:response.externalId});
     }
     return response;
@@ -189,10 +188,13 @@ module.exports = {
         var request = Promise.resolve(postInt(config.host[env] + config.signIn, data));
         request.then(function(sess) {
             sess.isSupportedUser = isSupportedUser;
+            // in some installations the server environment is "wrong" in that it's not enough 
+            // to determine the host. Set a host property and use that for future requests.
             if (sess.isSupportedUser()) {
                 sess.studyName = studyName;
                 sess.studyId = data.study;
                 session = sess;
+                session.host = config.host[env];
                 storeService.set(SESSION_KEY, session);
                 listeners.emit(SESSION_STARTED_EVENT_KEY, sess);
             }
@@ -201,11 +203,8 @@ module.exports = {
         return request;
     },
     getStudyList: function(env) {
-        var request = Promise.resolve(getInt(config.host[env] + config.getStudyList));
-        request.then(function(response) {
-            return response.items.sort(utils.makeFieldSorter("name"));
-        });
-        return request;
+        return Promise.resolve(getInt(config.host[env] + config.getStudyList))
+            .then(fn.handleSort('items', 'name'));
     },
     signOut: signOut,
     requestResetPassword: function(env, data) {
@@ -278,7 +277,7 @@ module.exports = {
         return post(url, survey);
     },
     deleteSurvey: function(survey, physical) {
-        var queryString = transforms.queryString({physical:(physical === true)});
+        var queryString = fn.queryString({physical:(physical === true)});
         var createdString = new Date(survey.createdOn).toISOString();
         var url = config.survey + survey.guid + '/revisions/' + createdString + queryString;
         return del(url);
@@ -377,7 +376,7 @@ module.exports = {
         return del(config.cache+"/"+esc(cacheKey));
     },
     getParticipants: function(offsetBy, pageSize, emailFilter, startDate, endDate) {
-        var queryString = transforms.queryString({
+        var queryString = fn.queryString({
             offsetBy: offsetBy, pageSize: pageSize, emailFilter: emailFilter,
             startDate: startDate, endDate: endDate
         });
@@ -433,7 +432,7 @@ module.exports = {
         return post(config.participants+"/"+id+"/resendEmailVerification");
     },
     getExternalIds: function(params) {
-        return get(config.externalIds + transforms.queryString(params || {}));
+        return get(config.externalIds + fn.queryString(params || {}));
     },
     addExternalIds: function(identifiers) {
         return post(config.externalIds, identifiers);
@@ -448,10 +447,10 @@ module.exports = {
         }
     },
     getStudyReports: function() {
-        return get(config.reports+transforms.queryString({"type":"study"}));
+        return get(config.reports+fn.queryString({"type":"study"}));
     },
     getStudyReport: function(identifier, startDate, endDate) {
-        var queryString = transforms.queryString({startDate: startDate, endDate: endDate});
+        var queryString = fn.queryString({startDate: startDate, endDate: endDate});
         return get(config.reports + "/" + identifier + queryString);
     },
     addStudyReport: function(identifier, report) {
@@ -470,17 +469,17 @@ module.exports = {
         return post(config.reports + "/" + index.identifier + "/index", index);
     },
     getParticipantReports: function() {
-        return get(config.reports+transforms.queryString({"type":"participant"}));
+        return get(config.reports+ fn.queryString({"type":"participant"}));
     },
     getParticipantUploads: function(userId, startTime, endTime) {
-        var queryString = transforms.queryString({startTime: startTime, endTime: endTime});
+        var queryString = fn.queryString({startTime: startTime, endTime: endTime});
         return get(config.participants + '/' + userId + '/uploads' + queryString);
     },
     getParticipantUploadStatus: function(uploadId) {
         return get(config.uploadstatuses + '/' + uploadId);
     },
     getParticipantReport: function(userId, identifier, startDate, endDate) {
-        var queryString = transforms.queryString({startDate: startDate, endDate: endDate});
+        var queryString = fn.queryString({startDate: startDate, endDate: endDate});
         return get(config.participants + '/' + userId + '/reports/' + identifier + queryString);
     },
     addParticipantReport: function(userId, identifier, report) {
@@ -493,7 +492,7 @@ module.exports = {
         return del(config.participants + '/' + userId + '/reports/' + identifier + '/' + date);
     },
     getParticipantActivities: function(userId, activityGuid, params) {
-        var queryString = transforms.queryString(params);
+        var queryString = fn.queryString(params);
         return get(config.participants + '/' + userId + '/activities/' + activityGuid + queryString);
     },
     deleteParticipantActivities: function(userId) {

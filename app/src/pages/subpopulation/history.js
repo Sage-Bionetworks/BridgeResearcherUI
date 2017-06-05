@@ -1,8 +1,13 @@
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var bind = require('../../binder');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 var alerts = require('../../widgets/alerts');
+
+var failureHandler = utils.failureHandler({
+    redirectMsg:"Consent group not found.", 
+    redirectTo:"subpopulations"
+});
 
 module.exports = function(params) {
     var self = this;
@@ -15,19 +20,17 @@ module.exports = function(params) {
         .obs('publishedConsentCreatedOn')
         .obs('name');
 
-    self.formatDateTime = fn.formatLocalDateTime;
+    fn.copyProps(self, fn, 'formatDateTime');
 
-    self.publish = function(vm, event) {
+    self.publish = function(item, event) {
         alerts.confirmation("Are you sure you want to publish this consent?", function() {
-            utils.startHandler(vm, event);
+            utils.startHandler(self, event);
 
-            params.guid = vm.subpopulationGuid;
-            params.createdOn = vm.createdOn;
-
+            fn.copyProps(params, item, 'subpopulationGuid->guid', 'createdOn');
             serverService.publishStudyConsent(params.guid, params.createdOn)
                 .then(load)
-                .then(utils.successHandler(vm, event, "Consent published"))
-                .catch(utils.failureHandler(vm, event));
+                .then(utils.successHandler(self, event, "Consent published"))
+                .catch(failureHandler);
         });
     };
     
@@ -36,17 +39,15 @@ module.exports = function(params) {
     }
     function addActiveFlag(item) {
         item.active = (self.publishedConsentCreatedOnObs() === item.createdOn);
-        return item;
-    }
-    function updateHistory(response) {
-        self.historyItemsObs(response.items.map(addActiveFlag));
     }
 
     function load() {
         return serverService.getSubpopulation(params.guid)
-            .then(binder.update('name','publishedConsentCreatedOn'))
+            .then(binder.update())
             .then(getHistory)
-            .then(updateHistory);
+            .then(fn.handleForEach('items', addActiveFlag))
+            .then(fn.handleObsUpdate(self.historyItemsObs, 'items'))
+            .catch(failureHandler);
     }
     load();
 };

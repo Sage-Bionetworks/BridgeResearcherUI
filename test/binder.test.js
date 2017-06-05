@@ -1,5 +1,6 @@
 var expect = require('chai').expect;
 var bind = require('../app/src/binder');
+var ko = require('knockout');
 
 describe("binder", function() {
     function multiply(value) {
@@ -155,5 +156,71 @@ describe("binder", function() {
         expect(modelTransformContext.model).to.equal(updateModel);
         expect(modelTransformContext.vm).to.equal(binder.vm);
         expect(modelTransformContext.observer).to.be.instanceof(Function);
+    });
+});
+describe("transforms", function() {
+    describe("formatAttributes", function() {
+        it("works", function() {
+            var context = {
+                vm: {
+                    attributesObs: ko.observable([
+                        {key:"foo", obs: ko.observable()},
+                        {key:"bar", obs: ko.observable()}
+                    ])
+                }
+            }
+            var result = bind.formatAttributes({
+                "foo":"1","bar":"2"
+            }, context);
+            expect(result[0].key).to.equal("foo");
+            expect(result[0].obs()).to.equal("1");
+            expect(result[1].key).to.equal("bar");
+            expect(result[1].obs()).to.equal("2");
+        });
+    });
+    describe("formatHealthCode", function() {
+        it("works", function() {
+            var context = { vm: { study: { healthCodeExportEnabled: false } } };
+            expect( bind.formatHealthCode("ABC", context) ).to.equal("N/A");
+            
+            context = { vm: { study: { healthCodeExportEnabled: true } } };
+            expect( bind.formatHealthCode("ABC", context) ).to.equal("ABC");
+        });
+    });
+    describe("formatTitle", function() {
+        it("works", function() {
+            var context = { model: { id: "exists", firstName: "Fred", lastName: "Flintstone" } };
+            expect (bind.formatTitle(undefined, context) ).to.equal("Fred Flintstone");
+
+            context = { model: { firstName: "Fred", lastName: "Flintstone" } };
+            expect (bind.formatTitle(undefined, context) ).to.equal("Fred Flintstone");
+            
+            context = { model: { firstName: "Fred" } };
+            expect (bind.formatTitle(undefined, context) ).to.equal("Fred");
+            
+            context = { model: { id: "foo", email: "email@email.com" } };
+            expect (bind.formatTitle(undefined, context) ).to.equal("email@email.com");
+
+            context = { model: { id: "new" } };
+            expect (bind.formatTitle(undefined, context) ).to.equal("New participant");
+            
+            context = { model: { id: "foo" } };
+            expect (bind.formatTitle(undefined, context) ).to.equal("—");
+
+            context = { model: { id: "new", firstName: "Fred" } };
+            expect (bind.formatTitle(undefined, context) ).to.equal("Fred");
+
+            context = { model: { id: "new", firstName: "Fred", lastName: "Flintstone" } };
+            expect (bind.formatTitle(undefined, context) ).to.equal("Fred Flintstone");
+        });
+    });
+    describe("persistAttributes", function() {
+        it("works", function() {
+            var attr = [
+                {key: "foo", obs: ko.observable("1")},
+                {key: "bar", obs: ko.observable("2")},
+            ];
+            expect( bind.persistAttributes(attr) ).to.deep.equal({foo:"1",bar:"2"});
+        });
     });
 });

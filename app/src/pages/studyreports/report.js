@@ -1,11 +1,11 @@
-var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var root = require('../../root');
 var jsonFormatter = require('../../json_formatter');
 var tables = require('../../tables');
 var utils = require('../../utils');
+var fn = require('../../functions');
+var bind = require('../../binder');
 
-var SORTER = utils.makeFieldSorter("date");
 var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
 function firstDayOfMonth(year, month) {
@@ -18,30 +18,30 @@ function lastDayOfMonth(year, month) {
 module.exports = function(params) {
     var self = this;
 
-    self.identifierObs = ko.observable(params.id);
-    self.isDeveloper = root.isDeveloper;
-    self.showLoaderObs = ko.observable(false);
-    self.publicObs = ko.observable(false);
-    self.toggleObs = ko.observable();
+    bind(self)
+        .obs('identifier', params.id)
+        .obs('showLoader', false)
+        .obs('public', false)
+        .obs('toggle')
+        .obs('formatMonth');
+    
+    fn.copyProps(self, root, 'isDeveloper');
 
     function publicToggled(newValue) {
         utils.startHandler(self, event);
-        serverService.updateStudyReportIndex({
-            identifier: params.id, public: newValue
-        }).then(function(response) {
-            self.publicObs(newValue);
-            self.toggleObs(newValue);
-            return response;
-        })
-        .then(utils.successHandler(self, event, "Report updated."))
-        .catch(utils.failureHandler(self, event));
+        serverService.updateStudyReportIndex({identifier: params.id, public: newValue})
+            .then(fn.handleStaticObsUpdate(self.publicObs, newValue))
+            .then(fn.handleStaticObsUpdate(self.toggleObs, newValue))
+            .then(utils.successHandler(self, event, "Report updated."))
+            .catch(utils.failureHandler());
     }
     function loadIndex() {
-        return serverService.getStudyReportIndex(params.id).then(function(response) {
-            self.publicObs(response.public);
-            self.toggleObs(response.public);
-            self.toggleObs.subscribe(publicToggled, null, 'change');
-        });
+        return serverService.getStudyReportIndex(params.id)
+            .then(fn.handleObsUpdate(self.publicObs, 'public'))
+            .then(fn.handleObsUpdate(self.toggleObs, 'public'))
+            .then(function(response) {
+                self.toggleObs.subscribe(publicToggled, null, 'change');
+            });
     }
     loadIndex();
 
@@ -77,8 +77,6 @@ module.exports = function(params) {
         });
         return false;
     };
-    self.formatMonthObs = ko.observable();
-
     self.priorMonth = function() {
         if (self.currentMonth === 0) {
             self.currentYear--;
@@ -107,21 +105,18 @@ module.exports = function(params) {
     function deleteItem(item) {
         return serverService.deleteStudyReportRecord(params.id, item.date);        
     }
-    function mapResponse(response) {
-        response.items = response.items.map(jsonFormatter.mapItem);
-        self.itemsObs(response.items.sort(SORTER).reverse());
-    }
-    function loaderOff() {
-        self.showLoaderObs(false);
-    }
+
     function load() {
         self.showLoaderObs(true);
         self.formatMonthObs(MONTHS[self.currentMonth] + " " + self.currentYear);
         var startDate = firstDayOfMonth(self.currentYear, self.currentMonth);
         var endDate = lastDayOfMonth(self.currentYear, self.currentMonth);
         serverService.getStudyReport(params.id, startDate, endDate)
-            .then(mapResponse)
-            .then(loaderOff);
+            .then(fn.handleSort('items', 'date', true))
+            .then(fn.handleMap('items', jsonFormatter.mapItem))
+            .then(fn.handleObsUpdate(self.itemsObs, 'items'))
+            .then(fn.handleStaticObsUpdate(self.showLoaderObs, false))
+            .catch(utils.failureHandler());
     }
     load();
 };

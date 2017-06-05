@@ -2,15 +2,20 @@ var ko = require('knockout');
 var serverService = require('../../services/server_service');
 var surveyUtils = require('./survey_utils');
 var utils = require('../../utils');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 var root = require('../../root');
+
+var notFound = utils.failureHandler({
+    redirectTo: "surveys",
+    redirectMsg: "Survey not found."
+});
 
 module.exports = function(params) {
     var self = this;
 
     self.isLoaded = ko.observable(false);
     self.survey = null;
-    self.formatDateTime = fn.formatLocalDateTime;
+    self.formatDateTime = fn.formatDateTime;
     surveyUtils.initSurveyVM(self);
 
     // Only one is needed
@@ -105,17 +110,16 @@ module.exports = function(params) {
                 .then(updateVM)
                 .then(unpublish)
                 .then(utils.successHandler(vm, event, "New version of survey saved."))
-                .catch(utils.failureHandler(vm, event));
+                .catch(utils.failureHandler());
         } else if (self.survey.guid) {
             save().then(updateVM)
                 .then(utils.successHandler(vm, event, "Survey saved."))
-                .catch(utils.failureHandler(vm, event));
+                .catch(utils.failureHandler());
         } else {
             create().then(updateVM)
                 .then(utils.successHandler(vm, event, "Survey created."))
-                .catch(utils.failureHandler(vm, event));
+                .catch(utils.failureHandler());
         }
-
     };
 
     if (params.guid === "new") {
@@ -123,10 +127,10 @@ module.exports = function(params) {
     } else if (params.createdOn) {
         serverService.getSurvey(params.guid, params.createdOn)
             .then(loadVM)
-            .catch(utils.notFoundHandler("Survey", "surveys"));
+            .catch(notFound);
     } else {
         serverService.getSurveyMostRecent(params.guid)
             .then(loadVM)
-            .catch(utils.notFoundHandler("Survey", "surveys"));
+            .catch(notFound);
     }
 };

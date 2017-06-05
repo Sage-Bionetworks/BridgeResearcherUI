@@ -4,7 +4,7 @@ var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var root = require('../../root');
 var tables = require('../../tables');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 var alerts = require('../../widgets/alerts');
 
 var cssClassNameForStatus = {
@@ -33,7 +33,7 @@ module.exports = function() {
     self.isAdmin = root.isAdmin;
     self.recordsObs = ko.observable("");
     self.formatName = fn.formatName;
-    self.formatDateTime = fn.formatLocalDateTime;
+    self.formatDateTime = fn.formatDateTime;
     self.classNameForStatus = function(user) {
         return cssClassNameForStatus[user.status];
     };
@@ -67,7 +67,7 @@ module.exports = function() {
             utils.startHandler(vm, event);
             serverService.resendEmailVerification(userId)
                 .then(utils.successHandler(vm, event, "Resent email to verify participant's email address."))
-                .catch(utils.failureHandler(vm, event));
+                .catch(utils.failureHandler());
         });
     };
     self.enableAccount = function(item, event) {
@@ -76,7 +76,7 @@ module.exports = function() {
             .then(updateParticipantStatus)
             .then(publishPageUpdate)
             .then(utils.successHandler(item, event, "User account activated."))
-            .catch(utils.failureHandler(item, event));
+            .catch(utils.failureHandler());
     };
     self.exportDialog = function() {
         root.openDialog('participant_export', {emailFilter: self.emailFilter, 

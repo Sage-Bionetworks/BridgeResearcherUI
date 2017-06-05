@@ -51,7 +51,7 @@ module.exports = function() {
 
         serverService.saveStudy(self.study, false)
             .then(utils.successHandler(vm, event, "Study information saved."))
-            .catch(utils.failureHandler(vm, event));
+            .catch(utils.failureHandler());
     };
     self.publicKey = function() {
         if (self.study) {
@@ -59,11 +59,14 @@ module.exports = function() {
         }
     };
 
+    function updateObservers(study) {
+        updateMinAppObservers(study, self.minIosObs, 'iPhone OS');
+        updateMinAppObservers(study, self.minAndroidObs, 'Android');
+    }
+
     serverService.getStudy()
         .then(binder.assign('study'))
         .then(binder.update())
-        .then(function(study) {
-            updateMinAppObservers(study, self.minIosObs, 'iPhone OS');
-            updateMinAppObservers(study, self.minAndroidObs, 'Android');
-        });
+        .then(updateObservers)
+        .catch(utils.failureHandler());
 };

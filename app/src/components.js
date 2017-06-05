@@ -3,9 +3,9 @@ var reg = ko.components.register;
 
 reg('none', {template: '<div class="ui modal dialog"></div>'});
 
-reg('start', {
-    viewModel: require('./pages/start/start'),
-    template: require('./pages/start/start.html')
+reg('dailyUploads', {
+    viewModel: require('./pages/studyreports/dailyUploads'),
+    template: require('./pages/studyreports/dailyUploads.html')
 });
 reg('errors', {
     viewModel: require('./widgets/errors/errors'),
@@ -55,13 +55,17 @@ reg('external_ids', {
     viewModel: require('./pages/external_ids/external_ids'),
     template: require('./pages/external_ids/external_ids.html')
 });
+reg('signUps', {
+    viewModel: require('./pages/studyreports/signUps'),
+    template: require('./pages/studyreports/signUps.html')
+});
 reg('reports', {
-    viewModel: require('./pages/reports/reports'),
-    template: require('./pages/reports/reports.html')
+    viewModel: require('./pages/studyreports/reports'),
+    template: require('./pages/studyreports/reports.html')
 });
 reg('report', {
-    viewModel: require('./pages/report/report'),
-    template: require('./pages/report/report.html')
+    viewModel: require('./pages/studyreports/report'),
+    template: require('./pages/studyreports/report.html')
 });
 reg('subpopulations', {
     viewModel: require('./pages/subpopulations/subpopulations'),
@@ -398,10 +402,6 @@ reg('external_id_importer', {
 reg('participant_export', {
     viewModel: require('./dialogs/participant_export/participant_export'),
     template: require('./dialogs/participant_export/participant_export.html'), synchronous: true
-});
-reg('new_external_id', {
-    viewModel: require('./dialogs/new_external_id/new_external_id'),
-    template: require('./dialogs/new_external_id/new_external_id.html'), synchronous: true
 });
 reg('copy_schemas', {
     viewModel: require('./dialogs/copy_schemas/copy_schemas'),

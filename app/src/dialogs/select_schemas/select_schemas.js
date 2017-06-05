@@ -2,7 +2,7 @@ var serverService = require('../../services/server_service');
 var root = require('../../root');
 var utils = require('../../utils');
 var tables = require('../../tables');
-var ko = require('knockout');
+var fn = require('../../functions');
 
 /**
  * params:
@@ -62,10 +62,11 @@ module.exports = function(params) {
     }
 
     function load() { 
-        serverService.getAllUploadSchemas().then(function(response) {
-            var items = response.items.sort(utils.makeFieldSorter("name")).map(schemaToView);
-            self.itemsObs.pushAll(items);
-        }).catch(utils.failureHandler());
+        serverService.getAllUploadSchemas()
+            .then(fn.handleMap('items', schemaToView))
+            .then(fn.handleSort('items','name'))
+            .then(fn.handleObsUpdate(self.itemsObs, 'items'))
+            .catch(utils.failureHandler());
     }
     load();
 };

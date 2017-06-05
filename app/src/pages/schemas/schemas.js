@@ -5,6 +5,7 @@ var criteriaUtils = require('../../criteria_utils');
 var utils = require('../../utils');
 var root = require('../../root');
 var tables = require('../../tables');
+var fn = require('../../functions');
 
 function deleteItem(schema) {
     return serverService.deleteSchema(schema.schemaId);
@@ -14,12 +15,9 @@ module.exports = function() {
     var self = this;
 
     schemaUtils.initSchemasVM(self);
-
-    self.criteriaLabel = criteriaUtils.label;
-    self.isAdmin = root.isAdmin;
-    self.isDeveloper = root.isDeveloper;
-    self.formatModuleLink = sharedModuleUtils.formatModuleLink;
-    self.moduleHTML = sharedModuleUtils.moduleHTML;
+    fn.copyProps(self, root, 'isAdmin', 'isDeveloper');
+    fn.copyProps(self, sharedModuleUtils, 'formatModuleLink', 'moduleHTML');
+    fn.copyProps(self, criteriaUtils, 'label');
     
     tables.prepareTable(self, {
         name: "schema", 
@@ -35,7 +33,10 @@ module.exports = function() {
     }
     self.copySchemasDialog = function(vm, event) {
         var copyables = self.itemsObs().filter(tables.hasBeenChecked);
-        root.openDialog('copy_schemas', {copyables: copyables, closeCopySchemasDialog: closeCopySchemasDialog});
+        root.openDialog('copy_schemas', {
+            copyables: copyables, 
+            closeCopySchemasDialog: closeCopySchemasDialog
+        });
     };
     self.openModuleBrowser = function() {
         root.openDialog('module_browser', {
@@ -51,9 +52,9 @@ module.exports = function() {
     function load() {
         sharedModuleUtils.loadNameMaps()
             .then(serverService.getAllUploadSchemas)
-            .then(function(response) {
-                self.itemsObs(response.items.sort(utils.makeFieldSorter("name")));
-            });
+            .then(fn.handleSort('items', 'name'))
+            .then(fn.handleObsUpdate(self.itemsObs, 'items'))
+            .catch(utils.failureHandler());
     }
     load();
 };

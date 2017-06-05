@@ -1,12 +1,10 @@
 var ko = require('knockout');
+var fn = require('./functions');
 
 function nameInspector(string) {
     var isArray = /\[\]$/.test(string);
     var name = (isArray) ? string.match(/[^\[]*/)[0] : string;
     return {name: name, observableName: name+"Obs", isArray: isArray};
-}
-function identity(value) {
-    return value;
 }
 function createObservable(doBinding) {
     return function(name, defaultValue, modelTransform, obsTransform) {
@@ -14,7 +12,7 @@ function createObservable(doBinding) {
         // No default because registering one indicates you want an update for a model
         // whether it has a property for the observer or not.
         info.modelTransform = modelTransform;
-        info.obsTransform = obsTransform || identity; // not needed for an observer
+        info.obsTransform = obsTransform || fn.identity; // not needed for an observer
         info.bind = doBinding;
         
         var value = (typeof defaultValue === "undefined") ? undefined : defaultValue;
@@ -27,26 +25,6 @@ function createObservable(doBinding) {
         this.vm[info.observableName] = info.observable = obs;
         this.fields[info.name] = info;
         return this;
-    };
-}
-// Retrieve the value of a property to the property of an object on the model (rather 
-// than directly as a property of the model);
-function fromObjectField(fieldName, objFieldName) {
-    return function(value, context) {
-        context.model[fieldName] = context.model[fieldName] || {};
-        return context.model[fieldName][objFieldName];
-    };
-}
-// Write the observer to the property of an object that is a property of the model 
-// object (rather than directly on the model);
-function toObjectField(fieldName, objFieldName) {
-    return function(value, context)  {
-        context.model[fieldName] = context.model[fieldName] || {};
-        if (typeof value !== "undefined") {
-            context.model[fieldName][objFieldName] = value;
-        } else {
-            delete context.model[fieldName][objFieldName];
-        }
     };
 }
 
@@ -158,9 +136,67 @@ Binder.prototype = {
 module.exports = function(vm) {
     return new Binder(vm);
 };
-module.exports.objPropDelegates = function(fieldName, objFieldName) {
+
+/* ================================================ */
+/* binder processing utility methods */
+/* ================================================ */
+
+// Retrieve the value of a property on an object that is set as a property on the model 
+// (rather than directly as a property of the model);
+function fromObjectField(fieldName, objFieldName) {
+    return function(value, context) {
+        context.model[fieldName] = context.model[fieldName] || {};
+        return context.model[fieldName][objFieldName];
+    };
+}
+// Write the observer to the property of an object that is a property on the model 
+// (rather than directly on the model);
+function toObjectField(fieldName, objFieldName) {
+    return function(value, context)  {
+        context.model[fieldName] = context.model[fieldName] || {};
+        if (typeof value !== "undefined") {
+            context.model[fieldName][objFieldName] = value;
+        } else {
+            delete context.model[fieldName][objFieldName];
+        }
+    };
+}
+function objPropDelegates(fieldName, objFieldName) {
     return {
         toObject: toObjectField(fieldName, objFieldName),
         fromObject: fromObjectField(fieldName, objFieldName)
     };
-};
+}
+function persistAttributes(value) {
+    return value.reduce(function(map, value) {
+        map[value.key] = value.obs();
+        return map;
+    }, {});
+}
+function formatTitle(value, context) {
+    var user = context.model;
+    if (user.id === "new" && fn.isBlank(user.firstName) && fn.isBlank(user.lastName)) {
+        return "New participant";
+    }
+    return fn.formatName(context.model);
+}
+function formatAttributes(value, context) {
+    context.vm.attributesObs().map(function(attr) {
+        attr.obs(value[attr.key]);
+    });
+    return context.vm.attributesObs();
+}
+function formatHealthCode(value, context) {
+    return (context.vm.study.healthCodeExportEnabled) ? value : 'N/A';
+}
+function callObsCallback(value, context) {
+    return context.observer.callback();
+}
+
+// Lots of static methods to replace transforms
+module.exports.objPropDelegates = objPropDelegates;
+module.exports.formatAttributes = formatAttributes;
+module.exports.formatHealthCode = formatHealthCode;
+module.exports.formatTitle = formatTitle;
+module.exports.persistAttributes = persistAttributes;
+module.exports.callObsCallback = callObsCallback;

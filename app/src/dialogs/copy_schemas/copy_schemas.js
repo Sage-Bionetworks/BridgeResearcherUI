@@ -2,6 +2,8 @@ var serverService = require('../../services/server_service');
 var ko = require('knockout');
 var root = require('../../root');
 var utils = require('../../utils');
+var fn = require('../../functions');
+var bind = require('../../binder');
 var Promise = require('bluebird');
 
 module.exports = function(params) {
@@ -10,10 +12,12 @@ module.exports = function(params) {
     var copyables = params.copyables;
     var specs = [];
 
-    self.indexObs = ko.observable(0);
-    self.nameObs = ko.observable(copyables[0].name + " (Copy)");
-    self.schemaIdObs = ko.observable(copyables[0].schemaId);
-    self.revisionObs = ko.observable(1);
+    bind(self)
+        .obs('index', 0)
+        .obs('name', copyables[0].name + " (Copy)")
+        .obs('schemaId', copyables[0].schemaId)
+        .obs('revision', 1);
+    self.closeDialog = root.closeDialog;
 
     function updateObserversFromCopyables() {
         var index = self.indexObs();
@@ -70,19 +74,14 @@ module.exports = function(params) {
             updateObserversFromCopyables();
         }
     };
+
     self.copy = function(vm, event) {
         updateSpecsFromObservers();
         utils.startHandler(vm, event);
 
-        Promise.each(specs, function(schema) {
-            return serverService.createUploadSchema(schema);
-        }).then(function() {
-            params.closeCopySchemasDialog();
-        })
-        .then(utils.successHandler(vm, event))
-        .catch(utils.failureHandler(vm, event));
-    };
-    self.closeDialog = function() {
-        root.closeDialog();
+        Promise.each(specs, fn.handlePromise(serverService.createUploadSchema))
+            .then(params.closeCopySchemasDialog)
+            .then(utils.successHandler(vm, event))
+            .catch(utils.failureHandler());
     };
 };

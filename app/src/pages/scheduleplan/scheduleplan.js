@@ -2,9 +2,14 @@ var serverService = require('../../services/server_service');
 var scheduleUtils = require('./../schedule/schedule_utils');
 var utils = require('../../utils');
 var bind = require('../../binder');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 var optionsService = require('../../services/options_service');
 var Promise = require('bluebird');
+
+var failureHandler = utils.failureHandler({
+    redirectTo: "scheduleplans",
+    redirectMsg: "Schedule plan not found."
+});
 
 /**
  * The complexity of this view comes from the fact that the entire data model is in the strategy,
@@ -14,14 +19,14 @@ var Promise = require('bluebird');
 module.exports = function(params) {
     var self = this;
     
+    // The callback function will be called when saving the schedule plan; the strategy 
+    // implementation must implement this callback to return a strategy object.
     var binder = bind(self)
-        // The callback function will be called when saving the schedule plan; the strategy 
-        // implementation must implement this callback to return a strategy object.
-        .bind('strategy', null, null, fn.callObsCallback)
+        .bind('strategy', null, null, bind.callObsCallback)
         .bind('label', '')
         .obs('schedulePlanType', (params.guid==="new") ? 'SimpleScheduleStrategy' : 'empty');
         
-    self.strategyObs.callback = utils.identity;
+    self.strategyObs.callback = fn.identity;
     // Fields for this form
     self.schedulePlanTypeOptions = scheduleUtils.TYPE_OPTIONS;
     self.schedulePlanTypeLabel = utils.makeOptionLabelFinder(scheduleUtils.TYPE_OPTIONS);
@@ -35,12 +40,12 @@ module.exports = function(params) {
 
     self.save = function(vm, event) {
         self.plan = binder.persist(self.plan);
-        utils.deleteUnusedProperties(self.plan);
+        fn.deleteUnusedProperties(self.plan);
 
         utils.startHandler(self, event);
         serverService.saveSchedulePlan(self.plan)
             .then(utils.successHandler(self, event, "The schedule plan has been saved."))
-            .catch(utils.failureHandler(self, event));
+            .catch(failureHandler);
     };
     self.updateType = function(vm, event) {
         var spType = event.target.getAttribute('data-type');
@@ -54,34 +59,36 @@ module.exports = function(params) {
         self.schedulePlanTypeObs(plan.strategy.type);
         return plan;
     }
-
     function resolveActivity(activity) {
         return serverService.getTaskDefinition(activity.compoundActivity.taskIdentifier)
             .then(function(task) {
                 activity.compoundActivity = task;
                 activity.compoundActivity.taskIdentifier = task.taskId;
                 return activity;
-            });
+            })
+            .catch(failureHandler);
     }
-
+    function isCompoundActivity(activity) {
+        return activity.activityType === "compound";
+    }
     // These are not actually filled out on the server.
     function addCompoundActivitiesToPlan(plan) {
-        var activities = optionsService.getActivities(plan).filter(function(activity) {
-            return activity.activityType === "compound";
-        });
+        var activities = optionsService.getActivities(plan).filter(isCompoundActivity);
         return Promise.map(activities, resolveActivity).then(function() {
             return plan;
         });
     }
-
-    scheduleUtils.loadOptions().then(function() {
-        var promise = (params.guid !== "new") ?
+    function schedulePlan() {
+        return (params.guid !== "new") ?
             serverService.getSchedulePlan(params.guid) :
             Promise.resolve(scheduleUtils.newSchedulePlan());
-        promise.then(addCompoundActivitiesToPlan)
+    }
+
+    scheduleUtils.loadOptions().then(function() {
+        schedulePlan().then(addCompoundActivitiesToPlan)
             .then(binder.assign('plan'))
             .then(updateScheduleTypeObs)
             .then(binder.update())
-            .catch(utils.notFoundHandler("Schedule plan.", "scheduleplans"));
+            .catch(failureHandler);
     });
 };

@@ -4,8 +4,12 @@ var scheduleUtils = require('../../pages/schedule/schedule_utils');
 var bind = require('../../binder');
 var root = require('../../root');
 var tables = require('../../tables');
+var fn = require('../../functions');
 
-var ACTIVITY_SORTER = utils.makeFieldSorter("plan");
+var failureHandler = utils.failureHandler({
+    redirectTo: "participants",
+    redirectMsg: "Participant not found"
+});
 
 module.exports = function(params) {
     var self = this;
@@ -16,24 +20,29 @@ module.exports = function(params) {
         .obs('isNew', false)
         .obs('title', '&#160;');
 
+    fn.copyProps(self, root, 'isPublicObs');
+
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(root.isPublicObs() ? part.name : part.externalId);
-    }).catch(utils.failureHandler());
+    }).catch(failureHandler);
 
-    self.isPublicObs = root.isPublicObs;
     tables.prepareTable(self, {name:'activitie'});
 
     self.linkMaker = function(userId, guid) {
         return root.userPath()+userId+'/activities/'+guid;
     };
-
-    serverService.getSchedulePlans().then(function(response) {
+    function processActivities(response) {
         var array = [];
         response.items.forEach(function(plan) {
             scheduleUtils.getActivitiesWithStrategyInfo(plan).forEach(function(spec) {
                 array.push(spec);
             });
         });
-        self.itemsObs(array.sort(ACTIVITY_SORTER));
-    }).catch(utils.notFoundHandler("Participant", "participants"));
+        return {items: array};
+    }
+    serverService.getSchedulePlans()
+        .then(processActivities)
+        .then(fn.handleSort('items', 'plan'))
+        .then(fn.handleObsUpdate(self.itemsObs, 'items'))
+        .catch(failureHandler);
 };

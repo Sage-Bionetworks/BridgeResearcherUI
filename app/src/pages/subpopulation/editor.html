@@ -30,7 +30,7 @@
         </a>
         <div class="right menu pub-status">
             <div class="item" data-bind="visible: !!createdOnObs()">
-                <i class="clock icon"></i> <span data-bind="text: createdOnObs"></span>
+                <i class="clock icon"></i> <span data-bind="text: formatDateTime(createdOnObs())"></span>
             </div>
             <div class="item" data-bind="visible: activeObs">
                 <div class="green mini ui label">

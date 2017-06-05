@@ -4,8 +4,8 @@ var root = require('../../root');
 var jsonFormatter = require('../../json_formatter');
 var tables = require('../../tables');
 var utils = require('../../utils');
+var fn = require('../../functions');
 
-var SORTER = utils.makeFieldSorter("date");
 var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
 function firstDayOfMonth(year, month) {
@@ -102,13 +102,6 @@ module.exports = function(params) {
     function deleteItem(item) {
         return serverService.deleteParticipantReportRecord(params.userId, params.identifier, item.date);
     }
-    function mapResponse(response) {
-        response.items = response.items.map(jsonFormatter.mapItem);
-        self.itemsObs(response.items.sort(SORTER).reverse());
-    }
-    function loaderOff() {
-        self.showLoaderObs(false);
-    }
     function loadReport() {
         var startDate = firstDayOfMonth(self.currentYear, self.currentMonth);
         var endDate = lastDayOfMonth(self.currentYear, self.currentMonth);
@@ -120,9 +113,14 @@ module.exports = function(params) {
         self.formatMonthObs(MONTHS[self.currentMonth] + " " + self.currentYear);
         serverService.getParticipant(params.userId)
             .then(loadReport)
-            .then(mapResponse)
-            .then(loaderOff)
-            .catch(utils.notFoundHandler("Participant", "participants"));
+            .then(fn.handleMap('items', jsonFormatter.mapItem))
+            .then(fn.handleSort('items', 'date', true))
+            .then(fn.handleObsUpdate(self.itemsObs, 'items'))
+            .then(fn.handleStaticObsUpdate(self.showLoaderObs, false))
+            .catch(utils.failureHandler({
+                redirectTo: "participants",
+                redirectMsg: "Participant not found."
+            }));
     }
     load();
 };

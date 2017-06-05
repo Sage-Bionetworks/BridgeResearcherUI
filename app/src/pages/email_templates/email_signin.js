@@ -16,7 +16,7 @@ module.exports = function() {
             self.study = study;
             self.subjectObs(study.emailSignInTemplate.subject);
             self.editor.setData(study.emailSignInTemplate.body);
-        });
+        }).catch(utils.failureHandler());
     };
 
     self.save = function(vm, event) {
@@ -26,6 +26,6 @@ module.exports = function() {
 
         serverService.saveStudy(self.study)
             .then(utils.successHandler(vm, event, "Email saved."))
-            .catch(utils.failureHandler(vm, event));
+            .catch(utils.failureHandler());
     };
 };

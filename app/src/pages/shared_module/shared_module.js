@@ -3,13 +3,17 @@ var serverService = require('../../services/server_service');
 var bind = require('../../binder');
 var utils = require('../../utils');
 var root = require('../../root');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 
 var OPTIONS = [
     {value: null, label:'Both'},
     {value: 'Android', label: 'Android'},
     {value: 'iOS', label: 'iOS'}
 ];
+var failureHandler = utils.failureHandler({
+    redirectTo: "shared_modules",
+    redirectMsg: "Shared module not found."
+});
 
 function tagsToView(tags) {
     return (tags || []).join(", ");
@@ -22,7 +26,7 @@ function loadSurveyRevisions(vm, survey) {
         // Need to confirm, but if you link to unpublished survey, it is just published
         // when you publish the metadata... ?
         var dates = response.items.map(function(oneSurvey) {
-            var d = fn.formatLocalDateTime(oneSurvey.createdOn);
+            var d = fn.formatDateTime(oneSurvey.createdOn);
             return {value: oneSurvey.createdOn, label: d};
         });
         vm.linkedVersionOptionsObs(dates);
@@ -183,7 +187,7 @@ module.exports = function(params) {
         serverService[methodName](self.metadata)
             .then(updateId)
             .then(utils.successHandler(vm, event, "Shared module saved."))
-            .catch(utils.failureHandler(vm, event));
+            .catch(utils.failureHandler());
     };
     if (params.id !== "new") {
         sharedModuleUtils.loadNameMaps()
@@ -191,6 +195,6 @@ module.exports = function(params) {
             .then(binder.assign('metadata'))
             .then(binder.update())
             .then(updateSharedModuleWithNames)
-            .catch(utils.notFoundHandler("Shared module", "shared_modules"));
+            .catch(failureHandler);
     }
 };

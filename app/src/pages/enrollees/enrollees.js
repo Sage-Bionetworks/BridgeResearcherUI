@@ -5,9 +5,7 @@ var root = require('../../root');
 require('knockout-postbox');
 var bind = require('../../binder');
 var tables = require('../../tables');
-
-// TODO: If we were really slick, we would validate the identifiers as valid passwords, because that's 
-// how they'll be used when making lab credentials.
+var fn = require('../../functions');
 
 var OPTIONS = {offsetBy:null, pageSize: 1, assignmentFilter:false};
 
@@ -20,18 +18,9 @@ module.exports = function() {
         .obs('result', '')
         .obs('showResults', false);
 
-    self.codesEnumeratedObs = root.codesEnumeratedObs;
-    self.isDeveloper = root.isDeveloper;
-    self.isResearcher = root.isResearcher;
+    fn.copyProps(self, root, 'codesEnumeratedObs', 'isDeveloper', 'isResearcher');
     tables.prepareTable(self, {name: 'external ID'});
 
-    // to get a spinner on this control you need to adjust the DOM target.
-    // Creating a fake event for this.
-    function adjustDropDownButtonTarget(event) {
-        return {
-            target: event.target.parentNode.parentNode
-        };
-    }    
     function extractId(response) {
         if (response.items.length === 0) {
             throw new Error("There are no unassigned external IDs registered with your study. Please import more IDs to create more credentials.");
@@ -70,7 +59,7 @@ module.exports = function() {
         createNewCredentials(data.identifier)
             .then(updatePageWithResult)
             .then(utils.successHandler(self, event))
-            .catch(utils.failureHandler(self, event));
+            .catch(utils.failureHandler());
     };
     self.createFromNext = function(vm, event) {
         self.showResultsObs(false);
@@ -80,7 +69,7 @@ module.exports = function() {
             .then(createNewCredentials)
             .then(updatePageWithResult)
             .then(utils.successHandler(vm, event))
-            .catch(utils.failureHandler(vm, event));
+            .catch(utils.failureHandler());
     };
     self.showLinkLoading = function(vm, event) {
         event.target.nextElementSibling.classList.add("active");

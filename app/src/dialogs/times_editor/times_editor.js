@@ -1,6 +1,7 @@
 var ko = require('knockout');
 var scheduleUtils = require('../../pages/schedule/schedule_utils');
 var root = require('../../root');
+var fn = require('../../functions');
 
 function hourMinuteValue(value) {
     return value.replace(":00.000","");
@@ -12,18 +13,15 @@ module.exports = function(params) {
     self.itemsObs = ko.observableArray(
         ko.utils.arrayMap(params.timesObs(), hourMinuteValue)
     );
-    self.timesObs = params.timesObs;
-    self.clearTimesFunc = params.clearTimesFunc;
+    fn.copyProps(self, params, 'timesObs', 'clearTimesFunc');
+    fn.copyProps(self, scheduleUtils, 'timeOptions->timesOptions', 'timeOptionsLabel->timesLabel');
     self.scheduleType = params.scheduleTypeObs();
-
     self.timeObs = ko.observable();
-    self.timesOptions = scheduleUtils.timeOptions;
-    self.timesLabel = scheduleUtils.timeOptionsLabel;
 
     // When it's only one time, this becomes the control that reflects the
-    // state of the schedule, so initialize it.
+    // state of the schedule, so set the selected value in the select control
     if (self.scheduleType === 'once') {
-        self.timesObs(params.timesObs()[0]);
+        self.timeObs(params.timesObs()[0]);
     }
 
     self.addTime = function(vm, event) {
@@ -49,11 +47,10 @@ module.exports = function(params) {
         }
         root.closeDialog();
     };
+
+    self.cancel = root.closeDialog;
     self.clear = function(vm, event) {
         self.clearTimesFunc(vm, event);
-        root.closeDialog();
-    };
-    self.cancel = function() {
         root.closeDialog();
     };
 };

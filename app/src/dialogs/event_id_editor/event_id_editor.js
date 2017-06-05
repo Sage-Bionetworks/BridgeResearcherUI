@@ -3,6 +3,7 @@ var optionsService = require('./../../services/options_service');
 var root = require('../../root');
 var UNARY_EVENTS = require('../../pages/schedule/schedule_utils').UNARY_EVENTS;
 var bind = require('../../binder');
+var fn = require('../../functions');
 
 /**
  * This editor no longer allows you to edit survey or question triggered events, although these 
@@ -20,10 +21,10 @@ module.exports = function(params) {
         .obs('activityFinished', false)
         .obs('activity')
         .obs('activityOptions[]');
-
-    self.clearEventIdFunc = params.clearEventIdFunc;
-    self.eventIdObs = params.eventIdObs;
+    
+    fn.copyParams(self, params, 'clearEventIdFunc', 'eventIdObs');
     self.activityLabel = utils.makeOptionLabelFinder(self.activityOptionsObs);
+    self.closeDialog = root.closeDialog;
 
     self.saveAndCloseDialog = function() {
         var events = [];
@@ -40,13 +41,7 @@ module.exports = function(params) {
         self.clearEventIdFunc(vm, event);
         root.closeDialog();
     };
-    self.closeDialog = function() {
-        root.closeDialog();
-    };
 
-    function loadActivityOptions() {
-        return optionsService.getActivityOptions();
-    }
     function initEditor() {
         if (self.activityOptionsObs().length === 0) {
             self.hasActivitiesObs(false);
@@ -69,7 +64,7 @@ module.exports = function(params) {
         }
     }
     optionsService.getSurveyOptions()
-        .then(loadActivityOptions)
+        .then(optionsService.getActivityOptions)
         .then(self.activityOptionsObs)
         .then(initEditor);
 };

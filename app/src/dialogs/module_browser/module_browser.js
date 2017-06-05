@@ -1,9 +1,9 @@
-var root = require('../../root');
 var tables = require('../../tables');
 var serverService = require('../../services/server_service');
 var sharedModuleUtils = require('../../shared_module_utils');
 var utils = require('../../utils');
 var ko = require('knockout');
+var fn = require('../../functions');
 
 /*
 - Hide things that are already imported?
@@ -16,12 +16,12 @@ module.exports = function(params) {
     var methName = (params.type === "survey") ? "getSurveys" : "getAllUploadSchemas";
     var scrollTo = utils.makeScrollTo(".item");
 
+    fn.copyProps(self, sharedModuleUtils, 'formatDescription', 'formatTags', 'formatVersions');
+
     self.title = "Shared " + params.type + "s";
-    self.formatDescription = sharedModuleUtils.formatDescription;
-    self.formatTags = sharedModuleUtils.formatTags;
-    self.formatVersions = sharedModuleUtils.formatVersions;
     self.searchObs = ko.observable("").extend({ rateLimit: 300 });
     self.searchObs.subscribe(load);
+    self.cancel = params.closeModuleBrowser;
 
     tables.prepareTable(self, {name: params.type});
 
@@ -30,12 +30,11 @@ module.exports = function(params) {
         serverService.importMetadata(item.id, item.version)
             .then(params.closeModuleBrowser)
             .then(utils.successHandler(self, event))
-            .catch(utils.dialogFailureHandler(self, event, scrollTo));
+            .then(utils.listFailure2({scrollTo: scrollTo}));
     };
     self.isImported = function(metadata) {
         return importedMods[metadata.id+"/"+metadata.version];
     };
-    self.cancel = params.closeModuleBrowser;
 
     function searchForModules() {
         var query = "?published=true";
@@ -47,9 +46,6 @@ module.exports = function(params) {
             query += "&mostrecent=false&where=" + encodeURIComponent(str);
         }
         return serverService.getMetadata(query, params.type);
-    }
-    function loadItems(response) {
-        self.itemsObs(response.items.reverse());
     }
     function addImportedModules(response) {
         response.items.filter(function(item) {
@@ -64,7 +60,8 @@ module.exports = function(params) {
             .then(addImportedModules)
             .then(sharedModuleUtils.loadNameMaps)
             .then(searchForModules)
-            .then(loadItems);
+            .then(fn.handleReverse('items'))
+            .then(fn.handleObsUpdate(self.itemsObs, 'items'));
     }
     load();
 };

@@ -3,17 +3,21 @@ var serverService = require('../../services/server_service');
 var schemaUtils = require('../schema/schema_utils');
 var utils = require('../../utils');
 var bind = require('../../binder');
+var fn = require('../../functions');
 
 var FIELD_SKELETON = {
     name:'', required:false, type:null, unboundedText:false, maxLength:'100', fileExtension:'', mimeType:''
 };
+var failureHandler = utils.failureHandler({
+    redirectTo: "schemas",
+    redirectMsg: "Upload schema not found.",
+    transient: false
+});
 
 module.exports = function(params) {
     var self = this;
-    var scrollTo = utils.makeScrollTo(".ui.warning.message");
 
     schemaUtils.initVM(self);
-
     var minIos = bind.objPropDelegates('minAppVersions', 'iPhone OS');
     var minAnd = bind.objPropDelegates('minAppVersions', 'Android');
     var maxIos = bind.objPropDelegates('maxAppVersions', 'iPhone OS');
@@ -32,6 +36,13 @@ module.exports = function(params) {
         .bind('androidMin', '', minAnd.fromObject, minAnd.toObject)
         .bind('androidMax', '', maxAnd.fromObject, maxAnd.toObject)
         .bind('fieldDefinitions[]', [], fieldDefToObs, fieldObsToDef);
+
+    var hideWarning = fn.handleStaticObsUpdate(self.showErrorObs, false);
+    var updateRevision = fn.seq(
+        fn.handleObsUpdate(self.revisionObs, 'revision'),
+        fn.handleCopyProps(self.schema, 'version'),
+        fn.handleStaticObsUpdate(self.isNewObs, false)
+    );
 
     self.revisionLabel = ko.computed(function() {
         if (self.revisionObs()) {
@@ -85,46 +96,22 @@ module.exports = function(params) {
     function makeNewField() {
         return fieldDefToObs([Object.assign({}, FIELD_SKELETON)])[0];
     }    
-    function hideWarning() {
-        self.showErrorObs(false);
-    }
-    function updateRevision(response) {
-        self.revisionObs(response.revision);
-        self.schema.version = response.version;
-        self.isNewObs(false);
-        return response;
-    }
-    function handleError(failureHandler) {
-        return function(response) {
-            var json = response.responseJSON;
-            if (/Can\'t\supdate/.test(json.message)) {
-                // This is a schema version mismatch
-                self.showErrorObs(true);
-                utils.clearPendingControl();
-                scrollTo(0);
-            } else {
-                json.errors = json.errors || [];
-                failureHandler(response);
-            }
-        };
+    function uploadSchema() {
+        if (self.isNewObs() || self.revisionObs() !== params.schemaId) {
+            return serverService.createUploadSchema(self.schema);
+        } else {
+            return serverService.updateUploadSchema(self.schema);
+        }
     }
 
     self.save = function(vm, event) {
         utils.startHandler(vm, event);
 
         self.schema = binder.persist(self.schema);
-        if (self.isNewObs()) {
-            serverService.createUploadSchema(self.schema)
-                .then(updateRevision)
-                .then(utils.successHandler(vm, event, "Schema has been saved."))
-                .catch(handleError(utils.failureHandler(vm, event)));
-        } else {
-            // Try and save. If it fails, offer the opportunity to the user to create a new revision.
-            serverService.updateUploadSchema(self.schema)
-                .then(updateRevision)
-                .then(utils.successHandler(vm, event, "Schema has been saved."))
-                .catch(handleError(utils.failureHandler(vm, event)));
-        }
+        uploadSchema()
+            .then(updateRevision)
+            .then(utils.successHandler(vm, event, "Schema has been saved."))
+            .catch(failureHandler);
     };
 
     self.addBelow = function(field, event) {
@@ -147,21 +134,23 @@ module.exports = function(params) {
             .then(updateRevision)
             .then(utils.successHandler(vm, event, "Schema has been saved at new revision."))
             .then(hideWarning)
-            .catch(utils.failureHandler(vm, event));
+            .catch(failureHandler);
     };
     self.closeWarning = hideWarning;
 
-    var promise = null;
-    if (params.schemaId === "new") {
-        promise = Promise.resolve({name:'',schemaId:'',schemaType:'ios_data',revision:null,
-            fieldDefinitions:[Object.assign({}, FIELD_SKELETON)]
-        });
-    } else if (params.revision) {
-        promise = serverService.getUploadSchema(params.schemaId, params.revision);
-    } else {
-        promise = serverService.getMostRecentUploadSchema(params.schemaId);
+    function loadSchema() { 
+        if (params.schemaId === "new") {
+            return Promise.resolve({name:'',schemaId:'',schemaType:'ios_data',revision:null,
+                fieldDefinitions:[Object.assign({}, FIELD_SKELETON)]
+            });
+        } else if (params.revision) {
+            return serverService.getUploadSchema(params.schemaId, params.revision);
+        } else {
+            return serverService.getMostRecentUploadSchema(params.schemaId);
+        }
     }
-    promise.then(binder.assign('schema'))
+
+    loadSchema().then(binder.assign('schema'))
         .then(binder.update())
-        .catch(utils.notFoundHandler("Upload schema", "schemas"));
+        .catch(failureHandler);
 };

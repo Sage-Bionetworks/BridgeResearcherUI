@@ -1,7 +1,7 @@
 var saveAs = require('../../../lib/filesaver.min.js');
 var serverService = require('../../services/server_service');
 var root = require('../../root');
-var fn = require('../../transforms');
+var fn = require('../../functions');
 var Promise = require('bluebird');
 var bind = require('../../binder');
 var batchDialogUtils = require('../../batch_dialog_utils');
@@ -25,18 +25,16 @@ var FIELD_FORMATTERS = {
 };
 function formatConsentRecords(record) {
     var aString = record.subpopulationGuid;
-    aString += " consented=" + fn.formatLocalDateTime(record.signedOn);
+    aString += " consented=" + fn.formatDateTime(record.signedOn);
     if (record.withdrewOn) {
-        aString += ", withdrew=" + fn.formatLocalDateTime(record.withdrewOn);
+        aString += ", withdrew=" + fn.formatDateTime(record.withdrewOn);
     }
     return aString;
 }
 
 var CollectParticipantsWorker = function(params) {
-    this.total = params.total;
-    this.emailFilter = params.emailFilter;
-    this.startDate = params.startDate;
-    this.endDate = params.endDate;
+
+    fn.copyProps(this, params, 'total', 'emailFilter', 'startDate', 'endDate');
     this.identifiers = [];
     var pages = [];
     var numPages = Math.floor(this.total/PAGE_SIZE);
@@ -145,6 +143,8 @@ module.exports = function(params) {
     var self = this;
     
     batchDialogUtils.initBatchDialog(self);
+    fn.copyProps(self, fn, 'formatDateTime');
+    self.close = fn.seq(self.cancel, root.closeDialog);
 
     serverService.getStudy().then(function(study) {
         ATTRIBUTES = Object.freeze([].concat(study.userProfileAttributes)); 
@@ -192,12 +192,5 @@ module.exports = function(params) {
         });
         var dateString = new Date().toISOString().split("T")[0];  
         saveAs.saveAs(blob, "participants-"+dateString+".tsv");
-    };
-    self.close = function(vm, event) {
-        self.cancel();
-        root.closeDialog();
-    };
-    self.formatLocalDateTime = function(date) {
-        return new Date(date).toLocaleDateString();
     };
 };

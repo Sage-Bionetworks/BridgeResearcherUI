@@ -1,5 +1,6 @@
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
+var fn = require('../../functions');
 var bind = require('../../binder');
 var ko = require('knockout');
 var root = require('../../root');
@@ -18,8 +19,8 @@ module.exports = function() {
         .bind('disableExport');
 
     self.isLinked = ko.computed(function() {
-        return utils.isNotBlank(self.synapseProjectIdObs()) || 
-               utils.isNotBlank(self.synapseDataAccessTeamIdObs());
+        return fn.isNotBlank(self.synapseProjectIdObs()) || 
+               fn.isNotBlank(self.synapseDataAccessTeamIdObs());
     });
 
     self.isPublicObs = root.isPublicObs;
@@ -39,7 +40,7 @@ module.exports = function() {
                 self.synapseDataAccessTeamIdObs(response.teamId);
                 self.synapseProjectIdObs(response.projectId);
             }).then(utils.successHandler(vm, event, "Synapse information created."))
-            .catch(utils.dialogFailureHandler(vm, event));
+            .catch(utils.failureHandler({transient:false}));
         });
     };
     self.save = function(vm, event) {
@@ -48,10 +49,11 @@ module.exports = function() {
 
         serverService.saveStudy(self.study)
             .then(utils.successHandler(vm, event, "Synapse information saved."))
-            .catch(utils.failureHandler(vm, event));
+            .catch(utils.failureHandler());
     };
 
     serverService.getStudy()
         .then(binder.assign('study'))
-        .then(binder.update());
+        .then(binder.update())
+        .catch(utils.failureHandler());
 };

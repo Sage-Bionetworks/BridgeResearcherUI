@@ -1,14 +1,26 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
-            <h3>Reports</h3>
+            <h3>Study Reports</h3>
         </div>
         <div class="fixed-header-buttons">
             <button class="ui red tiny button" data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
             <button class="ui primary tiny button" data-bind="visible: isDeveloper, click: addReport">Add report&hellip;</button>
         </div>
     </div>
-    <div class="ui empty secondary pointing menu"></div>
+    <div class="ui secondary pointing menu">
+        <a href="#/reports/uploads" class="item">
+            <i class="upload icon"></i> Daily Uploads
+        </a>
+        <!--
+        <a href="#/reports/signUps" class="item">
+            <i class="users icon"></i> Sign Ups
+        </a>
+        -->
+        <div class="active item">
+            <i class="table icon"></i> Raw Data
+        </div>
+    </div>
 </div>
 <div class="scrollbox">
     <p>For reports on individual participants, look up that participant and find the <i>Reports</i> tab under their record.</p>
@@ -31,7 +43,7 @@
                     <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                 </td>
                 <td width="100%">
-                    <a data-bind="attr:{'href': '#/reports/' + encodeURIComponent($data.identifier)}, 
+                    <a data-bind="attr:{'href': '#/reports/raw/' + encodeURIComponent($data.identifier)}, 
                         text: $data.identifier"></a>
                 </td>
                 <td data-bind="text: $data.publicObs() ? 

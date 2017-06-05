@@ -1,6 +1,40 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
+            <h3>Study Reports</h3>
+        </div>
+        <div class="fixed-header-buttons">
+            <b style="margin-right: 1rem" 
+                data-bind="text: publicObs() ? 'Visible to public' : 'Visible to signed in users only'"></b>
+            <div class="ui toggle checkbox" data-bind="semantic: 'checkbox', 
+                checkboxObs: toggleObs, visible: isDeveloper">
+                <input type="checkbox" name="gift" tabindex="0" 
+                    class="hidden" data-bind="attr: {checked: toggleObs}">
+                <label>&#160;</label>
+            </div>
+            <button class="ui tiny red button" 
+                data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), 
+                click: deleteItems">Delete records</button>
+            <button class="ui tiny primary button" 
+                data-bind="visible: isDeveloper, click: addReport">Add report record&hellip;</button>
+        </div>
+    </div>
+    <div class="ui secondary pointing menu">
+        <a href="/#/reports/uploads" class="item">
+            <i class="upload icon"></i> Daily Uploads
+        </a>
+        <a href="/#/reports/signUps" class="item">
+            <i class="users icon"></i> Sign Ups
+        </a>
+        <div class="active item">
+            <i class="table icon"></i> Raw Data
+        </div>
+    </div>    
+</div>
+<!--
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <div class="fixed-header-heading">
             <div class="ui breadcrumb">
                 <a class="section" href="#/reports">Reports</a>
                 <i class="right chevron icon divider"></i>
@@ -14,19 +48,15 @@
     </div>
     <div class="ui empty secondary pointing menu"></div>
 </div>
+-->
 <div class="scrollbox">
-    <errors></errors>
     <div class="line-control">
         <div class="line-control-stretch">
-            <b style="margin-right:1rem">Visibility: </b>
-            <div class="ui toggle checkbox" data-bind="semantic: 'checkbox', 
-                checkboxObs: toggleObs, visible: isDeveloper">
-                <input type="checkbox" name="gift" tabindex="0" 
-                    class="hidden" data-bind="attr: {checked: toggleObs}">
-                <label data-bind="text: publicObs() ? 'Public' : 'Signed in users only'"></label>
+            <div class="ui breadcrumb">
+                <a href="#/reports/raw" class="section">Reports</a>
+                <i class="right chevron icon divider"></i>
+                <b data-bind="text: identifierObs"></b>
             </div>
-            <div data-bind="visible: !isDeveloper(), 
-                text: publicObs() ? 'Public' : 'Signed in users only'"></div>
         </div>
         <div>
             <div class="ui small pagination menu">
@@ -48,6 +78,7 @@
             </div>
         </div>
     </div>
+    <errors></errors>
     <table class="ui compact selectable json table">
         <thead>
             <tr>

@@ -2,37 +2,45 @@ var serverService = require('../../services/server_service');
 var root = require('../../root');
 var bind = require('../../binder');
 var utils = require('../../utils');
+var BridgeError = require('../../error');
 
 module.exports = function(params) {
     var self = this;
 
+    self.cancel = root.closeDialog;
+
     bind(self)
-        .bind('subject', '')
-        .bind('message', '');
+        .obs('subject', '')
+        .obs('message', '');
+
+    function sendNotification(msgObj) {
+        if (params.userId) {
+            return serverService.sendUserNotification(params.userId, msgObj);
+        } else if (params.topicId) {
+            return serverService.sendTopicNotification(params.topicId, msgObj);
+        }
+    }
 
     self.send = function(vm, event) {
-        if (self.subjectObs() === "" || self.messageObs() === "") {
-            utils.formFailure(event.target, 'Subject and message are both required.');
-            return;
+        var msgObj = {
+            subject: self.subjectObs(), 
+            message: self.messageObs()
+        };
+        var error = new BridgeError();
+        if (msgObj.subject === "") {
+            error.addError("subject", "is required");
         }
-        var subject = self.subjectObs();
-        var message = self.messageObs();
-        utils.startHandler(vm, event);
+        if (msgObj.message === "") {
+            error.addError("message", "is required");
+        }
+        if (error.hasErrors()) {
+            return utils.failureHandler({transient:false})(error);
+        }
 
-        var msgObj = {subject: subject, message: message};
-        var promise = null;
-        if (params.userId) {
-            promise = serverService.sendUserNotification(params.userId, msgObj);
-        } else if (params.topicId) {
-            promise = serverService.sendTopicNotification(params.topicId, msgObj);
-        } else {
-            throw new Error("No type of notification provided.");
-        }
-        promise.then(utils.successHandler(vm, event, "Notification has been sent."))
+        utils.startHandler(vm, event);
+        sendNotification(msgObj)
+            .then(utils.successHandler(vm, event, "Notification has been sent."))
             .then(self.cancel)
-            .catch(utils.dialogFailureHandler(vm, event));        
-    };
-    self.cancel = function(vm, event) {
-        root.closeDialog();
+            .catch(utils.failureHandler({transient:false}));        
     };
 };

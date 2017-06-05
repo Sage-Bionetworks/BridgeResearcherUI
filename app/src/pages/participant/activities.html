@@ -2,8 +2,10 @@
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
             <div class="ui breadcrumb">
-                <a class="section" href="#/participants" data-bind="visible: isPublicObs">Participants</a>
-                <a class="section" href="#/enrollees" data-bind="visible: !isPublicObs()">External Identifiers</a>
+                <a class="section" href="#/participants" 
+                    data-bind="visible: isPublicObs">Participants</a>
+                <a class="section" href="#/enrollees" 
+                    data-bind="visible: !isPublicObs()">External Identifiers</a>
                 <i class="right chevron icon divider"></i>
             </div>            
             <h3 data-bind="html: titleObs"></h3>
@@ -19,8 +21,8 @@
     <table class="ui compact selectable table">
         <thead>
             <tr>
-                <th>In Schedule</th>
                 <th>Activity</th>
+                <th>In Schedule</th>
                 <th>Qualifier</th>
             </tr>
         </thead>
@@ -31,12 +33,11 @@
         </tbody>
         <tbody data-bind="foreach: itemsObs">
             <tr>
-                <td data-bind="text: $data.plan">
-                </td>
                 <td>
                     <a data-bind="text: $data.label, attr: {
                         'href': $parent.linkMaker($parent.userIdObs(), $data.guid)}"></a>
                 </td>
+                <td data-bind="text: $data.plan"></td>
                 <td data-bind="text: $data.qualifier"></td>
             </tr>
         </tbody>

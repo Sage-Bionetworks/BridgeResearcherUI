@@ -1,5 +1,5 @@
 var serverService = require('../../services/server_service');
-var utils = require('../../utils');
+var fn = require('../../functions');
 var bind = require('../../binder');
 
 function partialRelay(criteriaObs) {
@@ -73,7 +73,7 @@ module.exports = function(params) {
     }));
 
     function intValue(newValue) {
-        return (utils.isNotBlank(newValue)) ? parseInt(newValue,10) : null;
+        return (fn.isNotBlank(newValue)) ? parseInt(newValue,10) : null;
     }
 
     serverService.getStudy().then(function(study) {

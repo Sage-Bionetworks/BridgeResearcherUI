@@ -1,8 +1,7 @@
 var serverService = require('./server_service');
-var utils = require('../utils');
+var fn = require('../functions');
 
-var NAME_SORTER = utils.makeFieldSorter('name');
-var LABEL_SORTER = utils.makeFieldSorter('label');
+var LABEL_SORTER = fn.makeFieldSorter('label');
 
 function getSchedule(group) {
     return group.schedule;
@@ -36,14 +35,11 @@ function getActivityOptions() {
 }
 function getSurveyOptions() {
     return serverService.getPublishedSurveys()
-        .then(sortSurveys)
+        .then(fn.handleSort('items', 'name'))
         .then(collectSurveyOptions);
 }
-function sortSurveys(response) {
-    return response.items.sort(NAME_SORTER);
-}
 function collectSurveyOptions(surveys) {
-    var surveyOpts = surveys.map(function(survey) {
+    var surveyOpts = surveys.items.map(function(survey) {
         return { label: survey.name, value: survey.guid };
     });
     return [{value:"",label:"Select survey:"}].concat(surveyOpts);

@@ -2,6 +2,7 @@ var serverService = require('../../../services/server_service');
 var utils = require('../../../utils');
 var bind = require('../../../binder');
 var root = require('../../../root');
+var ko = require('knockout');
 
 module.exports = function() {
     var self = this;
@@ -27,13 +28,13 @@ module.exports = function() {
     self.save = function(vm, event) {
         self.study = binder.persist(self.study);
 
-        var n = Object.keys(self.study.pushNotificationARNs).length > 0;
-        root.notificationsEnabledObs(n);
+        var enabled = Object.keys(self.study.pushNotificationARNs).length > 0;
+        root.notificationsEnabledObs(enabled);
 
         utils.startHandler(self, event);
         serverService.saveStudy(self.study, true)
             .then(utils.successHandler(vm, event, "Study information saved."))
-            .catch(utils.failureHandler(vm, event));
+            .catch(utils.failureHandler());
     };
 
     serverService.getStudy()

@@ -4,7 +4,6 @@ var $ = require('jquery');
 var flatpickr = require('flatpickr');
 require('../../node_modules/flatpickr/dist/flatpickr.min.css');
 var alert = require('./widgets/alerts');
-var fn = require('./transforms');
 var Chart = require('chart.js');
 
 // need to make a global out of this for semantic to work, as it's not in a package.
@@ -54,17 +53,19 @@ ko.bindingHandlers.flatpickr = {
         var onChange = allBindings().onChange || function() {};
         var wrap = (allBindings().wrap === true);
         var includeTime = element.hasAttribute("data-enableTime");
-        var input = element.querySelector("input");
 
         function updateObserver(date) {
             observer(null);
             if (date) {
-                observer(fn.formatLocalDate(date, "00:00:00.000"));
+                observer(date);
             }
             onChange();
         }
         function createPicker() {
-            flatpickr(element, {/*defaultDate: d, */onChange: updateObserver, wrap: wrap, clickOpens: !wrap});
+            var d = observer();
+            var config = { defaultDate: d, onChange: updateObserver, wrap: wrap, 
+                clickOpens: !wrap, enableTime: includeTime };
+            flatpickr(element, config);
         }
         // You must delay initialization in a modal until after the modal is open, or 
         // the picker works... but spontaneously opens. Just add timeout: 600 to the 

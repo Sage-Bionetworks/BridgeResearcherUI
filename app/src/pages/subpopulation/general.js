@@ -2,6 +2,13 @@ var criteriaUtils = require('../../criteria_utils');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
 var bind = require('../../binder');
+var fn = require('../../functions');
+
+var failureHandler = utils.failureHandler({
+    redirectMsg:"Consent group not found.", 
+    redirectTo:"subpopulations",
+    transient: false
+});
 
 function newSubpop() {
     return {'name':'','description':'','criteria':criteriaUtils.newCriteria()};
@@ -18,31 +25,28 @@ module.exports = function(params) {
         .bind('description')
         .bind('required', true)
         .bind('criteria');
-
-    function noLongerNew(response) {
-        self.isNewObs(false);
-        self.guidObs(response.guid);
-        self.nameObs(self.subpopulation.name);
-        self.titleObs(self.subpopulation.name);
-        params.guid = response.guid;
-        return response;
-    }
-    function updateTitle(response) {
-        self.titleObs(response.name);
-        return response;
-    }
     
+    var titleUpdated = fn.handleObsUpdate(self.titleObs, 'name');
+
+    function saveSubpop() {
+        return (self.subpopulation.guid) ?
+            serverService.updateSubpopulation(self.subpopulation) :
+            serverService.createSubpopulation(self.subpopulation);
+    }
+
     self.save = function(vm, event) {
         self.subpopulation = binder.persist(self.subpopulation);
         
         utils.startHandler(vm, event);
         
-        var promise = (self.subpopulation.guid) ?
-            serverService.updateSubpopulation(self.subpopulation) :
-            serverService.createSubpopulation(self.subpopulation);
-        promise.then(noLongerNew)
+        saveSubpop()
+            .then(fn.handleStaticObsUpdate(self.isNewObs, false))
+            .then(fn.handleObsUpdate(self.guidObs, 'guid'))
+            .then(fn.handleCopyProps(params, 'guid'))
+            .then(fn.returning(self.subpopulation))
+            .then(titleUpdated)
             .then(utils.successHandler(vm, event, "Consent group has been saved."))
-            .catch(utils.failureHandler(vm, event));
+            .catch(failureHandler);
     };
     
     serverService.getStudy()
@@ -55,7 +59,7 @@ module.exports = function(params) {
                 return serverService.getSubpopulation(params.guid)
                     .then(binder.assign('subpopulation'))
                     .then(binder.update())
-                    .then(updateTitle);
+                    .then(titleUpdated);
             }
-        }).catch(utils.notFoundHandler("Consent group", "subpopulations"));
+        }).catch(failureHandler);
 };

@@ -1,6 +1,7 @@
-var utils = require('../../utils');
 var ko = require('knockout');
 var root = require('../../root');
+var fn = require('../../functions');
+var bind = require('../../binder');
 
 /**
  * This is a simpler replacement for the object-hash library.
@@ -61,7 +62,7 @@ function ListsSource(elements, element) {
     for (var key in md5s) {
         this.listSet.push(md5s[key]);
     }
-    this.listSet.sort(utils.makeFieldSorter('name'));
+    this.listSet.sort(fn.makeFieldSorter('name'));
 }
 ListsSource.prototype = {
     getAllLists: function() {
@@ -133,25 +134,23 @@ module.exports = function(params) {
     var self = this;
 
     var parent = params.parentViewModel;
-    self.elementsObs = parent.elementsObs;
-    self.element = parent.element;
-
-    self.labelObs = ko.observable();
-    self.detailObs = ko.observable();
-    self.valueObs = ko.observable();
-    self.indexObs = ko.observable(null);
-    self.selectedIndexObs = ko.observable(0);
-    self.selectedIndexObs.subscribe(function() {
-        self.cancelEditMode();
-    });
-
-    // Should we copy edits over to all the same lists.
-    self.copyToAllEnumsObs = ko.observable(true);
+    fn.copyProps(self, parent, 'elementsObs', 'element');
 
     var listsSource = new ListsSource(self.elementsObs(), self.element);
-    self.allLists = ko.observableArray(listsSource.getAllLists());
 
-    self.listObs = ko.observableArray(listsSource.getCurrentEntry().enumeration);
+    bind(self)
+        .obs('label')
+        .obs('detail')
+        .obs('value')
+        .obs('index', null)
+        .obs('currentTab', 'editor')
+        .obs('selectedIndex', 0)
+        .obs('copyToAllEnums', true)
+        .obs('allLists[]', listsSource.getAllLists())
+        .obs('list[]', listsSource.getCurrentEntry().enumeration);
+    
+    // Should we copy edits over to all the same lists.
+    self.cancel = fn.seq(self.cancelEditMode, root.closeDialog);
 
     self.hasDetail = function(item) {
         return !!item.detail;
@@ -190,6 +189,8 @@ module.exports = function(params) {
         self.valueObs("");
         self.indexObs(null);
     };
+    self.selectedIndexObs.subscribe(self.cancelEditMode);
+
     self.addListItem = function() {
         var label = self.labelObs();
         if (label) {
@@ -233,12 +234,6 @@ module.exports = function(params) {
         self.cancelEditMode();
         root.closeDialog();
     };
-    self.cancel = function() {
-        self.cancelEditMode();
-        root.closeDialog();
-    };
-
-    self.currentTabObs = ko.observable('editor');
     self.isActive = function(tag) {
         self.cancelEditMode();
         return tag === self.currentTabObs();

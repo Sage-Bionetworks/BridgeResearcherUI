@@ -63,7 +63,11 @@ module.exports = function(params) {
             }).then(function(response) {
                 self.itemsObs(response.items.reverse());
                 return response;
-            }).catch(utils.notFoundHandler('Shared module', 'shared_modules'));
+            })
+            .catch(utils.failureHandler({
+                redirectTo: "shared_modules",
+                redirectMsg: "Shared module not found"
+            }));
     }
     load();
 };
