@@ -10,8 +10,6 @@ var PAGE_SIZE = 25;
  *      pageKey
  * @params pageKey - a key to make the pagination on this table unique from other pagination on 
  *      the screen
- * @params top - mark one of the pagers as the top pager, and only that pager will take responsibility
- *      for calling for the first page of records. Also, search is hidden for the bottom control.
  * @params showAssignment - show assignment controls (true of false, defaults to true)
  */
 module.exports = function(params) {
@@ -22,7 +20,6 @@ module.exports = function(params) {
     var history = [null];
     var pendingRequest = false;
 
-    self.top = params.top;
     self.showAssignment = (typeof params.showAssignment === "boolean") ? 
         params.showAssignment : true;
     self.showSearch = (typeof params.showSearch === "boolean") ?
@@ -31,9 +28,7 @@ module.exports = function(params) {
     bind(self)
         .obs('idFilter')
         .obs('pageKey')
-        .obs('totalRecords')
         .obs('currentPage')
-        .obs('totalPages')
         .obs('hasPrevious', false)
         .obs('hasNext', false)
         .obs('hasFirstPage', false)
@@ -66,6 +61,13 @@ module.exports = function(params) {
         var params = {pageSize: PAGE_SIZE, offsetKey: offsetKey,
             idFilter: self.idFilterObs(), assignmentFilter: currentAssignmentFilter};
         return loadingFunc(params)
+            .then(function(response) {
+                // REMOVEME once this is offsetKey once again.
+                if (response) {
+                    response.offsetKey = response.offsetBy;
+                }
+                return response;
+            })
             .then(addCurrentPage)
             .catch(utils.failureHandler());
     }
@@ -73,10 +75,8 @@ module.exports = function(params) {
         self.hasNextObs(!!response.offsetKey);
         self.hasPreviousObs(response.hasHistory);
         self.hasFirstPageObs(response.currentPage > 0);
-        self.totalRecordsObs(response.total);
         self.idFilterObs(response.idFilter || "");
         self.currentPageObs(response.currentPage); // this was added in addCurrentPage()
-        self.totalPagesObs( Math.ceil(response.total/PAGE_SIZE) );
         self.showLoaderObs(false);
         self.searchLoadingObs(false);
         pendingRequest = false;
@@ -90,50 +90,40 @@ module.exports = function(params) {
             wrappedLoadingFunc();
         }
     };
-    if (self.top) {
-        self.firstPage = function(vm, event) {
-            if (!pendingRequest) {
-                clear();
-                currentAssignmentFilter = null;
-                self.idFilterObs("");
-                self.showLoaderObs(true);
-                wrappedLoadingFunc();
-            }
-        };
-        self.previousPage = function(vm, event) {
-            if (!pendingRequest) {
-                history.pop(); // next page key
-                history.pop(); // current page key
-                var lastKey = history[history.length-1]; // the last page key
-                self.currentPageObs(self.currentPageObs()-1);
-                self.showLoaderObs(true);
-                wrappedLoadingFunc(lastKey);
-            }
-        };
-        self.nextPage = function(vm, event) {
-            if (!pendingRequest) {
-                var lastKey = history[history.length-1];        
-                self.showLoaderObs(true);
-                self.currentPageObs(self.currentPageObs()+1);
-                wrappedLoadingFunc(lastKey);
-            }
-        };
-        ko.postbox.subscribe(pageKey+'-firstPage', self.firstPage);
-        ko.postbox.subscribe(pageKey+'-previousPage', self.previousPage);
-        ko.postbox.subscribe(pageKey+'-nextPage', self.nextPage);
-    } else {
-        self.firstPage = function(vm, event) {
-            ko.postbox.publish(pageKey+'-firstPage');
-        };
-        self.previousPage = function(vm, event) {
-            ko.postbox.publish(pageKey+'-previousPage');
-        };
-        self.nextPage = function(vm, event) {
-            ko.postbox.publish(pageKey+'-nextPage');
-        };
-    }
+    self.firstPage = function(vm, event) {
+        if (!pendingRequest) {
+            clear();
+            currentAssignmentFilter = null;
+            self.idFilterObs("");
+            self.showLoaderObs(true);
+            wrappedLoadingFunc();
+        }
+    };
+    self.previousPage = function(vm, event) {
+        if (!pendingRequest) {
+            history.pop(); // next page key
+            history.pop(); // current page key
+            var lastKey = history[history.length-1]; // the last page key
+            self.currentPageObs(self.currentPageObs()-1);
+            self.showLoaderObs(true);
+            wrappedLoadingFunc(lastKey);
+        }
+    };
+    self.nextPage = function(vm, event) {
+        if (!pendingRequest) {
+            var lastKey = history[history.length-1];        
+            self.showLoaderObs(true);
+            self.currentPageObs(self.currentPageObs()+1);
+            wrappedLoadingFunc(lastKey);
+        }
+    };
+    ko.postbox.subscribe(pageKey+'-firstPage', self.firstPage);
+    ko.postbox.subscribe(pageKey+'-previousPage', self.previousPage);
+    ko.postbox.subscribe(pageKey+'-nextPage', self.nextPage);
+
     self.assignFilter = function(vm, event) {
         clear();
+        self.searchLoadingObs(true);
         currentAssignmentFilter = getValue(event.target.value);
         wrappedLoadingFunc();
         return true;
@@ -142,8 +132,6 @@ module.exports = function(params) {
     // parent page is resetting, go back to first page, clear filters, etc.
     ko.postbox.subscribe(pageKey+'-refresh', self.firstPage);
 
-    if (self.top) {
-        self.firstPage();
-    }
+    self.firstPage();
     document.querySelector("#assignEither").checked = true;
 };
