@@ -9,7 +9,6 @@ module.exports = function() {
     
     var binder = bind(self)
         .obs('items[]', [])
-        .obs('total', 0)
         .obs('result', '')
         .obs('showResults', false);
 
@@ -31,8 +30,7 @@ module.exports = function() {
     
     self.loadingFunc = function loadPage(params) {
         return serverService.getExternalIds(params)
-            .then(binder.update('total','items'))
-            .then(msgIfNoRecords)
-            .catch(utils.failureHandler());
+            .then(binder.update('items'))
+            .then(msgIfNoRecords);
     };
 };

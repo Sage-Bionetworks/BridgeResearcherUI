@@ -21,8 +21,8 @@
             <label for="assignEither">Both</label>
         </div>
     </div>
-    <div data-bind="visible: totalPagesObs() > 1">
-        <div class="ui small pagination menu" data-bind="css:{loading:showLoaderObs}, visible: totalPagesObs() > 1">
+    <div>
+        <div class="ui small pagination menu" data-bind="css:{loading:showLoaderObs}">
             <div class="item" title="First page" data-bind="click: firstPage, visible: hasFirstPageObs">
                 1
             </div>
@@ -31,8 +31,7 @@
             </div>
             <div class="active item">
                 <div data-bind="visible: showLoaderObs" class="ui small active loader"></div>
-                <span data-bind="text: currentPageObs() + 1"></span>&nbsp;of&nbsp; 
-                <span data-bind="text: totalPagesObs()"></span>
+                <span data-bind="text: currentPageObs() + 1"></span>
             </div>        
             <div class="item" title="Next page" data-bind="click: nextPage, visible: hasNextObs">
                 <i class="chevron right icon"></i>
