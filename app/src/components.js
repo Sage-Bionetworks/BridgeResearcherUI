@@ -353,6 +353,10 @@ reg('shared-module', {
     viewModel: require('./widgets/shared_module/shared_module'),
     template: require('./widgets/shared_module/shared_module.html')
 });
+reg('forward-pager', {
+    viewModel: require('./widgets/forward_pager/forward_pager'),
+    template: require('./widgets/forward_pager/forward_pager.html')
+});
 
 // Dialogs. These must be synchronous.
 reg('module_browser', {

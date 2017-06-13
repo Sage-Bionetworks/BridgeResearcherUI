@@ -15,7 +15,11 @@ module.exports = {
             return null;
         }
         console.debug("[cache] Loading from cache", key);
-        return JSON.parse(value);
+        try {
+            return JSON.parse(value);
+        } catch(e) {
+            return null;
+        }
     },
     remove: function(key) {
         localStorage.removeItem(key);

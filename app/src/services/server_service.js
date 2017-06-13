@@ -471,8 +471,9 @@ module.exports = {
     getParticipantReports: function() {
         return get(config.reports+ fn.queryString({"type":"participant"}));
     },
-    getParticipantUploads: function(userId, startTime, endTime) {
-        var queryString = fn.queryString({startTime: startTime, endTime: endTime});
+    getParticipantUploads: function(userId, args) {
+        console.log("startTime", args.startTime, "endTime", args.endTime);
+        var queryString = fn.queryString(args);
         return get(config.participants + '/' + userId + '/uploads' + queryString);
     },
     getParticipantUploadStatus: function(uploadId) {

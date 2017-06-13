@@ -5,12 +5,12 @@
                 event: {keyup: doEmailSearch}, hasFocus: true">
             <i class="search icon"></i>
         </div>
-        <div class="ui action input" data-bind="visible: top, flatpickr: startDateObs, timeout: 50, wrap: true, onChange: doCalSearch">
+        <div class="ui action input" data-bind="flatpickr: startDateObs, timeout: 50, wrap: true, onChange: doCalSearch">
             <input type="text" placeholder="Created on or after" readonly data-input>
             <div data-toggle></div>
             <button class="ui icon button" data-clear><i class="remove circle icon"></i></button>
         </div>
-        <div class="ui action input" data-bind="visible: top, flatpickr: endDateObs, timeout: 50, wrap: true, onChange: doCalSearch">
+        <div class="ui action input" data-bind="flatpickr: endDateObs, timeout: 50, wrap: true, onChange: doCalSearch">
             <input type="text" placeholder="Created before" readonly data-input>
             <div data-toggle></div>
             <button class="ui icon button" data-clear><i class="remove circle icon"></i></button>
