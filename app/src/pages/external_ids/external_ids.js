@@ -1,16 +1,23 @@
 var serverService = require('../../services/server_service');
-var utils = require('../../utils');
+var fn = require('../../functions');
 var root = require('../../root');
 var bind = require('../../binder');
 var tables = require('../../tables');
 
 module.exports = function() {
     var self = this;
-    
+    var assignmentFilter;
+
     var binder = bind(self)
         .obs('items[]', [])
         .obs('result', '')
+        .obs('idFilter')
+        .obs('pageKey')
+        .obs('searchLoading')
         .obs('showResults', false);
+
+    self.vm = self;
+    self.callback = fn.identity;
 
     self.codesEnumeratedObs = root.codesEnumeratedObs;
     tables.prepareTable(self, {name: 'external ID'});
@@ -21,16 +28,44 @@ module.exports = function() {
         }
         return response;
     }
+    function getValue(value) {
+        switch(value) {
+            case 'true': return 'true';
+            case 'false': return 'false';
+            default: return null;
+        }
+    }    
     self.openImportDialog = function(vm, event) {
         self.showResultsObs(false);
-        root.openDialog('external_id_importer', {vm: self, showCreateCredentials: false, reload: self.loadingFunc, autoCredentials: true});
+        root.openDialog('external_id_importer', {
+            vm: self, 
+            showCreateCredentials: false, 
+            reload: self.loadingFunc, 
+            autoCredentials: true
+        });
     };
-    
+    self.doSearch = function(vm, event) {
+        if (event.keyCode === 13) {
+            self.callback();
+        }
+    };
+    self.assignFilter = function(vm, event) {
+        assignmentFilter = getValue(event.target.value);
+        self.callback();
+        return true;
+    };
+        
     serverService.getStudy().then(binder.assign('study'));
     
-    self.loadingFunc = function loadPage(params) {
-        return serverService.getExternalIds(params)
+    self.loadingFunc = function loadPage(args) {
+        args = args || {};
+        args.assignmentFilter = assignmentFilter; 
+        args.idFilter = self.idFilterObs();
+
+        self.searchLoadingObs(true);
+        return serverService.getExternalIds(args)
             .then(binder.update('items'))
+            .then(fn.handleStaticObsUpdate(self.searchLoadingObs, false))
             .then(msgIfNoRecords);
     };
 };

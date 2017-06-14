@@ -5,19 +5,27 @@ var tables = require('../../tables');
 var root = require('../../root');
 var fn = require('../../functions');
 
-function sortUploads(b,a) {
-    return (a.requestedOn < b.requestedOn) ? -1 : (a.requestedOn > b.requestedOn) ? 1 : 0;
-}
+var PAGE_SIZE = 25;
 
 module.exports = function(params) {
     var self = this;
+
+    var today = new Date();
+    var tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate()+1, 
+        today.getHours(), today.getMinutes(), today.getSeconds());
+    var start = today.toISOString("00:00:00");
+    var end = tomorrow.toISOString("00:00:00");
+    
+    // For the forward pager control.
+    self.vm = self;
+    self.callback = fn.identity;
+
     bind(self)
         .obs('userId', params.userId)
         .obs('name', '')
-        .obs('selectedRange', new Date())
-        .obs('showLoader', false)
-        .obs('day')
-        .obs('total', 0)
+        .obs('uploadsStartDate', new Date(start))
+        .obs('uploadsEndDate', new Date(end))
+        .obs('warn', false)
         .obs('isNew', false)
         .obs('title', '&#160;');
 
@@ -28,7 +36,6 @@ module.exports = function(params) {
 
     fn.copyProps(self, root, 'isPublicObs');
     fn.copyProps(self, fn, 'formatDateTime');
-    self.selectedRangeObs.subscribe(load);
 
     tables.prepareTable(self, {name:'upload'});
 
@@ -50,16 +57,27 @@ module.exports = function(params) {
             default: return '';
         }
     };
+
+    function dateToString(date, atStart) {
+        return (date) ? date.toLocalISOString("00:00:00") : null;
+    }
+
+    self.doCalSearch = function() {
+        var start = dateToString(self.uploadsStartDateObs());
+        var end = dateToString(self.uploadsEndDateObs());
+        var oneMissing = (start === null || end === null);
+        self.warnObs(oneMissing);
+        if (!oneMissing) {
+            self.itemsObs([]);
+            self.recordsMessageObs("<div class='ui tiny active inline loader'></div>");
+            self.callback();
+        }
+    };
     self.htmlFor = function(data) {
         if (data.validationMessageList === undefined) return null;
         return data.validationMessageList.map(function(error) {
             return "<p class='ui segment error-message'>"+error+"</p>";
         }).join('');
-    };
-    self.selectRange = function(data, event) {
-        var date = event.currentTarget._flatpickr.selectedDateObj;
-        self.selectedRangeObs(date);
-        return false;
     };
     self.uploadURL = function(data) {
         return '#/participants/' + self.userIdObs() + '/uploads/' + data.uploadId;
@@ -118,28 +136,18 @@ module.exports = function(params) {
         return '';
     }
     function processUploads(response) {
-        var dateString = fn.formatDate(response.startTime);
-        self.dayObs(dateString);
-        self.totalObs(response.items.length);
-        response.items.sort(sortUploads);
         response.items.map(processItem);
         self.itemsObs(response.items);
         return response;
     }
-    function getDateRange(date) {
-        date = (date) ? new Date(date) : new Date();
-        return {
-            startTime: date.toISOString().split("T")[0] + "T00:00:00.000Z", 
-            endTime: date.toISOString().split("T")[0] + "T23:59:59.999Z"
-        };
-    }    
-    function load() {
-        self.showLoaderObs(true);
-        var range = getDateRange( self.selectedRangeObs() );
-        serverService.getParticipantUploads(params.userId, range.startTime, range.endTime)
-            .then(processUploads)
-            .then(fn.handleStaticObsUpdate(self.showLoaderObs, false))
-            .catch(utils.failureHandler());
-    }
-    load();
+    
+    self.loadingFunc = function(args) {
+        args = args || {};
+        args.pageSize = PAGE_SIZE;
+        args.startTime = dateToString(self.uploadsStartDateObs());
+        args.endTime = dateToString(self.uploadsEndDateObs());
+
+        return serverService.getParticipantUploads(params.userId, args)
+            .then(processUploads);
+    };
 };
