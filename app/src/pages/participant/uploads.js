@@ -141,7 +141,7 @@ module.exports = function(params) {
         return response;
     }
     
-    function load(args) {
+    self.loadingFunc = function(args) {
         args = args || {};
         args.pageSize = PAGE_SIZE;
         args.startTime = dateToString(self.uploadsStartDateObs());
@@ -149,6 +149,5 @@ module.exports = function(params) {
 
         return serverService.getParticipantUploads(params.userId, args)
             .then(processUploads);
-    }
-    self.loadingFunc = load;
+    };
 };

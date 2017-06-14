@@ -16,10 +16,8 @@ module.exports = function() {
         .obs('items[]', [])
         .obs('total', 0)
         .obs('result', '')
-
         .obs('searchLoading', false)
         .obs('idFilter')
-
         .obs('showResults', false);
 
     // For the forward pager control.
