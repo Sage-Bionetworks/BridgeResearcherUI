@@ -96,7 +96,7 @@ module.exports = function(params) {
             var id = item.schemaId;
             var rev = item.schemaRevision;
             item.contentObs(id);
-            item.hrefObs('/#/schemas/'+encodeURIComponent(id)+'/versions/'+rev);
+            item.hrefObs('/#/schemas/'+encodeURIComponent(id)+'/versions/'+rev+'/editor');
         }
         item.progressState = getSemanticControlState(item);
         item.completedByObs(formatCompletedBy(item));
