@@ -10,7 +10,7 @@
                 optionsSrc: $parent.fieldTypeOptions, optionsCaption: 'Select type...'"></ui-select>
         </div>
     </div>
-    <!-- ko if: $parent.extraObs() === 'string' -->
+    <!-- ko if: $parent.extraObs() === 'string' || $parent.extraObs() === 'single' -->
         <div class="draggable">
             <ui-checkbox params="checkedObs: unboundedTextObs">Any length, or</ui-checkbox>
         </div>
@@ -31,6 +31,17 @@
         <div class="draggable extra">
             <input placeholder="File ext" 
                 data-bind="textInput: fileExtensionObs" style="width:6rem"></input>
+        </div>
+    <!-- /ko -->
+    <!-- ko if: $parent.extraObs() === 'multi' -->
+        <div class="draggable">
+            <a class="link" style="padding: .4rem" data-bind="click: $parents[2].editMultiChoiceAnswerList,
+                attr:{id:'fieldDefinitions'+$index()+'_multiChoiceAnswerList'}">
+                <span data-bind="text: multiChoiceAnswerListObs().length"></span> items&hellip;
+            </a>
+        </div>
+        <div class="draggable required">
+            <ui-checkbox params="checkedObs: allowOtherChoicesObs">Allow Other Choices</ui-checkbox>
         </div>
     <!-- /ko -->
     <div class="draggable required">

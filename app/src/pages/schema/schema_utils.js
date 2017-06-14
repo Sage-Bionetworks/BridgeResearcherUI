@@ -17,13 +17,13 @@ var ALL_FIELD_TYPE_OPTIONS = Object.freeze([
     {label: "Integer", value: "int", deprecated:false, extra_fields: 'none'},
     {label: "String", value: "string", deprecated:false, extra_fields: 'string'},
     {label: "Time of Day (no date)", value: "time_v2", deprecated:false, extra_fields: 'none'},
+    {label: "Multi-Choice", value: "multi_choice", deprecated:false, extra_fields: 'multi'},
+    {label: "Single-Choice", value: "single_choice", deprecated:false, extra_fields: 'single'},
 
     {label: "Blob Attachment", value: "attachment_blob", deprecated:true, extra_fields: 'none'},
     {label: "CSV Attachment", value: "attachment_csv", deprecated:true, extra_fields: 'none'},
     {label: "JSON Blob Attachment", value: "attachment_json_blob", deprecated:true, extra_fields: 'none'},
     {label: "JSON Table", value: "attachment_json_table", deprecated:true, extra_fields: 'none'},
-    {label: "Multi-Choice", value: "multi_choice", deprecated:true, extra_fields: 'none'},
-    {label: "Single-Choice", value: "single_choice", deprecated:true, extra_fields: 'none'},
     {label: "Duration", value: "duration_v2", deprecated:true, extra_fields: 'none'},
     {label: "Timestamp", value: "timestamp", deprecated:true, extra_fields: 'none'}
 ]);
