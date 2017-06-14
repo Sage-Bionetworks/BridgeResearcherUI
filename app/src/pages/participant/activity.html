@@ -27,9 +27,30 @@
         </div>
     </div>
     <errors></errors>
-   <!-- ko component: {name:'activity_pager', params: {
-       itemsObs: itemsObs, loadingFunc: loadingFunc, pageKey: 'activity-page', top: true}
-    } --><!-- /ko -->    
+
+    <div class="line-control">
+        <div class="line-control-stretch">
+            <div class="ui action input" data-bind="flatpickr: startDateObs, 
+                timeout: 50, wrap: true, onChange: doCalSearch">
+                <input type="text" placeholder="Created on or after" readonly data-input>
+                <div data-toggle></div>
+                <button class="ui icon button" data-clear data-bind="click: clearStart"><i class="remove circle icon"></i></button>
+            </div>
+            <div class="ui action input" data-bind="flatpickr: endDateObs, 
+                timeout: 50, wrap: true, onChange: doCalSearch">
+                <input type="text" placeholder="Created before" readonly data-input>
+                <div data-toggle></div>
+                <button class="ui icon button" data-clear data-bind="click: clearEnd"><i class="remove circle icon"></i></button>
+            </div>
+            <div class="label-field-padding" data-bind="visible: warnObs">
+                <i class="ui yellow warning sign icon"></i> Set both dates to filter.
+            </div>
+        </div>
+        <div>
+            <forward-pager params="vm: vm"></forward-pager>
+        </div>
+    </div>
+
     <table class="ui compact selectable table">
         <thead>
             <tr>

@@ -16,7 +16,15 @@ module.exports = function() {
         .obs('items[]', [])
         .obs('total', 0)
         .obs('result', '')
+
+        .obs('searchLoading', false)
+        .obs('idFilter')
+
         .obs('showResults', false);
+
+    // For the forward pager control.
+    self.vm = self;
+    self.callback = fn.identity;
 
     fn.copyProps(self, root, 'codesEnumeratedObs', 'isDeveloper', 'isResearcher');
     tables.prepareTable(self, {name: 'external ID'});
@@ -74,6 +82,11 @@ module.exports = function() {
     self.showLinkLoading = function(vm, event) {
         event.target.nextElementSibling.classList.add("active");
         return true;
+    };
+    self.doSearch = function(vm, event) {
+        if (event.keyCode === 13) {
+            self.callback();
+        }
     };
     
     // This is called from the dialog that allows a user to enter a new external identifier.

@@ -2,9 +2,9 @@ var bind = require('../../binder');
 var utils = require('../../utils');
 
 module.exports = function(params) {
-    console.assert(params.vm, "vm not supplied");
-    console.assert(params.vm.loadingFunc, "vm.loadingFunc not supplied");
-    console.assert(params.vm.callback, "vm.callback not supplied");
+    console.assert(params.vm, "loadingFunc not supplied");
+    console.assert(params.vm.loadingFunc, "loadingFunc not supplied");
+    console.assert(params.vm.callback, "callback not supplied");
 
     var self = this;
     var loadingFunc = params.vm.loadingFunc;

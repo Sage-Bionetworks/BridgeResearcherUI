@@ -291,14 +291,6 @@ reg('participants_pager', {
     viewModel: require('./widgets/participants_pager/participants_pager'),
     template: require('./widgets/participants_pager/participants_pager.html')
 });
-reg('activity_pager', {
-    viewModel: require('./widgets/activity_pager/activity_pager'),
-    template: require('./widgets/activity_pager/activity_pager.html')
-});
-reg('ddb_pager', {
-    viewModel: require('./widgets/ddb_pager/ddb_pager'),
-    template: require('./widgets/ddb_pager/ddb_pager.html')
-});
 reg('field_definition', {
     viewModel: require('./pages/schema/field_definition'),
     template: require('./pages/schema/field_definition.html')
