@@ -42,8 +42,8 @@ module.exports = function(params) {
             self.currentTabObs(tabName);
         };
     };
-    self.selectList = function(item) {
-        self.listObs(item);
+    self.selectList = function(array) {
+        self.listObs(array);
         self.currentTabObs('editor');
     };
     
