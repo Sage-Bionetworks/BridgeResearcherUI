@@ -4,9 +4,11 @@ var schemaUtils = require('../schema/schema_utils');
 var utils = require('../../utils');
 var bind = require('../../binder');
 var fn = require('../../functions');
+var root = require('../../root');
 
 var FIELD_SKELETON = {
-    name:'', required:false, type:null, unboundedText:false, maxLength:'100', fileExtension:'', mimeType:''
+    name:'', required:false, type:null, unboundedText:false, maxLength:'100', fileExtension:'', mimeType:'',
+        multiChoiceAnswerList:[], allowOtherChoices:false
 };
 var failureHandler = utils.failureHandler({
     redirectTo: "schemas",
@@ -17,7 +19,6 @@ var failureHandler = utils.failureHandler({
 module.exports = function(params) {
     var self = this;
 
-    schemaUtils.initVM(self);
     var minIos = bind.objPropDelegates('minAppVersions', 'iPhone OS');
     var minAnd = bind.objPropDelegates('minAppVersions', 'Android');
     var maxIos = bind.objPropDelegates('maxAppVersions', 'iPhone OS');
@@ -36,6 +37,7 @@ module.exports = function(params) {
         .bind('androidMin', '', minAnd.fromObject, minAnd.toObject)
         .bind('androidMax', '', maxAnd.fromObject, maxAnd.toObject)
         .bind('fieldDefinitions[]', [], fieldDefToObs, fieldObsToDef);
+    schemaUtils.initVM(self);
 
     var hideWarning = fn.handleStaticObsUpdate(self.showErrorObs, false);
     var updateRevision = fn.seq(
@@ -43,7 +45,6 @@ module.exports = function(params) {
         fn.handleCopyProps(self.schema, 'version'),
         fn.handleStaticObsUpdate(self.isNewObs, false)
     );
-
     self.revisionLabel = ko.computed(function() {
         if (self.revisionObs()) {
             return 'v' + self.revisionObs();
@@ -60,6 +61,8 @@ module.exports = function(params) {
                 .bind('unboundedText', def.unboundedText)
                 .bind('maxLength', def.maxLength)
                 .bind('fileExtension', def.fileExtension)
+                .bind('allowOtherChoices', def.allowOtherChoices)
+                .bind('multiChoiceAnswerList[]', [].concat(def.multiChoiceAnswerList))
                 .bind('mimeType', def.mimeType);
             return def;
         });
@@ -76,7 +79,7 @@ module.exports = function(params) {
                 required: item.requiredObs(),
                 type: type
             };
-            if (type === "string" || type === "inline_json_blob") {
+            if (type === "string" || type === "inline_json_blob" || type === "single_choice") {
                 field.unboundedText = item.unboundedTextObs();
                 if (!field.unboundedText) {
                     field.maxLength = item.maxLengthObs();
@@ -88,6 +91,9 @@ module.exports = function(params) {
                     ext = "." + ext;
                 }
                 field.fileExtension = ext;
+            } else if (type === "multi_choice") {
+                field.multiChoiceAnswerList = item.multiChoiceAnswerListObs();
+                field.allowOtherChoices = item.allowOtherChoicesObs();
             }
             fields.push(field);
         });
@@ -113,7 +119,6 @@ module.exports = function(params) {
             .then(utils.successHandler(vm, event, "Schema has been saved."))
             .catch(failureHandler);
     };
-
     self.addBelow = function(field, event) {
         var index = self.fieldDefinitionsObs.indexOf(field);
         var newField = makeNewField();
@@ -136,6 +141,22 @@ module.exports = function(params) {
             .then(hideWarning)
             .catch(failureHandler);
     };
+    self.editMultiChoiceAnswerList = function(field, event) {
+        var otherLists = [];
+        self.fieldDefinitionsObs().forEach(function(oneField) {
+            if (oneField.typeObs() === "multi_choice") {
+                var oneList = oneField.multiChoiceAnswerListObs();
+                if (oneList.length) {
+                    otherLists.push([].concat(oneList));
+                }
+            }
+        });
+        root.openDialog('multichoice_editor', {
+            listObs: field.multiChoiceAnswerListObs,
+            otherLists: otherLists
+        });
+    };
+    
     self.closeWarning = hideWarning;
 
     function loadSchema() { 

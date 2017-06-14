@@ -10,8 +10,36 @@
     <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
-    <!-- ko component: {name:'ddb_pager', params: {loadingFunc: loadingFunc, 
-        pageKey: 'external-ids-page', showSearch: true, top: true} } --><!-- /ko -->
+    <div class="line-control">
+        <div>
+            <div class="ui icon input" data-bind="css:{loading: searchLoadingObs}">
+                <input type="text" placeholder="Start of ID" data-bind="textInput: idFilterObs, 
+                    event: {keyup: doSearch}">
+                <i class="search icon"></i>
+            </div>
+        </div>
+        <div class="line-control-radio line-control-stretch">
+            <label>Credentials?</label>
+            <div class="ui radio checkbox">
+                <input id="assignTrue" type="radio" value="true" 
+                    name="assign" data-bind="click: assignFilter"/>
+                <label for="assignTrue">Yes</label>
+            </div>
+            <div class="ui radio checkbox">
+                <input id="assignFalse" type="radio" value="false" 
+                    name="assign" data-bind="click: assignFilter"/>
+                <label for="assignFalse">No</label>
+            </div>
+            <div class="ui radio checkbox">
+                <input id="assignEither" type="radio" value="all" 
+                    name="assign" data-bind="click: assignFilter" checked/>
+                <label for="assignEither">Both</label>
+            </div>
+        </div>
+        <div>
+            <forward-pager params="vm: vm"></forward-pager>
+        </div>
+    </div>
     <table class="ui compact selectable table">
         <thead>
             <tr>

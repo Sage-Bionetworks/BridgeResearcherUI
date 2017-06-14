@@ -291,14 +291,6 @@ reg('participants_pager', {
     viewModel: require('./widgets/participants_pager/participants_pager'),
     template: require('./widgets/participants_pager/participants_pager.html')
 });
-reg('activity_pager', {
-    viewModel: require('./widgets/activity_pager/activity_pager'),
-    template: require('./widgets/activity_pager/activity_pager.html')
-});
-reg('ddb_pager', {
-    viewModel: require('./widgets/ddb_pager/ddb_pager'),
-    template: require('./widgets/ddb_pager/ddb_pager.html')
-});
 reg('field_definition', {
     viewModel: require('./pages/schema/field_definition'),
     template: require('./pages/schema/field_definition.html')
@@ -353,6 +345,10 @@ reg('shared-module', {
     viewModel: require('./widgets/shared_module/shared_module'),
     template: require('./widgets/shared_module/shared_module.html')
 });
+reg('forward-pager', {
+    viewModel: require('./widgets/forward_pager/forward_pager'),
+    template: require('./widgets/forward_pager/forward_pager.html')
+});
 
 // Dialogs. These must be synchronous.
 reg('module_browser', {
@@ -390,6 +386,10 @@ reg('forgot_password_dialog', {
 reg('enumeration_editor', {
     viewModel: require('./dialogs/enumeration_editor/enumeration_editor'),
     template: require('./dialogs/enumeration_editor/enumeration_editor.html'), synchronous: true
+});
+reg('multichoice_editor', {
+    viewModel: require('./dialogs/multichoice_editor/multichoice_editor'),
+    template: require('./dialogs/multichoice_editor/multichoice_editor.html'), synchronous: true
 });
 reg('event_id_editor', {
     viewModel: require('./dialogs/event_id_editor/event_id_editor'),

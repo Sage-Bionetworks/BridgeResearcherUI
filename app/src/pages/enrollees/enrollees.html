@@ -19,9 +19,19 @@
             <p style="margin-top:1rem">Credentials created for user ID: <span class="identifier-emphasis" data-bind="text: resultObs"></span> </p>
             <p>Enter this ID into the app to register the device.</p>
         </div>
-    </div>    
-    <!-- ko component: {name:'ddb_pager', params: {loadingFunc: loadingFunc, 
-        pageKey: 'enrollees-page', showSearch: true, top: true} } --><!-- /ko -->
+    </div>
+    <div class="line-control">
+        <div class="line-control-stretch">
+            <div class="ui icon input" data-bind="css:{loading: searchLoadingObs}">
+                <input type="text" placeholder="Start of ID" data-bind="textInput: idFilterObs, 
+                    event: {keyup: doSearch}">
+                <i class="search icon"></i>
+            </div>
+        </div>
+        <div>
+            <forward-pager params="vm: vm"></forward-pager>
+        </div>
+    </div>
     <table class="ui compact selectable table">
         <thead>
             <tr>

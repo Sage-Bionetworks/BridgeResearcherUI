@@ -6,6 +6,23 @@ var bind = require('./binder');
 var clipboard = require('./widgets/clipboard/clipboard');
 var alerts = require('./widgets/alerts');
 
+function pad(num) {
+    var norm = Math.abs(Math.floor(num));
+    return (norm < 10 ? '0' : '') + norm;
+}
+Date.prototype.toLocalISOString = function(timePortion) {
+    var tzo = -this.getTimezoneOffset();
+    var dif = tzo >= 0 ? '+' : '-';
+    var str = this.getFullYear()+'-'+pad(this.getMonth() + 1)+'-'+pad(this.getDate())+'T';
+    if (timePortion) {
+        str += timePortion;
+    } else {
+        str += pad(this.getHours())+':'+pad(this.getMinutes())+':'+pad(this.getSeconds());
+    }
+    str += dif + pad(tzo / 60) + ':' + pad(tzo % 60);
+    return str;
+};
+
 window.ko = ko;
 // When you enable this, 1) everything is a bit faster, and 2) the UI is completely broken.
 // ko.options.deferUpdates = true;

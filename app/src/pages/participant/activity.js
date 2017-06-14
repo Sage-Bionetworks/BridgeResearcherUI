@@ -16,6 +16,9 @@ module.exports = function(params) {
     var self = this;
     // params.guid, params.userId
 
+    self.vm = self;
+    self.callback = fn.identity;
+
     self.formatTitleCase = fn.formatTitleCase;
     self.formatDateTime = fn.formatDateTime;
 
@@ -36,6 +39,9 @@ module.exports = function(params) {
         .obs('isNew', false)
         .obs('title', '&#160;')
         .obs('guid', params.guid)
+        .obs('startDate')
+        .obs('endDate')
+        .obs('warn', false)
         .obs('activityLabel', '&#160;');
 
     tables.prepareTable(self, {
@@ -66,6 +72,20 @@ module.exports = function(params) {
         item.clientData = data;
         root.closeDialog();
     };
+    self.doCalSearch = function() {
+        self.callback();
+    };
+    self.clearStart = function() {
+        self.startDateObs(null);
+        self.callback();
+    };
+    self.clearEnd = function() {
+        self.endDateObs(null);
+        self.callback();
+    };
+    function bothOrNeither(startDate, endDate) {
+        return (startDate === null && endDate === null) || (startDate !== null && endDate !== null);
+    }
 
     serverService.getSchedulePlans().then(function(response) {
         response.items.forEach(function(plan) {
@@ -77,16 +97,22 @@ module.exports = function(params) {
         });
     }).catch(failureHandler);
 
-    self.loadingFunc = function(offsetBy, pageSize, startDate, endDate) {
-        return serverService.getParticipantActivities(self.userIdObs(), params.guid, {
-            offsetBy: offsetBy,
-            pageSize: pageSize,
-            scheduledOnStart: startDate,
-            scheduledOnEnd: endDate
-        }).then(function(response) {
-            response.items = response.items.map(jsonFormatter.mapClientDataItem);
-            self.itemsObs(response.items);
-            return response;
-        });
+    self.loadingFunc = function(args) {
+        args = args || {};
+        args.scheduledOnStart = fn.dateTimeString(self.startDateObs());
+        args.scheduledOnEnd = fn.dateTimeString(self.endDateObs());
+
+        if (!bothOrNeither(args.scheduledOnStart, args.scheduledOnEnd)) {
+            self.warnObs(true);
+            return Promise.resolve({});
+        }
+        self.warnObs(false);
+
+        return serverService.getParticipantActivities(self.userIdObs(), params.guid, args)
+            .then(function(response) {
+                response.items = response.items.map(jsonFormatter.mapClientDataItem);
+                self.itemsObs(response.items);
+                return response;
+            });
     };
 };
