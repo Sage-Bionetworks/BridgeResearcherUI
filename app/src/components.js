@@ -387,6 +387,10 @@ reg('enumeration_editor', {
     viewModel: require('./dialogs/enumeration_editor/enumeration_editor'),
     template: require('./dialogs/enumeration_editor/enumeration_editor.html'), synchronous: true
 });
+reg('multichoice_editor', {
+    viewModel: require('./dialogs/multichoice_editor/multichoice_editor'),
+    template: require('./dialogs/multichoice_editor/multichoice_editor.html'), synchronous: true
+});
 reg('event_id_editor', {
     viewModel: require('./dialogs/event_id_editor/event_id_editor'),
     template: require('./dialogs/event_id_editor/event_id_editor.html'), synchronous: true

@@ -148,9 +148,6 @@ module.exports = function(params) {
         .obs('copyToAllEnums', true)
         .obs('allLists[]', listsSource.getAllLists())
         .obs('list[]', listsSource.getCurrentEntry().enumeration);
-    
-    // Should we copy edits over to all the same lists.
-    self.cancel = fn.seq(self.cancelEditMode, root.closeDialog);
 
     self.hasDetail = function(item) {
         return !!item.detail;
@@ -244,4 +241,6 @@ module.exports = function(params) {
             self.currentTabObs(tabName);
         };
     };
+    // Should we copy edits over to all the same lists.
+    self.cancel = fn.seq(self.cancelEditMode, root.closeDialog);
 };
