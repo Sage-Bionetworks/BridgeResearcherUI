@@ -137,31 +137,16 @@
     padding: 1rem;
     max-height: 200px;
     overflow-y: scroll;
-}
+
     .rules-table-rule {
         @include flex-box(row);
         @include align-items(center);
+        
+        div {
+            padding: .2rem;
+        }
     }
-        .rules-table-rule-cell {
-            padding: .2rem .2rem;
-            white-space: nowrap;
-        }
-        .rules-table-rule-cell input[text], .rules-table-rule-cell select {
-            width: 10rem ! important;
-        }
-        .rules-table-rule-cell input[radio] {
-            width:1rem!important;
-        }
-        .rules-table-rule-cell:last-child {
-            @include flex(2);
-            text-align: right;
-        }
-    .rules-actions {
-        padding: 0 1.5rem 1.5rem 1.5rem;
-    }
-    .rules-editor-actions {
-        padding: 2rem 1.5rem 1.5rem 1.5rem;
-    }
+}
 .enum-list {
     padding:0!important;
     overflow-y: auto;

@@ -24,10 +24,10 @@ function createRule(rule) {
  * @returns {boolean|*}
  */
 function filterOutRulesWithNoValues(rule) {
-    if (rule.operator() === 'de') {
+    if (rule.operator() === 'de' || rule.operator() === 'always') {
         rule.value(null);
     }
-    return (rule.operator() === 'de' || rule.value());
+    return (rule.operator() === 'de' || rule.operator() === 'always' || rule.value());
 }
 
 function convertBackToBoolean(rule) {
@@ -64,11 +64,10 @@ function getIdentifierOptions(elementsArray, startIdentifier) {
 module.exports = function(params) {
     var self = this;
     var parent = params.parentViewModel;
-    var con = params.element.constraints;
 
     fn.copyProps(self, parent, 'element', 'elementsObs', 'operatorOptions', 'operatorLabel');
-
-    self.rulesObs = ko.observableArray(con.rulesObs().map(createRule));
+    self.selectedIndexObs = ko.observable();
+    self.rulesObs = ko.observableArray(params.element.rulesObs().map(createRule));
     self.identifierOptions = getIdentifierOptions(self.elementsObs(), self.element.identifier);
     self.identifierLabel = fn.identity;
     self.cancelRules = root.closeDialog;
@@ -82,7 +81,7 @@ module.exports = function(params) {
     };
     self.saveRules = function() {
         var rules = self.rulesObs().filter(filterOutRulesWithNoValues).map(convertBackToBoolean);
-        self.element.constraints.rulesObs(rules);
+        self.element.rulesObs(rules);
         root.closeDialog();
     };
 };
