@@ -156,7 +156,8 @@ function makeObservable(obj, field) {
     }
     // Note we're copying the array when passing it to the observable, or it gets shared between properties,
     // enumeration in particular (rules is remodeled)
-    return (field === "rules" || field === "enumeration") ? ko.observableArray([].concat(obj[field])) : ko.observable(obj[field]);
+    return (field === "rules" || field === "enumeration") ? 
+        ko.observableArray([].concat(obj[field])) : ko.observable(obj[field]);
 }
 
 /**
@@ -176,15 +177,6 @@ function elementToObservables(element) {
         });
         element.constraintsTypeObs = ko.observable(con.type);
     }
-    element.rulesObs((element.rules || []).map(function(rule) {
-        return {
-            operator: ko.observable(rule.operator),
-            value: ko.observable(rule.value),
-            endSurvey: ko.observable(!!rule.endSurvey),
-            skipTo: ko.observable(rule.skipTo)
-        };
-    }));
-
     element.changeUiHint = function(domEl) {
         var newHint = domEl.getAttribute("data-type");
         element.uiHintObs(newHint);
@@ -210,15 +202,6 @@ function observablesToElement(element) {
             updateModelField(con, field);
         });
     }
-    element.rules = element.rulesObs().map(function(rule) {
-        var newRule = {operator: rule.operator(), value: rule.value()};
-        if (rule.endSurvey()) {
-            newRule.endSurvey = true;
-        } else {
-            newRule.skipTo = rule.skipTo();
-        }
-        return newRule;
-    });
     return element;
 }
 /**
@@ -328,14 +311,16 @@ module.exports = {
         };
         vm.formatRule = function(rule) {
             var array = [];
-            array.push(vm.operatorLabel(rule.operator()));
-            if (rule.operator() !== 'de' && rule.operator() !== 'always') {
-                array.push(rule.value());
+            array.push(vm.operatorLabel(rule.operator));
+            if (rule.operator !== 'de' && rule.operator !== 'always') {
+                array.push(rule.value);
             }
-            if (rule.endSurvey()) {
+            if (rule.endSurvey) {
                 array.push("end the survey");
-            } else {
-                array.push("skip to &ldquo;"+rule.skipTo()+"&rdquo;");
+            } else if (rule.skipTo) {
+                array.push("skip to &ldquo;"+rule.skipTo+"&rdquo;");
+            } else if (rule.assignDataGroup) {
+                array.push("add data group &ldquo;"+rule.assignDataGroup+"&rdquo;");
             }
             return array.join(' ');
         };
