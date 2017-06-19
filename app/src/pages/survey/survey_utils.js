@@ -42,13 +42,14 @@ var DURATION_OPTIONS = Object.freeze([
     {value: 'years', label: 'Years'}
 ]);
 var OPERATOR_OPTIONS = Object.freeze([
-    {value: 'eq', label: '='},
-    {value: 'ne', label: '!='},
-    {value: 'lt', label: '<'},
-    {value: 'gt', label: '>'},
-    {value: 'le', label: '<='},
-    {value: 'ge', label: '>='},
-    {value: 'de', label: 'declined'}
+    {value: 'eq', label: 'When value ='},
+    {value: 'ne', label: 'When value !='},
+    {value: 'lt', label: 'When value <'},
+    {value: 'gt', label: 'When value >'},
+    {value: 'le', label: 'When value <='},
+    {value: 'ge', label: 'When value >='},
+    {value: 'de', label: 'When question is declined'},
+    {value: 'always', label: 'Always'}
 ]);
 var uiHintLabels = {
     'checkbox':'Checkbox',
@@ -89,8 +90,8 @@ var SELECT_OPTIONS_BY_TYPE = Object.freeze({
     'WeightConstraints':[UI_HINT_OPTIONS.weight]
 });
 var ELEMENT_TEMPLATE = Object.freeze({
-    'SurveyInfoScreen': {type:'SurveyInfoScreen', title:'', prompt:'', promptDetail:'', identifier:''},
-    'SurveyQuestion': {type:'SurveyQuestion', fireEvent:false, 'uiHint':'', prompt:'', promptDetail:'', identifier:''}
+    'SurveyInfoScreen': {type:'SurveyInfoScreen', title:'', prompt:'', promptDetail:'', identifier:'', rules: ''},
+    'SurveyQuestion': {type:'SurveyQuestion', fireEvent:false, 'uiHint':'', prompt:'', promptDetail:'', identifier:'', rules: ''}
 });
 var DATA_TYPE_OPTIONS = Object.freeze([
     {label: 'String', value: 'string'},
@@ -106,18 +107,18 @@ var DATA_TYPE_OPTIONS = Object.freeze([
     {label: 'Weight', value: 'weight'}
 ]);
 var CONSTRAINTS_TEMPLATES = Object.freeze({
-    'BooleanConstraints': {dataType:'boolean', rules:[]},
-    'DateConstraints': {dataType:'date', rules:[], allowFuture:false, earliestValue:'', latestValue:'' },
-    'DateTimeConstraints': {dataType:'datetime', rules:[], allowFuture:false, earliestValue:'', latestValue:'' },
-    'TimeConstraints': {dataType:'time', rules:[]},
-    'IntegerConstraints': {dataType:'integer', rules:[], minValue:0, maxValue:255, unit: '', step:1.0},
-    'DecimalConstraints': {dataType:'decimal', rules: [], minValue:0, maxValue:255, unit: '', step:1.0},
-    'DurationConstraints': {dataType: 'duration', rules: [], minValue:0, maxValue:255, unit: '', step:1.0},
-    'StringConstraints': {dataType:'string', rules: [], minLength:0, maxLength:255, pattern:'',patternPlaceholder:'',patternErrorMessage:''},
-    'MultiValueConstraints': {dataType:'string', enumeration:[], rules:[], allowOther:false, allowMultiple:false},
-    'BloodPressureConstraints': {dataType:'bloodpressure', rules:[]},
-    'HeightConstraints': {dataType:'height', rules:[], forInfant:false},
-    'WeightConstraints': {dataType:'weight', rules:[], forInfant:false},
+    'BooleanConstraints': {dataType:'boolean'},
+    'DateConstraints': {dataType:'date', allowFuture:false, earliestValue:'', latestValue:'' },
+    'DateTimeConstraints': {dataType:'datetime', allowFuture:false, earliestValue:'', latestValue:'' },
+    'TimeConstraints': {dataType:'time'},
+    'IntegerConstraints': {dataType:'integer', minValue:0, maxValue:255, unit: '', step:1.0},
+    'DecimalConstraints': {dataType:'decimal', minValue:0, maxValue:255, unit: '', step:1.0},
+    'DurationConstraints': {dataType: 'duration', minValue:0, maxValue:255, unit: '', step:1.0},
+    'StringConstraints': {dataType:'string', minLength:0, maxLength:255, pattern:'',patternPlaceholder:'',patternErrorMessage:''},
+    'MultiValueConstraints': {dataType:'string', enumeration:[], allowOther:false, allowMultiple:false},
+    'BloodPressureConstraints': {dataType:'bloodpressure'},
+    'HeightConstraints': {dataType:'height', forInfant:false},
+    'WeightConstraints': {dataType:'weight', forInfant:false},
 });
 var UI_HINT_FOR_CONSTRAINTS = Object.freeze({
     'BooleanConstraints': 'checkbox',
@@ -135,7 +136,7 @@ var UI_HINT_FOR_CONSTRAINTS = Object.freeze({
 });
 
 var SURVEY_FIELDS = ['name','createdOn','guid','identifier','published','version','copyrightNotice'];
-var ELEMENT_FIELDS = ['prompt','promptDetail', 'title', 'uiHint','identifier','fireEvent'];
+var ELEMENT_FIELDS = ['prompt','promptDetail', 'title', 'uiHint','identifier','fireEvent','rules'];
 
 function getConstraints(type) {
     var con = {type: type};
@@ -155,7 +156,8 @@ function makeObservable(obj, field) {
     }
     // Note we're copying the array when passing it to the observable, or it gets shared between properties,
     // enumeration in particular (rules is remodeled)
-    return (field === "rules" || field === "enumeration") ? ko.observableArray([].concat(obj[field])) : ko.observable(obj[field]);
+    return (field === "rules" || field === "enumeration") ? 
+        ko.observableArray([].concat(obj[field])) : ko.observable(obj[field]);
 }
 
 /**
@@ -173,18 +175,8 @@ function elementToObservables(element) {
         Object.keys(getConstraints(con.type)).forEach(function(field) {
             con[field+"Obs"] = makeObservable(con, field);
         });
-        // ... and then the rules
-        con.rulesObs(con.rules.map(function(rule) {
-            return {
-                operator: ko.observable(rule.operator),
-                value: ko.observable(rule.value),
-                endSurvey: ko.observable(!!rule.endSurvey),
-                skipTo: ko.observable(rule.skipTo)
-            };
-        }));
         element.constraintsTypeObs = ko.observable(con.type);
     }
-
     element.changeUiHint = function(domEl) {
         var newHint = domEl.getAttribute("data-type");
         element.uiHintObs(newHint);
@@ -198,8 +190,6 @@ function elementToObservables(element) {
  * @returns {*}
  */
 function observablesToElement(element) {
-    // because we've hidden the ability to set a UIHint, we need to adjust here based on the settings for the
-    // MultiValue type:
     var con = element.constraints;
     if (con && con.typeObs() === "MultiValueConstraints" && con.allowMultipleObs()) {
         element.uiHintObs(UI_HINT_OPTIONS.checkbox.value);
@@ -210,15 +200,6 @@ function observablesToElement(element) {
     if (con) {
         Object.keys(getConstraints(con.type)).forEach(function(field) {
             updateModelField(con, field);
-        });
-        element.constraints.rules = con.rulesObs().map(function(rule) {
-            var newRule = {operator: rule.operator(), value: rule.value()};
-            if (rule.endSurvey()) {
-                newRule.endSurvey = true;
-            } else {
-                newRule.skipTo = rule.skipTo();
-            }
-            return newRule;
         });
     }
     return element;
@@ -259,11 +240,11 @@ function changeElementType(oldElement, newType) {
     });
     // except for UI hint which is bound to constraints, but not in constraints...
     newElement.uiHintObs(newElement.uiHint);
+    newElement.rulesObs(oldElement.rulesObs());
 
     var bothQuestions = (oldElement.type !== "SurveyInfoScreen" && 
                          newElement.type !== "SurveyInfoScreen");
     if (bothQuestions) {
-        newElement.constraints.rulesObs(oldElement.constraints.rulesObs());
         // Because they are not going to be swapped out...
         oldElement.uiHint = newElement.uiHint;
         oldElement.uiHintObs(newElement.uiHintObs());
@@ -317,24 +298,39 @@ module.exports = {
     initConstraintsVM: function(vm, params) {
         vm.element = params.element;
         vm.elementsObs = params.elementsObs;
+        vm.rulesObs = params.element.rulesObs;
         vm.formatDate = fn.formatDate;
         vm.formatDateTime = fn.formatDateTime;
+        vm.operatorOptions = OPERATOR_OPTIONS;
+        vm.operatorLabel = utils.makeOptionLabelFinder(OPERATOR_OPTIONS);
+        vm.hasRules = function() {
+            return (vm.rulesObs() !== null && vm.rulesObs().length > 0);
+        };
+        vm.editRules = function() {
+            root.openDialog('rules_editor', {parentViewModel: vm, element: vm.element});
+        };
+        vm.formatRule = function(rule) {
+            var array = [];
+            array.push(vm.operatorLabel(rule.operator));
+            if (rule.operator !== 'de' && rule.operator !== 'always') {
+                array.push(rule.value);
+            }
+            if (rule.endSurvey) {
+                array.push("end the survey");
+            } else if (rule.skipTo) {
+                array.push("skip to &ldquo;"+rule.skipTo+"&rdquo;");
+            } else if (rule.assignDataGroup) {
+                array.push("add data group &ldquo;"+rule.assignDataGroup+"&rdquo;");
+            }
+            return array.join(' ');
+        };
 
         if (params.element.type === "SurveyQuestion") {
-            vm.hasRules = function() {
-                return (vm.rulesObs() !== null && vm.rulesObs().length > 0);
-            };
             vm.getUiHintOptions = function(dataType) {
                 return SELECT_OPTIONS_BY_TYPE[vm.element.constraints.type];
             };
-            vm.editRules = function() {
-                root.openDialog('rules_editor', {parentViewModel: vm, element: vm.element});
-            };
-
             vm.durationOptions = DURATION_OPTIONS;
             vm.durationLabel = utils.makeOptionLabelFinder(DURATION_OPTIONS);
-            
-            vm.rulesObs = params.element.constraints.rulesObs;
             vm.uiHintObs = params.element.uiHintObs;
             vm.fireEventObs = params.element.fireEventObs;
             vm.uiHintOptions = SELECT_OPTIONS_BY_TYPE[params.element.constraints.type];
@@ -343,9 +339,6 @@ module.exports = {
             vm.dataTypeLabel = utils.makeOptionLabelFinder(vm.dataTypeOptions);
             vm.unitOptions = UNIT_OPTIONS;
             vm.unitLabel = utils.makeOptionLabelFinder(UNIT_OPTIONS);
-
-            vm.operatorOptions = OPERATOR_OPTIONS;
-            vm.operatorLabel = utils.makeOptionLabelFinder(OPERATOR_OPTIONS);
         }
     }
 };

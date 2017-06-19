@@ -1,7 +1,4 @@
-var ko = require('knockout');
 var root = require('../../root');
-var fn = require('../../functions');
-var utils = require('../../utils');
 var binder = require('../../binder');
 
 module.exports = function(params) {

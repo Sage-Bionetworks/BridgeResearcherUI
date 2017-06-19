@@ -1,18 +1,9 @@
 <div data-bind="visible: !$parent.hasRules()">
     <span class="link" data-bind="click: $parent.editRules">Add Rules&hellip;</span>
 </div>
-<div data-bind="visible: $parent.hasRules()">
+<div data-bind="visible: $parent.hasRules(), attr: {class: cssTokensObs}">
     <div data-bind="foreach: rulesObs">
-        <div>
-            <span data-bind="visible: !endSurvey()">
-                skip to <span data-bind="text: $data.skipTo()"></span> when answer is 
-            </span>
-            <span data-bind="visible: endSurvey()">
-                end the survey when answer is 
-            </span>
-            <span data-bind="text: $parents[1].operatorLabel($data.operator())"></span>
-            <span data-bind="visible: $data.operator() != 'de', text: $data.value()"></span>
-        </div>
+        <div data-bind="html: $parents[1].formatRule($data)"></div>
     </div>
     <div>
         <span class="link" data-bind="click: $parent.editRules">Edit Rules</span>
