@@ -67,10 +67,10 @@ module.exports = function(params) {
 
     self.linkedVersionObs.subscribe(function(newValue) {
         if (self.metadata.surveyGuid) {
+            self.schemaRevisionObs(null);
             self.surveyCreatedOnObs(newValue);
-            self.schemaIdObs(null);
         } else if (self.metadata.schemaId) {
-            self.schemaIdObs(newValue);
+            self.schemaRevisionObs(newValue);
             self.surveyCreatedOnObs(null);
         }
     });

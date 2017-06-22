@@ -10,17 +10,27 @@ var FAILURE_HANDLER = failureHandler({transient:true});
 var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
 var TIMEOUT_ERROR = "The request timed out. Please verify you have an internet connection, and try again.";
 var ROLE_ERROR = 'You do not appear to be a developer, researcher, or admin.';
+var PERM_ERROR = 'You do not have permissions to perform that action.';
 var pendingControl = null;
 toastr.options = config.toastr;
 
 var statusHandlers = {
       0: localError,
     400: badResponse,
+    403: notAllowed,
     404: notFound,
     409: badResponse,
     412: notAdmin,
     500: serverError
 };
+function notAllowed(response, params) {
+        var root = require('./root'); // insane, but has to happen here.
+        document.location = "#/reports/uploads";
+        root.changeView('dailyUploads', {});
+        setTimeout(function() {
+            toastr.error(PERM_ERROR);
+        },500);
+}
 function badResponse(response, params) {
     // If the error does not return JSON, we have to hunt around for what happened, 
     // and that gets sorted out here.

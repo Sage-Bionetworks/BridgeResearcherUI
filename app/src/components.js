@@ -296,6 +296,7 @@ reg('field_definition', {
     template: require('./pages/schema/field_definition.html')
 });
 reg('SurveyInfoScreen', {
+    viewModel: require('./pages/survey/survey_info'),
     template: require('./pages/survey/survey_info.html')
 });
 reg('SurveyQuestion', {
@@ -305,6 +306,7 @@ reg('constraints-label', {
     template: require('./pages/survey/constraints/constraints_label.html')
 });
 reg('ui-rules', {
+    viewModel: require('./pages/survey/constraints/ui_rules'),
     template: require('./pages/survey/constraints/ui_rules.html')
 });
 reg('ui-checkbox', {

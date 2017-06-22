@@ -1,4 +1,5 @@
 var root = require('../../root');
+var serverService = require('../../services/server_service');
 
 module.exports = function(params) {
     var self = this;
@@ -7,6 +8,7 @@ module.exports = function(params) {
     self.isNewObs = params.isNewObs;
     self.isPublicObs = params.isPublicObs;
     self.userIdObs = params.userIdObs;
+    self.statusObs = params.statusObs;
 
     self.linkMaker = function(postfix) {
         return root.userPath() + self.userIdObs() + '/' + postfix;

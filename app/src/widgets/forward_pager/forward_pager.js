@@ -53,13 +53,15 @@ module.exports = function(params) {
         var args = {offsetKey: offsetKey};
 
         loadingFunc(args).then(function(response) {
-            history.push(nextOffset);
-            nextOffset = response.offsetKey;
-            self.showLoaderObs(false);
-            self.hasPreviousObs(history.length > 1);
-            self.hasNextObs(response.hasNext);
-            self.currentPageObs(history.length-1);
-            pendingRequest = false;
+            if (response) {
+                history.push(nextOffset);
+                nextOffset = response.offsetKey;
+                self.showLoaderObs(false);
+                self.hasPreviousObs(history.length > 1);
+                self.hasNextObs(response.hasNext);
+                self.currentPageObs(history.length-1);
+                pendingRequest = false;
+            }
             return response;
         }).catch(utils.failureHandler());
     }

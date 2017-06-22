@@ -172,7 +172,7 @@ function isSupportedUser() {
 function cacheParticipantName(response) {
     if (response && response.id) {
         var name = fn.formatName(response);
-        cache.set(response.id+':name', {name:name,externalId:response.externalId});
+        cache.set(response.id+':name', {name:name,externalId:response.externalId,status:response.status});
     }
     return response;
 }

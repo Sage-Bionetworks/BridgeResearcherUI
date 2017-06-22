@@ -25,15 +25,16 @@
                 <a class="item" data-type="BloodPressureConstraints">Blood Pressure</a>     
             </div>
         </div>
-    </span>    
+    </span>
     <table class="element-content-constraints">
-        <tbody>
-            <tr>
-                <td class="element-content-constraints-label">
-                    <p style="font-style:italic">There are no constraints for information screens.</p>
-                </td>
-            </tr>
-        </tbody>
-    </table>    
+        <tr>
+            <td class="element-content-constraints-label">
+                <label>Rules</label>
+            </td>
+            <td class="element-content-constraints-control" width="100%">
+                <ui-rules params="rulesObs: rulesObs, elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>
+            </td>
+        </tr>
+    </table>
 </div>
 
