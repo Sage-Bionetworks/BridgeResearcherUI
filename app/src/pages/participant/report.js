@@ -14,6 +14,10 @@ function firstDayOfMonth(year, month) {
 function lastDayOfMonth(year, month) {
     return new Date(year, month+1, 0).toISOString().split("T")[0];
 }
+var failureHandler = utils.failureHandler({
+    redirectTo: "participants",
+    redirectMsg: "Participant not found"
+});
 
 module.exports = function(params) {
     var self = this;
@@ -30,12 +34,14 @@ module.exports = function(params) {
         .obs('title', '&#160;')
         .obs('identifier', params.identifier)
         .obs('formatMonth')
+        .obs('status')
         .obs('showLoader', false);
 
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(root.isPublicObs() ? part.name : part.externalId);
         self.nameObs(root.isPublicObs() ? part.name : part.externalId);
-    }).catch(utils.failureHandler());
+        self.statusObs(part.status);
+    }).catch(failureHandler);
     
     self.isPublicObs = root.isPublicObs;
     self.isDeveloper = root.isDeveloper;
@@ -117,10 +123,7 @@ module.exports = function(params) {
             .then(fn.handleSort('items', 'date', true))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))
             .then(fn.handleStaticObsUpdate(self.showLoaderObs, false))
-            .catch(utils.failureHandler({
-                redirectTo: "participants",
-                redirectMsg: "Participant not found."
-            }));
+            .catch(failureHandler);
     }
     load();
 };

@@ -31,6 +31,7 @@ module.exports = function(params) {
         .obs('userId', params.userId)
         .obs('name', '')
         .obs('title', '&#160;')
+        .obs('status')
         .obs('languages', null, joiner)
         .obs('userDataGroups', null, joiner)
         .obs('signedInOn', null, dater)
@@ -48,6 +49,7 @@ module.exports = function(params) {
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(root.isPublicObs() ? part.name : part.externalId);
         self.nameObs(root.isPublicObs() ? part.name : part.externalId);
+        self.statusObs(part.status);
     }).then(requestInfo)
         .then(binder.update())
         .catch(utils.failureHandler());

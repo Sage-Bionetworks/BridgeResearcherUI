@@ -6,6 +6,10 @@ var root = require('../../root');
 var fn = require('../../functions');
 
 var PAGE_SIZE = 25;
+var failureHandler = utils.failureHandler({
+    redirectTo: "participants",
+    redirectMsg: "Participant not found"
+});
 
 module.exports = function(params) {
     var self = this;
@@ -27,12 +31,14 @@ module.exports = function(params) {
         .obs('uploadsEndDate', new Date(end))
         .obs('warn', false)
         .obs('isNew', false)
+        .obs('status')
         .obs('title', '&#160;');
 
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(root.isPublicObs() ? part.name : part.externalId);
         self.nameObs(root.isPublicObs() ? part.name : part.externalId);
-    }).catch(utils.failureHandler());
+        self.statusObs(part.status);
+    }).catch(failureHandler);
 
     fn.copyProps(self, root, 'isPublicObs');
     fn.copyProps(self, fn, 'formatDateTime');
@@ -136,8 +142,10 @@ module.exports = function(params) {
         return '';
     }
     function processUploads(response) {
-        response.items.map(processItem);
-        self.itemsObs(response.items);
+        if (response.items) {
+            response.items.map(processItem);
+            self.itemsObs(response.items);
+        }
         return response;
     }
     
@@ -148,6 +156,7 @@ module.exports = function(params) {
         args.endTime = dateToString(self.uploadsEndDateObs());
 
         return serverService.getParticipantUploads(params.userId, args)
-            .then(processUploads);
+            .then(processUploads)
+            .catch(failureHandler);
     };
 };

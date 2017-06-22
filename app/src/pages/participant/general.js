@@ -44,7 +44,8 @@ module.exports = function(params) {
         .bind('roles[]', null, fn.formatRoles, fn.persistRoles)
         .obs('title', (params.userId === "new") ? "New participant" : "&#160;");
     
-    self.isPublicObs = root.isPublicObs;
+    fn.copyProps(self, root, 'isPublicObs', 'isAdmin');
+    
     if (!self.isNewObs()) {
         serverService.getParticipantName(self.userIdObs()).then(function(part) {
             self.titleObs(root.isPublicObs() ? part.name : part.externalId);
@@ -128,7 +129,7 @@ module.exports = function(params) {
         }
 
         utils.startHandler(vm, event);
-        saveParticipant(participant)
+        return saveParticipant(participant)
             .then(updateName)
             .then(utils.successHandler(vm, event, "Participant created."))
             .catch(failureHandler);

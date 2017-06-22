@@ -281,6 +281,7 @@ var formatDate = seq(checkArgs, asDate, formatDateString, blankInvalidDateString
 var formatDateTime = seq(checkArgs, asDate, formatDateTimeString, blankInvalidDateString);
 
 module.exports = {
+    asDate: asDate,
     copyProps: copyProps,
     dateTimeString: dateTimeString,
     deleteUnusedProperties: deleteUnusedProperties,

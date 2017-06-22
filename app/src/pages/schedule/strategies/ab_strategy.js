@@ -1,6 +1,6 @@
 var ko = require('knockout');
 var utils = require('../../../utils');
-var utils = require('../../../functions');
+var fn = require('../../../functions');
 var scheduleUtils = require('../schedule_utils');
 var root = require('../../../root');
 

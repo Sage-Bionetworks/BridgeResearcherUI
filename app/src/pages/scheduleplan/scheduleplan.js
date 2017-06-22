@@ -34,7 +34,11 @@ module.exports = function(params) {
     self.schedulePlanTypeObs.subscribe(function(newType) {
         if (self.strategyObs.callback()) {
             var newStrategy = scheduleUtils.newStrategy(newType, self.strategyObs.callback());
-            self.strategyObs(newStrategy);
+            // In theory this should be happening after the page has re-rendered, but this is
+            // not true. Without this timeout, the criteria or group arrays won't be rendered.
+            setTimeout(function() {
+                self.strategyObs(newStrategy);
+            }, 1);
         }
     });
 

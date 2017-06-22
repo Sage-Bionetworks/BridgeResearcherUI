@@ -18,12 +18,14 @@ module.exports = function(params) {
         .obs('userId', params.userId)
         .obs('items[]', [])
         .obs('isNew', false)
+        .obs('status')
         .obs('title', '&#160;');
 
     fn.copyProps(self, root, 'isPublicObs');
 
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(root.isPublicObs() ? part.name : part.externalId);
+        self.statusObs(part.status);
     }).catch(failureHandler);
 
     tables.prepareTable(self, {name:'activitie'});

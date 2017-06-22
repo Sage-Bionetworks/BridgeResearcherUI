@@ -28,9 +28,12 @@
         <i class="world icon"></i> Request Info
     </a>
     
-    <div class="right menu" data-bind="visible: $data.showEnableAccountObs && $data.showEnableAccountObs()">
-        <div class="item">
-            <span class="ui red text "><i class="warning sign icon"></i> Disabled</span>
+    <div class="right menu">
+        <div class="item" data-bind="visible: statusObs() === 'disabled'">
+            <span class="ui red tiny label"><i class="warning sign icon"></i> Disabled</span>
+        </div>
+        <div class="item" data-bind="visible: statusObs() === 'unverified'">
+            <span class="ui orange tiny label"><i class="warning sign icon"></i> Unverified</span>
         </div>
     </div>
 </div>
