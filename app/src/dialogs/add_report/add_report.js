@@ -1,6 +1,7 @@
 var bind = require('../../binder');
 var serverService = require('../../services/server_service');
 var utils = require('../../utils');
+var fn = require('../../functions');
 var BridgeError = require('../../error');
 
 module.exports = function(params) {
@@ -9,7 +10,11 @@ module.exports = function(params) {
     var binder = bind(self)
         .obs('showIdentifier', typeof params.identifier === "undefined")
         .bind('identifier', params.identifier)
-        .bind('date', new Date().toISOString().split("T")[0])
+        .bind('date', new Date().toISOString().split("T")[0], function() {
+
+        }, function(value) {
+            return fn.asDate(value).toISOString().split("T")[0];
+        })
         .bind('data');
 
     self.close = params.closeDialog;
@@ -43,7 +48,7 @@ module.exports = function(params) {
         addReport(entry)
             .then(self.close)
             .then(utils.successHandler(vm, event))
-            .catch(utils.dialogFailureHandler2());
+            .catch(utils.failureHandler());
     };
     
 };

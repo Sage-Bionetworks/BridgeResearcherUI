@@ -14,12 +14,14 @@ module.exports = function(params) {
         .obs('userId', params.userId)
         .obs('title', '&#160;')
         .obs('isRegistered', false)
+        .obs('status')
         .obs('notificationsEnabled', false)
         .obs('items[]');
 
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(root.isPublicObs() ? part.name : part.externalId);
         self.nameObs(root.isPublicObs() ? part.name : part.externalId);
+        self.statusObs(part.status);
     }).catch(utils.failureHandler());
 
     tables.prepareTable(self, {name:'notification registration'});

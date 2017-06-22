@@ -29,6 +29,7 @@ module.exports = function(params) {
         .obs('items[]')
         .obs('isNew', false)
         .obs('noConsent', true)
+        .obs('status')
         .obs('title', '&#160;');
 
     tables.prepareTable(self, {name:'consent'});
@@ -36,6 +37,7 @@ module.exports = function(params) {
     self.isPublicObs = root.isPublicObs;
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(root.isPublicObs() ? part.name : part.externalId);
+        self.statusObs(part.status);
     }).catch(failureHandler);
 
     self.resendConsent = function(vm, event) {

@@ -44,6 +44,6 @@ module.exports = function(params) {
         addReport(entry)
             .then(self.close)
             .then(utils.successHandler(vm, event))
-            .catch(utils.dialogFailureHandler2());
+            .catch(utils.failureHandler());
     };
 };

@@ -49,7 +49,8 @@
                 <td style="padding: 0; text-align:right">
                     <button data-bind="visible: $data.status === 'unverified', click: $component.resendEmailVerification"
                         class="ui basic compact mini button">Resend email verification</button>
-                    <button data-bind="visible: $data.status === 'unverified', click: $component.enableAccount"
+                    <button data-bind="visible: $data.status === 'unverified' && $component.isAdmin(), 
+                        click: $component.enableAccount"
                         class="ui basic compact mini button">Enable account</button>
                     <span style="padding-right:1rem" data-bind="visible: $data.status === 'disabled'">
                         <i class="warning sign icon"></i>Disabled</span>

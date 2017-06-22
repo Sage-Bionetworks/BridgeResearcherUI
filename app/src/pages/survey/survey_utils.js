@@ -240,7 +240,6 @@ function changeElementType(oldElement, newType) {
     });
     // except for UI hint which is bound to constraints, but not in constraints...
     newElement.uiHintObs(newElement.uiHint);
-    newElement.rulesObs(oldElement.rulesObs());
 
     var bothQuestions = (oldElement.type !== "SurveyInfoScreen" && 
                          newElement.type !== "SurveyInfoScreen");

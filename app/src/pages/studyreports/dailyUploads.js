@@ -53,23 +53,28 @@ module.exports = function() {
         var requested = [];
         var duplicate = [];
         var succeeded = [];
+        var validation_failed = [];
         response.items.forEach(function(item) {
             labels.push(formatDate(item.date));
             succeeded.push(item.data.succeeded || 0);
             requested.push(item.data.requested || 0);
             duplicate.push(item.data.duplicate || 0);
+            validation_failed.push(item.data.validation_failed || 0);
         });
         var max = Math.max.apply(null, succeeded);
 
         var datasets = [];
         if (Math.max.apply(null,succeeded) > 0) {
-            datasets.push(dataSet('Successful', succeeded, 'rgba(75,192,192,1.0)'));
+            datasets.push(dataSet('Successful', succeeded, '#21ba45'));
         }
         if (Math.max.apply(null,requested) > 0) {
-            datasets.push(dataSet('Failed Attempts', requested, 'rgba(54,162,235,1.0)'));
+            datasets.push(dataSet('Failed (Started, Not Finished)', requested, '#6435c9'));
+        }
+        if (Math.max.apply(null,validation_failed) > 0) {
+            datasets.push(dataSet('Failed (Data Invalid)', validation_failed, '#db2828'));
         }
         if (Math.max.apply(null,duplicate) > 0) {
-            datasets.push(dataSet('Duplicates', duplicate, 'rgba(255,206,86,1.0)'));
+            datasets.push(dataSet('Duplicates', duplicate, '#fbbd08'));
         }
         var stepSize = Math.pow(10, Math.floor(Math.log10(max)));
 
