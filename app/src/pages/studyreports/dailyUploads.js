@@ -112,3 +112,6 @@ module.exports = function() {
     }
     loadChart('2');
 };
+module.exports.prototype.dispose = function() {
+    this.isActive.dispose();
+};

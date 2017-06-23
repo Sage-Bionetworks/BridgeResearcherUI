@@ -12,3 +12,6 @@ module.exports = function(params) {
         }).join(' ');
     });
 };
+module.exports.prototype.dispose = function() {
+    this.cssTokensObs.dispose();
+};

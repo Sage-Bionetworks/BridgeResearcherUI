@@ -175,3 +175,6 @@ module.exports = function(params) {
         .then(binder.update())
         .catch(failureHandler);
 };
+module.exports.prototype.dispose = function() {
+    this.revisionLabel.dispose();
+};

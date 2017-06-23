@@ -35,3 +35,6 @@ module.exports = function(params) {
             }
         });
 };
+module.exports.prototype.dispose = function() {
+    this.revisionLabel.dispose();
+};

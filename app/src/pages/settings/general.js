@@ -70,3 +70,6 @@ module.exports = function() {
         .then(updateObservers)
         .catch(utils.failureHandler());
 };
+module.exports.prototype.dispose = function() {
+    this.minAgeLabel.dispose();
+};

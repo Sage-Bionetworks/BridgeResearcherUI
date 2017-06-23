@@ -47,7 +47,7 @@ module.exports = function(params) {
             }
         }
     }
-    ko.computed(updateSubFields);
+    self.computedUpdateSubFields = ko.computed(updateSubFields);
     self.amountObs.subscribe(updateFieldObs);
     self.durationObs.subscribe(updateFieldObs);
 
@@ -62,4 +62,7 @@ module.exports = function(params) {
             self.fieldObs(duration.replace('*',amt));
         }
     }
+};
+module.exports.prototype.dispose = function() {
+    this.computedUpdateSubFields.dispose();
 };

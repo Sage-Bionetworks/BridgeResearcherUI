@@ -18,12 +18,12 @@ module.exports = function() {
         .bind('usesCustomExportSchedule')
         .bind('disableExport');
 
+    self.isPublicObs = root.isPublicObs;
+
     self.isLinked = ko.computed(function() {
         return fn.isNotBlank(self.synapseProjectIdObs()) || 
                fn.isNotBlank(self.synapseDataAccessTeamIdObs());
     });
-
-    self.isPublicObs = root.isPublicObs;
     self.projectLinkObs = ko.computed(function() {
         var value = self.synapseProjectIdObs();
         return (value) ? (BASE+"Synapse:"+value) : null;
@@ -56,4 +56,9 @@ module.exports = function() {
         .then(binder.assign('study'))
         .then(binder.update())
         .catch(utils.failureHandler());
+};
+module.exports.prototype.dispose = function() {
+    this.isLinked.dispose();
+    this.projectLinkObs.dispose();
+    this.teamLinkObs.dispose();
 };
