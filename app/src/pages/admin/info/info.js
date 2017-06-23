@@ -42,3 +42,6 @@ module.exports = function() {
         .then(binder.update())
         .catch(utils.failureHandler());
 };
+module.exports.prototype.dispose = function() {
+    this.accountLimitLabel.dispose();
+};

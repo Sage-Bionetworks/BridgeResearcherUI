@@ -39,7 +39,15 @@ function errorFieldKeyToId(errorKey) {
     return errorKey.replace(/[\s{\[\]]/g,"").replace(/\./g,"_").replace(/}/g,'');
 }
 
+var errorComponentStack = [];
+
+function isNotSelf(self) {
+    return errorComponentStack[errorComponentStack.length-1] !== self;
+}
+
 module.exports = function() {
+    errorComponentStack.push(this);
+    console.log("creating errors component", errorComponentStack);
     var self = this;
 
     var errorQueue = [];
@@ -51,6 +59,9 @@ module.exports = function() {
     });
     
     ko.postbox.subscribe("showErrors", function(payload) {
+        if (isNotSelf(self)) {
+            return;
+        }
         if (payload.message && typeof payload.errors === "undefined") {
             toastr.error(payload.message);
             return;
@@ -100,6 +111,9 @@ module.exports = function() {
         self.errorsObs.pushAll(globalErrors);
     });
     ko.postbox.subscribe("clearErrors", function() {
+        if (isNotSelf(self)) {
+            return;
+        }
         self.errorsObs.removeAll();
         toastr.clear();
         errorQueue.forEach(function(field) {
@@ -111,4 +125,9 @@ module.exports = function() {
         errorQueue = [];
         errorLabelQueue = [];
     });
+};
+module.exports.prototype.dispose = function() {
+    errorComponentStack.pop(this);
+    this.displayObs.dispose();
+    console.log("disposing errors component", errorComponentStack);
 };

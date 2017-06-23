@@ -85,3 +85,8 @@ module.exports = function(params) {
             .catch(utils.failureHandler());
     };
 };
+module.exports.prototype.dispose = function() {
+    this.canGoPreviousObs.dispose();
+    this.canGoNextObs.dispose();
+    this.canCopyObs.dispose();
+};

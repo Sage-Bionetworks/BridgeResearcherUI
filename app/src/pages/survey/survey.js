@@ -134,3 +134,6 @@ module.exports = function(params) {
             .catch(notFound);
     }
 };
+module.exports.prototype.dispose = function() {
+    this.titleObs.dispose();
+};
