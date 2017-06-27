@@ -109,16 +109,13 @@
             border: 1px solid #e5e5e5;
         }
 .ui.constraints.grid label {
-    /*outline: 1px solid red;*/
     display: inline-block;
     width: 9rem;
 }
 .ui.grid .ui.checkbox label {
-    /*outline: 1px solid green;*/
     display: inline;
 }
 .ui.constraints.grid .field:not(:last-child) {
-    /*outline: 1px solid purple;*/
     padding-bottom: .5rem;
 }
 .ui.constraints.grid select {

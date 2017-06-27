@@ -111,10 +111,8 @@ module.exports = function(params) {
     }    
     function uploadSchema() {
         if (self.isNewObs()) {
-            console.log("Creating new schema at revision", self.schema.revision, "version");
             return serverService.createUploadSchema(self.schema);
         } else {
-            console.log("Updating schema at revision", self.schema.revision, "version", self.schema.version);
             return serverService.updateUploadSchema(self.schema);
         }
     }
@@ -186,7 +184,6 @@ module.exports = function(params) {
     }
 
     loadSchema().then(binder.assign('schema'))
-        .then(fn.log("loaded schema"))
         .then(binder.update())
         .catch(failureHandler);
 };

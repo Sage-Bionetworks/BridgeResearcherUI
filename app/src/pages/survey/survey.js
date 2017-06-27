@@ -89,8 +89,6 @@ module.exports = function(params) {
         surveyUtils.observablesToElement(element);
 
         var newElement = JSON.parse(JSON.stringify(element));
-        console.log("newElement", newElement);
-
         if (newElement.type === "SurveyInfoScreen") {
             newElement.title = "[Copy] " + newElement.title;
         } else {
