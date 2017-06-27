@@ -82,12 +82,22 @@ module.exports = function(params) {
         if (newType !== oldElement.type) {
             self.elementsObs.splice(index, 1, newElement);
         }
+        scrollTo(index);
     };
     self.copyElement = function(element) {
         var index = self.elementsObs.indexOf(element);
         surveyUtils.observablesToElement(element);
 
         var newElement = JSON.parse(JSON.stringify(element));
+        console.log("newElement", newElement);
+
+        if (newElement.type === "SurveyInfoScreen") {
+            newElement.title = "[Copy] " + newElement.title;
+        } else {
+            newElement.prompt = "[Copy] " + newElement.prompt;
+        }
+        newElement.identifier = fn.incrementNumber(newElement.identifier);
+        
         surveyUtils.elementToObservables(newElement);
         self.elementsObs.splice(index+1, 0, newElement);
         scrollTo(index+1);

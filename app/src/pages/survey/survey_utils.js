@@ -49,7 +49,9 @@ var OPERATOR_OPTIONS = Object.freeze([
     {value: 'le', label: 'When value <='},
     {value: 'ge', label: 'When value >='},
     {value: 'de', label: 'When question is declined'},
-    {value: 'always', label: 'Always'}
+    {value: 'always', label: 'Always'},
+    {value: 'any', label: 'If user has any groups'},
+    {value: 'all', label: 'If user has all groups'}
 ]);
 var uiHintLabels = {
     'checkbox':'Checkbox',
@@ -90,8 +92,10 @@ var SELECT_OPTIONS_BY_TYPE = Object.freeze({
     'WeightConstraints':[UI_HINT_OPTIONS.weight]
 });
 var ELEMENT_TEMPLATE = Object.freeze({
-    'SurveyInfoScreen': {type:'SurveyInfoScreen', title:'', prompt:'', promptDetail:'', identifier:'', rules: ''},
-    'SurveyQuestion': {type:'SurveyQuestion', fireEvent:false, 'uiHint':'', prompt:'', promptDetail:'', identifier:'', rules: ''}
+    'SurveyInfoScreen': {type:'SurveyInfoScreen', title:'', prompt:'', promptDetail:'', 
+        identifier:'', beforeRules: [], afterRules: []},
+    'SurveyQuestion': {type:'SurveyQuestion', fireEvent:false, 'uiHint':'', prompt:'', 
+        promptDetail:'', identifier:'', beforeRules: [], afterRules: []}
 });
 var DATA_TYPE_OPTIONS = Object.freeze([
     {label: 'String', value: 'string'},
@@ -136,7 +140,7 @@ var UI_HINT_FOR_CONSTRAINTS = Object.freeze({
 });
 
 var SURVEY_FIELDS = ['name','createdOn','guid','identifier','published','version','copyrightNotice'];
-var ELEMENT_FIELDS = ['prompt','promptDetail', 'title', 'uiHint','identifier','fireEvent','rules'];
+var ELEMENT_FIELDS = ['prompt','promptDetail', 'title', 'uiHint','identifier','fireEvent','beforeRules','afterRules'];
 
 function getConstraints(type) {
     var con = {type: type};
@@ -156,8 +160,12 @@ function makeObservable(obj, field) {
     }
     // Note we're copying the array when passing it to the observable, or it gets shared between properties,
     // enumeration in particular (rules is remodeled)
-    return (field === "rules" || field === "enumeration") ? 
-        ko.observableArray([].concat(obj[field])) : ko.observable(obj[field]);
+    if (['rules','beforeRules','afterRules','enumeration'].indexOf(field) > -1) {
+        var array = (obj[field]) ? [].concat(obj[field]) : [];
+        return ko.observableArray(array);
+    } else {
+        return ko.observable(obj[field]);
+    }
 }
 
 /**
@@ -297,16 +305,22 @@ module.exports = {
     initConstraintsVM: function(vm, params) {
         vm.element = params.element;
         vm.elementsObs = params.elementsObs;
-        vm.rulesObs = params.element.rulesObs;
+        vm.beforeRulesObs = params.element.beforeRulesObs;
+        vm.afterRulesObs = params.element.afterRulesObs;
         vm.formatDate = fn.formatDate;
         vm.formatDateTime = fn.formatDateTime;
         vm.operatorOptions = OPERATOR_OPTIONS;
+        vm.collectionName = params.collectionName;
         vm.operatorLabel = utils.makeOptionLabelFinder(OPERATOR_OPTIONS);
-        vm.hasRules = function() {
-            return (vm.rulesObs() !== null && vm.rulesObs().length > 0);
+        vm.hasRules = function(fieldName) {
+            return (vm[fieldName]() !== null && vm[fieldName]().length > 0);
         };
-        vm.editRules = function() {
-            root.openDialog('rules_editor', {parentViewModel: vm, element: vm.element});
+        vm.editRules = function(fieldName) {
+            return function() {
+                root.openDialog('rules_editor', {
+                    parentViewModel: vm, element: vm.element, fieldName: fieldName
+                });
+            };
         };
         vm.formatRule = function(rule) {
             var array = [];
@@ -314,12 +328,21 @@ module.exports = {
             if (rule.operator !== 'de' && rule.operator !== 'always') {
                 array.push(rule.value);
             }
+            if (rule.dataGroups && rule.dataGroups.length) {
+                array.push(rule.dataGroups.map(function(group) {
+                    return "&ldquo;"+group+"&rdquo;";
+                }).join(", "));
+            }
             if (rule.endSurvey) {
                 array.push("end the survey");
             } else if (rule.skipTo) {
                 array.push("skip to &ldquo;"+rule.skipTo+"&rdquo;");
             } else if (rule.assignDataGroup) {
                 array.push("add data group &ldquo;"+rule.assignDataGroup+"&rdquo;");
+            } else if (rule.displayIf) {
+                array.push("then display screen");
+            } else if (rule.displayUnless) {
+                array.push("then do not display screen");
             }
             return array.join(' ');
         };

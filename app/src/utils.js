@@ -63,7 +63,7 @@ function notFound(response, params) {
     }
 }
 function serverError(response) {
-    toastr.error(JSON.stringify(response.responseJSON));
+    toastr.error(JSON.stringify(response.responseJSON.message));
 }
 function errorMessageHandler(message, params) {
     if (params.transient) {

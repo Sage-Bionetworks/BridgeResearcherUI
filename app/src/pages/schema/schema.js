@@ -26,12 +26,15 @@ module.exports = function(params) {
 
     var binder = bind(self)
         .obs('isNew', params.schemaId === "new")
+        .obs('showError', false)
+        .obs('index', 0)
         .bind('schemaId', params.schemaId)
         .bind('schemaType')
+        .bind('published', false)
         .bind('revision', params.revision ? params.revision : null)
-        .obs('showError', false)
         .bind('name', '')
-        .obs('index', 0)
+        .bind('moduleId')
+        .bind('moduleVersion')
         .bind('iosMin', '', minIos.fromObject, minIos.toObject)
         .bind('iosMax', '', maxIos.fromObject, maxIos.toObject)
         .bind('androidMin', '', minAnd.fromObject, minAnd.toObject)
@@ -41,8 +44,12 @@ module.exports = function(params) {
 
     var hideWarning = fn.handleStaticObsUpdate(self.showErrorObs, false);
     var updateRevision = fn.seq(
+        fn.log('response'),
         fn.handleObsUpdate(self.revisionObs, 'revision'),
-        fn.handleCopyProps(self.schema, 'version'),
+        fn.handleObsUpdate(self.publishedObs, 'published'),
+        fn.handleObsUpdate(self.moduleIdObs, 'moduleId'),
+        fn.handleObsUpdate(self.moduleVersionObs, 'moduleVersion'),
+        fn.handleCopyProps(self.schema, 'version', 'published'),
         fn.handleStaticObsUpdate(self.isNewObs, false)
     );
     self.revisionLabel = ko.computed(function() {
@@ -103,9 +110,11 @@ module.exports = function(params) {
         return fieldDefToObs([Object.assign({}, FIELD_SKELETON)])[0];
     }    
     function uploadSchema() {
-        if (self.isNewObs() || self.revisionObs() !== params.schemaId) {
+        if (self.isNewObs()) {
+            console.log("Creating new schema at revision", self.schema.revision, "version");
             return serverService.createUploadSchema(self.schema);
         } else {
+            console.log("Updating schema at revision", self.schema.revision, "version", self.schema.version);
             return serverService.updateUploadSchema(self.schema);
         }
     }
@@ -131,9 +140,14 @@ module.exports = function(params) {
     self.saveNewRevision = function(vm, event) {
         utils.startHandler(vm, event);
         // Get the most recent revision, then increment that by one.
+
+        self.schema = binder.persist(self.schema);
         serverService.getMostRecentUploadSchema(params.schemaId).then(function(schema) {
             self.schema.revision = schema.revision + 1;
+            delete self.schema.published;
             delete self.schema.version;
+            delete self.schema.moduleId;
+            delete self.schema.moduleVersion;
             return self.schema;
         }).then(serverService.createUploadSchema)
             .then(updateRevision)
@@ -172,6 +186,7 @@ module.exports = function(params) {
     }
 
     loadSchema().then(binder.assign('schema'))
+        .then(fn.log("loaded schema"))
         .then(binder.update())
         .catch(failureHandler);
 };

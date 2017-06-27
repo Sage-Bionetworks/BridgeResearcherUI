@@ -1,41 +1,37 @@
 <constraints-label params="title: 'Multiple Choice Question', element: element"
     data-bind="attr:{id:'elements'+$index()+'_constraints_uiHint'}"></constraints-label>
-<table class="element-content-constraints">
-    <tr>
-        <td class="element-content-constraints-label">
+<div class="ui constraints grid">
+    <div class="eight wide column">
+        <div class="field">
             <label>Data Type</label>
-        </td>
-        <td class="element-content-constraints-control">
-            <ui-select params="fieldObs: dataTypeObs, fieldLabel: dataTypeLabel, optionsSrc: dataTypeOptions"></ui-select>
-        </td>
-        <td class="element-content-constraints-label">
-            <label>Allow other?</label>
-        </td>
-        <td class="element-content-constraints-control">
-            <ui-checkbox params="checkedObs: allowOtherObs"></ui-checkbox>
-        </td>
-        <td class="element-content-constraints-label">
-            <label>Rules:</label>
-        </td>
-        <td class="element-content-constraints-control" rowspan="2" width="100%">
-            <ui-rules params="rulesObs: rulesObs, elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>
-        </td>
-    </tr>
-    <tr>
-        <td class="element-content-constraints-label">
+            <ui-select style="width:3rem" params="fieldObs: dataTypeObs, fieldLabel: dataTypeLabel, optionsSrc: dataTypeOptions"></ui-select>
+        </div>
+        <div class="field">
             <label>Enumeration</label>
-        </td>
-        <td class="element-content-constraints-control">
             <span class="link" data-bind="click: editEnum">
                 <span data-bind="text: enumerationObs().length"></span> options&hellip;
             </span>
-        </td>
-        <td class="element-content-constraints-label">
+        </div>
+        <div class="field">
+            <label>Allow other?</label>
+            <ui-checkbox params="checkedObs: allowOtherObs"></ui-checkbox>
+        </div>
+        <div class="field">
             <label>Allow multiple?</label>
-        </td>
-        <td class="element-content-constraints-control">
             <ui-checkbox params="checkedObs: allowMultipleObs"></ui-checkbox>
-        </td>
-    </tr>
-</table>
+        </div>
+    </div>
+    <div class="eight wide column">
+        <div class="field">
+            <label>Before Rules</label>
+            <ui-rules params="element: element, fieldName: 'beforeRulesObs', 
+                elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>            
+        </div>
+        <div class="field">
+            <label>After Rules</label>
+            <ui-rules params="element: element, fieldName: 'afterRulesObs', 
+                elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>
+        </div>
+    </div>
+</div>
 <div data-bind="attr:{class:$data.collectionName+'constraints_enumeration'}"></div>

@@ -22,6 +22,9 @@ Date.prototype.toLocalISOString = function(timePortion) {
     str += dif + pad(tzo / 60) + ':' + pad(tzo % 60);
     return str;
 };
+Array.prototype.contains = function(value) {
+    return this.indexOf(value) > -1;
+};
 
 window.ko = ko;
 // When you enable this, 1) everything is a bit faster, and 2) the UI is completely broken.

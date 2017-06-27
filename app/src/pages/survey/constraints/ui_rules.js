@@ -4,7 +4,9 @@ var fn = require('../../../functions');
 module.exports = function(params) {
     var self = this;
 
-    fn.copyProps(self, params, 'rulesObs', 'elementsObs', 'collectionName');
+    fn.copyProps(self, params, 'element', 'fieldName', 'elementsObs', 'collectionName');
+    self.rulesObs = self.element[self.fieldName];
+    self.fieldProperty = self.fieldName.replace("Obs","");
 
     self.cssTokensObs = ko.computed(function() {
         return self.rulesObs().map(function(rule, index) {

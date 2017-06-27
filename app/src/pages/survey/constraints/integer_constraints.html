@@ -1,39 +1,71 @@
 <constraints-label params="title: 'Integer Question', element: element"></constraints-label>
-<table class="element-content-constraints">
-    <tr>
-        <td class="element-content-constraints-label">
+<div class="ui constraints grid">
+    <div class="eight wide column">
+        <div class="constraints-group">
+            <div class="field" data-bind="attr:{id: $parent.collectionName+'constraints_minValue'}">
+                <label>Min value</label>
+                <input class="numeric" type="text" data-bind="textInput: minValueObs"/>
+            </div>
+            <div class="field">
+                <label>Max value</label>
+                <input class="numeric" type="text" data-bind="textInput: maxValueObs"/>
+            </div>
+        </div>
+        <div class="constraints-group">
+            <div class="field" data-bind="attr:{id: $parent.collectionName+'constraints_step'}">
+                <label>Step</label>
+                <input class="numeric" type="text" data-bind="textInput: stepObs"/>
+            </div>
+            <div class="field">
+                <label>Unit</label>
+                <ui-select params="fieldObs: unitObs, fieldLabel: unitLabel, optionsSrc: unitOptions"></ui-select>
+            </div>
+        </div>
+    </div>
+    <div class="eight wide column">
+        <div class="field">
+            <label>Before Rules</label>
+            <ui-rules params="element: element, fieldName: 'beforeRulesObs', 
+                elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>            
+        </div>
+        <div class="field">
+            <label>After Rules</label>
+            <ui-rules params="element: element, fieldName: 'afterRulesObs', 
+                elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>
+        </div>
+    </div>
+    <!--
+    <div class="five wide column">
+        <div class="field" data-bind="attr:{id: $parent.collectionName+'constraints_minValue'}">
             <label>Min value</label>
-        </td>
-        <td class="element-content-constraints-control"
-            data-bind="attr:{id: $parent.collectionName+'constraints_minValue'}">
             <input class="numeric" type="text" data-bind="textInput: minValueObs"/>
-        </td>
-        <td class="element-content-constraints-label">
-            <label>Step</label>
-        </td>
-        <td class="element-content-constraints-control"
-            data-bind="attr:{id: $parent.collectionName+'constraints_step'}">
-            <input class="numeric" type="text" data-bind="textInput: stepObs"/>
-        </td>
-        <td class="element-content-constraints-label">
-            <label>Rules</label>
-        </td>
-        <td class="element-content-constraints-control" rowspan="2">
-            <ui-rules params="rulesObs: rulesObs, elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>
-        </td>
-    </tr>
-    <tr>
-        <td class="element-content-constraints-label">
+        </div>
+        <div class="field">
             <label>Max value</label>
-        </td>
-        <td class="element-content-constraints-control">
             <input class="numeric" type="text" data-bind="textInput: maxValueObs"/>
-        </td>
-        <td class="element-content-constraints-label">
+        </div>
+    </div>
+    <div class="five wide column">
+        <div class="field" data-bind="attr:{id: $parent.collectionName+'constraints_step'}">
+            <label>Step</label>
+            <input class="numeric" type="text" data-bind="textInput: stepObs"/>
+        </div>
+        <div class="field">
             <label>Unit</label>
-        </td>
-        <td class="element-content-constraints-control">
             <ui-select params="fieldObs: unitObs, fieldLabel: unitLabel, optionsSrc: unitOptions"></ui-select>
-        </td>
-    </tr>
-</table>
+        </div>
+    </div>
+    <div class="six wide column">
+        <div class="field">
+            <label>Before Rules</label>
+            <ui-rules params="element: element, fieldName: 'beforeRulesObs', 
+                elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>            
+        </div>
+        <div class="field">
+            <label>After Rules</label>
+            <ui-rules params="element: element, fieldName: 'afterRulesObs', 
+                elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>
+        </div>
+    </div>
+    -->
+</div>

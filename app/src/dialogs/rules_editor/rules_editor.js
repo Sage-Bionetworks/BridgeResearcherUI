@@ -6,7 +6,9 @@ var serverService = require('../../services/server_service');
 var ACTION_OPTIONS = Object.freeze([
     {value: 'skipTo', label: 'skip to question'},
     {value: 'endSurvey', label: 'end the survey'},
-    {value: 'assignDataGroup', label: 'assign data group'}
+    {value: 'assignDataGroup', label: 'assign data group'},
+    {value: 'displayIf', label: 'then display'},
+    {value: 'displayUnless', label: 'then do not display'}
 ]);
 
 /**
@@ -18,36 +20,56 @@ function createRule(rule) {
     // This copy into new observables allows you to close the dialog without altering the 
     // underlying survey. Knockout also does not do well with a boolean value, so we have 
     // to convert that to a string, and convert it back again when closing the dialog.
-
-    var action = (rule.assignDataGroup) ? 'assignDataGroup' : (rule.skipTo) ? 'skipTo' : 'endSurvey';
+    var action = 'skipTo';
+    if (rule.assignDataGroup) {
+        action = 'assignDataGroup';
+    } else if (rule.endSurvey) {
+        action = 'endSurvey';
+    } else if (rule.displayIf) {
+        action = 'displayIf';
+    } else if (rule.displayUnless) {
+        action = 'displayUnless';
+    }
     return {
-        operator: ko.observable(ko.unwrap(rule.operator)),
-        value: ko.observable(ko.unwrap(rule.value)),
-        assignDataGroup: ko.observable(ko.unwrap(rule.assignDataGroup)),
-        skipTo: ko.observable(ko.unwrap(rule.skipTo)),
+        operatorObs: ko.observable(rule.operator),
+        valueObs: ko.observable(rule.value),
+        assignDataGroupObs: ko.observable(rule.assignDataGroup),
+        skipToObs: ko.observable(rule.skipTo),
+        dataGroupsObs: ko.observableArray(rule.dataGroups),
         actionSelectedObs: ko.observable(action)
     };
 }
-/**
- * Filter out a rule if it is not a declined rule, and has no value.
- * @param rule
- * @returns {boolean|*}
- */
+
+var SET_OPS = ['any','all'];
+var NO_VALUE_OPS = ['de','always'];
+
 function filterOutRulesWithNoValues(rule) {
-    if (rule.operator() === 'de' || rule.operator() === 'always') {
-        rule.value(null);
+    var op = rule.operatorObs();
+    if (SET_OPS.contains(op)) {
+        rule.valueObs(null);
+    } else if (NO_VALUE_OPS.contains(op)) {
+        rule.dataGroupsObs([]);
     }
-    return (rule.operator() === 'de' || rule.operator() === 'always' || rule.value());
+    return (rule.valueObs() || rule.dataGroupsObs().length || NO_VALUE_OPS.contains(op));
 }
 
 function observerToObject(rule) {
-    var obj = {operator: rule.operator(), value: rule.value()};
+    var obj = {operator: rule.operatorObs()};
+    if (!SET_OPS.contains(rule.operatorObs())) {
+        obj.value = rule.valueObs();
+    } else {
+        obj.dataGroups = rule.dataGroupsObs();
+    }
     if (rule.actionSelectedObs() === "skipTo") {
-        obj.skipTo = rule.skipTo();
+        obj.skipTo = rule.skipToObs();
+    } else if (rule.actionSelectedObs() === "assignDataGroup") {
+        obj.assignDataGroup = rule.assignDataGroupObs();
     } else if (rule.actionSelectedObs() === "endSurvey") {
         obj.endSurvey = true;
-    } else if (rule.actionSelectedObs() === "assignDataGroup") {
-        obj.assignDataGroup = rule.assignDataGroup();
+    } else if (rule.actionSelectedObs() === "displayIf") {
+        obj.displayIf = true;
+    } else if (rule.actionSelectedObs() === "displayUnless") {
+        obj.displayUnless = true;
     }
     return obj;
 }
@@ -76,31 +98,34 @@ function getIdentifierOptions(elementsArray, startIdentifier) {
  * Receives:
  *      ViewModel parentViewModel
  *      Element element
+ *      fieldName property of the rules (afterRules, beforeRules)
  * @param params
  */
 module.exports = function(params) {
     var self = this;
     var parent = params.parentViewModel;
 
-    fn.copyProps(self, parent, 'element', 'elementsObs', 'operatorOptions', 'operatorLabel');
+    fn.copyProps(self, parent, 'elementsObs', 'operatorOptions', 'operatorLabel');
+    fn.copyProps(self, params, 'element', 'fieldName');
     self.selectedIndexObs = ko.observable();
-    self.rulesObs = ko.observableArray(params.element.rulesObs().map(createRule));
+    self.rulesObs = ko.observableArray([]);
+
     self.identifierOptions = getIdentifierOptions(self.elementsObs(), self.element.identifier);
-    self.identifierLabel = fn.identity;
     self.cancelRules = root.closeDialog;
     self.actionOptions = ACTION_OPTIONS;
-    self.dataGroupOptions = ko.observableArray([]);
+    self.dataGroupOptionsObs = ko.observableArray([]);
+    self.dataGroupStringOptionsObs = ko.observableArray([]);
 
     self.addRule = function() {
         var id = (self.identifierOptions.length) ? self.identifierOptions[0].value : "";
-        self.rulesObs.push(createRule({operator: "eq", value: "", skipTo: id, endSurvey: false}));
+        self.rulesObs.push(createRule({operator: "eq", value: "", skipTo: id}));
     };
     self.deleteRule = function(rule) {
         self.rulesObs.remove(rule);
     };
     self.saveRules = function() {
         var rules = self.rulesObs().filter(filterOutRulesWithNoValues).map(observerToObject);
-        self.element.rulesObs(rules);
+        self.element[self.fieldName](rules);
         root.closeDialog();
     };
 
@@ -108,6 +133,10 @@ module.exports = function(params) {
         var dataGroups = study.dataGroups.map(function(group) {
             return {value: group, label: group};
         });
-        self.dataGroupOptions(dataGroups);
+        self.dataGroupOptionsObs(dataGroups);
+        self.dataGroupStringOptionsObs([].concat(study.dataGroups));
+
+        var obs = params.element[params.fieldName]().map(createRule);
+        self.rulesObs(obs);
     });
 };
