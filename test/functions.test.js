@@ -318,6 +318,20 @@ describe("handleIf", function() {
         expect(result).to.equal(1);
     });
 });
+describe("incrementNumber", function() {
+    it("handles missing values", function() {
+        expect(fn.incrementNumber()).to.be.undefined;
+        expect(fn.incrementNumber(null)).to.be.null;
+    });
+    it("extracts and increments number at end", function() {
+        expect(fn.incrementNumber("")).to.equal("1");
+        expect(fn.incrementNumber("foo")).to.equal("foo1");
+        expect(fn.incrementNumber("foo1")).to.equal("foo2");
+    });
+    it("is not confused by numbers elsewhere in string", function() {
+        expect(fn.incrementNumber("12foo10")).to.equal("12foo11");
+    });
+});
 describe("is", function() {
     //TODO
 });

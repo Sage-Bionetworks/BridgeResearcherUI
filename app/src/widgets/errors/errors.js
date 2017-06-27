@@ -11,6 +11,7 @@ function truncateErrorFieldKey(errorString) {
     parts[0] = keyParts[keyParts.length-1];
     return parts.join(" ")
         .replace(/([a-z\d])([A-Z])/g, '$1 $2')
+        .replace(/(\[[0-9+]\])/g, '')
         .replace("Versions{Android}","version") // schema IEE strangeness
         .replace("Versions{i Phone OS}", "version") // schema IEE strangeness
         .toLowerCase();

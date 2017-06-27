@@ -1,11 +1,11 @@
-<div data-bind="visible: !$parent.hasRules()">
-    <span class="link" data-bind="click: $parent.editRules">Add Rules&hellip;</span>
+<div data-bind="foreach: rulesObs">
+    <div data-bind="attr: {id: $parent.collectionName + $parent.fieldProperty + $index()}">
+        <div class="rule" data-bind="html: $parents[1].formatRule($data)"></div>
+    </div>
 </div>
-<div data-bind="visible: $parent.hasRules(), attr: {class: cssTokensObs}">
-    <div data-bind="foreach: rulesObs">
-        <div data-bind="html: $parents[1].formatRule($data)"></div>
-    </div>
-    <div>
-        <span class="link" data-bind="click: $parent.editRules">Edit Rules</span>
-    </div>
+<div>
+    <button class="ui mini compact circular icon button"
+        data-bind="click: $parent.editRules(fieldName)">
+        <i class="horizontal ellipsis icon"></i>
+    </button>
 </div>

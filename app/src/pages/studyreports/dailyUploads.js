@@ -37,10 +37,13 @@ module.exports = function() {
     self.rangeObs = ko.observable('2');
     self.hasDataObs = ko.observable(false);
 
+    self.comps = [];
     self.isActive = function(value) {
-        return ko.computed(function() {
+        var comp = ko.computed(function() {
             return self.rangeObs() === value;
         });
+        self.comps.push(comp);
+        return comp;
     };
     self.selectRange = function(vm, event) {
         var rangeNum = event.target.getAttribute('data-range');
@@ -113,5 +116,7 @@ module.exports = function() {
     loadChart('2');
 };
 module.exports.prototype.dispose = function() {
-    this.isActive.dispose();
+    this.comps.forEach(function(comp) {
+        comp.dispose();
+    });
 };

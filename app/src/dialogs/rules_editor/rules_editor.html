@@ -13,26 +13,35 @@
             <div class="rules-table-rule">
                 <div>
                     <select class="ui dropdown" style="flex: 1" data-bind="options: $parent.operatorOptions,
-                        optionsText: 'label', optionsValue: 'value', value: $data.operator"></select>
+                        optionsText: 'label', optionsValue: 'value', value: $data.operatorObs"></select>
                 </div>
                 <div>
-                    <input type="text" data-bind="textInput: $data.value, css: {
-                        hidden: $data.operator() === 'de' || $data.operator() === 'always'}"/>
+                    <input type="text" data-bind="textInput: $data.valueObs, 
+                        visible: $data.operatorObs() !== 'de' && $data.operatorObs() !== 'always' && 
+                                $data.operatorObs() !== 'all' && $data.operatorObs() !== 'any'"/>
+                    <div data-bind="visible: $data.operatorObs() === 'any' || $data.operatorObs() === 'all'">
+                        <select multiple data-bind="semantic: 'multi-search-select', optionsValue: 'value', 
+                            updateSelect: $data.dataGroupsObs, foreach: $parent.dataGroupStringOptionsObs">
+                            <option data-bind="text: $data, selected: $parent.dataGroupsObs().indexOf($data) > -1"></option>
+                        </select>
+                    </div>
                 </div>
                 <div>
                     <select class="ui dropdown" data-bind="options: $parent.actionOptions, 
                         value: actionSelectedObs, optionsText: 'label', optionsValue: 'value'"></select>
                 </div>
                 <div style="flex: 1">
-                    <select class="ui dropdown" data-bind="value: $data.skipTo, 
+                    <select class="ui dropdown" data-bind="value: $data.skipToObs, 
                         options: $parent.identifierOptions, optionsText: 'label', 
                         visible: $data.actionSelectedObs() === 'skipTo', optionsValue: 'value'"></select>
-                    <select class="ui dropdown" data-bind="value: $data.assignDataGroup, 
-                        options: $parent.dataGroupOptions, optionsText: 'label', 
+                    <select class="ui dropdown" data-bind="value: $data.assignDataGroupObs, 
+                        options: $parent.dataGroupOptionsObs, optionsText: 'label', 
                         visible: $data.actionSelectedObs() === 'assignDataGroup', optionsValue: 'value'"></select>
                 </div>
                 <div>
-                    <div class="link" data-bind="click: $parent.deleteRule"><i class="delete icon"></i></div>
+                    <div class="link" data-bind="click: $parent.deleteRule">
+                        <i class="delete icon"></i>
+                    </div>
                 </div>
             </div>
         </div>

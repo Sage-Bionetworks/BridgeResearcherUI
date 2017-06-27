@@ -9,6 +9,9 @@ module.exports = function(params) {
 
     bind(self)
         .obs('name')
+        .obs('published')
+        .obs('moduleId')
+        .obs('moduleVersion')
         .obs('revision', params.revision)
         .obs('schemaId', params.schemaId);
 
@@ -27,8 +30,14 @@ module.exports = function(params) {
     self.link = function(item) {
         return "#/schemas/"+encodeURIComponent(item.schemaId)+"/versions/"+item.revision+'/editor';
     };
-    serverService.getUploadSchemaAllRevisions(params.schemaId)
-        .then(fn.handleObsUpdate(self.itemsObs, 'items'))
+
+    serverService.getUploadSchema(params.schemaId, params.revision)
+        .then(fn.handleObsUpdate(self.moduleIdObs, 'moduleId'))
+        .then(fn.handleObsUpdate(self.moduleVersionObs, 'moduleVersion'))
+        .then(fn.handleObsUpdate(self.publishedObs, 'published'))
+        .then(function(response) {
+            return serverService.getUploadSchemaAllRevisions(params.schemaId);
+        }).then(fn.handleObsUpdate(self.itemsObs, 'items'))
         .then(function(response) {
             if (response.items.length) {
                 self.nameObs(response.items[0].name);

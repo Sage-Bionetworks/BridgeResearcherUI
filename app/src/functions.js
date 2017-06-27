@@ -276,6 +276,18 @@ function deleteUnusedProperties(object) {
         }
     }
 }
+// Append a number to the string, intelligently incrementing if a number already exists there.
+function incrementNumber(string) {
+    if (is(string, 'String')) {
+        var digits = 0, match = /(\d+$)/.exec(string);
+        if (match) {
+            digits = parseInt(match[0]);
+            string = string.substring(0,string.length-(match[0].length));
+        }
+        string = string + (digits+1);
+    }
+    return string;
+}
 
 var formatDate = seq(checkArgs, asDate, formatDateString, blankInvalidDateString);
 var formatDateTime = seq(checkArgs, asDate, formatDateTimeString, blankInvalidDateString);
@@ -303,6 +315,7 @@ module.exports = {
     handleSort: handleSort,
     handleStaticObsUpdate: handleStaticObsUpdate,
     identity: identity,
+    incrementNumber: incrementNumber,
     is: is,
     isBlank: isBlank,
     isNotBlank: isNotBlank,
