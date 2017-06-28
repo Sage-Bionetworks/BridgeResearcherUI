@@ -62,7 +62,7 @@ module.exports = function(params) {
     }
 
     function load() { 
-        serverService.getPublishedSurveys()
+        serverService.getSurveys()
             .then(fn.handleMap('items', surveyToView))
             .then(fn.handleSort('items', 'name'))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))

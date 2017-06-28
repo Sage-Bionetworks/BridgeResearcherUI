@@ -18,7 +18,7 @@
             <i class="file outline icon"></i> Editor
         </a>
         <span class="active item">
-            <i class="history icon"></i> History
+            <i class="history icon"></i> History &amp; Publication
         </span>
         <div class="right menu pub-status">
             <div class="item">
@@ -50,6 +50,7 @@
                 <th>Name</th>
                 <th>Revision</th>
                 <th>Matching Criteria</th>
+                <th>Module</th>
                 <th>&nbsp;</th>
             </tr>
         </thead>
@@ -65,9 +66,15 @@
                 </td>
                 <td data-bind="text: $data.revision"></td>
                 <td style="white-space: nowrap" data-bind="html: $parent.criteriaLabel($data)"></td>
+                <td data-bind="attr: {'data-html': $parent.moduleHTML($data)}, 
+                    semantic: 'popup', html: $parent.formatModuleLink($data)"></td>
                 <td>
                     <div data-bind="visible: $data.published" style="text-align: right">
                         <i class="checkmark icon"></i> Published
+                    </div>
+                    <div data-bind="visible: !$data.published" style="text-align: right">
+                        <button class="ui basic compact mini button" 
+                            data-bind="click:  $component.publish">Publish</button>
                     </div>
                 </td>
             </tr>

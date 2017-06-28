@@ -116,6 +116,16 @@ module.exports = function(params) {
             return serverService.updateUploadSchema(self.schema);
         }
     }
+    // Get the most recent revision, then increment that by one. Reset version/revision
+    // and de-link it from shared modules.
+    function reviseToNew(schema) {
+        self.schema.revision = schema.revision + 1;
+        delete self.schema.published;
+        delete self.schema.version;
+        delete self.schema.moduleId;
+        delete self.schema.moduleVersion;
+        return self.schema;
+    }
 
     self.save = function(vm, event) {
         utils.startHandler(vm, event);
@@ -137,31 +147,21 @@ module.exports = function(params) {
     };
     self.saveNewRevision = function(vm, event) {
         utils.startHandler(vm, event);
-        // Get the most recent revision, then increment that by one.
 
         self.schema = binder.persist(self.schema);
-        serverService.getMostRecentUploadSchema(params.schemaId).then(function(schema) {
-            self.schema.revision = schema.revision + 1;
-            delete self.schema.published;
-            delete self.schema.version;
-            delete self.schema.moduleId;
-            delete self.schema.moduleVersion;
-            return self.schema;
-        }).then(serverService.createUploadSchema)
+        serverService.getMostRecentUploadSchema(params.schemaId)
+            .then(reviseToNew)
+            .then(serverService.createUploadSchema)
             .then(updateRevision)
-            .then(utils.successHandler(vm, event, "Schema has been saved at new revision."))
             .then(hideWarning)
+            .then(utils.successHandler(vm, event, "Schema has been saved at new revision."))
             .catch(failureHandler);
     };
     self.editMultiChoiceAnswerList = function(field, event) {
-        var otherLists = [];
-        self.fieldDefinitionsObs().forEach(function(oneField) {
-            if (oneField.typeObs() === "multi_choice") {
-                var oneList = oneField.multiChoiceAnswerListObs();
-                if (oneList.length) {
-                    otherLists.push([].concat(oneList));
-                }
-            }
+        var otherLists = self.fieldDefinitionsObs().filter(function(oneField) {
+            return (oneField.typeObs() === "multi_choice" && oneField.multiChoiceAnswerListObs().length);
+        }).map(function(oneField) {
+            return [].concat(oneField.multiChoiceAnswerListObs());
         });
         root.openDialog('multichoice_editor', {
             listObs: field.multiChoiceAnswerListObs,

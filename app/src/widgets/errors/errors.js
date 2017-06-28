@@ -59,16 +59,14 @@ module.exports = function() {
         return self.errorsObs().length > 0;
     });
     
-    ko.postbox.subscribe("showErrors", function(payload) {
+    ko.postbox.subscribe("showErrors", function(object) {
         if (isNotSelf(self)) {
             return;
         }
-        if (payload.message && typeof payload.errors === "undefined") {
-            toastr.error(payload.message);
-            return;
-        }
+        var config = object.config;
+        var payload = object.payload;
         var message = payload.message;
-        var errors = payload.errors;
+        var errors = payload.errors || {};
         fixEnumErrorsForTopLevelEditor(errors);
 
         // Scroll to top of scrollbox. jQuery is included globally in the page
@@ -76,7 +74,7 @@ module.exports = function() {
 
         var globalErrors = [];
         // This was basically a payload with a message and no errors... so show the message.
-        if (Object.keys(payload.errors).length === 0) {
+        if (Object.keys(errors).length === 0) {
             globalErrors.push(message);
         }
         for (var fieldName in errors) {

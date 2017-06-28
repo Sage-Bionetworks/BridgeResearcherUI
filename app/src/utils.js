@@ -39,7 +39,7 @@ function badResponse(response, params) {
     if (!params.transient && !payload.errors) {
         payload.errors = {};
     }
-    ko.postbox.publish("showErrors", payload);
+    ko.postbox.publish("showErrors", {payload: payload, config: params});
 }
 function localError(response) {
     var error = (response.statusText === "timeout") ? TIMEOUT_ERROR : GENERIC_ERROR;
@@ -70,7 +70,7 @@ function errorMessageHandler(message, params) {
         toastr.error(message);
     } else {
         var payload = {"message":message};
-        ko.postbox.publish("showErrors", payload);
+        ko.postbox.publish("showErrors", {payload: payload, config: params});
     }
 }
 function statusNotHandled(res) {

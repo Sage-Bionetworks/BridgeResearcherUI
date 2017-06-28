@@ -12,7 +12,7 @@
         </div>
         <div class="fixed-header-buttons">
             <button class="ui tiny primary button" data-bind="visible: !publishedObs(), click: save">Save</button>
-            <button class="ui tiny primary button" data-bind="visible: publishedObs, click: saveNewRevision">Save New Revision</button>
+            <button class="ui tiny primary button" data-bind="visible: publishedObs, click: saveNewRevision">Save</button>
         </div>
     </div>
     <div class="ui secondary pointing menu" data-bind="visible: !isNewObs()">
@@ -21,7 +21,7 @@
         </span>
         <a data-bind="attr: {href: '#/schemas/'+encodeURIComponent(schemaIdObs())+
             '/versions/'+revisionObs()+'/history'}" class="item">
-            <i class="history icon"></i> History
+            <i class="history icon"></i> History &amp; Publication
         </a>
         <div class="right menu pub-status">
             <div class="item">

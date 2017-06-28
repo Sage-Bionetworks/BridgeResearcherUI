@@ -33,7 +33,8 @@ function loadSurveyRevisions(vm, survey) {
     });
 }
 function loadSchemaRevisions(vm, schema) {
-    return serverService.getUploadSchemaAllRevisions(schema.schemaId).then(function(response) {
+    var identifier = schema.id || schema.schemaId;
+    return serverService.getUploadSchemaAllRevisions(identifier).then(function(response) {
         var revisions = response.items.map(function(oneSchema) {
             return {value: oneSchema.revision, label: oneSchema.revision};
         });
@@ -147,6 +148,8 @@ module.exports = function(params) {
     self.addSchemas = function(schemas) {
         self.surveyGuidObs(null);
         self.surveyCreatedOnObs(null);
+        delete self.metadata.surveyGuid;
+        delete self.metadata.surveyCreatedOn;
 
         var schema = schemas[0];
         self.schemaIdObs(schema.id);
@@ -160,6 +163,8 @@ module.exports = function(params) {
     self.addSurveys = function(surveys) {
         self.schemaIdObs(null);
         self.schemaRevisionObs(null);
+        delete self.metadata.schemaId;
+        delete self.metadata.schemaRevision;
 
         var survey = surveys[0];
         self.surveyGuidObs(survey.guid);
