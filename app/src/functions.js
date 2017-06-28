@@ -13,7 +13,7 @@ function is(obj, typeName) {
     return Object.prototype.toString.call(obj) === "[object "+typeName+"]";
 }
 function isBlank(obj) {
-    return (typeof obj === "undefined") || obj === null || obj === "";
+    return (typeof obj === "undefined") || obj === null || /^\W*$/.test(obj);
 }
 function isNotBlank(obj) {
     return (typeof obj !== "undefined") && obj !== null && obj !== "";

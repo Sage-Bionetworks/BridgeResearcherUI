@@ -333,13 +333,69 @@ describe("incrementNumber", function() {
     });
 });
 describe("is", function() {
-    //TODO
+    it("handles null values", function() {
+        expect(fn.is(null, 'Date')).to.be.false;
+        expect(fn.is(undefined, 'Date')).to.be.false;
+    });
+    it("validates date", function() {
+        expect(fn.is(new Date(), 'Date')).to.be.true;
+        expect(fn.is('not a date', 'Date')).to.be.false;
+    });
+    it("validates regexp", function() {
+        expect(fn.is(/a/, 'RegExp')).to.be.true;
+        expect(fn.is('not a regex', 'RegExp')).to.be.false;
+    });
+    it("validates string", function() {
+        expect(fn.is(new String('string'), 'String')).to.be.true;
+        expect(fn.is('', 'String')).to.be.true;
+        expect(fn.is(new Date, 'String')).to.be.false;
+    });
+    it("validates number", function() {
+        expect(fn.is(new Number(4), 'Number')).to.be.true;
+        expect(fn.is(-1, 'Number')).to.be.true;
+        expect(fn.is('4', 'Number')).to.be.false;
+    });
+    it("validates array", function() {
+        expect(fn.is(new Array(4), 'Array')).to.be.true;
+        expect(fn.is([0], 'Array')).to.be.true;
+        expect(fn.is('[]', 'Array')).to.be.false;
+    });
+    it("validates object", function() {
+        expect(fn.is(new Object(), 'Object')).to.be.true;
+        expect(fn.is({}, 'Object')).to.be.true;
+        expect(fn.is(new Date(), 'Object')).to.be.false;
+    });
+    it("validates function", function() {
+        expect(fn.is(new Function("x * x"), 'Function')).to.be.true;
+        expect(fn.is(function() {}, 'Function')).to.be.true;
+        expect(fn.is(new Date(), 'Function')).to.be.false;
+    });
 });
 describe("isBlank", function() {
-    //TODO
+    it("detects blank, null, empty string", function() {
+        expect(fn.isBlank()).to.be.true;
+        expect(fn.isBlank(null)).to.be.true;
+        expect(fn.isBlank("")).to.be.true;
+        expect(fn.isBlank("   \t")).to.be.true;
+    });
+    it("does not report objects as blank", function() {
+        expect(fn.isBlank(new Date())).to.be.false;
+        expect(fn.isBlank({})).to.be.false;
+        expect(fn.isBlank(function() {})).to.be.false;
+    });
 });
 describe("deleteUnusedProperties", function() {
-    //TODO
+    it("deletes null, undefined but not empty string properties", function() {
+        var object = {
+            prop1: undefined,
+            prop2: null,
+            prop3: "",
+            prop4: false
+        };
+        fn.deleteUnusedProperties(object);
+        expect(Object.keys(object).length).to.equal(1);
+        expect(object.prop4).to.be.false;
+    });
 });
 
 });
