@@ -85,6 +85,7 @@ function formatModuleLink(object) {
     return "";
 }
 function moduleHTML(object) {
+    console.log(object);
     return sharedModuleHTMLMap[object.moduleId];
 }
 

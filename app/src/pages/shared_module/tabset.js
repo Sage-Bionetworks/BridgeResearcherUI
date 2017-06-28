@@ -21,7 +21,7 @@ module.exports = function(params) {
     };
 };
 module.exports.prototype.dispose = function() {
-    self.computeds.forEach(function(c) {
+    this.computeds.forEach(function(c) {
         c.dispose();
     });
 };
