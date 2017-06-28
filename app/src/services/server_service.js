@@ -185,22 +185,22 @@ module.exports = {
         return (session !== null);
     },
     signIn: function(studyName, env, data) {
-        var request = Promise.resolve(postInt(config.host[env] + config.signIn, data));
-        request.then(function(sess) {
-            sess.isSupportedUser = isSupportedUser;
-            // in some installations the server environment is "wrong" in that it's not enough 
-            // to determine the host. Set a host property and use that for future requests.
-            if (sess.isSupportedUser()) {
+        return postInt(config.host[env] + config.signIn, data)
+            .then(function(sess) {
+                sess.isSupportedUser = isSupportedUser;
+                if (!sess.isSupportedUser()) {
+                    return Promise.reject(new Error("User does not have required roles to use study manager."));
+                }
+                // in some installations the server environment is "wrong" in that it's not enough 
+                // to determine the host. Set a host property and use that for future requests.
                 sess.studyName = studyName;
                 sess.studyId = data.study;
                 session = sess;
                 session.host = config.host[env];
                 storeService.set(SESSION_KEY, session);
                 listeners.emit(SESSION_STARTED_EVENT_KEY, sess);
-            }
-            return sess;
-        });
-        return request;
+                return sess;
+            });
     },
     getStudyList: function(env) {
         return Promise.resolve(getInt(config.host[env] + config.getStudyList))

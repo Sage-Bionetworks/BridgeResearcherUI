@@ -24,6 +24,22 @@ module.exports = function(params) {
     fn.copyProps(self, criteriaUtils, 'label->criteriaLabel');
     fn.copyProps(self, sharedModuleUtils, 'formatModuleLink', 'moduleHTML');
 
+    function markSchemaPublished(schema) {
+        schema.published = true;
+        return schema;
+    }
+    function getUploadSchema() {
+        return serverService.getUploadSchema(params.schemaId, params.revision);
+    }
+    function getUploadSchemaAllRevisions() {
+        return serverService.getUploadSchemaAllRevisions(params.schemaId);
+    }
+    function setItemsName(response) {
+        if (response.items.length) {
+            self.nameObs(response.items[0].name);
+        }
+    }
+
     self.revisionLabel = ko.computed(function() {
         if (self.revisionObs()) {
             return 'v' + self.revisionObs();
@@ -37,10 +53,7 @@ module.exports = function(params) {
         utils.startHandler(item, event);
 
         serverService.getUploadSchema(item.schemaId, item.revision)
-            .then(function(schema) {
-                schema.published = true;
-                return schema;
-            })
+            .then(markSchemaPublished)
             .then(serverService.updateUploadSchema)
             .then(load)
             .then(utils.successHandler(item, event, "Schema published."))
@@ -48,20 +61,14 @@ module.exports = function(params) {
     };
 
     function load() {
-        sharedModuleUtils.loadNameMaps().then(function() {
-            return serverService.getUploadSchema(params.schemaId, params.revision);
-        })
+        sharedModuleUtils.loadNameMaps()
+            .then(getUploadSchema)
             .then(fn.handleObsUpdate(self.moduleIdObs, 'moduleId'))
             .then(fn.handleObsUpdate(self.moduleVersionObs, 'moduleVersion'))
             .then(fn.handleObsUpdate(self.publishedObs, 'published'))
-            .then(function(response) {
-                return serverService.getUploadSchemaAllRevisions(params.schemaId);
-            }).then(fn.handleObsUpdate(self.itemsObs, 'items'))
-            .then(function(response) {
-                if (response.items.length) {
-                    self.nameObs(response.items[0].name);
-                }
-            });
+            .then(getUploadSchemaAllRevisions)
+            .then(fn.handleObsUpdate(self.itemsObs, 'items'))
+            .then(setItemsName);
     }
     load();
 };
