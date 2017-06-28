@@ -385,7 +385,7 @@ describe("isBlank", function() {
     });
 });
 describe("deleteUnusedProperties", function() {
-    it("deletes null, undefined but not empty string properties", function() {
+    it("deletes null, undefined, and empty strings (but not false)", function() {
         var object = {
             prop1: undefined,
             prop2: null,
