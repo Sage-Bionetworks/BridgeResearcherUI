@@ -1,32 +1,41 @@
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // The ignore plugin in is removing moment.js localization, which takes a lot of room.
 
 module.exports = {
-    devtool: 'source-map',
     entry: ['./app/src/routes.js'],
     output: {
-        path: './app/dist',
+        path: path.resolve(__dirname, "app/dist"),
         filename: 'bundle.[hash].js'
     },
     module: {
-        preLoaders: [
-            { test: /\.js/, include: /app\/src/, loader: "jshint-loader" }  
-        ],
-        loaders: [
-            { test: /\.(scss|css)$/, loader: "style!css!sass" },
-            { test: /\.html$/, loader: "html?removeComments=false" }
+        rules: [
+            {
+                test: /\.js/,
+                exclude: /(node_modules|browser_components)/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ["es2015"]
+                    }
+                }
+            },
+            {
+                test: /\.(scss|css)$/, loader: "style-loader!css-loader!sass-loader"
+            },
+            {
+                test: /\.html$/, loader: "html-loader?removeComments=false"
+            }
         ]
     },
+    devtool: 'source-map',
     plugins: [
         new HtmlWebpackPlugin({template: "app/template.html",filename: "../index.html"}),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
     ],
     resolve: {
-        extensions: ['', '.css', '.js', '.html','.scss']
-    },
-    jshint: {
-        emitErrors: true
+        extensions: ['.css', '.js', '.html','.scss']
     }
 }

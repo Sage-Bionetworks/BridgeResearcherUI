@@ -157,7 +157,6 @@ function del(path) {
  * @returns {Promise}
  */
 function signOut() {
-    var env = session.environment;
     postInt(session.host + config.signOut);
     cache.reset();
     session = null;

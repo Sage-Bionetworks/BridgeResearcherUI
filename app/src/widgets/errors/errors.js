@@ -59,12 +59,10 @@ module.exports = function() {
         return self.errorsObs().length > 0;
     });
     
-    ko.postbox.subscribe("showErrors", function(object) {
+    ko.postbox.subscribe("showErrors", function(payload) {
         if (isNotSelf(self)) {
             return;
         }
-        var config = object.config;
-        var payload = object.payload;
         var message = payload.message;
         var errors = payload.errors || {};
         fixEnumErrorsForTopLevelEditor(errors);

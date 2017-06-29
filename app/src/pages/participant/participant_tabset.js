@@ -1,5 +1,4 @@
 var root = require('../../root');
-var serverService = require('../../services/server_service');
 
 module.exports = function(params) {
     var self = this;
