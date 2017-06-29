@@ -9,7 +9,8 @@ require('./bindings/dragula');
 require('./components');
 var ko = require('knockout');
 require('knockout-postbox');
-var director = require('director');
+// require statement import does not work after update to webpack 3.0
+import { Router } from 'director/build/director';
 var root = require('./root');
 var serverService = require('./services/server_service');
 
@@ -43,7 +44,7 @@ function redirectToParticipant(externalId) {
     serverService.getParticipants(null,5,"+"+externalId+"@").then(redirectTo);
 }
 
-var router = new director.Router();
+var router = new Router();
 router.param('guid', /([^\/]*)/);
 router.param('createdOn', /([^\/]*)/);
 router.on('/settings/general', routeTo('general'));
