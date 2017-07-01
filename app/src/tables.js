@@ -1,9 +1,9 @@
-var ko = require('knockout');
-var utils = require('./utils');
-var alerts = require('./widgets/alerts');
-var clipboard = require('./widgets/clipboard/clipboard');
-var root = require('./root');
-var Promise = require('bluebird');
+import { alerts } from './widgets/alerts';
+import { clipboard } from './widgets/clipboard/clipboard';
+import { ko } from 'knockout';
+import { Promise } from 'bluebird';
+import { root } from './root';
+import { utils } from './utils';
 require('knockout-postbox');
 
 function hasBeenChecked(item) {
@@ -64,7 +64,7 @@ function redirectHandler(vm, redirect) {
  * Set up a bunch of repetitive stuff for tables. This could be a component if data-driven tables
  * weren't a nightmare to turn into components. Better to take a mix-in approach.
  */
-module.exports = {
+export default {
     /**
      * options:
      * - name: the name of the objects in the collection, in the ui

@@ -1,15 +1,15 @@
-var schemaUtils = require('../../pages/schema/schema_utils');
-var serverService = require('../../services/server_service');
-var bind = require('../../binder');
-var fn = require('../../functions');
-var tables = require('../../tables');
+import { Binder } from '../../binder';
+import { fn } from '../../functions';
+import { schemaUtils } from '../../pages/schema/schema_utils';
+import { serverService }  from '../../services/server_service';
+import { tables } from '../../tables';
 
 module.exports = function(params) {
     var self = this;
 
     schemaUtils.initVM(self);
 
-    bind(self)
+    new Binder(self)
         .obs('createdOn', params.createdOn)
         .obs('published', false)
         .obs('survey')

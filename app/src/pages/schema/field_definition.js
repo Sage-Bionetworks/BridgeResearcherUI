@@ -1,12 +1,12 @@
-var schemaUtils = require('./schema_utils');
-var bind = require('../../binder');
+import { Binder } from '../../binder';
+import { schemaUtils } from './schema_utils';
 
 module.exports = function(params) {
     var self = this;
     var type = params.field.typeObs();
 
     self.field = params.field;
-    bind(self)
+    new Binder(self)
         .obs('focus', false)
         .obs('extra', 'none');
     schemaUtils.initFieldDefinitionVM(self, type);

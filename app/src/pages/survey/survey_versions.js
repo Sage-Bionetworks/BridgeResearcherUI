@@ -1,9 +1,9 @@
-var serverService = require('../../services/server_service');
-var utils = require('../../utils');
-var bind = require('../../binder');
-var fn = require('../../functions');
-var alerts = require('../../widgets/alerts');
-var tables = require('../../tables');
+import { alerts } from '../../widgets/alerts';
+import { Binder } from '../../binder';
+import { fn } from '../../functions';
+import { serverService }  from '../../services/server_service';
+import { tables } from '../../tables';
+import { utils } from '../../utils';
 
 module.exports = function(params) {
     var self = this;
@@ -11,7 +11,7 @@ module.exports = function(params) {
 
     self.formatDateTime = fn.formatDateTime;
     
-    var binder = bind(self)
+    var binder = new Binder(self)
         .obs('guid', params.guid)
         .obs('createdOn', params.createdOn)
         .obs('published', false)

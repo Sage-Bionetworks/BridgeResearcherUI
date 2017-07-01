@@ -1,7 +1,7 @@
-var ko = require('knockout');
-var root = require('../../root');
-var fn = require('../../functions');
-var bind = require('../../binder');
+import { Binder } from '../../binder';
+import { fn } from '../../functions';
+import { ko } from 'knockout';
+import { root } from '../../root';
 
 /**
  * This is a simpler replacement for the object-hash library.
@@ -138,7 +138,7 @@ module.exports = function(params) {
 
     var listsSource = new ListsSource(self.elementsObs(), self.element);
 
-    bind(self)
+    new Binder(self)
         .obs('label')
         .obs('detail')
         .obs('value')

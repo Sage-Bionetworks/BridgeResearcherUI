@@ -1,14 +1,14 @@
-var serverService = require('../../services/server_service');
-var fn = require('../../functions');
-var root = require('../../root');
-var bind = require('../../binder');
-var tables = require('../../tables');
+import { Binder } from '../../binder';
+import { fn } from '../../functions';
+import { root } from '../../root';
+import { serverService }  from '../../services/server_service';
+import { tables } from '../../tables';
 
 module.exports = function() {
     var self = this;
     var assignmentFilter;
 
-    var binder = bind(self)
+    var binder = new Binder(self)
         .obs('items[]', [])
         .obs('result', '')
         .obs('idFilter')

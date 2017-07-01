@@ -1,5 +1,5 @@
-var ko = require('knockout');
-require('../../lib/semantic-2.2.min'); // we reference it here.
+import ko from 'knockout';
+import '../../lib/semantic-2.2.min';
 
 var handlers = {
     'progress': function($element, allBindings, config) {

@@ -1,9 +1,9 @@
-var serverService = require('../../services/server_service');
-var utils = require('../../utils');
-var root = require('../../root');
-var tables = require('../../tables');
-var ko = require('knockout');
-var fn = require('../../functions');
+import { serverService }  from '../../services/server_service';
+import { utils } from '../../utils';
+import { root } from '../../root';
+import { tables } from '../../tables';
+import { ko } from 'knockout';
+import { fn } from '../../functions';
 
 function deleteItem(item) {
     return serverService.deleteStudyReport(item.identifier);

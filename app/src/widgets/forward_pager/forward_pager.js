@@ -1,5 +1,5 @@
-var bind = require('../../binder');
-var utils = require('../../utils');
+import { Binder } from '../../binder';
+import { utils } from '../../utils';
 
 module.exports = function(params) {
     console.assert(params.vm, "loadingFunc not supplied");
@@ -13,7 +13,7 @@ module.exports = function(params) {
     var nextOffset = null;
     var history = [];
 
-    bind(self)
+    new Binder(self)
         .obs('showLoader', false)
         .obs('hasPrevious', false)
         .obs('hasNext', false)

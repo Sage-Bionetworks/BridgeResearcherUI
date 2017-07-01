@@ -1,26 +1,26 @@
-var ko = require('knockout');
+import ko from 'knockout';
+
 var reg = ko.components.register;
-
-reg('none', {template: '<div class="ui modal dialog"></div>'});
-
-reg('dailyUploads', {
-    viewModel: require('./pages/studyreports/dailyUploads'),
-    template: require('./pages/studyreports/dailyUploads.html')
-});
 reg('errors', {
     viewModel: require('./widgets/errors/errors'),
     template: require('./widgets/errors/errors.html')
 });
 reg('shared_modules', {
-    viewModel: require('./pages/shared_modules/shared_modules'),
+    viewModel: require('./pages/shared_modules/shared_modules'), 
     template: require('./pages/shared_modules/shared_modules.html')
 });
+reg('none', {
+    template: '<div class="ui modal dialog"></div>'});
+reg('dailyUploads', {
+    viewModel: require('./pages/studyreports/dailyUploads'), 
+    template: require('./pages/studyreports/dailyUploads.html')
+});
 reg('shared_module', {
-    viewModel: require('./pages/shared_module/shared_module'),
+    viewModel: require('./pages/shared_module/shared_module'), 
     template: require('./pages/shared_module/shared_module.html')
 });
 reg('shared_module_versions', {
-    viewModel: require('./pages/shared_module/shared_module_versions'),
+    viewModel: require('./pages/shared_module/shared_module_versions'), 
     template: require('./pages/shared_module/shared_module_versions.html')
 });
 reg('sharedmodule-tabset', {

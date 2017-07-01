@@ -1,9 +1,9 @@
-var sharedModuleUtils = require('../../shared_module_utils');
-var serverService = require('../../services/server_service');
-var bind = require('../../binder');
-var utils = require('../../utils');
-var root = require('../../root');
-var fn = require('../../functions');
+import { Binder } from '../../binder';
+import fn from '../../functions';
+import root from '../../root';
+import serverService  from '../../services/server_service';
+import sharedModuleUtils from '../../shared_module_utils';
+import utils from '../../utils';
 
 var OPTIONS = [
     {value: null, label:'Both'},
@@ -41,12 +41,12 @@ function loadSchemaRevisions(vm, schema) {
         vm.linkedVersionOptionsObs(revisions);
     });
 }
-module.exports = function(params) {
+export default function(params) {
     var self = this;
     self.editor = null;
     self.metadata = {tags:[], version: 1};
 
-    var binder = bind(self)
+    var binder = new Binder(self)
         .obs('isNew', params.id === "new")
         .bind('published', false)
         .bind('id')

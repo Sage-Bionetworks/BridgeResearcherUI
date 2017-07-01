@@ -1,6 +1,7 @@
-var serverService = require('../../services/server_service');
-var utils = require('../../utils');
-var bind = require('../../binder');
+import { Binder } from '../../binder';
+import root from '../../root';
+import serverService  from '../../services/server_service';
+import utils from '../../utils';
 
 function updateMinAppVersion(vm, obs, name) {
     var value = parseInt(obs(),10);
@@ -24,10 +25,7 @@ function maxToZero(value) {
 module.exports = function() {
     var self = this;
 
-    // This cannot be loaded sooner, at the top of the file. Just plain don't work. Why? WHY?!
-    var root = require('../../root');
-
-    var binder = bind(self)
+    var binder = new Binder(self)
         .obs('message')
         .obs('identifier')
         .obs('minIos')

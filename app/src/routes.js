@@ -1,29 +1,28 @@
-require('../css/main');
-require('../lib/toastr.min');
-require('../lib/dragula.min');
+import '../css/main';
+import '../lib/toastr.min';
+import '../lib/dragula.min';
 
-require('./bindings');
-require('./bindings/semantic');
-require('../lib/jquery.scrollTo');
-require('./bindings/dragula');
-require('./components');
-var ko = require('knockout');
-require('knockout-postbox');
-// require statement import does not work after update to webpack 3.0
 import { Router } from 'director/build/director';
-var root = require('./root');
-var serverService = require('./services/server_service');
+import ko from 'knockout';
+import root from './root';
+import serverService from './services/server_service';
+import './bindings';
+import './bindings/semantic';
+import '../lib/jquery.scrollTo';
+import './bindings/dragula';
+import './components';
+import 'knockout-postbox';
 
-var GUID_CREATEDON = ['guid','createdOn'];
-var GUID = ['guid'];
-var ID = ['id'];
-var ID_VERSION = ['id','version'];
-var SCHEMAID = ['schemaId'];
-var SCHEMAID_REVISION = ['schemaId','revision'];
-var TASKID = ['taskId'];
-var USERID = ['userId'];
-var USERID_IDENTIFIER = ['userId','identifier'];
-var USERID_GUID = ['userId','guid'];
+const GUID_CREATEDON = ['guid','createdOn'];
+const GUID = ['guid'];
+const ID = ['id'];
+const ID_VERSION = ['id','version'];
+const SCHEMAID = ['schemaId'];
+const SCHEMAID_REVISION = ['schemaId','revision'];
+const TASKID = ['taskId'];
+const USERID = ['userId'];
+const USERID_IDENTIFIER = ['userId','identifier'];
+const USERID_GUID = ['userId','guid'];
 
 function namedParams(fields, args) {
     return (fields || []).reduce(function(params, name, i) {

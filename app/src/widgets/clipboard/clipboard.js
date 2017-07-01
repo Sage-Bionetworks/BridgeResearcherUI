@@ -1,9 +1,9 @@
-var serverService = require('../../services/server_service');
-var storeService = require('../../services/store_service');
-var optionsService = require('../../services/options_service');
-var ko = require('knockout');
-var utils = require('../../utils');
-var Promise = require('bluebird');
+import serverService from '../../services/server_service';
+import storeService from '../../services/store_service';
+import optionsService from '../../services/options_service';
+import * as ko from 'knockout';
+import utils from '../../utils';
+import * as Promise from 'bluebird';
 require('knockout-postbox');
 
 /**

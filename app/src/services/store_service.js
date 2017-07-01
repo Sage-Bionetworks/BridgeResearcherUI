@@ -1,10 +1,10 @@
-var fn = require('../functions');
+import { fn } from '../functions';
 
 // This has to be here so that these filter values can be removed in the url to update the page.
 // This is very hacky...
 localStorage.removeItem('participants-page');
 
-module.exports = {
+export default {
     set: function(key, value) {
         console.debug("[cache] Setting", key);
         localStorage.setItem(key, JSON.stringify(value));

@@ -1,14 +1,14 @@
-var storeService = require('../../services/store_service');
-var serverService = require('../../services/server_service');
-var utils = require('../../utils');
-var fn = require('../../functions');
-var bind = require('../../binder');
-var config = require('../../config');
-var root = require('../../root');
-var BridgeError = require('../../error');
+import { Binder } from '../../binder';
+import { BridgeError } from '../../bridge_error';
+import { config } from '../../config';
+import { fn } from '../../functions';
+import { root } from '../../root';
+import { serverService }  from '../../services/server_service';
+import { storeService }  from '../../services/store_service';
+import { utils } from '../../utils';
 
-var STUDY_KEY = 'studyKey';
-var ENVIRONMENT = 'environment';
+const STUDY_KEY = 'studyKey';
+const ENVIRONMENT = 'environment';
 
 // There will be stale data in the UI if we don't reload when changing studies or environments.
 function makeReloader(studyKey, environment) {
@@ -33,7 +33,7 @@ module.exports = function() {
         studyKey = storeService.get(STUDY_KEY) || 'api';
         env = storeService.get(ENVIRONMENT) || 'production';
     }
-    bind(self)
+    new Binder(self)
         .obs('title')
         .obs('username')
         .obs('password')

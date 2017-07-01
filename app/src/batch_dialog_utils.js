@@ -1,8 +1,8 @@
-var bind = require('./binder');
+import { Binder } from './binder';
 
-module.exports = {
+export default {
     initBatchDialog: function(vm) {
-        bind(vm)
+        new Binder(vm)
             .obs('errorMessages[]',[])
             .obs('status')
             .obs('value', 0)

@@ -1,9 +1,9 @@
-var ko = require('knockout');
-var serverService = require('../../services/server_service');
-var surveyUtils = require('./survey_utils');
-var utils = require('../../utils');
-var fn = require('../../functions');
-var root = require('../../root');
+import fn from '../../functions';
+import ko from 'knockout';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import surveyUtils from './survey_utils';
+import utils from '../../utils';
 
 var notFound = utils.failureHandler({
     redirectTo: "surveys",

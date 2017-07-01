@@ -1,13 +1,13 @@
-var serverService = require('../../services/server_service');
-var bind = require('../../binder');
-var fn = require('../../functions');
-var utils = require('../../utils');
-var root = require('../../root');
+import { serverService }  from '../../services/server_service';
+import { Binder } from '../../binder';
+import { fn } from '../../functions';
+import { utils } from '../../utils';
+import { root } from '../../root';
 
 module.exports = function(params) {
     var self = this;
 
-    var binder = bind(self)
+    var binder = new Binder(self)
         .obs('isNew', params.guid === "new")
         .obs('title', 'New Topic')
         .obs('createdOn', '', fn.formatDateTime)

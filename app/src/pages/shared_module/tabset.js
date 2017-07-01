@@ -1,4 +1,4 @@
-var ko = require('knockout');
+import { ko } from 'knockout';
 
 module.exports = function(params) {
     var self = this;

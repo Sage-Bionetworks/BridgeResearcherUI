@@ -1,6 +1,7 @@
-var expect = require('chai').expect;
-var sinon = require('sinon');
-var fn = require('../app/src/functions');
+import * as fn from '../app/src/functions.js';
+import { expect } from 'chai';
+import * as sinon from 'sinon';
+
 if (!String.prototype.padStart) {
     String.prototype.padStart = function padStart(targetLength,padString) {
         targetLength = targetLength>>0; //floor if number or convert non-number to 0;

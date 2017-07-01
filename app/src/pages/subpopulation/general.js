@@ -1,8 +1,8 @@
-var criteriaUtils = require('../../criteria_utils');
-var serverService = require('../../services/server_service');
-var utils = require('../../utils');
-var bind = require('../../binder');
-var fn = require('../../functions');
+import { Binder } from '../../binder';
+import criteriaUtils from '../../criteria_utils';
+import fn from '../../functions';
+import serverService from '../../services/server_service';
+import utils from '../../utils';
 
 var failureHandler = utils.failureHandler({
     redirectMsg:"Consent group not found.", 
@@ -17,7 +17,7 @@ function newSubpop() {
 module.exports = function(params) {
     var self = this;
 
-    var binder = bind(self)
+    var binder = new Binder(self)
         .obs('isNew', params.guid === "new")
         .obs('guid')
         .obs('title', 'New Consent Group')

@@ -1,20 +1,20 @@
-var sharedModuleUtils = require('../../shared_module_utils');
-var serverService = require('../../services/server_service');
-var utils = require('../../utils');
-var ko = require('knockout');
-var alerts = require('../../widgets/alerts');
-var config = require('../../config');
+import { alerts } from '../../widgets/alerts';
+import { config } from '../../config';
+import { ko } from 'knockout';
+import { serverService }  from '../../services/server_service';
+import { sharedModuleUtils } from '../../shared_module_utils';
+import { utils } from '../../utils';
 
-var NO_ITEMS_MSG = "There are currently no shared modules (or none with those search terms).";
-var DELETE_CONFIRM_MSG = "This deletes ALL revisions of the module.\n\n"+
+const NO_ITEMS_MSG = "There are currently no shared modules (or none with those search terms).";
+const DELETE_CONFIRM_MSG = "This deletes ALL revisions of the module.\n\n"+
     "Use the module's history page to delete a single revision.\n\n"+
     "Are you sure you want to delete this shared module?";
-var OPTIONS = [
+const OPTIONS = [
     {label: "Surveys only", value: "survey"},
     {label: "Upload schemas only", value: "schema"},
     {label: "Both", value: "both"}
 ];
-module.exports = function() {
+export default function() {
     var self = this;
 
     function doSearch() {

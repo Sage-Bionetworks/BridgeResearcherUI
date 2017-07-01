@@ -1,7 +1,7 @@
-var utils = require('../../utils');
-var ko = require('knockout');
-var root = require('../../root');
-var fn = require('../../functions');
+import { fn } from '../../functions';
+import { ko } from 'knockout';
+import { root } from '../../root';
+import { utils } from '../../utils';
 
 var UNIT_OPTIONS = Object.freeze([
     {value: null, label: '<none>'},
@@ -261,12 +261,12 @@ function changeElementType(oldElement, newType) {
     return newElement;
 }
 
-module.exports = {
-    newSurvey: newSurvey,
-    newField: newField,
-    observablesToElement: observablesToElement,
-    elementToObservables: elementToObservables,
-    changeElementType: changeElementType,
+export default {
+    newSurvey,
+    newField,
+    observablesToElement,
+    elementToObservables,
+    changeElementType,
     surveyToObservables: function(vm, survey) {
         SURVEY_FIELDS.forEach(function(field) {
             vm[field+"Obs"](survey[field]);

@@ -1,11 +1,11 @@
-var serverService = require('../../services/server_service');
-var root = require('../../root');
-var bind = require('../../binder');
+import { Binder } from '../../binder';
+import { root } from '../../root';
+import { serverService }  from '../../services/server_service';
 
 module.exports = function(params) {
     var self = this;
 
-    bind(self)
+    new Binder(self)
         .obs('downloadHref', params.study.identifier + ".pem")
         .obs('downloadFileName', '')
         .obs('content');

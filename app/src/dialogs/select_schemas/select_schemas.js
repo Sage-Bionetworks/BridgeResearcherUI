@@ -1,8 +1,8 @@
-var serverService = require('../../services/server_service');
-var root = require('../../root');
-var utils = require('../../utils');
-var tables = require('../../tables');
-var fn = require('../../functions');
+import { serverService }  from '../../services/server_service';
+import { root } from '../../root';
+import { utils } from '../../utils';
+import { tables } from '../../tables';
+import { fn } from '../../functions';
 
 /**
  * params:

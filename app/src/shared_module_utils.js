@@ -1,4 +1,4 @@
-var serverService = require('./services/server_service');
+import { serverService }  from './services/server_service';
 
 var sharedModuleNameMap = {};
 var sharedModuleHTMLMap = {};
@@ -27,7 +27,7 @@ function updateSchemaNameMap(response) {
     });
     allLoaded = true;
 }
-function loadMaps() {
+function loadNameMaps() {
     if (allLoaded) {
         return Promise.resolve();
     } else {
@@ -88,15 +88,15 @@ function moduleHTML(object) {
     return sharedModuleHTMLMap[object.moduleId];
 }
 
-module.exports = {
-    loadNameMaps: loadMaps,
-    formatDescription: formatDescription,
-    formatMetadataLinkedItem: formatMetadataLinkedItem,
-    formatTags: formatTags,
-    formatVersions: formatVersions,
-    getSurveyName: getSurveyName,
-    getSchemaName: getSchemaName,
-    formatModuleLink: formatModuleLink,
-    moduleHTML: moduleHTML
+export default {
+    loadNameMaps: loadNameMaps,
+    formatDescription,
+    formatMetadataLinkedItem,
+    formatTags,
+    formatVersions,
+    getSurveyName,
+    getSchemaName,
+    formatModuleLink,
+    moduleHTML
 };
 

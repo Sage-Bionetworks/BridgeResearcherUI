@@ -1,7 +1,6 @@
-// jquery is loaded globally
-var ko = require('knockout');
-var dragula = require('dragula');
-var autoScroll = require('dom-autoscroller');
+import autoScroll from 'dom-autoscroller';
+import dragula from 'dragula';
+import ko from 'knockout';
 
 var indexOf = [].indexOf;
 

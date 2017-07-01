@@ -1,12 +1,13 @@
-var ko = require('knockout');
-var serverService = require('../../services/server_service');
-var sharedModuleUtils = require('../../shared_module_utils');
-var utils = require('../../utils');
-var fn = require('../../functions');
-var Promise = require('bluebird');
-var surveyFieldsToDelete = ['guid','version','createdOn','modifiedOn','published','deleted'];
-var tables = require('../../tables');
-var root = require('../../root');
+import { fn } from '../../functions';
+import { ko } from 'knockout';
+import { Promise } from 'bluebird';
+import { root } from '../../root';
+import { serverService }  from '../../services/server_service';
+import { sharedModuleUtils } from '../../shared_module_utils';
+import { tables } from '../../tables';
+import { utils } from '../../utils';
+
+const SURVEY_FIELDS_TO_DELETE = ['guid','version','createdOn','modifiedOn','published','deleted'];
 
 function addScheduleField(survey) {
     survey.schedulePlanObs = ko.observableArray([]);
@@ -63,7 +64,7 @@ module.exports = function() {
         Promise.mapSeries(copyables, function(survey) {
             return serverService.getSurvey(survey.guid, survey.createdOn).then(function(fullSurvey) {
                 fullSurvey.name += " (Copy)";
-                surveyFieldsToDelete.forEach(function(field) {
+                SURVEY_FIELDS_TO_DELETE.forEach(function(field) {
                     delete fullSurvey[field]; 
                 });
                 fullSurvey.elements.forEach(function(element) {

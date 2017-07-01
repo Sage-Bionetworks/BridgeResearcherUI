@@ -1,5 +1,5 @@
-var surveyUtils = require('../survey_utils');
-var root = require('../../../root');
+import { root } from '../../../root';
+import { surveyUtils } from '../survey_utils';
 
 module.exports = function(params) {
     var self = this;

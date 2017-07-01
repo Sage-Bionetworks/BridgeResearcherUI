@@ -1,7 +1,7 @@
-var ko = require('knockout');
-var scheduleUtils = require('../../pages/schedule/schedule_utils');
-var root = require('../../root');
-var fn = require('../../functions');
+import { fn } from '../../functions';
+import { ko } from 'knockout';
+import { root } from '../../root';
+import { scheduleUtils } from '../../pages/schedule/schedule_utils';
 
 function hourMinuteValue(value) {
     return value.replace(":00.000","");

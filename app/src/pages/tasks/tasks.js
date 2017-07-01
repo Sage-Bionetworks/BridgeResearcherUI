@@ -1,9 +1,9 @@
-var serverService = require('../../services/server_service');
-var utils = require('../../utils');
-var Promise = require('bluebird');
-var tables = require('../../tables');
-var scheduleUtils = require('../schedule/schedule_utils');
-var fn = require('../../functions');
+import { fn } from '../../functions';
+import { Promise } from 'bluebird';
+import { scheduleUtils }  from '../schedule/schedule_utils';
+import { serverService }  from '../../services/server_service';
+import { tables } from '../../tables';
+import { utils } from '../../utils';
 
 function deleteItem(task) {
     return serverService.deleteTaskDefinition(task.taskId);

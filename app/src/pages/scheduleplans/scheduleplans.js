@@ -1,11 +1,11 @@
-var serverService = require('../../services/server_service.js');
-var optionsService = require('../../services/options_service.js');
-var scheduleUtils = require('../schedule/schedule_utils.js');
-var utils = require('../../utils');
-var fn = require('../../functions');
-var tables = require('../../tables');
-var root = require('../../root');
-var Promise = require('bluebird');
+import { fn } from '../../functions';
+import { optionsService } from '../../services/options_service';
+import { Promise } from 'bluebird';
+import { root } from '../../root';
+import { scheduleUtils }  from '../schedule/schedule_utils';
+import { serverService }  from '../../services/server_service';
+import { tables } from '../../tables';
+import { utils } from '../../utils';
 
 function deleteItem(plan) {
     return serverService.deleteSchedulePlan(plan.guid);

@@ -1,10 +1,9 @@
-// jquery loaded globally (for now) from CDNs.
-var ko = require('knockout');
-var $ = require('jquery');
-var flatpickr = require('flatpickr');
-require('../../node_modules/flatpickr/dist/flatpickr.min.css');
-var alert = require('./widgets/alerts');
-var Chart = require('chart.js');
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+import $ from 'jquery';
+import alert from './widgets/alerts';
+import Chart from 'chart.js';
+import flatpickr from 'flatpickr';
+import ko from 'knockout';
 
 // need to make a global out of this for semantic to work, as it's not in a package.
 // This is hacky, webpack has better support for this. Worse, semantic is a jQuery

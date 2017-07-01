@@ -1,11 +1,11 @@
-var utils = require('../../utils');
-var serverService = require('../../services/server_service');
-var bind = require('../../binder');
-var tables = require('../../tables');
-var root = require('../../root');
-var fn = require('../../functions');
+import { Binder } from '../../binder';
+import fn from '../../functions';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import tables from '../../tables';
+import utils from '../../utils';
 
-var PAGE_SIZE = 25;
+const PAGE_SIZE = 25;
 var failureHandler = utils.failureHandler({
     redirectTo: "participants",
     redirectMsg: "Participant not found"
@@ -24,7 +24,7 @@ module.exports = function(params) {
     self.vm = self;
     self.callback = fn.identity;
 
-    bind(self)
+    new Binder(self)
         .obs('userId', params.userId)
         .obs('name', '')
         .obs('uploadsStartDate', new Date(start))

@@ -1,10 +1,10 @@
-var serverService = require('../../services/server_service');
-var ko = require('knockout');
-var root = require('../../root');
-var utils = require('../../utils');
-var fn = require('../../functions');
-var bind = require('../../binder');
-var Promise = require('bluebird');
+import { Binder } from '../../binder';
+import { fn } from '../../functions';
+import { ko } from 'knockout';
+import { Promise } from 'bluebird';
+import { root } from '../../root';
+import { serverService }  from '../../services/server_service';
+import { utils } from '../../utils';
 
 module.exports = function(params) {
     var self = this;
@@ -12,7 +12,7 @@ module.exports = function(params) {
     var copyables = params.copyables;
     var specs = [];
 
-    bind(self)
+    new Binder(self)
         .obs('index', 0)
         .obs('name', copyables[0].name + " (Copy)")
         .obs('schemaId', copyables[0].schemaId)

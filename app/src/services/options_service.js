@@ -1,5 +1,5 @@
-var serverService = require('./server_service');
-var fn = require('../functions');
+import * as fn from '../functions';
+import { serverService }  from './server_service';
 
 var LABEL_SORTER = fn.makeFieldSorter('label');
 
@@ -65,11 +65,11 @@ function getCompoundActivityOptions() {
         return [{value:"",label:"Select compound task:"}].concat(opts);
     });
 }
-module.exports = {
-    getActivities: getActivities,
-    getSchedules: getSchedules,
-    getActivityOptions: getActivityOptions,
-    getSurveyOptions: getSurveyOptions,
-    getTaskIdentifierOptions: getTaskIdentifierOptions,
-    getCompoundActivityOptions: getCompoundActivityOptions
+export default {
+    getActivities,
+    getSchedules,
+    getActivityOptions,
+    getSurveyOptions,
+    getTaskIdentifierOptions,
+    getCompoundActivityOptions
 };

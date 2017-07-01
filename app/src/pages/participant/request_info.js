@@ -1,7 +1,7 @@
-var serverService = require('../../services/server_service');
-var bind = require('../../binder');
-var root = require('../../root');
-var utils = require('../../utils');
+import { Binder } from '../../binder';
+import { root } from '../../root';
+import { serverService }  from '../../services/server_service';
+import { utils } from '../../utils';
 
 function joiner(value) {
     return (value && value.length) ? value.join(", ") : "<none>";
@@ -26,7 +26,7 @@ function noner(value) {
 module.exports = function(params) {
     var self = this;
 
-    var binder = bind(self)
+    var binder = new Binder(self)
         .obs('isNew', false)
         .obs('userId', params.userId)
         .obs('name', '')

@@ -1,9 +1,9 @@
-var tables = require('../../tables');
-var serverService = require('../../services/server_service');
-var sharedModuleUtils = require('../../shared_module_utils');
-var utils = require('../../utils');
-var ko = require('knockout');
-var fn = require('../../functions');
+import { fn } from '../../functions';
+import { ko } from 'knockout';
+import { serverService }  from '../../services/server_service';
+import { sharedModuleUtils } from '../../shared_module_utils';
+import { tables } from '../../tables';
+import { utils } from '../../utils';
 
 /*
 - Hide things that are already imported?

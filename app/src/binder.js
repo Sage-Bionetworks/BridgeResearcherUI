@@ -1,5 +1,5 @@
-var ko = require('knockout');
-var fn = require('./functions');
+import * as ko from 'knockout';
+import * as fn from './functions.js';
 
 function nameInspector(string) {
     var isArray = /\[\]$/.test(string);
@@ -28,36 +28,36 @@ function createObservable(doBinding) {
     };
 }
 
-function Binder(vm) {
-    this.vm = vm;
-    this.fields = {};
-}
-Binder.prototype = {
-    /**
-     * Create an observable on the view model that updates the model object.
-     * Update will update the observable, and persist will update the model 
-     * object.
-     * 
-     * @param name - the name of the property on the model object
-     * @param defaultValue - a default value for this field, can null
-     * @param modelTransform - a pure function that formats a model value before
-     *      setting an observer with the value
-     * @param obsTransform - a pure function that formats the value of an 
-     *      observable before updating a model object
-     */
-    bind: createObservable(true),
-    /**
-     * Create an observable on the view model that does not update the model object.
-     * Update will update the observable, but persist will not update the model 
-     * object. An observer transform is not needed because the observer will not be 
-     * used to update a model object.
-     * 
-     * @param name - the name of the property on the model object
-     * @param defaultValue - a default value for this field, can null
-     * @param modelTransform - a pure function that formats a model value before
-     *      setting an observer with the value
-     */
-    obs: createObservable(false),
+export class Binder {
+    constructor(vm) {
+        this.vm = vm;
+        this.fields = {};
+        /**
+         * Create an observable on the view model that updates the model object.
+         * Update will update the observable, and persist will update the model 
+         * object.
+         * 
+         * @param name - the name of the property on the model object
+         * @param defaultValue - a default value for this field, can null
+         * @param modelTransform - a pure function that formats a model value before
+         *      setting an observer with the value
+         * @param obsTransform - a pure function that formats the value of an 
+         *      observable before updating a model object
+         */
+        this.bind = createObservable(true);
+        /**
+         * Create an observable on the view model that does not update the model object.
+         * Update will update the observable, but persist will not update the model 
+         * object. An observer transform is not needed because the observer will not be 
+         * used to update a model object.
+         * 
+         * @param name - the name of the property on the model object
+         * @param defaultValue - a default value for this field, can null
+         * @param modelTransform - a pure function that formats a model value before
+         *      setting an observer with the value
+         */
+        this.obs = createObservable(false);
+    }
     /**
      * Returns a function that can be registered as a callback to receive a model and 
      * update observables in the view model. If no field names are supplied, all observables 
@@ -71,7 +71,7 @@ Binder.prototype = {
      *      - vm - the viewModel
      *      - observer - the observable instance
      */
-    update: function() {
+    update() {
         console.assert(arguments.length === 0 || typeof arguments[0] === 'string',
             "binder.update() returns function for updating, do not call directly with a model object.");
         var fields = (arguments.length > 0) ? arguments : Object.keys(this.fields);
@@ -92,7 +92,7 @@ Binder.prototype = {
             }
             return model;
         }.bind(this);
-    },
+    }
     /**
      * Persist all the bound observables (two-way data bound) created with bind() back to a 
      * copy of the model object, maintaining all the existing properties that are not updated.
@@ -108,7 +108,7 @@ Binder.prototype = {
      *      - vm - the viewModel
      *      - observer - the observer
      */
-    persist: function(model) {
+    persist(model) {
         var copy = Object.assign({}, model);
         Object.keys(this.fields).forEach(function(field) {
             var info = this.fields[field];
@@ -123,80 +123,73 @@ Binder.prototype = {
             }
         }, this);
         return copy;
-    },
-    assign: function(field) {
+    }
+    assign(field) {
         console.assert(typeof field === 'string', 'string field value must be supplied');
+        /*
+        return (model) => {
+            this.vm[field] = model;
+            return model;
+        };
+        */
         return function(model) {
             this.vm[field] = model;
             return model;
         }.bind(this);
     }
-};
-
-module.exports = function(vm) {
-    return new Binder(vm);
-};
-
-/* ================================================ */
-/* binder processing utility methods */
-/* ================================================ */
-
-// Retrieve the value of a property on an object that is set as a property on the model 
-// (rather than directly as a property of the model);
-function fromObjectField(fieldName, objFieldName) {
-    return function(value, context) {
-        context.model[fieldName] = context.model[fieldName] || {};
-        return context.model[fieldName][objFieldName];
-    };
-}
-// Write the observer to the property of an object that is a property on the model 
-// (rather than directly on the model);
-function toObjectField(fieldName, objFieldName) {
-    return function(value, context)  {
-        context.model[fieldName] = context.model[fieldName] || {};
-        if (typeof value !== "undefined") {
-            context.model[fieldName][objFieldName] = value;
-        } else {
-            delete context.model[fieldName][objFieldName];
-        }
-    };
-}
-function objPropDelegates(fieldName, objFieldName) {
-    return {
-        toObject: toObjectField(fieldName, objFieldName),
-        fromObject: fromObjectField(fieldName, objFieldName)
-    };
-}
-function persistAttributes(value) {
-    return value.reduce(function(map, value) {
-        map[value.key] = value.obs();
-        return map;
-    }, {});
-}
-function formatTitle(value, context) {
-    var user = context.model;
-    if (user.id === "new" && fn.isBlank(user.firstName) && fn.isBlank(user.lastName)) {
-        return "New participant";
+    /**
+     * Retrieve the value of a property on an object that is set as a property on the model 
+     * (rather than directly as a property of the model);
+     */
+    static fromObjectField(fieldName, objFieldName) {
+        return function(value, context) {
+            context.model[fieldName] = context.model[fieldName] || {};
+            return context.model[fieldName][objFieldName];
+        };
     }
-    return fn.formatName(context.model);
+    /**
+     * Write the observer to the property of an object that is a property on the model 
+     * (rather than directly on the model);
+     */
+    static toObjectField(fieldName, objFieldName) {
+        return function(value, context)  {
+            context.model[fieldName] = context.model[fieldName] || {};
+            if (typeof value !== "undefined") {
+                context.model[fieldName][objFieldName] = value;
+            } else {
+                delete context.model[fieldName][objFieldName];
+            }
+        };
+    }
+    static objPropDelegates(fieldName, objFieldName) {
+        return {
+            toObject: toObjectField(fieldName, objFieldName),
+            fromObject: fromObjectField(fieldName, objFieldName)
+        };
+    }
+    static persistAttributes(value) {
+        return value.reduce(function(map, value) {
+            map[value.key] = value.obs();
+            return map;
+        }, {});
+    }
+    static formatTitle(value, context) {
+        var user = context.model;
+        if (user.id === "new" && fn.isBlank(user.firstName) && fn.isBlank(user.lastName)) {
+            return "New participant";
+        }
+        return fn.formatName(context.model);
+    }
+    static formatAttributes(value, context) {
+        context.vm.attributesObs().map(function(attr) {
+            attr.obs(value[attr.key]);
+        });
+        return context.vm.attributesObs();
+    }
+    static formatHealthCode(value, context) {
+        return (context.vm.study.healthCodeExportEnabled) ? value : 'N/A';
+    }
+    static callObsCallback(value, context) {
+        return context.observer.callback();
+    }
 }
-function formatAttributes(value, context) {
-    context.vm.attributesObs().map(function(attr) {
-        attr.obs(value[attr.key]);
-    });
-    return context.vm.attributesObs();
-}
-function formatHealthCode(value, context) {
-    return (context.vm.study.healthCodeExportEnabled) ? value : 'N/A';
-}
-function callObsCallback(value, context) {
-    return context.observer.callback();
-}
-
-// Lots of static methods to replace transforms
-module.exports.objPropDelegates = objPropDelegates;
-module.exports.formatAttributes = formatAttributes;
-module.exports.formatHealthCode = formatHealthCode;
-module.exports.formatTitle = formatTitle;
-module.exports.persistAttributes = persistAttributes;
-module.exports.callObsCallback = callObsCallback;
