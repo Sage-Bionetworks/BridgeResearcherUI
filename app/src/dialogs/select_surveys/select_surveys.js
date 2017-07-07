@@ -1,4 +1,4 @@
-import * as fn from '../../functions';
+import fn from '../../functions';
 import root from '../../root';
 import serverService from '../../services/server_service';
 import tables from '../../tables';

@@ -6,10 +6,10 @@
  * for a session to be established, then the call is completed.
  */
 // Necessary because export of library is broken
-import * as fn from '../functions';
 import $ from 'jquery';
 import config from '../config';
 import EventEmitter from '../events';
+import fn from '../functions';
 import Promise from 'bluebird';
 import storeService from './store_service';
 

@@ -1,4 +1,4 @@
-import * as fn from '../../functions';
+import fn from '../../functions';
 import Binder from '../../binder';
 import BridgeError from '../../bridge_error';
 import config from '../../config';

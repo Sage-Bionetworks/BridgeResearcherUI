@@ -1,6 +1,6 @@
 import alerts from '../../../widgets/alerts';
-import * as fn from '../../../functions';
-import * as ko from 'knockout';
+import fn from '../../../functions';
+import ko from 'knockout';
 import Promise from 'bluebird';
 import serverService from '../../../services/server_service';
 import tables from '../../../tables';

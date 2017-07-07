@@ -1,7 +1,7 @@
 import 'knockout-postbox';
-import * as ko from 'knockout';
-import * as Promise from 'bluebird';
+import ko from 'knockout';
 import optionsService from '../../services/options_service';
+import Promise from 'bluebird';
 import serverService from '../../services/server_service';
 import storeService from '../../services/store_service';
 import utils from '../../utils';
@@ -385,7 +385,7 @@ function copyToClipboard(response) {
 serverService.addSessionStartListener(function() {
     var items = storeService.get('clipboard');
     if (items) {
-        clipboardEntries.pushAll(items);
+        clipboardEntries.push.apply(clipboardEntries, items);
     }
 });
 

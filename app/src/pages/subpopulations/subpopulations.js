@@ -1,5 +1,5 @@
-import * as fn from '../../functions';
 import criteriaUtils from '../../criteria_utils';
+import fn from '../../functions';
 import root from '../../root';
 import serverService from '../../services/server_service';
 import tables from '../../tables';

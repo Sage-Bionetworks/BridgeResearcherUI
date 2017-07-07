@@ -1,5 +1,5 @@
-import { Promise } from 'bluebird';
-import * as fn from '../../functions';
+import Promise from 'bluebird';
+import fn from '../../functions';
 import batchDialogUtils from '../../batch_dialog_utils';
 import Binder from '../../binder';
 import root from '../../root';

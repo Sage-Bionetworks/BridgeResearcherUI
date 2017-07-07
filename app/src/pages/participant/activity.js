@@ -1,5 +1,5 @@
 import Binder from '../../binder';
-import * as fn from '../../functions';
+import fn from '../../functions';
 import jsonFormatter from '../../json_formatter';
 import root from '../../root';
 import scheduleUtils from '../../pages/schedule/schedule_utils';

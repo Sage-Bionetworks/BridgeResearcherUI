@@ -1,4 +1,4 @@
-import * as fn from './functions';
+import fn from './functions';
 
 function quote(a) {
     return '"'+a+'"';

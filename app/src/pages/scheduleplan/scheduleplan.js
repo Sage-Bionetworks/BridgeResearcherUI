@@ -1,5 +1,5 @@
 import Binder from '../../binder';
-import * as fn from '../../functions';
+import fn from '../../functions';
 import optionsService from '../../services/options_service';
 import Promise from 'bluebird';
 import scheduleUtils from '../schedule/schedule_utils';

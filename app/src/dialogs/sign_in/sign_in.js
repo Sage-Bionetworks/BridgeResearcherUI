@@ -1,7 +1,7 @@
-import * as fn from '../../functions';
 import Binder from '../../binder';
 import BridgeError from '../../bridge_error';
 import config from '../../config';
+import fn from '../../functions';
 import root from '../../root';
 import serverService from '../../services/server_service';
 import storeService from '../../services/store_service';

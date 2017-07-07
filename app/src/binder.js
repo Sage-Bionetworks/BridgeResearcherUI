@@ -1,5 +1,5 @@
-import * as ko from 'knockout';
-import * as fn from './functions.js';
+import ko from 'knockout';
+import fn from './functions.js';
 
 function nameInspector(string) {
     var isArray = /\[\]$/.test(string);
@@ -75,7 +75,7 @@ export default class Binder {
         console.assert(arguments.length === 0 || typeof arguments[0] === 'string',
             "binder.update() returns function for updating, do not call directly with a model object.");
         var fields = (arguments.length > 0) ? arguments : Object.keys(this.fields);
-        return function(model) {
+        return (model) => {
             for (var i=0; i < fields.length; i++) {
                 var field = fields[i];
                 var info = this.fields[field];
@@ -91,7 +91,7 @@ export default class Binder {
                 }
             }
             return model;
-        }.bind(this);
+        };
     }
     /**
      * Persist all the bound observables (two-way data bound) created with bind() back to a 
@@ -110,10 +110,11 @@ export default class Binder {
      */
     persist(model) {
         var copy = Object.assign({}, model);
-        Object.keys(this.fields).forEach(function(field) {
+        Object.keys(this.fields).forEach(field => {
             var info = this.fields[field];
             if (info.bind) {
-                var context = {oldValue: model[info.name], model: model, copy: copy, vm: this.vm, observer: info.observable};
+                var context = {oldValue: model[info.name], model: model, 
+                    copy: copy, vm: this.vm, observer: info.observable};
                 var value = info.obsTransform(info.observable(), context);
                 if (value !== null && typeof value !== "undefined") {
                     copy[info.name] = value;    
@@ -121,21 +122,15 @@ export default class Binder {
                     delete copy[info.name];
                 }
             }
-        }, this);
+        });
         return copy;
     }
     assign(field) {
         console.assert(typeof field === 'string', 'string field value must be supplied');
-        /*
         return (model) => {
             this.vm[field] = model;
             return model;
         };
-        */
-        return function(model) {
-            this.vm[field] = model;
-            return model;
-        }.bind(this);
     }
     /**
      * Retrieve the value of a property on an object that is set as a property on the model 
