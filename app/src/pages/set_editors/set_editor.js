@@ -1,5 +1,5 @@
-import Binder from '../../binder';
 import * as fn from '../../functions';
+import Binder from '../../binder';
 import root from '../../root';
 import serverService from '../../services/server_service';
 import utils from '../../utils';
@@ -24,7 +24,7 @@ module.exports = function(propertyName) {
         };
         self.remove = function(attribute) {
             self.newRecordsObs.remove(attribute);
-            self.noChangesObs(false);
+            self.noChangesObs(self.newRecordsObs().length === 0);
         };
         self.add = function() {
             // TODO: We don't want to use root.message like this. We want to create an error
@@ -45,7 +45,7 @@ module.exports = function(propertyName) {
             array.sort(fn.lowerCaseStringSorter);
             self.newRecordsObs(array);
             self.addFieldObs("");
-            self.noChangesObs(false);
+            self.noChangesObs(self.newRecordsObs().length === 0);
         };
         self.save = function(vm, event) {
             var array = [].concat(self.recordsObs());
