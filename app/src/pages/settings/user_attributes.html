@@ -14,6 +14,11 @@
         <div class="ten wide column">
             <div class="ui large labels" data-bind="foreach: recordsObs">
                 <div class="ui label">
+                    <span data-bind="text: $data"></span>
+                </div><br/>
+            </div>
+            <div class="ui large labels" data-bind="foreach: newRecordsObs">
+                <div class="ui label">
                     <span data-bind="text: $data"></span> <i class="icon close" data-bind="click: $component.remove"></i>
                 </div><br/>
             </div>
