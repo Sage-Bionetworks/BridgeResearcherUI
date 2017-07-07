@@ -1,6 +1,6 @@
-var serverService = require('../../services/server_service');
-var fn = require('../../functions');
-var bind = require('../../binder');
+import * as fn from '../../functions';
+import Binder from '../../binder';
+import serverService from '../../services/server_service';
 
 function partialRelay(criteriaObs) {
     return function(func) {
@@ -24,7 +24,7 @@ module.exports = function(params) {
 
     self.id = params.id;
     self.criteriaObs = params.criteriaObs;
-    var binder = bind(self)
+    var binder = new Binder(self)
         .bind('language')
         .bind('allOfGroups[]')
         .bind('noneOfGroups[]')

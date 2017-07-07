@@ -1,5 +1,5 @@
-var ko = require('knockout');
-var fn = require('../../functions');
+import * as ko from 'knockout';
+import * as fn from '../../functions';
 
 module.exports = function(params) {
     var self = this;

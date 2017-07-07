@@ -1,5 +1,5 @@
-var ko = require('knockout');
-var utils = require('../../utils');
+import * as ko from 'knockout';
+import utils from '../../utils';
 
 var DURATION_OPTIONS = Object.freeze([
     {value: 'PT*H', label: 'Hours'},

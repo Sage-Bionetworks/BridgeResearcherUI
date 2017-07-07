@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     environments: [
         {value: "local", label: "Local"},
         {value: "develop", label: "Development"},

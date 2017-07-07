@@ -1,10 +1,10 @@
-var sharedModuleUtils = require('../../shared_module_utils');
-var serverService = require('../../services/server_service');
-var bind = require('../../binder');
-var utils = require('../../utils');
-var root = require('../../root');
-var fn = require('../../functions');
-var ko = require('knockout');
+import * as fn from '../../functions';
+import * as ko from 'knockout';
+import Binder from '../../binder';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import sharedModuleUtils from '../../shared_module_utils';
+import utils from '../../utils';
 
 function schemaListToView(schemaList, context) {
     return schemaList.map(schemaToView).map(loadSchemaRevisions);
@@ -77,7 +77,7 @@ module.exports = function(params) {
 
     self.task = {};
 
-    var binder = bind(self)
+    var binder = new Binder(self)
         .bind('isNew', params.taskId === "new")
         .bind('taskId', params.taskId === "new" ? null : params.taskId)
         .bind('schemaList[]', [], schemaListToView, schemaListToTask)

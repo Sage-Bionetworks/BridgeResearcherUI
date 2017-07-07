@@ -1,8 +1,8 @@
-var bind = require('../../binder');
-var serverService = require('../../services/server_service');
-var utils = require('../../utils');
-var fn = require('../../functions');
-var BridgeError = require('../../error');
+import * as fn from '../../functions';
+import Binder from '../../binder';
+import BridgeError from '../../bridge_error';
+import serverService  from '../../services/server_service';
+import utils from '../../utils';
 
 function getLocalDate(value) {
     return fn.asDate(value).toISOString().split("T")[0];
@@ -11,7 +11,7 @@ function getLocalDate(value) {
 module.exports = function(params) {
     var self = this;
 
-    var binder = bind(self)
+    var binder = new Binder(self)
         .obs('showIdentifier', typeof params.identifier === "undefined")
         .bind('identifier', params.identifier)
         .bind('date', new Date().toISOString().split("T")[0], null, getLocalDate)

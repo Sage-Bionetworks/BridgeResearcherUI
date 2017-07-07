@@ -1,10 +1,10 @@
-var ko = require('knockout');
-var serverService = require('../../services/server_service');
-var schemaUtils = require('../schema/schema_utils');
-var utils = require('../../utils');
-var bind = require('../../binder');
-var fn = require('../../functions');
-var root = require('../../root');
+import Binder from '../../binder';
+import * as fn from '../../functions';
+import * as ko from 'knockout';
+import root from '../../root';
+import schemaUtils from './schema_utils';
+import serverService from '../../services/server_service';
+import utils from '../../utils';
 
 var FIELD_SKELETON = {
     name:'', required:false, type:null, unboundedText:false, maxLength:'100', fileExtension:'', mimeType:'',
@@ -19,12 +19,12 @@ var failureHandler = utils.failureHandler({
 module.exports = function(params) {
     var self = this;
 
-    var minIos = bind.objPropDelegates('minAppVersions', 'iPhone OS');
-    var minAnd = bind.objPropDelegates('minAppVersions', 'Android');
-    var maxIos = bind.objPropDelegates('maxAppVersions', 'iPhone OS');
-    var maxAnd = bind.objPropDelegates('maxAppVersions', 'Android');
+    var minIos = Binder.objPropDelegates('minAppVersions', 'iPhone OS');
+    var minAnd = Binder.objPropDelegates('minAppVersions', 'Android');
+    var maxIos = Binder.objPropDelegates('maxAppVersions', 'iPhone OS');
+    var maxAnd = Binder.objPropDelegates('maxAppVersions', 'Android');
 
-    var binder = bind(self)
+    var binder = new Binder(self)
         .obs('isNew', params.schemaId === "new")
         .obs('showError', false)
         .obs('index', 0)
@@ -61,7 +61,7 @@ module.exports = function(params) {
 
     function fieldDefToObs(fieldDefinitions) {
         return fieldDefinitions.map(function(def) {
-            bind(def)
+            new Binder(def)
                 .bind('name', def.name)
                 .bind('required', def.required)
                 .bind('type', def.type)

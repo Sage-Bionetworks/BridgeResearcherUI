@@ -1,19 +1,17 @@
-var saveAs = require('../../../lib/filesaver.min.js');
-var serverService = require('../../services/server_service');
-var root = require('../../root');
-var fn = require('../../functions');
-var Promise = require('bluebird');
-var bind = require('../../binder');
-var batchDialogUtils = require('../../batch_dialog_utils');
+import { Promise } from 'bluebird';
+import * as fn from '../../functions';
+import batchDialogUtils from '../../batch_dialog_utils';
+import Binder from '../../binder';
+import root from '../../root';
+import saveAs from '../../../lib/filesaver.min.js';
+import serverService from '../../services/server_service';
 
-var PREMSG = "Only exporting accounts that ";
-var FETCH_DELAY = 100;
-var HEADERS = [];
-var ATTRIBUTES = [];
-var PAGE_SIZE = 100;
-var FIELDS = Object.freeze(["firstName","lastName","email", "sharingScope", "status", "notifyByEmail", 
+const PREMSG = "Only exporting accounts that ";
+const FETCH_DELAY = 100;
+const PAGE_SIZE = 100;
+const FIELDS = Object.freeze(["firstName","lastName","email", "sharingScope", "status", "notifyByEmail", 
     "dataGroups", "languages", "roles", "id", "healthCode", "externalId", "createdOn", "consentHistories"]);
-var FIELD_FORMATTERS = {
+const FIELD_FORMATTERS = {
     'consentHistories': function(map) {
         return Object.keys(map).map(function(guid) {
             return map[guid].map(formatConsentRecords).join('; ');
@@ -23,6 +21,10 @@ var FIELD_FORMATTERS = {
         return (value+'').toLowerCase();
     }
 };
+
+var ATTRIBUTES = [];
+var HEADERS = [];
+
 function formatConsentRecords(record) {
     var aString = record.subpopulationGuid;
     aString += " consented=" + fn.formatDateTime(record.signedOn);
@@ -151,7 +153,7 @@ module.exports = function(params) {
         HEADERS = Object.freeze([].concat(FIELDS).concat(ATTRIBUTES).join("\t"));
     });
     
-    bind(self)
+    new Binder(self)
         .obs('enable')
         .obs('canContactByEmail', false)
         .obs('filterMessage[]', []);

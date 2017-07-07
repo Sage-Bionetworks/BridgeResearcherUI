@@ -1,10 +1,11 @@
-var ko = require('knockout');
-require('knockout-postbox');
-var toastr = require('toastr');
-var config = require('./config');
-var $ = require('jquery');
-var alerts = require('./widgets/alerts');
-var fn = require('./functions');
+import 'knockout-postbox';
+import * as fn from './functions';
+import * as k from 'knockout';
+import * as toastr from 'toastr';
+import $ from 'jquery';
+import alerts from './widgets/alerts';
+import config from './config';
+import root from './root';
 
 var FAILURE_HANDLER = failureHandler({transient:true});
 var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
@@ -24,7 +25,6 @@ var statusHandlers = {
     500: serverError
 };
 function notAllowed(response, params) {
-        var root = require('./root'); // insane, but has to happen here.
         document.location = "#/reports/uploads";
         root.changeView('dailyUploads', {});
         setTimeout(function() {
@@ -50,7 +50,6 @@ function notAdmin(response) {
 }
 function notFound(response, params) {
     if (params.redirectTo) {
-        var root = require('./root'); // insane, but has to happen here.
         document.location = "#/" + params.redirectTo;
         root.changeView(params.redirectTo);
         if (params.redirectMsg) {
@@ -198,7 +197,7 @@ function successHandler(vm, event, message) {
         return response;
     };
 }
-function makeScrolTo(itemSelector) {
+function makeScrollTo(itemSelector) {
     return function scrollTo(index) {
         var offset = $(".fixed-header").outerHeight() * 1.75;
         var $scrollbox = $(".scrollbox");
@@ -247,7 +246,7 @@ function animatedDeleter(scrollTo, elementsObs, selectedElementObs) {
     };
 }
 
-module.exports = {
+export default {
     /**
      * A start handler called before a request to the server is made. All errors are cleared
      * and a loading indicator is shown. This is not done globally because some server requests
@@ -255,7 +254,7 @@ module.exports = {
      * @param vm
      * @param event
      */
-    startHandler: startHandler,
+    startHandler,
     /**
      * An Ajax success handler for a view model that supports the editing of a form.
      * Turns off the loading indicator on the button used to submit the form, and
@@ -264,34 +263,34 @@ module.exports = {
      * @param event
      * @returns {Function}
      */
-    successHandler: successHandler,
-    clearPendingControl: clearPendingControl,
+    successHandler,
+    clearPendingControl,
     /**
      * Given an array of option objects (with the properties "label" and "value"),
      * return a function that will return a specific option given a value.
      * @param options array or observableArray
      * @returns {Function}
      */
-    makeOptionFinder: makeOptionFinder,
+    makeOptionFinder,
     /**
      * Given an array of option objects (with the properties "label" and "value"),
      * return a function that will return an option label given a value.
      * @param options array or observableArray
      * @returns {Function}
      */
-    makeOptionLabelFinder: makeOptionLabelFinder,
+    makeOptionLabelFinder,
     /**
      * The logic for the scrollbox scrolling is not idea so isolate it here where we
      * can fix it everywhere it is used.
      * @param itemSelector
      * @returns {scrollTo}
      */
-    makeScrollTo: makeScrolTo,
-    fadeUp: fadeUp,
-    createParticipantForID: createParticipantForID,
-    animatedDeleter: animatedDeleter,
-    findStudyName: findStudyName,
-    atLeastOneSignedConsent: atLeastOneSignedConsent,
-    copyString: copyString,
-    failureHandler: failureHandler
+    makeScrollTo,
+    fadeUp,
+    createParticipantForID,
+    animatedDeleter,
+    findStudyName,
+    atLeastOneSignedConsent,
+    copyString,
+    failureHandler
 };

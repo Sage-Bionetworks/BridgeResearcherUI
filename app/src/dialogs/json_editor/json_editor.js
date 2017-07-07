@@ -1,4 +1,4 @@
-var ko = require('knockout');
+import * as ko from 'knockout';
 
 /**
  * params:

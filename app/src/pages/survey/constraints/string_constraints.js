@@ -1,4 +1,4 @@
-var surveyUtils = require('../survey_utils');
+import surveyUtils from '../survey_utils';
 
 module.exports = function(params) {
     var self = this;

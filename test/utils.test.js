@@ -1,5 +1,4 @@
-//var expect = require('chai').expect;
-//var utils = require('../app/src/utils');
+//import { utils } from '../app/src/utils';
 
 // Doesn't work, because utils now depends on browser
 xdescribe("utils", function() {

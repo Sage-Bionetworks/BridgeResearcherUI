@@ -1,6 +1,6 @@
-var ko = require('knockout');
-var root = require('../../root');
-var fn = require('../../functions');
+import * as fn from '../../functions';
+import * as ko from 'knockout';
+import root from '../../root';
 
 module.exports = function(params) {
     var self = this;

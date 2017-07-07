@@ -1,12 +1,12 @@
-var serverService = require('../../services/server_service');
-var utils = require('../../utils');
-var bind = require('../../binder');
-var root = require('../../root');
+import Binder from '../../binder';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import utils from '../../utils';
 
 module.exports = function() {
     var self = this;
 
-    var binder = bind(self)
+    var binder = new Binder(self)
         .obs('minLengths', [2,3,4,5,6,7,8,9,10,11,12,13,14])
         .bind('passwordPolicy');
         

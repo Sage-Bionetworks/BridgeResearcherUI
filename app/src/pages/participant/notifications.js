@@ -1,14 +1,14 @@
-var serverService = require('../../services/server_service');
-var bind = require('../../binder');
-var root = require('../../root');
-var utils = require('../../utils');
-var tables = require('../../tables');
-var fn = require('../../functions');
+import Binder from '../../binder';
+import * as fn from '../../functions';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import tables from '../../tables';
+import utils from '../../utils';
 
 module.exports = function(params) {
     var self = this;
 
-    bind(self)
+    new Binder(self)
         .obs('isNew', false)
         .obs('name', '')
         .obs('userId', params.userId)

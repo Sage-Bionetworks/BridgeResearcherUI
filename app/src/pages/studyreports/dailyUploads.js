@@ -1,11 +1,11 @@
-var serverService = require('../../services/server_service');
-var ko = require('knockout');
-var fn = require('../../functions');
-var utils = require('../../utils');
+import * as fn from '../../functions';
+import * as ko from 'knockout';
+import serverService from '../../services/server_service';
+import utils from '../../utils';
 
-var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-var WEEK = 7*1000*60*60*24;
-var STUDY_NAME = 'Bridge-Reporter-Scheduler-prod-daily-upload-report';
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const WEEK = 7*1000*60*60*24;
+const STUDY_NAME = 'Bridge-Reporter-Scheduler-prod-daily-upload-report';
 
 function dataSet(label, array, color) {
     return {

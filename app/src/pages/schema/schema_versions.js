@@ -1,15 +1,15 @@
-var serverService = require('../../services/server_service');
-var criteriaUtils = require('../../criteria_utils');
-var sharedModuleUtils = require('../../shared_module_utils');
-var tables = require('../../tables');
-var bind = require('../../binder');
-var fn = require('../../functions');
-var utils = require('../../utils');
+import Binder from '../../binder';
+import criteriaUtils from '../../criteria_utils';
+import * as fn from '../../functions';
+import serverService from '../../services/server_service';
+import sharedModuleUtils from '../../shared_module_utils';
+import tables from '../../tables';
+import utils from '../../utils';
 
 module.exports = function(params) {
     var self = this;
 
-    bind(self)
+    new Binder(self)
         .obs('name')
         .obs('published')
         .obs('moduleId')

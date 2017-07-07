@@ -1,10 +1,10 @@
-var root = require('../../root');
-var utils = require('../../utils');
-var bind = require('../../binder');
-var serverService = require('../../services/server_service');
-var Promise = require("bluebird");
-var batchDialogUtils = require('../../batch_dialog_utils');
-var fn = require('../../functions');
+import batchDialogUtils from '../../batch_dialog_utils';
+import Binder from '../../binder';
+import * as fn from '../../functions';
+import { Promise } from 'bluebird';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import utils from '../../utils';
 
 // Worker
 // * calculateSteps: int
@@ -79,7 +79,7 @@ module.exports = function(params) {
     batchDialogUtils.initBatchDialog(self);
     self.cancelDialog = fn.seq(self.cancel, params.reload, root.closeDialog);
 
-    bind(self)
+    new Binder(self)
         .obs('import', '')
         .obs('enable', true)
         .obs('closeText', 'Close')

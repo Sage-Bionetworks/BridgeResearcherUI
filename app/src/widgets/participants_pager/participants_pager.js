@@ -1,9 +1,9 @@
-var utils = require('../../utils');
-var bind = require('../../binder');
-var storeService = require('../../services/store_service');
-var fn = require('../../functions');
+import * as fn from '../../functions';
+import Binder from '../../binder';
+import storeService from '../../services/store_service';
+import utils from '../../utils';
 
-var pageSize = 25;
+const pageSize = 25;
 
 /**
  * @params loadingFunc - the function to call to load resources. The function takes the parameters 
@@ -18,7 +18,7 @@ module.exports = function(params) {
     var query = storeService.restoreQuery(pageKey);
     var offsetBy = query.offsetBy;
 
-    bind(self)
+    new Binder(self)
         .obs('emailFilter', query.emailFilter)
         .obs('startDate', query.startDate)
         .obs('endDate', query.endDate)

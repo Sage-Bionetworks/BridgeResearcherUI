@@ -1,16 +1,15 @@
-var serverService = require('../../services/server_service');
-var schemaUtils = require('../schema/schema_utils');
-var sharedModuleUtils = require('../../shared_module_utils');
-var criteriaUtils = require('../../criteria_utils');
-var utils = require('../../utils');
-var root = require('../../root');
-var tables = require('../../tables');
-var fn = require('../../functions');
+import * as fn from '../../functions';
+import criteriaUtils from '../../criteria_utils';
+import root from '../../root';
+import schemaUtils from '../schema/schema_utils';
+import serverService from '../../services/server_service';
+import sharedModuleUtils from '../../shared_module_utils';
+import tables from '../../tables';
+import utils from '../../utils';
 
 function deleteItem(schema) {
     return serverService.deleteSchema(schema.schemaId);
 }
-
 module.exports = function() {
     var self = this;
 

@@ -1,10 +1,10 @@
-var ko = require('knockout');
-var utils = require('../../utils');
-var criteriaUtils = require('../../criteria_utils');
-var optionsService = require('./../../services/options_service');
-var serverService = require('../../services/server_service');
-var Promise = require('bluebird');
-var fn = require('../../functions');
+import criteriaUtils from '../../criteria_utils';
+import * as fn from '../../functions';
+import * as ko from 'knockout';
+import optionsService from '../../services/options_service';
+import Promise from 'bluebird';
+import serverService from '../../services/server_service';
+import utils from '../../utils';
 
 var surveyNameMap = {};
 
@@ -359,26 +359,26 @@ function getActivitiesWithStrategyInfo(plan) {
     }
     return activities;
 }
-module.exports = {
-    newSchedule: newSchedule,
-    newSchedulePlan: newSchedulePlan,
-    newStrategy: newStrategy,
-    formatEventId: formatEventId,
-    formatTimesArray: formatTimesArray,
-    formatStrategy: formatStrategy,
-    formatSchedule: formatSchedule,
-    formatCompoundActivity: formatCompoundActivity,
+export default {
+    newSchedule,
+    newSchedulePlan,
+    newStrategy,
+    formatEventId,
+    formatTimesArray,
+    formatStrategy,
+    formatSchedule,
+    formatCompoundActivity,
     timeOptions: TIME_OPTIONS,
     timeOptionsLabel: utils.makeOptionLabelFinder(TIME_OPTIONS),
-    formatScheduleStrategyType: formatScheduleStrategyType,
+    formatScheduleStrategyType,
     timeOptionsFinder: utils.makeOptionFinder(TIME_OPTIONS),
-    activitiesObs: activitiesObs,
-    surveysOptionsObs: surveysOptionsObs,
-    taskOptionsObs: taskOptionsObs,
-    compoundActivityOptionsObs: compoundActivityOptionsObs,
-    getActivitiesWithStrategyInfo: getActivitiesWithStrategyInfo,
-    TYPE_OPTIONS: TYPE_OPTIONS,
-    UNARY_EVENTS: UNARY_EVENTS,
+    activitiesObs,
+    surveysOptionsObs,
+    taskOptionsObs,
+    compoundActivityOptionsObs,
+    getActivitiesWithStrategyInfo,
+    TYPE_OPTIONS,
+    UNARY_EVENTS,
     loadOptions: function() {
         var p1 = optionsService.getActivityOptions().then(activitiesObs);
         var p2 = optionsService.getSurveyOptions().then(surveysOptionsObs);
@@ -388,3 +388,4 @@ module.exports = {
         return Promise.all([p1, p2, p3, p4, p5]);
     }
 };
+export { UNARY_EVENTS };

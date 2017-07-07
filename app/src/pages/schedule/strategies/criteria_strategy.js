@@ -1,9 +1,9 @@
-var ko = require('knockout');
-var utils = require('../../../utils');
-var fn = require('../../../functions');
-var scheduleUtils = require('../schedule_utils');
-var criteriaUtils = require('../../../criteria_utils');
-var root = require('../../../root');
+import * as fn from '../../../functions';
+import * as ko from 'knockout';
+import criteriaUtils from '../../../criteria_utils';
+import root from '../../../root';
+import scheduleUtils from '../schedule_utils';
+import utils from '../../../utils';
 
 function groupToObservables(group) {
     group.criteriaObs = ko.observable(group.criteria);

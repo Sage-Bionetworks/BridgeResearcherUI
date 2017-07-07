@@ -1,10 +1,10 @@
-var root = require('../../root');
-var binder = require('../../binder');
+import Binder from '../../binder';
+import root from '../../root';
 
 module.exports = function(params) {
     var self = this;
 
-    binder(self)
+    new Binder(self)
         .obs('list[]', params.listObs() || [])
         .obs('value')
         .obs('selectedIndex')

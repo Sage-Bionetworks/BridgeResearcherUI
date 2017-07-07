@@ -1,11 +1,11 @@
-var utils = require('../../utils');
-var serverService = require('../../services/server_service');
-var scheduleUtils = require('../../pages/schedule/schedule_utils');
-var bind = require('../../binder');
-var root = require('../../root');
-var jsonFormatter = require('../../json_formatter');
-var tables = require('../../tables');
-var fn = require('../../functions');
+import Binder from '../../binder';
+import * as fn from '../../functions';
+import jsonFormatter from '../../json_formatter';
+import root from '../../root';
+import scheduleUtils from '../../pages/schedule/schedule_utils';
+import serverService from '../../services/server_service';
+import tables from '../../tables';
+import utils from '../../utils';
 
 var failureHandler = utils.failureHandler({
     redirectTo: "participants",
@@ -34,7 +34,7 @@ module.exports = function(params) {
         return string;
     };
 
-    bind(self)
+    new Binder(self)
         .obs('userId', params.userId)
         .obs('isNew', false)
         .obs('title', '&#160;')

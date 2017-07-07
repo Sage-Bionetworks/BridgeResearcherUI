@@ -1,10 +1,10 @@
-var serverService = require('../../services/server_service');
-var storeService = require('../../services/store_service');
-var optionsService = require('../../services/options_service');
-var ko = require('knockout');
-var utils = require('../../utils');
-var Promise = require('bluebird');
-require('knockout-postbox');
+import 'knockout-postbox';
+import * as ko from 'knockout';
+import * as Promise from 'bluebird';
+import optionsService from '../../services/options_service';
+import serverService from '../../services/server_service';
+import storeService from '../../services/store_service';
+import utils from '../../utils';
 
 /**
  * There are a lot of rules for the clipboard:
@@ -420,4 +420,4 @@ var clipboard = {
     }
 };
 
-module.exports = clipboard;
+export default clipboard;

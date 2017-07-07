@@ -1,8 +1,8 @@
-var ko = require('knockout');
-var utils = require('../../../utils');
-var fn = require('../../../functions');
-var scheduleUtils = require('../schedule_utils');
-var root = require('../../../root');
+import * as fn from '../../../functions';
+import * as ko from 'knockout';
+import root from '../../../root';
+import scheduleUtils from '../schedule_utils';
+import utils from '../../../utils';
 
 function groupToObservables(group) {
     group.percentageObs = ko.observable(group.percentage);

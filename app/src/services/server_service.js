@@ -6,20 +6,21 @@
  * for a session to be established, then the call is completed.
  */
 // Necessary because export of library is broken
-var EventEmitter = require('../events');
-var storeService = require('./store_service');
-var config = require('../config');
-var Promise = require('bluebird');
-var fn = require('../functions');
+import * as fn from '../functions';
+import $ from 'jquery';
+import config from '../config';
+import EventEmitter from '../events';
+import Promise from 'bluebird';
+import storeService from './store_service';
 
-var SESSION_KEY = 'session';
-var SESSION_STARTED_EVENT_KEY = 'sessionStarted';
-var SESSION_ENDED_EVENT_KEY = 'sessionEnded';
-var TIMEOUT = 10000;
-var listeners = new EventEmitter();
+const SESSION_KEY = 'session';
+const SESSION_STARTED_EVENT_KEY = 'sessionStarted';
+const SESSION_ENDED_EVENT_KEY = 'sessionEnded';
+const TIMEOUT = 10000;
+const listeners = new EventEmitter();
+const NO_CACHE_PATHS = ['studies/self/emailStatus','/participants','externalIds?'];
+
 var session = null;
-var $ = require('jquery');
-var NO_CACHE_PATHS = ['studies/self/emailStatus','/participants','externalIds?'];
 
 // jQuery throws up if there's no window, even in unit tests
 if (typeof window !== "undefined") {
@@ -179,7 +180,7 @@ function esc(string) {
     return encodeURIComponent(string);
 }
 
-module.exports = {
+export default {
     isAuthenticated: function() {
         return (session !== null);
     },

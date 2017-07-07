@@ -1,4 +1,4 @@
-var sharedModuleUtils = require('../../shared_module_utils');
+import sharedModuleUtils from '../../shared_module_utils';
 
 /**
  * params:

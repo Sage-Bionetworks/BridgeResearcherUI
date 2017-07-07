@@ -1,18 +1,18 @@
-var ko = require('knockout');
-var serverService = require('../../services/server_service');
-var utils = require('../../utils');
-var root = require('../../root');
-require('knockout-postbox');
-var bind = require('../../binder');
-var tables = require('../../tables');
-var fn = require('../../functions');
+import 'knockout-postbox';
+import * as fn from '../../functions';
+import * as ko from 'knockout';
+import Binder from '../../binder';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import tables from '../../tables';
+import utils from '../../utils';
 
 var OPTIONS = {offsetBy:null, pageSize: 1, assignmentFilter:false};
 
 module.exports = function() {
     var self = this;
     
-    var binder = bind(self)
+    var binder = new Binder(self)
         .obs('items[]', [])
         .obs('total', 0)
         .obs('result', '')

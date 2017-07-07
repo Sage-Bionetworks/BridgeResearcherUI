@@ -1,12 +1,12 @@
-var serverService = require('../../services/server_service');
-var bind = require('../../binder');
-var root = require('../../root');
-var jsonFormatter = require('../../json_formatter');
-var tables = require('../../tables');
-var utils = require('../../utils');
-var fn = require('../../functions');
+import * as fn from '../../functions';
+import Binder from '../../binder';
+import jsonFormatter from '../../json_formatter';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import tables from '../../tables';
+import utils from '../../utils';
 
-var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
 function firstDayOfMonth(year, month) {
     return new Date(year, month, 1).toISOString().split("T")[0];
@@ -27,7 +27,7 @@ module.exports = function(params) {
         delete: deleteItem
     });
 
-    bind(self)
+    new Binder(self)
         .obs('isNew', false)
         .obs('userId', params.userId)
         .obs('name', '')

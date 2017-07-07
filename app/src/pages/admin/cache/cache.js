@@ -1,15 +1,16 @@
-var serverService = require('../../../services/server_service');
-var tables = require('../../../tables');
-var alerts = require('../../../widgets/alerts');
-var Promise = require('bluebird');
-var ko = require('knockout');
-var fn = require('../../../functions');
-var utils = require('../../../utils');
+import alerts from '../../../widgets/alerts';
+import * as fn from '../../../functions';
+import * as ko from 'knockout';
+import Promise from 'bluebird';
+import serverService from '../../../services/server_service';
+import tables from '../../../tables';
+import utils from '../../../utils';
 
-var PAGE_SIZE = 100;
-var DELAY = 200;
+const PAGE_SIZE = 100;
+const DELAY = 200;
+const MSG = "Are you sure you want to sign out everyone in this study?";
+
 var adminEmail = null;
-var MSG = "Are you sure you want to sign out everyone in this study?";
 
 function mapKey(cacheKey) {
     return {key: cacheKey};

@@ -1,6 +1,6 @@
-var utils = require('../../utils');
+import utils from '../../utils';
 
-var SCHEMA_TYPE_OPTIONS = Object.freeze([
+const SCHEMA_TYPE_OPTIONS = Object.freeze([
     {value: 'ios_survey', label: 'iOS Survey'},
     {value: 'ios_data', label: 'iOS Data'}
 ]);
@@ -48,8 +48,8 @@ var TYPE_LOOKUP = ALL_FIELD_TYPE_OPTIONS.reduce(function(obj, type) {
     return obj;
 }, {});
 
-module.exports = {
-    TYPE_LOOKUP: TYPE_LOOKUP,
+export default {
+    TYPE_LOOKUP,
     // refs: schemas.js
     initSchemasVM: function(vm) {
         vm.schemaTypeLabel = utils.makeOptionLabelFinder(SCHEMA_TYPE_OPTIONS);

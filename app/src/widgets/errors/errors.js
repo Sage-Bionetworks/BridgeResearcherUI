@@ -1,7 +1,7 @@
-var ko = require('knockout');
-require('knockout-postbox');
-var toastr = require('toastr');
-var $ = require('jquery');
+import 'knockout-postbox';
+import * as ko from 'knockout';
+import * as toastr from 'toastr';
+import $ from 'jquery';
 
 var ENUM_ERROR = ["Enumeration values can only contain alphanumeric characters (they can also have spaces, dashes, underscores and periods in the middle, but not more than one of these special characters in a row)."];
 
