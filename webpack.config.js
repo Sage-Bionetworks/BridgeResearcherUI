@@ -1,11 +1,7 @@
-import path from 'path';
-import webpack from 'webpack';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-/*
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-*/
+
 // The ignore plugin in is removing moment.js localization, which takes a lot of room.
 
 module.exports = {
