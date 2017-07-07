@@ -1,5 +1,5 @@
-import { Binder } from './binder';
 import alerts from './widgets/alerts';
+import Binder from './binder';
 import clipboard from './widgets/clipboard/clipboard';
 import config from './config';
 import ko from 'knockout';
@@ -218,8 +218,9 @@ if (document.location.search) {
 console.debug("root.queryParams", root.queryParams);
 
 export default root;
-ko.applyBindings(root, document.body);
+//ko.applyBindings(root, document.body);
 
 window.addEventListener("load", function() {
     document.body.style.opacity = "1.0";
+    ko.applyBindings(root, document.body);
 }, false);

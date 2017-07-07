@@ -1,11 +1,11 @@
-import { ko } from 'knockout';
-require('knockout-postbox');
-import { serverService }  from '../../services/server_service';
-import { utils } from '../../utils';
-import { root } from '../../root';
-import { tables } from '../../tables';
-import { fn } from '../../functions';
-import { alerts } from '../../widgets/alerts';
+import 'knockout-postbox';
+import * as fn from '../../functions';
+import * as ko from 'knockout';
+import alerts from '../../widgets/alerts';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import tables from '../../tables';
+import utils from '../../utils';
 
 var cssClassNameForStatus = {
     'disabled': 'negative',

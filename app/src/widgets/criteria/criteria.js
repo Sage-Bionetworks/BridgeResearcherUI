@@ -1,6 +1,6 @@
-import { Binder } from '../../binder';
-import { fn } from '../../functions';
-import { serverService }  from '../../services/server_service';
+import * as fn from '../../functions';
+import Binder from '../../binder';
+import serverService from '../../services/server_service';
 
 function partialRelay(criteriaObs) {
     return function(func) {

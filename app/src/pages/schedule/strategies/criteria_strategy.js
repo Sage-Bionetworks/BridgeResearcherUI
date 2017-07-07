@@ -1,9 +1,9 @@
-import { criteriaUtils }  from '../../../criteria_utils';
-import { fn } from '../../../functions';
-import { ko } from 'knockout';
-import { root } from '../../../root';
-import { scheduleUtils }  from '../schedule_utils';
-import { utils } from '../../../utils';
+import * as fn from '../../../functions';
+import * as ko from 'knockout';
+import criteriaUtils from '../../../criteria_utils';
+import root from '../../../root';
+import scheduleUtils from '../schedule_utils';
+import utils from '../../../utils';
 
 function groupToObservables(group) {
     group.criteriaObs = ko.observable(group.criteria);

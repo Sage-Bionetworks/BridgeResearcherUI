@@ -1,10 +1,10 @@
-import { alerts } from './widgets/alerts';
-import { clipboard } from './widgets/clipboard/clipboard';
-import { ko } from 'knockout';
+import 'knockout-postbox';
 import { Promise } from 'bluebird';
-import { root } from './root';
-import { utils } from './utils';
-require('knockout-postbox');
+import * as ko from 'knockout';
+import alerts from './widgets/alerts';
+import clipboard from './widgets/clipboard/clipboard';
+import root from './root';
+import utils from './utils';
 
 function hasBeenChecked(item) {
     return item.checkedObs();

@@ -1,8 +1,8 @@
-import { serverService }  from '../../services/server_service';
-import { root } from '../../root';
-import { utils } from '../../utils';
-import { tables } from '../../tables';
-import { fn } from '../../functions';
+import * as fn from '../../functions';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import tables from '../../tables';
+import utils from '../../utils';
 
 /**
  * params:

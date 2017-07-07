@@ -1,10 +1,10 @@
-import { Binder } from '../../binder';
-import { fn } from '../../functions';
-import { ko } from 'knockout';
+import Binder from '../../binder';
+import * as fn from '../../functions';
+import * as ko from 'knockout';
 import { Promise } from 'bluebird';
-import { root } from '../../root';
-import { serverService }  from '../../services/server_service';
-import { utils } from '../../utils';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import utils from '../../utils';
 
 module.exports = function(params) {
     var self = this;

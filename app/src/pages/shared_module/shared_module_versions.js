@@ -1,10 +1,10 @@
-import { alerts } from '../../widgets/alerts';
-import { Binder } from '../../binder';
-import { config } from '../../config';
-import { serverService }  from '../../services/server_service';
-import { sharedModuleUtils } from '../../shared_module_utils';
-import { tables } from '../../tables';
-import { utils } from '../../utils';
+import alerts from '../../widgets/alerts';
+import Binder from '../../binder';
+import config from '../../config';
+import serverService from '../../services/server_service';
+import sharedModuleUtils from '../../shared_module_utils';
+import tables from '../../tables';
+import utils from '../../utils';
 
 var DELETE_MSG = "Are you sure you want to delete this shared module version?";
 

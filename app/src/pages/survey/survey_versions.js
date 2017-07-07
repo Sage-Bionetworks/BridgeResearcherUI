@@ -1,9 +1,9 @@
-import { alerts } from '../../widgets/alerts';
-import { Binder } from '../../binder';
-import { fn } from '../../functions';
-import { serverService }  from '../../services/server_service';
-import { tables } from '../../tables';
-import { utils } from '../../utils';
+import * as fn from '../../functions';
+import alerts from '../../widgets/alerts';
+import Binder from '../../binder';
+import serverService from '../../services/server_service';
+import tables from '../../tables';
+import utils from '../../utils';
 
 module.exports = function(params) {
     var self = this;

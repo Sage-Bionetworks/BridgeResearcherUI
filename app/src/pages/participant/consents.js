@@ -1,6 +1,6 @@
-import { Binder } from '../../binder';
+import Binder from '../../binder';
 import alerts from '../../widgets/alerts';
-import fn from '../../functions';
+import * as fn from '../../functions';
 import Promise from 'bluebird';
 import root from '../../root';
 import serverService from '../../services/server_service';

@@ -1,11 +1,11 @@
-import { fn } from '../../functions';
-import { ko } from 'knockout';
+import * as fn from '../../functions';
+import * as ko from 'knockout';
 import { Promise } from 'bluebird';
-import { root } from '../../root';
-import { serverService }  from '../../services/server_service';
-import { sharedModuleUtils } from '../../shared_module_utils';
-import { tables } from '../../tables';
-import { utils } from '../../utils';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import sharedModuleUtils from '../../shared_module_utils';
+import tables from '../../tables';
+import utils from '../../utils';
 
 const SURVEY_FIELDS_TO_DELETE = ['guid','version','createdOn','modifiedOn','published','deleted'];
 

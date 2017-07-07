@@ -1,7 +1,7 @@
-import { Binder } from '../../binder';
-import { fn } from '../../functions';
-import { storeService }  from '../../services/store_service';
-import { utils } from '../../utils';
+import * as fn from '../../functions';
+import Binder from '../../binder';
+import storeService from '../../services/store_service';
+import utils from '../../utils';
 
 const pageSize = 25;
 

@@ -1,7 +1,7 @@
+import * as fn from '../../functions';
+import * as ko from 'knockout';
 import alerts from '../../widgets/alerts';
-import { Binder } from '../../binder';
-import fn from '../../functions';
-import ko from 'knockout';
+import Binder from '../../binder';
 import root from '../../root';
 import serverService from '../../services/server_service';
 import utils from '../../utils';
@@ -24,12 +24,12 @@ module.exports = function(params) {
     var binder = new Binder(self)
         .obs('showEnableAccount', false)
         .obs('isNew', (params.userId === "new"))
-        .obs('healthCode', 'N/A', bind.formatHealthCode)
+        .obs('healthCode', 'N/A', Binder.formatHealthCode)
         .obs('allDataGroups[]')
         .obs('createdOn', null, fn.formatDateTime)
         .obs('allRoles[]', ROLES)
         .bind('email')
-        .bind('attributes[]', [], bind.formatAttributes, bind.persistAttributes)
+        .bind('attributes[]', [], Binder.formatAttributes, Binder.persistAttributes)
         .bind('firstName')
         .bind('lastName')
         .bind('sharingScope')

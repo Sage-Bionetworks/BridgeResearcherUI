@@ -1,11 +1,11 @@
-import { Binder } from '../../binder';
-import { BridgeError } from '../../bridge_error';
-import { config } from '../../config';
-import { fn } from '../../functions';
-import { root } from '../../root';
-import { serverService }  from '../../services/server_service';
-import { storeService }  from '../../services/store_service';
-import { utils } from '../../utils';
+import * as fn from '../../functions';
+import Binder from '../../binder';
+import BridgeError from '../../bridge_error';
+import config from '../../config';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import storeService from '../../services/store_service';
+import utils from '../../utils';
 
 var SUCCESS_MSG = "An email has been sent to that address with instructions on changing your password.";
 

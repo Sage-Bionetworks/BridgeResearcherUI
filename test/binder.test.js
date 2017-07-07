@@ -1,6 +1,6 @@
-import { Binder } from '../app/src/binder.js';
-import * as ko from 'knockout';
+import Binder from '../app/src/binder.js';
 import { expect } from 'chai';
+import * as ko from 'knockout';
 import * as sinon from 'sinon';
 
 describe("binder", function() {

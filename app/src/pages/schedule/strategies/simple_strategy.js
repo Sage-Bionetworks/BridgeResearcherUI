@@ -1,6 +1,6 @@
-import { ko } from 'knockout';
-import { fn } from '../../../functions';
-import { root } from '../../../root';
+import * as ko from 'knockout';
+import * as fn from '../../../functions';
+import root from '../../../root';
 
 module.exports = function(params) {
     var self = this;

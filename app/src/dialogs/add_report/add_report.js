@@ -1,8 +1,8 @@
-import { Binder } from '../../binder';
-import { BridgeError } from '../../bridge_error';
-import { fn } from '../../functions';
-import { serverService }  from '../../services/server_service';
-import { utils } from '../../utils';
+import * as fn from '../../functions';
+import Binder from '../../binder';
+import BridgeError from '../../bridge_error';
+import serverService  from '../../services/server_service';
+import utils from '../../utils';
 
 function getLocalDate(value) {
     return fn.asDate(value).toISOString().split("T")[0];

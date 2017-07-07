@@ -1,6 +1,6 @@
-import { Binder } from '../../binder';
-import fn from '../../functions';
-import ko from 'knockout';
+import Binder from '../../binder';
+import * as fn from '../../functions';
+import * as ko from 'knockout';
 import root from '../../root';
 import schemaUtils from './schema_utils';
 import serverService from '../../services/server_service';
@@ -19,10 +19,10 @@ var failureHandler = utils.failureHandler({
 module.exports = function(params) {
     var self = this;
 
-    var minIos = bind.objPropDelegates('minAppVersions', 'iPhone OS');
-    var minAnd = bind.objPropDelegates('minAppVersions', 'Android');
-    var maxIos = bind.objPropDelegates('maxAppVersions', 'iPhone OS');
-    var maxAnd = bind.objPropDelegates('maxAppVersions', 'Android');
+    var minIos = Binder.objPropDelegates('minAppVersions', 'iPhone OS');
+    var minAnd = Binder.objPropDelegates('minAppVersions', 'Android');
+    var maxIos = Binder.objPropDelegates('maxAppVersions', 'iPhone OS');
+    var maxAnd = Binder.objPropDelegates('maxAppVersions', 'Android');
 
     var binder = new Binder(self)
         .obs('isNew', params.schemaId === "new")

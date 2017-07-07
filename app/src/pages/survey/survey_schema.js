@@ -1,8 +1,8 @@
-import { Binder } from '../../binder';
-import { fn } from '../../functions';
-import { schemaUtils } from '../../pages/schema/schema_utils';
-import { serverService }  from '../../services/server_service';
-import { tables } from '../../tables';
+import * as fn from '../../functions';
+import Binder from '../../binder';
+import schemaUtils from '../../pages/schema/schema_utils';
+import serverService from '../../services/server_service';
+import tables from '../../tables';
 
 module.exports = function(params) {
     var self = this;

@@ -1,5 +1,5 @@
-import { Binder } from '../../binder';
-import { schemaUtils } from './schema_utils';
+import Binder from '../../binder';
+import schemaUtils from './schema_utils';
 
 module.exports = function(params) {
     var self = this;

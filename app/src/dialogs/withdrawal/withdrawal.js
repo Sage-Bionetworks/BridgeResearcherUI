@@ -1,6 +1,6 @@
-import { ko } from 'knockout';
-import { root } from '../../root';
-import { utils } from '../../utils';
+import * as ko from 'knockout';
+import root from '../../root';
+import utils from '../../utils';
 
 module.exports = function(params /*userId, vm, closeMethod, subpopGuid */) {
     var self = this;

@@ -28,7 +28,7 @@ function createObservable(doBinding) {
     };
 }
 
-export class Binder {
+export default class Binder {
     constructor(vm) {
         this.vm = vm;
         this.fields = {};
@@ -163,8 +163,8 @@ export class Binder {
     }
     static objPropDelegates(fieldName, objFieldName) {
         return {
-            toObject: toObjectField(fieldName, objFieldName),
-            fromObject: fromObjectField(fieldName, objFieldName)
+            toObject: Binder.toObjectField(fieldName, objFieldName),
+            fromObject: Binder.fromObjectField(fieldName, objFieldName)
         };
     }
     static persistAttributes(value) {

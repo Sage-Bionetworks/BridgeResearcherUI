@@ -1,11 +1,11 @@
+import 'knockout-postbox';
+import * as fn from './functions';
 import * as k from 'knockout';
-require('knockout-postbox');
 import * as toastr from 'toastr';
-import * as config from './config';
-import { $ } from 'jquery';
-import { alerts } from './widgets/alerts';
-import { fn } from './functions';
-import { root } from './root';
+import $ from 'jquery';
+import alerts from './widgets/alerts';
+import config from './config';
+import root from './root';
 
 var FAILURE_HANDLER = failureHandler({transient:true});
 var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";

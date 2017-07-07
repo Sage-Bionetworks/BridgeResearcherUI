@@ -1,5 +1,5 @@
-import { Binder } from '../../binder';
-import fn from '../../functions';
+import Binder from '../../binder';
+import * as fn from '../../functions';
 import optionsService from '../../services/options_service';
 import Promise from 'bluebird';
 import scheduleUtils from '../schedule/schedule_utils';
@@ -22,7 +22,7 @@ module.exports = function(params) {
     // The callback function will be called when saving the schedule plan; the strategy 
     // implementation must implement this callback to return a strategy object.
     var binder = new Binder(self)
-        .bind('strategy', null, null, bind.callObsCallback)
+        .bind('strategy', null, null, Binder.callObsCallback)
         .bind('label', '')
         .obs('schedulePlanType', (params.guid==="new") ? 'SimpleScheduleStrategy' : 'empty');
         

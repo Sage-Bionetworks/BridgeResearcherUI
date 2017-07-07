@@ -10,7 +10,8 @@ reg('shared_modules', {
     template: require('./pages/shared_modules/shared_modules.html')
 });
 reg('none', {
-    template: '<div class="ui modal dialog"></div>'});
+    template: '<div class="ui modal dialog"></div>'
+});
 reg('dailyUploads', {
     viewModel: require('./pages/studyreports/dailyUploads'), 
     template: require('./pages/studyreports/dailyUploads.html')

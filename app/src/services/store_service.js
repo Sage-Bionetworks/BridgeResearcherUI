@@ -1,4 +1,4 @@
-import { fn } from '../functions';
+import * as fn from '../functions';
 
 // This has to be here so that these filter values can be removed in the url to update the page.
 // This is very hacky...

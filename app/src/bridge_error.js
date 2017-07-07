@@ -3,9 +3,8 @@
  * server. Can be used for client-side validation (although we rarely do this, 
  * leaving most of it to the server for now).
  */
-export default class BridgeError extends Error {
+export default class BridgeError {
     constructor() { 
-        super();
         this.status = 400;
         this.responseJSON = {
             errors: {}

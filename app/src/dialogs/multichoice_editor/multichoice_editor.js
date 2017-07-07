@@ -1,5 +1,5 @@
-import { Binder } from '../../binder';
-import { root } from '../../root';
+import Binder from '../../binder';
+import root from '../../root';
 
 module.exports = function(params) {
     var self = this;

@@ -1,9 +1,9 @@
-import { serverService }  from '../../services/server_service';
-import { utils } from '../../utils';
-import { root } from '../../root';
-import { tables } from '../../tables';
-import { ko } from 'knockout';
-import { fn } from '../../functions';
+import serverService from '../../services/server_service';
+import utils from '../../utils';
+import root from '../../root';
+import tables from '../../tables';
+import * as ko from 'knockout';
+import * as fn from '../../functions';
 
 function deleteItem(item) {
     return serverService.deleteStudyReport(item.identifier);

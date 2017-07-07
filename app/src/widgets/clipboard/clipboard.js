@@ -1,10 +1,10 @@
+import 'knockout-postbox';
+import * as ko from 'knockout';
+import * as Promise from 'bluebird';
+import optionsService from '../../services/options_service';
 import serverService from '../../services/server_service';
 import storeService from '../../services/store_service';
-import optionsService from '../../services/options_service';
-import * as ko from 'knockout';
 import utils from '../../utils';
-import * as Promise from 'bluebird';
-require('knockout-postbox');
 
 /**
  * There are a lot of rules for the clipboard:
@@ -420,4 +420,4 @@ var clipboard = {
     }
 };
 
-module.exports = clipboard;
+export default clipboard;

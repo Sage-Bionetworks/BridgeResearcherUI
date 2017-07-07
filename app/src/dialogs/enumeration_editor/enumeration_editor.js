@@ -1,7 +1,7 @@
-import { Binder } from '../../binder';
-import { fn } from '../../functions';
-import { ko } from 'knockout';
-import { root } from '../../root';
+import Binder from '../../binder';
+import * as fn from '../../functions';
+import * as ko from 'knockout';
+import root from '../../root';
 
 /**
  * This is a simpler replacement for the object-hash library.

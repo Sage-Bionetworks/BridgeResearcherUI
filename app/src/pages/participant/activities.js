@@ -1,5 +1,5 @@
-import { Binder } from '../../binder';
-import fn from '../../functions';
+import Binder from '../../binder';
+import * as fn from '../../functions';
 import root from '../../root';
 import scheduleUtils from '../../pages/schedule/schedule_utils';
 import serverService from '../../services/server_service';

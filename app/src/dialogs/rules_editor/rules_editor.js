@@ -1,7 +1,7 @@
-import { ko } from 'knockout';
-import { root } from '../../root';
-import { fn } from '../../functions';
-import { serverService }  from '../../services/server_service';
+import * as fn from '../../functions';
+import * as ko from 'knockout';
+import root from '../../root';
+import serverService from '../../services/server_service';
 
 var ACTION_OPTIONS = Object.freeze([
     {value: 'skipTo', label: 'skip to question'},

@@ -1,4 +1,4 @@
-import { serverService }  from './services/server_service';
+import serverService from './services/server_service';
 
 var sharedModuleNameMap = {};
 var sharedModuleHTMLMap = {};

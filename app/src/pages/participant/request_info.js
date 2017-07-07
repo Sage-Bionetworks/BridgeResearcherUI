@@ -1,7 +1,7 @@
-import { Binder } from '../../binder';
-import { root } from '../../root';
-import { serverService }  from '../../services/server_service';
-import { utils } from '../../utils';
+import Binder from '../../binder';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import utils from '../../utils';
 
 function joiner(value) {
     return (value && value.length) ? value.join(", ") : "<none>";

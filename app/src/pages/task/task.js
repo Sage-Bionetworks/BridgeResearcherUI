@@ -1,10 +1,10 @@
-import { Binder } from '../../binder';
-import { fn } from '../../functions';
-import { ko } from 'knockout';
-import { root } from '../../root';
-import { serverService }  from '../../services/server_service';
-import { sharedModuleUtils } from '../../shared_module_utils';
-import { utils } from '../../utils';
+import * as fn from '../../functions';
+import * as ko from 'knockout';
+import Binder from '../../binder';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import sharedModuleUtils from '../../shared_module_utils';
+import utils from '../../utils';
 
 function schemaListToView(schemaList, context) {
     return schemaList.map(schemaToView).map(loadSchemaRevisions);

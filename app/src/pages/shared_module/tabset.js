@@ -1,4 +1,4 @@
-import { ko } from 'knockout';
+import * as ko from 'knockout';
 
 module.exports = function(params) {
     var self = this;

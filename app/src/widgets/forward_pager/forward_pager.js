@@ -1,5 +1,5 @@
-import { Binder } from '../../binder';
-import { utils } from '../../utils';
+import Binder from '../../binder';
+import utils from '../../utils';
 
 module.exports = function(params) {
     console.assert(params.vm, "loadingFunc not supplied");

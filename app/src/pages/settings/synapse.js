@@ -1,10 +1,10 @@
-import { alerts } from '../../widgets/alerts';
-import { Binder } from '../../binder';
-import { fn } from '../../functions';
-import { ko } from 'knockout';
-import { root } from '../../root';
-import { serverService }  from '../../services/server_service';
-import { utils } from '../../utils';
+import * as fn from '../../functions';
+import * as ko from 'knockout';
+import alerts from '../../widgets/alerts';
+import Binder from '../../binder';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import utils from '../../utils';
 
 const BASE = "https://www.synapse.org/#!";
 const CREATE_MSG = "Please enter your Synapse user account ID\n(you'll be made the administrator of the project):";

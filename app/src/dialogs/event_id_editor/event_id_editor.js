@@ -1,9 +1,9 @@
-import { Binder } from '../../binder';
-import { fn } from '../../functions';
-import { optionsService } from '../../services/options_service';
-import { root } from '../../root';
+import Binder from '../../binder';
 import { UNARY_EVENTS } from '../../pages/schedule/schedule_utils';
-import { utils } from '../../utils';
+import * as fn from '../../functions';
+import optionsService from '../../services/options_service';
+import root from '../../root';
+import utils from '../../utils';
 
 /**
  * This editor no longer allows you to edit survey or question triggered events, although these 

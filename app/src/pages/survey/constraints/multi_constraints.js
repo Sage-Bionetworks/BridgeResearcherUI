@@ -1,5 +1,5 @@
-import { root } from '../../../root';
-import { surveyUtils } from '../survey_utils';
+import root from '../../../root';
+import surveyUtils from '../survey_utils';
 
 module.exports = function(params) {
     var self = this;

@@ -1,6 +1,6 @@
-import { Binder } from '../../binder';
+import * as fn from '../../functions';
+import Binder from '../../binder';
 import criteriaUtils from '../../criteria_utils';
-import fn from '../../functions';
 import serverService from '../../services/server_service';
 import utils from '../../utils';
 

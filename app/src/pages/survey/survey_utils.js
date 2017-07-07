@@ -1,7 +1,7 @@
-import { fn } from '../../functions';
-import { ko } from 'knockout';
-import { root } from '../../root';
-import { utils } from '../../utils';
+import * as fn from '../../functions';
+import * as ko from 'knockout';
+import root from '../../root';
+import utils from '../../utils';
 
 var UNIT_OPTIONS = Object.freeze([
     {value: null, label: '<none>'},

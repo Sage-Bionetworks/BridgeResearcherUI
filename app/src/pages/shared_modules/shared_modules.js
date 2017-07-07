@@ -1,9 +1,9 @@
-import { alerts } from '../../widgets/alerts';
-import { config } from '../../config';
-import { ko } from 'knockout';
-import { serverService }  from '../../services/server_service';
-import { sharedModuleUtils } from '../../shared_module_utils';
-import { utils } from '../../utils';
+import alerts from '../../widgets/alerts';
+import config from '../../config';
+import * as ko from 'knockout';
+import serverService from '../../services/server_service';
+import sharedModuleUtils from '../../shared_module_utils';
+import utils from '../../utils';
 
 const NO_ITEMS_MSG = "There are currently no shared modules (or none with those search terms).";
 const DELETE_CONFIRM_MSG = "This deletes ALL revisions of the module.\n\n"+

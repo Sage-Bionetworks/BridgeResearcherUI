@@ -1,8 +1,8 @@
-import { serverService }  from '../../services/server_service';
-import { Binder } from '../../binder';
-import { fn } from '../../functions';
-import { utils } from '../../utils';
-import { root } from '../../root';
+import * as fn from '../../functions';
+import Binder from '../../binder';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import utils from '../../utils';
 
 module.exports = function(params) {
     var self = this;

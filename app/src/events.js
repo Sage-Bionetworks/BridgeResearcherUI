@@ -21,7 +21,7 @@ export default class EventEmitter {
     once(event, callback) {
         validate.call(this, event, callback);
         this.events[event].push(function callee() {
-            this.off(event, callee); // clever
+            this.removeEventListener(event, callee); // clever
             callback.apply(this, arguments);
         }.bind(this));
         return this;

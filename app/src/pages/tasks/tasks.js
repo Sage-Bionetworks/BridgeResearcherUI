@@ -1,9 +1,9 @@
-import { fn } from '../../functions';
+import * as fn from '../../functions';
 import { Promise } from 'bluebird';
-import { scheduleUtils }  from '../schedule/schedule_utils';
-import { serverService }  from '../../services/server_service';
-import { tables } from '../../tables';
-import { utils } from '../../utils';
+import scheduleUtils from '../schedule/schedule_utils';
+import serverService from '../../services/server_service';
+import tables from '../../tables';
+import utils from '../../utils';
 
 function deleteItem(task) {
     return serverService.deleteTaskDefinition(task.taskId);

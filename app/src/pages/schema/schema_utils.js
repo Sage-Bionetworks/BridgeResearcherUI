@@ -1,4 +1,4 @@
-import { utils } from '../../utils';
+import utils from '../../utils';
 
 const SCHEMA_TYPE_OPTIONS = Object.freeze([
     {value: 'ios_survey', label: 'iOS Survey'},

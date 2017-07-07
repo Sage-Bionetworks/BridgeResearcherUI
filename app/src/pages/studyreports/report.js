@@ -1,5 +1,5 @@
-import { Binder } from '../../binder';
-import fn from '../../functions';
+import * as fn from '../../functions';
+import Binder from '../../binder';
 import jsonFormatter from '../../json_formatter';
 import root from '../../root';
 import serverService from '../../services/server_service';

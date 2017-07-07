@@ -1,9 +1,9 @@
-import { criteriaUtils }  from '../../criteria_utils';
-import { fn } from '../../functions';
-import { root } from '../../root';
-import { serverService }  from '../../services/server_service';
-import { tables } from '../../tables';
-import { utils } from '../../utils';
+import * as fn from '../../functions';
+import criteriaUtils from '../../criteria_utils';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import tables from '../../tables';
+import utils from '../../utils';
 
 function deleteItem(plan) {
     return serverService.deleteSubpopulation(plan.guid);

@@ -1,10 +1,10 @@
-import { Binder } from '../../binder';
-import { criteriaUtils }  from '../../criteria_utils';
-import { fn } from '../../functions';
-import { serverService }  from '../../services/server_service';
-import { sharedModuleUtils } from '../../shared_module_utils';
-import { tables } from '../../tables';
-import { utils } from '../../utils';
+import Binder from '../../binder';
+import criteriaUtils from '../../criteria_utils';
+import * as fn from '../../functions';
+import serverService from '../../services/server_service';
+import sharedModuleUtils from '../../shared_module_utils';
+import tables from '../../tables';
+import utils from '../../utils';
 
 module.exports = function(params) {
     var self = this;

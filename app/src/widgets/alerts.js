@@ -1,5 +1,5 @@
 import '../../../node_modules/sweetalert/dist/sweetalert.css';
-import { swal } from 'sweetalert';
+import swal from 'sweetalert';
 
 function confirmation(message, func) {
     swal({ title: "Hey now", text: message, showCancelButton: true,
