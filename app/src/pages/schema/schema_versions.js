@@ -1,6 +1,6 @@
 import Binder from '../../binder';
 import criteriaUtils from '../../criteria_utils';
-import * as fn from '../../functions';
+import fn from '../../functions';
 import serverService from '../../services/server_service';
 import sharedModuleUtils from '../../shared_module_utils';
 import tables from '../../tables';

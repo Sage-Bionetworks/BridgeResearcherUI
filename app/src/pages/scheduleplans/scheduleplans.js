@@ -1,6 +1,6 @@
-import * as fn from '../../functions';
+import Promise from 'bluebird';
+import fn from '../../functions';
 import optionsService from '../../services/options_service';
-import { Promise } from 'bluebird';
 import root from '../../root';
 import scheduleUtils from '../schedule/schedule_utils';
 import serverService from '../../services/server_service';

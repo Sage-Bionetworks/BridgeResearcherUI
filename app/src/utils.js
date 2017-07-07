@@ -1,21 +1,18 @@
 import 'knockout-postbox';
-import * as fn from './functions';
-import * as k from 'knockout';
-import * as toastr from 'toastr';
 import $ from 'jquery';
 import alerts from './widgets/alerts';
 import config from './config';
+import fn from './functions';
+import ko from 'knockout';
 import root from './root';
+import toastr from 'toastr';
 
-var FAILURE_HANDLER = failureHandler({transient:true});
-var GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
-var TIMEOUT_ERROR = "The request timed out. Please verify you have an internet connection, and try again.";
-var ROLE_ERROR = 'You do not appear to be a developer, researcher, or admin.';
-var PERM_ERROR = 'You do not have permissions to perform that action.';
-var pendingControl = null;
-toastr.options = config.toastr;
-
-var statusHandlers = {
+const FAILURE_HANDLER = failureHandler({transient:true});
+const GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
+const TIMEOUT_ERROR = "The request timed out. Please verify you have an internet connection, and try again.";
+const ROLE_ERROR = 'You do not appear to be a developer, researcher, or admin.';
+const PERM_ERROR = 'You do not have permissions to perform that action.';
+const statusHandlers = {
       0: localError,
     400: badResponse,
     403: notAllowed,
@@ -24,6 +21,10 @@ var statusHandlers = {
     412: notAdmin,
     500: serverError
 };
+
+var pendingControl = null;
+toastr.options = config.toastr;
+
 function notAllowed(response, params) {
         document.location = "#/reports/uploads";
         root.changeView('dailyUploads', {});

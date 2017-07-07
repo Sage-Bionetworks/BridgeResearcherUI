@@ -1,6 +1,6 @@
-import * as fn from '../../functions';
 import alerts from '../../widgets/alerts';
 import Binder from '../../binder';
+import fn from '../../functions';
 import serverService from '../../services/server_service';
 import utils from '../../utils';
 

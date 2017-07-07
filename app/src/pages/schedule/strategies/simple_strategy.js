@@ -1,5 +1,5 @@
-import * as ko from 'knockout';
-import * as fn from '../../../functions';
+import fn from '../../../functions';
+import ko from 'knockout';
 import root from '../../../root';
 
 module.exports = function(params) {

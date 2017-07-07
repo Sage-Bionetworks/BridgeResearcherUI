@@ -292,7 +292,7 @@ var formatDate = seq(checkArgs, asDate, formatDateString, blankInvalidDateString
 var formatDateTime = seq(checkArgs, asDate, formatDateTimeString, blankInvalidDateString);
 var localDateTimeToUTC = seq(asDate, intLocalDateTimeToUTC);
 
-export {
+export default {
     asDate,
     copyProps,
     dateTimeString,

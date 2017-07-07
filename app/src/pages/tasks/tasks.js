@@ -1,5 +1,5 @@
-import * as fn from '../../functions';
-import { Promise } from 'bluebird';
+import Promise from 'bluebird';
+import fn from '../../functions';
 import scheduleUtils from '../schedule/schedule_utils';
 import serverService from '../../services/server_service';
 import tables from '../../tables';

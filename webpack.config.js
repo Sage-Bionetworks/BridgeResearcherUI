@@ -1,14 +1,22 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+const extractSass = new ExtractTextPlugin({
+    filename: "[name].[hash].css",
+    disable: process.env.NODE_ENV === "development"
+});
 
 // The ignore plugin in is removing moment.js localization, which takes a lot of room.
 
 module.exports = {
-    entry: ['./app/src/routes.js'],
+    entry: {
+        bundle: './app/src/routes.js'
+    },
     output: {
         path: path.resolve(__dirname, "app/dist"),
-        filename: 'bundle.[hash].js'
+        filename: '[name].[hash].js'
     },
     module: {
         rules: [
@@ -23,17 +31,32 @@ module.exports = {
                 }
             },
             {
-                test: /\.(scss|css)$/, loader: "style-loader!css-loader!sass-loader"
+                test: /\.(scss|css)$/, 
+                use: extractSass.extract({
+                    use: [
+                        {loader: "css-loader"}, 
+                        {loader: "sass-loader"}
+                    ],
+                    fallback: "style-loader"
+                })
             },
             {
-                test: /\.html$/, loader: "html-loader?removeComments=false"
+                test: /\.html$/, 
+                use: {
+                    loader: 'html-loader',
+                    options: {
+                        removeComments: false,
+                        minimize: true
+                    }
+                }
             }
         ]
     },
     devtool: 'source-map',
     plugins: [
-        new HtmlWebpackPlugin({template: "app/template.html",filename: "../index.html"}),
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+        new HtmlWebpackPlugin({template: "app/template.html", filename: "../index.html"}),
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        extractSass
     ],
     resolve: {
         extensions: ['.css', '.js', '.html','.scss']

@@ -1,7 +1,7 @@
-import Binder from '../app/src/binder.js';
 import { expect } from 'chai';
-import * as ko from 'knockout';
 import * as sinon from 'sinon';
+import Binder from '../app/src/binder.js';
+import ko from 'knockout';
 
 describe("binder", function() {
     function multiply(value) {

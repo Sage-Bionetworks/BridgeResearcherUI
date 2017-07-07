@@ -1,8 +1,8 @@
 import 'knockout-postbox';
-import { Promise } from 'bluebird';
-import * as ko from 'knockout';
 import alerts from './widgets/alerts';
 import clipboard from './widgets/clipboard/clipboard';
+import ko from 'knockout';
+import Promise from 'bluebird';
 import root from './root';
 import utils from './utils';
 

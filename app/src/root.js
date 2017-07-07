@@ -220,7 +220,7 @@ console.debug("root.queryParams", root.queryParams);
 export default root;
 //ko.applyBindings(root, document.body);
 
-window.addEventListener("load", function() {
-    document.body.style.opacity = "1.0";
+window.addEventListener("DOMContentLoaded", function() {
     ko.applyBindings(root, document.body);
+    document.body.style.opacity = "1.0";
 }, false);

@@ -1,7 +1,7 @@
 import 'knockout-postbox';
-import * as fn from '../../functions';
-import * as ko from 'knockout';
+import ko from 'knockout';
 import Binder from '../../binder';
+import fn from '../../functions';
 import root from '../../root';
 import serverService from '../../services/server_service';
 import tables from '../../tables';

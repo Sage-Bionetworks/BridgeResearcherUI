@@ -1,4 +1,4 @@
-import * as ko from 'knockout';
+import ko from 'knockout';
 import root from '../../root';
 import utils from '../../utils';
 

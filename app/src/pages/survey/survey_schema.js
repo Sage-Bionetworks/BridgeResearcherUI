@@ -1,5 +1,5 @@
-import * as fn from '../../functions';
 import Binder from '../../binder';
+import fn from '../../functions';
 import schemaUtils from '../../pages/schema/schema_utils';
 import serverService from '../../services/server_service';
 import tables from '../../tables';

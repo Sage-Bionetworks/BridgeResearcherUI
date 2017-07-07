@@ -1,5 +1,5 @@
-import * as ko from 'knockout';
-import * as fn from '../../functions';
+import fn from '../../functions';
+import ko from 'knockout';
 
 module.exports = function(params) {
     var self = this;

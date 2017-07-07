@@ -1,4 +1,4 @@
-import * as fn from '../app/src/functions.js';
+import fn from '../app/src/functions.js';
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 

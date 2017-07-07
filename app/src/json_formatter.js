@@ -1,4 +1,4 @@
-import * as ko from 'knockout';
+import ko from 'knockout';
 
 // See http://jsfiddle.net/unlsj/
 const JSON_LINE = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg;
