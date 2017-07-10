@@ -52,6 +52,10 @@ reg('email_signin', {
     viewModel: require('./pages/email_templates/email_signin'),
     template: require('./pages/email_templates/email_signin.html')
 });
+reg('account_exists', {
+    viewModel: require('./pages/email_templates/account_exists'),
+    template: require('./pages/email_templates/account_exists.html')
+});
 reg('external_ids', {
     viewModel: require('./pages/external_ids/external_ids'),
     template: require('./pages/external_ids/external_ids.html')
@@ -283,6 +287,9 @@ reg('ui-duration', {
 reg('survey-tabset', {
     viewModel: require('./pages/survey/tabset'),
     template: require('./pages/survey/tabset.html')
+});
+reg('template-tabset', {
+    template: require('./pages/email_templates/tabset.html')
 });
 reg('criteria', {
     viewModel: require('./widgets/criteria/criteria'),
