@@ -3,7 +3,7 @@ import $ from 'jquery';
 import ko from 'knockout';
 import toastr from 'toastr';
 
-var ENUM_ERROR = ["Enumeration values can only contain alphanumeric characters (they can also have spaces, dashes, underscores and periods in the middle, but not more than one of these special characters in a row)."];
+const ENUM_ERROR = ["Enumeration values can only contain alphanumeric characters (they can also have spaces, dashes, underscores and periods in the middle, but not more than one of these special characters in a row)."];
 
 function truncateErrorFieldKey(errorString) {
     var parts = errorString.split(" ");

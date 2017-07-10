@@ -6,159 +6,164 @@ import serverService from '../../services/server_service';
 import sharedModuleUtils from '../../shared_module_utils';
 import utils from '../../utils';
 
-function schemaListToView(schemaList, context) {
-    return schemaList.map(schemaToView).map(loadSchemaRevisions);
-}
-function schemaToView(schema) {
-    return {
-        id: schema.schemaId || schema.id, 
-        name: sharedModuleUtils.getSchemaName(schema.schemaId || schema.id),
-        revision: schema.revision,
-        revisionObs: ko.observable(schema.revision),
-        revisionList: ko.observableArray([schemaToOption(schema)])
-    };
-}
-function schemaListToTask(schemaList, context) {
-    return schemaList.map(function(schema) {
-        var obj = {id: schema.id};
-        if (schema.revisionObs()) {
-            obj.revision = schema.revisionObs();
-        }
-        return obj;
-    });
-}
-function surveyListToView(surveyList, context) {
-    return surveyList.map(surveyToView).map(loadSurveyRevisions);
-}
-function surveyToView(survey) {
-    return {
-        name: sharedModuleUtils.getSurveyName(survey.guid),
-        guid: survey.guid,
-        createdOn: survey.createdOn,
-        createdOnObs: ko.observable(survey.createdOn),
-        createdOnList: ko.observableArray([surveyToOption(survey)])
-    };
-}
-function surveyListToTask(surveyList, context) {
-    return surveyList.map(function(survey) {
-        var obj = {guid: survey.guid};
-        if (survey.createdOnObs()) {
-            obj.createdOn = survey.createdOnObs();
-        }
-        return obj;
-    });
-}
-function loadSurveyRevisions(newSurvey) {
-    serverService.getSurveyAllRevisions(newSurvey.guid).then(function(response) {
-        newSurvey.createdOnList(response.items.filter(function(survey) {
-            return survey.published;  
-        }).map(surveyToOption));
-    });
-    return newSurvey;
-}
-function loadSchemaRevisions(newSchema) {
-    serverService.getUploadSchemaAllRevisions(newSchema.id).then(function(response) {
-        newSchema.revisionList(response.items.filter(function(schema) {
-            return schema.revision;
-        }).map(schemaToOption));
-    });
-    return newSchema;
-}
-function surveyToOption(survey) {
-    return {label: fn.formatDateTime(survey.createdOn), value: survey.createdOn};
-}
-function schemaToOption(schema) {
-    return {label: schema.revision, value: schema.revision};
-}
-module.exports = function(params) {
-    var self = this;
+/**
+ * This is written as an ES6 class, rather than the functional approach taken elsewhere. 
+ * I feel "meh" about the difference, but I'll leave it here for the moment. You start 
+ * to have to track "this" references which can be annoying. It's also more verbose 
+ * because there's no use of closures.
+ */
+module.exports = class Task {
+    constructor(params) {
+        this.taskId = params.taskId;
+        fn.copyProps(this, fn, 'formatDateTime');
 
-    fn.copyProps(self, fn, 'formatDateTime');
+        this.task = {};
 
-    self.task = {};
-
-    var binder = new Binder(self)
-        .bind('isNew', params.taskId === "new")
-        .bind('taskId', params.taskId === "new" ? null : params.taskId)
-        .bind('schemaList[]', [], schemaListToView, schemaListToTask)
-        .bind('surveyList[]', [], surveyListToView, surveyListToTask)
-        .obs('schemaIndex')
-        .obs('surveyIndex')
-        .obs('name', params.taskId === "new" ? "New Task" : params.taskId);
-
-    function updateId(response) {
-        self.nameObs(response.taskId);
-        self.isNewObs(false);
-        params.taskId = response.taskId; 
-        self.task.version = response.version;
+        this.binder = new Binder(this)
+            .bind('isNew', params.taskId === "new")
+            .bind('taskId', params.taskId === "new" ? null : params.taskId)
+            .bind('schemaList[]', [], Task.schemaListToView, Task.schemaListToTask)
+            .bind('surveyList[]', [], Task.surveyListToView, Task.surveyListToTask)
+            .obs('schemaIndex')
+            .obs('surveyIndex')
+            .obs('name', params.taskId === "new" ? "New Task" : params.taskId);
+        this.load();
     }
-
-    self.openSchemaSelector = function() { 
-        self.task = binder.persist(self.task);
-        root.openDialog('select_schemas',{
-            addSchemas: self.addSchemas,
+    updateId(response) {
+        this.nameObs(response.taskId);
+        this.isNewObs(false);
+        this.taskId = response.taskId; 
+        this.task.version = response.version;
+    }
+    openSchemaSelector() { 
+        this.task = this.binder.persist(this.task);
+        root.openDialog('select_schemas', {
+            addSchemas: this.addSchemas.bind(this),
             allowMostRecent: true,
-            selected: self.task.schemaList
+            selected: this.task.schemaList
         });
-    };
-    self.openSurveySelector = function() { 
-        self.task = binder.persist(self.task);
+    }
+    openSurveySelector() { 
+        this.task = this.binder.persist(this.task);
         root.openDialog('select_surveys',{
-            addSurveys: self.addSurveys,
+            addSurveys: this.addSurveys.bind(this),
             allowMostRecent: true,
-            selected: self.task.surveyList
+            selected: this.task.surveyList
         });
-    };
-    self.addSchemas = function(schemas) {
-        self.schemaListObs([]);
+    }
+    addSchemas(schemas) {
+        this.schemaListObs([]);
         for (var i=0; i < schemas.length; i++) {
-            var newSchema = schemaToView(schemas[i]);
-            self.schemaListObs.push(newSchema);
-            loadSchemaRevisions(newSchema);
+            var newSchema = Task.schemaToView(schemas[i]);
+            this.schemaListObs.push(newSchema);
+            Task.loadSchemaRevisions(newSchema);
         }
         root.closeDialog();
-    };
-    self.addSurveys = function(surveys) {
-        self.surveyListObs([]);
+    }
+    addSurveys(surveys) {
+        this.surveyListObs([]);
         for (var i=0; i < surveys.length; i++) {
-            var newSurvey = surveyToView(surveys[i]);
-            self.surveyListObs.push(newSurvey);
-            loadSurveyRevisions(newSurvey);
+            var newSurvey = Task.surveyToView(surveys[i]);
+            this.surveyListObs.push(newSurvey);
+            Task.loadSurveyRevisions(newSurvey);
         }
         root.closeDialog();
-    };
-    self.removeSchema = function(object, event) {
-        self.schemaListObs.remove(object);
-    };
-    self.removeSurvey = function(object, event) {
-        self.surveyListObs.remove(object);
-    };
-    self.save = function(vm, event) {
+    }
+    removeSchema(object, event) {
+        this.schemaListObs.remove(object);
+    }
+    removeSurvey(object, event) {
+        this.surveyListObs.remove(object);
+    }
+    save(vm, event) {
         utils.startHandler(vm, event);
 
-        var methodName = (params.taskId === "new") ? "createTaskDefinition" : "updateTaskDefinition";
-        self.task = binder.persist(self.task);
+        var methodName = (this.taskId === "new") ? "createTaskDefinition" : "updateTaskDefinition";
+        this.task = this.binder.persist(this.task);
 
-        serverService[methodName](self.task)
-            .then(updateId)
+        serverService[methodName](this.task)
+            .then(this.updateId.bind(this))
             .then(utils.successHandler(vm, event, "Task saved."))
             .catch(utils.failureHandler());
-    };
-
-    function loadTaskDefinition() {
-        if (params.taskId !== "new") {
-            return serverService.getTaskDefinition(params.taskId)
-                .then(binder.assign('task'))
-                .then(binder.update())
+    }
+    loadTaskDefinition() {
+        if (this.taskId !== "new") {
+            return serverService.getTaskDefinition(this.taskId)
+                .then(this.binder.assign('task'))
+                .then(this.binder.update())
                 .catch(utils.failureHandler({
                     redirectTo: "tasks",
                     redirectMsg: "Task not found."
                 }));
         }
+    }    
+    load() {
+        sharedModuleUtils.loadNameMaps()
+            .then(this.loadTaskDefinition.bind(this))
+            .catch(utils.failureHandler());
     }
-    serverService.getPublishedSurveys()
-        .then(sharedModuleUtils.loadNameMaps)
-        .then(serverService.getPublishedSurveys)
-        .then(loadTaskDefinition)
-        .catch(utils.failureHandler());
-};
+    static schemaListToView(schemaList, context) {
+        return schemaList.map(Task.schemaToView).map(Task.loadSchemaRevisions);
+    }
+    static schemaToView(schema) {
+        return {
+            id: schema.schemaId || schema.id, 
+            name: sharedModuleUtils.getSchemaName(schema.schemaId || schema.id),
+            revision: schema.revision,
+            revisionObs: ko.observable(schema.revision),
+            revisionList: ko.observableArray([Task.schemaToOption(schema)])
+        };
+    }
+    static schemaListToTask(schemaList, context) {
+        return schemaList.map(function(schema) {
+            var obj = {id: schema.id};
+            if (schema.revisionObs()) {
+                obj.revision = schema.revisionObs();
+            }
+            return obj;
+        });
+    }
+    static surveyListToView(surveyList, context) {
+        return surveyList.map(Task.surveyToView).map(Task.loadSurveyRevisions);
+    }
+    static surveyToView(surveyRef) {
+        return {
+            name: sharedModuleUtils.getSurveyName(surveyRef.guid),
+            guid: surveyRef.guid,
+            createdOn: surveyRef.createdOn,
+            createdOnObs: ko.observable(surveyRef.createdOn),
+            createdOnList: ko.observableArray([Task.surveyToOption(surveyRef)])
+        };
+    }
+    static surveyListToTask(surveyList, context) {
+        return surveyList.map(function(survey) {
+            var obj = {guid: survey.guid};
+            if (survey.createdOnObs()) {
+                obj.createdOn = survey.createdOnObs();
+            }
+            return obj;
+        });
+    }
+    static loadSurveyRevisions(surveyRef) {
+        serverService.getSurveyAllRevisions(surveyRef.guid).then(function(response) {
+            surveyRef.createdOnList(response.items.filter(function(survey) {
+                return survey.published;
+            }).map(Task.surveyToOption));
+        });
+        return surveyRef;
+    }
+    static loadSchemaRevisions(newSchema) {
+        serverService.getUploadSchemaAllRevisions(newSchema.id).then(function(response) {
+            newSchema.revisionList(response.items.filter(function(schema) {
+                return schema.revision;
+            }).map(Task.schemaToOption));
+        });
+        return newSchema;
+    }
+    static surveyToOption(survey) {
+        return {label: fn.formatDateTime(survey.createdOn), value: survey.createdOn};
+    }
+    static schemaToOption(schema) {
+        return {label: schema.revision, value: schema.revision};
+    }
+}

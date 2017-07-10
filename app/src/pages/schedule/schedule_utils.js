@@ -6,6 +6,7 @@ import Promise from 'bluebird';
 import serverService from '../../services/server_service';
 import utils from '../../utils';
 
+// This is duplicated in sharedModuleUtils.
 var surveyNameMap = {};
 
 var activitiesObs = ko.observableArray([]);
@@ -309,7 +310,7 @@ function formatCompoundActivity(task) {
     return phrase.join('; ');
 }
 function loadFormatCompoundActivity() {
-    return serverService.getPublishedSurveys().then(function(response) {
+    return serverService.getSurveys().then(function(response) {
         response.items.forEach(function(survey) {
             surveyNameMap[survey.guid] = survey.name;
         });
