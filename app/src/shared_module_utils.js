@@ -36,10 +36,7 @@ function loadNameMaps() {
             .then(serverService.getSurveys)
             .then(updateSurveyNameMap)
             .then(serverService.getAllUploadSchemas)
-            .then(updateSchemaNameMap)
-            .then(function() {
-                console.log("Name maps loaded for compound definitions", surveyNameMap, schemaNameMap);
-            });
+            .then(updateSchemaNameMap);
     }
 }
 function formatDescription(metadata, withVersion) {
