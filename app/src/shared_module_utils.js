@@ -33,10 +33,13 @@ function loadNameMaps() {
     } else {
         return serverService.getMetadata("?mostrecent=true&published=true")
             .then(updateSharedModuleNameMap)
-            .then(serverService.getPublishedSurveys)
+            .then(serverService.getSurveys)
             .then(updateSurveyNameMap)
             .then(serverService.getAllUploadSchemas)
-            .then(updateSchemaNameMap);
+            .then(updateSchemaNameMap)
+            .then(function() {
+                console.log("Name maps loaded for compound definitions", surveyNameMap, schemaNameMap);
+            });
     }
 }
 function formatDescription(metadata, withVersion) {
