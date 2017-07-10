@@ -39,7 +39,6 @@ if (request) {
     request.send();
     request.onreadystatechange = function() {
         if(request.readyState === 4 && request.status === 200) {
-            // TODO: sort entries
             var object = JSON.parse(request.responseText);
             displayItems(object.items);
         }
