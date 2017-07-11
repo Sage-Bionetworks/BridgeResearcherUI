@@ -19,7 +19,7 @@ module.exports = function() {
         delete: deleteItem
     });
     self.addReport = function(vm, event) {
-        root.openDialog('add_report', {
+        root.openDialog('report_editor', {
             closeDialog: self.closeDialog, 
             type: "study"
         });
