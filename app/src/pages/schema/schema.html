@@ -11,7 +11,8 @@
             </h3>
         </div>
         <div class="fixed-header-buttons">
-            <button class="ui tiny primary button" data-bind="click: save">Save</button>
+            <button class="ui tiny primary button" data-bind="visible: !publishedObs(), click: save">Save</button>
+            <button class="ui tiny primary button" data-bind="visible: publishedObs, click: saveNewRevision">Save</button>
         </div>
     </div>
     <div class="ui secondary pointing menu" data-bind="visible: !isNewObs()">
@@ -20,11 +21,27 @@
         </span>
         <a data-bind="attr: {href: '#/schemas/'+encodeURIComponent(schemaIdObs())+
             '/versions/'+revisionObs()+'/history'}" class="item">
-            <i class="history icon"></i> History
+            <i class="history icon"></i> History &amp; Publication
         </a>
-        <div class="right menu">
+        <div class="right menu pub-status">
             <div class="item">
                 <i class="clock icon"></i> <span data-bind="text: revisionLabel"></span>
+            </div>
+            <div class="item" data-bind="visible: publishedObs">
+                <span class="green ui mini label">
+                    <i class="checkmark icon"></i> Published
+                </span>
+            </div>
+            <div class="item" data-bind="visible: !publishedObs()">
+                <span class="orange ui mini label">
+                    <i class="warning icon"></i> Not Published
+                </span>
+            </div>
+            <div class="item" data-bind="visible: !!moduleIdObs(), semantic: 'popup', attr: {
+                'data-content': moduleIdObs() + ' v' + moduleVersionObs()}">
+                <span class="teal ui mini label">
+                    <i class="linkify icon"></i> Shared
+                </span>
             </div>
         </div>
     </div>
@@ -88,10 +105,9 @@
             </div>
             <div class="field">
                 <label>&#160;</label>
-                <label>Revision Number <a data-bind="semantic: 'popup'"
-                    data-content="If you have no reason to set the revision number, you can safely ignore it."
-                ><i class="ui warning sign icon"></i></a></label>
-                <input type="number" style="width: 8rem" type="text" data-bind="textInput: $data.revisionObs"/>
+                <label>Revision Number</label>
+                <input type="number" style="width: 8rem" type="text" 
+                    data-bind="textInput: $data.revisionObs"/>
             </div>
         </div>
     </form>

@@ -1,9 +1,9 @@
-var serverService = require('../../services/server_service');
-var utils = require('../../utils');
-var criteriaUtils = require('../../criteria_utils');
-var root = require('../../root');
-var tables = require('../../tables');
-var fn = require('../../functions');
+import criteriaUtils from '../../criteria_utils';
+import fn from '../../functions';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import tables from '../../tables';
+import utils from '../../utils';
 
 function deleteItem(plan) {
     return serverService.deleteSubpopulation(plan.guid);

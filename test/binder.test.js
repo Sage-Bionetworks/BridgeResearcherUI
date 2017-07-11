@@ -1,6 +1,7 @@
-var expect = require('chai').expect;
-var bind = require('../app/src/binder');
-var ko = require('knockout');
+import { expect } from 'chai';
+import * as sinon from 'sinon';
+import Binder from '../app/src/binder.js';
+import ko from 'knockout';
 
 describe("binder", function() {
     function multiply(value) {
@@ -11,27 +12,27 @@ describe("binder", function() {
     }
     it("can instantiate a binder object", function() {
         var vm = {};
-        var binder = bind(vm);
+        var binder = new Binder(vm);
         expect(binder).to.not.be.null;
         expect(binder.vm).to.equal(vm); 
     });
     it("obs() with name only", function() {
         var vm = {};
-        var binder = bind(vm);
+        var binder = new Binder(vm);
         
         binder.obs('any')
             .obs('array[]');
             
         expect(vm.anyObs).to.be.instanceof(Function);
         expect(vm.arrayObs).to.be.instanceof(Function);
-        expect(vm.arrayObs.push).to.be.defined;
+        expect(vm.arrayObs.push).to.not.be.undefined;
         
         vm.anyObs("test");
         expect(vm.anyObs()).to.equal("test");
     });
     it("obs() with default values", function() {
         var vm = {};
-        var binder = bind(vm);
+        var binder = new Binder(vm);
         binder.obs('fieldOne', false);
         binder.obs('fieldTwo', 0);
         binder.obs('fieldThree', null);
@@ -44,14 +45,14 @@ describe("binder", function() {
     });
     it("obs() with observer transform doesn't apply transform to default value", function() {
         var vm = {};
-        var binder = bind(vm);
+        var binder = new Binder(vm);
         binder.obs("any", 2, multiply);
         
         expect(vm.anyObs()).to.equal(2);
     });
     it("obs() with observer transform applies transform on model-based update", function() {
         var vm = {};
-        var binder = bind(vm);
+        var binder = new Binder(vm);
         binder.obs("any", 2, multiply);
         
         binder.update()({any: 4});
@@ -59,7 +60,7 @@ describe("binder", function() {
     });
     it("obs() without transform does not update model", function() {
         var vm = {};
-        var binder = bind(vm);
+        var binder = new Binder(vm);
         binder.obs("any", 2);
         
         var result = binder.persist({});
@@ -67,7 +68,7 @@ describe("binder", function() {
     });
     it("obs() with model transform does not update model", function() {
         var vm = {};
-        var binder = bind(vm);
+        var binder = new Binder(vm);
         binder.obs("any", 2, multiply, bang);
         
         var result = binder.persist({});
@@ -77,14 +78,14 @@ describe("binder", function() {
     
      it("bind() with observer transform doesn't apply transform to default value", function() {
         var vm = {};
-        var binder = bind(vm);
+        var binder = new Binder(vm);
         binder.bind("any", 2, multiply);
         
         expect(vm.anyObs()).to.equal(2);
     });
     it("bind() with observer transform applies transform on model-based update", function() {
         var vm = {};
-        var binder = bind(vm);
+        var binder = new Binder(vm);
         binder.bind("any", 2, multiply);
         
         binder.update()({any: 4});
@@ -92,7 +93,7 @@ describe("binder", function() {
     });
     it("obs() without transform updates model", function() {
         var vm = {};
-        var binder = bind(vm);
+        var binder = new Binder(vm);
         binder.bind("any", 2);
         
         var result = binder.persist({});
@@ -100,7 +101,7 @@ describe("binder", function() {
     });
     it("bind() with model transform updates model", function() {
         var vm = {};
-        var binder = bind(vm);
+        var binder = new Binder(vm);
         binder.bind("any", 2, multiply, bang);
         
         var result = binder.persist({});
@@ -108,7 +109,7 @@ describe("binder", function() {
     });   
     it("bind() with both transforms works", function() {
         var vm = {};
-        var binder = bind(vm);
+        var binder = new Binder(vm);
         binder.bind("any", 2, multiply, bang);
         binder.update()({'any':4})
         
@@ -117,7 +118,7 @@ describe("binder", function() {
     });   
     it("mixes obs() and bind() correctly", function() {
         var vm = {};
-        var binder = bind(vm);
+        var binder = new Binder(vm);
         
         binder.obs('fieldOne', 1)
         binder.bind('fieldTwo', 2);
@@ -131,7 +132,7 @@ describe("binder", function() {
     });
     it("provides a context on processing value to observable", function() {
         var vm = {};
-        var binder = bind(vm);
+        var binder = new Binder(vm);
         var model = {any: 4};
         var updateModel = {any: 3};
         var obsTransformContext = null;
@@ -169,7 +170,7 @@ describe("transforms", function() {
                     ])
                 }
             }
-            var result = bind.formatAttributes({
+            var result = Binder.formatAttributes({
                 "foo":"1","bar":"2"
             }, context);
             expect(result[0].key).to.equal("foo");
@@ -181,37 +182,37 @@ describe("transforms", function() {
     describe("formatHealthCode", function() {
         it("works", function() {
             var context = { vm: { study: { healthCodeExportEnabled: false } } };
-            expect( bind.formatHealthCode("ABC", context) ).to.equal("N/A");
+            expect(Binder.formatHealthCode("ABC", context) ).to.equal("N/A");
             
             context = { vm: { study: { healthCodeExportEnabled: true } } };
-            expect( bind.formatHealthCode("ABC", context) ).to.equal("ABC");
+            expect(Binder.formatHealthCode("ABC", context) ).to.equal("ABC");
         });
     });
     describe("formatTitle", function() {
         it("works", function() {
             var context = { model: { id: "exists", firstName: "Fred", lastName: "Flintstone" } };
-            expect (bind.formatTitle(undefined, context) ).to.equal("Fred Flintstone");
+            expect(Binder.formatTitle(undefined, context) ).to.equal("Fred Flintstone");
 
             context = { model: { firstName: "Fred", lastName: "Flintstone" } };
-            expect (bind.formatTitle(undefined, context) ).to.equal("Fred Flintstone");
+            expect(Binder.formatTitle(undefined, context) ).to.equal("Fred Flintstone");
             
             context = { model: { firstName: "Fred" } };
-            expect (bind.formatTitle(undefined, context) ).to.equal("Fred");
+            expect(Binder.formatTitle(undefined, context) ).to.equal("Fred");
             
             context = { model: { id: "foo", email: "email@email.com" } };
-            expect (bind.formatTitle(undefined, context) ).to.equal("email@email.com");
+            expect(Binder.formatTitle(undefined, context) ).to.equal("email@email.com");
 
             context = { model: { id: "new" } };
-            expect (bind.formatTitle(undefined, context) ).to.equal("New participant");
+            expect(Binder.formatTitle(undefined, context) ).to.equal("New participant");
             
             context = { model: { id: "foo" } };
-            expect (bind.formatTitle(undefined, context) ).to.equal("—");
+            expect(Binder.formatTitle(undefined, context) ).to.equal("—");
 
             context = { model: { id: "new", firstName: "Fred" } };
-            expect (bind.formatTitle(undefined, context) ).to.equal("Fred");
+            expect(Binder.formatTitle(undefined, context) ).to.equal("Fred");
 
             context = { model: { id: "new", firstName: "Fred", lastName: "Flintstone" } };
-            expect (bind.formatTitle(undefined, context) ).to.equal("Fred Flintstone");
+            expect(Binder.formatTitle(undefined, context) ).to.equal("Fred Flintstone");
         });
     });
     describe("persistAttributes", function() {
@@ -220,7 +221,7 @@ describe("transforms", function() {
                 {key: "foo", obs: ko.observable("1")},
                 {key: "bar", obs: ko.observable("2")},
             ];
-            expect( bind.persistAttributes(attr) ).to.deep.equal({foo:"1",bar:"2"});
+            expect(Binder.persistAttributes(attr)).to.deep.equal({foo:"1",bar:"2"});
         });
     });
 });

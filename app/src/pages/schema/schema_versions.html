@@ -18,11 +18,27 @@
             <i class="file outline icon"></i> Editor
         </a>
         <span class="active item">
-            <i class="history icon"></i> History
+            <i class="history icon"></i> History &amp; Publication
         </span>
-        <div class="right menu">
+        <div class="right menu pub-status">
             <div class="item">
                 <i class="clock icon"></i> <span data-bind="text: revisionLabel"></span>
+            </div>
+            <div class="item" data-bind="visible: publishedObs">
+                <span class="green ui mini label">
+                    <i class="checkmark icon"></i> Published
+                </span>
+            </div>
+            <div class="item" data-bind="visible: !publishedObs()">
+                <span class="orange ui mini label">
+                    <i class="warning icon"></i> Not Published
+                </span>
+            </div>
+            <div class="item" data-bind="visible: !!moduleIdObs(), semantic: 'popup', attr: {
+                'data-content': moduleIdObs() + ' v' + moduleVersionObs()}">
+                <span class="teal ui mini label">
+                    <i class="linkify icon"></i> Shared
+                </span>
             </div>
         </div>
     </div>
@@ -34,20 +50,33 @@
                 <th>Name</th>
                 <th>Revision</th>
                 <th>Matching Criteria</th>
+                <th>Module</th>
+                <th>&nbsp;</th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
-                <td colspan="3" data-bind="html: recordsMessageObs"></td>
+                <td colspan="4" data-bind="html: recordsMessageObs"></td>
             </tr>
         </tbody>        
         <tbody data-bind="foreach: itemsObs">
-            <tr>
+            <tr data-bind="css: { positive: $data.published }">
                 <td width="50%">
                     <a data-bind="attr: {href: $parent.link($data)}, text: $data.name"></a>
                 </td>
                 <td data-bind="text: $data.revision"></td>
                 <td style="white-space: nowrap" data-bind="html: $parent.criteriaLabel($data)"></td>
+                <td data-bind="attr: {'data-html': $parent.moduleHTML($data)}, 
+                    semantic: 'popup', html: $parent.formatModuleLink($data)"></td>
+                <td>
+                    <div data-bind="visible: $data.published" style="text-align: right">
+                        <i class="checkmark icon"></i> Published
+                    </div>
+                    <div data-bind="visible: !$data.published" style="text-align: right">
+                        <button class="ui basic compact mini button" 
+                            data-bind="click:  $component.publish">Publish</button>
+                    </div>
+                </td>
             </tr>
         </tbody>
     </table>

@@ -1,32 +1,64 @@
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+const extractSass = new ExtractTextPlugin({
+    filename: "[name].[hash].css",
+    disable: process.env.NODE_ENV === "development"
+});
 
 // The ignore plugin in is removing moment.js localization, which takes a lot of room.
 
 module.exports = {
-    devtool: 'source-map',
-    entry: ['./app/src/routes.js'],
+    entry: {
+        bundle: './app/src/routes.js'
+    },
     output: {
-        path: './app/dist',
-        filename: 'bundle.[hash].js'
+        path: path.resolve(__dirname, "app/dist"),
+        filename: '[name].[hash].js'
     },
     module: {
-        preLoaders: [
-            { test: /\.js/, include: /app\/src/, loader: "jshint-loader" }  
-        ],
-        loaders: [
-            { test: /\.(scss|css)$/, loader: "style!css!sass" },
-            { test: /\.html$/, loader: "html?removeComments=false" }
+        rules: [
+            {
+                test: /\.js/,
+                exclude: /(node_modules|browser_components)/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ["es2015"]
+                    }
+                }
+            },
+            {
+                test: /\.(scss|css)$/, 
+                use: extractSass.extract({
+                    use: [
+                        {loader: "css-loader"}, 
+                        {loader: "sass-loader"}
+                    ],
+                    fallback: "style-loader"
+                })
+            },
+            {
+                test: /\.html$/, 
+                use: {
+                    loader: 'html-loader',
+                    options: {
+                        removeComments: false,
+                        minimize: true
+                    }
+                }
+            }
         ]
     },
+    devtool: 'source-map',
     plugins: [
-        new HtmlWebpackPlugin({template: "app/template.html",filename: "../index.html"}),
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+        new HtmlWebpackPlugin({template: "app/template.html", filename: "../index.html"}),
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        extractSass
     ],
     resolve: {
-        extensions: ['', '.css', '.js', '.html','.scss']
-    },
-    jshint: {
-        emitErrors: true
+        extensions: ['.css', '.js', '.html','.scss']
     }
 }

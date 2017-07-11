@@ -1,9 +1,9 @@
-var utils = require('../../utils');
-var serverService = require('../../services/server_service');
-var bind = require('../../binder');
-var root = require('../../root');
-var tables = require('../../tables');
-var fn = require('../../functions');
+import Binder from '../../binder';
+import fn from '../../functions';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import tables from '../../tables';
+import utils from '../../utils';
 
 var failureHandler = utils.failureHandler({
     redirectTo: "participants",
@@ -13,7 +13,7 @@ var failureHandler = utils.failureHandler({
 module.exports = function(params) {
     var self = this;
 
-    bind(self)
+    new Binder(self)
         .obs('userId', params.userId)
         .obs('name', '')
         .obs('isNew', false)

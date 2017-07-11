@@ -1,10 +1,9 @@
 // The only requirement for this module is that it have zero dependencies.
-
-var SECOND = 1000;
-var MINUTE = SECOND*60;
-var HOUR = MINUTE*60;
-var DAY = HOUR*24;
-var WEEK = DAY*7;
+const SECOND = 1000;
+const MINUTE = SECOND*60;
+const HOUR = MINUTE*60;
+const DAY = HOUR*24;
+const WEEK = DAY*7;
 
 function identity(arg) {
     return arg;
@@ -13,7 +12,7 @@ function is(obj, typeName) {
     return Object.prototype.toString.call(obj) === "[object "+typeName+"]";
 }
 function isBlank(obj) {
-    return (typeof obj === "undefined") || obj === null || obj === "";
+    return (typeof obj === "undefined") || obj === null || /^\W*$/.test(obj);
 }
 function isNotBlank(obj) {
     return (typeof obj !== "undefined") && obj !== null && obj !== "";
@@ -133,7 +132,7 @@ function formatName(participant) {
     return (array.length === 0) ? '—' : array.join(' ');
 }
 // Convert date object as if it were a LocalDateTime object to the UTC timezone
-function localDateTimeToUTC(date) {
+function intLocalDateTimeToUTC(date) {
     return new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
 }
 function utcTolocalDateTime(date) {
@@ -276,44 +275,58 @@ function deleteUnusedProperties(object) {
         }
     }
 }
+// Append a number to the string, intelligently incrementing if a number already exists there.
+function incrementNumber(string) {
+    if (is(string, 'String')) {
+        var digits = 0, match = /(\d+$)/.exec(string);
+        if (match) {
+            digits = parseInt(match[0]);
+            string = string.substring(0,string.length-(match[0].length));
+        }
+        string = string + (digits+1);
+    }
+    return string;
+}
 
 var formatDate = seq(checkArgs, asDate, formatDateString, blankInvalidDateString);
 var formatDateTime = seq(checkArgs, asDate, formatDateTimeString, blankInvalidDateString);
+var localDateTimeToUTC = seq(asDate, intLocalDateTimeToUTC);
 
-module.exports = {
-    asDate: asDate,
-    copyProps: copyProps,
-    dateTimeString: dateTimeString,
-    deleteUnusedProperties: deleteUnusedProperties,
-    formatDate: formatDate,
-    formatDateTime: formatDateTime,
-    formatLanguages: formatLanguages,
-    formatMs: formatMs,
-    formatName: formatName,
-    formatRoles: formatRoles,
-    formatTitleCase: formatTitleCase,
-    formatVersionRange: formatVersionRange,
-    handleCopyProps: handleCopyProps,
-    handleForEach: handleForEach,
-    handleIf: handleIf,
-    handleMap: handleMap,
-    handleObsUpdate: handleObsUpdate,
-    handlePromise: handlePromise,
-    handleReverse: handleReverse,
-    handleSort: handleSort,
-    handleStaticObsUpdate: handleStaticObsUpdate,
-    identity: identity,
-    is: is,
-    isBlank: isBlank,
-    isNotBlank: isNotBlank,
-    localDateTimeToUTC: seq(asDate, localDateTimeToUTC),
-    log: log,
-    lowerCaseStringSorter: lowerCaseStringSorter,
-    makeFieldSorter: makeFieldSorter,
-    persistLanguages: persistLanguages,
-    persistRoles: persistRoles,
-    queryString: queryString,
-    returning: returning,
-    seq: seq,
-    utcTolocalDateTime: seq(asDate, utcTolocalDateTime)
+export default {
+    asDate,
+    copyProps,
+    dateTimeString,
+    deleteUnusedProperties,
+    formatDate,
+    formatDateTime,
+    formatLanguages,
+    formatMs,
+    formatName,
+    formatRoles,
+    formatTitleCase,
+    formatVersionRange,
+    handleCopyProps,
+    handleForEach,
+    handleIf,
+    handleMap,
+    handleObsUpdate,
+    handlePromise,
+    handleReverse,
+    handleSort,
+    handleStaticObsUpdate,
+    identity,
+    incrementNumber,
+    is,
+    isBlank,
+    isNotBlank,
+    localDateTimeToUTC,
+    log,
+    lowerCaseStringSorter,
+    makeFieldSorter,
+    persistLanguages,
+    persistRoles,
+    queryString,
+    returning,
+    seq,
+    utcTolocalDateTime
 };

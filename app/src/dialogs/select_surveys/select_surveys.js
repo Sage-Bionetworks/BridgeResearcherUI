@@ -1,8 +1,8 @@
-var serverService = require('../../services/server_service');
-var root = require('../../root');
-var utils = require('../../utils');
-var tables = require('../../tables');
-var fn = require('../../functions');
+import fn from '../../functions';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import tables from '../../tables';
+import utils from '../../utils';
 
 /**
  * params:
@@ -62,7 +62,7 @@ module.exports = function(params) {
     }
 
     function load() { 
-        serverService.getPublishedSurveys()
+        serverService.getSurveys()
             .then(fn.handleMap('items', surveyToView))
             .then(fn.handleSort('items', 'name'))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))

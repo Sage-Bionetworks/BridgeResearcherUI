@@ -1,11 +1,11 @@
-var ko = require('knockout');
+import ko from 'knockout';
 
 // See http://jsfiddle.net/unlsj/
-var JSON_LINE = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg;
-var KEY = '<span class=json-key>';
-var VAL = '<span class=json-value>';
-var STR = '<span class=json-string>';
-var COLON = /[": ]/g;
+const JSON_LINE = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg;
+const KEY = '<span class=json-key>';
+const VAL = '<span class=json-value>';
+const STR = '<span class=json-string>';
+const COLON = /[": ]/g;
 
 function replacer(match, pIndent, pKey, pVal, pEnd) {
     var r = pIndent || '';
@@ -43,7 +43,4 @@ function mapClientDataItem(item) {
     return item;
 }
 
-module.exports = {
-    mapItem: mapItem,
-    mapClientDataItem: mapClientDataItem
-};
+export default { mapItem, mapClientDataItem };

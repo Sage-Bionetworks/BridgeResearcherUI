@@ -1,8 +1,8 @@
-var scheduleUtils = require('./schedule_utils');
-var utils = require('../../utils');
-var fn = require('../../functions');
-var root = require('../../root');
-var ko = require('knockout');
+import fn from '../../functions';
+import ko from 'knockout';
+import root from '../../root';
+import scheduleUtils from './schedule_utils';
+import utils from '../../utils';
 
 var SCHEDULE_TYPE_OPTIONS = Object.freeze([
     {value: 'once', label: 'Once'},

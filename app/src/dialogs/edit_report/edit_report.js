@@ -1,12 +1,12 @@
-var bind = require('../../binder');
-var serverService = require('../../services/server_service');
-var utils = require('../../utils');
-var BridgeError = require('../../error');
+import Binder from '../../binder';
+import BridgeError from '../../bridge_error';
+import serverService from '../../services/server_service';
+import utils from '../../utils';
 
 module.exports = function(params) {
     var self = this;
 
-    var binder = bind(self)
+    var binder = new Binder(self)
         .obs('showIdentifier', typeof params.identifier === "undefined")
         .obs('userId', params.userId)
         .bind('identifier', params.identifier)

@@ -1,29 +1,29 @@
-var serverService = require('../../services/server_service');
-var utils = require('../../utils');
-var fn = require('../../functions');
-var bind = require('../../binder');
-var ko = require('knockout');
-var root = require('../../root');
-var alerts = require('../../widgets/alerts');
+import alerts from '../../widgets/alerts';
+import Binder from '../../binder';
+import fn from '../../functions';
+import ko from 'knockout';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import utils from '../../utils';
 
-var BASE = "https://www.synapse.org/#!";
-var CREATE_MSG = "Please enter your Synapse user account ID\n(you'll be made the administrator of the project):";
+const BASE = "https://www.synapse.org/#!";
+const CREATE_MSG = "Please enter your Synapse user account ID\n(you'll be made the administrator of the project):";
 
 module.exports = function() {
     var self = this;
 
-    var binder = bind(self)
+    var binder = new Binder(self)
         .bind('synapseDataAccessTeamId')
         .bind('synapseProjectId')
         .bind('usesCustomExportSchedule')
         .bind('disableExport');
 
+    self.isPublicObs = root.isPublicObs;
+
     self.isLinked = ko.computed(function() {
         return fn.isNotBlank(self.synapseProjectIdObs()) || 
                fn.isNotBlank(self.synapseDataAccessTeamIdObs());
     });
-
-    self.isPublicObs = root.isPublicObs;
     self.projectLinkObs = ko.computed(function() {
         var value = self.synapseProjectIdObs();
         return (value) ? (BASE+"Synapse:"+value) : null;
@@ -56,4 +56,9 @@ module.exports = function() {
         .then(binder.assign('study'))
         .then(binder.update())
         .catch(utils.failureHandler());
+};
+module.exports.prototype.dispose = function() {
+    this.isLinked.dispose();
+    this.projectLinkObs.dispose();
+    this.teamLinkObs.dispose();
 };

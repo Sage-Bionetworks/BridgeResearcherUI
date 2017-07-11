@@ -9,24 +9,24 @@ function validate(event, callback){
     this.events[event] = this.events[event] || [];
 }
 
-function EventEmitter() {
-    this.events = {};
-}
-EventEmitter.prototype = {
-    on: function(event, callback        ) {
+export default class EventEmitter {
+    constructor() {
+        this.events = {};
+    }
+    addEventListener(event, callback        ) {
         validate.call(this, event, callback);
         this.events[event].push(callback);
         return this;
-    },
-    once: function(event, callback) {
+    }
+    once(event, callback) {
         validate.call(this, event, callback);
         this.events[event].push(function callee() {
-            this.off(event, callee); // clever
+            this.removeEventListener(event, callee);
             callback.apply(this, arguments);
         }.bind(this));
         return this;
-    },
-    off: function(event, callback){
+    }
+    removeEventListener(event, callback){
         if(typeof event !== 'string') {
             throw new Error("Invalid Arguments");
         }
@@ -41,8 +41,8 @@ EventEmitter.prototype = {
             }
         }
         return this;
-    },
-    emit: function(event){
+    }
+    emit(event){
         if(typeof event !== 'string') {
             throw new Error("Invalid Arguments");
         }
@@ -55,7 +55,3 @@ EventEmitter.prototype = {
         return this;
     }
 };
-EventEmitter.prototype.addEventListener = EventEmitter.prototype.on;
-EventEmitter.prototype.removeEventListener = EventEmitter.prototype.off;
-
-module.exports = EventEmitter;

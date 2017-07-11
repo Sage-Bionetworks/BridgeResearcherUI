@@ -1,5 +1,5 @@
-var swal = require('sweetalert');
-require('../../../node_modules/sweetalert/dist/sweetalert.css');
+import '../../../node_modules/sweetalert/dist/sweetalert.css';
+import swal from 'sweetalert';
 
 function confirmation(message, func) {
     swal({ title: "Hey now", text: message, showCancelButton: true,
@@ -33,9 +33,9 @@ function prompt(message, okFunc) {
     });
 }
 
-module.exports = {
-    warn: warn,
-    confirmation: confirmation,
-    deleteConfirmation: deleteConfirmation,
-    prompt: prompt
+export default {
+    warn,
+    confirmation,
+    deleteConfirmation,
+    prompt
 };

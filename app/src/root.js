@@ -1,10 +1,10 @@
-var ko = require('knockout');
-var serverService = require('./services/server_service');
-var config = require('./config');
-var toastr = require('toastr');
-var bind = require('./binder');
-var clipboard = require('./widgets/clipboard/clipboard');
-var alerts = require('./widgets/alerts');
+import alerts from './widgets/alerts';
+import Binder from './binder';
+import clipboard from './widgets/clipboard/clipboard';
+import config from './config';
+import ko from 'knockout';
+import serverService from './services/server_service';
+import toastr from 'toastr';
 
 function pad(num) {
     var norm = Math.abs(Math.floor(num));
@@ -21,6 +21,9 @@ Date.prototype.toLocalISOString = function(timePortion) {
     }
     str += dif + pad(tzo / 60) + ':' + pad(tzo % 60);
     return str;
+};
+Array.prototype.contains = function(value) {
+    return this.indexOf(value) > -1;
 };
 
 window.ko = ko;
@@ -68,7 +71,7 @@ toastr.options = config.toastr;
 var RootViewModel = function() {
     var self = this;
 
-    bind(self)
+    new Binder(self)
         .obs('environment', '')
         .obs('studyName', '')
         .obs('studyIdentifier')
@@ -214,9 +217,10 @@ if (document.location.search) {
 }
 console.debug("root.queryParams", root.queryParams);
 
-module.exports = root;
-ko.applyBindings(root, document.body);
+export default root;
+//ko.applyBindings(root, document.body);
 
-window.addEventListener("load", function() {
+window.addEventListener("DOMContentLoaded", function() {
+    ko.applyBindings(root, document.body);
     document.body.style.opacity = "1.0";
 }, false);

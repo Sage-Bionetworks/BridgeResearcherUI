@@ -176,11 +176,15 @@ progress {
 
 /* Used to position the green/orange label next to version number in secondary menu. */
 .pub-status {
-    .item:first-child {
-        padding-right: 0 !important;
+    padding-right: 1rem;
+    .item {
+        max-height: 2.75rem;
+        margin: 0;
+        padding-left: 0!important;
+        padding-right: 0!important;
     }
-    .item:not(:first-child) {
-        padding-left: .25rem !important;
+    .item * {
+        margin: 0;
     }
 }
 

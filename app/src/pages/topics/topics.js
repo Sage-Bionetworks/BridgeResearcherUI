@@ -1,8 +1,8 @@
-var serverService = require('../../services/server_service');
-var tables = require('../../tables');
-var root = require('../../root');
-var utils = require('../../utils');
-var fn = require('../../functions');
+import fn from '../../functions';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import tables from '../../tables';
+import utils from '../../utils';
 
 function deleteTopic(topic) {
     return serverService.deleteTopic(topic.guid);

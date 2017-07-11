@@ -1,11 +1,11 @@
-var utils = require('../../utils');
-var fn = require('../../functions');
-var serverService = require('../../services/server_service');
-var storeService = require('../../services/store_service');
-var config = require('../../config');
-var root = require('../../root');
-var bind = require('../../binder');
-var BridgeError = require('../../error');
+import fn from '../../functions';
+import Binder from '../../binder';
+import BridgeError from '../../bridge_error';
+import config from '../../config';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import storeService from '../../services/store_service';
+import utils from '../../utils';
 
 var SUCCESS_MSG = "An email has been sent to that address with instructions on changing your password.";
 
@@ -21,7 +21,7 @@ module.exports = function() {
         studyKey = storeService.get('studyKey') || 'api';
         env = storeService.get('environment') || 'production';
     }
-    bind(self)
+    new Binder(self)
         .obs('email')
         .obs('title')
         .obs('study', studyKey)

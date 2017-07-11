@@ -1,7 +1,7 @@
-var ko = require('knockout');
-var root = require('../../root');
-var fn = require('../../functions');
-var bind = require('../../binder');
+import Binder from '../../binder';
+import fn from '../../functions';
+import ko from 'knockout';
+import root from '../../root';
 
 /**
  * This is a simpler replacement for the object-hash library.
@@ -138,7 +138,7 @@ module.exports = function(params) {
 
     var listsSource = new ListsSource(self.elementsObs(), self.element);
 
-    bind(self)
+    new Binder(self)
         .obs('label')
         .obs('detail')
         .obs('value')
@@ -180,6 +180,10 @@ module.exports = function(params) {
     self.editorCommandObs = ko.computed(function() {
         return (self.indexObs() !== null) ? 'Update' : 'Add';
     });
+    self.newListItemValid = ko.computed(function() {
+        var value = self.valueObs() || self.labelObs();
+        return !isValueValidOnServer(value);
+    });
     self.cancelEditMode = function() {
         self.labelObs("");
         self.detailObs("");
@@ -205,10 +209,6 @@ module.exports = function(params) {
         }
         self.cancelEditMode();
     };
-    self.newListItemValid = ko.computed(function() {
-        var value = self.valueObs() || self.labelObs();
-        return !isValueValidOnServer(value);
-    });
     self.saveList = function() {
         var entry = listsSource.getCurrentEntry();
 
@@ -243,4 +243,9 @@ module.exports = function(params) {
     };
     // Should we copy edits over to all the same lists.
     self.cancel = fn.seq(self.cancelEditMode, root.closeDialog);
+};
+module.exports.prototype.dispose = function() {
+    this.editorTitleObs.dispose();
+    this.editorCommandObs.dispose();
+    this.newListItemValid.dispose();
 };

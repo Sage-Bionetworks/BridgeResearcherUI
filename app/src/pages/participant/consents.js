@@ -1,11 +1,11 @@
-var utils = require('../../utils');
-var serverService = require('../../services/server_service');
-var Promise = require('bluebird');
-var root = require('../../root');
-var bind = require('../../binder');
-var alerts = require('../../widgets/alerts');
-var tables = require('../../tables');
-var fn = require('../../functions');
+import alerts from '../../widgets/alerts';
+import Binder from '../../binder';
+import fn from '../../functions';
+import Promise from 'bluebird';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import tables from '../../tables';
+import utils from '../../utils';
 
 var failureHandler = utils.failureHandler({
     redirectTo: "participants",
@@ -24,7 +24,7 @@ serverService.addSessionEndListener(function() {
 module.exports = function(params) {
     var self = this;
 
-    bind(self)
+    new Binder(self)
         .obs('userId', params.userId)
         .obs('items[]')
         .obs('isNew', false)

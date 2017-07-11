@@ -1,8 +1,8 @@
-var serverService = require('../../services/server_service');
-var config = require('../../config');
-var bind = require('../../binder');
-var fn = require('../../functions');
-var utils = require('../../utils');
+import Binder from '../../binder';
+import config from '../../config';
+import fn from '../../functions';
+import serverService from '../../services/server_service';
+import utils from '../../utils';
 
 var failureHandler = utils.failureHandler({
     redirectMsg:"Consent group not found.", 
@@ -12,7 +12,7 @@ var failureHandler = utils.failureHandler({
 module.exports = function(params) {
     var self = this;
     
-    bind(self)
+    new Binder(self)
         .obs('name')
         .obs('guid', params.guid)
         .obs('htmlUrl')

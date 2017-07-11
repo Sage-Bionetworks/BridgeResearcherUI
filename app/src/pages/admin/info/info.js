@@ -1,16 +1,16 @@
-var serverService = require('../../../services/server_service');
-var utils = require('../../../utils');
-var bind = require('../../../binder');
-var root = require('../../../root');
-var ko = require('knockout');
+import Binder from '../../../binder';
+import ko from 'knockout';
+import root from '../../../root';
+import serverService from '../../../services/server_service';
+import utils from '../../../utils';
 
 module.exports = function() {
     var self = this;
 
-    var ios = bind.objPropDelegates('pushNotificationARNs', 'iPhone OS');
-    var android = bind.objPropDelegates('pushNotificationARNs', 'Android');
+    var ios = Binder.objPropDelegates('pushNotificationARNs', 'iPhone OS');
+    var android = Binder.objPropDelegates('pushNotificationARNs', 'Android');
 
-    var binder = bind(self)
+    var binder = new Binder(self)
         .bind('healthCodeExportEnabled')
         .bind('emailVerificationEnabled')
         .bind('externalIdValidationEnabled')
@@ -41,4 +41,7 @@ module.exports = function() {
         .then(binder.assign('study'))
         .then(binder.update())
         .catch(utils.failureHandler());
+};
+module.exports.prototype.dispose = function() {
+    this.accountLimitLabel.dispose();
 };

@@ -1,14 +1,14 @@
-var serverService = require('../../services/server_service');
-var utils = require('../../utils');
-var root = require('../../root');
-var bind = require('../../binder');
-var fn = require('../../functions');
+import Binder from '../../binder';
+import fn from '../../functions';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import utils from '../../utils';
 
 module.exports = function(propertyName) {
     return function () {
         var self = this;
         
-        var binder = bind(self)
+        var binder = new Binder(self)
             .obs('records[]')
             .obs('newRecords[]')
             .obs('addField')
@@ -24,9 +24,11 @@ module.exports = function(propertyName) {
         };
         self.remove = function(attribute) {
             self.newRecordsObs.remove(attribute);
-            self.noChangesObs(false);
+            self.noChangesObs(self.newRecordsObs().length === 0);
         };
         self.add = function() {
+            // TODO: We don't want to use root.message like this. We want to create an error
+            // object and show like any other entity validation exception, as we do elsewhere.
             if (!self.addFieldObs()) {
                 return root.message('warning', 'A value is required.');
             }
@@ -43,7 +45,7 @@ module.exports = function(propertyName) {
             array.sort(fn.lowerCaseStringSorter);
             self.newRecordsObs(array);
             self.addFieldObs("");
-            self.noChangesObs(false);
+            self.noChangesObs(self.newRecordsObs().length === 0);
         };
         self.save = function(vm, event) {
             var array = [].concat(self.recordsObs());

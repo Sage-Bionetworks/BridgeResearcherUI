@@ -1,9 +1,9 @@
-var tables = require('../../tables');
-var serverService = require('../../services/server_service');
-var sharedModuleUtils = require('../../shared_module_utils');
-var utils = require('../../utils');
-var ko = require('knockout');
-var fn = require('../../functions');
+import fn from '../../functions';
+import ko from 'knockout';
+import serverService from '../../services/server_service';
+import sharedModuleUtils from '../../shared_module_utils';
+import tables from '../../tables';
+import utils from '../../utils';
 
 /*
 - Hide things that are already imported?
@@ -30,7 +30,7 @@ module.exports = function(params) {
         serverService.importMetadata(item.id, item.version)
             .then(params.closeModuleBrowser)
             .then(utils.successHandler(self, event))
-            .then(utils.listFailure2({scrollTo: scrollTo}));
+            .catch(utils.failureHandler({scrollTo: scrollTo, transient: false}));
     };
     self.isImported = function(metadata) {
         return importedMods[metadata.id+"/"+metadata.version];

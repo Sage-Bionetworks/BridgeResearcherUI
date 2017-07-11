@@ -1,4 +1,4 @@
-var fn = require('./functions');
+import fn from './functions';
 
 function quote(a) {
     return '"'+a+'"';
@@ -75,7 +75,4 @@ function newCriteria() {
 /**
  * Can be either a Subpopulation or a ScheduleCriteria, they share the same properties
  */
-module.exports = {
-    label: label,
-    newCriteria: newCriteria
-};
+export default { label, newCriteria };

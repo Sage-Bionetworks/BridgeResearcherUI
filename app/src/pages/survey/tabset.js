@@ -1,5 +1,5 @@
-var ko = require('knockout');
-var fn = require('../../functions');
+import fn from '../../functions';
+import ko from 'knockout';
 
 module.exports = function(params) {
     var self = this;
@@ -10,8 +10,9 @@ module.exports = function(params) {
     self.publishedObs = params.viewModel.publishedObs;
     self.selected = params.selected;
 
+    self.computeds = [];
     self.linkMaker = function(tabName) {
-        return ko.computed(function() {
+        var c = ko.computed(function() {
             var url = '#/surveys/'+self.guidObs();
             if (self.createdOnObs()) {
                 var createdOn = self.createdOnObs();
@@ -27,5 +28,12 @@ module.exports = function(params) {
             }
             return url;
         });
+        self.computeds.push(c);
+        return c;
     };
+};
+module.exports.prototype.dispose = function() {
+    this.computeds.forEach(function(c) {
+        c.dispose();
+    });
 };

@@ -108,44 +108,53 @@
             background-color: white;
             border: 1px solid #e5e5e5;
         }
-    .element-content-constraints {
-        border-collapse: collapse;
-    }
-        .element-content-constraints td {
-            vertical-align: baseline;
-        }
-        .element-content-constraints-label {
-            text-align: right;
-            padding: .2rem .8rem .2rem .4rem;
-            white-space: nowrap;
-        }
-        .element-content-constraints-control {
-            padding: .2rem 1rem .2rem .2rem;
-        }
-            .element-content-constraints-control .numeric {
-                display: block;
-                width: 4rem;
-            }
-            .element-content-constraints-control select.ui.dropdown {
-                height: auto;
-            }
+.ui.constraints.grid label {
+    display: inline-block;
+    width: 9rem;
+}
+.ui.grid .ui.checkbox label {
+    display: inline;
+}
+.ui.constraints.grid .field:not(:last-child) {
+    padding-bottom: .5rem;
+}
+.ui.constraints.grid select {
+    padding: .25rem;
+    height: auto;
+    background-color: white;
+}
+.constraints-group {
+    display: flex; 
+    flex-direction:row;
+}
+.constraints-group > div:last-child {
+    padding-left: 1rem;
+}
 
-
+/* Rules in the rules editor dialog. */
 .rules-table {
     border-top: 1px solid silver;
     border-bottom: 1px solid silver;
     padding: 1rem;
-    max-height: 200px;
-    overflow-y: scroll;
 
     .rules-table-rule {
+        width: 100%;
         @include flex-box(row);
         @include align-items(center);
         
         div {
             padding: .2rem;
+            flex: 1;
+        }
+        div:last-child {
+            flex: 0;
         }
     }
+}
+/* Rule in the ui-rules control. */
+.rule {
+    font-style:italic; 
+    font-size: smaller;
 }
 .enum-list {
     padding:0!important;

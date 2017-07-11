@@ -6,20 +6,21 @@
  * for a session to be established, then the call is completed.
  */
 // Necessary because export of library is broken
-var EventEmitter = require('../events');
-var storeService = require('./store_service');
-var config = require('../config');
-var Promise = require('bluebird');
-var fn = require('../functions');
+import $ from 'jquery';
+import config from '../config';
+import EventEmitter from '../events';
+import fn from '../functions';
+import Promise from 'bluebird';
+import storeService from './store_service';
 
-var SESSION_KEY = 'session';
-var SESSION_STARTED_EVENT_KEY = 'sessionStarted';
-var SESSION_ENDED_EVENT_KEY = 'sessionEnded';
-var TIMEOUT = 10000;
-var listeners = new EventEmitter();
+const SESSION_KEY = 'session';
+const SESSION_STARTED_EVENT_KEY = 'sessionStarted';
+const SESSION_ENDED_EVENT_KEY = 'sessionEnded';
+const TIMEOUT = 10000;
+const listeners = new EventEmitter();
+const NO_CACHE_PATHS = ['studies/self/emailStatus','/participants','externalIds?'];
+
 var session = null;
-var $ = require('jquery');
-var NO_CACHE_PATHS = ['studies/self/emailStatus','/participants','externalIds?'];
 
 // jQuery throws up if there's no window, even in unit tests
 if (typeof window !== "undefined") {
@@ -157,7 +158,6 @@ function del(path) {
  * @returns {Promise}
  */
 function signOut() {
-    var env = session.environment;
     postInt(session.host + config.signOut);
     cache.reset();
     session = null;
@@ -180,27 +180,27 @@ function esc(string) {
     return encodeURIComponent(string);
 }
 
-module.exports = {
+export default {
     isAuthenticated: function() {
         return (session !== null);
     },
     signIn: function(studyName, env, data) {
-        var request = Promise.resolve(postInt(config.host[env] + config.signIn, data));
-        request.then(function(sess) {
-            sess.isSupportedUser = isSupportedUser;
-            // in some installations the server environment is "wrong" in that it's not enough 
-            // to determine the host. Set a host property and use that for future requests.
-            if (sess.isSupportedUser()) {
+        return postInt(config.host[env] + config.signIn, data)
+            .then(function(sess) {
+                sess.isSupportedUser = isSupportedUser;
+                if (!sess.isSupportedUser()) {
+                    return Promise.reject(new Error("User does not have required roles to use study manager."));
+                }
+                // in some installations the server environment is "wrong" in that it's not enough 
+                // to determine the host. Set a host property and use that for future requests.
                 sess.studyName = studyName;
                 sess.studyId = data.study;
                 session = sess;
                 session.host = config.host[env];
                 storeService.set(SESSION_KEY, session);
                 listeners.emit(SESSION_STARTED_EVENT_KEY, sess);
-            }
-            return sess;
-        });
-        return request;
+                return sess;
+            });
     },
     getStudyList: function(env) {
         return Promise.resolve(getInt(config.host[env] + config.getStudyList))

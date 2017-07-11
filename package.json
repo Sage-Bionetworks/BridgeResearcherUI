@@ -1,48 +1,63 @@
 {
   "name": "bridge-researcher-ui",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "The Bridge Study Manager for the Sage Bionetworks Bridge Server",
   "main": "index.js",
-  "engine": "node 6.6.0",
+  "engine": "node 8.1.3",
   "scripts": {
-    "clean": "rm app/index.html; rm -rf app/dist; mkdir app/dist",
+    "clean": "rm app/index.html; rm npm-debug*; rm -rf app/dist; mkdir app/dist",
     "start": "webpack-dev-server --content-base app",
     "watch": "webpack --progress --colors --watch",
     "release": "webpack -p",
-    "test": "mocha"
+    "test": "mocha --require babel-core/register"
   },
   "author": "Bridge Server Team <bridgeit@sagebase.org>",
   "license": "MIT",
   "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.24.1",
     "bluebird": "^3.4.0",
-    "chai": "^3.5.0",
-    "css-loader": "^0.25.0",
+    "chai": "^4.0.2",
+    "css-loader": "^0.28.4",
     "director": "^1.2.8",
-    "dom-autoscroller": "^1.2.1",
+    "dom-autoscroller": "^2.3.1 ",
     "dragula": "^3.7.2",
-    "flatpickr": "^1.9.1",
+    "extract-text-webpack-plugin": "^2.1.2",
+    "flatpickr": "^3.0.6",
     "html-loader": "^0.4.4",
     "html-webpack-plugin": "^2.22.0",
     "jquery": "^3.0.0",
     "jshint": "^2.9.2",
     "jshint-loader": "^0.8.3",
     "knockout": "^3.4.0",
-    "knockout-postbox": "^0.5.2",
+    "knockout-postbox": "^0.6.0",
     "mocha": "^3.4.1",
-    "node-libs-browser": "^1.0.0",
+    "node-libs-browser": "^2.0.0",
     "node-sass": "^3.3.2",
-    "sass-loader": "^4.0.2",
-    "sinon": "git://github.com/sinonjs/sinon#v2.0.0-pre",
-    "style-loader": "^0.13.1",
+    "sass-loader": "^6.0.6",
+    "sinon": "^2.3.4",
+    "style-loader": "^0.18.2",
     "sweetalert": "^1.1.3",
     "toastr": "^2.1.2",
-    "webpack": "^1.12.14",
-    "webpack-dev-server": "^1.12.14"
+    "webpack": "^3.0.0",
+    "webpack-dev-server": "^2.5.0"
   },
   "peerDependencies": {
     "node-sass": "^3.3.2"
   },
   "dependencies": {
+    "bundle-loader": "^0.5.5",
     "chart.js": "^2.5.0"
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ],
+    "plugins": [
+      "transform-es2015-modules-commonjs"
+    ]
   }
 }

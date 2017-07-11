@@ -1,11 +1,11 @@
-var serverService = require('../../services/server_service');
-var ko = require('knockout');
-var fn = require('../../functions');
-var utils = require('../../utils');
+import fn from '../../functions';
+import ko from 'knockout';
+import serverService from '../../services/server_service';
+import utils from '../../utils';
 
-var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-var WEEK = 7*1000*60*60*24;
-var STUDY_NAME = 'Bridge-Reporter-Scheduler-prod-daily-upload-report';
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const WEEK = 7*1000*60*60*24;
+const STUDY_NAME = 'Bridge-Reporter-Scheduler-prod-daily-upload-report';
 
 function dataSet(label, array, color) {
     return {
@@ -37,10 +37,13 @@ module.exports = function() {
     self.rangeObs = ko.observable('2');
     self.hasDataObs = ko.observable(false);
 
+    self.comps = [];
     self.isActive = function(value) {
-        return ko.computed(function() {
+        var comp = ko.computed(function() {
             return self.rangeObs() === value;
         });
+        self.comps.push(comp);
+        return comp;
     };
     self.selectRange = function(vm, event) {
         var rangeNum = event.target.getAttribute('data-range');
@@ -111,4 +114,9 @@ module.exports = function() {
             .catch(utils.failureHandler());
     }
     loadChart('2');
+};
+module.exports.prototype.dispose = function() {
+    this.comps.forEach(function(comp) {
+        comp.dispose();
+    });
 };

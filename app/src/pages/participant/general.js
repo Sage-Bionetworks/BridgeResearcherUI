@@ -1,10 +1,10 @@
-var serverService = require('../../services/server_service');
-var ko = require('knockout');
-var utils = require('../../utils');
-var bind = require('../../binder');
-var fn = require('../../functions');
-var alerts = require('../../widgets/alerts');
-var root = require('../../root');
+import alerts from '../../widgets/alerts';
+import Binder from '../../binder';
+import fn from '../../functions';
+import ko from 'knockout';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import utils from '../../utils';
 
 var failureHandler = utils.failureHandler({
     redirectTo: "participants",
@@ -21,15 +21,15 @@ var NEW_PARTICIPANT = {id:"new",attributes:{}};
 module.exports = function(params) {
     var self = this;
 
-    var binder = bind(self)
+    var binder = new Binder(self)
         .obs('showEnableAccount', false)
         .obs('isNew', (params.userId === "new"))
-        .obs('healthCode', 'N/A', bind.formatHealthCode)
+        .obs('healthCode', 'N/A', Binder.formatHealthCode)
         .obs('allDataGroups[]')
         .obs('createdOn', null, fn.formatDateTime)
         .obs('allRoles[]', ROLES)
         .bind('email')
-        .bind('attributes[]', [], bind.formatAttributes, bind.persistAttributes)
+        .bind('attributes[]', [], Binder.formatAttributes, Binder.persistAttributes)
         .bind('firstName')
         .bind('lastName')
         .bind('sharingScope')

@@ -1,9 +1,9 @@
-var ko = require('knockout');
-require('knockout-postbox');
-var toastr = require('toastr');
-var $ = require('jquery');
+import 'knockout-postbox';
+import $ from 'jquery';
+import ko from 'knockout';
+import toastr from 'toastr';
 
-var ENUM_ERROR = ["Enumeration values can only contain alphanumeric characters (they can also have spaces, dashes, underscores and periods in the middle, but not more than one of these special characters in a row)."];
+const ENUM_ERROR = ["Enumeration values can only contain alphanumeric characters (they can also have spaces, dashes, underscores and periods in the middle, but not more than one of these special characters in a row)."];
 
 function truncateErrorFieldKey(errorString) {
     var parts = errorString.split(" ");
@@ -11,6 +11,7 @@ function truncateErrorFieldKey(errorString) {
     parts[0] = keyParts[keyParts.length-1];
     return parts.join(" ")
         .replace(/([a-z\d])([A-Z])/g, '$1 $2')
+        .replace(/(\[[0-9+]\])/g, '')
         .replace("Versions{Android}","version") // schema IEE strangeness
         .replace("Versions{i Phone OS}", "version") // schema IEE strangeness
         .toLowerCase();
@@ -39,7 +40,15 @@ function errorFieldKeyToId(errorKey) {
     return errorKey.replace(/[\s{\[\]]/g,"").replace(/\./g,"_").replace(/}/g,'');
 }
 
+var errorComponentStack = [];
+
+function isNotSelf(self) {
+    return errorComponentStack[errorComponentStack.length-1] !== self;
+}
+
 module.exports = function() {
+    errorComponentStack.push(this);
+    console.log("creating errors component", errorComponentStack);
     var self = this;
 
     var errorQueue = [];
@@ -51,12 +60,11 @@ module.exports = function() {
     });
     
     ko.postbox.subscribe("showErrors", function(payload) {
-        if (payload.message && typeof payload.errors === "undefined") {
-            toastr.error(payload.message);
+        if (isNotSelf(self)) {
             return;
         }
         var message = payload.message;
-        var errors = payload.errors;
+        var errors = payload.errors || {};
         fixEnumErrorsForTopLevelEditor(errors);
 
         // Scroll to top of scrollbox. jQuery is included globally in the page
@@ -64,7 +72,7 @@ module.exports = function() {
 
         var globalErrors = [];
         // This was basically a payload with a message and no errors... so show the message.
-        if (Object.keys(payload.errors).length === 0) {
+        if (Object.keys(errors).length === 0) {
             globalErrors.push(message);
         }
         for (var fieldName in errors) {
@@ -100,6 +108,9 @@ module.exports = function() {
         self.errorsObs.pushAll(globalErrors);
     });
     ko.postbox.subscribe("clearErrors", function() {
+        if (isNotSelf(self)) {
+            return;
+        }
         self.errorsObs.removeAll();
         toastr.clear();
         errorQueue.forEach(function(field) {
@@ -111,4 +122,9 @@ module.exports = function() {
         errorQueue = [];
         errorLabelQueue = [];
     });
+};
+module.exports.prototype.dispose = function() {
+    errorComponentStack.pop(this);
+    this.displayObs.dispose();
+    console.log("disposing errors component", errorComponentStack);
 };

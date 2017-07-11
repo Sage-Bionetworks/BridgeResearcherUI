@@ -1,19 +1,21 @@
 <constraints-label params="title: 'Weight Question', element: element"></constraints-label>
-<table class="element-content-constraints">
-    <tr>
-        <td class="element-content-constraints-label">
-            <label>Rules</label>
-        </td>
-        <td class="element-content-constraints-control" width="100%">
-            <ui-rules params="rulesObs: rulesObs, elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>
-        </td>
-    </tr>
-    <tr>
-        <td class="element-content-constraints-label">
+<div class="ui constraints grid">
+    <div class="five wide column">
+        <div class="field">
             <label>For infant?</label>
-        </td>
-        <td class="element-content-constraints-control">
             <ui-checkbox params="checkedObs: forInfantObs"></ui-checkbox>
-        </td>
-    </tr>
-</table>
+        </div>
+    </div>
+    <div class="eleven wide column">
+        <div class="field">
+            <label>Before Rules</label>
+            <ui-rules params="element: element, fieldName: 'beforeRulesObs', 
+                elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>            
+        </div>
+        <div class="field">
+            <label>After Rules</label>
+            <ui-rules params="element: element, fieldName: 'afterRulesObs', 
+                elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>
+        </div>
+    </div>
+</div>

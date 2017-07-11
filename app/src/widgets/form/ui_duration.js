@@ -1,5 +1,5 @@
-var ko = require('knockout');
-var utils = require('../../utils');
+import ko from 'knockout';
+import utils from '../../utils';
 
 var DURATION_OPTIONS = Object.freeze([
     {value: 'PT*H', label: 'Hours'},
@@ -47,7 +47,7 @@ module.exports = function(params) {
             }
         }
     }
-    ko.computed(updateSubFields);
+    self.computedUpdateSubFields = ko.computed(updateSubFields);
     self.amountObs.subscribe(updateFieldObs);
     self.durationObs.subscribe(updateFieldObs);
 
@@ -62,4 +62,7 @@ module.exports = function(params) {
             self.fieldObs(duration.replace('*',amt));
         }
     }
+};
+module.exports.prototype.dispose = function() {
+    this.computedUpdateSubFields.dispose();
 };

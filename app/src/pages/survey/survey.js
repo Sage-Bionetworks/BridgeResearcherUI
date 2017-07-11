@@ -1,9 +1,9 @@
-var ko = require('knockout');
-var serverService = require('../../services/server_service');
-var surveyUtils = require('./survey_utils');
-var utils = require('../../utils');
-var fn = require('../../functions');
-var root = require('../../root');
+import fn from '../../functions';
+import ko from 'knockout';
+import root from '../../root';
+import serverService from '../../services/server_service';
+import surveyUtils from './survey_utils';
+import utils from '../../utils';
 
 var notFound = utils.failureHandler({
     redirectTo: "surveys",
@@ -82,12 +82,20 @@ module.exports = function(params) {
         if (newType !== oldElement.type) {
             self.elementsObs.splice(index, 1, newElement);
         }
+        scrollTo(index);
     };
     self.copyElement = function(element) {
         var index = self.elementsObs.indexOf(element);
         surveyUtils.observablesToElement(element);
 
         var newElement = JSON.parse(JSON.stringify(element));
+        if (newElement.type === "SurveyInfoScreen") {
+            newElement.title = "[Copy] " + newElement.title;
+        } else {
+            newElement.prompt = "[Copy] " + newElement.prompt;
+        }
+        newElement.identifier = fn.incrementNumber(newElement.identifier);
+        
         surveyUtils.elementToObservables(newElement);
         self.elementsObs.splice(index+1, 0, newElement);
         scrollTo(index+1);
@@ -133,4 +141,7 @@ module.exports = function(params) {
             .then(loadVM)
             .catch(notFound);
     }
+};
+module.exports.prototype.dispose = function() {
+    this.titleObs.dispose();
 };
