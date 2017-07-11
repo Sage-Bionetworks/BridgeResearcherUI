@@ -23,6 +23,7 @@ module.exports = function(params) {
     self.fadeUp = utils.fadeUp();
 
     function loadVM(survey) {
+        console.log(survey);
         self.survey = survey;
         surveyUtils.surveyToObservables(self, survey);
         root.setEditorPanel('SurveyPanel', {viewModel:self});
