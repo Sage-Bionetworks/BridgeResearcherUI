@@ -4,29 +4,26 @@ import BridgeError from '../../bridge_error';
 import serverService  from '../../services/server_service';
 import utils from '../../utils';
 
-function getLocalDate(value) {
-    return fn.asDate(value).toISOString().split("T")[0];
-}
+module.exports = class AddReport {
+    constructor(params) {
+        this.type = params.type;
+        this.userId = params.userId;
 
-module.exports = function(params) {
-    var self = this;
+        this.binder = new Binder(this)
+            .obs('showIdentifier', typeof params.identifier === "undefined")
+            .bind('identifier', params.identifier)
+            .bind('date', new Date().toISOString().split("T")[0], null, AddReport.getLocalDate)
+            .bind('data');
 
-    var binder = new Binder(self)
-        .obs('showIdentifier', typeof params.identifier === "undefined")
-        .bind('identifier', params.identifier)
-        .bind('date', new Date().toISOString().split("T")[0], null, getLocalDate)
-        .bind('data');
-
-    self.close = params.closeDialog;
-
-    function addReport(entry) {
-        return (params.type === "participant") ?
-            serverService.addParticipantReport(params.userId, entry.identifier, entry) :
+        this.close = params.closeDialog;
+    }
+    addReport(entry) {
+        return (this.type === "participant") ?
+            serverService.addParticipantReport(this.userId, entry.identifier, entry) :
             serverService.addStudyReport(entry.identifier, entry);
     }
-
-    self.save = function(vm, event) {
-        var entry = binder.persist({});
+    save(vm, event) {
+        var entry = this.binder.persist({});
         try {
             entry.data = JSON.parse(entry.data);
         } catch(e) {
@@ -45,10 +42,12 @@ module.exports = function(params) {
         }
 
         utils.startHandler(vm, event);
-        addReport(entry)
-            .then(self.close)
+        this.addReport(entry)
+            .then(this.close)
             .then(utils.successHandler(vm, event))
             .catch(utils.failureHandler());
-    };
-    
-};
+    }
+    static getLocalDate(value) {
+        return fn.asDate(value).toISOString().split("T")[0];
+    }
+}
