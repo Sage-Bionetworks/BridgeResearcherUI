@@ -250,6 +250,15 @@ ko.bindingHandlers.tab = {
         });
     }
 };
+ko.bindingHandlers.tabber = {
+    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var href = element.getAttribute('href');
+        element.classList.add("item");
+        if (new String(document.location.hash).indexOf(href) > -1) {
+            element.classList.add("active");
+        }
+    }
+};
 
 ko.bindingHandlers.href = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
