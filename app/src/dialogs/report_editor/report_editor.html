@@ -1,8 +1,6 @@
 <div class="ui small modal">
     <i class="close icon"></i>
-    <div class="header">
-        Add report record
-    </div>
+    <div class="header" data-bind="text: titleObs"></div>
     <div class="content">
         <errors></errors>
         <form id="thisForm" class="ui form" data-bind="submitByButton: 'thisFormSubmit'">

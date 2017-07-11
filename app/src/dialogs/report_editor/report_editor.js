@@ -10,6 +10,7 @@ module.exports = class AddReport {
 
         this.binder = new Binder(this)
             .obs('showIdentifier', !fn.isDefined(params.identifier))
+            .obs('title', params.data ? "Edit report record" : "Add report record")
             .bind('identifier', params.identifier)
             .bind('date', AddReport.getLocalDate(params.date), null, AddReport.getLocalDate)
             .bind('data', AddReport.jsonAsString(params.data), null, AddReport.stringAsJson);
