@@ -16,8 +16,8 @@ import storeService from './store_service';
 const SESSION_KEY = 'session';
 const SESSION_STARTED_EVENT_KEY = 'sessionStarted';
 const SESSION_ENDED_EVENT_KEY = 'sessionEnded';
-const TIMEOUT = 10000;
 const listeners = new EventEmitter();
+const LOG_CACHE = false;
 const NO_CACHE_PATHS = ['studies/self/emailStatus','/participants','externalIds?'];
 
 var session = null;
@@ -46,15 +46,15 @@ var cache = (function() {
     return {
         get: function(key) {
             var value = cachedItems[key];
-            console.info((value) ? "[json cache] hit" : "[json cache] miss", key);
+            if (LOG_CACHE) { console.info((value) ? "[json cache] hit" : "[json cache] miss", key); }
             return (value) ? JSON.parse(value) : null;
         },
         set: function(key, response) {
             if (!matchesNoCachePath(key)) {
-                console.info("[json cache] caching",key);
+                if (LOG_CACHE) { console.info("[json cache] caching", key); }
                 cachedItems[key] = JSON.stringify(response);
             } else {
-                console.warn("[json cache] do not cache", key);
+                if (LOG_CACHE) { console.warn("[json cache] do not cache", key); }
             }
         },
         clear: function(key) {
@@ -67,47 +67,32 @@ var cache = (function() {
     };
 })();
 
-function getHeaders() {
-    var headers = {'Content-Type': 'application/json'};
-    if (session && session.sessionToken) {
-        headers['Bridge-Session'] = session.sessionToken;
-    }
-    return headers;
-}
 function postInt(url, data) {
     if (!data) {
         data = "{}";
     } else if (typeof data !== 'string') {
         data = JSON.stringify(data);
     }
-    return $.ajax({
-        method: 'POST',
-        url: url,
-        headers: getHeaders(),
-        data: data,
-        type: "application/json",
-        dataType: "json",
-        timeout: TIMEOUT
-    });
+    return $.ajax(baseParams('POST', url, data));
 }
 function getInt(url) {
-    return $.ajax({
-        method: 'GET',
-        url: url,
-        headers: getHeaders(),
-        type: "application/json",
-        dataType: "json",
-        timeout: TIMEOUT
-    });
+    return $.ajax(baseParams('GET', url));
 }
 function deleteInt(url) {
-    return $.ajax({
-        method: 'DELETE',
+    return $.ajax(baseParams('DELETE', url));
+}
+function baseParams(method, url, data) {
+    var headers = {'Content-Type': 'application/json'};
+    if (session && session.sessionToken) {
+        headers['Bridge-Session'] = session.sessionToken;
+    }
+    return Object.assign((data) ? {data:data} : {}, {
+        method: method,
         url: url,
-        headers: getHeaders(),
-        type: "application/json",
-        dataType: "json",
-        timeout: TIMEOUT
+        headers: headers, 
+        type: "application/json", 
+        dataType: "json", 
+        timeout: 10000
     });
 }
 
@@ -172,7 +157,11 @@ function isSupportedUser() {
 function cacheParticipantName(response) {
     if (response && response.id) {
         var name = fn.formatName(response);
-        cache.set(response.id+':name', {name:name,externalId:response.externalId,status:response.status});
+        cache.set(response.id+':name', {
+            name: name,
+            externalId: response.externalId,
+            status: response.status
+        });
     }
     return response;
 }

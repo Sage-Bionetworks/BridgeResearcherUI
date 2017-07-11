@@ -1,4 +1,5 @@
 import Binder from '../../binder';
+import BridgeError from '../../bridge_error';
 import fn from '../../functions';
 import root from '../../root';
 import serverService from '../../services/server_service';
@@ -27,18 +28,20 @@ module.exports = function(propertyName) {
             self.noChangesObs(self.newRecordsObs().length === 0);
         };
         self.add = function() {
-            // TODO: We don't want to use root.message like this. We want to create an error
-            // object and show like any other entity validation exception, as we do elsewhere.
+            var error = new BridgeError();
             if (!self.addFieldObs()) {
-                return root.message('warning', 'A value is required.');
+                error.addError("value", "is required");
             }
             if (self.recordsObs.contains(self.addFieldObs()) || 
                 self.newRecordsObs.contains(self.addFieldObs())) {
-                return root.message('warning', 'The value must be unique.');
+                error.addError("value", "must be unique");
             }
             // If it's a dataGroup entry, it has to meet some string validation criteria.
             if (propertyName === "dataGroups" && !/^[a-zA-Z0-9_-]+$/.test(self.addFieldObs())) {
-                return root.message('warning', 'The value can only be letters, numbers, underscores and dashes.');
+                error.addError("value", "can only be letters, numbers, underscores and dashes");
+            }
+            if (error.hasErrors()) {
+                return utils.failureHandler()(error);
             }
             var array = self.newRecordsObs();
             array.push(self.addFieldObs());
