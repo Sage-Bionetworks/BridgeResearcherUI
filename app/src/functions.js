@@ -339,6 +339,7 @@ export default {
     incrementNumber,
     is,
     isBlank,
+    isDefined,
     isNotBlank,
     localDateTimeToUTC,
     log,

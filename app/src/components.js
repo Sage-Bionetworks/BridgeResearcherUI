@@ -377,13 +377,9 @@ reg('read_about_clipboard', {
     viewModel: require('./dialogs/read_about_clipboard/read_about_clipboard'),
     template: require('./dialogs/read_about_clipboard/read_about_clipboard.html'), synchronous: true
 });
-reg('add_report', {
-    viewModel: require('./dialogs/add_report/add_report'),
-    template: require('./dialogs/add_report/add_report.html'), synchronous: true
-});
-reg('edit_report', {
-    viewModel: require('./dialogs/edit_report/edit_report'),
-    template: require('./dialogs/edit_report/edit_report.html'), synchronous: true
+reg('report_editor', {
+    viewModel: require('./dialogs/report_editor/report_editor'),
+    template: require('./dialogs/report_editor/report_editor.html'), synchronous: true
 });
 reg('sign_in_dialog', {
     viewModel: require('./dialogs/sign_in/sign_in'),

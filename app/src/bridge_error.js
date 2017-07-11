@@ -1,3 +1,5 @@
+import utils from './utils';
+
 /**
  * Creates an object structure similar to an EntityNotFoundException sent from the 
  * server. Can be used for client-side validation (although we rarely do this, 
@@ -9,6 +11,18 @@ export default class BridgeError {
         this.responseJSON = {
             errors: {}
         };
+    }
+    addErrorIf(test, fieldName, message) {
+        if (!!test) {
+            this.addError(fieldName, message);
+        }
+    }
+    displayErrors() {
+        if (this.hasErrors()) {
+            utils.failureHandler()(this);
+            return true;
+        }
+        return false;
     }
     addError(fieldName, message) {
         var e = this.responseJSON.errors;

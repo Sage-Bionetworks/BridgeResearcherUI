@@ -55,7 +55,7 @@ module.exports = function(params) {
     });
 
     self.addReport = function(vm, event) {
-        root.openDialog('add_report', {
+        root.openDialog('report_editor', {
             closeDialog: self.closeDialog, 
             identifier: params.id,
             type: "study"
@@ -69,7 +69,7 @@ module.exports = function(params) {
         model.collapsedObs(!model.collapsedObs());
     };
     self.editReportRecord = function(item) {
-        root.openDialog('edit_report', {
+        root.openDialog('report_editor', {
             closeDialog: self.closeDialog,
             identifier: params.id,
             date: item.date,
