@@ -46,7 +46,6 @@ module.exports = class AddReport {
         }
     }
     static jsonAsString(value) {
-        console.log("Binder.jsonAsString", value);
         return (value) ? JSON.stringify(value) : value;
     }
 }
