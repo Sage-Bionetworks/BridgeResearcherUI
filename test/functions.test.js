@@ -398,5 +398,21 @@ describe("deleteUnusedProperties", function() {
         expect(object.prop4).to.be.false;
     });
 });
-
+describe("dateToLocalISOString", function() {
+    it("converts date to local timezone in ISO format", function() {
+        var date = new Date("2017-07-10T23:32:35.550Z");
+        expect(fn.dateToLocalISOString(date)).to.equal("2017-07-10T16:32:35-07:00");
+    });
+    it("converts date with set time portion", function() {
+        var date = new Date("2017-07-10T23:32:35.550Z");
+        expect(fn.dateToLocalISOString(date, "00:00:00")).to.equal("2017-07-10T00:00:00-07:00");
+    });
+});
+describe("arrayContains", function() {
+    it("works", function() {
+        var array = ['A','B','C'];
+        expect(fn.arrayContains(array, 'A')).to.be.true;
+        expect(fn.arrayContains(array, 'D')).to.be.false;
+    });
+});
 });
