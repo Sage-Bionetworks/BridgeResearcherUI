@@ -26,8 +26,8 @@ module.exports = function(params) {
         .obs('published')
         .obs('name')
         .obs('isNew')
-        .obs('id')
-        .obs('version');
+        .obs('id', params.id)
+        .obs('version', params.version);
 
     self.formatDescription = sharedModuleUtils.formatDescription;
     self.formatTags = sharedModuleUtils.formatTags;

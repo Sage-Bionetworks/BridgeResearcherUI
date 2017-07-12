@@ -1,6 +1,12 @@
 import fn from '../../functions';
 import ko from 'knockout';
 
+const POSTFIXES = {
+    'schema': '/schema',
+    'history': '/versions',
+    'editor': '/editor'
+};
+
 module.exports = function(params) {
     var self = this;
 
@@ -8,7 +14,6 @@ module.exports = function(params) {
     self.guidObs = params.viewModel.guidObs;
     self.createdOnObs = params.viewModel.createdOnObs;
     self.publishedObs = params.viewModel.publishedObs;
-    self.selected = params.selected;
 
     self.computeds = [];
     self.linkMaker = function(tabName) {
@@ -21,11 +26,7 @@ module.exports = function(params) {
                 }
                 url += ("/"+createdOn.toISOString());
             }
-            if (tabName === 'schema') {
-                return url + '/schema';
-            } else if (tabName === 'history') {
-                return url + '/versions';
-            }
+            url += POSTFIXES[tabName];
             return url;
         });
         self.computeds.push(c);

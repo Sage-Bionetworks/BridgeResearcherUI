@@ -166,4 +166,4 @@ module.exports = class Task {
     static schemaToOption(schema) {
         return {label: schema.revision, value: schema.revision};
     }
-}
+};
