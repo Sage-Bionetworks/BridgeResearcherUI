@@ -12,7 +12,7 @@
             <button class="ui red tiny button" data-bind="click: withdraw, visible: !noConsentObs()">Withdraw from study&hellip;</button>
         </div>
     </div>
-    <!-- ko component: {name: 'participant-tabset', params: {active: 'consents', isNewObs: isNewObs, 
+    <!-- ko component: {name: 'participant-tabset', params: {isNewObs: isNewObs, 
         isPublicObs: isPublicObs, userIdObs: userIdObs, statusObs: statusObs}} --><!-- /ko -->
 </div>
 <div class="scrollbox">
@@ -64,7 +64,7 @@
                 </td>
                 <td>
                     <a target="_blank" data-bind="visible: $data.name !== 'No consent', 
-                        attr: {'href': $parent.linkToDocument($data)}">
+                        href: $parent.linkToDocument($data)">
                         View document <i class="ui external icon"> </i>
                     </a>
                 </td>

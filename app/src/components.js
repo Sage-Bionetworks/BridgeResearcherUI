@@ -294,6 +294,10 @@ reg('survey-tabset', {
 reg('template-tabset', {
     template: require('./pages/email_templates/tabset.html')
 });
+reg('subpop-tabset', {
+    viewModel: require('./pages/subpopulation/tabset'),
+    template: require('./pages/subpopulation/tabset.html')
+});
 reg('criteria', {
     viewModel: require('./widgets/criteria/criteria'),
     template: require('./widgets/criteria/criteria.html')

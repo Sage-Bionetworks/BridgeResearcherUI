@@ -1,3 +1,4 @@
+import Binder from '../../binder';
 import fn from '../../functions';
 import ko from 'knockout';
 import root from '../../root';
@@ -13,7 +14,11 @@ var notFound = utils.failureHandler({
 module.exports = function(params) {
     var self = this;
 
-    self.isLoaded = ko.observable(false);
+    new Binder(self)
+        .obs('createdOn', params.createdOn)
+        .obs('guid', params.guid)
+        .obs('isLoaded', false);
+
     self.survey = null;
     self.formatDateTime = fn.formatDateTime;
     surveyUtils.initSurveyVM(self);
@@ -23,11 +28,10 @@ module.exports = function(params) {
     self.fadeUp = utils.fadeUp();
 
     function loadVM(survey) {
-        console.log(survey);
         self.survey = survey;
         surveyUtils.surveyToObservables(self, survey);
         root.setEditorPanel('SurveyPanel', {viewModel:self});
-        self.isLoaded(true);
+        self.isLoadedObs(true);
         return survey.createdOn;
     }
     function updateVM(keys, message) {
@@ -37,7 +41,7 @@ module.exports = function(params) {
         self.guidObs(keys.guid);
         self.createdOnObs(keys.createdOn);
         self.versionObs(keys.version);
-        self.isLoaded(true);
+        self.isLoadedObs(true);
     }
     function version(keys) {
         return serverService.versionSurvey(keys.guid, keys.createdOn);

@@ -95,3 +95,8 @@ module.exports = function(params) {
     studyConsent().then(loadIntoEditor)
         .catch(failureHandler);
 };
+module.exports.prototype.dispose = function() {
+    if (this.editor) {
+        this.editor.destroy();
+    }
+};

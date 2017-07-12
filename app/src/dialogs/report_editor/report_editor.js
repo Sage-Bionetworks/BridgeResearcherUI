@@ -49,4 +49,4 @@ module.exports = class AddReport {
     static jsonAsString(value) {
         return (value) ? JSON.stringify(value) : value;
     }
-}
+};

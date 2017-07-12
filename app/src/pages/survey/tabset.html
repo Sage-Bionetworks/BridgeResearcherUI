@@ -1,14 +1,11 @@
 <div class="ui secondary pointing menu">
-    <a class="item" data-tab="editor" 
-        data-bind="tab: selected, href: linkMaker('editor')">
+    <a data-bind="href: linkMaker('editor'), tabber">
         <i class="file outline icon"></i> Editor
     </a>
-    <a class="item" data-tab="schema" 
-        data-bind="tab: selected, href: linkMaker('schema'), visible: !!createdOnObs()">
+    <a data-bind="href: linkMaker('schema'), tabber, visible: !!createdOnObs()">
         <i class="puzzle icon"></i> Schema
     </a>
-    <a class="item" data-tab="history" 
-        data-bind="tab: selected, href: linkMaker('history'), visible: !!createdOnObs()">
+    <a data-bind="href: linkMaker('history'), tabber, visible: !!createdOnObs()">
         <i class="history icon"></i> History &amp; Publication
     </a>
     <div class="right menu pub-status">

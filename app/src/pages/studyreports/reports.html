@@ -31,7 +31,7 @@
                     <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                 </td>
                 <td width="100%">
-                    <a data-bind="attr:{'href': '#/reports/raw/' + encodeURIComponent($data.identifier)}, 
+                    <a data-bind="href: '#/reports/raw/' + encodeURIComponent($data.identifier), 
                         text: $data.identifier"></a>
                 </td>
                 <td data-bind="text: $data.publicObs() ? 

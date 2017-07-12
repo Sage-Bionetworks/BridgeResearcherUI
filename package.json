@@ -33,7 +33,7 @@
     "html-webpack-plugin": "^2.22.0",
     "jquery": "^3.2.1",
     "jshint": "^2.9.2",
-    "jshint-loader": "^0.8.3",
+    "jshint-loader": "^0.8.4",
     "knockout": "^3.4.0",
     "knockout-postbox": "^0.6.0",
     "mocha": "^3.4.1",

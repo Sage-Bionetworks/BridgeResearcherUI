@@ -11,7 +11,7 @@
             <button class="ui primary tiny button" data-bind="click: save">Save</button>
         </div>
     </div>
-    <survey-tabset params="selected: 'editor', viewModel: $data"></survey-tabset>
+    <survey-tabset params="viewModel: $data"></survey-tabset>
 </div>
 <div class="scrollbox">
     <errors></errors>
@@ -34,9 +34,9 @@
 
     <h3>Questions</h3>
 
-    <h4 data-bind="visible: !isLoaded()">Loading...</h4>
+    <h4 data-bind="visible: !isLoadedObs()">Loading...</h4>
 
-    <div data-bind="visible: elementsObs().length === 0 && isLoaded()">
+    <div data-bind="visible: elementsObs().length === 0 && isLoadedObs()">
         <p>There are currently no questions in this survey. Create a question:</p>
         <button class="ui primary button" data-type="MultiValueConstraints" 
             data-bind="click: createNewElement">Create New Element</button>
