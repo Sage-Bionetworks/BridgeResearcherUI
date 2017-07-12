@@ -14,7 +14,7 @@ const OPTIONS = [
     {label: "Upload schemas only", value: "schema"},
     {label: "Both", value: "both"}
 ];
-export default function() {
+module.exports = function() {
     var self = this;
 
     function doSearch() {

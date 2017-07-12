@@ -28,6 +28,9 @@ reg('sharedmodule-tabset', {
     viewModel: require('./pages/shared_module/tabset'),
     template: require('./pages/shared_module/tabset.html')
 });
+reg('studyreports-tabset', {
+    template: require('./pages/studyreports/tabset.html')
+});
 reg('general', {
     viewModel: require('./pages/settings/general'),
     template: require('./pages/settings/general.html')
