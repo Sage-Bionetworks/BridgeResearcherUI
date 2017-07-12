@@ -254,8 +254,6 @@ ko.bindingHandlers.tabber = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
         var hash = new String(document.location.hash);
         var href = element.getAttribute('href');
-        console.log(href);
-
         element.classList.add("item");
         element.classList.toggle("active", hash.indexOf(href) > -1);
     }
