@@ -10,7 +10,7 @@
         </div>
         <div class="fixed-header-buttons"></div>
     </div>
-    <!-- ko component: {name: 'participant-tabset', params: {active: 'uploads', isNewObs: isNewObs,
+    <!-- ko component: {name: 'participant-tabset', params: {isNewObs: isNewObs,
         isPublicObs: isPublicObs, userIdObs: userIdObs, statusObs: statusObs}} --><!-- /ko -->
 </div>
 <div class="scrollbox">
@@ -79,7 +79,7 @@
                 <td data-bind="html: $data.completedByObs"></td>
                 <td data-bind="text: $data.recordId"></td>
                 <td>
-                    <a target="_blank" rel="noopener" data-bind="attr:{href: $data.hrefObs}, text: $data.contentObs"></a>
+                    <a target="_blank" rel="noopener" data-bind="href: $data.hrefObs, text: $data.contentObs"></a>
                 </td>
                 <td style="width:12rem">
                     <div data-bind="semantic: $data.progressState">

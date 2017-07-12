@@ -40,8 +40,8 @@
                             <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                         </td>
                         <td>
-                            <a data-bind="attr:{'href': '#/topics/' + encodeURIComponent($data.guid)}, 
-                                text: $data.name"></a>
+                            <a data-bind="text: $data.name, href: 
+                                '#/topics/' + encodeURIComponent($data.guid)"></a>
                         </td>
                         <td data-bind="text: $data.description"></td>
                     </tr>

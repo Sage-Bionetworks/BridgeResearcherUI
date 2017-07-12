@@ -1,18 +1,19 @@
+import fn from '../../functions';
 import ko from 'knockout';
-import root from '../../root';
 
 module.exports = function(params) {
     var self = this;
 
-    self.isNewObs = params.isNewObs;
-    self.isPublicObs = params.isPublicObs;
-    self.userIdObs = params.userIdObs;
-    self.statusObs = params.statusObs;
+    self.guidObs = params.guidObs;
+
+    self.createdOnObs = params.createdOnObs;
+    self.formatDateTime = fn.formatDateTime;
+    self.activeObs = params.activeObs;
 
     self.computeds = [];
-    self.linkMaker = function(postfix) {
+    self.linkMaker = function(tabName) {
         var c = ko.computed(function() {
-            return root.userPath() + self.userIdObs() + '/' + postfix;
+            return '#/subpopulations/' + self.guidObs() + '/consents/' + tabName;
         });
         self.computeds.push(c);
         return c;

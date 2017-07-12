@@ -12,7 +12,7 @@
         </div>
         <div class="fixed-header-buttons"></div>
     </div>
-    <!-- ko component: {name: 'participant-tabset', params: {active: 'activities', isNewObs: isNewObs,
+    <!-- ko component: {name: 'participant-tabset', params: {isNewObs: isNewObs,
         isPublicObs: isPublicObs, userIdObs: userIdObs, statusObs: statusObs}} --><!-- /ko -->
 </div>
 <div class="scrollbox">
@@ -34,8 +34,8 @@
         <tbody data-bind="foreach: itemsObs">
             <tr>
                 <td>
-                    <a data-bind="text: $data.label, attr: {
-                        'href': $parent.linkMaker($parent.userIdObs(), $data.guid)}"></a>
+                    <a data-bind="text: $data.label, 
+                        'href': $parent.linkMaker($parent.userIdObs(), $data.guid)"></a>
                 </td>
                 <td data-bind="text: $data.plan"></td>
                 <td data-bind="text: $data.qualifier"></td>

@@ -1,0 +1,29 @@
+<div class="ui secondary pointing menu">
+    <a data-bind="href: linkMaker('editor'), tabber">
+        <i class="setting icon"></i> General
+    </a>
+    <a data-bind="href: linkMaker('recent'), tabber">
+        <i class="file outline icon"></i> Editor
+    </a>
+    <a data-bind="href: linkMaker('history'), tabber">
+        <i class="history icon"></i> History &amp; Publication
+    </a>
+    <a data-bind="href: linkMaker('download'), tabber">
+        <i class="download icon"></i> Download
+    </a>
+    <div class="right menu pub-status">
+        <div class="item" data-bind="visible: !!createdOnObs()">
+            <i class="clock icon"></i> <span data-bind="text: formatDateTime(createdOnObs())"></span>
+        </div>
+        <div class="item" data-bind="visible: activeObs">
+            <div class="green mini ui label">
+                <i class="checkmark icon"></i> Published
+            </div>
+        </div>
+        <div class="item" data-bind="visible: !activeObs()">
+            <div class="orange ui mini label">
+                <i class="warning icon"></i> Not Published
+            </div>
+        </div>
+    </div>    
+</div>

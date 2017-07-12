@@ -39,7 +39,8 @@
                         disabled: $data.published"></ui-checkbox>
                 </td>
                 <td>
-                    <a data-bind="attr: {'href': '#/shared_modules/'+encodeURIComponent($data.id)+'/versions/'+$data.version+'/editor'}, text: $data.name"></a>
+                    <a data-bind="text: $data.name, href: 
+                        '#/shared_modules/'+encodeURIComponent($data.id)+'/versions/'+$data.version+'/editor'"></a>
                 </td>
                 <td data-bind="text: $component.formatDescription($data)"></td>
                 <td data-bind="text: $component.formatVersions($data)"></td>
