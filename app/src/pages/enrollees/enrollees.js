@@ -101,6 +101,7 @@ module.exports = function() {
     serverService.getStudy().then(binder.assign('study'));
     
     self.loadingFunc = function loadPage(params) {
+        params.idFilter = self.idFilterObs();
         return serverService.getExternalIds(params)
             .then(binder.update('total','items'))
             .then(msgIfNoRecords)
