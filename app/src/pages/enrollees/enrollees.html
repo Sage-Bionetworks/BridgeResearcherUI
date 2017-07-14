@@ -50,7 +50,7 @@
                     <span data-bind="text: $data.identifier, visible: !$data.assigned"></span>
                     <span data-bind="visible: $data.assigned">
                         <span data-bind="visible: !$parent.isResearcher(), text: $data.identifier"></span>
-                        <a data-bind="visible: $parent.isResearcher, href': '#/enrollees/'+$data.identifier, 
+                        <a data-bind="visible: $parent.isResearcher, href: '#/enrollees/'+$data.identifier, 
                             text: $data.identifier, click: $component.showLinkLoading"></a>
                         <span class="ui tiny inline loader"></span>
                     </span>
