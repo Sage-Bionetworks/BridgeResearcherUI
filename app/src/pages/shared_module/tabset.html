@@ -1,23 +1,19 @@
 <div class="ui secondary pointing menu">
-    <a class="item" data-tab="editor" 
-        data-bind="tab: selected, href: linkMaker('editor')">
+    <a data-bind="href: linkMaker('editor'), tabber">
         <i class="file outline icon"></i> Editor
     </a>
-    <a class="item" data-tab="history" 
-        data-bind="tab: selected, href: linkMaker('history'), visible: !isNewObs()">
+    <a data-bind="href: linkMaker('history'), tabber, visible: !isNewObs()">
         <i class="history icon"></i> History &amp; Publication
     </a>
     <div class="right menu pub-status">
         <div class="item" data-bind="visible: !isNewObs()">
             <i class="clock icon"></i> <span data-bind="text: versionObs"></span>
         </div>
-        <div class="item" data-bind="visible: publishedObs">
-            <span class="green ui mini label">
+        <div class="item">
+            <span class="green ui mini label" data-bind="visible: publishedObs">
                 <i class="checkmark icon"></i> Published
             </span>
-        </div>
-        <div class="item" data-bind="visible: !publishedObs()">
-            <span class="orange ui mini label">
+            <span class="orange ui mini label" data-bind="visible: !publishedObs()">
                 <i class="warning icon"></i> Not Published
             </span>
         </div>

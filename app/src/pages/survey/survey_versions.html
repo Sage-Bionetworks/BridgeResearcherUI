@@ -9,7 +9,7 @@
         </div>
         <div class="fixed-header-buttons"></div>
     </div>
-    <survey-tabset params="selected: 'history', viewModel: $data"></survey-tabset>
+    <survey-tabset params="viewModel: $data"></survey-tabset>
 </div>
 <div class="scrollbox">
     <errors></errors>
@@ -30,7 +30,7 @@
         <tbody data-bind="foreach: itemsObs">
             <tr data-bind="css: { positive: $data.published }">
                 <td>
-                    <a data-bind="attr: {href: '#/surveys/'+$data.guid+'/'+$data.createdOn}, text: $data.name"></span></a>
+                    <a data-bind="href: '#/surveys/'+$data.guid+'/'+$data.createdOn, text: $data.name"></span></a>
                 </td>
                 <td data-bind="text:$parent.formatDateTime($data.createdOn)"></td>
                 <td>

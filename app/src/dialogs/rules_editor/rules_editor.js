@@ -45,17 +45,17 @@ var NO_VALUE_OPS = ['de','always'];
 
 function filterOutRulesWithNoValues(rule) {
     var op = rule.operatorObs();
-    if (SET_OPS.contains(op)) {
+    if (fn.arrayContains(SET_OPS, op)) {
         rule.valueObs(null);
-    } else if (NO_VALUE_OPS.contains(op)) {
+    } else if (fn.arrayContains(NO_VALUE_OPS, op)) {
         rule.dataGroupsObs([]);
     }
-    return (rule.valueObs() || rule.dataGroupsObs().length || NO_VALUE_OPS.contains(op));
+    return (rule.valueObs() || rule.dataGroupsObs().length || fn.arrayContains(NO_VALUE_OPS, op));
 }
 
 function observerToObject(rule) {
     var obj = {operator: rule.operatorObs()};
-    if (!SET_OPS.contains(rule.operatorObs())) {
+    if (!fn.arrayContains(SET_OPS, rule.operatorObs())) {
         obj.value = rule.valueObs();
     } else {
         obj.dataGroups = rule.dataGroupsObs();

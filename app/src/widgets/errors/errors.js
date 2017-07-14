@@ -48,7 +48,7 @@ function isNotSelf(self) {
 
 module.exports = function() {
     errorComponentStack.push(this);
-    console.log("creating errors component", errorComponentStack);
+    //console.log("creating errors component", errorComponentStack);
     var self = this;
 
     var errorQueue = [];
@@ -88,14 +88,19 @@ module.exports = function() {
                 fieldEl = document.querySelector("."+id);
             }
             if (fieldEl) {
-                var div = fieldEl.querySelector(".ui.basic.red.pointing.prompt");
-                if (!div) {
-                    div = document.createElement("div");
-                    div.className = "ui basic red pointing prompt label transition visible";
-                    errorLabelQueue.push(div);
-                    fieldEl.appendChild(div);
+                var containerDiv = fieldEl.querySelector(".error.box");
+                if (!containerDiv) {
+                    containerDiv = document.createElement("div");
+                    containerDiv.className = "error box";
                 }
-                div.innerHTML = string;
+                containerDiv.innerHTML = "";
+                var error = document.createElement("div");
+                error.className = "ui basic red pointing prompt label transition visible";
+                error.innerHTML = string;
+                containerDiv.appendChild(error);
+
+                errorLabelQueue.push(containerDiv);
+                fieldEl.appendChild(containerDiv);
                 fieldEl.classList.add("error");
                 errorQueue.push(fieldEl);
             } else {
@@ -126,5 +131,5 @@ module.exports = function() {
 module.exports.prototype.dispose = function() {
     errorComponentStack.pop(this);
     this.displayObs.dispose();
-    console.log("disposing errors component", errorComponentStack);
+    //console.log("disposing errors component", errorComponentStack);
 };

@@ -251,6 +251,28 @@ ko.bindingHandlers.tab = {
     }
 };
 
+function updateTabSelection(element) {
+    var hash = document.location.hash;
+    var href = element.getAttribute('href');
+    element.classList.toggle("active", hash.indexOf(href) > -1);
+}
+
+ko.bindingHandlers.tabber = {
+    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        element.classList.add("item");
+        updateTabSelection(element);
+
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.attributeName === "href") {
+                    updateTabSelection(element);            
+                }
+            });
+        });
+        observer.observe(element, {attributes: true});
+    }
+};
+
 ko.bindingHandlers.href = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
         updateElement(element, valueAccessor, function(element, value) {

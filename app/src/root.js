@@ -4,31 +4,6 @@ import clipboard from './widgets/clipboard/clipboard';
 import config from './config';
 import ko from 'knockout';
 import serverService from './services/server_service';
-import toastr from 'toastr';
-
-function pad(num) {
-    var norm = Math.abs(Math.floor(num));
-    return (norm < 10 ? '0' : '') + norm;
-}
-Date.prototype.toLocalISOString = function(timePortion) {
-    var tzo = -this.getTimezoneOffset();
-    var dif = tzo >= 0 ? '+' : '-';
-    var str = this.getFullYear()+'-'+pad(this.getMonth() + 1)+'-'+pad(this.getDate())+'T';
-    if (timePortion) {
-        str += timePortion;
-    } else {
-        str += pad(this.getHours())+':'+pad(this.getMinutes())+':'+pad(this.getSeconds());
-    }
-    str += dif + pad(tzo / 60) + ':' + pad(tzo % 60);
-    return str;
-};
-Array.prototype.contains = function(value) {
-    return this.indexOf(value) > -1;
-};
-
-window.ko = ko;
-// When you enable this, 1) everything is a bit faster, and 2) the UI is completely broken.
-// ko.options.deferUpdates = true;
 
 // Used in navigation to keep a section highlighted as you navigate into it.
 var participantPages = ['participant_general','participant_consents',  'participant_reports',
@@ -41,7 +16,7 @@ var pageSets = {
     'surveys': ['surveys','survey','survey_versions', "survey_schema"],
     'schemas': ['schemas','schema','schema_versions'],
     'scheduleplans': ['scheduleplans','scheduleplan'],
-    'email_templates': ['verify_email', 'reset_password', 'email_signin'],
+    'email_templates': ['verify_email', 'reset_password', 'email_signin', 'account_exists'],
     'subpopulations': ['subpopulations', 'subpopulation', 'subpopulation_editor', 'subpopulation_history', 'subpopulation_download'],
     'participants': ['participants'].concat(participantPages),
     'enrollees': ['enrollees'].concat(participantPages),
@@ -66,7 +41,6 @@ function unverifiedEmailAlert(response) {
             "You will not be able to send email until this step is completed.");
     }
 }
-toastr.options = config.toastr;
 
 var RootViewModel = function() {
     var self = this;
@@ -154,18 +128,6 @@ var RootViewModel = function() {
     self.isDevEnvObs = ko.computed(function() {
         return ['local','develop','staging'].indexOf(self.environmentObs()) > -1; 
     });
-    /**
-     * Displays a message that we UI insiders like to call "a piece of toast"
-     * @param severity {String} one of 'success', 'info', 'warning' or 'error'
-     * @param message {String} the message for the toast
-     */
-    self.message = function(severity, message) {
-        if (toastr[severity]) {
-            toastr[severity](message);
-        } else {
-            throw new Error(severity + ' is not a message type');
-        }
-    };
     serverService.addSessionStartListener(function(session) {
         self.studyNameObs(session.studyName);
         self.environmentObs(session.environment);

@@ -24,8 +24,8 @@
             <button class="ui tiny primary button" data-bind="click: save">Save</button>
         </div>
     </div>
-    <!-- ko component: {name: 'participant-tabset', params: { active: 'info', 
-        isNewObs: isNewObs, showEnableAccountObs: showEnableAccountObs, isPublicObs: isPublicObs,
+    <!-- ko component: {name: 'participant-tabset', params: {isNewObs: isNewObs, 
+        showEnableAccountObs: showEnableAccountObs, isPublicObs: isPublicObs,
         userIdObs: userIdObs, statusObs: statusObs
     }} --><!-- /ko -->
 </div>
@@ -123,7 +123,7 @@
             <div class="field">
                 <label>Email</label>
                 <div>
-                    <a data-bind="attr:{href: 'mailto:'+emailObs()}, text: emailObs"></a>
+                    <a data-bind="href: 'mailto:'+emailObs(), text: emailObs"></a>
                 </div>
             </div>
             <div class="field"></div>

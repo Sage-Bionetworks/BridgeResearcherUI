@@ -49,7 +49,7 @@
                     <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                 </td>
                 <td style="white-space: nowrap">
-                    <a data-bind="attr: {'href': '#/tasks/'+ encodeURIComponent($data.taskId)}, text: $data.taskId"></a>
+                    <a data-bind="href: '#/tasks/'+ encodeURIComponent($data.taskId), text: $data.taskId"></a>
                 </td>
                 <td data-bind="html: $parent.formatCompoundActivity($data)"></td>
             </tr>

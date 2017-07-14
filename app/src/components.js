@@ -28,6 +28,9 @@ reg('sharedmodule-tabset', {
     viewModel: require('./pages/shared_module/tabset'),
     template: require('./pages/shared_module/tabset.html')
 });
+reg('studyreports-tabset', {
+    template: require('./pages/studyreports/tabset.html')
+});
 reg('general', {
     viewModel: require('./pages/settings/general'),
     template: require('./pages/settings/general.html')
@@ -51,6 +54,10 @@ reg('reset_password', {
 reg('email_signin', {
     viewModel: require('./pages/email_templates/email_signin'),
     template: require('./pages/email_templates/email_signin.html')
+});
+reg('account_exists', {
+    viewModel: require('./pages/email_templates/account_exists'),
+    template: require('./pages/email_templates/account_exists.html')
 });
 reg('external_ids', {
     viewModel: require('./pages/external_ids/external_ids'),
@@ -284,6 +291,13 @@ reg('survey-tabset', {
     viewModel: require('./pages/survey/tabset'),
     template: require('./pages/survey/tabset.html')
 });
+reg('template-tabset', {
+    template: require('./pages/email_templates/tabset.html')
+});
+reg('subpop-tabset', {
+    viewModel: require('./pages/subpopulation/tabset'),
+    template: require('./pages/subpopulation/tabset.html')
+});
 reg('criteria', {
     viewModel: require('./widgets/criteria/criteria'),
     template: require('./widgets/criteria/criteria.html')
@@ -370,13 +384,9 @@ reg('read_about_clipboard', {
     viewModel: require('./dialogs/read_about_clipboard/read_about_clipboard'),
     template: require('./dialogs/read_about_clipboard/read_about_clipboard.html'), synchronous: true
 });
-reg('add_report', {
-    viewModel: require('./dialogs/add_report/add_report'),
-    template: require('./dialogs/add_report/add_report.html'), synchronous: true
-});
-reg('edit_report', {
-    viewModel: require('./dialogs/edit_report/edit_report'),
-    template: require('./dialogs/edit_report/edit_report.html'), synchronous: true
+reg('report_editor', {
+    viewModel: require('./dialogs/report_editor/report_editor'),
+    template: require('./dialogs/report_editor/report_editor.html'), synchronous: true
 });
 reg('sign_in_dialog', {
     viewModel: require('./dialogs/sign_in/sign_in'),

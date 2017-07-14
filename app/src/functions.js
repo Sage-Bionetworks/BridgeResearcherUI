@@ -287,15 +287,36 @@ function incrementNumber(string) {
     }
     return string;
 }
+function pad(num) {
+    var norm = Math.abs(Math.floor(num));
+    return (norm < 10 ? '0' : '') + norm;
+}
+function dateToLocalISOString(date, timePortion) {
+    var tzo = -date.getTimezoneOffset();
+    var dif = tzo >= 0 ? '+' : '-';
+    var str = date.getFullYear()+'-'+pad(date.getMonth() + 1)+'-'+pad(date.getDate())+'T';
+    if (timePortion) {
+        str += timePortion;
+    } else {
+        str += pad(date.getHours())+':'+pad(date.getMinutes())+':'+pad(date.getSeconds());
+    }
+    str += dif + pad(tzo / 60) + ':' + pad(tzo % 60);
+    return str;
+}
+function arrayContains(array, value) {
+    return array.indexOf(value) > -1;
+}
 
 var formatDate = seq(checkArgs, asDate, formatDateString, blankInvalidDateString);
 var formatDateTime = seq(checkArgs, asDate, formatDateTimeString, blankInvalidDateString);
 var localDateTimeToUTC = seq(asDate, intLocalDateTimeToUTC);
 
 export default {
+    arrayContains,
     asDate,
     copyProps,
     dateTimeString,
+    dateToLocalISOString,
     deleteUnusedProperties,
     formatDate,
     formatDateTime,
@@ -318,6 +339,7 @@ export default {
     incrementNumber,
     is,
     isBlank,
+    isDefined,
     isNotBlank,
     localDateTimeToUTC,
     log,

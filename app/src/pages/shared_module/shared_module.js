@@ -41,7 +41,7 @@ function loadSchemaRevisions(vm, schema) {
         vm.linkedVersionOptionsObs(revisions);
     });
 }
-export default function(params) {
+module.exports = function(params) {
     var self = this;
     self.editor = null;
     self.metadata = {tags:[], version: 1};
@@ -49,7 +49,7 @@ export default function(params) {
     var binder = new Binder(self)
         .obs('isNew', params.id === "new")
         .bind('published', false)
-        .bind('id')
+        .bind('id', params.id)
         .bind('licenseRestricted', false)
         .bind('name', '')
         .bind('notes', '', notesToView, notesToModel)
@@ -201,5 +201,10 @@ export default function(params) {
             .then(binder.update())
             .then(updateSharedModuleWithNames)
             .catch(failureHandler);
+    }
+};
+module.exports.prototype.dispose = function() {
+    if (this.editor) {
+        this.editor.destroy();
     }
 };

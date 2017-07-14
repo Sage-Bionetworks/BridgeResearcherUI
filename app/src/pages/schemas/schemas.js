@@ -27,8 +27,7 @@ module.exports = function() {
 
     function closeCopySchemasDialog() {
         root.closeDialog();
-        root.message('success', 'Schemas copied');
-        load();
+        load().then(utils.successHandler(self, null, "Schemas copied"));
     }
     self.copySchemasDialog = function(vm, event) {
         var copyables = self.itemsObs().filter(tables.hasBeenChecked);
@@ -49,7 +48,7 @@ module.exports = function() {
     };
 
     function load() {
-        sharedModuleUtils.loadNameMaps()
+        return sharedModuleUtils.loadNameMaps()
             .then(serverService.getAllUploadSchemas)
             .then(fn.handleSort('items', 'name'))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))

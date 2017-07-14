@@ -10,6 +10,7 @@
     <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
+    <errors></errors>
     <div class="ui grid">
         <div class="ten wide column">
             <div class="ui large labels" data-bind="foreach: recordsObs">
@@ -22,10 +23,12 @@
                     <span data-bind="text: $data"></span> <i class="icon close" data-bind="click: $component.remove"></i>
                 </div><br/>
             </div>
-            <div class="ui action input">
-                <input type="text" data-bind="textInput: $component.addFieldObs, hasFocus: true,
-                    event: {keypress: $component.keyHandler}"/>
-                <button class="ui button" data-bind="click: $component.add">Add</button>
+            <div class="field" id="value">
+                <div class="ui action input">
+                    <input type="text" data-bind="textInput: $component.addFieldObs, 
+                        event: {keypress: $component.keyHandler}, hasFocus: true"/>
+                    <button class="ui button" data-bind="click: $component.add">Add</button>
+                </div>
             </div>
         </div>
         <div class="six wide column">

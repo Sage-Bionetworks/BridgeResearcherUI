@@ -54,7 +54,7 @@ module.exports = function(params) {
     self.currentYear = d.getFullYear();    
 
     self.addReport = function(vm, event) {
-        root.openDialog('add_report', {
+        root.openDialog('report_editor', {
             closeDialog: self.closeDialog,
             identifier: params.identifier,
             userId: params.userId,
@@ -69,7 +69,7 @@ module.exports = function(params) {
         model.collapsedObs(!model.collapsedObs());
     };
     self.editReportRecord = function(item) {
-        root.openDialog('edit_report', {
+        root.openDialog('report_editor', {
             closeDialog: self.closeDialog,
             identifier: params.identifier,
             userId: params.userId,

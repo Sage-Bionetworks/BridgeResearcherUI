@@ -14,24 +14,25 @@
         <div class="ten wide column">
             <errors></errors>
             <form class="ui form">
-                <div class="required field" id="emailSignInTemplate_subject">
+                <div class="required field" id="accountExistsTemplate_subject">
                     <label>Subject</label>
                     <input type="text" name="subject" data-bind="textInput: subjectObs, hasFocus: true"/>
                 </div>
-                <div class="field" id="emailSignInTemplate_body">
+                <div class="field" id="accountExistsTemplate_body">
                     <textarea id="rpTemplate" data-bind="ckeditor: $component.initEditor" class="ui textarea doc"></textarea>
                 </div>
             </form>
         </div>
         <div class="six wide column">
             <div class="ui message">
-                <p>This is the email sent to a user that will contain a link to sign in to the app. This requires coordination with the app itself to capture the link and process the token accordingly. </p>
+                <p>If a user tries to sign up twice for the same study, we will send this email. It notes 
+                    the account already exists, and provides a link to reset the password (it seems likely the user 
+                    has forgotten it). </p>
 
-                <p><strong>Note that the default email message contains a link with several token values; this link must be maintained 
-                    in the email in order for the user to sign in.</strong></p>
+                <p><strong>It <em>must</em> contain the value <code>${url}</code>,</strong> which is a variable that will be
+                    replaced with the address users must click to reset their passwords.  You cannot link the ${url} 
+                    variable. Most web email clients will link it automatically. </p>
 
-                <p>However, you will need to replace the <code>${host}</code> value with a custom host. If you used the default <code>${host}</code> value it will conflict with other apps built on the Bridge server. The initial <code>${host}</code> value is for testing purposes. </p>
-                
                 <p>There are other values available: </p>
 
                 <dl>

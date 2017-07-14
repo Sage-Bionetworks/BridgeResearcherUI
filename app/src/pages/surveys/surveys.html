@@ -59,11 +59,11 @@
                     <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                 </td>
                 <td data-bind="attr:{title:$data.identifier}">
-                    <a data-bind="attr: {'href': '#/surveys/'+$data.guid+'/'+$data.createdOn}, text: $data.name"></a>
+                    <a data-bind="href: '#/surveys/'+$data.guid+'/'+$data.createdOn+'/editor', text: $data.name"></a>
                 </td>
                 <td data-bind="text: $parent.formatDateTime($data.modifiedOn)"></td>
                 <td data-bind="foreach: $data.schedulePlanObs"><!-- ko if: $index() > 0 --><span>, </span><!-- /ko -->
-                    <a target="_blank" rel="noopener" data-bind="attr: {href: '#/scheduleplans/'+$data.guid}, html: $data.label"></a>
+                    <a target="_blank" rel="noopener" data-bind="href: '#/scheduleplans/'+$data.guid, html: $data.label"></a>
                 </td>
                 <td data-bind="attr: {'data-html': $parent.moduleHTML($data)}, 
                     semantic: 'popup', html: $parent.formatModuleLink($data)"></td>

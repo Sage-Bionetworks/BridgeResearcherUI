@@ -12,17 +12,17 @@ module.exports = function() {
     self.initEditor = function(ckeditor) {
         self.editor = ckeditor;
         serverService.getStudy().then(function(study) {
-            study.emailSignInTemplate = study.emailSignInTemplate || {};
+            study.accountExistsTemplate = study.accountExistsTemplate || {};
             self.study = study;
-            self.subjectObs(study.emailSignInTemplate.subject);
-            self.editor.setData(study.emailSignInTemplate.body);
+            self.subjectObs(study.accountExistsTemplate.subject);
+            self.editor.setData(study.accountExistsTemplate.body);
         }).catch(utils.failureHandler());
     };
 
     self.save = function(vm, event) {
         utils.startHandler(self, event);
-        self.study.emailSignInTemplate.subject = self.subjectObs();
-        self.study.emailSignInTemplate.body = self.editor.getData();
+        self.study.accountExistsTemplate.subject = self.subjectObs();
+        self.study.accountExistsTemplate.body = self.editor.getData();
 
         serverService.saveStudy(self.study)
             .then(utils.successHandler(vm, event, "Email saved."))

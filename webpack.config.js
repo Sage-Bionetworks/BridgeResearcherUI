@@ -30,6 +30,19 @@ module.exports = {
                     }
                 }
             },
+			{
+				test: /\.js/,
+				enforce: "pre",
+				exclude: /(node_modules|browser_components|lib)/,
+				use: [
+					{
+                        loader: "jshint-loader",
+                        options: {
+                            esversion: 6
+                        }
+                    }
+				]
+			},
             {
                 test: /\.(scss|css)$/, 
                 use: extractSass.extract({

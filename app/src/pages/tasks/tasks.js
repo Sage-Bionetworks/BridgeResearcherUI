@@ -42,4 +42,4 @@ module.exports = class Tasks {
             .then(fn.handleObsUpdate(this.itemsObs, 'items'))
             .catch(utils.failureHandler());
     }
-}
+};
