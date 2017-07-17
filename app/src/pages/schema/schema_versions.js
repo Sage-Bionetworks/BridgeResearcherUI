@@ -10,7 +10,7 @@ module.exports = function(params) {
     var self = this;
 
     new Binder(self)
-        .obs('name')
+        .obs('name', '&#160;')
         .obs('published')
         .obs('moduleId')
         .obs('isNew', false)
