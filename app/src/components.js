@@ -355,6 +355,10 @@ reg('participant-tabset', {
     viewModel: require('./pages/participant/participant_tabset'),
     template: require('./pages/participant/participant_tabset.html')
 });
+reg('schema-tabset', {
+    viewModel: require('./pages/schema/tabset'),
+    template: require('./pages/schema/tabset.html')
+});
 reg('not_found', {
     template: require('./pages/not_found/not_found.html')
 });

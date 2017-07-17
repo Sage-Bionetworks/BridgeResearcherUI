@@ -52,12 +52,6 @@ module.exports = function(params) {
         fn.handleCopyProps(self.schema, 'version', 'published'),
         fn.handleStaticObsUpdate(self.isNewObs, false)
     );
-    self.revisionLabel = ko.computed(function() {
-        if (self.revisionObs()) {
-            return 'v' + self.revisionObs();
-        }
-        return '';
-    });
 
     function fieldDefToObs(fieldDefinitions) {
         return fieldDefinitions.map(function(def) {
@@ -186,7 +180,4 @@ module.exports = function(params) {
     loadSchema().then(binder.assign('schema'))
         .then(binder.update())
         .catch(failureHandler);
-};
-module.exports.prototype.dispose = function() {
-    this.revisionLabel.dispose();
 };

@@ -15,36 +15,7 @@
             <button class="ui tiny primary button" data-bind="visible: publishedObs, click: saveNewRevision">Save</button>
         </div>
     </div>
-    <div class="ui secondary pointing menu" data-bind="visible: !isNewObs()">
-        <span class="active item">
-            <i class="file outline icon"></i> Editor
-        </span>
-        <a class="item" data-bind="href: 
-            '#/schemas/'+encodeURIComponent(schemaIdObs())+'/versions/'+revisionObs()+'/history'">
-            <i class="history icon"></i> History &amp; Publication
-        </a>
-        <div class="right menu pub-status">
-            <div class="item">
-                <i class="clock icon"></i> <span data-bind="text: revisionLabel"></span>
-            </div>
-            <div class="item" data-bind="visible: publishedObs">
-                <span class="green ui mini label">
-                    <i class="checkmark icon"></i> Published
-                </span>
-            </div>
-            <div class="item" data-bind="visible: !publishedObs()">
-                <span class="orange ui mini label">
-                    <i class="warning icon"></i> Not Published
-                </span>
-            </div>
-            <div class="item" data-bind="visible: !!moduleIdObs(), semantic: 'popup', attr: {
-                'data-content': moduleIdObs() + ' v' + moduleVersionObs()}">
-                <span class="teal ui mini label">
-                    <i class="linkify icon"></i> Shared
-                </span>
-            </div>
-        </div>
-    </div>
+    <schema-tabset params="viewModel: $data"></schema-tabset>
     <div class="ui empty secondary pointing menu" data-bind="visible: isNewObs"></div>
 </div>
 <div class="scrollbox">
