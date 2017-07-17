@@ -18,6 +18,7 @@ var failureHandler = utils.failureHandler({
 
 module.exports = function(params) {
     var self = this;
+    self.schema = {};
 
     var minIos = Binder.objPropDelegates('minAppVersions', 'iPhone OS');
     var minAnd = Binder.objPropDelegates('minAppVersions', 'Android');
@@ -33,6 +34,7 @@ module.exports = function(params) {
         .bind('published', false)
         .bind('revision', params.revision ? params.revision : null)
         .bind('name', '')
+        .bind('title', '&#160;')
         .bind('moduleId')
         .bind('moduleVersion')
         .bind('iosMin', '', minIos.fromObject, minIos.toObject)
@@ -44,12 +46,12 @@ module.exports = function(params) {
 
     var hideWarning = fn.handleStaticObsUpdate(self.showErrorObs, false);
     var updateRevision = fn.seq(
-        fn.log('response'),
         fn.handleObsUpdate(self.revisionObs, 'revision'),
         fn.handleObsUpdate(self.publishedObs, 'published'),
         fn.handleObsUpdate(self.moduleIdObs, 'moduleId'),
         fn.handleObsUpdate(self.moduleVersionObs, 'moduleVersion'),
         fn.handleCopyProps(self.schema, 'version', 'published'),
+        updateTitle,
         fn.handleStaticObsUpdate(self.isNewObs, false)
     );
 
@@ -99,6 +101,12 @@ module.exports = function(params) {
             fields.push(field);
         });
         return fields;
+    }
+    function updateTitle(response) {
+        if (response.name) {
+            self.titleObs(response.name);
+        }
+        return response;
     }
     function makeNewField() {
         return fieldDefToObs([Object.assign({}, FIELD_SKELETON)])[0];
@@ -167,6 +175,7 @@ module.exports = function(params) {
 
     function loadSchema() { 
         if (params.schemaId === "new") {
+            self.titleObs("New Upload Schema");
             return Promise.resolve({name:'',schemaId:'',schemaType:'ios_data',revision:null,
                 fieldDefinitions:[Object.assign({}, FIELD_SKELETON)]
             });
@@ -179,5 +188,6 @@ module.exports = function(params) {
 
     loadSchema().then(binder.assign('schema'))
         .then(binder.update())
+        .then(updateTitle)
         .catch(failureHandler);
 };
