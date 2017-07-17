@@ -76,7 +76,6 @@ router.on('/surveys/:guid/:createdOn/editor', routeTo('survey', GUID_CREATEDON))
 //router.on('/surveys/:guid/:createdOn', routeTo('survey', GUID_CREATEDON));
 router.on('/surveys/:guid', routeTo('survey', GUID));
 router.on('/schemas', routeTo('schemas'));
-router.on('/schemas/:schemaId', routeTo('schema', SCHEMAID));
 router.on('/schemas/:schemaId/versions/:revision/editor', routeTo('schema', SCHEMAID_REVISION));
 router.on('/schemas/:schemaId/versions/:revision/history', routeTo('schema_versions', SCHEMAID_REVISION));
 router.on('/schedules', routeTo('schedules'));

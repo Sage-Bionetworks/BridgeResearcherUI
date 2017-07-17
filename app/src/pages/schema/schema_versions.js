@@ -13,6 +13,7 @@ module.exports = function(params) {
         .obs('name')
         .obs('published')
         .obs('moduleId')
+        .obs('isNew', false)
         .obs('moduleVersion')
         .obs('revision', params.revision)
         .obs('schemaId', params.schemaId);
@@ -39,13 +40,7 @@ module.exports = function(params) {
             self.nameObs(response.items[0].name);
         }
     }
-
-    self.revisionLabel = ko.computed(function() {
-        if (self.revisionObs()) {
-            return 'v' + self.revisionObs();
-        }
-        return '';
-    });
+    // similar to tabset
     self.link = function(item) {
         return "#/schemas/"+encodeURIComponent(item.schemaId)+"/versions/"+item.revision+'/editor';
     };
@@ -71,7 +66,4 @@ module.exports = function(params) {
             .then(setItemsName);
     }
     load();
-};
-module.exports.prototype.dispose = function() {
-    this.revisionLabel.dispose();
 };
