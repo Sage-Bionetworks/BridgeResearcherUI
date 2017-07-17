@@ -5,10 +5,7 @@
                 <a href="#/schemas" class="section">Upload Schemas</a>
                 <i class="right chevron icon divider"></i>
             </div>             
-            <h3>
-                <span data-bind="visible: nameObs().length > 0, text: nameObs"></span>
-                <span data-bind="visible: nameObs().length === 0">New Upload Schema</span>
-            </h3>
+            <h3 data-bind="html: titleObs"></h3>
         </div>
         <div class="fixed-header-buttons">
             <button class="ui tiny primary button" data-bind="visible: !publishedObs(), click: save">Save</button>
