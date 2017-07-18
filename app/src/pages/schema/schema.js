@@ -1,3 +1,4 @@
+import alerts from '../../widgets/alerts';
 import Binder from '../../binder';
 import fn from '../../functions';
 import ko from 'knockout';
@@ -43,6 +44,18 @@ module.exports = function(params) {
         .bind('androidMax', '', maxAnd.fromObject, maxAnd.toObject)
         .bind('fieldDefinitions[]', [], fieldDefToObs, fieldObsToDef);
     schemaUtils.initVM(self);
+
+    var haveShownAlert = false;
+    self.revisionObs.subscribe(function(newValue) {
+        // one time, if you are changing the revision (and it's not being bumped on the server due 
+        // to a change in a published schema), show an alert explaining to the user that the edit 
+        // effectively makes a new copy.
+        if (!haveShownAlert && !self.publishedObs() && params.revision != newValue) {
+            self.isNewObs(true);
+            haveShownAlert = true;
+            alerts.warn("By changing the revision, you are creating a new schema. If this revision already exists, you will get an error.");
+        }
+    });
 
     var hideWarning = fn.handleStaticObsUpdate(self.showErrorObs, false);
     var updateRevision = fn.seq(
