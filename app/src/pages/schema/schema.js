@@ -47,9 +47,9 @@ module.exports = function(params) {
 
     var haveShownAlert = false;
     self.revisionObs.subscribe(function(newValue) {
-        console.log(params.revision, newValue);
         // one time, if you are changing the revision (and it's not being bumped on the server due 
-        // to a change in a published schema), show an alert explaining to the user.
+        // to a change in a published schema), show an alert explaining to the user that the edit 
+        // effectively makes a new copy.
         if (!haveShownAlert && !self.publishedObs() && params.revision != newValue) {
             self.isNewObs(true);
             haveShownAlert = true;
