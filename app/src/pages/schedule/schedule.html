@@ -85,7 +85,11 @@
                 <select class="ui dropdown" data-bind="options: $component.activityTypeOptions,
                     optionsText: 'label', optionsValue: 'value', value: $data.activityTypeObs"></select>                    
             </div>
-            <div data-bind="attr:{id:'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_activity'}">
+            <div data-bind="attr:{class:
+                'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_task_identifier '+
+                'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_survey_guid '+
+                'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_compoundActivity_taskIdentifier '
+            }">
                 <select class="ui dropdown" data-bind="visible: $data.activityTypeObs() == 'task', 
                     options: $component.taskOptionsObs,
                     optionsText: 'label', optionsValue: 'value', value: $data.taskIdObs"></select>                    

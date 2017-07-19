@@ -322,7 +322,7 @@ describe("handleIf", function() {
 describe("handleConditionalObsUpdate", function() {
     it("does not update falsy value", function() {
         var observer = sinon.spy();
-        var func = fn.handleObsUpdate(observer, 'name');
+        var func = fn.handleConditionalObsUpdate(observer, 'name');
 
         var result = func({});
         expect(observer.neverCalledWith('foo')).to.be.true;

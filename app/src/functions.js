@@ -163,7 +163,7 @@ function handleObsUpdate(obs, fieldName) {
 function handleConditionalObsUpdate(object, fieldName) {
     return function(response) {
         if (response[fieldName]) {
-            object[fieldName] = response[fieldName];
+            object(response[fieldName]);
         }
         return response;
     };
@@ -270,7 +270,7 @@ function deleteUnusedProperties(object) {
         }
     } else if (is(object, 'Object')) {
         for (var prop in object) {
-            if (typeof object[prop] === 'undefined' || object[prop] === "" || object[prop] === null) {
+            if (isBlank(object[prop])) {
                 delete object[prop];
             } else {
                 deleteUnusedProperties(object[prop]);
