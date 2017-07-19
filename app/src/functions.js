@@ -17,10 +17,9 @@ function isBlank(obj) {
 function isNotBlank(obj) {
     return (typeof obj !== "undefined") && obj !== null && obj !== "";
 }
-function seq() {
-    var args = Array.prototype.slice.call(arguments);
+function seq(...funcs) {
     return function(startValue) {
-        return args.reduce(function(result, func) {
+        return funcs.reduce(function(result, func) {
             return func.call(func, result);
         }, startValue);
     };
@@ -161,6 +160,14 @@ function handleObsUpdate(obs, fieldName) {
         return response;
     };
 }
+function handleConditionalObsUpdate(object, fieldName) {
+    return function(response) {
+        if (response[fieldName]) {
+            object[fieldName] = response[fieldName];
+        }
+        return response;
+    };
+}
 function handleStaticObsUpdate(obs, value) {
     return function(response) {
         obs(value);
@@ -181,11 +188,9 @@ function fieldUpdater(source, fieldName) {
         this[fieldName] = source[fieldName];
     }
 }
-function handleCopyProps(target) {
-    console.assert(arguments.length >= 2, "insufficient arguments to handleCopyProps");
-    var args = Array.prototype.slice.call(arguments,1);
+function handleCopyProps(target, ...fieldNames) {
     return function(response) {
-        args.forEach(function(fieldName) {
+        fieldNames.forEach(function(fieldName) {
             fieldUpdater.call(target, response, fieldName);
         });
         return response;
@@ -206,10 +211,8 @@ function handleMap(fieldName, func) {
         return response;
     };
 }
-function copyProps(target, source) {
-    console.assert(arguments.length >= 3, "insufficient arguments to copyProps");
-    var args = Array.prototype.slice.call(arguments,2);
-    args.forEach(function(fieldName) {
+function copyProps(target, source, ...fieldNames) {
+    fieldNames.forEach(function(fieldName) {
         fieldUpdater.call(target, source, fieldName);
     });
 }
@@ -326,6 +329,7 @@ export default {
     formatRoles,
     formatTitleCase,
     formatVersionRange,
+    handleConditionalObsUpdate,
     handleCopyProps,
     handleForEach,
     handleIf,
