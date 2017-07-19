@@ -31,6 +31,6 @@ module.exports = function(params) {
 };
 module.exports.prototype.dispose = function() {
     this.computeds.forEach(function(c) {
-        c.dispose;
+        c.dispose();
     });
 };

@@ -103,7 +103,7 @@ function formatActivities(buffer, activities, verb) {
         } else if (act.activityType === "survey" && act.survey) {
             label = verb + " survey '"+surveysOptionsLabel(act.survey.guid)+"'";
         } else if (act.activityType === "compound" && act.compoundActivity) {
-            label = verb + " tasks '"+formatCompoundActivity(act.compoundActivity)+"'";
+            label = verb + " compound task '"+act.compoundActivity.taskIdentifier+"'";
         }
         actMap[label] = ++actMap[label] || 1;
     });
@@ -301,6 +301,7 @@ function formatCompoundActivity(task) {
         phrase.push(schemas);
     }
     var surveys = task.surveyList.map(function(survey) {
+        console.log(survey.guid, surveyNameMap);
         return surveyNameMap[survey.guid] + ((survey.createdOn) ? 
             ' <i>(pub. ' + fn.formatDateTime(survey.createdOn) + ')</i>' : '');
     }).join(', ');
@@ -384,8 +385,8 @@ export default {
         var p1 = optionsService.getActivityOptions().then(activitiesObs);
         var p2 = optionsService.getSurveyOptions().then(surveysOptionsObs);
         var p3 = optionsService.getTaskIdentifierOptions().then(taskOptionsObs);
-        var p4 = optionsService.getCompoundActivityOptions().then(compoundActivityOptionsObs);
-        var p5 = loadFormatCompoundActivity();
+        var p4 = loadFormatCompoundActivity();
+        var p5 = optionsService.getCompoundActivityOptions().then(compoundActivityOptionsObs);
         return Promise.all([p1, p2, p3, p4, p5]);
     }
 };

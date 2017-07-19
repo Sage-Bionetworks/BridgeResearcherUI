@@ -12,7 +12,7 @@ module.exports = class Tasks {
             name: 'task',
             type: 'CompoundActivityDefinition',
             delete: this.deleteItem,
-            refresh: this.load
+            refresh: this.load.bind(this)
         });
         fn.copyProps(this, scheduleUtils, 'formatCompoundActivity');    
         this.load();
@@ -27,14 +27,14 @@ module.exports = class Tasks {
             task.taskId += "-copy";
             delete task.version;
             return serverService.createTaskDefinition(task);
-        }).then(load)
+        }).then(this.load.bind(this))
             .then(utils.successHandler(vm, event, confirmMsg))
             .catch(utils.failureHandler({transient:false}));
     }
     deleteItem(task) {
         return serverService.deleteTaskDefinition(task.taskId);
     }
-    load() { 
+    load() {
         sharedModuleUtils.loadNameMaps()
             .then(scheduleUtils.loadOptions)
             .then(serverService.getTaskDefinitions)
