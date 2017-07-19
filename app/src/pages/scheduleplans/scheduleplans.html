@@ -4,7 +4,25 @@
             <h3>Scheduling</h3>
         </div>
         <div class="fixed-header-buttons">
-            <button class="ui tiny button" data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: copyToClipboard">Copy to Clipboard</button>
+            <!--
+            <button class="ui tiny button" data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), 
+                click: copyToClipboard">Copy to Clipboard</button>
+            -->
+            <div class="ui tiny buttons">
+                <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()}, 
+                    semantic: 'dropdown-button-toggle'">Copy</div>
+                <div class="ui tiny floating dropdown icon button" 
+                    data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item" data-bind="click: copy">Copy</div>
+                        <div class="item" data-bind="click: copyToClipboard">Copy to Clipboard</div>
+                    </div>
+                </div>
+            </div>
+
+
+
             <button class="ui red tiny button" data-bind="disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
             <a href="#/scheduleplans/new" class="ui primary tiny button">New Schedule Plan</a>
         </div>

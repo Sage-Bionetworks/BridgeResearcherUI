@@ -4,11 +4,8 @@ import ko from 'knockout';
 module.exports = function(params) {
     var self = this;
 
-    self.guidObs = params.guidObs;
-
-    self.createdOnObs = params.createdOnObs;
-    self.formatDateTime = fn.formatDateTime;
-    self.activeObs = params.activeObs;
+    fn.copyProps(self, params, 'guidObs', 'createdOnObs', 'activeObs');
+    fn.copyProps(self, fn, 'formatDateTime');
 
     self.computeds = [];
     self.linkMaker = function(tabName) {

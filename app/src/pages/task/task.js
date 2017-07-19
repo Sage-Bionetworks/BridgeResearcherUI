@@ -11,13 +11,16 @@ import utils from '../../utils';
  * I feel "meh" about the difference, but I'll leave it here for the moment. You start 
  * to have to track "this" references which can be annoying. It's also more verbose 
  * because there's no use of closures.
+ * 
+ * One thing I found is that $component.function references in the template do not have
+ * the correct this reference... which is practically a show stopper by itself.
  */
 module.exports = class Task {
     constructor(params) {
         this.taskId = params.taskId;
-        fn.copyProps(this, fn, 'formatDateTime');
-
         this.task = {};
+
+        fn.copyProps(this, fn, 'formatDateTime');
 
         this.binder = new Binder(this)
             .bind('isNew', params.taskId === "new")
@@ -70,9 +73,11 @@ module.exports = class Task {
         root.closeDialog();
     }
     removeSchema(object, event) {
+        // had to use .bind() in the template... because of the $component.removeSchema syntax
         this.schemaListObs.remove(object);
     }
     removeSurvey(object, event) {
+        // had to use .bind() in the template... because of the $component.removeSurvey syntax
         this.surveyListObs.remove(object);
     }
     save(vm, event) {
