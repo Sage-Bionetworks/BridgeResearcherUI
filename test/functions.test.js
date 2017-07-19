@@ -319,6 +319,21 @@ describe("handleIf", function() {
         expect(result).to.equal(1);
     });
 });
+describe("handleConditionalObsUpdate", function() {
+    it("does not update falsy value", function() {
+        var observer = sinon.spy();
+        var func = fn.handleObsUpdate(observer, 'name');
+
+        var result = func({});
+        expect(observer.neverCalledWith('foo')).to.be.true;
+
+        result = func({name:0});
+        expect(observer.neverCalledWith('foo')).to.be.true;
+
+        result = func({name:'foo'});
+        expect(observer.calledWith('foo')).to.be.true;
+    });
+});
 describe("incrementNumber", function() {
     it("handles missing values", function() {
         expect(fn.incrementNumber()).to.be.undefined;
