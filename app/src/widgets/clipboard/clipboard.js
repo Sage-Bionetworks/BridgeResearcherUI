@@ -386,7 +386,7 @@ function copyToClipboard(response) {
     storeService.set('clipboard', clipboardEntries());
 }
 
-serverService.addSessionStartListener(function(session) {
+serverService.addSessionStartListener(function() {
     var items = storeService.get('clipboard');
     if (items) {
         clipboardEntries.push.apply(clipboardEntries, items);
