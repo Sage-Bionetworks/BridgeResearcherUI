@@ -12,6 +12,7 @@ const GENERIC_ERROR = "A server error happened. We don't know what exactly. Plea
 const TIMEOUT_ERROR = "The request timed out. Please verify you have an internet connection, and try again.";
 const ROLE_ERROR = 'You do not appear to be a developer, researcher, or admin.';
 const PERM_ERROR = 'You do not have permissions to perform that action.';
+const NETWORK_ERROR = 'A network error occurred. Please verify you have an internet connection, and try again.';
 const statusHandlers = {
       0: localError,
     400: badResponse,
@@ -44,8 +45,13 @@ function badResponse(response, params) {
     ko.postbox.publish("showErrors", payload);
 }
 function localError(response) {
-    var error = (response.statusText === "timeout") ? TIMEOUT_ERROR : GENERIC_ERROR;
-    toastr.error(error);
+    if (response.statusText === "timeout") {
+        toastr.error(TIMEOUT_ERROR);
+    } else if (response.status === 0) {
+        toastr.error(NETWORK_ERROR);
+    } else {
+        toastr.error(GENERIC_ERROR);
+    }
 }
 function notAdmin(response) {
     toastr.error(ROLE_ERROR);

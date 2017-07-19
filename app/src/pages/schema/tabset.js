@@ -12,11 +12,14 @@ module.exports = function(params) {
     fn.copyProps(self, params.viewModel, 'isNewObs','schemaIdObs','revisionObs',
         'publishedObs','moduleIdObs','moduleVersionObs');
 
+    self.computeds = [];
     self.linkMaker = function(tabName) {
-        return ko.computed(function() { 
+        var c = ko.computed(function() { 
             return '#/schemas/'+encodeURIComponent(self.schemaIdObs())+
                 '/versions/'+self.revisionObs()+'/'+tabName;
         });
+        self.computeds.push(c);
+        return c;
     };
     self.revisionLabel = ko.computed(function() {
         if (self.revisionObs()) {
@@ -24,7 +27,10 @@ module.exports = function(params) {
         }
         return '';
     });
+    self.computeds.push(self.revisionLabel);
 };
 module.exports.prototype.dispose = function() {
-    this.revisionLabel.dispose();
+    this.computeds.forEach(function(c) {
+        c.dispose();
+    });
 };

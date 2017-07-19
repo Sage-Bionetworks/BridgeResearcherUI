@@ -35,11 +35,6 @@ module.exports = function(params) {
     function getUploadSchemaAllRevisions() {
         return serverService.getUploadSchemaAllRevisions(params.schemaId);
     }
-    function setItemsName(response) {
-        if (response.items.length) {
-            self.nameObs(response.items[0].name);
-        }
-    }
     // similar to tabset
     self.link = function(item) {
         return "#/schemas/"+encodeURIComponent(item.schemaId)+"/versions/"+item.revision+'/editor';
@@ -58,12 +53,12 @@ module.exports = function(params) {
     function load() {
         sharedModuleUtils.loadNameMaps()
             .then(getUploadSchema)
+            .then(fn.handleObsUpdate(self.nameObs, 'name'))
             .then(fn.handleObsUpdate(self.moduleIdObs, 'moduleId'))
             .then(fn.handleObsUpdate(self.moduleVersionObs, 'moduleVersion'))
             .then(fn.handleObsUpdate(self.publishedObs, 'published'))
             .then(getUploadSchemaAllRevisions)
-            .then(fn.handleObsUpdate(self.itemsObs, 'items'))
-            .then(setItemsName);
+            .then(fn.handleObsUpdate(self.itemsObs, 'items'));
     }
     load();
 };

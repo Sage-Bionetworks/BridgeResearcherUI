@@ -110,10 +110,12 @@ MODEL_METADATA.SchedulePlan = {
                 value: dataGroup, label: "Data group: " + dataGroup, type:"DataGroup"});
         });
         var schedules = optionsService.getSchedules(plan);
-        var activities = schedules.reduce(function(array, schedule) {
-            return [].concat(schedule.activities);
-        }, []);
-
+        var activities = [];
+        schedules.forEach(function(schedule) {
+            schedule.activities.forEach(function(activity) {
+                activities.push(activity);
+            });
+        });
         // Add tasks and schedules referenced in activities
         activities.forEach(function(act) {
             if (act.task) {
@@ -126,6 +128,8 @@ MODEL_METADATA.SchedulePlan = {
                     delete act.survey.createdOn;
                     clipboard.copy("Survey", survey);
                 });
+            } else if (act.compoundActivity) {
+                clipboard.copy("CompoundActivityDefinition", act.compoundActivity);
             }
         });
 

@@ -8,27 +8,13 @@
             <h3 data-bind="html: titleObs"></h3>
         </div>
         <div class="fixed-header-buttons">
-            <button class="ui tiny primary button" data-bind="visible: !publishedObs(), click: save">Save</button>
-            <button class="ui tiny primary button" data-bind="visible: publishedObs, click: saveNewRevision">Save</button>
+            <button class="ui tiny primary button" data-bind="click: save">Save</button>
         </div>
     </div>
     <schema-tabset params="viewModel: $data"></schema-tabset>
     <div class="ui empty secondary pointing menu" data-bind="visible: isNewObs"></div>
 </div>
 <div class="scrollbox">
-    <div class="ui warning icon message" style="margin-bottom: 1.4rem" data-bind="visible: showErrorObs">
-        <i class="check warningsign icon"></i>
-        <div class="content">
-            <div class="header">Schema is not backwards compatible</div>
-            <p style="margin-top:1rem">You&lsquo;ve made changes that are not backwards compatible. If you 
-                are sending data to Bridge using this schema revision, the server would start rejecting 
-                the data. You can save it under a new revision, or keep editing. </p>
-            <div class="button-container">
-                <button class="ui primary button" data-bind="click: saveNewRevision">Save as new revision</button>
-                <button class="ui button" data-bind="click: closeWarning">Close</button>
-            </div>
-        </div>
-    </div>    
     <form class="ui form">
         <errors></errors>
         <div class="three fields">

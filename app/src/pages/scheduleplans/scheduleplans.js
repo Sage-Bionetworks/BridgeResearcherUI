@@ -37,6 +37,21 @@ module.exports = function() {
                 return activity;
             });
     }
+    self.copy = function(vm, event) {
+        var copyables = this.itemsObs().filter(tables.hasBeenChecked);
+        var confirmMsg = (copyables.length > 1) ?
+            "Schedules have been copied." : "Schedule has been copied.";
+
+        utils.startHandler(vm, event);
+        Promise.mapSeries(copyables, function(schedule) {
+            schedule.label += " (Copy)";
+            delete schedule.guid;
+            delete schedule.version;
+            return serverService.createSchedulePlan(schedule);
+        }).then(load)
+            .then(utils.successHandler(vm, event, confirmMsg))
+            .catch(utils.failureHandler({transient:false}));
+    };
 
     function load() {
         scheduleUtils.loadOptions()

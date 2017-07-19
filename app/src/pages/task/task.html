@@ -34,11 +34,11 @@
                         <td><ui-select params="fieldObs: $data.revisionObs, optionsSrc: $data.revisionList, 
                                 optionsCaption: 'Most Recent Revision'"></ui-select></td>
                         <td><button class="ui basic red compact mini button" 
-                                data-bind="click: $component.removeSchema">Delete</button></td>
+                                data-bind="click: $component.removeSchema.bind($component)">Delete</button></td>
                     </tr>
                 </tbody>
             </table>
-            <button class="ui tiny button" data-bind="click: openSchemaSelector">Add Schema</button>
+            <button class="ui tiny button" data-bind="click: openSchemaSelector">Edit Schemas</button>
 
             <h3>Surveys</h3>
             <table class="ui compact table" data-bind="visible: surveyListObs().length > 0">
@@ -49,11 +49,11 @@
                         <td><ui-select params="fieldObs: $data.createdOnObs, optionsSrc: $data.createdOnList, 
                                 optionsCaption: 'Most Recently Published'"></ui-select></td>
                         <td><button class="ui basic red compact mini button" 
-                                data-bind="click: $component.removeSurvey">Delete</button></td>
+                                data-bind="click: $component.removeSurvey.bind($component)">Delete</button></td>
                     </tr>
                 </tbody>
             </table>
-            <button class="ui tiny button" data-bind="click: openSurveySelector">Add Survey</button>
+            <button class="ui tiny button" data-bind="click: openSurveySelector">Edit Surveys</button>
         </div>
         <div class="six wide column">
             <div class="ui message">

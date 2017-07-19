@@ -5,7 +5,7 @@ import root from '../../root';
 module.exports = function(params) {
     var self = this;
 
-    var input = fn.seq(fn.utcTolocalDateTime, ko.observable);
+    var input = fn.seq(fn.asDate, fn.utcTolocalDateTime, ko.observable);
     self.startsOnObs = input(params.startsOnObs() || new Date());
     self.endsOnObs = input(params.endsOnObs() || new Date());
     self.formatDateTime = fn.formatDateTime;

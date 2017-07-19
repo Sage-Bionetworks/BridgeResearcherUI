@@ -30,12 +30,12 @@ module.exports = function(params) {
         .obs('isNew', params.schemaId === "new")
         .obs('showError', false)
         .obs('index', 0)
+        .obs('title', '&#160;')
         .bind('schemaId', params.schemaId)
         .bind('schemaType')
         .bind('published', false)
         .bind('revision', params.revision ? params.revision : null)
         .bind('name', '')
-        .bind('title', '&#160;')
         .bind('moduleId')
         .bind('moduleVersion')
         .bind('iosMin', '', minIos.fromObject, minIos.toObject)
@@ -45,26 +45,16 @@ module.exports = function(params) {
         .bind('fieldDefinitions[]', [], fieldDefToObs, fieldObsToDef);
     schemaUtils.initVM(self);
 
-    var haveShownAlert = false;
-    self.revisionObs.subscribe(function(newValue) {
-        // one time, if you are changing the revision (and it's not being bumped on the server due 
-        // to a change in a published schema), show an alert explaining to the user that the edit 
-        // effectively makes a new copy.
-        if (!haveShownAlert && !self.publishedObs() && params.revision != newValue) {
-            self.isNewObs(true);
-            haveShownAlert = true;
-            alerts.warn("By changing the revision, you are creating a new schema. If this revision already exists, you will get an error.");
-        }
-    });
-
     var hideWarning = fn.handleStaticObsUpdate(self.showErrorObs, false);
+    self.lastRevision = params.revision;
     var updateRevision = fn.seq(
         fn.handleObsUpdate(self.revisionObs, 'revision'),
         fn.handleObsUpdate(self.publishedObs, 'published'),
         fn.handleObsUpdate(self.moduleIdObs, 'moduleId'),
         fn.handleObsUpdate(self.moduleVersionObs, 'moduleVersion'),
         fn.handleCopyProps(self.schema, 'version', 'published'),
-        updateTitle,
+        fn.handleCopyProps(self, 'revision->lastRevision'),
+        fn.handleConditionalObsUpdate(self.titleObs, 'name'),
         fn.handleStaticObsUpdate(self.isNewObs, false)
     );
 
@@ -78,7 +68,7 @@ module.exports = function(params) {
                 .bind('maxLength', def.maxLength)
                 .bind('fileExtension', def.fileExtension)
                 .bind('allowOtherChoices', def.allowOtherChoices)
-                .bind('multiChoiceAnswerList[]', [].concat(def.multiChoiceAnswerList))
+                .bind('multiChoiceAnswerList[]', [].concat(def.multiChoiceAnswerList || []))
                 .bind('mimeType', def.mimeType);
             return def;
         });
@@ -115,36 +105,25 @@ module.exports = function(params) {
         });
         return fields;
     }
-    function updateTitle(response) {
-        if (response.name) {
-            self.titleObs(response.name);
-        }
-        return response;
-    }
     function makeNewField() {
         return fieldDefToObs([Object.assign({}, FIELD_SKELETON)])[0];
     }    
     function uploadSchema() {
-        if (self.isNewObs()) {
+        if (self.revisionObs() != self.lastRevision || self.isNewObs()) {
             return serverService.createUploadSchema(self.schema);
         } else {
             return serverService.updateUploadSchema(self.schema);
         }
     }
-    // Get the most recent revision, then increment that by one. Reset version/revision
-    // and de-link it from shared modules.
-    function reviseToNew(schema) {
-        self.schema.revision = schema.revision + 1;
-        delete self.schema.published;
-        delete self.schema.version;
-        delete self.schema.moduleId;
-        delete self.schema.moduleVersion;
-        return self.schema;
-    }
 
     self.save = function(vm, event) {
         utils.startHandler(vm, event);
-
+        // If the schema is published, set flag to false and increment the revision. Will save
+        // or throw an error if that revision exists.
+        if (self.publishedObs()) {
+            self.publishedObs(false);
+            self.revisionObs( parseInt(self.revisionObs())+1);
+        }
         self.schema = binder.persist(self.schema);
         uploadSchema()
             .then(updateRevision)
@@ -160,18 +139,6 @@ module.exports = function(params) {
         var field = makeNewField();
         self.fieldDefinitionsObs.push(field);
     };
-    self.saveNewRevision = function(vm, event) {
-        utils.startHandler(vm, event);
-
-        self.schema = binder.persist(self.schema);
-        serverService.getMostRecentUploadSchema(params.schemaId)
-            .then(reviseToNew)
-            .then(serverService.createUploadSchema)
-            .then(updateRevision)
-            .then(hideWarning)
-            .then(utils.successHandler(vm, event, "Schema has been saved at new revision."))
-            .catch(failureHandler);
-    };
     self.editMultiChoiceAnswerList = function(field, event) {
         var otherLists = self.fieldDefinitionsObs().filter(function(oneField) {
             return (oneField.typeObs() === "multi_choice" && oneField.multiChoiceAnswerListObs().length);
@@ -183,8 +150,6 @@ module.exports = function(params) {
             otherLists: otherLists
         });
     };
-    
-    self.closeWarning = hideWarning;
 
     function loadSchema() { 
         if (params.schemaId === "new") {
@@ -198,9 +163,9 @@ module.exports = function(params) {
             return serverService.getMostRecentUploadSchema(params.schemaId);
         }
     }
-
+    
     loadSchema().then(binder.assign('schema'))
         .then(binder.update())
-        .then(updateTitle)
+        .then(fn.handleConditionalObsUpdate(self.titleObs, 'name'))
         .catch(failureHandler);
 };
