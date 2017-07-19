@@ -161,6 +161,14 @@ function handleObsUpdate(obs, fieldName) {
         return response;
     };
 }
+function handleConditionalObsUpdate(obs, fieldName) {
+    return function(response) {
+        if (response[fieldName]) {
+            obs(response[fieldName]);
+        }
+        return response;
+    };
+}
 function handleStaticObsUpdate(obs, value) {
     return function(response) {
         obs(value);
@@ -181,6 +189,15 @@ function fieldUpdater(source, fieldName) {
         this[fieldName] = source[fieldName];
     }
 }
+function handleCopyProps(target, ...fieldNames) {
+    return function(response) {
+        fieldNames.forEach(function(fieldName) {
+            fieldUpdater.call(target, response, fieldName);
+        });
+        return response;
+    };
+}
+/*
 function handleCopyProps(target) {
     console.assert(arguments.length >= 2, "insufficient arguments to handleCopyProps");
     var args = Array.prototype.slice.call(arguments,1);
@@ -191,6 +208,7 @@ function handleCopyProps(target) {
         return response;
     };
 }
+*/
 function handleSort(fieldName, sortField, reverse) {
     return function(response) {
         response[fieldName].sort(makeFieldSorter(sortField));
@@ -326,6 +344,7 @@ export default {
     formatRoles,
     formatTitleCase,
     formatVersionRange,
+    handleConditionalObsUpdate,
     handleCopyProps,
     handleForEach,
     handleIf,
