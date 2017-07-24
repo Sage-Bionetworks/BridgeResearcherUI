@@ -65,7 +65,7 @@ module.exports = function(params) {
     };
 
     function dateToString(date, atStart) {
-        return (date) ? fn.dateToLocalISOString(date, "00:00:00") : null;
+        return (date) ? fn.dateToLocalISOString(fn.asDate(date), "00:00:00") : null;
     }
 
     self.doCalSearch = function() {
