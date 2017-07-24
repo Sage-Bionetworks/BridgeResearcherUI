@@ -9,14 +9,14 @@ export default class EmailViewModel {
         this.editor = null;
         this.subjectObs = ko.observable("");
 
-        this.initEditor = function(ckeditor) {
+        this.initEditor = (ckeditor) => {
             this.editor = ckeditor;
-            serverService.getStudy().then(function(study) {
+            serverService.getStudy().then((study) => {
                 this.study = study;
                 this.subjectObs(study[this.templateName].subject);
                 this.editor.setData(study[this.templateName].body);
-            }.bind(this)).catch(utils.failureHandler());
-        }.bind(this);
+            }).catch(utils.failureHandler());
+        };
     }
     save(vm, event) {
         this.study[this.templateName] = {

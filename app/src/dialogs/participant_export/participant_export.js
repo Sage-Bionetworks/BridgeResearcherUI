@@ -104,9 +104,9 @@ FetchParticipantWorker.prototype = {
             return Promise.resolve();
         }
         this.identifier = this.identifiers.shift();
-        return Promise.delay(FETCH_DELAY).then(function() {
+        return Promise.delay(FETCH_DELAY).then(() => {
             return serverService.getParticipant(this.identifier).then(this._success.bind(this));
-        }.bind(this));
+        });
     },
     _success: function(response) {
         if (this._canExport(response)) {
