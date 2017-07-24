@@ -92,7 +92,7 @@ module.exports = function(params) {
         model.collapsedObs(!model.collapsedObs());
     };
     function processItem(item) {
-        bind(item)
+        new Binder(item)
             .obs('content','')
             .obs('href','')
             .obs('collapsed', true)

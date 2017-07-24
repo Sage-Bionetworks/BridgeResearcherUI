@@ -192,11 +192,13 @@ export default {
             });
     },
     getStudyList: function(env) {
+        // TODO: why is there a Promise.resolve() here?
         return Promise.resolve(getInt(config.host[env] + config.getStudyList))
             .then(fn.handleSort('items', 'name'));
     },
     signOut: signOut,
     requestResetPassword: function(env, data) {
+        // TODO: why is there a Promise.resolve() heree?
         return Promise.resolve(postInt(config.host[env] + config.requestResetPassword, data));
     },
     getStudy: function() {

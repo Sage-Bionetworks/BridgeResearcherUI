@@ -1,13 +1,11 @@
+import fn from '../../functions';
 import ko from 'knockout';
 import root from '../../root';
 
 module.exports = function(params) {
     var self = this;
 
-    self.isNewObs = params.isNewObs;
-    self.isPublicObs = params.isPublicObs;
-    self.userIdObs = params.userIdObs;
-    self.statusObs = params.statusObs;
+    fn.copyProps(self, params, 'isNewObs', 'isPublicObs', 'userIdObs', 'statusObs');
 
     self.computeds = [];
     self.linkMaker = function(postfix) {

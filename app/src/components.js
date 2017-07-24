@@ -349,11 +349,11 @@ reg('tag-editor', {
     template: require('./widgets/tag_editor.html')
 });
 reg('settings-tabset', {
-    template: require('./pages/settings/settings_tabset.html')
+    template: require('./pages/settings/tabset.html')
 });
 reg('participant-tabset', {
-    viewModel: require('./pages/participant/participant_tabset'),
-    template: require('./pages/participant/participant_tabset.html')
+    viewModel: require('./pages/participant/tabset'),
+    template: require('./pages/participant/tabset.html')
 });
 reg('schema-tabset', {
     viewModel: require('./pages/schema/tabset'),
