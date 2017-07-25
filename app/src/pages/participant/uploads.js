@@ -82,7 +82,7 @@ module.exports = function(params) {
     self.htmlFor = function(data) {
         if (data.validationMessageList === undefined) return null;
         return data.validationMessageList.map(function(error) {
-            return "<p class='ui segment error-message'>"+error+"</p>";
+            return "<p class='error-message'>"+error+"</p>";
         }).join('');
     };
     self.uploadURL = function(data) {

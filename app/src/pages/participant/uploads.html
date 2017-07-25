@@ -74,7 +74,9 @@
                         </span>
                     </span>
                     <span data-bind="text: $data.uploadId"></span>
-                    <div style="position:relative" data-bind="html: $component.htmlFor($data), visible: !$data.collapsedObs()">
+                    <div class="upload-error-messages" 
+                        data-bind="html: $component.htmlFor($data), visible: !$data.collapsedObs()">
+                    </div>
                 </td>
                 <td data-bind="html: $data.completedByObs"></td>
                 <td data-bind="text: $data.recordId"></td>
