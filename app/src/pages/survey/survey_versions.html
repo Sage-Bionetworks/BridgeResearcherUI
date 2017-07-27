@@ -30,7 +30,7 @@
         <tbody data-bind="foreach: itemsObs">
             <tr data-bind="css: { positive: $data.published }">
                 <td>
-                    <a data-bind="href: '#/surveys/'+$data.guid+'/'+$data.createdOn, text: $data.name"></span></a>
+                    <a data-bind="href: '#/surveys/'+$data.guid+'/'+$data.createdOn+'/editor', text: $data.name"></span></a>
                 </td>
                 <td data-bind="text:$parent.formatDateTime($data.createdOn)"></td>
                 <td>
