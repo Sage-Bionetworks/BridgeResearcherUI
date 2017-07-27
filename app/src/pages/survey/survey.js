@@ -94,13 +94,14 @@ module.exports = function(params) {
         surveyUtils.observablesToElement(element);
 
         var newElement = JSON.parse(JSON.stringify(element));
+        delete newElement.guid;
+        delete newElement.identifier;
         if (newElement.type === "SurveyInfoScreen") {
             newElement.title = "[Copy] " + newElement.title;
         } else {
             newElement.prompt = "[Copy] " + newElement.prompt;
         }
         newElement.identifier = fn.incrementNumber(newElement.identifier);
-        
         surveyUtils.elementToObservables(newElement);
         self.elementsObs.splice(index+1, 0, newElement);
         scrollTo(index+1);
