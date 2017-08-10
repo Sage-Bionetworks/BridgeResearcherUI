@@ -22,8 +22,8 @@ module.exports = function() {
         
     self.total = 0;
     self.emailFilter = null;
-    self.startDate = null;
-    self.endDate = null;
+    self.startTime = null;
+    self.endTime = null;
 
     tables.prepareTable(self, {
         name: "participant", 
@@ -80,14 +80,14 @@ module.exports = function() {
     };
     self.exportDialog = function() {
         root.openDialog('participant_export', {emailFilter: self.emailFilter, 
-            startDate: self.startDate, endDate: self.endDate, total: self.total});    
+            startTime: self.startTime, endTime: self.endTime, total: self.total});    
     };
-    self.loadingFunc = function(offsetBy, pageSize, emailFilter, startDate, endDate) {
+    self.loadingFunc = function(offsetBy, pageSize, emailFilter, startTime, endTime) {
         self.emailFilter = emailFilter;
-        self.startDate = startDate;
-        self.endDate = endDate;
+        self.startTime = startTime;
+        self.endTime = endTime;
 
-        return serverService.getParticipants(offsetBy, pageSize, emailFilter, startDate, endDate)
+        return serverService.getParticipants(offsetBy, pageSize, emailFilter, startTime, endTime)
             .then(load)
             .catch(utils.failureHandler());
     };

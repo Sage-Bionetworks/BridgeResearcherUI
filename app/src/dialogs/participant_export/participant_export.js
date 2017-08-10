@@ -36,7 +36,7 @@ function formatConsentRecords(record) {
 
 var CollectParticipantsWorker = function(params) {
 
-    fn.copyProps(this, params, 'total', 'emailFilter', 'startDate', 'endDate');
+    fn.copyProps(this, params, 'total', 'emailFilter', 'startTime', 'endTime');
     this.identifiers = [];
     var pages = [];
     var numPages = Math.floor(this.total/PAGE_SIZE);
@@ -61,7 +61,7 @@ CollectParticipantsWorker.prototype = {
     performWork: function(promise) {
         this.offsetBy = this.pageOffsets.shift();
         return serverService
-            .getParticipants(this.offsetBy, PAGE_SIZE, this.emailFilter, this.startDate, this.endDate)
+            .getParticipants(this.offsetBy, PAGE_SIZE, this.emailFilter, this.startTime, this.endTime)
             .then(this._success.bind(this));
     },
     _success: function(response) {
@@ -161,13 +161,13 @@ module.exports = function(params) {
     if (params.emailFilter) {
         self.filterMessageObs.push(PREMSG+"have email matching the string &ldquo;"+params.emailFilter+"&rdquo;");
     }
-    if (params.startDate) {
+    if (params.startTime) {
         self.filterMessageObs.push(PREMSG+"were created on or after &ldquo;"+
-            new Date(params.startDate).toLocaleDateString()+"&rdquo;");
+            new Date(params.startTime).toLocaleDateString()+"&rdquo;");
     }
-    if (params.endDate) {
+    if (params.endTime) {
         self.filterMessageObs.push(PREMSG+"were created on or before &ldquo;"+
-            new Date(params.endDate).toLocaleDateString()+"&rdquo;");
+            new Date(params.endTime).toLocaleDateString()+"&rdquo;");
     }
 
     self.startExport = function(vm, event) {
