@@ -2,6 +2,7 @@ import Binder from '../../binder';
 import { UNARY_EVENTS } from '../../pages/schedule/schedule_utils';
 import fn from '../../functions';
 import optionsService from '../../services/options_service';
+import serverService from '../../services/server_service';
 import root from '../../root';
 import utils from '../../utils';
 
@@ -19,6 +20,9 @@ module.exports = function(params) {
         .obs('answer')
         .obs('hasActivities', true)
         .obs('activityFinished', false)
+        .obs('activityEventKeys[]', [])
+        .obs('selectedEventKeys[]', [])
+        .obs('customEvent', false)
         .obs('activity')
         .obs('activityOptions[]');
     
@@ -31,10 +35,16 @@ module.exports = function(params) {
         if (self.activityFinishedObs() && self.activityObs()) {
             events.push("activity:" + self.activityObs() + ":finished");
         }
+        if (self.selectedEventKeysObs()) {
+            self.selectedEventKeysObs().forEach(function(key) {
+                events.push("custom:"+key);
+            });
+        }
         if (self.enrollmentObs()) {
             events.push(self.enrollmentPeriodObs());
         }
         self.eventIdObs(events.join(','));
+        console.log(self.eventIdObs());
         root.closeDialog();
     };
     self.clearAndCloseDialog = function(vm, event) {
@@ -53,8 +63,14 @@ module.exports = function(params) {
                 if (Object.keys(UNARY_EVENTS).indexOf(eventId) > -1) {
                     self.enrollmentObs(true);
                     self.enrollmentPeriodObs(eventId);
+                } else if (eventId.indexOf("custom:") > -1) {
+                    let parts = eventId.split(":");
+                    console.log(parts);
+                    self.customEventObs(true);
+                    self.selectedEventKeysObs.push(parts[1]);
+                    console.log(self.selectedEventKeysObs());
                 } else {
-                    var parts = eventId.split(":");
+                    let parts = eventId.split(":");
                     if (parts[0] === "activity") {
                         self.activityFinishedObs(true);
                         self.activityObs(parts[1]);
@@ -63,7 +79,11 @@ module.exports = function(params) {
             });
         }
     }
-    optionsService.getSurveyOptions()
+    serverService.getStudy()
+        .then(function(response) {
+            self.activityEventKeysObs(response.activityEventKeys);
+        })
+        .then(optionsService.getSurveyOptions)
         .then(optionsService.getActivityOptions)
         .then(self.activityOptionsObs)
         .then(initEditor);

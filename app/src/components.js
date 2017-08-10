@@ -458,6 +458,10 @@ reg('user_attributes', {
     template: require('./pages/settings/user_attributes.html'),
     viewModel: require('./pages/set_editors/set_editor')('userProfileAttributes')
 });
+reg('event_keys', { 
+    template: require('./pages/settings/event_keys.html'),
+    viewModel: require('./pages/set_editors/set_editor')('activityEventKeys')
+});
 reg('task_identifiers', { 
     template: require('./pages/set_editors/task_identifiers.html'),
     viewModel: require('./pages/set_editors/set_editor')('taskIdentifiers')

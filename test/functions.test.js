@@ -116,7 +116,7 @@ describe("formatVersionRange", function() {
         expect( fn.formatVersionRange() ).to.equal("<i>All versions</i>");
     });
 });
-describe("langauges", function() {
+describe("languages", function() {
     describe("formatLanguages", function() {
         it("works", function() {
             expect( fn.formatLanguages(["en","fr"]) ).to.eql("en, fr");
@@ -130,6 +130,25 @@ describe("langauges", function() {
             expect(fn.persistLanguages(" en, fr ")).to.eql(["en","fr"]);
             expect(fn.persistLanguages(" ")).to.be.empty;
         });
+    });
+});
+describe("formatList", function() {
+    it("handles null", function() {
+        expect(fn.formatList(null)).to.equal("");
+    });
+    it("handles empty list", function() {
+        expect(fn.formatList([])).to.equal("");
+    });
+    it("handles one item", function() {
+        expect(fn.formatList(["A"])).to.equal("A");
+    });
+    it("handles odd items", function() {
+        expect(fn.formatList(["A","B","C"], "or")).to.equal("A, B, or C");
+        expect(fn.formatList(["A","B","C"], "and")).to.equal("A, B, and C");
+    });
+    it("handles even items", function() {
+        expect(fn.formatList(["A","B"], "or")).to.equal("A or B");
+        expect(fn.formatList(["A","B"], "and")).to.equal("A and B");
     });
 });
 describe("roles", function() {

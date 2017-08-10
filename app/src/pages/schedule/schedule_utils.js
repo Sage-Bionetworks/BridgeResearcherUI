@@ -64,9 +64,11 @@ function formatEventId(value) {
     if (!value) {
         return "On enrollment (default)";
     }
-    return value.split(',').reverse().map(function(value) {
+    var elements = value.split(',').reverse().map(function(value) {
         if (UNARY_EVENTS[value]) {
             return UNARY_EVENTS[value];
+        } else if (value.indexOf("custom:") > -1) {
+            return value.split(":")[1];
         }
         // events have three parts, e.g. survey:<guid>:finished
         var parts = value.split(":");
@@ -82,7 +84,8 @@ function formatEventId(value) {
             return "when activity '"+activityLabel+"' is finished";
         }
         return " " + value;
-    }).join(', and ');
+    });
+    return fn.formatList(elements, 'and');
 }
 function formatTimesArray(times) {
     return (fn.is(times,'Array') && times.length) ? toList(times.map(function(time) {
