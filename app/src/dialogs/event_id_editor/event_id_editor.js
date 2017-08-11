@@ -44,7 +44,6 @@ module.exports = function(params) {
             events.push(self.enrollmentPeriodObs());
         }
         self.eventIdObs(events.join(','));
-        console.log(self.eventIdObs());
         root.closeDialog();
     };
     self.clearAndCloseDialog = function(vm, event) {
@@ -65,10 +64,8 @@ module.exports = function(params) {
                     self.enrollmentPeriodObs(eventId);
                 } else if (eventId.indexOf("custom:") > -1) {
                     let parts = eventId.split(":");
-                    console.log(parts);
                     self.customEventObs(true);
                     self.selectedEventKeysObs.push(parts[1]);
-                    console.log(self.selectedEventKeysObs());
                 } else {
                     let parts = eventId.split(":");
                     if (parts[0] === "activity") {
@@ -79,10 +76,9 @@ module.exports = function(params) {
             });
         }
     }
+    
     serverService.getStudy()
-        .then(function(response) {
-            self.activityEventKeysObs(response.activityEventKeys);
-        })
+        .then(fn.handleObsUpdate(self.activityEventKeysObs, 'activityEventKeys'))
         .then(optionsService.getSurveyOptions)
         .then(optionsService.getActivityOptions)
         .then(self.activityOptionsObs)
