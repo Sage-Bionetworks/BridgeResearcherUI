@@ -68,7 +68,7 @@ function formatEventId(value) {
         if (UNARY_EVENTS[value]) {
             return UNARY_EVENTS[value];
         } else if (value.indexOf("custom:") > -1) {
-            return value.split(":")[1];
+            return "when "+ value.split(":")[1] + " occurs";
         }
         // events have three parts, e.g. survey:<guid>:finished
         var parts = value.split(":");
@@ -85,7 +85,7 @@ function formatEventId(value) {
         }
         return " " + value;
     });
-    return fn.formatList(elements, 'and');
+    return sentenceCase(fn.formatList(elements, 'and'));
 }
 function formatTimesArray(times) {
     return (fn.is(times,'Array') && times.length) ? toList(times.map(function(time) {
