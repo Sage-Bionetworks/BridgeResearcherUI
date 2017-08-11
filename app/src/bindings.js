@@ -55,8 +55,8 @@ ko.bindingHandlers.flatpickr = {
 
         function updateObserver(date) {
             observer(null);
-            if (date) {
-                observer(date);
+            if (date && date.length) {
+                observer(date[0]);
             }
             onChange();
         }

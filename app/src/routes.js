@@ -50,6 +50,7 @@ router.on('/settings/general', routeTo('general'));
 router.on('/settings/email', routeTo('email'));
 router.on('/settings/data_groups', routeTo('data_groups'));
 router.on('/settings/password_policy', routeTo('password_policy'));
+router.on('/settings/event_keys', routeTo('event_keys'));
 router.on('/settings/user_attributes', routeTo('user_attributes'));
 router.on('/settings/synapse', routeTo('synapse'));
 router.on('/task_identifiers', routeTo('task_identifiers'));

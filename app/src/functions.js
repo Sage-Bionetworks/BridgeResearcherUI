@@ -309,6 +309,19 @@ function dateToLocalISOString(date, timePortion) {
 function arrayContains(array, value) {
     return array.indexOf(value) > -1;
 }
+function formatList(array = [], finalWord = 'and') {
+    if (is(array, 'Array') && array.length) {
+        if (array.length === 1) {
+            return array[0];
+        } else if (array.length === 2) {
+            return `${array[0]} ${finalWord} ${array[1]}`;
+        } else {
+            var middle = array.splice(1, array.length-2).join(", ");
+            return `${array[0]}, ${middle}, ${finalWord} ${array[array.length-1]}`;
+        }
+    }
+    return '';
+}
 
 var formatDate = seq(checkArgs, asDate, formatDateString, blankInvalidDateString);
 var formatDateTime = seq(checkArgs, asDate, formatDateTimeString, blankInvalidDateString);
@@ -324,6 +337,7 @@ export default {
     formatDate,
     formatDateTime,
     formatLanguages,
+    formatList,
     formatMs,
     formatName,
     formatRoles,

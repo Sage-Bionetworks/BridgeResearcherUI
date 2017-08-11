@@ -55,7 +55,7 @@ module.exports = function(params) {
         loadingFunc(args).then(function(response) {
             if (response) {
                 history.push(nextOffset);
-                nextOffset = response.offsetKey;
+                nextOffset = response.nextPageOffsetKey;
                 self.showLoaderObs(false);
                 self.hasPreviousObs(history.length > 1);
                 self.hasNextObs(response.hasNext);

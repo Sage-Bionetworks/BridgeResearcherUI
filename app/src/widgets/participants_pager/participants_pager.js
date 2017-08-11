@@ -20,8 +20,8 @@ module.exports = function(params) {
 
     new Binder(self)
         .obs('emailFilter', query.emailFilter)
-        .obs('startDate', query.startDate)
-        .obs('endDate', query.endDate)
+        .obs('startTime', query.startTime)
+        .obs('endTime', query.endTime)
         .obs('offsetBy', offsetBy)
         .obs('pageSize', pageSize)
         .obs('totalRecords')
@@ -68,6 +68,7 @@ module.exports = function(params) {
     };
 
     function makeDate(date) {
+        // I don't know why this ends up sending an empty array, but it does.
         if (date) {
             return new Date(date).toISOString();
         }
@@ -76,26 +77,27 @@ module.exports = function(params) {
     function updateModel(response) {
         // If you're not a researcher, it can happen this gets called without a response.
         if (response) {
-            self.offsetByObs(response.offsetBy);
-            self.pageSizeObs(response.pageSize);
+            var rp = response.requestParams;
+            self.offsetByObs(rp.offsetBy);
+            self.pageSizeObs(rp.pageSize);
             self.totalRecordsObs(response.total);
-            self.emailFilterObs(response.emailFilter);
-            self.startDateObs(response.startDate);
-            self.endDateObs(response.endDate);
-            self.currentPageObs(Math.round(response.offsetBy/response.pageSize));
-            self.totalPagesObs( Math.ceil(response.total/response.pageSize) );
+            self.emailFilterObs(rp.emailFilter);
+            self.startTimeObs(rp.startTime);
+            self.endTimeObs(rp.endTime);
+            self.currentPageObs(Math.round(rp.offsetBy/rp.pageSize));
+            self.totalPagesObs( Math.ceil(response.total/rp.pageSize) );
         }
     }
     
     function wrappedLoadingFunc(offsetBy, vm, event) {
         var emailFilter = self.emailFilterObs();
-        var startDate = makeDate(self.startDateObs());
-        var endDate = makeDate(self.endDateObs());
+        var startTime = makeDate(self.startTimeObs());
+        var endTime = makeDate(self.endTimeObs());
 
         storeService.persistQuery(pageKey, {emailFilter: emailFilter, 
-            startDate: startDate, endDate: endDate, offsetBy: offsetBy});
+            startTime: startTime, endTime: endTime, offsetBy: offsetBy});
 
-        loadingFunc(offsetBy, pageSize, emailFilter, startDate, endDate)
+        loadingFunc(offsetBy, pageSize, emailFilter, startTime, endTime)
             .then(updateModel)
             .then(fn.handleStaticObsUpdate(self.searchLoadingObs, false))
             .then(fn.handleStaticObsUpdate(self.showLoaderObs, false))
