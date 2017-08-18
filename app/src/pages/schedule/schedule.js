@@ -27,7 +27,6 @@ function addObserversToActivity(activity) {
     activity.labelDetailObs = ko.observable(activity.labelDetail);
     activity.activityTypeObs = ko.observable(activity.activityType);
     activity.taskIdObs = ko.observable();
-    activity.guid = activity.guid;
     if (activity.activityType === 'task') {
         activity.taskIdObs(activity.task.identifier);
     }
