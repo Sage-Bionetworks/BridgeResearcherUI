@@ -4,16 +4,12 @@ export default {
         {value: "develop", label: "Development"},
         {value: "staging", label: "Staging"},
         {value: "production", label: "Production"},
-        {value: "develop_aws", label: "Development (AWS)"},
-        {value: "staging_aws", label: "Staging (AWS)"},
         {value: "production_aws", label: "Production (AWS)"}
     ],
     host: {
         'local': 'http://localhost:9000',
         'develop': 'https://webservices-develop.sagebridge.org',
-        'develop_aws': 'https://bridgepf-develop.sagebridge.org',
         'staging': 'https://webservices-staging.sagebridge.org',
-        'staging_aws': 'https://bridgepf-uat.sagebridge.org',
         'production': 'https://webservices.sagebridge.org',
         'production_aws': 'https://bridgepf-prod.sagebridge.org',
     },
