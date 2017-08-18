@@ -123,9 +123,9 @@ reg('schema_versions', {
     viewModel: require('./pages/schema/schema_versions'),
     template: require('./pages/schema/schema_versions.html')
 });
-reg('synapse', {
-    viewModel: require('./pages/settings/synapse'),
-    template: require('./pages/settings/synapse.html')
+reg('data_export', {
+    viewModel: require('./pages/data_export/data_export'),
+    template: require('./pages/data_export/data_export.html')
 });
 reg('scheduleplans', {
     viewModel: require('./pages/scheduleplans/scheduleplans'),
