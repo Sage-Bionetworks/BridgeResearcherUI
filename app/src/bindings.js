@@ -100,6 +100,19 @@ ko.bindingHandlers.selected = {
         }
     }  
 };
+ko.bindingHandlers.readonly = {
+    init: function(element, valueAccessor) {
+        var observer = valueAccessor();
+        observer.subscribe(function(value) {
+            if (value) {
+                element.setAttribute("readonly","readonly");
+            } else {
+                element.removeAttribute("readonly");
+            }
+        });
+    }
+};
+
 ko.bindingHandlers.ckeditor = {
     init: function(element, valueAccessor) {
         if (!CKEDITOR) {

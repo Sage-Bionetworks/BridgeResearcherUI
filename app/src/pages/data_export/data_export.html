@@ -1,15 +1,15 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
-            <h3>Synapse Configuration</h3>
+            <h3>Data Export Management</h3>
         </div>
         <div class="fixed-header-buttons">
-            <button class="ui tiny button" data-bind="click: createSynapseProject, visible: !isLinked()">Create Synapse Project&hellip;</button>
+            <button class="ui tiny button" data-bind="click: createSynapseProject, visible: isDeveloper() && !isLinked()">Create Synapse Project&hellip;</button>
             <button class="ui tiny primary button" data-bind="click: startExport, visible: isLinked">Export Now to Synapse</button>
-            <button class="ui tiny primary button" data-bind="click: save">Save</button>
+            <button class="ui tiny primary button" data-bind="click: save, visible: isDeveloper">Save</button>
         </div>
     </div>
-    <!-- ko component: {name: 'settings-tabset', params: {active: 'synapse', isPublicObs: isPublicObs}} --><!-- /ko -->
+    <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
     <div class="ui grid">
@@ -19,28 +19,32 @@
                 <div class="fields">
                     <div class="six wide field">
                         <label>Synapse Project ID</label>
-                        <input type="text" name="synapseProjectId" data-bind="textInput: synapseProjectIdObs, hasFocus: true"/>
+                        <input type="text" name="synapseProjectId" 
+                            data-bind="textInput: synapseProjectIdObs, hasFocus: true, readonly: isResearcherOnly"/>
                     </div>
                     <div class="eight wide field">
                         <label>&#160;</label>
                         <div style="margin-top:1rem">
-                            <a target="_blank" rel="noopener" data-bind="visible: projectLinkObs, href: projectLinkObs">View Project on Synapse</a>
+                            <a target="_blank" rel="noopener" 
+                                data-bind="visible: projectLinkObs, href: projectLinkObs">View Project on Synapse</a>
                         </div>
                     </div>
                 </div>
                 <div class="fields">
                     <div class="six wide field">
                         <label>Synapse Access Team ID</label>
-                        <input type="text" name="synapseDataAccessTeamId" data-bind="textInput: synapseDataAccessTeamIdObs"/>
+                        <input type="text" name="synapseDataAccessTeamId" 
+                            data-bind="textInput: synapseDataAccessTeamIdObs, readonly: isResearcherOnly"/>
                     </div>
                     <div class="eight wide field">
                         <label>&#160;</label>
                         <div style="margin-top:1rem">
-                            <a target="_blank" rel="noopener" data-bind="visible: teamLinkObs, href: teamLinkObs">View Team on Synapse</a>
+                            <a target="_blank" rel="noopener" 
+                                data-bind="visible: teamLinkObs, href: teamLinkObs">View Team on Synapse</a>
                         </div>
                     </div>
                 </div>
-                <div class="field">
+                <div class="field" data-bind="visible: isDeveloper">
                     <label>Users custom export schedule</label>
                     <ui-checkbox params="checkedObs: usesCustomExportScheduleObs">
                         This study has a custom export schedule set up for it

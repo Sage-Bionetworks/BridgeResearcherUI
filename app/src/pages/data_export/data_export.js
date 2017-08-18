@@ -23,7 +23,7 @@ module.exports = function() {
         .bind('usesCustomExportSchedule')
         .bind('disableExport');
 
-    self.isPublicObs = root.isPublicObs;
+    fn.copyProps(self, root, 'isPublicObs', 'isDeveloper', 'isResearcherOnly');
 
     self.isLinked = ko.computed(function() {
         return fn.isNotBlank(self.synapseProjectIdObs()) || 

@@ -52,7 +52,7 @@ router.on('/settings/data_groups', routeTo('data_groups'));
 router.on('/settings/password_policy', routeTo('password_policy'));
 router.on('/settings/event_keys', routeTo('event_keys'));
 router.on('/settings/user_attributes', routeTo('user_attributes'));
-router.on('/settings/synapse', routeTo('synapse'));
+router.on('/data_export', routeTo('data_export'));
 router.on('/task_identifiers', routeTo('task_identifiers'));
 router.on('/email_templates', routeTo('verify_email'));
 router.on('/email_templates/verify_email', routeTo('verify_email'));
