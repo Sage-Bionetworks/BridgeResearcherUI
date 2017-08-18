@@ -3,6 +3,7 @@ import ko from 'knockout';
 import root from '../../root';
 import scheduleUtils from './schedule_utils';
 import utils from '../../utils';
+import Binder from '../../binder';
 
 var SCHEDULE_TYPE_OPTIONS = Object.freeze([
     {value: 'once', label: 'Once'},
@@ -55,9 +56,11 @@ function extractActivityFromObservables(activity) {
     }
     return act;
 }
+/*
 function observe(self, name, isArray) {
     self[name+"Obs"] = (isArray) ? ko.observableArray() : ko.observable();
 }
+*/
 function updateView(self, schedule, fields) {
     fields.forEach(function(field) {
         self[field+"Obs"](schedule[field]);    
@@ -91,6 +94,18 @@ module.exports = function(params) {
     self.activityTypeOptions = ACTIVITY_TYPE_OPTIONS;
     self.activityTypeLabel = utils.makeOptionLabelFinder(ACTIVITY_TYPE_OPTIONS);    
 
+    new Binder(self)
+        .obs('eventId')
+        .obs('scheduleType')
+        .obs('startsOn')
+        .obs('endsOn')
+        .obs('delay')
+        .obs('interval')
+        .obs('times')
+        .obs('cronTrigger')
+        .obs('expires')
+        .obs('activities[]');
+        /*
     observe(self, "eventId");
     observe(self, "scheduleType");
     observe(self, "startsOn");
@@ -101,7 +116,7 @@ module.exports = function(params) {
     observe(self, "cronTrigger");
     observe(self, "expires");
     observe(self, "activities", true);
-    
+    */
     if (params.scheduleHolder) {
         self.dispose = function() {
             var holder = params.scheduleHolder;

@@ -565,6 +565,9 @@ export default {
             (config.sharedmodules+'/'+esc(id)+'/import');
         return post(url);
     },
+    startExport: function() {
+        return post(config.export + "/start");
+    },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {
             throw Error("Session listener not a function");

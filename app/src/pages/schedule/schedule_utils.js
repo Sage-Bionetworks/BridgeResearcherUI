@@ -85,14 +85,15 @@ function formatEventId(value) {
         }
         return " " + value;
     });
-    return sentenceCase(fn.formatList(elements, 'and'));
+    return fn.formatList(elements);
+}
+function formatTime(time) {
+    time = time.replace(":00.000","");
+    // If there's no label, it's an odd time. Just leave it for now.
+    return timeFormatter(time) || time;
 }
 function formatTimesArray(times) {
-    return (fn.is(times,'Array') && times.length) ? toList(times.map(function(time) {
-        time = time.replace(":00.000","");
-        // If there's no label, it's an odd time. Just leave it for now.
-        return timeFormatter(time) || time;
-    })) : "<None>";
+    return (fn.is(times,'Array') && times.length) ? fn.formatList(times.map(formatTime)) : "<None>";
 }
 function formatActivities(buffer, activities, verb) {
     var actMap = {};
@@ -143,19 +144,6 @@ function periodToWordsNoArticle(periodStr) {
             (period.amt + " " + period.measure) :
             (period.amt + " " + period.measure+"s");
     }).join(', ');
-}
-function toList(array) {
-    var len = array.length;
-    if (len === 0) {
-        return "";
-    } else if (len === 1) {
-        return array[0];
-    } else if (len === 2) {
-        return array[0] + " and " + array[1];
-    } else {
-        array[array.length-1] = "and " + array[array.length-1];
-        return array.join(", ");
-    }
 }
 function newStrategy(type, existingStrategy) {
     var schedules = (existingStrategy) ? extractSchedules(existingStrategy) : [newSchedule()];
@@ -210,28 +198,27 @@ function newSchedule() {
 function newSchedulePlan() {
     return {type: 'SchedulePlan', label: "", strategy: cloneSimpleStrategy([newSchedule()])};
 }
+function formatEventElement(event) {
+    if (Object.keys(UNARY_EVENTS).indexOf(event) > -1) {
+        return event.replace(/_/g, " ");
+    }
+    return formatEventId(event);
+}
 function formatSchedule(sch) {
     if (!sch) {
         return "<i>No Schedule</i>";
     }
     var buffer = [];
 
-    var initClause = "";
     var events = (sch.eventId) ? sch.eventId.split(",").reverse() : ["enrollment"];
+    var eventClause = "";
     if (sch.delay) {
-        initClause = periodToWords(sch.delay) + " after ";
+        eventClause = periodToWords(sch.delay) + " after ";
     } else if (events[0] === "enrollment") {
-        initClause = "upon ";
+        eventClause = "upon ";
     }
-    initClause += toList(events.map(function(event) {
-        if (Object.keys(UNARY_EVENTS).indexOf(event) > -1) {
-            return event.replace(/_/g, " ");
-        }
-        return formatEventId(event);
-    }));
-    // Capitalize first letter of phrase
-    initClause = initClause.substring(0,1).toUpperCase() + initClause.substring(1);
-    buffer.push(initClause);
+    eventClause += fn.formatList(events.map(formatEventElement));
+    buffer.push(eventClause);
 
     if (sch.scheduleType === "persistent") {
         var inner = [];
@@ -368,7 +355,7 @@ export default {
     newSchedule,
     newSchedulePlan,
     newStrategy,
-    formatEventId,
+    formatEventId: fn.seq(formatEventId, sentenceCase),
     formatTimesArray,
     formatStrategy,
     formatSchedule,
