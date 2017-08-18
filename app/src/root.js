@@ -12,7 +12,7 @@ var participantPages = ['participant_general','participant_consents',  'particip
     'participant_activity'];
 
 var pageSets = {
-    'settings/general': ['general', 'email', 'data_groups', 'password_policy', 'eligibility', 'user_attributes', 'synapse'],
+    'settings/general': ['general', 'email', 'data_groups', 'password_policy', 'eligibility', 'user_attributes', 'event_keys'],
     'surveys': ['surveys','survey','survey_versions', "survey_schema"],
     'schemas': ['schemas','schema','schema_versions'],
     'scheduleplans': ['scheduleplans','scheduleplan'],
@@ -117,6 +117,11 @@ var RootViewModel = function() {
     self.isAdmin = roleFunc(self.rolesObs, 'admin');
     self.isSharedStudy = ko.computed(function() {
         return self.studyIdentifierObs() === 'shared';
+    });
+    self.isResearcherOnly = ko.computed(function() {
+        var roles = self.rolesObs();
+        console.log("isResearcherOnly", (roles.indexOf("researcher") > -1) && (roles.indexOf("developer") === -1));
+        return roles.indexOf("researcher") > -1 && roles.indexOf("developer") === -1;
     });
 
     self.openDialog = function(dialogName, params) {

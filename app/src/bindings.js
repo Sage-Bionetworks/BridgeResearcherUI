@@ -55,8 +55,8 @@ ko.bindingHandlers.flatpickr = {
 
         function updateObserver(date) {
             observer(null);
-            if (date) {
-                observer(date);
+            if (date && date.length) {
+                observer(date[0]);
             }
             onChange();
         }
@@ -100,6 +100,19 @@ ko.bindingHandlers.selected = {
         }
     }  
 };
+ko.bindingHandlers.readonly = {
+    init: function(element, valueAccessor) {
+        var observer = valueAccessor();
+        observer.subscribe(function(value) {
+            if (value) {
+                element.setAttribute("readonly","readonly");
+            } else {
+                element.removeAttribute("readonly");
+            }
+        });
+    }
+};
+
 ko.bindingHandlers.ckeditor = {
     init: function(element, valueAccessor) {
         if (!CKEDITOR) {

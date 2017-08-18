@@ -8,7 +8,12 @@ import utils from '../../utils';
 
 const BASE = "https://www.synapse.org/#!";
 const CREATE_MSG = "Please enter your Synapse user account ID\n(you'll be made the administrator of the project):";
-
+const EXPORT_MSG = "Unexported study data is being exported to Synapse.\n" + 
+    "This can take some time.\nVisit your project in Synapse to see your newly uploaded data.";
+function exportingMsg() {
+    alerts.notification("Starting Data Export", EXPORT_MSG);
+}
+    
 module.exports = function() {
     var self = this;
 
@@ -18,7 +23,7 @@ module.exports = function() {
         .bind('usesCustomExportSchedule')
         .bind('disableExport');
 
-    self.isPublicObs = root.isPublicObs;
+    fn.copyProps(self, root, 'isPublicObs', 'isDeveloper', 'isResearcherOnly');
 
     self.isLinked = ko.computed(function() {
         return fn.isNotBlank(self.synapseProjectIdObs()) || 
@@ -32,7 +37,14 @@ module.exports = function() {
         var value = self.synapseDataAccessTeamIdObs();
         return (value) ? (BASE+"Team:"+value) : null;
     });
+    self.startExport = function(self, event) {
+        utils.startHandler(self, event);
 
+        serverService.startExport()
+            .then(utils.successHandler(self, event))
+            .then(exportingMsg)
+            .catch(utils.failureHandler({transient:false}));
+    };
     self.createSynapseProject = function(vm, event) {
         alerts.prompt(CREATE_MSG, function(synapseUserId) {
             utils.startHandler(self, event);

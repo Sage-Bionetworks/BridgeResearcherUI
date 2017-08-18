@@ -32,8 +32,12 @@ function prompt(message, okFunc) {
         swal.close();
     });
 }
+function notification(title, message) {
+    swal({title: title, text: message, type: "success"});
+}
 
 export default {
+    notification,
     warn,
     confirmation,
     deleteConfirmation,

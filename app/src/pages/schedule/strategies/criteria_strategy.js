@@ -47,11 +47,10 @@ module.exports = function(params) {
 
     root.setEditorPanel('CriteriaScheduleStrategyPanel', {viewModel:self});
 
-    var subscription = params.strategyObs.subscribe(function(strategy) {
+    params.strategyObs.subscribe(function(strategy) {
         if (strategy && strategy.scheduleCriteria) {
             self.scheduleCriteriaObs(strategy.scheduleCriteria.map(groupToObservables));
             root.setEditorPanel('CriteriaScheduleStrategyPanel', {viewModel:self});
-            subscription.dispose();
         }
     });    
 

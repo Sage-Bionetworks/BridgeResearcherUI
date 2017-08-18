@@ -35,7 +35,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="ui horizontal divider">and / or</div>
                     <div class="fields">
                         <div class="field">
                             <ui-checkbox params="checkedObs: activityFinishedObs">
@@ -51,16 +50,42 @@
                                 optionsCaption: 'Select activity...', css:{disabled: !activityFinishedObs()}"></select>
                         </div>
                     </div>
+                    <div class="fields">
+                        <div class="field">
+                            <ui-checkbox params="checkedObs: customEventObs">
+                                When any of these custom activities exist:
+                            </ui-checkbox>
+                        </div>
+                    </div>
+                    <div style="margin-left: 2rem" class="grouped fields">
+                        <div class="field">
+                            <!-- ko foreach: activityEventKeysObs -->
+                                <div class="field">
+                                    <div class="ui checkbox">
+                                        <input type="checkbox" value="cherry" data-bind="attr:{value: $data, id: $data}, 
+                                            enable: $parent.customEventObs(),
+                                            checked: $parent.selectedEventKeysObs" /> <label data-bind="attr:{for: $data}, 
+                                                text: $data"></label>
+                                    </div>
+                                </div>
+                            <!-- /ko -->
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="eight wide column">
-                <div style="text-indent: -.6rem; margin-left: .6rem">
+                <p>
+                    All events that apply will be used to schedule activities.
+                </p>
+                <p>
                     <span style="color:#B22222">* </span> For activities that run for a specific time on the calendar
                     (e.g. a survey for the week of September 4-10, 2016), these events start before the &ldquo;event 
                     in progress&rdquo; to ensure that participants who join the study during that time period will be 
-                    scheduled to do this activity, even though it started before they joined.<br><br> (This is a niche use 
-                    case. &ldquo;At time of enrollment&rdquo; is usually best.)
-                </div>
+                    scheduled to do this activity, even though it started before they joined.
+                </p>
+                <p>
+                    (This is a niche use case. &ldquo;At time of enrollment&rdquo; is usually best.)
+                </p>
             </div>
         </div>
     </div>

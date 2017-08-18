@@ -48,6 +48,8 @@ module.exports = function(params) {
 
         utils.startHandler(self, event);
         serverService.saveSchedulePlan(self.plan)
+            .then(getFullSchedulePlan)
+            .then(fn.handleObsUpdate(self.strategyObs, 'strategy'))
             .then(utils.successHandler(self, event, "The schedule plan has been saved."))
             .catch(failureHandler);
     };
@@ -62,6 +64,9 @@ module.exports = function(params) {
     function updateScheduleTypeObs(plan) {
         self.schedulePlanTypeObs(plan.strategy.type);
         return plan;
+    }
+    function getFullSchedulePlan(response) {
+        return serverService.getSchedulePlan(response.guid);
     }
     function resolveActivity(activity) {
         return serverService.getTaskDefinition(activity.compoundActivity.taskIdentifier)

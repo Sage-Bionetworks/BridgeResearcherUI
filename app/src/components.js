@@ -123,9 +123,9 @@ reg('schema_versions', {
     viewModel: require('./pages/schema/schema_versions'),
     template: require('./pages/schema/schema_versions.html')
 });
-reg('synapse', {
-    viewModel: require('./pages/settings/synapse'),
-    template: require('./pages/settings/synapse.html')
+reg('data_export', {
+    viewModel: require('./pages/data_export/data_export'),
+    template: require('./pages/data_export/data_export.html')
 });
 reg('scheduleplans', {
     viewModel: require('./pages/scheduleplans/scheduleplans'),
@@ -457,6 +457,10 @@ reg('select_surveys', {
 reg('user_attributes', { 
     template: require('./pages/settings/user_attributes.html'),
     viewModel: require('./pages/set_editors/set_editor')('userProfileAttributes')
+});
+reg('event_keys', { 
+    template: require('./pages/settings/event_keys.html'),
+    viewModel: require('./pages/set_editors/set_editor')('activityEventKeys')
 });
 reg('task_identifiers', { 
     template: require('./pages/set_editors/task_identifiers.html'),

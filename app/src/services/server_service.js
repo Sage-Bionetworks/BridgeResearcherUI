@@ -366,10 +366,10 @@ export default {
     deleteCacheKey: function(cacheKey) {
         return del(config.cache+"/"+esc(cacheKey));
     },
-    getParticipants: function(offsetBy, pageSize, emailFilter, startDate, endDate) {
+    getParticipants: function(offsetBy, pageSize, emailFilter, startTime, endTime) {
         var queryString = fn.queryString({
             offsetBy: offsetBy, pageSize: pageSize, emailFilter: emailFilter,
-            startDate: startDate, endDate: endDate
+            startTime: startTime, endTime: endTime
         });
         return get(config.participants+queryString);
     },
@@ -564,6 +564,9 @@ export default {
             (config.sharedmodules+'/'+esc(id)+'/versions/'+esc(version)+'/import') :
             (config.sharedmodules+'/'+esc(id)+'/import');
         return post(url);
+    },
+    startExport: function() {
+        return post(config.export + "/start");
     },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {

@@ -15,13 +15,12 @@ module.exports = function(params) {
         return strategy;
     };
 
-    var subscription = params.strategyObs.subscribe(function(strategy) {
+    params.strategyObs.subscribe(function(strategy) {
         if (strategy && strategy.schedule) {
             setTimeout(function() {
                 self.scheduleObs(strategy.schedule);
             }, 1);
             root.setEditorPanel('SimpleScheduleStrategyPanel', {viewModel:self});
-            subscription.dispose();
         }
     });    
 };
