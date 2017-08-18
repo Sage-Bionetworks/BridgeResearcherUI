@@ -4,7 +4,8 @@
             <h3>Synapse Configuration</h3>
         </div>
         <div class="fixed-header-buttons">
-            <button class="ui tiny button" data-bind="click: createSynapseProject, disable: isLinked">Create Synapse Project&hellip;</button>
+            <button class="ui tiny button" data-bind="click: createSynapseProject, visible: !isLinked()">Create Synapse Project&hellip;</button>
+            <button class="ui tiny primary button" data-bind="click: startExport, visible: isLinked">Export Now to Synapse</button>
             <button class="ui tiny primary button" data-bind="click: save">Save</button>
         </div>
     </div>
