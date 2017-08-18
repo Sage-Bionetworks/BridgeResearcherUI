@@ -21,7 +21,7 @@ module.exports = function(params) {
                 self.scheduleObs(strategy.schedule);
             }, 1);
             root.setEditorPanel('SimpleScheduleStrategyPanel', {viewModel:self});
-            subscription.dispose();
+            //subscription.dispose();
         }
     });    
 };

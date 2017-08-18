@@ -27,6 +27,7 @@ function addObserversToActivity(activity) {
     activity.labelDetailObs = ko.observable(activity.labelDetail);
     activity.activityTypeObs = ko.observable(activity.activityType);
     activity.taskIdObs = ko.observable();
+    activity.guid = activity.guid;
     if (activity.activityType === 'task') {
         activity.taskIdObs(activity.task.identifier);
     }
@@ -56,11 +57,6 @@ function extractActivityFromObservables(activity) {
     }
     return act;
 }
-/*
-function observe(self, name, isArray) {
-    self[name+"Obs"] = (isArray) ? ko.observableArray() : ko.observable();
-}
-*/
 function updateView(self, schedule, fields) {
     fields.forEach(function(field) {
         self[field+"Obs"](schedule[field]);    
@@ -105,18 +101,7 @@ module.exports = function(params) {
         .obs('cronTrigger')
         .obs('expires')
         .obs('activities[]');
-        /*
-    observe(self, "eventId");
-    observe(self, "scheduleType");
-    observe(self, "startsOn");
-    observe(self, "endsOn");
-    observe(self, "delay");
-    observe(self, "interval");
-    observe(self, "times");
-    observe(self, "cronTrigger");
-    observe(self, "expires");
-    observe(self, "activities", true);
-    */
+
     if (params.scheduleHolder) {
         self.dispose = function() {
             var holder = params.scheduleHolder;
@@ -127,6 +112,7 @@ module.exports = function(params) {
     }
 
     function updateEditor(schedule) {
+        // TODO: This could be replaced with a binder update probably
         updateView(self, schedule, ['eventId','scheduleType','startsOn','endsOn','delay',
             'interval','times','cronTrigger','expires']);
         self.editorScheduleTypeObs(getEditorType(schedule));
