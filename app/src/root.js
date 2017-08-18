@@ -118,6 +118,11 @@ var RootViewModel = function() {
     self.isSharedStudy = ko.computed(function() {
         return self.studyIdentifierObs() === 'shared';
     });
+    self.isResearcherOnly = ko.computed(function() {
+        var roles = self.rolesObs();
+        console.log("isResearcherOnly", (roles.indexOf("researcher") > -1) && (roles.indexOf("developer") === -1));
+        return roles.indexOf("researcher") > -1 && roles.indexOf("developer") === -1;
+    });
 
     self.openDialog = function(dialogName, params) {
         self.dialogObs({name: dialogName, params: params});

@@ -118,6 +118,14 @@
                             </a>
                         </div>
                     </div>
+                    <div class="item" data-bind="visible: isResearcher() && !isDeveloper() && !isSharedStudy()">
+                        <i class="server icon"></i> Study Data
+                        <div class="menu">
+                            <a href="#/data_export" class="item" data-bind="active: isActive">
+                                Data Export Management
+                            </a>
+                        </div>
+                    </div>
                     <div class="item" data-bind="visible: isDeveloper() && isSharedStudy()">
                         <i class="server icon"></i> Shared Study Data
                         <div class="menu">
