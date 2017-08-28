@@ -486,6 +486,11 @@ export default {
         var queryString = fn.queryString(params);
         return get(config.participants + '/' + userId + '/activities/' + activityGuid + queryString);
     },
+    getParticipantNewActivities: function(userId, referentType, guid, params) {
+        var queryString = fn.queryString(params);
+        return get(config.participants + '/' + userId + '/activities/' + referentType.toLowerCase() + 
+            '/' + encodeURIComponent(guid) + queryString);
+    },
     deleteParticipantActivities: function(userId) {
         return del(config.participants + '/' + userId + '/activities');
     },

@@ -23,6 +23,7 @@ const TASKID = ['taskId'];
 const USERID = ['userId'];
 const USERID_IDENTIFIER = ['userId','identifier'];
 const USERID_GUID = ['userId','guid'];
+const USERID_REFERENT_GUID = ['userId','referentType','guid'];
 
 function namedParams(fields, args) {
     return (fields || []).reduce(function(params, name, i) {
@@ -86,6 +87,10 @@ router.on('/scheduleplans/:guid', routeTo('scheduleplan', GUID));
 router.on('/participants/:userId/reports/:identifier', routeTo('participant_report', USERID_IDENTIFIER));
 router.on('/participants/:userId/activities/:guid', routeTo('participant_activity', USERID_GUID));
 router.on('/participants/:userId/activities', routeTo('participant_activities', USERID));
+
+router.on('/participants/:userId/newActivities/:referentType/:guid', routeTo('participant_activity2', USERID_REFERENT_GUID));
+router.on('/participants/:userId/newActivities', routeTo('participant_activities2', USERID));
+
 router.on('/participants/:userId/consents', routeTo('participant_consents', USERID));
 router.on('/participants/:userId/notifications', routeTo('participant_notifications', USERID));
 router.on('/participants/:userId/reports', routeTo('participant_reports', USERID));

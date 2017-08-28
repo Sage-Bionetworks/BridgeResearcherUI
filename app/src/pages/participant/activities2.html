@@ -1,0 +1,40 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <div class="fixed-header-heading">
+            <div class="ui breadcrumb">
+                <a class="section" href="#/participants" 
+                    data-bind="visible: isPublicObs">Participants</a>
+                <a class="section" href="#/enrollees" 
+                    data-bind="visible: !isPublicObs()">External Identifiers</a>
+                <i class="right chevron icon divider"></i>
+            </div>            
+            <h3 data-bind="html: titleObs"></h3>
+        </div>
+        <div class="fixed-header-buttons"></div>
+    </div>
+    <!-- ko component: {name: 'participant-tabset', params: {isNewObs: isNewObs,
+        isPublicObs: isPublicObs, userIdObs: userIdObs, statusObs: statusObs}} --><!-- /ko -->
+</div>
+<div class="scrollbox">
+    <errors></errors>
+
+    <table class="ui compact selectable table">
+        <thead>
+            <tr>
+                <th>Activity</th>
+            </tr>
+        </thead>
+        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+            <tr>
+                <td colspan="3" data-bind="html: recordsMessageObs"></td>
+            </tr>
+        </tbody>
+        <tbody data-bind="foreach: itemsObs">
+            <tr>
+                <td>
+                    <a data-bind="attr:{href: $parent.linkMaker($data)}, text: label"></a>
+                </td>
+            </tr>
+        </tbody>
+    </table> 
+</div>
