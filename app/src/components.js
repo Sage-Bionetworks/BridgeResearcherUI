@@ -155,6 +155,16 @@ reg('participant_activity', {
     viewModel: require('./pages/participant/activity'),
     template: require('./pages/participant/activity.html')
 });
+
+reg('participant_activities2', {
+    viewModel: require('./pages/participant/activities2'),
+    template: require('./pages/participant/activities2.html')
+});
+reg('participant_activity2', {
+    viewModel: require('./pages/participant/activity2'),
+    template: require('./pages/participant/activity2.html')
+});
+
 reg('participant_consents', {
     viewModel: require('./pages/participant/consents'),
     template: require('./pages/participant/consents.html')
@@ -342,9 +352,9 @@ reg('ui-select', {
 reg('ui-textarea', {
     template: require('./widgets/form/ui_textarea.html')
 });
-reg('fire-event', {
+/* reg('fire-event', {
     template: require('./widgets/fire_event.html')
-});
+}); */
 reg('tag-editor', {
     template: require('./widgets/tag_editor.html')
 });

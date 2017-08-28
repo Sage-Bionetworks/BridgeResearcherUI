@@ -120,7 +120,6 @@ var RootViewModel = function() {
     });
     self.isResearcherOnly = ko.computed(function() {
         var roles = self.rolesObs();
-        console.log("isResearcherOnly", (roles.indexOf("researcher") > -1) && (roles.indexOf("developer") === -1));
         return roles.indexOf("researcher") > -1 && roles.indexOf("developer") === -1;
     });
 
