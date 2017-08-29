@@ -46,7 +46,11 @@ module.exports = function(params) {
     };
 
     function processPlans(response) {
-        response.items.forEach(processPlan);
+        if (response.items.length) {
+            response.items.forEach(processPlan);
+        } else {
+            self.itemsObs([]);
+        }
     }
     function processPlan(plan) {
         optionsService.getActivities(plan).forEach(processActivity);
