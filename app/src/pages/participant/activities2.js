@@ -70,10 +70,7 @@ module.exports = function(params) {
         self.itemsObs.push(item);
     }
 
-    function load() {
-        sharedModuleUtils.loadNameMaps()
-            .then(serverService.getSchedulePlans)
-            .then(processPlans);
-    }
-    load();
+    sharedModuleUtils.loadNameMaps()
+        .then(serverService.getSchedulePlans)
+        .then(processPlans);
 };
