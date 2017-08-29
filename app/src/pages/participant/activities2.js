@@ -32,8 +32,7 @@ module.exports = function(params) {
 
     tables.prepareTable(self, {
         name: "activitie",
-        type: "Activity",
-        refresh: load
+        type: "Activity"
     });
 
     serverService.getParticipantName(params.userId).then(function(part) {
@@ -47,7 +46,6 @@ module.exports = function(params) {
     };
 
     function processPlans(response) {
-        console.log("DID GET HERE", response);
         if (response.items.length) {
             response.items.forEach(processPlan);
         } else {
