@@ -32,7 +32,8 @@ module.exports = function(params) {
 
     tables.prepareTable(self, {
         name: "activitie",
-        type: "Activity"
+        type: "Activity",
+        refresh: load
     });
 
     serverService.getParticipantName(params.userId).then(function(part) {
@@ -46,7 +47,12 @@ module.exports = function(params) {
     };
 
     function processPlans(response) {
-        response.items.forEach(processPlan);
+        console.log("DID GET HERE", response);
+        if (response.items.length) {
+            response.items.forEach(processPlan);
+        } else {
+            self.itemsObs([]);
+        }
     }
     function processPlan(plan) {
         optionsService.getActivities(plan).forEach(processActivity);
@@ -66,7 +72,10 @@ module.exports = function(params) {
         self.itemsObs.push(item);
     }
 
-    sharedModuleUtils.loadNameMaps()
-        .then(serverService.getSchedulePlans)
-        .then(processPlans);
+    function load() {
+        sharedModuleUtils.loadNameMaps()
+            .then(serverService.getSchedulePlans)
+            .then(processPlans);
+    }
+    load();
 };
