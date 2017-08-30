@@ -87,14 +87,13 @@ router.on('/scheduleplans/:guid', routeTo('scheduleplan', GUID));
 router.on('/participants/:userId/reports/:identifier', routeTo('participant_report', USERID_IDENTIFIER));
 router.on('/participants/:userId/activities/:guid', routeTo('participant_activity', USERID_GUID));
 router.on('/participants/:userId/activities', routeTo('participant_activities', USERID));
-
 router.on('/participants/:userId/newActivities/:referentType/:guid', routeTo('participant_activity2', USERID_REFERENT_GUID));
 router.on('/participants/:userId/newActivities', routeTo('participant_activities2', USERID));
-
 router.on('/participants/:userId/consents', routeTo('participant_consents', USERID));
 router.on('/participants/:userId/notifications', routeTo('participant_notifications', USERID));
 router.on('/participants/:userId/reports', routeTo('participant_reports', USERID));
 router.on('/participants/:userId/uploads', routeTo('participant_uploads', USERID));
+router.on('/participants/:userId/clientData', routeTo('participant_clientData', USERID));
 router.on('/participants/:userId', routeTo('participant_general', USERID));
 router.on('/participants/:userId/general', routeTo('participant_general', USERID));
 router.on('/participants/:userId/requestInfo', routeTo('participant_request_info', USERID));

@@ -164,6 +164,10 @@ reg('participant_activity2', {
     viewModel: require('./pages/participant/activity2'),
     template: require('./pages/participant/activity2.html')
 });
+reg('participant_clientData', {
+    viewModel: require('./pages/participant/client_data'),
+    template: require('./pages/participant/client_data.html')
+});
 
 reg('participant_consents', {
     viewModel: require('./pages/participant/consents'),
