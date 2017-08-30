@@ -205,6 +205,10 @@ function successHandler(vm, event, message) {
         return response;
     };
 }
+function clearErrors() {
+    clearPendingControl();
+    ko.postbox.publish("clearErrors");
+}
 function makeScrollTo(itemSelector) {
     return function scrollTo(index) {
         var offset = $(".fixed-header").outerHeight() * 1.75;
@@ -255,6 +259,7 @@ function animatedDeleter(scrollTo, elementsObs, selectedElementObs) {
 }
 
 export default {
+    clearErrors,
     /**
      * A start handler called before a request to the server is made. All errors are cleared
      * and a loading indicator is shown. This is not done globally because some server requests

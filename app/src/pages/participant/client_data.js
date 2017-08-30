@@ -5,6 +5,7 @@ import serverService from '../../services/server_service';
 import jsonFormatter from '../../json_formatter';
 import utils from '../../utils';
 import alerts from '../../widgets/alerts';
+import BridgeError from '../../bridge_error';
 
 var failureHandler = utils.failureHandler({
     redirectTo: "participants",
@@ -50,13 +51,18 @@ module.exports = function(params) {
                 delete self.participant.clientData;
             }
         } catch(e) {
-            alerts.error("That does not appear to be valid JSON.");
+            var error = new BridgeError();
+            error.addError("clientData", "is not valid JSON");
+            utils.failureHandler({transient:false})(error);
             return false;
+            //alerts.error("That does not appear to be valid JSON.");
+            //return false;
         }
         return true;
     }
 
     self.save = function(vm, event) {
+        utils.clearErrors();
         if (!updateClientData()) {
             return;
         }
@@ -65,7 +71,10 @@ module.exports = function(params) {
             .then(utils.successHandler(vm, event, "Client data updated."))
             .catch(utils.failureHandler());
     };
-    self.reformat = updateClientData;
+    self.reformat = function(vm,event) {
+        utils.clearErrors();
+        updateClientData();
+    };
     
     self.isPublicObs = root.isPublicObs;        
 };
