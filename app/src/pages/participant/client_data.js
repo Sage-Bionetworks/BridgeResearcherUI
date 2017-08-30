@@ -55,8 +55,6 @@ module.exports = function(params) {
             error.addError("clientData", "is not valid JSON");
             utils.failureHandler({transient:false})(error);
             return false;
-            //alerts.error("That does not appear to be valid JSON.");
-            //return false;
         }
         return true;
     }
