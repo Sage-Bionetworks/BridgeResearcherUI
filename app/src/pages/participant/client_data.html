@@ -1,0 +1,31 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <div class="fixed-header-heading">
+            <div class="ui breadcrumb">
+                <a class="section" href="#/participants"
+                    data-bind="visible: isPublicObs">Participants</a>
+                <a class="section" href="#/enrollees"
+                    data-bind="visible: !isPublicObs()">External Identifiers</a>
+                <i class="right chevron icon divider"></i>
+            </div>            
+            <h3 data-bind="html: titleObs"></h3>
+        </div>
+        <div class="fixed-header-buttons">
+            <button class="ui tiny primary button" data-bind="click: save">Save</button>
+        </div>
+    </div>
+    <!-- ko component: {name: 'participant-tabset', params: { userIdObs: userIdObs,
+        isNewObs: isNewObs, isPublicObs: isPublicObs, statusObs: statusObs}} --><!-- /ko -->
+</div>
+<div class="scrollbox">
+    <errors></errors>
+    <div class="ui form">
+        <div class="field" id="clientData">
+            <label>Client data should be in JSON format</label>
+            <textarea data-bind="textInput: clientDataObs"></textarea>
+        </div>
+    </div>
+    <div style="padding-top:1rem">
+        <button class="ui tiny primary button" data-bind="click: reformat">Reformat</button>
+    </div>
+</div>

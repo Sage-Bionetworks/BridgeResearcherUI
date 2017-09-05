@@ -5,17 +5,25 @@
     <a data-bind="tabber, href: linkMaker('consents'), visible: $data.isPublicObs">
         <i class="legal icon"></i> Consent
     </a>
+    <!--
     <a data-bind="tabber, href: linkMaker('activities')">
+        <i class="wait icon"></i> Activities (Old)
+    </a>
+-->
+    <a data-bind="tabber, href: linkMaker('newActivities')">
         <i class="wait icon"></i> Activities
     </a>
     <a data-bind="tabber, href: linkMaker('uploads')">
         <i class="upload icon"></i> Uploads
     </a>
     <a data-bind="tabber, href: linkMaker('notifications')">
-        <i class="announcement icon"></i> Push Notifications
+        <i class="announcement icon"></i> Notifications
     </a>
     <a data-bind="tabber, href: linkMaker('reports')">
         <i class="newspaper icon"></i> Reports
+    </a>
+    <a data-bind="tabber, href: linkMaker('clientData')">
+        <i class="database icon"></i> Client Data
     </a>
     <a data-bind="tabber, href: linkMaker('requestInfo')">
         <i class="world icon"></i> Request Info

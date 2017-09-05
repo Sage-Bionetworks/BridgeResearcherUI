@@ -9,7 +9,8 @@ import serverService from './services/server_service';
 var participantPages = ['participant_general','participant_consents',  'participant_reports',
     'participant_report', 'participant_activities', 'participant_uploads', 
     'participant_upload', 'participant_notifications', 'participant_request_info', 
-    'participant_activity'];
+    'participant_activity', 'participant_activities2', 'participant_activity2',
+    'participant_clientData'];
 
 var pageSets = {
     'settings/general': ['general', 'email', 'data_groups', 'password_policy', 'eligibility', 'user_attributes', 'event_keys'],
@@ -120,7 +121,6 @@ var RootViewModel = function() {
     });
     self.isResearcherOnly = ko.computed(function() {
         var roles = self.rolesObs();
-        console.log("isResearcherOnly", (roles.indexOf("researcher") > -1) && (roles.indexOf("developer") === -1));
         return roles.indexOf("researcher") > -1 && roles.indexOf("developer") === -1;
     });
 

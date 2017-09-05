@@ -19,6 +19,9 @@ function deleteConfirmation(message, func, deleteButton) {
 function warn(message) {
     swal({ title: "", text: message, type: "warning", confirmButtonText: "OK", confirmButtonColor: "#2185d0"});
 }
+function error(message) {
+    swal("Oops...", message, "error");
+}
 function prompt(message, okFunc) {
     swal({title: "", text: message, type: "input", showCancelButton: true, closeOnConfirm: false}, function(inputValue) {
         if (inputValue === false) {
@@ -37,9 +40,10 @@ function notification(title, message) {
 }
 
 export default {
-    notification,
-    warn,
     confirmation,
     deleteConfirmation,
-    prompt
+    error,
+    notification,
+    prompt,
+    warn
 };
