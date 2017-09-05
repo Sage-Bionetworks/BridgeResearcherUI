@@ -16,8 +16,10 @@
         isPublicObs: isPublicObs, userIdObs: userIdObs, statusObs: statusObs}} --><!-- /ko -->
 </div>
 <div class="scrollbox">
+    <p>
+        <a data-bind="href: '#/participants/'+userIdObs()+'/activities'">Old activities view</a>
+    </p>
     <errors></errors>
-
     <table class="ui compact selectable table">
         <thead>
             <tr>
