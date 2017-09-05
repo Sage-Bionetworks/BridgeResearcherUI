@@ -22,6 +22,8 @@ const LINK_COMPONENTS = {
 module.exports = function(params) {
     var self = this;
 
+    self.tempDedupMap = {};
+
     new Binder(self)
         .obs('userId', params.userId)
         .obs('isNew', false)
@@ -51,6 +53,7 @@ module.exports = function(params) {
         } else {
             self.itemsObs([]);
         }
+        return response;
     }
     function processPlan(plan) {
         optionsService.getActivities(plan).forEach(processActivity);
@@ -67,10 +70,18 @@ module.exports = function(params) {
             item.label = activity.compoundActivity.taskIdentifier;
             item.identifier = activity.compoundActivity.taskIdentifier;
         }
-        self.itemsObs.push(item);
+        self.tempDedupMap[item.identifier] = item;
+    }
+    function sortPlans(response) {
+        var array = Object.values(self.tempDedupMap);
+        array.sort(function(a,b) {
+            return a.label.localeCompare(b.label);
+        });
+        self.itemsObs(array);
     }
 
     sharedModuleUtils.loadNameMaps()
         .then(serverService.getSchedulePlans)
-        .then(processPlans);
+        .then(processPlans)
+        .then(sortPlans);
 };
