@@ -14,6 +14,7 @@
                 <option value="once">Once</option>
                 <option value="interval">Recurring</option>
                 <option value="cron">Recurring on cron schedule</option>
+                <option value="sequence">Sequence</option>
                 <option value="persistent">Persistent</option>
             </select>            
         </div>
@@ -31,8 +32,8 @@
             <label>Delay first task by</label>
             <ui-duration params="fieldObs: delayObs"></ui-duration>
         </div>
-        <div class="field" data-bind="visible: editorScheduleTypeObs() === 'interval', attr:{id:
-            'strategy_'+$component.collectionName+'schedule_interval'}">
+        <div class="field" data-bind="attr:{id:'strategy_'+$component.collectionName+'schedule_interval'}, 
+            visible: editorScheduleTypeObs() === 'interval' || editorScheduleTypeObs() === 'sequence'">
             <label>Then schedule every</label>
             <ui-duration params="fieldObs: intervalObs, noHours: true"></ui-duration>
         </div>
@@ -54,6 +55,11 @@
             'strategy_'+$component.collectionName+'schedule_expires'}">
             <label data-bind="text: (editorScheduleTypeObs() !== 'once') ? 'Tasks expire after' : 'Task expires after'"></label>
             <ui-duration params="fieldObs: expiresObs"></ui-duration>
+        </div>
+        <div class="field" data-bind="visible: editorScheduleTypeObs() === 'sequence', 
+            attr:{id:'strategy_'+$component.collectionName+'schedule_expires'}">
+            <label>Ending sequence after</label>
+            <ui-duration params="fieldObs: sequencePeriodObs, noHours: true"></ui-duration>
         </div>
     </div>
 
