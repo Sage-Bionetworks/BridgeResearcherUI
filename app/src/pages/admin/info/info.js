@@ -7,19 +7,20 @@ import utils from '../../../utils';
 module.exports = function() {
     var self = this;
 
-    var ios = Binder.objPropDelegates('pushNotificationARNs', 'iPhone OS');
     var android = Binder.objPropDelegates('pushNotificationARNs', 'Android');
+    var ios = Binder.objPropDelegates('pushNotificationARNs', 'iPhone OS');
 
     var binder = new Binder(self)
-        .bind('healthCodeExportEnabled')
-        .bind('emailVerificationEnabled')
-        .bind('externalIdValidationEnabled')
-        .bind('emailSignInEnabled')
-        .bind('externalIdRequiredOnSignup')
-        .bind('strictUploadValidationEnabled')
         .bind('accountLimit', 0, null, parseInt)
+        .bind('androidArn', null, android.fromObject, android.toObject)
+        .bind('emailSignInEnabled')
+        .bind('emailVerificationEnabled')
+        .bind('externalIdRequiredOnSignup')
+        .bind('externalIdValidationEnabled')
+        .bind('healthCodeExportEnabled')
         .bind('iosArn', null, ios.fromObject, ios.toObject)
-        .bind('androidArn', null, android.fromObject, android.toObject);
+        .bind('strictUploadValidationEnabled')
+        .bind('studyIdExcludedInExport');
 
     self.accountLimitLabel = ko.computed(function(){
         return (self.accountLimitObs() == "0") ? "None" : self.accountLimitObs();
