@@ -31,6 +31,14 @@
             </ui-checkbox>
         </div>
         <div class="field">
+            <label>Sign in via email</label>
+            <ui-checkbox params="checkedObs: studyIdExcludedInExportObs">
+                Exclude study ID from columnn names of export data
+            </ui-checkbox>
+            <p style="padding: 0; margin: .5rem 0 0 0; font-style: italic" 
+                class="help-text">Unless this is a legacy study, you should leave this checked.</p>
+        </div>
+        <div class="field">
             <label>Account limit</label>
             <input type="range" min="0" max="200" 
                 data-bind="value: accountLimitObs, valueUpdate: 'input'"/>
