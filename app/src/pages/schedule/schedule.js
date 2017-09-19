@@ -64,6 +64,8 @@ function updateView(self, schedule, fields) {
 function getEditorType(schedule) {
     if (schedule.scheduleType === 'once') {
         return "once";
+    } else if (schedule.scheduleType === 'recurring' && schedule.sequencePeriod) {
+        return "sequence";
     } else if (schedule.scheduleType === 'recurring' && schedule.cronTrigger) {
         return "cron";
     } else if (schedule.scheduleType === 'recurring') {
@@ -72,7 +74,7 @@ function getEditorType(schedule) {
     return "persistent";
 }
 function getScheduleType(editorType) {
-    return (editorType === "cron" || editorType === "interval") ? 'recurring' : editorType;
+    return (editorType === "sequence" || editorType === "cron" || editorType === "interval") ? 'recurring' : editorType;
 }
 
 module.exports = function(params) {
@@ -99,6 +101,7 @@ module.exports = function(params) {
         .obs('times')
         .obs('cronTrigger')
         .obs('expires')
+        .obs('sequencePeriod')
         .obs('activities[]');
 
     if (params.scheduleHolder) {
@@ -113,7 +116,7 @@ module.exports = function(params) {
     function updateEditor(schedule) {
         // TODO: This could be replaced with a binder update probably
         updateView(self, schedule, ['eventId','scheduleType','startsOn','endsOn','delay',
-            'interval','times','cronTrigger','expires']);
+            'interval','times','cronTrigger','expires','sequencePeriod']);
         self.editorScheduleTypeObs(getEditorType(schedule));
         self.activitiesObs(schedule.activities.map(addObserversToActivity));
     }
@@ -128,6 +131,7 @@ module.exports = function(params) {
             times: self.timesObs(),
             cronTrigger: self.cronTriggerObs(),
             expires: self.expiresObs(),
+            sequencePeriod: self.sequencePeriodObs(),
             activities: self.activitiesObs().map(extractActivityFromObservables)
         };
         fn.deleteUnusedProperties(sch);
@@ -138,13 +142,16 @@ module.exports = function(params) {
             case 'once':
                 delete sch.interval;
                 delete sch.cronTrigger;
+                delete sch.sequencePeriod;
                 break;
             case 'interval':
                 delete sch.cronTrigger;
+                delete sch.sequencePeriod;
                 break;
             case 'cron':
                 delete sch.interval;
                 delete sch.times;
+                delete sch.sequencePeriod;
                 break;
             case 'persistent':
                 delete sch.interval;
@@ -152,6 +159,7 @@ module.exports = function(params) {
                 delete sch.times;
                 delete sch.delay;
                 delete sch.expires;
+                delete sch.sequencePeriod;
         }
         return sch;
     }

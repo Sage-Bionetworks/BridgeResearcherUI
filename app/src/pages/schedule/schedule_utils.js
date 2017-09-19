@@ -244,6 +244,9 @@ function formatSchedule(sch) {
     if (sch.expires) {
         phrase += " Expire tasks after " + periodToWords(sch.expires) + ".";
     }
+    if (sch.sequencePeriod) {
+        phrase += " End this sequence of tasks at " + periodToWords(sch.sequencePeriod) + ".";
+    }
     if (sch.startsOn || sch.endsOn) {
         phrase += " Only schedule tasks ";
         if (sch.startsOn) {

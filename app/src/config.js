@@ -3,15 +3,13 @@ export default {
         {value: "local", label: "Local"},
         {value: "develop", label: "Development"},
         {value: "staging", label: "Staging"},
-        {value: "production", label: "Production"},
-        {value: "production_aws", label: "Production (AWS)"}
+        {value: "production", label: "Production"}
     ],
     host: {
         'local': 'http://localhost:9000',
         'develop': 'https://webservices-develop.sagebridge.org',
         'staging': 'https://webservices-staging.sagebridge.org',
-        'production': 'https://webservices.sagebridge.org',
-        'production_aws': 'https://bridgepf-prod.sagebridge.org',
+        'production': 'https://webservices.sagebridge.org'
     },
     toastr: {
         closeButton: true,
