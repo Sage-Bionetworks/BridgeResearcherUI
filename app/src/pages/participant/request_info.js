@@ -52,10 +52,6 @@ module.exports = function(params) {
         self.nameObs(root.isPublicObs() ? part.name : part.externalId);
         self.statusObs(part.status);
     }).then(requestInfo)
-        .then(function(requestInfo) {
-            console.log(requestInfo);
-            return requestInfo;
-        })
         .then(binder.update())
         .catch(utils.failureHandler());
 };

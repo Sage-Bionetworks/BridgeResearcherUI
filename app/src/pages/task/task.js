@@ -83,7 +83,7 @@ module.exports = class Task {
     save(vm, event) {
         utils.startHandler(vm, event);
 
-        var methodName = (this.taskId === "new") ? "createTaskDefinition" : "updateTaskDefinition";
+        var methodNdame = (this.taskId === "new") ? "createTaskDefinition" : "updateTaskDefinition";
         this.task = this.binder.persist(this.task);
 
         serverService[methodName](this.task)

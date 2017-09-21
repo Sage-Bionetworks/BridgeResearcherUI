@@ -24,6 +24,7 @@ module.exports = function(params) {
 
     self.id = params.id;
     self.criteriaObs = params.criteriaObs;
+    self.appVersionsOnly = params.appVersionsOnly || false;
     var binder = new Binder(self)
         .bind('language')
         .bind('allOfGroups[]')

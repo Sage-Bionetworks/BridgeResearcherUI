@@ -1,5 +1,6 @@
 import ko from 'knockout';
 import fn from './functions.js';
+import jsonFormatter from './json_formatter';
 
 function nameInspector(string) {
     var isArray = /\[\]$/.test(string);
@@ -186,5 +187,25 @@ export default class Binder {
     }
     static callObsCallback(value, context) {
         return context.observer.callback();
+    }
+    static fromJson(json, context) {
+        if (json) {
+            try {
+                return jsonFormatter.prettyPrint(json);
+            } catch(e) {
+                console.error(e);
+            }
+        }
+        return '';
+    }
+    static toJson(string, context) {
+        if (string) {
+            try {
+                return JSON.parse(string);
+            } catch(e) {
+                console.error(e);
+            }
+            return null;
+        }
     }
 }
