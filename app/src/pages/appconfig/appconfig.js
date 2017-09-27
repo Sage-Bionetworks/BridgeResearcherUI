@@ -17,11 +17,11 @@ var failureHandler = utils.failureHandler({
 
 function newAppConfig() {
     return {
-        'label':'',
-        'clientData':{"test":true},
-        'criteria':criteriaUtils.newCriteria(),
-        'surveyReferences':[],
-        'schemaReferences':[]
+        'label': '',
+        'clientData': {},
+        'criteria': criteriaUtils.newCriteria(),
+        'surveyReferences': [],
+        'schemaReferences': []
     };
 }
 
@@ -30,16 +30,16 @@ module.exports = function(params) {
 
     var binder = new Binder(self)
         .obs('isNew', params.guid === "new")
-        .obs('guid')
         .obs('title', 'New App Config')
+        .obs('guid')
         .obs('createdOn')
         .obs('modifiedOn')
         .obs('schemaIndex')
         .obs('surveyIndex')
         .bind('version')
         .bind('label')
-        .bind('clientData', null, Binder.fromJson, Binder.toJson)
         .bind('criteria')
+        .bind('clientData', null, Binder.fromJson, Binder.toJson)
         .bind('surveyReferences[]', [], Task.surveyListToView, Task.surveyListToTask)
         .bind('schemaReferences[]', [], Task.schemaListToView, Task.schemaListToTask);
 
@@ -92,7 +92,7 @@ module.exports = function(params) {
     };
     self.openSurveySelector = function(vm, event) {
         self.task = binder.persist(self.appConfig);
-        root.openDialog('select_surveys',{
+        root.openDialog('select_surveys', {
             addSurveys: self.addSurveys.bind(self),
             allowMostRecent: true,
             selected: self.appConfig.surveyReferences
@@ -126,7 +126,6 @@ module.exports = function(params) {
         if (updateClientData()) {
             return;
         }
-
         self.appConfig = binder.persist(self.appConfig);
         utils.startHandler(vm, event);
         saveAppConfig()
