@@ -316,6 +316,10 @@ reg('criteria', {
     viewModel: require('./widgets/criteria/criteria'),
     template: require('./widgets/criteria/criteria.html')
 });
+reg('app_version_criteria', {
+    viewModel: require('./widgets/criteria/criteria'),
+    template: require('./widgets/criteria/app_version_criteria.html')
+});
 reg('participants_pager', {
     viewModel: require('./widgets/participants_pager/participants_pager'),
     template: require('./widgets/participants_pager/participants_pager.html')
@@ -465,6 +469,14 @@ reg('select_schemas', {
 reg('select_surveys', {
     viewModel: require('./dialogs/select_surveys/select_surveys'),
     template: require('./dialogs/select_surveys/select_surveys.html'), synchronous: true
+});
+reg('appconfigs', {
+    viewModel: require('./pages/appconfigs/appconfigs'),
+    template: require('./pages/appconfigs/appconfigs.html')
+});
+reg('appconfig', {
+    viewModel: require('./pages/appconfig/appconfig'),
+    template: require('./pages/appconfig/appconfig.html')
 });
 
 // Attribute editors

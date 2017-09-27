@@ -573,6 +573,21 @@ export default {
     startExport: function() {
         return post(config.export + "/start");
     },
+    getAppConfigs: function() {
+        return get(config.appConfigs);
+    },
+    getAppConfig: function(guid) {
+        return get(config.appConfigs + '/' + guid);
+    },
+    createAppConfig: function(appConfig) {
+        return post(config.appConfigs, appConfig);
+    },
+    updateAppConfig: function(appConfig) {
+        return post(config.appConfigs + '/' + appConfig.guid, appConfig);
+    },
+    deleteAppConfig: function(guid) {
+        return del(config.appConfigs + '/' + guid);
+    },
     addSessionStartListener: function(listener) {
         if (typeof listener !== "function") {
             throw Error("Session listener not a function");

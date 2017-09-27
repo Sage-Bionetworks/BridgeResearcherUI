@@ -286,15 +286,14 @@ function formatScheduleStrategyType(type) {
 }
 function formatCompoundActivity(task) {
     var phrase = [];
-    var schemas = task.schemaList.map(function(schema) {
+    var schemas = (task.schemaList || task.schemaReferences).map(function(schema) {
         return schema.id + ((schema.revision) ? 
             ' <i>(rev. ' + schema.revision + ')</i>' : '');
     }).join(', ');
     if (schemas) {
         phrase.push(schemas);
     }
-    var surveys = task.surveyList.map(function(survey) {
-        console.log(survey.guid, surveyNameMap);
+    var surveys = (task.surveyList || task.surveyReferences).map(function(survey) {
         return surveyNameMap[survey.guid] + ((survey.createdOn) ? 
             ' <i>(pub. ' + fn.formatDateTime(survey.createdOn) + ')</i>' : '');
     }).join(', ');

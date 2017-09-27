@@ -62,5 +62,6 @@ export default {
     topics: '/v3/topics',
     uploadstatuses: '/v3/uploadstatuses',
     users: '/v3/users',
-    verifyEmail: '/v3/studies/self/verifyEmail'
+    verifyEmail: '/v3/studies/self/verifyEmail',
+    appConfigs: '/v3/appconfigs'
 };

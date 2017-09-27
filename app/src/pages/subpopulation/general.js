@@ -36,7 +36,6 @@ module.exports = function(params) {
 
     self.save = function(vm, event) {
         self.subpopulation = binder.persist(self.subpopulation);
-        
         utils.startHandler(vm, event);
         
         saveSubpop()
