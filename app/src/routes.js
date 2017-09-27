@@ -119,6 +119,8 @@ router.on('/shared_modules', routeTo('shared_modules'));
 router.on('/shared_modules/:id', routeTo('shared_module', ID));
 router.on('/shared_modules/:id/versions/:version/editor', routeTo('shared_module', ID_VERSION));
 router.on('/shared_modules/:id/versions/:version/history', routeTo('shared_module_versions', ID_VERSION));
+router.on('/app_configs', routeTo('appconfigs'));
+router.on('/app_configs/:guid', routeTo('appconfig', GUID));
 
 router.configure({
     notfound: routeTo('not_found'),
