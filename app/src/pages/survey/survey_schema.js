@@ -1,6 +1,6 @@
 import Binder from '../../binder';
 import fn from '../../functions';
-import schemaUtils from '../../pages/schema/schema_utils';
+import * as schemaUtils from '../../pages/schema/schema_utils';
 import serverService from '../../services/server_service';
 import tables from '../../tables';
 

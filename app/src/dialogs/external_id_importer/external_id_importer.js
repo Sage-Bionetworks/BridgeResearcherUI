@@ -77,7 +77,7 @@ module.exports = function(params) {
     var supportEmail;
 
     batchDialogUtils.initBatchDialog(self);
-    self.cancelDialog = fn.seq(self.cancel, params.reload, root.closeDialog);
+    self.cancelDialog = fn.seq(self.cancel, params.reloadi  , root.closeDialog);
 
     new Binder(self)
         .obs('import', '')

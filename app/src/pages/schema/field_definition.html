@@ -55,8 +55,11 @@
                 <i class="square add icon"></i>
             </button>
             <button class="ui compact basic mini button" data-content="Delete this field" 
-                data-bind="fadeRemove: { selector: '.field_definition', object: $data, 
-                    'collection': 'fieldDefinitionsObs'}, semantic: 'popup'">
+                data-bind="fadeRemove: {
+                    selector: '.field_definition', 
+                    object: $data, 
+                    'collection':$parents[2].itemsObs
+                }, semantic: 'popup'">
                 <i class="delete icon"></i>
             </button>
         </div>        
