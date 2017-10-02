@@ -3,14 +3,15 @@ import Binder from '../../binder';
 import fn from '../../functions';
 import ko from 'knockout';
 import root from '../../root';
-import schemaUtils from './schema_utils';
+import * as schemaUtils from './schema_utils';
 import serverService from '../../services/server_service';
 import utils from '../../utils';
 
+/*
 var FIELD_SKELETON = {
     name:'', required:false, type:null, unboundedText:false, maxLength:'100', fileExtension:'', mimeType:'',
         multiChoiceAnswerList:[], allowOtherChoices:false
-};
+};*/
 var failureHandler = utils.failureHandler({
     redirectTo: "schemas",
     redirectMsg: "Upload schema not found.",
@@ -42,7 +43,7 @@ module.exports = function(params) {
         .bind('iosMax', '', maxIos.fromObject, maxIos.toObject)
         .bind('androidMin', '', minAnd.fromObject, minAnd.toObject)
         .bind('androidMax', '', maxAnd.fromObject, maxAnd.toObject)
-        .bind('fieldDefinitions[]', [], fieldDefToObs, fieldObsToDef);
+        .bind('fieldDefinitions[]', [], schemaUtils.fieldDefToObs, schemaUtils.fieldObsToDef);
     schemaUtils.initVM(self);
 
     var hideWarning = fn.handleStaticObsUpdate(self.showErrorObs, false);
@@ -57,57 +58,6 @@ module.exports = function(params) {
         fn.handleConditionalObsUpdate(self.titleObs, 'name'),
         fn.handleStaticObsUpdate(self.isNewObs, false)
     );
-
-    function fieldDefToObs(fieldDefinitions) {
-        return fieldDefinitions.map(function(def) {
-            new Binder(def)
-                .bind('name', def.name)
-                .bind('required', def.required)
-                .bind('type', def.type)
-                .bind('unboundedText', def.unboundedText)
-                .bind('maxLength', def.maxLength)
-                .bind('fileExtension', def.fileExtension)
-                .bind('allowOtherChoices', def.allowOtherChoices)
-                .bind('multiChoiceAnswerList[]', [].concat(def.multiChoiceAnswerList || []))
-                .bind('mimeType', def.mimeType);
-            return def;
-        });
-    }
-    function fieldObsToDef(fieldDefinitions) {
-        var fields = [];
-        fieldDefinitions.forEach(function(item) {
-            var type = item.typeObs();
-            if (!type) {
-                return;
-            }
-            var field = {
-                name: item.nameObs(),
-                required: item.requiredObs(),
-                type: type
-            };
-            if (type === "string" || type === "inline_json_blob" || type === "single_choice") {
-                field.unboundedText = item.unboundedTextObs();
-                if (!field.unboundedText) {
-                    field.maxLength = item.maxLengthObs();
-                }
-            } else if (type === "attachment_v2") {
-                field.mimeType = item.mimeTypeObs();
-                var ext = item.fileExtensionObs();
-                if (!/^\./.test(ext)) {
-                    ext = "." + ext;
-                }
-                field.fileExtension = ext;
-            } else if (type === "multi_choice") {
-                field.multiChoiceAnswerList = item.multiChoiceAnswerListObs();
-                field.allowOtherChoices = item.allowOtherChoicesObs();
-            }
-            fields.push(field);
-        });
-        return fields;
-    }
-    function makeNewField() {
-        return fieldDefToObs([Object.assign({}, FIELD_SKELETON)])[0];
-    }    
     function uploadSchema() {
         if (self.revisionObs() != self.lastRevision || self.isNewObs()) {
             return serverService.createUploadSchema(self.schema);
@@ -132,11 +82,11 @@ module.exports = function(params) {
     };
     self.addBelow = function(field, event) {
         var index = self.fieldDefinitionsObs.indexOf(field);
-        var newField = makeNewField();
+        var newField = schemaUtils.makeNewField();
         self.fieldDefinitionsObs.splice(index+1,0,newField);
     };
     self.addFirst = function(vm, event) {
-        var field = makeNewField();
+        var field = schemaUtils.makeNewField();
         self.fieldDefinitionsObs.push(field);
     };
     self.editMultiChoiceAnswerList = function(field, event) {
@@ -154,9 +104,7 @@ module.exports = function(params) {
     function loadSchema() { 
         if (params.schemaId === "new") {
             self.titleObs("New Upload Schema");
-            return Promise.resolve({name:'',schemaId:'',schemaType:'ios_data',revision:null,
-                fieldDefinitions:[Object.assign({}, FIELD_SKELETON)]
-            });
+            return Promise.resolve(schemaUtils.makeNewField());
         } else if (params.revision) {
             return serverService.getUploadSchema(params.schemaId, params.revision);
         } else {

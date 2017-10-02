@@ -108,8 +108,8 @@ module.exports = function(params) {
         self.warnObs(false);
 
         return serverService.getParticipantNewActivities(
-            self.userIdObs(), params.referentType, params.guid, args)
-            .then(function(response) {
+            self.userIdObs(), params.referentType, params.guid, args).then(function(response) {
+                console.log(args);
                 response.items = response.items.map(jsonFormatter.mapClientDataItem);
                 self.itemsObs(response.items);
                 return response;

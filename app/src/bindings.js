@@ -196,6 +196,10 @@ ko.bindingHandlers.submitByButton = {
 };
 
 function findItemsObs(context, collName) {
+    // If the observer is passed in directly, just return that.
+    if (typeof collName !== 'string') {
+        return collName;
+    }
     for (var i = 0; i < context.$parents.length; i++) {
         if (context.$parents[i][collName]) {
             if (context.$parents[i][collName]) {

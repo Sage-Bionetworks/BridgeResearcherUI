@@ -90,9 +90,6 @@
                             <a href="#/reports" class="item" data-bind="active: isActive, visible: isDeveloper() || isResearcher()">
                                 Study Reports
                             </a>
-                            <a href="#/app_configs" class="item" data-bind="active: isActive, visible: isDeveloper()">
-                                App Configs
-                            </a>
                             <a href="#/topics" class="item" data-bind="active: isActive, visible: isDeveloper() || isResearcher()">
                                 Push Notifications
                             </a>
@@ -113,14 +110,28 @@
                             <a href="#/task_identifiers" class="item" data-bind="active: isActive">
                                 Task Identifiers
                             </a>
-                            <a href="#/schemas" class="item" data-bind="active: isActive">
-                                Upload Schemas
-                            </a>
-                            <a href="#/data_export" class="item" data-bind="active: isActive">
-                                Data Export Management
+                            <a href="#/app_configs" class="item" data-bind="active: isActive">
+                                App Configs
                             </a>
                         </div>
                     </div>
+
+                    <div class="item" data-bind="visible: isDeveloper() && !isSharedStudy()">
+                        <i class="upload icon"></i> Upload &amp; Export
+                        <div class="menu">
+                            <a href="#/schemas" class="item" data-bind="active: isActive">
+                                Upload Schemas
+                            </a>
+                            <a href="#/shared_upload_metadata" class="item" data-bind="active: isActive">
+                                Shared Upload Metadata
+                            </a>
+                            <a href="#/export_settings" class="item" data-bind="active: isActive">
+                                Export Settings
+                            </a>
+                        </div>
+                    </div>
+    
+
                     <div class="item" data-bind="visible: isResearcher() && !isDeveloper() && !isSharedStudy()">
                         <i class="server icon"></i> Study Data
                         <div class="menu">

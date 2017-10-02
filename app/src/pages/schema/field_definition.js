@@ -1,9 +1,10 @@
 import Binder from '../../binder';
-import schemaUtils from './schema_utils';
+import * as schemaUtils from './schema_utils';
 
 module.exports = function(params) {
     var self = this;
     var type = params.field.typeObs();
+    console.log(params);
 
     self.field = params.field;
     new Binder(self)
@@ -19,6 +20,7 @@ module.exports = function(params) {
     }
     updateExtraFields(type);
 
+    self.itemsObs = params.itemsObs;
     self.field.typeObs.subscribe(updateExtraFields);
     self.field.unboundedTextObs.subscribe(function(newValue) {
         if (newValue) {
