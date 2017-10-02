@@ -4,7 +4,6 @@ import * as schemaUtils from './schema_utils';
 module.exports = function(params) {
     var self = this;
     var type = params.field.typeObs();
-    console.log(params);
 
     self.field = params.field;
     new Binder(self)

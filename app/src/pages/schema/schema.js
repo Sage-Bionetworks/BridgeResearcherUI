@@ -7,11 +7,6 @@ import * as schemaUtils from './schema_utils';
 import serverService from '../../services/server_service';
 import utils from '../../utils';
 
-/*
-var FIELD_SKELETON = {
-    name:'', required:false, type:null, unboundedText:false, maxLength:'100', fileExtension:'', mimeType:'',
-        multiChoiceAnswerList:[], allowOtherChoices:false
-};*/
 var failureHandler = utils.failureHandler({
     redirectTo: "schemas",
     redirectMsg: "Upload schema not found.",
