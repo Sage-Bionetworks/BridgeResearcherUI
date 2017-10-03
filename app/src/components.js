@@ -123,9 +123,13 @@ reg('schema_versions', {
     viewModel: require('./pages/schema/schema_versions'),
     template: require('./pages/schema/schema_versions.html')
 });
-reg('data_export', {
-    viewModel: require('./pages/data_export/data_export'),
-    template: require('./pages/data_export/data_export.html')
+reg('export_settings', {
+    viewModel: require('./pages/export_settings/export_settings'),
+    template: require('./pages/export_settings/export_settings.html')
+});
+reg('shared_upload_metadata', {
+    viewModel: require('./pages/shared_upload_metadata/shared_upload_metadata'),
+    template: require('./pages/shared_upload_metadata/shared_upload_metadata.html')
 });
 reg('scheduleplans', {
     viewModel: require('./pages/scheduleplans/scheduleplans'),
@@ -156,13 +160,13 @@ reg('participant_activity', {
     template: require('./pages/participant/activity.html')
 });
 
-reg('participant_activities2', {
-    viewModel: require('./pages/participant/activities2'),
-    template: require('./pages/participant/activities2.html')
+reg('participant_newActivities', {
+    viewModel: require('./pages/participant/newActivities'),
+    template: require('./pages/participant/newActivities.html')
 });
-reg('participant_activity2', {
-    viewModel: require('./pages/participant/activity2'),
-    template: require('./pages/participant/activity2.html')
+reg('participant_newActivity', {
+    viewModel: require('./pages/participant/newActivity'),
+    template: require('./pages/participant/newActivity.html')
 });
 reg('participant_clientData', {
     viewModel: require('./pages/participant/client_data'),

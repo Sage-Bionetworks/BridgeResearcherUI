@@ -9,7 +9,7 @@ import serverService from './services/server_service';
 var participantPages = ['participant_general','participant_consents',  'participant_reports',
     'participant_report', 'participant_activities', 'participant_uploads', 
     'participant_upload', 'participant_notifications', 'participant_request_info', 
-    'participant_activity', 'participant_activities2', 'participant_activity2',
+    'participant_activity', 'participant_newActivities', 'participant_newActivity',
     'participant_clientData'];
 
 var pageSets = {
@@ -26,7 +26,9 @@ var pageSets = {
     'reports': ['','dailyUploads','uploads','reports', 'report','signUps'],
     'topics': ['topics', 'topic'],
     'tasks': ['tasks','task'],
-    'shared_modules': ['shared_modules','shared_module','shared_module_versions']
+    'data_export/general': ['data_export_general','data_export_metadata'],
+    'shared_modules': ['shared_modules','shared_module','shared_module_versions'],
+    'app_configs': ['appconfigs', 'appconfig']
 };
 function roleFunc(observer, role) {
     return ko.computed(function() {return observer().indexOf(role) > -1;});

@@ -1,4 +1,10 @@
 import utils from '../../utils';
+import Binder from '../../binder';
+
+var FIELD_SKELETON = {
+    name:'', required:false, type:null, unboundedText:false, maxLength:'100', fileExtension:'', mimeType:'',
+        multiChoiceAnswerList:[], allowOtherChoices:false
+};
 
 const SCHEMA_TYPE_OPTIONS = Object.freeze([
     {value: 'ios_survey', label: 'iOS Survey'},
@@ -48,30 +54,82 @@ var TYPE_LOOKUP = ALL_FIELD_TYPE_OPTIONS.reduce(function(obj, type) {
     return obj;
 }, {});
 
-export default {
-    TYPE_LOOKUP,
-    // refs: schemas.js
-    initSchemasVM: function(vm) {
-        vm.schemaTypeLabel = utils.makeOptionLabelFinder(SCHEMA_TYPE_OPTIONS);
-    },
-    // refs: schema.js, survey_schema.js
-    initVM: function(vm) {
-        vm.schemaTypeOptions = SCHEMA_TYPE_OPTIONS;
-        vm.schemaTypeLabel = utils.makeOptionLabelFinder(SCHEMA_TYPE_OPTIONS);
-        vm.fieldTypeOptions = ALL_FIELD_TYPE_OPTIONS;
-        vm.fieldTypeLabel = utils.makeOptionLabelFinder(ALL_FIELD_TYPE_OPTIONS);
-    },
-    // refs: field_definitions.js
-    initFieldDefinitionVM: function(vm, type) {
-        vm.mimeTypes = MIME_TYPES;
-        var schemaType = TYPE_LOOKUP[type];
-        if (schemaType && schemaType.deprecated) {
-            var options = FIELD_TYPE_OPTIONS.map(function(e) { return e; });
-            options.push(schemaType);
-            vm.fieldTypeOptions = options;
-        } else {
-            vm.fieldTypeOptions = FIELD_TYPE_OPTIONS;
+function initSchemasVM(vm) {
+    vm.schemaTypeLabel = utils.makeOptionLabelFinder(SCHEMA_TYPE_OPTIONS);
+}
+
+function initVM(vm) {
+    vm.schemaTypeOptions = SCHEMA_TYPE_OPTIONS;
+    vm.schemaTypeLabel = utils.makeOptionLabelFinder(SCHEMA_TYPE_OPTIONS);
+    vm.fieldTypeOptions = ALL_FIELD_TYPE_OPTIONS;
+    vm.fieldTypeLabel = utils.makeOptionLabelFinder(ALL_FIELD_TYPE_OPTIONS);
+}
+
+function fieldDefToObs(fieldDefinitions) {
+    return fieldDefinitions.map(function(def) {
+        new Binder(def)
+            .bind('name', def.name)
+            .bind('required', def.required)
+            .bind('type', def.type)
+            .bind('unboundedText', def.unboundedText)
+            .bind('maxLength', def.maxLength)
+            .bind('fileExtension', def.fileExtension)
+            .bind('allowOtherChoices', def.allowOtherChoices)
+            .bind('multiChoiceAnswerList[]', [].concat(def.multiChoiceAnswerList || []))
+            .bind('mimeType', def.mimeType);
+        return def;
+    });
+}
+
+function fieldObsToDef(fieldDefinitions) {
+    var fields = [];
+    fieldDefinitions.forEach(function(item) {
+        var type = item.typeObs();
+        if (!type) {
+            return;
         }
-        vm.fieldTypeLabel = utils.makeOptionLabelFinder(vm.fieldTypeOptions);
+        var field = {
+            name: item.nameObs(),
+            required: item.requiredObs(),
+            type: type
+        };
+        if (type === "string" || type === "inline_json_blob" || type === "single_choice") {
+            field.unboundedText = item.unboundedTextObs();
+            if (!field.unboundedText) {
+                field.maxLength = item.maxLengthObs();
+            }
+        } else if (type === "attachment_v2") {
+            field.mimeType = item.mimeTypeObs();
+            var ext = item.fileExtensionObs();
+            if (!/^\./.test(ext)) {
+                ext = "." + ext;
+            }
+            field.fileExtension = ext;
+        } else if (type === "multi_choice") {
+            field.multiChoiceAnswerList = item.multiChoiceAnswerListObs();
+            field.allowOtherChoices = item.allowOtherChoicesObs();
+        }
+        fields.push(field);
+    });
+    return fields;
+}
+
+function makeNewField() {
+    return fieldDefToObs([Object.assign({}, FIELD_SKELETON)])[0];
+}    
+
+function initFieldDefinitionVM(vm, type) {
+    vm.mimeTypes = MIME_TYPES;
+    var schemaType = TYPE_LOOKUP[type];
+    if (schemaType && schemaType.deprecated) {
+        var options = FIELD_TYPE_OPTIONS.map(function(e) { return e; });
+        options.push(schemaType);
+        vm.fieldTypeOptions = options;
+    } else {
+        vm.fieldTypeOptions = FIELD_TYPE_OPTIONS;
     }
-};
+    vm.fieldTypeLabel = utils.makeOptionLabelFinder(vm.fieldTypeOptions);
+}
+
+export { TYPE_LOOKUP, fieldDefToObs, fieldObsToDef, 
+    makeNewField, initSchemasVM, initVM, initFieldDefinitionVM };

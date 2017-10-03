@@ -56,8 +56,11 @@ module.exports = function() {
     }
     self.openImportDialog = function(vm, event) {
         self.showResultsObs(false);
-        root.openDialog('external_id_importer', {vm: self, showCreateCredentials: true,
-            reload: self.loadingFunc});
+        root.openDialog('external_id_importer', {
+            vm: self, 
+            showCreateCredentials: true,
+            reload: self.loadingFunc.bind(self)
+        });
     };
     self.createFrom = function(data, event) {
         self.showResultsObs(false);
@@ -101,6 +104,7 @@ module.exports = function() {
     serverService.getStudy().then(binder.assign('study'));
     
     self.loadingFunc = function loadPage(params) {
+        params = params || {};
         params.idFilter = self.idFilterObs();
         return serverService.getExternalIds(params)
             .then(binder.update('total','items'))
