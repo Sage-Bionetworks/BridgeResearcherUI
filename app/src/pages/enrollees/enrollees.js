@@ -108,6 +108,7 @@ module.exports = function() {
         params.idFilter = self.idFilterObs();
         return serverService.getExternalIds(params)
             .then(binder.update('total','items'))
+            .then(fn.log("items"))
             .then(msgIfNoRecords)
             .catch(utils.failureHandler());
     };

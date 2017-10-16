@@ -56,7 +56,6 @@
                 <th>Status</th>
                 <th>Schedule Window</th>
                 <th>Execution Time</th>
-                <!--<th></th>-->
                 <th>Client Data</th>
             </tr>
         </thead>
@@ -86,11 +85,6 @@
                     </span>&mdash;<span data-bind="text: $parent.formatDateTime($data.finishedOn)">
                     </span>
                 </td>
-                <!--
-                <td style="text-align:right">
-                    <button class="ui basic compact mini button" data-bind="click: $component.editReportRecord">Edit</button>
-                </td>
-                -->
                 <td>
                     <div data-bind="visible: $data.clientData">
                         <div class="json-expand-control" data-bind="visible: $data.collapsedObs">

@@ -29,7 +29,6 @@ module.exports = function(params) {
         .obs('title', '&#160;')
         .bind('schemaId', params.schemaId)
         .bind('schemaType')
-        .bind('published', false)
         .bind('revision', params.revision ? params.revision : null)
         .bind('name', '')
         .bind('moduleId')
@@ -45,29 +44,29 @@ module.exports = function(params) {
     self.lastRevision = params.revision;
     var updateRevision = fn.seq(
         fn.handleObsUpdate(self.revisionObs, 'revision'),
-        fn.handleObsUpdate(self.publishedObs, 'published'),
         fn.handleObsUpdate(self.moduleIdObs, 'moduleId'),
         fn.handleObsUpdate(self.moduleVersionObs, 'moduleVersion'),
-        fn.handleCopyProps(self.schema, 'version', 'published'),
+        fn.handleCopyProps(self.schema, 'version'),
         fn.handleCopyProps(self, 'revision->lastRevision'),
         fn.handleConditionalObsUpdate(self.titleObs, 'name'),
         fn.handleStaticObsUpdate(self.isNewObs, false)
     );
     function uploadSchema() {
         if (self.revisionObs() != self.lastRevision || self.isNewObs()) {
+            console.log("create");
             return serverService.createUploadSchema(self.schema);
         } else {
+            console.log("update");
             return serverService.updateUploadSchema(self.schema);
         }
     }
 
     self.save = function(vm, event) {
         utils.startHandler(vm, event);
-        // If the schema is published, set flag to false and increment the revision. Will save
-        // or throw an error if that revision exists.
-        if (self.publishedObs()) {
-            self.publishedObs(false);
-            self.revisionObs( parseInt(self.revisionObs())+1);
+        if (self.schema.moduleId) {
+            self.moduleIdObs(null);
+            self.moduleVersionObs(null);
+            self.revisionObs(self.revisionObs()+1);
         }
         self.schema = binder.persist(self.schema);
         uploadSchema()
