@@ -53,10 +53,8 @@ module.exports = function(params) {
     );
     function uploadSchema() {
         if (self.revisionObs() != self.lastRevision || self.isNewObs()) {
-            console.log("create");
             return serverService.createUploadSchema(self.schema);
         } else {
-            console.log("update");
             return serverService.updateUploadSchema(self.schema);
         }
     }
