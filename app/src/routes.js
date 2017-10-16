@@ -109,7 +109,6 @@ router.on('/enrollees/:userId/notifications', routeTo('participant_notifications
 router.on('/enrollees/:userId/reports', routeTo('participant_reports', USERID));
 router.on('/enrollees/:userId/uploads', routeTo('participant_uploads', USERID));
 router.on('/enrollees/:userId/clientData', routeTo('participant_clientData', USERID));
-router.on('/enrollees/:userId', routeTo('participant_general', USERID));
 router.on('/enrollees/:userId/general', routeTo('participant_general', USERID));
 router.on('/enrollees/:userId/requestInfo', routeTo('participant_request_info', USERID));
 router.on('/enrollees/:externalId', redirectToParticipant);
