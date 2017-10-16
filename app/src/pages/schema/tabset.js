@@ -9,8 +9,7 @@ import ko from 'knockout';
 module.exports = function(params) {
     var self = this;
 
-    fn.copyProps(self, params.viewModel, 'isNewObs','schemaIdObs','revisionObs',
-        'publishedObs','moduleIdObs','moduleVersionObs');
+    fn.copyProps(self, params.viewModel, 'isNewObs','schemaIdObs','revisionObs','moduleIdObs','moduleVersionObs');
 
     self.computeds = [];
     self.linkMaker = function(tabName) {

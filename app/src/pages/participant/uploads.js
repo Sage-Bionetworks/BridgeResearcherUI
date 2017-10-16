@@ -137,7 +137,7 @@ module.exports = function(params) {
             }
             return fEnd+" ("+item.completedBy+", "+fn.formatMs(end-start)+")";
         } else if (item.status === 'duplicate') {
-            return "duplicates <span class='upload-id'>"+shortDup+"</span>";
+            return "duplicates <span class='upload-id'>"+item.duplicateUploadId+"</span>";
         }
         return '';
     }
