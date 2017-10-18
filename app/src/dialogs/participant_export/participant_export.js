@@ -5,6 +5,7 @@ import Binder from '../../binder';
 import root from '../../root';
 import saveAs from '../../../lib/filesaver.min.js';
 import serverService from '../../services/server_service';
+import utils from '../../utils';
 
 const PREMSG = "Only exporting accounts that ";
 const FETCH_DELAY = 100;
@@ -59,12 +60,13 @@ CollectParticipantsWorker.prototype = {
         return this.offsetBy;
     },
     performWork: function(promise) {
-        this.offsetBy = this.pageOffsets.shift();
+        this.offsetBy = this.pageOffsets[0];
         return serverService
             .getParticipants(this.offsetBy, PAGE_SIZE, this.emailFilter, this.startTime, this.endTime)
             .then(this._success.bind(this));
     },
     _success: function(response) {
+        this.pageOffsets.shift();
         if (response && response.items) {
             response.items.forEach(function(participant) {
                 if (participant.status !== "unverified") {
@@ -103,12 +105,14 @@ FetchParticipantWorker.prototype = {
         if (!this.hasWork()) {
             return Promise.resolve();
         }
-        this.identifier = this.identifiers.shift();
+        this.identifier = this.identifiers[0];
         return Promise.delay(FETCH_DELAY).then(() => {
-            return serverService.getParticipant(this.identifier).then(this._success.bind(this));
+            return serverService.getParticipant(this.identifier)
+                .then(this._success.bind(this));
         });
     },
     _success: function(response) {
+        this.identifiers.shift();
         if (this._canExport(response)) {
             this.output += "\n"+this._formatOneParticipant(response);
         }
@@ -146,7 +150,9 @@ module.exports = function(params) {
     
     batchDialogUtils.initBatchDialog(self);
     fn.copyProps(self, fn, 'formatDateTime');
-    self.close = fn.seq(self.cancel, root.closeDialog);
+    self.close = fn.seq(self.cancel, function() {
+        serverService.setReauthBehavior(serverService.REAUTH_BEHAVIOR.RELOAD);
+    }, root.closeDialog);
 
     serverService.getStudy().then(function(study) {
         ATTRIBUTES = Object.freeze([].concat(study.userProfileAttributes)); 
@@ -176,6 +182,7 @@ module.exports = function(params) {
 
         var collectWorker = new CollectParticipantsWorker(params);
 
+        serverService.setReauthBehavior(serverService.REAUTH_BEHAVIOR.REAUTH);
         self.run(collectWorker).then(function(identifiers) {
             var fetchWorker = new FetchParticipantWorker(identifiers, self.canContactByEmailObs());
             var totalParticipants = identifiers.length;

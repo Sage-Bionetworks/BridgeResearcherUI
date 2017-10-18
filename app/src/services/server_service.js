@@ -20,7 +20,17 @@ const listeners = new EventEmitter();
 const LOG_CACHE = false;
 const NO_CACHE_PATHS = ['studies/self/emailStatus','/participants','externalIds?'];
 
+// TODO: This suggests that server service should be a proper object with configuration. 
+// We'd use a standard instance, but construct an instance with different behavior for 
+// the export participants dialog. Changing state of singleton just because UI is single-
+// threaded is gross.
+const REAUTH_BEHAVIOR = {
+    RELOAD: 1,
+    REAUTH: 2
+};
+
 var session = null;
+var reauthenticationBehavior = REAUTH_BEHAVIOR.RELOAD;
 
 // jQuery throws up if there's no window, even in unit tests
 if (typeof window !== "undefined") {
@@ -98,8 +108,14 @@ function baseParams(method, url, data) {
 
 function reloadPageWhenSessionLost(response) {
     if (response.status === 401) {
-        storeService.remove(SESSION_KEY);
-        window.location.reload();
+        switch(reauthenticationBehavior) {
+            case REAUTH_BEHAVIOR.RELOAD:
+                storeService.remove(SESSION_KEY);
+                window.location.reload();
+                break;
+            case REAUTH_BEHAVIOR.REAUTH:
+                throw response;
+        }
     }
     return response;
 }
@@ -168,28 +184,44 @@ function cacheParticipantName(response) {
 function esc(string) {
     return encodeURIComponent(string);
 }
-
+function cacheSession(studyName, studyId, env) {
+    return function(sess) {
+        // Initial sign in we capture some information not in the session. 
+        // Thereafer we have to copy it on reauthentication to any newly
+        // acquired session.
+        if (arguments.length) {
+            fn.copyProps(sess, session, 'studyName','studyId','host');
+        } else {
+            sess.studyName = studyName;
+            sess.studyId = studyId;
+            sess.host = config.host[env];
+        }
+        sess.isSupportedUser = isSupportedUser;
+        session = sess;
+        storeService.set(SESSION_KEY, session);
+        listeners.emit(SESSION_STARTED_EVENT_KEY, sess);
+        return sess;
+    };
+}
 export default {
+    REAUTH_BEHAVIOR,
+    setReauthBehavior: function(behavior) {
+        reauthenticationBehavior = behavior;
+    },
     isAuthenticated: function() {
         return (session !== null);
     },
-    signIn: function(studyName, env, data) {
-        return postInt(config.host[env] + config.signIn, data)
-            .then(function(sess) {
-                sess.isSupportedUser = isSupportedUser;
-                if (!sess.isSupportedUser()) {
-                    return Promise.reject(new Error("User does not have required roles to use study manager."));
-                }
-                // in some installations the server environment is "wrong" in that it's not enough 
-                // to determine the host. Set a host property and use that for future requests.
-                sess.studyName = studyName;
-                sess.studyId = data.study;
-                session = sess;
-                session.host = config.host[env];
-                storeService.set(SESSION_KEY, session);
-                listeners.emit(SESSION_STARTED_EVENT_KEY, sess);
-                return sess;
-            });
+    signIn: function(studyName, env, signIn) {
+        return postInt(config.host[env] + config.signIn, signIn)
+            .then(cacheSession(studyName, signIn.study, env));
+    },
+    reauthenticate: function() {
+        if (!session) {
+            console.error("Cannot reauthenticate: session has expired and been removed.");
+        }
+        var reauth = {study: session.studyId, email: session.email, reauthToken: session.reauthToken};
+        return postInt(config.host[session.environment] + config.reauth, reauth)
+            .then(cacheSession());
     },
     getStudyList: function(env) {
         // TODO: why is there a Promise.resolve() here?

@@ -1,4 +1,5 @@
 import Binder from './binder';
+import serverService from './services/server_service';
 
 export default {
     initBatchDialog: function(vm) {
@@ -25,6 +26,13 @@ export default {
         }
         function promiseHandler(worker, isErrorHandler) {
             return function(e) {
+                // Export has taken long enough that session timed out. Reauthenticate and continue.
+                if (e && e.status === 401) {
+                    return serverService.reauthenticate()
+                        .then(function() {
+                            return executer(worker);
+                        });
+                }
                 vm.updateStatus(++vm.progressIndex, vm.steps);
                 if (isErrorHandler) {
                     vm.errorMessagesObs.unshift( worker.currentWorkItem()+": "+errorMessage(e) );

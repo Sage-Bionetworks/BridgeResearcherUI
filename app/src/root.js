@@ -140,7 +140,9 @@ var RootViewModel = function() {
         self.environmentObs(session.environment);
         self.studyIdentifierObs(session.studyId);
         self.rolesObs(session.roles);
-        self.closeDialog();
+        // This interferes with reauthentication behavior when we use it. Not sure if it
+        // is required by any code path at this point to properly close the dialog.
+        // self.closeDialog();
         serverService.getStudy().then(function(study) {
             // Until we can support on server, enumerating the codes is the same as requiring the code at sign up.
             // isPublic = emailVerificationEnabled

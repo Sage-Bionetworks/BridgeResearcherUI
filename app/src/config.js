@@ -48,6 +48,7 @@ export default {
     metadata: '/v3/sharedmodules/metadata',
     participants: '/v3/participants',
     publishedSurveys: '/v3/surveys/published',
+    reauth: '/v3/auth/reauth',
     reports: '/v3/reports',
     requestResetPassword: '/v3/auth/requestResetPassword',
     schemaPlans: '/v3/scheduleplans',
