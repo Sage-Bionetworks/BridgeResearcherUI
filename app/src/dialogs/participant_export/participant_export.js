@@ -1,10 +1,13 @@
-import Promise from 'bluebird';
-import fn from '../../functions';
+import {ServerService} from '../../services/server_service';
 import batchDialogUtils from '../../batch_dialog_utils';
 import Binder from '../../binder';
+import fn from '../../functions';
+import Promise from 'bluebird';
 import root from '../../root';
 import saveAs from '../../../lib/filesaver.min.js';
-import serverService from '../../services/server_service';
+import utils from '../../utils';
+
+var serverService = new ServerService(false);
 
 const PREMSG = "Only exporting accounts that ";
 const FETCH_DELAY = 100;
@@ -35,7 +38,6 @@ function formatConsentRecords(record) {
 }
 
 var CollectParticipantsWorker = function(params) {
-
     fn.copyProps(this, params, 'total', 'emailFilter', 'startTime', 'endTime');
     this.identifiers = [];
     var pages = [];
@@ -59,12 +61,13 @@ CollectParticipantsWorker.prototype = {
         return this.offsetBy;
     },
     performWork: function(promise) {
-        this.offsetBy = this.pageOffsets.shift();
+        this.offsetBy = this.pageOffsets[0];
         return serverService
             .getParticipants(this.offsetBy, PAGE_SIZE, this.emailFilter, this.startTime, this.endTime)
             .then(this._success.bind(this));
     },
     _success: function(response) {
+        this.pageOffsets.shift();
         if (response && response.items) {
             response.items.forEach(function(participant) {
                 if (participant.status !== "unverified") {
@@ -103,12 +106,14 @@ FetchParticipantWorker.prototype = {
         if (!this.hasWork()) {
             return Promise.resolve();
         }
-        this.identifier = this.identifiers.shift();
+        this.identifier = this.identifiers[0];
         return Promise.delay(FETCH_DELAY).then(() => {
-            return serverService.getParticipant(this.identifier).then(this._success.bind(this));
+            return serverService.getParticipant(this.identifier)
+                .then(this._success.bind(this));
         });
     },
     _success: function(response) {
+        this.identifiers.shift();
         if (this._canExport(response)) {
             this.output += "\n"+this._formatOneParticipant(response);
         }

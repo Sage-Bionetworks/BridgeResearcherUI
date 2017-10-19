@@ -1,9 +1,9 @@
-import fn from '../../functions';
+import {serverService} from '../../services/server_service';
 import Binder from '../../binder';
 import BridgeError from '../../bridge_error';
 import config from '../../config';
+import fn from '../../functions';
 import root from '../../root';
-import serverService from '../../services/server_service';
 import storeService from '../../services/store_service';
 import utils from '../../utils';
 
@@ -72,7 +72,7 @@ module.exports = function() {
         storeService.set('studyKey', self.studyObs());
 
         utils.startHandler(self, event);
-        serverService.requestResetPassword(env, model)
+        return serverService.requestResetPassword(env, model)
             .then(openSignInDialog)
             .then(utils.successHandler(self, event, SUCCESS_MSG))
             .catch(utils.failureHandler());

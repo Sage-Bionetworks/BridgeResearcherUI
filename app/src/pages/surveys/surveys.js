@@ -1,8 +1,8 @@
+import {serverService} from '../../services/server_service';
 import fn from '../../functions';
 import ko from 'knockout';
 import Promise from 'bluebird';
 import root from '../../root';
-import serverService from '../../services/server_service';
 import sharedModuleUtils from '../../shared_module_utils';
 import tables from '../../tables';
 import utils from '../../utils';
@@ -96,7 +96,7 @@ module.exports = function() {
     }
     function load() {
         return sharedModuleUtils.loadNameMaps()
-            .then(serverService.getSurveys)
+            .then(serverService.getSurveys.bind(serverService))
             .then(fn.handleSort('items','name'))
             .then(fn.handleForEach('items', addScheduleField))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))

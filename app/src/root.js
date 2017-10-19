@@ -1,9 +1,9 @@
+import {serverService} from './services/server_service';
 import alerts from './widgets/alerts';
 import Binder from './binder';
 import clipboard from './widgets/clipboard/clipboard';
 import config from './config';
 import ko from 'knockout';
-import serverService from './services/server_service';
 
 // Used in navigation to keep a section highlighted as you navigate into it.
 var participantPages = ['participant_general','participant_consents',  'participant_reports',
@@ -140,7 +140,9 @@ var RootViewModel = function() {
         self.environmentObs(session.environment);
         self.studyIdentifierObs(session.studyId);
         self.rolesObs(session.roles);
-        self.closeDialog();
+        // This interferes with reauthentication behavior when we use it. Not sure if it
+        // is required by any code path at this point to properly close the dialog.
+        // self.closeDialog();
         serverService.getStudy().then(function(study) {
             // Until we can support on server, enumerating the codes is the same as requiring the code at sign up.
             // isPublic = emailVerificationEnabled

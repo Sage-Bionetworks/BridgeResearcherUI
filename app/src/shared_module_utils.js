@@ -1,4 +1,4 @@
-import serverService from './services/server_service';
+import {serverService} from './services/server_service';
 
 var sharedModuleNameMap = {};
 var sharedModuleHTMLMap = {};
@@ -33,9 +33,9 @@ function loadNameMaps() {
     } else {
         return serverService.getMetadata("?mostrecent=true&published=true")
             .then(updateSharedModuleNameMap)
-            .then(serverService.getSurveys)
+            .then(serverService.getSurveys.bind(serverService))
             .then(updateSurveyNameMap)
-            .then(serverService.getAllUploadSchemas)
+            .then(serverService.getAllUploadSchemas.bind(serverService))
             .then(updateSchemaNameMap);
     }
 }

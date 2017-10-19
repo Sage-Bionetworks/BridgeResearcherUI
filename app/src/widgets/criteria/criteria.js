@@ -1,6 +1,6 @@
+import {serverService} from '../../services/server_service';
 import Binder from '../../binder';
 import fn from '../../functions';
-import serverService from '../../services/server_service';
 
 function partialRelay(criteriaObs) {
     return function(func) {

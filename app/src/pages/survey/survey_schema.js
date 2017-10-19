@@ -1,7 +1,7 @@
+import {serverService} from '../../services/server_service';
+import * as schemaUtils from '../../pages/schema/schema_utils';
 import Binder from '../../binder';
 import fn from '../../functions';
-import * as schemaUtils from '../../pages/schema/schema_utils';
-import serverService from '../../services/server_service';
 import tables from '../../tables';
 
 module.exports = function(params) {

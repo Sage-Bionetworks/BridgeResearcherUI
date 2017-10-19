@@ -1,7 +1,7 @@
+import {serverService}  from '../../services/server_service';
 import Binder from '../../binder';
 import fn from '../../functions';
 import root from '../../root';
-import serverService  from '../../services/server_service';
 import sharedModuleUtils from '../../shared_module_utils';
 import utils from '../../utils';
 

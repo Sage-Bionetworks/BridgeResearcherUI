@@ -1,9 +1,9 @@
+import {serverService} from '../../services/server_service';
 import Binder from '../../binder';
 import fn from '../../functions';
+import optionsService from '../../services/options_service';
 import root from '../../root';
 import scheduleUtils from '../../pages/schedule/schedule_utils';
-import optionsService from '../../services/options_service';
-import serverService from '../../services/server_service';
 import sharedModuleUtils from '../../shared_module_utils';
 import tables from '../../tables';
 import utils from '../../utils';
@@ -81,7 +81,7 @@ module.exports = function(params) {
     }
 
     sharedModuleUtils.loadNameMaps()
-        .then(serverService.getSchedulePlans)
+        .then(serverService.getSchedulePlans.bind(serverService))
         .then(processPlans)
         .then(sortPlans);
 };

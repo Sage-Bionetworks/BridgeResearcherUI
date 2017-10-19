@@ -1,9 +1,9 @@
+import {serverService} from '../../services/server_service';
 import Binder from '../../binder';
 import fn from '../../functions';
 import optionsService from '../../services/options_service';
 import Promise from 'bluebird';
 import scheduleUtils from '../schedule/schedule_utils';
-import serverService from '../../services/server_service';
 import utils from '../../utils';
 
 var failureHandler = utils.failureHandler({
