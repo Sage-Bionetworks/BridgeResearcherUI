@@ -1,9 +1,9 @@
-import Binder from '../../binder';
+import {serverService} from '../../services/server_service';
 import * as schemaUtils from '../../pages/schema/schema_utils';
-import root from '../../root';
-import serverService from '../../services/server_service';
-import utils from '../../utils';
+import Binder from '../../binder';
 import fn from '../../functions';
+import root from '../../root';
+import utils from '../../utils';
 
 var failureHandler = utils.failureHandler({
     redirectTo: "study",

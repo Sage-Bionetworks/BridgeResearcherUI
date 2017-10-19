@@ -1,8 +1,8 @@
+import {serverService} from '../../services/server_service';
+import {UNARY_EVENTS} from '../../pages/schedule/schedule_utils';
 import Binder from '../../binder';
-import { UNARY_EVENTS } from '../../pages/schedule/schedule_utils';
 import fn from '../../functions';
 import optionsService from '../../services/options_service';
-import serverService from '../../services/server_service';
 import root from '../../root';
 import utils from '../../utils';
 

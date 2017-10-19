@@ -1,7 +1,7 @@
+import {serverService} from '../../services/server_service';
 import Binder from '../../binder';
 import criteriaUtils from '../../criteria_utils';
 import fn from '../../functions';
-import serverService from '../../services/server_service';
 import sharedModuleUtils from '../../shared_module_utils';
 import tables from '../../tables';
 import utils from '../../utils';
@@ -44,7 +44,7 @@ module.exports = function(params) {
 
         serverService.getUploadSchema(item.schemaId, item.revision)
             .then(markSchemaPublished)
-            .then(serverService.updateUploadSchema)
+            .then(serverService.updateUploadSchema.bind(serverService))
             .then(load)
             .then(utils.successHandler(item, event, "Schema published."))
             .catch(utils.failureHandler());

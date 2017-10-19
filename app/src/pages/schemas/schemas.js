@@ -1,8 +1,8 @@
+import {serverService} from '../../services/server_service';
+import * as schemaUtils from '../schema/schema_utils';
 import criteriaUtils from '../../criteria_utils';
 import fn from '../../functions';
 import root from '../../root';
-import * as schemaUtils from '../schema/schema_utils';
-import serverService from '../../services/server_service';
 import sharedModuleUtils from '../../shared_module_utils';
 import tables from '../../tables';
 import utils from '../../utils';
@@ -49,7 +49,7 @@ module.exports = function() {
 
     function load() {
         return sharedModuleUtils.loadNameMaps()
-            .then(serverService.getAllUploadSchemas)
+            .then(serverService.getAllUploadSchemas.bind(serverService))
             .then(fn.handleSort('items', 'name'))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))
             .catch(utils.failureHandler());
