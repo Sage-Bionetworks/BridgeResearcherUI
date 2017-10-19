@@ -27,3 +27,5 @@ Continuously run tests
 Build a release
 
     npm run release
+
+Trival change.
