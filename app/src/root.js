@@ -1,9 +1,9 @@
+import {serverService} from './services/server_service';
 import alerts from './widgets/alerts';
 import Binder from './binder';
 import clipboard from './widgets/clipboard/clipboard';
 import config from './config';
 import ko from 'knockout';
-import serverService from './services/server_service';
 
 // Used in navigation to keep a section highlighted as you navigate into it.
 var participantPages = ['participant_general','participant_consents',  'participant_reports',

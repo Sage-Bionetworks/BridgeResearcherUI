@@ -1,7 +1,7 @@
-import fn from '../../functions';
+import {serverService}  from '../../services/server_service';
 import Binder from '../../binder';
 import BridgeError from '../../bridge_error';
-import serverService  from '../../services/server_service';
+import fn from '../../functions';
 import utils from '../../utils';
 
 module.exports = class AddReport {

@@ -1,9 +1,9 @@
+import {serverService} from '../../services/server_service';
 import Binder from '../../binder';
 import fn from '../../functions';
 import ko from 'knockout';
 import Promise from 'bluebird';
 import root from '../../root';
-import serverService from '../../services/server_service';
 import utils from '../../utils';
 
 module.exports = function(params) {
@@ -79,7 +79,7 @@ module.exports = function(params) {
         updateSpecsFromObservers();
         utils.startHandler(vm, event);
 
-        Promise.each(specs, fn.handlePromise(serverService.createUploadSchema))
+        Promise.each(specs, fn.handlePromise(serverService.createUploadSchema.bind(serverService)))
             .then(params.closeCopySchemasDialog)
             .then(utils.successHandler(vm, event))
             .catch(utils.failureHandler());

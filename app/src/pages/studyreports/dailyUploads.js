@@ -1,6 +1,6 @@
+import {serverService} from '../../services/server_service';
 import fn from '../../functions';
 import ko from 'knockout';
-import serverService from '../../services/server_service';
 import utils from '../../utils';
 
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];

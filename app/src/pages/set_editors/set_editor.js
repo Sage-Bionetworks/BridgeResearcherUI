@@ -1,8 +1,8 @@
+import {serverService} from '../../services/server_service';
 import Binder from '../../binder';
 import BridgeError from '../../bridge_error';
 import fn from '../../functions';
 import root from '../../root';
-import serverService from '../../services/server_service';
 import utils from '../../utils';
 
 module.exports = function(propertyName) {
@@ -59,7 +59,7 @@ module.exports = function(propertyName) {
             utils.startHandler(self, event);
             self.study[propertyName] = array;
             serverService.saveStudy(self.study)
-                .then(serverService.getStudy)
+                .then(serverService.getStudy.bind(serverService))
                 .then(updateTaskIdentifiers)
                 .then(fn.handleStaticObsUpdate(self.noChangesObs, true))
                 .then(utils.successHandler(self, event, "Values saved."))

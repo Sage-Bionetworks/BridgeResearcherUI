@@ -1,8 +1,8 @@
+import {serverService} from '../../services/server_service';
 import Binder from '../../binder';
 import fn from '../../functions';
 import root from '../../root';
 import scheduleUtils from '../../pages/schedule/schedule_utils';
-import serverService from '../../services/server_service';
 import tables from '../../tables';
 import utils from '../../utils';
 
