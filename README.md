@@ -29,5 +29,3 @@ Build a release
     npm run release
 
 simple change to force commit
-
-..
