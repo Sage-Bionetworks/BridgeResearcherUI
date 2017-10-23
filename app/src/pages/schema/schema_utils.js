@@ -15,6 +15,7 @@ const SCHEMA_TYPE_OPTIONS = Object.freeze([
 // automatically when surveys are published. They aren't in the UI for creating new data schemas.
 var ALL_FIELD_TYPE_OPTIONS = Object.freeze([
     {label: "Attachment", value: "attachment_v2", deprecated:false, extra_fields: 'attachment'},
+    {label: "Large Text Attachment", value: "large_text_attachment", deprecated:false, extra_fields: 'none'},
     {label: "Boolean", value: "boolean", deprecated:false, extra_fields: 'none'},
     {label: "Date (no time of day)", value: "calendar_date", deprecated:false, extra_fields: 'none'},
     {label: "Date & Time/Timestamp", value: "timestamp", deprecated:false, extra_fields: 'none'},
