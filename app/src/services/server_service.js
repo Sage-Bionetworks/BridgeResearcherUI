@@ -23,6 +23,38 @@ var session = null;
 var cache = new Cache();
 var listeners = new EventEmitter();
 
+function esc(string) {
+    return encodeURIComponent(string);
+}
+function postInt(url, data) {
+    if (!data) {
+        data = "{}";
+    } else if (typeof data !== 'string') {
+        data = JSON.stringify(data);
+    }
+    return $.ajax(baseParams('POST', url, data));
+}
+function getInt(url) {
+    return $.ajax(baseParams('GET', url));
+}
+function deleteInt(url) {
+    return $.ajax(baseParams('DELETE', url));
+}
+function baseParams(method, url, data) {
+    var headers = {'Content-Type': 'application/json'};
+    if (session && session.sessionToken) {
+        headers['Bridge-Session'] = session.sessionToken;
+    }
+    return Object.assign((data) ? {data:data} : {}, {
+        method: method,
+        url: url,
+        headers: headers, 
+        type: "application/json", 
+        dataType: "json", 
+        timeout: 10000
+    });
+}
+
 export class ServerService {
     constructor(reloadNoAuth = true) {
         this.reloadNoAuth = reloadNoAuth;
@@ -34,34 +66,6 @@ export class ServerService {
                 session = null;
                 listeners.emit(SESSION_ENDED_EVENT_KEY);
             }
-        });
-    }
-    postInt(url, data) {
-        if (!data) {
-            data = "{}";
-        } else if (typeof data !== 'string') {
-            data = JSON.stringify(data);
-        }
-        return $.ajax(this.baseParams('POST', url, data));
-    }
-    getInt(url) {
-        return $.ajax(this.baseParams('GET', url));
-    }
-    deleteInt(url) {
-        return $.ajax(this.baseParams('DELETE', url));
-    }
-    baseParams(method, url, data) {
-        var headers = {'Content-Type': 'application/json'};
-        if (session && session.sessionToken) {
-            headers['Bridge-Session'] = session.sessionToken;
-        }
-        return Object.assign((data) ? {data:data} : {}, {
-            method: method,
-            url: url,
-            headers: headers, 
-            type: "application/json", 
-            dataType: "json", 
-            timeout: 10000
         });
     }
     reloadPageWhenSessionLost(response) {
@@ -89,7 +93,7 @@ export class ServerService {
             return Promise.resolve(cache.get(path));
         } else {
             return this.makeSessionWaitingPromise("GET " + path, () => {
-                return this.getInt(session.host + path).then((response) => {
+                return getInt(session.host + path).then((response) => {
                     cache.set(path, response);
                     return response;
                 });
@@ -99,27 +103,14 @@ export class ServerService {
     post(path, body) {
         cache.clear(path);
         return this.makeSessionWaitingPromise("POST " + path, () => {
-            return this.postInt(session.host + path, body);
+            return postInt(session.host + path, body);
         });
     }
     del(path) {
         cache.clear(path);
         return this.makeSessionWaitingPromise("DEL " + path, () => {
-            return this.deleteInt(session.host + path);
+            return deleteInt(session.host + path);
         });
-    }
-    /**
-     * If we ever get back a 401, the UI isn't in sync with reality, sign the
-     * user out. So this is called from error handler, as well as being available
-     * from serverService.
-     * @returns {Promise}
-     */
-    signOut() {
-        this.postInt(session.host + config.signOut);
-        cache.reset();
-        session = null;
-        storeService.remove(SESSION_KEY);
-        listeners.emit(SESSION_ENDED_EVENT_KEY);
     }
     isSupportedUser() {
         return this.roles.some(function(role) {
@@ -136,9 +127,6 @@ export class ServerService {
             });
         }
         return response;
-    }
-    esc(string) {
-        return encodeURIComponent(string);
     }
     cacheSession(studyName, studyId, env) {
         // Initial sign in we capture some information not in the session. Thereafer we have 
@@ -163,8 +151,15 @@ export class ServerService {
         return (session !== null);
     }
     signIn(studyName, env, signIn) {
-        return this.postInt(config.host[env] + config.signIn, signIn)
+        return postInt(config.host[env] + config.signIn, signIn)
             .then(this.cacheSession(studyName, signIn.study, env));
+    }
+    signOut() {
+        postInt(session.host + config.signOut);
+        cache.reset();
+        session = null;
+        storeService.remove(SESSION_KEY);
+        listeners.emit(SESSION_ENDED_EVENT_KEY);
     }
     reauthenticate() {
         if (!session) {
@@ -172,15 +167,15 @@ export class ServerService {
         }
         var reauth = {study: session.studyId, email: session.email, 
             reauthToken: session.reauthToken};
-        return this.postInt(config.host[session.environment] + config.reauth, reauth)
+        return postInt(config.host[session.environment] + config.reauth, reauth)
             .then(this.cacheSession());
     }
     getStudyList(env) {
-        return this.getInt(config.host[env] + config.getStudyList)
+        return getInt(config.host[env] + config.getStudyList)
             .then(fn.handleSort('items', 'name'));
     }
     requestResetPassword(env, data) {
-        return this.postInt(config.host[env] + config.requestResetPassword, data);
+        return postInt(config.host[env] + config.requestResetPassword, data);
     }
     getStudy() {
         return this.gethttp(config.getCurrentStudy);
@@ -278,7 +273,7 @@ export class ServerService {
         });
     }
     updateUploadSchema(schema) {
-        var path = config.schemasV4+"/"+this.esc(schema.schemaId)+"/revisions/"+this.esc(schema.revision);
+        var path = config.schemasV4+"/"+esc(schema.schemaId)+"/revisions/"+esc(schema.revision);
         return this.post(path, schema).then(function(response) {
             schema.version = response.version;
             return response;
@@ -343,7 +338,7 @@ export class ServerService {
         return this.gethttp(config.cache);
     }
     deleteCacheKey(cacheKey) {
-        return this.del(config.cache+"/"+this.esc(cacheKey));
+        return this.del(config.cache+"/"+esc(cacheKey));
     }
     getParticipants(offsetBy, pageSize, emailFilter, startTime, endTime) {
         var queryString = fn.queryString({
@@ -501,13 +496,13 @@ export class ServerService {
         return this.post(config.compoundactivitydefinitions, task);
     }
     getTaskDefinition(taskId) {
-        return this.gethttp(config.compoundactivitydefinitions + "/" + this.esc(taskId));
+        return this.gethttp(config.compoundactivitydefinitions + "/" + esc(taskId));
     }
     updateTaskDefinition(task) {
-        return this.post(config.compoundactivitydefinitions + "/" + this.esc(task.taskId), task);
+        return this.post(config.compoundactivitydefinitions + "/" + esc(task.taskId), task);
     }
     deleteTaskDefinition(taskId) {
-        return this.del(config.compoundactivitydefinitions + "/" + this.esc(taskId));
+        return this.del(config.compoundactivitydefinitions + "/" + esc(taskId));
     }
     getMetadata(searchString, modType) {
         searchString = searchString || "";
@@ -525,28 +520,28 @@ export class ServerService {
         return this.post(config.metadata, metadata);
     }
     getMetadataLatestVersion(id) {
-        return this.gethttp(config.metadata + '/' + this.esc(id));
+        return this.gethttp(config.metadata + '/' + esc(id));
     }
     getMetadataVersion(id, version) {
-        return this.gethttp(config.metadata + '/' + this.esc(id) + '/versions/' + this.esc(version));
+        return this.gethttp(config.metadata + '/' + esc(id) + '/versions/' + esc(version));
     }
     getMetadataAllVersions(id) {
         // id, mostrecent: "true", published: "false", where: null, tags: null
-        return this.gethttp(config.metadata+'/'+this.esc(id)+'/versions?mostrecent=false');
+        return this.gethttp(config.metadata+'/'+esc(id)+'/versions?mostrecent=false');
     }
     updateMetadata(metadata) {
-        return this.post(config.metadata+'/'+this.esc(metadata.id)+'/versions/'+this.esc(metadata.version), metadata);
+        return this.post(config.metadata+'/'+esc(metadata.id)+'/versions/'+esc(metadata.version), metadata);
     }
     deleteMetadata(id) {
-        return this.del(config.metadata+'/'+this.esc(id)+'/versions');
+        return this.del(config.metadata+'/'+esc(id)+'/versions');
     }
     deleteMetadataVersion(id, version) {
-        return this.del(config.metadata+'/'+this.esc(id)+'/versions/'+this.esc(version));
+        return this.del(config.metadata+'/'+esc(id)+'/versions/'+esc(version));
     }
     importMetadata(id, version) {
         var url = (typeof version === "number") ?
-            (config.sharedmodules+'/'+this.esc(id)+'/versions/'+this.esc(version)+'/import') :
-            (config.sharedmodules+'/'+this.esc(id)+'/import');
+            (config.sharedmodules+'/'+esc(id)+'/versions/'+esc(version)+'/import') :
+            (config.sharedmodules+'/'+esc(id)+'/import');
         return this.post(url);
     }
     startExport() {
