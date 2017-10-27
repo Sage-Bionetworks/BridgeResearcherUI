@@ -45,29 +45,64 @@
                         </div>
                     </div>
                 </div>
+                <div class="grouped fields">
+                    <label>Upload Validation Strictness</label>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input id="uvs1" type="radio" name="uploadValidationStrictness" value="warning" checked=""  data-bind="checked: uploadValidationStrictnessObs" tabindex="0" class="hidden">
+                            <label for="uvs1">
+                                None
+                            </label>
+                            <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
+                                No error reporting (the default).
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input id="uvs2" type="radio" name="uploadValidationStrictness" value="report" tabindex="0" data-bind="checked: uploadValidationStrictnessObs" class="hidden">
+                            <label for="uvs2">Report</label>
+                            <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
+                                Allow the upload, but capture an error message and export it along with your data to Synapse.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input id="uvs3" type="radio" name="uploadValidationStrictness" value="strict" tabindex="0" data-bind="checked: uploadValidationStrictnessObs" class="hidden">
+                            <label for="uvs3">Strict</label>
+                            <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
+                                Return an error response and do not complete upload if validation fails. 
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="field" data-bind="visible: isDeveloper">
-                    <label>Users custom export schedule</label>
-                    <ui-checkbox params="checkedObs: usesCustomExportScheduleObs">
-                        This study has a custom export schedule set up for it
-                    </ui-checkbox>
-                    <br>
-                    <ui-checkbox params="checkedObs: disableExportObs">
-                        Disable Export
-                    </ui-checkbox>
+                    <label>Users Custom Export Schedule</label>
+                    <div style="margin-bottom: 5px">
+                        <ui-checkbox params="checkedObs: usesCustomExportScheduleObs">
+                            This study has a custom export schedule set up for it
+                        </ui-checkbox>
+                    </div>
+                    <div>
+                        <ui-checkbox params="checkedObs: disableExportObs">
+                            Disable Export
+                        </ui-checkbox>
+                    </div>
                 </div>
             </form>
         </div>
         <div class="six wide column">
             <div class="ui message">
-                <p>Research data is exported to Synapse, a portal for researchers to manage data, collaborate with one another, 
-                    and perform data analysis. </p>
+                <p>Research data is exported to Synapse, a portal for researchers to manage data, collaborate with one 
+                    another, and perform data analysis. </p>
                     
-                <p>Use the <em>Link to Synapse</em> button to create a project and access team. Or if created manually, you 
-                    can enter these IDs here. They are necessary for the export to be successful. </p>
-                    
-                <p>Links lead to projects 
-                    in Synapse where this study's data is archived (Synapse credentials are separate from Bridge credentials 
-                    so you will need a Synapse account to access). </p>
+                <p>Links lead to projects in Synapse where this study's data is archived (Synapse credentials are separate 
+                    from Bridge credentials so you will need a Synapse account to access). </p>
+
+                <p>You can also trigger manual exports, change the frequency of your study's production export schedule, 
+                    and change how the reporting of errors are handled. 
+                </p>
             </div>
         </div>
     </div>
