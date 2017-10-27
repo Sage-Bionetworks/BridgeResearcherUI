@@ -13,7 +13,7 @@ const EXPORT_MSG = "Unexported study data is being exported to Synapse.\n" +
 function exportingMsg() {
     alerts.notification("Starting Data Export", EXPORT_MSG);
 }
-    
+
 module.exports = function() {
     var self = this;
 
@@ -21,6 +21,7 @@ module.exports = function() {
         .bind('synapseDataAccessTeamId')
         .bind('synapseProjectId')
         .bind('usesCustomExportSchedule')
+        .bind('uploadValidationStrictness', 'warning')
         .bind('disableExport');
 
     fn.copyProps(self, root, 'isPublicObs', 'isDeveloper', 'isResearcherOnly');
