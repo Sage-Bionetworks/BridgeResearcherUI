@@ -51,10 +51,10 @@
                         <div class="ui radio checkbox">
                             <input id="uvs1" type="radio" name="uploadValidationStrictness" value="warning" checked=""  data-bind="checked: uploadValidationStrictnessObs" tabindex="0" class="hidden">
                             <label for="uvs1">
-                                Warning
+                                None
                             </label>
                             <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
-                                The default setting, which is to log a warning into the Bridge Server logs.
+                                No error reporting (the default).
                             </div>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                             <input id="uvs2" type="radio" name="uploadValidationStrictness" value="report" tabindex="0" data-bind="checked: uploadValidationStrictnessObs" class="hidden">
                             <label for="uvs2">Report</label>
                             <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
-                                    In addition to logging a warning, this writes a validation message back into the health data record and exports that message to Synapse.
+                                Allow the upload, but capture an error message and export it along with your data to Synapse.
                             </p>
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                             <input id="uvs3" type="radio" name="uploadValidationStrictness" value="strict" tabindex="0" data-bind="checked: uploadValidationStrictnessObs" class="hidden">
                             <label for="uvs3">Strict</label>
                             <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
-                                Returns an error response if validation fails.
+                                Return an error response and do not complete upload if validation fails. 
                             </div>
                         </div>
                     </div>
