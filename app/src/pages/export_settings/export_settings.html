@@ -49,30 +49,31 @@
                     <label>Upload Validation Strictness</label>
                     <div class="field">
                         <div class="ui radio checkbox">
-                            <input id="uvs1" type="radio" name="uploadValidationStrictness" value="warning" checked=""  data-bind="checked: uploadValidationStrictnessObs" tabindex="0" class="hidden">
-                            <label for="uvs1">
-                                None
-                            </label>
+                            <input id="uvs3" type="radio" name="uploadValidationStrictness" class="hidden" 
+                                value="strict" data-bind="checked: uploadValidationStrictnessObs">
+                            <label for="uvs3">Strict</label>
                             <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
-                                No error reporting (the default).
+                                Return an error response and do not complete upload if validation fails. 
                             </div>
                         </div>
                     </div>
                     <div class="field">
                         <div class="ui radio checkbox">
-                            <input id="uvs2" type="radio" name="uploadValidationStrictness" value="report" tabindex="0" data-bind="checked: uploadValidationStrictnessObs" class="hidden">
+                            <input id="uvs2" type="radio" name="uploadValidationStrictness" class="hidden" 
+                                value="report" data-bind="checked: uploadValidationStrictnessObs">
                             <label for="uvs2">Report</label>
                             <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
-                                Allow the upload, but capture an error message and export it along with your data to Synapse.
+                                Allow the upload, but capture an error message and export it to Synapse with your data.
                             </p>
                         </div>
                     </div>
                     <div class="field">
                         <div class="ui radio checkbox">
-                            <input id="uvs3" type="radio" name="uploadValidationStrictness" value="strict" tabindex="0" data-bind="checked: uploadValidationStrictnessObs" class="hidden">
-                            <label for="uvs3">Strict</label>
+                            <input id="uvs1" type="radio" name="uploadValidationStrictness" class="hidden" 
+                                value="warning" data-bind="checked: uploadValidationStrictnessObs">
+                            <label for="uvs1">None</label>
                             <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
-                                Return an error response and do not complete upload if validation fails. 
+                                No error reporting.
                             </div>
                         </div>
                     </div>

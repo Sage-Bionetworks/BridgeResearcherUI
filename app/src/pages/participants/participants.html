@@ -25,7 +25,7 @@
                 <th width="10" data-bind="visible: isAdmin">
                     <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
                 </th>
-                <th>Email</th>
+                <th>Email/Phone</th>
                 <th>Name</th>
                 <th style="white-space: nowrap">Created On</th>
                 <th></th>
@@ -43,6 +43,7 @@
                 </td>
                 <td>
                     <a data-bind="href: '#/participants/'+$data.id+'/general', text: $data.email"></a>
+                    <a data-bind="href: '#/participants/'+$data.id+'/general', text: $data.phone"></a>
                 </td>
                 <td data-bind="text: $component.formatName($data)"></td>
                 <td style="white-space: nowrap" data-bind="text: $component.formatDateTime($data.createdOn)"></td>
