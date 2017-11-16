@@ -5,7 +5,7 @@ import root from '../../root';
 import utils from '../../utils';
 
 function appleModelToObs(array, context) {
-    return array.map(function(obj) {
+    return (array || []).map(function(obj) {
         return {
             appIdObs: ko.observable(obj.appID),
             pathsObs: ko.observableArray(obj.paths)
@@ -21,7 +21,7 @@ function appleObsToModel(array) {
     });
 }
 function androidModelToObs(array, context) {
-    return array.map(function(obj) {
+    return (array || []).map(function(obj) {
         return {
             namespaceObs: ko.observable(obj.namespace),
             packageNameObs: ko.observable(obj.package_name),
