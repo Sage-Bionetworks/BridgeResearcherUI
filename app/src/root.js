@@ -17,18 +17,19 @@ var pageSets = {
     'surveys': ['surveys','survey','survey_versions', "survey_schema"],
     'schemas': ['schemas','schema','schema_versions'],
     'scheduleplans': ['scheduleplans','scheduleplan'],
-    'email_templates': ['verify_email', 'reset_password', 'email_signin', 'account_exists'],
+    'email_templates/verify_email': ['verify_email', 'reset_password', 'email_signin', 'account_exists'],
     'subpopulations': ['subpopulations', 'subpopulation', 'subpopulation_editor', 'subpopulation_history', 'subpopulation_download'],
     'participants': ['participants'].concat(participantPages),
     'enrollees': ['enrollees'].concat(participantPages),
     'admin/info': ['admin_info'],
     'admin/cache': ['admin_cache'],
-    'reports': ['','dailyUploads','uploads','reports', 'report','signUps'],
+    'reports/uploads': ['','dailyUploads','uploads','reports', 'report','signUps'],
     'topics': ['topics', 'topic'],
     'tasks': ['tasks','task'],
     'data_export/general': ['data_export_general','data_export_metadata'],
     'shared_modules': ['shared_modules','shared_module','shared_module_versions'],
-    'app_configs': ['appconfigs', 'appconfig']
+    'app_configs': ['appconfigs', 'appconfig'],
+    'app_links': ['app_links']
 };
 function roleFunc(observer, role) {
     return ko.computed(function() {return observer().indexOf(role) > -1;});

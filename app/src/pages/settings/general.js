@@ -32,6 +32,7 @@ module.exports = function() {
         .obs('minIos')
         .obs('minAndroid')
         .bind('name')
+        .bind('shortName')
         .bind('sponsorName')
         .bind('minAgeOfConsent', null, zeroToMax, maxToZero);
     
