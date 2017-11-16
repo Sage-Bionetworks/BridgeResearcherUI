@@ -189,7 +189,7 @@ function cacheSession(studyName, studyId, env) {
         // Initial sign in we capture some information not in the session. 
         // Thereafer we have to copy it on reauthentication to any newly
         // acquired session.
-        if (arguments.length) {
+        if (session && arguments.length) {
             fn.copyProps(sess, session, 'studyName','studyId','host');
         } else {
             sess.studyName = studyName;

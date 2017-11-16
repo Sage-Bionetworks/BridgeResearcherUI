@@ -39,6 +39,10 @@ reg('email', {
     viewModel: require('./pages/settings/email'),
     template: require('./pages/settings/email.html')
 });
+reg('app_links', {
+    viewModel: require('./pages/settings/applinks'),
+    template: require('./pages/settings/applinks.html')
+});
 reg('password_policy', {
     viewModel: require('./pages/settings/password_policy'),
     template: require('./pages/settings/password_policy.html')
@@ -473,6 +477,14 @@ reg('select_schemas', {
 reg('select_surveys', {
     viewModel: require('./dialogs/select_surveys/select_surveys'),
     template: require('./dialogs/select_surveys/select_surveys.html'), synchronous: true
+});
+reg('edit_apple_link', {
+    viewModel: require('./dialogs/edit_apple_link/edit_apple_link'),
+    template: require('./dialogs/edit_apple_link/edit_apple_link.html'), synchronous: true
+});
+reg('edit_android_link', {
+    viewModel: require('./dialogs/edit_android_link/edit_android_link'),
+    template: require('./dialogs/edit_android_link/edit_android_link.html'), synchronous: true
 });
 reg('appconfigs', {
     viewModel: require('./pages/appconfigs/appconfigs'),

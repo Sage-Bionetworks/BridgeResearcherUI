@@ -70,7 +70,7 @@
                             <a href="#/settings/general" class="item" data-bind="active: isActive, visible: isDeveloper()">
                                 Settings
                             </a>
-                            <a href="#/email_templates" class="item" data-bind="active: isActive, visible: isDeveloper()">
+                            <a href="#/email_templates/verify_email" class="item" data-bind="active: isActive, visible: isDeveloper()">
                                 Email Templates
                             </a>
                             <a href="#/subpopulations" class="item" data-bind="active: isActive, visible: isDeveloper()">
@@ -87,7 +87,7 @@
                                 visible: isPublicObs() && codesEnumeratedObs() && isDeveloper()">
                                 External IDs
                             </a>
-                            <a href="#/reports" class="item" data-bind="active: isActive, visible: isDeveloper() || isResearcher()">
+                            <a href="#/reports/uploads" class="item" data-bind="active: isActive, visible: isDeveloper() || isResearcher()">
                                 Study Reports
                             </a>
                             <a href="#/topics" class="item" data-bind="active: isActive, visible: isDeveloper() || isResearcher()">
@@ -110,12 +110,19 @@
                             <a href="#/task_identifiers" class="item" data-bind="active: isActive">
                                 Task Identifiers
                             </a>
+                        </div>
+                    </div>
+                    <div class="item" data-bind="visible: isDeveloper()">
+                        <i class="tablet icon"></i> App Support
+                        <div class="menu">
                             <a href="#/app_configs" class="item" data-bind="active: isActive">
                                 App Configs
                             </a>
+                            <a href="#/app_links" class="item"  data-bind="active: isActive">
+                                App &amp; Universal Links
+                            </a>
                         </div>
                     </div>
-
                     <div class="item" data-bind="visible: isDeveloper() && !isSharedStudy()">
                         <i class="upload icon"></i> Upload &amp; Export
                         <div class="menu">
@@ -130,8 +137,6 @@
                             </a>
                         </div>
                     </div>
-    
-
                     <div class="item" data-bind="visible: isResearcher() && !isDeveloper() && !isSharedStudy()">
                         <i class="server icon"></i> Study Data
                         <div class="menu">
