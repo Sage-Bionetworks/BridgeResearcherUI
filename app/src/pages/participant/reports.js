@@ -1,7 +1,7 @@
+import {serverService} from '../../services/server_service';
 import Binder from '../../binder';
 import fn from '../../functions';
 import root from '../../root';
-import serverService from '../../services/server_service';
 import tables from '../../tables';
 import utils from '../../utils';
 
@@ -53,7 +53,7 @@ module.exports = function(params) {
     }
     function load() {
         serverService.getParticipant(params.userId)
-            .then(serverService.getParticipantReports)
+            .then(serverService.getParticipantReports.bind(serverService))
             .then(fn.handleSort('items', 'identifier'))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))
             .catch(failureHandler);

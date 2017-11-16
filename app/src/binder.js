@@ -188,6 +188,12 @@ export default class Binder {
     static callObsCallback(value, context) {
         return context.observer.callback();
     }
+    static formatPhone(value, context) {
+        return (value) ? value.number : null;
+    }
+    static persistPhone(value, context) {
+        return value;
+    }
     static fromJson(json, context) {
         if (json) {
             try {

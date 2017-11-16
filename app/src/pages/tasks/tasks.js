@@ -1,7 +1,7 @@
+import {serverService} from '../../services/server_service';
 import fn from '../../functions';
 import Promise from 'bluebird';
 import scheduleUtils from '../schedule/schedule_utils';
-import serverService from '../../services/server_service';
 import sharedModuleUtils from '../../shared_module_utils';
 import tables from '../../tables';
 import utils from '../../utils';
@@ -37,7 +37,7 @@ module.exports = class Tasks {
     load() {
         sharedModuleUtils.loadNameMaps()
             .then(scheduleUtils.loadOptions)
-            .then(serverService.getTaskDefinitions)
+            .then(serverService.getTaskDefinitions.bind(serverService))
             .then(fn.handleSort('items','taskId'))
             .then(fn.handleObsUpdate(this.itemsObs, 'items'))
             .catch(utils.failureHandler());

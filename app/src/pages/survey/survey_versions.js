@@ -1,7 +1,7 @@
+import {serverService} from '../../services/server_service';
 import alerts from '../../widgets/alerts';
 import Binder from '../../binder';
 import fn from '../../functions';
-import serverService from '../../services/server_service';
 import tables from '../../tables';
 import utils from '../../utils';
 

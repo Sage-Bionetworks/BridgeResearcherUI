@@ -1,9 +1,9 @@
+import {serverService} from '../../services/server_service';
 import batchDialogUtils from '../../batch_dialog_utils';
 import Binder from '../../binder';
 import fn from '../../functions';
 import Promise from 'bluebird';
 import root from '../../root';
-import serverService from '../../services/server_service';
 import utils from '../../utils';
 
 // Worker

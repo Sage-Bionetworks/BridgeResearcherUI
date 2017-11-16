@@ -1,9 +1,9 @@
+import {serverService} from '../../services/server_service';
 import alerts from '../../widgets/alerts';
 import Binder from '../../binder';
 import fn from '../../functions';
 import ko from 'knockout';
 import root from '../../root';
-import serverService from '../../services/server_service';
 import utils from '../../utils';
 
 var failureHandler = utils.failureHandler({
@@ -29,6 +29,7 @@ module.exports = function(params) {
         .obs('createdOn', null, fn.formatDateTime)
         .obs('allRoles[]', ROLES)
         .bind('email')
+        .bind('phone', null, Binder.formatPhone, Binder.persistPhone)
         .bind('attributes[]', [], Binder.formatAttributes, Binder.persistAttributes)
         .bind('firstName')
         .bind('lastName')
@@ -54,6 +55,13 @@ module.exports = function(params) {
     
     self.statusObs.subscribe(function(status) {
         self.showEnableAccountObs(status !== "enabled");
+    });
+
+    self.emailLink = ko.computed(function() {
+        return "mailto:" + self.emailObs();
+    });
+    self.phoneLink = ko.computed(function() {
+        return "tel:" + self.phoneObs();
     });
 
     function initStudy(study) {

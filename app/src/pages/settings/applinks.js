@@ -1,8 +1,8 @@
+import {serverService} from '../../services/server_service';
 import Binder from '../../binder';
-import root from '../../root';
-import serverService from '../../services/server_service';
-import utils from '../../utils';
 import ko from 'knockout';
+import root from '../../root';
+import utils from '../../utils';
 
 function appleModelToObs(array, context) {
     return array.map(function(obj) {

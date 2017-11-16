@@ -27,7 +27,3 @@ Continuously run tests
 Build a release
 
     npm run release
-
-simple change to force commit
-
-..

@@ -1,7 +1,7 @@
+import {serverService} from '../../services/server_service';
 import alerts from '../../widgets/alerts';
 import config from '../../config';
 import ko from 'knockout';
-import serverService from '../../services/server_service';
 import sharedModuleUtils from '../../shared_module_utils';
 import utils from '../../utils';
 
@@ -85,7 +85,7 @@ module.exports = function() {
 
     function load() {
         sharedModuleUtils.loadNameMaps()
-            .then(serverService.getMetadata)
+            .then(serverService.getMetadata.bind(serverService))
             .then(updateTable)
             .catch(utils.failureHandler());
     }

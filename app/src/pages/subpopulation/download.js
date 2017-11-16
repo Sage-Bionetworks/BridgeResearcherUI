@@ -1,7 +1,7 @@
+import {serverService} from '../../services/server_service';
 import Binder from '../../binder';
 import config from '../../config';
 import fn from '../../functions';
-import serverService from '../../services/server_service';
 import utils from '../../utils';
 
 var failureHandler = utils.failureHandler({
@@ -28,7 +28,7 @@ module.exports = function(params) {
 
     serverService.getSubpopulation(params.guid)
         .then(fn.handleObsUpdate(self.nameObs, 'name'))
-        .then(serverService.getSession)
+        .then(serverService.getSession.bind(serverService))
         .then(updateURLs)
         .catch(failureHandler);    
 };

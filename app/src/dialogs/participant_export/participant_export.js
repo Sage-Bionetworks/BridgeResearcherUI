@@ -1,11 +1,13 @@
-import Promise from 'bluebird';
-import fn from '../../functions';
+import {ServerService} from '../../services/server_service';
 import batchDialogUtils from '../../batch_dialog_utils';
 import Binder from '../../binder';
+import fn from '../../functions';
+import Promise from 'bluebird';
 import root from '../../root';
 import saveAs from '../../../lib/filesaver.min.js';
-import serverService from '../../services/server_service';
 import utils from '../../utils';
+
+var serverService = new ServerService(false);
 
 const PREMSG = "Only exporting accounts that ";
 const FETCH_DELAY = 100;
@@ -36,7 +38,6 @@ function formatConsentRecords(record) {
 }
 
 var CollectParticipantsWorker = function(params) {
-
     fn.copyProps(this, params, 'total', 'emailFilter', 'startTime', 'endTime');
     this.identifiers = [];
     var pages = [];
@@ -150,9 +151,7 @@ module.exports = function(params) {
     
     batchDialogUtils.initBatchDialog(self);
     fn.copyProps(self, fn, 'formatDateTime');
-    self.close = fn.seq(self.cancel, function() {
-        serverService.setReauthBehavior(serverService.REAUTH_BEHAVIOR.RELOAD);
-    }, root.closeDialog);
+    self.close = fn.seq(self.cancel, root.closeDialog);
 
     serverService.getStudy().then(function(study) {
         ATTRIBUTES = Object.freeze([].concat(study.userProfileAttributes)); 
@@ -182,7 +181,6 @@ module.exports = function(params) {
 
         var collectWorker = new CollectParticipantsWorker(params);
 
-        serverService.setReauthBehavior(serverService.REAUTH_BEHAVIOR.REAUTH);
         self.run(collectWorker).then(function(identifiers) {
             var fetchWorker = new FetchParticipantWorker(identifiers, self.canContactByEmailObs());
             var totalParticipants = identifiers.length;

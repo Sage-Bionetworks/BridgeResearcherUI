@@ -2,16 +2,16 @@ import '../css/main';
 import '../lib/toastr.min';
 import '../lib/dragula.min';
 
-import { Router } from 'director/build/director';
-import ko from 'knockout';
-import root from './root';
-import serverService from './services/server_service';
-import './bindings';
-import './bindings/semantic';
 import '../lib/jquery.scrollTo';
+import './bindings';
 import './bindings/dragula';
+import './bindings/semantic';
 import './components';
 import 'knockout-postbox';
+import {Router} from 'director/build/director';
+import {serverService} from './services/server_service';
+import ko from 'knockout';
+import root from './root';
 
 const GUID_CREATEDON = ['guid','createdOn'];
 const GUID = ['guid'];

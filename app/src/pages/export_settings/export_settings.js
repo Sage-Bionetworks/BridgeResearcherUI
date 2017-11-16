@@ -1,9 +1,9 @@
+import {serverService} from '../../services/server_service';
 import alerts from '../../widgets/alerts';
 import Binder from '../../binder';
 import fn from '../../functions';
 import ko from 'knockout';
 import root from '../../root';
-import serverService from '../../services/server_service';
 import utils from '../../utils';
 
 const BASE = "https://www.synapse.org/#!";
@@ -13,7 +13,7 @@ const EXPORT_MSG = "Unexported study data is being exported to Synapse.\n" +
 function exportingMsg() {
     alerts.notification("Starting Data Export", EXPORT_MSG);
 }
-    
+
 module.exports = function() {
     var self = this;
 
@@ -21,6 +21,7 @@ module.exports = function() {
         .bind('synapseDataAccessTeamId')
         .bind('synapseProjectId')
         .bind('usesCustomExportSchedule')
+        .bind('uploadValidationStrictness', 'warning')
         .bind('disableExport');
 
     fn.copyProps(self, root, 'isPublicObs', 'isDeveloper', 'isResearcherOnly');

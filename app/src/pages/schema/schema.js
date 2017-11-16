@@ -1,10 +1,10 @@
+import {serverService} from '../../services/server_service';
+import * as schemaUtils from './schema_utils';
 import alerts from '../../widgets/alerts';
 import Binder from '../../binder';
 import fn from '../../functions';
 import ko from 'knockout';
 import root from '../../root';
-import * as schemaUtils from './schema_utils';
-import serverService from '../../services/server_service';
 import utils from '../../utils';
 
 var failureHandler = utils.failureHandler({

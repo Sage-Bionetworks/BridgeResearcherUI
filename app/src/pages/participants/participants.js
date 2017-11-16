@@ -1,9 +1,9 @@
 import 'knockout-postbox';
+import {serverService} from '../../services/server_service';
 import alerts from '../../widgets/alerts';
 import fn from '../../functions';
 import ko from 'knockout';
 import root from '../../root';
-import serverService from '../../services/server_service';
 import tables from '../../tables';
 import utils from '../../utils';
 
@@ -54,6 +54,16 @@ module.exports = function() {
     }
     function load(response) {
         self.total = response.total;
+        response.items = response.items.map(function(item) {
+            // TODO: Clean this up. we want both phone formats, maybe bound
+            // to different observers.
+            if (item.phone) {
+                item.phone = item.phone.nationalFormat;
+            } else {
+                item.phone = "";
+            }
+            return item;
+        });
         self.recordsObs(formatCount(response.total));
         self.itemsObs(response.items);
         if (response.items.length === 0) {

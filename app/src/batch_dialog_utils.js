@@ -1,5 +1,7 @@
+import {ServerService} from './services/server_service';
 import Binder from './binder';
-import serverService from './services/server_service';
+
+var serverService = new ServerService(false);
 
 export default {
     initBatchDialog: function(vm) {

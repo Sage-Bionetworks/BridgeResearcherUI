@@ -1,5 +1,5 @@
+import {serverService} from './server_service';
 import fn from '../functions';
-import serverService from './server_service';
 
 var LABEL_SORTER = fn.makeFieldSorter('label');
 

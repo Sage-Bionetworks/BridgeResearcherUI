@@ -1,9 +1,9 @@
-import Promise from 'bluebird';
+import {serverService} from '../../services/server_service';
 import fn from '../../functions';
 import optionsService from '../../services/options_service';
+import Promise from 'bluebird';
 import root from '../../root';
 import scheduleUtils from '../schedule/schedule_utils';
-import serverService from '../../services/server_service';
 import tables from '../../tables';
 import utils from '../../utils';
 
@@ -55,7 +55,7 @@ module.exports = function() {
 
     function load() {
         scheduleUtils.loadOptions()
-            .then(serverService.getSchedulePlans)
+            .then(serverService.getSchedulePlans.bind(serverService))
             .then(fn.handleSort('items', 'label'))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))
             .then(function(response) {
