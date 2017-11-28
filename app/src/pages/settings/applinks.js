@@ -63,9 +63,7 @@ module.exports = function() {
     };
     self.openAppleAppLinkEditor = function(element, event) {
         root.openDialog('edit_apple_link', {
-            study: self.study,
-            appleAppLinksObs: self.appleAppLinksObs
-        });
+            study: self.study, appleAppLinksObs: self.appleAppLinksObs});
     };
     self.pathFormatter = function(appleLink) {
         return appleLink.pathsObs().join(", ");
@@ -75,9 +73,7 @@ module.exports = function() {
     };
     self.openAndroidAppLinkEditor = function(element, event) {
         root.openDialog('edit_android_link', {
-            study: self.study,
-            androidAppLinksObs: self.androidAppLinksObs
-        });
+            study: self.study, androidAppLinksObs: self.androidAppLinksObs});
     };
     self.fingerprintsFormatter = function(androidLink) {
         return androidLink.fingerprintsObs().map(function(fp) {
