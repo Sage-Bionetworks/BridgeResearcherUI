@@ -68,7 +68,9 @@ MODEL_METADATA.UploadSchema = {
     primaryKeys:["schemaId", "revision"],
     label: "name",
     getMethod: getCopy,
-    pasteMethod: serverService.createUploadSchema
+    pasteMethod: function(schema) {
+        return serverService.createUploadSchema(schema);
+    }
 };
 MODEL_METADATA.Subpopulation = {
     primaryKeys:["guid"],
