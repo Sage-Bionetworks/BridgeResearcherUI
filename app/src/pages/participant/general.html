@@ -123,10 +123,15 @@
             <div class="field">
                 <label>Email</label>
                 <div>
-                    <a data-bind="href: 'mailto:'+emailObs(), text: emailObs"></a>
+                    <a data-bind="href: emailLink, text: emailObs"></a>
                 </div>
             </div>
-            <div class="field"></div>
+            <div class="field">
+                <label>Phone</label>
+                <div>
+                    <a data-bind="href: phoneLink, text: phoneObs"></a>
+                </div>
+            </div>
             <div class="field">
                 <label>Created On</label>
                 <div data-bind="text: createdOnObs"></div>

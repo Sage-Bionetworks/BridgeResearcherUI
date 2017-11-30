@@ -41,6 +41,6 @@ module.exports = function(params) {
         sendNotification(msgObj)
             .then(utils.successHandler(vm, event, "Notification has been sent."))
             .then(self.cancel)
-            .catch(utils.failureHandler({transient:false}));        
+            .catch(utils.failureHandler({transient:false}));
     };
 };

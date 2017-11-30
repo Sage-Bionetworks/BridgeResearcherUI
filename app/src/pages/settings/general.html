@@ -15,6 +15,16 @@
         <div class="ten wide column">
             <errors> </errors>
             <form class="ui form">
+                <div class="fields">
+                    <div class="twelve wide required field" id="name">
+                        <label>Study name</label>
+                        <input type="text" data-bind="textInput: nameObs, hasFocus: true"/>
+                    </div>
+                    <div class="six wide field" id="shortName">
+                        <label>Short name (max. 10 letters)</label>
+                        <input maxlength="10" type="text" data-bind="textInput: shortNameObs"/>
+                    </div>
+                </div>
                 <div class="required field" id="name">
                     <label>Study name</label>
                     <input type="text" data-bind="textInput: nameObs, hasFocus: true"/>
