@@ -1,27 +1,10 @@
-<div class="ui vertical menu">
-    <div class="tabset" data-bind="click: $root.setSidebarPanel">
-        <a>Navigation</a>
-        <a data-bind="visible: $root.isDeveloper">Clipboard</a>
-        <a class="active" data-bind="visible: $root.isEditorTabVisibleObs">Editor</a>
-    </div>
-    <div class="title item">
-        <i class="server icon"></i>
-        <span data-bind="visible: nameObs().length > 0, text: nameObs"></span>
-        <span data-bind="visible: nameObs().length === 0">New Survey</span>
-    </div>
-    <div class="item vertical-scrollbox" data-bind="foreach: elementsObs, dragula: {
-        dragHandleSelector: '.vs-item-content', indexObs: selectedElementObs, listObs: elementsObs}">
-        <div class="vs-item" data-bind="click: $component.selectElement">
-            <div class="vs-item-content" data-bind="html: $component.truncate($data.titleObs() || $data.promptObs())"></div>
-            <div class="vs-item-delete link"><i class="delete icon" data-bind="click: $component.removeElement"></i></div>
-        </div>
-    </div>
-    <div class="item">
-        <i>Drag items in this list to reorder them.</i>
-    </div>
-    <div class="item">
-        <i class="sign out icon"></i> <a href="#" data-bind="click: $root.signOut">Sign Out</a>
+<div class="panel-vertical-scrollbox" data-bind="foreach: elementsObs, dragula: {
+    dragHandleSelector: '.vs-item-content', indexObs: selectedElementObs, listObs: elementsObs}">
+    <div class="vs-item" data-bind="click: $component.selectElement">
+        <div class="vs-item-content" data-bind="html: $component.truncate($data.titleObs() || $data.promptObs())"></div>
+        <div class="vs-item-delete link"><i class="delete icon" data-bind="click: $component.removeElement"></i></div>
     </div>
 </div>
-
-
+<div class="item" style="padding: .5rem">
+    <i>Drag list items to reorder them.</i>
+</div>

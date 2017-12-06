@@ -2,6 +2,9 @@ import ko from 'knockout';
 import '../../lib/semantic-2.2.min';
 
 var handlers = {
+    'accordion': function($element) {
+        $element.addClass("ui styled fluid accordion").accordion({exclusive:false});
+    },
     'progress': function($element, allBindings, config) {
         $element.addClass("ui tiny progress")
             .attr('data-value', config.value)

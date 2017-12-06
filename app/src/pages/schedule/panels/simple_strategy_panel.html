@@ -1,13 +1,3 @@
-<div class="ui vertical menu">
-    <div class="tabset" data-bind="click: $root.setSidebarPanel">
-        <a>Navigation</a>
-        <a data-bind="visible: $root.isDeveloper">Clipboard</a>
-        <a class="active" data-bind="visible: $root.isEditorTabVisibleObs">Editor</a>
-    </div>
-    <div class="title item">
-        <i class="calendar icon"></i>
-        <span data-bind="visible: labelObs().length > 0, text: labelObs"></span>
-        <span data-bind="visible: labelObs().length === 0">New Schedule Plan</span>
-    </div>
-    <div class="item">Every user gets the same schedule.</div>
+<div class="panel-vertical-scrollbox">
+        <div class="item" style="padding: .5rem">Every user gets the same schedule.</div>
 </div>
