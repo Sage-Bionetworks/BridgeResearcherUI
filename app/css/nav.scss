@@ -3,34 +3,30 @@ nav {
     @include order(-1);
     padding:  1rem ! important;
     background-color: rgba(96,134,153,.2);
+    overflow-y: auto;
 
-    .title span {
-        font-weight: bold;
+    .content {
+        margin: 0!important;
+        padding: 5px!important;
     }
-    .ui.vertical.menu {
-        width: 100%;
+    .content .menu {
+        margin: 0!important;
     }
-
-    .tabset {
-        margin-bottom: .2rem;
-        margin-top: .5rem; 
-        display: flex; 
-        justify-content: space-around;
-
-        a {
-            cursor: pointer;
-        }
-        a.active {
-            font-weight: bold; 
-            color: black;
-            border-bottom: 2px solid rgba(34,36,38,.15);
-            padding-bottom: 3px;
-            margin-bottom: -4px;
-        }
-
+    .content a:last-child {
+        padding: 2px 4px;
     }
-}
-/* Super-specific style applied to the clipboard to fix it. */
-.clipboard .ui.vertical.menu.vertical-scrollbox > .item:last-child {
-    padding-bottom: 1rem;
+    .scroll-container {
+        padding:0!important; 
+        margin:0!important;
+    }
+    .vertical-scrollbox {
+        max-height: 10rem;
+        width: 100%!important;
+    }
+    .panel-vertical-scrollbox {
+        max-height: 20rem;
+        width: 100%!important;
+        border-top: 1px solid #eee; 
+        border-bottom: 1px solid #eee;
+    }
 }

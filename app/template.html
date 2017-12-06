@@ -19,166 +19,178 @@
         <main data-bind="component: {name: mainPageObs, params: mainParamsObs}">
         </main>
         <nav data-bind="visible: showNavigationObs">
-            <div data-bind="visible: isSidebarActive('editor'), component: {name: editorPanelObs, params: editorParamsObs}"></div>
-            <div data-bind="visible: isSidebarActive('clipboard')">
-                <div class="ui vertical menu clipboard">
-                    <div class="tabset" data-bind="click: setSidebarPanel">
-                        <a>Navigation</a>
-                        <a class="active" data-bind="visible: isDeveloper()">Clipboard</a>
-                        <a data-bind="visible: isEditorTabVisibleObs">Editor</a>
-                    </div>
-                    <div class="title item">
-                        <i class="paste icon"></i>
-                        <span>Cross-Study Clipboard</span>
-                    </div>
-                    <div class="ui vertical menu vertical-scrollbar" style="border:none" 
-                        data-bind="visible: clipboard.entries().length === 0">
-                        <div class="item">
-                            <i>No items in clipboard.</i>
-                        </div>
-                    </div>
-                    <div class="ui vertical menu vertical-scrollbox" style="border:none" 
-                            data-bind="visible: clipboard.entries().length > 0, foreach: clipboard.entries">
+
+            <div data-bind="semantic: 'accordion', visible: isSidebarActive('editor')"
+                style="margin-bottom: 1rem">
+                <div class="active title">
+                    <i class="server icon"></i> Editor
+                    <i class="dropdown icon"></i>
+                </div>
+                <div class="active content" data-bind="component: {
+                    name: editorPanelObs, params: editorParamsObs}"
+                    style="padding:0!important">
+                </div>
+            </div>
+
+            <div data-bind="semantic: 'accordion', visible: clipboard.entries().length > 0"
+                style="margin-bottom: 1rem">
+                <div class="active title">
+                    <i class="paste icon"></i> Clipboard
+                    <i class="dropdown icon"></i>
+                </div>
+                <div class="active content scroll-container">
+                    <div class="ui secondary vertical menu vertical-scrollbox" 
+                        data-bind="foreach: clipboard.entries">
                         <div class="item" data-bind="text: $data._label"></div>
                     </div>
-                    <div class="item">
-                        <div style="text-align: center; margin-bottom: .5rem">
-                            <button data-bind="click: clipboard.clearAll, disable: clipboard.entries().length === 0" class="ui compact mini button">
-                                <i class="remove icon"></i>Clear All
-                            </button>
-                            <button data-bind="click: clipboard.pasteAll, disable: clipboard.entries().length === 0" class="ui compact mini button">
-                                <i class="paste icon"></i>Paste All
-                            </button>
+                    <div class="item" style="padding: .5rem; text-align: center">
+                        <button data-bind="click: clipboard.clearAll" class="ui compact mini button">
+                            <i class="remove icon"></i>Clear All
+                        </button>
+                        <button data-bind="click: clipboard.pasteAll" class="ui compact mini button">
+                            <i class="paste icon"></i>Paste All
+                        </button>
+                        <div style="text-align: left; line-height:1; margin-top: .5rem">
+                            <i style="font-size:smaller">
+                                Clipboard items can be transferred between studies. 
+                                <a class="link" data-bind="click: readAboutClipboard">Read More</a>
+                            </i>
                         </div>
-                        <i style="font-size:smaller">Clipboard items can be transferred between studies. <a class="link" data-bind="click: readAboutClipboard">Read More</a></i>
-                    </div>
-                    <div class="item">
-                        <i class="sign out icon"></i> <a href="#" data-bind="click: signOut">Sign Out</a>
                     </div>
                 </div>
             </div>
-            <div data-bind="visible: isSidebarActive('navigation')">
-                <div class="ui vertical menu">
-                    <div class="tabset" data-bind="click: setSidebarPanel">
-                        <a class="active">Navigation</a>
-                        <a data-bind="visible: isDeveloper()">Clipboard</a>
-                        <a data-bind="visible: isEditorTabVisibleObs">Editor</a>
-                    </div>
-                    <div class="item" data-bind="visible: !isSharedStudy()">
-                        <i class="lab icon"></i> Study
-                        <div class="menu">
-                            <a href="#/settings/general" class="item" data-bind="active: isActive, visible: isDeveloper()">
-                                Settings
-                            </a>
-                            <a href="#/email_templates/verify_email" class="item" data-bind="active: isActive, visible: isDeveloper()">
-                                Email Templates
-                            </a>
-                            <a href="#/subpopulations" class="item" data-bind="active: isActive, visible: isDeveloper()">
-                                Consent Groups
-                            </a>
-                            <a href="#/participants" class="item" data-bind="active: isActive, visible: isPublicObs() && isResearcher()">
-                                Participants
-                            </a>
-                            <a href="#/enrollees" class="item" data-bind="active: isActive, 
-                                visible: !isPublicObs() && codesEnumeratedObs()">
-                                External IDs
-                            </a>
-                            <a href="#/external_ids" class="item" data-bind="active: isActive, 
-                                visible: isPublicObs() && codesEnumeratedObs() && isDeveloper()">
-                                External IDs
-                            </a>
-                            <a href="#/reports/uploads" class="item" data-bind="active: isActive, visible: isDeveloper() || isResearcher()">
-                                Study Reports
-                            </a>
-                            <a href="#/topics" class="item" data-bind="active: isActive, visible: isDeveloper() || isResearcher()">
-                                Push Notifications
-                            </a>
-                        </div>
-                    </div>
-                    <div class="item" data-bind="visible: isDeveloper() && !isSharedStudy()">
-                        <i class="server icon"></i> Study Data
-                        <div class="menu">
-                            <a href="#/scheduleplans" class="item" data-bind="active: isActive">
-                                Scheduling
-                            </a>
-                            <a href="#/tasks" class="item" data-bind="active: isActive">
-                                Compound Tasks
-                            </a>
-                            <a href="#/surveys" class="item" data-bind="active: isActive">
-                                Surveys
-                            </a>
-                            <a href="#/task_identifiers" class="item" data-bind="active: isActive">
-                                Task Identifiers
-                            </a>
-                        </div>
-                    </div>
-                    <div class="item" data-bind="visible: isDeveloper()">
-                        <i class="tablet icon"></i> App Support
-                        <div class="menu">
-                            <a href="#/app_configs" class="item" data-bind="active: isActive">
-                                App Configs
-                            </a>
-                            <a href="#/app_links" class="item"  data-bind="active: isActive">
-                                App &amp; Universal Links
-                            </a>
-                        </div>
-                    </div>
-                    <div class="item" data-bind="visible: isDeveloper() && !isSharedStudy()">
-                        <i class="upload icon"></i> Upload &amp; Export
-                        <div class="menu">
-                            <a href="#/schemas" class="item" data-bind="active: isActive">
-                                Upload Schemas
-                            </a>
-                            <a href="#/shared_upload_metadata" class="item" data-bind="active: isActive">
-                                Shared Upload Metadata
-                            </a>
-                            <a href="#/export_settings" class="item" data-bind="active: isActive">
-                                Export Settings
-                            </a>
-                        </div>
-                    </div>
-                    <div class="item" data-bind="visible: isResearcher() && !isDeveloper() && !isSharedStudy()">
-                        <i class="server icon"></i> Study Data
-                        <div class="menu">
-                            <a href="#/data_export" class="item" data-bind="active: isActive">
-                                Data Export Management
-                            </a>
-                        </div>
-                    </div>
-                    <div class="item" data-bind="visible: isDeveloper() && isSharedStudy()">
-                        <i class="server icon"></i> Shared Study Data
-                        <div class="menu">
-                            <a href="#/shared_modules" class="item" data-bind="active: isActive">
-                                Shared Modules
-                            </a>
-                            <a href="#/schemas" class="item" data-bind="active: isActive">
-                                Data Schemas
-                            </a>
-                            <a href="#/surveys" class="item" data-bind="active: isActive">
-                                Surveys
-                            </a>
-                        </div>
-                    </div>
-                    <div class="item" data-bind="visible: isAdmin() && !isSharedStudy()">
-                        <i class="settings icon"></i> Administration
-                        <div class="menu">
-                            <a href="#/admin/info" class="item" data-bind="active: isActive">
-                                Study Settings
-                            </a>
-                            <a href="#/admin/cache" class="item" data-bind="active: isActive">
-                                Cache Control
-                            </a>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <i class="sign out icon"></i> <a href="#" data-bind="click: signOut">Sign Out</a>
+
+            <div data-bind="semantic: 'accordion'">
+                <div class="title" data-bind="visible: !isSharedStudy()">
+                    <i class="lab icon"></i> Study
+                    <i class="dropdown icon"></i>
+                </div>
+                <div class="content" data-bind="visible: !isSharedStudy()">
+                    <div class="ui secondary vertical menu">
+                        <a href="#/settings/general" class="item" data-bind="active: isActive, visible: isDeveloper()">
+                            Settings
+                        </a>
+                        <a href="#/email_templates/verify_email" class="item" data-bind="active: isActive, visible: isDeveloper()">
+                            Email Templates
+                        </a>
+                        <a href="#/subpopulations" class="item" data-bind="active: isActive, visible: isDeveloper()">
+                            Consent Groups
+                        </a>
+                        <a href="#/participants" class="item" data-bind="active: isActive, visible: isPublicObs() && isResearcher()">
+                            Participants
+                        </a>
+                        <a href="#/enrollees" class="item" data-bind="active: isActive, 
+                            visible: !isPublicObs() && codesEnumeratedObs()">
+                            External IDs
+                        </a>
+                        <a href="#/external_ids" class="item" data-bind="active: isActive, 
+                            visible: isPublicObs() && codesEnumeratedObs() && isDeveloper()">
+                            External IDs
+                        </a>
+                        <a href="#/reports/uploads" class="item" data-bind="active: isActive, visible: isDeveloper() || isResearcher()">
+                            Study Reports
+                        </a>
+                        <a href="#/topics" class="item" data-bind="active: isActive, visible: isDeveloper() || isResearcher()">
+                            Push Notifications
+                        </a>
                     </div>
                 </div>
+
+                <div class="title" data-bind="visible: isDeveloper() && !isSharedStudy()">
+                    <i class="server icon"></i> Study Data
+                    <i class="dropdown icon"></i>
+                </div>
+                <div class="content" data-bind="visible: isDeveloper() && !isSharedStudy()">
+                    <div class="ui secondary vertical menu">
+                        <a href="#/scheduleplans" class="item" data-bind="active: isActive">
+                            Scheduling
+                        </a>
+                        <a href="#/tasks" class="item" data-bind="active: isActive">
+                            Compound Tasks
+                        </a>
+                        <a href="#/surveys" class="item" data-bind="active: isActive">
+                            Surveys
+                        </a>
+                        <a href="#/task_identifiers" class="item" data-bind="active: isActive">
+                            Task Identifiers
+                        </a>
+                    </div>
+                </div>
+
+                <div class="title" data-bind="visible: isDeveloper() && !isSharedStudy()">
+                    <i class="tablet icon"></i> App Support
+                    <i class="dropdown icon"></i>
+                </div>
+                <div class="content" data-bind="visible: isDeveloper() && !isSharedStudy()">
+                    <div class="ui secondary vertical menu">
+                        <a href="#/app_configs" class="item" data-bind="active: isActive">
+                            App Configs
+                        </a>
+                        <a href="#/app_links" class="item"  data-bind="active: isActive">
+                            App &amp; Universal Links
+                        </a>
+                    </div>
+                </div>
+
+                <div class="title" data-bind="visible: isDeveloper() && !isSharedStudy()">
+                    <i class="upload icon"></i> Upload &amp; Export
+                    <i class="dropdown icon"></i>
+                </div>
+                <div class="content" data-bind="visible: isDeveloper() && !isSharedStudy()">
+                    <div class="ui secondary vertical menu">
+                        <a href="#/schemas" class="item" data-bind="active: isActive">
+                            Upload Schemas
+                        </a>
+                        <a href="#/shared_upload_metadata" class="item" data-bind="active: isActive">
+                            Shared Upload Metadata
+                        </a>
+                        <a href="#/export_settings" class="item" data-bind="active: isActive">
+                            Export Settings
+                        </a>
+                    </div>
+                </div>
+
+                <div class="title" data-bind="visible: isDeveloper() && isSharedStudy()">
+                    <i class="server icon"></i> Shared Study Data
+                    <i class="dropdown icon"></i>
+                </div>
+                <div class="content" data-bind="visible: isDeveloper() && isSharedStudy()">
+                    <div class="ui secondary vertical menu">
+                        <a href="#/shared_modules" class="item" data-bind="active: isActive">
+                            Shared Modules
+                        </a>
+                        <a href="#/schemas" class="item" data-bind="active: isActive">
+                            Data Schemas
+                        </a>
+                        <a href="#/surveys" class="item" data-bind="active: isActive">
+                            Surveys
+                        </a>
+                    </div>
+                </div>
+
+                <div class="title" data-bind="visible: isAdmin() && !isSharedStudy()">
+                    <i class="settings icon"></i> Administration
+                    <i class="dropdown icon"></i>
+                </div>
+                <div class="content" data-bind="visible: isAdmin() && !isSharedStudy()">
+                    <div class="ui secondary vertical menu">
+                        <a href="#/admin/info" class="item" data-bind="active: isActive">
+                            Study Settings
+                        </a>
+                        <a href="#/admin/cache" class="item" data-bind="active: isActive">
+                            Cache Control
+                        </a>
+                    </div>
+                </div>
+
             </div>
         </nav>
     </section>
     <footer>
-        <p data-bind="{attr:{'title': environmentObs}}">&copy; 2015-2017 Sage Bionetworks.</p>
+        <p data-bind="{attr:{'title': environmentObs}}">
+            &copy; 2015-2017 Sage Bionetworks &middot; 
+            <a data-bind="click: signOut" href="#">Sign Out <i class="sign out icon"></i></a>
+        </p>
     </footer>
     <div data-bind="modal: dialogObs"></div>
     
