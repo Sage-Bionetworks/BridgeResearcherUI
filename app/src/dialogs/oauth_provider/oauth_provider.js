@@ -16,7 +16,7 @@ module.exports = function(params) {
         .bind('callbackUrl');
 
     if (typeof params.index === "number") {
-        var op = params.oauthProvidersObs()[params.index];
+        var op = params.oAuthProvidersObs()[params.index];
         self.vendorIdObs(op.vendorId);
         self.clientIdObs(op.clientId);
         self.secretObs(op.secret);
@@ -51,10 +51,10 @@ module.exports = function(params) {
             'callbackUrl': self.callbackUrlObs()
         };
         if (typeof params.index === "number") {
-            var oldOp = params.oauthProvidersObs()[params.index];
-            params.oauthProvidersObs.replace(oldOp,op);
+            var oldOp = params.oAuthProvidersObs()[params.index];
+            params.oAuthProvidersObs.replace(oldOp,op);
         } else {
-            params.oauthProvidersObs.push(op);
+            params.oAuthProvidersObs.push(op);
         }
         root.closeDialog();
     };
