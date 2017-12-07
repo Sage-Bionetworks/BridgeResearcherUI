@@ -249,8 +249,13 @@ function activeHandler(element, valueAccessor) {
     }
     var func = valueAccessor;
     do {
-        func = func(id);
+        func = func(id, element);
     } while(typeof func === "function");
+    if (func) {
+        // the active handler is used in an accordian. Open the panel the match
+        // is located in.
+        $(element).closest(".content").addClass("active").prev().addClass("active");
+    }
     element.classList.toggle("active", func);
 }
 

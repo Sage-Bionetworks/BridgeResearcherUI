@@ -1,25 +1,13 @@
-<div class="ui vertical menu">
-    <div class="tabset" data-bind="click: $root.setSidebarPanel">
-        <a>Navigation</a>
-        <a data-bind="visible: $root.isDeveloper">Clipboard</a>
-        <a class="active" data-bind="visible: $root.isEditorTabVisibleObs">Editor</a>
+<div class="panel-vertical-scrollbox" data-bind="foreach: scheduleCriteriaObs, dragula: {
+    dragHandleSelector: '.vs-item-content', indexObs: selectedElementObs,  
+    listObs: scheduleCriteriaObs}">
+    <div class="vs-item" data-bind="click: $component.selectCriteria">
+        <div class="vs-item-content" data-bind="text: $data.labelObs"></div>
+        <div class="vs-item-delete link"><i class="delete icon" data-bind="click: $component.removeCriteria"></i></div>
     </div>
-    <div class="title item">
-        <i class="calendar icon"></i>
-        <span data-bind="visible: labelObs().length > 0, text: labelObs"></span>
-        <span data-bind="visible: labelObs().length === 0">New Schedule Plan</span>
-    </div>
-    <div class="item vertical-scrollbox" data-bind="foreach: scheduleCriteriaObs, dragula: {
-        dragHandleSelector: '.vs-item-content', indexObs: selectedElementObs,  
-        listObs: scheduleCriteriaObs}">
-        <div class="vs-item" data-bind="click: $component.selectCriteria">
-            <div class="vs-item-content" data-bind="text: $data.labelObs"></div>
-            <div class="vs-item-delete link"><i class="delete icon" data-bind="click: $component.removeCriteria"></i></div>
-        </div>
-    </div>
-    <div class="item">
-        <a class="ui link" data-bind="click: $component.addCriteria">
-            <i class="add square icon"></i>Add Schedule
-        </a>
-    </div>
+</div>
+<div class="item" style="padding: .5rem">
+    <a class="ui link" data-bind="click: $component.addCriteria">
+        <i class="add square icon"></i>Add Schedule
+    </a>
 </div>

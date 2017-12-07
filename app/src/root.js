@@ -91,7 +91,7 @@ var RootViewModel = function() {
             self.sidePanelObs(event.target.textContent.toLowerCase());
         }
     };
-    self.isActive = function(tag) {
+    self.isActive = function(tag, element) {
         if (pageSets[tag]) {
             return pageSets[tag].indexOf(self.selectedObs()) > -1;
         }

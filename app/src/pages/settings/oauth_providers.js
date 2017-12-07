@@ -5,8 +5,10 @@ import utils from '../../utils';
 import ko from 'knockout';
 import alert from '../../widgets/alerts';
 
+// This is a trivial change because Travis doesn't seem to think the branch is there for deployment.
+
 function modelToObs(map, context) {
-    return Object.keys(map).map(function(vendorId) {
+    return Object.keys(map || {}).map(function(vendorId) {
         var obj = map[vendorId];
         obj.vendorId = vendorId;
         return obj;
@@ -28,7 +30,7 @@ module.exports = function() {
     var self = this;
     self.isPublicObs = root.isPublicObs;
 
-    var binder = new Binder(self).bind('oauthProviders[]', [], modelToObs, obsToModel);
+    var binder = new Binder(self).bind('oAuthProviders[]', [], modelToObs, obsToModel);
 
     self.save = function(vm, event) {
         self.study = binder.persist(self.study);
@@ -40,17 +42,17 @@ module.exports = function() {
     };
     self.removeProvider = function(element) {
         alert.deleteConfirmation("Do you want to delete this OAuth provider?", function() {
-            self.oauthProvidersObs.remove(element);
+            self.oAuthProvidersObs.remove(element);
         });
     };
     self.addProvider = function() {
         root.openDialog('oauth_provider', {
-            study: self.study, oauthProvidersObs: self.oauthProvidersObs});
+            study: self.study, oAuthProvidersObs: self.oAuthProvidersObs});
     };
     self.editProvider = function(provider) {
-        var index = self.oauthProvidersObs().indexOf(provider);
+        var index = self.oAuthProvidersObs().indexOf(provider);
         root.openDialog('oauth_provider', { index: index,
-            study: self.study, oauthProvidersObs: self.oauthProvidersObs});
+            study: self.study, oAuthProvidersObs: self.oAuthProvidersObs});
     };
 
     serverService.getStudy()

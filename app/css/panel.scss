@@ -2,13 +2,12 @@
 .title.item {
   font-weight: bold;
 }
-.vertical-scrollbox {
-  max-height: 28rem;
+.vertical-scrollbox, .panel-vertical-scrollbox {
   overflow-y: auto;
   padding: 0!important;
   margin: 0!important;
 }
-.ui.vertical.menu.vertical-scrollbox {
+.ui.vertical.menu.vertical-scrollbox, .panel-vertical-scrollbox {
   border-bottom-right-radius: 0px!important;
   border-bottom-left-radius: 0px!important;
   box-shadow: none;

@@ -18,10 +18,10 @@
 <div class="scrollbox">
     <div class="ui grid">
         <div class="ten wide column">
-            <p data-bind="visible: oauthProvidersObs().length === 0">
+            <p data-bind="visible: oAuthProvidersObs().length === 0">
                 There are no providers configured to issue OAuth 2.0 access tokens. 
             </p>
-            <div data-bind="visible: oauthProvidersObs().length > 0, foreach: oauthProvidersObs">
+            <div data-bind="visible: oAuthProvidersObs().length > 0, foreach: oAuthProvidersObs">
                 <div class="ui card" style="width:100%; margin-bottom: 1rem">
                     <div class="content">
                         <span style="margin-bottom:.25rem" class="header" data-bind="text:$data.vendorId"></span>
