@@ -5,6 +5,8 @@ import utils from '../../utils';
 import ko from 'knockout';
 import alert from '../../widgets/alerts';
 
+// This is a trivial change because Travis doesn't seem to think the branch is there for deployment.
+
 function modelToObs(map, context) {
     return Object.keys(map || {}).map(function(vendorId) {
         var obj = map[vendorId];
