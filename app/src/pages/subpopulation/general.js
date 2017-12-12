@@ -53,7 +53,8 @@ module.exports = function(params) {
         .then(function(study) {
             if (params.guid === "new") {
                 return Promise.resolve(newSubpop())
-                    .then(binder.assign('subpopulation'));
+                    .then(binder.assign('subpopulation'))
+                    .then(binder.update());
             } else {
                 return serverService.getSubpopulation(params.guid)
                     .then(binder.assign('subpopulation'))
