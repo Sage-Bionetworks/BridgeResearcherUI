@@ -20,6 +20,7 @@ module.exports = function(params) {
 
     new Binder(self)
         .obs('emailFilter', query.emailFilter)
+        .obs('phoneFilter', query.phoneFilter)
         .obs('startTime', query.startTime)
         .obs('endTime', query.endTime)
         .obs('offsetBy', offsetBy)
@@ -30,7 +31,7 @@ module.exports = function(params) {
         .obs('searchLoading', false)
         .obs('showLoader', false);
     
-    self.doEmailSearch = function(vm, event) {
+    self.doSearch = function(vm, event) {
         if (event.keyCode === 13) {
             self.searchLoadingObs(true);
             wrappedLoadingFunc(Math.round(self.currentPageObs()));
@@ -82,6 +83,7 @@ module.exports = function(params) {
             self.pageSizeObs(rp.pageSize);
             self.totalRecordsObs(response.total);
             self.emailFilterObs(rp.emailFilter);
+            self.phoneFilterObs(rp.phoneFilter);
             self.startTimeObs(rp.startTime);
             self.endTimeObs(rp.endTime);
             self.currentPageObs(Math.round(rp.offsetBy/rp.pageSize));
@@ -91,13 +93,14 @@ module.exports = function(params) {
     
     function wrappedLoadingFunc(offsetBy, vm, event) {
         var emailFilter = self.emailFilterObs();
+        var phoneFilter = self.phoneFilterObs();
         var startTime = makeDate(self.startTimeObs());
         var endTime = makeDate(self.endTimeObs());
 
-        storeService.persistQuery(pageKey, {emailFilter: emailFilter, 
-            startTime: startTime, endTime: endTime, offsetBy: offsetBy});
+        storeService.persistQuery(pageKey, {
+            emailFilter, phoneFilter, startTime, endTime, offsetBy});
 
-        loadingFunc(offsetBy, pageSize, emailFilter, startTime, endTime)
+        loadingFunc(offsetBy, pageSize, emailFilter, phoneFilter, startTime, endTime)
             .then(updateModel)
             .then(fn.handleStaticObsUpdate(self.searchLoadingObs, false))
             .then(fn.handleStaticObsUpdate(self.showLoaderObs, false))

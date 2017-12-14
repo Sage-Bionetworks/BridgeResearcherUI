@@ -1,9 +1,14 @@
 <div class="line-control">
     <div class="line-control-stretch">
         <div class="ui icon input" data-bind="css:{loading: searchLoadingObs}, visible: top">
-            <input type="text" placeholder="Email address" data-bind="textInput: emailFilterObs, 
-                event: {keyup: doEmailSearch}, hasFocus: true">
-            <i class="search icon"></i>
+            <input type="text" placeholder="Email address" 
+                data-bind="textInput: emailFilterObs, event: {keyup: doSearch}, hasFocus: true">
+            <i class="email icon"></i>
+        </div>
+        <div class="ui icon input" data-bind="css:{loading: searchLoadingObs}, visible: top">
+            <input type="text" placeholder="Phone number" 
+                data-bind="textInput: phoneFilterObs, event: {keyup: doSearch}">
+            <i class="phone icon"></i>
         </div>
         <div class="ui action input" data-bind="flatpickr: startTimeObs, timeout: 50, wrap: true, onChange: doCalSearch">
             <input type="text" placeholder="Created on or after" readonly data-input>

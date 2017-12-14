@@ -22,6 +22,7 @@ module.exports = function() {
         
     self.total = 0;
     self.emailFilter = null;
+    self.phoneFilter = null;
     self.startTime = null;
     self.endTime = null;
 
@@ -34,6 +35,9 @@ module.exports = function() {
     self.recordsObs = ko.observable("");
     self.formatName = fn.formatName;
     self.formatDateTime = fn.formatDateTime;
+    self.formatEmailPhone = function(value) {
+        return (value) ? value : '—';
+    };
     self.classNameForStatus = function(user) {
         return cssClassNameForStatus[user.status];
     };
@@ -89,15 +93,16 @@ module.exports = function() {
             .catch(utils.failureHandler());
     };
     self.exportDialog = function() {
-        root.openDialog('participant_export', {emailFilter: self.emailFilter, 
+        root.openDialog('participant_export', {emailFilter: self.emailFilter, phoneFilter: self.phoneFilter,
             startTime: self.startTime, endTime: self.endTime, total: self.total});    
     };
-    self.loadingFunc = function(offsetBy, pageSize, emailFilter, startTime, endTime) {
+    self.loadingFunc = function(offsetBy, pageSize, emailFilter, phoneFilter, startTime, endTime) {
         self.emailFilter = emailFilter;
+        self.phoneFilter = phoneFilter;
         self.startTime = startTime;
         self.endTime = endTime;
 
-        return serverService.getParticipants(offsetBy, pageSize, emailFilter, startTime, endTime)
+        return serverService.getParticipants(offsetBy, pageSize, emailFilter, phoneFilter, startTime, endTime)
             .then(load)
             .catch(utils.failureHandler());
     };

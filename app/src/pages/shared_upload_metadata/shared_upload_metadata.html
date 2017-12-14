@@ -13,7 +13,7 @@
 <div class="scrollbox">
     <div class="ui grid">
         <div class="ten wide column">
-            <div data-bind="visible: uploadMetadataFieldDefinitionsObs().length === 0">
+            <div data-bind="visible: fieldDefinitionsObs().length === 0">
                 <p>There are currently no upload metadata fields.</p>
                 <p>
                     <button class="ui primary button" data-bind="click: addFirst">
@@ -21,17 +21,17 @@
                     </button>
                 <p>
             </div>
-            <div class="ui form schema sfieldZone" data-bind="foreach: uploadMetadataFieldDefinitionsObs, 
+            <div class="ui form schema sfieldZone" data-bind="foreach: fieldDefinitionsObs, 
             dragula: { 
                 dragHandleSelector: '.draggable', 
                 indexObs: indexObs, 
-                listObs: uploadMetadataFieldDefinitionsObs 
+                listObs: fieldDefinitionsObs 
             }">
             <div class="field_definitions" data-bind="component: {
                     name: 'field_definition', 
                     params: { 
                         field: $data, 
-                        itemsObs: $parent.uploadMetadataFieldDefinitionsObs, 
+                        itemsObs: $parent.fieldDefinitionsObs, 
                         indexObs: $index 
                     }
                 }"></div>

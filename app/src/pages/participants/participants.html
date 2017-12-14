@@ -9,7 +9,7 @@
                 Export&hellip;</button>
             <button class="ui red tiny button" data-bind="visible: isAdmin, 
                 disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
-            <a href="#/participants/new" class="ui primary tiny button">New Participant</a>
+            <a href="#/participants/new/general" class="ui primary tiny button">New Participant</a>
         </div>
     </div>
     <div class="ui empty secondary pointing menu"></div>
@@ -25,15 +25,16 @@
                 <th width="10" data-bind="visible: isAdmin">
                     <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
                 </th>
-                <th>Email/Phone</th>
                 <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
                 <th style="white-space: nowrap">Created On</th>
                 <th></th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
-                <td colspan="5" data-bind="html: recordsMessageObs"></td>
+                <td colspan="6" data-bind="html: recordsMessageObs"></td>
             </tr>
         </tbody>
         <tbody data-bind="foreach: itemsObs">
@@ -41,14 +42,19 @@
                 <td data-bind="visible: $parent.isAdmin">
                     <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                 </td>
-                <td>
-                    <a data-bind="href: '#/participants/'+$data.id+'/general', text: $data.email"></a>
-                    <a data-bind="href: '#/participants/'+$data.id+'/general', text: $data.phone"></a>
-                </td>
                 <td data-bind="text: $component.formatName($data)"></td>
+                <td>
+                    <a data-bind="href: '#/participants/'+$data.id+'/general', 
+                        text: $component.formatEmailPhone($data.email)"></a>
+                </td>
+                <td>
+                    <a data-bind="href: '#/participants/'+$data.id+'/general', 
+                        text: $component.formatEmailPhone($data.phone)"></a>
+                </td>
                 <td style="white-space: nowrap" data-bind="text: $component.formatDateTime($data.createdOn)"></td>
                 <td style="padding: 0; text-align:right">
-                    <button data-bind="visible: $data.status === 'unverified', click: $component.resendEmailVerification"
+                    <button data-bind="visible: $data.status === 'unverified', 
+                        click: $component.resendEmailVerification"
                         class="ui basic compact mini button">Resend email verification</button>
                     <button data-bind="visible: $data.status === 'unverified' && $component.isAdmin(), 
                         click: $component.enableAccount"
