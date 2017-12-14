@@ -200,7 +200,7 @@ describe("transforms", function() {
             expect(Binder.formatTitle(undefined, context) ).to.equal("Fred");
             
             context = { model: { id: "foo", email: "email@email.com" } };
-            expect(Binder.formatTitle(undefined, context) ).to.equal("email@email.com");
+            expect(Binder.formatTitle(undefined, context) ).to.equal("—");
 
             context = { model: { id: "new" } };
             expect(Binder.formatTitle(undefined, context) ).to.equal("New participant");
