@@ -16,7 +16,7 @@ var OPTIONS = [
     {value: 'all_qualified_researchers', label:'All Qualified Researchers'}
 ];
 var ROLES = ["Developer", "Researcher", "Administrator", "Worker"];
-var NEW_PARTICIPANT = {id:"new",attributes:{}};
+var NEW_PARTICIPANT = {id:"new",attributes:{},phone:{number: '', regionCode: 'US'}};
 
 module.exports = function(params) {
     var self = this;
@@ -30,6 +30,7 @@ module.exports = function(params) {
         .obs('allRoles[]', ROLES)
         .bind('email')
         .bind('phone', null, Binder.formatPhone, Binder.persistPhone)
+        .bind('phoneRegion', 'US')
         .bind('attributes[]', [], Binder.formatAttributes, Binder.persistAttributes)
         .bind('firstName')
         .bind('lastName')
@@ -63,6 +64,11 @@ module.exports = function(params) {
     self.phoneLink = ko.computed(function() {
         return "tel:" + self.phoneObs();
     });
+    self.updateRegion = function(model, event) {
+        if(event.target.classList.contains("item")) {
+            self.phoneRegionObs(event.target.textContent);
+        }
+    };
 
     function initStudy(study) {
         // there's a timer in the control involved here, we need to use an observer
@@ -132,13 +138,15 @@ module.exports = function(params) {
 
         var updatedTitle = self.isPublicObs() ? 
             fn.formatName(participant) : participant.externalId;
-        function updateName() {
+        function updateName(participant) {
             self.titleObs(updatedTitle);
+            return serverService.getParticipant(participant.identifier);
         }
 
         utils.startHandler(vm, event);
         return saveParticipant(participant)
             .then(updateName)
+            .then(binder.update())
             .then(utils.successHandler(vm, event, "Participant created."))
             .catch(failureHandler);
     };

@@ -18,31 +18,47 @@ module.exports = function(params) {
 
     var binder = new Binder(this)
         .obs('index', 0)
-        .bind('uploadMetadataFieldDefinitions[]', [], schemaUtils.fieldDefToObs, schemaUtils.fieldObsToDef)
+        .bind('fieldDefinitions[]', [])
         .bind('version');
-    
+
     self.save = function(vm, event) {
+        if (!self.study) {
+            return;
+        }
         utils.startHandler(vm, event);
 
-        self.study = binder.persist(self.study);
+        self.study.uploadMetadataFieldDefinitions = schemaUtils.fieldObsToDef(self.fieldDefinitionsObs());
         serverService.saveStudy(self.study, self.isAdmin())
             .then(fn.handleObsUpdate(self.versionObs, 'version'))
             .then(utils.successHandler(vm, event, "Upload metadata fields have been saved."))
             .catch(utils.failureHandler());
     };
     self.addBelow = function(field, event) {
-        var index = self.uploadMetadataFieldDefinitionsObs.indexOf(field);
+        var index = self.fieldDefinitionsObs.indexOf(field);
         var newField = schemaUtils.makeNewField();
-        self.uploadMetadataFieldDefinitionsObs.splice(index+1,0,newField);
+        self.fieldDefinitionsObs.splice(index+1,0,newField);
     };
     self.addFirst = function(vm, event) {
-        console.log(schemaUtils);
         var field = schemaUtils.makeNewField();
-        self.uploadMetadataFieldDefinitionsObs.push(field);
+        self.fieldDefinitionsObs.push(field);
+    };
+    self.editMultiChoiceAnswerList = function(field, event) {
+        var otherLists = self.fieldDefinitionsObs().filter(function(oneField) {
+            return (oneField.typeObs() === "multi_choice" && oneField.multiChoiceAnswerListObs().length);
+        }).map(function(oneField) {
+            return [].concat(oneField.multiChoiceAnswerListObs());
+        });
+        root.openDialog('multichoice_editor', {
+            listObs: field.multiChoiceAnswerListObs,
+            otherLists: otherLists
+        });
     };
     
     serverService.getStudy()
-        .then(binder.assign('study'))
-        .then(binder.update())
+        .then(function(study) {
+            self.study = study;
+            self.fieldDefinitionsObs(schemaUtils.fieldDefToObs(study.uploadMetadataFieldDefinitions));
+            return study;
+        })
         .catch(failureHandler);
 };

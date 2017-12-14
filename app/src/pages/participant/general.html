@@ -62,19 +62,24 @@
                 <label>Email</label>
                 <input type="text" data-bind="textInput: emailObs"/>
             </div>
-            <div class="field">
-                <label>Data Groups</label>
-                <select multiple data-bind="semantic: 'multi-search-select', 
-                    updateSelect: dataGroupsObs, foreach: allDataGroupsObs">
-                    <option data-bind="text: $data, selected: $component.dataGroupsObs().indexOf($data) > -1"></option>
-                </select>
+            <div class="field" data-bind="visible: isNewObs" id="phone">
+                <label>Phone</label>
+                <div class="ui left labeled input">
+                    <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
+                        <div class="text" data-bind="text: phoneRegionObs"></div>
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                            <div class="item">US</div>
+                            <div class="item">CA</div>
+                            <div class="item">MX</div>
+                        </div>
+                    </div>
+                    <input type="text" placeholder="Phone number" data-bind="textInput: phoneObs">
+                </div>        
             </div>
-            <div class="field">
-                <label>Languages</label>
-                <input type="text" data-bind="textInput: languagesObs"/>
-                <div class="help-text">
-                    For example, "en, fr"
-                </div>
+            <div class="field" id="externalId">
+                <label>External ID</label>
+                <input type="text" data-bind="textInput: externalIdObs"/>
             </div>
             <div class="field" data-bind="visible: !isNewObs()">
                 <label>Health Code</label>
@@ -83,33 +88,57 @@
                     Confidential. Do not redistribute.
                 </span>
             </div>
+            <div class="field" data-bind="visible: !isNewObs()">
+                <label>User ID</label>
+                <input type="text" readonly data-bind="value: idObs"/>
+            </div>
         </div>
-        
         <div class="equal width fields">
             <div class="required field" data-bind="visible: isNewObs" id="password">
                 <label>Password</label>
                 <input type="password" data-bind="textInput: passwordObs"/>
             </div>
-            <div class="field" id="externalId">
-                <label>External ID</label>
-                <input type="text" data-bind="textInput: externalIdObs"/>
+            <div class="field">
+                <label>Languages</label>
+                <input type="text" data-bind="textInput: languagesObs"/>
+                <div class="help-text">
+                    For example, "en, fr"
+                </div>
             </div>
-            <div class="field" data-bind="visible: isPublicObs">
+            <div class="field">
+                <label>Data Groups</label>
+                <select multiple data-bind="semantic: 'multi-search-select', 
+                    updateSelect: dataGroupsObs, foreach: allDataGroupsObs">
+                    <option data-bind="text: $data, 
+                        selected: $component.dataGroupsObs().indexOf($data) > -1"></option>
+                </select>
+            </div>
+            <div class="field" data-bind="visible: !isPublicObs()">
+                <label>Created On</label>
+                <div data-bind="text: createdOnObs"></div>
+            </div>
+            <div class="field" data-bind="visible: isPublicObs() && !isNewObs()">
                 <label style="margin-bottom: .9rem">Email Preference</label>
                 <ui-checkbox params="checkedObs: notifyByEmailObs">
                     Consents to receive email from study
                 </ui-checkbox>
             </div>
-            <div class="field" data-bind="visible: !isNewObs()">
-                <label>User ID</label>
-                <input type="text" readonly data-bind="value: idObs"/>
-            </div>
-            <div class="field" data-bind="visible: !isPublicObs()">
-                <label>Created On</label>
-                <div data-bind="text: createdOnObs"></div>
-            </div>            
         </div>
-        
+        <div class="equal width fields" data-bind="visible: !isNewObs() && isPublicObs">
+            <div class="field">
+                <label>Email</label>
+                <a class="input-field-padding" data-bind="href: emailLink, text: emailObs"></a>
+            </div>
+            <div class="field">
+                <label>Phone</label>
+                <a class="input-field-padding" data-bind="href: phoneLink, text: phoneObs"></a>
+            </div>
+            <div class="field">
+                <label>Created On</label>
+                <div class="input-field-padding" data-bind="text: createdOnObs"></div>
+            </div>
+        </div>
+        <h4 class="ui dividing header">Attributes</h4>
         <div class="equal width fields">
             <!-- ko foreach: attributesObs -->
                 <div class="field" style="margin-right: 2rem; max-width: 12rem">
@@ -117,25 +146,6 @@
                     <input type="text" data-bind="textInput: $data.obs"/>
                 </div>
             <!-- /ko -->
-        </div>
-        
-        <div class="equal width fields" data-bind="visible: !isNewObs() && isPublicObs">
-            <div class="field">
-                <label>Email</label>
-                <div>
-                    <a data-bind="href: emailLink, text: emailObs"></a>
-                </div>
-            </div>
-            <div class="field">
-                <label>Phone</label>
-                <div>
-                    <a data-bind="href: phoneLink, text: phoneObs"></a>
-                </div>
-            </div>
-            <div class="field">
-                <label>Created On</label>
-                <div data-bind="text: createdOnObs"></div>
-            </div>
         </div>
     </form>
 </div>
