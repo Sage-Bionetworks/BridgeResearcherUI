@@ -189,10 +189,14 @@ export default class Binder {
         return context.observer.callback();
     }
     static formatPhone(value, context) {
-        return (value) ? value.number : null;
+        if (value) {
+            context.vm.phoneRegionObs(value.regionCode);
+            return value.number;
+        }
+        return null;
     }
     static persistPhone(value, context) {
-        return value;
+        return {number: context.vm.phoneObs(), regionCode: context.vm.phoneRegionObs()};
     }
     static fromJson(json, context) {
         if (json) {

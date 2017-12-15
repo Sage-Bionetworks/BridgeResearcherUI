@@ -124,9 +124,6 @@ function formatName(participant) {
     if (participant) {
         notBlankName(array, participant.firstName);
         notBlankName(array, participant.lastName);
-        if (array.length === 0 && participant.email) {
-            return participant.email;
-        }
     }
     return (array.length === 0) ? '—' : array.join(' ');
 }

@@ -340,11 +340,8 @@ export class ServerService {
     deleteCacheKey(cacheKey) {
         return this.del(config.cache+"/"+esc(cacheKey));
     }
-    getParticipants(offsetBy, pageSize, emailFilter, startTime, endTime) {
-        var queryString = fn.queryString({
-            offsetBy: offsetBy, pageSize: pageSize, emailFilter: emailFilter,
-            startTime: startTime, endTime: endTime
-        });
+    getParticipants(offsetBy, pageSize, emailFilter, phoneFilter, startTime, endTime) {
+        var queryString = fn.queryString({offsetBy, pageSize, emailFilter, phoneFilter, startTime, endTime});
         return this.gethttp(config.participants+queryString);
     }
     getParticipant(id) {
