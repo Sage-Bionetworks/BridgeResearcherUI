@@ -36,7 +36,7 @@ function addObserversToActivity(activity) {
     }
     activity.compoundTaskIdObs = ko.observable();
     if (activity.activityType === 'compound') {
-        activity.compoundTaskIdObs(activity.compoundActivity.taskId);
+        activity.compoundTaskIdObs(activity.compoundActivity.taskIdentifier);
     }
     return activity;
 }
