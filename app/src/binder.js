@@ -196,7 +196,10 @@ export default class Binder {
         return null;
     }
     static persistPhone(value, context) {
-        return {number: context.vm.phoneObs(), regionCode: context.vm.phoneRegionObs()};
+        if (context.vm.phoneObs() && context.vm.phoneRegionObs()) {
+            return {number: context.vm.phoneObs(), regionCode: context.vm.phoneRegionObs()};    
+        }
+        return null;
     }
     static fromJson(json, context) {
         if (json) {
