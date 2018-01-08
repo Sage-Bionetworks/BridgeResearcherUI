@@ -23,8 +23,8 @@ module.exports = function(params) {
     fn.copyProps(self, root, 'isPublicObs', 'isDeveloper', 'isResearcher');
 
     serverService.getParticipantName(params.userId).then(function(part) {
-        self.titleObs(root.isPublicObs() ? part.name : part.externalId);
-        self.nameObs(root.isPublicObs() ? part.name : part.externalId);
+        self.titleObs(part.name);
+        self.nameObs(part.name);
         self.statusObs(part.status);
     }).catch(failureHandler);
 

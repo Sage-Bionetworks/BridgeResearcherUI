@@ -38,7 +38,7 @@ function routeTo(routeName, fields) {
     };
 }
 function redirectTo(response) {
-    router.setRoute('/enrollees/' + response.items[0].id+'/general');
+    router.setRoute('/participants/' + response.items[0].id+'/general');
 }
 function redirectToParticipant(externalId) {
     serverService.getParticipants(null,5,"+"+externalId+"@").then(redirectTo);

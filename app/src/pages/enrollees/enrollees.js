@@ -50,7 +50,7 @@ module.exports = function() {
     }
     function msgIfNoRecords(response) {
         if (response.items.length === 0) {
-            self.recordsMessageObs("There are no participants (or none that start with your search string).");
+            self.recordsMessageObs("There are no external IDs (or none that start with your search string).");
         }
         return response;
     }
