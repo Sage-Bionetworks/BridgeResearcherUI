@@ -33,8 +33,7 @@ module.exports = function() {
 
     self.isAdmin = root.isAdmin;
     self.recordsObs = ko.observable("");
-    self.formatName = fn.formatName;
-    self.formatDateTime = fn.formatDateTime;
+    fn.copyProps(self, fn, 'formatName', 'formatDateTime', 'formatSummaryAsFullLabel');
 
     self.formatEmailPhone = function(value) {
         return (value) ? value : '—';

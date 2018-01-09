@@ -127,12 +127,29 @@ function formatName(participant) {
     }
     return (array.length === 0) ? '—' : array.join(' ');
 }
+function formatSummaryAsFullLabel(summary) {
+    var name = formatName(summary);
+    if (summary.email) {
+        if (summary.email.includes(summary.externalId)) {
+            name = summary.externalId;
+        } else if (name === '—') {
+            name = summary.email;
+        }
+    } else if (summary.phone) {
+        name = summary.phone;
+    }
+    return name;
+}
 function formatNameAsFullLabel(participant) {
     var name = formatName(participant);
-    if (participant.email.includes(participant.externalId)) {
-        name = participant.externalId;
-    } else if (name === '—') {
-        name = participant.email;
+    if (participant.email) {
+        if (participant.email.includes(participant.externalId)) {
+            name = participant.externalId;
+        } else if (name === '—') {
+            name = participant.email;
+        }
+    } else if (participant.phone) {
+        name = participant.phone.nationalFormat;
     }
     return name;
 }
@@ -347,6 +364,7 @@ export default {
     formatMs,
     formatName,
     formatNameAsFullLabel,
+    formatSummaryAsFullLabel,
     formatRoles,
     formatTitleCase,
     formatVersionRange,
