@@ -23,8 +23,8 @@ module.exports = function(params) {
     fn.copyProps(self, root, 'isPublicObs', 'isDeveloper', 'isResearcher');
 
     serverService.getParticipantName(params.userId).then(function(part) {
-        self.titleObs(root.isPublicObs() ? part.name : part.externalId);
-        self.nameObs(root.isPublicObs() ? part.name : part.externalId);
+        self.titleObs(part.name);
+        self.nameObs(part.name);
         self.statusObs(part.status);
     }).catch(failureHandler);
 
@@ -34,7 +34,7 @@ module.exports = function(params) {
     });
 
     self.reportURL = function(item) {
-        return root.userPath() + self.userIdObs() + '/reports/' + item.identifier;        
+        return '#/participants/'+self.userIdObs()+'/reports/'+item.identifier;        
     };
     self.addReport = function(vm, event) {
         root.openDialog('report_editor', {

@@ -10,7 +10,7 @@ module.exports = function(params) {
     self.computeds = [];
     self.linkMaker = function(postfix) {
         var c = ko.computed(function() {
-            return root.userPath() + self.userIdObs() + '/' + postfix;
+            return '#/participants/'+self.userIdObs()+'/'+postfix;
         });
         self.computeds.push(c);
         return c;

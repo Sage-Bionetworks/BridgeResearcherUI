@@ -25,6 +25,7 @@ module.exports = function() {
     self.phoneFilter = null;
     self.startTime = null;
     self.endTime = null;
+    self.isPublicObs = root.isPublicObs;
 
     tables.prepareTable(self, {
         name: "participant", 
@@ -35,6 +36,7 @@ module.exports = function() {
     self.recordsObs = ko.observable("");
     self.formatName = fn.formatName;
     self.formatDateTime = fn.formatDateTime;
+
     self.formatEmailPhone = function(value) {
         return (value) ? value : '—';
     };

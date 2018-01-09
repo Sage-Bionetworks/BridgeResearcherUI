@@ -19,8 +19,8 @@ module.exports = function(params) {
         .obs('items[]');
 
     serverService.getParticipantName(params.userId).then(function(part) {
-        self.titleObs(root.isPublicObs() ? part.name : part.externalId);
-        self.nameObs(root.isPublicObs() ? part.name : part.externalId);
+        self.titleObs(part.name);
+        self.nameObs(part.name);
         self.statusObs(part.status);
     }).catch(utils.failureHandler());
 

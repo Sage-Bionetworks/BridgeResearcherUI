@@ -2,8 +2,7 @@
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
             <div class="ui breadcrumb">
-                <a class="section" href="#/participants" data-bind="visible: isPublicObs">Participants</a>
-                <a class="section" href="#/enrollees" data-bind="visible: !isPublicObs()">External Identifiers</a>
+                <a class="section" href="#/participants">Participants</a>
                 <i class="right chevron icon divider"></i>
             </div>            
             <h3 data-bind="html: titleObs"></h3>
@@ -124,7 +123,7 @@
                 </ui-checkbox>
             </div>
         </div>
-        <div class="equal width fields" data-bind="visible: !isNewObs() && isPublicObs">
+        <div class="equal width fields" data-bind="visible: !isNewObs()">
             <div class="field">
                 <label>Email</label>
                 <a class="input-field-padding" data-bind="href: emailLink, text: emailObs"></a>

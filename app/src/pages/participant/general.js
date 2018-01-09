@@ -50,7 +50,7 @@ module.exports = function(params) {
     
     if (!self.isNewObs()) {
         serverService.getParticipantName(self.userIdObs()).then(function(part) {
-            self.titleObs(root.isPublicObs() ? part.name : part.externalId);
+            self.titleObs(part.name);
         }).catch(failureHandler);
     }
     

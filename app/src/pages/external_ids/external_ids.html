@@ -3,37 +3,28 @@
         <div class="fixed-header-heading">
             <h3>External Identifiers</h3>
         </div>
-        <div class="fixed-header-buttons" data-bind="visible: codesEnumeratedObs">
+        <div class="fixed-header-buttons" data-bind="visible: codesEnumeratedObs && isDeveloper">
             <button class="ui tiny button" style="margin-left: 3rem" data-bind="click: openImportDialog">Import&hellip;</button>
+            <button class="ui tiny button" data-bind="click: createFromNext">Assign Next ID</button>
         </div>
     </div>
     <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
+    <div class="ui success icon message" style="margin-bottom: 1.4rem" data-bind="visible: showResultsObs">
+        <i class="check sign icon"></i>
+        <div class="content">
+            <div class="header">Participant credentials created</div>
+            <p style="margin-top:1rem">Credentials created for user ID: <span class="identifier-emphasis" data-bind="text: resultObs"></span> </p>
+            <p>Enter this ID into the app to register the device.</p>
+        </div>
+    </div>
     <div class="line-control">
-        <div>
+        <div class="line-control-stretch">
             <div class="ui icon input" data-bind="css:{loading: searchLoadingObs}">
                 <input type="text" placeholder="Start of ID" data-bind="textInput: idFilterObs, 
                     event: {keyup: doSearch}">
                 <i class="search icon"></i>
-            </div>
-        </div>
-        <div class="line-control-radio line-control-stretch">
-            <label>Credentials?</label>
-            <div class="ui radio checkbox">
-                <input id="assignTrue" type="radio" value="true" 
-                    name="assign" data-bind="click: assignFilter"/>
-                <label for="assignTrue">Yes</label>
-            </div>
-            <div class="ui radio checkbox">
-                <input id="assignFalse" type="radio" value="false" 
-                    name="assign" data-bind="click: assignFilter"/>
-                <label for="assignFalse">No</label>
-            </div>
-            <div class="ui radio checkbox">
-                <input id="assignEither" type="radio" value="all" 
-                    name="assign" data-bind="click: assignFilter" checked/>
-                <label for="assignEither">Both</label>
             </div>
         </div>
         <div>
@@ -55,12 +46,20 @@
         <tbody data-bind="foreach: itemsObs">
             <tr>
                 <td style="white-space: nowrap; width:100%">
-                    <span data-bind="text: $data.identifier"></span>
+                    <span data-bind="text: $data.identifier, visible: !$data.assigned"></span>
+                    <span data-bind="visible: $data.assigned">
+                        <span data-bind="visible: !$parent.isResearcher(), text: $data.identifier"></span>
+                        <a data-bind="visible: $parent.isResearcher, href: '#/external_ids/'+$data.identifier, 
+                            text: $data.identifier, click: $component.showLinkLoading"></a>
+                        <span class="ui tiny inline loader"></span>
+                    </span>
                 </td>
                 <td style="white-space: nowrap">
                     <div data-bind="visible: $data.assigned === true">
-                        <i class="green check icon"> </i> Assigned
+                        <i class="green check icon"> </i> Credentials Created
                     </div>
+                    <button data-bind="visible: $data.assigned == false, click: $component.createFrom" 
+                        class="ui compact mini button">Create Credentials</button>
                 </td>
             </tr>
         </tbody>

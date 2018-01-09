@@ -38,15 +38,15 @@ module.exports = function(params) {
         .obs('showLoader', false);
 
     serverService.getParticipantName(params.userId).then(function(part) {
-        self.titleObs(root.isPublicObs() ? part.name : part.externalId);
-        self.nameObs(root.isPublicObs() ? part.name : part.externalId);
+        self.titleObs(part.name);
+        self.nameObs(part.name);
         self.statusObs(part.status);
     }).catch(failureHandler);
     
     self.isPublicObs = root.isPublicObs;
     self.isDeveloper = root.isDeveloper;
     self.linkMaker = function() {
-        return root.userPath()+self.userIdObs()+'/reports';
+        return '#/participants/'+self.userIdObs()+'/reports';
     };
 
     var d = new Date();
