@@ -31,7 +31,7 @@ module.exports = function(params) {
     tables.prepareTable(self, {name:'activitie'});
 
     self.linkMaker = function(userId, guid) {
-        return root.userPath()+userId+'/activities/'+guid;
+        return '#/participants/'+userId+'/activities/'+guid;
     };
     function processActivities(response) {
         var array = [];

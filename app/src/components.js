@@ -147,10 +147,6 @@ reg('scheduleplan', {
     viewModel: require('./pages/scheduleplan/scheduleplan'),
     template: require('./pages/scheduleplan/scheduleplan.html')
 });
-reg('enrollees', {
-    viewModel: require('./pages/enrollees/enrollees'),
-    template: require('./pages/enrollees/enrollees.html')
-});
 reg('participants', {
     viewModel: require('./pages/participants/participants'),
     template: require('./pages/participants/participants.html')

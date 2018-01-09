@@ -34,7 +34,7 @@ module.exports = function(params) {
     });
 
     self.reportURL = function(item) {
-        return root.userPath() + self.userIdObs() + '/reports/' + item.identifier;        
+        return '#/participants/'+self.userIdObs()+'/reports/'+item.identifier;        
     };
     self.addReport = function(vm, event) {
         root.openDialog('report_editor', {

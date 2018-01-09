@@ -40,7 +40,7 @@ module.exports = function() {
     }
     function updatePageWithResult(response) {
         self.showResultsObs(true);
-        ko.postbox.publish('enrollees-page-refresh');
+        ko.postbox.publish('external-ids-page-refresh');
         return response;
     }
     function convertToPaged(identifier) {

@@ -46,7 +46,7 @@ module.exports = function(params) {
     self.isPublicObs = root.isPublicObs;
     self.isDeveloper = root.isDeveloper;
     self.linkMaker = function() {
-        return root.userPath()+self.userIdObs()+'/reports';
+        return '#/participants/'+self.userIdObs()+'/reports';
     };
 
     var d = new Date();
