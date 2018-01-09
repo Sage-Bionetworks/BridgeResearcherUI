@@ -42,14 +42,13 @@
                 <td data-bind="visible: $parent.isAdmin">
                     <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                 </td>
-                <td data-bind="text: $component.formatName($data)"></td>
                 <td>
                     <a data-bind="href: '#/participants/'+$data.id+'/general', 
-                        text: $component.formatEmailPhone($data.email)"></a>
+                        text: $component.formatSummaryAsFullLabel($data)"></a>
                 </td>
-                <td>
-                    <a data-bind="href: '#/participants/'+$data.id+'/general', 
-                        text: $component.formatEmailPhone($data.phone)"></a>
+                <td data-bind="text: $component.formatEmailPhone($data.email)">
+                </td>
+                <td data-bind="text: $component.formatEmailPhone($data.phone)">
                 </td>
                 <td style="white-space: nowrap" data-bind="text: $component.formatDateTime($data.createdOn)"></td>
                 <td style="padding: 0; text-align:right">
