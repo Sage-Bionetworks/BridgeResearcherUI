@@ -50,8 +50,6 @@
                     <span data-bind="visible: $data.assigned">
                         <span data-bind="visible: !$parent.isResearcher(), text: $data.identifier"></span>
 
-                        <!-- TODO: We want to control the spinner better here. -->
-                        <!-- href: '#/external_ids/'+$data.identifier,  -->
                         <a class="link" data-bind="visible: $parent.isResearcher, 
                             text: $data.identifier, click: $component.execLink"></a>
                         <span class="ui tiny inline loader"></span>

@@ -84,7 +84,6 @@ module.exports = function() {
     self.execLink = function(item, event) {
         event.target.nextElementSibling.classList.add("active");
         serverService.getParticipants(null,5,"+"+item.identifier+"@").then(function(response) {
-            console.log(response);
             if (response.items.length === 0) {
                 toastr.error("Not a lab code account: we cannot locate the account by its external ID.");
             } else {
@@ -92,10 +91,6 @@ module.exports = function() {
             }
             event.target.nextElementSibling.classList.remove("active");
         });
-    };
-    self.showLinkLoading = function(vm, event) {
-        event.target.nextElementSibling.classList.add("active");
-        return true;
     };
     self.doSearch = function(vm, event) {
         if (event.keyCode === 13) {
