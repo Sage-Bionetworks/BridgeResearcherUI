@@ -96,8 +96,7 @@ module.exports = function(params) {
     }
     function saveParticipant(participant) {
         if (self.isNewObs()) {
-            return serverService.createParticipant(participant)
-                .then(afterCreate);
+            return serverService.createParticipant(participant).then(afterCreate);
         } else {
             return serverService.updateParticipant(participant);
         }
@@ -138,11 +137,10 @@ module.exports = function(params) {
 
         var updatedTitle = self.study.emailVerificationEnabled ? 
             fn.formatName(participant) : participant.externalId;
-        function updateName(participant) {
+        function updateName(response) {
             self.titleObs(updatedTitle);
-            return serverService.getParticipant(participant.identifier);
+            return serverService.getParticipant(self.userIdObs());
         }
-
         utils.startHandler(vm, event);
         return saveParticipant(participant)
             .then(updateName)
