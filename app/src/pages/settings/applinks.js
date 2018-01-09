@@ -48,8 +48,6 @@ module.exports = function() {
         .obs('appleIndex')
         .obs('androidIndex');
 
-    self.isPublicObs = root.isPublicObs;
-
     self.save = function(vm, event) {
         self.study = binder.persist(self.study);
 

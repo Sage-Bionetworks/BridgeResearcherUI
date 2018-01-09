@@ -21,8 +21,6 @@ module.exports = function(params) {
         .obs('status')
         .obs('title', '&#160;');
 
-    fn.copyProps(self, root, 'isPublicObs');
-
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(part.name);
         self.statusObs(part.status);

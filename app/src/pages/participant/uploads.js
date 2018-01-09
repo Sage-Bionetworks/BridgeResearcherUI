@@ -40,7 +40,6 @@ module.exports = function(params) {
         self.statusObs(part.status);
     }).catch(failureHandler);
 
-    fn.copyProps(self, root, 'isPublicObs');
     fn.copyProps(self, fn, 'formatDateTime');
 
     tables.prepareTable(self, {name:'upload'});

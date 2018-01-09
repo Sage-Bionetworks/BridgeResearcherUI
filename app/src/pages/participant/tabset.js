@@ -5,7 +5,7 @@ import root from '../../root';
 module.exports = function(params) {
     var self = this;
 
-    fn.copyProps(self, params, 'isNewObs', 'isPublicObs', 'userIdObs', 'statusObs');
+    fn.copyProps(self, params, 'isNewObs', 'userIdObs', 'statusObs');
 
     self.computeds = [];
     self.linkMaker = function(postfix) {

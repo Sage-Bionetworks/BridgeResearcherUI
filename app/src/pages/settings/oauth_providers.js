@@ -28,7 +28,6 @@ function obsToModel(array) {
 
 module.exports = function() {
     var self = this;
-    self.isPublicObs = root.isPublicObs;
 
     var binder = new Binder(self).bind('oAuthProviders[]', [], modelToObs, obsToModel);
 

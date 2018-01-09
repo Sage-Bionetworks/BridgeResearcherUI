@@ -119,12 +119,7 @@ export class ServerService {
     }
     cacheParticipantName(response) {
         if (response && response.id) {
-            var name = fn.formatName(response);
-            if (response.email.includes(response.externalId)) {
-                name = response.externalId;
-            } else if (name === '—') {
-                name = response.email;
-            }
+            var name = fn.formatNameAsFullLabel(response);
             cache.set(response.id+':name', {name: name, status: response.status});
         }
         return response;
