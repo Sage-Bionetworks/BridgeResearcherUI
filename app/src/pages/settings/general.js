@@ -40,7 +40,6 @@ module.exports = function() {
         return (self.minAgeOfConsentObs() == "121") ? "No age limit" : self.minAgeOfConsentObs();
     });
 
-    self.isPublicObs = root.isPublicObs;
     self.save = function(vm, event) {
         utils.startHandler(self, event);
         self.study = binder.persist(self.study);

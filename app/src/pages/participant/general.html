@@ -12,7 +12,7 @@
                 <div class="text">Actions</div>
                 <i class="dropdown icon"></i>
                 <div class="menu">
-                    <div class="item" data-bind="click: requestResetPassword, visible: isPublicObs">Send reset password email</div>
+                    <div class="item" data-bind="click: requestResetPassword">Send reset password email</div>
                     <div class="item" data-bind="visible: showEnableAccountObs() && isAdmin(), 
                         click: enableAccount">Enable Account</div>
                     <div class="item" data-bind="visible: !showEnableAccountObs() && isAdmin(), 
@@ -24,15 +24,14 @@
         </div>
     </div>
     <!-- ko component: {name: 'participant-tabset', params: {isNewObs: isNewObs, 
-        showEnableAccountObs: showEnableAccountObs, isPublicObs: isPublicObs,
-        userIdObs: userIdObs, statusObs: statusObs
+        showEnableAccountObs: showEnableAccountObs, userIdObs: userIdObs, statusObs: statusObs
     }} --><!-- /ko -->
 </div>
 <div class="scrollbox">
     <errors></errors>
     <form class="ui form">
         <div class="equal width fields">
-            <div class="field" data-bind="visible: isPublicObs">
+            <div class="field">
                 <label>Name</label>
                 <div class="two fields" style="margin-right:.1rem">
                     <input type="text" style="margin-left:.4rem" placeholder="First Name" 
@@ -51,8 +50,6 @@
                     updateSelect: rolesObs, foreach: allRolesObs">
                     <option data-bind="text: $data, selected: $component.rolesObs().indexOf($data) > -1"></option>
                 </select>
-            </div>
-            <div class="field" data-bind="visible: !isPublicObs()">
             </div>
         </div>
         
@@ -112,11 +109,7 @@
                         selected: $component.dataGroupsObs().indexOf($data) > -1"></option>
                 </select>
             </div>
-            <div class="field" data-bind="visible: !isPublicObs()">
-                <label>Created On</label>
-                <div data-bind="text: createdOnObs"></div>
-            </div>
-            <div class="field" data-bind="visible: isPublicObs() && !isNewObs()">
+            <div class="field" data-bind="!isNewObs()">
                 <label style="margin-bottom: .9rem">Email Preference</label>
                 <ui-checkbox params="checkedObs: notifyByEmailObs">
                     Consents to receive email from study

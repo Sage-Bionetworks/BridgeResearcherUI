@@ -83,7 +83,7 @@ module.exports = function(params) {
         .obs('import', '')
         .obs('enable', true)
         .obs('closeText', 'Close')
-        .obs('createCredentials', !root.isPublicObs());
+        .obs('createCredentials', true);
 
     self.statusObs("Please enter a list of identifiers, separated by commas or new lines.");
     

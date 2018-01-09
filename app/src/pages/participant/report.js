@@ -43,7 +43,6 @@ module.exports = function(params) {
         self.statusObs(part.status);
     }).catch(failureHandler);
     
-    self.isPublicObs = root.isPublicObs;
     self.isDeveloper = root.isDeveloper;
     self.linkMaker = function() {
         return '#/participants/'+self.userIdObs()+'/reports';

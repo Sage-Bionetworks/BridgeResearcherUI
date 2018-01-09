@@ -55,8 +55,6 @@ module.exports = function(params) {
         self.statusObs(part.status);
     }).catch(failureHandler);
 
-    self.isPublicObs = root.isPublicObs;
-
     self.toggle = function(model) {
         model.collapsedObs(!model.collapsedObs());
     };

@@ -41,8 +41,6 @@ module.exports = function(params) {
         .obs('timeZone', null, noner)
         .obs('userAgent', null, noner);
 
-    self.isPublicObs = root.isPublicObs;
-
     function requestInfo() {
         return serverService.getParticipantRequestInfo(params.userId);
     }

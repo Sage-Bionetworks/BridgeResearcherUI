@@ -24,7 +24,7 @@ module.exports = function() {
         .bind('uploadValidationStrictness', 'warning')
         .bind('disableExport');
 
-    fn.copyProps(self, root, 'isPublicObs', 'isDeveloper', 'isResearcherOnly');
+    fn.copyProps(self, root, 'isDeveloper', 'isResearcherOnly');
 
     self.isLinked = ko.computed(function() {
         return fn.isNotBlank(self.synapseProjectIdObs()) || 
