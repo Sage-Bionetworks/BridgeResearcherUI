@@ -76,15 +76,13 @@
                         <a href="#/subpopulations" class="item" data-bind="active: isActive, visible: isDeveloper()">
                             Consent Groups
                         </a>
-                        <a href="#/participants" class="item" data-bind="active: isActive, visible: isPublicObs() && isResearcher()">
+                        <a href="#/participants" class="item" data-bind="active: isActive, visible: isResearcher()">
                             Participants
                         </a>
-                        <a href="#/enrollees" class="item" data-bind="active: isActive, 
-                            visible: !isPublicObs() && codesEnumeratedObs()">
+                        <a href="#/external_ids" class="item" data-bind="active: isActive, visible: !isPublicObs()">
                             External IDs
                         </a>
-                        <a href="#/external_ids" class="item" data-bind="active: isActive, 
-                            visible: isPublicObs() && codesEnumeratedObs() && isDeveloper()">
+                        <a href="#/external_ids" class="item" data-bind="active: isActive, visible: isPublicObs()">
                             External IDs
                         </a>
                         <a href="#/reports/uploads" class="item" data-bind="active: isActive, visible: isDeveloper() || isResearcher()">

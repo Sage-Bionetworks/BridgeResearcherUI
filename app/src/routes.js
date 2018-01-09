@@ -38,7 +38,7 @@ function routeTo(routeName, fields) {
     };
 }
 function redirectTo(response) {
-    router.setRoute('/enrollees/' + response.items[0].id+'/general');
+    router.setRoute('/participants/' + response.items[0].id+'/general');
 }
 function redirectToParticipant(externalId) {
     serverService.getParticipants(null,5,"+"+externalId+"@").then(redirectTo);
@@ -99,21 +99,8 @@ router.on('/participants/:userId', routeTo('participant_general', USERID));
 router.on('/participants/:userId/general', routeTo('participant_general', USERID));
 router.on('/participants/:userId/requestInfo', routeTo('participant_request_info', USERID));
 router.on('/participants', routeTo('participants'));
-// EVERYTHING IN PARTICIPANTS, HAS TO BE IN ENROLLEES
-router.on('/enrollees/:userId/reports/:identifier', routeTo('participant_report', USERID_IDENTIFIER));
-router.on('/enrollees/:userId/activities/:guid', routeTo('participant_activity', USERID_GUID));
-router.on('/enrollees/:userId/activities', routeTo('participant_activities', USERID));
-router.on('/enrollees/:userId/newActivities/:referentType/:guid', routeTo('participant_newActivity', USERID_REFERENT_GUID));
-router.on('/enrollees/:userId/newActivities', routeTo('participant_newActivities', USERID));
-router.on('/enrollees/:userId/consents', routeTo('participant_consents', USERID));
-router.on('/enrollees/:userId/notifications', routeTo('participant_notifications', USERID));
-router.on('/enrollees/:userId/reports', routeTo('participant_reports', USERID));
-router.on('/enrollees/:userId/uploads', routeTo('participant_uploads', USERID));
-router.on('/enrollees/:userId/clientData', routeTo('participant_clientData', USERID));
-router.on('/enrollees/:userId/general', routeTo('participant_general', USERID));
-router.on('/enrollees/:userId/requestInfo', routeTo('participant_request_info', USERID));
-router.on('/enrollees/:externalId', redirectToParticipant);
-router.on('/enrollees', routeTo('enrollees'));
+router.on('/external_ids/:externalId', redirectToParticipant);
+router.on('/external_ids', routeTo('external_ids'));
 
 router.on('/tasks', routeTo('tasks'));
 router.on('/tasks/:taskId', routeTo('task', TASKID));

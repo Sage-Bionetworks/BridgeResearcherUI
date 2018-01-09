@@ -20,7 +20,7 @@ var pageSets = {
     'email_templates/verify_email': ['verify_email', 'reset_password', 'email_signin', 'account_exists'],
     'subpopulations': ['subpopulations', 'subpopulation', 'subpopulation_editor', 'subpopulation_history', 'subpopulation_download'],
     'participants': ['participants'].concat(participantPages),
-    'enrollees': ['enrollees'].concat(participantPages),
+    'external_ids': 'external_ids',
     'admin/info': ['admin_info'],
     'admin/cache': ['admin_cache'],
     'reports/uploads': ['','dailyUploads','uploads','reports', 'report','signUps'],
@@ -111,9 +111,6 @@ var RootViewModel = function() {
     };
     self.readAboutClipboard = function() {
         self.openDialog('read_about_clipboard');
-    };
-    self.userPath = function() {
-        return (/enrollees/.test(document.location.hash)) ? '#/enrollees/' : '#/participants/';
     };
 
     self.isResearcher = roleFunc(self.rolesObs, 'researcher');
