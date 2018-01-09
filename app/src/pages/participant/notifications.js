@@ -26,7 +26,6 @@ module.exports = function(params) {
 
     tables.prepareTable(self, {name:'notification registration'});
 
-    self.isPublicObs = root.isPublicObs;
     self.isDeveloper = root.isDeveloper;
     self.isResearcher = root.isResearcher;
     self.notificationsEnabledObs = root.notificationsEnabledObs;

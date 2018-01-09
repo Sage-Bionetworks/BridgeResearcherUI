@@ -20,7 +20,7 @@ module.exports = function(params) {
         .obs('status')
         .obs('title', '&#160;');
 
-    fn.copyProps(self, root, 'isPublicObs', 'isDeveloper', 'isResearcher');
+    fn.copyProps(self, root, 'isDeveloper', 'isResearcher');
 
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(part.name);

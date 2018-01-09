@@ -33,7 +33,7 @@ export default {
             PUBLISH: "Are you sure you want to publish this shared module version?"
         }
     },
-    // options: isPublic, codesEnumerated, codeRequired, notificationsEnabled, under studyId
+    // options: codesEnumerated, codeRequired, notificationsEnabled, under studyId
     studies: {
     },
     cache: '/v3/cache',

@@ -73,6 +73,4 @@ module.exports = function(params) {
         utils.clearErrors();
         updateClientData();
     };
-    
-    self.isPublicObs = root.isPublicObs;        
 };

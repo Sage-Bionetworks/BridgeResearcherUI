@@ -34,7 +34,6 @@ module.exports = function(params) {
 
     tables.prepareTable(self, {name:'consent'});
 
-    self.isPublicObs = root.isPublicObs;
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(part.name);
         self.statusObs(part.status);

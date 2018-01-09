@@ -46,7 +46,7 @@ module.exports = function(params) {
         .bind('roles[]', null, fn.formatRoles, fn.persistRoles)
         .obs('title', (params.userId === "new") ? "New participant" : "&#160;");
     
-    fn.copyProps(self, root, 'isPublicObs', 'isAdmin');
+    fn.copyProps(self, root, 'isAdmin');
     
     if (!self.isNewObs()) {
         serverService.getParticipantName(self.userIdObs()).then(function(part) {
@@ -136,7 +136,7 @@ module.exports = function(params) {
         // This should be updating the title, but it isn't, because the id is still "new".
         binder.persist(participant);
 
-        var updatedTitle = self.isPublicObs() ? 
+        var updatedTitle = self.study.emailVerificationEnabled ? 
             fn.formatName(participant) : participant.externalId;
         function updateName(participant) {
             self.titleObs(updatedTitle);

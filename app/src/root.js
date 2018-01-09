@@ -59,7 +59,6 @@ var RootViewModel = function() {
         .obs('mainParams', {})
         .obs('editorPanel', 'none')
         .obs('editorParams', {})
-        .obs('isPublic', false)
         .obs('codesEnumerated', false)
         .obs('codeRequired', false)
         .obs('isEditorTabVisible', false)
@@ -143,11 +142,9 @@ var RootViewModel = function() {
         // self.closeDialog();
         serverService.getStudy().then(function(study) {
             // Until we can support on server, enumerating the codes is the same as requiring the code at sign up.
-            // isPublic = emailVerificationEnabled
             // codesEumerated = externalIdValidationEnabled
             // codeRequired = externalIdRequiredOnSignUp
             var defaults = {
-                isPublic: study.emailVerificationEnabled,
                 codesEnumerated: study.externalIdValidationEnabled,
                 codeRequired: study.externalIdRequiredOnSignUp,
                 notificationsEnabled: Object.keys(study.pushNotificationARNs).length > 0
@@ -155,7 +152,6 @@ var RootViewModel = function() {
             var studyConfig = config.studies[study.identifier] || {};
             var opts = Object.assign({}, defaults, studyConfig);
             
-            self.isPublicObs(opts.isPublic);
             self.codesEnumeratedObs(opts.codesEnumerated);
             self.codeRequiredObs(opts.codeRequired);
             self.notificationsEnabledObs(opts.notificationsEnabled);
@@ -167,7 +163,6 @@ var RootViewModel = function() {
         self.environmentObs("");
         self.studyIdentifierObs("");
         self.rolesObs([]);
-        self.isPublicObs(false);
         self.codesEnumeratedObs(false);
         self.codeRequiredObs(false);
         self.openDialog('sign_in_dialog');

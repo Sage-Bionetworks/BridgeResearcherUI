@@ -20,7 +20,6 @@ module.exports = function() {
         return serverService.emailStatus().then(binder.update('status'));
     }
     
-    self.isPublicObs = root.isPublicObs;
     self.save = function(vm, event) {
         self.study = binder.persist(self.study);
 

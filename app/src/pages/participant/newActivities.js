@@ -30,8 +30,6 @@ module.exports = function(params) {
         .obs('status')
         .obs('title', '&#160;');
 
-    fn.copyProps(self, root, 'isPublicObs');
-
     tables.prepareTable(self, {
         name: "activitie",
         type: "Activity"

@@ -25,7 +25,6 @@ module.exports = function() {
     self.phoneFilter = null;
     self.startTime = null;
     self.endTime = null;
-    self.isPublicObs = root.isPublicObs;
 
     tables.prepareTable(self, {
         name: "participant", 

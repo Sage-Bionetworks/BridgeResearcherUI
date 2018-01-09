@@ -127,6 +127,15 @@ function formatName(participant) {
     }
     return (array.length === 0) ? '—' : array.join(' ');
 }
+function formatNameAsFullLabel(participant) {
+    var name = formatName(participant);
+    if (participant.email.includes(participant.externalId)) {
+        name = participant.externalId;
+    } else if (name === '—') {
+        name = participant.email;
+    }
+    return name;
+}
 // Convert date object as if it were a LocalDateTime object to the UTC timezone
 function intLocalDateTimeToUTC(date) {
     return new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
@@ -337,6 +346,7 @@ export default {
     formatList,
     formatMs,
     formatName,
+    formatNameAsFullLabel,
     formatRoles,
     formatTitleCase,
     formatVersionRange,
