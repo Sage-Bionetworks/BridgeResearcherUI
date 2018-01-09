@@ -6,6 +6,7 @@ import ko from 'knockout';
 import root from '../../root';
 import tables from '../../tables';
 import utils from '../../utils';
+import toastr from 'toastr';
 
 var OPTIONS = {offsetBy:null, pageSize: 1, assignmentFilter:false};
 
@@ -79,6 +80,18 @@ module.exports = function() {
             .then(updatePageWithResult)
             .then(utils.successHandler(vm, event))
             .catch(utils.failureHandler());
+    };
+    self.execLink = function(item, event) {
+        event.target.nextElementSibling.classList.add("active");
+        serverService.getParticipants(null,5,"+"+item.identifier+"@").then(function(response) {
+            console.log(response);
+            if (response.items.length === 0) {
+                toastr.error("Not a lab code account: we cannot locate the account by its external ID.");
+            } else {
+                document.location = '#/participants/'+response.items[0].id;
+            }
+            event.target.nextElementSibling.classList.remove("active");
+        });
     };
     self.showLinkLoading = function(vm, event) {
         event.target.nextElementSibling.classList.add("active");

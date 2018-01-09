@@ -37,12 +37,6 @@ function routeTo(routeName, fields) {
         root.changeView(routeName, params);
     };
 }
-function redirectTo(response) {
-    router.setRoute('/participants/' + response.items[0].id+'/general');
-}
-function redirectToParticipant(externalId) {
-    serverService.getParticipants(null,5,"+"+externalId+"@").then(redirectTo);
-}
 
 var router = new Router();
 router.param('guid', /([^\/]*)/);
@@ -99,9 +93,7 @@ router.on('/participants/:userId', routeTo('participant_general', USERID));
 router.on('/participants/:userId/general', routeTo('participant_general', USERID));
 router.on('/participants/:userId/requestInfo', routeTo('participant_request_info', USERID));
 router.on('/participants', routeTo('participants'));
-router.on('/external_ids/:externalId', redirectToParticipant);
 router.on('/external_ids', routeTo('external_ids'));
-
 router.on('/tasks', routeTo('tasks'));
 router.on('/tasks/:taskId', routeTo('task', TASKID));
 router.on('/topics/:guid', routeTo('topic', GUID));
