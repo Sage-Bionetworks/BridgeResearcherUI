@@ -37,11 +37,9 @@ module.exports = function() {
         .obs('phone')
         .obs('phoneRegion', 'US')
         .obs('title')
-        .obs('token', '')
         .obs('study', studyKey)
         .obs('environment', env)
         .obs('studyOptions[]')
-        .obs('tokenSent', false)
         .obs('isLocked', isLocked);
 
     self.environmentOptions = config.environments;
@@ -58,9 +56,6 @@ module.exports = function() {
             self.titleObs(utils.findStudyName(self.studyOptionsObs(), studyKey));
         }
     }
-    function tokenHasBeenSent() {
-        self.tokenSentObs(true);
-    }
     function loadStudyList(newValue) {
         serverService.getStudyList(newValue)
             .then(loadStudies)
@@ -72,15 +67,20 @@ module.exports = function() {
     function clear(response) {
         self.phoneObs("");
         self.phoneRegionObs("US");
-        self.tokenObs("");
-        self.tokenSentObs(false);
         root.closeDialog();
         return response;
     }
 
     self.sendPhoneSignInRequest = function(vm, event) {
         var env = self.environmentObs();
-        var model = {phone: {number: self.phoneObs(), regionCode: self.phoneRegionObs()}, study: self.studyObs()};
+        var studyName = utils.findStudyName(self.studyOptionsObs(), studyKey);
+        var model = {
+            phone: {number: self.phoneObs(), regionCode: self.phoneRegionObs()}, 
+            study: self.studyObs(),
+            env: env,
+            studyName: studyName,
+            studyKey: studyKey
+        };
         
         var error = new BridgeError();
         if (!model.phone.number) {
@@ -98,43 +98,11 @@ module.exports = function() {
 
         utils.startHandler(vm, event);
         return serverService.requestPhoneSignIn(env, model)
-            .then(tokenHasBeenSent)
+            .then(function(request) {
+                root.openDialog('submit_code_dialog', model);
+            })
             .then(utils.successHandler(vm, event, SUCCESS_MSG))
             .catch(utils.failureHandler());
-    };
-    self.signIn = function(vm, event) {
-        var env = self.environmentObs();
-        var model = {
-            phone: {number: self.phoneObs(), regionCode: self.phoneRegionObs()}, 
-            study: self.studyObs(), 
-            token: self.tokenObs().replace(/[^\d]/g,'')
-        };
-
-        var error = new BridgeError();
-        if (!model.phone.number) {
-            error.addError("phone", "is required");
-        }
-        if (!model.phone.regionCode) {
-            error.addError("phoneRegion", "is required");
-        }
-        if (!model.token) {
-            error.addError("token", "is required");
-        }
-        if (!/\d{6,6}/.test(model.token)) {
-            error.addError("token", "does not appear to be a valid code");
-        }
-        if (error.hasErrors()) {
-            return utils.failureHandler()(error);
-        }
-        var reloadIfNeeded = makeReloader(studyKey, env);
-        var studyName = utils.findStudyName(self.studyOptionsObs(), studyKey);
-
-        utils.startHandler(vm, event);
-        return serverService.phoneSignIn(studyName, env, model)
-            .then(clear)
-            .then(reloadIfNeeded)
-            .then(utils.successHandler(vm, event))
-            .catch(utils.failureHandler({transient:false}));
     };
 
     self.updateRegion = function(model, event) {
