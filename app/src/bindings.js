@@ -241,6 +241,18 @@ ko.bindingHandlers.fadeRemove = {
         });
     }
 };
+ko.bindingHandlers.returnTo = {
+    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        var expr = valueAccessor();
+        var target = document.querySelector(expr);
+        element.addEventListener("keypress", function(e) {
+            if (e.keyCode === 13) {
+                $(target).click();
+                return false;
+            }
+        }, false);
+    }
+};
 
 function activeHandler(element, valueAccessor) {
     var id = element.getAttribute("href");

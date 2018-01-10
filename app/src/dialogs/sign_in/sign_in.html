@@ -6,9 +6,9 @@
         <h4 data-bind="html: titleObs"></h4>
         <form id="signInForm" class="ui form" action="" data-bind="submitByButton: 'signInSubmit'">
             <errors></errors>
-            <div class="field" id="email">
+            <div class="field" id="email" class="SignIn">
                 <label for="username">Email address</label>
-                <input type="text" data-bind="textInput: usernameObs"/>
+                <input type="text" data-bind="textInput: usernameObs, hasFocus: focusEmailObs"/>
             </div>
             <div class="field" id="password">
                 <label for="password">Password</label>
@@ -17,13 +17,13 @@
             <div class="two fields" data-bind="if: !isLockedObs()">
                 <div class="field">
                     <label for="environment">Environment</label>
-                    <select name="environment" class="ui dropdown" data-bind="value: environmentObs,
+                    <select taborder="-1" name="environment" class="ui dropdown" data-bind="value: environmentObs,
                         options: environmentOptions, optionsText: 'label', optionsValue: 'value'">
                     </select>
                 </div>
                 <div class="field">
                     <label for="study">Study</label>
-                    <select class="ui dropdown" data-bind="value: studyObs,
+                    <select taborder="-1" class="ui dropdown" data-bind="value: studyObs,
                         options: studyOptionsObs, optionsText: 'name', optionsValue: 'identifier'">
                     </select>
                 </div>
@@ -31,8 +31,8 @@
         </form>
     </div>
     <div class="actions">
-        <button type="submit" form="signInForm" id="signInSubmit" class="ui primary small button" data-bind="click: signIn">Sign In</button>
-        <button class="ui small button" data-bind="click: forgotPassword">Forgot Password</button>
-        <button class="ui small button" style="float:right" data-bind="click: usePhone">Use Phone</button>
+        <button type="submit" taborder="-1" form="signInForm" id="signInSubmit" class="ui primary small button" data-bind="click: signIn">Sign In</button>
+        <button class="ui small button" taborder="-1" data-bind="click: forgotPassword">Forgot Password</button>
+        <button class="ui small button" taborder="-1" style="float:right" data-bind="click: usePhone">Use Phone</button>
     </div>
 </div>

@@ -4,7 +4,7 @@
     </div>
     <div class="content">
         <h4 data-bind="html: titleObs"></h4>
-        <p>Enter your phone number and we'll send you code to sign in. </p>
+        <p>Enter your phone number and we'll send you a code to sign in. </p>
         <form class="ui form">
             <errors></errors>
             <div data-bind="visible: !tokenSentObs()">
@@ -20,7 +20,8 @@
                                 <div class="item">MX</div>
                             </div>
                         </div>
-                        <input type="text" placeholder="Phone number" data-bind="textInput: phoneObs">
+                        <input type="text" placeholder="Phone number" data-bind="textInput: phoneObs, 
+                            returnTo: '#sendPhoneReq'">
                     </div>        
                 </div>
                 <div class="two fields" data-bind="if: !isLockedObs()">
@@ -41,15 +42,16 @@
             <div data-bind="visible: tokenSentObs">
                 <div class="field" id="token" data-bind="visible: tokenSentObs">
                     <label for="token">Code</label>
-                    <input type="text" placeholder="### ###" data-bind="textInput: tokenObs">
+                    <input type="text" placeholder="### ###" data-bind="textInput: tokenObs, 
+                        hasFocus: tokenSentObs, returnTo: '#phoneSignIn'">
                 </div>
             </div>
         </form>
     </div>
     <div class="actions">
-        <button class="ui primary small button" 
+        <button id="sendPhoneReq" class="ui primary small button" 
             data-bind="visible: !tokenSentObs(), click: sendPhoneSignInRequest">Send Code</button>
-        <button class="ui primary small button"
+        <button id="phoneSignIn" class="ui primary small button"
             data-bind="visible: tokenSentObs, click: signIn">Sign In</button>
         <button class="ui small button" data-bind="click: cancel">Cancel</button>
     </div>
