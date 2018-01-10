@@ -247,8 +247,8 @@ ko.bindingHandlers.returnTo = {
         var target = document.querySelector(expr);
         element.addEventListener("keypress", function(e) {
             if (e.keyCode === 13) {
+                e.preventDefault();
                 $(target).click();
-                return false;
             }
         }, false);
     }
