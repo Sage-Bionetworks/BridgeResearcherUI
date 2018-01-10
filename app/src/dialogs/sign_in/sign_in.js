@@ -103,6 +103,9 @@ module.exports = function() {
             .catch(utils.failureHandler({transient:false}));
     };
 
+    self.usePhone = function(vm, event) {
+        root.openDialog('phone_signin_dialog');
+    };
     self.forgotPassword = function() {
         root.openDialog('forgot_password_dialog');
     };

@@ -150,6 +150,10 @@ export class ServerService {
         return postInt(config.host[env] + config.signIn, signIn)
             .then(this.cacheSession(studyName, signIn.study, env));
     }
+    phoneSignIn(studyName, env, signIn) {
+        return postInt(config.host[env] + config.phoneSignIn, signIn)
+            .then(this.cacheSession(studyName, signIn.study, env));
+    }
     signOut() {
         postInt(session.host + config.signOut);
         cache.reset();
@@ -169,6 +173,9 @@ export class ServerService {
     getStudyList(env) {
         return getInt(config.host[env] + config.getStudyList)
             .then(fn.handleSort('items', 'name'));
+    }
+    requestPhoneSignIn(env, data) {
+        return postInt(config.host[env] + config.requestPhoneSignIn, data);
     }
     requestResetPassword(env, data) {
         return postInt(config.host[env] + config.requestResetPassword, data);
