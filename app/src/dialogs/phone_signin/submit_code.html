@@ -1,0 +1,22 @@
+<div class="ui small modal">
+    <div class="header">
+        Sign In With Your Phone
+    </div>
+    <div class="content">
+        <h4 data-bind="html: titleObs"></h4>
+        <p>Enter your phone number and we'll send you a code to sign in. </p>
+        <form class="ui form" onsubmit="return false">
+            <errors></errors>
+            <div class="field" id="token">
+                <label for="token">Code</label>
+                <input type="text" placeholder="### ###" 
+                    data-bind="textInput: tokenObs, returnTo: '#phoneSignIn'">
+            </div>
+        </form>
+    </div>
+    <div class="actions">
+        <button id="phoneSignIn" class="ui primary small button"
+            data-bind="click: signIn">Sign In</button>
+        <button class="ui small button" data-bind="click: cancel">Cancel</button>
+    </div>
+</div>

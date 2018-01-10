@@ -430,6 +430,10 @@ reg('phone_signin_dialog', {
     viewModel: require('./dialogs/phone_signin/phone_signin'),
     template: require('./dialogs/phone_signin/phone_signin.html'), synchronous: true
 });
+reg('submit_code_dialog', {
+    viewModel: require('./dialogs/phone_signin/submit_code'),
+    template: require('./dialogs/phone_signin/submit_code.html'), synchronous: true
+});
 reg('enumeration_editor', {
     viewModel: require('./dialogs/enumeration_editor/enumeration_editor'),
     template: require('./dialogs/enumeration_editor/enumeration_editor.html'), synchronous: true
