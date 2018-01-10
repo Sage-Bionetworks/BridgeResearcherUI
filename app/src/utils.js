@@ -16,6 +16,7 @@ const NETWORK_ERROR = 'A network error occurred. Please verify you have an inter
 const statusHandlers = {
       0: localError,
     400: badResponse,
+    401: badResponse,
     403: notAllowed,
     404: notFound,
     409: badResponse,

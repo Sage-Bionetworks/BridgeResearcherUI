@@ -39,6 +39,7 @@ module.exports = function() {
         .obs('password')
         .obs('study', studyKey)
         .obs('environment', env)
+        .obs('focusEmail', false)
         .obs('studyOptions[]')
         .obs('isLocked', isLocked);
     
@@ -59,6 +60,11 @@ module.exports = function() {
     function loadStudyList(newValue) {
         return serverService.getStudyList(newValue)
             .then(loadStudies)
+            .then(function() {
+                setTimeout(function() {
+                    self.focusEmailObs(true);
+                }, 200);
+            })
             .catch(utils.failureHandler());
     }
     function clear(response) {
