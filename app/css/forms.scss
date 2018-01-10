@@ -102,3 +102,7 @@ label[for] {
     border-color: #E0B4B4;
     background-color: rgb(255, 246, 246);
 }
+/* For some reason this isn't being set by Semantic UI. */
+.dropdown:focus {
+    border-color: #85B7D9!important;
+}

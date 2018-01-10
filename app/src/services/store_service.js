@@ -12,6 +12,7 @@ export default {
     get: function(key) {
         var value = localStorage.getItem(key);
         if (typeof value !== "string") {
+            console.debug("[cache] Load miss from cache", key);
             return null;
         }
         console.debug("[cache] Loading from cache", key);
