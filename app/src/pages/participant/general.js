@@ -30,6 +30,8 @@ module.exports = function(params) {
         .obs('allRoles[]', ROLES)
         .bind('email')
         .bind('phone', null, Binder.formatPhone, Binder.persistPhone)
+        .obs('emailNull', true)
+        .obs('phoneNull', true)
         .bind('phoneRegion', 'US')
         .bind('attributes[]', [], Binder.formatAttributes, Binder.persistAttributes)
         .bind('firstName')
@@ -130,6 +132,10 @@ module.exports = function(params) {
             .then(utils.successHandler(vm, event, "User signed out."))
             .catch(failureHandler);
     };
+    self.formatPhone = function(phone, phoneRegion) {
+        return fn.flagForRegionCode(phoneRegion) + ' ' + phone;
+    };
+
     self.save = function(vm, event) {
         var participant = binder.persist(NEW_PARTICIPANT);
         // This should be updating the title, but it isn't, because the id is still "new".
@@ -141,18 +147,31 @@ module.exports = function(params) {
             self.titleObs(updatedTitle);
             return serverService.getParticipant(self.userIdObs());
         }
+        function updateEmailPhoneState(participant)  {
+            self.emailNullObs(fn.isBlank(participant.email));
+            self.phoneNullObs(fn.isBlank(participant.phone && participant.phone.number));
+            return participant;
+        }
+
         utils.startHandler(vm, event);
         return saveParticipant(participant)
             .then(updateName)
             .then(binder.update())
+            .then(updateEmailPhoneState)
             .then(utils.successHandler(vm, event, "Participant created."))
             .catch(failureHandler);
     };
+    function noteInitialStatus(participant) {
+        self.emailNullObs(fn.isBlank(participant.email));
+        self.phoneNullObs(fn.isBlank(participant.phone && participant.phone.number));
+        return participant;
+    }
     
     serverService.getStudy()
         .then(binder.assign('study'))
         .then(initStudy)
         .then(getParticipant)
+        .then(noteInitialStatus)
         .then(binder.update())
         .catch(failureHandler);
 };
