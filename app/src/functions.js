@@ -4,7 +4,15 @@ const MINUTE = SECOND*60;
 const HOUR = MINUTE*60;
 const DAY = HOUR*24;
 const WEEK = DAY*7;
+const FLAGS = {
+    'US': '🇺🇸',
+    'MX': '🇲🇽',
+    'CA': '🇨🇦'
+};
 
+function flagForRegionCode(regionCode) {
+    return FLAGS[regionCode];
+}
 function identity(arg) {
     return arg;
 }
@@ -357,6 +365,7 @@ export default {
     dateTimeString,
     dateToLocalISOString,
     deleteUnusedProperties,
+    flagForRegionCode,
     formatDate,
     formatDateTime,
     formatLanguages,
