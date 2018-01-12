@@ -58,7 +58,7 @@ function mapClientDataItem(item) {
     item.collapsedObs = ko.observable(true);
     item.isDisabled = (item.status === 'expired');
     if (item.clientData) {
-        item.formattedData = prettyPrintHTML(item.clientData);
+        item.formattedData = prettyPrintHTML(JSON.parse(item.clientData));
     }
     return item;
 }
