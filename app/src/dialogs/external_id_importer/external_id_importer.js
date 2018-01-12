@@ -45,9 +45,10 @@ IdImportWorker.prototype = {
     }
 };
 
-function CreateCredentialsWorker(supportEmail, identifiers) {
+function CreateCredentialsWorker(supportEmail, identifiers, dataGroups) {
     this.supportEmail = supportEmail;
     this.identifiers = identifiers;
+    this.dataGroups = dataGroups;
 }
 CreateCredentialsWorker.prototype = {
     calculateSteps: function(){ 
@@ -62,6 +63,7 @@ CreateCredentialsWorker.prototype = {
     performWork: function(){ 
         this.currentId = this.identifiers.shift();
         var participant = utils.createParticipantForID(this.supportEmail, this.currentId);
+        participant.dataGroups = this.dataGroups;
         return serverService.createParticipant(participant);
     },
     currentWorkItem: function() { 
@@ -78,16 +80,22 @@ module.exports = function(params) {
 
     batchDialogUtils.initBatchDialog(self);
     self.cancelDialog = fn.seq(self.cancel, params.reload, root.closeDialog);
-
+    
     new Binder(self)
         .obs('import', '')
         .obs('enable', true)
+        .obs('isDisabled', false)
         .obs('closeText', 'Close')
-        .obs('createCredentials', true);
+        .obs('createCredentials', true)
+        .obs('dataGroups[]')
+        .obs('allDataGroups[]');
 
     self.statusObs("Please enter a list of identifiers, separated by commas or new lines.");
-    
+    self.createCredentialsObs.subscribe(function(newValue) {
+        self.isDisabledObs(!newValue);
+    });
     serverService.getStudy().then(function(study) {
+        self.allDataGroupsObs(study.dataGroups);
         supportEmail = study.supportEmail;
     });
     
@@ -108,7 +116,7 @@ module.exports = function(params) {
 
         self.run(importWorker).then(function(identifiers) {
             if (self.createCredentialsObs()) {
-                var credentialsWorker = new CreateCredentialsWorker(supportEmail, identifiers);
+                var credentialsWorker = new CreateCredentialsWorker(supportEmail, identifiers, self.dataGroupsObs());
                 self.run(credentialsWorker).then(displayComplete);
             } else {
                 displayComplete();

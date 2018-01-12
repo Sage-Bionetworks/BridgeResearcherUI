@@ -73,9 +73,8 @@
                     </div>
                     <input type="text" placeholder="Phone number" data-bind="textInput: phoneObs">
                 </div>
-                <a data-bind="visible: !phoneNullObs(), href: phoneLink, 
-                    text: $component.formatPhone(phoneObs(), phoneRegionObs())"
-                    class="input-field-padding"></a>
+                <a class="input-field-padding" data-bind="visible: !phoneNullObs(), 
+                    href: phoneLink, text: $component.formatPhone(phoneObs(), phoneRegionObs())"></a>
             </div>
             <div class="field" id="externalId">
                 <label>External ID</label>

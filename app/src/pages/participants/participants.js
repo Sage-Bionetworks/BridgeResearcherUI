@@ -59,9 +59,6 @@ module.exports = function() {
     function load(response) {
         self.total = response.total;
         response.items = response.items.map(function(item) {
-
-            // TODO: Clean this up. we want both phone formats, maybe bound
-            // to different observers.
             if (item.phone) {
                 item.phone = fn.flagForRegionCode(item.phone.regionCode) + ' ' + item.phone.nationalFormat;
             } else {
