@@ -73,10 +73,7 @@ CreateCredentialsWorker.prototype = {
         Promise.resolve();
     }
 };
-/*
-dataGroupsObs
-allDataGroupsObs
-*/
+
 module.exports = function(params) {
     var self = this;
     var supportEmail;
