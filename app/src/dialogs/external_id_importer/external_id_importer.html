@@ -20,11 +20,21 @@
                     <li data-bind="text: $data"></li>
                 </ul>
             </div>
-            <div class="field" style="margin-top:1rem">
-                <ui-checkbox params="checkedObs: createCredentialsObs">
-                    Create credentials for these IDs
-                </ui-checkbox>
-            </div>            
+            <div class="equal width fields" style="margin-top:1rem">
+                <div class="field">
+                    <ui-checkbox params="checkedObs: createCredentialsObs">
+                        Create credentials for these IDs
+                    </ui-checkbox>
+                </div>
+                <div class="field" data-bind="css: {disabled: isDisabledObs}">
+                    <label>Add these data groups to the created account</label>
+                    <select multiple data-bind="semantic: 'multi-search-select', 
+                        updateSelect: dataGroupsObs, foreach: allDataGroupsObs">
+                        <option data-bind="text: $data, 
+                            selected: $component.dataGroupsObs().indexOf($data) > -1"></option>
+                    </select>
+                </div>
+            </div>
         </form>
     </div>
     <div class="actions">

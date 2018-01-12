@@ -54,13 +54,14 @@
         </div>
         
         <div class="equal width fields">
-            <div class="required field" data-bind="visible: isNewObs" id="email">
+            <div class="required field" id="email">
                 <label>Email</label>
-                <input type="text" data-bind="textInput: emailObs"/>
+                <input type="text" data-bind="visible: emailNullObs, textInput: emailObs"/>
+                <a class="input-field-padding" data-bind="visible: !emailNullObs(), href: emailLink, text: emailObs"></a>
             </div>
-            <div class="field" data-bind="visible: isNewObs" id="phone">
+            <div class="field" id="phone">
                 <label>Phone</label>
-                <div class="ui left labeled input">
+                <div class="ui left labeled input" data-bind="visible: phoneNullObs">
                     <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
                         <div class="text" data-bind="text: phoneRegionObs"></div>
                         <i class="dropdown icon"></i>
@@ -71,29 +72,17 @@
                         </div>
                     </div>
                     <input type="text" placeholder="Phone number" data-bind="textInput: phoneObs">
-                </div>        
+                </div>
+                <a class="input-field-padding" data-bind="visible: !phoneNullObs(), 
+                    href: phoneLink, text: $component.formatPhone(phoneObs(), phoneRegionObs())"></a>
             </div>
             <div class="field" id="externalId">
                 <label>External ID</label>
                 <input type="text" data-bind="textInput: externalIdObs"/>
             </div>
-            <div class="field" data-bind="visible: !isNewObs()">
-                <label>Health Code</label>
-                <input readonly data-bind="value: healthCodeObs"/>
-                <span class="help-text ui small red text" data-bind="visible: healthCodeObs() !== 'N/A'">
-                    Confidential. Do not redistribute.
-                </span>
-            </div>
-            <div class="field" data-bind="visible: !isNewObs()">
-                <label>User ID</label>
-                <input type="text" readonly data-bind="value: idObs"/>
-            </div>
         </div>
+
         <div class="equal width fields">
-            <div class="required field" data-bind="visible: isNewObs" id="password">
-                <label>Password</label>
-                <input type="password" autocomplete="new-password" data-bind="textInput: passwordObs"/>
-            </div>
             <div class="field">
                 <label>Languages</label>
                 <input type="text" data-bind="textInput: languagesObs"/>
@@ -116,20 +105,35 @@
                 </ui-checkbox>
             </div>
         </div>
+        
+        <div class="equal width fields" data-bind="visible: isNewObs()">
+            <div class="required field" id="password">
+                <label>Password</label>
+                <input type="password" autocomplete="new-password" data-bind="textInput: passwordObs"/>
+            </div>
+            <div class="field"></div>
+            <div class="field"></div>
+        </div>
+
         <div class="equal width fields" data-bind="visible: !isNewObs()">
             <div class="field">
-                <label>Email</label>
-                <a class="input-field-padding" data-bind="href: emailLink, text: emailObs"></a>
+                <label>Health Code</label>
+                <div data-bind="text: healthCodeObs" class="input-field-padding"
+                    style="margin-bottom: 0; padding-bottom: 0"></div>
+                <div class="ui small red text" data-bind="visible: healthCodeObs() !== 'N/A'">
+                    Confidential. Do not redistribute.
+                </div>
             </div>
             <div class="field">
-                <label>Phone</label>
-                <a class="input-field-padding" data-bind="href: phoneLink, text: phoneObs"></a>
+                <label>User ID</label>
+                <div data-bind="text: idObs" class="input-field-padding"></div>
             </div>
             <div class="field">
                 <label>Created On</label>
                 <div class="input-field-padding" data-bind="text: createdOnObs"></div>
             </div>
         </div>
+        
         <h4 class="ui dividing header">Attributes</h4>
         <div class="equal width fields">
             <!-- ko foreach: attributesObs -->
