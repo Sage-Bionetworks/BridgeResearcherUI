@@ -51,6 +51,10 @@ reg('oauth_providers', {
     viewModel: require('./pages/settings/oauth_providers'),
     template: require('./pages/settings/oauth_providers.html')
 });
+reg('install_links', {
+    viewModel: require('./pages/settings/install_links'),
+    template: require('./pages/settings/install_links.html')
+});
 reg('verify_email', {
     viewModel: require('./pages/email_templates/verify_email'),
     template: require('./pages/email_templates/verify_email.html')

@@ -7,22 +7,22 @@
         <form id="signInForm" class="ui form" action="" data-bind="submitByButton: 'signInSubmit'">
             <errors></errors>
             <div class="field" id="email">
-                <label for="username">Email address</label>
-                <input type="text" data-bind="textInput: usernameObs, hasFocus: focusEmailObs"/>
+                <label>Email address</label>
+                <input type="text" autocomplete="email" data-bind="textInput: usernameObs, hasFocus: focusEmailObs"/>
             </div>
             <div class="field" id="password">
-                <label for="password">Password</label>
+                <label>Password</label>
                 <input type="password" autocomplete="current-password" data-bind="textInput: passwordObs"/>
             </div>
             <div class="two fields" data-bind="if: !isLockedObs()">
                 <div class="field">
-                    <label for="environment">Environment</label>
+                    <label>Environment</label>
                     <select taborder="-1" name="environment" class="ui dropdown" data-bind="value: environmentObs,
                         options: environmentOptions, optionsText: 'label', optionsValue: 'value'">
                     </select>
                 </div>
                 <div class="field">
-                    <label for="study">Study</label>
+                    <label>Study</label>
                     <select taborder="-1" class="ui dropdown" data-bind="value: studyObs,
                         options: studyOptionsObs, optionsText: 'name', optionsValue: 'identifier'">
                     </select>
