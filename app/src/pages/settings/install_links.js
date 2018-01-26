@@ -10,10 +10,9 @@ const UNIVERSAL = "Universal";
 
 module.exports = function() {
     var self = this;
-
-    var ios = Binder.objPropDelegates('installLinks', 'iPhone OS');
-    var android = Binder.objPropDelegates('installLinks', 'Android');
-    var universal = Binder.objPropDelegates('installLinks', 'Universal');
+    var ios = Binder.objPropDelegates('installLinks', IOS);
+    var android = Binder.objPropDelegates('installLinks', ANDROID);
+    var universal = Binder.objPropDelegates('installLinks', UNIVERSAL);
 
     var binder = new Binder(self)
         .bind('ios', '', ios.fromObject, ios.toObject)
@@ -23,7 +22,6 @@ module.exports = function() {
     self.save = function(vm, event) {
         self.study = binder.persist(self.study);
 
-        console.log(self.study);
         utils.startHandler(self, event);
         serverService.saveStudy(self.study)
             .then(utils.successHandler(vm, event, "Install links saved."))
