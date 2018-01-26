@@ -150,7 +150,7 @@ export default class Binder {
     static toObjectField(fieldName, objFieldName) {
         return function(value, context)  {
             context.model[fieldName] = context.model[fieldName] || {};
-            if (typeof value !== "undefined") {
+            if (typeof value !== "undefined" && value !== "") {
                 context.model[fieldName][objFieldName] = value;
             } else {
                 delete context.model[fieldName][objFieldName];
