@@ -13,16 +13,23 @@ export default class EmailViewModel {
             this.editor = ckeditor;
             serverService.getStudy().then((study) => {
                 this.study = study;
+                console.log(JSON.parse(JSON.stringify(study)));
                 this.subjectObs(study[this.templateName].subject);
                 this.editor.setData(study[this.templateName].body);
+                this.postLoad(study);
             }).catch(utils.failureHandler());
         };
+    }
+    postLoad(study) {
+    }
+    preSave(study) {
     }
     save(vm, event) {
         this.study[this.templateName] = {
             subject: this.subjectObs(),
             body: this.editor.getData()
         };
+        this.preSave(this.study);
         
         utils.startHandler(this, event);
         serverService.saveStudy(this.study)
