@@ -14,6 +14,11 @@
         <div class="ten wide column">
             <errors></errors>
             <form class="ui form">
+                <div class="field" style="margin: 1rem 0 2rem 0">
+                    <ui-checkbox params="checkedObs: autoVerificationEnabledObs">
+                        Send a verification email as part of sign up
+                    </ui-checkbox>
+                </div>
                 <div class="required field" id="verifyEmailTemplate_subject">
                     <label>Subject</label>
                     <input type="text" name="subject" data-bind="textInput: subjectObs, hasFocus: true"/>
