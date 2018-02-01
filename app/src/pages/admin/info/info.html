@@ -11,66 +11,88 @@
 </div>
 <div class="scrollbox">
     <errors></errors>
-    <form class="ui form">
-        <div class="field">
-            <label>Data Validation</label>
-            <ui-checkbox params="checkedObs: strictUploadValidationEnabledObs">
-                Enable strict validation of upload files
-            </ui-checkbox>
+    <div class="ui grid">
+        <div class="ten wide column">
+            <form class="ui form">
+                <div class="field">
+                    <label>Data Validation</label>
+                    <ui-checkbox params="checkedObs: strictUploadValidationEnabledObs">
+                        Enable strict validation of upload files
+                    </ui-checkbox>
+                </div>
+                <div class="field">
+                    <label>Health code export</label>
+                    <ui-checkbox params="checkedObs: healthCodeExportEnabledObs">
+                        Include participant health code on the participant information page
+                    </ui-checkbox>
+                </div>
+                <div class="field">
+                    <label>Sign in via email</label>
+                    <ui-checkbox params="checkedObs: emailSignInEnabledObs">
+                        Enable users to generate sign in links via email
+                    </ui-checkbox>
+                </div>
+                <div class="field">
+                    <label>Export compatibility</label>
+                    <ui-checkbox params="checkedObs: studyIdExcludedInExportObs">
+                        Exclude study ID from columnn names of export data
+                    </ui-checkbox>
+                    <p style="padding: 0; margin: .5rem 0 0 0; font-style: italic" 
+                        class="help-text">Unless this is a legacy study, you should leave this checked.</p>
+                </div>
+                <div class="field">
+                    <label>Account limit</label>
+                    <input type="range" min="0" max="200" 
+                        data-bind="value: accountLimitObs, valueUpdate: 'input'"/>
+                    <div class="ui large label" data-bind="text: accountLimitLabel"></div>
+                </div>
+                <h4 class="ui dividing header">Public/Clinical Studies</h4>
+                <div class="field">
+                    <label>Email verification</label>
+                    <ui-checkbox params="checkedObs: emailVerificationEnabledObs">
+                        Create accounts with unverified email addresses and require user to verify
+                    </ui-checkbox>
+                </div>
+                <div class="field" id="externalIdValidationEnabled">
+                    <label>External ID validation</label>
+                    <ui-checkbox style="display:block" params="checkedObs: externalIdValidationEnabledObs">
+                        Enable Bridge management of external IDs
+                    </ui-checkbox>
+                </div>
+                <div class="field" id="externalIdRequiredOnSignup">
+                    <label>Require external ID on sign up</label>
+                    <ui-checkbox style="display:block" params="checkedObs: externalIdRequiredOnSignupObs">
+                        External ID is required when user submits initial sign up
+                    </ui-checkbox>
+                </div>
+                <h4 class="ui dividing header">Notifications</h4>
+                <div class="field">
+                    <label>iOS Platform ARN</label>
+                    <input style="width:40rem" type="text" data-bind="textInput: iosArnObs"/>
+                </div>
+                <div class="field">
+                    <label>Android Platform ARN</label>
+                    <input style="width:40rem" type="text" data-bind="textInput: androidArnObs"/>
+                </div>
+            </form>        
         </div>
-        <div class="field">
-            <label>Health code export</label>
-            <ui-checkbox params="checkedObs: healthCodeExportEnabledObs">
-                Include participant health code on the participant information page
-            </ui-checkbox>
+        <div class="six wide column">
+            <div class="ui message">
+                <p>If email verification is enabled, email addresses must be verified by the 
+                    user. This can happen one of two ways:<p></p>
+                    
+                <p>&bullet; through an email requesting verification of the email (which can be turned 
+                    on or off by study developers where the template is defined), or</p>
+                    
+                <p>&bullet; by signing in through an email with a link that is sent to the user's 
+                    email address. In the latter case, signing in via email only API needs to be enabled 
+                    for the study.</p>
+
+                <p>If email verification is disabled, then the study must either require an external ID on 
+                    sign up, it must validate the external ID against a list of IDs maintained by Bridge, or 
+                    both must be enabled. </p>
+                </p>
+            </div>
         </div>
-        <div class="field">
-            <label>Sign in via email</label>
-            <ui-checkbox params="checkedObs: emailSignInEnabledObs">
-                Enable users to generate sign in links via email
-            </ui-checkbox>
-        </div>
-        <div class="field">
-            <label>Sign in via email</label>
-            <ui-checkbox params="checkedObs: studyIdExcludedInExportObs">
-                Exclude study ID from columnn names of export data
-            </ui-checkbox>
-            <p style="padding: 0; margin: .5rem 0 0 0; font-style: italic" 
-                class="help-text">Unless this is a legacy study, you should leave this checked.</p>
-        </div>
-        <div class="field">
-            <label>Account limit</label>
-            <input type="range" min="0" max="200" 
-                data-bind="value: accountLimitObs, valueUpdate: 'input'"/>
-            <div class="ui large label" data-bind="text: accountLimitLabel"></div>
-        </div>
-        <h4 class="ui dividing header">Public/Clinical Studies</h4>
-        <div class="field">
-            <label>Email verification</label>
-            <ui-checkbox params="checkedObs: emailVerificationEnabledObs">
-                Require participants to verify their email address
-            </ui-checkbox>
-        </div>
-        <div class="field" id="externalIdValidationEnabled">
-            <label>External ID validation</label>
-            <ui-checkbox style="display:block" params="checkedObs: externalIdValidationEnabledObs">
-                Enable Bridge management of external IDs
-            </ui-checkbox>
-        </div>
-        <div class="field" id="externalIdRequiredOnSignup">
-            <label>Require external ID on sign up</label>
-            <ui-checkbox style="display:block" params="checkedObs: externalIdRequiredOnSignupObs">
-                External ID is required when user submits initial sign up
-            </ui-checkbox>
-        </div>
-        <h4 class="ui dividing header">Notifications</h4>
-        <div class="field">
-            <label>iOS Platform ARN</label>
-            <input style="width:40rem" type="text" data-bind="textInput: iosArnObs"/>
-        </div>
-        <div class="field">
-            <label>Android Platform ARN</label>
-            <input style="width:40rem" type="text" data-bind="textInput: androidArnObs"/>
-        </div>
-    </form>
+    </div>
 </div>

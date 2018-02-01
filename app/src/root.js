@@ -13,7 +13,7 @@ var participantPages = ['participant_general','participant_consents',  'particip
     'participant_clientData'];
 
 var pageSets = {
-    'settings/general': ['general', 'email', 'data_groups', 'password_policy', 'eligibility', 'user_attributes', 'event_keys','oauth_providers'],
+    'settings/general': ['general', 'email', 'data_groups', 'password_policy', 'eligibility', 'user_attributes', 'event_keys','oauth_providers', 'install_links'],
     'surveys': ['surveys','survey','survey_versions', "survey_schema"],
     'schemas': ['schemas','schema','schema_versions'],
     'scheduleplans': ['scheduleplans','scheduleplan'],
