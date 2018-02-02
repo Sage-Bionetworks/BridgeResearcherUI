@@ -63,7 +63,7 @@ CollectParticipantsWorker.prototype = {
     performWork: function(promise) {
         this.offsetBy = this.pageOffsets[0];
         return serverService
-            .getParticipants(this.offsetBy, PAGE_SIZE, this.emailFilter, this.startTime, this.endTime)
+            .getParticipants(this.offsetBy, PAGE_SIZE, this.emailFilter, null, this.startTime, this.endTime)
             .then(this._success.bind(this));
     },
     _success: function(response) {
