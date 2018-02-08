@@ -15,6 +15,7 @@ module.exports = function() {
         .bind('androidArn', null, android.fromObject, android.toObject)
         .bind('emailSignInEnabled')
         .bind('emailVerificationEnabled')
+        .bind('reauthenticationEnabled')
         .bind('externalIdRequiredOnSignup')
         .bind('externalIdValidationEnabled')
         .bind('healthCodeExportEnabled')
