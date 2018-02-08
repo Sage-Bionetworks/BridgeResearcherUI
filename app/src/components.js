@@ -318,6 +318,7 @@ reg('survey-tabset', {
     template: require('./pages/survey/tabset.html')
 });
 reg('template-tabset', {
+    viewModel: require('./pages/email_templates/tabset'),
     template: require('./pages/email_templates/tabset.html')
 });
 reg('subpop-tabset', {
