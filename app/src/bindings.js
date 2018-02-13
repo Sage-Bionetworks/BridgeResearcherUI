@@ -256,6 +256,7 @@ ko.bindingHandlers.returnTo = {
 
 function activeHandler(element, valueAccessor) {
     var id = element.getAttribute("href");
+    console.log(id);
     if (id) {
         id = id.replace('#/','');
     }

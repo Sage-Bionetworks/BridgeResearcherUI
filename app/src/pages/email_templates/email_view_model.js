@@ -8,11 +8,13 @@ export default class EmailViewModel {
         this.study = null;
         this.editor = null;
         this.subjectObs = ko.observable("");
+        this.studyIdObs = ko.observable();
 
         this.initEditor = (ckeditor) => {
             this.editor = ckeditor;
             serverService.getStudy().then((study) => {
                 this.study = study;
+                this.studyIdObs(study.identifier);
                 this.subjectObs(study[this.templateName].subject);
                 this.editor.setData(study[this.templateName].body);
                 this.postLoad(study);
