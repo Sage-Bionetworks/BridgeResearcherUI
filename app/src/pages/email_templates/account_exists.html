@@ -26,11 +26,11 @@
         <div class="six wide column">
             <div class="ui message">
                 <p>If a user tries to sign up twice for the same study, we will send this email. It notes 
-                    the account already exists, and provides a link to reset the password (it seems likely the user has forgotten it). </p>
+                    the account already exists, and provides a link to reset the password or sign in via email (depending on your study's design). </p>
 
-                <p><strong>It <em>must</em> contain the value <code>${resetPasswordUrl}</code> or <code>${emailSignInUrl}</code>.</strong> You cannot link these variables. Most web email clients will link it automatically. </p>
+                <p><strong>It <em>must</em> contain the value <code>${resetPasswordUrl}</code> or <code>${emailSignInUrl}</code>.</strong> Most web email clients will link these URLs automatically, but you can also create a link. </p>
 
-                <p>There values that are available: </p>
+                <p>There are other values available for use in your template: </p>
 
                 <dl>
                     <dt>${resetPasswordUrl}</dt>
@@ -42,6 +42,9 @@
                             
                     <dt>${studyName}</dt>
                     <dd>the name you entered for your study</dd>
+
+                    <dt>${studyShortName}</dt>
+                    <dd>the short name you entered for your study</dd>
 
                     <dt>${sponsorName}</dt>
                     <dd>the name you entered for the group sponsoring the study</dd>
