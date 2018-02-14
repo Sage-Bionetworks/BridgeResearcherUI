@@ -254,29 +254,6 @@ ko.bindingHandlers.returnTo = {
     }
 };
 
-function activeHandler(element, valueAccessor) {
-    var id = element.getAttribute("href");
-    console.log(id);
-    if (id) {
-        id = id.replace('#/','');
-    }
-    var func = valueAccessor;
-    do {
-        func = func(id, element);
-    } while(typeof func === "function");
-    if (func) {
-        // the active handler is used in an accordian. Open the panel the match
-        // is located in.
-        $(element).closest(".content").addClass("active").prev().addClass("active");
-    }
-    element.classList.toggle("active", func);
-}
-
-ko.bindingHandlers.active = {
-    init: activeHandler,
-    update: activeHandler
-};
-
 ko.bindingHandlers.tab = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
         var tab = element.getAttribute('data-tab');

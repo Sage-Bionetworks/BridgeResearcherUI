@@ -35,3 +35,28 @@ nav {
         padding-bottom: .5rem;
     }
 }
+.settings *[data-ref='settings'],
+.templates *[data-ref='templates'],
+.subpops *[data-ref='subpops'],
+.participants *[data-ref='participants'],
+.extids *[data-ref='extids'],
+.reports *[data-ref='reports'],
+.notifications *[data-ref='notifications'],
+.scheduling *[data-ref='scheduling'],
+.tasks *[data-ref='tasks'],
+.surveys *[data-ref='surveys'],
+.taskIds *[data-ref='taskIds'],
+.appConfigs *[data-ref='appConfigs'],
+.links *[data-ref='links'],
+.schemas *[data-ref='schemas'],
+.metadata *[data-ref='metadata'],
+.export *[data-ref='export'],
+.modules *[data-ref='modules'],
+.schemas *[data-ref='schemas'],
+.surveys *[data-ref='surveys'],
+.study *[data-ref='study'],
+.cache *[data-ref='cache'] {
+    background-color: rgba(0,0,0,.05) !important;
+    color: rgba(0,0,0,.95) !important;
+    border-radius: .28571429rem !important;
+} 
