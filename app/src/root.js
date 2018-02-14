@@ -5,32 +5,6 @@ import clipboard from './widgets/clipboard/clipboard';
 import config from './config';
 import ko from 'knockout';
 
-// Used in navigation to keep a section highlighted as you navigate into it.
-var participantPages = ['participant_general','participant_consents',  'participant_reports',
-    'participant_report', 'participant_activities', 'participant_uploads', 
-    'participant_upload', 'participant_notifications', 'participant_request_info', 
-    'participant_activity', 'participant_newActivities', 'participant_newActivity',
-    'participant_clientData'];
-
-var pageSets = {
-    'settings/general': ['general', 'email', 'data_groups', 'password_policy', 'eligibility', 'user_attributes', 'event_keys','oauth_providers', 'install_links'],
-    'surveys': ['surveys','survey','survey_versions', "survey_schema"],
-    'schemas': ['schemas','schema','schema_versions'],
-    'scheduleplans': ['scheduleplans','scheduleplan'],
-    'email_templates/verify_email': ['verify_email', 'reset_password', 'email_signin', 'account_exists'],
-    'subpopulations': ['subpopulations', 'subpopulation', 'subpopulation_editor', 'subpopulation_history', 'subpopulation_download'],
-    'participants': ['participants'].concat(participantPages),
-    'external_ids': 'external_ids',
-    'admin/info': ['admin_info'],
-    'admin/cache': ['admin_cache'],
-    'reports/uploads': ['','dailyUploads','uploads','reports', 'report','signUps'],
-    'topics': ['topics', 'topic'],
-    'tasks': ['tasks','task'],
-    'data_export/general': ['data_export_general','data_export_metadata'],
-    'shared_modules': ['shared_modules','shared_module','shared_module_versions'],
-    'app_configs': ['appconfigs', 'appconfig'],
-    'app_links': ['app_links']
-};
 function roleFunc(observer, role) {
     return ko.computed(function() {return observer().indexOf(role) > -1;});
 }
@@ -89,12 +63,6 @@ var RootViewModel = function() {
         if (event.target.nodeName === "A") {
             self.sidePanelObs(event.target.textContent.toLowerCase());
         }
-    };
-    self.isActive = function(tag, element) {
-        if (pageSets[tag]) {
-            return pageSets[tag].indexOf(self.selectedObs()) > -1;
-        }
-        return tag === self.selectedObs();
     };
     self.isSidebarActive = function(tag) {
         return self.sidePanelObs() === tag;
@@ -182,7 +150,6 @@ if (document.location.search) {
 console.debug("root.queryParams", root.queryParams);
 
 export default root;
-//ko.applyBindings(root, document.body);
 
 window.addEventListener("DOMContentLoaded", function() {
     ko.applyBindings(root, document.body);
