@@ -46,10 +46,16 @@ function routeTo(routeName, section, fields) {
         root.changeView(routeName, params);
     };
 }
+function redirectTo(newRoute) {
+    return function() {
+        router.setRoute(newRoute);
+    };
+}
 
 var router = new Router();
 router.param('guid', /([^\/]*)/);
 router.param('createdOn', /([^\/]*)/);
+router.on('/settings', redirectTo('/settings/general'));
 router.on('/settings/general', routeTo('general', 'settings'));
 router.on('/settings/email', routeTo('email', 'settings'));
 router.on('/settings/data_groups', routeTo('data_groups', 'settings'));
@@ -62,16 +68,17 @@ router.on('/app_links', routeTo('app_links', 'links'));
 router.on('/export_settings', routeTo('export_settings', 'export'));
 router.on('/shared_upload_metadata', routeTo('shared_upload_metadata', 'metadata'));
 router.on('/task_identifiers', routeTo('task_identifiers', 'taskIds'));
-router.on('/email_templates/verify_email', routeTo('verify_email', 'templates'));
+router.on('/email_templates', redirectTo('/email_templates/reset_password'));
 router.on('/email_templates/reset_password', routeTo('reset_password', 'templates'));
-router.on('/email_templates/email_signin', routeTo('email_signin', 'templates'));
+router.on('/email_templates/verify_email', routeTo('verify_email', 'templates'));
 router.on('/email_templates/account_exists', routeTo('account_exists', 'templates'));
+router.on('/email_templates/email_signin', routeTo('email_signin', 'templates'));
 router.on('/subpopulations/:guid/consents/history', routeTo('subpopulation_history', 'subpops', GUID));
 router.on('/subpopulations/:guid/consents/download', routeTo('subpopulation_download', 'subpops', GUID));
 router.on('/subpopulations/:guid/consents/:createdOn', routeTo('subpopulation_editor', 'subpops', GUID_CREATEDON));
 router.on('/subpopulations/:guid', routeTo('subpopulation', 'subpops', GUID));
 router.on('/subpopulations', routeTo('subpopulations', 'subpops'));
-router.on('/reports', routeTo('dailyUploads', 'reports'));
+router.on('/reports', redirectTo('/reports/uploads'));
 router.on('/reports/uploads', routeTo('dailyUploads', 'reports'));
 router.on('/reports/signUps', routeTo('signUps', 'reports'));
 router.on('/reports/raw/:identifier', routeTo('report', 'reports', ID));
