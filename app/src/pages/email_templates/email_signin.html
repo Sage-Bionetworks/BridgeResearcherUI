@@ -27,16 +27,16 @@
             <div class="ui message">
                 <p>This is the email sent to a user that will contain a link to sign in to the app. This requires coordination with the app itself to capture the link and process the token accordingly. </p>
 
-                <p><strong>Note that the default email message contains a link with several token values; this link must be maintained 
-                    in the email in order for the user to sign in.</strong></p>
+                <p><strong>It <em>must</em> contain the value <code>${url}</code>,</strong> which is a variable that will be replaced with the address the application must intercept to complete the sign in. The URL will take the format <code class="wrap-long-line">https://webservices.sagebridge.org/mobile/<b data-bind="text: studyIdObs"></b>/startSession.html</code>. Most web email clients will link these URLs automatically, but you can also create a link. </p>
 
-                <p>However, you will need to replace the <code>${host}</code> value with a custom host. If you used the default <code>${host}</code> value it will conflict with other apps built on the Bridge server. The initial <code>${host}</code> value is for testing purposes. </p>
-                
-                <p>There are other values available: </p>
+                <p>There are other values available for use in your template: </p>
 
                 <dl>
                     <dt>${studyName}</dt>
                     <dd>the name you entered for your study</dd>
+
+                    <dt>${studyShortName}</dt>
+                    <dd>the short name you entered for your study</dd>
 
                     <dt>${sponsorName}</dt>
                     <dd>the name you entered for the group sponsoring the study</dd>

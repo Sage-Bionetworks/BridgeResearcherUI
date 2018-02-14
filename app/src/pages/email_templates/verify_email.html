@@ -30,18 +30,19 @@
         </div>
         <div class="six wide column">
             <div class="ui message">
-                <p>This is the email sent to users when they sign up for your study. </p>
+                <p>This is the email sent to users when they sign up for your study with an email address, so we can verify the address. </p>
 
-                <p><strong>It <em>must</em> contain the value <code>${url}</code>,</strong> which is a variable that will be
-                    replaced with the address users must click to verify their email addresses. You cannot link the ${url} 
-                    variable. Most web email clients will link it automatically. </p>
+                <p><strong>It <em>must</em> contain the value <code>${url}</code>,</strong> which is a variable that will be replaced with the address users must click to verify their email addresses. Most web email clients will link these URLs automatically, but you can also create a link. </p>
 
-                <p>There are other values available: </p>
+                <p>There are other values available for use in your template: </p>
 
                 <dl>
                     <dt>${studyName}</dt>
                     <dd>the name you entered for your study</dd>
 
+                    <dt>${studyShortName}</dt>
+                    <dd>the short name you entered for your study</dd>
+                    
                     <dt>${sponsorName}</dt>
                     <dd>the name you entered for the group sponsoring the study</dd>
 
