@@ -7,9 +7,9 @@ export default {
     ],
     host: {
         'local': 'http://localhost:9000',
-        'develop': 'https://webservices-develop.sagebridge.org',
-        'staging': 'https://webservices-staging.sagebridge.org',
-        'production': 'https://webservices.sagebridge.org'
+        'develop': 'https://ws-develop.sagebridge.org',
+        'staging': 'https://ws-staging.sagebridge.org',
+        'production': 'https://ws.sagebridge.org'
     },
     toastr: {
         closeButton: true,

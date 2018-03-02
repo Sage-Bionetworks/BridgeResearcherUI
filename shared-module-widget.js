@@ -32,7 +32,7 @@ function displayItems(items) {
         root.parentNode.insertBefore(div, root);
     });
 }
-var url = 'https://webservices.sagebridge.org/v3/sharedmodules/metadata?mostrecent=true&published=true';
+var url = 'https://ws.sagebridge.org/v3/sharedmodules/metadata?mostrecent=true&published=true';
 var request = createCORSRequest('GET', url);
 if (request) {
     request.setRequestHeader('Content-Type', 'application/json');
