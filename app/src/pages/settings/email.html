@@ -31,8 +31,8 @@
                         <div class="label-field-padding" data-bind="visible: statusObs() == 'pending'">
                             <div class="orange ui label"><i class="warning sign icon"></i> Pending</div>
                             <div>
-                            <span class="link" data-bind="click:verifyEmail">Send verification email</span> &bull; 
-                            <span class="link" data-bind="click:refreshStatus">Refresh</span>
+                                <span class="link" data-bind="click:verifyEmail">Send verification email</span> &bull; 
+                                <span class="link" data-bind="click:refreshStatus">Refresh</span>
                             </div>
                         </div>
                     </div>
@@ -53,9 +53,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="required field" id="technicalEmail">
-                    <label>Technical contact email</label>
-                    <input type="text" data-bind="textInput: technicalEmailObs, hasFocus: true"/>
+                <div class="two fields">
+                    <div class="required field" id="technicalEmail">
+                        <label>Technical contact email</label>
+                        <input type="text" data-bind="textInput: technicalEmailObs, hasFocus: true"/>
+                    </div>
                 </div>
             </form>
         </div>
