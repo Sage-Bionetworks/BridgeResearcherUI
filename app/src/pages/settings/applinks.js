@@ -46,7 +46,8 @@ module.exports = function() {
         .bind('appleAppLinks[]', [], appleModelToObs, appleObsToModel)
         .bind('androidAppLinks[]', [], androidModelToObs, androidObsToModel)
         .obs('appleIndex')
-        .obs('androidIndex');
+        .obs('androidIndex')
+        .obs('identifier');
 
     self.save = function(vm, event) {
         self.study = binder.persist(self.study);

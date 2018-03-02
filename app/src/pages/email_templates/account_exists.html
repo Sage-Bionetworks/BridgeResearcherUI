@@ -28,18 +28,11 @@
                 <p>If a user tries to sign up twice for the same study, we will send this email. It notes 
                     the account already exists, and provides a link to reset the password or sign in via email (depending on your study's design). </p>
 
-                <p><strong>It <em>must</em> contain the value <code>${resetPasswordUrl}</code> or <code>${emailSignInUrl}</code>.</strong> Most web email clients will link these URLs automatically, but you can also create a link. </p>
+                <p><strong>It <em>must</em> contain the value <code>${resetPasswordUrl}</code>, <code>${emailSignInUrl}</code>, <code>${shortResetPasswordUrl}</code> or <code>${shortEmailSignInUrl}</code>.</strong> Most web email clients will link these URLs automatically, but you can also create a link. </p>
 
                 <p>There are other values available for use in your template: </p>
 
                 <dl>
-                    <dt>${resetPasswordUrl}</dt>
-                    <dd>a link user can click to reset the password (older templates use ${url})</dd>
-
-                    <dt>${emailSignInUrl}</dt>
-                    <dd>a link user can click to sign in via email (only available if the study has 
-                        email sign ins enabled)</dd>
-                            
                     <dt>${studyName}</dt>
                     <dd>the name you entered for your study</dd>
 
