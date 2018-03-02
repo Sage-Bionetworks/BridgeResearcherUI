@@ -14,17 +14,13 @@
         <div class="ten wide column">
             <errors></errors>
             <form class="ui form">
-                <div class="required field" id="technicalEmail">
-                    <label>Technical contact email</label>
-                    <input type="text" data-bind="textInput: technicalEmailObs, hasFocus: true"/>
-                </div>
                 <div class="two fields">
                     <div class="required field" id="supportEmail">
                         <label>Support email</label>
                         <input type="text" data-bind="textInput: supportEmailObs"/>
                     </div>
                     <div class="field">
-                        <label>Email Verified with Amazon's Mail Service?</label>
+                        <label>&nbsp;</label>
                         <div class="label-field-padding" data-bind="visible: statusObs() == 'verified'">
                             <div class="green ui label"><i class="check circle icon"></i> Verified</div>
                         </div>
@@ -41,9 +37,25 @@
                         </div>
                     </div>
                 </div>
-                <div class="required field" id="consentNotificationEmail">
-                    <label>Consent notification email</label>
-                    <input type="text" data-bind="textInput: consentNotificationEmailObs"/>
+                <div class="two fields">
+                    <div class="required field" id="consentNotificationEmail">
+                        <label>Consent notification email</label>
+                        <input type="text" data-bind="textInput: consentNotificationEmailObs"/>
+                    </div>
+                    <div class="field">
+                        <label>&nbsp;</label>
+                        <div class="label-field-padding" data-bind="visible: consentNotificationEmailVerifiedObs">
+                            <div class="green ui label"><i class="check circle icon"></i> Verified</div>
+                        </div>
+                        <div class="label-field-padding" data-bind="visible: !consentNotificationEmailVerifiedObs()">
+                            <div class="red ui label"><i class="warning sign icon"></i> Unverified</div>
+                            <div class="link" data-bind="click:verifyConsentEmail">Send verification email</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="required field" id="technicalEmail">
+                    <label>Technical contact email</label>
+                    <input type="text" data-bind="textInput: technicalEmailObs, hasFocus: true"/>
                 </div>
             </form>
         </div>
