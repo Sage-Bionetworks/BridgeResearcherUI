@@ -22,10 +22,9 @@ module.exports = function(params) {
     }
     function getEmail(id) {
         return serverService.getParticipants(0, 5, id).then(function(response) {
-            if (response.items.length === 1) {
-                return serverService.getParticipant(response.items[0].id);
-            }
-            return Promise.reject("Participant not found");
+            return (response.items.length === 1) ?
+                serverService.getParticipant(response.items[0].id) :
+                Promise.reject("Participant not found");
         });
     }
     function makeSuccess(vm, event) {
