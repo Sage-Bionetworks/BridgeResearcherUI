@@ -92,7 +92,10 @@ module.exports = function() {
     };
     self.exportDialog = function() {
         root.openDialog('participant_export', {emailFilter: self.emailFilter, phoneFilter: self.phoneFilter,
-            startTime: self.startTime, endTime: self.endTime, total: self.total});    
+            startTime: self.startTime, endTime: self.endTime, total: self.total});
+    };
+    self.findDialog = function() {
+        root.openDialog('participant_finder');
     };
     self.loadingFunc = function(offsetBy, pageSize, emailFilter, phoneFilter, startTime, endTime) {
         self.emailFilter = emailFilter;

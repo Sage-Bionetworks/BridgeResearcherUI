@@ -471,6 +471,10 @@ reg('participant_export', {
     viewModel: require('./dialogs/participant_export/participant_export'),
     template: require('./dialogs/participant_export/participant_export.html'), synchronous: true
 });
+reg('participant_finder', {
+    viewModel: require('./dialogs/participant_finder/participant_finder'),
+    template: require('./dialogs/participant_finder/participant_finder.html'), synchronous: true
+});
 reg('copy_schemas', {
     viewModel: require('./dialogs/copy_schemas/copy_schemas'),
     template: require('./dialogs/copy_schemas/copy_schemas.html'), synchronous: true
