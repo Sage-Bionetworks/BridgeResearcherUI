@@ -1,10 +1,5 @@
 import {ServerService} from '../../services/server_service';
-import batchDialogUtils from '../../batch_dialog_utils';
-import Binder from '../../binder';
-import fn from '../../functions';
-import Promise from 'bluebird';
 import root from '../../root';
-import saveAs from '../../../lib/filesaver.min.js';
 import utils from '../../utils';
 import ko from 'knockout';
 
@@ -25,6 +20,13 @@ module.exports = function(params) {
     function getExternalId(id) {
         return serverService.getParticipant("externalId:"+id);
     }
+    function getEmail(id) {
+        return serverService.getParticipants(0, 5, id).then(function(response) {
+            return (response.items.length === 1) ?
+                serverService.getParticipant(response.items[0].id) :
+                Promise.reject("Participant not found");
+        });
+    }
     function makeSuccess(vm, event) {
         return function(response) {
             utils.successHandler(vm, event);
@@ -40,7 +42,9 @@ module.exports = function(params) {
         utils.startHandler(vm, event);
         getId(id).then(success).catch(function() {
             getHealthCode(id).then(success).catch(function() {
-                getExternalId(id).then(success).catch(utils.failureHandler());
+                getExternalId(id).then(success).catch(function() {
+                    getEmail(id).then(success).catch(utils.failureHandler({transient:false}));
+                });
             });
         });
     };
