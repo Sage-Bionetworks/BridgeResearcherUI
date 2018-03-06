@@ -22,7 +22,7 @@
     "bluebird": "^3.4.0",
     "bundle-loader": "^0.5.5",
     "chai": "^4.0.2",
-    "chart.js": "^2.5.0",
+    "chart.js": "^2.7.2",
     "css-loader": "^0.28.4",
     "director": "^1.2.8",
     "dom-autoscroller": "^2.3.1 ",
