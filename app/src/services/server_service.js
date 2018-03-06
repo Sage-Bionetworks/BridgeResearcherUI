@@ -334,6 +334,9 @@ export class ServerService {
     verifyEmail() {
         return this.post(config.verifyEmail);
     }
+    verifyStudyEmail(type) {
+        return this.post(config.verifyStudyEmail + "?type="+type);
+    }
     emailStatus() {
         return this.gethttp(config.emailStatus);
     }

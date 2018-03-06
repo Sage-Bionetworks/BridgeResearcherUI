@@ -21,7 +21,7 @@ module.exports = function(params) {
     function updateURLs(session) {
         var host = config.host[session.environment] + "/" + params.guid + "/consent.";
         host = host.replace('https','http');
-        host = host.replace('webservices','docs');
+        host = host.replace('ws','docs');
         self.htmlUrlObs(host + 'html');
         self.pdfUrlObs(host + 'pdf');
     }

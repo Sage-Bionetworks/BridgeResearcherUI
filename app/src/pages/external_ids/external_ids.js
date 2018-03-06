@@ -83,13 +83,12 @@ module.exports = function() {
     };
     self.execLink = function(item, event) {
         event.target.nextElementSibling.classList.add("active");
-        serverService.getParticipants(null,5,"+"+item.identifier+"@").then(function(response) {
-            if (response.items.length === 0) {
-                toastr.error("Not a lab code account: we cannot locate the account by its external ID.");
-            } else {
-                document.location = '#/participants/'+response.items[0].id;
-            }
+        serverService.getParticipant("externalId:"+item.identifier).then(function(response) {
             event.target.nextElementSibling.classList.remove("active");
+            document.location = '#/participants/'+response.id+'/general';
+        }).catch(function() {
+            event.target.nextElementSibling.classList.remove("active");
+            toastr.error("Not a lab code account: we cannot locate the account by its external ID.");
         });
     };
     self.doSearch = function(vm, event) {

@@ -16,6 +16,28 @@ var cssClassNameForStatus = {
 function deleteItem(participant) {
     return serverService.deleteParticipant(participant.id);
 }
+function getId(id) {
+    return serverService.getParticipant(id);
+}
+function getHealthCode(id) {
+    return serverService.getParticipant("healthCode:"+id);
+}
+function getExternalId(id) {
+    return serverService.getParticipant("externalId:"+id);
+}
+function getEmail(id) {
+    return serverService.getParticipants(0, 5, id).then(function(response) {
+        return (response.items.length === 1) ?
+            serverService.getParticipant(response.items[0].id) :
+            Promise.reject("Participant not found");
+    });
+}
+function makeSuccess(vm, event) {
+    return function(response) {
+        event.target.parentNode.parentNode.classList.remove("loading");
+        document.location = '#/participants/'+response.id+'/general';
+    };
+}
 
 module.exports = function() {
     var self = this;
@@ -33,6 +55,7 @@ module.exports = function() {
 
     self.isAdmin = root.isAdmin;
     self.recordsObs = ko.observable("");
+    self.findObs = ko.observable("");
     fn.copyProps(self, fn, 'formatName', 'formatDateTime', 'formatSummaryAsFullLabel');
 
     self.formatEmailPhone = function(value) {
@@ -73,6 +96,30 @@ module.exports = function() {
         }
         return response;
     }
+
+    self.handleKeyEvent = function(vm, event) {
+        if (event.keyCode === 13) {
+            event.target.parentNode.parentNode.classList.add("loading");
+
+            var id = self.findObs();
+            var success = makeSuccess(vm, event);
+            utils.startHandler(vm, event);
+            
+            getHealthCode(id).then(success).catch(function() {
+                getExternalId(id).then(success).catch(function() {
+                    getId(id).then(success).catch(function() {
+                        getEmail(id).then(success)
+                            .catch(function(e) {
+                                event.target.parentNode.parentNode.classList.remove("loading");
+                                utils.failureHandler({transient:false})(e);
+                            });
+                    });
+                });
+            });
+        }
+        return true;
+    };
+
     self.resendEmailVerification = function(vm, event) {
         alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
             var userId = vm.id;
@@ -92,7 +139,10 @@ module.exports = function() {
     };
     self.exportDialog = function() {
         root.openDialog('participant_export', {emailFilter: self.emailFilter, phoneFilter: self.phoneFilter,
-            startTime: self.startTime, endTime: self.endTime, total: self.total});    
+            startTime: self.startTime, endTime: self.endTime, total: self.total});
+    };
+    self.findDialog = function() {
+        root.openDialog('participant_finder');
     };
     self.loadingFunc = function(offsetBy, pageSize, emailFilter, phoneFilter, startTime, endTime) {
         self.emailFilter = emailFilter;

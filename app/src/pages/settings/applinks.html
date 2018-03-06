@@ -50,11 +50,10 @@
             <div class="ui message">
                 <p>To create links that are intercepted by your application (“App Links” on Android, “Universal Links” on iPhone), we provide the server support to register those links with your application.</p>
 
-                <p>Your links must point to the host and path <code>https://webservices.sagebridge.org/&lt;your-study-id&gt;</code>. <b><i>You should define paths here for Apple OS that always include this study-based context path.</i></b></p>
+                <p>Your links must point to the host and path <code>https://ws.sagebridge.org/<span data-bind="text: identifierObs"></span></code>. <b><i>You should define paths here for Apple OS that always include this study-based context path.</i></b></p>
                 
                 <p></p>On Android, you should declare the Intents to capture these links so they include the 
-                <code>&lt;data &hellip; android:pathPrefix="/&lt;your-study-id&gt;"/&gt;</code> element to scope your captured URLs.
-                </p>
+                <code>&lt;data android:pathPrefix="/<span data-bind="text: identifierObs"></span>"/&gt;</code> element to scope your captured URLs.</p>
 
                 <p>Bridge enforces these constraints.</p>
 

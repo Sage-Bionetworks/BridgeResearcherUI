@@ -14,7 +14,8 @@ module.exports = function() {
         .obs('identifier')
         .bind('technicalEmail')
         .bind('supportEmail')
-        .bind('consentNotificationEmail');
+        .bind('consentNotificationEmail')
+        .obs('consentNotificationEmailVerified', true);
 
     function checkEmailStatus() {
         return serverService.emailStatus().then(binder.update('status'));
@@ -33,6 +34,12 @@ module.exports = function() {
         utils.startHandler(vm, event);
         serverService.verifyEmail()
             .then(binder.update('status'))
+            .then(utils.successHandler(vm, event, "Request to verify email has been sent."))
+            .catch(utils.failureHandler());
+    };
+    self.verifyConsentEmail = function(vm, event) {
+        utils.startHandler(vm, event);
+        serverService.verifyStudyEmail('consent_notification')
             .then(utils.successHandler(vm, event, "Request to verify email has been sent."))
             .catch(utils.failureHandler());
     };

@@ -31,4 +31,10 @@
             padding-bottom: .75rem;
         }
     }
+    .fixed-header-buttons {
+        display: flex;
+    }
+    .fixed-header-buttons > * {
+        margin-left: .5rem;
+    }
 }
