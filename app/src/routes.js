@@ -128,4 +128,4 @@ router.configure({
         root.sidePanelObs('navigation'); 
     }]
 });
-router.init();
+router.init('/reports/uploads');

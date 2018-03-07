@@ -29,7 +29,7 @@ var RootViewModel = function() {
         .obs('studyIdentifier')
         .obs('selected', '')
         .obs('roles[]', [])
-        .obs('mainPage', 'dailyUploads')
+        .obs('mainPage', 'empty')
         .obs('mainParams', {})
         .obs('editorPanel', 'none')
         .obs('editorParams', {})
