@@ -71,6 +71,26 @@ reg('account_exists', {
     viewModel: require('./pages/email_templates/account_exists'),
     template: require('./pages/email_templates/account_exists.html')
 });
+reg('sms_verify_phone', {
+    viewModel: require('./pages/sms_templates/verify_phone'),
+    template: require('./pages/sms_templates/verify_phone.html')
+});
+reg('sms_reset_password', {
+    viewModel: require('./pages/sms_templates/reset_password'),
+    template: require('./pages/sms_templates/reset_password.html')
+});
+reg('sms_phone_signin', {
+    viewModel: require('./pages/sms_templates/phone_signin'),
+    template: require('./pages/sms_templates/phone_signin.html')
+});
+reg('sms_account_exists', {
+    viewModel: require('./pages/sms_templates/account_exists'),
+    template: require('./pages/sms_templates/account_exists.html')
+});
+reg('sms_app_install_link', {
+    viewModel: require('./pages/sms_templates/app_install_link'),
+    template: require('./pages/sms_templates/app_install_link.html')
+});
 reg('external_ids', {
     viewModel: require('./pages/external_ids/external_ids'),
     template: require('./pages/external_ids/external_ids.html')
@@ -321,6 +341,10 @@ reg('template-tabset', {
     viewModel: require('./pages/email_templates/tabset'),
     template: require('./pages/email_templates/tabset.html')
 });
+reg('sms-template-tabset', {
+    viewModel: require('./pages/sms_templates/tabset'),
+    template: require('./pages/sms_templates/tabset.html')
+});
 reg('subpop-tabset', {
     viewModel: require('./pages/subpopulation/tabset'),
     template: require('./pages/subpopulation/tabset.html')
@@ -471,12 +495,6 @@ reg('participant_export', {
     viewModel: require('./dialogs/participant_export/participant_export'),
     template: require('./dialogs/participant_export/participant_export.html'), synchronous: true
 });
-/*
-reg('participant_finder', {
-    viewModel: require('./dialogs/participant_finder/participant_finder'),
-    template: require('./dialogs/participant_finder/participant_finder.html'), synchronous: true
-});
-*/
 reg('copy_schemas', {
     viewModel: require('./dialogs/copy_schemas/copy_schemas'),
     template: require('./dialogs/copy_schemas/copy_schemas.html'), synchronous: true

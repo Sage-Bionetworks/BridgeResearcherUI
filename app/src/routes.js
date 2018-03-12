@@ -68,11 +68,20 @@ router.on('/app_links', routeTo('app_links', 'links'));
 router.on('/export_settings', routeTo('export_settings', 'export'));
 router.on('/shared_upload_metadata', routeTo('shared_upload_metadata', 'metadata'));
 router.on('/task_identifiers', routeTo('task_identifiers', 'taskIds'));
-router.on('/email_templates', redirectTo('/email_templates/reset_password'));
+
+router.on('/email_templates', redirectTo('/email_templates/verify_email'));
 router.on('/email_templates/reset_password', routeTo('reset_password', 'templates'));
 router.on('/email_templates/verify_email', routeTo('verify_email', 'templates'));
 router.on('/email_templates/account_exists', routeTo('account_exists', 'templates'));
 router.on('/email_templates/email_signin', routeTo('email_signin', 'templates'));
+
+router.on('/sms_templates', redirectTo('/sms_templates/verify_phone', 'sms'));
+router.on('/sms_templates/reset_password', routeTo('sms_reset_password', 'sms'));
+router.on('/sms_templates/verify_phone', routeTo('sms_verify_phone', 'sms'));
+router.on('/sms_templates/account_exists', routeTo('sms_account_exists', 'sms'));
+router.on('/sms_templates/phone_signin', routeTo('sms_phone_signin', 'sms'));
+router.on('/sms_templates/app_install_link', routeTo('sms_app_install_link', 'sms'));
+
 router.on('/subpopulations/:guid/consents/history', routeTo('subpopulation_history', 'subpops', GUID));
 router.on('/subpopulations/:guid/consents/download', routeTo('subpopulation_download', 'subpops', GUID));
 router.on('/subpopulations/:guid/consents/:createdOn', routeTo('subpopulation_editor', 'subpops', GUID_CREATEDON));

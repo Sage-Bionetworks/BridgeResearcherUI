@@ -34,7 +34,7 @@ export default class EmailViewModel {
         
         utils.startHandler(this, event);
         serverService.saveStudy(this.study)
-            .then(utils.successHandler(vm, event, "Email saved."))
+            .then(utils.successHandler(vm, event, "Template saved."))
             .catch(utils.failureHandler());
     }
     dispose() {
