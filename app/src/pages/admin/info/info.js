@@ -14,6 +14,7 @@ module.exports = function() {
         .bind('accountLimit', 0, null, parseInt)
         .bind('androidArn', null, android.fromObject, android.toObject)
         .bind('emailSignInEnabled')
+        .bind('phoneSignInEnabled')
         .bind('emailVerificationEnabled')
         .bind('reauthenticationEnabled')
         .bind('externalIdRequiredOnSignup')

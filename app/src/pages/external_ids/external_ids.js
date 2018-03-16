@@ -81,15 +81,8 @@ module.exports = function() {
             .then(utils.successHandler(vm, event))
             .catch(utils.failureHandler());
     };
-    self.execLink = function(item, event) {
-        event.target.nextElementSibling.classList.add("active");
-        serverService.getParticipant("externalId:"+item.identifier).then(function(response) {
-            event.target.nextElementSibling.classList.remove("active");
-            document.location = '#/participants/'+response.id+'/general';
-        }).catch(function() {
-            event.target.nextElementSibling.classList.remove("active");
-            toastr.error("Not a lab code account: we cannot locate the account by its external ID.");
-        });
+    self.link = function(item) {
+        return '#/participants/'+encodeURIComponent('externalId:'+item.identifier)+'/general';
     };
     self.doSearch = function(vm, event) {
         if (event.keyCode === 13) {
