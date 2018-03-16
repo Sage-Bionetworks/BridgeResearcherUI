@@ -49,13 +49,6 @@ module.exports = function(params) {
         .obs('title', (params.userId === "new") ? "New participant" : "&#160;");
     
     fn.copyProps(self, root, 'isAdmin');
-    /*
-    if (!self.isNewObs()) {
-        serverService.getParticipantName(self.userIdObs()).then(function(part) {
-            self.titleObs(part.name);
-        }).catch(failureHandler);
-    }
-    */
     
     self.statusObs.subscribe(function(status) {
         self.showEnableAccountObs(status !== "enabled");
