@@ -14,7 +14,9 @@ export default class SmsViewModel {
         serverService.getStudy().then((study) => {
             this.study = study;
             this.studyIdObs(study.identifier);
-            this.messageObs(study[this.templateName].message);
+            if (study[this.templateName]) {
+                this.messageObs(study[this.templateName].message);
+            }
             this.postLoad(study);
         }).catch(utils.failureHandler());        
     }
@@ -33,6 +35,8 @@ export default class SmsViewModel {
             string = string.split("${sponsortName}").join(this.study.sponsorName);
             string = string.split("${supportEmail}").join(this.study.supportEmail);
             string = string.split("${expirationPeriod}").join("# hours");
+            string = string.split("${resetPasswordExpirationPeriod}").join("# hours");
+            string = string.split("${phoneSignInExpirationPeriod}").join("# hours");
             string = string.split("${url}").join(this.getSampleURL());
             string = string.split("${resetPasswordUrl}").join(this.getSampleURL());
             string = string.split("${token}").join("###-###");

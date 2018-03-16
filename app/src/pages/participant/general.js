@@ -49,12 +49,13 @@ module.exports = function(params) {
         .obs('title', (params.userId === "new") ? "New participant" : "&#160;");
     
     fn.copyProps(self, root, 'isAdmin');
-    
+    /*
     if (!self.isNewObs()) {
         serverService.getParticipantName(self.userIdObs()).then(function(part) {
             self.titleObs(part.name);
         }).catch(failureHandler);
     }
+    */
     
     self.statusObs.subscribe(function(status) {
         self.showEnableAccountObs(status !== "enabled");
@@ -164,6 +165,15 @@ module.exports = function(params) {
     function noteInitialStatus(participant) {
         self.emailNullObs(fn.isBlank(participant.email));
         self.phoneNullObs(fn.isBlank(participant.phone && participant.phone.number));
+
+        // The general page can be linked to using externalId: or healthCode:... here we 
+        // fix the ID to the be real ID, then use that to call getParticipantName
+        self.userIdObs(participant.id);
+        if (!self.isNewObs()) {
+            serverService.getParticipantName(participant.id).then(function(part) {
+                self.titleObs(part.name);
+            }).catch(failureHandler);
+        }
         return participant;
     }
     

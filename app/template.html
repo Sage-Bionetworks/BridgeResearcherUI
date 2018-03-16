@@ -82,10 +82,11 @@
                         <a href="#/participants" class="item" data-ref="participants" data-bind="visible: isResearcher()">
                             Participants
                         </a>
-                        <a href="#/external_ids" class="item" data-ref="extids">
+                        <a href="#/external_ids" class="item" data-ref="extids" data-bind="visible: codesEnumeratedObs">
                             External IDs
                         </a>
-                        <a href="#/reports" class="item" data-ref="reports" data-bind="visible: isDeveloper() || isResearcher()">
+                        <a href="#/reports" class="item" data-ref="reports" 
+                            data-bind="visible: isDeveloper() || isResearcher()">
                             Study Reports
                         </a>
                         <a href="#/topics" class="item" data-ref="notifications" data-bind="visible: isDeveloper() || isResearcher()">
