@@ -49,10 +49,9 @@
                     <span data-bind="text: $data.identifier, visible: !$data.assigned"></span>
                     <span data-bind="visible: $data.assigned">
                         <span data-bind="visible: !$parent.isResearcher(), text: $data.identifier"></span>
-
-                        <a class="link" data-bind="visible: $parent.isResearcher, 
-                            text: $data.identifier, click: $component.execLink"></a>
-                        <span class="ui tiny inline loader"></span>
+                        <a data-bind="text: $data.identifier, visible: $parent.isResearcher, 
+                            attr: {'href': $parent.link($data)}">
+                        </a>
                     </span>
                 </td>
                 <td style="white-space: nowrap">
