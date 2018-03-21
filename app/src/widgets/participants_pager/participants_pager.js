@@ -18,11 +18,15 @@ module.exports = function(params) {
     var query = storeService.restoreQuery(pageKey);
     var offsetBy = query.offsetBy;
 
+    var {defaultStart, defaultEnd} = fn.getRangeInDays(-14, 0);
+    var start = query.startTime ? new Date(query.startTime) : defaultStart;
+    var end = query.endTime ? new Date(query.endTime) : defaultEnd;
+
     new Binder(self)
         .obs('emailFilter', query.emailFilter)
         .obs('phoneFilter', query.phoneFilter)
-        .obs('startTime', query.startTime)
-        .obs('endTime', query.endTime)
+        .obs('startTime', start)
+        .obs('endTime', end)
         .obs('offsetBy', offsetBy)
         .obs('pageSize', pageSize)
         .obs('totalRecords')
@@ -95,8 +99,12 @@ module.exports = function(params) {
         var emailFilter = self.emailFilterObs();
         var phoneFilter = self.phoneFilterObs();
         var startTime = makeDate(self.startTimeObs());
-        var endTime = makeDate(self.endTimeObs());
-
+        var endTime = null;
+        if (self.endTimeObs()) {
+            var date = new Date(self.endTimeObs());
+            date.setDate(date.getDate()+1);
+            endTime = makeDate(date);
+        }
         storeService.persistQuery(pageKey, {
             emailFilter, phoneFilter, startTime, endTime, offsetBy});
 

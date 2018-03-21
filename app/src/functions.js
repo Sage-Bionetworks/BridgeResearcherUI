@@ -353,6 +353,13 @@ function formatList(array = [], finalWord = 'and') {
     }
     return '';
 }
+function getRangeInDays(deltaPast, deltaFuture) {
+    var start = new Date();
+    start.setDate(start.getDate()+deltaPast);
+    var end = new Date();
+    end.setDate(end.getDate()+deltaFuture);
+    return {start, end};
+}
 
 var formatDate = seq(checkArgs, asDate, formatDateString, blankInvalidDateString);
 var formatDateTime = seq(checkArgs, asDate, formatDateTimeString, blankInvalidDateString);
@@ -377,6 +384,7 @@ export default {
     formatRoles,
     formatTitleCase,
     formatVersionRange,
+    getRangeInDays,
     handleConditionalObsUpdate,
     handleCopyProps,
     handleForEach,

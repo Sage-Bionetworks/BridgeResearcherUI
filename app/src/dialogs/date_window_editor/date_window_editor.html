@@ -1,5 +1,5 @@
 <div class="ui small modal">
-    <i class="close icon"></i>
+    <i data-bind="click:cancel" class="close icon"></i>
     <div class="header">
         Execution Window
     </div>
@@ -8,11 +8,11 @@
             <div class="two fields">
                 <div class="field">
                     <label>Schedule tasks from date</label>
-                    <input data-enableTime="true" data-bind="flatpickr: startsOnObs, timeout: 600"/>
+                    <input data-enableTime="true" data-bind="flatpickr: startsOnObs"/>
                 </div>
                 <div class="field">
                     <label>to date</label>
-                    <input data-enableTime="true" data-bind="flatpickr: endsOnObs, timeout: 600"/>
+                    <input data-enableTime="true" data-bind="flatpickr: endsOnObs"/>
                 </div>
             </div>
         </div>

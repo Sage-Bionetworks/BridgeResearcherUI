@@ -62,7 +62,7 @@ module.exports = function() {
             .catch(utils.failureHandler());
     }
     function openSignInDialog() {
-        root.openDialog('sign_in_dialog');
+        root.openDialog('sign_in_dialog', {closeable:false});
     }
     function clear(response) {
         self.phoneObs("");
@@ -99,6 +99,7 @@ module.exports = function() {
         utils.startHandler(vm, event);
         return serverService.requestPhoneSignIn(env, model)
             .then(function(request) {
+                model.closeable = false;
                 root.openDialog('submit_code_dialog', model);
             })
             .then(utils.successHandler(vm, event, SUCCESS_MSG))

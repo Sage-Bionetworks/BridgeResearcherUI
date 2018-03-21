@@ -14,11 +14,14 @@ var failureHandler = utils.failureHandler({
 module.exports = function(params) {
     var self = this;
 
+    var {start, end} = fn.getRangeInDays(-14, 0);
+    /*
     var today = new Date();
     var tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate()+1, 
         today.getHours(), today.getMinutes(), today.getSeconds());
     var start = today.toISOString("00:00:00");
     var end = tomorrow.toISOString("00:00:00");
+    */
     
     // For the forward pager control.
     self.vm = self;
@@ -27,8 +30,8 @@ module.exports = function(params) {
     new Binder(self)
         .obs('userId', params.userId)
         .obs('name', '')
-        .obs('uploadsStartDate', new Date(start))
-        .obs('uploadsEndDate', new Date(end))
+        .obs('uploadsStartDate', start)
+        .obs('uploadsEndDate', end)
         .obs('warn', false)
         .obs('isNew', false)
         .obs('status')
@@ -67,9 +70,17 @@ module.exports = function(params) {
         return (date) ? fn.dateToLocalISOString(fn.asDate(date), "00:00:00") : null;
     }
 
+    function dateRange() {
+        let start = dateToString(self.uploadsStartDateObs());
+        let end = self.uploadsEndDateObs();
+        end.setDate(end.getDate()+1);
+        end = dateToString(end);
+        return {start, end};
+    }
+
     self.doCalSearch = function() {
-        var start = dateToString(self.uploadsStartDateObs());
-        var end = dateToString(self.uploadsEndDateObs());
+        var {start, end} = dateRange();
+
         var oneMissing = (start === null || end === null);
         self.warnObs(oneMissing);
         if (!oneMissing) {
@@ -151,9 +162,9 @@ module.exports = function(params) {
     self.loadingFunc = function(args) {
         args = args || {};
         args.pageSize = PAGE_SIZE;
-        args.startTime = dateToString(self.uploadsStartDateObs());
-        args.endTime = dateToString(self.uploadsEndDateObs());
-
+        var {start, end} = dateRange();
+        args.startTime = start;
+        args.endTime = end;
         return serverService.getParticipantUploads(params.userId, args)
             .then(processUploads)
             .catch(failureHandler);

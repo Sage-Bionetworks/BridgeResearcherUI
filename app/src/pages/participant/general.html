@@ -46,8 +46,8 @@
             </div>
             <div class="field">
                 <label>Roles</label>
-                <select multiple data-bind="semantic: 'multi-search-select', 
-                    updateSelect: rolesObs, foreach: allRolesObs">
+                <select multiple data-bind="updateSelect: rolesObs, foreach: allRolesObs, 
+                    semantic: 'multi-search-select'">
                     <option data-bind="text: $data, selected: $component.rolesObs().indexOf($data) > -1"></option>
                 </select>
             </div>

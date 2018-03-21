@@ -1,5 +1,5 @@
 <div class="ui small modal">
-    <i class="close icon"></i>
+    <i data-bind="click:close" class="close icon"></i>
     <div class="header" data-bind="text: titleObs"></div>
     <div class="content">
         <errors></errors>
@@ -10,7 +10,7 @@
             </div>
             <div class="field" id="date">
                 <label>Date</label>
-                <input data-bind="flatpickr: dateObs, timeout: 600"/>
+                <input data-bind="flatpickr: dateObs"/>
             </div>
             <div class="field" id="data">
                 <label>JSON</label>

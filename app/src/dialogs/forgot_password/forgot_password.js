@@ -50,7 +50,7 @@ module.exports = function() {
             .catch(utils.failureHandler());
     }
     function openSignInDialog() {
-        root.openDialog('sign_in_dialog');
+        root.openDialog('sign_in_dialog', {closeable:false});
     }
 
     self.sendResetPasswordRequest = function(vm, event) {
