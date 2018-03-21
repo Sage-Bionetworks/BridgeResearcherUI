@@ -111,12 +111,11 @@ router.on('/participants/:userId/notifications', routeTo('participant_notificati
 router.on('/participants/:userId/reports', routeTo('participant_reports', 'participants', USERID));
 router.on('/participants/:userId/uploads', routeTo('participant_uploads', 'participants', USERID));
 router.on('/participants/:userId/clientData', routeTo('participant_clientData', 'participants', USERID));
-router.on('/participants/:userId', routeTo('participant_general', 'participants', USERID));
 router.on('/participants/:userId/general', routeTo('participant_general', 'participants', USERID));
 router.on('/participants/:userId/requestInfo', routeTo('participant_request_info', 'participants', USERID));
+router.on('/participants/:userId', routeTo('participant_general', 'participants', USERID));
 router.on('/participants', routeTo('participants', 'participants'));
 router.on('/external_ids', routeTo('external_ids', 'extids'));
-router.on('/tasks', routeTo('tasks', 'tasks'));
 router.on('/tasks/:taskId', routeTo('task', 'tasks', TASKID));
 router.on('/topics/:guid', routeTo('topic', 'notifications', GUID));
 router.on('/topics', routeTo('topics', 'notifications'));

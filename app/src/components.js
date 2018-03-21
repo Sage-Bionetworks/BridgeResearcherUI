@@ -418,6 +418,10 @@ reg('forward-pager', {
 });
 
 // Dialogs. These must be synchronous.
+reg('sign_out_user', {
+    viewModel: require('./dialogs/sign_out_user/sign_out_user'),
+    template: require('./dialogs/sign_out_user/sign_out_user.html'), synchronous: true
+});
 reg('module_browser', {
     viewModel: require('./dialogs/module_browser/module_browser'),
     template: require('./dialogs/module_browser/module_browser.html'), synchronous: true
