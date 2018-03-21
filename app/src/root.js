@@ -133,7 +133,7 @@ var RootViewModel = function() {
         self.rolesObs([]);
         self.codesEnumeratedObs(false);
         self.codeRequiredObs(false);
-        self.openDialog('sign_in_dialog');
+        self.openDialog('sign_in_dialog', {closeable:false});
     });
     setTimeout(checkVerifyStatus, 1000);
 };

@@ -387,8 +387,8 @@ export class ServerService {
         cache.clear(id+':name');
         return this.del(config.users + '/' + id);
     }
-    signOutUser(id) {
-        return this.post(config.participants+"/"+id+"/signOut");  
+    signOutUser(id, deleteReauthToken) {
+        return this.post(config.participants+"/"+id+"/signOut" + fn.queryString({deleteReauthToken}));  
     }
     requestResetPasswordUser(id) {
         return this.post(config.participants+"/"+id+"/requestResetPassword");

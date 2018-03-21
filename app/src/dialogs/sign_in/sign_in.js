@@ -110,9 +110,9 @@ module.exports = function() {
     };
 
     self.usePhone = function(vm, event) {
-        root.openDialog('phone_signin_dialog');
+        root.openDialog('phone_signin_dialog', {closeable:false});
     };
     self.forgotPassword = function() {
-        root.openDialog('forgot_password_dialog');
+        root.openDialog('forgot_password_dialog', {closeable:false});
     };
 };

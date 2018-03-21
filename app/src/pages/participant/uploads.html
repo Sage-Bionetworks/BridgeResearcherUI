@@ -15,17 +15,10 @@
 <div class="scrollbox">
     <errors></errors>
     <div class="line-control">
-        <div class="ui action input" style="margin-right:.4rem"
-            data-bind="flatpickr: uploadsStartDateObs, timeout: 50, wrap: true, onChange: doCalSearch">
-            <input type="text" placeholder="Uploaded on or after" readonly data-input data-toggle>
-            <div data-toggle></div>
-            <button class="ui icon button" data-clear><i class="remove circle icon"></i></button>
-        </div>
-        <div class="ui action input"
-            data-bind="flatpickr: uploadsEndDateObs, timeout: 50, wrap: true, onChange: doCalSearch">
-            <input type="text" placeholder="Uploaded before" readonly data-input data-toggle>
-            <div data-toggle></div>
-            <button class="ui icon button" data-clear><i class="remove circle icon"></i></button>
+        <div class="ui icon input" data-bind="range: {
+            startDateObs: uploadsStartDateObs, endDateObs: uploadsEndDateObs, onChange: doCalSearch}">
+            <input type="text" placeholder="Uploaded in range" readonly>
+            <i class="calendar icon"></i>
         </div>
         <div class="line-control-stretch">
             <span data-bind="visible: warnObs" style="padding-left: .5rem" class="label-field-padding">

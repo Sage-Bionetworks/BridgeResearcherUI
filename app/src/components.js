@@ -179,15 +179,6 @@ reg('participant_general', {
     viewModel: require('./pages/participant/general'),
     template: require('./pages/participant/general.html')
 });
-reg('participant_activities', {
-    viewModel: require('./pages/participant/activities'),
-    template: require('./pages/participant/activities.html')
-});
-reg('participant_activity', {
-    viewModel: require('./pages/participant/activity'),
-    template: require('./pages/participant/activity.html')
-});
-
 reg('participant_newActivities', {
     viewModel: require('./pages/participant/newActivities'),
     template: require('./pages/participant/newActivities.html')
@@ -427,6 +418,10 @@ reg('forward-pager', {
 });
 
 // Dialogs. These must be synchronous.
+reg('sign_out_user', {
+    viewModel: require('./dialogs/sign_out_user/sign_out_user'),
+    template: require('./dialogs/sign_out_user/sign_out_user.html'), synchronous: true
+});
 reg('module_browser', {
     viewModel: require('./dialogs/module_browser/module_browser'),
     template: require('./dialogs/module_browser/module_browser.html'), synchronous: true

@@ -4,6 +4,7 @@ import alert from './widgets/alerts';
 import Chart from 'chart.js';
 import flatpickr from 'flatpickr';
 import ko from 'knockout';
+import RootViewModel from './root';
 
 // need to make a global out of this for semantic to work, as it's not in a package.
 // This is hacky, webpack has better support for this. Worse, semantic is a jQuery
@@ -12,21 +13,19 @@ window.$ = window.jQuery = $;
 
 // http://stackoverflow.com/questions/23606541/observable-array-push-multiple-objects-in-knockout-js
 ko.observableArray.fn.pushAll = function(valuesToPush) {
-    var underlyingArray = this();
     this.valueWillMutate();
-    ko.utils.arrayPushAll(underlyingArray, valuesToPush);
+    ko.utils.arrayPushAll(this(), valuesToPush);
     this.valueHasMutated();
     return this;
 };
 ko.observableArray.fn.contains = function(value) {
-    var underlyingArray = this();
-    return underlyingArray.indexOf(value) > -1;
+    return this().indexOf(value) > -1;
 };
 
 ko.bindingHandlers.chart = {
-    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-        var context = element.getContext("2d");
-        var observer = valueAccessor();
+    init: function(element, valueAccessor) {
+        let context = element.getContext("2d");
+        let observer = valueAccessor();
         observer.subscribe(function(config) {
             if (element._chart) {
                 element._chart.destroy();
@@ -45,49 +44,69 @@ ko.bindingHandlers.focusable = {
         });
     }
 };
-ko.bindingHandlers.flatpickr = {
-    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-        var observer = valueAccessor();
-        var timeout = allBindings().timeout;
-        var onChange = allBindings().onChange || function() {};
-        var wrap = (allBindings().wrap === true);
-        var includeTime = element.hasAttribute("data-enableTime");
 
-        function updateObserver(date) {
-            observer(null);
-            if (date && date.length) {
-                observer(date[0]);
+ko.bindingHandlers.range = {
+    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        element.classList.add('range');
+
+        let input = element.querySelector("input");
+        let config = valueAccessor();
+        let startDateObs = config.startDateObs;
+        let endDateObs = config.endDateObs;
+        let onChange = config.onChange || function() {};
+
+        function updateObservers(dates) {
+            startDateObs(null);
+            endDateObs(null);
+            if (dates && dates.length) {
+                startDateObs(dates[0]);
+                endDateObs(dates[1]);
             }
             onChange();
         }
-        function createPicker() {
-            var d = observer();
-            var config = { defaultDate: d, onChange: updateObserver, wrap: wrap, 
-                clickOpens: !wrap, enableTime: includeTime };
-            flatpickr(element, config);
+        flatpickr(input, { onChange: updateObservers, mode: 'range', clickOpens: true,
+            defaultDate: [startDateObs(), endDateObs()], enableTime: false,
+            altInput: true, altFormat: "F j, Y", dateFormat: "Y-m-d" });
+    }
+};
+
+ko.bindingHandlers.flatpickr = {
+    init: function(element, valueAccessor, allBindings) {
+        let observer = valueAccessor();
+        let onChange = allBindings().onChange || function() {};
+        let includeTime = element.hasAttribute("data-enableTime");
+        let _init = false;
+
+        function setInstance() {
+            if (_init) { return; }
+            _init = true;
+            instance.close();
         }
-        // You must delay initialization in a modal until after the modal is open, or 
-        // the picker works... but spontaneously opens. Just add timeout: 600 to the 
-        // binding, or however long you want to delay.
-        if (timeout) {
-            setTimeout(createPicker, timeout);    
-        } else {
-            createPicker();
+
+        let instance = flatpickr(element, { defaultDate: observer(), 
+            onChange: updateObserver, enableTime: includeTime, onOpen: setInstance });
+
+        function updateObserver(dates) {
+            observer(null);
+            if (dates && dates.length) {
+                observer(dates[0]);
+            }
+            onChange();
         }
     }
 };
 
 ko.bindingHandlers.condPopup = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-        var data = bindingContext.$data;
-        var object = ko.unwrap(valueAccessor());
+        let data = bindingContext.$data;
+        let object = ko.unwrap(valueAccessor());
         if (object.render(data)) {
             element.setAttribute('data-variation', 'very wide');
             element.setAttribute('data-html', object.html(data));
             $(element).popup();
         }
-        var className = object.className(data);
-        if (className) {
+        let className = object.className(data);
+        if (letlassName) {
             element.classList.add(object.className(data));
         }
     }
@@ -158,16 +177,21 @@ ko.bindingHandlers.ckeditor = {
 ko.bindingHandlers.modal = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
         ko.bindingHandlers.component.init(element, valueAccessor, allBindings, viewModel, bindingContext);
-        var observable = valueAccessor();
-        observable.subscribe(function (newConfig) {
-            var $modal = $(".ui.modal");
-            if ($modal.modal) {
-                if (newConfig.name !== "none") {
-                    $modal.modal({closable: false, detachable: false, notify: 'always', observeChanges: true});
-                    $modal.modal("show");
-                } else {
-                    $modal.modal('hide');
+        let observable = valueAccessor();
+        let $modal = null;
+        observable.subscribe(function(newConfig, params) {
+            let closeable = (newConfig.params && typeof newConfig.params.closeable !== "undefined") ?
+                newConfig.params.closeable : true;
+            
+            if (newConfig.name !== "none") {
+                if ($modal) {
+                    $modal.empty();
                 }
+                $modal = $(".ui.modal")
+                    .modal({closable: closeable, notify: 'always'})
+                    .modal("show");
+            } else {
+                $modal.modal('hide');
             }
         });
     }

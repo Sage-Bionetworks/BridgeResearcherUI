@@ -39,7 +39,7 @@ module.exports = function(params) {
         .obs('isLocked', isLocked);
     
     function openSignInDialog() {
-        root.openDialog('sign_in_dialog');
+        root.openDialog('sign_in_dialog', {closeable:false});
     }
     function clear(response) {
         self.tokenObs("");

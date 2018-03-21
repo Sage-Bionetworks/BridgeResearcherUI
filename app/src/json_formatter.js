@@ -26,22 +26,11 @@ function prettyPrintHTML(obj) {
         .replace(/</g, '&lt;').replace(/>/g, '&gt;')
         .replace(JSON_LINE, htmlReplacer);
 }
-function replacer(match, pIndent, pKey, pVal, pEnd) {
-    var r = pIndent || '';
-    if (pKey) {
-        r = r + '"' + pKey.replace(COLON, '') + '": ';
-    }
-    if (pVal) {
-        r = r + pVal;
-    }
-    return r + (pEnd || '');
-}
 function prettyPrint(obj) {
     if (!obj) { 
         return "";
     }
-    return JSON.stringify(obj, null, 3)
-        .replace(JSON_LINE, replacer);
+    return JSON.stringify(obj, null, 2);
 }
 function mapItem(item) {
     item.collapsedObs = ko.observable(true);

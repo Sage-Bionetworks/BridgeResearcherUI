@@ -1,5 +1,5 @@
 import ko from 'knockout';
-import '../../lib/semantic-2.2.min';
+import '../../lib/semantic-2.3.min';
 
 var handlers = {
     'accordion': function($element) {
@@ -71,31 +71,20 @@ var handlers = {
     },
     'multi-search-select': function($element, allBindings) {
         var collectionObs = allBindings().updateSelect;
-        var intervalId = setInterval(init, 100);
 
-        function init() {
-            var allOptionsObs = allBindings().foreach;
-            if (allOptionsObs() instanceof Array) {
-                clearTimeout(intervalId);
-                
-                $element.dropdown("set selected", collectionObs());
-                collectionObs.subscribe(function(newValue) {
-                    $element.dropdown("set selected", newValue);
-                });
-            } else {
-                console.log("polling");
-            }
-        }        
-        
         $element.addClass("ui selection dropdown").dropdown({
-            onAdd: function(value) {
+            onAdd: function(value, text, $choice) {
                 if (!collectionObs.contains(value)) {
-                    collectionObs.push(value);    
+                    collectionObs().push(value);
                 }
             },
             onRemove: function(value) {
                 collectionObs.remove(value);
             }
+        });
+        $element.dropdown("set selected", collectionObs());
+        collectionObs.subscribe(function(newValue) {
+            $element.dropdown("set selected", newValue);
         });
     }
 };
