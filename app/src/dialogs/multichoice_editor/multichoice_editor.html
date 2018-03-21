@@ -1,5 +1,5 @@
 <div class="ui small modal">
-    <i class="close icon"></i>
+    <i data-bind="click:cancel" class="close icon"></i>
     <div class="header">
         Enumerated Values
     </div>
@@ -49,7 +49,7 @@
         </div>            
     </div>
     <div class="actions">
-        <button data-bind="click: cancel" class="ui small button">Cancel</button>
         <button data-bind="click: save" class="ui small primary button">Save</button>
+        <button data-bind="click: cancel" class="ui small button">Cancel</button>
     </div>
 </div>

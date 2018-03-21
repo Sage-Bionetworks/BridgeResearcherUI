@@ -104,8 +104,6 @@ router.on('/schemas/:schemaId', routeTo('schema', 'schemas', SCHEMAID));
 router.on('/scheduleplans', routeTo('scheduleplans', 'scheduling'));
 router.on('/scheduleplans/:guid', routeTo('scheduleplan', 'scheduling', GUID));
 router.on('/participants/:userId/reports/:identifier', routeTo('participant_report', 'participants', USERID_IDENTIFIER));
-router.on('/participants/:userId/activities/:guid', routeTo('participant_activity', 'participants', USERID_GUID));
-router.on('/participants/:userId/activities', routeTo('participant_activities', 'participants', USERID));
 router.on('/participants/:userId/newActivities/:referentType/:guid', routeTo('participant_newActivity', 'participants', USERID_REFERENT_GUID));
 router.on('/participants/:userId/newActivities', routeTo('participant_newActivities', 'participants', USERID));
 router.on('/participants/:userId/consents', routeTo('participant_consents', 'participants', USERID));

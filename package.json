@@ -28,7 +28,7 @@
     "dom-autoscroller": "^2.3.1 ",
     "dragula": "^3.7.2",
     "extract-text-webpack-plugin": "^2.1.2",
-    "flatpickr": "^3.0.6",
+    "flatpickr": "^3.1.5",
     "html-loader": "^0.4.4",
     "html-webpack-plugin": "^2.22.0",
     "jquery": "^3.2.1",

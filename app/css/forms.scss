@@ -98,6 +98,10 @@ label[for] {
     border-color:#85B7D9!important;
 }
 
+.ui.range.input>input {
+    width: 20rem !important;
+}
+
 .error .editor.textarea {
     border-color: #E0B4B4;
     background-color: rgb(255, 246, 246);

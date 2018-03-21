@@ -179,15 +179,6 @@ reg('participant_general', {
     viewModel: require('./pages/participant/general'),
     template: require('./pages/participant/general.html')
 });
-reg('participant_activities', {
-    viewModel: require('./pages/participant/activities'),
-    template: require('./pages/participant/activities.html')
-});
-reg('participant_activity', {
-    viewModel: require('./pages/participant/activity'),
-    template: require('./pages/participant/activity.html')
-});
-
 reg('participant_newActivities', {
     viewModel: require('./pages/participant/newActivities'),
     template: require('./pages/participant/newActivities.html')

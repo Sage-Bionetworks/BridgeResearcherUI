@@ -33,13 +33,15 @@ module.exports = function(params) {
         return string;
     };
 
+    var {start, end} = fn.getRangeInDays(-14, 14);
+    
     new Binder(self)
         .obs('userId', params.userId)
         .obs('isNew', false)
         .obs('title', '&#160;')
         .obs('guid', params.guid)
-        .obs('startDate')
-        .obs('endDate')
+        .obs('startDate', start)
+        .obs('endDate', end)
         .obs('status')
         .obs('warn', false)
         .obs('activityLabel', '&#160;');
@@ -97,8 +99,11 @@ module.exports = function(params) {
     self.loadingFunc = function(args) {
         args = args || {};
         args.scheduledOnStart = fn.dateTimeString(self.startDateObs());
-        args.scheduledOnEnd = fn.dateTimeString(self.endDateObs());
-
+        if (self.endDateObs()) {
+            var date = new Date(self.endDateObs());
+            date.setDate(date.getDate()+1);
+            args.scheduledOnEnd = fn.dateTimeString(date);
+        }
         if (!bothOrNeither(args.scheduledOnStart, args.scheduledOnEnd)) {
             self.warnObs(true);
             return Promise.resolve({});
