@@ -93,15 +93,15 @@ module.exports = function(params) {
         self.userIdObs(response.identifier);
         return response;
     }
-    function signOut() {
-        return serverService.signOutUser(self.userIdObs());        
-    }
     function saveParticipant(participant) {
         if (self.isNewObs()) {
             return serverService.createParticipant(participant).then(afterCreate);
         } else {
             return serverService.updateParticipant(participant);
         }
+    }
+    function signOut() {
+        return serverService.signOutUser(self.userIdObs());        
     }
 
     self.sharingScopeOptions = OPTIONS;
@@ -126,11 +126,7 @@ module.exports = function(params) {
             .catch(failureHandler);
     };
     self.signOutUser = function(vm, event) {
-        utils.startHandler(vm, event);
-        
-        serverService.signOutUser(self.userIdObs())
-            .then(utils.successHandler(vm, event, "User signed out."))
-            .catch(failureHandler);
+        root.openDialog('sign_out_user', {userId: self.userIdObs()});
     };
     self.formatPhone = function(phone, phoneRegion) {
         return fn.flagForRegionCode(phoneRegion) + ' ' + phone;
