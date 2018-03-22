@@ -49,11 +49,6 @@ header {
     &.dev {
         @include gradient(orange, 41%, #B22222, 100%);
     }
-    /*
-    i {
-        font-size: 2rem!important;
-    }
-    */
     h2 {
         font-weight: normal;
         letter-spacing: 2px;
