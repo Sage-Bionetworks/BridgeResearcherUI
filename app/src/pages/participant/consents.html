@@ -62,7 +62,7 @@
                         click: $component.resendConsent" class="ui basic compact mini button">Resend consent</button>
                 </td>
                 <td>
-                    <a target="_blank" data-bind="visible: $data.name !== 'No consent', 
+                    <a target="_blank" rel="noopener" data-bind="visible: $data.name !== 'No consent', 
                         href: $parent.linkToDocument($data)">
                         View document <i class="ui external icon"> </i>
                     </a>

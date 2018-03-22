@@ -28,10 +28,10 @@ module.exports = function(params) {
         .obs('allDataGroups[]')
         .obs('createdOn', null, fn.formatDateTime)
         .obs('allRoles[]', ROLES)
-        .bind('email')
-        .bind('phone', null, Binder.formatPhone, Binder.persistPhone)
         .obs('emailNull', true)
         .obs('phoneNull', true)
+        .bind('email')
+        .bind('phone', null, Binder.formatPhone, Binder.persistPhone)
         .bind('phoneRegion', 'US')
         .bind('attributes[]', [], Binder.formatAttributes, Binder.persistAttributes)
         .bind('firstName')
@@ -49,7 +49,7 @@ module.exports = function(params) {
         .obs('title', (params.userId === "new") ? "New participant" : "&#160;");
     
     fn.copyProps(self, root, 'isAdmin');
-    
+
     self.statusObs.subscribe(function(status) {
         self.showEnableAccountObs(status !== "enabled");
     });
