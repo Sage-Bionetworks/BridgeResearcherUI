@@ -4,6 +4,7 @@ import Binder from '../../binder';
 import fn from '../../functions';
 import ko from 'knockout';
 import root from '../../root';
+import storeService from '../../services/store_service';
 import utils from '../../utils';
 
 var failureHandler = utils.failureHandler({
@@ -15,11 +16,20 @@ var OPTIONS = [
     {value: 'sponsors_and_partners', label:'Sponsors And Partners'},
     {value: 'all_qualified_researchers', label:'All Qualified Researchers'}
 ];
-var ROLES = ["Developer", "Researcher", "Administrator", "Worker"];
 var NEW_PARTICIPANT = {id:"new",attributes:{},phone:{number: '', regionCode: 'US'}};
 
 module.exports = function(params) {
     var self = this;
+
+    var session = storeService.get('session');
+    var ROLES = [];
+    if (session.roles.includes("admin")) {
+        ROLES = ["Developer", "Researcher", "Administrator", "Worker"];
+    } else if (session.roles.includes("researcher")) {
+        ROLES = ["Developer", "Researcher"];
+    } else if (session.roles.includes("developer")) {
+        ROLES = ["Developer"];
+    }
 
     var binder = new Binder(self)
         .obs('showEnableAccount', false)
@@ -28,10 +38,10 @@ module.exports = function(params) {
         .obs('allDataGroups[]')
         .obs('createdOn', null, fn.formatDateTime)
         .obs('allRoles[]', ROLES)
-        .bind('email')
-        .bind('phone', null, Binder.formatPhone, Binder.persistPhone)
         .obs('emailNull', true)
         .obs('phoneNull', true)
+        .bind('email')
+        .bind('phone', null, Binder.formatPhone, Binder.persistPhone)
         .bind('phoneRegion', 'US')
         .bind('attributes[]', [], Binder.formatAttributes, Binder.persistAttributes)
         .bind('firstName')
@@ -49,7 +59,7 @@ module.exports = function(params) {
         .obs('title', (params.userId === "new") ? "New participant" : "&#160;");
     
     fn.copyProps(self, root, 'isAdmin');
-    
+
     self.statusObs.subscribe(function(status) {
         self.showEnableAccountObs(status !== "enabled");
     });
