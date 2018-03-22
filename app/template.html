@@ -8,8 +8,12 @@
     <script src="//cdn.ckeditor.com/4.7.1/full/ckeditor.js"></script>
 </head>
 <body style="opacity:0.0; color: #202020">
-    <header data-bind="visible: showNavigationObs, css: {dev: isDevEnvObs}">
-        <h2 data-bind="text: studyNameObs"></h2>
+    <header data-bind="css: {dev: isDevEnvObs}">
+        <h2>
+            <i class="white bars icon" data-bind="visible: showNavigationObs, click: hideNav"></i>
+            <i class="white bars icon" data-bind="visible: !showNavigationObs(), click: showNav"></i>
+            <span data-bind="text: studyNameObs"></span>
+        </h2>
         <div class="header-study-name">
             <span>Bridge Study Manager</span>
             <i class="white heartbeat icon"></i> 
@@ -19,7 +23,6 @@
         <main data-bind="component: {name: mainPageObs, params: mainParamsObs}">
         </main>
         <nav data-bind="visible: showNavigationObs">
-
             <div data-bind="semantic: 'accordion', visible: isSidebarActive('editor')"
                 style="margin-bottom: 1rem">
                 <div class="active title">
@@ -191,12 +194,5 @@
         </p>
     </footer>
     <div data-bind="modal: dialogObs"></div>
-    
-    <div class="nav-content" style="top: 4.5rem" data-bind="visible: showNavigationObs, click: hideNav">
-        <i class="maximize icon"> </i>
-    </div>
-    <div class="nav-content" style="top: .5rem" data-bind="visible: !showNavigationObs(), click: showNav">
-        <i class="minimize icon"> </i>
-    </div>
 </body>
 </html>
