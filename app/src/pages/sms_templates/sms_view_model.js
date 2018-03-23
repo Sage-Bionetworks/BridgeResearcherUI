@@ -28,9 +28,9 @@ export default class SmsViewModel {
         return "";
     }
     formatMessage() {
-        var string = this.messageObs();
+        let string = this.messageObs();
         if (this.study) {
-            var studyShortName = this.study.shortName || "Bridge";
+            let studyShortName = this.study.shortName || "Bridge";
             string = string.split("${studyShortName}").join(studyShortName);
             string = string.split("${sponsortName}").join(this.study.sponsorName);
             string = string.split("${supportEmail}").join(this.study.supportEmail);

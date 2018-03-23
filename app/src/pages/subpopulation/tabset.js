@@ -2,14 +2,14 @@ import fn from '../../functions';
 import ko from 'knockout';
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     fn.copyProps(self, params, 'guidObs', 'createdOnObs', 'activeObs');
     fn.copyProps(self, fn, 'formatDateTime');
 
     self.computeds = [];
     self.linkMaker = function(tabName) {
-        var c = ko.computed(function() {
+        let c = ko.computed(function() {
             return '#/subpopulations/' + self.guidObs() + '/consents/' + tabName;
         });
         self.computeds.push(c);

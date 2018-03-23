@@ -113,7 +113,7 @@ ko.bindingHandlers.condPopup = {
 };
 ko.bindingHandlers.selected = {
     init: function(element, valueAccessor) {
-        var value = ko.unwrap(valueAccessor());
+        let value = ko.unwrap(valueAccessor());
         if (value) {
             element.setAttribute("selected","selected");
         }
@@ -121,7 +121,7 @@ ko.bindingHandlers.selected = {
 };
 ko.bindingHandlers.readonly = {
     init: function(element, valueAccessor) {
-        var observer = valueAccessor();
+        let observer = valueAccessor();
         observer.subscribe(function(value) {
             if (value) {
                 element.setAttribute("readonly","readonly");
@@ -139,18 +139,18 @@ ko.bindingHandlers.ckeditor = {
         }
         CKEDITOR.on('dialogDefinition', function(event) {
             if (['image','table','link'].indexOf( event.data.name ) > -1) {
-                var dialogDefinition = event.data.definition;
+                let dialogDefinition = event.data.definition;
                 dialogDefinition.removeContents('Link');
                 dialogDefinition.removeContents('advanced');
             }
         });
-        var id = element.getAttribute("id");
-        var config = {
+        let id = element.getAttribute("id");
+        let config = {
             height: "25rem",
             resize_dir: "vertical",
             on: {
                 instanceReady: function(event) {
-                    var callback = valueAccessor();
+                    let callback = valueAccessor();
                     callback(event.editor);
                 }
             },
@@ -198,7 +198,7 @@ ko.bindingHandlers.modal = {
 };
 ko.bindingHandlers.editableDiv = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-        var observer = valueAccessor();
+        let observer = valueAccessor();
         element.innerText = observer() || '';
         element.addEventListener('keyup', function() {
             observer(element.innerText);
@@ -207,8 +207,8 @@ ko.bindingHandlers.editableDiv = {
 };
 ko.bindingHandlers.submitByButton = {
     init: function(element, valueAccessor) {
-        var buttonId = ko.unwrap(valueAccessor());
-        var button = document.getElementById(buttonId);
+        let buttonId = ko.unwrap(valueAccessor());
+        let button = document.getElementById(buttonId);
         if (!button) {
             console.error("Could not find button #" + buttonId);
         }
@@ -224,7 +224,7 @@ function findItemsObs(context, collName) {
     if (typeof collName !== 'string') {
         return collName;
     }
-    for (var i = 0; i < context.$parents.length; i++) {
+    for (let i = 0; i < context.$parents.length; i++) {
         if (context.$parents[i][collName]) {
             if (context.$parents[i][collName]) {
                 return context.$parents[i][collName];
@@ -247,13 +247,13 @@ function findItemsObs(context, collName) {
  */
 ko.bindingHandlers.fadeRemove = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-        var config = ko.unwrap(valueAccessor());
-        var selector = config.selector;
-        var rowItem = config.object;
-        var collName = config.collection || 'itemsObs';
-        var context = ko.contextFor(element);
-        var itemsObs = findItemsObs(context, collName);
-        var $element = $(element).closest(selector);
+        let config = ko.unwrap(valueAccessor());
+        let selector = config.selector;
+        let rowItem = config.object;
+        let collName = config.collection || 'itemsObs';
+        let context = ko.contextFor(element);
+        let itemsObs = findItemsObs(context, collName);
+        let $element = $(element).closest(selector);
         element.addEventListener('click', function(event) {
             event.preventDefault();
             alert.deleteConfirmation("Are you sure you want to delete this?", function() {
@@ -267,8 +267,8 @@ ko.bindingHandlers.fadeRemove = {
 };
 ko.bindingHandlers.returnTo = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-        var expr = valueAccessor();
-        var target = document.querySelector(expr);
+        let expr = valueAccessor();
+        let target = document.querySelector(expr);
         element.addEventListener("keypress", function(e) {
             if (e.keyCode === 13) {
                 e.preventDefault();
@@ -280,7 +280,7 @@ ko.bindingHandlers.returnTo = {
 
 ko.bindingHandlers.tab = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-        var tab = element.getAttribute('data-tab');
+        let tab = element.getAttribute('data-tab');
         updateElement(element, valueAccessor, function(element, value) {
             element.classList.toggle("active", value === tab);
         });
@@ -288,9 +288,9 @@ ko.bindingHandlers.tab = {
 };
 
 function updateTabSelection(element) {
-    var hash = document.location.hash;
-    var href = element.getAttribute('href');
-    var tabPostFix = (href) ? ("/" + href.split("/").pop()) : href;
+    let hash = document.location.hash;
+    let href = element.getAttribute('href');
+    let tabPostFix = (href) ? ("/" + href.split("/").pop()) : href;
     element.classList.toggle("active", hash.indexOf(tabPostFix) > -1);
 }
 
@@ -299,7 +299,7 @@ ko.bindingHandlers.tabber = {
         element.classList.add("item");
         updateTabSelection(element);
 
-        var observer = new MutationObserver(function(mutations) {
+        let observer = new MutationObserver(function(mutations) {
             mutations.forEach(function(mutation) {
                 if (mutation.attributeName === "href") {
                     updateTabSelection(element);            
@@ -319,7 +319,7 @@ ko.bindingHandlers.href = {
 };
 
 function updateElement(element, valueAccessor, func) {
-    var accessor = valueAccessor();
+    let accessor = valueAccessor();
     if (ko.isObservable(accessor) || ko.isComputed(accessor)) {
         func(element, accessor());
         accessor.subscribe(function(newValue) {

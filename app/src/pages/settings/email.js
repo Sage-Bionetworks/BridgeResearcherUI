@@ -4,9 +4,9 @@ import root from '../../root';
 import utils from '../../utils';
 
 module.exports = function() {
-    var self = this;
+    let self = this;
 
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .obs('status','')
         .obs('message')
         .obs('name')

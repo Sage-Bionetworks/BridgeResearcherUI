@@ -21,9 +21,9 @@ module.exports = class AddReport {
             serverService.addStudyReport(entry.identifier, entry);
     }
     save(vm, event) {
-        var entry = this.binder.persist({});
+        let entry = this.binder.persist({});
 
-        var error = new BridgeError();
+        let error = new BridgeError();
         error.addErrorIf(!entry.identifier, "identifier", "is required");
         error.addErrorIf(!entry.data, "data", "is required");
 
@@ -36,7 +36,7 @@ module.exports = class AddReport {
         }
     }
     static getLocalDate(value) {
-        var date = value || new Date();
+        let date = value || new Date();
         return fn.asDate(date).toISOString().split("T")[0];
     }
     static stringAsJson(value, context) {

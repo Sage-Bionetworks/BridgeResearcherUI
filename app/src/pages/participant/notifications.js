@@ -6,7 +6,7 @@ import tables from '../../tables';
 import utils from '../../utils';
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     new Binder(self)
         .obs('isNew', false)

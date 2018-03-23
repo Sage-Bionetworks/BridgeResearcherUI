@@ -12,7 +12,7 @@ import utils from '../../utils';
  * and submitted to Bridge, so there's no point in exposing a scheduling UI for these at this time. 
  */
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     new Binder(self)
         .obs('enrollment', true)
@@ -31,7 +31,7 @@ module.exports = function(params) {
     self.closeDialog = root.closeDialog;
 
     self.saveAndCloseDialog = function() {
-        var events = [];
+        let events = [];
         if (self.activityFinishedObs() && self.activityObs()) {
             events.push("activity:" + self.activityObs() + ":finished");
         }

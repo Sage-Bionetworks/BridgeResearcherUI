@@ -5,18 +5,18 @@ import fn from '../../functions';
 import root from '../../root';
 import utils from '../../utils';
 
-var failureHandler = utils.failureHandler({
+const failureHandler = utils.failureHandler({
     redirectTo: "study",
     redirectMsg: "Study not found.",
     transient: false
 });
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
   
     self.isAdmin = root.isAdmin;
 
-    var binder = new Binder(this)
+    let binder = new Binder(this)
         .obs('index', 0)
         .bind('fieldDefinitions[]', [])
         .bind('version');
@@ -34,16 +34,16 @@ module.exports = function(params) {
             .catch(utils.failureHandler());
     };
     self.addBelow = function(field, event) {
-        var index = self.fieldDefinitionsObs.indexOf(field);
-        var newField = schemaUtils.makeNewField();
+        let index = self.fieldDefinitionsObs.indexOf(field);
+        let newField = schemaUtils.makeNewField();
         self.fieldDefinitionsObs.splice(index+1,0,newField);
     };
     self.addFirst = function(vm, event) {
-        var field = schemaUtils.makeNewField();
+        let field = schemaUtils.makeNewField();
         self.fieldDefinitionsObs.push(field);
     };
     self.editMultiChoiceAnswerList = function(field, event) {
-        var otherLists = self.fieldDefinitionsObs().filter(function(oneField) {
+        let otherLists = self.fieldDefinitionsObs().filter(function(oneField) {
             return (oneField.typeObs() === "multi_choice" && oneField.multiChoiceAnswerListObs().length);
         }).map(function(oneField) {
             return [].concat(oneField.multiChoiceAnswerListObs());

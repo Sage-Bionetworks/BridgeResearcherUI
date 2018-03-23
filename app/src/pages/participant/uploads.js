@@ -6,22 +6,15 @@ import tables from '../../tables';
 import utils from '../../utils';
 
 const PAGE_SIZE = 25;
-var failureHandler = utils.failureHandler({
+const failureHandler = utils.failureHandler({
     redirectTo: "participants",
     redirectMsg: "Participant not found"
 });
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
-    var {start, end} = fn.getRangeInDays(-14, 0);
-    /*
-    var today = new Date();
-    var tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate()+1, 
-        today.getHours(), today.getMinutes(), today.getSeconds());
-    var start = today.toISOString("00:00:00");
-    var end = tomorrow.toISOString("00:00:00");
-    */
+    let {start, end} = fn.getRangeInDays(-14, 0);
     
     // For the forward pager control.
     self.vm = self;
@@ -79,9 +72,9 @@ module.exports = function(params) {
     }
 
     self.doCalSearch = function() {
-        var {start, end} = dateRange();
+        let {start, end} = dateRange();
 
-        var oneMissing = (start === null || end === null);
+        let oneMissing = (start === null || end === null);
         self.warnObs(oneMissing);
         if (!oneMissing) {
             self.itemsObs([]);
@@ -109,8 +102,8 @@ module.exports = function(params) {
             .obs('completedBy', '');
             
         if (item.status === 'succeeded') {
-            var id = item.schemaId;
-            var rev = item.schemaRevision;
+            let id = item.schemaId;
+            let rev = item.schemaRevision;
             item.contentObs(id);
             item.hrefObs('/#/schemas/'+encodeURIComponent(id)+'/versions/'+rev+'/editor');
         }
@@ -118,7 +111,7 @@ module.exports = function(params) {
         item.completedByObs(formatCompletedBy(item));
     }
     function getSemanticControlState(item) {
-        var obj = {type: 'progress', color: 'gray', value: 1, label: 'Upload Requested', total:3};
+        let obj = {type: 'progress', color: 'gray', value: 1, label: 'Upload Requested', total:3};
         if (item.status === 'succeeded') {
             obj.value = 2;
             obj.label = "Upload Completed";
@@ -138,10 +131,10 @@ module.exports = function(params) {
 
     function formatCompletedBy(item) {
         if (item.status === 'succeeded') {
-            var start = new Date(item.requestedOn).getTime();
-            var end = new Date(item.completedOn).getTime();
-            var fStart = fn.formatDateTime(item.requestedOn);
-            var fEnd = fn.formatDateTime(item.completedOn);
+            let start = new Date(item.requestedOn).getTime();
+            let end = new Date(item.completedOn).getTime();
+            let fStart = fn.formatDateTime(item.requestedOn);
+            let fEnd = fn.formatDateTime(item.completedOn);
             if (fStart.split(', ')[0] === fEnd.split(', ')[0]) {
                 fEnd = fEnd.split(', ')[1];
             }
@@ -162,7 +155,7 @@ module.exports = function(params) {
     self.loadingFunc = function(args) {
         args = args || {};
         args.pageSize = PAGE_SIZE;
-        var {start, end} = dateRange();
+        let {start, end} = dateRange();
         args.startTime = start;
         args.endTime = end;
         return serverService.getParticipantUploads(params.userId, args)

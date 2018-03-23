@@ -7,29 +7,29 @@ import Promise from 'bluebird';
 import utils from '../../utils';
 
 // This is duplicated in sharedModuleUtils.
-var surveyNameMap = {};
+const surveyNameMap = {};
 
-var activitiesObs = ko.observableArray([]);
-var activityOptionsLabel = utils.makeOptionLabelFinder(activitiesObs);
+const activitiesObs = ko.observableArray([]);
+const activityOptionsLabel = utils.makeOptionLabelFinder(activitiesObs);
 
-var surveysOptionsObs = ko.observableArray([]);
-var surveysOptionsLabel = utils.makeOptionLabelFinder(surveysOptionsObs);
+const surveysOptionsObs = ko.observableArray([]);
+const surveysOptionsLabel = utils.makeOptionLabelFinder(surveysOptionsObs);
 
-var questionsOptionsObs = ko.observableArray([]);
-var questionsOptionsLabel = utils.makeOptionLabelFinder(questionsOptionsObs);
+const questionsOptionsObs = ko.observableArray([]);
+const questionsOptionsLabel = utils.makeOptionLabelFinder(questionsOptionsObs);
 
-var taskOptionsObs = ko.observableArray([]);
-var taskOptionsLabel = utils.makeOptionLabelFinder(taskOptionsObs);
+const taskOptionsObs = ko.observableArray([]);
+const taskOptionsLabel = utils.makeOptionLabelFinder(taskOptionsObs);
 
-var compoundActivityOptionsObs = ko.observableArray([]);
+const compoundActivityOptionsObs = ko.observableArray([]);
 
-var TYPE_OPTIONS = Object.freeze([
+const TYPE_OPTIONS = Object.freeze([
     {value: 'SimpleScheduleStrategy', label: 'Simple Schedule'},
     {value: 'ABTestScheduleStrategy', label: 'A/B Test Schedule'},
     {value: 'CriteriaScheduleStrategy', label: 'Criteria-based Schedule'}
 ]);
 
-var PERIOD_WORDS = Object.freeze({
+const PERIOD_WORDS = Object.freeze({
     'H': 'hour',
     'D': "day",
     'M': "month",
@@ -37,50 +37,44 @@ var PERIOD_WORDS = Object.freeze({
     'Y': 'year'
 });
 
-var UNARY_EVENTS = Object.freeze({
+const UNARY_EVENTS = Object.freeze({
     'enrollment': 'On enrollment',
     'two_weeks_before_enrollment': 'Two weeks before enrollment',
     'two_months_before_enrollment': 'Two months before enrollment'
 });
 
-var TIME_OPTIONS = [];
-var MINUTES = ["00","30"];
-var timeFormatter = utils.makeOptionLabelFinder(TIME_OPTIONS);
+const TIME_OPTIONS = [];
+const timeFormatter = utils.makeOptionLabelFinder(TIME_OPTIONS);
 
-function fillTime(min) {
-    TIME_OPTIONS.push({
-        label: hour+":"+min+" "+meridian,
-        value: hour24+":"+min
-    });
-}
-for (var i=0; i < 24; i++) {
-    var hour = (i === 0) ? 12 : (i > 12) ? i-12 : i;
-    var hour24 = (i < 10) ? ("0"+i) : (""+i);
-    var meridian = (i < 12) ? "AM" : "PM";
-    MINUTES.forEach(fillTime);
+for (let i=0; i < 24; i++) {
+    let hour = (i === 0) ? 12 : (i > 12) ? i-12 : i;
+    let hour24 = (i < 10) ? ("0"+i) : (""+i);
+    let meridian = (i < 12) ? "AM" : "PM";
+    TIME_OPTIONS.push({label: hour+":00 "+meridian,value: hour24+":00"});
+    TIME_OPTIONS.push({label: hour+":30 "+meridian,value: hour24+":30"});
 }
 
 function formatEventId(value) {
     if (!value) {
         return "On enrollment (default)";
     }
-    var elements = value.split(',').reverse().map(function(value) {
+    let elements = value.split(',').reverse().map(function(value) {
         if (UNARY_EVENTS[value]) {
             return UNARY_EVENTS[value];
         } else if (value.indexOf("custom:") > -1) {
             return "when "+ value.split(":")[1] + " occurs";
         }
         // events have three parts, e.g. survey:<guid>:finished
-        var parts = value.split(":");
+        let parts = value.split(":");
         if (parts[0] === "survey") {
-            var surveyLabel = surveysOptionsLabel(parts[1]);
+            let surveyLabel = surveysOptionsLabel(parts[1]);
             return "when survey '"+surveyLabel+"' is finished";
         } else if (parts[0] === "question") {
-            var questionLabel = questionsOptionsLabel(parts[1]);
-            var answerValue = parts[2].split("=")[1];
+            let questionLabel = questionsOptionsLabel(parts[1]);
+            let answerValue = parts[2].split("=")[1];
             return "when question '"+questionLabel+"' is answered with value '"+answerValue+"'";
         } else if (parts[0] === "activity") {
-            var activityLabel = activityOptionsLabel(parts[1]);
+            let activityLabel = activityOptionsLabel(parts[1]);
             return "when activity '"+activityLabel+"' is finished";
         }
         return " " + value;
@@ -96,9 +90,9 @@ function formatTimesArray(times) {
     return (fn.is(times,'Array') && times.length) ? fn.formatList(times.map(formatTime)) : "<None>";
 }
 function formatActivities(buffer, activities, verb) {
-    var actMap = {};
+    let actMap = {};
     activities.map(function(act) {
-        var label = verb + ' task (not specified)';
+        let label = verb + ' task (not specified)';
 
         // This may be way too complicated, it still does not show the underlying *real* name
         // of the thing being linked to in the schedule
@@ -119,15 +113,15 @@ function sentenceCase(string) {
     return string.substring(0,1).toUpperCase() + string.substring(1);
 }
 function parsePeriods(period) {
-    var periods = period.substring(1).match(/(\d+\D)/g);
+    let periods = period.substring(1).match(/(\d+\D)/g);
     return periods.map(function(period) {
-        var amt = parseInt(period, 10);
-        var measure = PERIOD_WORDS[period.replace(/[\d]*/, '')];
+        let amt = parseInt(period, 10);
+        let measure = PERIOD_WORDS[period.replace(/[\d]*/, '')];
         return {amt: amt, measure: measure};
     });
 }
 function periodToWords(periodStr) {
-    var periods = parsePeriods(periodStr);
+    let periods = parsePeriods(periodStr);
     return periods.map(function(period) {
         if (period.amt === 1 && period.measure === "H") {
             return "an " + period.measure;
@@ -138,7 +132,7 @@ function periodToWords(periodStr) {
     }).join(', ');
 }
 function periodToWordsNoArticle(periodStr) {
-    var periods = parsePeriods(periodStr);
+    let periods = parsePeriods(periodStr);
     return periods.map(function(period) {
         return (period.amt === 1) ?
             (period.amt + " " + period.measure) :
@@ -146,7 +140,7 @@ function periodToWordsNoArticle(periodStr) {
     }).join(', ');
 }
 function newStrategy(type, existingStrategy) {
-    var schedules = (existingStrategy) ? extractSchedules(existingStrategy) : [newSchedule()];
+    let schedules = (existingStrategy) ? extractSchedules(existingStrategy) : [newSchedule()];
     switch(type) {
         case 'SimpleScheduleStrategy':
             return cloneSimpleStrategy(schedules);
@@ -208,10 +202,10 @@ function formatSchedule(sch) {
     if (!sch) {
         return "<i>No Schedule</i>";
     }
-    var buffer = [];
+    let buffer = [];
 
-    var events = (sch.eventId) ? sch.eventId.split(",").reverse() : ["enrollment"];
-    var eventClause = "";
+    let events = (sch.eventId) ? sch.eventId.split(",").reverse() : ["enrollment"];
+    let eventClause = "";
     if (sch.delay) {
         eventClause = periodToWords(sch.delay) + " after ";
     } else if (events[0] === "enrollment") {
@@ -221,7 +215,7 @@ function formatSchedule(sch) {
     buffer.push(eventClause);
 
     if (sch.scheduleType === "persistent") {
-        var inner = [];
+        let inner = [];
         formatActivities(inner, sch.activities, "the");
         buffer.push("make " + inner.join(", ") + " permanently available to the user");
     } else {
@@ -240,7 +234,7 @@ function formatSchedule(sch) {
             formatActivities(buffer, sch.activities, "do");
         }
     }
-    var phrase = buffer.join(", ") + ".";
+    let phrase = buffer.join(", ") + ".";
     if (sch.expires) {
         phrase += " Expire tasks after " + periodToWords(sch.expires) + ".";
     }
@@ -285,15 +279,15 @@ function formatScheduleStrategyType(type) {
     return TYPE_OPTIONS[type].label;
 }
 function formatCompoundActivity(task) {
-    var phrase = [];
-    var schemas = (task.schemaList || task.schemaReferences).map(function(schema) {
+    let phrase = [];
+    let schemas = (task.schemaList || task.schemaReferences).map(function(schema) {
         return schema.id + ((schema.revision) ? 
             ' <i>(rev. ' + schema.revision + ')</i>' : '');
     }).join(', ');
     if (schemas) {
         phrase.push(schemas);
     }
-    var surveys = (task.surveyList || task.surveyReferences).map(function(survey) {
+    let surveys = (task.surveyList || task.surveyReferences).map(function(survey) {
         return surveyNameMap[survey.guid] + ((survey.createdOn) ? 
             ' <i>(pub. ' + fn.formatDateTime(survey.createdOn) + ')</i>' : '');
     }).join(', ');
@@ -310,7 +304,7 @@ function loadFormatCompoundActivity() {
     });
 }
 function getActivitiesWithStrategyInfo(plan) {
-    var activities = [];
+    let activities = [];
     switch(plan.strategy.type) {
         case 'SimpleScheduleStrategy':
             plan.strategy.schedule.activities.forEach(function(activity) {
@@ -339,7 +333,7 @@ function getActivitiesWithStrategyInfo(plan) {
         case 'CriteriaScheduleStrategy':
             plan.strategy.scheduleCriteria.forEach(function(group) {
                 group.schedule.activities.forEach(function(activity) {
-                    var critLabel = criteriaUtils.label(group.criteria);
+                    let critLabel = criteriaUtils.label(group.criteria);
                     activities.push({
                         plan: plan.label,
                         planGuid: plan.guid,
@@ -374,11 +368,11 @@ export default {
     TYPE_OPTIONS,
     UNARY_EVENTS,
     loadOptions: function() {
-        var p1 = optionsService.getActivityOptions().then(activitiesObs);
-        var p2 = optionsService.getSurveyOptions().then(surveysOptionsObs);
-        var p3 = optionsService.getTaskIdentifierOptions().then(taskOptionsObs);
-        var p4 = loadFormatCompoundActivity();
-        var p5 = optionsService.getCompoundActivityOptions().then(compoundActivityOptionsObs);
+        let p1 = optionsService.getActivityOptions().then(activitiesObs);
+        let p2 = optionsService.getSurveyOptions().then(surveysOptionsObs);
+        let p3 = optionsService.getTaskIdentifierOptions().then(taskOptionsObs);
+        let p4 = loadFormatCompoundActivity();
+        let p5 = optionsService.getCompoundActivityOptions().then(compoundActivityOptionsObs);
         return Promise.all([p1, p2, p3, p4, p5]);
     }
 };

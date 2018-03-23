@@ -7,13 +7,13 @@ import jsonFormatter from '../../json_formatter';
 import root from '../../root';
 import utils from '../../utils';
 
-var failureHandler = utils.failureHandler({
+let failureHandler = utils.failureHandler({
     redirectTo: "participants",
     redirectMsg: "Participant not found"
 });
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
     self.participant = null;
 
     new Binder(self)
@@ -51,7 +51,7 @@ module.exports = function(params) {
                 delete self.participant.clientData;
             }
         } catch(e) {
-            var error = new BridgeError();
+            let error = new BridgeError();
             error.addError("clientData", "is not valid JSON");
             utils.failureHandler({transient:false})(error);
             return false;

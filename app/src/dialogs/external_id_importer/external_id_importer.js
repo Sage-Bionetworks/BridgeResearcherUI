@@ -62,7 +62,7 @@ CreateCredentialsWorker.prototype = {
     },
     performWork: function(){ 
         this.currentId = this.identifiers.shift();
-        var participant = utils.createParticipantForID(this.supportEmail, this.currentId);
+        let participant = utils.createParticipantForID(this.supportEmail, this.currentId);
         participant.dataGroups = this.dataGroups;
         return serverService.createParticipant(participant);
     },
@@ -75,8 +75,8 @@ CreateCredentialsWorker.prototype = {
 };
 
 module.exports = function(params) {
-    var self = this;
-    var supportEmail;
+    let self = this;
+    let supportEmail;
 
     batchDialogUtils.initBatchDialog(self);
     self.cancelDialog = fn.seq(self.cancel, params.reload, root.closeDialog);
@@ -105,7 +105,7 @@ module.exports = function(params) {
     self.startImport = function(vm, event) {
         self.statusObs("Preparing to import...");
 
-        var importWorker = new IdImportWorker(self.importObs());
+        let importWorker = new IdImportWorker(self.importObs());
         if (!importWorker.hasWork()) {
             self.errorMessagesObs.unshift("You must enter some identifiers.");
             return;
@@ -116,7 +116,7 @@ module.exports = function(params) {
 
         self.run(importWorker).then(function(identifiers) {
             if (self.createCredentialsObs()) {
-                var credentialsWorker = new CreateCredentialsWorker(supportEmail, identifiers, self.dataGroupsObs());
+                let credentialsWorker = new CreateCredentialsWorker(supportEmail, identifiers, self.dataGroupsObs());
                 self.run(credentialsWorker).then(displayComplete);
             } else {
                 displayComplete();

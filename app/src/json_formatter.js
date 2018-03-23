@@ -8,7 +8,7 @@ const STR = '<span class=json-string>';
 const COLON = /[": ]/g;
 
 function htmlReplacer(match, pIndent, pKey, pVal, pEnd) {
-    var r = pIndent || '';
+    let r = pIndent || '';
     if (pKey) {
         r = r + KEY + pKey.replace(COLON, '') + '</span>: ';
     }

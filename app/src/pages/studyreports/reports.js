@@ -10,7 +10,7 @@ function deleteItem(item) {
 }
 
 module.exports = function() {
-    var self = this;
+    let self = this;
 
     self.isDeveloper = root.isDeveloper;
 

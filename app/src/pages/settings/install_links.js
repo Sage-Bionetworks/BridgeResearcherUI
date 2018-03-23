@@ -9,12 +9,12 @@ const ANDROID = "Android";
 const UNIVERSAL = "Universal";
 
 module.exports = function() {
-    var self = this;
-    var ios = Binder.objPropDelegates('installLinks', IOS);
-    var android = Binder.objPropDelegates('installLinks', ANDROID);
-    var universal = Binder.objPropDelegates('installLinks', UNIVERSAL);
+    let self = this;
+    let ios = Binder.objPropDelegates('installLinks', IOS);
+    let android = Binder.objPropDelegates('installLinks', ANDROID);
+    let universal = Binder.objPropDelegates('installLinks', UNIVERSAL);
 
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .bind('ios', '', ios.fromObject, ios.toObject)
         .bind('android', '', android.fromObject, android.toObject)
         .bind('universal', '', universal.fromObject, universal.toObject);

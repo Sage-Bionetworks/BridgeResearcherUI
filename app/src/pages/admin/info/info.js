@@ -5,12 +5,12 @@ import root from '../../../root';
 import utils from '../../../utils';
 
 module.exports = function() {
-    var self = this;
+    let self = this;
 
-    var android = Binder.objPropDelegates('pushNotificationARNs', 'Android');
-    var ios = Binder.objPropDelegates('pushNotificationARNs', 'iPhone OS');
+    let android = Binder.objPropDelegates('pushNotificationARNs', 'Android');
+    let ios = Binder.objPropDelegates('pushNotificationARNs', 'iPhone OS');
 
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .bind('accountLimit', 0, null, parseInt)
         .bind('androidArn', null, android.fromObject, android.toObject)
         .bind('emailSignInEnabled')
@@ -31,7 +31,7 @@ module.exports = function() {
     self.save = function(vm, event) {
         self.study = binder.persist(self.study);
 
-        var enabled = Object.keys(self.study.pushNotificationARNs).length > 0;
+        let enabled = Object.keys(self.study.pushNotificationARNs).length > 0;
         root.notificationsEnabledObs(enabled);
 
         utils.startHandler(self, event);

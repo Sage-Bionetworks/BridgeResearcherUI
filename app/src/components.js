@@ -1,6 +1,6 @@
 import ko from 'knockout';
 
-var reg = ko.components.register;
+const reg = ko.components.register;
 reg('errors', {
     viewModel: require('./widgets/errors/errors'),
     template: require('./widgets/errors/errors.html')

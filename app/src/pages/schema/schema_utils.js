@@ -1,7 +1,7 @@
 import utils from '../../utils';
 import Binder from '../../binder';
 
-var FIELD_SKELETON = {
+const FIELD_SKELETON = {
     name:'', required:false, type:null, unboundedText:false, maxLength:'100', fileExtension:'', mimeType:'',
         multiChoiceAnswerList:[], allowOtherChoices:false
 };
@@ -13,7 +13,7 @@ const SCHEMA_TYPE_OPTIONS = Object.freeze([
 
 // Note: some of these fields are marked deprecated because they are only used to create schemas 
 // automatically when surveys are published. They aren't in the UI for creating new data schemas.
-var ALL_FIELD_TYPE_OPTIONS = Object.freeze([
+const ALL_FIELD_TYPE_OPTIONS = Object.freeze([
     {label: "Attachment", value: "attachment_v2", deprecated:false, extra_fields: 'attachment'},
     {label: "Large Text Attachment", value: "large_text_attachment", deprecated:false, extra_fields: 'none'},
     {label: "Boolean", value: "boolean", deprecated:false, extra_fields: 'none'},
@@ -35,12 +35,12 @@ var ALL_FIELD_TYPE_OPTIONS = Object.freeze([
     {label: "Timestamp", value: "timestamp", deprecated:true, extra_fields: 'none'}
 ]);
 
-var FIELD_TYPE_OPTIONS = Object.freeze(ALL_FIELD_TYPE_OPTIONS.filter(function(option) {
+const FIELD_TYPE_OPTIONS = Object.freeze(ALL_FIELD_TYPE_OPTIONS.filter(function(option) {
     return !option.deprecated;
 }));
 
 // Just some frequently used mime types to aid editors. Can easily add or remove from this list.
-var MIME_TYPES = Object.freeze([
+const MIME_TYPES = Object.freeze([
     {title:"application/json", ext:".json"},
     {title:"application/octet-stream", ext:".bin"},
     {title:"image/jpeg", ext:".jpg"},
@@ -50,7 +50,7 @@ var MIME_TYPES = Object.freeze([
     {title:"text/tab-separated-values", ext:".tsv"}
 ]);
 
-var TYPE_LOOKUP = ALL_FIELD_TYPE_OPTIONS.reduce(function(obj, type) {
+const TYPE_LOOKUP = ALL_FIELD_TYPE_OPTIONS.reduce(function(obj, type) {
     obj[type.value] = type;
     return obj;
 }, {});
@@ -83,13 +83,13 @@ function fieldDefToObs(fieldDefinitions) {
 }
 
 function fieldObsToDef(fieldDefinitions) {
-    var fields = [];
+    let fields = [];
     fieldDefinitions.forEach(function(item) {
-        var type = item.typeObs();
+        let type = item.typeObs();
         if (!type) {
             return;
         }
-        var field = {
+        let field = {
             name: item.nameObs(),
             required: item.requiredObs(),
             type: type
@@ -101,7 +101,7 @@ function fieldObsToDef(fieldDefinitions) {
             }
         } else if (type === "attachment_v2") {
             field.mimeType = item.mimeTypeObs();
-            var ext = item.fileExtensionObs();
+            let ext = item.fileExtensionObs();
             if (!/^\./.test(ext)) {
                 ext = "." + ext;
             }
@@ -121,9 +121,9 @@ function makeNewField() {
 
 function initFieldDefinitionVM(vm, type) {
     vm.mimeTypes = MIME_TYPES;
-    var schemaType = TYPE_LOOKUP[type];
+    let schemaType = TYPE_LOOKUP[type];
     if (schemaType && schemaType.deprecated) {
-        var options = FIELD_TYPE_OPTIONS.map(function(e) { return e; });
+        let options = FIELD_TYPE_OPTIONS.map(function(e) { return e; });
         options.push(schemaType);
         vm.fieldTypeOptions = options;
     } else {

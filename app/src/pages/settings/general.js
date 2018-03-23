@@ -5,7 +5,7 @@ import root from '../../root';
 import utils from '../../utils';
 
 function updateMinAppVersion(vm, obs, name) {
-    var value = parseInt(obs(),10);
+    let value = parseInt(obs(),10);
     if (value >= 0) {
         vm.study.minSupportedAppVersions[name] = value;
     }
@@ -24,9 +24,9 @@ function maxToZero(value) {
 }
 
 module.exports = function() {
-    var self = this;
+    let self = this;
 
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .obs('message')
         .obs('identifier')
         .obs('minIos')

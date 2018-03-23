@@ -15,20 +15,20 @@ const OPTIONS = [
     {label: "Both", value: "both"}
 ];
 module.exports = function() {
-    var self = this;
+    let self = this;
 
     function doSearch() {
-        var text = self.searchObs();
-        var tagsOnly = self.tagsOnlyObs();
-        var modType = self.moduleTypeFilterObs();
+        let text = self.searchObs();
+        let tagsOnly = self.tagsOnlyObs();
+        let modType = self.moduleTypeFilterObs();
 
-        var query = "?mostrecent=false";
+        let query = "?mostrecent=false";
         if (text === "") {
             query = "?mostrecent=true";
         } else if (tagsOnly) {
             query += "&tags=" + encodeURIComponent(text);
         } else {
-            var str = "name like '%"+text+"%' or notes like '%"+text+"%'";
+            let str = "name like '%"+text+"%' or notes like '%"+text+"%'";
             query += "&where=" + encodeURIComponent(str);
         }
         serverService.getMetadata(query, modType)
@@ -76,7 +76,7 @@ module.exports = function() {
     };
 
     function updateTable(response) {
-        var items = response.items;
+        let items = response.items;
         if (items.length === 0) {
             self.recordsMessageObs(NO_ITEMS_MSG);
         }

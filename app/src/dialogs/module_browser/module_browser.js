@@ -11,10 +11,10 @@ import utils from '../../utils';
 - import an updated version
 */
 module.exports = function(params) {
-    var self = this;
-    var importedMods = {};
-    var methName = (params.type === "survey") ? "getSurveys" : "getAllUploadSchemas";
-    var scrollTo = utils.makeScrollTo(".item");
+    let self = this;
+    let importedMods = {};
+    let methName = (params.type === "survey") ? "getSurveys" : "getAllUploadSchemas";
+    let scrollTo = utils.makeScrollTo(".item");
 
     fn.copyProps(self, sharedModuleUtils, 'formatDescription', 'formatTags', 'formatVersions');
 
@@ -37,12 +37,12 @@ module.exports = function(params) {
     };
 
     function searchForModules() {
-        var query = "?published=true";
-        var text = self.searchObs();
+        let query = "?published=true";
+        let text = self.searchObs();
         if (text === "") {
             query += "&mostrecent=true";
         } else {
-            var str = "name like '%"+text+"%' or notes like '%"+text+"%'";
+            let str = "name like '%"+text+"%' or notes like '%"+text+"%'";
             query += "&mostrecent=false&where=" + encodeURIComponent(str);
         }
         return serverService.getMetadata(query, params.type);

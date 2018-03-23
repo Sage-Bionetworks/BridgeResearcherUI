@@ -19,11 +19,11 @@ function titleCase(string) {
     return string.substring(0,1).toUpperCase() + string.substring(1);
 }
 function prepareDelete(vm, objName) {
-    var deletables = vm.itemsObs().filter(hasBeenChecked);
-    var msg = (deletables.length > 1) ?
+    let deletables = vm.itemsObs().filter(hasBeenChecked);
+    let msg = (deletables.length > 1) ?
             "Are you sure you want to delete these "+objName+"s?" :
             "Are you sure you want to delete this "+objName+"?";
-    var confirmMsg = (deletables.length > 1) ?
+    let confirmMsg = (deletables.length > 1) ?
             titleCase(objName)+"s deleted." : titleCase(objName)+" deleted.";
     return {deletables: deletables, msg: msg, confirmMsg: confirmMsg};        
 }
@@ -73,11 +73,11 @@ export default {
      * - refresh: a function to call to refresh items in the collection 
      */
     prepareTable: function(vm, options) {
-        var objName = options.name;
-        var objType = options.type;
-        var deleteFunc = options.delete;
-        var loadFunc = options.refresh;
-        var redirectTo = options.redirect;
+        let objName = options.name;
+        let objType = options.type;
+        let deleteFunc = options.delete;
+        let loadFunc = options.refresh;
+        let redirectTo = options.redirect;
 
         if (!vm.itemsObs) {
             vm.itemsObs = ko.observableArray([]);
@@ -110,7 +110,7 @@ export default {
         }
         if (deleteFunc) {
             vm.deleteItems = function(vm, event) {
-                var del = prepareDelete(vm, objName);
+                let del = prepareDelete(vm, objName);
 
                 alerts.deleteConfirmation(del.msg, function() {
                     utils.startHandler(self, event);

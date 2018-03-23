@@ -42,7 +42,7 @@ function routeTo(routeName, section, fields) {
             .addClass("active")
             .prev()
             .addClass("active");
-        var params = namedParams(fields, arguments);
+        let params = namedParams(fields, arguments);
         root.changeView(routeName, params);
     };
 }
@@ -52,7 +52,7 @@ function redirectTo(newRoute) {
     };
 }
 
-var router = new Router();
+const router = new Router();
 router.param('guid', /([^\/]*)/);
 router.param('createdOn', /([^\/]*)/);
 router.on('/settings', redirectTo('/settings/general'));

@@ -1,13 +1,13 @@
 import ko from 'knockout';
 import utils from '../../utils';
 
-var DURATION_OPTIONS = Object.freeze([
+const DURATION_OPTIONS = Object.freeze([
     {value: 'PT*H', label: 'Hours'},
     {value: 'P*D', label: 'Days'},
     {value: 'P*W', label: 'Weeks'},
     {value: 'P*M', label: 'Months'}
 ]);
-var DURATION_NO_HOURS_OPTIONS = Object.freeze([
+const DURATION_NO_HOURS_OPTIONS = Object.freeze([
     {value: 'P*D', label: 'Days'},
     {value: 'P*W', label: 'Weeks'},
     {value: 'P*M', label: 'Months'}
@@ -22,7 +22,7 @@ var DURATION_NO_HOURS_OPTIONS = Object.freeze([
  *  noHours - if true, no hours will be shown in the dropdown menu
  */
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     self.fieldObs = params.fieldObs;
     self.amountObs = ko.observable();
@@ -37,10 +37,10 @@ module.exports = function(params) {
     }
 
     function updateSubFields() {
-        var value = self.fieldObs();
+        let value = self.fieldObs();
         if (value) {
-            var amt = parseInt(value.replace(/\D/g,''), 10);
-            var duration = value.split(/\d+/).join("*");
+            let amt = parseInt(value.replace(/\D/g,''), 10);
+            let duration = value.split(/\d+/).join("*");
             if (amt === parseInt(amt,10) && self.durationOptionsLabel(duration) !== '') {
                 self.amountObs(amt);
                 self.durationObs(duration);
@@ -52,8 +52,8 @@ module.exports = function(params) {
     self.durationObs.subscribe(updateFieldObs);
 
     function updateFieldObs() {
-        var amt = self.amountObs();
-        var duration = self.durationObs();
+        let amt = self.amountObs();
+        let duration = self.durationObs();
 
         self.fieldObs(null);
 

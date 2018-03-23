@@ -5,19 +5,19 @@ import scheduleUtils from './schedule_utils';
 import utils from '../../utils';
 import Binder from '../../binder';
 
-var SCHEDULE_TYPE_OPTIONS = Object.freeze([
+const SCHEDULE_TYPE_OPTIONS = Object.freeze([
     {value: 'once', label: 'Once'},
     {value: 'recurring', label: 'Recurring'},
     {value: 'cron', label: 'Cron-based'},
     {value: 'persistent', label: 'Persistent'}
 ]);
-var ACTIVITY_TYPE_OPTIONS = Object.freeze([
+const ACTIVITY_TYPE_OPTIONS = Object.freeze([
     {value: 'task', label: 'Do Task'},
     {value: 'compound', label: 'Do Compound Task'},
     {value: 'survey', label: 'Take Survey'}
 ]);
 function newActivity() {
-    var activity = scheduleUtils.newSchedule().activities[0];
+    let activity = scheduleUtils.newSchedule().activities[0];
     activity.activityType = "task";
     addObserversToActivity(activity);
     return activity;
@@ -41,7 +41,7 @@ function addObserversToActivity(activity) {
     return activity;
 }
 function extractActivityFromObservables(activity) {
-    var act = {
+    let act = {
         label: activity.labelObs(),
         guid: activity.guid,
         labelDetail: activity.labelDetailObs(),
@@ -78,7 +78,7 @@ function getScheduleType(editorType) {
 }
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
     
     fn.copyProps(self, params, 'collectionName');
     fn.copyProps(self, fn, 'formatDateTime');
@@ -106,8 +106,8 @@ module.exports = function(params) {
 
     if (params.scheduleHolder) {
         self.dispose = function() {
-            var holder = params.scheduleHolder;
-            var sch = readEditor();
+            let holder = params.scheduleHolder;
+            let sch = readEditor();
             holder.schedule = sch;
             holder.scheduleObs(sch);
         };
@@ -121,7 +121,7 @@ module.exports = function(params) {
         self.activitiesObs(schedule.activities.map(addObserversToActivity));
     }
     function readEditor() {
-        var sch = {
+        let sch = {
             eventId: self.eventIdObs(),
             scheduleType: self.scheduleTypeObs(),
             startsOn: self.startsOnObs(),
@@ -185,7 +185,7 @@ module.exports = function(params) {
     };    
     self.formatWindow = function() {
         if (self.startsOnObs() || self.endsOnObs()) {
-            var string = "";
+            let string = "";
             if (self.startsOnObs()) {
                 string += new Date(self.startsOnObs()).toUTCString();
             }
@@ -223,7 +223,7 @@ module.exports = function(params) {
     };
     self.addActivityAfter = function(vm, event) {
         event.preventDefault();
-        var context = ko.contextFor(event.target);
+        let context = ko.contextFor(event.target);
         self.activitiesObs.splice(context.$index()+1,0,newActivity());
     };
     self.copyGuid = function(item, event) { 

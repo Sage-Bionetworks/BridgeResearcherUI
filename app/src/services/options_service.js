@@ -1,7 +1,7 @@
 import {serverService} from './server_service';
 import fn from '../functions';
 
-var LABEL_SORTER = fn.makeFieldSorter('label');
+const LABEL_SORTER = fn.makeFieldSorter('label');
 
 function getSchedule(group) {
     return group.schedule;
@@ -18,13 +18,13 @@ function getSchedules(plan) {
 }
 function getActivityOptions() {
     return serverService.getSchedulePlans().then(function(response) {
-        var activities = [];
+        let activities = [];
         response.items.forEach(function(plan) {
-            var schedules = getSchedules(plan);
+            let schedules = getSchedules(plan);
             schedules.forEach(function(schedule) {
-                var multi = schedule.activities.length > 1;
+                let multi = schedule.activities.length > 1;
                 schedule.activities.forEach(function(activity, i) {
-                    var actLabel = (multi) ? 
+                    let actLabel = (multi) ? 
                         (activity.label + " ("+plan.label+" activity #"+(i+1)+")") : activity.label; 
                     activities.push({label: actLabel, "value": activity.guid});
                 });
@@ -39,14 +39,14 @@ function getSurveyOptions() {
         .then(collectSurveyOptions);
 }
 function collectSurveyOptions(surveys) {
-    var surveyOpts = surveys.items.map(function(survey) {
+    let surveyOpts = surveys.items.map(function(survey) {
         return { label: survey.name, value: survey.guid };
     });
     return [{value:"",label:"Select survey:"}].concat(surveyOpts);
 }
 function getTaskIdentifierOptions() {
     return serverService.getStudy().then(function(study) {
-        var taskOpts = study.taskIdentifiers.map(function(id) {
+        let taskOpts = study.taskIdentifiers.map(function(id) {
             return { label:id, value:id };
         });
         return [{value:"",label:"Select task:"}].concat(taskOpts);
@@ -59,7 +59,7 @@ function getActivities(plan) {
 }
 function getCompoundActivityOptions() {
     return serverService.getTaskDefinitions().then(function(response) {
-        var opts = response.items.map(function(task) {
+        let opts = response.items.map(function(task) {
             return {label: task.taskId, value: task.taskId};
         });
         return [{value:"",label:"Select compound task:"}].concat(opts);

@@ -3,13 +3,15 @@ import fn from '../../functions';
 import ko from 'knockout';
 import root from '../../root';
 
-var ACTION_OPTIONS = Object.freeze([
+const ACTION_OPTIONS = Object.freeze([
     {value: 'skipTo', label: 'skip to question'},
     {value: 'endSurvey', label: 'end the survey'},
     {value: 'assignDataGroup', label: 'assign data group'},
     {value: 'displayIf', label: 'then display'},
     {value: 'displayUnless', label: 'then do not display'}
 ]);
+const SET_OPS = ['any','all'];
+const NO_VALUE_OPS = ['de','always'];
 
 /**
  * Create a rule object with new observables.
@@ -20,7 +22,7 @@ function createRule(rule) {
     // This copy into new observables allows you to close the dialog without altering the 
     // underlying survey. Knockout also does not do well with a boolean value, so we have 
     // to convert that to a string, and convert it back again when closing the dialog.
-    var action = 'skipTo';
+    let action = 'skipTo';
     if (rule.assignDataGroup) {
         action = 'assignDataGroup';
     } else if (rule.endSurvey) {
@@ -40,11 +42,8 @@ function createRule(rule) {
     };
 }
 
-var SET_OPS = ['any','all'];
-var NO_VALUE_OPS = ['de','always'];
-
 function filterOutRulesWithNoValues(rule) {
-    var op = rule.operatorObs();
+    let op = rule.operatorObs();
     if (fn.arrayContains(SET_OPS, op)) {
         rule.valueObs(null);
     } else if (fn.arrayContains(NO_VALUE_OPS, op)) {
@@ -54,7 +53,7 @@ function filterOutRulesWithNoValues(rule) {
 }
 
 function observerToObject(rule) {
-    var obj = {operator: rule.operatorObs()};
+    let obj = {operator: rule.operatorObs()};
     if (!fn.arrayContains(SET_OPS, rule.operatorObs())) {
         obj.value = rule.valueObs();
     } else {
@@ -82,9 +81,9 @@ function observerToObject(rule) {
  * @returns {*|Array}
  */
 function getIdentifierOptions(elementsArray, startIdentifier) {
-    var startIdentifierFound = false;
+    let startIdentifierFound = false;
     return elementsArray.filter(function(el) {
-        var valid = !!el.identifierObs() && startIdentifierFound;
+        let valid = !!el.identifierObs() && startIdentifierFound;
         if (el.identifierObs() === startIdentifier) {
             startIdentifierFound = true;
         }
@@ -102,8 +101,8 @@ function getIdentifierOptions(elementsArray, startIdentifier) {
  * @param params
  */
 module.exports = function(params) {
-    var self = this;
-    var parent = params.parentViewModel;
+    let self = this;
+    let parent = params.parentViewModel;
 
     fn.copyProps(self, parent, 'elementsObs', 'operatorOptions', 'operatorLabel');
     fn.copyProps(self, params, 'element', 'fieldName');
@@ -117,26 +116,26 @@ module.exports = function(params) {
     self.dataGroupStringOptionsObs = ko.observableArray([]);
 
     self.addRule = function() {
-        var id = (self.identifierOptions.length) ? self.identifierOptions[0].value : "";
+        let id = (self.identifierOptions.length) ? self.identifierOptions[0].value : "";
         self.rulesObs.push(createRule({operator: "eq", value: "", skipTo: id}));
     };
     self.deleteRule = function(rule) {
         self.rulesObs.remove(rule);
     };
     self.saveRules = function() {
-        var rules = self.rulesObs().filter(filterOutRulesWithNoValues).map(observerToObject);
+        let rules = self.rulesObs().filter(filterOutRulesWithNoValues).map(observerToObject);
         self.element[self.fieldName](rules);
         root.closeDialog();
     };
 
     serverService.getStudy().then(function(study) {
-        var dataGroups = study.dataGroups.map(function(group) {
+        let dataGroups = study.dataGroups.map(function(group) {
             return {value: group, label: group};
         });
         self.dataGroupOptionsObs(dataGroups);
         self.dataGroupStringOptionsObs([].concat(study.dataGroups));
 
-        var obs = params.element[params.fieldName]().map(createRule);
+        let obs = params.element[params.fieldName]().map(createRule);
         self.rulesObs(obs);
     });
 };

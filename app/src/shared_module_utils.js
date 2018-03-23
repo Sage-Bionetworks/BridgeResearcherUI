@@ -1,17 +1,17 @@
 import {serverService} from './services/server_service';
 
-var sharedModuleNameMap = {};
-var sharedModuleHTMLMap = {};
-var surveyNameMap = {};
-var schemaNameMap = {};
-var objImported = {};
-var allLoaded = false;
+const sharedModuleNameMap = {};
+const sharedModuleHTMLMap = {};
+const surveyNameMap = {};
+const schemaNameMap = {};
+const objImported = {};
+let allLoaded = false;
 
 function updateSharedModuleNameMap(response) {
     response.items.forEach(function(metadata) {
         objImported[metadata.id+"/"+metadata.version] = true;
         sharedModuleNameMap[metadata.id] = metadata.name;
-        var str = "<p><b>"+metadata.name+"</b></p>";
+        let str = "<p><b>"+metadata.name+"</b></p>";
         str += "<p><i>"+formatDescription(metadata, true)+"</i></p>";
         sharedModuleHTMLMap[metadata.id] = str+metadata.notes;
     });
@@ -40,7 +40,7 @@ function loadNameMaps() {
     }
 }
 function formatDescription(metadata, withVersion) {
-    var array = [];
+    let array = [];
     if (metadata.os) {
         array.push(metadata.os + " only");
     }

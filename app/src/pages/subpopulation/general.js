@@ -4,7 +4,7 @@ import criteriaUtils from '../../criteria_utils';
 import fn from '../../functions';
 import utils from '../../utils';
 
-var failureHandler = utils.failureHandler({
+const failureHandler = utils.failureHandler({
     redirectMsg:"Consent group not found.", 
     redirectTo:"subpopulations",
     transient: false
@@ -15,9 +15,9 @@ function newSubpop() {
 }
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .obs('isNew', params.guid === "new")
         .obs('guid')
         .obs('title', 'New Consent Group')
@@ -26,7 +26,7 @@ module.exports = function(params) {
         .bind('required', true)
         .bind('criteria');
     
-    var titleUpdated = fn.handleObsUpdate(self.titleObs, 'name');
+    let titleUpdated = fn.handleObsUpdate(self.titleObs, 'name');
 
     function saveSubpop() {
         return (self.subpopulation.guid) ?

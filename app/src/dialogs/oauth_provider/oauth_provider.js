@@ -5,10 +5,10 @@ import root from '../../root';
 import utils from '../../utils';
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
     self.closeDialog = root.closeDialog;
 
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .bind('vendorId')
         .bind('clientId')
         .bind('secret')
@@ -16,7 +16,7 @@ module.exports = function(params) {
         .bind('callbackUrl');
 
     if (typeof params.index === "number") {
-        var op = params.oAuthProvidersObs()[params.index];
+        let op = params.oAuthProvidersObs()[params.index];
         self.vendorIdObs(op.vendorId);
         self.clientIdObs(op.clientId);
         self.secretObs(op.secret);
@@ -24,7 +24,7 @@ module.exports = function(params) {
         self.callbackUrlObs(op.callbackUrl);
     }
     self.save = function(){
-        var error = new BridgeError();
+        let error = new BridgeError();
         if (!self.vendorIdObs()) {
             error.addError("vendorId", "is required");
         }
@@ -43,7 +43,7 @@ module.exports = function(params) {
         if (error.hasErrors()) {
             return utils.failureHandler({transient:false})(error);
         }
-        var op = {
+        let op = {
             'vendorId': self.vendorIdObs().toLowerCase(),
             'clientId': self.clientIdObs(),
             'secret': self.secretObs(),
@@ -51,7 +51,7 @@ module.exports = function(params) {
             'callbackUrl': self.callbackUrlObs()
         };
         if (typeof params.index === "number") {
-            var oldOp = params.oAuthProvidersObs()[params.index];
+            let oldOp = params.oAuthProvidersObs()[params.index];
             params.oAuthProvidersObs.replace(oldOp,op);
         } else {
             params.oAuthProvidersObs.push(op);

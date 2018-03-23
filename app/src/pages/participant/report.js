@@ -7,6 +7,10 @@ import tables from '../../tables';
 import utils from '../../utils';
 
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const failureHandler = utils.failureHandler({
+    redirectTo: "participants",
+    redirectMsg: "Participant not found"
+});
 
 function firstDayOfMonth(year, month) {
     return new Date(year, month, 1).toISOString().split("T")[0];
@@ -14,13 +18,9 @@ function firstDayOfMonth(year, month) {
 function lastDayOfMonth(year, month) {
     return new Date(year, month+1, 0).toISOString().split("T")[0];
 }
-var failureHandler = utils.failureHandler({
-    redirectTo: "participants",
-    redirectMsg: "Participant not found"
-});
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     tables.prepareTable(self, {
         name: "report", 
@@ -48,7 +48,7 @@ module.exports = function(params) {
         return '#/participants/'+self.userIdObs()+'/reports';
     };
 
-    var d = new Date();
+    let d = new Date();
     self.currentMonth = d.getMonth();
     self.currentYear = d.getFullYear();    
 
@@ -98,7 +98,7 @@ module.exports = function(params) {
         load();
     };
     self.thisMonth = function() {
-        var d = new Date();
+        let d = new Date();
         self.currentMonth = d.getMonth();
         self.currentYear = d.getFullYear();
         load();
@@ -108,8 +108,8 @@ module.exports = function(params) {
         return serverService.deleteParticipantReportRecord(params.userId, params.identifier, item.date);
     }
     function loadReport() {
-        var startDate = firstDayOfMonth(self.currentYear, self.currentMonth);
-        var endDate = lastDayOfMonth(self.currentYear, self.currentMonth);
+        let startDate = firstDayOfMonth(self.currentYear, self.currentMonth);
+        let endDate = lastDayOfMonth(self.currentYear, self.currentMonth);
         return serverService.getParticipantReport(params.userId, params.identifier, startDate, endDate);
     }
 

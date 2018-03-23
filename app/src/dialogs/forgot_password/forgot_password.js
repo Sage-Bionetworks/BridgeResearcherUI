@@ -7,13 +7,13 @@ import root from '../../root';
 import storeService from '../../services/store_service';
 import utils from '../../utils';
 
-var SUCCESS_MSG = "An email has been sent to that address with instructions on changing your password.";
+const SUCCESS_MSG = "An email has been sent to that address with instructions on changing your password.";
 
 module.exports = function() {
-    var self = this;
-    var isLocked = fn.isNotBlank(root.queryParams.study);
+    let self = this;
+    let isLocked = fn.isNotBlank(root.queryParams.study);
     
-    var studyKey, env;    
+    let studyKey, env;    
     if (isLocked) {
         studyKey = root.queryParams.study;
         env = 'production';
@@ -54,10 +54,10 @@ module.exports = function() {
     }
 
     self.sendResetPasswordRequest = function(vm, event) {
-        var env = self.environmentObs();
-        var model = {email: self.emailObs(), study: self.studyObs()};
+        let env = self.environmentObs();
+        let model = {email: self.emailObs(), study: self.studyObs()};
         
-        var error = new BridgeError();
+        let error = new BridgeError();
         if (!model.email) {
             error.addError("email", "is required");
         }

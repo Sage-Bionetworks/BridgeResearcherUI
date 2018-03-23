@@ -1,5 +1,5 @@
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     self.labelObs = params.viewModel.labelObs;
     self.scheduleCriteriaObs = params.viewModel.scheduleCriteriaObs;

@@ -7,7 +7,7 @@ import root from '../../root';
 import tables from '../../tables';
 import utils from '../../utils';
 
-var cssClassNameForStatus = {
+const cssClassNameForStatus = {
     'disabled': 'negative',
     'unverified': 'warning',
     'verified': ''
@@ -40,7 +40,7 @@ function makeSuccess(vm, event) {
 }
 
 module.exports = function() {
-    var self = this;
+    let self = this;
         
     self.total = 0;
     self.emailFilter = null;
@@ -101,8 +101,8 @@ module.exports = function() {
         if (event.keyCode === 13) {
             event.target.parentNode.parentNode.classList.add("loading");
 
-            var id = self.findObs();
-            var success = makeSuccess(vm, event);
+            let id = self.findObs();
+            let success = makeSuccess(vm, event);
             utils.startHandler(vm, event);
             
             getHealthCode(id).then(success).catch(function() {
@@ -122,7 +122,7 @@ module.exports = function() {
 
     self.resendEmailVerification = function(vm, event) {
         alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
-            var userId = vm.id;
+            let userId = vm.id;
             utils.startHandler(vm, event);
             serverService.resendEmailVerification(userId)
                 .then(utils.successHandler(vm, event, "Resent email to verify participant's email address."))

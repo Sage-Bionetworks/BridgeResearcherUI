@@ -10,7 +10,7 @@ export default {
         localStorage.setItem(key, JSON.stringify(value));
     },
     get: function(key) {
-        var value = localStorage.getItem(key);
+        let value = localStorage.getItem(key);
         if (typeof value !== "string") {
             console.debug("[cache] Load miss from cache", key);
             return null;
@@ -26,22 +26,22 @@ export default {
         localStorage.removeItem(key);
     },
     persistQuery: function(key, object) {
-        var queryString = fn.queryString(object);
+        let queryString = fn.queryString(object);
         localStorage.setItem(key, queryString);
-        var url = document.location.pathname + queryString + document.location.hash;
+        let url = document.location.pathname + queryString + document.location.hash;
         window.history.replaceState(null, null, url);
     },
     restoreQuery: function(key) {
-        var stored = null;
+        let stored = null;
         if (document.location.search) {
             stored = document.location.search;
         } else if (localStorage.getItem(key)) {
             stored = localStorage.getItem(key);
         }
         if (stored) {
-            var pairs = stored.substring(1).split("&");
+            let pairs = stored.substring(1).split("&");
             return pairs.reduce(function(obj, pair) {
-                var keyPair = pair.split("=");
+                let keyPair = pair.split("=");
                 obj[decodeURIComponent(keyPair[0])] = decodeURIComponent(keyPair[1]);
                 return obj;
             }, {});

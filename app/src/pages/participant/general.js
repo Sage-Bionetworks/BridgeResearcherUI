@@ -6,22 +6,22 @@ import ko from 'knockout';
 import root from '../../root';
 import utils from '../../utils';
 
-var failureHandler = utils.failureHandler({
+const failureHandler = utils.failureHandler({
     redirectTo: "participants",
     redirectMsg: "Participant not found"
 });
-var OPTIONS = [
+const OPTIONS = [
     {value: 'no_sharing', label:'No Sharing'},
     {value: 'sponsors_and_partners', label:'Sponsors And Partners'},
     {value: 'all_qualified_researchers', label:'All Qualified Researchers'}
 ];
-var ROLES = ["Developer", "Researcher", "Administrator", "Worker"];
-var NEW_PARTICIPANT = {id:"new",attributes:{},phone:{number: '', regionCode: 'US'}};
+const ROLES = ["Developer", "Researcher", "Administrator", "Worker"];
+const NEW_PARTICIPANT = {id:"new",attributes:{},phone:{number: '', regionCode: 'US'}};
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .obs('showEnableAccount', false)
         .obs('isNew', (params.userId === "new"))
         .obs('healthCode', 'N/A', Binder.formatHealthCode)
@@ -70,7 +70,7 @@ module.exports = function(params) {
         // there's a timer in the control involved here, we need to use an observer
         self.allDataGroupsObs(study.dataGroups || []);
         
-        var attrs = self.study.userProfileAttributes.map(function(key) {
+        let attrs = self.study.userProfileAttributes.map(function(key) {
             return {key:key, label: fn.formatTitleCase(key,''), obs: ko.observable()}; 
         });
         self.attributesObs(attrs);
@@ -127,11 +127,11 @@ module.exports = function(params) {
     };
 
     self.save = function(vm, event) {
-        var participant = binder.persist(NEW_PARTICIPANT);
+        let participant = binder.persist(NEW_PARTICIPANT);
         // This should be updating the title, but it isn't, because the id is still "new".
         binder.persist(participant);
 
-        var updatedTitle = self.study.emailVerificationEnabled ? 
+        let updatedTitle = self.study.emailVerificationEnabled ? 
             fn.formatName(participant) : participant.externalId;
         function updateName(response) {
             self.titleObs(updatedTitle);

@@ -4,13 +4,13 @@ import Binder from '../../binder';
 import fn from '../../functions';
 import utils from '../../utils';
 
-var failureHandler = utils.failureHandler({
+const failureHandler = utils.failureHandler({
     redirectMsg:"Consent group not found.", 
     redirectTo:"subpopulations"
 });
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
     self.editor = null;
 
     new Binder(self)
@@ -30,7 +30,7 @@ module.exports = function(params) {
 
     // The editor and the request for the content can arrive in any order. bind here
     self.initEditor = (function(vm) {
-        var documentContent = null;
+        let documentContent = null;
         return function(object) {
             if (typeof object === "string") { // content
                 documentContent = object;
@@ -46,7 +46,7 @@ module.exports = function(params) {
 
     function loadIntoEditor(consent) {
         if (consent.documentContent.indexOf("<html") > -1) {
-            var doc = consent.documentContent;
+            let doc = consent.documentContent;
             consent.documentContent = doc.split(/<body[^>]*\>/)[1].split(/<\/body\>.*/)[0].trim();
         }
         self.createdOnObs(consent.createdOn);

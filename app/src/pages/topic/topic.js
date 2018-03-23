@@ -5,9 +5,9 @@ import root from '../../root';
 import utils from '../../utils';
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .obs('isNew', params.guid === "new")
         .obs('title', 'New Topic')
         .obs('createdOn', '', fn.formatDateTime)
@@ -20,7 +20,7 @@ module.exports = function(params) {
         self.titleObs(self.topic.name);
         self.isNewObs(false);
         self.guidObs(response.guid);
-        var d = fn.formatDateTime(new Date());
+        let d = fn.formatDateTime(new Date());
         if (!self.createdOnObs()) { // Just fake this
             self.createdOnObs(d);
         }

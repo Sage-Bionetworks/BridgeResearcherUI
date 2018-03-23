@@ -13,7 +13,7 @@ import utils from '../../utils';
  *  selected: survey list
  */
 module.exports = function(params) {
-    var self = this;
+    let self = this;
     
     self.title = params.selectOne ? 'Select Survey' : 'Select Surveys';
     self.controlName = params.selectOne ? 'ui-radio' : 'ui-checkbox';
@@ -29,10 +29,10 @@ module.exports = function(params) {
     }
 
     self.select = function() {
-        var filterFunc = (params.selectOne) ?
+        let filterFunc = (params.selectOne) ?
             selectByGuid($("input[type=radio]:checked").toArray()[0].id.substring(1)) :
             selectByChecked;
-        var surveys = self.itemsObs().filter(filterFunc);
+        let surveys = self.itemsObs().filter(filterFunc);
         params.addSurveys(surveys);
     };
 
@@ -48,8 +48,8 @@ module.exports = function(params) {
         })[0];
     }
     function surveyToView(survey) {
-        var selectedSurvey = match(survey);
-        var obj = {
+        let selectedSurvey = match(survey);
+        let obj = {
             guid: survey.guid, 
             name: survey.name, 
             checkedObs: ko.observable(!!selectedSurvey)

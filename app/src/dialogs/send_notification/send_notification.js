@@ -5,7 +5,7 @@ import root from '../../root';
 import utils from '../../utils';
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     self.cancel = root.closeDialog;
 
@@ -22,11 +22,11 @@ module.exports = function(params) {
     }
 
     self.send = function(vm, event) {
-        var msgObj = {
+        let msgObj = {
             subject: self.subjectObs(), 
             message: self.messageObs()
         };
-        var error = new BridgeError();
+        let error = new BridgeError();
         if (msgObj.subject === "") {
             error.addError("subject", "is required");
         }

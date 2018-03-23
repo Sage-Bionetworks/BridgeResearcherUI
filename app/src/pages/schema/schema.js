@@ -7,22 +7,22 @@ import ko from 'knockout';
 import root from '../../root';
 import utils from '../../utils';
 
-var failureHandler = utils.failureHandler({
+const failureHandler = utils.failureHandler({
     redirectTo: "schemas",
     redirectMsg: "Upload schema not found.",
     transient: false
 });
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
     self.schema = {};
 
-    var minIos = Binder.objPropDelegates('minAppVersions', 'iPhone OS');
-    var minAnd = Binder.objPropDelegates('minAppVersions', 'Android');
-    var maxIos = Binder.objPropDelegates('maxAppVersions', 'iPhone OS');
-    var maxAnd = Binder.objPropDelegates('maxAppVersions', 'Android');
+    let minIos = Binder.objPropDelegates('minAppVersions', 'iPhone OS');
+    let minAnd = Binder.objPropDelegates('minAppVersions', 'Android');
+    let maxIos = Binder.objPropDelegates('maxAppVersions', 'iPhone OS');
+    let maxAnd = Binder.objPropDelegates('maxAppVersions', 'Android');
 
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .obs('isNew', params.schemaId === "new")
         .obs('showError', false)
         .obs('index', 0)
@@ -40,9 +40,9 @@ module.exports = function(params) {
         .bind('fieldDefinitions[]', [], schemaUtils.fieldDefToObs, schemaUtils.fieldObsToDef);
     schemaUtils.initVM(self);
 
-    var hideWarning = fn.handleStaticObsUpdate(self.showErrorObs, false);
+    let hideWarning = fn.handleStaticObsUpdate(self.showErrorObs, false);
     self.lastRevision = params.revision;
-    var updateRevision = fn.seq(
+    let updateRevision = fn.seq(
         fn.handleObsUpdate(self.revisionObs, 'revision'),
         fn.handleObsUpdate(self.moduleIdObs, 'moduleId'),
         fn.handleObsUpdate(self.moduleVersionObs, 'moduleVersion'),
@@ -73,16 +73,16 @@ module.exports = function(params) {
             .catch(failureHandler);
     };
     self.addBelow = function(field, event) {
-        var index = self.fieldDefinitionsObs.indexOf(field);
-        var newField = schemaUtils.makeNewField();
+        let index = self.fieldDefinitionsObs.indexOf(field);
+        let newField = schemaUtils.makeNewField();
         self.fieldDefinitionsObs.splice(index+1,0,newField);
     };
     self.addFirst = function(vm, event) {
-        var field = schemaUtils.makeNewField();
+        let field = schemaUtils.makeNewField();
         self.fieldDefinitionsObs.push(field);
     };
     self.editMultiChoiceAnswerList = function(field, event) {
-        var otherLists = self.fieldDefinitionsObs().filter(function(oneField) {
+        let otherLists = self.fieldDefinitionsObs().filter(function(oneField) {
             return (oneField.typeObs() === "multi_choice" && oneField.multiChoiceAnswerListObs().length);
         }).map(function(oneField) {
             return [].concat(oneField.multiChoiceAnswerListObs());

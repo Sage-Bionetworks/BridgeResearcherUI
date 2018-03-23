@@ -40,9 +40,9 @@ function androidObsToModel(array) {
 }
     
 module.exports = function() {
-    var self = this;
+    let self = this;
 
-    var binder = new Binder(this)
+    let binder = new Binder(this)
         .bind('appleAppLinks[]', [], appleModelToObs, appleObsToModel)
         .bind('androidAppLinks[]', [], androidModelToObs, androidObsToModel)
         .obs('appleIndex')

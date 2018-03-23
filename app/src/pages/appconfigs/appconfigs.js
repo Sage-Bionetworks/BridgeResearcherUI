@@ -8,7 +8,7 @@ import tables from '../../tables';
 import utils from '../../utils';
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     tables.prepareTable(self, {
         name:'app config',

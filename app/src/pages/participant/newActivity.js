@@ -7,13 +7,13 @@ import scheduleUtils from '../../pages/schedule/schedule_utils';
 import tables from '../../tables';
 import utils from '../../utils';
 
-var failureHandler = utils.failureHandler({
+const failureHandler = utils.failureHandler({
     redirectTo: "participants",
     redirectMsg: "Participant not found"
 });
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     self.vm = self;
     self.callback = fn.identity;
@@ -25,15 +25,15 @@ module.exports = function(params) {
         return (item.activity.activityType === "survey") ? "tasks icon" : "child icon";
     };
     self.formatActivity = function(item) {
-        var act = item.activity;
-        var string = act.label;
+        let act = item.activity;
+        let string = act.label;
         if (act.detail) {
             string += " (" + act.detail + ") ";
         }
         return string;
     };
 
-    var {start, end} = fn.getRangeInDays(-14, 14);
+    let {start, end} = fn.getRangeInDays(-14, 14);
     
     new Binder(self)
         .obs('userId', params.userId)
@@ -100,7 +100,7 @@ module.exports = function(params) {
         args = args || {};
         args.scheduledOnStart = fn.dateTimeString(self.startDateObs());
         if (self.endDateObs()) {
-            var date = new Date(self.endDateObs());
+            let date = new Date(self.endDateObs());
             date.setDate(date.getDate()+1);
             args.scheduledOnEnd = fn.dateTimeString(date);
         }
