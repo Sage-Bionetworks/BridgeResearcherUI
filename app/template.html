@@ -185,13 +185,15 @@
                     </div>
                 </div>
             </div>
+            
+            <p style="text-align: center; margin-top: 1rem">
+                <a data-bind="click: signOut" href="#">Sign Out <i class="sign out icon"></i></a>
+            </p>
         </nav>
     </section>
     <footer>
-        <p data-bind="{attr:{'title': environmentObs}}">
-            &copy; 2015-2018 Sage Bionetworks &middot; 
-            <a data-bind="click: signOut" href="#">Sign Out <i class="sign out icon"></i></a>
-        </p>
+        <p>&copy; 2015-2018 Sage Bionetworks <span data-bind="html: '&middot; '+environmentObs(),
+            visible: environmentObs() !== 'production'"></span></p>
     </footer>
     <div data-bind="modal: dialogObs"></div>
 </body>

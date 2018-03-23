@@ -99,12 +99,15 @@ router.on('/surveys/:guid/:createdOn/editor', routeTo('survey', 'surveys', GUID_
 router.on('/surveys/:guid', routeTo('survey', 'surveys', GUID));
 router.on('/schemas', routeTo('schemas', 'schemas'));
 router.on('/schemas/:schemaId/versions/:revision/editor', routeTo('schema', 'schemas', SCHEMAID_REVISION));
-router.on('/schemas/:schemaId/versions/:revision/history', routeTo('schema_versions', 'schemas', SCHEMAID_REVISION));
+router.on('/schemas/:schemaId/versions/:revision/history', 
+    routeTo('schema_versions', 'schemas', SCHEMAID_REVISION));
 router.on('/schemas/:schemaId', routeTo('schema', 'schemas', SCHEMAID));
 router.on('/scheduleplans', routeTo('scheduleplans', 'scheduling'));
 router.on('/scheduleplans/:guid', routeTo('scheduleplan', 'scheduling', GUID));
-router.on('/participants/:userId/reports/:identifier', routeTo('participant_report', 'participants', USERID_IDENTIFIER));
-router.on('/participants/:userId/newActivities/:referentType/:guid', routeTo('participant_newActivity', 'participants', USERID_REFERENT_GUID));
+router.on('/participants/:userId/reports/:identifier', 
+    routeTo('participant_report', 'participants', USERID_IDENTIFIER));
+router.on('/participants/:userId/newActivities/:referentType/:guid', 
+    routeTo('participant_newActivity', 'participants', USERID_REFERENT_GUID));
 router.on('/participants/:userId/newActivities', routeTo('participant_newActivities', 'participants', USERID));
 router.on('/participants/:userId/consents', routeTo('participant_consents', 'participants', USERID));
 router.on('/participants/:userId/notifications', routeTo('participant_notifications', 'participants', USERID));
@@ -117,6 +120,7 @@ router.on('/participants/:userId', routeTo('participant_general', 'participants'
 router.on('/participants', routeTo('participants', 'participants'));
 router.on('/external_ids', routeTo('external_ids', 'extids'));
 router.on('/tasks/:taskId', routeTo('task', 'tasks', TASKID));
+router.on('/tasks', routeTo('tasks'));
 router.on('/topics/:guid', routeTo('topic', 'notifications', GUID));
 router.on('/topics', routeTo('topics', 'notifications'));
 router.on('/admin/info', routeTo('admin_info', 'info'));
