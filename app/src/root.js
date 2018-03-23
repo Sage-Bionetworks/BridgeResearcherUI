@@ -20,8 +20,8 @@ function unverifiedEmailAlert(response) {
     }
 }
 
-var RootViewModel = function() {
-    var self = this;
+let RootViewModel = function() {
+    let self = this;
 
     new Binder(self)
         .obs('environment', '')
@@ -87,7 +87,7 @@ var RootViewModel = function() {
         return self.studyIdentifierObs() === 'shared';
     });
     self.isResearcherOnly = ko.computed(function() {
-        var roles = self.rolesObs();
+        let roles = self.rolesObs();
         return roles.indexOf("researcher") > -1 && roles.indexOf("developer") === -1;
     });
 
@@ -112,13 +112,13 @@ var RootViewModel = function() {
             // Until we can support on server, enumerating the codes is the same as requiring the code at sign up.
             // codesEumerated = externalIdValidationEnabled
             // codeRequired = externalIdRequiredOnSignUp
-            var defaults = {
+            let defaults = {
                 codesEnumerated: study.externalIdValidationEnabled,
                 codeRequired: study.externalIdRequiredOnSignUp,
                 notificationsEnabled: Object.keys(study.pushNotificationARNs).length > 0
             };
-            var studyConfig = config.studies[study.identifier] || {};
-            var opts = Object.assign({}, defaults, studyConfig);
+            let studyConfig = config.studies[study.identifier] || {};
+            let opts = Object.assign({}, defaults, studyConfig);
             
             self.codesEnumeratedObs(opts.codesEnumerated);
             self.codeRequiredObs(opts.codeRequired);
@@ -138,12 +138,12 @@ var RootViewModel = function() {
     setTimeout(checkVerifyStatus, 1000);
 };
 
-var root = new RootViewModel();
+let root = new RootViewModel();
 
 root.queryParams = {};
 if (document.location.search) {
     document.location.search.substring(1).split("&").forEach(function(pair) {
-        var fragments = pair.split("=");
+        let fragments = pair.split("=");
         root.queryParams[decodeURIComponent(fragments[0])] = decodeURIComponent(fragments[1]);
     });
 }

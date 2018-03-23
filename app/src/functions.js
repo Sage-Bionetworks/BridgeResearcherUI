@@ -49,19 +49,19 @@ function formatMs(ms) {
         throw Error('formatMs cannot format a non-number value');
     }
     if (ms < MINUTE) {
-        var s = Math.floor(ms/SECOND);
+        let s = Math.floor(ms/SECOND);
         return s + "s";
     } else if (ms < HOUR) {
-        var m = Math.floor(ms/MINUTE);
+        let m = Math.floor(ms/MINUTE);
         return m + "m " + formatMs(ms%MINUTE);
     } else if (ms < DAY) {
-        var h = Math.floor(ms/HOUR);
+        let h = Math.floor(ms/HOUR);
         return h + "h " + formatMs(ms%HOUR);
     } else if (ms < WEEK) {
-        var d = Math.floor(ms/DAY);
+        let d = Math.floor(ms/DAY);
         return d + "d " + formatMs(ms%DAY);
     } else {
-        var w = Math.floor(ms/WEEK);
+        let w = Math.floor(ms/WEEK);
         return w + "w " + formatMs(ms%WEEK);
     }
 }
@@ -82,7 +82,7 @@ function formatTitleCase(string, defaultValue) {
     return defaultValue || '';
 }
 function queryString(object) {
-    var string = "";
+    let string = "";
     if (object) {
         string = Object.keys(object).filter(function(key) { 
             return typeof object[key] !== "undefined" && object[key] !== null && object[key] !== ""; 
@@ -128,7 +128,7 @@ function notBlankName(array, value) {
     }
 }
 function formatName(participant) {
-    var array = [];
+    let array = [];
     if (participant) {
         notBlankName(array, participant.firstName);
         notBlankName(array, participant.lastName);
@@ -136,7 +136,7 @@ function formatName(participant) {
     return (array.length === 0) ? '—' : array.join(' ');
 }
 function formatSummaryAsFullLabel(summary) {
-    var name = formatName(summary);
+    let name = formatName(summary);
     if (summary.email) {
         if (summary.email.includes(summary.externalId)) {
             name = summary.externalId;
@@ -149,7 +149,7 @@ function formatSummaryAsFullLabel(summary) {
     return name;
 }
 function formatNameAsFullLabel(participant) {
-    var name = formatName(participant);
+    let name = formatName(participant);
     if (participant.email) {
         if (participant.email.includes(participant.externalId)) {
             name = participant.externalId;
@@ -213,7 +213,7 @@ function handleForEach(fieldName, func) {
 }
 function fieldUpdater(source, fieldName) {
     if (fieldName.indexOf("->") > -1) {
-        var fields = fieldName.split("->");
+        let fields = fieldName.split("->");
         this[fields[1]] = source[fields[0]];
     } else {
         this[fieldName] = source[fieldName];
@@ -275,7 +275,7 @@ function log(label) {
 function handleIf(bool, func, returnFuncValue) {
     return function(response) {
         if (bool) { 
-            var result = func(); 
+            let result = func(); 
             if (returnFuncValue) {
                 return result;
             }
@@ -296,11 +296,11 @@ function handleReverse(property) {
 }
 function deleteUnusedProperties(object) {
     if (is(object, 'Array')) {
-        for (var i=0; i < object.length; i++) {
+        for (let i=0; i < object.length; i++) {
             deleteUnusedProperties(object[i]);
         }
     } else if (is(object, 'Object')) {
-        for (var prop in object) {
+        for (let prop in object) {
             if (isBlank(object[prop])) {
                 delete object[prop];
             } else {
@@ -312,7 +312,7 @@ function deleteUnusedProperties(object) {
 // Append a number to the string, intelligently incrementing if a number already exists there.
 function incrementNumber(string) {
     if (is(string, 'String')) {
-        var digits = 0, match = /(\d+$)/.exec(string);
+        let digits = 0, match = /(\d+$)/.exec(string);
         if (match) {
             digits = parseInt(match[0]);
             string = string.substring(0,string.length-(match[0].length));
@@ -322,13 +322,13 @@ function incrementNumber(string) {
     return string;
 }
 function pad(num) {
-    var norm = Math.abs(Math.floor(num));
+    let norm = Math.abs(Math.floor(num));
     return (norm < 10 ? '0' : '') + norm;
 }
 function dateToLocalISOString(date, timePortion) {
-    var tzo = -date.getTimezoneOffset();
-    var dif = tzo >= 0 ? '+' : '-';
-    var str = date.getFullYear()+'-'+pad(date.getMonth() + 1)+'-'+pad(date.getDate())+'T';
+    let tzo = -date.getTimezoneOffset();
+    let dif = tzo >= 0 ? '+' : '-';
+    let str = date.getFullYear()+'-'+pad(date.getMonth() + 1)+'-'+pad(date.getDate())+'T';
     if (timePortion) {
         str += timePortion;
     } else {
@@ -347,23 +347,23 @@ function formatList(array = [], finalWord = 'and') {
         } else if (array.length === 2) {
             return `${array[0]} ${finalWord} ${array[1]}`;
         } else {
-            var middle = array.splice(1, array.length-2).join(", ");
+            let middle = array.splice(1, array.length-2).join(", ");
             return `${array[0]}, ${middle}, ${finalWord} ${array[array.length-1]}`;
         }
     }
     return '';
 }
 function getRangeInDays(deltaPast, deltaFuture) {
-    var start = new Date();
+    let start = new Date();
     start.setDate(start.getDate()+deltaPast);
-    var end = new Date();
+    let end = new Date();
     end.setDate(end.getDate()+deltaFuture);
     return {start, end};
 }
 
-var formatDate = seq(checkArgs, asDate, formatDateString, blankInvalidDateString);
-var formatDateTime = seq(checkArgs, asDate, formatDateTimeString, blankInvalidDateString);
-var localDateTimeToUTC = seq(asDate, intLocalDateTimeToUTC);
+let formatDate = seq(checkArgs, asDate, formatDateString, blankInvalidDateString);
+let formatDateTime = seq(checkArgs, asDate, formatDateTimeString, blankInvalidDateString);
+let localDateTimeToUTC = seq(asDate, intLocalDateTimeToUTC);
 
 export default {
     arrayContains,

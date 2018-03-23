@@ -1,7 +1,7 @@
 import ko from 'knockout';
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
     
     self.versionObs = params.viewModel.versionObs;
     self.idObs = params.viewModel.idObs;
@@ -11,8 +11,8 @@ module.exports = function(params) {
 
     self.computeds = [];
     self.linkMaker = function(tabName) {
-        var c = ko.computed(function() {
-            var url = '#/shared_modules/'+encodeURIComponent(self.idObs())+'/versions/'+self.versionObs();
+        let c = ko.computed(function() {
+            let url = '#/shared_modules/'+encodeURIComponent(self.idObs())+'/versions/'+self.versionObs();
             url += (tabName == 'editor') ? '/editor' : '/history';
             return url;
         });

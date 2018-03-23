@@ -15,9 +15,9 @@ function exportingMsg() {
 }
 
 module.exports = function() {
-    var self = this;
+    let self = this;
 
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .bind('synapseDataAccessTeamId')
         .bind('synapseProjectId')
         .bind('usesCustomExportSchedule')
@@ -31,11 +31,11 @@ module.exports = function() {
                fn.isNotBlank(self.synapseDataAccessTeamIdObs());
     });
     self.projectLinkObs = ko.computed(function() {
-        var value = self.synapseProjectIdObs();
+        let value = self.synapseProjectIdObs();
         return (value) ? (BASE+"Synapse:"+value) : null;
     });
     self.teamLinkObs = ko.computed(function() {
-        var value = self.synapseDataAccessTeamIdObs();
+        let value = self.synapseDataAccessTeamIdObs();
         return (value) ? (BASE+"Team:"+value) : null;
     });
     self.startExport = function(self, event) {

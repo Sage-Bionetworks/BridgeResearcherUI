@@ -30,17 +30,17 @@ function label(criteria) {
     // These properties don't necessarily exist, which throws reference errors. So init them.
     criteria.minAppVersions = criteria.minAppVersions || {};
     criteria.maxAppVersions = criteria.maxAppVersions || {};
-    var iosMin = valueForObs(criteria.minAppVersions, "iPhone OS");
-    var iosMax = valueForObs(criteria.maxAppVersions, "iPhone OS");
-    var androidMin = valueForObs(criteria.minAppVersions, "Android");
-    var androidMax = valueForObs(criteria.maxAppVersions, "Android");
-    var language = valueForObs(criteria, "language");
-    var allOfGroups = valueForObs(criteria, "allOfGroups");
-    var noneOfGroups = valueForObs(criteria, "noneOfGroups");
-    var iosRange = formatVersionRange(iosMin, iosMax);
-    var androidRange = formatVersionRange(androidMin, androidMax);
+    let iosMin = valueForObs(criteria.minAppVersions, "iPhone OS");
+    let iosMax = valueForObs(criteria.maxAppVersions, "iPhone OS");
+    let androidMin = valueForObs(criteria.minAppVersions, "Android");
+    let androidMax = valueForObs(criteria.maxAppVersions, "Android");
+    let language = valueForObs(criteria, "language");
+    let allOfGroups = valueForObs(criteria, "allOfGroups");
+    let noneOfGroups = valueForObs(criteria, "noneOfGroups");
+    let iosRange = formatVersionRange(iosMin, iosMax);
+    let androidRange = formatVersionRange(androidMin, androidMax);
 
-    var arr = [];
+    let arr = [];
     if (iosRange !== null && iosRange === androidRange) {
         arr.push(iosRange);
     } else {

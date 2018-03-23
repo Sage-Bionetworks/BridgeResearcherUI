@@ -12,7 +12,6 @@ const FAILURE_HANDLER = utils.failureHandler({
     redirectTo: "participants",
     redirectMsg: "Participant not found"
 });
-
 const LINK_COMPONENTS = {
     'task': 'tasks/',
     'survey': 'surveys/',
@@ -20,7 +19,7 @@ const LINK_COMPONENTS = {
 };
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     self.tempDedupMap = {};
 
@@ -41,7 +40,7 @@ module.exports = function(params) {
     }).catch(FAILURE_HANDLER);
 
     self.linkMaker = function(ref) {
-        var base = '#/participants/'+self.userIdObs()+'/newActivities/';
+        let base = '#/participants/'+self.userIdObs()+'/newActivities/';
         return base + LINK_COMPONENTS[ref.type] + decodeURIComponent(ref.identifier);
     };
 
@@ -57,7 +56,7 @@ module.exports = function(params) {
         optionsService.getActivities(plan).forEach(processActivity);
     }
     function processActivity(activity) {
-        var item = {type: activity.activityType};
+        let item = {type: activity.activityType};
         if (activity.task) {
             item.label = activity.task.identifier;
             item.identifier = activity.task.identifier;
@@ -71,7 +70,7 @@ module.exports = function(params) {
         self.tempDedupMap[item.identifier] = item;
     }
     function sortPlans(response) {
-        var array = Object.values(self.tempDedupMap);
+        let array = Object.values(self.tempDedupMap);
         array.sort(function(a,b) {
             return a.label.localeCompare(b.label);
         });

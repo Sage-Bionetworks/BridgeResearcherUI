@@ -4,15 +4,15 @@ import Binder from '../../binder';
 import fn from '../../functions';
 import utils from '../../utils';
 
-var failureHandler = utils.failureHandler({
+const failureHandler = utils.failureHandler({
     redirectMsg:"Consent group not found.", 
     redirectTo:"subpopulations"
 });
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .obs('active', true)
         .obs('createdOn')
         .obs('historyItems[]')

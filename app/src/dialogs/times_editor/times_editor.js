@@ -8,7 +8,7 @@ function hourMinuteValue(value) {
 }
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     self.itemsObs = ko.observableArray(
         ko.utils.arrayMap(params.timesObs(), hourMinuteValue)
@@ -26,7 +26,7 @@ module.exports = function(params) {
 
     self.addTime = function(vm, event) {
         event.preventDefault();
-        var time = scheduleUtils.timeOptionsFinder(self.timeObs());
+        let time = scheduleUtils.timeOptionsFinder(self.timeObs());
         if (self.itemsObs().indexOf(time.value) === -1) {
             self.itemsObs.push(time.value);
             self.itemsObs.sort();
@@ -34,7 +34,7 @@ module.exports = function(params) {
     };
     self.deleteTime = function(vm, event) {
         event.preventDefault();
-        var context = ko.contextFor(event.target);
+        let context = ko.contextFor(event.target);
         self.itemsObs.remove(context.$data);
     };
     self.save = function() {

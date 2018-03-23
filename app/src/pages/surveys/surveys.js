@@ -24,7 +24,7 @@ function collectGuids(object, array) {
 }
 function annotateSurveys(surveys, plans) {
     plans.forEach(function(plan) {
-        var allPlanGuids = collectGuids(plan, []);    
+        let allPlanGuids = collectGuids(plan, []);    
         surveys.forEach(function(survey) {
             if (allPlanGuids.indexOf(survey.guid) > -1) {
                 survey.schedulePlanObs.push({label: plan.label, guid: plan.guid});
@@ -37,7 +37,7 @@ function deleteItem(survey) {
 }
 
 module.exports = function() {
-    var self = this;
+    let self = this;
 
     fn.copyProps(self, fn, 'formatDateTime');
     fn.copyProps(self, root, 'isDeveloper');
@@ -56,8 +56,8 @@ module.exports = function() {
         }).join(', ');
     };
     self.copySurveys = function(vm, event) {
-        var copyables = self.itemsObs().filter(tables.hasBeenChecked);
-        var confirmMsg = (copyables.length > 1) ?
+        let copyables = self.itemsObs().filter(tables.hasBeenChecked);
+        let confirmMsg = (copyables.length > 1) ?
             "Surveys have been copied." : "Survey has been copied.";
 
         utils.startHandler(vm, event);

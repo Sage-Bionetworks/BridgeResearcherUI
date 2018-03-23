@@ -18,8 +18,8 @@ module.exports = class Tasks {
         this.load();
     }
     copy(vm, event) {
-        var copyables = this.itemsObs().filter(tables.hasBeenChecked);
-        var confirmMsg = (copyables.length > 1) ?
+        let copyables = this.itemsObs().filter(tables.hasBeenChecked);
+        let confirmMsg = (copyables.length > 1) ?
             "Tasks have been copied." : "Task has been copied.";
 
         utils.startHandler(vm, event);

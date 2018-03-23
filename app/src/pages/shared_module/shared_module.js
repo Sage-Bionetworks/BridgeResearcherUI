@@ -5,12 +5,12 @@ import root from '../../root';
 import sharedModuleUtils from '../../shared_module_utils';
 import utils from '../../utils';
 
-var OPTIONS = [
+const OPTIONS = Object.freeze([
     {value: null, label:'Both'},
     {value: 'Android', label: 'Android'},
     {value: 'iOS', label: 'iOS'}
-];
-var failureHandler = utils.failureHandler({
+]);
+const failureHandler = utils.failureHandler({
     redirectTo: "shared_modules",
     redirectMsg: "Shared module not found."
 });
@@ -25,28 +25,28 @@ function loadSurveyRevisions(vm, survey) {
     return serverService.getSurveyAllRevisions(survey.guid).then(function(response) {
         // Need to confirm, but if you link to unpublished survey, it is just published
         // when you publish the metadata... ?
-        var dates = response.items.map(function(oneSurvey) {
-            var d = fn.formatDateTime(oneSurvey.createdOn);
+        let dates = response.items.map(function(oneSurvey) {
+            let d = fn.formatDateTime(oneSurvey.createdOn);
             return {value: oneSurvey.createdOn, label: d};
         });
         vm.linkedVersionOptionsObs(dates);
     });
 }
 function loadSchemaRevisions(vm, schema) {
-    var identifier = schema.id || schema.schemaId;
+    let identifier = schema.id || schema.schemaId;
     return serverService.getUploadSchemaAllRevisions(identifier).then(function(response) {
-        var revisions = response.items.map(function(oneSchema) {
+        let revisions = response.items.map(function(oneSchema) {
             return {value: oneSchema.revision, label: oneSchema.revision};
         });
         vm.linkedVersionOptionsObs(revisions);
     });
 }
 module.exports = function(params) {
-    var self = this;
+    let self = this;
     self.editor = null;
     self.metadata = {tags:[], version: 1};
 
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .obs('isNew', params.id === "new")
         .bind('published', false)
         .bind('id', params.id)
@@ -151,7 +151,7 @@ module.exports = function(params) {
         delete self.metadata.surveyGuid;
         delete self.metadata.surveyCreatedOn;
 
-        var schema = schemas[0];
+        let schema = schemas[0];
         self.schemaIdObs(schema.id);
         self.schemaRevisionObs(schema.revision);
         self.linkedNameObs("Schema: " + schema.id);
@@ -166,7 +166,7 @@ module.exports = function(params) {
         delete self.metadata.schemaId;
         delete self.metadata.schemaRevision;
 
-        var survey = surveys[0];
+        let survey = surveys[0];
         self.surveyGuidObs(survey.guid);
         self.surveyCreatedOnObs(survey.createdOn);
         self.linkedNameObs("Survey: " + survey.name);
@@ -180,9 +180,9 @@ module.exports = function(params) {
         self.editor.setData(self.metadata.notes);
     };
     self.save = function(vm, event) {
-        var oldVersion = self.metadata.version; // prior to updating from model
+        let oldVersion = self.metadata.version; // prior to updating from model
         self.metadata = binder.persist(self.metadata);
-        var methodName = (params.id === "new" || self.metadata.version !== oldVersion) ?
+        let methodName = (params.id === "new" || self.metadata.version !== oldVersion) ?
             "createMetadata" : "updateMetadata";
         if (oldVersion !== self.versionObs()) {
             self.metadata.published = false;

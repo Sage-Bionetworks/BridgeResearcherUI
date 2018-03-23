@@ -12,7 +12,7 @@ const ENVIRONMENT = 'environment';
 
 // There will be stale data in the UI if we don't reload when changing studies or environments.
 function makeReloader(studyKey, environment) {
-    var requiresReload = (storeService.get(STUDY_KEY) !== studyKey || 
+    let requiresReload = (storeService.get(STUDY_KEY) !== studyKey || 
                           storeService.get(ENVIRONMENT) !== environment);
     return (requiresReload) ?
         function(response) {
@@ -21,11 +21,11 @@ function makeReloader(studyKey, environment) {
 }
 
 module.exports = function() {
-    var self = this;
-    var signInSubmit = document.querySelector("#signInSubmit");
-    var isLocked = fn.isNotBlank(root.queryParams.study);
-    
-    var studyKey, env;    
+    let self = this;
+    let signInSubmit = document.querySelector("#signInSubmit");
+    let isLocked = fn.isNotBlank(root.queryParams.study);
+
+    let studyKey, env;    
     if (isLocked) {
         studyKey = root.queryParams.study;
         env = 'production';
@@ -75,12 +75,12 @@ module.exports = function() {
     }
 
     self.signIn = function(vm, event) {
-        var credentials = {
+        let credentials = {
             username: self.usernameObs(), 
             password: self.passwordObs(), 
             study: self.studyObs()
         };
-        var error = new BridgeError();
+        let error = new BridgeError();
         if (credentials.username === "") {
             error.addError("email", "is required");
         }
@@ -91,16 +91,16 @@ module.exports = function() {
             return utils.failureHandler({transient:false})(error);
         }
 
-        var studyKey = self.studyObs();
-        var environment = self.environmentObs();
-        var reloadIfNeeded = makeReloader(studyKey, environment);
+        let studyKey = self.studyObs();
+        let environment = self.environmentObs();
+        let reloadIfNeeded = makeReloader(studyKey, environment);
 
         // Succeed or fail, let's keep these values for other sign ins.
         storeService.set(STUDY_KEY, studyKey);
         storeService.set(ENVIRONMENT, environment);
 
         utils.startHandler(self, {target: signInSubmit});
-        var studyName = utils.findStudyName(self.studyOptionsObs(), studyKey);
+        let studyName = utils.findStudyName(self.studyOptionsObs(), studyKey);
         
         serverService.signIn(studyName, environment, credentials)
             .then(clear)

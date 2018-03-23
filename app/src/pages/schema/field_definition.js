@@ -2,8 +2,8 @@ import Binder from '../../binder';
 import * as schemaUtils from './schema_utils';
 
 module.exports = function(params) {
-    var self = this;
-    var type = params.field.typeObs();
+    let self = this;
+    let type = params.field.typeObs();
 
     self.field = params.field;
     new Binder(self)
@@ -12,7 +12,7 @@ module.exports = function(params) {
     schemaUtils.initFieldDefinitionVM(self, type);
 
     function updateExtraFields(type) {
-        var typeInfo = schemaUtils.TYPE_LOOKUP[type];
+        let typeInfo = schemaUtils.TYPE_LOOKUP[type];
         if (typeInfo) {
             self.extraObs(typeInfo.extra_fields);
         }

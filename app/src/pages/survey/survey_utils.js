@@ -3,7 +3,7 @@ import ko from 'knockout';
 import root from '../../root';
 import utils from '../../utils';
 
-var UNIT_OPTIONS = Object.freeze([
+const UNIT_OPTIONS = Object.freeze([
     {value: null, label: '<none>'},
     {value: 'seconds', label: 'Seconds'},
     {value: 'minutes', label: 'Minutes'},
@@ -31,7 +31,7 @@ var UNIT_OPTIONS = Object.freeze([
     {value: 'quarts', label: 'Quarts'},
     {value: 'yards', label: 'Yards'}
 ]);
-var DURATION_OPTIONS = Object.freeze([
+const DURATION_OPTIONS = Object.freeze([
     {value: null, label: '<none>'},
     {value: 'seconds', label: 'Seconds'},
     {value: 'minutes', label: 'Minutes'},
@@ -41,7 +41,7 @@ var DURATION_OPTIONS = Object.freeze([
     {value: 'months', label: 'Months'},
     {value: 'years', label: 'Years'}
 ]);
-var OPERATOR_OPTIONS = Object.freeze([
+const OPERATOR_OPTIONS = Object.freeze([
     {value: 'eq', label: 'When value ='},
     {value: 'ne', label: 'When value !='},
     {value: 'lt', label: 'When value <'},
@@ -53,7 +53,7 @@ var OPERATOR_OPTIONS = Object.freeze([
     {value: 'any', label: 'If user has any groups'},
     {value: 'all', label: 'If user has all groups'}
 ]);
-var uiHintLabels = {
+const uiHintLabels = Object.freeze({
     'checkbox':'Checkbox',
     'combobox':'Combobox',
     'datepicker':'Date Picker',
@@ -70,13 +70,13 @@ var uiHintLabels = {
     'weight':'Weight',
     'height':'Height',
     'bloodpressure':'Blood Pressure'
-};
-var UI_HINT_OPTIONS = Object.freeze(Object.keys(uiHintLabels).reduce(function(object, key) {
+});
+const UI_HINT_OPTIONS = Object.freeze(Object.keys(uiHintLabels).reduce(function(object, key) {
     object[key] = {value: key, label: uiHintLabels[key]};
     return object;
 }, {}));
 
-var SELECT_OPTIONS_BY_TYPE = Object.freeze({
+const SELECT_OPTIONS_BY_TYPE = Object.freeze({
     'BooleanConstraints':[UI_HINT_OPTIONS.checkbox, UI_HINT_OPTIONS.toggle],
     'DateConstraints':[UI_HINT_OPTIONS.datepicker],
     'DateTimeConstraints':[UI_HINT_OPTIONS.datetimepicker],
@@ -91,13 +91,13 @@ var SELECT_OPTIONS_BY_TYPE = Object.freeze({
     'HeightConstraints':[UI_HINT_OPTIONS.height],
     'WeightConstraints':[UI_HINT_OPTIONS.weight]
 });
-var ELEMENT_TEMPLATE = Object.freeze({
+const ELEMENT_TEMPLATE = Object.freeze({
     'SurveyInfoScreen': {type:'SurveyInfoScreen', title:'', prompt:'', promptDetail:'', 
         identifier:'', beforeRules: [], afterRules: []},
     'SurveyQuestion': {type:'SurveyQuestion', fireEvent:false, 'uiHint':'', prompt:'', 
         promptDetail:'', identifier:'', beforeRules: [], afterRules: []}
 });
-var DATA_TYPE_OPTIONS = Object.freeze([
+const DATA_TYPE_OPTIONS = Object.freeze([
     {label: 'String', value: 'string'},
     {label: 'Boolean', value: 'boolean'},
     {label: 'Date', value: 'date'},
@@ -110,7 +110,7 @@ var DATA_TYPE_OPTIONS = Object.freeze([
     {label: 'Height', value: 'height'},
     {label: 'Weight', value: 'weight'}
 ]);
-var CONSTRAINTS_TEMPLATES = Object.freeze({
+const CONSTRAINTS_TEMPLATES = Object.freeze({
     'BooleanConstraints': {dataType:'boolean'},
     'DateConstraints': {dataType:'date', allowFuture:false, earliestValue:'', latestValue:'' },
     'DateTimeConstraints': {dataType:'datetime', allowFuture:false, earliestValue:'', latestValue:'' },
@@ -124,7 +124,7 @@ var CONSTRAINTS_TEMPLATES = Object.freeze({
     'HeightConstraints': {dataType:'height', forInfant:false},
     'WeightConstraints': {dataType:'weight', forInfant:false},
 });
-var UI_HINT_FOR_CONSTRAINTS = Object.freeze({
+const UI_HINT_FOR_CONSTRAINTS = Object.freeze({
     'BooleanConstraints': 'checkbox',
     'DateConstraints': 'datepicker',
     'DateTimeConstraints': 'datetimepicker',
@@ -139,11 +139,11 @@ var UI_HINT_FOR_CONSTRAINTS = Object.freeze({
     'WeightConstraints': 'weight'
 });
 
-var SURVEY_FIELDS = ['name','createdOn','guid','identifier','published','version','copyrightNotice'];
-var ELEMENT_FIELDS = ['prompt','promptDetail', 'title', 'uiHint','identifier','fireEvent','beforeRules','afterRules'];
+const SURVEY_FIELDS = ['name','createdOn','guid','identifier','published','version','copyrightNotice'];
+const ELEMENT_FIELDS = ['prompt','promptDetail', 'title', 'uiHint','identifier','fireEvent','beforeRules','afterRules'];
 
 function getConstraints(type) {
-    var con = {type: type};
+    let con = {type: type};
     ko.utils.extend(con, CONSTRAINTS_TEMPLATES[type]);
     return con;
 }
@@ -152,16 +152,16 @@ function makeObservable(obj, field) {
     // Strip out time zone, as this control is local time only. We may change it as well on the server
     // to use LocalDateTime, that's pending.
     if (obj.dataType === "datetime" && (field === "earliestValue" || field === "latestValue")) {
-        var value = obj[field];
+        let value = obj[field];
         if (value) {
-            var matches = value.match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/);
+            let matches = value.match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/);
             return ko.observable(matches && matches.length ? matches[0] : "");
         }
     }
     // Note we're copying the array when passing it to the observable, or it gets shared between properties,
     // enumeration in particular (rules is remodeled)
     if (['rules','beforeRules','afterRules','enumeration'].indexOf(field) > -1) {
-        var array = (obj[field]) ? [].concat(obj[field]) : [];
+        let array = (obj[field]) ? [].concat(obj[field]) : [];
         return ko.observableArray(array);
     } else {
         return ko.observable(obj[field]);
@@ -177,7 +177,7 @@ function elementToObservables(element) {
     ELEMENT_FIELDS.forEach(function(field) {
         element[field+"Obs"] = makeObservable(element, field);
     });
-    var con = element.constraints;
+    let con = element.constraints;
     if (con) {
         // We do this twice for new objects... that's okay and it's necessary for correct initialization
         Object.keys(getConstraints(con.type)).forEach(function(field) {
@@ -186,7 +186,7 @@ function elementToObservables(element) {
         element.constraintsTypeObs = ko.observable(con.type);
     }
     element.changeUiHint = function(domEl) {
-        var newHint = domEl.getAttribute("data-type");
+        let newHint = domEl.getAttribute("data-type");
         element.uiHintObs(newHint);
     };
     return element;
@@ -198,7 +198,7 @@ function elementToObservables(element) {
  * @returns {*}
  */
 function observablesToElement(element) {
-    var con = element.constraints;
+    let con = element.constraints;
     if (con && con.typeObs() === "MultiValueConstraints" && con.allowMultipleObs()) {
         element.uiHintObs(UI_HINT_OPTIONS.checkbox.value);
     }
@@ -219,7 +219,7 @@ function observablesToElement(element) {
  * @param fieldName
  */
 function updateModelField(model, fieldName) {
-    var obsName = fieldName + "Obs";
+    let obsName = fieldName + "Obs";
     if (typeof model[obsName]() !== "undefined") {
         model[fieldName] = model[obsName]();
         if (model[fieldName] === "") {
@@ -231,8 +231,8 @@ function newSurvey() {
     return {name:'', guid:'', identifier:'', published:false, createdOn:null, elements:[], version:null};
 }
 function newField(type) {
-    var elementType = (type === "SurveyInfoScreen") ? type : "SurveyQuestion";
-    var newEl = {type: elementType};
+    let elementType = (type === "SurveyInfoScreen") ? type : "SurveyQuestion";
+    let newEl = {type: elementType};
     ko.utils.extend(newEl, ELEMENT_TEMPLATE[elementType]);
     if (elementType === "SurveyQuestion") {
         newEl.uiHint = UI_HINT_FOR_CONSTRAINTS[type];
@@ -241,7 +241,7 @@ function newField(type) {
     return elementToObservables(newEl);
 }
 function changeElementType(oldElement, newType) {
-    var newElement = newField(newType);
+    let newElement = newField(newType);
     newElement = elementToObservables(newElement);
     ELEMENT_FIELDS.forEach(function(field) {
         newElement[field+"Obs"](oldElement[field+"Obs"]());
@@ -249,7 +249,7 @@ function changeElementType(oldElement, newType) {
     // except for UI hint which is bound to constraints, but not in constraints...
     newElement.uiHintObs(newElement.uiHint);
 
-    var bothQuestions = (oldElement.type !== "SurveyInfoScreen" && 
+    let bothQuestions = (oldElement.type !== "SurveyInfoScreen" && 
                          newElement.type !== "SurveyInfoScreen");
     if (bothQuestions) {
         // Because they are not going to be swapped out...
@@ -271,7 +271,7 @@ export default {
         SURVEY_FIELDS.forEach(function(field) {
             vm[field+"Obs"](survey[field]);
         });
-        var elements = survey.elements.map(elementToObservables);
+        let elements = survey.elements.map(elementToObservables);
         vm.elementsObs.pushAll(elements);
     },
     observablesToSurvey: function(vm, survey) {
@@ -323,7 +323,7 @@ export default {
             };
         };
         vm.formatRule = function(rule) {
-            var array = [];
+            let array = [];
             array.push(vm.operatorLabel(rule.operator));
             if (rule.operator !== 'de' && rule.operator !== 'always') {
                 array.push(rule.value);

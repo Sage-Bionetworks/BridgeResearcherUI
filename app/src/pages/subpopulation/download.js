@@ -4,13 +4,13 @@ import config from '../../config';
 import fn from '../../functions';
 import utils from '../../utils';
 
-var failureHandler = utils.failureHandler({
+const failureHandler = utils.failureHandler({
     redirectMsg:"Consent group not found.", 
     redirectTo:"subpopulations"
 });
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
     
     new Binder(self)
         .obs('name')
@@ -19,7 +19,7 @@ module.exports = function(params) {
         .obs('pdfUrl');
     
     function updateURLs(session) {
-        var host = config.host[session.environment] + "/" + params.guid + "/consent.";
+        let host = config.host[session.environment] + "/" + params.guid + "/consent.";
         host = host.replace('https','http');
         host = host.replace('ws','docs');
         self.htmlUrlObs(host + 'html');

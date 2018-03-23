@@ -12,15 +12,15 @@ const pageSize = 25;
  *      the screen
  */
 module.exports = function(params) {
-    var self = this;
-    var pageKey = params.pageKey;
-    var loadingFunc = params.loadingFunc;
-    var query = storeService.restoreQuery(pageKey);
-    var offsetBy = query.offsetBy;
+    let self = this;
+    let pageKey = params.pageKey;
+    let loadingFunc = params.loadingFunc;
+    let query = storeService.restoreQuery(pageKey);
+    let offsetBy = query.offsetBy;
 
-    var {defaultStart, defaultEnd} = fn.getRangeInDays(-14, 0);
-    var start = query.startTime ? new Date(query.startTime) : defaultStart;
-    var end = query.endTime ? new Date(query.endTime) : defaultEnd;
+    let {defaultStart, defaultEnd} = fn.getRangeInDays(-14, 0);
+    let start = query.startTime ? new Date(query.startTime) : defaultStart;
+    let end = query.endTime ? new Date(query.endTime) : defaultEnd;
 
     new Binder(self)
         .obs('emailFilter', query.emailFilter)
@@ -47,14 +47,14 @@ module.exports = function(params) {
         wrappedLoadingFunc(Math.round(self.currentPageObs()));
     };
     self.previousPage = function(vm, event) {
-        var page = self.currentPageObs() -1;
+        let page = self.currentPageObs() -1;
         if (page >= 0) {
             self.showLoaderObs(true);
             wrappedLoadingFunc(page*pageSize);
         }
     };
     self.nextPage = function(vm, event) {
-        var page = self.currentPageObs() +1;
+        let page = self.currentPageObs() +1;
         if (page <= self.totalPagesObs()-1) {
             self.showLoaderObs(true);
             wrappedLoadingFunc(page*pageSize);
@@ -82,7 +82,7 @@ module.exports = function(params) {
     function updateModel(response) {
         // If you're not a researcher, it can happen this gets called without a response.
         if (response) {
-            var rp = response.requestParams;
+            let rp = response.requestParams;
             self.offsetByObs(rp.offsetBy);
             self.pageSizeObs(rp.pageSize);
             self.totalRecordsObs(response.total);
@@ -96,12 +96,12 @@ module.exports = function(params) {
     }
     
     function wrappedLoadingFunc(offsetBy, vm, event) {
-        var emailFilter = self.emailFilterObs();
-        var phoneFilter = self.phoneFilterObs();
-        var startTime = makeDate(self.startTimeObs());
-        var endTime = null;
+        let emailFilter = self.emailFilterObs();
+        let phoneFilter = self.phoneFilterObs();
+        let startTime = makeDate(self.startTimeObs());
+        let endTime = null;
         if (self.endTimeObs()) {
-            var date = new Date(self.endTimeObs());
+            let date = new Date(self.endTimeObs());
             date.setDate(date.getDate()+1);
             endTime = makeDate(date);
         }

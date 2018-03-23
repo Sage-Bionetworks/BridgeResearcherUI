@@ -31,7 +31,7 @@ function newGroup() {
 }
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     self.labelObs = params.labelObs;
     self.strategyObs = params.strategyObs;
@@ -40,7 +40,7 @@ module.exports = function(params) {
     self.selectedElementObs = ko.observable(0);
     
     params.strategyObs.callback = function () {
-        var strategy = params.strategyObs();
+        let strategy = params.strategyObs();
         strategy.scheduleCriteria = self.scheduleCriteriaObs().map(observablesToGroup);
         return strategy;
     };
@@ -54,7 +54,7 @@ module.exports = function(params) {
         }
     });    
 
-    var scrollTo = utils.makeScrollTo(".schedulegroup-fieldset");
+    let scrollTo = utils.makeScrollTo(".schedulegroup-fieldset");
     self.fadeUp = utils.fadeUp();
 
     self.addCriteria = function(vm, event) {
@@ -64,7 +64,7 @@ module.exports = function(params) {
     self.removeCriteria = utils.animatedDeleter(scrollTo, self.scheduleCriteriaObs);
 
     self.selectCriteria = function(group) {
-        var index = self.scheduleCriteriaObs.indexOf(group);
+        let index = self.scheduleCriteriaObs.indexOf(group);
         scrollTo(index);
     };
 };

@@ -7,10 +7,10 @@ function joiner(value) {
     return (value && value.length) ? value.join(", ") : "<none>";
 }
 function stringer(value) {
-    var array = [];
+    let array = [];
     if (value) {
         delete value.type;
-        for (var prop in value) {
+        for (let prop in value) {
             array.push(prop + " = " + value[prop]);
         }
     }
@@ -24,9 +24,9 @@ function noner(value) {
 }
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .obs('isNew', false)
         .obs('userId', params.userId)
         .obs('name', '')

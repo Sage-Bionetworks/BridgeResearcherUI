@@ -3,7 +3,7 @@ import root from '../../root';
 import utils from '../../utils';
 
 module.exports = function(params /*userId, vm, closeMethod, subpopGuid */) {
-    var self = this;
+    let self = this;
 
     self.reasonObs = ko.observable();
     self.cancel = root.closeDialog;

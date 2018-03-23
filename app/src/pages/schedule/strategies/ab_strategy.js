@@ -26,13 +26,13 @@ function observablesToGroup(group) {
 }
 
 function newGroup() {
-    var group = {percentage:0, schedule:scheduleUtils.newSchedule()};
+    let group = {percentage:0, schedule:scheduleUtils.newSchedule()};
     groupToObservables(group);
     return group;
 }
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     self.labelObs = params.labelObs;
     self.scheduleGroupsObs = ko.observableArray([]);
@@ -47,12 +47,12 @@ module.exports = function(params) {
     });
    
     params.strategyObs.callback = function () {
-        var strategy = params.strategyObs();
+        let strategy = params.strategyObs();
         strategy.scheduleGroups = self.scheduleGroupsObs().map(observablesToGroup);
         return strategy;
     };
 
-    var scrollTo = utils.makeScrollTo(".schedulegroup-fieldset");
+    let scrollTo = utils.makeScrollTo(".schedulegroup-fieldset");
     self.fadeUp = utils.fadeUp();
 
     self.addGroup = function(vm, event) {
@@ -61,7 +61,7 @@ module.exports = function(params) {
     };
     self.removeGroup = utils.animatedDeleter(scrollTo, self.scheduleGroupsObs);
     self.selectGroup = function(group) {
-        var index = self.scheduleGroupsObs.indexOf(group);
+        let index = self.scheduleGroupsObs.indexOf(group);
         scrollTo(index);
     };
 };

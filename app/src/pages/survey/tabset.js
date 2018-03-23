@@ -8,7 +8,7 @@ const POSTFIXES = {
 };
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     self.formatDateTime = fn.formatDateTime;
     self.guidObs = params.viewModel.guidObs;
@@ -17,10 +17,10 @@ module.exports = function(params) {
 
     self.computeds = [];
     self.linkMaker = function(tabName) {
-        var c = ko.computed(function() {
-            var url = '#/surveys/'+self.guidObs();
+        let c = ko.computed(function() {
+            let url = '#/surveys/'+self.guidObs();
             if (self.createdOnObs()) {
-                var createdOn = self.createdOnObs();
+                let createdOn = self.createdOnObs();
                 if (typeof createdOn === "string") {
                     createdOn = new Date(createdOn);
                 }

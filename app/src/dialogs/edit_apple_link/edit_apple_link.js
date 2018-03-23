@@ -5,18 +5,18 @@ import ko from 'knockout';
 import utils from '../../utils';
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
     self.link = {};
     self.studyPrefix = '/'+params.study.identifier+'/';
     self.closeDialog = root.closeDialog;
 
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .bind('addField')
         .bind('appId')
         .bind('paths[]', [self.studyPrefix, self.studyPrefix+'*']);
 
     self.add = function() {
-        var value = self.addFieldObs();
+        let value = self.addFieldObs();
         if (value.indexOf(self.studyPrefix) === -1) {
             value = self.studyPrefix + value;
         }
@@ -36,7 +36,7 @@ module.exports = function(params) {
     };
 
     self.save = function() {
-        var error = new BridgeError();
+        let error = new BridgeError();
         if (!self.appIdObs()) {
             error.addError("appId", "is required");
         }

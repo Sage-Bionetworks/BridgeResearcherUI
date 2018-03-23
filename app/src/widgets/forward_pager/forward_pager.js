@@ -6,12 +6,12 @@ module.exports = function(params) {
     console.assert(params.vm.loadingFunc, "loadingFunc not supplied");
     console.assert(params.vm.callback, "callback not supplied");
 
-    var self = this;
-    var loadingFunc = params.vm.loadingFunc;
-    var pendingRequest = false;
+    let self = this;
+    let loadingFunc = params.vm.loadingFunc;
+    let pendingRequest = false;
 
-    var nextOffset = null;
-    var history = [];
+    let nextOffset = null;
+    let history = [];
 
     new Binder(self)
         .obs('showLoader', false)
@@ -50,7 +50,7 @@ module.exports = function(params) {
     function wrappedLoadingFunc(offsetKey) {
         self.showLoaderObs(true);
         pendingRequest = true;
-        var args = {offsetKey: offsetKey};
+        let args = {offsetKey: offsetKey};
 
         loadingFunc(args).then(function(response) {
             if (response) {

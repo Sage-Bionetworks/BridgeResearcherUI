@@ -6,7 +6,7 @@ import Promise from 'bluebird';
 import scheduleUtils from '../schedule/schedule_utils';
 import utils from '../../utils';
 
-var failureHandler = utils.failureHandler({
+const failureHandler = utils.failureHandler({
     redirectTo: "scheduleplans",
     redirectMsg: "Schedule plan not found."
 });
@@ -17,11 +17,11 @@ var failureHandler = utils.failureHandler({
  * @param params
  */
 module.exports = function(params) {
-    var self = this;
+    let self = this;
     
     // The callback function will be called when saving the schedule plan; the strategy 
     // implementation must implement this callback to return a strategy object.
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .bind('strategy', null, null, Binder.callObsCallback)
         .bind('label', '')
         .obs('schedulePlanType', (params.guid==="new") ? 'SimpleScheduleStrategy' : 'empty');
@@ -33,7 +33,7 @@ module.exports = function(params) {
 
     self.schedulePlanTypeObs.subscribe(function(newType) {
         if (self.strategyObs.callback()) {
-            var newStrategy = scheduleUtils.newStrategy(newType, self.strategyObs.callback());
+            let newStrategy = scheduleUtils.newStrategy(newType, self.strategyObs.callback());
             // In theory this should be happening after the page has re-rendered, but this is
             // not true. Without this timeout, the criteria or group arrays won't be rendered.
             setTimeout(function() {
@@ -54,7 +54,7 @@ module.exports = function(params) {
             .catch(failureHandler);
     };
     self.updateType = function(vm, event) {
-        var spType = event.target.getAttribute('data-type');
+        let spType = event.target.getAttribute('data-type');
         if (spType) {
             self.schedulePlanTypeObs(event.target.getAttribute('data-type'));
         }
@@ -82,7 +82,7 @@ module.exports = function(params) {
     }
     // These are not actually filled out on the server.
     function addCompoundActivitiesToPlan(plan) {
-        var activities = optionsService.getActivities(plan).filter(isCompoundActivity);
+        let activities = optionsService.getActivities(plan).filter(isCompoundActivity);
         return Promise.map(activities, resolveActivity).then(function() {
             return plan;
         });

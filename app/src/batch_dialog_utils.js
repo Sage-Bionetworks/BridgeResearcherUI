@@ -1,7 +1,7 @@
 import {ServerService} from './services/server_service';
 import Binder from './binder';
 
-var serverService = new ServerService(false);
+const serverService = new ServerService(false);
 
 export default {
     initBatchDialog: function(vm) {
@@ -63,7 +63,7 @@ export default {
             vm.steps = steps;
             vm.valueObs(progressIndex);
             vm.maxObs(steps);
-            var perc = ((progressIndex/steps)*100).toFixed(0);
+            let perc = ((progressIndex/steps)*100).toFixed(0);
             if (perc > 100) { perc = 100; }
             vm.percentageObs(perc+"%");
         };

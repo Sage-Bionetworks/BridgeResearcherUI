@@ -11,7 +11,7 @@ function deleteItem(schema) {
     return serverService.deleteSchema(schema.schemaId);
 }
 module.exports = function() {
-    var self = this;
+    let self = this;
 
     schemaUtils.initSchemasVM(self);
     fn.copyProps(self, root, 'isAdmin', 'isDeveloper');
@@ -30,7 +30,7 @@ module.exports = function() {
         load().then(utils.successHandler(self, null, "Schemas copied"));
     }
     self.copySchemasDialog = function(vm, event) {
-        var copyables = self.itemsObs().filter(tables.hasBeenChecked);
+        let copyables = self.itemsObs().filter(tables.hasBeenChecked);
         root.openDialog('copy_schemas', {
             copyables: copyables, 
             closeCopySchemasDialog: closeCopySchemasDialog

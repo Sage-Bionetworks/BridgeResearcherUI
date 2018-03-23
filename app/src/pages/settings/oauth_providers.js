@@ -9,7 +9,7 @@ import alert from '../../widgets/alerts';
 
 function modelToObs(map, context) {
     return Object.keys(map || {}).map(function(vendorId) {
-        var obj = map[vendorId];
+        let obj = map[vendorId];
         obj.vendorId = vendorId;
         return obj;
     });
@@ -27,9 +27,9 @@ function obsToModel(array) {
 }
 
 module.exports = function() {
-    var self = this;
+    let self = this;
 
-    var binder = new Binder(self).bind('oAuthProviders[]', [], modelToObs, obsToModel);
+    let binder = new Binder(self).bind('oAuthProviders[]', [], modelToObs, obsToModel);
 
     self.save = function(vm, event) {
         self.study = binder.persist(self.study);
@@ -49,7 +49,7 @@ module.exports = function() {
             study: self.study, oAuthProvidersObs: self.oAuthProvidersObs});
     };
     self.editProvider = function(provider) {
-        var index = self.oAuthProvidersObs().indexOf(provider);
+        let index = self.oAuthProvidersObs().indexOf(provider);
         root.openDialog('oauth_provider', { index: index,
             study: self.study, oAuthProvidersObs: self.oAuthProvidersObs});
     };

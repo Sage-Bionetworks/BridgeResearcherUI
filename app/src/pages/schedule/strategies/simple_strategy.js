@@ -3,14 +3,14 @@ import ko from 'knockout';
 import root from '../../../root';
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     self.labelObs = params.labelObs;
     self.scheduleObs = ko.observable();
     self.scheduleObs.callback = fn.identity;
 
     params.strategyObs.callback = function () {
-        var strategy = params.strategyObs();
+        let strategy = params.strategyObs();
         strategy.schedule = self.scheduleObs.callback();
         return strategy;
     };

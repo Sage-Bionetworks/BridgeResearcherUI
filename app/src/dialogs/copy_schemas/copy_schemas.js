@@ -7,10 +7,10 @@ import root from '../../root';
 import utils from '../../utils';
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
-    var copyables = params.copyables;
-    var specs = [];
+    let copyables = params.copyables;
+    let specs = [];
 
     new Binder(self)
         .obs('index', 0)
@@ -20,8 +20,8 @@ module.exports = function(params) {
     self.closeDialog = root.closeDialog;
 
     function updateObserversFromCopyables() {
-        var index = self.indexObs();
-        var name = /\(Copy\)$/.test(copyables[index].name) ?
+        let index = self.indexObs();
+        let name = /\(Copy\)$/.test(copyables[index].name) ?
             copyables[index].name :
             copyables[index].name + " (Copy)";
         self.nameObs(name);
@@ -29,7 +29,7 @@ module.exports = function(params) {
         self.revisionObs(1);
     }
     function updateSpecsFromObservers() {
-        var index = self.indexObs();
+        let index = self.indexObs();
         specs[index] = Object.assign({}, copyables[index], {
             name: self.nameObs(),
             schemaId: self.schemaIdObs(),
@@ -37,7 +37,7 @@ module.exports = function(params) {
         });
     }
     function updateObserversFromSpecs() {
-        var index = self.indexObs();
+        let index = self.indexObs();
         self.nameObs(specs[index].name);
         self.schemaIdObs(specs[index].schemaId);
         self.revisionObs(specs[index].revision);

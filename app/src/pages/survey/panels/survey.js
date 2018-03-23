@@ -1,7 +1,7 @@
-var MAX_LENGTH = 65;
+const MAX_LENGTH = 65;
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     self.nameObs = params.viewModel.nameObs;
     self.elementsObs = params.viewModel.elementsObs;

@@ -7,12 +7,12 @@ import root from '../../root';
 import tables from '../../tables';
 import utils from '../../utils';
 
-var failureHandler = utils.failureHandler({
+let failureHandler = utils.failureHandler({
     redirectTo: "participants",
     redirectMsg: "Participant not found"
 });
 
-var session = null;
+let session = null;
 
 serverService.addSessionStartListener(function(sess) {
     session = sess;
@@ -22,7 +22,7 @@ serverService.addSessionEndListener(function() {
 });
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     new Binder(self)
         .obs('userId', params.userId)
@@ -40,7 +40,7 @@ module.exports = function(params) {
     }).catch(failureHandler);
 
     self.resendConsent = function(vm, event) {
-        var subpopGuid = vm.consentURL.split("/subpopulations/")[1].split("/consents/")[0];
+        let subpopGuid = vm.consentURL.split("/subpopulations/")[1].split("/consents/")[0];
         alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
             utils.startHandler(vm, event);
             serverService.resendConsentAgreement(params.userId, subpopGuid)
@@ -53,7 +53,7 @@ module.exports = function(params) {
             userId: params.userId, vm: self, closeMethod: 'finishWithdrawal'});
     };
     self.finishWithdrawal = function(reasonString) {
-        var reason = (reasonString) ? {"reason": reasonString} : {};
+        let reason = (reasonString) ? {"reason": reasonString} : {};
         serverService.withdrawParticipantFromStudy(params.userId, reason)
             .then(root.closeDialog)
             .then(load)
@@ -65,7 +65,7 @@ module.exports = function(params) {
             userId: params.userId, vm: self, closeMethod: 'finishSubpopWithdrawal', subpopGuid: model.subpopulationGuid});
     };
     self.finishSubpopWithdrawal = function(reasonString, subpopGuid) {
-        var reason = (reasonString) ? {"reason": reasonString} : {};
+        let reason = (reasonString) ? {"reason": reasonString} : {};
         serverService.withdrawParticipantFromSubpopulation(params.userId, subpopGuid, reason)
             .then(root.closeDialog)
             .then(load)
@@ -73,7 +73,7 @@ module.exports = function(params) {
             .catch(failureHandler);
     };
     self.linkToDocument = function($data) {
-        var query = fn.queryString({
+        let query = fn.queryString({
             userId: self.userIdObs(),
             index: $data.subpopulationGuidIndex,
             guid: $data.subpopulationGuid,
@@ -90,7 +90,7 @@ module.exports = function(params) {
         self.itemsObs([]);
         self.recordsMessageObs("<div class='ui tiny active inline loader'></div>");
         serverService.getParticipant(self.userIdObs()).then(function(response) {
-            var histories = response.consentHistories;
+            let histories = response.consentHistories;
             
             return Promise.map(Object.keys(histories), function(guid) {
                 return serverService.getSubpopulation(guid);
@@ -105,7 +105,7 @@ module.exports = function(params) {
                         });
                     }
                     histories[subpop.guid].reverse().map(function(record, i) {
-                        var history = {consented:true, isFirst:(i === 0)};
+                        let history = {consented:true, isFirst:(i === 0)};
                         history.consentGroupName = subpop.name;
                         history.consentURL = '/#/subpopulations/'+subpop.guid+'/consents/'+record.consentCreatedOn;
                         history.subpopulationGuid = subpop.guid;

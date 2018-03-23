@@ -26,9 +26,9 @@ function newAppConfig() {
 }
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .obs('isNew', params.guid === "new")
         .obs('title', 'New App Config')
         .obs('guid')
@@ -43,7 +43,7 @@ module.exports = function(params) {
         .bind('surveyReferences[]', [], Task.surveyListToView, Task.surveyListToTask)
         .bind('schemaReferences[]', [], Task.schemaListToView, Task.schemaListToTask);
 
-    var titleUpdated = fn.handleObsUpdate(self.titleObs, 'label');
+    let titleUpdated = fn.handleObsUpdate(self.titleObs, 'label');
     fn.copyProps(self, fn, 'formatDateTime');
 
     function saveAppConfig() {
@@ -70,10 +70,10 @@ module.exports = function(params) {
     function updateClientData() {
         if (self.clientDataObs()) {
             try {
-                var json = JSON.parse(self.clientDataObs());
+                let json = JSON.parse(self.clientDataObs());
                 self.clientDataObs(jsonFormatter.prettyPrint(json));
             } catch(e) {
-                var error = new BridgeError();
+                let error = new BridgeError();
                 error.addError("clientData", "is not valid JSON");
                 utils.failureHandler({transient:false})(error);
                 return true;
@@ -100,8 +100,8 @@ module.exports = function(params) {
     };
     self.addSchemas = function(schemas) {
         self.schemaReferencesObs([]);
-        for (var i=0; i < schemas.length; i++) {
-            var newSchema = Task.schemaToView(schemas[i]);
+        for (let i=0; i < schemas.length; i++) {
+            let newSchema = Task.schemaToView(schemas[i]);
             this.schemaReferencesObs.push(newSchema);
             Task.loadSchemaRevisions(newSchema);
         }
@@ -109,8 +109,8 @@ module.exports = function(params) {
     };
     self.addSurveys = function(surveys) {
         self.surveyReferencesObs([]);
-        for (var i=0; i < surveys.length; i++) {
-            var newSurvey = Task.surveyToView(surveys[i]);
+        for (let i=0; i < surveys.length; i++) {
+            let newSurvey = Task.surveyToView(surveys[i]);
             self.surveyReferencesObs.push(newSurvey);
             Task.loadSurveyRevisions(newSurvey);
         }

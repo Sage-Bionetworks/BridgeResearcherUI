@@ -8,12 +8,12 @@ import tables from '../../tables';
 import utils from '../../utils';
 import toastr from 'toastr';
 
-var OPTIONS = {offsetBy:null, pageSize: 1, assignmentFilter:false};
+let OPTIONS = {offsetBy:null, pageSize: 1, assignmentFilter:false};
 
 module.exports = function() {
-    var self = this;
+    let self = this;
     
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .obs('items[]', [])
         .obs('total', 0)
         .obs('result', '')
@@ -36,7 +36,7 @@ module.exports = function() {
     }
     function createNewCredentials(identifier) {
         self.resultObs(identifier);
-        var participant = utils.createParticipantForID(self.study.supportEmail, identifier);
+        let participant = utils.createParticipantForID(self.study.supportEmail, identifier);
         return serverService.createParticipant(participant);
     }
     function updatePageWithResult(response) {

@@ -6,14 +6,14 @@ import sharedModuleUtils from '../../shared_module_utils';
 import tables from '../../tables';
 import utils from '../../utils';
 
-var DELETE_MSG = "Are you sure you want to delete this shared module version?";
+const DELETE_MSG = "Are you sure you want to delete this shared module version?";
 
 function deleteItem(item) {
     return serverService.deleteMetadataVersion(item.id, item.version);
 }
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
     self.metadata = {};
 
     tables.prepareTable(self, {
@@ -22,7 +22,7 @@ module.exports = function(params) {
         redirect: "#/shared_modules"
     });
 
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .obs('published')
         .obs('name')
         .obs('isNew')

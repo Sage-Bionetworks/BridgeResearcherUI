@@ -4,9 +4,9 @@ import root from '../../root';
 import utils from '../../utils';
 
 module.exports = function() {
-    var self = this;
+    let self = this;
 
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .obs('minLengths', [2,3,4,5,6,7,8,9,10,11,12,13,14])
         .bind('passwordPolicy');
         

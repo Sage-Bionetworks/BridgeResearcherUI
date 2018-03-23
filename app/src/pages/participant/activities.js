@@ -6,13 +6,13 @@ import scheduleUtils from '../../pages/schedule/schedule_utils';
 import tables from '../../tables';
 import utils from '../../utils';
 
-var failureHandler = utils.failureHandler({
+let failureHandler = utils.failureHandler({
     redirectTo: "participants",
     redirectMsg: "Participant not found"
 });
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     new Binder(self)
         .obs('userId', params.userId)
@@ -32,7 +32,7 @@ module.exports = function(params) {
         return '#/participants/'+userId+'/activities/'+guid;
     };
     function processActivities(response) {
-        var array = [];
+        let array = [];
         response.items.forEach(function(plan) {
             scheduleUtils.getActivitiesWithStrategyInfo(plan).forEach(function(spec) {
                 array.push(spec);

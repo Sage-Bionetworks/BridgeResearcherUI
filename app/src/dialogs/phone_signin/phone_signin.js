@@ -7,13 +7,13 @@ import root from '../../root';
 import storeService from '../../services/store_service';
 import utils from '../../utils';
 
-var SUCCESS_MSG = "An SMS message has been sent to that phone number; enter the code to sign in.";
+const SUCCESS_MSG = "An SMS message has been sent to that phone number; enter the code to sign in.";
 const STUDY_KEY = 'studyKey';
 const ENVIRONMENT = 'environment';
 
 // There will be stale data in the UI if we don't reload when changing studies or environments.
 function makeReloader(studyKey, environment) {
-    var requiresReload = (storeService.get(STUDY_KEY) !== studyKey || 
+    let requiresReload = (storeService.get(STUDY_KEY) !== studyKey || 
                           storeService.get(ENVIRONMENT) !== environment);
     return (requiresReload) ?
         function(response) {
@@ -22,10 +22,10 @@ function makeReloader(studyKey, environment) {
 }
 
 module.exports = function() {
-    var self = this;
-    var isLocked = fn.isNotBlank(root.queryParams.study);
+    let self = this;
+    let isLocked = fn.isNotBlank(root.queryParams.study);
 
-    var studyKey, env;
+    let studyKey, env;
     if (isLocked) {
         studyKey = root.queryParams.study;
         env = 'production';
@@ -72,9 +72,9 @@ module.exports = function() {
     }
 
     self.sendPhoneSignInRequest = function(vm, event) {
-        var env = self.environmentObs();
-        var studyName = utils.findStudyName(self.studyOptionsObs(), studyKey);
-        var model = {
+        let env = self.environmentObs();
+        let studyName = utils.findStudyName(self.studyOptionsObs(), studyKey);
+        let model = {
             phone: {number: self.phoneObs(), regionCode: self.phoneRegionObs()}, 
             study: self.studyObs(),
             env: env,
@@ -82,7 +82,7 @@ module.exports = function() {
             studyKey: studyKey
         };
         
-        var error = new BridgeError();
+        let error = new BridgeError();
         if (!model.phone.number) {
             error.addError("phone", "is required");
         }

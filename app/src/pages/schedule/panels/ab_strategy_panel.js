@@ -1,6 +1,6 @@
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     self.labelObs = params.viewModel.labelObs;
     self.scheduleGroupsObs = params.viewModel.scheduleGroupsObs;
