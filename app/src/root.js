@@ -33,8 +33,7 @@ let RootViewModel = function() {
         .obs('mainParams', {})
         .obs('editorPanel', 'none')
         .obs('editorParams', {})
-        .obs('codesEnumerated', false)
-        .obs('codeRequired', false)
+        .obs('externalIdValidationEnabled', false)
         .obs('isEditorTabVisible', false)
         .obs('notificationsEnabled', false)
         .obs('sidePanel', 'navigation')
@@ -105,25 +104,10 @@ let RootViewModel = function() {
         self.environmentObs(session.environment);
         self.studyIdentifierObs(session.studyId);
         self.rolesObs(session.roles);
-        // This interferes with reauthentication behavior when we use it. Not sure if it
-        // is required by any code path at this point to properly close the dialog.
-        // self.closeDialog();
+
         serverService.getStudy().then(function(study) {
-            // Until we can support on server, enumerating the codes is the same as requiring the code at sign up.
-            // codesEumerated = externalIdValidationEnabled
-            // codeRequired = externalIdRequiredOnSignUp
-            let defaults = {
-                codesEnumerated: study.externalIdValidationEnabled,
-                codeRequired: study.externalIdRequiredOnSignUp,
-                notificationsEnabled: Object.keys(study.pushNotificationARNs).length > 0
-            };
-            let studyConfig = config.studies[study.identifier] || {};
-            let opts = Object.assign({}, defaults, studyConfig);
-            
-            self.codesEnumeratedObs(opts.codesEnumerated);
-            self.codeRequiredObs(opts.codeRequired);
-            self.notificationsEnabledObs(opts.notificationsEnabled);
-            console.debug("[config]", Object.keys(opts).map(function(key) { return key + "=" + opts[key]; }).join(', '));
+            self.externalIdValidationEnabledObs(study.externalIdValidationEnabled);
+            self.notificationsEnabledObs(Object.keys(study.pushNotificationARNs).length > 0);
         });
     });
     serverService.addSessionEndListener(function(session) {
@@ -131,8 +115,6 @@ let RootViewModel = function() {
         self.environmentObs("");
         self.studyIdentifierObs("");
         self.rolesObs([]);
-        self.codesEnumeratedObs(false);
-        self.codeRequiredObs(false);
         self.openDialog('sign_in_dialog', {closeable:false});
     });
     setTimeout(checkVerifyStatus, 1000);

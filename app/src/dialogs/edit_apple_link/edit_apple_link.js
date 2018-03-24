@@ -17,12 +17,12 @@ module.exports = function(params) {
 
     self.add = function() {
         let value = self.addFieldObs();
-        if (value.indexOf(self.studyPrefix) === -1) {
+        if (value && value.indexOf(self.studyPrefix) === -1) {
             value = self.studyPrefix + value;
+            value = value.replace("//","/");
+            self.pathsObs.push(value);
+            self.addFieldObs("");
         }
-        value = value.replace("//","/");
-        self.pathsObs.push(value);
-        self.addFieldObs("");
     };
     self.remove = function(path) {
         self.pathsObs.remove(path);

@@ -70,7 +70,7 @@ var handlers = {
         });        
     },
     'multi-search-select': function($element, allBindings) {
-        var collectionObs = allBindings().updateSelect;
+        let collectionObs = allBindings().updateSelect;
 
         $element.addClass("ui selection dropdown").dropdown({
             onAdd: function(value, text, $choice) {
@@ -82,9 +82,14 @@ var handlers = {
                 collectionObs.remove(value);
             }
         });
+        // may not need this
         $element.dropdown("set selected", collectionObs());
         collectionObs.subscribe(function(newValue) {
-            $element.dropdown("set selected", newValue);
+            // Annoyingly, this is needed to initialize the criteria component correctly
+            // in the criteria-based schedule editor.
+            setTimeout(() => {
+                $element.dropdown("set selected", newValue);
+            },1);
         });
     }
 };

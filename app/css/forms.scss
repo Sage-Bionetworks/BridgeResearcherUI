@@ -102,6 +102,10 @@ label[for] {
     width: 20rem !important;
 }
 
+form.disabled  .disable-pane {
+    opacity: .6;
+}
+
 .error .editor.textarea {
     border-color: #E0B4B4;
     background-color: rgb(255, 246, 246);

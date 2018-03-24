@@ -21,7 +21,6 @@ module.exports = function(params) {
     fn.copyProps(self, scheduleUtils, 'formatCompoundActivity');
     fn.copyProps(self, root, 'isAdmin');
 
-    // TODO: Exact same code is duplicated in SharedModuleUtils, this needs to be consolidated.
     scheduleUtils.loadOptions()
         .then(serverService.getAppConfigs.bind(serverService))
         .then(fn.handleSort('items','label'))

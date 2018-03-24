@@ -22,8 +22,8 @@ function partialRelay(criteriaObs) {
 module.exports = function(params) {
     let self = this;
 
-    self.id = params.id;
-    self.criteriaObs = params.criteriaObs;
+    fn.copyProps(self, params, 'id', 'criteriaObs');
+
     let binder = new Binder(self)
         .bind('language')
         .bind('allOfGroups[]')

@@ -5,6 +5,8 @@ import toastr from 'toastr';
 
 const ENUM_ERROR = ["Enumeration values can only contain alphanumeric characters (they can also have spaces, dashes, underscores and periods in the middle, but not more than one of these special characters in a row)."];
 
+const errorComponentStack = [];
+
 function truncateErrorFieldKey(errorString) {
     let parts = errorString.split(" ");
     let keyParts = parts[0].split(".");
@@ -40,16 +42,13 @@ function errorFieldKeyToId(errorKey) {
     return errorKey.replace(/[\s{\[\]]/g,"").replace(/\./g,"_").replace(/}/g,'');
 }
 
-let errorComponentStack = [];
-
 function isNotSelf(self) {
     return errorComponentStack[errorComponentStack.length-1] !== self;
 }
 
 module.exports = function() {
-    errorComponentStack.push(this);
-    //console.log("creating errors component", errorComponentStack);
     let self = this;
+    errorComponentStack.push(this);
 
     let errorQueue = [];
     let errorLabelQueue = [];
@@ -131,5 +130,4 @@ module.exports = function() {
 module.exports.prototype.dispose = function() {
     errorComponentStack.pop(this);
     this.displayObs.dispose();
-    //console.log("disposing errors component", errorComponentStack);
 };

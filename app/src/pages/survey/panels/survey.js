@@ -1,12 +1,13 @@
+import fn from '../../../functions';
+
 const MAX_LENGTH = 65;
 
 module.exports = function(params) {
     let self = this;
 
-    self.nameObs = params.viewModel.nameObs;
-    self.elementsObs = params.viewModel.elementsObs;
-    self.selectedElementObs = params.viewModel.selectedElementObs;
-    self.selectElement = params.viewModel.selectElement;
+    fn.copyProps(self, params.viewModel, 
+        'nameObs', 'elementsObs', 'selectedElementObs', 'selectElement');
+
     self.removeElement = function(data, event) {
         event.stopPropagation();
         params.viewModel.deleteElement(data, event);

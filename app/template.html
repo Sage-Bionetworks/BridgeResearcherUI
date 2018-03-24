@@ -83,7 +83,8 @@
                         <a href="#/participants" class="item" data-ref="participants" data-bind="visible: isResearcher()">
                             Participants
                         </a>
-                        <a href="#/external_ids" class="item" data-ref="extids" data-bind="visible: codesEnumeratedObs">
+                        <a href="#/external_ids" class="item" data-ref="extids" 
+                            data-bind="visible: externalIdValidationEnabledObs">
                             External IDs
                         </a>
                         <a href="#/reports" class="item" data-ref="reports" 

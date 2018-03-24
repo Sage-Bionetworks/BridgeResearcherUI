@@ -60,7 +60,7 @@ module.exports = function(params) {
         }
     };
 
-    // binder doesn't know how to update an observable from a completely different, nested property...
+    // TODO: binder doesn't know how to update an observable from a completely different, nested property...
     function updateScheduleTypeObs(plan) {
         self.schedulePlanTypeObs(plan.strategy.type);
         return plan;
