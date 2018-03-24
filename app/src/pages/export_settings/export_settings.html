@@ -16,79 +16,77 @@
     <div class="ui grid">
         <div class="ten wide column">
             <errors></errors>
-            <form class="ui form">
-                <div class="fields">
-                    <div class="six wide field">
-                        <label>Synapse Project ID</label>
-                        <input type="text" name="synapseProjectId" 
-                            data-bind="textInput: synapseProjectIdObs, hasFocus: true, readonly: isResearcherOnly"/>
-                    </div>
-                    <div class="eight wide field">
-                        <label>&#160;</label>
-                        <div style="margin-top:1rem">
-                            <a target="_blank" rel="noopener" 
-                                data-bind="visible: projectLinkObs, href: projectLinkObs">View Project on Synapse</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="fields">
-                    <div class="six wide field">
-                        <label>Synapse Access Team ID</label>
-                        <input type="text" name="synapseDataAccessTeamId" 
-                            data-bind="textInput: synapseDataAccessTeamIdObs, readonly: isResearcherOnly"/>
-                    </div>
-                    <div class="eight wide field">
-                        <label>&#160;</label>
-                        <div style="margin-top:1rem">
-                            <a target="_blank" rel="noopener" 
-                                data-bind="visible: teamLinkObs, href: teamLinkObs">View Team on Synapse</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="grouped fields">
-                    <label>Upload Validation Strictness</label>
-                    <div class="field">
-                        <div class="ui radio checkbox">
-                            <input id="uvs3" type="radio" name="uploadValidationStrictness" class="hidden" 
-                                value="strict" data-bind="checked: uploadValidationStrictnessObs">
-                            <label for="uvs3">Strict</label>
-                            <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
-                                Return an error response and do not complete upload if validation fails. 
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="ui radio checkbox">
-                            <input id="uvs2" type="radio" name="uploadValidationStrictness" class="hidden" 
-                                value="report" data-bind="checked: uploadValidationStrictnessObs">
-                            <label for="uvs2">Report</label>
-                            <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
-                                Allow the upload, but capture an error message and export it to Synapse with your data.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="ui radio checkbox">
-                            <input id="uvs1" type="radio" name="uploadValidationStrictness" class="hidden" 
-                                value="warning" data-bind="checked: uploadValidationStrictnessObs">
-                            <label for="uvs1">None</label>
-                            <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
-                                No error reporting.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="field" data-bind="visible: isDeveloper">
-                    <label>Users Custom Export Schedule</label>
-                    <div style="margin-bottom: 5px">
-                        <ui-checkbox params="checkedObs: usesCustomExportScheduleObs">
-                            This study has a custom export schedule set up for it
-                        </ui-checkbox>
-                    </div>
+            <form class="ui form" data-bind="css: {disabled: disableExportObs}">
+                <div class="field" style="margin: 1rem auto 2rem" data-bind="visible: isDeveloper">
                     <div>
                         <ui-checkbox params="checkedObs: disableExportObs">
-                            Disable Export
+                            Disable data export
                         </ui-checkbox>
+                    </div>
+                </div>
+                <div class="disable-pane">
+                    <div class="fields">
+                        <div class="six wide field">
+                            <label>Synapse Project ID</label>
+                            <input type="text" name="synapseProjectId" 
+                                data-bind="textInput: synapseProjectIdObs, hasFocus: true, 
+                                    attr: {readonly: isResearcherOnly() || disableExportObs()}"/>
+                        </div>
+                        <div class="eight wide field">
+                            <label>&#160;</label>
+                            <div style="margin-top:1rem">
+                                <a target="_blank" rel="noopener" 
+                                    data-bind="visible: projectLinkObs, href: projectLinkObs">View Project on Synapse</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fields">
+                        <div class="six wide field">
+                            <label>Synapse Access Team ID</label>
+                            <input type="text" name="synapseDataAccessTeamId" 
+                                data-bind="textInput: synapseDataAccessTeamIdObs, 
+                                attr: {readonly: isResearcherOnly() || disableExportObs()}"/>
+                        </div>
+                        <div class="eight wide field">
+                            <label>&#160;</label>
+                            <div style="margin-top:1rem">
+                                <a target="_blank" rel="noopener" 
+                                    data-bind="visible: teamLinkObs, href: teamLinkObs">View Team on Synapse</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grouped fields">
+                        <label>Upload Validation Strictness</label>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input id="uvs3" type="radio" name="uploadValidationStrictness" class="hidden" 
+                                    value="strict" data-bind="checked: uploadValidationStrictnessObs, attr:{disabled: disableExportObs}">
+                                <label for="uvs3">Strict</label>
+                                <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
+                                    Return an error response and do not complete upload if validation fails. 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input id="uvs2" type="radio" name="uploadValidationStrictness" class="hidden" 
+                                    value="report" data-bind="checked: uploadValidationStrictnessObs, attr:{disabled: disableExportObs}">
+                                <label for="uvs2">Report</label>
+                                <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
+                                    Allow the upload, but capture an error message and export it to Synapse with your data.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input id="uvs1" type="radio" name="uploadValidationStrictness" class="hidden" 
+                                    value="warning" data-bind="checked: uploadValidationStrictnessObs, attr:{disabled: disableExportObs}">
+                                <label for="uvs1">None</label>
+                                <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
+                                    No error reporting.
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>

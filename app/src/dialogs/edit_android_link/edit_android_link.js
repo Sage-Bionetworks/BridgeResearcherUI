@@ -17,8 +17,10 @@ module.exports = function(params) {
     
     self.add = function() {
         let value = self.addFieldObs();
-        self.fingerprintsObs.push(value);
-        self.addFieldObs("");
+        if (value) {
+            self.fingerprintsObs.push(value);
+            self.addFieldObs("");
+        }
     };
     self.remove = function(path) {
         self.fingerprintsObs.remove(path);

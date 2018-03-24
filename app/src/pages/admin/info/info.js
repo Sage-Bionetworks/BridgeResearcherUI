@@ -20,6 +20,7 @@ module.exports = function() {
         .bind('externalIdRequiredOnSignup')
         .bind('externalIdValidationEnabled')
         .bind('healthCodeExportEnabled')
+        .bind('usesCustomExportSchedule')
         .bind('iosArn', null, ios.fromObject, ios.toObject)
         .bind('strictUploadValidationEnabled')
         .bind('studyIdExcludedInExport');

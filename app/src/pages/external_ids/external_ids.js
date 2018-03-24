@@ -18,6 +18,7 @@ module.exports = function() {
         .obs('total', 0)
         .obs('result', '')
         .obs('searchLoading', false)
+        .obs('externalIdValidationEnabled', false)
         .obs('idFilter')
         .obs('showResults', false);
 
@@ -25,7 +26,7 @@ module.exports = function() {
     self.vm = self;
     self.callback = fn.identity;
 
-    fn.copyProps(self, root, 'codesEnumeratedObs', 'isDeveloper', 'isResearcher');
+    fn.copyProps(self, root, 'isDeveloper', 'isResearcher');
     tables.prepareTable(self, {name: 'external ID'});
 
     function extractId(response) {

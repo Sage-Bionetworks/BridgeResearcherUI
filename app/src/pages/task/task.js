@@ -6,6 +6,11 @@ import root from '../../root';
 import sharedModuleUtils from '../../shared_module_utils';
 import utils from '../../utils';
 
+const taskFailure = utils.failureHandler({
+    redirectTo: "tasks",
+    redirectMsg: "Task not found."
+});
+
 /**
  * This is written as an ES6 class, rather than the functional approach taken elsewhere. 
  * I feel "meh" about the difference, but I'll leave it here for the moment. You start 
@@ -96,10 +101,7 @@ module.exports = class Task {
             return serverService.getTaskDefinition(this.taskId)
                 .then(this.binder.assign('task'))
                 .then(this.binder.update())
-                .catch(utils.failureHandler({
-                    redirectTo: "tasks",
-                    redirectMsg: "Task not found."
-                }));
+                .catch(taskFailure);
         }
     }    
     load() {

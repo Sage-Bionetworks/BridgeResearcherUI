@@ -10,10 +10,8 @@ const POSTFIXES = {
 module.exports = function(params) {
     let self = this;
 
-    self.formatDateTime = fn.formatDateTime;
-    self.guidObs = params.viewModel.guidObs;
-    self.createdOnObs = params.viewModel.createdOnObs;
-    self.publishedObs = params.viewModel.publishedObs;
+    fn.copyProps(self, fn, 'formatDateTime');
+    fn.copyProps(self, params.viewModel, 'guidObs', 'createdOnObs', 'publishedObs');
 
     self.computeds = [];
     self.linkMaker = function(tabName) {

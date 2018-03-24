@@ -120,7 +120,7 @@ router.on('/participants/:userId', routeTo('participant_general', 'participants'
 router.on('/participants', routeTo('participants', 'participants'));
 router.on('/external_ids', routeTo('external_ids', 'extids'));
 router.on('/tasks/:taskId', routeTo('task', 'tasks', TASKID));
-router.on('/tasks', routeTo('tasks'));
+router.on('/tasks', routeTo('tasks', 'tasks'));
 router.on('/topics/:guid', routeTo('topic', 'notifications', GUID));
 router.on('/topics', routeTo('topics', 'notifications'));
 router.on('/admin/info', routeTo('admin_info', 'info'));

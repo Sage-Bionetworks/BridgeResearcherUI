@@ -8,6 +8,9 @@ import utils from '../../utils';
 module.exports = function(params) {
     let self = this;
 
+    fn.copyProps(self, root, 'isDeveloper', 'isResearcher', 'notificationsEnabledObs');
+    self.formatDate = fn.formatDateTime;
+
     new Binder(self)
         .obs('isNew', false)
         .obs('name', '')
@@ -25,11 +28,6 @@ module.exports = function(params) {
     }).catch(utils.failureHandler());
 
     tables.prepareTable(self, {name:'notification registration'});
-
-    self.isDeveloper = root.isDeveloper;
-    self.isResearcher = root.isResearcher;
-    self.notificationsEnabledObs = root.notificationsEnabledObs;
-    self.formatDate = fn.formatDateTime;
 
     self.sendNotification = function() {
         root.openDialog('send_notification', {
