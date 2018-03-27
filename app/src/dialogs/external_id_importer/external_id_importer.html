@@ -28,11 +28,7 @@
                 </div>
                 <div class="field" data-bind="css: {disabled: isDisabledObs}">
                     <label>Add these data groups to the created account</label>
-                    <select multiple data-bind="semantic: 'multi-search-select', 
-                        updateSelect: dataGroupsObs, foreach: allDataGroupsObs">
-                        <option data-bind="text: $data, 
-                            selected: $component.dataGroupsObs().indexOf($data) > -1"></option>
-                    </select>
+                    <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
                 </div>
             </div>
         </form>

@@ -1,0 +1,21 @@
+<div class="te container">
+    <div>
+        <div class="ui dropdown" data-bind="semantic: 'dropdown-button', 
+            css: {'disabled': allObs().length === 0}">
+            <span>Add</span>
+            <div class="menu" data-bind="foreach: allObs">
+                <span class="item" data-bind="click: $parent.addTag, text: $data"></span>
+            </div>
+        </div>
+    </div>
+    <div class="empty" data-bind="visible: selectedObs().length === 0">
+        <i data-bind="text: noneSelected"></i>
+    </div>
+    <div class="tags" data-bind="foreach: selectedObs, visible: selectedObs().length > 0">
+        <span class="small ui label" data-bind="click: $parent.removeTag">
+            <!-- ko text: $data --><!-- /ko -->
+            <i class="red delete icon"></i>
+        </span>
+    </div>
+</div>
+
