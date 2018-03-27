@@ -5,7 +5,6 @@ module.exports = function(params) {
 
     self.selectedObs = params.selectedObs;
     self.allObs = ko.observableArray(params.allObs().slice());
-    self.readonly = false;
     self.noneSelected = "No " + params.type + " selected";
     self.dropdown = null;
 
