@@ -114,3 +114,29 @@ form.disabled  .disable-pane {
 .dropdown:focus {
     border-color: #85B7D9!important;
 }
+
+/* Tag Editor 2.0 */
+div.te.container {
+    display:flex;
+    align-items: baseline;
+    .empty {
+        padding: .62rem 0;
+    }
+    .tags {
+        border: 1px solid rgba(34,36,38,.15); 
+        border-radius: .29rem;
+        padding: .45rem;
+        padding-bottom: .2rem;
+    }
+    .label {
+        margin: 0;
+        margin-bottom: .2rem; 
+        cursor:pointer;
+    }
+    .dropdown {
+        margin-right: .75rem;
+    }
+    .dropdown > div > span.item {
+        font-weight: normal!important;
+    }    
+}

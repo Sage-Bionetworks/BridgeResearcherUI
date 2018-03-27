@@ -15,8 +15,29 @@ const OPTIONS = [
     {value: 'sponsors_and_partners', label:'Sponsors And Partners'},
     {value: 'all_qualified_researchers', label:'All Qualified Researchers'}
 ];
-const ROLES = ["Developer", "Researcher", "Administrator", "Worker"];
 const NEW_PARTICIPANT = {id:"new",attributes:{},phone:{number: '', regionCode: 'US'}};
+
+function selectRoles(session) {
+    let set = new Set();
+    for (let i=0; i < session.roles.length; i++) {
+        var role = session.roles[i];
+        switch(role) {
+            case 'admin':
+                set.add('Worker');
+                set.add('Administrator');
+                /* falls through */
+            case 'researcher':
+                set.add("Researcher");
+                /* falls through */
+            case 'developer':
+                set.add("Developer");
+                /* falls through */
+        }
+    }
+    var roles = Array.from(set);
+    roles.sort();
+    return roles;
+}
 
 module.exports = function(params) {
     let self = this;
@@ -27,7 +48,7 @@ module.exports = function(params) {
         .obs('healthCode', 'N/A', Binder.formatHealthCode)
         .obs('allDataGroups[]')
         .obs('createdOn', null, fn.formatDateTime)
-        .obs('allRoles[]', ROLES)
+        .obs('allRoles[]', [])
         .obs('emailNull', true)
         .obs('phoneNull', true)
         .bind('email')
@@ -65,6 +86,11 @@ module.exports = function(params) {
             self.phoneRegionObs(event.target.textContent);
         }
     };
+
+    serverService.getSession().then((session) => {
+        var roles = selectRoles(session);
+        self.allRolesObs(roles);
+    });
 
     function initStudy(study) {
         // there's a timer in the control involved here, we need to use an observer

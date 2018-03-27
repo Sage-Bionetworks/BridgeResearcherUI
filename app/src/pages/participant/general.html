@@ -46,9 +46,7 @@
             </div>
             <div class="field">
                 <label>Roles</label>
-                <select multiple data-bind="updateSelect: rolesObs, foreach: allRolesObs, semantic: 'multi-search-select'">
-                    <option data-bind="text: $data, selected: $component.rolesObs().indexOf($data) > -1"></option>
-                </select>
+                <tag-editor params="selectedObs: rolesObs, allObs: allRolesObs, type: 'roles'"></tag-editor>
             </div>
         </div>
         
@@ -91,11 +89,7 @@
             </div>
             <div class="field">
                 <label>Data Groups</label>
-                <select multiple data-bind="semantic: 'multi-search-select', 
-                    updateSelect: dataGroupsObs, foreach: allDataGroupsObs">
-                    <option data-bind="text: $data, 
-                        selected: $component.dataGroupsObs().indexOf($data) > -1"></option>
-                </select>
+                <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
             </div>
             <div class="field" data-bind="!isNewObs()">
                 <label style="margin-bottom: .9rem">Email Preference</label>

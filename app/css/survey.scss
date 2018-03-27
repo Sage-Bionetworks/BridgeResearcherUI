@@ -142,11 +142,11 @@
         @include flex-box(row);
         @include align-items(center);
         
-        div {
+        div.rule-cell {
             padding: .2rem;
             flex: 1;
         }
-        div:last-child {
+        div.rule-cell:last-child {
             flex: 0;
         }
     }

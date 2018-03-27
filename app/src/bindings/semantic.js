@@ -85,8 +85,8 @@ var handlers = {
         // may not need this
         $element.dropdown("set selected", collectionObs());
         collectionObs.subscribe(function(newValue) {
-            // Annoyingly, this is needed to initialize the criteria component correctly
-            // in the criteria-based schedule editor.
+            // Annoyingly, this is needed to initialize the criteria component correctly in the 
+            // criteria-based schedule editor.
             setTimeout(() => {
                 $element.dropdown("set selected", newValue);
             },1);

@@ -320,6 +320,10 @@ reg('BloodPressureConstraints', {
     viewModel: require('./pages/survey/constraints/bloodpressure_constraints.js'),
     template: require('./pages/survey/constraints/bloodpressure_constraints.html')
 });
+reg('tag-editor', {
+    viewModel: require('./widgets/tag-editor/tag_editor'),
+    template: require('./widgets/tag-editor/tag_editor.html')
+});
 reg('ui-duration', {
     viewModel: require('./widgets/form/ui_duration'),
     template: require('./widgets/form/ui_duration.html')
@@ -391,9 +395,6 @@ reg('ui-textarea', {
 /* reg('fire-event', {
     template: require('./widgets/fire_event.html')
 }); */
-reg('tag-editor', {
-    template: require('./widgets/tag_editor.html')
-});
 reg('settings-tabset', {
     template: require('./pages/settings/tabset.html')
 });
