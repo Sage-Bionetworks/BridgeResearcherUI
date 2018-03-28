@@ -450,6 +450,9 @@ export class ServerService {
         let queryString = fn.queryString({startDate: startDate, endDate: endDate});
         return this.gethttp(config.participants + '/' + userId + '/reports/' + identifier + queryString);
     }
+    getParticipantActivityEvents(userId) {
+        return this.gethttp(config.participants + '/' + userId + '/activityEvents');
+    }
     addParticipantReport(userId, identifier, report) {
         return this.post(config.participants + '/' + userId + '/reports/' + identifier, report);
     }

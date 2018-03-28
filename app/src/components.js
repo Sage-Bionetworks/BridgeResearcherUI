@@ -179,13 +179,17 @@ reg('participant_general', {
     viewModel: require('./pages/participant/general'),
     template: require('./pages/participant/general.html')
 });
-reg('participant_newActivities', {
-    viewModel: require('./pages/participant/newActivities'),
-    template: require('./pages/participant/newActivities.html')
+reg('participant_activities', {
+    viewModel: require('./pages/participant/activities'),
+    template: require('./pages/participant/activities.html')
 });
-reg('participant_newActivity', {
-    viewModel: require('./pages/participant/newActivity'),
-    template: require('./pages/participant/newActivity.html')
+reg('participant_activity_events', {
+    viewModel: require('./pages/participant/activity_events'),
+    template: require('./pages/participant/activity_events.html')
+});
+reg('participant_activity', {
+    viewModel: require('./pages/participant/activity'),
+    template: require('./pages/participant/activity.html')
 });
 reg('participant_clientData', {
     viewModel: require('./pages/participant/client_data'),

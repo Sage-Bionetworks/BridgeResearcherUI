@@ -9,14 +9,23 @@ module.exports = function(params) {
     self.dropdown = null;
 
     params.allObs.subscribe(function(array) {
-        self.allObs(params.allObs().slice());
+        let copy = array.slice();
+        copy.sort();
+        self.allObs(copy);
     });
     self.selectedObs.subscribe(function(array) {
-        array.sort();
         for (let i=0; i < array.length; i++) {
             self.allObs.remove(array[i]);
         }
     });
+
+    function transfer(srcObs, destObs, item) {
+        srcObs.remove(item);
+        let array = destObsObs();
+        array.push(item);
+        array.sort();
+        destObsObs(array);
+    }
 
     self.addTag = function(item, event) {
         if (self.dropdown === null) {
@@ -25,14 +34,9 @@ module.exports = function(params) {
         if (self.allObs().length === 1) {
             self.dropdown.dropdown('hide');
         }
-        var array = self.selectedObs();
-        array.push(item);
-        array.sort();
-        self.selectedObs(array);
-        self.allObs.remove(item);
+        transfer(self.allObs, self.selectedObs, item);
     };
     self.removeTag = function(item, event) {
-        self.selectedObs.remove(item);
-        self.allObs.push(item);
+        transfer(self.selectedObs, self.allObs, item);
     };
 };
