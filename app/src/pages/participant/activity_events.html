@@ -1,0 +1,49 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <div class="fixed-header-heading">
+            <div class="ui breadcrumb">
+                <a class="section" href="#/participants">Participants</a>
+                <i class="right chevron icon divider"></i>
+            </div>            
+            <h3 data-bind="html: titleObs"></h3>
+        </div>
+        <div class="fixed-header-buttons"></div>
+    </div>
+    <!-- ko component: {name: 'participant-tabset', params: { userIdObs: userIdObs,
+        isNewObs: isNewObs, statusObs: statusObs}} --><!-- /ko -->
+</div>
+<div class="scrollbox">
+    <div class="line-control" style="margin-bottom: 1rem">
+        <div class="line-control-stretch">
+            <div class="ui breadcrumb">
+                <a class="section" 
+                    data-bind="href:'#/participants/'+userIdObs()+'/activities'">All Activities</a>
+                <i class="right chevron icon divider"></i>
+                <b>Activity Events</b>
+            </div>
+        </div>
+    </div>
+    <errors></errors>
+    <table class="ui compact selectable table">
+        <thead>
+            <tr>
+                <th>Event ID</th>
+                <th>Time</th>
+                <th>Activity</th>
+            </tr>
+        </thead>
+        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+            <tr>
+                <td colspan="3" data-bind="html: recordsMessageObs"></td>
+            </tr>
+        </tbody>        
+        <tbody data-bind="foreach: itemsObs">
+            <tr>
+                <td data-bind="text: $data.eventId"></td>
+                <td data-bind="text: $parent.formatDateTime($data.timestamp)"></td>
+                <td data-bind="text: $parent.activityLabel($data)"></td>
+            </tr>
+        </tbody>
+    </table>    
+</div>
+    
