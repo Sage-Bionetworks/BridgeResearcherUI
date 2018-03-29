@@ -36,6 +36,14 @@ module.exports = function() {
     });
     loadStudyList(env);
     
+    self.keypress = function(vm, event) {
+        if (event.keyCode === 13) {
+            self.sendResetPasswordRequest(vm, event);
+            return false;
+        }
+        return true;
+    };
+    
     function loadStudies(studies){
         self.studyOptionsObs(studies.items);
         self.studyObs(studyKey);
