@@ -21,10 +21,10 @@ module.exports = function(params) {
 
     function transfer(srcObs, destObs, item) {
         srcObs.remove(item);
-        let array = destObsObs();
+        let array = destObs();
         array.push(item);
         array.sort();
-        destObsObs(array);
+        destObs(array);
     }
 
     self.addTag = function(item, event) {

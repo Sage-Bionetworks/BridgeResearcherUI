@@ -22,7 +22,7 @@ function makeReloader(studyKey, environment) {
 
 module.exports = function() {
     let self = this;
-    let signInSubmit = document.querySelector("#signInSubmit");
+    let signInSubmit = document.querySelector("button[form='signInForm']");
     let isLocked = fn.isNotBlank(root.queryParams.study);
 
     let studyKey, env;    
@@ -73,6 +73,14 @@ module.exports = function() {
         root.closeDialog();
         return response;
     }
+
+    self.keypress = function(vm, event) {
+        if (event.keyCode === 13) {
+            self.signIn(vm, event);
+            return false;
+        }
+        return true;
+    };
 
     self.signIn = function(vm, event) {
         let credentials = {
