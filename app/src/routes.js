@@ -92,14 +92,8 @@ router.on('/subpopulations/:guid/general', routeTo('subpopulation', 'subpops', G
 router.on('/subpopulations/:guid/editor', redirectTo('/subpopulations/{0}/editor/recent'));
 router.on('/subpopulations/:guid/editor/recent', routeTo('subpopulation_editor', 'subpops', GUID));
 router.on('/subpopulations/:guid/editor/:createdOn', routeTo('subpopulation_editor', 'subpops', GUID_CREATEDON));
-
 router.on('/subpopulations/:guid/editor/recent/history', routeTo('subpopulation_history', 'subpops', GUID));
 router.on('/subpopulations/:guid/editor/:createdOn/history', routeTo('subpopulation_history', 'subpops', GUID_CREATEDON));
-
-/*
-router.on('/subpopulations/:guid/history/recent', routeTo('subpopulation_history', 'subpops', GUID));
-router.on('/subpopulations/:guid/history/:createdOn', routeTo('subpopulation_history', 'subpops', GUID_CREATEDON));
-*/
 router.on('/subpopulations/:guid/download', routeTo('subpopulation_download', 'subpops', GUID));
 
 router.on('/reports', redirectTo('/reports/uploads'));

@@ -58,8 +58,8 @@
                     <span class="red" data-bind="text: $data.withdrewOn"></span>
                 </td>
                 <td>
-                    <button data-bind="visible: $data.name !== 'No consent' && $data.withdrewOn > 0, 
-                        click: $component.resendConsent" class="ui basic compact mini button">Resend consent</button>
+                    <button data-bind="visible: $data.eligibleToWithdraw, click: $component.resendConsent" 
+                        class="ui basic compact mini button">Resend consent</button>
                 </td>
                 <td>
                     <a target="_blank" rel="noopener" data-bind="visible: $data.name !== 'No consent', 

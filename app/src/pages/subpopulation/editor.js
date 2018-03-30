@@ -27,7 +27,6 @@ module.exports = function(params) {
         return self.createdOnObs() === 'recent' || self.createdOnObs() === self.publishedConsentCreatedOnObs();
     });
     self.createHistoryLink = ko.computed(function() {
-        //return '#/subpopulations/' + self.guidObs() + '/history/' + self.createdOnObs();
         return '#/subpopulations/' + self.guidObs() + '/editor/' + self.createdOnObs() + "/history";
     });
 
