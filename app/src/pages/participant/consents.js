@@ -40,7 +40,6 @@ module.exports = function(params) {
     }).catch(failureHandler);
 
     self.resendConsent = function(vm, event) {
-        console.log(vm);
         let subpopGuid = vm.consentURL.split("/subpopulations/")[1].split("/consents/")[0];
         alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
             utils.startHandler(vm, event);
