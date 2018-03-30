@@ -9,23 +9,8 @@
         </div>
         <div class="fixed-header-buttons"></div>
     </div>
-    <div class="ui secondary pointing menu">
-        <a class="item" data-bind="attr:{
-            href: '#/subpopulations/'+guidObs()}">
-            <i class="setting icon"></i> General
-        </a>
-        <a class="item" data-bind="attr:{
-            href: '#/subpopulations/'+guidObs()+'/consents/recent'}">
-            <i class="file outline icon"></i> Editor
-        </a>
-        <a class="active item">
-            <i class="history icon"></i> History &amp; Publication
-        </a>
-        <a class="item" data-bind="attr:{
-            href: '#/subpopulations/'+guidObs()+'/consents/download'}">
-            <i class="download icon"></i> Download
-        </a>
-    </div>
+    <subpop-tabset params="guidObs: guidObs, createdOnObs: createdOnObs, 
+        publishedConsentCreatedOnObs: publishedConsentCreatedOnObs"></subpop-tabset>
 </div>
 <div class="scrollbox">
     <div class="ui grid">
@@ -40,8 +25,8 @@
                 <tbody data-bind="foreach: historyItemsObs">
                     <tr data-bind="css: { positive: $data.active }">
                         <td>
-                            <a data-bind="attr: {href: '#/subpopulations/'+$parent.guidObs()+'/consents/'+$data.createdOn},
-                            text: $parent.formatDateTime($data.createdOn)"></a>
+                            <a data-bind="attr: {href: '#/subpopulations/'+$parent.guidObs()+
+                                '/consents/'+$data.createdOn}, text: $parent.formatDateTime($data.createdOn)"></a>
                         </td>
                         <td>
                             <div data-bind="visible: $data.active" style="text-align: right">

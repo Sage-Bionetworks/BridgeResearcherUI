@@ -12,8 +12,8 @@
             <button class="ui tiny primary button" data-bind="visible: isDeveloper, click: addReport">Add report record&hellip;</button>
         </div>
     </div>
-    <!-- ko component: {name: 'participant-tabset', params: {isNewObs: isNewObs,
-        userIdObs: userIdObs, statusObs: statusObs}} --><!-- /ko -->
+    <participant-tabset params="isNewObs: isNewObs, userIdObs: userIdObs, 
+        statusObs: statusObs"></participant-tabset>
 </div>
 <div class="scrollbox">
     <div class="line-control">

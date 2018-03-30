@@ -1,14 +1,14 @@
-<div class="ui secondary pointing menu">
-    <a data-bind="href: linkMaker('editor'), tabber">
+<div class="ui secondary pointing menu" data-bind="visible: !isNewObs()">
+    <a data-bind="tabber, href: linkMaker('general')">
         <i class="setting icon"></i> General
     </a>
-    <a data-bind="href: linkMaker('recent'), tabber">
+    <a data-bind="tabber, href: linkMaker('editor')">
         <i class="file outline icon"></i> Editor
     </a>
-    <a data-bind="href: linkMaker('history'), tabber">
+    <a data-bind="tabber, href: linkMaker('history')">
         <i class="history icon"></i> History &amp; Publication
     </a>
-    <a data-bind="href: linkMaker('download'), tabber">
+    <a data-bind="tabber, href: linkMaker('download')">
         <i class="download icon"></i> Download
     </a>
     <div class="right menu pub-status">
@@ -27,3 +27,4 @@
         </div>
     </div>    
 </div>
+<div class="ui empty secondary pointing menu" data-bind="visible: isNewObs"></div>

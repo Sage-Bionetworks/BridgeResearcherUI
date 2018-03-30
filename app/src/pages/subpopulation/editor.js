@@ -14,8 +14,7 @@ module.exports = function(params) {
     self.editor = null;
 
     new Binder(self)
-        .obs('active', true)
-        .obs('createdOn')
+        .obs('createdOn', params.createdOn)
         .obs('publishedConsentCreatedOn')
         .obs('historyItems[]')
         .obs('guid', params.guid)
@@ -50,7 +49,6 @@ module.exports = function(params) {
             consent.documentContent = doc.split(/<body[^>]*\>/)[1].split(/<\/body\>.*/)[0].trim();
         }
         self.createdOnObs(consent.createdOn);
-        self.activeObs(consent.createdOn === self.publishedConsentCreatedOnObs());
         self.consent = consent;
         params.createdOn = consent.createdOn;
         self.initEditor(consent.documentContent);

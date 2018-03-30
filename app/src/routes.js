@@ -46,9 +46,15 @@ function routeTo(routeName, section, fields) {
         root.changeView(routeName, params);
     };
 }
+const FORMAT_PARSER = /\{[^\|}]+\}/g;
+
 function redirectTo(newRoute) {
-    return function() {
-        router.setRoute(newRoute);
+    return function(...args) {
+        var route = newRoute.replace(FORMAT_PARSER, function(token){
+            var prop = token.substring(1, token.length-1);
+            return args[prop];
+        });
+        router.setRoute(route);
     };
 }
 
@@ -68,13 +74,11 @@ router.on('/app_links', routeTo('app_links', 'links'));
 router.on('/export_settings', routeTo('export_settings', 'export'));
 router.on('/shared_upload_metadata', routeTo('shared_upload_metadata', 'metadata'));
 router.on('/task_identifiers', routeTo('task_identifiers', 'taskIds'));
-
 router.on('/email_templates', redirectTo('/email_templates/verify_email'));
 router.on('/email_templates/reset_password', routeTo('reset_password', 'templates'));
 router.on('/email_templates/verify_email', routeTo('verify_email', 'templates'));
 router.on('/email_templates/account_exists', routeTo('account_exists', 'templates'));
 router.on('/email_templates/email_signin', routeTo('email_signin', 'templates'));
-
 router.on('/sms_templates', redirectTo('/sms_templates/verify_phone', 'sms'));
 router.on('/sms_templates/reset_password', routeTo('sms_reset_password', 'sms'));
 router.on('/sms_templates/verify_phone', routeTo('sms_verify_phone', 'sms'));
@@ -82,11 +86,18 @@ router.on('/sms_templates/account_exists', routeTo('sms_account_exists', 'sms'))
 router.on('/sms_templates/phone_signin', routeTo('sms_phone_signin', 'sms'));
 router.on('/sms_templates/app_install_link', routeTo('sms_app_install_link', 'sms'));
 
-router.on('/subpopulations/:guid/consents/history', routeTo('subpopulation_history', 'subpops', GUID));
-router.on('/subpopulations/:guid/consents/download', routeTo('subpopulation_download', 'subpops', GUID));
-router.on('/subpopulations/:guid/consents/:createdOn', routeTo('subpopulation_editor', 'subpops', GUID_CREATEDON));
-router.on('/subpopulations/:guid', routeTo('subpopulation', 'subpops', GUID));
+router.on('/subpopulations/:guid/consents/recent/general', routeTo('subpopulation', 'subpops', GUID));
+router.on('/subpopulations/:guid/consents/:createdOn/general', routeTo('subpopulation', 'subpops', GUID_CREATEDON));
+router.on('/subpopulations/:guid/consents/:createdOn/editor', 
+    routeTo('subpopulation_editor', 'subpops', GUID_CREATEDON));
+router.on('/subpopulations/:guid/consents/:createdOn/history', 
+    routeTo('subpopulation_history', 'subpops', GUID_CREATEDON));
+router.on('/subpopulations/:guid/consents/:createdOn/download', 
+    routeTo('subpopulation_download', 'subpops', GUID_CREATEDON));
+router.on('/subpopulations/:guid', redirectTo('/subpopulations/{0}/consents/recent/general'));
+router.on('/subpopulations/:guid/consents/:createdOn', redirectTo('/subpopulations/{0}/consents/{1}/editor'));
 router.on('/subpopulations', routeTo('subpopulations', 'subpops'));
+
 router.on('/reports', redirectTo('/reports/uploads'));
 router.on('/reports/uploads', routeTo('dailyUploads', 'reports'));
 router.on('/reports/signUps', routeTo('signUps', 'reports'));

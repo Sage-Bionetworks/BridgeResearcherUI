@@ -12,38 +12,8 @@
             <button class="ui tiny primary button" data-bind="click: save">Save</button>
         </div>
     </div>
-    <div class="ui secondary pointing menu">
-        <a class="item" data-bind="attr:{
-            href: '#/subpopulations/'+guidObs()}">
-            <i class="setting icon"></i> General
-        </a>
-        <a class="active item">
-            <i class="file outline icon"></i> Editor
-        </a>
-        <a class="item" data-bind="attr:{
-            href: '#/subpopulations/'+guidObs()+'/consents/history'}">
-            <i class="history icon"></i> History &amp; Publication
-        </a>
-        <a class="item" data-bind="attr:{
-            href: '#/subpopulations/'+guidObs()+'/consents/download'}">
-            <i class="download icon"></i> Download
-        </a>
-        <div class="right menu pub-status">
-            <div class="item" data-bind="visible: !!createdOnObs()">
-                <i class="clock icon"></i> <span data-bind="text: formatDateTime(createdOnObs())"></span>
-            </div>
-            <div class="item" data-bind="visible: activeObs">
-                <div class="green mini ui label">
-                    <i class="checkmark icon"></i> Published
-                </div>
-            </div>
-            <div class="item" data-bind="visible: !activeObs()">
-                <div class="orange ui mini label">
-                    <i class="warning icon"></i> Not Published
-                </div>
-            </div>
-        </div>
-    </div>
+    <subpop-tabset params="guidObs: guidObs, createdOnObs: createdOnObs, 
+        publishedConsentCreatedOnObs: publishedConsentCreatedOnObs"></subpop-tabset>
 </div>
 <div class="scrollbox">
     <textarea id="consentEditor" data-bind="ckeditor: initEditor" class="ui textarea"></textarea>

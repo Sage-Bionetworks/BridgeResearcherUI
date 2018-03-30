@@ -15,13 +15,16 @@ function newSubpop() {
 }
 
 module.exports = function(params) {
+    console.log("GENERAL", JSON.stringify(params));
     let self = this;
 
     let binder = new Binder(self)
         .obs('isNew', params.guid === "new")
-        .obs('guid')
+        .obs('guid', params.guid)
+        .obs('createdOn', params.createdOn)
         .obs('title', 'New Consent Group')
         .bind('name')
+        .bind('publishedConsentCreatedOn')
         .bind('description')
         .bind('required', true)
         .bind('criteria');
@@ -48,6 +51,13 @@ module.exports = function(params) {
             .catch(failureHandler);
     };
     
+    function updateTimestamp(subpop) {
+        if (!params.createdOn) {
+            self.createdOnObs(subpop.publishedConsentCreatedOn);
+        }
+        return subpop;
+    }
+
     serverService.getStudy()
         .then(binder.assign('study'))
         .then(function(study) {
@@ -59,6 +69,8 @@ module.exports = function(params) {
                 return serverService.getSubpopulation(params.guid)
                     .then(binder.assign('subpopulation'))
                     .then(binder.update())
+                    .then(updateTimestamp)
+                    .then(fn.log('subpop'))
                     .then(titleUpdated);
             }
         }).catch(failureHandler);
