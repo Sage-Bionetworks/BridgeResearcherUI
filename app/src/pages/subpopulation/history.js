@@ -13,10 +13,9 @@ module.exports = function(params) {
     let self = this;
 
     let binder = new Binder(self)
-        .obs('active', true)
-        .obs('createdOn')
         .obs('historyItems[]')
         .obs('guid', params.guid)
+        .obs('createdOn', params.createdOn)
         .obs('publishedConsentCreatedOn')
         .obs('name');
 
@@ -44,6 +43,7 @@ module.exports = function(params) {
     function load() {
         return serverService.getSubpopulation(params.guid)
             .then(binder.update())
+            .then(fn.handleObsUpdate(self.publishedConsentCreatedOnObs, 'publishedConsentCreatedOn'))
             .then(getHistory)
             .then(fn.handleForEach('items', addActiveFlag))
             .then(fn.handleObsUpdate(self.historyItemsObs, 'items'))
