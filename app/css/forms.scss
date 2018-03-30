@@ -121,7 +121,6 @@ div.te.container {
     align-items: baseline;
     .tags {
         padding: .45rem;
-        padding-bottom: .2rem;
     }
     .label {
         margin: 0;
@@ -130,9 +129,15 @@ div.te.container {
         color: black;
     }
     .dropdown {
-        margin-right: .5rem;
+        margin-top: .5rem;
+
+        span.item:not(:hover) {
+            font-weight: normal;
+            background-color: white;
+        }
+        span.item:hover {
+            font-weight: normal;
+            background-color: rgba(0,0,0,.05);
+        }
     }
-    .dropdown > div > span.item {
-        font-weight: normal!important;
-    }    
 }
