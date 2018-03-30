@@ -11,8 +11,7 @@
             <button class="ui tiny primary button" data-bind="click: save">Save</button>
         </div>
     </div>
-    <subpop-tabset params="isNewObs: isNewObs, guidObs: guidObs, createdOnObs: createdOnObs, 
-        publishedConsentCreatedOnObs: publishedConsentCreatedOnObs"></subpop-tabset>
+    <subpop-tabset params="isNewObs: isNewObs, guidObs: guidObs"></subpop-tabset>
 </div>
 <div class="scrollbox">
     <errors></errors>
@@ -27,8 +26,10 @@
                 <input type="text" data-bind="textInput: descriptionObs"/>
             </div>
         </div>
+
         <h4 style="margin-top:0">Assignment based on</h4>
-        <!-- ko component: {name:"criteria", params:{id:"", criteriaObs:criteriaObs}} --><!-- /ko -->
+        <criteria params="id: '', criteriaObs: criteriaObs"></criteria>
+        
         <div class="fields">
             <div class="six wide field">
                 <div class="field">

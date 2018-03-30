@@ -3,6 +3,7 @@ import alerts from '../../widgets/alerts';
 import Binder from '../../binder';
 import fn from '../../functions';
 import utils from '../../utils';
+import ko from 'knockout';
 
 const failureHandler = utils.failureHandler({
     redirectMsg:"Consent group not found.", 
@@ -14,13 +15,21 @@ module.exports = function(params) {
     self.editor = null;
 
     new Binder(self)
-        .obs('createdOn', params.createdOn)
-        .obs('publishedConsentCreatedOn')
         .obs('historyItems[]')
         .obs('guid', params.guid)
+        .obs('createdOn', params.createdOn || 'recent')
+        .obs('publishedConsentCreatedOn')
         .obs('name');
 
     fn.copyProps(self, fn, 'formatDateTime');
+
+    self.activeObs = ko.computed(function() {
+        return self.createdOnObs() === 'recent' || self.createdOnObs() === self.publishedConsentCreatedOnObs();
+    });
+    self.createHistoryLink = ko.computed(function() {
+        //return '#/subpopulations/' + self.guidObs() + '/history/' + self.createdOnObs();
+        return '#/subpopulations/' + self.guidObs() + '/editor/' + self.createdOnObs() + "/history";
+    });
 
     // subpopulation fields
     serverService.getSubpopulation(params.guid)
@@ -68,7 +77,6 @@ module.exports = function(params) {
             serverService.saveStudyConsent(params.guid, {documentContent: self.editor.getData()})
                 .then(fn.handleCopyProps(params, 'createdOn'))
                 .then(fn.handleObsUpdate(self.createdOnObs, 'createdOn'))
-                .then(fn.handleObsUpdate(self.publishedConsentCreatedOnObs, 'createdOn'))
                 .then(publishConsent)
                 .then(load)
                 .then(loadIntoEditor)
