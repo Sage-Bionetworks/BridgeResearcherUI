@@ -3,6 +3,7 @@ import alerts from '../../widgets/alerts';
 import Binder from '../../binder';
 import fn from '../../functions';
 import utils from '../../utils';
+import ko from 'knockout';
 
 const failureHandler = utils.failureHandler({
     redirectMsg:"Consent group not found.", 
@@ -15,11 +16,15 @@ module.exports = function(params) {
     let binder = new Binder(self)
         .obs('historyItems[]')
         .obs('guid', params.guid)
-        .obs('createdOn', params.createdOn)
+        .obs('createdOn', params.createdOn || 'recent')
         .obs('publishedConsentCreatedOn')
         .obs('name');
 
     fn.copyProps(self, fn, 'formatDateTime');
+
+    self.activeObs = ko.computed(function() {
+        return self.createdOnObs() === self.publishedConsentCreatedOnObs();
+    });
 
     self.publish = function(item, event) {
         alerts.confirmation("Are you sure you want to publish this consent?", function() {
@@ -43,7 +48,6 @@ module.exports = function(params) {
     function load() {
         return serverService.getSubpopulation(params.guid)
             .then(binder.update())
-            .then(fn.handleObsUpdate(self.publishedConsentCreatedOnObs, 'publishedConsentCreatedOn'))
             .then(getHistory)
             .then(fn.handleForEach('items', addActiveFlag))
             .then(fn.handleObsUpdate(self.historyItemsObs, 'items'))

@@ -15,8 +15,6 @@ module.exports = function(params) {
     new Binder(self)
         .obs('name')
         .obs('guid', params.guid)
-        .obs('createdOn', params.createdOn)
-        .obs('publishedConsentCreatedOn')
         .obs('htmlUrl')
         .obs('pdfUrl');
     
@@ -30,7 +28,6 @@ module.exports = function(params) {
 
     serverService.getSubpopulation(params.guid)
         .then(fn.handleObsUpdate(self.nameObs, 'name'))
-        .then(fn.handleObsUpdate(self.publishedConsentCreatedOnObs, 'publishedConsentCreatedOn'))
         .then(serverService.getSession.bind(serverService))
         .then(updateURLs)
         .catch(failureHandler);    
