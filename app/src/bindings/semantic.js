@@ -61,6 +61,7 @@ var handlers = {
     'adjacent-popup': function($element) {
         $element.popup({inline:true});
     },
+    /*
     'popup-menu': function($element) {
         $element.popup({
             on: 'click', 
@@ -69,6 +70,7 @@ var handlers = {
             duration: 100
         });        
     },
+    */
     'multi-search-select': function($element, allBindings) {
         let collectionObs = allBindings().updateSelect;
 

@@ -376,6 +376,9 @@ export class ServerService {
     sendTopicNotification(guid, message) {
         return this.post(config.topics+"/"+guid+"/sendNotification", message);
     }
+    sendSmsMessage(id, message) {
+        return this.post(config.participants+"/"+id+"/sendSmsMessage", message);
+    }
     createParticipant(participant) {
         return this.post(config.participants+"?verifyEmail=false", participant);
     }
