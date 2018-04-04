@@ -13,29 +13,38 @@
         statusObs: statusObs"></participant-tabset>
 </div>
 <div class="scrollbox">
-    <p>
-        View the <a data-bind="href: '#/participants/'+userIdObs()+'/activities/events'">
-            <i style="margin-right:0" class="calendar alternate outline icon"></i>Events</a> 
-            we’re using to schedule this participant.
-    </p>
+    <div class="line-control" style="margin-bottom: 1rem">
+        <div class="line-control-stretch">
+            <div class="ui breadcrumb">
+                <a class="section" 
+                    data-bind="href:'#/participants/'+userIdObs()+'/activities'">All Activities</a>
+                <i class="right chevron icon divider"></i>
+                <b>Activity Events</b>
+            </div>
+        </div>
+    </div>
     <errors></errors>
     <table class="ui compact selectable table">
         <thead>
             <tr>
+                <th>Event ID</th>
+                <th>Time</th>
                 <th>Activity</th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
-                <td data-bind="html: recordsMessageObs"></td>
+                <td colspan="3" data-bind="html: recordsMessageObs"></td>
             </tr>
-        </tbody>
+        </tbody>        
         <tbody data-bind="foreach: itemsObs">
             <tr>
-                <td>
-                    <a data-bind="attr:{href: $parent.linkMaker($data)}, text: label"></a>
-                </td>
+                <td data-bind="text: $data.eventId"></td>
+                <td data-bind="text: $parent.formatDateTime($data.timestamp),
+                    attr: {title: $data.timestamp}"></td>
+                <td data-bind="text: $parent.activityLabel($data)"></td>
             </tr>
         </tbody>
-    </table> 
+    </table>    
 </div>
+    

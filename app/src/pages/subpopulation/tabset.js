@@ -2,15 +2,20 @@ import fn from '../../functions';
 import ko from 'knockout';
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
-    fn.copyProps(self, params, 'guidObs', 'createdOnObs', 'activeObs');
+    fn.copyProps(self, params, 'guidObs', 'isNewObs');
     fn.copyProps(self, fn, 'formatDateTime');
+
+    // Only passed in on the on the general tab
+    if (!self.isNewObs) {
+        self.isNewObs = ko.observable(false);
+    }
 
     self.computeds = [];
     self.linkMaker = function(tabName) {
-        var c = ko.computed(function() {
-            return '#/subpopulations/' + self.guidObs() + '/consents/' + tabName;
+        let c = ko.computed(function() {
+            return '#/subpopulations/' + self.guidObs() + '/' + tabName;
         });
         self.computeds.push(c);
         return c;

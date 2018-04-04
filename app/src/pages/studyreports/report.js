@@ -16,7 +16,7 @@ function lastDayOfMonth(year, month) {
 }
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     new Binder(self)
         .obs('identifier', params.id)
@@ -45,7 +45,7 @@ module.exports = function(params) {
     }
     loadIndex();
 
-    var d = new Date();
+    let d = new Date();
     self.currentMonth = d.getMonth();
     self.currentYear = d.getFullYear();
 
@@ -96,7 +96,7 @@ module.exports = function(params) {
         load();
     };
     self.thisMonth = function() {
-        var d = new Date();
+        let d = new Date();
         self.currentMonth = d.getMonth();
         self.currentYear = d.getFullYear();
         load();
@@ -109,8 +109,8 @@ module.exports = function(params) {
     function load() {
         self.showLoaderObs(true);
         self.formatMonthObs(MONTHS[self.currentMonth] + " " + self.currentYear);
-        var startDate = firstDayOfMonth(self.currentYear, self.currentMonth);
-        var endDate = lastDayOfMonth(self.currentYear, self.currentMonth);
+        let startDate = firstDayOfMonth(self.currentYear, self.currentMonth);
+        let endDate = lastDayOfMonth(self.currentYear, self.currentMonth);
         serverService.getStudyReport(params.id, startDate, endDate)
             .then(fn.handleSort('items', 'date', true))
             .then(fn.handleMap('items', jsonFormatter.mapItem))

@@ -12,7 +12,7 @@ function deleteItem(plan) {
 }
 
 module.exports = function() {
-    var self = this;
+    let self = this;
     self.allItems = [];
 
     fn.copyProps(self, root, 'isAdmin', 'isDeveloper');
@@ -38,8 +38,8 @@ module.exports = function() {
             });
     }
     self.copy = function(vm, event) {
-        var copyables = this.itemsObs().filter(tables.hasBeenChecked);
-        var confirmMsg = (copyables.length > 1) ?
+        let copyables = this.itemsObs().filter(tables.hasBeenChecked);
+        let confirmMsg = (copyables.length > 1) ?
             "Schedules have been copied." : "Schedule has been copied.";
 
         utils.startHandler(vm, event);

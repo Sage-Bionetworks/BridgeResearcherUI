@@ -11,8 +11,8 @@
             <button class="ui red tiny button" data-bind="click: withdraw, visible: !noConsentObs()">Withdraw from study&hellip;</button>
         </div>
     </div>
-    <!-- ko component: {name: 'participant-tabset', params: {isNewObs: isNewObs, 
-        userIdObs: userIdObs, statusObs: statusObs}} --><!-- /ko -->
+    <participant-tabset params="isNewObs: isNewObs, userIdObs: userIdObs, 
+        statusObs: statusObs"></participant-tabset>
 </div>
 <div class="scrollbox">
     <errors></errors>
@@ -58,11 +58,11 @@
                     <span class="red" data-bind="text: $data.withdrewOn"></span>
                 </td>
                 <td>
-                    <button data-bind="visible: $data.name !== 'No consent' && $data.withdrewOn > 0, 
-                        click: $component.resendConsent" class="ui basic compact mini button">Resend consent</button>
+                    <button data-bind="visible: $data.eligibleToWithdraw, click: $component.resendConsent" 
+                        class="ui basic compact mini button">Resend consent</button>
                 </td>
                 <td>
-                    <a target="_blank" data-bind="visible: $data.name !== 'No consent', 
+                    <a target="_blank" rel="noopener" data-bind="visible: $data.name !== 'No consent', 
                         href: $parent.linkToDocument($data)">
                         View document <i class="ui external icon"> </i>
                     </a>

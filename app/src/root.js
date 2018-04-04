@@ -20,8 +20,8 @@ function unverifiedEmailAlert(response) {
     }
 }
 
-var RootViewModel = function() {
-    var self = this;
+let RootViewModel = function() {
+    let self = this;
 
     new Binder(self)
         .obs('environment', '')
@@ -33,8 +33,7 @@ var RootViewModel = function() {
         .obs('mainParams', {})
         .obs('editorPanel', 'none')
         .obs('editorParams', {})
-        .obs('codesEnumerated', false)
-        .obs('codeRequired', false)
+        .obs('externalIdValidationEnabled', false)
         .obs('isEditorTabVisible', false)
         .obs('notificationsEnabled', false)
         .obs('sidePanel', 'navigation')
@@ -87,7 +86,7 @@ var RootViewModel = function() {
         return self.studyIdentifierObs() === 'shared';
     });
     self.isResearcherOnly = ko.computed(function() {
-        var roles = self.rolesObs();
+        let roles = self.rolesObs();
         return roles.indexOf("researcher") > -1 && roles.indexOf("developer") === -1;
     });
 
@@ -105,25 +104,10 @@ var RootViewModel = function() {
         self.environmentObs(session.environment);
         self.studyIdentifierObs(session.studyId);
         self.rolesObs(session.roles);
-        // This interferes with reauthentication behavior when we use it. Not sure if it
-        // is required by any code path at this point to properly close the dialog.
-        // self.closeDialog();
+
         serverService.getStudy().then(function(study) {
-            // Until we can support on server, enumerating the codes is the same as requiring the code at sign up.
-            // codesEumerated = externalIdValidationEnabled
-            // codeRequired = externalIdRequiredOnSignUp
-            var defaults = {
-                codesEnumerated: study.externalIdValidationEnabled,
-                codeRequired: study.externalIdRequiredOnSignUp,
-                notificationsEnabled: Object.keys(study.pushNotificationARNs).length > 0
-            };
-            var studyConfig = config.studies[study.identifier] || {};
-            var opts = Object.assign({}, defaults, studyConfig);
-            
-            self.codesEnumeratedObs(opts.codesEnumerated);
-            self.codeRequiredObs(opts.codeRequired);
-            self.notificationsEnabledObs(opts.notificationsEnabled);
-            console.debug("[config]", Object.keys(opts).map(function(key) { return key + "=" + opts[key]; }).join(', '));
+            self.externalIdValidationEnabledObs(study.externalIdValidationEnabled);
+            self.notificationsEnabledObs(Object.keys(study.pushNotificationARNs).length > 0);
         });
     });
     serverService.addSessionEndListener(function(session) {
@@ -131,19 +115,17 @@ var RootViewModel = function() {
         self.environmentObs("");
         self.studyIdentifierObs("");
         self.rolesObs([]);
-        self.codesEnumeratedObs(false);
-        self.codeRequiredObs(false);
         self.openDialog('sign_in_dialog', {closeable:false});
     });
     setTimeout(checkVerifyStatus, 1000);
 };
 
-var root = new RootViewModel();
+let root = new RootViewModel();
 
 root.queryParams = {};
 if (document.location.search) {
     document.location.search.substring(1).split("&").forEach(function(pair) {
-        var fragments = pair.split("=");
+        let fragments = pair.split("=");
         root.queryParams[decodeURIComponent(fragments[0])] = decodeURIComponent(fragments[1]);
     });
 }

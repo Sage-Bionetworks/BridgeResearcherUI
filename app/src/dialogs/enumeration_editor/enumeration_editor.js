@@ -13,12 +13,12 @@ function hash(array) {
     if (array === null || array.length === 0) {
         return 0;
     }
-    var total = 0, i = array.length;
+    let total = 0, i = array.length;
     while(i--) {
-        var object = array[i];
-        var label = object.label;
-        var detail = object.detail;
-        var value = object.value; 
+        let object = array[i];
+        let label = object.label;
+        let detail = object.detail;
+        let value = object.value; 
         if (typeof label !== "undefined" && label !== null) {
             total += checksum(label);
         }
@@ -33,8 +33,8 @@ function hash(array) {
 }
 
 function checksum(s) {
-    var chk = 0x12345678;
-    var i = s.length;
+    let chk = 0x12345678;
+    let i = s.length;
     while(i--) {
         chk += (s.charCodeAt(i) * (i + 1));
     }
@@ -44,11 +44,11 @@ function checksum(s) {
 function ListsSource(elements, element) {
     this.currentListEntry = null;
     this.listSet = [];
-    var md5s = {};
+    let md5s = {};
     elements.forEach(function(anElement) {
-        var enumeration = getEnumeration(anElement);
+        let enumeration = getEnumeration(anElement);
         if (enumeration) {
-            var entry = makeListMapEntry(enumeration, anElement === element);
+            let entry = makeListMapEntry(enumeration, anElement === element);
             if (!md5s[entry.md5]) {
                 md5s[entry.md5] = entry;
             } else {
@@ -59,7 +59,7 @@ function ListsSource(elements, element) {
             }
         }
     }, this);
-    for (var key in md5s) {
+    for (let key in md5s) {
         this.listSet.push(md5s[key]);
     }
     this.listSet.sort(fn.makeFieldSorter('name'));
@@ -77,7 +77,7 @@ ListsSource.prototype = {
 };
 
 function makeListMapEntry(enumeration, isSelectedEnumeration) {
-    var name = "&lt;empty&gt;";
+    let name = "&lt;empty&gt;";
     if (enumeration.length === 1) {
         name = itemLabel(enumeration[0]);
     } else if (enumeration.length === 2) {
@@ -113,7 +113,7 @@ function copyEntry(element, entry) {
 }
 
 function getEnumeration(element) {
-    var con = element.constraints;
+    let con = element.constraints;
     if (con && con.enumerationObs) {
         return con.enumerationObs();
     }
@@ -131,12 +131,12 @@ function isValueValidOnServer(value) {
 }
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
-    var parent = params.parentViewModel;
+    let parent = params.parentViewModel;
     fn.copyProps(self, parent, 'elementsObs', 'element');
 
-    var listsSource = new ListsSource(self.elementsObs(), self.element);
+    let listsSource = new ListsSource(self.elementsObs(), self.element);
 
     new Binder(self)
         .obs('label')
@@ -168,7 +168,7 @@ module.exports = function(params) {
         return true;
     };
     self.moveToEditor = function(item, event) {
-        var index = self.listObs().indexOf(item);
+        let index = self.listObs().indexOf(item);
         self.indexObs(index);
         self.labelObs(item.label);
         self.detailObs(item.detail);
@@ -181,7 +181,7 @@ module.exports = function(params) {
         return (self.indexObs() !== null) ? 'Update' : 'Add';
     });
     self.newListItemValid = ko.computed(function() {
-        var value = self.valueObs() || self.labelObs();
+        let value = self.valueObs() || self.labelObs();
         return !isValueValidOnServer(value);
     });
     self.cancelEditMode = function() {
@@ -193,11 +193,11 @@ module.exports = function(params) {
     self.selectedIndexObs.subscribe(self.cancelEditMode);
 
     self.addListItem = function() {
-        var label = self.labelObs();
+        let label = self.labelObs();
         if (label) {
-            var value = self.valueObs() || label;
+            let value = self.valueObs() || label;
             if (self.indexObs() !== null) {
-                var item = self.listObs()[self.indexObs()];
+                let item = self.listObs()[self.indexObs()];
                 item.label = self.labelObs();
                 item.value = value;
                 item.detail = self.detailObs();
@@ -210,19 +210,19 @@ module.exports = function(params) {
         self.cancelEditMode();
     };
     self.saveList = function() {
-        var entry = listsSource.getCurrentEntry();
+        let entry = listsSource.getCurrentEntry();
 
         entry.enumeration = self.listObs();
 
         // We're looking for lists on other elements that were similar to the list before
         // the user started editing it, so we want the original MD5 before it gets
         // recalculated
-        var oldMD5 = entry.md5;
+        let oldMD5 = entry.md5;
 
         copyEntry(self.element, entry);
         if (self.copyToAllEnumsObs()) {
             self.elementsObs().forEach(function (element) {
-                var enumeration = getEnumeration(element);
+                let enumeration = getEnumeration(element);
                 if (enumeration && hash(enumeration) === oldMD5) {
                     copyEntry(element, entry);
                 }

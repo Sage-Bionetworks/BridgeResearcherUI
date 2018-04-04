@@ -17,12 +17,12 @@ function dataSet(label, array, color) {
     };
 }
 function formatDate(date) {
-    var parts = date.split("-");
+    let parts = date.split("-");
     return MONTHS[parseInt(parts[1])-1] + " " + parseInt(parts[2]);
 }
 function getDateRange(range) {
-    var millis = new Date().getTime();
-    var rangeOffset = WEEK * parseInt(range);
+    let millis = new Date().getTime();
+    let rangeOffset = WEEK * parseInt(range);
     return {
         startDate: new Date(millis - rangeOffset).toISOString().split("T")[0],
         endDate: new Date().toISOString().split("T")[0]
@@ -30,7 +30,7 @@ function getDateRange(range) {
 }
 
 module.exports = function() {
-    var self = this;
+    let self = this;
 
     self.isLoadingObs = ko.observable(false);
     self.chartObs = ko.observable();
@@ -39,24 +39,24 @@ module.exports = function() {
 
     self.comps = [];
     self.isActive = function(value) {
-        var comp = ko.computed(function() {
+        let comp = ko.computed(function() {
             return self.rangeObs() === value;
         });
         self.comps.push(comp);
         return comp;
     };
     self.selectRange = function(vm, event) {
-        var rangeNum = event.target.getAttribute('data-range');
+        let rangeNum = event.target.getAttribute('data-range');
         self.rangeObs(rangeNum);
         loadChart(rangeNum);
     };
 
     function makeChart(response) {
-        var labels = [];
-        var requested = [];
-        var duplicate = [];
-        var succeeded = [];
-        var validation_failed = [];
+        let labels = [];
+        let requested = [];
+        let duplicate = [];
+        let succeeded = [];
+        let validation_failed = [];
         response.items.forEach(function(item) {
             labels.push(formatDate(item.date));
             succeeded.push(item.data.succeeded || 0);
@@ -64,9 +64,9 @@ module.exports = function() {
             duplicate.push(item.data.duplicate || 0);
             validation_failed.push(item.data.validation_failed || 0);
         });
-        var max = Math.max.apply(null, succeeded);
+        let max = Math.max.apply(null, succeeded);
 
-        var datasets = [];
+        let datasets = [];
         if (Math.max.apply(null,succeeded) > 0) {
             datasets.push(dataSet('Successful', succeeded, '#21ba45'));
         }
@@ -79,7 +79,7 @@ module.exports = function() {
         if (Math.max.apply(null,duplicate) > 0) {
             datasets.push(dataSet('Duplicates', duplicate, '#fbbd08'));
         }
-        var stepSize = Math.pow(10, Math.floor(Math.log10(max)));
+        let stepSize = Math.pow(10, Math.floor(Math.log10(max)));
 
         self.hasDataObs(datasets.length > 0);
 
@@ -102,7 +102,7 @@ module.exports = function() {
     function loadChart(rangeNum) {
         utils.startHandler(self);
         self.isLoadingObs(true);
-        var range = getDateRange(rangeNum);
+        let range = getDateRange(rangeNum);
         serverService.getStudyReport(STUDY_NAME, range.startDate, range.endDate)
             .then(fn.handleStaticObsUpdate(self.isLoadingObs, false))
             .then(function(response) {

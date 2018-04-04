@@ -2,7 +2,7 @@ import fn from '../../../functions';
 import ko from 'knockout';
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     fn.copyProps(self, params, 'element', 'fieldName', 'elementsObs', 'collectionName');
     self.rulesObs = self.element[self.fieldName];

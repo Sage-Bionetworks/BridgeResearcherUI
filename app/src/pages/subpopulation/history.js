@@ -3,24 +3,28 @@ import alerts from '../../widgets/alerts';
 import Binder from '../../binder';
 import fn from '../../functions';
 import utils from '../../utils';
+import ko from 'knockout';
 
-var failureHandler = utils.failureHandler({
+const failureHandler = utils.failureHandler({
     redirectMsg:"Consent group not found.", 
     redirectTo:"subpopulations"
 });
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
-    var binder = new Binder(self)
-        .obs('active', true)
-        .obs('createdOn')
+    let binder = new Binder(self)
         .obs('historyItems[]')
         .obs('guid', params.guid)
+        .obs('createdOn', params.createdOn || 'recent')
         .obs('publishedConsentCreatedOn')
         .obs('name');
 
     fn.copyProps(self, fn, 'formatDateTime');
+
+    self.activeObs = ko.computed(function() {
+        return self.createdOnObs() === self.publishedConsentCreatedOnObs();
+    });
 
     self.publish = function(item, event) {
         alerts.confirmation("Are you sure you want to publish this consent?", function() {

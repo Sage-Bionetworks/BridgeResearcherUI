@@ -10,7 +10,7 @@ const PAGE_SIZE = 100;
 const DELAY = 200;
 const MSG = "Are you sure you want to sign out everyone in this study?";
 
-var adminEmail = null;
+let adminEmail = null;
 
 function mapKey(cacheKey) {
     return {key: cacheKey};
@@ -26,7 +26,7 @@ serverService.addSessionEndListener(function() {
 });
 
 module.exports = function() {
-    var self = this;
+    let self = this;
     
     self.signOutStatusObs = ko.observable();
 
@@ -36,7 +36,7 @@ module.exports = function() {
     });
 
     serverService.getCacheKeys().then(function(response) {
-        var items = response.map(mapKey);
+        let items = response.map(mapKey);
         self.itemsObs(items.sort(fn.makeFieldSorter("key")));
     }).catch(utils.failureHandler());
 
@@ -47,9 +47,9 @@ module.exports = function() {
         }, "Yes, sign everyone out");
     };
     function processAllPages(response) {
-        var pages = Math.ceil(response.total/PAGE_SIZE);
-        var promise = Promise.resolve();
-        for (var i=0; i <= pages; i++) {
+        let pages = Math.ceil(response.total/PAGE_SIZE);
+        let promise = Promise.resolve();
+        for (let i=0; i <= pages; i++) {
             promise = promise.delay(DELAY).then(processOnePage(promise, i));
         }
         promise.then(function() {

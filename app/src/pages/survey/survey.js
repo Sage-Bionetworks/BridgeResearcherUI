@@ -6,13 +6,13 @@ import root from '../../root';
 import surveyUtils from './survey_utils';
 import utils from '../../utils';
 
-var notFound = utils.failureHandler({
+const notFound = utils.failureHandler({
     redirectTo: "surveys",
     redirectMsg: "Survey not found."
 });
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     new Binder(self)
         .obs('createdOn', params.createdOn)
@@ -24,7 +24,7 @@ module.exports = function(params) {
     surveyUtils.initSurveyVM(self);
 
     // Only one is needed
-    var scrollTo = utils.makeScrollTo(".element");
+    let scrollTo = utils.makeScrollTo(".element");
     self.fadeUp = utils.fadeUp();
 
     function loadVM(survey) {
@@ -60,40 +60,40 @@ module.exports = function(params) {
     }
 
     self.createNewElement = function(vm, event) {
-        var type = event.target.getAttribute("data-type");
-        var el = surveyUtils.newField(type);
+        let type = event.target.getAttribute("data-type");
+        let el = surveyUtils.newField(type);
         self.elementsObs.push(el);
-        var index = self.elementsObs().length-1;
+        let index = self.elementsObs().length-1;
         self.selectedElementObs(index);
     };
     self.createElementAfter = function(element, event) {
-        var index = self.elementsObs.indexOf(element);
-        var el = surveyUtils.newField("MultiValueConstraints");
+        let index = self.elementsObs.indexOf(element);
+        let el = surveyUtils.newField("MultiValueConstraints");
         self.elementsObs.splice(index+1,0,el);
         self.selectedElementObs(index+1);
     };
     self.selectElement = function(data, event) {
-        var index = self.elementsObs().indexOf(data);
+        let index = self.elementsObs().indexOf(data);
         self.selectedElementObs(index);
     };
     self.deleteElement = utils.animatedDeleter(scrollTo, self.elementsObs, self.selectedElementObs);
 
     self.changeElementType = function(domEl) {
-        var index = ko.contextFor(domEl).$index();
-        var oldElement = self.elementsObs()[index];
-        var newType = domEl.getAttribute("data-type");
+        let index = ko.contextFor(domEl).$index();
+        let oldElement = self.elementsObs()[index];
+        let newType = domEl.getAttribute("data-type");
 
-        var newElement = surveyUtils.changeElementType(oldElement, newType);
+        let newElement = surveyUtils.changeElementType(oldElement, newType);
         if (newType !== oldElement.type) {
             self.elementsObs.splice(index, 1, newElement);
         }
         scrollTo(index);
     };
     self.copyElement = function(element) {
-        var index = self.elementsObs.indexOf(element);
+        let index = self.elementsObs.indexOf(element);
         surveyUtils.observablesToElement(element);
 
-        var newElement = JSON.parse(JSON.stringify(element));
+        let newElement = JSON.parse(JSON.stringify(element));
         delete newElement.guid;
         delete newElement.identifier;
         if (newElement.type === "SurveyInfoScreen") {

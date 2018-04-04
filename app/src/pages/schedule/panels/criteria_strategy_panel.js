@@ -1,11 +1,8 @@
-module.exports = function(params) {
-    var self = this;
+import fn from '../../../functions';
 
-    self.labelObs = params.viewModel.labelObs;
-    self.scheduleCriteriaObs = params.viewModel.scheduleCriteriaObs;
-    self.selectedElementObs = params.viewModel.selectedElementObs;
-    
-    self.selectCriteria = params.viewModel.selectCriteria;
-    self.removeCriteria = params.viewModel.removeCriteria;
-    self.addCriteria = params.viewModel.addCriteria;
+module.exports = function(params) {
+    let self = this;
+
+    fn.copyProps(self, params.viewModel, 'labelObs', 'scheduleCriteriaObs', 'selectedElementObs',
+        'selectCriteria', 'removeCriteria', 'addCriteria');
 };

@@ -5,20 +5,22 @@ import ko from 'knockout';
 import utils from '../../utils';
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
     self.link = {};
     self.closeDialog = root.closeDialog;
 
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .bind('addField')
         .bind('namespace')
         .bind('packageName')
         .bind('fingerprints[]', []);
     
     self.add = function() {
-        var value = self.addFieldObs();
-        self.fingerprintsObs.push(value);
-        self.addFieldObs("");
+        let value = self.addFieldObs();
+        if (value) {
+            self.fingerprintsObs.push(value);
+            self.addFieldObs("");
+        }
     };
     self.remove = function(path) {
         self.fingerprintsObs.remove(path);
@@ -35,7 +37,7 @@ module.exports = function(params) {
         return !/[0-9a-fA-F:]{95,95}/.test(fp);
     }
     self.save = function() {
-        var error = new BridgeError();
+        let error = new BridgeError();
         if (!self.namespaceObs()) {
             error.addError("namespace", "is required");
         }

@@ -32,7 +32,7 @@ export default class EventEmitter {
         }
         if (this.events[event]) {
             if(typeof callback === 'function'){
-                var index = this.events[event].indexOf(callback);
+                let index = this.events[event].indexOf(callback);
                 if(index !== -1){
                     this.events[event].splice(index, 1);
                 }
@@ -47,7 +47,7 @@ export default class EventEmitter {
             throw new Error("Invalid Arguments");
         }
         if (this.events[event]) {
-            var args = Array.prototype.slice.call(arguments,1);
+            let args = Array.prototype.slice.call(arguments,1);
             this.events[event].forEach(function(callback) {
                 callback.apply(this, args);
             }, this);

@@ -1,6 +1,6 @@
 import surveyUtils from '../survey_utils';
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
     surveyUtils.initConstraintsVM(self, params);
 };

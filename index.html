@@ -79,10 +79,12 @@
                             <a href="#/participants" class="item" data-bind="active: isActive, visible: isResearcher()">
                                 Participants
                             </a>
-                            <a href="#/external_ids" class="item" data-bind="active: isActive, visible: codesEnumeratedObs()">
+                            <a href="#/external_ids" class="item" data-bind="active: isActive, 
+                                visible: externalIdValidationEnabledObs()">
                                 External IDs
                             </a>
-                            <a href="#/external_ids" class="item" data-bind="active: isActive, visible: codesEnumeratedObs() && isDeveloper()">
+                            <a href="#/external_ids" class="item" data-bind="active: isActive, 
+                                visible: externalIdValidationEnabledObs() && isDeveloper()">
                                 External IDs
                             </a>
                             <a href="#/reports" class="item" data-bind="active: isActive, visible: isDeveloper() || isResearcher()">

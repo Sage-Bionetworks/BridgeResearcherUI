@@ -12,7 +12,7 @@ export default class Cache {
         this.cachedItems = {};
     }
     get(key) {
-        var value = this.cachedItems[key];
+        let value = this.cachedItems[key];
         if (LOG_CACHE) { 
             console.info((value) ? "[json cache] hit" : "[json cache] miss", key); 
         }

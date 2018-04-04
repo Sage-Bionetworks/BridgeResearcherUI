@@ -6,12 +6,12 @@ import tables from '../../tables';
 import utils from '../../utils';
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
     self.keys = params;
 
     self.formatDateTime = fn.formatDateTime;
     
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .obs('guid', params.guid)
         .obs('createdOn', params.createdOn)
         .obs('published', false)

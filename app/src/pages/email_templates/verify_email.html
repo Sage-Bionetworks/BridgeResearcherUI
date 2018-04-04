@@ -13,18 +13,21 @@
     <div class="ui grid">
         <div class="ten wide column">
             <errors></errors>
-            <form class="ui form">
+            <form class="ui form" data-bind="attr: {disabled: !autoVerificationEnabledObs()}">
                 <div class="field" style="margin: 1rem 0 2rem 0">
                     <ui-checkbox params="checkedObs: autoVerificationEnabledObs">
                         Send a verification email as part of sign up
                     </ui-checkbox>
                 </div>
-                <div class="required field" id="verifyEmailTemplate_subject">
-                    <label>Subject</label>
-                    <input type="text" name="subject" data-bind="textInput: subjectObs, hasFocus: true"/>
-                </div>
-                <div class="field" id="verifyEmailTemplate_body">
-                    <textarea id="veTemplate" data-bind="ckeditor: $component.initEditor" class="ui textarea doc"></textarea>
+                <div class="disable-pane">
+                    <div class="required field" id="verifyEmailTemplate_subject">
+                        <label>Subject</label>
+                        <input type="text" name="subject" data-bind="textInput: subjectObs, hasFocus: true,
+                            attr: {disabled: !autoVerificationEnabledObs()}"/>
+                    </div>
+                    <div class="field" id="verifyEmailTemplate_body">
+                        <textarea id="veTemplate" data-bind="ckeditor: $component.initEditor" class="ui textarea doc"></textarea>
+                    </div>
                 </div>
             </form>
         </div>

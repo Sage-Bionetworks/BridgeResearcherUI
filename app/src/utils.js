@@ -24,7 +24,7 @@ const statusHandlers = {
     500: serverError
 };
 
-var pendingControl = null;
+let pendingControl = null;
 toastr.options = config.toastr;
 
 function notAllowed(response, params) {
@@ -38,7 +38,7 @@ function badResponse(response, params) {
     console.log(response, params);
     // If the error does not return JSON, we have to hunt around for what happened, 
     // and that gets sorted out here.
-    var payload = response.responseJSON || {};
+    let payload = response.responseJSON || {};
     payload.message = payload.message || response.responseText;
     if (!params.transient && !payload.errors) {
         payload.errors = {};
@@ -77,7 +77,7 @@ function errorMessageHandler(message, params) {
     if (params.transient) {
         toastr.error(message);
     } else {
-        var payload = {"message":message};
+        let payload = {"message":message};
         ko.postbox.publish("showErrors", payload);
     }
 }
@@ -106,7 +106,7 @@ function failureHandler(params) {
         if (typeof response === "string") {
             errorMessageHandler(response, params);
         } else if (fn.is(response.status,'Number')) {
-            var handler = statusHandlers[ response.status ] || statusNotHandled;
+            let handler = statusHandlers[ response.status ] || statusNotHandled;
             handler(response, params);
         } else if (response.message) {
             errorMessageHandler(response.message, params);
@@ -120,9 +120,9 @@ function failureHandler(params) {
 }
 function makeOptionFinder(arrayOrObs) {
     return function(value) {
-        var options = ko.unwrap(arrayOrObs);
-        for (var i= 0; i < options.length; i++) {
-            var option = options[i];
+        let options = ko.unwrap(arrayOrObs);
+        for (let i= 0; i < options.length; i++) {
+            let option = options[i];
             if (option.value === value) {
                 return option;
             }
@@ -130,9 +130,9 @@ function makeOptionFinder(arrayOrObs) {
     };
 }
 function makeOptionLabelFinder(arrayOrObs) {
-    var finder = makeOptionFinder(arrayOrObs);
+    let finder = makeOptionFinder(arrayOrObs);
     return function(value) {
-        var option = finder(value);
+        let option = finder(value);
         return option ? option.label : "";
     };
 }
@@ -148,7 +148,7 @@ function clearPendingControl() {
     }
 }
 function createEmailTemplate(email, identifier) {
-    var parts = email.split("@");
+    let parts = email.split("@");
     if (parts[0].indexOf("+") > -1) {
         parts[0] = parts[0].split("+")[0];
     }
@@ -160,16 +160,16 @@ function atLeastOneSignedConsent(consentHistories) {
     }
     // At least one consent history whose last item has not been withdrawn.
     return Object.keys(consentHistories).some(function(guid) {
-        var history = consentHistories[guid];
+        let history = consentHistories[guid];
         if (history.length === 0) {
             return true;
         }
-        var last = history[history.length-1];
+        let last = history[history.length-1];
         return (last && typeof last.withdrewOn === "undefined");
     });
 }
 function copyString(value) {
-    var p = document.createElement("textarea");
+    let p = document.createElement("textarea");
     p.style = "position:fixed;top:0;left:0";
     p.value = value;
     document.body.appendChild(p);
@@ -212,9 +212,9 @@ function clearErrors() {
 }
 function makeScrollTo(itemSelector) {
     return function scrollTo(index) {
-        var offset = $(".fixed-header").outerHeight() * 1.75;
-        var $scrollbox = $(".scrollbox");
-        var $element = $scrollbox.find(itemSelector).eq(index);
+        let offset = $(".fixed-header").outerHeight() * 1.75;
+        let $scrollbox = $(".scrollbox");
+        let $element = $scrollbox.find(itemSelector).eq(index);
         if ($scrollbox.length && $element.length) {
             $scrollbox.scrollTo($element, {offsetTop: offset});
             setTimeout(function() {
@@ -234,7 +234,7 @@ function createParticipantForID(email, identifier) {
 function fadeUp() {
     return function(div) {
         if (div.nodeType === 1) {
-            var $div = $(div);
+            let $div = $(div);
             $div.slideUp(function() { $div.remove(); });
         }
     };
@@ -245,7 +245,7 @@ function animatedDeleter(scrollTo, elementsObs, selectedElementObs) {
         event.stopPropagation();
         alerts.deleteConfirmation("Are you sure you want to delete this?", function() {
             setTimeout(function() {
-                var index = elementsObs.indexOf(element);
+                let index = elementsObs.indexOf(element);
                 elementsObs.splice(index,1);
                 setTimeout(function() {
                     if (selectedElementObs) {

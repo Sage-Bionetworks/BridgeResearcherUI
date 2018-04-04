@@ -5,7 +5,7 @@ import fn from '../../functions';
 import tables from '../../tables';
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     schemaUtils.initVM(self);
 

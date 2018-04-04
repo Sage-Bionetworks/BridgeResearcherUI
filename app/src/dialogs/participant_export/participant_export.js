@@ -7,8 +7,7 @@ import root from '../../root';
 import saveAs from '../../../lib/filesaver.min.js';
 import utils from '../../utils';
 
-var serverService = new ServerService(false);
-
+const serverService = new ServerService(false);
 const PREMSG = "Only exporting accounts that ";
 const FETCH_DELAY = 100;
 const PAGE_SIZE = 100;
@@ -25,11 +24,11 @@ const FIELD_FORMATTERS = {
     }
 };
 
-var ATTRIBUTES = [];
-var HEADERS = [];
+let ATTRIBUTES = [];
+let HEADERS = [];
 
 function formatConsentRecords(record) {
-    var aString = record.subpopulationGuid;
+    let aString = record.subpopulationGuid;
     aString += " consented=" + fn.formatDateTime(record.signedOn);
     if (record.withdrewOn) {
         aString += ", withdrew=" + fn.formatDateTime(record.withdrewOn);
@@ -37,12 +36,12 @@ function formatConsentRecords(record) {
     return aString;
 }
 
-var CollectParticipantsWorker = function(params) {
+let CollectParticipantsWorker = function(params) {
     fn.copyProps(this, params, 'total', 'emailFilter', 'startTime', 'endTime');
     this.identifiers = [];
-    var pages = [];
-    var numPages = Math.floor(this.total/PAGE_SIZE);
-    for (var i=0; i <= numPages; i++) {
+    let pages = [];
+    let numPages = Math.floor(this.total/PAGE_SIZE);
+    for (let i=0; i <= numPages; i++) {
         pages.push(i*PAGE_SIZE);
     }
     this.pageOffsets = pages;
@@ -81,7 +80,7 @@ CollectParticipantsWorker.prototype = {
         return Promise.resolve(this.identifiers);
     }
 };
-var FetchParticipantWorker = function(identifiers, canContactByEmail) {
+let FetchParticipantWorker = function(identifiers, canContactByEmail) {
     this.identifiers = identifiers;
     this.canContactByEmail = canContactByEmail;
     this.fields = FIELDS;
@@ -131,9 +130,9 @@ FetchParticipantWorker.prototype = {
             utils.atLeastOneSignedConsent(participant.consentHistories);
     },
     _formatOneParticipant: function(participant) {
-        var array = this.fields.map(function(field) {
-            var formatter = this.formatters[field];
-            var value = participant[field];
+        let array = this.fields.map(function(field) {
+            let formatter = this.formatters[field];
+            let value = participant[field];
             return (formatter) ? formatter(value) : value;
         }, this);
         this.attributes.forEach(function(field) {
@@ -147,7 +146,7 @@ FetchParticipantWorker.prototype = {
 };
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
     
     batchDialogUtils.initBatchDialog(self);
     fn.copyProps(self, fn, 'formatDateTime');
@@ -179,11 +178,11 @@ module.exports = function(params) {
         self.statusObs("Currently preparing your *.tsv file...");
         event.target.setAttribute("disabled","disabled");
 
-        var collectWorker = new CollectParticipantsWorker(params);
+        let collectWorker = new CollectParticipantsWorker(params);
 
         self.run(collectWorker).then(function(identifiers) {
-            var fetchWorker = new FetchParticipantWorker(identifiers, self.canContactByEmailObs());
-            var totalParticipants = identifiers.length;
+            let fetchWorker = new FetchParticipantWorker(identifiers, self.canContactByEmailObs());
+            let totalParticipants = identifiers.length;
 
             self.run(fetchWorker).then(function(output) {
                 self.exportData = output;
@@ -194,10 +193,10 @@ module.exports = function(params) {
         });
     };
     self.download = function() {
-        var blob = new Blob([HEADERS+self.exportData], {
+        let blob = new Blob([HEADERS+self.exportData], {
             type: "text/tab-separated-values;charset=utf-8"
         });
-        var dateString = new Date().toISOString().split("T")[0];  
+        let dateString = new Date().toISOString().split("T")[0];  
         saveAs.saveAs(blob, "participants-"+dateString+".tsv");
     };
 };

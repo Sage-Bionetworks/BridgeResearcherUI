@@ -33,9 +33,6 @@ export default {
             PUBLISH: "Are you sure you want to publish this shared module version?"
         }
     },
-    // options: codesEnumerated, codeRequired, notificationsEnabled, under studyId
-    studies: {
-    },
     cache: '/v3/cache',
     compoundactivitydefinitions: '/v3/compoundactivitydefinitions',
     emailStatus: '/v3/studies/self/emailStatus',

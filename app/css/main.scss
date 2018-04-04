@@ -49,14 +49,16 @@ header {
     &.dev {
         @include gradient(orange, 41%, #B22222, 100%);
     }
-    i {
-        font-size: 2rem!important;
-    }
     h2 {
         font-weight: normal;
         letter-spacing: 2px;
         color: white;
         padding: 1rem 2rem 0rem 1.5rem;
+        i {
+            font-size: 1.6rem!important;
+            cursor: pointer;
+            opacity: 0.8!important;
+        }
     }
     a {
         color: white;
@@ -69,11 +71,13 @@ header {
         span {
             font-variant: small-caps;
             letter-spacing: 2px;
+            opacity: 0.8!important;
         }
         i {
             position: absolute; 
             right: 1rem; 
             top: .2rem;
+            font-size: 2rem!important;
         }
     }
 }

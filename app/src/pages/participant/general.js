@@ -6,32 +6,53 @@ import ko from 'knockout';
 import root from '../../root';
 import utils from '../../utils';
 
-var failureHandler = utils.failureHandler({
+const failureHandler = utils.failureHandler({
     redirectTo: "participants",
     redirectMsg: "Participant not found"
 });
-var OPTIONS = [
+const OPTIONS = [
     {value: 'no_sharing', label:'No Sharing'},
     {value: 'sponsors_and_partners', label:'Sponsors And Partners'},
     {value: 'all_qualified_researchers', label:'All Qualified Researchers'}
 ];
-var ROLES = ["Developer", "Researcher", "Administrator", "Worker"];
-var NEW_PARTICIPANT = {id:"new",attributes:{},phone:{number: '', regionCode: 'US'}};
+const NEW_PARTICIPANT = {id:"new",attributes:{},phone:{number: '', regionCode: 'US'}};
+
+function selectRoles(session) {
+    let set = new Set();
+    for (let i=0; i < session.roles.length; i++) {
+        var role = session.roles[i];
+        switch(role) {
+            case 'admin':
+                set.add('Worker');
+                set.add('Administrator');
+                /* falls through */
+            case 'researcher':
+                set.add("Researcher");
+                /* falls through */
+            case 'developer':
+                set.add("Developer");
+                /* falls through */
+        }
+    }
+    var roles = Array.from(set);
+    roles.sort();
+    return roles;
+}
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .obs('showEnableAccount', false)
         .obs('isNew', (params.userId === "new"))
         .obs('healthCode', 'N/A', Binder.formatHealthCode)
         .obs('allDataGroups[]')
         .obs('createdOn', null, fn.formatDateTime)
-        .obs('allRoles[]', ROLES)
-        .bind('email')
-        .bind('phone', null, Binder.formatPhone, Binder.persistPhone)
+        .obs('allRoles[]', [])
         .obs('emailNull', true)
         .obs('phoneNull', true)
+        .bind('email')
+        .bind('phone', null, Binder.formatPhone, Binder.persistPhone)
         .bind('phoneRegion', 'US')
         .bind('attributes[]', [], Binder.formatAttributes, Binder.persistAttributes)
         .bind('firstName')
@@ -49,7 +70,7 @@ module.exports = function(params) {
         .obs('title', (params.userId === "new") ? "New participant" : "&#160;");
     
     fn.copyProps(self, root, 'isAdmin');
-    
+
     self.statusObs.subscribe(function(status) {
         self.showEnableAccountObs(status !== "enabled");
     });
@@ -66,11 +87,16 @@ module.exports = function(params) {
         }
     };
 
+    serverService.getSession().then((session) => {
+        var roles = selectRoles(session);
+        self.allRolesObs(roles);
+    });
+
     function initStudy(study) {
         // there's a timer in the control involved here, we need to use an observer
         self.allDataGroupsObs(study.dataGroups || []);
         
-        var attrs = self.study.userProfileAttributes.map(function(key) {
+        let attrs = self.study.userProfileAttributes.map(function(key) {
             return {key:key, label: fn.formatTitleCase(key,''), obs: ko.observable()}; 
         });
         self.attributesObs(attrs);
@@ -127,11 +153,11 @@ module.exports = function(params) {
     };
 
     self.save = function(vm, event) {
-        var participant = binder.persist(NEW_PARTICIPANT);
+        let participant = binder.persist(NEW_PARTICIPANT);
         // This should be updating the title, but it isn't, because the id is still "new".
         binder.persist(participant);
 
-        var updatedTitle = self.study.emailVerificationEnabled ? 
+        let updatedTitle = self.study.emailVerificationEnabled ? 
             fn.formatName(participant) : participant.externalId;
         function updateName(response) {
             self.titleObs(updatedTitle);

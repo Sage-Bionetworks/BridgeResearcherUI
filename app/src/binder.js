@@ -3,24 +3,24 @@ import fn from './functions.js';
 import jsonFormatter from './json_formatter';
 
 function nameInspector(string) {
-    var isArray = /\[\]$/.test(string);
-    var name = (isArray) ? string.match(/[^\[]*/)[0] : string;
+    let isArray = /\[\]$/.test(string);
+    let name = (isArray) ? string.match(/[^\[]*/)[0] : string;
     return {name: name, observableName: name+"Obs", isArray: isArray};
 }
 function createObservable(doBinding) {
     return function(name, defaultValue, modelTransform, obsTransform) {
-        var info = nameInspector(name);
+        let info = nameInspector(name);
         // No default because registering one indicates you want an update for a model
         // whether it has a property for the observer or not.
         info.modelTransform = modelTransform;
         info.obsTransform = obsTransform || fn.identity; // not needed for an observer
         info.bind = doBinding;
         
-        var value = (typeof defaultValue === "undefined") ? undefined : defaultValue;
+        let value = (typeof defaultValue === "undefined") ? undefined : defaultValue;
         // Don't call the transform for the initial value. We have transforms that 
         // require study to be loaded and this is usually too early in the cycle for 
         // that to be true. Just init the value you want to see in the world.
-        var obs = (info.isArray) ?
+        let obs = (info.isArray) ?
             ko.observableArray(value) :
             ko.observable(value);
         this.vm[info.observableName] = info.observable = obs;
@@ -75,14 +75,14 @@ export default class Binder {
     update() {
         console.assert(arguments.length === 0 || typeof arguments[0] === 'string',
             "binder.update() returns function for updating, do not call directly with a model object.");
-        var fields = (arguments.length > 0) ? arguments : Object.keys(this.fields);
+        let fields = (arguments.length > 0) ? arguments : Object.keys(this.fields);
         return (model) => {
-            for (var i=0; i < fields.length; i++) {
-                var field = fields[i];
-                var info = this.fields[field];
-                var context = {oldValue: info.observable(), model: model, vm: this.vm, observer: info.observable};
+            for (let i=0; i < fields.length; i++) {
+                let field = fields[i];
+                let info = this.fields[field];
+                let context = {oldValue: info.observable(), model: model, vm: this.vm, observer: info.observable};
                 if (info.modelTransform) {
-                    var value = info.modelTransform(model[field], context);
+                    let value = info.modelTransform(model[field], context);
                     info.observable(value);
                 } else if (typeof model[field] !== "undefined") {
                     info.observable(model[field]);
@@ -110,13 +110,13 @@ export default class Binder {
      *      - observer - the observer
      */
     persist(model) {
-        var copy = Object.assign({}, model);
+        let copy = Object.assign({}, model);
         Object.keys(this.fields).forEach(field => {
-            var info = this.fields[field];
+            let info = this.fields[field];
             if (info.bind) {
-                var context = {oldValue: model[info.name], model: model, 
+                let context = {oldValue: model[info.name], model: model, 
                     copy: copy, vm: this.vm, observer: info.observable};
-                var value = info.obsTransform(info.observable(), context);
+                let value = info.obsTransform(info.observable(), context);
                 if (value !== null && typeof value !== "undefined") {
                     copy[info.name] = value;    
                 } else {
@@ -170,7 +170,7 @@ export default class Binder {
         }, {});
     }
     static formatTitle(value, context) {
-        var user = context.model;
+        let user = context.model;
         if (user.id === "new" && fn.isBlank(user.firstName) && fn.isBlank(user.lastName)) {
             return "New participant";
         }

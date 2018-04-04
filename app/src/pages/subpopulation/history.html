@@ -9,25 +9,30 @@
         </div>
         <div class="fixed-header-buttons"></div>
     </div>
-    <div class="ui secondary pointing menu">
-        <a class="item" data-bind="attr:{
-            href: '#/subpopulations/'+guidObs()}">
-            <i class="setting icon"></i> General
-        </a>
-        <a class="item" data-bind="attr:{
-            href: '#/subpopulations/'+guidObs()+'/consents/recent'}">
-            <i class="file outline icon"></i> Editor
-        </a>
-        <a class="active item">
-            <i class="history icon"></i> History &amp; Publication
-        </a>
-        <a class="item" data-bind="attr:{
-            href: '#/subpopulations/'+guidObs()+'/consents/download'}">
-            <i class="download icon"></i> Download
-        </a>
-    </div>
+    <subpop-tabset params="guidObs: guidObs"></subpop-tabset>
 </div>
 <div class="scrollbox">
+    <div class="line-control" style="margin-bottom: 1rem">
+        <div class="line-control-stretch">
+            <div class="ui breadcrumb">
+                <a class="section" 
+                    data-bind="href:'#/subpopulations/'+guidObs()+'/editor/'+createdOnObs()">Consent Editor</a>
+                <i class="right chevron icon divider"></i>
+                <b>Edit History</b>
+            </div>
+        </div>
+        <div class="line-control">
+            <div data-bind="visible: !!createdOnObs()" style="margin-right: 1rem">
+                <i class="clock icon"></i> <span data-bind="text: formatDateTime(createdOnObs())"></span>
+            </div>
+            <div class="green mini ui label" data-bind="visible: activeObs">
+                <i class="checkmark icon"></i> Published
+            </div>
+            <div class="orange ui mini label" data-bind="visible: !activeObs()">
+                <i class="warning icon"></i> Not Published
+            </div>
+        </div>
+    </div>
     <div class="ui grid">
         <div class="ten wide column">
             <table class="ui compact selectable table">
@@ -40,8 +45,8 @@
                 <tbody data-bind="foreach: historyItemsObs">
                     <tr data-bind="css: { positive: $data.active }">
                         <td>
-                            <a data-bind="attr: {href: '#/subpopulations/'+$parent.guidObs()+'/consents/'+$data.createdOn},
-                            text: $parent.formatDateTime($data.createdOn)"></a>
+                            <a data-bind="attr: {href: '#/subpopulations/'+$parent.guidObs()+
+                                '/editor/'+$data.createdOn}, text: $parent.formatDateTime($data.createdOn)"></a>
                         </td>
                         <td>
                             <div data-bind="visible: $data.active" style="text-align: right">

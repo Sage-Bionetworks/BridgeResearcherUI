@@ -25,7 +25,7 @@ export default class BridgeError {
         return false;
     }
     addError(fieldName, message) {
-        var e = this.responseJSON.errors;
+        let e = this.responseJSON.errors;
         e[fieldName] = e[fieldName] || [];
         e[fieldName].push(fieldName + " " + message);
     }

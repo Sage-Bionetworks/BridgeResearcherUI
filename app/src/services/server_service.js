@@ -19,9 +19,9 @@ const SESSION_KEY = 'session';
 const SESSION_STARTED_EVENT_KEY = 'sessionStarted';
 
 // We want this to be shared by all server service instances.
-var session = null;
-var cache = new Cache();
-var listeners = new EventEmitter();
+const cache = new Cache();
+const listeners = new EventEmitter();
+let session = null;
 
 function esc(string) {
     return encodeURIComponent(string);
@@ -41,7 +41,7 @@ function deleteInt(url) {
     return $.ajax(baseParams('DELETE', url));
 }
 function baseParams(method, url, data) {
-    var headers = {'Content-Type': 'application/json'};
+    let headers = {'Content-Type': 'application/json'};
     if (session && session.sessionToken) {
         headers['Bridge-Session'] = session.sessionToken;
     }
@@ -119,7 +119,7 @@ export class ServerService {
     }
     cacheParticipantName(response) {
         if (response && response.id) {
-            var name = fn.formatNameAsFullLabel(response);
+            let name = fn.formatNameAsFullLabel(response);
             cache.set(response.id+':name', {name: name, status: response.status});
         }
         return response;
@@ -165,7 +165,7 @@ export class ServerService {
         if (!session) {
             console.error("Cannot reauthenticate: session has expired and been removed.");
         }
-        var reauth = {study: session.studyId, email: session.email, 
+        let reauth = {study: session.studyId, email: session.email, 
             reauthToken: session.reauthToken};
         return postInt(config.host[session.environment] + config.reauth, reauth)
             .then(this.cacheSession());
@@ -187,7 +187,7 @@ export class ServerService {
         return this.gethttp(config.getStudyPublicKey);
     }
     saveStudy(study, isAdmin) {
-        var url = (isAdmin) ? (config.getStudy + study.identifier) : config.getCurrentStudy;
+        let url = (isAdmin) ? (config.getStudy + study.identifier) : config.getCurrentStudy;
         return this.post(url, study).then(function(response) {
             study.version = response.version;
             return response;
@@ -242,14 +242,14 @@ export class ServerService {
         return this.post(config.survey + guid + '/revisions/' + createdOn + '/version');
     }
     updateSurvey(survey) {
-        var createdString = new Date(survey.createdOn).toISOString();
-        var url = config.survey + survey.guid + '/revisions/' + createdString;
+        let createdString = new Date(survey.createdOn).toISOString();
+        let url = config.survey + survey.guid + '/revisions/' + createdString;
         return this.post(url, survey);
     }
     deleteSurvey(survey, physical) {
-        var queryString = fn.queryString({physical:(physical === true)});
-        var createdString = new Date(survey.createdOn).toISOString();
-        var url = config.survey + survey.guid + '/revisions/' + createdString + queryString;
+        let queryString = fn.queryString({physical:(physical === true)});
+        let createdString = new Date(survey.createdOn).toISOString();
+        let url = config.survey + survey.guid + '/revisions/' + createdString + queryString;
         return this.del(url);
     }
     getAllUploadSchemas() {
@@ -276,7 +276,7 @@ export class ServerService {
         });
     }
     updateUploadSchema(schema) {
-        var path = config.schemasV4+"/"+esc(schema.schemaId)+"/revisions/"+esc(schema.revision);
+        let path = config.schemasV4+"/"+esc(schema.schemaId)+"/revisions/"+esc(schema.revision);
         return this.post(path, schema).then(function(response) {
             schema.version = response.version;
             return response;
@@ -302,7 +302,7 @@ export class ServerService {
         });
     }
     saveSchedulePlan(plan) {
-        var path = (plan.guid) ? (config.schemaPlans + "/" + plan.guid) : config.schemaPlans;
+        let path = (plan.guid) ? (config.schemaPlans + "/" + plan.guid) : config.schemaPlans;
         return this.post(path, plan).then(function(newPlan) {
             plan.guid = newPlan.guid;
             plan.version = newPlan.version;
@@ -322,7 +322,7 @@ export class ServerService {
         return this.post(config.subpopulations, subpop);
     }
     updateSubpopulation(subpop) {
-        var path = config.subpopulations + "/" + subpop.guid;
+        let path = config.subpopulations + "/" + subpop.guid;
         return this.post(path, subpop).then(function(response) {
             subpop.version = response.version;
             return response;
@@ -347,14 +347,14 @@ export class ServerService {
         return this.del(config.cache+"/"+esc(cacheKey));
     }
     getParticipants(offsetBy, pageSize, emailFilter, phoneFilter, startTime, endTime) {
-        var queryString = fn.queryString({offsetBy, pageSize, emailFilter, phoneFilter, startTime, endTime});
+        let queryString = fn.queryString({offsetBy, pageSize, emailFilter, phoneFilter, startTime, endTime});
         return this.gethttp(config.participants+queryString);
     }
     getParticipant(id) {
         return this.gethttp(config.participants+"/"+id).then(this.cacheParticipantName.bind(this));
     }
     getParticipantName(id) {
-        var name = cache.get(id+':name');
+        let name = cache.get(id+':name');
         if (name) {
             return Promise.resolve(name);
         } else {
@@ -418,7 +418,7 @@ export class ServerService {
         return this.gethttp(config.reports+fn.queryString({"type":"study"}));
     }
     getStudyReport(identifier, startDate, endDate) {
-        var queryString = fn.queryString({startDate: startDate, endDate: endDate});
+        let queryString = fn.queryString({startDate: startDate, endDate: endDate});
         return this.gethttp(config.reports + "/" + identifier + queryString);
     }
     addStudyReport(identifier, report) {
@@ -440,15 +440,18 @@ export class ServerService {
         return this.gethttp(config.reports+ fn.queryString({"type":"participant"}));
     }
     getParticipantUploads(userId, args) {
-        var queryString = fn.queryString(args);
+        let queryString = fn.queryString(args);
         return this.gethttp(config.participants + '/' + userId + '/uploads' + queryString);
     }
     getParticipantUploadStatus(uploadId) {
         return this.gethttp(config.uploadstatuses + '/' + uploadId);
     }
     getParticipantReport(userId, identifier, startDate, endDate) {
-        var queryString = fn.queryString({startDate: startDate, endDate: endDate});
+        let queryString = fn.queryString({startDate: startDate, endDate: endDate});
         return this.gethttp(config.participants + '/' + userId + '/reports/' + identifier + queryString);
+    }
+    getParticipantActivityEvents(userId) {
+        return this.gethttp(config.participants + '/' + userId + '/activityEvents');
     }
     addParticipantReport(userId, identifier, report) {
         return this.post(config.participants + '/' + userId + '/reports/' + identifier, report);
@@ -460,11 +463,11 @@ export class ServerService {
         return this.del(config.participants + '/' + userId + '/reports/' + identifier + '/' + date);
     }
     getParticipantActivities(userId, activityGuid, params) {
-        var queryString = fn.queryString(params);
+        let queryString = fn.queryString(params);
         return this.gethttp(config.participants + '/' + userId + '/activities/' + activityGuid + queryString);
     }
     getParticipantNewActivities(userId, referentType, guid, params) {
-        var queryString = fn.queryString(params);
+        let queryString = fn.queryString(params);
         return this.gethttp(config.participants + '/' + userId + '/activities/' + referentType.toLowerCase() + 
             '/' + encodeURIComponent(guid) + queryString);
     }
@@ -542,7 +545,7 @@ export class ServerService {
         return this.del(config.metadata+'/'+esc(id)+'/versions/'+esc(version));
     }
     importMetadata(id, version) {
-        var url = (typeof version === "number") ?
+        let url = (typeof version === "number") ?
             (config.sharedmodules+'/'+esc(id)+'/versions/'+esc(version)+'/import') :
             (config.sharedmodules+'/'+esc(id)+'/import');
         return this.post(url);

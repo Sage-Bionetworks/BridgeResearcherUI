@@ -8,16 +8,17 @@ import tables from '../../tables';
 import utils from '../../utils';
 import toastr from 'toastr';
 
-var OPTIONS = {offsetBy:null, pageSize: 1, assignmentFilter:false};
+let OPTIONS = {offsetBy:null, pageSize: 1, assignmentFilter:false};
 
 module.exports = function() {
-    var self = this;
+    let self = this;
     
-    var binder = new Binder(self)
+    let binder = new Binder(self)
         .obs('items[]', [])
         .obs('total', 0)
         .obs('result', '')
         .obs('searchLoading', false)
+        .obs('externalIdValidationEnabled', false)
         .obs('idFilter')
         .obs('showResults', false);
 
@@ -25,7 +26,7 @@ module.exports = function() {
     self.vm = self;
     self.callback = fn.identity;
 
-    fn.copyProps(self, root, 'codesEnumeratedObs', 'isDeveloper', 'isResearcher');
+    fn.copyProps(self, root, 'isDeveloper', 'isResearcher');
     tables.prepareTable(self, {name: 'external ID'});
 
     function extractId(response) {
@@ -36,7 +37,7 @@ module.exports = function() {
     }
     function createNewCredentials(identifier) {
         self.resultObs(identifier);
-        var participant = utils.createParticipantForID(self.study.supportEmail, identifier);
+        let participant = utils.createParticipantForID(self.study.supportEmail, identifier);
         return serverService.createParticipant(participant);
     }
     function updatePageWithResult(response) {

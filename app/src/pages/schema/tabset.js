@@ -7,13 +7,13 @@ import ko from 'knockout';
  *      the parent view model
  */
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     fn.copyProps(self, params.viewModel, 'isNewObs','schemaIdObs','revisionObs','moduleIdObs','moduleVersionObs');
 
     self.computeds = [];
     self.linkMaker = function(tabName) {
-        var c = ko.computed(function() { 
+        let c = ko.computed(function() { 
             return '#/schemas/'+encodeURIComponent(self.schemaIdObs())+
                 '/versions/'+self.revisionObs()+'/'+tabName;
         });

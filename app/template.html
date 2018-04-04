@@ -8,8 +8,12 @@
     <script src="//cdn.ckeditor.com/4.7.1/full/ckeditor.js"></script>
 </head>
 <body style="opacity:0.0; color: #202020">
-    <header data-bind="visible: showNavigationObs, css: {dev: isDevEnvObs}">
-        <h2 data-bind="text: studyNameObs"></h2>
+    <header data-bind="css: {dev: isDevEnvObs}">
+        <h2>
+            <i class="white bars icon" data-bind="visible: showNavigationObs, click: hideNav"></i>
+            <i class="white bars icon" data-bind="visible: !showNavigationObs(), click: showNav"></i>
+            <span data-bind="text: studyNameObs"></span>
+        </h2>
         <div class="header-study-name">
             <span>Bridge Study Manager</span>
             <i class="white heartbeat icon"></i> 
@@ -19,7 +23,6 @@
         <main data-bind="component: {name: mainPageObs, params: mainParamsObs}">
         </main>
         <nav data-bind="visible: showNavigationObs">
-
             <div data-bind="semantic: 'accordion', visible: isSidebarActive('editor')"
                 style="margin-bottom: 1rem">
                 <div class="active title">
@@ -31,7 +34,6 @@
                     style="padding:0!important">
                 </div>
             </div>
-
             <div data-bind="semantic: 'accordion', visible: clipboard.entries().length > 0"
                 style="margin-bottom: 1rem">
                 <div class="active title">
@@ -59,7 +61,6 @@
                     </div>
                 </div>
             </div>
-
             <div data-bind="semantic: 'accordion'" id="nav-accordian">
                 <div class="title" data-bind="visible: !isSharedStudy()">
                     <i class="lab icon"></i> Study
@@ -82,7 +83,8 @@
                         <a href="#/participants" class="item" data-ref="participants" data-bind="visible: isResearcher()">
                             Participants
                         </a>
-                        <a href="#/external_ids" class="item" data-ref="extids" data-bind="visible: codesEnumeratedObs">
+                        <a href="#/external_ids" class="item" data-ref="extids" 
+                            data-bind="visible: externalIdValidationEnabledObs">
                             External IDs
                         </a>
                         <a href="#/reports" class="item" data-ref="reports" 
@@ -182,21 +184,15 @@
                     </div>
                 </div>
             </div>
+            <p style="text-align: center; margin-top: 1rem">
+                <a data-bind="click: signOut" href="#">Sign Out <i class="sign out icon"></i></a>
+            </p>
         </nav>
     </section>
     <footer>
-        <p data-bind="{attr:{'title': environmentObs}}">
-            &copy; 2015-2018 Sage Bionetworks &middot; 
-            <a data-bind="click: signOut" href="#">Sign Out <i class="sign out icon"></i></a>
-        </p>
+        <p>&copy; 2015-2018 Sage Bionetworks <span data-bind="html: '&middot; '+environmentObs(),
+            visible: environmentObs() !== 'production'"></span></p>
     </footer>
     <div data-bind="modal: dialogObs"></div>
-    
-    <div class="nav-content" style="top: 4.5rem" data-bind="visible: showNavigationObs, click: hideNav">
-        <i class="maximize icon"> </i>
-    </div>
-    <div class="nav-content" style="top: .5rem" data-bind="visible: !showNavigationObs(), click: showNav">
-        <i class="minimize icon"> </i>
-    </div>
 </body>
 </html>

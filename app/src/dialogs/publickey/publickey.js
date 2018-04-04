@@ -3,7 +3,7 @@ import Binder from '../../binder';
 import root from '../../root';
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     new Binder(self)
         .obs('downloadHref', params.study.identifier + ".pem")
@@ -12,7 +12,7 @@ module.exports = function(params) {
     self.close = root.closeDialog;
 
     serverService.getStudyPublicKey().then(function(response) {
-        var fileContents = 'data:text/plain;charset=utf-8,' + encodeURIComponent(response.publicKey);
+        let fileContents = 'data:text/plain;charset=utf-8,' + encodeURIComponent(response.publicKey);
         self.contentObs(response.publicKey);
         self.downloadFileNameObs(fileContents);
     });

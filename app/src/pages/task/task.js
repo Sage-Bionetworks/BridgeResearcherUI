@@ -6,6 +6,11 @@ import root from '../../root';
 import sharedModuleUtils from '../../shared_module_utils';
 import utils from '../../utils';
 
+const taskFailure = utils.failureHandler({
+    redirectTo: "tasks",
+    redirectMsg: "Task not found."
+});
+
 /**
  * This is written as an ES6 class, rather than the functional approach taken elsewhere. 
  * I feel "meh" about the difference, but I'll leave it here for the moment. You start 
@@ -56,8 +61,8 @@ module.exports = class Task {
     }
     addSchemas(schemas) {
         this.schemaListObs([]);
-        for (var i=0; i < schemas.length; i++) {
-            var newSchema = Task.schemaToView(schemas[i]);
+        for (let i=0; i < schemas.length; i++) {
+            let newSchema = Task.schemaToView(schemas[i]);
             this.schemaListObs.push(newSchema);
             Task.loadSchemaRevisions(newSchema);
         }
@@ -65,8 +70,8 @@ module.exports = class Task {
     }
     addSurveys(surveys) {
         this.surveyListObs([]);
-        for (var i=0; i < surveys.length; i++) {
-            var newSurvey = Task.surveyToView(surveys[i]);
+        for (let i=0; i < surveys.length; i++) {
+            let newSurvey = Task.surveyToView(surveys[i]);
             this.surveyListObs.push(newSurvey);
             Task.loadSurveyRevisions(newSurvey);
         }
@@ -83,7 +88,7 @@ module.exports = class Task {
     save(vm, event) {
         utils.startHandler(vm, event);
 
-        var methodName = (this.taskId === "new") ? "createTaskDefinition" : "updateTaskDefinition";
+        let methodName = (this.taskId === "new") ? "createTaskDefinition" : "updateTaskDefinition";
         this.task = this.binder.persist(this.task);
 
         serverService[methodName](this.task)
@@ -96,10 +101,7 @@ module.exports = class Task {
             return serverService.getTaskDefinition(this.taskId)
                 .then(this.binder.assign('task'))
                 .then(this.binder.update())
-                .catch(utils.failureHandler({
-                    redirectTo: "tasks",
-                    redirectMsg: "Task not found."
-                }));
+                .catch(taskFailure);
         }
     }    
     load() {
@@ -121,7 +123,7 @@ module.exports = class Task {
     }
     static schemaListToTask(schemaList, context) {
         return schemaList.map(function(schema) {
-            var obj = {id: schema.id};
+            let obj = {id: schema.id};
             if (schema.revisionObs()) {
                 obj.revision = schema.revisionObs();
             }
@@ -142,7 +144,7 @@ module.exports = class Task {
     }
     static surveyListToTask(surveyList, context) {
         return surveyList.map(function(survey) {
-            var obj = {guid: survey.guid};
+            let obj = {guid: survey.guid};
             if (survey.createdOnObs()) {
                 obj.createdOn = survey.createdOnObs();
             }

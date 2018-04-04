@@ -11,24 +11,7 @@
             <button class="ui tiny primary button" data-bind="click: save">Save</button>
         </div>
     </div>
-    <div class="ui secondary pointing menu" data-bind="visible: !isNewObs()">
-        <a class="active item">
-            <i class="setting icon"></i> General
-        </a>
-        <a class="item" data-bind="attr:{
-            href: '#/subpopulations/'+guidObs()+'/consents/recent'}">
-            <i class="file outline icon"></i> Editor
-        </a>
-        <a class="item" data-bind="attr:{
-            href: '#/subpopulations/'+guidObs()+'/consents/history'}">
-            <i class="history icon"></i> History &amp; Publication
-        </a>
-        <a class="item" data-bind="attr:{
-            href: '#/subpopulations/'+guidObs()+'/consents/download'}">
-            <i class="download icon"></i> Download
-        </a>
-    </div>
-    <div class="ui empty secondary pointing menu" data-bind="visible: isNewObs"></div>
+    <subpop-tabset params="isNewObs: isNewObs, guidObs: guidObs"></subpop-tabset>
 </div>
 <div class="scrollbox">
     <errors></errors>
@@ -43,8 +26,10 @@
                 <input type="text" data-bind="textInput: descriptionObs"/>
             </div>
         </div>
+
         <h4 style="margin-top:0">Assignment based on</h4>
-        <!-- ko component: {name:"criteria", params:{id:"", criteriaObs:criteriaObs}} --><!-- /ko -->
+        <criteria params="id: '', criteriaObs: criteriaObs"></criteria>
+        
         <div class="fields">
             <div class="six wide field">
                 <div class="field">

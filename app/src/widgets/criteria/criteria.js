@@ -5,7 +5,7 @@ import fn from '../../functions';
 function partialRelay(criteriaObs) {
     return function(func) {
         return function(newValue) {
-            var crit = criteriaObs();
+            let crit = criteriaObs();
             func(crit, newValue);
             criteriaObs(crit);
         };
@@ -20,11 +20,11 @@ function partialRelay(criteriaObs) {
  *      to criteriaObs directly is not enough to update external components.
  */
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
-    self.id = params.id;
-    self.criteriaObs = params.criteriaObs;
-    var binder = new Binder(self)
+    fn.copyProps(self, params, 'id', 'criteriaObs');
+
+    let binder = new Binder(self)
         .bind('language')
         .bind('allOfGroups[]')
         .bind('noneOfGroups[]')
@@ -44,7 +44,7 @@ module.exports = function(params) {
         self.androidMaxObs(crit.maxAppVersions.Android);
     }
 
-    var relay = partialRelay(self.criteriaObs);
+    let relay = partialRelay(self.criteriaObs);
 
     self.languageObs.subscribe(relay(function(crit, newValue) {
         crit.language = newValue;
@@ -79,11 +79,11 @@ module.exports = function(params) {
     serverService.getStudy().then(function(study) {
         self.dataGroupsOptionsObs(study.dataGroups);
 
-        var crit = self.criteriaObs();
+        let crit = self.criteriaObs();
         if (crit) {
             updateVM(crit);    
         }
-        var sub = self.criteriaObs.subscribe(function(newValue) {
+        let sub = self.criteriaObs.subscribe(function(newValue) {
             sub.dispose();
             updateVM(newValue);
         });

@@ -3,13 +3,13 @@ import ko from 'knockout';
 import root from '../../root';
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     fn.copyProps(self, params, 'isNewObs', 'userIdObs', 'statusObs');
 
     self.computeds = [];
     self.linkMaker = function(postfix) {
-        var c = ko.computed(function() {
+        let c = ko.computed(function() {
             return '#/participants/'+self.userIdObs()+'/'+postfix;
         });
         self.computeds.push(c);

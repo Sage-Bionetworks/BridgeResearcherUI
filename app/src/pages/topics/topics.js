@@ -9,7 +9,7 @@ function deleteTopic(topic) {
 }
 
 module.exports = function() {
-    var self = this;
+    let self = this;
 
     fn.copyProps(self, root, 'isDeveloper', 'notificationsEnabledObs');
     

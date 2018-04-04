@@ -1,11 +1,11 @@
-<div class="ui secondary pointing menu" data-bind="visible: !$data.isNewObs()">
+<div class="ui secondary pointing menu" data-bind="visible: !isNewObs()">
     <a data-bind="tabber, href: linkMaker('general')">
         <i class="setting icon"></i> General
     </a>
     <a data-bind="tabber, href: linkMaker('consents')">
         <i class="legal icon"></i> Consent
     </a>
-    <a data-bind="tabber, href: linkMaker('newActivities')">
+    <a data-bind="tabber, href: linkMaker('activities')">
         <i class="wait icon"></i> Activities
     </a>
     <a data-bind="tabber, href: linkMaker('uploads')">

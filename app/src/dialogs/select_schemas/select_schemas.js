@@ -13,7 +13,7 @@ import utils from '../../utils';
  *  selected: schema list
  */
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     self.title = params.selectOne ? 'Select Schema' : 'Select Schemas';
     self.controlName = params.selectOne ? 'ui-radio' : 'ui-checkbox';
@@ -29,10 +29,10 @@ module.exports = function(params) {
     }
 
     self.select = function() {
-        var filterFunc = (params.selectOne) ?
+        let filterFunc = (params.selectOne) ?
             selectById($("input[type=radio]:checked").toArray()[0].id.substring(1)) :
             selectByChecked;
-        var schemas = self.itemsObs().filter(filterFunc);
+        let schemas = self.itemsObs().filter(filterFunc);
         params.addSchemas(schemas);
     };
 
@@ -48,8 +48,8 @@ module.exports = function(params) {
         })[0];
     }
     function schemaToView(schema) {
-        var selectedSchema = match(schema);
-        var obj = {
+        let selectedSchema = match(schema);
+        let obj = {
             id: schema.schemaId, 
             name: schema.name, 
             checkedObs: ko.observable(!!selectedSchema)

@@ -15,69 +15,72 @@
         <div class="ten wide column">
             <form class="ui form">
                 <div class="field">
-                    <label>Data Validation</label>
-                    <ui-checkbox params="checkedObs: strictUploadValidationEnabledObs">
-                        Enable strict validation of upload files
-                    </ui-checkbox>
-                </div>
-                <div class="field">
-                    <label>Health code export</label>
-                    <ui-checkbox params="checkedObs: healthCodeExportEnabledObs">
-                        Include participant health code on the participant information page
-                    </ui-checkbox>
-                </div>
-                <div class="field">
-                    <label>Export compatibility</label>
-                    <ui-checkbox params="checkedObs: studyIdExcludedInExportObs">
-                        Exclude study ID from columnn names of export data
-                    </ui-checkbox>
-                    <p style="padding: 0; margin: .5rem 0 0 0; font-style: italic" 
-                        class="help-text">Unless this is a legacy study, you should leave this checked.</p>
-                </div>
-                <div class="field">
                     <label>Account limit</label>
                     <input type="range" min="0" max="200" 
                         data-bind="value: accountLimitObs, valueUpdate: 'input'"/>
                     <div class="ui large label" data-bind="text: accountLimitLabel"></div>
                 </div>
-                <h4 class="ui dividing header">Authentication Options</h4>
+
+                <h4 class="ui dividing header">Export Options</h4>
                 <div class="field">
-                    <label>Sign in via email</label>
+                    <ui-checkbox params="checkedObs: studyIdExcludedInExportObs">
+                        Exclude study ID from columnn names of export data
+                    </ui-checkbox>
+                    <p style="margin-left: 1.5rem; margin-top: .25em; opacity: .5; font-style: italic"
+                        class="help-text">Unless this is a legacy study, you should leave this checked.</p>
+                </div>
+                <div class="field">
+                    <ui-checkbox params="checkedObs: strictUploadValidationEnabledObs">
+                        Enable strict validation of upload files
+                    </ui-checkbox>
+                </div>
+                <div class="field">
+                    <ui-checkbox params="checkedObs: usesCustomExportScheduleObs">
+                        This study has a custom export schedule set up for it
+                    </ui-checkbox>
+                </div>
+                <div class="field">
+                    <ui-checkbox params="checkedObs: healthCodeExportEnabledObs">
+                        Return participant health codes through the API
+                    </ui-checkbox>
+                </div>
+    
+                <h4 class="ui dividing header">Authentication</h4>
+                <div class="field">
                     <ui-checkbox params="checkedObs: emailSignInEnabledObs">
-                        Enable users to generate sign in links via email
+                        Enable sign in via email
                     </ui-checkbox>
                 </div>
                 <div class="field">
-                    <label>Sign in via phone (SMS message)</label>
                     <ui-checkbox params="checkedObs: phoneSignInEnabledObs">
-                        Enable users to generate sign in codes via SMS messages
+                        Enable sign in via phone
                     </ui-checkbox>
                 </div>
                 <div class="field">
-                    <label>Reauthentication tokens</label>
                     <ui-checkbox params="checkedObs: reauthenticationEnabledObs">
-                        Issue tokens to reauthenticate with the server
+                        Issue reauthentication tokens
                     </ui-checkbox>
                 </div>
-                <h4 class="ui dividing header">Public/Clinical Studies</h4>
+        
+                <h4 class="ui dividing header">External IDs</h4>
                 <div class="field">
-                    <label>Email verification</label>
                     <ui-checkbox params="checkedObs: emailVerificationEnabledObs">
-                        Create accounts with unverified email addresses and require user to verify
+                        Verify new email addresses
                     </ui-checkbox>
+                    <p style="margin-left: 1.5rem; margin-top: .25em; opacity: .5; font-style: italic"
+                        class="help-text">This must be disabled for legacy external ID studies. Otherwise leave it checked.</p>
                 </div>
                 <div class="field" id="externalIdValidationEnabled">
-                    <label>External ID validation</label>
-                    <ui-checkbox style="display:block" params="checkedObs: externalIdValidationEnabledObs">
-                        Enable Bridge management of external IDs
+                    <ui-checkbox params="checkedObs: externalIdValidationEnabledObs">
+                        Manage external IDs in Bridge
                     </ui-checkbox>
                 </div>
                 <div class="field" id="externalIdRequiredOnSignup">
-                    <label>Require external ID on sign up</label>
-                    <ui-checkbox style="display:block" params="checkedObs: externalIdRequiredOnSignupObs">
-                        External ID is required when user submits initial sign up
+                    <ui-checkbox params="checkedObs: externalIdRequiredOnSignupObs">
+                        Require external ID on sign up
                     </ui-checkbox>
                 </div>
+    
                 <h4 class="ui dividing header">Notifications</h4>
                 <div class="field">
                     <label>iOS Platform ARN</label>

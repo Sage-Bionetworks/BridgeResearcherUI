@@ -102,6 +102,10 @@ label[for] {
     width: 20rem !important;
 }
 
+form.disabled  .disable-pane {
+    opacity: .6;
+}
+
 .error .editor.textarea {
     border-color: #E0B4B4;
     background-color: rgb(255, 246, 246);
@@ -109,4 +113,31 @@ label[for] {
 /* For some reason this isn't being set by Semantic UI. */
 .dropdown:focus {
     border-color: #85B7D9!important;
+}
+
+/* Tag Editor 2.0 */
+div.te.container {
+    display:flex;
+    align-items: baseline;
+    .tags {
+        padding: .45rem;
+    }
+    .label {
+        margin: 0;
+        margin-bottom: .2rem; 
+        cursor:pointer;
+        color: black;
+    }
+    .dropdown {
+        margin-top: .5rem;
+
+        span.item:not(:hover) {
+            font-weight: normal;
+            background-color: white;
+        }
+        span.item:hover {
+            font-weight: normal;
+            background-color: rgba(0,0,0,.05);
+        }
+    }
 }

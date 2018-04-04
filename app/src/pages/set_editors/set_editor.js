@@ -7,9 +7,9 @@ import utils from '../../utils';
 
 module.exports = function(propertyName) {
     return function () {
-        var self = this;
+        let self = this;
         
-        var binder = new Binder(self)
+        let binder = new Binder(self)
             .obs('records[]')
             .obs('newRecords[]')
             .obs('addField')
@@ -27,7 +27,7 @@ module.exports = function(propertyName) {
             self.noChangesObs(self.newRecordsObs().length === 0);
         };
         self.add = function() {
-            var error = new BridgeError();
+            let error = new BridgeError();
             if (!self.addFieldObs()) {
                 error.addError("value", "is required");
             }
@@ -42,7 +42,7 @@ module.exports = function(propertyName) {
             if (error.hasErrors()) {
                 return utils.failureHandler()(error);
             }
-            var array = self.newRecordsObs();
+            let array = self.newRecordsObs();
             array.push(self.addFieldObs());
             array.sort(fn.lowerCaseStringSorter);
             self.newRecordsObs(array);
@@ -50,7 +50,7 @@ module.exports = function(propertyName) {
             self.noChangesObs(self.newRecordsObs().length === 0);
         };
         self.save = function(vm, event) {
-            var array = [].concat(self.recordsObs());
+            let array = [].concat(self.recordsObs());
             self.newRecordsObs().forEach(function(identifier) {
                 array.push(identifier);
             });

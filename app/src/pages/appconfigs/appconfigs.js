@@ -8,7 +8,7 @@ import tables from '../../tables';
 import utils from '../../utils';
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     tables.prepareTable(self, {
         name:'app config',
@@ -21,7 +21,6 @@ module.exports = function(params) {
     fn.copyProps(self, scheduleUtils, 'formatCompoundActivity');
     fn.copyProps(self, root, 'isAdmin');
 
-    // TODO: Exact same code is duplicated in SharedModuleUtils, this needs to be consolidated.
     scheduleUtils.loadOptions()
         .then(serverService.getAppConfigs.bind(serverService))
         .then(fn.handleSort('items','label'))

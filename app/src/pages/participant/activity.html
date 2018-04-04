@@ -9,15 +9,15 @@
         </div>
         <div class="fixed-header-buttons"></div>
     </div>
-    <!-- ko component: {name: 'participant-tabset', params: { userIdObs: userIdObs,
-        isNewObs: isNewObs, statusObs: statusObs}} --><!-- /ko -->
+    <participant-tabset params="isNewObs: isNewObs, userIdObs: userIdObs, 
+        statusObs: statusObs"></participant-tabset>
 </div>
 <div class="scrollbox">
     <div class="line-control" style="margin-bottom: 1rem">
         <div class="line-control-stretch">
             <div class="ui breadcrumb">
                 <a class="section" 
-                    data-bind="href:'#/participants/'+userIdObs()+'/newActivities'">Activities</a>
+                    data-bind="href:'#/participants/'+userIdObs()+'/activities'">All Activities</a>
                 <i class="right chevron icon divider"></i>
                 <b data-bind="html: activityLabelObs"></b>
             </div>

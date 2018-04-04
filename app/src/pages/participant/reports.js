@@ -5,13 +5,13 @@ import root from '../../root';
 import tables from '../../tables';
 import utils from '../../utils';
 
-var failureHandler = utils.failureHandler({
+const failureHandler = utils.failureHandler({
     redirectTo: "participants",
     redirectMsg: "Participant not found"
 });
 
 module.exports = function(params) {
-    var self = this;
+    let self = this;
 
     new Binder(self)
         .obs('userId', params.userId)

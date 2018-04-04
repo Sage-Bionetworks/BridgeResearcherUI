@@ -5,11 +5,11 @@ module.exports = class SmsAppInstallLinkTemplate extends SmsViewModel {
         super('appInstallLinkSmsTemplate');
     }
     getSampleURL() {
-        var string = "NO VALUE";
+        let string = "NO VALUE";
 
-        var values = Object.values(this.study.installLinks);
-        for (var i=0; i < values.length; i++) {
-            var oneString = values[i];
+        let values = Object.values(this.study.installLinks);
+        for (let i=0; i < values.length; i++) {
+            let oneString = values[i];
             if (oneString.length > string.length) {
                 string = oneString;
             }
