@@ -1,0 +1,58 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <div class="fixed-header-heading">
+            <div class="ui breadcrumb">
+                <a class="section" href="#/uploads">Uploads</a>
+                <i class="right chevron icon divider"></i>
+            </div>            
+            <h3 data-bind="html: titleObs"></h3>
+        </div>
+        <div class="fixed-header-buttons">
+        </div>
+    </div>
+    <div class="ui empty secondary pointing menu"></div>
+</div>
+<div class="scrollbox">
+    <errors></errors>
+    <div class="ui form">
+        <div class="three fields">
+            <div class="field">
+                <label>Status</label>
+                <i data-bind="attr:{class: iconFor($data)}"></i>
+                <div class="input-field-padding" data-bind="text: statusObs"></div>
+            </div>
+            <div class="field">
+                <label>Upload Date</label>
+                <div class="input-field-padding" data-bind="text: uploadDateObs"></div>
+            </div>
+            <div class="field">
+                <label>Content Length</label>
+                <div class="input-field-padding" data-bind="text: contentLengthObs"></div>
+            </div>
+        </div>
+
+        <div class="three fields">
+            <div class="field">
+                <label>Requested On</label>
+                <div class="input-field-padding" data-bind="text: requestedOnObs"></div>
+            </div>
+            <div class="field">
+                <label>Completed On</label>
+                <div class="input-field-padding" data-bind="text: completedOnObs"></div>
+            </div>
+            <div class="field">
+                <label>Completed By</label>
+                <div class="input-field-padding" data-bind="text: completedByObs"></div>
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Errors</label>
+            <div data-bind="foreach: validationMessageListObs">
+                <p data-bind="text: $data"></p>
+            </div>
+        </div>
+
+    </div>
+</div>
+    

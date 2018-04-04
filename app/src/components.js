@@ -244,6 +244,10 @@ reg('uploads', {
     viewModel: require('./pages/uploads/uploads'),
     template: require('./pages/uploads/uploads.html')
 });
+reg('upload', {
+    viewModel: require('./pages/upload/upload'),
+    template: require('./pages/upload/upload.html')
+});
 reg('SimpleScheduleStrategy', {
     viewModel: require('./pages/schedule/strategies/simple_strategy'),
     template: require('./pages/schedule/strategies/simple_strategy.html')

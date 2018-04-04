@@ -4,7 +4,7 @@
             <h3>Uploads</h3>
         </div>
         <div class="fixed-header-buttons">
-            <div class="ui search">
+            <div class="ui search" data-bind="visible: isResearcher() || isAdmin()">
                 <div class="ui icon input">
                     <input class="prompt" type="text" style="padding: .47857143em 1em; width: 25rem"
                         placeholder="Find by upload or record ID"
@@ -19,8 +19,8 @@
 <div class="scrollbox">
     <errors></errors>
     <div class="line-control">
-        <div class="ui icon input" data-bind="range: {startDateObs: uploadsStartDateObs, 
-            endDateObs: uploadsEndDateObs, onChange: doCalSearch}">
+        <div class="ui icon input" data-bind="range: {onChange: doCalSearch, 
+            startDateObs: uploadsStartDateObs, endDateObs: uploadsEndDateObs}">
             <input type="text" placeholder="Uploaded in range" readonly>
             <i class="calendar icon"></i>
         </div>
@@ -34,8 +34,8 @@
         <thead>
             <tr class="non-breaking-rows">
                 <th style="width:10px"></th>
-                <th>Requested On</th>
                 <th>Upload ID</th>
+                <th>Requested On</th>
                 <th>Completed On</th>
                 <th>Record ID</th>
                 <th>Schema of content</th>
@@ -52,25 +52,10 @@
                 <td>
                     <i data-bind="attr:{class:$component.iconFor($data)}"></i>
                 </td>
-                <td data-bind="text: $data.requestedOn"></td>
                 <td>
-                    <span data-bind="visible: $data.status === 'validation_failed'">
-                        <span data-bind="visible: $data.collapsedObs">
-                            <a href="" data-bind="click: $component.toggle">
-                                <i style="margin:0;padding:0" class="plus square outline icon"></i>
-                            </a>
-                        </span>
-                        <span data-bind="visible: !$data.collapsedObs()">
-                            <a href="" data-bind="click: $component.toggle">
-                                <i style="margin:0;padding:0" class="minus square outline icon"></i>
-                            </a>
-                        </span>
-                    </span>
-                    <span data-bind="text: $data.uploadId"></span>
-                    <div class="upload-error-messages" 
-                        data-bind="html: $component.htmlFor($data), visible: !$data.collapsedObs()">
-                    </div>
+                    <a href="" data-bind="text: $data.uploadId, href: '#/uploads/' + $data.uploadId"></a>
                 </td>
+                <td data-bind="text: $data.requestedOn"></td>
                 <td data-bind="html: $data.completedByObs"></td>
                 <td data-bind="text: $data.recordId"></td>
                 <td>
