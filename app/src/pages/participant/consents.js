@@ -27,7 +27,6 @@ module.exports = function(params) {
     new Binder(self)
         .obs('userId', params.userId)
         .obs('items[]')
-        .obs('isNew', false)
         .obs('noConsent', true)
         .obs('status')
         .obs('title', '&#160;');

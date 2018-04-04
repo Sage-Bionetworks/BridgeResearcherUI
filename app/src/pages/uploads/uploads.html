@@ -1,21 +1,26 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
-            <div class="ui breadcrumb">
-                <a class="section" href="#/participants">Participants</a>
-                <i class="right chevron icon divider"></i>
-            </div>            
-            <h3 data-bind="html: titleObs"></h3>
+            <h3>Uploads</h3>
         </div>
-        <div class="fixed-header-buttons"></div>
+        <div class="fixed-header-buttons">
+            <div class="ui search">
+                <div class="ui icon input">
+                    <input class="prompt" type="text" style="padding: .47857143em 1em; width: 25rem"
+                        placeholder="Find by upload or record ID"
+                        data-bind="textInput: findObs, event:{keydown: handleKeyEvent}" >
+                    <i class="search icon"></i>
+                </div>
+            </div>
+        </div>
     </div>
-    <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
+    <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
     <errors></errors>
     <div class="line-control">
-        <div class="ui icon input" data-bind="range: {
-            startDateObs: uploadsStartDateObs, endDateObs: uploadsEndDateObs, onChange: doCalSearch}">
+        <div class="ui icon input" data-bind="range: {startDateObs: uploadsStartDateObs, 
+            endDateObs: uploadsEndDateObs, onChange: doCalSearch}">
             <input type="text" placeholder="Uploaded in range" readonly>
             <i class="calendar icon"></i>
         </div>
@@ -47,7 +52,7 @@
                 <td>
                     <i data-bind="attr:{class:$component.iconFor($data)}"></i>
                 </td>
-                <td data-bind="text: $component.formatDateTime($data.requestedOn)"></td>
+                <td data-bind="text: $data.requestedOn"></td>
                 <td>
                     <span data-bind="visible: $data.status === 'validation_failed'">
                         <span data-bind="visible: $data.collapsedObs">

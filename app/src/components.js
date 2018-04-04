@@ -240,6 +240,10 @@ reg('schedule', {
     viewModel: require('./pages/schedule/schedule'),
     template: require('./pages/schedule/schedule.html')
 });
+reg('uploads', {
+    viewModel: require('./pages/uploads/uploads'),
+    template: require('./pages/uploads/uploads.html')
+});
 reg('SimpleScheduleStrategy', {
     viewModel: require('./pages/schedule/strategies/simple_strategy'),
     template: require('./pages/schedule/strategies/simple_strategy.html')
@@ -506,6 +510,10 @@ reg('withdrawal', {
 reg('send_notification', {
     viewModel: require('./dialogs/send_notification/send_notification'),
     template: require('./dialogs/send_notification/send_notification.html'), synchronous: true
+});
+reg('send_sms_message', {
+    viewModel: require('./dialogs/send_sms_message/send_sms_message'),
+    template: require('./dialogs/send_sms_message/send_sms_message.html'), synchronous: true
 });
 reg('select_schemas', {
     viewModel: require('./dialogs/select_schemas/select_schemas'),
