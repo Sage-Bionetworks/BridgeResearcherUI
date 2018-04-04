@@ -25,7 +25,6 @@ module.exports = function(params) {
 
     new Binder(self)
         .obs('userId', params.userId)
-        .obs('isNew', false)
         .obs('status')
         .obs('title', '&#160;');
 

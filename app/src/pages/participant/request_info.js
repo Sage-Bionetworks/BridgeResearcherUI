@@ -27,7 +27,6 @@ module.exports = function(params) {
     let self = this;
 
     let binder = new Binder(self)
-        .obs('isNew', false)
         .obs('userId', params.userId)
         .obs('name', '')
         .obs('title', '&#160;')

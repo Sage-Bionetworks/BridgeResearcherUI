@@ -240,6 +240,10 @@ reg('schedule', {
     viewModel: require('./pages/schedule/schedule'),
     template: require('./pages/schedule/schedule.html')
 });
+reg('uploads', {
+    viewModel: require('./pages/uploads/uploads'),
+    template: require('./pages/uploads/uploads.html')
+});
 reg('SimpleScheduleStrategy', {
     viewModel: require('./pages/schedule/strategies/simple_strategy'),
     template: require('./pages/schedule/strategies/simple_strategy.html')

@@ -269,6 +269,16 @@ export class ServerService {
     getUploadSchema(identifier, revision) {
         return this.gethttp(config.schemas + "/" + identifier + "/revisions/" + revision);
     }
+    getUploads(args) {
+        let queryString = fn.queryString(args);
+        return this.gethttp(config.getCurrentStudy + '/uploads' + queryString);
+    }
+    getUploadById(id) {
+        return this.gethttp(config.uploads + '/' + id);
+    }
+    getUploadByRecordId(id) {
+        return this.gethttp(config.uploads + '/recordId:' + id);
+    }
     createUploadSchema(schema) {
         return this.post(config.schemasV4, schema).then(function(response) {
             schema.version = response.version;

@@ -12,7 +12,6 @@ module.exports = function(params) {
     self.formatDate = fn.formatDateTime;
 
     new Binder(self)
-        .obs('isNew', false)
         .obs('name', '')
         .obs('userId', params.userId)
         .obs('title', '&#160;')

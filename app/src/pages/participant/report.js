@@ -28,7 +28,6 @@ module.exports = function(params) {
     });
 
     new Binder(self)
-        .obs('isNew', false)
         .obs('userId', params.userId)
         .obs('name', '')
         .obs('title', '&#160;')
