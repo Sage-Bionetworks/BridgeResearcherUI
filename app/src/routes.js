@@ -142,6 +142,7 @@ router.on('/shared_modules/:id/versions/:version/history', 'modules', routeTo('s
 router.on('/app_configs', routeTo('appconfigs', 'appConfigs'));
 router.on('/app_configs/:guid', routeTo('appconfig', 'appConfigs', GUID));
 router.on('/uploads', routeTo('uploads', 'uploads'));
+router.on('/uploads/:guid', routeTo('upload', 'uploads', GUID));
 
 router.configure({
     notfound: routeTo('not_found'),

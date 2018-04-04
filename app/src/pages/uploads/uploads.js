@@ -1,6 +1,7 @@
 import {serverService} from '../../services/server_service';
 import Binder from '../../binder';
 import fn from '../../functions';
+import root from '../../root';
 import tables from '../../tables';
 import utils from '../../utils';
 
@@ -18,11 +19,14 @@ module.exports = class UploadsViewModel {
         
         this.vm = this;
         fn.copyProps(this, fn, 'formatDateTime', 'identity->callback');
+        fn.copyProps(this, root, 'isResearcher', 'isAdmin');
         tables.prepareTable(this, {name:'upload'});
     }
     makeSuccess(vm, event) {
         return function(response) {
             event.target.parentNode.parentNode.classList.remove("loading");
+            // we actually need this to be the upload ID though.
+            document.location = "#/uploads/" + this.findObs();
         };
     }
     classFor(item) {
