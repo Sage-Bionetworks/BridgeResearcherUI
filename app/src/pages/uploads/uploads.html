@@ -53,7 +53,9 @@
                     <i data-bind="attr:{class:$component.iconFor($data)}"></i>
                 </td>
                 <td>
-                    <a href="" data-bind="text: $data.uploadId, href: '#/uploads/' + $data.uploadId"></a>
+                    <span data-bind="visible: !$component.canViewDetails(), text: $data.uploadId"></span>
+                    <a data-bind="visible: $component.canViewDetails, 
+                        text: $data.uploadId, href: '#/uploads/' + $data.uploadId"></a>
                 </td>
                 <td data-bind="text: $data.requestedOn"></td>
                 <td data-bind="html: $data.completedByObs"></td>

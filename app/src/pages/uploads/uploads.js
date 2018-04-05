@@ -1,26 +1,34 @@
 import {serverService} from '../../services/server_service';
 import Binder from '../../binder';
 import fn from '../../functions';
+import ko from 'knockout';
 import root from '../../root';
+import storeService from '../../services/store_service';
 import tables from '../../tables';
 import utils from '../../utils';
 
 const PAGE_SIZE = 50;
+const PAGE_KEY = 'study-uploads';
 
 module.exports = class UploadsViewModel {
     constructor(params) {
         let {start, end} = fn.getRangeInDays(-14, 0);
+        this.query = storeService.restoreQuery(PAGE_KEY);
+        this.query.pageSize = this.query.pageSize || PAGE_SIZE;
+        this.query.startTime = (this.query.startTime) ? new Date(this.query.startTime) : start;
+        this.query.endTime = (this.query.endTime) ? new Date(this.query.endTime) : end;
+
         new Binder(this)
-            .obs('uploadsStartDate', start)
-            .obs('uploadsEndDate', end)
+            .obs('uploadsStartDate', this.query.startTime)
+            .obs('uploadsEndDate', this.query.endTime)
             .obs('find');
         this.loadingFunc = this.loadingFunc.bind(this);
         this.doCalSearch = this.doCalSearch.bind(this);
-        
         this.vm = this;
         fn.copyProps(this, fn, 'formatDateTime', 'identity->callback');
         fn.copyProps(this, root, 'isResearcher', 'isAdmin');
         tables.prepareTable(this, {name:'upload'});
+        this.canViewDetails = ko.computed(() => this.isResearcher() || this.isAdmin());
     }
     makeSuccess(vm, event) {
         return function(response) {
@@ -67,20 +75,23 @@ module.exports = class UploadsViewModel {
         }
         return true;
     }
-    dateRange() {
+    updateDateRange() {
         let start = this.uploadsStartDateObs();
         let end = this.uploadsEndDateObs();
         if (!start || !end) {
-            return {start:null, end:null};
+            this.query.startTime = null;
+            this.query.endTime = null;
+            return;
         }
         start.setHours(0, 0, 0, 0);
         end.setHours(23, 59, 59, 999);
-        return {start:start.toISOString(), end:end.toISOString()};
+        this.query.startTime = start;
+        this.query.endTime = end;
     }
     doCalSearch() {
         utils.clearErrors();
-        let {start, end} = this.dateRange();
-        if (start !== null && end !== null) {
+        this.updateDateRange();
+        if (this.query.startTime !== null && this.query.endTime !== null) {
             this.itemsObs([]);
             this.recordsMessageObs("<div class='ui tiny active inline loader'></div>");
             this.callback();
@@ -155,12 +166,10 @@ module.exports = class UploadsViewModel {
         return response;
     }
     loadingFunc(args) {
-        args = args || {};
-        args.pageSize = PAGE_SIZE;
-        let {start, end} = this.dateRange();
-        args.startTime = start;
-        args.endTime = end;
-        return serverService.getUploads(args)
+        this.updateDateRange();
+        storeService.persistQuery(PAGE_KEY, this.query);
+
+        return serverService.getUploads(this.query)
             .then(this.processUploads.bind(this))
             .catch(utils.failureHandler());
     }

@@ -87,7 +87,11 @@ function queryString(object) {
         string = Object.keys(object).filter(function(key) { 
             return typeof object[key] !== "undefined" && object[key] !== null && object[key] !== ""; 
         }).map(function(key) { 
-            return encodeURIComponent(key) + "=" + encodeURIComponent(object[key]); 
+            var value = object[key];
+            if (isDate(object[key])) {
+                value = object[key].toISOString();
+            }
+            return encodeURIComponent(key) + "=" + encodeURIComponent(value); 
         }).join("&");
     }
     return (string) ? ("?"+string) : string;
@@ -254,6 +258,9 @@ function returning(object) {
 }
 function isDefined(value) {
     return typeof value !== "undefined";
+}
+function isDate(value) {
+    return Object.prototype.toString.call(value) === '[object Date]';
 }
 function makeFieldSorter(fieldName) {
     return function sorter(a,b) {
