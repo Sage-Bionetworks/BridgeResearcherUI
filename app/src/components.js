@@ -216,6 +216,14 @@ reg('participant_uploads', {
     viewModel: require('./pages/participant/uploads'),
     template: require('./pages/participant/uploads.html')
 });
+reg('participant_upload', {
+    viewModel: require('./pages/participant/upload'),
+    template: require('./pages/participant/upload.html')
+});
+reg('upload-details', {
+    viewModel: require('./widgets/upload_details/upload_details'),
+    template: require('./widgets/upload_details/upload_details.html')
+});
 reg('participant_request_info', {
     viewModel: require('./pages/participant/request_info'),
     template: require('./pages/participant/request_info.html')

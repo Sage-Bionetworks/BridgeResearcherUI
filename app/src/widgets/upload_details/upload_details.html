@@ -1,0 +1,39 @@
+<div class="ui form">
+    <div class="three fields">
+        <div class="field">
+            <label>Status</label>
+            <i data-bind="attr:{class: iconFor($data)}"></i>
+            <span data-bind="text: statusObs"></span>
+        </div>
+        <div class="field">
+            <label>Upload Date</label>
+            <div data-bind="text: uploadDateObs"></div>
+        </div>
+        <div class="field">
+            <label>Content Length</label>
+            <div data-bind="text: contentLengthObs"></div>
+        </div>
+    </div>
+
+    <div class="three fields">
+        <div class="field">
+            <label>Requested On</label>
+            <div data-bind="text: requestedOnObs"></div>
+        </div>
+        <div class="field">
+            <label>Completed On</label>
+            <div data-bind="text: completedOnObs"></div>
+        </div>
+        <div class="field">
+            <label>Completed By</label>
+            <div data-bind="text: completedByObs"></div>
+        </div>
+    </div>
+
+    <div class="field">
+        <label>Errors</label>
+        <div data-bind="foreach: validationMessageListObs">
+            <p data-bind="text: $data"></p>
+        </div>
+    </div>
+</div>

@@ -1,9 +1,11 @@
 import {serverService} from '../../services/server_service';
 import Binder from '../../binder';
+import storeService from '../../services/store_service';
 import utils from '../../utils';
 import UploadsViewModel from '../uploads/uploads';
 
 const PAGE_SIZE = 25;
+const PAGE_KEY = 'participant-uploads';
 
 const failureHandler = utils.failureHandler({
     redirectTo: "participants",
@@ -26,13 +28,11 @@ module.exports = class ParticipantUploadsViewModel extends UploadsViewModel {
                 
     }
     loadingFunc(args) {
-        args = args || {};
-        args.pageSize = PAGE_SIZE;
-        let {start, end} = this.dateRange();
-        args.startTime = start;
-        args.endTime = end;
-        return serverService.getParticipantUploads(this.userIdObs(), args)
+        this.updateDateRange();
+        storeService.persistQuery(PAGE_KEY, this.query);
+
+        return serverService.getParticipantUploads(this.userIdObs(), this.query)
             .then(this.processUploads.bind(this))
             .catch(utils.failureHandler());
-    }
+    }    
 };
