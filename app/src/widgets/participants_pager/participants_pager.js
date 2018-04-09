@@ -75,7 +75,7 @@ module.exports = function(params) {
     function makeDate(date) {
         // I don't know why this ends up sending an empty array, but it does.
         if (date) {
-            return new Date(date).toISOString();
+            return fn.formatDateTime(date, 'iso');
         }
         return null;
     }

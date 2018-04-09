@@ -123,6 +123,8 @@ img {
     </table>    
 </div>
 <script>
+var LOCAL_TIMEZONE = new Date().toString().split("(")[1].split(")")[0];
+
 function showError() {
     document.body.innerHTML = '<div class="ui warning message"><div class="header">Cannot load document</div>You are signed out of the Bridge Study Manager. <a href="/">Sign back in</a> to view content.</div>';
 }
@@ -157,8 +159,10 @@ $.ajax(config('/v3/participants/' + queryParams.userId)).done(function(response)
     var user = response;
     // The index references the consents in reverse order, so we must reverse them here as well.
     var history = user.consentHistories[queryParams.guid].reverse()[queryParams.index];
-    var signedOn = (history.signedOn) ? new Date(history.signedOn).toLocaleString() : '';
-    var withdrewOn = (history.withdrewOn) ? new Date(history.withdrewOn).toLocaleString() : '';
+    var signedOn = (history.signedOn) ? 
+        (new Date(history.signedOn).toLocaleString() + ' ' + LOCAL_TIMEZONE) : '';
+    var withdrewOn = (history.withdrewOn) ? 
+        (new Date(history.withdrewOn).toLocaleString() + ' ' + LOCAL_TIMEZONE) : '';
     var signature = (history.imageData) ? "data:"+history.imageMimeType+";base64,"+history.imageData : '';
 
     // Unfortunately, if the birthdate is 0, it is stored as 1969-12-31. So... we *could* 

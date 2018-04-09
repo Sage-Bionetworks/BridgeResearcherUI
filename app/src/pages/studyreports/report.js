@@ -6,13 +6,14 @@ import root from '../../root';
 import tables from '../../tables';
 import utils from '../../utils';
 
-const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MONTHS = ['January','February','March','April','May','June','July','August',
+    'September','October','November','December'];
 
 function firstDayOfMonth(year, month) {
-    return new Date(year, month, 1).toISOString().split("T")[0];
+    return fn.formatDate(new Date(year, month, 1), 'iso');
 }
 function lastDayOfMonth(year, month) {
-    return new Date(year, month+1, 0).toISOString().split("T")[0];
+    return fn.formatDate(new Date(year, month+1, 0), 'iso');
 }
 
 module.exports = function(params) {

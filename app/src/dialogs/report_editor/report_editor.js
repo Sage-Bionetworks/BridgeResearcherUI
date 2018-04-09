@@ -4,6 +4,10 @@ import BridgeError from '../../bridge_error';
 import fn from '../../functions';
 import utils from '../../utils';
 
+function formatDateISO(value) {
+    return fn.formatDate(value, 'iso');
+}
+
 module.exports = class AddReport {
     constructor(params) {
         fn.copyProps(this, params, 'type', 'userId', 'closeDialog->close');
@@ -12,7 +16,7 @@ module.exports = class AddReport {
             .obs('showIdentifier', !fn.isDefined(params.identifier))
             .obs('title', params.data ? "Edit report record" : "Add report record")
             .bind('identifier', params.identifier)
-            .bind('date', AddReport.getLocalDate(params.date), null, AddReport.getLocalDate)
+            .bind('date', AddReport.getLocalDate(params.date), null, formatDateISO)
             .bind('data', AddReport.jsonAsString(params.data), null, AddReport.stringAsJson);
     }
     addReport(entry) {
@@ -36,8 +40,7 @@ module.exports = class AddReport {
         }
     }
     static getLocalDate(value) {
-        let date = value || new Date();
-        return fn.asDate(date).toISOString().split("T")[0];
+        return fn.formatDate(value, 'iso');
     }
     static stringAsJson(value, context) {
         try {

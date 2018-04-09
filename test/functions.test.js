@@ -74,16 +74,6 @@ describe("date & time formatting", function() {
     function pad(number, padding) {
         return (number+"").padStart(padding, "00000");
     }
-    describe("localDateTimeToUTC", function() {
-        it("converts our test time to UCT", function() {
-            var utcValue = TIME.getFullYear() + "-" + pad(TIME.getMonth()+1,2) + 
-                "-" + TIME.getDate() + "T" + pad(TIME.getHours(),2) + ":" + 
-                TIME.getMinutes() + ":" + TIME.getSeconds() + "." + 
-                pad(TIME.getMilliseconds(),3) + "Z";
-            expect(fn.localDateTimeToUTC(TIME).toISOString())
-                .to.equal(utcValue);
-        });
-    });
 });
 describe("formatTitleCase", function() {
     it("deals with empty values", function() {
@@ -185,14 +175,6 @@ describe("formatName", function() {
         expect(fn.formatName({lastName:"Last"})).to.equal("Last");
         expect(fn.formatName({})).to.equal("—");
         expect(fn.formatName()).to.equal("—");
-    });
-});
-describe("dateTimeString", function() {
-    it("safely converts date without nulls", function() {
-        expect(fn.dateTimeString(null)).to.be.null;
-    });
-    it("safely converts date without nulls", function() {
-        expect(fn.dateTimeString(TIME)).to.equal(TIME.toISOString());
     });
 });
 describe("updateObs", function() {
@@ -430,17 +412,6 @@ describe("deleteUnusedProperties", function() {
         fn.deleteUnusedProperties(object);
         expect(Object.keys(object).length).to.equal(1);
         expect(object.prop4).to.be.false;
-    });
-});
-// Need to fix fact that the time zone is different on the test machines (zulu time)
-xdescribe("dateToLocalISOString", function() {
-    it("converts date to local timezone in ISO format", function() {
-        var date = new Date("2017-07-10T23:32:35.550Z");
-        expect(fn.dateToLocalISOString(date)).to.equal("2017-07-10T16:32:35-07:00");
-    });
-    it("converts date with set time portion", function() {
-        var date = new Date("2017-07-10T23:32:35.550Z");
-        expect(fn.dateToLocalISOString(date, "00:00:00")).to.equal("2017-07-10T00:00:00-07:00");
     });
 });
 describe("arrayContains", function() {

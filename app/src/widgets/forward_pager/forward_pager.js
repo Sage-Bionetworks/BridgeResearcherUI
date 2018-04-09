@@ -2,10 +2,6 @@ import Binder from '../../binder';
 import utils from '../../utils';
 
 module.exports = function(params) {
-    console.assert(params.vm, "loadingFunc not supplied");
-    console.assert(params.vm.loadingFunc, "loadingFunc not supplied");
-    console.assert(params.vm.callback, "callback not supplied");
-
     let self = this;
     let loadingFunc = params.vm.loadingFunc;
     let pendingRequest = false;
@@ -48,6 +44,7 @@ module.exports = function(params) {
     };
 
     function wrappedLoadingFunc(offsetKey) {
+        console.log("nextOffset", nextOffset);
         self.showLoaderObs(true);
         pendingRequest = true;
         let args = {offsetKey: offsetKey};
@@ -56,6 +53,7 @@ module.exports = function(params) {
             if (response) {
                 history.push(nextOffset);
                 nextOffset = response.nextPageOffsetKey;
+                console.log("response.nextPageOffsetKey", response.nextPageOffsetKey);
                 self.showLoaderObs(false);
                 self.hasPreviousObs(history.length > 1);
                 self.hasNextObs(response.hasNext);

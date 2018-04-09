@@ -24,7 +24,7 @@ module.exports = function(params) {
     // redirect, you just deleted the record you last loaded in the tabset.
     function redirectIfDeleteSelf(thisSurvey) {
         return function(response) {
-            if (thisSurvey.createdOn === new Date(params.createdOn).toISOString()) {
+            if (thisSurvey.createdOn === fn.formatDateTime(params.createdOn, 'iso')) {
                 document.location = "#/surveys";
             }
             return response;

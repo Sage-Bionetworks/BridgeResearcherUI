@@ -1,0 +1,47 @@
+<div class="ui small modal">
+    <i data-bind="click:cancel" class="close icon"></i>
+    <div class="header">
+        Settings
+    </div>
+    <div class="ui form content" style="max-height: 25rem; overflow-y: auto">
+        <errors></errors>
+        <div class="grouped fields">
+            <label>Display dates & times</label>
+            <div class="field">
+                <div class="ui radio checkbox">
+                    <input id="df3" type="radio" name="dateFormatting" class="hidden" 
+                        value="local" data-bind="checked: dateFormattingObs">
+                    <label for="df3">Local time zone</label>
+                    <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
+                        in your local time zone
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <div class="ui radio checkbox">
+                    <input id="df2" type="radio" name="dateFormatting" class="hidden" 
+                        value="gmt" data-bind="checked: dateFormattingObs">
+                    <label for="df2">GMT / UTC</label>
+                    <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
+                        in GMT (also known as UTC)
+                    </p>
+                </div>
+            </div>
+            <div class="field">
+                <div class="ui radio checkbox">
+                    <input id="df1" type="radio" name="dateFormatting" class="hidden" 
+                        value="iso" data-bind="checked: dateFormattingObs">
+                    <label for="df1">ISO 8601</label>
+                    <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
+                        in ISO 8601 (hard to read, but may be useful for matching timestamps across repositories)
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="actions">
+        <button class="ui primary small button" data-bind="click: save">Save</button>
+        <button class="ui small button" data-bind="click: cancel">Cancel</button>
+    </div>
+</div>

@@ -129,12 +129,8 @@ module.exports = class UploadsViewModel {
         if (item.status === 'succeeded') {
             let start = new Date(item.requestedOn).getTime();
             let end = new Date(item.completedOn).getTime();
-            let fStart = fn.formatDateTime(item.requestedOn);
-            let fEnd = fn.formatDateTime(item.completedOn);
-            if (fStart.split(', ')[0] === fEnd.split(', ')[0]) {
-                fEnd = fEnd.split(', ')[1];
-            }
-            return fEnd+" ("+item.completedBy+", "+fn.formatMs(end-start)+")";
+            let completedOn = fn.formatTimeDiff(item.requestedOn, item.completedOn);
+            return completedOn+" ("+item.completedBy+", "+fn.formatMs(end-start)+")";
         } else if (item.status === 'duplicate') {
             return "duplicates <span class='upload-id'>"+item.duplicateUploadId+"</span>";
         }
@@ -167,9 +163,11 @@ module.exports = class UploadsViewModel {
     }
     loadingFunc(args) {
         this.updateDateRange();
-        storeService.persistQuery(PAGE_KEY, this.query);
-
-        return serverService.getUploads(this.query)
+        args.startDate = this.query.startDate;
+        args.endDate = this.query.endDate;
+        storeService.persistQuery(PAGE_KEY, args);
+        
+        return serverService.getUploads(args)
             .then(this.processUploads.bind(this))
             .catch(utils.failureHandler());
     }
