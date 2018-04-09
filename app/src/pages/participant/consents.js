@@ -110,12 +110,12 @@ module.exports = function(params) {
                         history.subpopulationGuid = subpop.guid;
                         history.subpopulationGuidIndex = i;
                         history.name = record.name;
-                        history.birthdate = new Date(record.birthdate).toLocaleDateString(); 
-                        history.signedOn = new Date(record.signedOn).toLocaleString();
-                        history.consentCreatedOn = new Date(record.consentCreatedOn).toLocaleString();
+                        history.birthdate = fn.formatDateTime(record.birthdate); 
+                        history.signedOn = fn.formatDateTime(record.signedOn); 
+                        history.consentCreatedOn = fn.formatDateTime(record.consentCreatedOn); 
                         history.hasSignedActiveConsent = record.hasSignedActiveConsent;
                         if (record.withdrewOn) {
-                            history.withdrewOn = new Date(record.withdrewOn).toLocaleString();
+                            history.withdrewOn = fn.formatDateTime(record.withdrewOn); 
                         } else {
                             self.noConsentObs(false);
                             history.eligibleToWithdraw = true;

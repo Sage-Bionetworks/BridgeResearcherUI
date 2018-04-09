@@ -97,11 +97,11 @@ module.exports = function(params) {
 
     self.loadingFunc = function(args) {
         args = args || {};
-        args.scheduledOnStart = fn.dateTimeString(self.startDateObs());
+        args.scheduledOnStart = fn.formatDateTime(self.startDateObs(), 'iso');
         if (self.endDateObs()) {
             let date = new Date(self.endDateObs());
             date.setDate(date.getDate()+1);
-            args.scheduledOnEnd = fn.dateTimeString(date);
+            args.scheduledOnEnd = fn.formatDateTime(date, 'iso');
         }
         if (!bothOrNeither(args.scheduledOnStart, args.scheduledOnEnd)) {
             self.warnObs(true);

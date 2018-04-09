@@ -244,13 +244,13 @@ function formatSchedule(sch) {
     if (sch.startsOn || sch.endsOn) {
         phrase += " Only schedule tasks ";
         if (sch.startsOn) {
-            phrase += "after <span class='times-label'>" + new Date(sch.startsOn).toUTCString() + "</span>";
+            phrase += "after <span class='times-label'>" + fn.formatDateTime(sch.startsOn) + "</span>";
         }
         if (sch.startsOn && sch.endsOn) {
             phrase += " and ";
         }
         if (sch.endsOn) {
-            phrase += "before <span class='times-label'>" + new Date(sch.endsOn).toUTCString() + "</span>";
+            phrase += "before <span class='times-label'>" + fn.formatDateTime(sch.endsOn) + "</span>";
         }
         phrase += ".";
     }

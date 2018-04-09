@@ -9,6 +9,7 @@ const FLAGS = {
     'MX': '🇲🇽',
     'CA': '🇨🇦'
 };
+const LOCAL_TIMEZONE = new Date().toString().split("(")[1].split(")")[0];
 
 function flagForRegionCode(regionCode) {
     return FLAGS[regionCode];
@@ -32,17 +33,8 @@ function seq(...funcs) {
         }, startValue);
     };
 }
-function asDate(value) {
-    return is(value, 'Date') ? value : new Date(value);
-}
 function blankInvalidDateString(string) {
     return (string === "Invalid Date") ? "" : string;
-}
-function formatDateString(date) {
-    return date.toLocaleDateString();    
-}
-function formatDateTimeString(date) {
-    return date.toLocaleString();    
 }
 function formatMs(ms) {
     if (!is(ms, "Number")) { 
@@ -165,22 +157,9 @@ function formatNameAsFullLabel(participant) {
     }
     return name;
 }
-// Convert date object as if it were a LocalDateTime object to the UTC timezone
-function intLocalDateTimeToUTC(date) {
-    return new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
-}
-function utcTolocalDateTime(date) {
-    return new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
-}
 function checkArgs(value) {
     if (arguments.length !== 1) { throw new Error(arguments); }
     return value;
-}
-function dateTimeString(date) {
-    if (is(date, 'Date')) {
-        return date.toISOString();
-    }
-    return null;
 }
 function makeFieldSorter(fieldName) {
     return function sorter(a,b) {
@@ -275,7 +254,6 @@ function lowerCaseStringSorter(a,b) {
 }
 function log(label) {
     return function(response) {
-        console.log(label, response);
         return response;
     };
 }
@@ -332,18 +310,6 @@ function pad(num) {
     let norm = Math.abs(Math.floor(num));
     return (norm < 10 ? '0' : '') + norm;
 }
-function dateToLocalISOString(date, timePortion) {
-    let tzo = -date.getTimezoneOffset();
-    let dif = tzo >= 0 ? '+' : '-';
-    let str = date.getFullYear()+'-'+pad(date.getMonth() + 1)+'-'+pad(date.getDate())+'T';
-    if (timePortion) {
-        str += timePortion;
-    } else {
-        str += pad(date.getHours())+':'+pad(date.getMinutes())+':'+pad(date.getSeconds());
-    }
-    str += dif + pad(tzo / 60) + ':' + pad(tzo % 60);
-    return str;
-}
 function arrayContains(array, value) {
     return array.indexOf(value) > -1;
 }
@@ -360,6 +326,42 @@ function formatList(array = [], finalWord = 'and') {
     }
     return '';
 }
+
+/* ==================================== DATE FUNCTIONS ==================================== */
+
+function _asDate(value) {
+    if (is(value, 'Date')) {
+        return value;
+    }
+    try {
+        // casting to string detects breaks on values such as null
+        return new Date(value.toString());
+    } catch(e) {
+        return new Date();
+    }
+}
+function _format(format) {
+    if (DATE_TIME[format]) {
+        return format;
+    }
+    return localStorage.getItem('timezone') || 'iso';
+}
+const DATE_TIME = {
+    'local': formatDateTimeLocal,
+    'gmt': formatDateTimeGMT,
+    'iso': formatDateTimeISO
+};
+const DATE = {
+    'local': formatDateLocal,
+    'gmt': formatDateGMT,
+    'iso': formatDateISO
+};
+const TIME = {
+    'local': formatTimeLocal,
+    'gmt': formatTimeGMT,
+    'iso': formatTimeISO
+};
+
 function getRangeInDays(deltaPast, deltaFuture) {
     let start = new Date();
     start.setDate(start.getDate()+deltaPast);
@@ -367,21 +369,66 @@ function getRangeInDays(deltaPast, deltaFuture) {
     end.setDate(end.getDate()+deltaFuture);
     return {start, end};
 }
+function formatTimeDiff(date1, date2) {
+    var string1 = formatDateTime(date1);
+    var string2 = formatDateTime(date1);
+    if (string1 !== string2) {
+        return formatDateTime(date2);
+    }
+    return formatTime(date2);
+}
 
-let formatDate = seq(checkArgs, asDate, formatDateString, blankInvalidDateString);
-let formatDateTime = seq(checkArgs, asDate, formatDateTimeString, blankInvalidDateString);
-let localDateTimeToUTC = seq(asDate, intLocalDateTimeToUTC);
+function formatDateTime(date, format) {
+    return DATE_TIME[_format(format)](date);
+}
+function formatDate(date, format) {
+    return DATE[_format(format)](date);
+}
+function formatTime(date, format) {
+    return TIME[_format(format)](date);
+}
+
+function formatDateTimeLocal(date) {
+    return _asDate(date).toLocaleString() + " " + LOCAL_TIMEZONE;
+}
+function formatDateLocal(date) {
+    return _asDate(date).toLocaleDateString() + " " + LOCAL_TIMEZONE;
+}
+function formatTimeLocal(date) {
+    return _asDate(date).toLocaleTimeString();
+}
+
+function formatDateTimeGMT(date) {
+    return _asDate(date).toUTCString().substring(5);
+}
+function formatDateGMT(date) {
+    return _asDate(date).toUTCString().substring(5).split(/(\d{4})/).slice(0,2).join("");
+    //return _asDate(date).toUTCString().substring(5).split(SPLIT_AFTER_DATE)[0];
+}
+function formatTimeGMT(date) {
+    return _asDate(date).toUTCString().substring(5).split(/(\d{4})/)[2].split(' ')[1];
+    //return _asDate(date).toUTCString().substring(5).split(SPLIT_AFTER_DATE)[1].split(" ")[0];
+}
+
+function formatDateTimeISO(date) {
+    return _asDate(date).toISOString();
+}
+function formatDateISO(date) {
+    return _asDate(date).toISOString().split("T")[0];
+}
+function formatTimeISO(date) {
+    return _asDate(date).toISOString().split("T")[1].split(".")[0];
+}
 
 export default {
     arrayContains,
-    asDate,
     copyProps,
-    dateTimeString,
-    dateToLocalISOString,
     deleteUnusedProperties,
     flagForRegionCode,
     formatDate,
     formatDateTime,
+    formatTime,
+    formatTimeDiff,
     formatLanguages,
     formatList,
     formatMs,
@@ -408,7 +455,6 @@ export default {
     isBlank,
     isDefined,
     isNotBlank,
-    localDateTimeToUTC,
     log,
     lowerCaseStringSorter,
     makeFieldSorter,
@@ -416,6 +462,5 @@ export default {
     persistRoles,
     queryString,
     returning,
-    seq,
-    utcTolocalDateTime
+    seq
 };

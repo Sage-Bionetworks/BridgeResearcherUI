@@ -242,13 +242,13 @@ export class ServerService {
         return this.post(config.survey + guid + '/revisions/' + createdOn + '/version');
     }
     updateSurvey(survey) {
-        let createdString = new Date(survey.createdOn).toISOString();
+        let createdString = fn.formatDateTime(survey.createdOn, 'iso');
         let url = config.survey + survey.guid + '/revisions/' + createdString;
         return this.post(url, survey);
     }
     deleteSurvey(survey, physical) {
         let queryString = fn.queryString({physical:(physical === true)});
-        let createdString = new Date(survey.createdOn).toISOString();
+        let createdString = fn.formatDateTime(survey.createdOn, 'iso');
         let url = config.survey + survey.guid + '/revisions/' + createdString + queryString;
         return this.del(url);
     }
@@ -270,8 +270,13 @@ export class ServerService {
         return this.gethttp(config.schemas + "/" + identifier + "/revisions/" + revision);
     }
     getUploads(args) {
+        delete args.offsetBy;
         let queryString = fn.queryString(args);
-        return this.gethttp(config.getCurrentStudy + '/uploads' + queryString);
+        console.log(config.getCurrentStudy + '/uploads' + queryString);
+        return this.gethttp(config.getCurrentStudy + '/uploads' + queryString).then(function(response) {
+            console.log(response);
+            return response;
+        });
     }
     getUploadById(id) {
         return this.gethttp(config.uploads + '/' + id);

@@ -24,8 +24,8 @@ function getDateRange(range) {
     let millis = new Date().getTime();
     let rangeOffset = WEEK * parseInt(range);
     return {
-        startDate: new Date(millis - rangeOffset).toISOString().split("T")[0],
-        endDate: new Date().toISOString().split("T")[0]
+        startDate: fn.formatDate(new Date(millis - rangeOffset), 'iso'),
+        endDate: fn.formatDate(null, 'iso')
     };
 }
 
