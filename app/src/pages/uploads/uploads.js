@@ -24,6 +24,7 @@ module.exports = class UploadsViewModel {
             .obs('find');
         this.loadingFunc = this.loadingFunc.bind(this);
         this.doCalSearch = this.doCalSearch.bind(this);
+        this.doSearch = this.doSearch.bind(this);
         this.vm = this;
         fn.copyProps(this, fn, 'formatDateTime', 'identity->callback');
         fn.copyProps(this, root, 'isResearcher', 'isAdmin');
@@ -55,17 +56,14 @@ module.exports = class UploadsViewModel {
             default: return '';
         }
     }
-    handleKeyEvent(vm, event) {
-        if (event.keyCode === 13) {
-            utils.clearErrors();
-            let id = this.findObs();
-            if (!id) {
-                return true;
-            }
+    doSearch(event) {
+        utils.clearErrors();
+        let id = this.findObs();
+        if (id) {
             event.target.parentNode.parentNode.classList.add("loading");
-            let success = this.makeSuccess(vm, event);
-
-            utils.startHandler(vm, event);
+            let success = this.makeSuccess(this, event);
+    
+            utils.startHandler(this, event);
             serverService.getUploadById(id).then(success).catch(function() {
                 serverService.getUploadByRecordId(id).then(success).catch(function(e) {
                     event.target.parentNode.parentNode.classList.remove("loading");
@@ -73,7 +71,6 @@ module.exports = class UploadsViewModel {
                 });
             });
         }
-        return true;
     }
     updateDateRange() {
         let start = this.uploadsStartDateObs();
@@ -129,7 +126,7 @@ module.exports = class UploadsViewModel {
         if (item.status === 'succeeded') {
             let start = new Date(item.requestedOn).getTime();
             let end = new Date(item.completedOn).getTime();
-            let completedOn = fn.formatTimeDiff(item.requestedOn, item.completedOn);
+            let completedOn = fn.formatDateTime(item.completedOn);
             return completedOn+" ("+item.completedBy+", "+fn.formatMs(end-start)+")";
         } else if (item.status === 'duplicate') {
             return "duplicates <span class='upload-id'>"+item.duplicateUploadId+"</span>";

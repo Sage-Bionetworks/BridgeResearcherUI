@@ -61,15 +61,11 @@
                 <td data-bind="text: $parent.formatTitleCase($data.status), 
                     css: {disabled: $data.isDisabled}">
                 </td>
-                <td data-bind="css: {disabled: $data.isDisabled}">
-                    <span data-bind="text: $parent.formatDateTime($data.scheduledOn)">
-                    </span>&mdash;<span data-bind="text: $parent.formatDateTime($data.expiresOn)">
-                    </span>
+                <td data-bind="css: {disabled: $data.isDisabled},
+                    html: $parent.formatDateTimeRange($data.scheduledOn, $data.expiresOn)">
                 </td>
-                <td data-bind="css: {disabled: $data.isDisabled}">
-                    <span data-bind="text: $parent.formatDateTime($data.startedOn)">
-                    </span>&mdash;<span data-bind="text: $parent.formatDateTime($data.finishedOn)">
-                    </span>
+                <td data-bind="css: {disabled: $data.isDisabled}, 
+                    html: $parent.formatDateTimeRange($data.startedOn, $data.finishedOn)">
                 </td>
                 <td>
                     <div data-bind="visible: $data.clientData">

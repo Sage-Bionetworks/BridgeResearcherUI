@@ -23,7 +23,7 @@
         <div class="line-control-stretch">
             <div class="ui icon input" data-bind="css:{loading: searchLoadingObs}">
                 <input type="text" placeholder="Start of ID" data-bind="textInput: idFilterObs, 
-                    event: {keyup: doSearch}">
+                    returnHandler: doSearch">
                 <i class="search icon"></i>
             </div>
         </div>

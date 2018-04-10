@@ -23,6 +23,7 @@ function makeReloader(studyKey, environment) {
 
 module.exports = function() {
     let self = this;
+    let phoneSignInRequest = document.querySelector("#phoneSignInRequest");
     let isLocked = fn.isNotBlank(root.queryParams.study);
 
     let studyKey, env;
@@ -96,13 +97,13 @@ module.exports = function() {
         storeService.set('environment', self.environmentObs());
         storeService.set('studyKey', self.studyObs());
 
-        utils.startHandler(vm, event);
+        utils.startHandler(vm, {target: phoneSignInRequest});
         return serverService.requestPhoneSignIn(env, model)
             .then(function(request) {
                 model.closeable = false;
                 root.openDialog('submit_code_dialog', model);
             })
-            .then(utils.successHandler(vm, event, SUCCESS_MSG))
+            .then(utils.successHandler(vm, {target: phoneSignInRequest}, SUCCESS_MSG))
             .catch(utils.failureHandler());
     };
 

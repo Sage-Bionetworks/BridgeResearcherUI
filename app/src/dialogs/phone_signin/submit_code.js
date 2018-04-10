@@ -23,6 +23,7 @@ function makeReloader(studyKey, environment) {
 
 module.exports = function(params) {
     let self = this;
+    let phoneSignIn = document.querySelector("#phoneSignIn");
     let isLocked = fn.isNotBlank(root.queryParams.study);
 
     let studyKey, env;
@@ -69,11 +70,11 @@ module.exports = function(params) {
         }
         let reloadIfNeeded = makeReloader(studyKey, params.env);
 
-        utils.startHandler(vm, event);
+        utils.startHandler(vm, {target: phoneSignIn});
         return serverService.phoneSignIn(params.studyName, params.env, model)
             .then(clear)
             .then(reloadIfNeeded)
-            .then(utils.successHandler(vm, event))
+            .then(utils.successHandler(vm, {target: phoneSignIn}))
             .catch(utils.failureHandler({transient:false}));
     };
     self.cancel = openSignInDialog;

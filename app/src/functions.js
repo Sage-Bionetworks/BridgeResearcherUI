@@ -9,7 +9,7 @@ const FLAGS = {
     'MX': '🇲🇽',
     'CA': '🇨🇦'
 };
-const LOCAL_TIMEZONE = new Date().toString().split("(")[1].split(")")[0];
+const LOCAL_TIMEZONE = Date().split("(")[1].split(")")[0];
 
 function flagForRegionCode(regionCode) {
     return FLAGS[regionCode];
@@ -369,15 +369,6 @@ function getRangeInDays(deltaPast, deltaFuture) {
     end.setDate(end.getDate()+deltaFuture);
     return {start, end};
 }
-function formatTimeDiff(date1, date2) {
-    var string1 = formatDateTime(date1);
-    var string2 = formatDateTime(date1);
-    if (string1 !== string2) {
-        return formatDateTime(date2);
-    }
-    return formatTime(date2);
-}
-
 function formatDateTime(date, format) {
     return DATE_TIME[_format(format)](date);
 }
@@ -403,11 +394,9 @@ function formatDateTimeGMT(date) {
 }
 function formatDateGMT(date) {
     return _asDate(date).toUTCString().substring(5).split(/(\d{4})/).slice(0,2).join("");
-    //return _asDate(date).toUTCString().substring(5).split(SPLIT_AFTER_DATE)[0];
 }
 function formatTimeGMT(date) {
     return _asDate(date).toUTCString().substring(5).split(/(\d{4})/)[2].split(' ')[1];
-    //return _asDate(date).toUTCString().substring(5).split(SPLIT_AFTER_DATE)[1].split(" ")[0];
 }
 
 function formatDateTimeISO(date) {
@@ -428,7 +417,6 @@ export default {
     formatDate,
     formatDateTime,
     formatTime,
-    formatTimeDiff,
     formatLanguages,
     formatList,
     formatMs,
