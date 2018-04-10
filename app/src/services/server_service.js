@@ -461,9 +461,6 @@ export class ServerService {
         let queryString = fn.queryString(args);
         return this.gethttp(config.participants + '/' + userId + '/uploads' + queryString);
     }
-    getParticipantUploadStatus(uploadId) {
-        return this.gethttp(config.uploadstatuses + '/' + uploadId);
-    }
     getParticipantReport(userId, identifier, startDate, endDate) {
         let queryString = fn.queryString({startDate: startDate, endDate: endDate});
         return this.gethttp(config.participants + '/' + userId + '/reports/' + identifier + queryString);
