@@ -12,16 +12,14 @@ module.exports = function(params) {
         .obs('allLists[]', params.otherLists);
 
     self.handleKeyEvent = function(vm, event) {
-        if (event.keyCode === 13 && self.valueObs()) {
+        if (self.valueObs()) {
             self.valueObs().split(/\W*,\W*/).forEach(function(value) {
                 if (value && self.listObs().indexOf(value) === -1) {
                     self.listObs.push(value);
                 }
             });
             self.valueObs("");
-            return false;
         }
-        return true;
     };
     self.removeListItem = function(item) {
         self.listObs.remove(item);

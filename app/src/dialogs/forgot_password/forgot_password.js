@@ -13,7 +13,6 @@ module.exports = function() {
     let self = this;
     let fpButton = document.querySelector("#fpButton");
     let isLocked = fn.isNotBlank(root.queryParams.study);
-    console.log(fpButton);
     let studyKey, env;    
     if (isLocked) {
         studyKey = root.queryParams.study;

@@ -160,13 +160,6 @@ module.exports = function(params) {
         listsSource.setCurrentEntry(entry);
         self.currentTabObs('editor');
     };
-    self.handleKeyEvent = function(vm, event) {
-        if (event.keyCode === 13) {
-            self.addListItem();
-            return false;
-        }
-        return true;
-    };
     self.moveToEditor = function(item, event) {
         let index = self.listObs().indexOf(item);
         self.indexObs(index);

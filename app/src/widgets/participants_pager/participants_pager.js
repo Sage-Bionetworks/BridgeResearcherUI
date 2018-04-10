@@ -36,10 +36,8 @@ module.exports = function(params) {
         .obs('showLoader', false);
     
     self.doSearch = function(vm, event) {
-        if (event.keyCode === 13) {
-            self.searchLoadingObs(true);
-            wrappedLoadingFunc(Math.round(self.currentPageObs()));
-        }
+        self.searchLoadingObs(true);
+        wrappedLoadingFunc(Math.round(self.currentPageObs()));
     };
 
     self.doCalSearch = function() {

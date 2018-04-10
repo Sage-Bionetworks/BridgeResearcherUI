@@ -309,10 +309,9 @@ ko.bindingHandlers.href = {
 ko.bindingHandlers.returnHandler = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
         let func = valueAccessor();
-
         element.addEventListener("keydown", function(event) {
             if (event.keyCode === 13) {
-                func();
+                func(event);
                 return false;
             }
             return true;

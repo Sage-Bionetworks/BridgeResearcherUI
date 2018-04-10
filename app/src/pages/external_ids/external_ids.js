@@ -86,9 +86,7 @@ module.exports = function() {
         return '#/participants/'+encodeURIComponent('externalId:'+item.identifier)+'/general';
     };
     self.doSearch = function(vm, event) {
-        if (event.keyCode === 13) {
-            self.callback();
-        }
+        self.callback(event);
     };
     
     // This is called from the dialog that allows a user to enter a new external identifier.

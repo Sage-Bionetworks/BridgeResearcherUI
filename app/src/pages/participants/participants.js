@@ -97,27 +97,24 @@ module.exports = function() {
         return response;
     }
 
-    self.handleKeyEvent = function(vm, event) {
-        if (event.keyCode === 13) {
-            event.target.parentNode.parentNode.classList.add("loading");
+    self.doSearch = function(event) {
+        event.target.parentNode.parentNode.classList.add("loading");
 
-            let id = self.findObs();
-            let success = makeSuccess(vm, event);
-            utils.startHandler(vm, event);
-            
-            getHealthCode(id).then(success).catch(function() {
-                getExternalId(id).then(success).catch(function() {
-                    getId(id).then(success).catch(function() {
-                        getEmail(id).then(success)
-                            .catch(function(e) {
-                                event.target.parentNode.parentNode.classList.remove("loading");
-                                utils.failureHandler({transient:false})(e);
-                            });
-                    });
+        let id = self.findObs();
+        let success = makeSuccess(self, event);
+        utils.startHandler(self, event);
+        
+        getHealthCode(id).then(success).catch(function() {
+            getExternalId(id).then(success).catch(function() {
+                getId(id).then(success).catch(function() {
+                    getEmail(id).then(success)
+                        .catch(function(e) {
+                            event.target.parentNode.parentNode.classList.remove("loading");
+                            utils.failureHandler({transient:false})(e);
+                        });
                 });
             });
-        }
-        return true;
+        });
     };
 
     self.resendEmailVerification = function(vm, event) {
