@@ -32,9 +32,6 @@ describe("functions", function() {
 describe("date & time formatting", function() {
     xdescribe("formatDate", function() {
         it("formats date string", function() {
-            console.log(new Date().toLocaleString());
-            console.log(new Date().toString());
-            console.log(fn.formatDate(TIME, 'local'));
             expect(fn.formatDate(TIME, 'local')).to.equal("5/23/2017 PDT")
             expect(fn.formatDate(TIME, 'gmt')).to.equal("23 May 2017 GMT");
             expect(fn.formatDate(TIME, 'iso')).to.equal("2017-05-23");
