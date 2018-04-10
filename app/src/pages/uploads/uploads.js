@@ -129,7 +129,7 @@ module.exports = class UploadsViewModel {
         if (item.status === 'succeeded') {
             let start = new Date(item.requestedOn).getTime();
             let end = new Date(item.completedOn).getTime();
-            let completedOn = fn.formatTimeDiff(item.requestedOn, item.completedOn);
+            let completedOn = fn.formatDateTime(item.completedOn);
             return completedOn+" ("+item.completedBy+", "+fn.formatMs(end-start)+")";
         } else if (item.status === 'duplicate') {
             return "duplicates <span class='upload-id'>"+item.duplicateUploadId+"</span>";

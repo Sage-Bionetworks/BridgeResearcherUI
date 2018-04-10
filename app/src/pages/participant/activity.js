@@ -83,6 +83,12 @@ module.exports = function(params) {
         self.endDateObs(null);
         self.callback();
     };
+    self.formatDateTimeRange = function(date1, date2) {
+        var array = [];
+        array.push( (date1) ? fn.formatDateTime(date1) : "" );
+        array.push( (date2) ? fn.formatDateTime(date2) : "" );
+        return array.join("&mdash;");
+    };
     function bothOrNeither(startDate, endDate) {
         return (startDate === null && endDate === null) || (startDate !== null && endDate !== null);
     }

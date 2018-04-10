@@ -5,7 +5,7 @@
     <div class="content">
         <h4 data-bind="html: titleObs"></h4>
         <p>Enter your phone number and we'll send you a code to sign in. </p>
-        <form class="ui form" onsubmit="return false">
+        <form class="ui form" data-bind="returnHandler: sendPhoneSignInRequest">
             <errors></errors>
             <div class="field" id="phone">
                 <label>Phone Number</label>
@@ -19,8 +19,7 @@
                             <div class="item">MX</div>
                         </div>
                     </div>
-                    <input type="text" placeholder="Phone number" 
-                        data-bind="textInput: phoneObs, returnTo: '#phoneSignInRequest'">
+                    <input type="text" placeholder="Phone number" data-bind="textInput: phoneObs">
                 </div>        
             </div>
             <div class="two fields" data-bind="visible: !isLockedObs()">

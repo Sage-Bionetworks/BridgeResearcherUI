@@ -11,8 +11,9 @@ const SUCCESS_MSG = "An email has been sent to that address with instructions on
 
 module.exports = function() {
     let self = this;
+    let fpButton = document.querySelector("#fpButton");
     let isLocked = fn.isNotBlank(root.queryParams.study);
-    
+    console.log(fpButton);
     let studyKey, env;    
     if (isLocked) {
         studyKey = root.queryParams.study;
@@ -35,14 +36,6 @@ module.exports = function() {
         loadStudyList(newValue);
     });
     loadStudyList(env);
-    
-    self.keypress = function(vm, event) {
-        if (event.keyCode === 13) {
-            self.sendResetPasswordRequest(vm, event);
-            return false;
-        }
-        return true;
-    };
     
     function loadStudies(studies){
         self.studyOptionsObs(studies.items);
@@ -79,10 +72,10 @@ module.exports = function() {
         storeService.set('environment', self.environmentObs());
         storeService.set('studyKey', self.studyObs());
 
-        utils.startHandler(self, event);
+        utils.startHandler(self, {target: fpButton});
         return serverService.requestResetPassword(env, model)
             .then(openSignInDialog)
-            .then(utils.successHandler(self, event, SUCCESS_MSG))
+            .then(utils.successHandler(self, {target: fpButton}, SUCCESS_MSG))
             .catch(utils.failureHandler());
     };
 

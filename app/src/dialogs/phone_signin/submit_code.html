@@ -5,12 +5,11 @@
     <div class="content">
         <h4 data-bind="html: titleObs"></h4>
         <p>Enter the code we sent via SMS to sign in. </p>
-        <form class="ui form" onsubmit="return false">
+        <form class="ui form" data-bind="returnHandler: signIn">
             <errors></errors>
             <div class="field" id="token">
                 <label for="token">Code</label>
-                <input type="text" placeholder="### ###" 
-                    data-bind="textInput: tokenObs, returnTo: '#phoneSignIn'">
+                <input type="text" placeholder="### ###" data-bind="textInput: tokenObs">
             </div>
         </form>
     </div>
