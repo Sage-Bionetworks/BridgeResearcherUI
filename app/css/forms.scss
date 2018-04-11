@@ -32,6 +32,14 @@
     color: #666;
     padding: 0 .5rem;
 }
+.checkbox-help-text {
+    color: #666;
+    padding: 0 .5rem;
+    margin-left: 1.5rem; 
+    margin-top: .25em; 
+    opacity: .5; 
+    font-style: italic;
+}
 input[disabled] {
     opacity: .7;
     background-color: #f5f5f5;

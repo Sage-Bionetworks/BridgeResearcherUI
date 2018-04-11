@@ -25,7 +25,7 @@
     <errors></errors>
     <div class="line-control">
         <div class="line-control-stretch">
-            <div class="ui icon input" data-bind="range: {
+            <div class="ui icon input" data-bind="css:{loading: searchLoadingObs}, range: {
                 startDateObs: startDateObs, endDateObs: endDateObs, onChange: doCalSearch}">
                 <input type="text" placeholder="Created in range" readonly>
                 <i class="calendar icon"></i>

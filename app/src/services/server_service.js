@@ -272,9 +272,7 @@ export class ServerService {
     getUploads(args) {
         delete args.offsetBy;
         let queryString = fn.queryString(args);
-        console.log(config.getCurrentStudy + '/uploads' + queryString);
         return this.gethttp(config.getCurrentStudy + '/uploads' + queryString).then(function(response) {
-            console.log(response);
             return response;
         });
     }

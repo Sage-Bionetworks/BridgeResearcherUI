@@ -160,8 +160,8 @@ module.exports = class UploadsViewModel {
     }
     loadingFunc(args) {
         this.updateDateRange();
-        args.startDate = this.query.startDate;
-        args.endDate = this.query.endDate;
+        args.startTime = this.query.startTime;
+        args.endTime = this.query.endTime;
         storeService.persistQuery(PAGE_KEY, args);
         
         return serverService.getUploads(args)
