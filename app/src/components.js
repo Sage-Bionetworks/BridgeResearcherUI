@@ -228,6 +228,14 @@ reg('participant_request_info', {
     viewModel: require('./pages/participant/request_info'),
     template: require('./pages/participant/request_info.html')
 });
+reg('event_keys', { 
+    template: require('./pages/events/event_keys.html'),
+    viewModel: require('./pages/set_editors/set_editor')('activityEventKeys')
+});
+reg('auto_custom_events', { 
+    viewModel: require('./pages/events/auto_custom_events'),
+    template: require('./pages/events/auto_custom_events.html')
+});
 reg('tasks', {
     viewModel: require('./pages/tasks/tasks'),
     template: require('./pages/tasks/tasks.html')
@@ -292,6 +300,10 @@ reg('admin_cache', {
     viewModel: require('./pages/admin/cache/cache'),
     template: require('./pages/admin/cache/cache.html')
 });
+reg('admin_upload', {
+    viewModel: require('./pages/admin/upload/upload'),
+    template: require('./pages/admin/upload/upload.html')
+});
 reg('BooleanConstraints', {
     viewModel: require('./pages/survey/constraints/boolean_constraints'),
     template: require('./pages/survey/constraints/boolean_constraints.html')
@@ -347,6 +359,9 @@ reg('tag-editor', {
 reg('ui-duration', {
     viewModel: require('./widgets/form/ui_duration'),
     template: require('./widgets/form/ui_duration.html')
+});
+reg('events-tabset', {
+    template: require('./pages/events/tabset.html')
 });
 reg('survey-tabset', {
     viewModel: require('./pages/survey/tabset'),
@@ -564,10 +579,6 @@ reg('appconfig', {
 reg('user_attributes', { 
     template: require('./pages/settings/user_attributes.html'),
     viewModel: require('./pages/set_editors/set_editor')('userProfileAttributes')
-});
-reg('event_keys', { 
-    template: require('./pages/settings/event_keys.html'),
-    viewModel: require('./pages/set_editors/set_editor')('activityEventKeys')
 });
 reg('task_identifiers', { 
     template: require('./pages/set_editors/task_identifiers.html'),

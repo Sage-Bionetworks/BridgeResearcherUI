@@ -33,8 +33,7 @@ module.exports = class UploadsViewModel {
     makeSuccess(vm, event) {
         return (response) => {
             event.target.parentNode.parentNode.classList.remove("loading");
-            // we actually need this to be the upload ID though.
-            document.location = "#/uploads/" + this.findObs();
+            document.location = "#/uploads/" + response.uploadId;
         };
     }
     classFor(item) {

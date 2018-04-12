@@ -1,13 +1,13 @@
 <div class="fixed-header">
     <div class="fixed-header-title">
         <div class="fixed-header-heading">
-            <h3>Event Keys</h3>
+            <h3>Scheduling Events</h3>
         </div>
         <div class="fixed-header-buttons">
             <button class="ui tiny primary button" data-bind="disable: $component.noChangesObs, click: $component.save">Save</button>
         </div>
     </div>
-    <!-- ko component: {name: 'settings-tabset', params: {active: 'event_keys'}} --><!-- /ko -->
+    <events-tabset></events-tabset>
 </div>
 <div class="scrollbox">
     <errors></errors>
