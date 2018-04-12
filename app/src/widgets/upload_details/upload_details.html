@@ -63,8 +63,7 @@
     </div>
 
     <div data-bind="visible: healthDataExistsObs">
-        <!--<h4 class="ui dividing header">Health Data</h4>-->
-        <h4 class="dividing-header">Health Data</h4>
+        <h4 class="upload-dividing-header">Health Data</h4>
         <div class="field">
             <div class="three fields">
                 <div class="field">
@@ -113,10 +112,10 @@
             </div>
         </div>
     
-        <h4 class="dividing-header">JSON</h4>
+        <h4 class="upload-dividing-header">JSON</h4>
         <pre style="overflow: auto" data-bind="html: $component.prettyPrintHTML(dataObs())"></pre>
     
-        <h4 class="dividing-header" data-bind="text: filenameObs">Files</h4>
+        <h4 class="upload-dividing-header" data-bind="text: filenameObs">Files</h4>
         <table class="ui very basic table" data-bind="visible: filesObs().length > 0">
             <tbody data-bind="foreach: filesObs">
                 <tr>
