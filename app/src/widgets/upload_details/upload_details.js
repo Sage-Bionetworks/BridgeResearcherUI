@@ -1,6 +1,7 @@
 import Binder from '../../binder';
 import fn from '../../functions';
 import jsonFormatter from '../../json_formatter';
+import ko from 'knockout';
 
 module.exports = function(params) {
     let self = this;
@@ -48,6 +49,15 @@ module.exports = function(params) {
                 self.filesObs(upload.healthData.metadata.files);
             }
         }
+    });
+    self.linkObs = ko.computed(function() {
+        return '#/participants/'+encodeURIComponent('healthCode:'+self.healthCodeObs())+'/general';
+    });
+    self.schemaLinkObs = ko.computed(function() {
+        return '#/schemas/'+self.schemaIdObs()+'/versions/'+self.schemaRevisionObs()+'/editor';
+    });
+    self.schemaLabel = ko.computed(function() {
+        return self.schemaIdObs() + ' v.' + self.schemaRevisionObs();
     });
 
     self.iconFor = function(status) {
