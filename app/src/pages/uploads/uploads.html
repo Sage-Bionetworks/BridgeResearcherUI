@@ -18,7 +18,7 @@
 </div>
 <div class="scrollbox">
     <errors></errors>
-    <div class="line-control" data-bind="visible: isDeveloper">
+    <div class="line-control">
         <div class="ui icon input" data-bind="range: {onChange: doCalSearch, 
             startDateObs: uploadsStartDateObs, endDateObs: uploadsEndDateObs}">
             <input type="text" placeholder="Uploaded in range" readonly>
@@ -30,7 +30,7 @@
             <forward-pager params="vm: vm"></forward-pager>
         </div>        
     </div>
-    <table class="ui compact selectable table" data-bind="visible: isDeveloper">
+    <table class="ui compact selectable table">
         <thead>
             <tr class="non-breaking-rows">
                 <th style="width:10px"></th>

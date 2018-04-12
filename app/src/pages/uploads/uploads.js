@@ -27,7 +27,7 @@ module.exports = class UploadsViewModel {
         this.doSearch = this.doSearch.bind(this);
         this.vm = this;
         fn.copyProps(this, fn, 'formatDateTime', 'identity->callback');
-        fn.copyProps(this, root, 'isAdmin', 'isDeveloper');
+        fn.copyProps(this, root, 'isAdmin');
         tables.prepareTable(this, {name:'upload'});
     }
     makeSuccess(vm, event) {
