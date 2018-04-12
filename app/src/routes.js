@@ -129,11 +129,9 @@ router.on('/participants/:userId/requestInfo', routeTo('participant_request_info
 router.on('/participants/:userId', routeTo('participant_general', 'participants', USERID));
 router.on('/participants', routeTo('participants', 'participants'));
 router.on('/external_ids', routeTo('external_ids', 'extids'));
-
 router.on('/events', redirectTo('/events/event_keys'));
 router.on('/events/event_keys', routeTo('event_keys', 'events'));
 router.on('/events/auto_custom_events', routeTo('auto_custom_events', 'events'));
-
 router.on('/tasks/:taskId', routeTo('task', 'tasks', TASKID));
 router.on('/tasks', routeTo('tasks', 'tasks'));
 router.on('/topics/:guid', routeTo('topic', 'notifications', GUID));
