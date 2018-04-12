@@ -11,7 +11,7 @@
             </div>
             <div class="field">
                 <label>Health Code</label>
-                <div data-bind="text: healthCodeObs"></div>
+                <a target="_blank" data-bind="href: $component.linkObs, text: healthCodeObs"></a>
             </div>
             <div class="field">
                 <label>S3 key name</label>
@@ -99,11 +99,8 @@
             <div class="three fields">
                 <div class="field">
                     <label>Schema ID</label>
-                    <div data-bind="text: schemaIdObs"></div>
-                </div>
-                <div class="field">
-                    <label>Schema Revision</label>
-                    <div data-bind="text: schemaRevisionObs"></div>
+                    <a target="_blank" data-bind="href: schemaLinkObs, text: schemaLabel">
+                    </a>
                 </div>
                 <div class="field">
                     <label>Health Data ID</label>

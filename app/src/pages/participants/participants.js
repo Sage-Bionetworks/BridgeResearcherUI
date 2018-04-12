@@ -80,7 +80,6 @@ module.exports = function() {
         return response;
     }
     function load(response) {
-        console.log(response);
         self.total = response.total;
         response.items = response.items.map(function(item) {
             if (item.phone) {
