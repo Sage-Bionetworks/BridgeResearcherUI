@@ -57,7 +57,9 @@ nav {
 .surveys *[data-ref='surveys'],
 .study *[data-ref='study'],
 .info *[data-ref='info'],
+.events *[data-ref='events'],
 .uploads *[data-ref='uploads'],
+.admin_upload *[data-ref='admin_upload'],
 .cache *[data-ref='cache'] {
     background-color: rgba(0,0,0,.05) !important;
     color: rgba(0,0,0,.95) !important;

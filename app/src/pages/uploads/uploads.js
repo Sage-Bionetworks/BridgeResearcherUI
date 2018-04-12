@@ -27,14 +27,13 @@ module.exports = class UploadsViewModel {
         this.doSearch = this.doSearch.bind(this);
         this.vm = this;
         fn.copyProps(this, fn, 'formatDateTime', 'identity->callback');
-        fn.copyProps(this, root, 'isAdmin');
+        fn.copyProps(this, root, 'isAdmin', 'isDeveloper');
         tables.prepareTable(this, {name:'upload'});
     }
     makeSuccess(vm, event) {
         return (response) => {
             event.target.parentNode.parentNode.classList.remove("loading");
-            // we actually need this to be the upload ID though.
-            document.location = "#/uploads/" + this.findObs();
+            document.location = "#/uploads/" + response.uploadId;
         };
     }
     classFor(item) {

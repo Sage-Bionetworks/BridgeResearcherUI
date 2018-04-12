@@ -66,7 +66,6 @@ router.on('/settings/general', routeTo('general', 'settings'));
 router.on('/settings/email', routeTo('email', 'settings'));
 router.on('/settings/data_groups', routeTo('data_groups', 'settings'));
 router.on('/settings/password_policy', routeTo('password_policy', 'settings'));
-router.on('/settings/event_keys', routeTo('event_keys', 'settings'));
 router.on('/settings/user_attributes', routeTo('user_attributes', 'settings'));
 router.on('/settings/oauth_providers', routeTo('oauth_providers', 'settings'));
 router.on('/settings/install_links', routeTo('install_links', 'settings'));
@@ -130,12 +129,18 @@ router.on('/participants/:userId/requestInfo', routeTo('participant_request_info
 router.on('/participants/:userId', routeTo('participant_general', 'participants', USERID));
 router.on('/participants', routeTo('participants', 'participants'));
 router.on('/external_ids', routeTo('external_ids', 'extids'));
+
+router.on('/events', redirectTo('/events/event_keys'));
+router.on('/events/event_keys', routeTo('event_keys', 'events'));
+router.on('/events/auto_custom_events', routeTo('auto_custom_events', 'events'));
+
 router.on('/tasks/:taskId', routeTo('task', 'tasks', TASKID));
 router.on('/tasks', routeTo('tasks', 'tasks'));
 router.on('/topics/:guid', routeTo('topic', 'notifications', GUID));
 router.on('/topics', routeTo('topics', 'notifications'));
 router.on('/admin/info', routeTo('admin_info', 'info'));
 router.on('/admin/cache', routeTo('admin_cache', 'cache'));
+router.on('/admin/uploads', routeTo('admin_upload', 'admin_upload'));
 router.on('/shared_modules', routeTo('shared_modules', 'modules'));
 router.on('/shared_modules/:id', routeTo('shared_module', 'modules', ID));
 router.on('/shared_modules/:id/versions/:version/editor', 'modules', routeTo('shared_module', ID_VERSION));
