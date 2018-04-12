@@ -4,7 +4,6 @@
             <h3>Participants</h3>
         </div>
         <div class="fixed-header-buttons">
-            <!--<input readonly style="border:none" data-bind="value: recordsObs()"/>-->
             <button class="ui tiny button" data-bind="click: exportDialog">Export&hellip;</button>
             <button class="ui red tiny button" data-bind="visible: isAdmin, 
                 disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
@@ -13,7 +12,7 @@
                 <div class="ui icon input">
                     <input class="prompt" type="text" style="padding: .47857143em 1em"
                         placeholder="Find by any identifier"
-                        data-bind="textInput: findObs, event:{keydown: handleKeyEvent}" >
+                        data-bind="textInput: findObs, returnHandler: doSearch" >
                     <i class="search icon"></i>
                 </div>
             </div>

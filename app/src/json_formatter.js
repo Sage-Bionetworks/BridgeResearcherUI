@@ -52,4 +52,4 @@ function mapClientDataItem(item) {
     return item;
 }
 
-export default { prettyPrint, mapItem, mapClientDataItem };
+export default { prettyPrint, mapItem, mapClientDataItem, prettyPrintHTML };

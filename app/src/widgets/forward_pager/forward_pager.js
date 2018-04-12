@@ -1,11 +1,8 @@
 import Binder from '../../binder';
 import utils from '../../utils';
+import ko from 'knockout';
 
 module.exports = function(params) {
-    console.assert(params.vm, "loadingFunc not supplied");
-    console.assert(params.vm.loadingFunc, "loadingFunc not supplied");
-    console.assert(params.vm.callback, "callback not supplied");
-
     let self = this;
     let loadingFunc = params.vm.loadingFunc;
     let pendingRequest = false;
@@ -56,12 +53,12 @@ module.exports = function(params) {
             if (response) {
                 history.push(nextOffset);
                 nextOffset = response.nextPageOffsetKey;
-                self.showLoaderObs(false);
                 self.hasPreviousObs(history.length > 1);
                 self.hasNextObs(response.hasNext);
                 self.currentPageObs(history.length-1);
-                pendingRequest = false;
             }
+            self.showLoaderObs(false);
+            pendingRequest = false;
             return response;
         }).catch(utils.failureHandler());
     }

@@ -12,13 +12,13 @@ module.exports = function(params) {
     self.formatDate = fn.formatDateTime;
 
     new Binder(self)
-        .obs('isNew', false)
         .obs('name', '')
         .obs('userId', params.userId)
         .obs('title', '&#160;')
         .obs('isRegistered', false)
         .obs('status')
         .obs('notificationsEnabled', false)
+        .obs('hasPhone', false)
         .obs('items[]');
 
     serverService.getParticipantName(params.userId).then(function(part) {
@@ -34,9 +34,19 @@ module.exports = function(params) {
             userId: params.userId
         });
     };
+    self.sendSmsMessage = function() {
+        root.openDialog('send_sms_message', {
+            userId: params.userId
+        });
+    };
 
     function load() {
-        serverService.getParticipantNotifications(params.userId).then(function(response) {
+        serverService.getParticipant(params.userId).then((participant) => {
+            self.hasPhoneObs(participant.phone != null);
+            return participant.id;
+        })
+        .then(serverService.getParticipantNotifications.bind(serverService))
+        .then(function(response) {
             self.isRegisteredObs(response.items.length > 0);
             self.itemsObs(response.items);
         }).catch(utils.failureHandler());

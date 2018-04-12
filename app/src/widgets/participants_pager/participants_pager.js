@@ -36,10 +36,8 @@ module.exports = function(params) {
         .obs('showLoader', false);
     
     self.doSearch = function(vm, event) {
-        if (event.keyCode === 13) {
-            self.searchLoadingObs(true);
-            wrappedLoadingFunc(Math.round(self.currentPageObs()));
-        }
+        self.searchLoadingObs(true);
+        wrappedLoadingFunc(Math.round(self.currentPageObs()));
     };
 
     self.doCalSearch = function() {
@@ -75,7 +73,7 @@ module.exports = function(params) {
     function makeDate(date) {
         // I don't know why this ends up sending an empty array, but it does.
         if (date) {
-            return new Date(date).toISOString();
+            return fn.formatDateTime(date, 'iso');
         }
         return null;
     }

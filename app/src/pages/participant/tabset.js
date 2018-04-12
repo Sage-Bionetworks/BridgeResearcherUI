@@ -5,6 +5,9 @@ import root from '../../root';
 module.exports = function(params) {
     let self = this;
 
+    if (!params.isNewObs) {
+        params.isNewObs = ko.observable(false);
+    }
     fn.copyProps(self, params, 'isNewObs', 'userIdObs', 'statusObs');
 
     self.computeds = [];

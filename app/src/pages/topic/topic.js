@@ -20,7 +20,7 @@ module.exports = function(params) {
         self.titleObs(self.topic.name);
         self.isNewObs(false);
         self.guidObs(response.guid);
-        let d = fn.formatDateTime(new Date());
+        let d = fn.formatDateTime();
         if (!self.createdOnObs()) { // Just fake this
             self.createdOnObs(d);
         }

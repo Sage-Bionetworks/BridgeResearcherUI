@@ -216,6 +216,14 @@ reg('participant_uploads', {
     viewModel: require('./pages/participant/uploads'),
     template: require('./pages/participant/uploads.html')
 });
+reg('participant_upload', {
+    viewModel: require('./pages/participant/upload'),
+    template: require('./pages/participant/upload.html')
+});
+reg('upload-details', {
+    viewModel: require('./widgets/upload_details/upload_details'),
+    template: require('./widgets/upload_details/upload_details.html')
+});
 reg('participant_request_info', {
     viewModel: require('./pages/participant/request_info'),
     template: require('./pages/participant/request_info.html')
@@ -239,6 +247,14 @@ reg('topic', {
 reg('schedule', {
     viewModel: require('./pages/schedule/schedule'),
     template: require('./pages/schedule/schedule.html')
+});
+reg('uploads', {
+    viewModel: require('./pages/uploads/uploads'),
+    template: require('./pages/uploads/uploads.html')
+});
+reg('upload', {
+    viewModel: require('./pages/upload/upload'),
+    template: require('./pages/upload/upload.html')
 });
 reg('SimpleScheduleStrategy', {
     viewModel: require('./pages/schedule/strategies/simple_strategy'),
@@ -506,6 +522,14 @@ reg('withdrawal', {
 reg('send_notification', {
     viewModel: require('./dialogs/send_notification/send_notification'),
     template: require('./dialogs/send_notification/send_notification.html'), synchronous: true
+});
+reg('send_sms_message', {
+    viewModel: require('./dialogs/send_sms_message/send_sms_message'),
+    template: require('./dialogs/send_sms_message/send_sms_message.html'), synchronous: true
+});
+reg('settings', {
+    viewModel: require('./dialogs/settings/settings'),
+    template: require('./dialogs/settings/settings.html'), synchronous: true
 });
 reg('select_schemas', {
     viewModel: require('./dialogs/select_schemas/select_schemas'),

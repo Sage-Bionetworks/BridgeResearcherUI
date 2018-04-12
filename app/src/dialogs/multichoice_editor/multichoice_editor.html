@@ -29,7 +29,7 @@
                 <div class="column">
                     <div class="ui form">
                         <div class="field">
-                            <input type="text" data-bind="textInput: valueObs, event:{keydown: handleKeyEvent}">
+                            <input type="text" data-bind="textInput: valueObs, returnHandler: handleKeyEvent">
                             <p class="help-text">These are the values that are sent to the server, not what you show to users. </p>
 
                             <p class="help-text">Comma-separated items will be split out into separate entries. </p>

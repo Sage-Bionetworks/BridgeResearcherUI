@@ -242,13 +242,13 @@ export class ServerService {
         return this.post(config.survey + guid + '/revisions/' + createdOn + '/version');
     }
     updateSurvey(survey) {
-        let createdString = new Date(survey.createdOn).toISOString();
+        let createdString = fn.formatDateTime(survey.createdOn, 'iso');
         let url = config.survey + survey.guid + '/revisions/' + createdString;
         return this.post(url, survey);
     }
     deleteSurvey(survey, physical) {
         let queryString = fn.queryString({physical:(physical === true)});
-        let createdString = new Date(survey.createdOn).toISOString();
+        let createdString = fn.formatDateTime(survey.createdOn, 'iso');
         let url = config.survey + survey.guid + '/revisions/' + createdString + queryString;
         return this.del(url);
     }
@@ -268,6 +268,19 @@ export class ServerService {
     }
     getUploadSchema(identifier, revision) {
         return this.gethttp(config.schemas + "/" + identifier + "/revisions/" + revision);
+    }
+    getUploads(args) {
+        delete args.offsetBy;
+        let queryString = fn.queryString(args);
+        return this.gethttp(config.getCurrentStudy + '/uploads' + queryString).then(function(response) {
+            return response;
+        });
+    }
+    getUploadById(id) {
+        return this.gethttp(config.uploads + '/' + id);
+    }
+    getUploadByRecordId(id) {
+        return this.gethttp(config.uploads + '/recordId:' + id);
     }
     createUploadSchema(schema) {
         return this.post(config.schemasV4, schema).then(function(response) {
@@ -376,6 +389,9 @@ export class ServerService {
     sendTopicNotification(guid, message) {
         return this.post(config.topics+"/"+guid+"/sendNotification", message);
     }
+    sendSmsMessage(id, message) {
+        return this.post(config.participants+"/"+id+"/sendSmsMessage", message);
+    }
     createParticipant(participant) {
         return this.post(config.participants+"?verifyEmail=false", participant);
     }
@@ -442,9 +458,6 @@ export class ServerService {
     getParticipantUploads(userId, args) {
         let queryString = fn.queryString(args);
         return this.gethttp(config.participants + '/' + userId + '/uploads' + queryString);
-    }
-    getParticipantUploadStatus(uploadId) {
-        return this.gethttp(config.uploadstatuses + '/' + uploadId);
     }
     getParticipantReport(userId, identifier, startDate, endDate) {
         let queryString = fn.queryString({startDate: startDate, endDate: endDate});

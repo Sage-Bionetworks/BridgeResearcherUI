@@ -1,0 +1,72 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+        <div class="fixed-header-heading">
+            <h3>Uploads</h3>
+        </div>
+        <div class="fixed-header-buttons">
+            <div class="ui search" data-bind="visible: isAdmin">
+                <div class="ui icon input">
+                    <input class="prompt" type="text" style="padding: .47857143em 1em; width: 25rem"
+                        placeholder="Find by upload or record ID"
+                        data-bind="textInput: findObs, returnHandler: doSearch" >
+                    <i class="search icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui empty secondary pointing menu"></div>
+</div>
+<div class="scrollbox">
+    <errors></errors>
+    <div class="line-control">
+        <div class="ui icon input" data-bind="range: {onChange: doCalSearch, 
+            startDateObs: uploadsStartDateObs, endDateObs: uploadsEndDateObs}">
+            <input type="text" placeholder="Uploaded in range" readonly>
+            <i class="calendar icon"></i>
+        </div>
+        <div class="line-control-stretch">
+        </div>
+        <div>
+            <forward-pager params="vm: vm"></forward-pager>
+        </div>        
+    </div>
+    <table class="ui compact selectable table">
+        <thead>
+            <tr class="non-breaking-rows">
+                <th style="width:10px"></th>
+                <th>Upload ID</th>
+                <th>Requested On</th>
+                <th>Completed On</th>
+                <th>Schema of content</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+            <tr>
+                <td colspan="6" data-bind="html: recordsMessageObs"></td>
+            </tr>
+        </tbody>        
+        <tbody data-bind="foreach: itemsObs">
+            <tr data-bind="attr:{class: $component.classFor($data)}">
+                <td>
+                    <i data-bind="attr:{class:$component.iconFor($data)}"></i>
+                </td>
+                <td>
+                    <span data-bind="visible: !$component.isAdmin(), text: $data.uploadId"></span>
+                    <a data-bind="visible: $component.isAdmin, text: $data.uploadId, href: '#/uploads/' + $data.uploadId"></a>
+                </td>
+                <td data-bind="text: $data.requestedOn"></td>
+                <td data-bind="html: $data.completedByObs"></td>
+                <td>
+                    <a target="_blank" rel="noopener" data-bind="href: $data.hrefObs, text: $data.contentObs"></a>
+                </td>
+                <td style="width:12rem">
+                    <div data-bind="semantic: $data.progressState">
+                        <div class="bar"></div>
+                        <div class="label" data-bind="text: $data.progressState.label"></div>
+                    </div>
+                </td>                    
+            </tr>
+        </tbody>
+    </table>
+</div>

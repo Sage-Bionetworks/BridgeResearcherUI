@@ -52,7 +52,7 @@ module.exports = function(params) {
             serverService.createAppConfig(self.appConfig);
     }
     function updateModifiedOn(response) {
-        self.modifiedOnObs(new Date().toISOString());
+        self.modifiedOnObs(fn.formatDateTime());
         return response;
     }
     function load() {

@@ -123,6 +123,7 @@ router.on('/participants/:userId/consents', routeTo('participant_consents', 'par
 router.on('/participants/:userId/notifications', routeTo('participant_notifications', 'participants', USERID));
 router.on('/participants/:userId/reports', routeTo('participant_reports', 'participants', USERID));
 router.on('/participants/:userId/uploads', routeTo('participant_uploads', 'participants', USERID));
+router.on('/participants/:userId/uploads/:guid', routeTo('participant_upload', 'participants', USERID_GUID));
 router.on('/participants/:userId/clientData', routeTo('participant_clientData', 'participants', USERID));
 router.on('/participants/:userId/general', routeTo('participant_general', 'participants', USERID));
 router.on('/participants/:userId/requestInfo', routeTo('participant_request_info', 'participants', USERID));
@@ -141,6 +142,8 @@ router.on('/shared_modules/:id/versions/:version/editor', 'modules', routeTo('sh
 router.on('/shared_modules/:id/versions/:version/history', 'modules', routeTo('shared_module_versions', ID_VERSION));
 router.on('/app_configs', routeTo('appconfigs', 'appConfigs'));
 router.on('/app_configs/:guid', routeTo('appconfig', 'appConfigs', GUID));
+router.on('/uploads', routeTo('uploads', 'uploads'));
+router.on('/uploads/:guid', routeTo('upload', 'uploads', GUID));
 
 router.configure({
     notfound: routeTo('not_found'),

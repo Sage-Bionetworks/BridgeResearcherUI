@@ -23,24 +23,20 @@
                     <label>Topic name</label>
                     <input type="text" data-bind="textInput: nameObs, hasFocus: true, attr:{readonly: !isDeveloper()}"/>
                 </div>
-                <div class="field" data-bind="visible: !isNewObs()">
-                    <label>GUID</label>
-                    <input type="text" readonly data-bind="value: guidObs"/>
-                </div>
-                <div class="field" data-bind="visible: !isNewObs()">
-                    <label>Created On</label>
-                    <input type="text" readonly data-bind="value: createdOnObs"/>
-                </div>
-                <div class="field" data-bind="visible: !isNewObs()">
-                    <label>Modified On</label>
-                    <input type="text" readonly data-bind="value: modifiedOnObs"/>
-                </div>
-            </div>
-            <div class="eight wide column">
                 <div class="field">
                     <label>Description</label>
                     <textarea data-bind="textInput: descriptionObs">
                     </textarea>
+                </div>
+            </div>
+            <div class="eight wide column">
+                <div class="field" data-bind="visible: !isNewObs()">
+                    <label>Created On</label>
+                    <div class="input-field-padding" data-bind="text: createdOnObs"></div>
+                </div>
+                <div class="field" data-bind="visible: !isNewObs()">
+                    <label>Modified On</label>
+                    <div class="input-field-padding" data-bind="text: modifiedOnObs"></div>
                 </div>
             </div>
         </div>

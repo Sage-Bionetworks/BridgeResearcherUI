@@ -167,11 +167,11 @@ module.exports = function(params) {
     }
     if (params.startTime) {
         self.filterMessageObs.push(PREMSG+"were created on or after &ldquo;"+
-            new Date(params.startTime).toLocaleDateString()+"&rdquo;");
+            fn.formatDateTime(params.startTime)+"&rdquo;");
     }
     if (params.endTime) {
         self.filterMessageObs.push(PREMSG+"were created on or before &ldquo;"+
-            new Date(params.endTime).toLocaleDateString()+"&rdquo;");
+            fn.formatDateTime(params.endTime)+"&rdquo;");
     }
 
     self.startExport = function(vm, event) {
@@ -196,7 +196,7 @@ module.exports = function(params) {
         let blob = new Blob([HEADERS+self.exportData], {
             type: "text/tab-separated-values;charset=utf-8"
         });
-        let dateString = new Date().toISOString().split("T")[0];  
+        let dateString = fn.formatDate();
         saveAs.saveAs(blob, "participants-"+dateString+".tsv");
     };
 };

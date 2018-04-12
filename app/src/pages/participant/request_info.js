@@ -1,5 +1,6 @@
 import {serverService} from '../../services/server_service';
 import Binder from '../../binder';
+import fn from '../../functions';
 import root from '../../root';
 import utils from '../../utils';
 
@@ -17,7 +18,7 @@ function stringer(value) {
     return array.join("<br>");
 }
 function dater(value) {
-    return (value) ? new Date(value).toString() : "<none>";
+    return (value) ? fn.formatDateTime(value) : "<none>";
 }
 function noner(value) {
     return (value) ? value : "<none>";
@@ -27,7 +28,6 @@ module.exports = function(params) {
     let self = this;
 
     let binder = new Binder(self)
-        .obs('isNew', false)
         .obs('userId', params.userId)
         .obs('name', '')
         .obs('title', '&#160;')

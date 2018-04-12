@@ -265,18 +265,6 @@ ko.bindingHandlers.fadeRemove = {
         });
     }
 };
-ko.bindingHandlers.returnTo = {
-    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-        let expr = valueAccessor();
-        let target = document.querySelector(expr);
-        element.addEventListener("keypress", function(e) {
-            if (e.keyCode === 13) {
-                e.preventDefault();
-                $(target).click();
-            }
-        }, false);
-    }
-};
 
 ko.bindingHandlers.tab = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
@@ -317,6 +305,20 @@ ko.bindingHandlers.href = {
         });
     }
 };
+
+ko.bindingHandlers.returnHandler = {
+    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        let func = valueAccessor();
+        element.addEventListener("keydown", function(event) {
+            if (event.keyCode === 13) {
+                func(event);
+                return false;
+            }
+            return true;
+        });
+    }
+};
+
 
 function updateElement(element, valueAccessor, func) {
     let accessor = valueAccessor();

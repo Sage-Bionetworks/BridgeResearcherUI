@@ -139,6 +139,9 @@
                 </div>
                 <div class="content" data-bind="visible: isDeveloper() && !isSharedStudy()">
                     <div class="ui secondary vertical menu">
+                        <a href="#/uploads" class="item" data-ref="uploads">
+                            Uploads
+                        </a>
                         <a href="#/schemas" class="item" data-ref="schemas">
                             Upload Schemas
                         </a>
@@ -185,7 +188,14 @@
                 </div>
             </div>
             <p style="text-align: center; margin-top: 1rem">
-                <a data-bind="click: signOut" href="#">Sign Out <i class="sign out icon"></i></a>
+                <span style="padding-right:.5rem">
+                    <i class="sign out icon"></i>
+                    <a data-bind="click: signOut" href="#">Sign Out</a>    
+                </span>
+                <span>
+                    <i class="cogs icon"></i>
+                    <a data-bind="click: settings" href="#">Settings</a>
+                </span>
             </p>
         </nav>
     </section>

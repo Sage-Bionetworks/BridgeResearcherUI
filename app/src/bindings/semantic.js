@@ -24,6 +24,7 @@ var handlers = {
             }
         });
     },
+    // TODO: This is not a search control. It's only used in the field_definition.html file.
     'search': function($element, allBindings) {
         var source = allBindings().source;
         var observer = allBindings().observer;
@@ -58,6 +59,7 @@ var handlers = {
     'popup': function($element) {
         $element.popup();
     },
+    /*
     'adjacent-popup': function($element) {
         $element.popup({inline:true});
     },
@@ -69,6 +71,7 @@ var handlers = {
             duration: 100
         });        
     },
+    */
     'multi-search-select': function($element, allBindings) {
         let collectionObs = allBindings().updateSelect;
 

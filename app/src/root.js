@@ -69,6 +69,9 @@ let RootViewModel = function() {
     self.signOut = function() {
         serverService.signOut();
     };
+    self.settings = function(){ 
+        self.openDialog('settings');
+    };
     self.changeView = function(name, params) {
         self.isEditorTabVisibleObs(false);
         self.sidePanelObs('navigation');

@@ -187,11 +187,11 @@ module.exports = function(params) {
         if (self.startsOnObs() || self.endsOnObs()) {
             let string = "";
             if (self.startsOnObs()) {
-                string += new Date(self.startsOnObs()).toUTCString();
+                string += fn.formatDateTime(self.startsOnObs());
             }
             string += "&mdash;";
             if (self.endsOnObs()) {
-                string += new Date(self.endsOnObs()).toUTCString();
+                string += fn.formatDateTime(self.endsOnObs());
             }
             return string;
         }

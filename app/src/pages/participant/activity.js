@@ -37,25 +37,24 @@ module.exports = function(params) {
     
     new Binder(self)
         .obs('userId', params.userId)
-        .obs('isNew', false)
         .obs('title', '&#160;')
         .obs('guid', params.guid)
         .obs('startDate', start)
         .obs('endDate', end)
         .obs('status')
-        .obs('warn', false)
+        .obs('searchLoading', false)
         .obs('activityLabel', '&#160;');
-
-    tables.prepareTable(self, {
-        name: "activitie",
-        type: "Activity",
-        refresh: self.loadingFunc
-    });
     
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(part.name);
         self.statusObs(part.status);
     }).catch(failureHandler);
+    
+    tables.prepareTable(self, {
+        name: "activitie",
+        type: "Activity"/*,
+        refresh: loadingFunc*/
+    });
 
     self.toggle = function(model) {
         model.collapsedObs(!model.collapsedObs());
@@ -74,19 +73,15 @@ module.exports = function(params) {
         root.closeDialog();
     };
     self.doCalSearch = function() {
+        self.searchLoadingObs(true);
         self.callback();
     };
-    self.clearStart = function() {
-        self.startDateObs(null);
-        self.callback();
+    self.formatDateTimeRange = function(date1, date2) {
+        var array = [];
+        array.push( (date1) ? fn.formatDateTime(date1) : "" );
+        array.push( (date2) ? fn.formatDateTime(date2) : "" );
+        return array.join("&mdash;");
     };
-    self.clearEnd = function() {
-        self.endDateObs(null);
-        self.callback();
-    };
-    function bothOrNeither(startDate, endDate) {
-        return (startDate === null && endDate === null) || (startDate !== null && endDate !== null);
-    }
 
     if (params.referentType === "surveys") {
         serverService.getSurveyMostRecent(params.guid).then(function(response) {
@@ -96,25 +91,27 @@ module.exports = function(params) {
         self.activityLabelObs(params.guid);
     }
 
-    self.loadingFunc = function(args) {
+    // so that function is hoisted to the tables.prepareTable() call above
+    function loadingFunc(args) {
+        console.log(self.startDateObs(), self.endDateObs());
+        self.searchLoadingObs(false);
+        if (!self.startDateObs() || !self.endDateObs()) {
+            return Promise.resolve();
+        }
         args = args || {};
-        args.scheduledOnStart = fn.dateTimeString(self.startDateObs());
-        if (self.endDateObs()) {
-            let date = new Date(self.endDateObs());
-            date.setDate(date.getDate()+1);
-            args.scheduledOnEnd = fn.dateTimeString(date);
-        }
-        if (!bothOrNeither(args.scheduledOnStart, args.scheduledOnEnd)) {
-            self.warnObs(true);
-            return Promise.resolve({});
-        }
-        self.warnObs(false);
+        args.scheduledOnStart = fn.formatDateTime(self.startDateObs(), 'iso');
+
+        let date = new Date(self.endDateObs());
+        date.setDate(date.getDate()+1);
+        args.scheduledOnEnd = fn.formatDateTime(date, 'iso');
 
         return serverService.getParticipantNewActivities(
             self.userIdObs(), params.referentType, params.guid, args).then(function(response) {
+                console.log(response);
                 response.items = response.items.map(jsonFormatter.mapClientDataItem);
                 self.itemsObs(response.items);
                 return response;
             });
-    };
+    }
+    self.loadingFunc = loadingFunc;
 };

@@ -20,8 +20,7 @@ module.exports = function(params) {
         .obs('userId', params.userId)
         .obs('title', '&#160;')
         .obs('status')
-        .obs('items[]')
-        .obs('isNew', false);
+        .obs('items[]');
 
     tables.prepareTable(self, {
         name: "activity event",

@@ -1,0 +1,19 @@
+<div class="ui small modal">
+    <i data-bind="click:cancel" class="close icon"></i>
+    <div class="header">
+        Send SMS Message
+    </div>
+    <div class="ui form content" style="max-height: 25rem; overflow-y: auto">
+        <errors></errors>
+        <div class="required field" id="message">
+            <label>Message</label>
+            <div contenteditable class="editor textarea range-control-border" 
+                style="text-align: left!important; padding: .66rem .85rem!important" 
+                data-bind="editableDiv: messageObs"></div>
+        </div>
+    </div>
+    <div class="actions">
+        <button class="ui primary small button" data-bind="click: send">Send</button>
+        <button class="ui small button" data-bind="click: cancel">Cancel</button>
+    </div>
+</div>

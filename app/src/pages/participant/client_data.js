@@ -18,7 +18,6 @@ module.exports = function(params) {
 
     new Binder(self)
         .obs('userId', params.userId)
-        .obs('isNew', false)
         .obs('title', '&#160;')
         .obs('guid', params.guid)
         .obs('startDate')

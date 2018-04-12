@@ -24,6 +24,7 @@ module.exports = function(params) {
         .bind('name')
         .bind('description')
         .bind('required', true)
+        .bind('autoSendConsentSuppressed')
         .bind('criteria');
     
     let titleUpdated = fn.handleObsUpdate(self.titleObs, 'name');

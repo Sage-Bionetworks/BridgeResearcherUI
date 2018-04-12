@@ -61,6 +61,7 @@ export default {
     surveys: '/v3/surveys',
     topics: '/v3/topics',
     uploadstatuses: '/v3/uploadstatuses',
+    uploads: '/v3/uploads',
     users: '/v3/users',
     verifyEmail: '/v3/studies/self/verifyEmail',
     verifyStudyEmail: '/v3/studies/self/emails/resendVerify',
