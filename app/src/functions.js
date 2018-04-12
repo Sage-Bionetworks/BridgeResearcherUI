@@ -400,6 +400,7 @@ function formatTimeGMT(date) {
 }
 
 function formatDateTimeISO(date) {
+    if (typeof date === "string") return date;
     return _asDate(date).toISOString();
 }
 function formatDateISO(date) {

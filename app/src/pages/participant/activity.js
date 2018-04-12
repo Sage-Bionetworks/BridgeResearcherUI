@@ -42,19 +42,19 @@ module.exports = function(params) {
         .obs('startDate', start)
         .obs('endDate', end)
         .obs('status')
-        .obs('warn', false)
+        .obs('searchLoading', false)
         .obs('activityLabel', '&#160;');
-
-    tables.prepareTable(self, {
-        name: "activitie",
-        type: "Activity",
-        refresh: self.loadingFunc
-    });
     
     serverService.getParticipantName(params.userId).then(function(part) {
         self.titleObs(part.name);
         self.statusObs(part.status);
     }).catch(failureHandler);
+    
+    tables.prepareTable(self, {
+        name: "activitie",
+        type: "Activity"/*,
+        refresh: loadingFunc*/
+    });
 
     self.toggle = function(model) {
         model.collapsedObs(!model.collapsedObs());
@@ -73,14 +73,7 @@ module.exports = function(params) {
         root.closeDialog();
     };
     self.doCalSearch = function() {
-        self.callback();
-    };
-    self.clearStart = function() {
-        self.startDateObs(null);
-        self.callback();
-    };
-    self.clearEnd = function() {
-        self.endDateObs(null);
+        self.searchLoadingObs(true);
         self.callback();
     };
     self.formatDateTimeRange = function(date1, date2) {
@@ -89,9 +82,6 @@ module.exports = function(params) {
         array.push( (date2) ? fn.formatDateTime(date2) : "" );
         return array.join("&mdash;");
     };
-    function bothOrNeither(startDate, endDate) {
-        return (startDate === null && endDate === null) || (startDate !== null && endDate !== null);
-    }
 
     if (params.referentType === "surveys") {
         serverService.getSurveyMostRecent(params.guid).then(function(response) {
@@ -101,25 +91,27 @@ module.exports = function(params) {
         self.activityLabelObs(params.guid);
     }
 
-    self.loadingFunc = function(args) {
+    // so that function is hoisted to the tables.prepareTable() call above
+    function loadingFunc(args) {
+        console.log(self.startDateObs(), self.endDateObs());
+        self.searchLoadingObs(false);
+        if (!self.startDateObs() || !self.endDateObs()) {
+            return Promise.resolve();
+        }
         args = args || {};
         args.scheduledOnStart = fn.formatDateTime(self.startDateObs(), 'iso');
-        if (self.endDateObs()) {
-            let date = new Date(self.endDateObs());
-            date.setDate(date.getDate()+1);
-            args.scheduledOnEnd = fn.formatDateTime(date, 'iso');
-        }
-        if (!bothOrNeither(args.scheduledOnStart, args.scheduledOnEnd)) {
-            self.warnObs(true);
-            return Promise.resolve({});
-        }
-        self.warnObs(false);
+
+        let date = new Date(self.endDateObs());
+        date.setDate(date.getDate()+1);
+        args.scheduledOnEnd = fn.formatDateTime(date, 'iso');
 
         return serverService.getParticipantNewActivities(
             self.userIdObs(), params.referentType, params.guid, args).then(function(response) {
+                console.log(response);
                 response.items = response.items.map(jsonFormatter.mapClientDataItem);
                 self.itemsObs(response.items);
                 return response;
             });
-    };
+    }
+    self.loadingFunc = loadingFunc;
 };

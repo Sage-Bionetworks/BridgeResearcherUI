@@ -16,30 +16,40 @@
 <div class="scrollbox">
     <errors></errors>
     <form class="ui form">
-        <div class="fields">
-            <div class="eight wide required field" id="name">
-                <label>Name</label>
-                <input type="text" data-bind="textInput: nameObs, hasFocus: true"/>
+        <div class="ui grid">
+            <div class="eight wide column">
+                <div class="field" id="name">
+                    <label>Name</label>
+                    <input type="text" data-bind="textInput: nameObs, hasFocus: true"/>
+                </div>
+                <div class="field" id="description">
+                    <label>Description</label>
+                    <input type="text" data-bind="textInput: descriptionObs"/>
+                </div>                
             </div>
-            <div class="eight wide field" id="description">
-                <label>Description</label>
-                <input type="text" data-bind="textInput: descriptionObs"/>
-            </div>
-        </div>
-
-        <h4 style="margin-top:0">Assignment based on</h4>
-        <criteria params="id: '', criteriaObs: criteriaObs"></criteria>
-        
-        <div class="fields">
-            <div class="six wide field">
+            <div class="eight wide column">
+                <label>&#160;</label>
                 <div class="field">
-                    <label>Is this consent required?</label>
-                    <div class="help-text" style="margin-bottom:1rem">If a user matches this consent group, <i>must</i> they sign the consent to access Bridge?</div>
                     <ui-checkbox params="checkedObs: requiredObs">
-                        Required
+                        User must consent to this agreement
                     </ui-checkbox>
+                    <p class="checkbox-help-text">
+                        If a user matches this consent group, they <i>must</i> sign the consent to access Bridge.
+                    </p>
+                </div>
+                <div class="field">
+                    <ui-checkbox params="checkedObs: autoSendConsentSuppressedObs">
+                        Do not automatically send the signed consent to the user
+                    </ui-checkbox>
+                    <p class="checkbox-help-text">
+                        They can still request the signed consent agreement via our APIs.
+                    </p>
                 </div>
             </div>
         </div>
+
+        <h4>Assignment based on</h4>
+
+        <criteria params="id: '', criteriaObs: criteriaObs"></criteria>
     </form>
 </div>

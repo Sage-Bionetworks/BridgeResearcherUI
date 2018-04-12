@@ -11,7 +11,7 @@
                 data-bind="textInput: phoneFilterObs, returnHandler: doSearch">
             <i class="phone icon"></i>
         </div>
-        <div class="ui icon input" data-bind="range: {
+        <div class="ui icon input" data-bind="css:{loading: searchLoadingObs}, range: {
             startDateObs: startTimeObs, endDateObs: endTimeObs, onChange: doCalSearch}">
             <input type="text" placeholder="Created in date range" readonly>
             <i class="calendar icon"></i>

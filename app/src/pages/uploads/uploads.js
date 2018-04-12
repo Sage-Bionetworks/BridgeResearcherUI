@@ -27,12 +27,11 @@ module.exports = class UploadsViewModel {
         this.doSearch = this.doSearch.bind(this);
         this.vm = this;
         fn.copyProps(this, fn, 'formatDateTime', 'identity->callback');
-        fn.copyProps(this, root, 'isResearcher', 'isAdmin');
+        fn.copyProps(this, root, 'isAdmin');
         tables.prepareTable(this, {name:'upload'});
-        this.canViewDetails = ko.computed(() => this.isResearcher() || this.isAdmin());
     }
     makeSuccess(vm, event) {
-        return function(response) {
+        return (response) => {
             event.target.parentNode.parentNode.classList.remove("loading");
             // we actually need this to be the upload ID though.
             document.location = "#/uploads/" + this.findObs();
@@ -160,8 +159,8 @@ module.exports = class UploadsViewModel {
     }
     loadingFunc(args) {
         this.updateDateRange();
-        args.startDate = this.query.startDate;
-        args.endDate = this.query.endDate;
+        args.startTime = this.query.startTime;
+        args.endTime = this.query.endTime;
         storeService.persistQuery(PAGE_KEY, args);
         
         return serverService.getUploads(args)
