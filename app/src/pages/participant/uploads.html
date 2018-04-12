@@ -47,8 +47,9 @@
                     <i data-bind="attr:{class:$component.iconFor($data)}"></i>
                 </td>
                 <td>
-                    <a data-bind="text: $data.uploadId, href: '#/participants/' + $component.userIdObs() + 
-                        '/uploads/' + $data.uploadId"></a>
+                    <a data-bind="visible: $component.isAdmin, text: $data.uploadId, 
+                        href: '#/participants/' + $component.userIdObs() + '/uploads/' + $data.uploadId"></a>
+                    <span data-bind="visible: !$component.isAdmin(), text: $data.uploadId"></span>
                 </td>
                 <td data-bind="text: $component.formatDateTime($data.requestedOn)"></td>
                 <td data-bind="html: $data.completedByObs"></td>

@@ -4,7 +4,7 @@
             <h3>Uploads</h3>
         </div>
         <div class="fixed-header-buttons">
-            <div class="ui search" data-bind="visible: isResearcher() || isAdmin()">
+            <div class="ui search" data-bind="visible: isAdmin">
                 <div class="ui icon input">
                     <input class="prompt" type="text" style="padding: .47857143em 1em; width: 25rem"
                         placeholder="Find by upload or record ID"
@@ -52,9 +52,8 @@
                     <i data-bind="attr:{class:$component.iconFor($data)}"></i>
                 </td>
                 <td>
-                    <span data-bind="visible: !$component.canViewDetails(), text: $data.uploadId"></span>
-                    <a data-bind="visible: $component.canViewDetails, 
-                        text: $data.uploadId, href: '#/uploads/' + $data.uploadId"></a>
+                    <span data-bind="visible: !$component.isAdmin(), text: $data.uploadId"></span>
+                    <a data-bind="visible: $component.isAdmin, text: $data.uploadId, href: '#/uploads/' + $data.uploadId"></a>
                 </td>
                 <td data-bind="text: $data.requestedOn"></td>
                 <td data-bind="html: $data.completedByObs"></td>
