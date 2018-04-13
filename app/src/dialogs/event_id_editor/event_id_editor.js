@@ -6,26 +6,18 @@ import optionsService from '../../services/options_service';
 import root from '../../root';
 import utils from '../../utils';
 
+function keyToUnary(key) {
+    return {label: UNARY_EVENTS[key], value: key};
+}
+function keyToCustom(key) {
+    return {label: "When “"+key+"” occurs", value: "custom:"+key};
+}
+
 function collectStudyEventKeys(eventKeys) {
     return function(study) {
-        Object.keys(UNARY_EVENTS).forEach((key) => {
-            eventKeys.push({
-                label: UNARY_EVENTS[key], 
-                value: key
-            });
-        });
-        study.activityEventKeys.forEach((key) => {
-            eventKeys.push({
-                label: "When “"+key+"” occurs", 
-                value: "custom:"+key
-            });
-        });
-        Object.keys(study.automaticCustomEvents).forEach((key) => {
-            eventKeys.push({
-                label: "When “"+key+"” occurs", 
-                value: "custom:"+key
-            });
-        });
+        Object.keys(UNARY_EVENTS).forEach(keyToUnary);
+        Object.keys(study.automaticCustomEvents).forEach(keyToCustom);
+        study.activityEventKeys.forEach(keyToCustom);
         return study;
     };
 }
