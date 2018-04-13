@@ -158,7 +158,7 @@ module.exports = function(params) {
         binder.persist(participant);
 
         let updatedTitle = self.study.emailVerificationEnabled ? 
-            fn.formatName(participant) : participant.externalId;
+            fn.formatNameAsFullLabel(participant) : participant.externalId;
         function updateName(response) {
             self.titleObs(updatedTitle);
             return serverService.getParticipant(self.userIdObs());

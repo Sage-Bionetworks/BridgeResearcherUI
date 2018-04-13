@@ -1,18 +1,51 @@
 <div class="ui small modal">
-    <div class="header">
-        Sign In
+    <div class="header" data-bind="text: titleObs">
     </div>
     <div class="content">
-        <h4 data-bind="html: titleObs"></h4>
         <form class="ui form" action="" data-bind="returnHandler: signIn">
             <errors></errors>
-            <div class="field" id="email">
-                <label>Email address</label>
-                <input type="text" autocomplete="email" data-bind="textInput: usernameObs, hasFocus: focusEmailObs"/>
+            <div class="two fields" data-bind="visible: stateObs() === 'SignIn'">
+                <div class="field" id="email">
+                    <label>Email address</label>
+                    <input autocomplete="email" data-bind="textInput: emailObs"/>
+                </div>
+                <div class="field" id="password">
+                    <label>Password</label>
+                    <input type="password" autocomplete="current-password" data-bind="textInput: passwordObs"/>
+                </div>
             </div>
-            <div class="field" id="password">
-                <label>Password</label>
-                <input type="password" autocomplete="current-password" data-bind="textInput: passwordObs"/>
+            <div class="field" data-bind="visible: stateObs() === 'ForgotPassword'">
+                <label>Email address</label>
+                <input autocomplete="email" data-bind="textInput: emailObs"/>
+            </div>
+            <div class="two fields" data-bind="visible: stateObs() === 'ExternalIdSignIn'">
+                <div class="field" id="externalId">
+                    <label>External ID</label>
+                    <input autocomplete="email" data-bind="textInput: externalIdObs"/>
+                </div>
+                <div class="field" id="password">
+                    <label>Password</label>
+                    <input type="password" autocomplete="current-password" data-bind="textInput: passwordObs"/>
+                </div>
+            </div>
+            <div class="field" id="phone" data-bind="visible: stateObs() === 'PhoneSignIn'">
+                <label>Phone Number</label>
+                <div class="ui left labeled input">
+                    <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
+                        <div class="text" data-bind="text: phoneRegionObs"></div>
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                            <div class="item">US</div>
+                            <div class="item">CA</div>
+                            <div class="item">MX</div>
+                        </div>
+                    </div>
+                    <input type="text" placeholder="Phone number" data-bind="textInput: phoneObs">
+                </div>        
+            </div>
+            <div class="field" id="token" data-bind="visible: stateObs() === 'EnterCode'">
+                <label for="token">Code</label>
+                <input type="text" placeholder="### ###" data-bind="textInput: tokenObs">
             </div>
             <div class="two fields" data-bind="if: !isLockedObs()">
                 <div class="field">
@@ -28,12 +61,30 @@
                     </select>
                 </div>
             </div>
+                
         </form>
     </div>
-    <div class="actions">
-        <button id="signInButton" class="ui primary small button" taborder="-1" 
-            data-bind="click: signIn">Sign In</button>
-        <button class="ui small button" taborder="-1" data-bind="click: forgotPassword">Forgot Password</button>
-        <button class="ui small button" taborder="-1" style="float:right" data-bind="click: usePhone">Use Phone</button>
+    <div class="actions" style="display: flex; align-items: center">
+        <div style="flex:1">
+            <button id="submitButton" class="ui primary small button" 
+                data-bind="click: submit, text: buttonTextObs"></button>
+        </div>
+
+        <div data-bind="visible: stateObs() === 'SignIn'">
+            <button class="ui small button" data-bind="click: useForgotPassword">
+                Forgot Password
+            </button>
+            <button class="ui small button" data-bind="click: useExternalId">
+                Use External ID
+            </button>
+            <button class="ui small button" data-bind="click: usePhone">
+                Use Phone
+            </button>
+        </div>
+        <div data-bind="visible: stateObs() !== 'SignIn'">
+            <button class="ui small button" data-bind="click: cancel">
+                Cancel
+            </button>
+        </div>
     </div>
 </div>
