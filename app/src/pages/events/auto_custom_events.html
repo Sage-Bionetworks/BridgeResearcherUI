@@ -15,7 +15,7 @@
         <div class="ten wide column" >
             <div data-bind="foreach: itemsObs">
                 <div class="auto_event">
-                    <input class="ui input" data-bind="textInput: eventKeyObs"/>
+                    <input placeholder="Event Key" class="ui input" data-bind="textInput: eventKeyObs"/>
                     <div>Schedule for</div>
                     <ui-duration style="margin: 0 1rem" 
                         params="fieldObs: periodObs, noHours: true"></ui-duration>
