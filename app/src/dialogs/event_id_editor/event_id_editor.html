@@ -6,86 +6,32 @@
     <div class="content">
         <div class="ui grid">
             <div class="eight wide column">
-                <form class="ui form">
-                    <div class="field">
-                        <ui-checkbox params="checkedObs: enrollmentObs">
-                            Schedule these activities when:
-                        </ui-checkbox>
-                    </div>
-                    <div style="margin-left: 2rem" class="grouped fields" data-bind="css:{disabled: !enrollmentObs()}">
-                        <div class="field">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="enrollment_offset" value="enrollment" 
-                                     id="e1" data-bind="checked: enrollmentPeriodObs">
-                                <label for="e1">Participant enrolls</label>
+                <form class="ui form event-id-editor">
+                    <div data-bind="foreach: selectedEventKeysObs, dragula: { 
+                        dragHandleSelector: '.draggable', indexObs: indexObs, 
+                        listObs: selectedEventKeysObs }">
+                        <div class="line-item">
+                            <div class="draggable label" 
+                                data-bind="text: $component.activityLabel($data)">
                             </div>
-                        </div>
-                        <div class="field">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="enrollment_offset" value="two_weeks_before_enrollment"  
-                                    id="e2" data-bind="checked: enrollmentPeriodObs">
-                                <label for="e2">Two weeks before participant enrolls<span style="color:#B22222"> *</span></label>
-                            </div>
-                        </div>
-                        <div class="field">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="enrollment_offset" value="two_months_before_enrollment"  
-                                    id="e3" data-bind="checked: enrollmentPeriodObs">
-                                <label for="e3">Two months before participant enrolls<span style="color:#B22222"> *</span></label>
+                            <div>
+                                <i data-bind="click: $component.removeEventKey" 
+                                    class="remove red circle icon"></i>
                             </div>
                         </div>
                     </div>
-                    <div class="fields">
-                        <div class="field">
-                            <ui-checkbox params="checkedObs: activityFinishedObs">
-                                When this activity is finished:
-                            </ui-checkbox>
-                        </div>
-                    </div>
-                    <div style="margin-left: 2rem" class="grouped fields">
-                        <div class="field">
-                            <span data-bind="visible: !hasActivitiesObs()">There are no other schedules with activities you can schedule against.</span>
-                            <select class="ui dropdown" data-bind="visible: hasActivitiesObs, options: activityOptionsObs,
-                                optionsText: 'label', optionsValue: 'value', value: activityObs,
-                                optionsCaption: 'Select activity...', css:{disabled: !activityFinishedObs()}"></select>
-                        </div>
-                    </div>
-                    <div class="fields">
-                        <div class="field">
-                            <ui-checkbox params="checkedObs: customEventObs">
-                                When any of these custom activities exist:
-                            </ui-checkbox>
-                        </div>
-                    </div>
-                    <div style="margin-left: 2rem" class="grouped fields">
-                        <div class="field">
-                            <!-- ko foreach: activityEventKeysObs -->
-                                <div class="field">
-                                    <div class="ui checkbox">
-                                        <input type="checkbox" value="cherry" data-bind="attr:{value: $data, id: $data}, 
-                                            enable: $parent.customEventObs(),
-                                            checked: $parent.selectedEventKeysObs" /> <label data-bind="attr:{for: $data}, 
-                                                text: $data"></label>
-                                    </div>
-                                </div>
-                            <!-- /ko -->
-                        </div>
+                    <div class="selector">
+                        <select class="ui dropdown" data-bind="options: allEventKeysObs,
+                            optionsText: 'label', optionsValue: 'value', value: activityObs,
+                            optionsCaption: 'Select event...'">
+                        </select>
+                        <button data-bind="click: addEventKey" class="ui tiny primary button">Add</button>
                     </div>
                 </form>
             </div>
             <div class="eight wide column">
-                <p>
-                    All events that apply will be used to schedule activities.
-                </p>
-                <p>
-                    <span style="color:#B22222">* </span> For activities that run for a specific time on the calendar
-                    (e.g. a survey for the week of September 4-10, 2016), these events start before the &ldquo;event 
-                    in progress&rdquo; to ensure that participants who join the study during that time period will be 
-                    scheduled to do this activity, even though it started before they joined.
-                </p>
-                <p>
-                    (This is a niche use case. &ldquo;At time of enrollment&rdquo; is usually best.)
-                </p>
+                <p>All events that apply will be used to schedule activities. <b>Events higher up in the list take precedence over events below them in the case of one-time activities.</b> </p>
+                <p>The scheduler will look for an event timestamp under each key, in turn, until it finds one (for one-time activities), or it will match all keys for recurring schedules.</p>
             </div>
         </div>
     </div>
