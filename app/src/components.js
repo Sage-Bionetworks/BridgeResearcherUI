@@ -482,18 +482,6 @@ reg('sign_in_dialog', {
     viewModel: require('./dialogs/sign_in/sign_in'),
     template: require('./dialogs/sign_in/sign_in.html'), synchronous: true
 });
-reg('forgot_password_dialog', {
-    viewModel: require('./dialogs/forgot_password/forgot_password'),
-    template: require('./dialogs/forgot_password/forgot_password.html'), synchronous: true
-});
-reg('phone_signin_dialog', {
-    viewModel: require('./dialogs/phone_signin/phone_signin'),
-    template: require('./dialogs/phone_signin/phone_signin.html'), synchronous: true
-});
-reg('submit_code_dialog', {
-    viewModel: require('./dialogs/phone_signin/submit_code'),
-    template: require('./dialogs/phone_signin/submit_code.html'), synchronous: true
-});
 reg('enumeration_editor', {
     viewModel: require('./dialogs/enumeration_editor/enumeration_editor'),
     template: require('./dialogs/enumeration_editor/enumeration_editor.html'), synchronous: true

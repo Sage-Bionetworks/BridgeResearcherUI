@@ -34,13 +34,14 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
+                <th>External ID</th>
                 <th style="white-space: nowrap">Created On</th>
                 <th></th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
-                <td colspan="6" data-bind="html: recordsMessageObs"></td>
+                <td colspan="7" data-bind="html: recordsMessageObs"></td>
             </tr>
         </tbody>
         <tbody data-bind="foreach: itemsObs">
@@ -50,11 +51,13 @@
                 </td>
                 <td>
                     <a data-bind="href: '#/participants/'+$data.id+'/general', 
-                        text: $component.formatSummaryAsFullLabel($data)"></a>
+                        text: $component.formatNameAsFullLabel($data)"></a>
                 </td>
                 <td data-bind="text: $component.formatEmailPhone($data.email)">
                 </td>
                 <td data-bind="text: $component.formatEmailPhone($data.phone)">
+                </td>
+                <td data-bind="text: $component.formatEmailPhone($data.externalId)">
                 </td>
                 <td style="white-space: nowrap" data-bind="text: $component.formatDateTime($data.createdOn)"></td>
                 <td style="padding: 0; text-align:right">
