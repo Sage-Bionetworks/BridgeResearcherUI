@@ -6,28 +6,26 @@
     <div class="content">
         <div class="ui grid">
             <div class="eight wide column">
-                <form class="ui form">
+                <form class="ui form event-id-editor">
                     <div data-bind="foreach: selectedEventKeysObs, dragula: { 
-                        dragHandleSelector: '.draggable', 
-                        indexObs: indexObs, 
-                        listObs: selectedEventKeysObs 
-                    }">
-                        <div style="display:flex; align-items: center; margin-bottom: .5rem; cursor:pointer">
-                            <div class="draggable" style="flex: 1" 
-                                data-bind="text: $component.activityLabel($data)"></div>
+                        dragHandleSelector: '.draggable', indexObs: indexObs, 
+                        listObs: selectedEventKeysObs }">
+                        <div class="line-item">
+                            <div class="draggable label" 
+                                data-bind="text: $component.activityLabel($data)">
+                            </div>
                             <div>
                                 <i data-bind="click: $component.removeEventKey" 
                                     class="remove red circle icon"></i>
                             </div>
                         </div>
                     </div>
-                    <div style="display:flex; padding-top: 1rem">
+                    <div class="selector">
                         <select class="ui dropdown" data-bind="options: allEventKeysObs,
                             optionsText: 'label', optionsValue: 'value', value: activityObs,
                             optionsCaption: 'Select event...'">
                         </select>
-                        <button data-bind="click: addEventKey" style="margin-left: .5rem; cursor: pointer"
-                            class="ui tiny primary button">Add</button>
+                        <button data-bind="click: addEventKey" class="ui tiny primary button">Add</button>
                     </div>
                 </form>
             </div>
