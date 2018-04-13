@@ -153,3 +153,16 @@ div.te.container {
     margin-top: 2rem!important;
     border-bottom: 1px solid #e5e5e5;
 }
+
+.auto_event {
+    display:flex; 
+    align-items: baseline;
+    margin-top: 1rem;
+
+    div {
+        white-space: pre;
+    }
+    div:nth-child(2) {
+        margin-left: 2rem;
+    }
+}
