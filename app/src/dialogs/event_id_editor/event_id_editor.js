@@ -12,12 +12,14 @@ function keyToUnary(key) {
 function keyToCustom(key) {
     return {label: "When “"+key+"” occurs", value: "custom:"+key};
 }
-
 function collectStudyEventKeys(eventKeys) {
     return function(study) {
-        Object.keys(UNARY_EVENTS).forEach(keyToUnary);
-        Object.keys(study.automaticCustomEvents).forEach(keyToCustom);
-        study.activityEventKeys.forEach(keyToCustom);
+        Object.keys(UNARY_EVENTS)
+            .forEach(key => eventKeys.push(keyToUnary(key)));
+        Object.keys(study.automaticCustomEvents)
+            .forEach(key => eventKeys.push(keyToCustom(key)));
+        study.activityEventKeys
+            .forEach(key => eventKeys.push(keyToCustom(key)));
         return study;
     };
 }
