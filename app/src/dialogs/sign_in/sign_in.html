@@ -2,28 +2,22 @@
     <div class="header" data-bind="text: titleObs">
     </div>
     <div class="content">
-        <form class="ui form" action="" data-bind="returnHandler: signIn">
+        <form class="ui form" action="" data-bind="returnHandler: submit">
             <errors></errors>
-            <div class="two fields" data-bind="visible: stateObs() === 'SignIn'">
-                <div class="field" id="email">
+            <div class="two fields" data-bind="visible: stateObs() === 'SignIn' || 
+                stateObs() === 'ExternalIdSignIn' || stateObs() === 'ForgotPassword'">
+                <div class="field" id="email" data-bind="visible: stateObs() === 'SignIn' || stateObs() === 'ForgotPassword'">
                     <label>Email address</label>
-                    <input autocomplete="email" data-bind="textInput: emailObs"/>
+                    <input autocomplete="email" data-bind="visible: stateObs() === 'SignIn', 
+                        textInput: emailObs, hasFocus: handleFocus('SignIn')"/>
+                    <input autocomplete="email" data-bind="visible: stateObs() === 'ForgotPassword', 
+                        textInput: emailObs, hasFocus: handleFocus('ForgotPassword')"/>
                 </div>
-                <div class="field" id="password">
-                    <label>Password</label>
-                    <input type="password" autocomplete="current-password" data-bind="textInput: passwordObs"/>
-                </div>
-            </div>
-            <div class="field" data-bind="visible: stateObs() === 'ForgotPassword'">
-                <label>Email address</label>
-                <input autocomplete="email" data-bind="textInput: emailObs"/>
-            </div>
-            <div class="two fields" data-bind="visible: stateObs() === 'ExternalIdSignIn'">
-                <div class="field" id="externalId">
+                <div class="field" id="externalId" data-bind="visible: stateObs() === 'ExternalIdSignIn'">
                     <label>External ID</label>
-                    <input autocomplete="email" data-bind="textInput: externalIdObs"/>
+                    <input data-bind="textInput: externalIdObs, hasFocus: handleFocus('ExternalIdSignIn')"/>
                 </div>
-                <div class="field" id="password">
+                <div class="field password" id="password" data-bind="visible: stateObs() !== 'ForgotPassword'">
                     <label>Password</label>
                     <input type="password" autocomplete="current-password" data-bind="textInput: passwordObs"/>
                 </div>
@@ -40,12 +34,14 @@
                             <div class="item">MX</div>
                         </div>
                     </div>
-                    <input type="text" placeholder="Phone number" data-bind="textInput: phoneObs">
+                    <input type="text" placeholder="Phone number" autocomplete="mobile"
+                        data-bind="textInput: phoneObs, hasFocus: handleFocus('PhoneSignIn')">
                 </div>        
             </div>
             <div class="field" id="token" data-bind="visible: stateObs() === 'EnterCode'">
                 <label for="token">Code</label>
-                <input type="text" placeholder="### ###" data-bind="textInput: tokenObs">
+                <input type="text" placeholder="### ###" 
+                    data-bind="textInput: tokenObs, hasFocus: handleFocus('EnterCode')">
             </div>
             <div class="two fields" data-bind="if: !isLockedObs()">
                 <div class="field">
@@ -61,7 +57,7 @@
                     </select>
                 </div>
             </div>
-                
+
         </form>
     </div>
     <div class="actions" style="display: flex; align-items: center">
