@@ -73,7 +73,12 @@ module.exports = function() {
     self.buttonTextObs = ko.computed(function() {
         return BUTTONS[self.stateObs()];
     });
-    
+    self.handleFocus = function(focusOnState) {
+        return ko.computed(function() {
+            return focusOnState === self.stateObs();
+        });
+    };
+
     self.environmentOptions = config.environments;
     self.environmentObs.subscribe(function(newValue) {
         self.studyOptionsObs({name:'Updating...',identifier:''});
@@ -137,6 +142,7 @@ module.exports = function() {
     self.submit = function(vm, event) {
         let key = self.stateObs();
         let methodName = key.substring(0,1).toLowerCase() + key.substring(1);
+        console.log("executing", methodName);
         self[methodName](vm, event);
     };
     self.signIn = function(vm, event) {
