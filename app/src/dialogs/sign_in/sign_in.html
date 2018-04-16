@@ -65,17 +65,13 @@
             <button id="submitButton" class="ui primary small button" 
                 data-bind="click: submit, text: buttonTextObs"></button>
         </div>
-
         <div data-bind="visible: stateObs() === 'SignIn'">
-            <button class="ui small button" data-bind="click: useForgotPassword">
-                Forgot Password
-            </button>
-            <button class="ui small button" data-bind="click: useExternalId">
-                Use External ID
-            </button>
-            <button class="ui small button" data-bind="click: usePhone">
-                Use Phone
-            </button>
+            <a href="" data-bind="click: useForgotPassword">Forgot Password?</a>
+            <span style="padding: 0 1rem"> </span>
+            Sign In Using
+            <a href="" data-bind="click: useExternalId">External ID</a>
+            &bull;
+            <a href="" data-bind="click: usePhone">Phone</a>
         </div>
         <div data-bind="visible: stateObs() !== 'SignIn'">
             <button class="ui small button" data-bind="click: cancel">
