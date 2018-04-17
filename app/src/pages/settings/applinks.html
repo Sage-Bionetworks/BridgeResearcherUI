@@ -21,8 +21,8 @@
                         <td class="dragHandle" data-bind="text: $data.appIdObs"></td>
                         <td data-bind="text: $component.pathFormatter($data)"></td>
                         <td style="text-align:right">
-                            <button class="ui basic red compact mini button" 
-                                data-bind="click: $component.removeAppleAppLink">Delete</button>
+                            <i class="red large times circle outline link icon" 
+                                data-bind="click: $component.removeAppleAppLink"></i>
                         </td>
                     </tr>
                 </tbody>
@@ -38,8 +38,8 @@
                         <td data-bind="text: $data.namespaceObs"></td>
                         <td data-bind="html: $component.fingerprintsFormatter($data)"></td>
                         <td style="text-align:right">
-                            <button class="ui basic red compact mini button" 
-                                data-bind="click: $component.removeAndroidAppLink">Delete</button>
+                            <i class="red large times circle outline link icon" 
+                                data-bind="click: $component.removeAndroidAppLink"></i>
                         </td>
                     </tr>
                 </tbody>

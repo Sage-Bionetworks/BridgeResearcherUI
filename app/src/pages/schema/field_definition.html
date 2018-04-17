@@ -48,20 +48,11 @@
         <ui-checkbox params="checkedObs: requiredObs">Required</ui-checkbox>
     </div>
     <div class="draggable activity-controls">
-        <div class="ui icon buttons">
-            <button class="ui compact basic mini button" 
-                data-bind="click: $parents[2].addBelow, semantic: 'popup'"
-                data-content="Add below">
-                <i class="square add icon"></i>
-            </button>
-            <button class="ui compact basic mini button" data-content="Delete this field" 
-                data-bind="fadeRemove: {
-                    selector: '.field_definition', 
-                    object: $data, 
-                    collection: 'fieldDefinitionsObs'
-                }, semantic: 'popup'">
-                <i class="delete icon"></i>
-            </button>
-        </div>        
+        <i class="large plus square outline link icon" 
+            data-bind="click: $parents[2].addBelow, semantic: 'popup'" 
+            data-content="Add below"></i>
+        <i class="red large times circle outline link icon" 
+            data-bind="fadeRemove: {selector: '.field_definition', object: $data, 
+            collection: 'fieldDefinitionsObs'}"></i>
     </div>
 </div>
