@@ -1,5 +1,6 @@
 .field_definition {
     @include flex-box(row);
+    flex-wrap: wrap;
     @include align-items(center);
     width: 100%;
     border-radius: 4px;

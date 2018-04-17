@@ -33,8 +33,8 @@
                         <td width="100%" class="dragHandle" data-bind="text: $data.name"></td>
                         <td><ui-select params="fieldObs: $data.revisionObs, optionsSrc: $data.revisionList, 
                                 optionsCaption: 'Most Recent Revision'"></ui-select></td>
-                        <td><button class="ui basic red compact mini button" 
-                                data-bind="click: $component.removeSchema.bind($component)">Delete</button></td>
+                        <td><i class="red large times circle outline link icon" 
+                            data-bind="click: $component.removeSchema.bind($component)"></i></td>
                     </tr>
                 </tbody>
             </table>
@@ -48,8 +48,8 @@
                         <td width="100%" class="dragHandle" data-bind="text: $data.name"></td>
                         <td><ui-select params="fieldObs: $data.createdOnObs, optionsSrc: $data.createdOnList, 
                                 optionsCaption: 'Most Recently Published'"></ui-select></td>
-                        <td><button class="ui basic red compact mini button" 
-                                data-bind="click: $component.removeSurvey.bind($component)">Delete</button></td>
+                        <td><i class="red large times circle outline link icon" 
+                            data-bind="click: $component.removeSurvey.bind($component)"></i></td>
                     </tr>
                 </tbody>
             </table>

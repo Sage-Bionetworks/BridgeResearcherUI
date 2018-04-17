@@ -16,18 +16,20 @@
 <div class="scrollbox">
     <errors></errors>
     <form class="ui form">
-        <div class="two fields">
-            <div class="seven wide field" id="label">
-                <label>Label</label>
-                <input type="text" data-bind="textInput: labelObs, hasFocus: true"/>
-            </div>
-            <div class="four wide field"></div>
-            <div class="four wide field">
-                <!-- ko component: {name:"app_version_criteria", params:{
-                    id:"", criteriaObs:criteriaObs}} --><!-- /ko -->
-            </div>
-        </div>
         <div class="ui relaxed grid" style="margin-top:1rem">
+            <div class="two column row">
+                <div class="column">
+                    <div class="field" id="label">
+                        <label>Label</label>
+                        <input type="text" data-bind="textInput: labelObs, hasFocus: true" />
+                    </div>
+                </div>
+                <div class="column">
+                    <!-- ko component: {name:"app_version_criteria", params:{
+                        id:"", criteriaObs:criteriaObs}} -->
+                    <!-- /ko -->
+                </div>
+            </div>
             <div class="two column row">
                 <div class="column">
                     <h3>Schemas (Tasks)</h3>
@@ -43,8 +45,9 @@
                                             optionsCaption: 'Select Revision:'"></ui-select>
                                     </div>
                                 </td>
-                                <td><button class="ui basic red compact mini button" 
-                                        data-bind="click: $component.removeSchema.bind($component)">Delete</button></td>
+                                <td>
+                                    <i class="red large times circle outline link icon" data-bind="click: $component.removeSchema.bind($component)"></i>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -63,8 +66,9 @@
                                             optionsCaption: 'Select Revision:'"></ui-select>
                                     </div>
                                 </td>
-                                <td><button class="ui basic red compact mini button" 
-                                        data-bind="click: $component.removeSurvey.bind($component)">Delete</button></td>
+                                <td>
+                                    <i class="red large times circle outline link icon" data-bind="click: $component.removeSurvey.bind($component)"></i>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -74,11 +78,10 @@
                     <h3>Client Data</h3>
                     <label>Client data should be in JSON format</label>
                     <div id="clientData">
-                        <textarea style="font-family: monospace; height: 50rem" 
-                            data-bind="textInput: clientDataObs"></textarea>
+                        <textarea style="font-family: monospace; height: 50rem" data-bind="textInput: clientDataObs"></textarea>
                     </div>
                     <div style="padding-top:1rem">
-                            <button class="ui tiny primary button" data-bind="click: reformat">Reformat</button>
+                        <button class="ui tiny primary button" data-bind="click: reformat">Reformat</button>
                     </div>
                 </div>
             </div>

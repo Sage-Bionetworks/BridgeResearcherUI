@@ -3,7 +3,10 @@
     listObs: scheduleCriteriaObs}">
     <div class="vs-item" data-bind="click: $component.selectCriteria">
         <div class="vs-item-content" data-bind="text: $data.labelObs"></div>
-        <div class="vs-item-delete link"><i class="delete icon" data-bind="click: $component.removeCriteria"></i></div>
+        <div class="vs-item-delete link">
+            <i class="red times circle outline link icon" 
+                data-bind="click: $component.removeCriteria"></i> 
+        </div>
     </div>
 </div>
 <div class="item" style="padding: .5rem">

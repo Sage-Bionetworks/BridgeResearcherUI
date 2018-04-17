@@ -1,5 +1,5 @@
-<div class="two fields">
-    <div class="field" data-bind="attr:{
+<div style="display:flex">
+    <div style="margin-right: 1rem" data-bind="attr:{
         class:'field '+$data.id+'minAppVersions_iphone_os ' + $data.id+'maxAppVersions_iphone_os'}">
         <label>iOS version</label>
         <div class="field range-control-border" data-bind="focusable">
@@ -8,7 +8,7 @@
             <input type="text" placeholder="Max" data-bind="textInput: $data.iosMaxObs"/>
         </div>
     </div>
-    <div class="field" data-bind="attr:{
+    <div style="flex: 1" data-bind="attr:{
         class:'field '+$data.id+'minAppVersions_android ' + $data.id+'maxAppVersions_android'}">
         <label>Android version</label>
         <div class="field range-control-border" data-bind="focusable">

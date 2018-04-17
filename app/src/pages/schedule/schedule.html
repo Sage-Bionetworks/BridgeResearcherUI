@@ -108,19 +108,14 @@
             </div>
             <div>
                 <div class="activity-controls">
-                    <button class="ui compact mini button" 
-                        data-bind="click: $component.addActivityAfter">
-                        <i class="square add icon"></i>Add below
-                    </button>
-                    <button class="ui red compact mini button" 
-                        data-bind="fadeRemove: {selector: '.activity', 
-                        object: $data, 'collection': 'activitiesObs'}">
-                        <i class="delete icon"></i>Delete
-                    </button>
-                    <button class="ui primary compact mini button"
-                        data-bind="click: $component.copyGuid, visible: $data.guid">
-                        <i class="copy icon"></i>Copy GUID
-                    </button>
+                    <i class="large grey plus square outline link icon" 
+                        data-bind="click: $component.addActivityAfter, semantic: 'popup'"
+                        data-content="Add below"></i>
+                    <i class="red large times circle outline link icon"
+                        data-bind="fadeRemove: {selector: '.activity', object: $data, 'collection': 'activitiesObs'}"></i>
+                    <i class="blue large copy outline link icon"
+                        data-bind="click: $component.copyGuid, visible: $data.guid, semantic: 'popup'" 
+                        data-content="Copy GUID"></i>
                 </div>
             </div>
         </div>
