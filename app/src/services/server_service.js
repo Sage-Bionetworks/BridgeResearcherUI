@@ -120,6 +120,7 @@ export class ServerService {
     cacheParticipantName(response) {
         if (response && response.id) {
             let name = fn.formatNameAsFullLabel(response);
+            console.log("Cache: ", name, JSON.stringify(response));
             cache.set(response.id+':name', {name: name, status: response.status});
         }
         return response;
@@ -368,14 +369,11 @@ export class ServerService {
     }
     getParticipantName(id) {
         let name = cache.get(id+':name');
-        if (name) {
-            return Promise.resolve(name);
-        } else {
-            return this.gethttp(config.participants+"/"+id).then(this.cacheParticipantName.bind(this))
-                .then(() => {
-                    return Promise.resolve(cache.get(id+':name'));
-                });
-        }
+        return (name) ?
+            Promise.resolve(name) :
+            this.gethttp(config.participants+"/"+id)
+                .then(this.cacheParticipantName.bind(this))
+                .then(() => Promise.resolve(cache.get(id+':name')));
     }
     getParticipantRequestInfo(id) {
         return this.gethttp(config.participants+"/"+id+"/requestInfo");

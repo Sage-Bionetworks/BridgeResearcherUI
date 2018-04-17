@@ -6,6 +6,35 @@ import optionsService from '../../services/options_service';
 import root from '../../root';
 import utils from '../../utils';
 
+function keyToUnary(key) {
+    return {label: UNARY_EVENTS[key], value: key};
+}
+function keyToCustom(key) {
+    return {label: "When “"+key+"” occurs", value: "custom:"+key};
+}
+function collectStudyEventKeys(eventKeys) {
+    return function(study) {
+        Object.keys(UNARY_EVENTS)
+            .forEach(key => eventKeys.push(keyToUnary(key)));
+        Object.keys(study.automaticCustomEvents)
+            .forEach(key => eventKeys.push(keyToCustom(key)));
+        study.activityEventKeys
+            .forEach(key => eventKeys.push(keyToCustom(key)));
+        return study;
+    };
+}
+function collectActivityEventKeys(eventKeys) {
+    return function(activities) {
+        activities.forEach((activity) => {
+            eventKeys.push({
+                label: "When activity “"+activity.label+"” is finished", 
+                value: "activity:"+activity.value+":finished"
+            });
+        });
+        return eventKeys;
+    };
+}
+
 /**
  * This editor no longer allows you to edit survey or question triggered events, although these 
  * are supported by the event system. These events are not generated when surveys are answered 
@@ -15,35 +44,35 @@ module.exports = function(params) {
     let self = this;
 
     new Binder(self)
-        .obs('enrollment', true)
-        .obs('enrollmentPeriod', Object.keys(UNARY_EVENTS)[0])
-        .obs('answer')
-        .obs('hasActivities', true)
-        .obs('activityFinished', false)
-        .obs('activityEventKeys[]', [])
-        .obs('selectedEventKeys[]', [])
-        .obs('customEvent', false)
         .obs('activity')
-        .obs('activityOptions[]');
+        .obs('index')
+        .obs('allEventKeys[]')
+        .obs('selectedEventKeys[]');
     
     fn.copyProps(self, params, 'clearEventIdFunc', 'eventIdObs');
-    self.activityLabel = utils.makeOptionLabelFinder(self.activityOptionsObs);
+    self.activityLabel = utils.makeOptionLabelFinder(self.allEventKeysObs);
     self.closeDialog = root.closeDialog;
 
+    self.addEventKey = function(vm, event) {
+        var key = self.activityObs();
+        if (key && !self.selectedEventKeysObs().includes(key)) {
+            if (UNARY_EVENTS[key]) {
+                // Only allow one enrollment-related event.
+                Object.keys(UNARY_EVENTS).forEach((oneKey) => {
+                    self.removeEventKey(oneKey);
+                });
+                self.selectedEventKeysObs.push(key);
+            } else {
+                self.selectedEventKeysObs.unshift(key);
+            }
+        }
+    };
+    self.removeEventKey = function(key, event) {
+        self.selectedEventKeysObs.remove(key);
+    };
     self.saveAndCloseDialog = function() {
-        let events = [];
-        if (self.activityFinishedObs() && self.activityObs()) {
-            events.push("activity:" + self.activityObs() + ":finished");
-        }
-        if (self.selectedEventKeysObs()) {
-            self.selectedEventKeysObs().forEach(function(key) {
-                events.push("custom:"+key);
-            });
-        }
-        if (self.enrollmentObs()) {
-            events.push(self.enrollmentPeriodObs());
-        }
-        self.eventIdObs(events.join(','));
+        var eventIdString = self.selectedEventKeysObs().join(",");
+        self.eventIdObs(eventIdString);
         root.closeDialog();
     };
     self.clearAndCloseDialog = function(vm, event) {
@@ -52,35 +81,21 @@ module.exports = function(params) {
     };
 
     function initEditor() {
-        if (self.activityOptionsObs().length === 0) {
-            self.hasActivitiesObs(false);
-        }
-        if (self.eventIdObs()) {
-            self.enrollmentObs(false);
-            self.activityFinishedObs(false);
-            self.eventIdObs().split(",").forEach(function(eventId) {
-                if (Object.keys(UNARY_EVENTS).indexOf(eventId) > -1) {
-                    self.enrollmentObs(true);
-                    self.enrollmentPeriodObs(eventId);
-                } else if (eventId.indexOf("custom:") > -1) {
-                    let parts = eventId.split(":");
-                    self.customEventObs(true);
-                    self.selectedEventKeysObs.push(parts[1]);
-                } else {
-                    let parts = eventId.split(":");
-                    if (parts[0] === "activity") {
-                        self.activityFinishedObs(true);
-                        self.activityObs(parts[1]);
-                    }
-                }
+        var eventIdString = self.eventIdObs();
+        if (eventIdString) {
+            eventIdString.split(",").forEach((eventId) => {
+                self.selectedEventKeysObs.push(eventId.trim());
             });
+        } else {
+            self.selectedEventKeysObs.push("enrollment");
         }
     }
     
+    let eventKeys = [];
     serverService.getStudy()
-        .then(fn.handleObsUpdate(self.activityEventKeysObs, 'activityEventKeys'))
-        .then(optionsService.getSurveyOptions)
+        .then(collectStudyEventKeys(eventKeys))
         .then(optionsService.getActivityOptions)
-        .then(self.activityOptionsObs)
+        .then(collectActivityEventKeys(eventKeys))
+        .then(self.allEventKeysObs)
         .then(initEditor);
 };
