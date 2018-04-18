@@ -1,5 +1,6 @@
 import Binder from '../../binder';
 import fn from '../../functions';
+import ko from 'knockout';
 import storeService from '../../services/store_service';
 import utils from '../../utils';
 
@@ -92,6 +93,8 @@ module.exports = function(params) {
             self.totalPagesObs( Math.ceil(response.total/rp.pageSize) );
         }
     }
+
+    ko.postbox.subscribe('page-refresh', wrappedLoadingFunc.bind(self));
     
     function wrappedLoadingFunc(offsetBy, vm, event) {
         let emailFilter = self.emailFilterObs();

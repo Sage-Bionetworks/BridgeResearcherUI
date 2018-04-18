@@ -1,0 +1,34 @@
+generatePasswordExternalIdManagementDisabled() {
+
+}
+generatePasswordExternalIdNotSubmitted() {
+
+}
+generatePasswordExternalIdRecordMissiong() {
+
+}
+generatePasswordNoAccountDoNotCreateAccount() {
+
+}
+generatePasswordNoAccountCreateAccountExternalIdTaken() {
+    
+}
+generatePasswordNoAccountCreateAccountOK() {
+}
+
+generatePasswordAccountExistsExternalIdTaken() {
+}
+generatePasswordAccountExistsExternalIdAssignedOK() {
+}
+generatePasswordAccountExistsExternalIdCannotBeAssigned() {
+}
+
+            accountDao.changePassword(account, password);
+
+            // Update the external ID, which will also assign it in the external ID table.
+            StudyParticipant updated = new StudyParticipant.Builder()
+                    .copyOf(participantService.getParticipant(study, account, false))
+                    .withExternalId(passGen.getExternalId()).build();
+            participantService.updateParticipant(study, ImmutableSet.of(), updated);
+            userId = account.getId();
+        }

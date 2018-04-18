@@ -62,7 +62,7 @@ CreateCredentialsWorker.prototype = {
     },
     performWork: function(){ 
         this.currentId = this.identifiers.shift();
-        let participant = utils.createParticipantForID(this.supportEmail, this.currentId);
+        let participant = utils.createParticipantForID(this.currentId);
         participant.dataGroups = this.dataGroups;
         return serverService.createParticipant(participant);
     },
