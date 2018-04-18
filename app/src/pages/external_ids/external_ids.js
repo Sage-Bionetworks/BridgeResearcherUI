@@ -37,12 +37,12 @@ module.exports = function() {
     }
     function createNewCredentials(identifier) {
         self.resultObs(identifier);
-        let participant = utils.createParticipantForID(self.study.supportEmail, identifier);
+        let participant = utils.createParticipantForID(identifier);
         return serverService.createParticipant(participant);
     }
     function updatePageWithResult(response) {
         self.showResultsObs(true);
-        ko.postbox.publish('external-ids-page-refresh');
+        ko.postbox.publish('page-refresh');
         return response;
     }
     function convertToPaged(identifier) {

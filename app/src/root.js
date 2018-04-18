@@ -120,6 +120,7 @@ let RootViewModel = function() {
         self.rolesObs([]);
         self.openDialog('sign_in_dialog', {closeable:false});
     });
+    // TODO: This is running every second all the time?!
     setTimeout(checkVerifyStatus, 1000);
 };
 
