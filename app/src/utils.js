@@ -223,10 +223,8 @@ function makeScrollTo(itemSelector) {
         }
     };
 }
-function createParticipantForID(email, identifier) {
+function createParticipantForID(identifier) {
     return {
-        "email": createEmailTemplate(email, identifier),
-        "password": identifier,
         "externalId": identifier,
         "sharingScope": "all_qualified_researchers"
     };

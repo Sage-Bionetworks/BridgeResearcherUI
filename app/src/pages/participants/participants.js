@@ -76,7 +76,7 @@ module.exports = function() {
         return serverService.updateParticipant(participant);
     }
     function publishPageUpdate(response) {
-        ko.postbox.publish('participants-page-refresh');
+        ko.postbox.publish('page-refresh');
         return response;
     }
     function load(response) {

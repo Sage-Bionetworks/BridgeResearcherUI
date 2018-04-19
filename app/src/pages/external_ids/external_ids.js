@@ -10,6 +10,10 @@ import toastr from 'toastr';
 
 let OPTIONS = {offsetBy:null, pageSize: 1, assignmentFilter:false};
 
+function deleteItem(item) {
+    return serverService.deleteExternalId(item.identifier);
+}
+
 module.exports = function() {
     let self = this;
     
@@ -20,6 +24,7 @@ module.exports = function() {
         .obs('searchLoading', false)
         .obs('externalIdValidationEnabled', false)
         .obs('idFilter')
+        .obs('canDelete', false)
         .obs('showResults', false);
 
     // For the forward pager control.
@@ -27,7 +32,7 @@ module.exports = function() {
     self.callback = fn.identity;
 
     fn.copyProps(self, root, 'isDeveloper', 'isResearcher');
-    tables.prepareTable(self, {name: 'external ID'});
+    tables.prepareTable(self, {name: 'external ID', delete: deleteItem});
 
     function extractId(response) {
         if (response.items.length === 0) {
@@ -37,12 +42,12 @@ module.exports = function() {
     }
     function createNewCredentials(identifier) {
         self.resultObs(identifier);
-        let participant = utils.createParticipantForID(self.study.supportEmail, identifier);
+        let participant = utils.createParticipantForID(identifier);
         return serverService.createParticipant(participant);
     }
     function updatePageWithResult(response) {
         self.showResultsObs(true);
-        ko.postbox.publish('external-ids-page-refresh');
+        ko.postbox.publish('page-refresh');
         return response;
     }
     function convertToPaged(identifier) {
@@ -99,8 +104,15 @@ module.exports = function() {
             .then(utils.successHandler())
             .catch(utils.failureHandler());
     };
+
+    function initDeletableState(study) {
+        self.canDeleteObs(root.isDeveloper() && !study.externalIdValidationEnabled);
+        return study;
+    }
     
-    serverService.getStudy().then(binder.assign('study'));
+    serverService.getStudy()
+        .then(binder.assign('study'))
+        .then(initDeletableState);
     
     self.loadingFunc = function loadPage(params) {
         params = params || {};

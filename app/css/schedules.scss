@@ -73,9 +73,6 @@
         padding-right: .5rem;
         width: 15rem;
     }
-    div:last-child {
-        width: 20rem;
-    }
 }
 .activity-controls {
     @include align-items(top); // just seems slightly more aligned than leaving it alone.

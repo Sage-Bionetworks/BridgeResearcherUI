@@ -7,8 +7,8 @@ module.exports = function(params) {
     let loadingFunc = params.vm.loadingFunc;
     let pendingRequest = false;
 
-    let nextOffset = null;
-    let history = [];
+    self.nextOffset = null;
+    self.history = [];
 
     new Binder(self)
         .obs('showLoader', false)
@@ -17,32 +17,47 @@ module.exports = function(params) {
         .obs('currentPage', 0);
 
     function clear() {
-        nextOffset = null;
-        history = [];
+        self.nextOffset = null;
+        self.history = [];
         self.currentPageObs(0);
     }
 
     self.firstPage = function() {
         if (!pendingRequest) {
             clear();
-            wrappedLoadingFunc(nextOffset);
+            wrappedLoadingFunc(self.nextOffset);
         }
     };
     params.vm.callback = self.firstPage;
 
+    ko.postbox.subscribe('page-refresh', refresh);
+
     self.previousPage = function() {
         if (!pendingRequest) {
-            history.pop(); // next page key
-            history.pop(); // current page key
-            nextOffset = history[history.length-1]; // the last page key
-            wrappedLoadingFunc(nextOffset);
+            self.history.pop(); // next page key
+            self.history.pop(); // current page key
+            self.nextOffset = self.history[history.length-1]; // the last page key
+            wrappedLoadingFunc(self.nextOffset);
         }
     };
+    
     self.nextPage = function() {
         if (!pendingRequest) {
-            wrappedLoadingFunc(nextOffset);
+            wrappedLoadingFunc(self.nextOffset);
         }
     };
+
+    function refresh() {
+        self.showLoaderObs(true);
+        pendingRequest = true;
+        let args = {offsetKey: self.history.pop()};
+
+        loadingFunc(args).then(function(response) {
+            self.showLoaderObs(false);
+            pendingRequest = false;
+            return response;
+        }).catch(utils.failureHandler());
+    }
 
     function wrappedLoadingFunc(offsetKey) {
         self.showLoaderObs(true);
@@ -51,11 +66,11 @@ module.exports = function(params) {
 
         loadingFunc(args).then(function(response) {
             if (response) {
-                history.push(nextOffset);
-                nextOffset = response.nextPageOffsetKey;
-                self.hasPreviousObs(history.length > 1);
+                self.history.push(self.nextOffset);
+                self.nextOffset = response.nextPageOffsetKey;
+                self.hasPreviousObs(self.history.length > 1);
                 self.hasNextObs(response.hasNext);
-                self.currentPageObs(history.length-1);
+                self.currentPageObs(self.history.length-1);
             }
             self.showLoaderObs(false);
             pendingRequest = false;
