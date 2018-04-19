@@ -40,7 +40,8 @@ module.exports = function(params) {
     fn.copyProps(self, jsonFormatter, 'prettyPrintHTML');
 
     params.uploadDetailsObs.subscribe(function(upload) {
-        console.log(upload);
+        self.filesObs([]);
+        self.healthDataExistsObs(false);
         binder.update()(upload);
         if (upload.healthData) {
             self.healthDataExistsObs(true);

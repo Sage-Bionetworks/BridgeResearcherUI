@@ -57,7 +57,7 @@
 
     <div data-bind="visible: validationMessageListObs().length > 0">
         <h4 class="ui dividing header">Validation Errors</h4>
-        <ul data-bind="foreach: validationMessageListObs">
+        <ul class="validation_errors" data-bind="foreach: validationMessageListObs">
             <li data-bind="text: $data"></li>
         </ul>
     </div>
@@ -98,7 +98,7 @@
             </div>
             <div class="three fields">
                 <div class="field">
-                    <label>Schema ID</label>
+                    <label>Upload Schema</label>
                     <a target="_blank" data-bind="href: schemaLinkObs, text: schemaLabel"></a>
                 </div>
                 <div class="field">
