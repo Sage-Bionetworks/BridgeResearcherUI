@@ -259,3 +259,11 @@ progress {
     -webkit-hyphens: auto;
     hyphens: auto;
 }
+
+.validation_errors {
+    line-height: 1.5;
+    max-width: 60rem;
+    li {
+        margin-bottom: 1rem;
+    }
+}

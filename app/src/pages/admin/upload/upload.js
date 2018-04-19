@@ -7,20 +7,24 @@ import storeService from '../../../services/store_service';
 import tables from '../../../tables';
 import utils from '../../../utils';
 
+const PAGE_KEY = 'findUpload';
+
 module.exports = function() {
     let self = this;
+    let query = storeService.restoreQuery(PAGE_KEY);
 
+    self.findObs = ko.observable(query.externalId || '');
     self.uploadDetailsObs = ko.observable();
-    self.findObs = ko.observable();
-    self.uploadDetailsObs = ko.observable();
+    self.isLoadingObs = ko.observable(false);
 
     self.doSearch = function(event) {
         utils.clearErrors();
         let id = self.findObs();
         if (id) {
-            event.target.parentNode.parentNode.classList.add("loading");
+            storeService.persistQuery(PAGE_KEY, {externalId: id});
+            self.isLoadingObs(true);
             let success = (response) => {
-                event.target.parentNode.parentNode.classList.remove("loading");
+                self.isLoadingObs(false);
                 serverService.getUploadById(response.uploadId).then((response) => {
                     self.uploadDetailsObs(response);
                 }).catch(utils.failureHandler());
@@ -29,10 +33,14 @@ module.exports = function() {
             utils.startHandler(self, event);
             serverService.getUploadById(id).then(success).catch(function() {
                 serverService.getUploadByRecordId(id).then(success).catch(function(e) {
-                    event.target.parentNode.parentNode.classList.remove("loading");
+                    self.isLoadingObs(false);
                     utils.failureHandler({transient:false})(e);
                 });
             });
         }
     };
+
+    if (self.findObs() !== '') {
+        self.doSearch({});
+    }
 };

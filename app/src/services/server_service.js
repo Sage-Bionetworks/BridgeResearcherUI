@@ -419,6 +419,10 @@ export class ServerService {
     addExternalIds(identifiers) {
         return this.post(config.externalIds, identifiers);
     }
+    deleteExternalId(id) {
+        let params = {'externalId':id};
+        return this.del(config.externalIds + fn.queryString(params));
+    }
     getSession() {
         if (session) {
             return Promise.resolve(session);

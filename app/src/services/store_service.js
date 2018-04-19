@@ -33,9 +33,7 @@ export default {
     },
     restoreQuery: function(key) {
         let stored = null;
-        if (document.location.search) {
-            stored = document.location.search;
-        } else if (localStorage.getItem(key)) {
+        if (localStorage.getItem(key)) {
             stored = localStorage.getItem(key);
         }
         if (stored) {
