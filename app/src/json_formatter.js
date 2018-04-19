@@ -6,6 +6,7 @@ const KEY = '<span class=json-key>';
 const VAL = '<span class=json-value>';
 const STR = '<span class=json-string>';
 const COLON = /[": ]/g;
+const INDENT_SIZE = 2;
 
 function htmlReplacer(match, pIndent, pKey, pVal, pEnd) {
     let r = pIndent || '';
@@ -52,4 +53,42 @@ function mapClientDataItem(item) {
     return item;
 }
 
-export default { prettyPrint, mapItem, mapClientDataItem, prettyPrintHTML };
+function addIndent(indent) {
+    let string = "";
+    for (let i=0; i < indent; i++) {
+        string += "&#160;";
+    }
+    return string;
+}
+function prettyPrintStringAsHTML(string) {
+    if (!string) {
+        return;
+    }
+    let indent = 0;
+    let output = "";
+    for (let i=0; i < string.length; i++) {
+        let charAt = string.charAt(i);
+        if (charAt === '{') {
+            indent += INDENT_SIZE;
+            output += (" {<br>" + addIndent(indent));
+        } else if (charAt === '}') {
+            indent -= INDENT_SIZE;
+            output += ("<br>" + addIndent(indent) + "}");
+        } else if (charAt === '[') {
+            indent += INDENT_SIZE;
+            output += (" [<br>" + addIndent(indent));
+        } else if (charAt === ']') {
+            indent -= INDENT_SIZE;
+            output += ("<br>" + addIndent(indent) + "]");
+        } else if (charAt === ',') {
+            output += (",<br>" + addIndent(indent));
+        } else if (charAt === ':') {
+            output += (": ");
+        } else {
+            output += charAt;
+        }
+    }
+    return output;
+}
+
+export default { prettyPrint, mapItem, mapClientDataItem, prettyPrintHTML, prettyPrintStringAsHTML };

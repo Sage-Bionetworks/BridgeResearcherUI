@@ -109,7 +109,7 @@
         </div>
     
         <h4 class="upload-dividing-header">JSON</h4>
-        <pre style="overflow: auto" data-bind="html: $component.prettyPrintHTML(dataObs())"></pre>
+        <pre style="overflow: auto" data-bind="html: prettyPrintStringAsHTML(dataObs())"></pre>
     
         <h4 class="upload-dividing-header" data-bind="text: filenameObs">Files</h4>
         <table class="ui very basic table" data-bind="visible: filesObs().length > 0">
