@@ -57,8 +57,8 @@ function baseParams(method, url, data, responseType) {
 }
 // Some JSON needs to be displayed exactly as entered and cannot be parsed, because some details
 // can be lost (e.g. 62.0 will become 62 after parsing). This method will extract an object under
-// a property name in the returned JSON string.
-function parseStringForRawData(raw, fieldName) {
+// a property name and convert it to a string.
+function parsePropObjToString(raw, fieldName) {
     var startIndex = raw.indexOf('"'+fieldName+'"') + (fieldName.length + 3);
     if (startIndex === -1) {
         return "";
@@ -78,7 +78,7 @@ function parseStringForRawData(raw, fieldName) {
     return "";
 }
 function convertDataToString(textResponse) {
-    var data = parseStringForRawData(textResponse, "data");
+    var data = parsePropObjToString(textResponse, "data");
     var response = JSON.parse(textResponse);
     if (response.healthData && response.healthData.data) {
         response.healthData.data = data;
