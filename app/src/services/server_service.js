@@ -34,13 +34,14 @@ function postInt(url, data) {
     }
     return $.ajax(baseParams('POST', url, data));
 }
-function getInt(url) {
-    return $.ajax(baseParams('GET', url));
+function getInt(url, responseType) {
+    return $.ajax(baseParams('GET', url, null, responseType));
 }
 function deleteInt(url) {
     return $.ajax(baseParams('DELETE', url));
 }
-function baseParams(method, url, data) {
+function baseParams(method, url, data, responseType) {
+    responseType = responseType || 'json';
     let headers = {'Content-Type': 'application/json'};
     if (session && session.sessionToken) {
         headers['Bridge-Session'] = session.sessionToken;
@@ -50,9 +51,39 @@ function baseParams(method, url, data) {
         url: url,
         headers: headers, 
         type: "application/json", 
-        dataType: "json", 
+        dataType: responseType, 
         timeout: 10000
     });
+}
+// Some JSON needs to be displayed exactly as entered and cannot be parsed, because some details
+// can be lost (e.g. 62.0 will become 62 after parsing). This method will extract an object under
+// a property name and convert it to a string.
+function parsePropObjToString(raw, fieldName) {
+    var startIndex = raw.indexOf('"'+fieldName+'"') + (fieldName.length + 3);
+    if (startIndex === -1) {
+        return "";
+    }
+    raw = raw.substring(startIndex);
+    var brackets = 1;
+    for (var i=1; i < raw.length; i++) {
+        if (raw.charAt(i) === '{') {
+            brackets++;
+        } else if (raw.charAt(i) === '}') {
+            brackets--;
+        }
+        if (brackets === 0) {
+            return raw.substring(0,i+1);
+        }
+    }
+    return "";
+}
+function convertDataToString(textResponse) {
+    var data = parsePropObjToString(textResponse, "data");
+    var response = JSON.parse(textResponse);
+    if (response.healthData && response.healthData.data) {
+        response.healthData.data = data;
+    }
+    return response;
 }
 
 export class ServerService {
@@ -94,6 +125,18 @@ export class ServerService {
         } else {
             return this.makeSessionWaitingPromise("GET " + path, () => {
                 return getInt(session.host + path).then((response) => {
+                    cache.set(path, response);
+                    return response;
+                });
+            });
+        }
+    }
+    gettext(path) {
+        if (cache.get(path)) {
+            return Promise.resolve(cache.get(path));
+        } else {
+            return this.makeSessionWaitingPromise("GET " + path, () => {
+                return getInt(session.host + path, 'text').then((response) => {
                     cache.set(path, response);
                     return response;
                 });
@@ -278,10 +321,10 @@ export class ServerService {
         });
     }
     getUploadById(id) {
-        return this.gethttp(config.uploads + '/' + id);
+        return this.gettext(config.uploads + '/' + id).then(convertDataToString);
     }
     getUploadByRecordId(id) {
-        return this.gethttp(config.uploads + '/recordId:' + id);
+        return this.gettext(config.uploads + '/recordId:' + id).then(convertDataToString);
     }
     createUploadSchema(schema) {
         return this.post(config.schemasV4, schema).then(function(response) {

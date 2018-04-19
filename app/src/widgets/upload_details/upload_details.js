@@ -37,7 +37,7 @@ module.exports = function(params) {
         return (!date) ? null : fn.formatDateTime(date);
     };
 
-    fn.copyProps(self, jsonFormatter, 'prettyPrintHTML');
+    fn.copyProps(self, jsonFormatter, 'prettyPrintStringAsHTML');
 
     params.uploadDetailsObs.subscribe(function(upload) {
         self.filesObs([]);
