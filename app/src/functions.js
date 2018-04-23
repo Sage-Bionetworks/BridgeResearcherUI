@@ -299,9 +299,6 @@ function pad(num) {
     let norm = Math.abs(Math.floor(num));
     return (norm < 10 ? '0' : '') + norm;
 }
-function arrayContains(array, value) {
-    return array.indexOf(value) > -1;
-}
 function formatList(array = [], finalWord = 'and') {
     if (is(array, 'Array') && array.length) {
         if (array.length === 1) {
@@ -400,7 +397,6 @@ function formatTimeISO(date) {
 }
 
 export default {
-    arrayContains,
     copyProps,
     deleteUnusedProperties,
     flagForRegionCode,
