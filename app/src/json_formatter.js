@@ -1,31 +1,13 @@
 import ko from 'knockout';
 
-// See http://jsfiddle.net/unlsj/
-const JSON_LINE = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg;
-const KEY = '<span class=json-key>';
-const VAL = '<span class=json-value>';
-const STR = '<span class=json-string>';
-const COLON = /[": ]/g;
 const INDENT_SIZE = 2;
+const QUOTE_LITERAL = ['<span class=json-key>"', '"</span>', '<span class=json-string>"', '"'];
 
-function htmlReplacer(match, pIndent, pKey, pVal, pEnd) {
-    let r = pIndent || '';
-    if (pKey) {
-        r = r + KEY + pKey.replace(COLON, '') + '</span>: ';
-    }
-    if (pVal) {
-        r = r + (pVal[0] == '"' ? STR : VAL) + pVal + '</span>';
-    }
-    return r + (pEnd || '');
-}
 function prettyPrintHTML(obj) {
     if (!obj) { 
         return "";
     }
-    return JSON.stringify(obj, null, 3)
-        .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
-        .replace(/</g, '&lt;').replace(/>/g, '&gt;')
-        .replace(JSON_LINE, htmlReplacer);
+    return prettyPrintStringAsHTML(JSON.stringify(obj));
 }
 function prettyPrint(obj) {
     if (!obj) { 
@@ -56,36 +38,39 @@ function mapClientDataItem(item) {
 function addIndent(indent) {
     let string = "";
     for (let i=0; i < indent; i++) {
-        string += "&#160;";
+        string += " ";
     }
     return string;
 }
+
 function prettyPrintStringAsHTML(string) {
     if (!string) {
-        return;
+        return '';
     }
     let indent = 0;
     let output = "";
-    for (let i=0; i < string.length; i++) {
-        let charAt = string.charAt(i);
-        if (charAt === '{') {
+    let stringState = 0;
+    for (let i=0, len = string.length; i < len; i++) {
+        let oneChar = string.charAt(i);
+        if (oneChar === '{' || oneChar === '[') {
             indent += INDENT_SIZE;
-            output += (" {<br>" + addIndent(indent));
-        } else if (charAt === '}') {
+            output += (oneChar+"\n" + addIndent(indent));
+        } else if (oneChar === '}' || oneChar === ']') {
             indent -= INDENT_SIZE;
-            output += ("<br>" + addIndent(indent) + "}");
-        } else if (charAt === '[') {
-            indent += INDENT_SIZE;
-            output += (" [<br>" + addIndent(indent));
-        } else if (charAt === ']') {
-            indent -= INDENT_SIZE;
-            output += ("<br>" + addIndent(indent) + "]");
-        } else if (charAt === ',') {
-            output += (",<br>" + addIndent(indent));
-        } else if (charAt === ':') {
-            output += (": ");
+            output += ("\n" + addIndent(indent) + oneChar);
+        } else if (oneChar === '"') {
+            output += QUOTE_LITERAL[stringState];
+            stringState++;
+        } else if (oneChar === ':') {
+            output += (stringState === 2) ? (oneChar+' ') : oneChar;
+        } else if (oneChar === ',') {
+            output += ("</span>,\n" + addIndent(indent));
+            stringState = 0;
+        } else if (stringState === 2) {
+            output += '<span class=json-value>'+oneChar;
+            stringState++;
         } else {
-            output += charAt;
+            output += oneChar;
         }
     }
     return output;

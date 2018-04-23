@@ -163,7 +163,6 @@ export class ServerService {
     cacheParticipantName(response) {
         if (response && response.id) {
             let name = fn.formatNameAsFullLabel(response);
-            console.log("Cache: ", name, JSON.stringify(response));
             cache.set(response.id+':name', {name: name, status: response.status});
         }
         return response;

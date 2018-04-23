@@ -4,6 +4,8 @@ import Binder from './binder';
 import clipboard from './widgets/clipboard/clipboard';
 import config from './config';
 import ko from 'knockout';
+//Babel doesn't convert this to es5 correctly, and you get an error
+//require('../components/br-fixed-header');
 
 function roleFunc(observer, role) {
     return ko.computed(function() {return observer().indexOf(role) > -1;});
@@ -120,7 +122,6 @@ let RootViewModel = function() {
         self.rolesObs([]);
         self.openDialog('sign_in_dialog', {closeable:false});
     });
-    // TODO: This is running every second all the time?!
     setTimeout(checkVerifyStatus, 1000);
 };
 

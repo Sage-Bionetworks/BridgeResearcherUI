@@ -142,7 +142,6 @@ module.exports = function() {
     self.submit = function(vm, event) {
         let key = self.stateObs();
         let methodName = key.substring(0,1).toLowerCase() + key.substring(1);
-        console.log("executing", methodName);
         self[methodName](vm, event);
     };
     self.signIn = function(vm, event) {

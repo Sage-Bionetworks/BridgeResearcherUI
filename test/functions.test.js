@@ -413,11 +413,4 @@ describe("deleteUnusedProperties", function() {
         expect(object.prop4).to.be.false;
     });
 });
-describe("arrayContains", function() {
-    it("works", function() {
-        var array = ['A','B','C'];
-        expect(fn.arrayContains(array, 'A')).to.be.true;
-        expect(fn.arrayContains(array, 'D')).to.be.false;
-    });
-});
 });
