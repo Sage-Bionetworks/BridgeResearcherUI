@@ -37,6 +37,8 @@ module.exports = function() {
                     utils.failureHandler({transient:false})(e);
                 });
             });
+        } else {
+            storeService.persistQuery(PAGE_KEY, {externalId: ""});
         }
     };
 

@@ -44,17 +44,17 @@ function createRule(rule) {
 
 function filterOutRulesWithNoValues(rule) {
     let op = rule.operatorObs();
-    if (fn.arrayContains(SET_OPS, op)) {
+    if (SET_OPS.includes(op)) {
         rule.valueObs(null);
-    } else if (fn.arrayContains(NO_VALUE_OPS, op)) {
+    } else if (NO_VALUE_OPS.includes(op)) {
         rule.dataGroupsObs([]);
     }
-    return (rule.valueObs() || rule.dataGroupsObs().length || fn.arrayContains(NO_VALUE_OPS, op));
+    return (rule.valueObs() || rule.dataGroupsObs().length || NO_VALUE_OPSSET_OPS.includes(op));
 }
 
 function observerToObject(rule) {
     let obj = {operator: rule.operatorObs()};
-    if (!fn.arrayContains(SET_OPS, rule.operatorObs())) {
+    if (!SET_OPS.includes(rule.operatorObs())) {
         obj.value = rule.valueObs();
     } else {
         obj.dataGroups = rule.dataGroupsObs();

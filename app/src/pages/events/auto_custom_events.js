@@ -38,7 +38,6 @@ module.exports = function() {
 
     serverService.getStudy().then(function(study) {
         self.study = study;
-        console.log(study.automaticCustomEvents);
         self.itemsObs(
             Object.entries(study.automaticCustomEvents || {}).map(mapToObservers)
         );

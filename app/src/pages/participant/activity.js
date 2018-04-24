@@ -93,7 +93,6 @@ module.exports = function(params) {
 
     // so that function is hoisted to the tables.prepareTable() call above
     function loadingFunc(args) {
-        console.log(self.startDateObs(), self.endDateObs());
         self.searchLoadingObs(false);
         if (!self.startDateObs() || !self.endDateObs()) {
             return Promise.resolve();
@@ -107,7 +106,6 @@ module.exports = function(params) {
 
         return serverService.getParticipantNewActivities(
             self.userIdObs(), params.referentType, params.guid, args).then(function(response) {
-                console.log(response);
                 response.items = response.items.map(jsonFormatter.mapClientDataItem);
                 self.itemsObs(response.items);
                 return response;
