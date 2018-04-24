@@ -214,7 +214,8 @@ export class ServerService {
             .then(this.cacheSession());
     }
     getStudyList(env) {
-        return this.gethttp(config.getStudyList).then(fn.handleSort('items', 'name'));
+        return getInt(config.host[env] + config.getStudyList)
+            .then(fn.handleSort('items', 'name'));
     }
     requestPhoneSignIn(env, data) {
         return postInt(config.host[env] + config.requestPhoneSignIn, data);
