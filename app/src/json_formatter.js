@@ -36,11 +36,7 @@ function mapClientDataItem(item) {
 }
 
 function addIndent(indent) {
-    let string = "";
-    for (let i=0; i < indent; i++) {
-        string += " ";
-    }
-    return string;
+    return ' '.repeat(indent);
 }
 
 function prettyPrintStringAsHTML(string) {
@@ -62,13 +58,20 @@ function prettyPrintStringAsHTML(string) {
             output += QUOTE_LITERAL[stringState];
             stringState++;
         } else if (oneChar === ':') {
-            output += (stringState === 2) ? (oneChar+' ') : oneChar;
+            if (stringState === 2) {
+                output += (oneChar+' ');
+            } else {
+                output += oneChar;
+            }
         } else if (oneChar === ',') {
-            output += ("</span>,\n" + addIndent(indent));
-            stringState = 0;
+            if (stringState !== 3) {
+                output += ("</span>,\n" + addIndent(indent));
+                stringState = 0;
+            } else {
+                output += oneChar;
+            }
         } else if (stringState === 2) {
             output += '<span class=json-value>'+oneChar;
-            stringState++;
         } else {
             output += oneChar;
         }
