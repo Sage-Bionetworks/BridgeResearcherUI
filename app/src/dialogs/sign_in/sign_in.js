@@ -36,8 +36,11 @@ function makeReloader(studyKey, environment) {
         function(response) {
             storeService.set(STUDY_KEY, studyKey);
             storeService.set(ENVIRONMENT, environment);
+            root.closeDialog();
             window.location.reload(); 
-        } : fn.identity;
+        } : function() {
+            root.closeDialog();
+        };
 }
 
 module.exports = function() {
@@ -105,7 +108,6 @@ module.exports = function() {
         self.phoneObs("");
         self.phoneRegionObs("US");
         self.tokenObs("");
-        root.closeDialog();
         return response;
     }
     function createPayload(...fields) {
@@ -162,6 +164,7 @@ module.exports = function() {
             let { studyKey, studyName, environment } = collectValues();
             utils.startHandler(self, SYNTH_EVENT);
             return serverService.requestResetPassword(environment, payload)
+                .then(clear)
                 .then(self.cancel)
                 .then(utils.successHandler(self, SYNTH_EVENT, SUCCESS_MSG))
                 .catch(utils.failureHandler());
@@ -171,9 +174,11 @@ module.exports = function() {
         let payload = createPayload('token', 'phone', 'phoneRegion', 'study');
         if (payload) {
             self.cancel();
+            clear();
             let { studyKey, studyName, environment } = collectValues();
             utils.startHandler(vm, SYNTH_EVENT);
             return serverService.phoneSignIn(studyName, environment, payload)
+                .then(clear)
                 .then(makeReloader(studyKey, environment))
                 .then(utils.successHandler(vm, SYNTH_EVENT))
                 .catch(utils.failureHandler({transient:false}));

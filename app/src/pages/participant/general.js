@@ -49,8 +49,6 @@ module.exports = function(params) {
         .obs('allDataGroups[]')
         .obs('createdOn', null, fn.formatDateTime)
         .obs('allRoles[]', [])
-        .obs('emailNull', true)
-        .obs('phoneNull', true)
         .bind('email')
         .bind('phone', null, Binder.formatPhone, Binder.persistPhone)
         .bind('phoneRegion', 'US')
@@ -149,7 +147,7 @@ module.exports = function(params) {
         root.openDialog('sign_out_user', {userId: self.userIdObs()});
     };
     self.formatPhone = function(phone, phoneRegion) {
-        return fn.flagForRegionCode(phoneRegion) + ' ' + phone;
+        return (phone) ? (fn.flagForRegionCode(phoneRegion) + ' ' + phone) : '';
     };
 
     self.save = function(vm, event) {
@@ -163,24 +161,15 @@ module.exports = function(params) {
             self.titleObs(updatedTitle);
             return serverService.getParticipant(self.userIdObs());
         }
-        function updateEmailPhoneState(participant)  {
-            self.emailNullObs(fn.isBlank(participant.email));
-            self.phoneNullObs(fn.isBlank(participant.phone && participant.phone.number));
-            return participant;
-        }
 
         utils.startHandler(vm, event);
         return saveParticipant(participant)
             .then(updateName)
             .then(binder.update())
-            .then(updateEmailPhoneState)
             .then(utils.successHandler(vm, event, "Participant created."))
             .catch(failureHandler);
     };
     function noteInitialStatus(participant) {
-        self.emailNullObs(fn.isBlank(participant.email));
-        self.phoneNullObs(fn.isBlank(participant.phone && participant.phone.number));
-
         // The general page can be linked to using externalId: or healthCode:... here we 
         // fix the ID to the be real ID, then use that to call getParticipantName
         self.userIdObs(participant.id);
