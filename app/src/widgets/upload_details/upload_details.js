@@ -56,6 +56,7 @@ module.exports = function(params) {
                 self.filesObs(upload.healthData.metadata.files);
             }
         }
+        load();
     });
     self.linkObs = ko.computed(function() {
         return '#/participants/'+encodeURIComponent('healthCode:'+self.healthCodeObs())+'/general';
@@ -79,6 +80,12 @@ module.exports = function(params) {
         }    
     };
 
+    function setSameStudy(study) {
+        self.sameStudyObs(study.identifier === self.studyIdObs());
+    }
+    function getSession() {
+        return serverService.getSession();
+    }
     function getStudyList(session) {
         return serverService.getStudyList(session.environment);
     }
@@ -86,13 +93,12 @@ module.exports = function(params) {
         var name = utils.findStudyName(list.items, self.studyIdObs());
         self.studyNameObs(name);
     }
-    function setSameStudy(study) {
-        self.sameStudyObs(study.identifier === self.studyIdObs());
-    }
 
-    serverService.getStudy()
-        .then(setSameStudy);
-    serverService.getSession()
-        .then(getStudyList)
-        .then(setStudyName);
+    function load() {
+        return serverService.getStudy()
+            .then(setSameStudy)
+            .then(getSession)
+            .then(getStudyList)
+            .then(setStudyName);
+    }
 };
