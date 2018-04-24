@@ -140,7 +140,13 @@ function formatNameAsFullLabel(summary) {
             name = summary.email;
         }
     } else if (summary.phone) {
-        name = summary.phone;
+        if (summary.phone.nationalFormat) {
+            name = summary.phone.nationalFormat;    
+        } else if (summary.phone.number) {
+            name = summary.phone.number;
+        } else {
+            name = summary.phone;
+        }
     } else if (summary.externalId) {
         name = summary.externalId;
     }
