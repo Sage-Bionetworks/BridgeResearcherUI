@@ -1,6 +1,10 @@
 <div class="ui form">
     <h4 data-bind="visible: healthDataExistsObs" class="ui dividing header">Upload</h4>
     <div class="field">
+        <div class="field" data-bind="visible: showStudyObs">
+            <label>Study ID</label>
+            <div><span data-bind="text: studyNameObs"></span> (<span data-bind="text: studyIdObs"></span>)</div>
+        </div>
         <div class="three fields">
             <div class="field">
                 <label>Status</label>
@@ -11,7 +15,8 @@
             </div>
             <div class="field">
                 <label>Health Code</label>
-                <a target="_blank" data-bind="href: $component.linkObs, text: healthCodeObs"></a>
+                <a target="_blank" data-bind="visible: sameStudyObs, href: $component.linkObs, text: healthCodeObs"></a>
+                <span data-bind="visible: !sameStudyObs(), text: healthCodeObs"></span>
             </div>
             <div class="field">
                 <label>S3 key name</label>
@@ -99,7 +104,8 @@
             <div class="three fields">
                 <div class="field">
                     <label>Upload Schema</label>
-                    <a target="_blank" data-bind="href: schemaLinkObs, text: schemaLabel"></a>
+                    <a target="_blank" data-bind="visible: sameStudyObs, href: schemaLinkObs, text: schemaLabel"></a>
+                    <span data-bind="visible: !sameStudyObs(), text: schemaLabel"></span>
                 </div>
                 <div class="field">
                     <label>Health Data ID</label>

@@ -1,12 +1,18 @@
+import {serverService} from '../../services/server_service';
 import Binder from '../../binder';
 import fn from '../../functions';
 import jsonFormatter from '../../json_formatter';
 import ko from 'knockout';
+import utils from '../../utils';
 
 module.exports = function(params) {
     let self = this;
 
     var binder = new Binder(this)
+        .obs('showStudy', params.showStudy || false)
+        .obs('sameStudy', false)
+        .obs('studyId')
+        .obs('studyName')
         .obs('filename') // upload
         .obs('status')
         .obs('healthCode')
@@ -72,4 +78,21 @@ module.exports = function(params) {
             default: return status;
         }    
     };
+
+    function getStudyList(session) {
+        return serverService.getStudyList(session.environment);
+    }
+    function setStudyName(list) {
+        var label = utils.findStudyName(list.items, self.studyIdObs());
+        self.studyNameObs(label);
+    }
+    function setSameStudy(study) {
+        self.sameStudyObs(study.identifier === self.studyIdObs());
+    }
+
+    serverService.getStudy()
+        .then(setSameStudy);
+    serverService.getSession()
+        .then(getStudyList)
+        .then(setStudyName);
 };
