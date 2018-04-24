@@ -187,7 +187,6 @@ function findStudyName(studies, studyIdentifier) {
             return (studyOption.identifier === studyIdentifier);
         })[0].name;
     } catch(e) {
-        console.log(e);
         throw new Error("Study '"+studyIdentifier+"' not found.");
     }
 }

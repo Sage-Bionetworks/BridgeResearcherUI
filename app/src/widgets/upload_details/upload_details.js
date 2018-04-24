@@ -83,8 +83,8 @@ module.exports = function(params) {
         return serverService.getStudyList(session.environment);
     }
     function setStudyName(list) {
-        var label = utils.findStudyName(list.items, self.studyIdObs());
-        self.studyNameObs(label);
+        var name = utils.findStudyName(list.items, self.studyIdObs());
+        self.studyNameObs(name);
     }
     function setSameStudy(study) {
         self.sameStudyObs(study.identifier === self.studyIdObs());
