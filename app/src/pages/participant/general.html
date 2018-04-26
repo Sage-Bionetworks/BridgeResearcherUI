@@ -48,16 +48,15 @@
                 <tag-editor params="selectedObs: rolesObs, allObs: allRolesObs, type: 'roles'"></tag-editor>
             </div>
         </div>
-        
-        <div class="equal width fields">
+
+        <div class="equal width fields" data-bind="visible: isNewObs">
             <div class="field" id="email">
                 <label>Email</label>
-                <input type="text" data-bind="visible: emailNullObs, textInput: emailObs"/>
-                <a class="input-field-padding" data-bind="visible: !emailNullObs(), href: emailLink, text: emailObs"></a>
+                <input type="text" data-bind="textInput: emailObs"/>
             </div>
             <div class="field" id="phone">
                 <label>Phone</label>
-                <div class="ui left labeled input" data-bind="visible: phoneNullObs">
+                <div class="ui left labeled input">
                     <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
                         <div class="text" data-bind="text: phoneRegionObs"></div>
                         <i class="dropdown icon"></i>
@@ -69,12 +68,31 @@
                     </div>
                     <input type="text" placeholder="Phone number" data-bind="textInput: phoneObs">
                 </div>
-                <a class="input-field-padding" data-bind="visible: !phoneNullObs(), 
-                    href: phoneLink, text: $component.formatPhone(phoneObs(), phoneRegionObs())"></a>
             </div>
             <div class="field" id="externalId">
                 <label>External ID</label>
                 <input type="text" data-bind="textInput: externalIdObs"/>
+            </div>
+        </div>
+            
+        
+        <div class="equal width fields" data-bind="visible: !isNewObs()">
+            <div class="field" id="email">
+                <label>Email</label>
+                <a class="input-field-padding" 
+                    data-bind="visible: emailObs(), href: emailLink, text: emailObs"></a>
+                <span class="input-field-padding" data-bind="visible: !emailObs()">—</span>
+            </div>
+            <div class="field" id="phone">
+                <label>Phone</label>
+                <a class="input-field-padding" data-bind="visible: phoneObs(), href: phoneLink, 
+                    text: $component.formatPhone(phoneObs(), phoneRegionObs())"></a>
+                <span class="input-field-padding" data-bind="visible: !phoneObs()">—</span>
+            </div>
+            <div class="field" id="externalId">
+                <label>External ID</label>
+                <span class="input-field-padding" data-bind="visible: externalIdObs(), text: externalIdObs"></span>
+                <span class="input-field-padding" data-bind="visible: !externalIdObs()">—</a>
             </div>
         </div>
 
