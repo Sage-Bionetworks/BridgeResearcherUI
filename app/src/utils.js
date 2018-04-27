@@ -28,14 +28,13 @@ let pendingControl = null;
 toastr.options = config.toastr;
 
 function notAllowed(response, params) {
-        document.location = "#/reports/uploads";
-        root.changeView('dailyUploads', {});
-        setTimeout(function() {
-            toastr.error(PERM_ERROR);
-        },500);
+    let payload = response.responseJSON || {};
+    let message = payload.message || PERM_ERROR;
+    document.location = "#/reports/uploads";
+    root.changeView('dailyUploads', {});
+    setTimeout(function() {toastr.error(message);},200);
 }
 function badResponse(response, params) {
-    console.log(response, params);
     // If the error does not return JSON, we have to hunt around for what happened, 
     // and that gets sorted out here.
     let payload = response.responseJSON || {};

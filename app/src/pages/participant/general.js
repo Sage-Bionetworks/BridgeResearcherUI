@@ -118,34 +118,9 @@ module.exports = function(params) {
             return serverService.updateParticipant(participant);
         }
     }
-    function signOut() {
-        return serverService.signOutUser(self.userIdObs());        
-    }
 
     self.sharingScopeOptions = OPTIONS;
 
-    self.enableAccount = function(vm, event) {
-        alerts.confirmation("Are you sure?\nWe will save any updates before enabling the account.", function() {
-            self.statusObs("enabled");
-            self.save(vm, event);
-        });
-    };
-    self.disableAccount = function(vm, event) {
-        alerts.confirmation("Are you sure?\nWe will save any updates before disabling the account.", function() {
-            self.statusObs("disabled");
-            self.save(vm, event).then(signOut);
-        });
-    };
-    self.requestResetPassword = function(vm, event) {
-        utils.startHandler(vm, event);
-        
-        serverService.requestResetPasswordUser(self.userIdObs())
-            .then(utils.successHandler(vm, event, "Reset password email has been sent to user."))
-            .catch(failureHandler);
-    };
-    self.signOutUser = function(vm, event) {
-        root.openDialog('sign_out_user', {userId: self.userIdObs()});
-    };
     self.formatPhone = function(phone, phoneRegion) {
         return (phone) ? (fn.flagForRegionCode(phoneRegion) + ' ' + phone) : '';
     };

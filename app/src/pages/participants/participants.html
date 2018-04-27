@@ -31,6 +31,7 @@
                 <th width="10" data-bind="visible: isAdmin">
                     <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
                 </th>
+                <th></th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
@@ -41,13 +42,35 @@
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
-                <td colspan="7" data-bind="html: recordsMessageObs"></td>
+                <td colspan="8" data-bind="html: recordsMessageObs"></td>
             </tr>
         </tbody>
         <tbody data-bind="foreach: itemsObs">
             <tr data-bind="css: $component.classNameForStatus($data)">
                 <td data-bind="visible: $parent.isAdmin">
                     <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+                </td>
+                <td style="padding: 0; text-align: right">
+                    <span data-bind="semantic: 'dropdown'">
+                        <i class="ui vertical ellipsis icon"></i>
+                        <div class="menu">
+                            <div class="item" data-bind="click: $parent.resendEmailVerification, visible: $parent.resendVisible($data)">
+                                Resend email verification
+                            </div>
+                            <div class="item" data-bind="click: $parent.requestResetPassword">
+                                Send reset password email
+                            </div>
+                            <div class="item" data-bind="click: $parent.enableAccount, visible: $parent.enableVisible($data)">
+                                Enable Account
+                            </div>
+                            <div class="item" data-bind="click: $parent.disableAccount, visible: $parent.disableVisible($data)">
+                                Disable Account
+                            </div>
+                            <div class="item" data-bind="click: $parent.signOutUser, visible: $parent.signOutVisible($data)">
+                                Sign out user&hellip;
+                            </div>
+                        </div>
+                    </span>
                 </td>
                 <td>
                     <a data-bind="href: '#/participants/'+$data.id+'/general', 
@@ -61,14 +84,8 @@
                 </td>
                 <td style="white-space: nowrap" data-bind="text: $component.formatDateTime($data.createdOn)"></td>
                 <td style="padding: 0; text-align:right">
-                    <button data-bind="visible: $data.status === 'unverified', 
-                        click: $component.resendEmailVerification"
-                        class="ui basic compact mini button">Resend email verification</button>
-                    <button data-bind="visible: $data.status === 'unverified' && $component.isAdmin(), 
-                        click: $component.enableAccount"
-                        class="ui basic compact mini button">Enable account</button>
-                    <span style="padding-right:1rem" data-bind="visible: $data.status === 'disabled'">
-                        <i class="warning sign icon"></i>Disabled</span>
+                    <span style="padding-right: .6rem; white-space: nowrap" data-bind="visible: $data.status === 'disabled'">
+                        <i class="warning sign icon"></i>Disabled</span>                    
                 </td>
             </tr>
         </tbody>

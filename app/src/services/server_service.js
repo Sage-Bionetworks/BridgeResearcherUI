@@ -504,6 +504,7 @@ export class ServerService {
         return this.gethttp(config.participants + '/' + userId + '/uploads' + queryString);
     }
     getParticipantReport(userId, identifier, startDate, endDate) {
+        // TODO: let queryString = fn.queryString({startDate, endDate});
         let queryString = fn.queryString({startDate: startDate, endDate: endDate});
         return this.gethttp(config.participants + '/' + userId + '/reports/' + identifier + queryString);
     }
