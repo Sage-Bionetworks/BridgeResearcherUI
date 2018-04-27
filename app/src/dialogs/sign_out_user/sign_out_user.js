@@ -17,6 +17,6 @@ module.exports = function(params) {
         serverService.signOutUser(params.userId, deleteReauthToken)
             .then(utils.successHandler(vm, event, "User signed out."))
             .then(self.cancel)
-            .catch(failureHandler);        
+            .catch(utils.failureHandler());        
     };
 };
