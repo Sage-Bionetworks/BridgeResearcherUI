@@ -1,15 +1,9 @@
 import {serverService} from '../../services/server_service';
-import ko from 'knockout';
+import Binder from '../../binder';
 
 module.exports = function() {
-    let self = this;
-
-    self.emailVerificationEnabledObs = ko.observable();
-    self.emailSignInEnabledObs = ko.observable();
-
-    serverService.getStudy().then((study) => {
-        self.emailVerificationEnabledObs(study.emailVerificationEnabled);
-        self.emailSignInEnabledObs(study.emailSignInEnabled);
-    });
-
+    let binder = new Binder(this)
+        .obs('emailVerificationEnabled')
+        .obs('emailSignInEnabled');
+    serverService.getStudy().then(binder.update());
 };

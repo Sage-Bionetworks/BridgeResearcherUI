@@ -8,24 +8,24 @@ import root from '../../root';
 import storeService from '../../services/store_service';
 import utils from '../../utils';
 
-const SUCCESS_MSG = "An email has been sent to that address with instructions on changing your password.";
+const ENVIRONMENT = 'environment';
 const PHONE_SUCCESS_MSG = "An SMS message has been sent to that phone number; enter the code to sign in.";
 const STUDY_KEY = 'studyKey';
-const ENVIRONMENT = 'environment';
+const SUCCESS_MSG = "An email has been sent to that address with instructions on changing your password.";
 
 const TITLES = {
-    'SignIn': 'Sign In',
-    'ForgotPassword': 'Forgot Password',
     'EnterCode': 'Enter Code',
+    'ExternalIdSignIn': 'Sign In',
+    'ForgotPassword': 'Forgot Password',
     'PhoneSignIn': 'Sign In',
-    'ExternalIdSignIn': 'Sign In'
+    'SignIn': 'Sign In'
 };
 const BUTTONS = {
-    'SignIn': 'Sign In',
-    'ForgotPassword': 'Send Email',
     'EnterCode': 'Sign In',
+    'ExternalIdSignIn': 'Sign In',
+    'ForgotPassword': 'Send Email',
     'PhoneSignIn': 'Send Text Message',
-    'ExternalIdSignIn': 'Sign In'
+    'SignIn': 'Sign In'
 };
 
 // There will be stale data in the UI if we don't reload when changing studies or environments.
