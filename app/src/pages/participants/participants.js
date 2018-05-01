@@ -185,6 +185,9 @@ module.exports = function() {
     self.resendVisible = function(item) {
         return item.status === 'unverified';
     };
+    self.resetPwdVisible = function(item) {
+        return item.status !== 'unverified';
+    };
     self.enableVisible = function(item) {
         return item.status !== 'enabled' && root.isAdmin();
     };
