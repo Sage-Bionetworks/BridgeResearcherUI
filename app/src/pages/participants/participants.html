@@ -57,7 +57,7 @@
                             <div class="item" data-bind="click: $parent.resendEmailVerification, visible: $parent.resendVisible($data)">
                                 Resend email verification
                             </div>
-                            <div class="item" data-bind="click: $parent.requestResetPassword">
+                            <div class="item" data-bind="click: $parent.requestResetPassword, visible: $parent.resetPwdVisible($data)">
                                 Send reset password email
                             </div>
                             <div class="item" data-bind="click: $parent.enableAccount, visible: $parent.enableVisible($data)">
