@@ -78,12 +78,14 @@ router.on('/email_templates/reset_password', routeTo('reset_password', 'template
 router.on('/email_templates/verify_email', routeTo('verify_email', 'templates'));
 router.on('/email_templates/account_exists', routeTo('account_exists', 'templates'));
 router.on('/email_templates/email_signin', routeTo('email_signin', 'templates'));
+router.on('/email_templates/signed_consent', routeTo('signed_consent', 'templates'));
 router.on('/sms_templates', redirectTo('/sms_templates/verify_phone', 'sms'));
 router.on('/sms_templates/reset_password', routeTo('sms_reset_password', 'sms'));
 router.on('/sms_templates/verify_phone', routeTo('sms_verify_phone', 'sms'));
 router.on('/sms_templates/account_exists', routeTo('sms_account_exists', 'sms'));
 router.on('/sms_templates/phone_signin', routeTo('sms_phone_signin', 'sms'));
 router.on('/sms_templates/app_install_link', routeTo('sms_app_install_link', 'sms'));
+router.on('/sms_templates/signed_consent', routeTo('sms_signed_consent', 'sms'));
 
 router.on('/subpopulations', routeTo('subpopulations', 'subpops'));
 router.on('/subpopulations/:guid', redirectTo('/subpopulations/{0}/general'));

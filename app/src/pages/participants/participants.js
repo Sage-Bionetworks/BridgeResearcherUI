@@ -148,4 +148,50 @@ module.exports = function() {
             .then(load)
             .catch(utils.failureHandler());
     };
+
+    self.enableAccount = function(user, event) {
+        console.log(arguments);
+        serverService.getParticipant(user.id).then(function(participant) {
+            participant.status = "enabled";
+            return serverService.updateParticipant(participant);
+        })
+        .then(function() {
+            serverService.signOutUser(user.id);
+            ko.postbox.publish('page-refresh');
+        })
+        .catch(utils.failureHandler());
+    };
+    self.disableAccount = function(user, event) {
+        serverService.getParticipant(user.id).then(function(participant) {
+            participant.status = "disabled";
+            return serverService.updateParticipant(participant);
+        })
+        .then(function() {
+            serverService.signOutUser(user.id);
+            ko.postbox.publish('page-refresh');
+        })
+        .catch(utils.failureHandler());
+    };
+    self.requestResetPassword = function(user, event) {
+        utils.startHandler(self, event);
+        serverService.requestResetPasswordUser(user.id)
+            .then(utils.successHandler(self, event, "Reset password email has been sent to user."))
+            .catch(utils.failureHandler());
+    };
+    self.signOutUser = function(user, event) {
+        root.openDialog('sign_out_user', {userId: user.id});
+    };
+    
+    self.resendVisible = function(item) {
+        return item.status === 'unverified';
+    };
+    self.enableVisible = function(item) {
+        return item.status !== 'enabled' && root.isAdmin();
+    };
+    self.disableVisible = function(item) {
+        return item.status === 'enabled' && root.isAdmin();
+    };
+    self.signOutVisible = function(item) {
+        return item.status !== 'unverified';
+    };
 };

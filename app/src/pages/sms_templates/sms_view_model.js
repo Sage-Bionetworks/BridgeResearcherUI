@@ -39,6 +39,7 @@ export default class SmsViewModel {
             string = string.split("${phoneSignInExpirationPeriod}").join("# hours");
             string = string.split("${url}").join(this.getSampleURL());
             string = string.split("${resetPasswordUrl}").join(this.getSampleURL());
+            string = string.split("${consentUrl}").join(this.getSampleURL());
             string = string.split("${token}").join("###-###");
         }
         return string;

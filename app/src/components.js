@@ -67,6 +67,10 @@ reg('email_signin', {
     viewModel: require('./pages/email_templates/email_signin'),
     template: require('./pages/email_templates/email_signin.html')
 });
+reg('signed_consent', {
+    viewModel: require('./pages/email_templates/signed_consent'),
+    template: require('./pages/email_templates/signed_consent.html')
+});
 reg('account_exists', {
     viewModel: require('./pages/email_templates/account_exists'),
     template: require('./pages/email_templates/account_exists.html')
@@ -82,6 +86,10 @@ reg('sms_reset_password', {
 reg('sms_phone_signin', {
     viewModel: require('./pages/sms_templates/phone_signin'),
     template: require('./pages/sms_templates/phone_signin.html')
+});
+reg('sms_signed_consent', {
+    viewModel: require('./pages/sms_templates/signed_consent'),
+    template: require('./pages/sms_templates/signed_consent.html')
 });
 reg('sms_account_exists', {
     viewModel: require('./pages/sms_templates/account_exists'),

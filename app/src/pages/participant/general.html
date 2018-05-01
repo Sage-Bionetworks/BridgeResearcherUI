@@ -8,18 +8,6 @@
             <h3 data-bind="html: titleObs"></h3>
         </div>
         <div class="fixed-header-buttons">
-            <div data-bind="semantic: 'dropdown-button', visible: !isNewObs()">
-                <div class="text">Actions</div>
-                <i class="dropdown icon"></i>
-                <div class="menu">
-                    <div class="item" data-bind="click: requestResetPassword">Send reset password email</div>
-                    <div class="item" data-bind="visible: showEnableAccountObs() && isAdmin(), 
-                        click: enableAccount">Enable Account</div>
-                    <div class="item" data-bind="visible: !showEnableAccountObs() && isAdmin(), 
-                        click: disableAccount">Disable Account</div>
-                    <div class="item" data-bind="click: signOutUser">Sign out user...</div>
-                </div>
-            </div>
             <button class="ui tiny primary button" data-bind="click: save">Save</button>
         </div>
     </div>
