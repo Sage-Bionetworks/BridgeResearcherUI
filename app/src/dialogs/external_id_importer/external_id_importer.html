@@ -20,15 +20,24 @@
                     <li data-bind="text: $data"></li>
                 </ul>
             </div>
-            <div class="equal width fields" style="margin-top:1rem">
-                <div class="field">
-                    <ui-checkbox params="checkedObs: createCredentialsObs">
-                        Create credentials for these IDs
-                    </ui-checkbox>
+            <div style="margin-top:1rem; display: flex">
+                <div style="flex:1">
+                    <div class="field">
+                        <ui-checkbox params="checkedObs: createCredentialsObs">
+                            Create credentials for these IDs
+                        </ui-checkbox>
+                    </div>
+                    <div class="field">
+                        <ui-checkbox params="checkedObs: useLegacyFormatObs">
+                            Use the legacy (email) format for external IDs
+                        </ui-checkbox>
+                    </div>
                 </div>
-                <div class="field" data-bind="css: {disabled: isDisabledObs}">
-                    <label>Add these data groups to the created account</label>
-                    <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
+                <div style="flex:1">
+                    <div class="field" data-bind="css: {disabled: isDisabledObs}">
+                        <label>Add these data groups to the created account</label>
+                        <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
+                    </div>
                 </div>
             </div>
         </form>

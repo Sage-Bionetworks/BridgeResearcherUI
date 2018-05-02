@@ -45,10 +45,11 @@ IdImportWorker.prototype = {
     }
 };
 
-function CreateCredentialsWorker(supportEmail, identifiers, dataGroups) {
+function CreateCredentialsWorker(supportEmail, identifiers, dataGroups, useLegacyFormat) {
     this.supportEmail = supportEmail;
     this.identifiers = identifiers;
     this.dataGroups = dataGroups;
+    this.useLegacyFormat = useLegacyFormat;
 }
 CreateCredentialsWorker.prototype = {
     calculateSteps: function(){ 
@@ -62,7 +63,9 @@ CreateCredentialsWorker.prototype = {
     },
     performWork: function(){ 
         this.currentId = this.identifiers.shift();
-        let participant = utils.createParticipantForID(this.currentId);
+        let participant = (this.useLegacyFormat) ?
+            utils.oldCreateParticipantForID(this.supportEmail, this.currentId) :
+            utils.createParticipantForID(this.currentId);
         participant.dataGroups = this.dataGroups;
         return serverService.createParticipant(participant);
     },
@@ -87,6 +90,7 @@ module.exports = function(params) {
         .obs('isDisabled', false)
         .obs('closeText', 'Close')
         .obs('createCredentials', true)
+        .obs('useLegacyFormat', false)
         .obs('dataGroups[]')
         .obs('allDataGroups[]');
 
@@ -95,6 +99,8 @@ module.exports = function(params) {
         self.isDisabledObs(!newValue);
     });
     serverService.getStudy().then(function(study) {
+        let legacy = study.emailVerificationEnabled === false && study.externalIdValidationEnabled === true;
+        self.useLegacyFormatObs(legacy);
         self.allDataGroupsObs(study.dataGroups);
         supportEmail = study.supportEmail;
     });
@@ -105,6 +111,7 @@ module.exports = function(params) {
     self.startImport = function(vm, event) {
         self.statusObs("Preparing to import...");
 
+        let useLegacyFormat = self.useLegacyFormatObs();
         let importWorker = new IdImportWorker(self.importObs());
         if (!importWorker.hasWork()) {
             self.errorMessagesObs.unshift("You must enter some identifiers.");
@@ -116,7 +123,7 @@ module.exports = function(params) {
 
         self.run(importWorker).then(function(identifiers) {
             if (self.createCredentialsObs()) {
-                let credentialsWorker = new CreateCredentialsWorker(supportEmail, identifiers, self.dataGroupsObs());
+                let credentialsWorker = new CreateCredentialsWorker(supportEmail, identifiers, self.dataGroupsObs(), useLegacyFormat);
                 self.run(credentialsWorker).then(displayComplete);
             } else {
                 displayComplete();

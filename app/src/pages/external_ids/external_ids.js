@@ -25,6 +25,7 @@ module.exports = function() {
         .obs('externalIdValidationEnabled', false)
         .obs('idFilter')
         .obs('canDelete', false)
+        .obs('useLegacyFormat', false)
         .obs('showResults', false);
 
     // For the forward pager control.
@@ -42,7 +43,9 @@ module.exports = function() {
     }
     function createNewCredentials(identifier) {
         self.resultObs(identifier);
-        let participant = utils.createParticipantForID(identifier);
+        let participant = (self.useLegacyFormatObs()) ?
+            utils.oldCreateParticipantForID(self.study.supportEmail, identifier) :
+            utils.createParticipantForID(identifier);
         return serverService.createParticipant(participant);
     }
     function updatePageWithResult(response) {
@@ -105,14 +108,16 @@ module.exports = function() {
             .catch(utils.failureHandler());
     };
 
-    function initDeletableState(study) {
+    function initFromStudy(study) {
+        let legacy = study.emailVerificationEnabled === false && study.externalIdValidationEnabled === true;
+        self.useLegacyFormatObs(legacy);
         self.canDeleteObs(root.isDeveloper() && !study.externalIdValidationEnabled);
         return study;
     }
     
     serverService.getStudy()
         .then(binder.assign('study'))
-        .then(initDeletableState);
+        .then(initFromStudy);
     
     self.loadingFunc = function loadPage(params) {
         params = params || {};
