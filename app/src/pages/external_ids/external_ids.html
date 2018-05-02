@@ -6,7 +6,6 @@
         <div class="fixed-header-buttons" data-bind="visible: isDeveloper">
             <button class="ui tiny button" style="margin-left: 3rem" data-bind="click: openImportDialog">Import&hellip;</button>
             <button class="ui tiny button" data-bind="click: createFromNext">Assign Next ID</button>
-            <button class="ui tiny button" data-bind="click: oldCreateFromNext">Assign Next Old External ID Account</button>
             <button data-bind="visible: canDeleteObs, disable: !atLeastOneChecked(), click: deleteItems" 
                 class="ui red tiny button">Delete</button>
         </div>
@@ -69,8 +68,6 @@
                     </div>
                     <button data-bind="visible: $data.assigned == false, click: $component.createFrom" 
                         class="ui compact mini button">Create Credentials</button>
-                    <button data-bind="visible: $data.assigned == false, click: $component.oldCreateFrom" 
-                        class="ui compact mini button">Create Old External ID Credentials</button>
                 </td>
             </tr>
         </tbody>
