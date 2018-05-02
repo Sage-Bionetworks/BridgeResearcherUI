@@ -74,6 +74,35 @@ CreateCredentialsWorker.prototype = {
     }
 };
 
+function OldCreateCredentialsWorker(supportEmail, identifiers, dataGroups) {
+    this.supportEmail = supportEmail;
+    this.identifiers = identifiers;
+    this.dataGroups = dataGroups;
+}
+OldCreateCredentialsWorker.prototype = {
+    calculateSteps: function(){ 
+        return this.identifiers.length;
+    },
+    hasWork: function(){ 
+        return this.identifiers.length > 0;
+    },
+    workDescription: function() { 
+        return "Creating credentials for " + this.identifiers[0];
+    },
+    performWork: function(){ 
+        this.currentId = this.identifiers.shift();
+        let participant = utils.oldCreateParticipantForID(this.supportEmail, this.currentId);
+        participant.dataGroups = this.dataGroups;
+        return serverService.createParticipant(participant);
+    },
+    currentWorkItem: function() { 
+        return this.currentId;
+    },
+    postFetch: function() { 
+        Promise.resolve();
+    }
+};
+
 module.exports = function(params) {
     let self = this;
     let supportEmail;
@@ -117,6 +146,27 @@ module.exports = function(params) {
         self.run(importWorker).then(function(identifiers) {
             if (self.createCredentialsObs()) {
                 let credentialsWorker = new CreateCredentialsWorker(supportEmail, identifiers, self.dataGroupsObs());
+                self.run(credentialsWorker).then(displayComplete);
+            } else {
+                displayComplete();
+            }
+        });
+    };
+    self.oldStartImport = function(vm, event) {
+        self.statusObs("Preparing to import...");
+
+        let importWorker = new IdImportWorker(self.importObs());
+        if (!importWorker.hasWork()) {
+            self.errorMessagesObs.unshift("You must enter some identifiers.");
+            return;
+        } else {
+            self.errorMessagesObs([]);
+            self.enableObs(false);
+        }
+
+        self.run(importWorker).then(function(identifiers) {
+            if (self.createCredentialsObs()) {
+                let credentialsWorker = new OldCreateCredentialsWorker(supportEmail, identifiers, self.dataGroupsObs());
                 self.run(credentialsWorker).then(displayComplete);
             } else {
                 displayComplete();

@@ -228,6 +228,21 @@ function createParticipantForID(identifier) {
         "sharingScope": "all_qualified_researchers"
     };
 }
+function createEmailTemplate(email, identifier) {
+    var parts = email.split("@");
+    if (parts[0].indexOf("+") > -1) {
+        parts[0] = parts[0].split("+")[0];
+    }
+    return parts[0] + "+" + identifier + "@" + parts[1];
+}
+function oldCreateParticipantForID(email, identifier) {
+    return {
+        "email": createEmailTemplate(email, identifier),
+        "password": identifier,
+        "externalId": identifier,
+        "sharingScope": "all_qualified_researchers"
+    };
+}
 function fadeUp() {
     return function(div) {
         if (div.nodeType === 1) {
@@ -299,6 +314,7 @@ export default {
     makeScrollTo,
     fadeUp,
     createParticipantForID,
+    oldCreateParticipantForID,
     animatedDeleter,
     findStudyName,
     atLeastOneSignedConsent,

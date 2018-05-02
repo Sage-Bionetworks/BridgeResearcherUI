@@ -45,6 +45,11 @@ module.exports = function() {
         let participant = utils.createParticipantForID(identifier);
         return serverService.createParticipant(participant);
     }
+    function oldCreateNewCredentials(identifier) {
+        self.resultObs(identifier);
+        let participant = utils.oldCreateParticipantForID(self.study.supportEmail, identifier);
+        return serverService.createParticipant(participant);
+    }
     function updatePageWithResult(response) {
         self.showResultsObs(true);
         ko.postbox.publish('page-refresh');
@@ -83,6 +88,24 @@ module.exports = function() {
         serverService.getExternalIds(OPTIONS)
             .then(extractId)
             .then(createNewCredentials)
+            .then(updatePageWithResult)
+            .then(utils.successHandler(vm, event))
+            .catch(utils.failureHandler());
+    };
+    self.oldCreateFrom = function(data, event) {
+        self.showResultsObs(false);
+        utils.startHandler(self, event);
+        oldCreateNewCredentials(data.identifier)
+            .then(updatePageWithResult)
+            .then(utils.successHandler(self, event))
+            .catch(utils.failureHandler());
+    };
+    self.oldCreateFromNext = function(vm, event) {
+        self.showResultsObs(false);
+        utils.startHandler(vm, event);
+        serverService.getExternalIds(OPTIONS)
+            .then(extractId)
+            .then(oldCreateNewCredentials)
             .then(updatePageWithResult)
             .then(utils.successHandler(vm, event))
             .catch(utils.failureHandler());
