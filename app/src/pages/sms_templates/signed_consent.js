@@ -5,6 +5,6 @@ module.exports = class SmsSignedConsentTemplate extends SmsViewModel {
         super('signedConsentSmsTemplate');
     }
     getSampleURL() {
-        return "https://org-sagebridge-usersigned-consents-prod.s3.amazonaws.com/#####################.pdf";
+        return "https://ws.sagebridge.org/r/xxxxx";
     }
 };
