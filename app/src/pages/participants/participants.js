@@ -53,13 +53,23 @@ module.exports = function() {
         delete: deleteItem
     });
 
-    self.isAdmin = root.isAdmin;
     self.recordsObs = ko.observable("");
     self.findObs = ko.observable("");
     fn.copyProps(self, fn, 'formatName', 'formatDateTime', 'formatNameAsFullLabel');
+    fn.copyProps(self, root, 'isAdmin', 'isDeveloper', 'isResearcher');
 
-    self.formatEmailPhone = function(value) {
-        return (value) ? value : '—';
+    self.formatIdentifiers = function(item) {
+        var array = [];
+        if (item.email) {
+            array.push(item.email);
+        }
+        if (item.phone) {
+            array.push(item.phone);
+        }
+        if (item.externalId) {
+            array.push(item.externalId);
+        }
+        return array.join(', ');
     };
     self.classNameForStatus = function(user) {
         return cssClassNameForStatus[user.status];
@@ -150,7 +160,6 @@ module.exports = function() {
     };
 
     self.enableAccount = function(user, event) {
-        console.log(arguments);
         serverService.getParticipant(user.id).then(function(participant) {
             participant.status = "enabled";
             return serverService.updateParticipant(participant);
@@ -181,6 +190,15 @@ module.exports = function() {
     self.signOutUser = function(user, event) {
         root.openDialog('sign_out_user', {userId: user.id});
     };
+    self.deleteTestUser = function(user, event) {
+        alerts.confirmation("This will delete the account.\n\nDo you wish to continue?", function() {
+            utils.startHandler(self, event);
+            serverService.deleteTestUser(user.id)
+                .then(utils.successHandler(self, event, "User deleted."))
+                .then(() => ko.postbox.publish('page-refresh'))
+                .catch(utils.failureHandler({redirect:false}));
+        });
+    };
     
     self.resendVisible = function(item) {
         return item.status === 'unverified';
@@ -196,5 +214,8 @@ module.exports = function() {
     };
     self.signOutVisible = function(item) {
         return item.status !== 'unverified';
+    };
+    self.deleteVisible = function(item) {
+        return root.isDeveloper() && root.isResearcher();
     };
 };
