@@ -13,6 +13,26 @@
     <div class="ui grid">
         <div class="ten wide column">
             <errors></errors>
+            <form class="ui form" data-bind="attr: {disabled: !autoVerificationPhoneEnabledObs()}">
+                <div class="field" style="margin: 1rem 0 2rem 0">
+                    <ui-checkbox params="checkedObs: autoVerificationPhoneEnabledObs">
+                        Send a verification message via SMS as part of sign up
+                    </ui-checkbox>
+                </div>
+                <div class="disable-pane">
+                    <div class="required field" id="verifyPhoneSmsTemplate_message"
+                        data-bind="css: {error: formattedMessageObs().length > 159}">
+                        <label>Message</label>
+                        <input type="text" name="message" data-bind="textInput: messageObs, hasFocus: true,
+                            attr: {disabled: !autoVerificationPhoneEnabledObs()}" autocomplete="off"/>
+                    </div>
+                    <p class="error-message" data-bind="visible: formattedMessageObs().length > 159">
+                        When formatted, the message will be too long for SMS (max. 160 characters).
+                    </p>
+                    <p class="help-text" data-bind="text: formattedMessageObs"></p>
+                </div>
+            </form>
+            <!--            
             <form class="ui form">
                 <div class="required field" id="verifyPhoneSmsTemplate_message"
                     data-bind="css: {error: formattedMessageObs().length > 159}">
@@ -24,6 +44,7 @@
                 </p>
                 <p class="help-text" data-bind="text: formattedMessageObs"></p>
             </form>
+        -->
         </div>
         <div class="six wide column">
             <div class="ui message">
