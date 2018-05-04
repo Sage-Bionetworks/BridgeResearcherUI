@@ -141,4 +141,4 @@ export default root;
 window.addEventListener("DOMContentLoaded", function() {
     ko.applyBindings(root, document.body);
     document.body.style.opacity = "1.0";
-}, false);
+}, false);  

@@ -31,18 +31,16 @@
                 <th width="10" data-bind="visible: isAdmin">
                     <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
                 </th>
-                <th></th>
+                <th width="10"></th>
                 <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>External ID</th>
+                <th>Identifier(s)</th>
                 <th style="white-space: nowrap">Created On</th>
                 <th></th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
-                <td colspan="8" data-bind="html: recordsMessageObs"></td>
+                <td colspan="6" data-bind="html: recordsMessageObs"></td>
             </tr>
         </tbody>
         <tbody data-bind="foreach: itemsObs">
@@ -50,7 +48,7 @@
                 <td data-bind="visible: $parent.isAdmin">
                     <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                 </td>
-                <td style="padding: 0; text-align: right">
+                <td style="text-align: right">
                     <span data-bind="semantic: 'dropdown'">
                         <i class="ui vertical ellipsis icon"></i>
                         <div class="menu" style="display:none">
@@ -69,6 +67,9 @@
                             <div class="item" data-bind="click: $parent.signOutUser, visible: $parent.signOutVisible($data)">
                                 Sign out user&hellip;
                             </div>
+                            <div class="item" data-bind="click: $parent.deleteTestUser, visible: $parent.deleteVisible($data)">
+                                <span class="red ui text">Delete Test Account</span>
+                            </div>
                         </div>
                     </span>
                 </td>
@@ -76,11 +77,7 @@
                     <a data-bind="href: '#/participants/'+$data.id+'/general', 
                         text: $component.formatNameAsFullLabel($data)"></a>
                 </td>
-                <td data-bind="text: $component.formatEmailPhone($data.email)">
-                </td>
-                <td data-bind="text: $component.formatEmailPhone($data.phone)">
-                </td>
-                <td data-bind="text: $component.formatEmailPhone($data.externalId)">
+                <td data-bind="text: $component.formatIdentifiers($data)">
                 </td>
                 <td style="white-space: nowrap" data-bind="text: $component.formatDateTime($data.createdOn)"></td>
                 <td style="padding: 0; text-align:right">
