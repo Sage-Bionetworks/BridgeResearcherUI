@@ -28,11 +28,16 @@ let pendingControl = null;
 toastr.options = config.toastr;
 
 function notAllowed(response, params) {
+    console.log("params", params);
     let payload = response.responseJSON || {};
     let message = payload.message || PERM_ERROR;
-    document.location = "#/reports/uploads";
-    root.changeView('dailyUploads', {});
-    setTimeout(function() {toastr.error(message);},200);
+    if (params.redirect === false) {
+        toastr.error(message);
+    } else {
+        document.location = "#/reports/uploads";
+        root.changeView('dailyUploads', {});
+        setTimeout(function() {toastr.error(message);},200);
+    }
 }
 function badResponse(response, params) {
     // If the error does not return JSON, we have to hunt around for what happened, 
@@ -86,6 +91,7 @@ function statusNotHandled(res) {
 /**
  * params:
  *  transient: boolean, default: true
+ *  redirect: do redirect, default: true
  *  redirectTo: string, default null
  *  redirectMsg: message
  *  scrollTo: scrollTo function to execute.
