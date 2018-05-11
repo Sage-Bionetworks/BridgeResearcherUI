@@ -17,7 +17,6 @@ module.exports = function(params) {
         .obs('title', '&#160;')
         .obs('isRegistered', false)
         .obs('status')
-        .obs('notificationsEnabled', false)
         .obs('hasPhone', false)
         .obs('items[]');
 
