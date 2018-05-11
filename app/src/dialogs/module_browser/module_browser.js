@@ -37,13 +37,14 @@ module.exports = function(params) {
     };
 
     function searchForModules() {
-        let query = "?published=true";
+        let query = {published:true};
         let text = self.searchObs();
         if (text === "") {
-            query += "&mostrecent=true";
+            query.mostrecent = true;
         } else {
-            let str = "name like '%"+text+"%' or notes like '%"+text+"%'";
-            query += "&mostrecent=false&where=" + encodeURIComponent(str);
+            query.mostrecent = false;
+            query.name = text;
+            query.notes = text;
         }
         return serverService.getMetadata(query, params.type);
     }

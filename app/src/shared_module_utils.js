@@ -31,7 +31,7 @@ function loadNameMaps() {
     if (allLoaded) {
         return Promise.resolve();
     } else {
-        return serverService.getMetadata("?mostrecent=true&published=true")
+        return serverService.getMetadata({mostrecent:true, published:true})
             .then(updateSharedModuleNameMap)
             .then(serverService.getSurveys.bind(serverService))
             .then(updateSurveyNameMap)
