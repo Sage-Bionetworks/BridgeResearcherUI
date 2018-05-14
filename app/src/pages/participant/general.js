@@ -15,7 +15,7 @@ const OPTIONS = [
     {value: 'sponsors_and_partners', label:'Sponsors And Partners'},
     {value: 'all_qualified_researchers', label:'All Qualified Researchers'}
 ];
-const NEW_PARTICIPANT = {id:"new",attributes:{},phone:{number: '', regionCode: 'US'}};
+const NEW_PARTICIPANT = {id:"new",attributes:{},email:'',phone:{number: '', regionCode: 'US'}};
 
 function selectRoles(session) {
     let set = new Set();
@@ -49,7 +49,7 @@ module.exports = function(params) {
         .obs('allDataGroups[]')
         .obs('createdOn', null, fn.formatDateTime)
         .obs('allRoles[]', [])
-        .bind('email')
+        .bind('email', null, null, (value) => fn.isBlank(value) ? null : value)
         .bind('phone', null, Binder.formatPhone, Binder.persistPhone)
         .bind('phoneRegion', 'US')
         .bind('attributes[]', [], Binder.formatAttributes, Binder.persistAttributes)
