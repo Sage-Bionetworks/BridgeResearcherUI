@@ -22,14 +22,13 @@ module.exports = function() {
         let tagsOnly = self.tagsOnlyObs();
         let modType = self.moduleTypeFilterObs();
 
-        let query = "?mostrecent=false";
+        let query = {mostrecent:false};
         if (text === "") {
-            query = "?mostrecent=true";
+            query.mostrecent = true;
         } else if (tagsOnly) {
-            query += "&tags=" + encodeURIComponent(text);
+            query.tags = text;
         } else {
-            let str = "name like '%"+text+"%' or notes like '%"+text+"%'";
-            query += "&where=" + encodeURIComponent(str);
+            query.q = text;
         }
         serverService.getMetadata(query, modType)
             .then(updateTable)

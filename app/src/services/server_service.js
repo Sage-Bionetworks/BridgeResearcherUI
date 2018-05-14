@@ -572,10 +572,12 @@ export class ServerService {
     deleteTaskDefinition(taskId) {
         return this.del(config.compoundactivitydefinitions + "/" + esc(taskId));
     }
-    getMetadata(searchString, modType) {
-        searchString = searchString || "";
-        // mostrecent: "true", published: "false", where: null, tags: null
-        return this.gethttp(config.metadata + searchString).then(function(response) {
+    getMetadata(search, modType) {
+        console.log("search", search);
+        // mostrecent: "true", published: "false", name: null, notes: null, tags: null
+        search = search || {};
+        let queryString = fn.queryString(search);
+        return this.gethttp(config.metadata + queryString).then(function(response) {
             if (modType === "survey" || modType === "schema") {
                 response.items = response.items.filter(function(item) {
                     return item.moduleType === modType;
@@ -594,7 +596,7 @@ export class ServerService {
         return this.gethttp(config.metadata + '/' + esc(id) + '/versions/' + esc(version));
     }
     getMetadataAllVersions(id) {
-        // id, mostrecent: "true", published: "false", where: null, tags: null
+        // id, mostrecent: "true", published: "false", name: null, notes: null, tags: null
         return this.gethttp(config.metadata+'/'+esc(id)+'/versions?mostrecent=false');
     }
     updateMetadata(metadata) {
