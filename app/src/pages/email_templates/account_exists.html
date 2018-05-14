@@ -28,7 +28,7 @@
                 <p>If a user tries to sign up twice for the same study, we will send this email. It notes 
                     the account already exists, and provides a link to reset the password or sign in via email (depending on your study's design). </p>
 
-                <p><strong>It <em>must</em> contain the value <code>${resetPasswordUrl}</code>, <code>${emailSignInUrl}</code>, <code>${shortResetPasswordUrl}</code> or <code>${shortEmailSignInUrl}</code>.</strong> Most web email clients will link these URLs automatically, but you can also create a link. </p>
+                <p><strong>It <em>must</em> contain the value <code>${resetPasswordUrl}</code> or <code>${emailSignInUrl}</code>.</strong> Most web email clients will link these URLs automatically, but you can also create a link. </p>
 
                 <p>There are other values available for use in your template: </p>
 
@@ -45,8 +45,11 @@
                     <dt>${supportEmail}</dt>
                     <dd>your support email address</dd>
 
-                    <dt>${expirationPeriod}</dt>
-                    <dd>the period before authentication links in the email will expire (e.g. "2 hours")</dd>
+                    <dt>${resetPasswordExpirationPeriod}</dt>
+                    <dd>the period before the reset password link in the email will expire (e.g. "1 day")</dd>
+
+                    <dt>${emailSignInExpirationPeriod}</dt>
+                    <dd>the period before the authentication link in the email will expire (e.g. "2 hours")</dd>
                 </dl>
             </div>
         </div>
