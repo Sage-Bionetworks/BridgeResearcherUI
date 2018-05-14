@@ -43,8 +43,7 @@ module.exports = function(params) {
             query.mostrecent = true;
         } else {
             query.mostrecent = false;
-            query.name = text;
-            query.notes = text;
+            query.q = text;
         }
         return serverService.getMetadata(query, params.type);
     }
