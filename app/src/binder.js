@@ -221,4 +221,7 @@ export default class Binder {
             return null;
         }
     }
+    static emptyToNull(string, context) {
+        return fn.isBlank(string) ? null : string;
+    }
 }

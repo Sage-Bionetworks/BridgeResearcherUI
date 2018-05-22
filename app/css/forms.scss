@@ -40,7 +40,7 @@
     opacity: .5; 
     font-style: italic;
 }
-input[disabled] {
+input[disabled], form[disabled='true'] iframe {
     opacity: .7;
     background-color: #f5f5f5;
 }
@@ -166,3 +166,11 @@ div.te.container {
         margin-left: 2rem;
     }
 }
+
+.subtab-button-selector {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 2rem;
+}
+

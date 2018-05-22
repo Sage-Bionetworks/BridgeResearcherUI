@@ -12,9 +12,9 @@ module.exports = function() {
         .obs('name')
         .obs('sponsorName')
         .obs('identifier')
-        .bind('technicalEmail')
         .bind('supportEmail')
-        .bind('consentNotificationEmail')
+        .bind('technicalEmail', null, null, Binder.emptyToNull)
+        .bind('consentNotificationEmail', null, null, Binder.emptyToNull)
         .obs('consentNotificationEmailVerified', true);
 
     function checkEmailStatus() {
