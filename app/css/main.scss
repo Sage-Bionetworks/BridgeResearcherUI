@@ -203,7 +203,11 @@ progress {
         text-overflow: ellipsis; 
         overflow: hidden;
     }
+    th {
+        padding: .7rem;
+    }
 }
+
 .hasBorder td {
     border-bottom: 1px solid #ccc;
 }

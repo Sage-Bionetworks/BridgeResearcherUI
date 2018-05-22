@@ -28,7 +28,8 @@ module.exports = function() {
         } else if (tagsOnly) {
             query.tags = text;
         } else {
-            query.q = text;
+            query.name = text;
+            query.notes = text;
         }
         serverService.getMetadata(query, modType)
             .then(updateTable)
