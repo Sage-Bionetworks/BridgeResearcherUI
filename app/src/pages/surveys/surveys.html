@@ -6,7 +6,7 @@
         <div class="fixed-header-buttons">
             <div class="ui tiny buttons">
                 <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()}, 
-                    semantic: 'dropdown-button-toggle'">Copy</div>
+                    semantic: 'dropdown-button-toggle', container: '.buttons'">Copy</div>
                 <div class="ui tiny floating dropdown icon button" 
                     data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
                     <i class="dropdown icon"></i>
@@ -19,7 +19,8 @@
             <button data-bind="disable: !atLeastOneChecked(), click: deleteItems" 
                 class="ui red tiny button">Delete</button>
             <div class="ui tiny buttons">
-                <div class="ui primary tiny button" data-bind="semantic: 'dropdown-button-toggle'">
+                <div class="ui primary tiny button" 
+                    data-bind="semantic: 'dropdown-button-toggle', container: '.buttons'">
                     Create Survey
                 </div>
                 <div class="ui primary tiny floating dropdown icon button" 

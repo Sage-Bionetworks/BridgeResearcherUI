@@ -64,9 +64,15 @@ ko.bindingHandlers.range = {
             }
             onChange();
         }
-        flatpickr(input, { onChange: updateObservers, mode: 'range', clickOpens: true,
+        var f = flatpickr(input, { onChange: updateObservers, mode: 'range', clickOpens: true,
             defaultDate: [startDateObs(), endDateObs()], enableTime: false,
             altInput: true, altFormat: "F j, Y", dateFormat: "Y-m-d" });
+        // This broken after an update...
+        element.parentNode.addEventListener('keydown', function(e) {
+            if (e.keyCode === 8) {
+                setTimeout(f.close, 100);
+            }
+        }, true);
     }
 };
 

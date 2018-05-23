@@ -25,25 +25,15 @@ export default {
     remove: function(key) {
         localStorage.removeItem(key);
     },
-    persistQuery: function(key, object) {
-        let queryString = fn.queryString(object);
-        localStorage.setItem(key, queryString);
-        let url = document.location.pathname + queryString + document.location.hash;
-        window.history.replaceState(null, null, url);
+    persistQuery: function(prefix, object) {
+        let queryString = fn.queryString(object, prefix);
+        let url = window.location.origin + window.location.pathname + 
+            queryString + document.location.hash;
+        window.history.pushState({path: url}, '', url);
     },
-    restoreQuery: function(key) {
-        let stored = null;
-        if (localStorage.getItem(key)) {
-            stored = localStorage.getItem(key);
-        }
-        if (stored) {
-            let pairs = stored.substring(1).split("&");
-            return pairs.reduce(function(obj, pair) {
-                let keyPair = pair.split("=");
-                obj[decodeURIComponent(keyPair[0])] = decodeURIComponent(keyPair[1]);
-                return obj;
-            }, {});
-        }
-        return {};
+    restoreQuery: function(prefix, ...arrayNames) {
+        let loc = document.location.search;
+        let arrayPropNames = arrayNames || [];
+        return fn.queryToObject(loc, arrayPropNames, prefix);
     }
 };
