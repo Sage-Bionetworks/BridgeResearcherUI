@@ -7,7 +7,7 @@ import storeService from '../../../services/store_service';
 import tables from '../../../tables';
 import utils from '../../../utils';
 
-const PAGE_KEY = 'findUpload';
+const PAGE_KEY = 'u';
 
 module.exports = function() {
     let self = this;

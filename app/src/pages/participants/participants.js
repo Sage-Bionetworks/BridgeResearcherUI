@@ -43,10 +43,6 @@ module.exports = function() {
     let self = this;
         
     self.total = 0;
-    self.emailFilter = null;
-    self.phoneFilter = null;
-    self.startTime = null;
-    self.endTime = null;
 
     tables.prepareTable(self, {
         name: "participant", 
@@ -145,16 +141,13 @@ module.exports = function() {
             .catch(utils.failureHandler());
     };
     self.exportDialog = function() {
-        root.openDialog('participant_export', {emailFilter: self.emailFilter, phoneFilter: self.phoneFilter,
-            startTime: self.startTime, endTime: self.endTime, total: self.total});
+        root.openDialog('participant_export', {total: self.total, search: self.search});
     };
-    self.loadingFunc = function(offsetBy, pageSize, emailFilter, phoneFilter, startTime, endTime) {
-        self.emailFilter = emailFilter;
-        self.phoneFilter = phoneFilter;
-        self.startTime = startTime;
-        self.endTime = endTime;
+    self.loadingFunc = function(search) {
+        utils.clearErrors();
+        self.search = search;
 
-        return serverService.getParticipants(offsetBy, pageSize, emailFilter, phoneFilter, startTime, endTime)
+        return serverService.searchAccountSummaries(search)
             .then(load)
             .catch(utils.failureHandler());
     };

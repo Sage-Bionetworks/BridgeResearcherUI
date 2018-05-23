@@ -406,6 +406,9 @@ export class ServerService {
         let queryString = fn.queryString({offsetBy, pageSize, emailFilter, phoneFilter, startTime, endTime});
         return this.gethttp(config.participants+queryString);
     }
+    searchAccountSummaries(search) {
+        return this.post(config.participants+"/search", search);
+    }
     getParticipant(id) {
         return this.gethttp(config.participants+"/"+id).then(this.cacheParticipantName.bind(this));
     }

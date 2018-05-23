@@ -1,3 +1,5 @@
+import { isArray } from "util";
+
 // The only requirement for this module is that it have zero dependencies.
 const SECOND = 1000;
 const MINUTE = SECOND*60;
@@ -73,20 +75,58 @@ function formatTitleCase(string, defaultValue) {
     }
     return defaultValue || '';
 }
-function queryString(object) {
+function queryString(object, prefix) {
     let string = "";
+    let ns = (prefix) ? (prefix+".") : '';
     if (object) {
-        string = Object.keys(object).filter(function(key) { 
+        var array = [];
+        Object.keys(object).filter(function(key) { 
             return typeof object[key] !== "undefined" && object[key] !== null && object[key] !== ""; 
-        }).map(function(key) { 
-            var value = object[key];
+        }).forEach(function(key) {
+            var finalKey = encodeURIComponent(ns+key) + "=";
             if (isDate(object[key])) {
-                value = object[key].toISOString();
+                array.push(finalKey + object[key].toISOString());
+            } else if (isArray(object[key])) {
+                for (var i=0; i < object[key].length; i++) {
+                    array.push(finalKey + encodeURIComponent(object[key][i]));
+                }
+            } else {
+                array.push(finalKey + encodeURIComponent(object[key]));
             }
-            return encodeURIComponent(key) + "=" + encodeURIComponent(value); 
-        }).join("&");
+        });
+        string = array.join("&");
     }
     return (string) ? ("?"+string) : string;
+}
+function queryToObject(query, arrayPropertyNames, prefix) {
+    let obj = {};
+    let ns = prefix ? (prefix+'.') : '';
+    query.replace(/^\?/,'').split("&").forEach(function(pair) {
+        let [key, value] = pair.split('=').map(value => decodeURIComponent(value));
+        if (key.startsWith(ns)) {
+            if (ns !== '') {
+                key = key.split(ns)[1];
+            }
+            if (obj[key] && isArray(obj[key])) {
+                obj[key].push(convertValue(value));
+            } else if (obj[key]) {
+                obj[key] = [obj[key], convertValue(value)];
+            } else if (arrayPropertyNames.includes(key)) {
+                obj[key] = [convertValue(value)];
+            } else {
+                obj[key] = convertValue(value);
+            }
+        }
+    });
+    return obj;    
+}
+function convertValue(value) {
+    if (value === 'true' || value === 'false') {
+        return value === 'true';
+    } else if (/^\d+$/.test(value)) {
+        return parseInt(value);
+    }
+    return value;
 }
 function formatVersionRange(minValue, maxValue) {
     if (!isBlank(minValue) && !isBlank(maxValue)) {
@@ -305,18 +345,47 @@ function pad(num) {
     let norm = Math.abs(Math.floor(num));
     return (norm < 10 ? '0' : '') + norm;
 }
-function formatList(array = [], finalWord = 'and') {
+function formatList(array = [], finalWord = 'and', separator = ', ') {
     if (is(array, 'Array') && array.length) {
         if (array.length === 1) {
             return array[0];
         } else if (array.length === 2) {
             return `${array[0]} ${finalWord} ${array[1]}`;
         } else {
-            let middle = array.splice(1, array.length-2).join(", ");
+            let middle = array.splice(1, array.length-2).join(separator);
             return `${array[0]}, ${middle}, ${finalWord} ${array[array.length-1]}`;
         }
     }
     return '';
+}
+function formatSearch(search) {
+    if (!search) {
+        return '';
+    }
+    let array = [];
+    if (search.emailFilter) {
+        array.push(`email matches “${search.emailFilter}”`);
+    }
+    if (search.phoneFilter) {
+        array.push(`phone matches “${search.phoneFilter}”`);
+    }
+    if (search.language) {
+        array.push(`languages include “${search.language}”`);
+    }
+    if (search.allOfGroups.length) {
+        array.push(`data groups include ${formatList(search.allOfGroups)}`);
+    }
+    if (search.noneOfGroups.length) {
+        array.push(`data groups exclude ${formatList(search.noneOfGroups)}`);
+    }
+    if (search.startTime && search.endTime) {
+        array.push(`account was created from ${formatDate(search.startTime)} to ${formatDate(search.endTime)}`);
+    } else if (search.startTime) {
+        array.push(`account was created on or after ${formatDate(search.startTime)}`);
+    } else if (search.endTime) {
+        array.push(`account was created on or before ${formatDate(search.endTime)}`);
+    }
+    return formatList(array, 'and', '; ');
 }
 
 /* ==================================== DATE FUNCTIONS ==================================== */
@@ -415,6 +484,7 @@ export default {
     formatName,
     formatNameAsFullLabel,
     formatRoles,
+    formatSearch,
     formatTitleCase,
     formatVersionRange,
     getRangeInDays,
@@ -440,6 +510,7 @@ export default {
     persistLanguages,
     persistRoles,
     queryString,
+    queryToObject,
     returning,
     seq
 };

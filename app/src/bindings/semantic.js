@@ -36,7 +36,7 @@ var handlers = {
     },
     // TODO: Does this direct binding of an observer fix anything outside of changing constraints?
     'dropdown': function($element, allBindings) {
-        var params = {action:'activate'};
+        var params = allBindings().params || {action:'activate'};
         var dropdownChange = allBindings().dropdownChange;
         if (dropdownChange) {
             params.onChange = function(value, text, $selectedItem) {
@@ -49,29 +49,21 @@ var handlers = {
     },
     'dropdown-button': function($element) {
         $element.addClass("ui tiny button dropdown")
-            .dropdown({action: 'hide', transition: 'drop'});
+            .dropdown({action: 'hide', transition: 'drop', on: 'hover'});
     },
-    'dropdown-button-toggle': function($element) {
-        $element.on('click', function(){ 
-            $element.next('.dropdown.button').dropdown('toggle');
+    'dropdown-button-toggle': function($element, allBindings) {
+        $element.on('click', function() {
+            let cont = allBindings().container;
+            if (cont) {
+                $element.closest(cont).find(".dropdown").dropdown('toggle');
+            } else {
+                console.error("dropdown-button-toggle does not specify a container selector");
+            }
         });
     },
     'popup': function($element) {
         $element.popup();
     },
-    /*
-    'adjacent-popup': function($element) {
-        $element.popup({inline:true});
-    },
-    'popup-menu': function($element) {
-        $element.popup({
-            on: 'click', 
-            hideOnScroll:true, 
-            position: 'left center', 
-            duration: 100
-        });        
-    },
-    */
     'multi-search-select': function($element, allBindings) {
         let collectionObs = allBindings().updateSelect;
 

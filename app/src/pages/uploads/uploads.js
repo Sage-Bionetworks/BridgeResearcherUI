@@ -8,7 +8,7 @@ import tables from '../../tables';
 import utils from '../../utils';
 
 const PAGE_SIZE = 50;
-const PAGE_KEY = 'study-uploads';
+const PAGE_KEY = 'u';
 
 module.exports = class UploadsViewModel {
     constructor(params) {
@@ -86,11 +86,11 @@ module.exports = class UploadsViewModel {
     doCalSearch() {
         utils.clearErrors();
         this.updateDateRange();
-        if (this.query.startTime !== null && this.query.endTime !== null) {
+        //if (this.query.startTime !== null && this.query.endTime !== null) {
             this.itemsObs([]);
             this.recordsMessageObs("<div class='ui tiny active inline loader'></div>");
             this.callback();
-        }
+        //}
     }
     htmlFor(data) {
         if (data.validationMessageList === undefined) {

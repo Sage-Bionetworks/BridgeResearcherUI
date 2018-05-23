@@ -413,4 +413,26 @@ describe("deleteUnusedProperties", function() {
         expect(object.prop4).to.be.false;
     });
 });
+describe("queryString", function() {
+    it("converts to a string", function() {
+        var object = {offsetBy: 0, pageSize: 40, noneOfGroups: ['sdk-int-2','test_user'], language: 'en', isArray: [2]};
+        var string = fn.queryString(object);
+        expect(string).to.equal("?offsetBy=0&pageSize=40&noneOfGroups=sdk-int-2&noneOfGroups=test_user&language=en&isArray=2");
+    });
+    it("only uses prefix when provided", function() {
+        var string = fn.queryString({userId: 'id', index: 'index', guid: 'guid', host: 'host'});
+        expect(string).to.equal("?userId=id&index=index&guid=guid&host=host");
+    });
+});
+describe("queryToObject", function() {
+    it("converts to object", function() {
+        var str = "?offsetBy=0&pageSize=50&noneOfGroups=sdk-int-2&noneOfGroups=test_user&language=en&isArray=2";
+        var object = fn.queryToObject(str, ['isArray']);
+        expect(object.offsetBy).to.equal(0);
+        expect(object.pageSize).to.equal(50);
+        expect(object.language).to.equal('en');
+        expect(object.noneOfGroups).to.eql(['sdk-int-2','test_user']);
+        expect(object.isArray).to.eql([2]);
+    });
+});
 });

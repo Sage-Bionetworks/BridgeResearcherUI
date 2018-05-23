@@ -8,8 +8,9 @@
             </div>
         </button>
     </div>
-    <div class="tags" data-bind="visible: selectedObs().length === 0">
-        <i data-bind="text: noneSelected"></i>
+    <div class="tags" data-bind="visible: selectedObs().length === 0, 
+        semantic: 'dropdown-button-toggle', container: '.te.container'">
+        <i style="cursor:pointer" data-bind="text: noneSelected"></i>
     </div>
     <div class="tags" data-bind="foreach: selectedObs, visible: selectedObs().length > 0">
         <span class="small ui label" data-bind="click: $parent.removeTag">

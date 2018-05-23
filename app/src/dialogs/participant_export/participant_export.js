@@ -36,8 +36,9 @@ function formatConsentRecords(record) {
     return aString;
 }
 
-let CollectParticipantsWorker = function(params) {
-    fn.copyProps(this, params, 'total', 'emailFilter', 'startTime', 'endTime');
+let CollectParticipantsWorker = function(total, search) {
+    this.total = total;
+    this.search = search;
     this.identifiers = [];
     let pages = [];
     let numPages = Math.floor(this.total/PAGE_SIZE);
@@ -60,10 +61,10 @@ CollectParticipantsWorker.prototype = {
         return this.offsetBy;
     },
     performWork: function(promise) {
-        this.offsetBy = this.pageOffsets[0];
-        return serverService
-            .getParticipants(this.offsetBy, PAGE_SIZE, this.emailFilter, null, this.startTime, this.endTime)
-            .then(this._success.bind(this));
+        this.search.offsetBy = this.pageOffsets[0];
+        this.search.offsetBy = this.offsetBy;
+        this.search.pageSize = PAGE_SIZE;
+        return serverService.searchAccountSummaries(this.search).then(this._success.bind(this));
     },
     _success: function(response) {
         this.pageOffsets.shift();
@@ -145,11 +146,13 @@ FetchParticipantWorker.prototype = {
     }
 };
 
-module.exports = function(params) {
+module.exports = function(params /*total, search*/) {
     let self = this;
+    self.total = params.total;
+    self.search = params.search;
     
     batchDialogUtils.initBatchDialog(self);
-    fn.copyProps(self, fn, 'formatDateTime');
+    fn.copyProps(self, fn, 'formatDateTime', 'formatSearch');
     self.close = fn.seq(self.cancel, root.closeDialog);
 
     serverService.getStudy().then(function(study) {
@@ -162,23 +165,23 @@ module.exports = function(params) {
         .obs('canContactByEmail', false)
         .obs('filterMessage[]', []);
 
-    if (params.emailFilter) {
-        self.filterMessageObs.push(PREMSG+"have email matching the string &ldquo;"+params.emailFilter+"&rdquo;");
+    if (self.search.emailFilter) {
+        self.filterMessageObs.push(PREMSG+"have email matching the string &ldquo;"+self.search.emailFilter+"&rdquo;");
     }
-    if (params.startTime) {
+    if (self.search.startTime) {
         self.filterMessageObs.push(PREMSG+"were created on or after &ldquo;"+
-            fn.formatDateTime(params.startTime)+"&rdquo;");
+            fn.formatDateTime(self.search.startTime)+"&rdquo;");
     }
-    if (params.endTime) {
+    if (self.search.endTime) {
         self.filterMessageObs.push(PREMSG+"were created on or before &ldquo;"+
-            fn.formatDateTime(params.endTime)+"&rdquo;");
+            fn.formatDateTime(self.search.endTime)+"&rdquo;");
     }
 
     self.startExport = function(vm, event) {
         self.statusObs("Currently preparing your *.tsv file...");
         event.target.setAttribute("disabled","disabled");
 
-        let collectWorker = new CollectParticipantsWorker(params);
+        let collectWorker = new CollectParticipantsWorker(self.total, self.search);
 
         self.run(collectWorker).then(function(identifiers) {
             let fetchWorker = new FetchParticipantWorker(identifiers, self.canContactByEmailObs());

@@ -395,9 +395,9 @@ reg('app_version_criteria', {
     viewModel: require('./widgets/criteria/criteria'),
     template: require('./widgets/criteria/app_version_criteria.html')
 });
-reg('participants_pager', {
-    viewModel: require('./widgets/participants_pager/participants_pager'),
-    template: require('./widgets/participants_pager/participants_pager.html')
+reg('participants-pager', {
+    viewModel: require('./pages/participants/pager'),
+    template: require('./pages/participants/pager.html')
 });
 reg('field_definition', {
     viewModel: require('./pages/schema/field_definition'),
