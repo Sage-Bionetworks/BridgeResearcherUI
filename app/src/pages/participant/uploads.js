@@ -5,7 +5,7 @@ import utils from '../../utils';
 import UploadsViewModel from '../uploads/uploads';
 
 const PAGE_SIZE = 25;
-const PAGE_KEY = 'participant-uploads';
+const PAGE_KEY = 'us';
 
 const failureHandler = utils.failureHandler({
     redirectTo: "participants",

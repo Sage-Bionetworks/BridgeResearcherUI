@@ -3,8 +3,10 @@ import fn from '../../functions';
 import ko from 'knockout';
 import storeService from '../../services/store_service';
 import utils from '../../utils';
+import root from '../../root';
+import { serverService } from '../../services/server_service';
 
-const pageSize = 25;
+const PAGE_SIZE = 5;
 
 /**
  * @params loadingFunc - the function to call to load resources. The function takes the parameters 
@@ -16,25 +18,27 @@ module.exports = function(params) {
     let self = this;
     let pageKey = params.pageKey;
     let loadingFunc = params.loadingFunc;
-    let query = storeService.restoreQuery(pageKey);
-    let offsetBy = query.offsetBy;
-
     let {defaultStart, defaultEnd} = fn.getRangeInDays(-14, 0);
-    let start = query.startTime ? new Date(query.startTime) : defaultStart;
-    let end = query.endTime ? new Date(query.endTime) : defaultEnd;
 
-    new Binder(self)
+    let query = storeService.restoreQuery('p', 'allOfGroups', 'noneOfGroups');
+
+    let binder = new Binder(self)
         .obs('emailFilter', query.emailFilter)
         .obs('phoneFilter', query.phoneFilter)
-        .obs('startTime', start)
-        .obs('endTime', end)
-        .obs('offsetBy', offsetBy)
-        .obs('pageSize', pageSize)
+        .obs('startTime', query.startTime || defaultStart)
+        .obs('endTime', query.endTime || defaultEnd)
+        .obs('offsetBy', query.offsetBy)
         .obs('totalRecords')
         .obs('totalPages')
         .obs('currentPage', 1)
         .obs('searchLoading', false)
-        .obs('showLoader', false);
+        .obs('showLoader', false)
+        .obs('showSearch', false)
+        .obs('formattedSearch', '')
+        .obs('language', query.language)
+        .obs('dataGroups[]')
+        .obs('allOfGroups[]', query.allOfGroups)
+        .obs('noneOfGroups[]', query.noneOfGroups);
     
     self.doSearch = function(vm, event) {
         self.searchLoadingObs(true);
@@ -49,18 +53,18 @@ module.exports = function(params) {
         let page = self.currentPageObs() -1;
         if (page >= 0) {
             self.showLoaderObs(true);
-            wrappedLoadingFunc(page*pageSize);
+            wrappedLoadingFunc(page*PAGE_SIZE);
         }
     };
     self.nextPage = function(vm, event) {
         let page = self.currentPageObs() +1;
         if (page <= self.totalPagesObs()-1) {
             self.showLoaderObs(true);
-            wrappedLoadingFunc(page*pageSize);
+            wrappedLoadingFunc(page*PAGE_SIZE);
         }
     };
     self.thisPage = function() {
-        wrappedLoadingFunc(self.currentPageObs()*pageSize);
+        wrappedLoadingFunc(self.currentPageObs()*PAGE_SIZE);
     };
     self.firstPage = function(vm, event) {
         self.showLoaderObs(true);
@@ -68,7 +72,23 @@ module.exports = function(params) {
     };
     self.lastPage = function(vm, event) {
         self.showLoaderObs(true);
-        wrappedLoadingFunc((self.totalPagesObs()-1)*pageSize);
+        wrappedLoadingFunc((self.totalPagesObs()-1)*PAGE_SIZE);
+    };
+    self.openSearchDialog = function(vm, event) {
+        utils.clearErrors();
+        self.showSearchObs(!self.showSearchObs());
+    };
+    self.clear = function(vm, event) {
+        self.emailFilterObs(null);
+        self.phoneFilterObs(null);
+        self.startTimeObs(null);
+        self.endTimeObs(null);
+        self.offsetByObs(0);
+        self.languageObs(null);
+        self.allOfGroupsObs([]);
+        self.noneOfGroupsObs([]);
+        self.showSearchObs(false);
+        wrappedLoadingFunc(0);
     };
 
     function makeDate(date) {
@@ -83,37 +103,47 @@ module.exports = function(params) {
         if (response) {
             let rp = response.requestParams;
             self.offsetByObs(rp.offsetBy);
-            self.pageSizeObs(rp.pageSize);
             self.totalRecordsObs(response.total);
             self.emailFilterObs(rp.emailFilter);
             self.phoneFilterObs(rp.phoneFilter);
             self.startTimeObs(rp.startTime);
             self.endTimeObs(rp.endTime);
-            self.currentPageObs(Math.round(rp.offsetBy/rp.pageSize));
-            self.totalPagesObs( Math.ceil(response.total/rp.pageSize) );
+            self.languageObs(rp.language);
+            self.allOfGroupsObs(rp.allOfGroups);
+            self.noneOfGroupsObs(rp.noneOfGroups);
+            self.currentPageObs(Math.round(rp.offsetBy/PAGE_SIZE));
+            self.totalPagesObs( Math.ceil(response.total/PAGE_SIZE) );
         }
     }
 
     ko.postbox.subscribe('page-refresh', wrappedLoadingFunc.bind(self));
-    
-    function wrappedLoadingFunc(offsetBy, vm, event) {
-        let emailFilter = self.emailFilterObs();
-        let phoneFilter = self.phoneFilterObs();
-        let startTime = makeDate(self.startTimeObs());
-        let endTime = null;
-        if (self.endTimeObs()) {
-            let date = new Date(self.endTimeObs());
-            date.setDate(date.getDate()+1);
-            endTime = makeDate(date);
-        }
-        storeService.persistQuery(pageKey, {
-            emailFilter, phoneFilter, startTime, endTime, offsetBy});
 
-        loadingFunc(offsetBy, pageSize, emailFilter, phoneFilter, startTime, endTime)
+    function wrappedLoadingFunc(offsetBy, vm, event) {
+        let search = {
+            offsetBy: offsetBy,
+            emailFilter: self.emailFilterObs(),
+            phoneFilter: self.phoneFilterObs(),
+            allOfGroups: self.allOfGroupsObs(),
+            noneOfGroups: self.noneOfGroupsObs(),
+            language: (self.languageObs()) ? self.languageObs() : null,
+            startTime: self.startTimeObs(),
+            endTime: self.endTimeObs()
+        };
+
+        storeService.persistQuery('p', search);
+        self.showSearchObs(false);
+        self.formattedSearchObs( fn.formatSearch(search) );
+
+        search.pageSize = PAGE_SIZE;
+        loadingFunc(search)
             .then(updateModel)
             .then(fn.handleStaticObsUpdate(self.searchLoadingObs, false))
             .then(fn.handleStaticObsUpdate(self.showLoaderObs, false))
             .catch(utils.failureHandler());
     }
-    wrappedLoadingFunc(offsetBy);
+    // not sure why we would call a function to get this or even use binder for all of this
+    serverService.getStudy().then((study) => {
+        self.dataGroupsObs(study.dataGroups);
+        wrappedLoadingFunc(0);
+    });
 };
