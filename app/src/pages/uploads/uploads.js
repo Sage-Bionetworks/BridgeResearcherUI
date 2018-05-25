@@ -21,7 +21,7 @@ module.exports = class UploadsViewModel {
         new Binder(this)
             .obs('uploadsStartDate', this.query.startTime)
             .obs('uploadsEndDate', this.query.endTime)
-            .obs('find');
+            .obs('find', '');
         this.loadingFunc = this.loadingFunc.bind(this);
         this.doCalSearch = this.doCalSearch.bind(this);
         this.doSearch = this.doSearch.bind(this);
@@ -56,7 +56,7 @@ module.exports = class UploadsViewModel {
     }
     doSearch(event) {
         utils.clearErrors();
-        let id = this.findObs();
+        let id = this.findObs().trim();
         if (id) {
             event.target.parentNode.parentNode.classList.add("loading");
             let success = this.makeSuccess(this, event);

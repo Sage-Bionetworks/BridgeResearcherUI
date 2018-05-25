@@ -64,10 +64,11 @@ ko.bindingHandlers.range = {
             }
             onChange();
         }
-        var f = flatpickr(input, { onChange: updateObservers, mode: 'range', clickOpens: true,
+        let f = flatpickr(input, { onChange: updateObservers, mode: 'range', clickOpens: true,
             defaultDate: [startDateObs(), endDateObs()], enableTime: false,
             altInput: true, altFormat: "F j, Y", dateFormat: "Y-m-d" });
-        // This broken after an update...
+
+        // control now does not close when you enter delete key, this fixes, but is not ideal
         element.parentNode.addEventListener('keydown', function(e) {
             if (e.keyCode === 8) {
                 setTimeout(f.close, 100);
