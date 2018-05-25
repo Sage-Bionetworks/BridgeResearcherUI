@@ -106,7 +106,7 @@ module.exports = function() {
     self.doSearch = function(event) {
         event.target.parentNode.parentNode.classList.add("loading");
 
-        let id = self.findObs();
+        let id = self.findObs().trim();
         let success = makeSuccess(self, event);
         utils.startHandler(self, event);
         
