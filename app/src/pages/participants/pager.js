@@ -6,7 +6,7 @@ import utils from '../../utils';
 import root from '../../root';
 import { serverService } from '../../services/server_service';
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 25;
 
 /**
  * @params loadingFunc - the function to call to load resources. The function takes the parameters 

@@ -19,7 +19,7 @@ module.exports = function() {
 
     self.doSearch = function(event) {
         utils.clearErrors();
-        let id = self.findObs();
+        let id = self.findObs().trim();
         if (id) {
             storeService.persistQuery(PAGE_KEY, {externalId: id});
             self.isLoadingObs(true);
