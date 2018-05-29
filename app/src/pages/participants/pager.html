@@ -1,26 +1,24 @@
-<div style="display: flex; flex-direction: row; align-items: center">
-    <div style="align-items: center; position: relative">
-        <div class="ui left icon input" style="width: 30rem">
-            <input readonly type="text" style="cursor: pointer" placeholder="Filter participants..."
-                data-bind="textInput: formattedSearchObs, click: openSearchDialog, 
-                returnHandler: openSearchDialog">
+<div class="pp">
+    <div class="pp_filter_control">
+        <div class="ui left icon input">
+            <input data-bind="textInput: formattedSearchObs, click: openSearchDialog, returnHandler: openSearchDialog"
+                readonly type="text" placeholder="Filter participants...">
             <i class="filter icon"></i>
         </div>
     </div>
-    <div id="searchPanel" style="position: absolute; top: 13rem; width: 50%" 
-        data-bind="visible: showSearchObs">
-        <div class="ui segment" style="z-index:100">
+    <div class="pp_search_panel" id="searchPanel" data-bind="visible: showSearchObs">
+        <div class="ui segment">
             <div class="ui grid">
                 <div class="row">
                     <div class="eight wide column">
-                        <div class="ui icon input" style="width: 100%">
+                        <div class="ui icon input">
                             <input type="text" placeholder="Email address" data-bind="textInput: 
                                 emailFilterObs, hasFocus: true, returnHandler: doSearch">
                             <i class="mail icon"></i>
                         </div>
                     </div>
                     <div class="eight wide column">
-                        <div class="ui icon input" style="width: 100%">
+                        <div class="ui icon input">
                             <input type="text" placeholder="Phone number" data-bind="textInput: 
                                 phoneFilterObs, returnHandler: doSearch">
                             <i class="phone icon"></i>
@@ -29,13 +27,13 @@
                 </div>
                 <div class="row">
                     <div class="eight wide column">
-                        <div class="ui input" style="width: 100%">
+                        <div class="ui input">
                             <input type="text" placeholder="Language" 
                                 data-bind="textInput: languageObs, returnHandler: doSearch">
                         </div>
                     </div>
                     <div class="eight wide column">
-                        <div class="ui icon input" style="width: 100%" data-bind="range: {
+                        <div class="ui icon input" data-bind="range: {
                             startDateObs: startTimeObs, endDateObs: endTimeObs}">
                             <input type="text" placeholder="Created in date range" readonly>
                             <i class="calendar icon"></i>
@@ -71,7 +69,7 @@
             </div>
         </div>
     </div>
-    <div style="flex:1; text-align: right">
+    <div class="pp_pager">
         <div class="ui small pagination menu" data-bind="visible: totalPagesObs() > 1, css:{loading:showLoaderObs}">
             <a class="item" title="First page" data-bind="click: firstPage, visible: currentPageObs() != 0">1</a>
             <a class="item" title="Previous page" data-bind="click: previousPage, visible: currentPageObs() != 0">
