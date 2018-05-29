@@ -1,0 +1,30 @@
+.pp {
+    display: flex; 
+    flex-direction: row; 
+    align-items: center;
+}
+.pp_filter_control {
+    align-items: center; 
+    position: relative;
+}
+    .pp_filter_control .ui.input {
+        width: 30rem;
+    }
+    .pp_filter_control input {
+        cursor: pointer;
+    }
+.pp_search_panel {
+    position: absolute; 
+    top: 13rem; 
+    width: 50%;
+}
+    .pp_search_panel .ui.segment {
+        z-index:100;
+    }
+    .pp_search_panel .ui.input {
+        width: 100%;
+    }
+.pp_pager {
+    flex:1;
+    text-align: right;
+}
