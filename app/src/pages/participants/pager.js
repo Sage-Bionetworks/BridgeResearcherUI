@@ -20,6 +20,15 @@ module.exports = function(params) {
     let loadingFunc = params.loadingFunc;
     let {defaultStart, defaultEnd} = fn.getRangeInDays(-14, 0);
 
+    let searchPanel = document.querySelector("#searchPanel");
+    this.closeHandler = (e) => {
+        if (self.showSearchObs() && !searchPanel.contains(e.target)) {
+            e.stopPropagation();
+            self.showSearchObs(false);
+        }
+    };
+    document.body.addEventListener('click', this.closeHandler, true);
+
     let query = storeService.restoreQuery('p', 'allOfGroups', 'noneOfGroups');
 
     let binder = new Binder(self)
@@ -129,7 +138,12 @@ module.exports = function(params) {
             startTime: self.startTimeObs(),
             endTime: self.endTimeObs()
         };
-
+        if (fn.is(search.startTime, 'Date')) {
+            search.startTime.setHours(0, 0, 0, 0);
+        }
+        if (fn.is(search.endTime, 'Date')) {
+            search.endTime.setHours(23, 59, 59, 999);
+        }
         storeService.persistQuery('p', search);
         self.showSearchObs(false);
         self.formattedSearchObs( fn.formatSearch(search) );
@@ -146,4 +160,7 @@ module.exports = function(params) {
         self.dataGroupsObs(study.dataGroups);
         wrappedLoadingFunc(0);
     });
+};
+module.exports.prototype.dispose = function() {
+    document.body.removeEventListener('click', this.closeHandler, true);
 };
