@@ -176,7 +176,10 @@ module.exports = function(params /*total, search*/) {
         self.filterMessageObs.push(PREMSG+"were created on or before &ldquo;"+
             fn.formatDateTime(self.search.endTime)+"&rdquo;");
     }
-
+    self.exportText = function() {
+        var searchString = self.formatSearch(self.search);
+        return (searchString === '') ? null : `Only exporting accounts where ${searchString}.`;
+    };
     self.startExport = function(vm, event) {
         self.statusObs("Currently preparing your *.tsv file...");
         event.target.setAttribute("disabled","disabled");

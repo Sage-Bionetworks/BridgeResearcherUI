@@ -1,12 +1,12 @@
 <div class="te container">
     <div>
-        <button class="ui mini compact circular icon button" data-bind="semantic: 'dropdown-button', 
-            css: {'disabled': allObs().length === 0}">
+        <div role="button" class="ui mini compact circular icon button" 
+            data-bind="semantic: 'dropdown-button', css: {'disabled': allObs().length === 0}">
             <i class="horizontal ellipsis icon"></i>
             <div class="menu" data-bind="foreach: allObs">
                 <span class="item" data-bind="click: $parent.addTag, text: $data"></span>
             </div>
-        </button>
+        </div>
     </div>
     <div class="tags" data-bind="visible: selectedObs().length === 0, 
         semantic: 'dropdown-button-toggle', container: '.te.container'">
