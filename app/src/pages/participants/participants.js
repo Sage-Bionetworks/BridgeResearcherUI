@@ -200,7 +200,7 @@ module.exports = function() {
         return item.status !== 'unverified';
     };
     self.enableVisible = function(item) {
-        return item.status !== 'enabled' && root.isAdmin();
+        return item.status === 'disabled' && root.isAdmin();
     };
     self.disableVisible = function(item) {
         return item.status === 'enabled' && root.isAdmin();
