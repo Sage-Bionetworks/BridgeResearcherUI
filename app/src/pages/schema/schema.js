@@ -27,7 +27,7 @@ module.exports = function(params) {
         .obs('showError', false)
         .obs('index', 0)
         .obs('title', '&#160;')
-        .bind('schemaId', params.schemaId)
+        .bind('schemaId', (params.schemaId === "new") ? '' : params.schemaId)
         .bind('schemaType')
         .bind('revision', params.revision ? params.revision : null)
         .bind('name', '')
@@ -96,7 +96,7 @@ module.exports = function(params) {
     function loadSchema() { 
         if (params.schemaId === "new") {
             self.titleObs("New Upload Schema");
-            return Promise.resolve(schemaUtils.makeNewField());
+            return Promise.resolve({"fieldDefinitions":[schemaUtils.makeNewField()]});
         } else if (params.revision) {
             return serverService.getUploadSchema(params.schemaId, params.revision);
         } else {
