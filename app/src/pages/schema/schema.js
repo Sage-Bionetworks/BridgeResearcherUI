@@ -96,7 +96,7 @@ module.exports = function(params) {
     function loadSchema() { 
         if (params.schemaId === "new") {
             self.titleObs("New Upload Schema");
-            return Promise.resolve(schemaUtils.makeNewField());
+            return Promise.resolve({"fieldDefinitions":[schemaUtils.makeNewField()]});
         } else if (params.revision) {
             return serverService.getUploadSchema(params.schemaId, params.revision);
         } else {
