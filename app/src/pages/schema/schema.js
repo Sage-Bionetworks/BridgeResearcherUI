@@ -27,7 +27,7 @@ module.exports = function(params) {
         .obs('showError', false)
         .obs('index', 0)
         .obs('title', '&#160;')
-        .bind('schemaId', params.schemaId)
+        .bind('schemaId', (params.schemaId === "new") ? '' : params.schemaId)
         .bind('schemaType')
         .bind('revision', params.revision ? params.revision : null)
         .bind('name', '')
