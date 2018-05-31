@@ -7,8 +7,8 @@ const FIELD_SKELETON = {
 };
 
 const SCHEMA_TYPE_OPTIONS = Object.freeze([
-    {value: 'ios_survey', label: 'iOS Survey'},
-    {value: 'ios_data', label: 'iOS Data'}
+    {value: 'ios_data', label: 'iOS Data'},
+    {value: 'ios_survey', label: 'iOS Survey'}
 ]);
 
 // Note: some of these fields are marked deprecated because they are only used to create schemas 
@@ -67,7 +67,7 @@ function initVM(vm) {
 }
 
 function fieldDefToObs(fieldDefinitions) {
-    return fieldDefinitions.map(function(def) {
+    return (fieldDefinitions || []).map(function(def) {
         new Binder(def)
             .bind('name', def.name)
             .bind('required', def.required)
