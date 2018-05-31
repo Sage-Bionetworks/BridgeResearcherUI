@@ -67,7 +67,7 @@ function initVM(vm) {
 }
 
 function fieldDefToObs(fieldDefinitions) {
-    return (fieldDefinitions || []).map(function(def) {
+    return fieldDefinitions.map(function(def) {
         new Binder(def)
             .bind('name', def.name)
             .bind('required', def.required)
