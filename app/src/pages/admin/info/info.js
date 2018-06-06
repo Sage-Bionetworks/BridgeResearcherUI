@@ -21,6 +21,7 @@ module.exports = function() {
         .bind('externalIdValidationEnabled')
         .bind('healthCodeExportEnabled')
         .bind('usesCustomExportSchedule')
+        .bind('verifyChannelOnSignInEnabled')
         .bind('iosArn', null, ios.fromObject, ios.toObject)
         .bind('strictUploadValidationEnabled')
         .bind('studyIdExcludedInExport');
