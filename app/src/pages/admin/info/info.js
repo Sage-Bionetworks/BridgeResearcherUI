@@ -3,6 +3,7 @@ import Binder from '../../../binder';
 import ko from 'knockout';
 import root from '../../../root';
 import utils from '../../../utils';
+import fn from '../../../functions';
 
 module.exports = function() {
     let self = this;
@@ -21,6 +22,7 @@ module.exports = function() {
         .bind('externalIdValidationEnabled')
         .bind('healthCodeExportEnabled')
         .bind('usesCustomExportSchedule')
+        .bind('verifyChannelOnSignInEnabled')
         .bind('iosArn', null, ios.fromObject, ios.toObject)
         .bind('strictUploadValidationEnabled')
         .bind('studyIdExcludedInExport');
