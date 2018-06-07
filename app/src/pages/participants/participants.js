@@ -199,7 +199,7 @@ module.exports = function() {
         return item.status === 'unverified';
     };
     self.resetPwdVisible = function(item) {
-        return true;
+        return item.status !== 'disabled';
     };
     self.enableVisible = function(item) {
         return item.status === 'disabled' && root.isAdmin();
@@ -208,7 +208,7 @@ module.exports = function() {
         return item.status === 'enabled' && root.isAdmin();
     };
     self.signOutVisible = function(item) {
-        return item.status !== 'unverified';
+        return item.status !== 'disabled' && item.status !== 'unverified';
     };
     self.deleteVisible = function(item) {
         return root.isDeveloper() && root.isResearcher();
