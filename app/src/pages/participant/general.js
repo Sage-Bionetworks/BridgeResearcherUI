@@ -107,7 +107,6 @@ module.exports = function(params) {
             serverService.getParticipant(self.userIdObs());
     }
     function afterCreate(response) {
-        console.log(response);
         self.statusObs("enabled");
         self.isNewObs(false);
         self.idObs(response.identifier);
