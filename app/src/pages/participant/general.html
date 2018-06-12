@@ -67,14 +67,21 @@
         <div class="equal width fields" data-bind="visible: !isNewObs()">
             <div class="field" id="email">
                 <label>Email</label>
-                <a class="input-field-padding" 
-                    data-bind="visible: emailObs(), href: emailLink, text: emailObs"></a>
+                <span data-bind="visible: emailObs()">
+                    <a class="input-field-padding" data-bind="href: emailLink, text: emailObs"></a>
+                    <i data-bind="css: observerIcon(emailVerifiedObs), semantic: 'popup', 
+                        attr: {'data-content': observerText(emailVerifiedObs)}"></i>
+                </span>
                 <span class="input-field-padding" data-bind="visible: !emailObs()">—</span>
             </div>
             <div class="field" id="phone">
                 <label>Phone</label>
-                <a class="input-field-padding" data-bind="visible: phoneObs(), href: phoneLink, 
-                    text: $component.formatPhone(phoneObs(), phoneRegionObs())"></a>
+                <span data-bind="visible: phoneObs()">
+                    <a class="input-field-padding" data-bind="href: phoneLink, 
+                        text: $component.formatPhone(phoneObs(), phoneRegionObs())"></a>
+                    <i data-bind="css: observerIcon(phoneVerifiedObs), semantic: 'popup', 
+                        attr: {'data-content': observerText(phoneVerifiedObs)}"></i>
+                </span>
                 <span class="input-field-padding" data-bind="visible: !phoneObs()">—</span>
             </div>
             <div class="field" id="externalId">
