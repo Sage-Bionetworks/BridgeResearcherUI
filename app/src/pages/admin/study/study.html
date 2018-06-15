@@ -1,0 +1,98 @@
+<div class="fixed-header">
+        <div class="fixed-header-title">
+            <div class="fixed-header-heading">
+                <div class="ui breadcrumb">
+                    <a href="#/admin/studies" class="section">Studies</a>
+                    <i class="right chevron icon divider"></i>
+                </div>
+                <h3 data-bind="text: nameObs"></h3>
+            </div>
+            <div class="fixed-header-buttons">
+                <button class="ui tiny primary button" data-bind="click: save">Save</button>
+            </div>
+        </div>
+        <div class="ui empty secondary pointing menu"></div>
+    </div>
+    <div class="scrollbox">
+        <errors></errors>
+        <form class="ui form">
+            <div class="two fields">
+                <div class="field">
+                    <label>Name</label>
+                    <input data-bind="textInput: nameObs">
+                </div>
+                <div class="field">
+                    <label>Support Email</label>
+                    <input data-bind="textInput: supportEmailObs">
+                </div>
+            </div>
+            <div class="two fields">
+                <div class="field">
+                    <label>Sponsor Name</label>
+                    <input data-bind="textInput: sponsorNameObs">
+                </div>
+                <div class="field">
+                    <label>Technical Email</label>
+                    <input data-bind="textInput: technicalEmailObs">
+                </div>
+            </div>
+            <div class="two fields">
+                <div class="field">
+                    <label>Study Identifier</label>
+                    <input data-bind="textInput: identifierObs">
+                </div>
+                <div class="field">
+                    <label>Consent Notification Email</label>
+                    <input data-bind="textInput: consentNotificationEmailObs">
+                </div>
+            </div>
+            
+            <h4 class="ui dividing header">Bridge Users</h4>
+            <div data-bind="foreach: usersObs" class="users">
+                <div class="four fields">
+                    <div class="field">
+                        <input placeholder="Email" data-bind="textInput: $data.emailObs">
+                    </div>
+                    <div class="field">
+                        <input placeholder="First Name" data-bind="textInput: $data.firstNameObs">
+                    </div>
+                    <div class="field">
+                        <input placeholder="Last Name" data-bind="textInput: $data.lastNameObs">
+                    </div>
+                    <div class="field">
+                        <tag-editor params="selectedObs: $data.rolesObs, 
+                            allObs: $parent.allRolesObs, type: 'roles'"></tag-editor>
+                    </div>
+                    <div class="field" style="width:6rem">
+                        <div class="input-field-padding">
+                            <i class="large plus square outline link icon" 
+                                data-bind="click: $parent.addBelow, semantic: 'popup'" 
+                                data-content="Add below"></i>
+                            <i class="red large times circle outline link icon" 
+                                data-bind="fadeRemove: {selector: '.four.fields', object: $data, 
+                                collection: 'usersObs'}"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="ui tiny primary button" data-bind="click: addFirstRow">Add User</button>
+
+            <h4 class="ui dividing header">Synapse Team Administrators</h4>
+            <div class="field">
+                <ui-checkbox params="checkedObs: darkObs">
+                    Alx Dark
+                </ui-checkbox>
+            </div>
+            <div class="field">
+                <ui-checkbox params="checkedObs: kellenObs">
+                    Mike Kellen
+                </ui-checkbox>
+            </div>
+            <div class="field">
+                <ui-checkbox params="checkedObs: botObs">
+                    Brian Bot
+                </ui-checkbox>
+            </div>
+        </form>
+    </div>
+</div>

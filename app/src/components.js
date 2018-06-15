@@ -312,6 +312,14 @@ reg('admin_upload', {
     viewModel: require('./pages/admin/upload/upload'),
     template: require('./pages/admin/upload/upload.html')
 });
+reg('admin_studies', {
+    viewModel: require('./pages/admin/studies/studies'),
+    template: require('./pages/admin/studies/studies.html')
+});
+reg('admin_study', {
+    viewModel: require('./pages/admin/study/study'),
+    template: require('./pages/admin/study/study.html')
+});
 reg('BooleanConstraints', {
     viewModel: require('./pages/survey/constraints/boolean_constraints'),
     template: require('./pages/survey/constraints/boolean_constraints.html')
