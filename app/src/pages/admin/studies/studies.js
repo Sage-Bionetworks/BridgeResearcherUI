@@ -1,6 +1,6 @@
 import {serverService} from '../../../services/server_service';
-import tables from '../../../tables';
 import fn from '../../../functions';
+import tables from '../../../tables';
 
 function deleteStudy(item) {
     if (item.identifier !== 'api' && item.identifier !== 'shared') {

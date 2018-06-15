@@ -17,18 +17,18 @@
         <errors></errors>
         <form class="ui form">
             <div class="two fields">
-                <div class="field">
-                    <label>Name</label>
+                <div class="field required" id="name">
+                    <label>Study name</label>
                     <input data-bind="textInput: nameObs">
                 </div>
-                <div class="field">
+                <div class="field" id="supportEmail">
                     <label>Support Email</label>
                     <input data-bind="textInput: supportEmailObs">
                 </div>
             </div>
             <div class="two fields">
-                <div class="field">
-                    <label>Sponsor Name</label>
+                <div class="field required" id="sponsorName">
+                    <label>Sponsor name</label>
                     <input data-bind="textInput: sponsorNameObs">
                 </div>
                 <div class="field">
@@ -37,7 +37,7 @@
                 </div>
             </div>
             <div class="two fields">
-                <div class="field">
+                <div class="field" id="identifier">
                     <label>Study Identifier</label>
                     <input data-bind="textInput: identifierObs">
                 </div>
@@ -50,7 +50,7 @@
             <h4 class="ui dividing header">Bridge Users</h4>
             <div data-bind="foreach: usersObs" class="users">
                 <div class="four fields">
-                    <div class="field">
+                    <div class="field" data-bind="attr: {id: 'users'+$index()+'_email'}">
                         <input placeholder="Email" data-bind="textInput: $data.emailObs">
                     </div>
                     <div class="field">
@@ -59,7 +59,7 @@
                     <div class="field">
                         <input placeholder="Last Name" data-bind="textInput: $data.lastNameObs">
                     </div>
-                    <div class="field">
+                    <div class="field" data-bind="attr: {id: 'users'+$index()+'_roles'}">
                         <tag-editor params="selectedObs: $data.rolesObs, 
                             allObs: $parent.allRolesObs, type: 'roles'"></tag-editor>
                     </div>
@@ -78,20 +78,22 @@
             <button class="ui tiny primary button" data-bind="click: addFirstRow">Add User</button>
 
             <h4 class="ui dividing header">Synapse Team Administrators</h4>
-            <div class="field">
-                <ui-checkbox params="checkedObs: darkObs">
-                    Alx Dark
-                </ui-checkbox>
-            </div>
-            <div class="field">
-                <ui-checkbox params="checkedObs: kellenObs">
-                    Mike Kellen
-                </ui-checkbox>
-            </div>
-            <div class="field">
-                <ui-checkbox params="checkedObs: botObs">
-                    Brian Bot
-                </ui-checkbox>
+            <div  id="adminIds">
+                <div class="field">
+                    <ui-checkbox params="checkedObs: darkObs">
+                        Alx Dark
+                    </ui-checkbox>
+                </div>
+                <div class="field">
+                    <ui-checkbox params="checkedObs: kellenObs">
+                        Mike Kellen
+                    </ui-checkbox>
+                </div>
+                <div class="field">
+                    <ui-checkbox params="checkedObs: botObs">
+                        Brian Bot
+                    </ui-checkbox>
+                </div>
             </div>
         </form>
     </div>
