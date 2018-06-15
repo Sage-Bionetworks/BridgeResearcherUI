@@ -18,10 +18,11 @@ function makeChecked(item) {
 function titleCase(string) {
     return string.substring(0,1).toUpperCase() + string.substring(1);
 }
-function prepareDelete(vm, objName) {
+function prepareDelete(vm, objName, objPlural) {
     let deletables = vm.itemsObs().filter(hasBeenChecked);
+
     let msg = (deletables.length > 1) ?
-            "Are you sure you want to delete these "+objName+"s?" :
+            "Are you sure you want to delete these "+(objPlural || objName+"s")+"?" :
             "Are you sure you want to delete this "+objName+"?";
     let confirmMsg = (deletables.length > 1) ?
             titleCase(objName)+"s deleted." : titleCase(objName)+" deleted.";
@@ -74,6 +75,7 @@ export default {
      */
     prepareTable: function(vm, options) {
         let objName = options.name;
+        let objPlural = options.plural;
         let objType = options.type;
         let deleteFunc = options.delete;
         let loadFunc = options.refresh;
@@ -110,7 +112,7 @@ export default {
         }
         if (deleteFunc) {
             vm.deleteItems = function(vm, event) {
-                let del = prepareDelete(vm, objName);
+                let del = prepareDelete(vm, objName, objPlural);
 
                 alerts.deleteConfirmation(del.msg, function() {
                     utils.startHandler(self, event);
