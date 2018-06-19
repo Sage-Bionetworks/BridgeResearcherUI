@@ -23,14 +23,6 @@
 
                 <h4 class="ui dividing header">Export Options</h4>
                 <div class="field">
-                    <ui-checkbox params="checkedObs: studyIdExcludedInExportObs">
-                        Exclude study ID from columnn names of export data
-                    </ui-checkbox>
-                    <p class="checkbox-help-text">
-                        Unless this is a legacy study, you should leave this checked.
-                    </p>
-                </div>
-                <div class="field">
                     <ui-checkbox params="checkedObs: strictUploadValidationEnabledObs">
                         Enable strict validation of upload files
                     </ui-checkbox>
@@ -64,14 +56,6 @@
                 </div>
         
                 <h4 class="ui dividing header">External IDs</h4>
-                <div class="field">
-                    <ui-checkbox params="checkedObs: emailVerificationEnabledObs">
-                        Verify new email addresses
-                    </ui-checkbox>
-                    <p class="checkbox-help-text">
-                        This must be disabled for legacy external ID studies. Otherwise leave it checked.
-                    </p>
-                </div>
                 <div class="field" id="externalIdValidationEnabled">
                     <ui-checkbox params="checkedObs: externalIdValidationEnabledObs">
                         Manage external IDs in Bridge
@@ -80,6 +64,26 @@
                 <div class="field" id="externalIdRequiredOnSignup">
                     <ui-checkbox params="checkedObs: externalIdRequiredOnSignupObs">
                         Require external ID on sign up
+                    </ui-checkbox>
+                </div>
+
+                <h4 class="ui dividing header">Legacy Study Support</h4>
+                <p class="error-message">
+                    Unless this is a legacy study, all these feature flags should be enabled.
+                </p>
+                <div class="field">
+                    <ui-checkbox params="checkedObs: verifyChannelOnSignInEnabledObs">
+                        Check that channel is verified on sign in
+                    </ui-checkbox>
+                </div>
+                <div class="field">
+                    <ui-checkbox params="checkedObs: emailVerificationEnabledObs">
+                        Verify new email addresses
+                    </ui-checkbox>
+                </div>
+                <div class="field">
+                    <ui-checkbox params="checkedObs: studyIdExcludedInExportObs">
+                        Exclude study ID from columnn names of export data
                     </ui-checkbox>
                 </div>
     

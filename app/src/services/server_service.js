@@ -226,6 +226,15 @@ export class ServerService {
     getStudy() {
         return this.gethttp(config.getCurrentStudy);
     }
+    getStudyById(identifier) {
+        return this.gethttp(config.getStudy + identifier);
+    }
+    createStudy(studyAndUsers) {
+        return this.post(config.getStudy + 'init', studyAndUsers);
+    }
+    deleteStudy(identifier) {
+        return this.del(config.getStudy + identifier + "?physical=false");
+    }
     getStudyPublicKey() {
         return this.gethttp(config.getStudyPublicKey);
     }

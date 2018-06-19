@@ -128,7 +128,7 @@ module.exports = function() {
             let userId = vm.id;
             utils.startHandler(vm, event);
             serverService.resendEmailVerification(userId)
-                .then(utils.successHandler(vm, event, "Resent email to verify participant's email address."))
+                .then(utils.successHandler(vm, event, "Sent email to verify participant's email address."))
                 .catch(utils.failureHandler());
         });
     };
@@ -175,10 +175,12 @@ module.exports = function() {
         .catch(utils.failureHandler());
     };
     self.requestResetPassword = function(user, event) {
-        utils.startHandler(self, event);
-        serverService.requestResetPasswordUser(user.id)
-            .then(utils.successHandler(self, event, "Reset password email has been sent to user."))
-            .catch(utils.failureHandler());
+        alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
+            utils.startHandler(self, event);
+            serverService.requestResetPasswordUser(user.id)
+                .then(utils.successHandler(self, event, "Reset password email has been sent to user."))
+                .catch(utils.failureHandler());
+        });
     };
     self.signOutUser = function(user, event) {
         root.openDialog('sign_out_user', {userId: user.id});
@@ -197,7 +199,7 @@ module.exports = function() {
         return item.status === 'unverified';
     };
     self.resetPwdVisible = function(item) {
-        return item.status !== 'unverified';
+        return item.status !== 'disabled';
     };
     self.enableVisible = function(item) {
         return item.status === 'disabled' && root.isAdmin();
@@ -206,7 +208,7 @@ module.exports = function() {
         return item.status === 'enabled' && root.isAdmin();
     };
     self.signOutVisible = function(item) {
-        return item.status !== 'unverified';
+        return item.status !== 'disabled' && item.status !== 'unverified';
     };
     self.deleteVisible = function(item) {
         return root.isDeveloper() && root.isResearcher();
