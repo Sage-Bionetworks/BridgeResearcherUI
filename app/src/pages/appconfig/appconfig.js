@@ -136,6 +136,7 @@ module.exports = function(params) {
             .then(updateModifiedOn)
             .then(fn.returning(self.appConfig))
             .then(titleUpdated)
+            //.then(sharedModuleUtils.loadNameMaps)
             .then(utils.successHandler(vm, event, "App configuration has been saved."))
             .catch(failureHandler);
     };

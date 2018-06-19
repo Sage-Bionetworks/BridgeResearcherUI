@@ -5,7 +5,6 @@ const sharedModuleHTMLMap = {};
 const surveyNameMap = {};
 const schemaNameMap = {};
 const objImported = {};
-let allLoaded = false;
 
 function updateSharedModuleNameMap(response) {
     response.items.forEach(function(metadata) {
@@ -25,19 +24,14 @@ function updateSchemaNameMap(response) {
     response.items.forEach(function(schema) {
         schemaNameMap[schema.schemaId] = schema.name;
     });
-    allLoaded = true;
 }
 function loadNameMaps() {
-    if (allLoaded) {
-        return Promise.resolve();
-    } else {
-        return serverService.getMetadata({mostrecent:true, published:true})
-            .then(updateSharedModuleNameMap)
-            .then(serverService.getSurveys.bind(serverService))
-            .then(updateSurveyNameMap)
-            .then(serverService.getAllUploadSchemas.bind(serverService))
-            .then(updateSchemaNameMap);
-    }
+    return serverService.getMetadata({mostrecent:true, published:true})
+        .then(updateSharedModuleNameMap)
+        .then(serverService.getSurveys.bind(serverService))
+        .then(updateSurveyNameMap)
+        .then(serverService.getAllUploadSchemas.bind(serverService))
+        .then(updateSchemaNameMap);
 }
 function formatDescription(metadata, withVersion) {
     let array = [];
