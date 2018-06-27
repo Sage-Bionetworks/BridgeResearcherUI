@@ -5,6 +5,7 @@ import ko from 'knockout';
 import Promise from 'bluebird';
 import root from './root';
 import utils from './utils';
+import swal from 'sweetalert2';
 
 function hasBeenChecked(item) {
     return item.checkedObs();
@@ -113,16 +114,34 @@ export default {
         if (deleteFunc) {
             vm.deleteItems = function(vm, event) {
                 let del = prepareDelete(vm, objName, objPlural);
-
-                alerts.deleteConfirmation(del.msg, function() {
-                    utils.startHandler(self, event);
-                    Promise.each(del.deletables, deleteFunc)
-                        .then(utils.successHandler(vm, event, del.confirmMsg))
-                        .then(uncheckAll(vm))
-                        .then(makeTableRowHandler(vm, del.deletables, objName))
-                        .then(redirectHandler(vm, redirectTo))
-                        .catch(utils.failureHandler(/*{transient:false}*/));
-                });
+                if (options.isAdmin && options.isAdmin()) {
+                    swal({
+                        type: 'warning',
+                        text: del.msg, 
+                        showCancelButton: true,
+                        confirmButtonText:  'Delete',
+                        cancelButtonText:  'Delete Permanently'
+                    }).then(result => {
+                        let f = (item) => deleteFunc(item, result.dismiss === "cancel");
+                        utils.startHandler(self, event);
+                        Promise.each(del.deletables, f)
+                            .then(utils.successHandler(vm, event, del.confirmMsg))
+                            .then(uncheckAll(vm))
+                            .then(makeTableRowHandler(vm, del.deletables, objName))
+                            .then(redirectHandler(vm, redirectTo))
+                            .catch(utils.failureHandler());
+                    });
+                } else {
+                    alerts.deleteConfirmation(del.msg, function() {
+                        utils.startHandler(self, event);
+                        Promise.each(del.deletables, deleteFunc)
+                            .then(utils.successHandler(vm, event, del.confirmMsg))
+                            .then(uncheckAll(vm))
+                            .then(makeTableRowHandler(vm, del.deletables, objName))
+                            .then(redirectHandler(vm, redirectTo))
+                            .catch(utils.failureHandler());
+                    });
+                }
             };
         }
     },
