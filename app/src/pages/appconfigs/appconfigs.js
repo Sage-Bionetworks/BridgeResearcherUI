@@ -12,7 +12,7 @@ module.exports = function(params) {
 
     tables.prepareTable(self, {
         name:'app config',
-        isAdmin: () => false,
+        isAdmin: root.isAdmin,
         delete: function(item, physicalDelete) {
             return serverService.deleteAppConfig(item.guid, physicalDelete === true);
         }
