@@ -12,14 +12,14 @@ module.exports = function(params) {
 
     tables.prepareTable(self, {
         name:'app config',
-        delete: function(item) {
-            return serverService.deleteAppConfig(item.guid);
+        isAdmin: () => false,
+        delete: function(item, physicalDelete) {
+            return serverService.deleteAppConfig(item.guid, physicalDelete === true);
         }
     });
 
     fn.copyProps(self, criteriaUtils, 'label->criteriaLabel');
     fn.copyProps(self, scheduleUtils, 'formatCompoundActivity');
-    fn.copyProps(self, root, 'isAdmin');
 
     scheduleUtils.loadOptions()
         .then(serverService.getAppConfigs.bind(serverService))

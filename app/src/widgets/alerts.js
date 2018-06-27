@@ -1,38 +1,49 @@
-import '../../../node_modules/sweetalert/dist/sweetalert.css';
-import swal from 'sweetalert';
+import swal from 'sweetalert2';
 
 function confirmation(message, func) {
     swal({ title: "Hey now", text: message, showCancelButton: true,
         confirmButtonText: "OK", confirmButtonColor: "#2185d0",
-    }, function(isConfirm){
-        if (isConfirm) { func(); }
+    }).then(result => {
+        if (result.value) {
+            func();
+        }
     });
 }
 function deleteConfirmation(message, func, deleteButton) {
-    swal({ title: "Hey now", text: message, showCancelButton: true,
-        allowEscapeKey: true, confirmButtonColor: "#db2828", 
+    swal({ 
+        title: "Hey now", 
+        text: message, 
+        showCancelButton: true,
+        allowEscapeKey: true, 
+        confirmButtonColor: "#db2828", 
         confirmButtonText: deleteButton || "Delete"
-    }, function(isConfirm){
-        if (isConfirm) { func(); }
+    }).then(result => {
+        if (result.value) {
+            func();
+        }
     });
 }
 function warn(message) {
     swal({ title: "", text: message, type: "warning", confirmButtonText: "OK", confirmButtonColor: "#2185d0"});
 }
-function error(message) {
-    swal("Oops...", message, "error");
-}
 function prompt(message, okFunc) {
-    swal({title: "", text: message, type: "input", showCancelButton: true, closeOnConfirm: false}, function(inputValue) {
-        if (inputValue === false) {
-            return false;
+    swal({
+        text: message, 
+        input: "text", 
+        showCancelButton: true,
+        preConfirm: (value) => {
+            if (value === "") {
+                swal.showValidationError("Please enter a value");
+                return false;
+            }
+            return value;
         }
-        if (inputValue === "") {
-            swal.showInputError("Please enter a value");
-            return false;
+    }).then(result => {
+        if (result.value) {
+            console.log(result.value);
+            okFunc(result.value);
+            swal.close();
         }
-        okFunc(inputValue);
-        swal.close();
     });
 }
 function notification(title, message) {
@@ -42,7 +53,6 @@ function notification(title, message) {
 export default {
     confirmation,
     deleteConfirmation,
-    error,
     notification,
     prompt,
     warn

@@ -630,7 +630,7 @@ export class ServerService {
         return this.post(config.export + "/start");
     }
     getAppConfigs() {
-        return this.gethttp(config.appConfigs);
+        return this.gethttp(config.appConfigs + '?includeDeleted=false');
     }
     getAppConfig(guid) {
         return this.gethttp(config.appConfigs + '/' + guid);
@@ -641,8 +641,8 @@ export class ServerService {
     updateAppConfig(appConfig) {
         return this.post(config.appConfigs + '/' + appConfig.guid, appConfig);
     }
-    deleteAppConfig(guid) {
-        return this.del(config.appConfigs + '/' + guid);
+    deleteAppConfig(guid, physicalDelete) {
+        return this.del(config.appConfigs + '/' + guid + '?physical=' + physicalDelete);
     }
     addSessionStartListener(listener) {
         if (typeof listener !== "function") {
