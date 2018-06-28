@@ -40,7 +40,7 @@ function blankInvalidDateString(string) {
 }
 function formatMs(ms) {
     if (!is(ms, "Number")) { 
-        throw Error('formatMs cannot format a non-number value');
+        throw Error('formatMs cannot format a non-number value: ' + ms);
     }
     if (ms < MINUTE) {
         let s = Math.floor(ms/SECOND);

@@ -1,7 +1,6 @@
 import {serverService} from '../../services/server_service';
 import Binder from '../../binder';
 import fn from '../../functions';
-import ko from 'knockout';
 import root from '../../root';
 import storeService from '../../services/store_service';
 import tables from '../../tables';
@@ -117,7 +116,7 @@ module.exports = class UploadsViewModel {
             item.hrefObs('/#/schemas/'+encodeURIComponent(id)+'/versions/'+rev+'/editor');
         }
         item.progressState = this.uploadProgressBarState(item);
-        item.requestedOn = fn.formatDateTime(item.requestedOn);
+        item.requestedOnFormatted = fn.formatDateTime(item.requestedOn);
         item.completedByObs(this.uploadFormatCompletedBy(item));
     }
     uploadFormatCompletedBy(item) {
