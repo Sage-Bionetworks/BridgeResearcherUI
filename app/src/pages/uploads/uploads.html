@@ -55,7 +55,7 @@
                     <span data-bind="visible: !$component.isAdmin(), text: $data.uploadId"></span>
                     <a data-bind="visible: $component.isAdmin, text: $data.uploadId, href: '#/uploads/' + $data.uploadId"></a>
                 </td>
-                <td data-bind="text: $data.requestedOn"></td>
+                <td data-bind="text: $data.requestedOnFormatted"></td>
                 <td data-bind="html: $data.completedByObs"></td>
                 <td>
                     <a target="_blank" rel="noopener" data-bind="href: $data.hrefObs, text: $data.contentObs"></a>
