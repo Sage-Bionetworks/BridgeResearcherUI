@@ -4,8 +4,22 @@
             <h3>App Configs</h3>
         </div>
         <div class="fixed-header-buttons">
-            <button class="ui red tiny button" data-bind="visible: isAdmin, 
-                disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
+            <button data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems" 
+                class="ui red tiny button">Delete</button>
+            <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
+                <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()},
+                    semantic: 'dropdown-button-toggle', container: '.buttons'">
+                    Delete
+                </div>
+                <div class="ui primary tiny floating dropdown icon button" 
+                    data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item" data-bind="click: deleteItems">Delete</div>
+                        <div class="item" data-bind="click: deletePermanently">Delete <b>Permanently</b></div>
+                    </div>
+                </div>
+            </div>
             <a href="#/app_configs/new" class="ui primary tiny button">New App Config</a>
         </div>
     </div>
@@ -16,7 +30,7 @@
     <table class="ui compact selectable table">
         <thead>
             <tr>
-                <th width="10" data-bind="visible: isAdmin">
+                <th width="10">
                     <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
                 </th>
                 <th nowrap>Label</th>
@@ -31,7 +45,7 @@
         </tbody>        
         <tbody data-bind="foreach: itemsObs">
             <tr>
-                <td data-bind="visible: $parent.isAdmin">
+                <td>
                     <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                 </td>
                 <td nowrap>
