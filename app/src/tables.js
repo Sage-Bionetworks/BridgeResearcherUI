@@ -79,6 +79,7 @@ export default {
         let objPlural = options.plural;
         let objType = options.type;
         let deleteFunc = options.delete;
+        let deletePermanentlyFunc = options.deletePermanently;
         let loadFunc = options.refresh;
         let redirectTo = options.redirect;
 
@@ -114,34 +115,30 @@ export default {
         if (deleteFunc) {
             vm.deleteItems = function(vm, event) {
                 let del = prepareDelete(vm, objName, objPlural);
-                if (options.isAdmin && options.isAdmin()) {
-                    swal({
-                        type: 'warning',
-                        text: del.msg, 
-                        showCancelButton: true,
-                        confirmButtonText:  'Delete',
-                        cancelButtonText:  'Delete Permanently'
-                    }).then(result => {
-                        let f = (item) => deleteFunc(item, result.dismiss === "cancel");
-                        utils.startHandler(self, event);
-                        Promise.each(del.deletables, f)
-                            .then(utils.successHandler(vm, event, del.confirmMsg))
-                            .then(uncheckAll(vm))
-                            .then(makeTableRowHandler(vm, del.deletables, objName))
-                            .then(redirectHandler(vm, redirectTo))
-                            .catch(utils.failureHandler());
-                    });
-                } else {
-                    alerts.deleteConfirmation(del.msg, function() {
-                        utils.startHandler(self, event);
-                        Promise.each(del.deletables, deleteFunc)
-                            .then(utils.successHandler(vm, event, del.confirmMsg))
-                            .then(uncheckAll(vm))
-                            .then(makeTableRowHandler(vm, del.deletables, objName))
-                            .then(redirectHandler(vm, redirectTo))
-                            .catch(utils.failureHandler());
-                    });
-                }
+                alerts.deleteConfirmation(del.msg, function() {
+                    utils.startHandler(self, event);
+                    Promise.each(del.deletables, deleteFunc)
+                        .then(utils.successHandler(vm, event, del.confirmMsg))
+                        .then(uncheckAll(vm))
+                        .then(makeTableRowHandler(vm, del.deletables, objName))
+                        .then(redirectHandler(vm, redirectTo))
+                        .catch(utils.failureHandler());
+                });                
+            };
+        }
+        if (deletePermanentlyFunc) {
+            vm.deletePermanently = function(vm, event) {
+                let del = prepareDelete(vm, objName, objPlural);
+                let msg = del.msg + " We cannot undo this kind of delete. Are you in production? Maybe rethink this.";
+                alerts.deleteConfirmation(msg, function() {
+                    utils.startHandler(self, event);
+                    Promise.each(del.deletables, deletePermanentlyFunc)
+                        .then(utils.successHandler(vm, event, del.confirmMsg))
+                        .then(uncheckAll(vm))
+                        .then(makeTableRowHandler(vm, del.deletables, objName))
+                        .then(redirectHandler(vm, redirectTo))
+                        .catch(utils.failureHandler());
+                }, "Delete FOREVER");
             };
         }
     },

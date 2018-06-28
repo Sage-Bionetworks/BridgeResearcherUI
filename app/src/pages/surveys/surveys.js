@@ -32,24 +32,25 @@ function annotateSurveys(surveys, plans) {
         });
     });
 }
-function deleteItem(survey) {
-    return serverService.deleteSurvey(survey, false);
-}
 
 module.exports = function() {
     let self = this;
 
     fn.copyProps(self, fn, 'formatDateTime');
-    fn.copyProps(self, root, 'isDeveloper');
+    fn.copyProps(self, root, 'isDeveloper', 'isAdmin');
     fn.copyProps(self, sharedModuleUtils, 'formatModuleLink', 'moduleHTML');
     
     tables.prepareTable(self, {
         name: 'survey',
         type: 'Survey',
-        delete: deleteItem,
+        delete: function(item) {
+            return serverService.deleteSurvey(item, false);
+        },
+        deletePermanently: function(item) {
+            return serverService.deleteSurvey(item, true);
+        },
         refresh: load
     });
-
     self.formatSchedules = function(survey) {
         return survey.schedulePlanObs().map(function(obj) {
             return obj.label;
