@@ -211,6 +211,6 @@ module.exports = function() {
         return item.status !== 'disabled' && item.status !== 'unverified';
     };
     self.deleteVisible = function(item) {
-        return root.isDeveloper() && root.isResearcher();
+        return root.isResearcher();
     };
 };
