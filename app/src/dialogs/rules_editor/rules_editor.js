@@ -49,7 +49,7 @@ function filterOutRulesWithNoValues(rule) {
     } else if (NO_VALUE_OPS.includes(op)) {
         rule.dataGroupsObs([]);
     }
-    return (rule.valueObs() || rule.dataGroupsObs().length || NO_VALUE_OPSSET_OPS.includes(op));
+    return (rule.valueObs() || rule.dataGroupsObs().length || NO_VALUE_OPS.includes(op));
 }
 
 function observerToObject(rule) {

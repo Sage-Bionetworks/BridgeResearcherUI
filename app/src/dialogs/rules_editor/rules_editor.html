@@ -37,9 +37,8 @@
                         visible: $data.actionSelectedObs() === 'assignDataGroup', optionsValue: 'value'"></select>
                 </div>
                 <div class="rule-cell">
-                    <div class="link" data-bind="click: $parent.deleteRule">
-                        <i class="delete icon"></i>
-                    </div>
+                    <i class="red large times circle outline link icon" 
+                        data-bind="click: $parent.deleteRule"></i>
                 </div>
             </div>
         </div>
