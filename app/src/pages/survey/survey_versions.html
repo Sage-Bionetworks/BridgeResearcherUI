@@ -7,7 +7,24 @@
             </div> 
             <h3 data-bind="text: nameObs"></h3>
         </div>
-        <div class="fixed-header-buttons"></div>
+        <div class="fixed-header-buttons">
+            <button data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems" 
+                class="ui red tiny button">Delete</button>
+            <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
+                <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()},
+                    semantic: 'dropdown-button-toggle', container: '.buttons'">
+                    Delete
+                </div>
+                <div class="ui primary tiny floating dropdown icon button" 
+                    data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item" data-bind="click: deleteItems">Delete</div>
+                        <div class="item" data-bind="click: deletePermanently">Delete <b>Permanently</b></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <survey-tabset params="viewModel: $data"></survey-tabset>
 </div>
@@ -16,6 +33,9 @@
     <table class="ui table">
         <thead>
             <tr>
+                <th width="10">
+                    <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+                </th>
                 <th>Name</th>
                 <th>Created On</th>
                 <th>Upload Schema</th>
@@ -24,11 +44,14 @@
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
-                <td colspan="4" data-bind="html: recordsMessageObs"></td>
+                <td colspan="5" data-bind="html: recordsMessageObs"></td>
             </tr>
         </tbody>        
         <tbody data-bind="foreach: itemsObs">
             <tr data-bind="css: { positive: $data.published }">
+                <td>
+                    <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+                </td>
                 <td>
                     <a data-bind="href: '#/surveys/'+$data.guid+'/'+$data.createdOn+'/editor', text: $data.name"></span></a>
                 </td>
@@ -44,8 +67,6 @@
                     <div data-bind="visible: !$data.published" style="text-align: right">
                         <button class="ui basic compact mini button" 
                             data-bind="click:  $component.publish">Publish</button>
-                        <button class="ui basic red compact mini button" 
-                            data-bind="click: $component.deleteSurvey">Delete</button>
                     </div>
                 </td>
             </tr>
