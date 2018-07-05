@@ -5,7 +5,6 @@ import fn from '../../functions';
 import tables from '../../tables';
 import utils from '../../utils';
 import root from '../../root';
-import { SSL_OP_NETSCAPE_DEMO_CIPHER_CHANGE_BUG } from 'constants';
 
 module.exports = function(params) {
     let self = this;
