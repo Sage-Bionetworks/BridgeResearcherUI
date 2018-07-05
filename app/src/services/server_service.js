@@ -275,8 +275,9 @@ export class ServerService {
     getMostRecentlyPublishedSurvey(guid) {
         return this.gethttp(config.survey + guid + '/revisions/published');
     }
-    getSurveyAllRevisions(guid) {
-        return this.gethttp(config.survey + guid + '/revisions');
+    getSurveyAllRevisions(guid, includeDeleted) {
+        let queryString = fn.queryString({includeDeleted:(includeDeleted === true)});
+        return this.gethttp(config.survey + guid + '/revisions' + queryString);
     }
     getSurvey(guid, createdOn) {
         return this.gethttp(config.survey+guid+'/revisions/'+createdOn);

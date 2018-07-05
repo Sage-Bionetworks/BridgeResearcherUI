@@ -44,10 +44,18 @@ module.exports = function() {
         name: 'survey',
         type: 'Survey',
         delete: function(item) {
-            return serverService.deleteSurvey(item, false);
+            return serverService.getSurveyAllRevisions(item.guid).then(response => {
+                return Promise.map(response.items, item => {
+                    return serverService.deleteSurvey(item, false);
+                });
+            });
         },
         deletePermanently: function(item) {
-            return serverService.deleteSurvey(item, true);
+            return serverService.getSurveyAllRevisions(item.guid, true).then(response => {
+                return Promise.map(response.items, item => {
+                    return serverService.deleteSurvey(item, true);
+                });
+            });
         },
         refresh: load
     });

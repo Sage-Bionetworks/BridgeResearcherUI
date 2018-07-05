@@ -54,10 +54,11 @@
             <div class="ui message">
                 <p>A consent group defines a set of users who must agree to a specific consent to participate in a study. Consents can be optional; these will not prevent participants from using Bridge.</p>
 
-                <ul style="padding-left:1rem">
-                <li>Users are assigned to one or more consent groups on every request (always at least one);</li>
-                <li>Bridge verifies that the user has signed all their required consents;</li>
-                <li>If they have, the request proceeds normally. If not, Bridge returns a 412 status code and the body of the response will include the user's session and consent status. The user is signed in, but unconsented.</li>
+                <!-- Strange but true: .ui.message p has an opacity set in semantic.css -->
+                <ul style="padding-left:1rem; opacity: .85">
+                    <li>Users are assigned to one or more consent groups on every request (always at least one);</li>
+                    <li>Bridge verifies that the user has signed all their required consents;</li>
+                    <li>If they have, the request proceeds normally. If not, Bridge returns a 412 status code and the body of the response will include the user's session and consent status. The user is signed in, but unconsented.</li>
                 </ul>
                 
                 <p><b>Note:</b> filtering on Bridge is opt-in: if a user does not match <i>any</i> consent goup, then they are assumed to match <i>all</i> consent groups. To disable consent for a group of users, create an optional consent group that matches those users, so they do not have to sign it. Then Bridge will not block their requests.</p>

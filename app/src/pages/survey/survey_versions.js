@@ -4,12 +4,15 @@ import Binder from '../../binder';
 import fn from '../../functions';
 import tables from '../../tables';
 import utils from '../../utils';
+import root from '../../root';
+import { SSL_OP_NETSCAPE_DEMO_CIPHER_CHANGE_BUG } from 'constants';
 
 module.exports = function(params) {
     let self = this;
     self.keys = params;
 
     self.formatDateTime = fn.formatDateTime;
+    self.isAdmin = root.isAdmin;
     
     let binder = new Binder(self)
         .obs('guid', params.guid)
@@ -19,7 +22,18 @@ module.exports = function(params) {
         .obs('selected', null)
         .obs('name');
 
-    tables.prepareTable(self, {name:'survey version'});
+    tables.prepareTable(self, {
+        name:'survey version',
+        type: 'Survey Version',
+        delete: function(item) {
+            return serverService.deleteSurvey(item, false);
+        },
+        deletePermanently: function(item) {
+            return serverService.deleteSurvey(item, true);
+        },
+        refresh: load,
+        redirect: "#/surveys"
+    });
 
     // redirect, you just deleted the record you last loaded in the tabset.
     function redirectIfDeleteSelf(thisSurvey) {
