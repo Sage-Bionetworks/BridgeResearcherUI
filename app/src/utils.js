@@ -28,7 +28,6 @@ let pendingControl = null;
 toastr.options = config.toastr;
 
 function notAllowed(response, params) {
-    console.log("params", params);
     let payload = response.responseJSON || {};
     let message = payload.message || PERM_ERROR;
     if (params.redirect === false) {

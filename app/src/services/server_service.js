@@ -266,8 +266,9 @@ export class ServerService {
     emailRoster() {
         return this.post(config.users + '/emailParticipantRoster');
     }
-    getSurveys() {
-        return this.gethttp(config.surveys);
+    getSurveys(includeDeleted) {
+        let queryString = fn.queryString({includeDeleted:(includeDeleted === true)});
+        return this.gethttp(config.surveys + queryString);
     }
     getPublishedSurveys() {
         return this.gethttp(config.publishedSurveys);
@@ -275,8 +276,9 @@ export class ServerService {
     getMostRecentlyPublishedSurvey(guid) {
         return this.gethttp(config.survey + guid + '/revisions/published');
     }
-    getSurveyAllRevisions(guid) {
-        return this.gethttp(config.survey + guid + '/revisions');
+    getSurveyAllRevisions(guid, includeDeleted) {
+        let queryString = fn.queryString({includeDeleted:(includeDeleted === true)});
+        return this.gethttp(config.survey + guid + '/revisions' + queryString);
     }
     getSurvey(guid, createdOn) {
         return this.gethttp(config.survey+guid+'/revisions/'+createdOn);
@@ -585,7 +587,6 @@ export class ServerService {
         return this.del(config.compoundactivitydefinitions + "/" + esc(taskId));
     }
     getMetadata(search, modType) {
-        console.log("search", search);
         // mostrecent: "true", published: "false", name: null, notes: null, tags: null
         search = search || {};
         let queryString = fn.queryString(search);
@@ -629,8 +630,9 @@ export class ServerService {
     startExport() {
         return this.post(config.export + "/start");
     }
-    getAppConfigs() {
-        return this.gethttp(config.appConfigs + '?includeDeleted=false');
+    getAppConfigs(includeDeleted) {
+        let queryString = fn.queryString({includeDeleted:(includeDeleted === true)});
+        return this.gethttp(config.appConfigs + queryString);
     }
     getAppConfig(guid) {
         return this.gethttp(config.appConfigs + '/' + guid);
