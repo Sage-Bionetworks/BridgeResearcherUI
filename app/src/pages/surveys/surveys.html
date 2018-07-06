@@ -70,9 +70,12 @@
             </tr>
         </tbody>        
         <tbody data-bind="foreach: itemsObs">
-            <tr>
+            <tr data-bind="css: {negative: $data.deleted}">
                 <td>
-                    <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+                    <ui-checkbox data-bind="visible: !$data.deletedObs()" 
+                        params="checkedObs: $data.checkedObs"></ui-checkbox>
+                    <i data-bind="visible: $data.deletedObs, click: $parent.undelete" 
+                        style="cursor: pointer" class="green undo icon"></i>
                 </td>
                 <td data-bind="attr:{title:$data.identifier}">
                     <a data-bind="href: '#/surveys/'+$data.guid+'/'+$data.createdOn+'/editor', text: $data.name"></a>
@@ -86,4 +89,9 @@
             </tr>
         </tbody>
     </table>
+    <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
+        <ui-checkbox params="checkedObs: showDeletedObs">
+            Show deleted surveys
+        </ui-checkbox>
+    </div>    
 </div>

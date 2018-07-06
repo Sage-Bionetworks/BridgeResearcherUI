@@ -39,8 +39,10 @@ module.exports = function(params) {
         return function(response) {
             if (thisSurvey.createdOn === fn.formatDateTime(params.createdOn, 'iso')) {
                 document.location = "#/surveys";
+                return response;
+            } else {
+                return load();
             }
-            return response;
         };
     }
 
@@ -48,7 +50,8 @@ module.exports = function(params) {
         alerts.deleteConfirmation("Are you sure you want to delete this survey version?", function() {
             utils.startHandler(self, event);
             serverService.deleteSurvey(survey)
-                .then(tables.makeTableRowHandler(self, [survey], 'survey versions'))
+                .then(load)
+                //.then(tables.makeTableRowHandler(self, [survey], 'survey versions'))
                 .then(redirectIfDeleteSelf(survey))
                 .then(utils.successHandler(self, event, "Survey version deleted."))
                 .catch(utils.failureHandler());
@@ -69,7 +72,7 @@ module.exports = function(params) {
         serverService.getSurveyAllRevisions(params.guid).then(binder.update());
         return response;
     }
-    function load(survey) {
+    function load() {
         // This is faster than it looks because of client-side caching
         return serverService.getSurvey(params.guid, params.createdOn)
             .then(binder.update())
@@ -80,5 +83,5 @@ module.exports = function(params) {
                 redirectMsg: "Survey not found."
             }));
     }
-    load(params);
+    load();
 };

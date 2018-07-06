@@ -29,9 +29,13 @@ module.exports = class ParticipantUploadsViewModel extends UploadsViewModel {
     }
     loadingFunc(args) {
         this.updateDateRange();
-        storeService.persistQuery(PAGE_KEY, this.query);
+        this.updateDateRange();
+        args.startTime = this.query.startTime;
+        args.endTime = this.query.endTime;
 
-        return serverService.getParticipantUploads(this.userIdObs(), this.query)
+        storeService.persistQuery(PAGE_KEY, args);
+
+        return serverService.getParticipantUploads(this.userIdObs(), args)
             .then(this.processUploads.bind(this))
             .catch(utils.failureHandler());
     }    
