@@ -43,6 +43,7 @@ module.exports = function() {
     tables.prepareTable(self, {
         name: 'survey',
         type: 'Survey',
+        refresh: load,
         delete: function(item) {
             return serverService.getSurveyAllRevisions(item.guid).then(response => {
                 return Promise.map(response.items, item => {
@@ -57,8 +58,17 @@ module.exports = function() {
                 });
             });
         },
-        refresh: load
+        undelete: function(item) {
+            // We need to pick up the existing questions or we'll wipe out the elements
+            return serverService.getSurvey(item.guid, item.createdOn)
+                .then(item => {
+                    item.deleted = false;
+                    return item;
+                })
+                .then(serverService.updateSurvey.bind(serverService));
+        }
     });
+
     self.formatSchedules = function(survey) {
         return survey.schedulePlanObs().map(function(obj) {
             return obj.label;
@@ -103,9 +113,12 @@ module.exports = function() {
             });
         }
     }
+    function loadSurveys() {
+        return serverService.getSurveys(self.showDeletedObs());
+    }
     function load() {
         return sharedModuleUtils.loadNameMaps()
-            .then(serverService.getSurveys.bind(serverService))
+            .then(loadSurveys)
             .then(fn.handleSort('items','name'))
             .then(fn.handleForEach('items', addScheduleField))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))

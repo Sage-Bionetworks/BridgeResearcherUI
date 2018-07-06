@@ -2,17 +2,22 @@ import 'knockout-postbox';
 import alerts from './widgets/alerts';
 import clipboard from './widgets/clipboard/clipboard';
 import ko from 'knockout';
+import fn from './functions';
 import Promise from 'bluebird';
 import root from './root';
 import utils from './utils';
-import swal from 'sweetalert2';
+
+const LOADER_TEXT = "<div class='ui tiny active inline loader'></div>";
 
 function hasBeenChecked(item) {
-    return item.checkedObs();
+    return item.checkedObs() && (!item.deletedObs || !item.deletedObs());
 }
 function makeChecked(item) {
     if (typeof item.checkedObs === "undefined") {
         item.checkedObs = ko.observable(false);
+        if (fn.is(item.deleted, 'Boolean')) {
+            item.deletedObs = ko.observable(item.deleted);
+        }
     }
     return item;
 }
@@ -82,11 +87,12 @@ export default {
         let deletePermanentlyFunc = options.deletePermanently;
         let loadFunc = options.refresh;
         let redirectTo = options.redirect;
+        let undeleteFunc = options.undelete;
 
         if (!vm.itemsObs) {
             vm.itemsObs = ko.observableArray([]);
         }
-        vm.recordsMessageObs = ko.observable("<div class='ui tiny active inline loader'></div>");
+        vm.recordsMessageObs = ko.observable(LOADER_TEXT);
         vm.itemsObs.subscribe(arrayListener(vm.recordsMessageObs, objName));
         vm.atLeastOneChecked = function () {
             return vm.itemsObs().some(hasBeenChecked);
@@ -120,7 +126,7 @@ export default {
                     Promise.each(del.deletables, deleteFunc)
                         .then(utils.successHandler(vm, event, del.confirmMsg))
                         .then(uncheckAll(vm))
-                        .then(makeTableRowHandler(vm, del.deletables, objName))
+                        .then(loadFunc)
                         .then(redirectHandler(vm, redirectTo))
                         .catch(utils.failureHandler());
                 });                
@@ -135,11 +141,26 @@ export default {
                     Promise.each(del.deletables, deletePermanentlyFunc)
                         .then(utils.successHandler(vm, event, del.confirmMsg))
                         .then(uncheckAll(vm))
-                        .then(makeTableRowHandler(vm, del.deletables, objName))
+                        .then(loadFunc)
                         .then(redirectHandler(vm, redirectTo))
                         .catch(utils.failureHandler());
                 }, "Delete FOREVER");
             };
+        }
+        if (undeleteFunc && loadFunc) {
+            vm.isAdmin = root.isAdmin;
+            vm.showDeletedObs = ko.observable(false);
+            vm.showDeletedObs.subscribe(loadFunc);
+            vm.undelete = function(item, event) {
+                item.deleted = false;
+                
+                event.target.parentNode.innerHTML = LOADER_TEXT;
+                return undeleteFunc(item)
+                    .then(loadFunc)
+                    .then(utils.successHandler(self, event, titleCase(objName) + " has been restored."))
+                    .catch(utils.failureHandler());
+            };
+        
         }
     },
     hasBeenChecked: function(item) {

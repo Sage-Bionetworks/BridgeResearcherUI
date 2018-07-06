@@ -43,6 +43,7 @@ module.exports = function(params) {
     
     self.nextPage = function() {
         if (!pendingRequest) {
+            console.log("self.nextOffset", self.nextOffset);
             wrappedLoadingFunc(self.nextOffset);
         }
     };
@@ -65,6 +66,7 @@ module.exports = function(params) {
         let args = {offsetKey: offsetKey};
 
         loadingFunc(args).then(function(response) {
+            console.log("response.nextPageOffsetKey", response.nextPageOffsetKey);
             if (response) {
                 self.history.push(self.nextOffset);
                 self.nextOffset = response.nextPageOffsetKey;
