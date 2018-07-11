@@ -355,8 +355,9 @@ export class ServerService {
     deleteSchemaRevision(schema) {
         return this.del(config.schemas + "/" + schema.schemaId + "/revisions/" + schema.revision);
     }
-    getSchedulePlans() {
-        return this.gethttp(config.schemaPlans);
+    getSchedulePlans(includeDeleted) {
+        let queryString = fn.queryString({includeDeleted:(includeDeleted === true)});
+        return this.gethttp(config.schemaPlans + queryString);
     }
     getSchedulePlan(guid) {
         return this.gethttp(config.schemaPlans + "/" + guid);
@@ -376,8 +377,9 @@ export class ServerService {
             return newPlan;
         });
     }
-    deleteSchedulePlan(guid) {
-        return this.del(config.schemaPlans + "/" + guid);
+    deleteSchedulePlan(guid, physical) {
+        let queryString = fn.queryString({physical:(physical === true)});
+        return this.del(config.schemaPlans + "/" + guid + queryString);
     }
     getAllSubpopulations() {
         return this.gethttp(config.subpopulations);
