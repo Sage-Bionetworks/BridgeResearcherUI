@@ -89,9 +89,13 @@ ko.bindingHandlers.flatpickr = {
             _init = true;
             instance.close();
         }
+        function localDateFormatter(date) {
+            return (includeTime) ? date.toLocaleString()  : date.toLocaleDateString();
+        }
 
         let instance = flatpickr(element, { defaultDate: observer(), 
-            onChange: updateObserver, enableTime: includeTime, onOpen: setInstance });
+            onChange: updateObserver, enableTime: includeTime, onOpen: setInstance,
+                formatDate: localDateFormatter });
 
         function updateObserver(dates) {
             observer(null);
