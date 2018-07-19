@@ -2,9 +2,15 @@ import {serverService} from '../../services/server_service';
 import Binder from '../../binder';
 import criteriaUtils from '../../criteria_utils';
 import fn from '../../functions';
+import root from '../../root';
 import sharedModuleUtils from '../../shared_module_utils';
 import tables from '../../tables';
 import utils from '../../utils';
+
+const notFound = utils.failureHandler({
+    redirectTo: "schemas",
+    redirectMsg: "Schema not found."
+});
 
 module.exports = function(params) {
     let self = this;
@@ -19,11 +25,23 @@ module.exports = function(params) {
         .obs('schemaId', params.schemaId);
 
     tables.prepareTable(self, {
-        name: 'schema'
+        name: "schema revision", 
+        type: "UploadSchema",
+        refresh: load,
+        delete: function(item) {
+            return serverService.deleteSchemaRevision(item, false);
+        },
+        deletePermanently: function(item) {
+            return serverService.deleteSchemaRevision(item, true);
+        },
+        undelete: function(item) {
+            return serverService.updateUploadSchema(item);
+        }
     });
 
     fn.copyProps(self, criteriaUtils, 'label->criteriaLabel');
     fn.copyProps(self, sharedModuleUtils, 'formatModuleLink', 'moduleHTML');
+    fn.copyProps(self, root, 'isAdmin', 'isDeveloper');
 
     function markSchemaPublished(schema) {
         schema.published = true;
@@ -33,7 +51,7 @@ module.exports = function(params) {
         return serverService.getUploadSchema(params.schemaId, params.revision);
     }
     function getUploadSchemaAllRevisions() {
-        return serverService.getUploadSchemaAllRevisions(params.schemaId);
+        return serverService.getUploadSchemaAllRevisions(params.schemaId, self.showDeletedObs());
     }
     // similar to tabset
     self.link = function(item) {
@@ -49,7 +67,7 @@ module.exports = function(params) {
             .then(utils.successHandler(item, event, "Schema published."))
             .catch(utils.failureHandler());
     };
-
+    
     function load() {
         sharedModuleUtils.loadNameMaps()
             .then(getUploadSchema)
@@ -58,7 +76,8 @@ module.exports = function(params) {
             .then(fn.handleObsUpdate(self.moduleVersionObs, 'moduleVersion'))
             .then(fn.handleObsUpdate(self.publishedObs, 'published'))
             .then(getUploadSchemaAllRevisions)
-            .then(fn.handleObsUpdate(self.itemsObs, 'items'));
+            .then(fn.handleObsUpdate(self.itemsObs, 'items'))
+            .catch(notFound);
     }
     load();
 };

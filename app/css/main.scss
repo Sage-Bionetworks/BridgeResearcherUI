@@ -92,9 +92,13 @@ footer p {
 /* GENERAL */
 
 .no_records td, .no_records p {
-    font-size: larger;
-    padding: 1rem!important;
     text-align: center!important;
+    padding:.55rem!important;
+}
+.no_records p {
+    margin: 0!important;
+    padding: 0!important;
+    font-weight: bold;
 }
 .public-key {
     font-family:monospace;

@@ -8,6 +8,22 @@
             <h3 data-bind="html: nameObs"></h3>
         </div>
         <div class="fixed-header-buttons">
+            <button data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems" 
+                class="ui red tiny button">Delete</button>
+            <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
+                <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()},
+                    semantic: 'dropdown-button-toggle', container: '.buttons'">
+                    Delete
+                </div>
+                <div class="ui primary tiny floating dropdown icon button" 
+                    data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item" data-bind="click: deleteItems">Delete</div>
+                        <div class="item" data-bind="click: deletePermanently">Delete <b>Permanently</b></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <schema-tabset params="viewModel: $data"></schema-tabset>
@@ -16,6 +32,9 @@
     <table class="ui compact selectable table">
         <thead>
             <tr>
+                <th width="10">
+                    <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+                </th>
                 <th>Name</th>
                 <th>Revision</th>
                 <th>Matching Criteria</th>
@@ -24,11 +43,17 @@
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
-                <td colspan="4" data-bind="html: recordsMessageObs"></td>
+                <td colspan="5" data-bind="html: recordsMessageObs"></td>
             </tr>
         </tbody>        
         <tbody data-bind="foreach: itemsObs">
-            <tr>
+            <tr data-bind="css: {negative: $data.deleted}">
+                <td>
+                    <ui-checkbox data-bind="visible: !$data.deletedObs()" 
+                        params="checkedObs: $data.checkedObs"></ui-checkbox>
+                    <i data-bind="visible: $data.deletedObs, click: $parent.undelete" 
+                        style="cursor: pointer" class="green undo icon"></i>
+                </td>
                 <td width="50%">
                     <a data-bind="href: $parent.link($data), text: $data.name"></a>
                 </td>
@@ -39,4 +64,9 @@
             </tr>
         </tbody>
     </table>
+    <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
+        <ui-checkbox params="checkedObs: showDeletedObs">
+            Show deleted upload schema revisions
+        </ui-checkbox>
+    </div>     
 </div>
