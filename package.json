@@ -38,7 +38,7 @@
     "knockout-postbox": "^0.6.0",
     "mocha": "^5.2.0",
     "node-libs-browser": "^2.0.0",
-    "node-sass": "^4.9.0",
+    "node-sass": "^4.9.2",
     "sass-loader": "^7.0.3",
     "sinon": "^6.0.1",
     "style-loader": "^0.18.2",
