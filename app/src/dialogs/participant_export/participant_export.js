@@ -155,17 +155,19 @@ module.exports = function(params /*total, search*/) {
     batchDialogUtils.initBatchDialog(self);
     fn.copyProps(self, fn, 'formatDateTime', 'formatSearch');
     self.close = fn.seq(self.cancel, root.closeDialog);
+    
+    new Binder(self)
+        .obs('enable')
+        .obs('reauthenticationEnabled')
+        .obs('canContactByEmail', false)
+        .obs('filterMessage[]', []);
 
     serverService.getStudy().then(function(study) {
+        self.reauthenticationEnabledObs(study.reauthenticationEnabled);
         ATTRIBUTES = Object.freeze([].concat(study.userProfileAttributes)); 
         HEADERS = Object.freeze([].concat(FIELDS).concat(ATTRIBUTES).join("\t"));
     });
     
-    new Binder(self)
-        .obs('enable')
-        .obs('canContactByEmail', false)
-        .obs('filterMessage[]', []);
-
     if (self.search.emailFilter) {
         self.filterMessageObs.push(PREMSG+"have email matching the string &ldquo;"+self.search.emailFilter+"&rdquo;");
     }
