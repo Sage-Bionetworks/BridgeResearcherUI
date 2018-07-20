@@ -3,7 +3,13 @@
         Export Participants
     </div>
     <div class="content">
-        <p>Any search filters you create will be used when exporting. You can limit export to certain email addresses, or a date range. </p>
+        <div class="ui error message" data-bind="visible: !reauthenticationEnabledObs()">
+            <p>We have not enabled automatic reauthentication for this study. If you have more than hundreds of 
+                participants in your study, your session may expire before you entirely export your participant 
+                data. Before exporting all participants, please contact Sage Bionetworks to have reauthentication 
+                enabled. </p>
+        </div>
+        <p>Any search filters you created to view participants will be used to select records for export. </p>
         <div class="ui info message" data-bind="visible: exportText(), text: exportText()"></div>
         <progress data-bind="attr:{ value: valueObs, max: maxObs}"></progress>
         <div class="progress-status">
@@ -17,7 +23,7 @@
         </div>        
         <div class="field" style="margin-top:1rem">
             <ui-checkbox params="checkedObs: canContactByEmailObs">
-                Only includ e participants you can contact by email
+                Only include participants you can contact by email
             </ui-checkbox>
         </div>
     </div>

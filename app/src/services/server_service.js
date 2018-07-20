@@ -306,8 +306,9 @@ export class ServerService {
         let url = config.survey + survey.guid + '/revisions/' + createdString + queryString;
         return this.del(url);
     }
-    getAllUploadSchemas() {
-        return this.gethttp(config.schemas).then(function(response) {
+    getAllUploadSchemas(includeDeleted) {
+        let queryString = fn.queryString({includeDeleted:(includeDeleted === true)});
+        return this.gethttp(config.schemas + queryString).then(function(response) {
             response.items = response.items.filter(function(schema) {
                 return (!schema.surveyGuid && !schema.surveyRevision);
             });
@@ -317,8 +318,9 @@ export class ServerService {
     getMostRecentUploadSchema(identifier) {
         return this.gethttp(config.schemas + "/" + identifier + '/recent');
     }
-    getUploadSchemaAllRevisions(identifier) {
-        return this.gethttp(config.schemas + "/" + identifier);
+    getUploadSchemaAllRevisions(identifier, includeDeleted) {
+        let queryString = fn.queryString({includeDeleted:(includeDeleted === true)});
+        return this.gethttp(config.schemas + "/" + identifier + queryString);
     }
     getUploadSchema(identifier, revision) {
         return this.gethttp(config.schemas + "/" + identifier + "/revisions/" + revision);
@@ -349,14 +351,17 @@ export class ServerService {
             return response;
         });
     }
-    deleteSchema(schemaId) {
-        return this.del(config.getStudy+session.studyId+"/uploadschemas/"+schemaId);
+    deleteSchema(schemaId, physical) {
+        let queryString = fn.queryString({physical:(physical === true)});
+        return this.del(config.schemas+ '/' + schemaId + queryString);
     }
-    deleteSchemaRevision(schema) {
-        return this.del(config.schemas + "/" + schema.schemaId + "/revisions/" + schema.revision);
+    deleteSchemaRevision(schema, physical) {
+        let queryString = fn.queryString({physical:(physical === true)});
+        return this.del(config.schemas + "/" + schema.schemaId + "/revisions/" + schema.revision + queryString);
     }
-    getSchedulePlans() {
-        return this.gethttp(config.schemaPlans);
+    getSchedulePlans(includeDeleted) {
+        let queryString = fn.queryString({includeDeleted:(includeDeleted === true)});
+        return this.gethttp(config.schemaPlans + queryString);
     }
     getSchedulePlan(guid) {
         return this.gethttp(config.schemaPlans + "/" + guid);
@@ -376,8 +381,9 @@ export class ServerService {
             return newPlan;
         });
     }
-    deleteSchedulePlan(guid) {
-        return this.del(config.schemaPlans + "/" + guid);
+    deleteSchedulePlan(guid, physical) {
+        let queryString = fn.queryString({physical:(physical === true)});
+        return this.del(config.schemaPlans + "/" + guid + queryString);
     }
     getAllSubpopulations() {
         return this.gethttp(config.subpopulations);

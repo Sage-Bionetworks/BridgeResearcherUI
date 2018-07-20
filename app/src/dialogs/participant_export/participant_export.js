@@ -15,8 +15,10 @@ const FIELDS = Object.freeze(["firstName","lastName","email", "sharingScope", "s
     "dataGroups", "languages", "roles", "id", "healthCode", "externalId", "createdOn", "consentHistories"]);
 const FIELD_FORMATTERS = {
     'consentHistories': function(map) {
-        return Object.keys(map).map(function(guid) {
-            return map[guid].map(formatConsentRecords).join('; ');
+        return Object.keys(map).filter(function(guid) {
+            return map[guid] && map[guid].length > 0;
+        }).map(function(guid) {
+            return guid + " [" + map[guid].map(formatConsentRecords).join('; ') + "]";
         }).join('; ');
     },
     'notifyByEmail': function(value) {
@@ -28,12 +30,11 @@ let ATTRIBUTES = [];
 let HEADERS = [];
 
 function formatConsentRecords(record) {
-    let aString = record.subpopulationGuid;
-    aString += " consented=" + fn.formatDateTime(record.signedOn);
+    let entry = "consented=" + fn.formatDateTime(record.signedOn);
     if (record.withdrewOn) {
-        aString += ", withdrew=" + fn.formatDateTime(record.withdrewOn);
+        entry += "; withdrew=" + fn.formatDateTime(record.withdrewOn);
     }
-    return aString;
+    return entry;
 }
 
 let CollectParticipantsWorker = function(total, search) {
@@ -154,17 +155,19 @@ module.exports = function(params /*total, search*/) {
     batchDialogUtils.initBatchDialog(self);
     fn.copyProps(self, fn, 'formatDateTime', 'formatSearch');
     self.close = fn.seq(self.cancel, root.closeDialog);
+    
+    new Binder(self)
+        .obs('enable')
+        .obs('reauthenticationEnabled')
+        .obs('canContactByEmail', false)
+        .obs('filterMessage[]', []);
 
     serverService.getStudy().then(function(study) {
+        self.reauthenticationEnabledObs(study.reauthenticationEnabled);
         ATTRIBUTES = Object.freeze([].concat(study.userProfileAttributes)); 
         HEADERS = Object.freeze([].concat(FIELDS).concat(ATTRIBUTES).join("\t"));
     });
     
-    new Binder(self)
-        .obs('enable')
-        .obs('canContactByEmail', false)
-        .obs('filterMessage[]', []);
-
     if (self.search.emailFilter) {
         self.filterMessageObs.push(PREMSG+"have email matching the string &ldquo;"+self.search.emailFilter+"&rdquo;");
     }

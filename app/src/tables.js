@@ -7,7 +7,7 @@ import Promise from 'bluebird';
 import root from './root';
 import utils from './utils';
 
-const LOADER_TEXT = "<div class='ui tiny active inline loader'></div>";
+const LOADER_TEXT = "<span class='ui tiny active inline loader'></span>";
 
 function hasBeenChecked(item) {
     return item.checkedObs() && (!item.deletedObs || !item.deletedObs());
@@ -41,7 +41,7 @@ function makeTableRowHandler(vm, deletables, objName) {
             vm.recordsMessageObs("");
         });
         if (vm.itemsObs().length === 0) {
-            vm.recordsMessageObs("There are currently no "+objName+"s.");
+            vm.recordsMessageObs("<p>There are currently no "+objName+"s.</p>");
         }
     };
 }
@@ -50,7 +50,7 @@ function arrayListener(recordsMessageObs, objName) {
         if (array.length) {
             return array.map(makeChecked);
         } else {
-            recordsMessageObs("There are currently no "+objName+"s.");
+            recordsMessageObs("<p>There are currently no "+objName+"s.</p>");
         }
     };
 }
@@ -150,7 +150,11 @@ export default {
         if (undeleteFunc && loadFunc) {
             vm.isAdmin = root.isAdmin;
             vm.showDeletedObs = ko.observable(false);
-            vm.showDeletedObs.subscribe(loadFunc);
+            vm.showDeletedObs.subscribe(() => {
+                vm.itemsObs([]);
+                vm.recordsMessageObs(LOADER_TEXT);
+                setTimeout(loadFunc, 200);
+            });
             vm.undelete = function(item, event) {
                 item.deleted = false;
                 

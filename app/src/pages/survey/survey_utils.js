@@ -149,15 +149,6 @@ function getConstraints(type) {
 }
 
 function makeObservable(obj, field) {
-    // Strip out time zone, as this control is local time only. We may change it as well on the server
-    // to use LocalDateTime, that's pending.
-    if (obj.dataType === "datetime" && (field === "earliestValue" || field === "latestValue")) {
-        let value = obj[field];
-        if (value) {
-            let matches = value.match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/);
-            return ko.observable(matches && matches.length ? matches[0] : "");
-        }
-    }
     // Note we're copying the array when passing it to the observable, or it gets shared between properties,
     // enumeration in particular (rules is remodeled)
     if (['rules','beforeRules','afterRules','enumeration'].indexOf(field) > -1) {
@@ -221,7 +212,11 @@ function observablesToElement(element) {
 function updateModelField(model, fieldName) {
     let obsName = fieldName + "Obs";
     if (typeof model[obsName]() !== "undefined") {
-        model[fieldName] = model[obsName]();
+        if (model.dataType === "date" && model[obsName]() instanceof Date) {
+            model[fieldName] = model[obsName]().toISOString().split("T")[0];
+        } else {
+            model[fieldName] = model[obsName]();
+        }
         if (model[fieldName] === "") {
             delete model[fieldName];
         }

@@ -58,12 +58,15 @@ img {
     visibility: hidden;
 }
 @media print {
-    body {
-        margin: .5in;
+    @page {
+        margin: 0.75in;
+    }
+    body, #document {
+        margin: 0;
+        padding: 0;
     }
     #document {
-        padding: 0;
-        margin: 0;
+        box-shadow: none;
     }
 }
 .ui.warning.message {
@@ -81,11 +84,11 @@ img {
     </div>
     <table class="signature-block" cellspacing="0" :style="sigStyle">
         <tr>
-            <td nowrap="nowrap" valign="bottom">{{name}}</td>
+            <td valign="bottom">{{name}}</td>
             <td></td>
-            <td nowrap="nowrap"><img :style="imgStyle" :src="signature" /></td>
+            <td><img :style="imgStyle" :src="signature" /></td>
             <td></td>
-            <td nowrap="nowrap" valign="bottom">{{signedOn}}</td>
+            <td valign="bottom">{{signedOn}}</td>
         </tr>
         <tr>
             <td class="line">Name of Participant</td>

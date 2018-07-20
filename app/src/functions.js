@@ -173,6 +173,9 @@ function formatName(participant) {
 }
 function formatNameAsFullLabel(summary) {
     let name = formatName(summary);
+    if (name !== '—') {
+        return name;
+    }
     if (summary.email) {
         if (summary.email.includes(summary.externalId)) {
             name = summary.externalId;

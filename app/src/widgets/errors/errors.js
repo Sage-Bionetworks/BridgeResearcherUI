@@ -82,7 +82,6 @@ module.exports = function() {
             // I might be inclined to switch over entirely to class tokens rather than IDs to 
             // simplify this, but it introduces new difficulties.
             let id = errorFieldKeyToId(fieldName);
-            console.log(id);
             let fieldEl = document.getElementById(id);
             if (!fieldEl) {
                 fieldEl = document.querySelector("."+id);

@@ -7,9 +7,6 @@ import sharedModuleUtils from '../../shared_module_utils';
 import tables from '../../tables';
 import utils from '../../utils';
 
-function deleteItem(schema) {
-    return serverService.deleteSchema(schema.schemaId);
-}
 module.exports = function() {
     let self = this;
 
@@ -21,8 +18,16 @@ module.exports = function() {
     tables.prepareTable(self, {
         name: "schema", 
         type: "UploadSchema",
-        delete: deleteItem,
-        refresh: load
+        refresh: load,
+        delete: function(item) {
+            return serverService.deleteSchema(item.schemaId, false);
+        },
+        deletePermanently: function(item) {
+            return serverService.deleteSchema(item.schemaId, true);
+        },
+        undelete: function(item) {
+            return serverService.updateUploadSchema(item);
+        }
     });
 
     function closeCopySchemasDialog() {
@@ -47,9 +52,13 @@ module.exports = function() {
         load();
     };
 
+    function getAllUploadSchemas() {
+        return serverService.getAllUploadSchemas(self.showDeletedObs());
+    }
+
     function load() {
         return sharedModuleUtils.loadNameMaps()
-            .then(serverService.getAllUploadSchemas.bind(serverService))
+            .then(getAllUploadSchemas)
             .then(fn.handleSort('items', 'name'))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))
             .catch(utils.failureHandler());
