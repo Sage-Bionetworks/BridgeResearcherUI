@@ -2,7 +2,6 @@ import {serverService} from './services/server_service';
 import alerts from './widgets/alerts';
 import Binder from './binder';
 import clipboard from './widgets/clipboard/clipboard';
-import config from './config';
 import ko from 'knockout';
 
 function roleFunc(observer, role) {
