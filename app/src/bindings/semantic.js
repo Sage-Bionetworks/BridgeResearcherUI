@@ -48,7 +48,7 @@ var handlers = {
         },0);
     },
     'dropdown-button': function($element) {
-        $element.addClass("ui tiny button dropdown")
+        $element.addClass("ui tiny scrolling button dropdown")
             .dropdown({action: 'hide', transition: 'drop', on: 'hover'});
     },
     'dropdown-button-toggle': function($element, allBindings) {
