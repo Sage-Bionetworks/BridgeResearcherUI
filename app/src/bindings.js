@@ -3,8 +3,8 @@ import $ from 'jquery';
 import alert from './widgets/alerts';
 import Chart from 'chart.js';
 import flatpickr from 'flatpickr';
+import fn from './functions';
 import ko from 'knockout';
-import RootViewModel from './root';
 
 // need to make a global out of this for semantic to work, as it's not in a package.
 // This is hacky, webpack has better support for this. Worse, semantic is a jQuery
@@ -82,6 +82,7 @@ ko.bindingHandlers.flatpickr = {
         let observer = valueAccessor();
         let onChange = allBindings().onChange || function() {};
         let includeTime = element.hasAttribute("data-enableTime");
+        let formatter = (includeTime) ? fn.formatDateTime : fn.formatDate;
         let _init = false;
 
         function setInstance() {
@@ -89,13 +90,10 @@ ko.bindingHandlers.flatpickr = {
             _init = true;
             instance.close();
         }
-        function localDateFormatter(date) {
-            return (includeTime) ? date.toLocaleString()  : date.toLocaleDateString();
-        }
 
         let instance = flatpickr(element, { defaultDate: observer(), 
             onChange: updateObserver, enableTime: includeTime, onOpen: setInstance,
-                formatDate: localDateFormatter });
+                formatDate: formatter });
 
         function updateObserver(dates) {
             observer(null);

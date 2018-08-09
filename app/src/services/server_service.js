@@ -652,6 +652,10 @@ export class ServerService {
     deleteAppConfig(guid, physicalDelete) {
         return this.del(config.appConfigs + '/' + guid + '?physical=' + physicalDelete);
     }
+    changeAdminStudy(studyName, studyId) {
+        return postInt(config.host[session.environment] + config.adminAuth + '/study', {study: studyId})
+            .then(this.cacheSession(studyName, studyId, session.environment));
+    }
     addSessionStartListener(listener) {
         if (typeof listener !== "function") {
             throw Error("Session listener not a function");
