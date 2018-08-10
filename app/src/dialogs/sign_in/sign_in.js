@@ -66,16 +66,14 @@ module.exports = function() {
         .obs('phone')
         .obs('phoneRegion', 'US')
         .obs('token')
+        .obs('imAnAdmin', false)
         .obs('externalId')
         .obs('studyOptions[]')
         .obs('isLocked', isLocked);
 
-    self.titleObs = ko.computed(function() {
-        return TITLES[self.stateObs()];
-    });
-    self.buttonTextObs = ko.computed(function() {
-        return BUTTONS[self.stateObs()];
-    });
+    self.titleObs = ko.computed(() => TITLES[self.stateObs()]);
+    self.buttonTextObs = ko.computed(() => BUTTONS[self.stateObs()]);
+    
     self.handleFocus = function(focusOnState) {
         return ko.computed(function() {
             return focusOnState === self.stateObs();
@@ -92,9 +90,6 @@ module.exports = function() {
     function loadStudies(studies){
         self.studyOptionsObs(studies.items);
         self.studyObs(studyKey);
-        if (self.isLockedObs()) {
-            self.titleObs(utils.findStudyName(self.studyOptionsObs(), studyKey));
-        }
     }
     function loadStudyList(newValue) {
         return serverService.getStudyList(newValue)
@@ -151,8 +146,11 @@ module.exports = function() {
         if (payload) {
             let { studyKey, studyName, environment } = collectValues();
             utils.startHandler(self, SYNTH_EVENT);
-            serverService.signIn(studyName, environment, payload)
-                .then(clear)
+
+            let promise = (self.imAnAdminObs()) ?
+                serverService.adminSignIn(studyName, environment, payload) :
+                serverService.signIn(studyName, environment, payload);
+            promise.then(clear)
                 .then(makeReloader(studyKey, environment))
                 .then(utils.successHandler(self, SYNTH_EVENT))
                 .catch(utils.failureHandler({transient:false}));

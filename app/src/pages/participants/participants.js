@@ -46,7 +46,8 @@ module.exports = function() {
 
     tables.prepareTable(self, {
         name: "participant", 
-        delete: deleteItem
+        delete: deleteItem,
+        refresh: () => ko.postbox.publish('page-refresh')
     });
 
     self.recordsObs = ko.observable("");

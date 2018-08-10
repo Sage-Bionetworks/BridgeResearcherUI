@@ -9,6 +9,7 @@ const extractSass = new ExtractTextPlugin({
 });
 
 // The ignore plugin in is removing moment.js localization, which takes a lot of room.
+// However I did manage to get moment out entirely, so this could be removed.
 
 module.exports = {
     entry: {
