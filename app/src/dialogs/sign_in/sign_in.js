@@ -146,19 +146,14 @@ module.exports = function() {
         if (payload) {
             let { studyKey, studyName, environment } = collectValues();
             utils.startHandler(self, SYNTH_EVENT);
-            if (self.imAnAdminObs()) {
-                serverService.adminSignIn(studyName, environment, payload)
-                    .then(clear)
-                    .then(makeReloader(studyKey, environment))
-                    .then(utils.successHandler(self, SYNTH_EVENT))
-                    .catch(utils.failureHandler({transient:false}));
-            } else {
-                serverService.signIn(studyName, environment, payload)
-                    .then(clear)
-                    .then(makeReloader(studyKey, environment))
-                    .then(utils.successHandler(self, SYNTH_EVENT))
-                    .catch(utils.failureHandler({transient:false}));
-            }
+
+            let promise = (self.imAnAdminObs()) ?
+                serverService.adminSignIn(studyName, environment, payload) :
+                serverService.signIn(studyName, environment, payload);
+            promise.then(clear)
+                .then(makeReloader(studyKey, environment))
+                .then(utils.successHandler(self, SYNTH_EVENT))
+                .catch(utils.failureHandler({transient:false}));
         }
     };
     self.forgotPassword = function(vm, event) {
