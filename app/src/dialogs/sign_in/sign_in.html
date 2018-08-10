@@ -2,8 +2,8 @@
     <div class="header" data-bind="text: titleObs">
     </div>
     <div class="content">
+        <errors></errors>
         <form class="ui form" action="" data-bind="returnHandler: submit">
-            <errors></errors>
             <div class="two fields" data-bind="visible: stateObs() === 'SignIn' || 
                 stateObs() === 'ExternalIdSignIn' || stateObs() === 'ForgotPassword'">
                 <div class="field" id="email" data-bind="visible: stateObs() === 'SignIn' || stateObs() === 'ForgotPassword'">
@@ -64,6 +64,12 @@
         <div style="flex:1">
             <button id="submitButton" class="ui primary small button" 
                 data-bind="click: submit, text: buttonTextObs"></button>
+
+            <span style="padding-left:1rem" data-bind="visible: !isLockedObs()">
+                <ui-checkbox params="checkedObs: imAnAdminObs">
+                    I’m an admin
+                </ui-checkbox>
+            </span>
         </div>
         <div data-bind="visible: stateObs() === 'SignIn'">
             <a href="" data-bind="click: useForgotPassword">Forgot Password?</a>

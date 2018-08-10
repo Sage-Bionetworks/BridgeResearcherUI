@@ -124,9 +124,9 @@ export default {
                 alerts.deleteConfirmation(del.msg, function() {
                     utils.startHandler(self, event);
                     Promise.each(del.deletables, deleteFunc)
-                        .then(utils.successHandler(vm, event, del.confirmMsg))
                         .then(uncheckAll(vm))
                         .then(loadFunc)
+                        .then(utils.successHandler(vm, event, del.confirmMsg))
                         .then(redirectHandler(vm, redirectTo))
                         .catch(utils.failureHandler());
                 });                
