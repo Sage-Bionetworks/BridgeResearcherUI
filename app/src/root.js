@@ -124,7 +124,7 @@ let RootViewModel = function() {
 
 let root = new RootViewModel();
 
-root.queryParams = {};
+root.queryParams = {studyPath: document.location.pathname.substring(1)};
 if (document.location.search) {
     document.location.search.substring(1).split("&").forEach(function(pair) {
         let fragments = pair.split("=");

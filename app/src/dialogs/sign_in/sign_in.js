@@ -46,12 +46,12 @@ function makeReloader(studyKey, environment) {
 module.exports = function() {
     let self = this;
 
-    let isLocked = fn.isNotBlank(root.queryParams.study);
+    let isLocked = fn.isNotBlank(root.queryParams.studyPath);
     const SYNTH_EVENT = {target: document.querySelector("#submitButton")};
 
     let studyKey, env;    
     if (isLocked) {
-        studyKey = root.queryParams.study;
+        studyKey = root.queryParams.studyPath;
         env = 'production';
     } else {
         studyKey = storeService.get(STUDY_KEY) || 'api';
