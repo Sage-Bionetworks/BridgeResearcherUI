@@ -15,9 +15,7 @@
     <div class="ui grid">
         <div class="ten wide column">
             <div class="ui warning message" data-bind="visible: !notificationsEnabledObs()">
-                <p>No notification services have been configured (APNS, GCM). Client applications cannot register for 
-                    notifications until this is done. Please contact the Bridge server team if you wish to include push 
-                    notifications in your app. </p>
+                <p>No notification services have been configured (APNS, GCM). Client applications cannot register for notifications until this is done. Please contact the Bridge server team if you wish to include push notifications in your app. </p>
             </div>
             <table class="ui compact selectable table" style="margin-top: 0">
                 <thead>
@@ -26,6 +24,7 @@
                             <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
                         </th>
                         <th>Topic Name</th>
+                        <th>Short Name</th>
                         <th>Description</th>
                     </tr>
                 </thead>
@@ -43,6 +42,7 @@
                             <a data-bind="text: $data.name, href: 
                                 '#/topics/' + encodeURIComponent($data.guid)"></a>
                         </td>
+                        <td data-bind="text: $data.shortName"></td>
                         <td data-bind="text: $data.description"></td>
                     </tr>
                 </tbody>

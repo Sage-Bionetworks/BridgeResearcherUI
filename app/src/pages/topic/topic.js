@@ -13,6 +13,7 @@ module.exports = function(params) {
         .obs('createdOn', '', fn.formatDateTime)
         .obs('modifiedOn', '', fn.formatDateTime)
         .bind('name', '')
+        .bind('shortName', '')
         .bind('guid', '')
         .bind('description', '');
 
