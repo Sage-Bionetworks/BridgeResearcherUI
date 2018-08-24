@@ -23,6 +23,12 @@
                     <label>Topic name</label>
                     <input type="text" data-bind="textInput: nameObs, hasFocus: true, attr:{readonly: !isDeveloper()}"/>
                 </div>
+                <div class="required field" id="name">
+                    <label>Short name (10 chars or less)</label>
+                    <input type="text" style="width: 14rem" maxLength="10" data-bind="textInput: shortNameObs, 
+                        attr:{readonly: !isDeveloper()}"/>
+                    <p class="help-text">The name shown in constrained contexts (e.g. the title of an SMS message).</p>
+                </div>
                 <div class="field">
                     <label>Description</label>
                     <textarea data-bind="textInput: descriptionObs">
