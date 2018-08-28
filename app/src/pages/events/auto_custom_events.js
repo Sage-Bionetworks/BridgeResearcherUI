@@ -3,18 +3,32 @@ import ko from 'knockout';
 import utils from '../../utils';
 
 function mapToObservers(entry) {
-    var eventKey = entry[0];
-    var period = entry[1];
+    let eventKey = entry[0];
+    let period = entry[1];
+    let originEvent = "enrollment";
+    if (period.includes(":")) {
+        [originEvent, period] = period.split(/:(.+)/).splice(0,2);
+    }
+    let delta = (period.includes("-")) ? "before" : "after";
+    period = period.replace('-','');
+
     return {
         eventKeyObs: ko.observable(eventKey),
-        periodObs: ko.observable(period)
+        periodObs: ko.observable(period),
+        deltaObs: ko.observable(delta),
+        originEventObs: ko.observable(originEvent)
     };
 }
 function obsToMap(accumulator, currentValue) {
-    var eventKey = currentValue.eventKeyObs();
-    var period = currentValue.periodObs();
+    let eventKey = currentValue.eventKeyObs();
+    let period = currentValue.periodObs();
+    let delta = currentValue.deltaObs();
+    let originEvent = currentValue.originEventObs();
+    if (delta === "before") {
+        period = period.replace("P","P-");
+    }
     if (eventKey && period) {
-        accumulator[eventKey] = period;
+        accumulator[eventKey] = originEvent + ":" + period;
     }
     return accumulator;
 }
@@ -23,6 +37,14 @@ module.exports = function() {
     let self = this;
 
     self.itemsObs = ko.observableArray([]);
+    self.allDeltasObs = ko.observableArray([
+        {label: 'before', value: 'before'}, 
+        {label: 'after', value: 'after'}
+    ]);
+    self.allEventsObs = ko.observableArray([
+        {label: 'enrollment', value: 'enrollment'}, 
+        {label: 'activities retrieved', value: 'activities_retrieved'}
+    ]);
 
     self.save = function(vm, event) {
         self.study.automaticCustomEvents = self.itemsObs().reduce(obsToMap, {});
@@ -39,7 +61,9 @@ module.exports = function() {
     serverService.getStudy().then(function(study) {
         self.study = study;
         self.itemsObs(
-            Object.entries(study.automaticCustomEvents || {}).map(mapToObservers)
+            Object.entries(study.automaticCustomEvents || {})
+                .sort((a,b) => a[0].localeCompare(b[0]))
+                .map(mapToObservers)
         );
     });
 };

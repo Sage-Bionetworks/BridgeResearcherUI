@@ -157,13 +157,16 @@ div.te.container {
 .auto_event {
     display:flex; 
     align-items: baseline;
-    margin-top: 1rem;
+    margin-bottom: 2rem;
 
-    div {
-        white-space: pre;
+    label {
+        display: block;
+        padding-left: .25rem;
+        padding-bottom: .25rem;
     }
-    div:nth-child(2) {
-        margin-left: 2rem;
+    .activity-controls {
+        align-self: flex-end;
+        padding-bottom: .55rem;
     }
 }
 

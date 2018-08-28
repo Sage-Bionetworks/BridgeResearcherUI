@@ -39,8 +39,7 @@ const PERIOD_WORDS = Object.freeze({
 
 const UNARY_EVENTS = Object.freeze({
     'enrollment': 'On enrollment',
-    'two_weeks_before_enrollment': 'Two weeks before enrollment',
-    'two_months_before_enrollment': 'Two months before enrollment'
+    'activities_retrieved': 'On first retrieving activities'
 });
 
 const TIME_OPTIONS = [];
@@ -208,7 +207,7 @@ function formatSchedule(sch) {
     let eventClause = "";
     if (sch.delay) {
         eventClause = periodToWords(sch.delay) + " after ";
-    } else if (events[0] === "enrollment") {
+    } else if (events[0] === "enrollment" || events[0] === "activities_retrieved") {
         eventClause = "upon ";
     }
     eventClause += fn.formatList(events.map(formatEventElement));
