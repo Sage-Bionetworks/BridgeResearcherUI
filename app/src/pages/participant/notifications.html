@@ -21,9 +21,7 @@
     <div class="ui grid">
         <div class="ten wide column">
             <div class="ui warning message" data-bind="visible: !notificationsEnabledObs()">
-                <p>No notification services have been configured (APNS, GCM). Client applications cannot register for 
-                    notifications until this is done. Contact Bridge server administration if you wish to include push 
-                    notifications in your Bridge participant management. </p>
+                <p>No push notification services have been configured (APNS, GCM). Client applications can only register for SMS messages until this is done. Contact Bridge server administration if you wish to include push notifications in your Bridge participant management. </p>
             </div>
             <table class="ui compact selectable table" data-bind="visible: isResearcher">
                 <thead>
