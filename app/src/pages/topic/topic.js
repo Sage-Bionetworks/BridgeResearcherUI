@@ -7,11 +7,11 @@ import utils from '../../utils';
 
 function newTopic() {
     return {
-        'name':'New Topic',
-        'shortName':'',
-        'guid':'',
-        'description':'',
-        'criteria':criteriaUtils.newCriteria()
+        'name': 'New Topic',
+        'shortName': '',
+        'guid': '',
+        'description': '',
+        'criteria': criteriaUtils.newCriteria()
     };
 }
 
@@ -83,7 +83,7 @@ module.exports = function(params) {
     } else {
         Promise.resolve(newTopic())
             .then(fn.handleObsUpdate(self.titleObs, 'name'))
-            .then(initCriteria)
-            .then(binder.assign('topic'));
+            .then(binder.assign('topic'))
+            .then(binder.update());
     }
 };
