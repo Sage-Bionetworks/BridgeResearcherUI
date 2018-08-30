@@ -1,4 +1,5 @@
 import {serverService} from '../../services/server_service';
+import criteriaUtils from '../../criteria_utils';
 import fn from '../../functions';
 import root from '../../root';
 import tables from '../../tables';
@@ -12,6 +13,7 @@ module.exports = function() {
     let self = this;
 
     fn.copyProps(self, root, 'isDeveloper', 'notificationsEnabledObs');
+    fn.copyProps(self, criteriaUtils, 'label');
     
     tables.prepareTable(self, {name: 'topic', type: 'NotificationTopic', 
         delete: deleteTopic, refresh: load});

@@ -6,8 +6,11 @@ function mapToObservers(entry) {
     let eventKey = entry[0];
     let period = entry[1];
     let originEvent = "enrollment";
+    
     if (period.includes(":")) {
-        [originEvent, period] = period.split(/:(.+)/).splice(0,2);
+        let lastIndex = period.lastIndexOf(":");
+        originEvent = period.substring(0,lastIndex);
+        period = period.substring(lastIndex+1);
     }
     let delta = (period.includes("-")) ? "before" : "after";
     period = period.replace('-','');
@@ -58,8 +61,15 @@ module.exports = function() {
         self.itemsObs.push(mapToObservers(['','P1D']));
     };
 
+    function activityEventKeyToOpt(key) {
+        return {label: key, value: "custom:"+key};
+    }
+
     serverService.getStudy().then(function(study) {
         self.study = study;
+        console.log(study);
+        let eventKeys = study.activityEventKeys || [];
+        self.allEventsObs.pushAll(eventKeys.map(activityEventKeyToOpt));
         self.itemsObs(
             Object.entries(study.automaticCustomEvents || {})
                 .sort((a,b) => a[0].localeCompare(b[0]))
