@@ -18,8 +18,18 @@ module.exports = function() {
     tables.prepareTable(self, {name: 'topic', type: 'NotificationTopic', 
         delete: deleteTopic, refresh: load});
 
+    function initCriteria(response) {
+        response.items.forEach((topic) => {
+            if (!fn.isDefined(topic.criteria)) {
+                topic.criteria = criteriaUtils.newCriteria();
+            }
+        });
+        return response;
+    }
+    
     function load() {
         serverService.getAllTopics()
+            .then(initCriteria)
             .then(fn.handleSort('items','name'))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))
             .catch(utils.failureHandler());
