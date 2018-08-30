@@ -24,8 +24,7 @@
                             <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
                         </th>
                         <th>Topic Name</th>
-                        <th>Short Name</th>
-                        <th>Description</th>
+                        <th>Membership criteria</th>
                     </tr>
                 </thead>
                 <tbody class="no_records" data-bind="if: itemsObs().length === 0">
@@ -39,11 +38,11 @@
                             <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                         </td>
                         <td>
-                            <a data-bind="text: $data.name, href: 
-                                '#/topics/' + encodeURIComponent($data.guid)"></a>
+                            <div><a data-bind="text: $data.name, href: 
+                                '#/topics/' + encodeURIComponent($data.guid)"></a></div>
+                            <div data-bind="text: $data.description"></div>
                         </td>
-                        <td data-bind="text: $data.shortName"></td>
-                        <td data-bind="text: $data.description"></td>
+                        <td data-bind="text: $parent.label($data.criteria)"></td>
                     </tr>
                 </tbody>
             </table>

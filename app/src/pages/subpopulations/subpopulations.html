@@ -21,14 +21,13 @@
                         <tr>
                             <th width="10" data-bind="visible: isDeveloper"></th>
                             <th>Name</th>
-                            <th>Description</th>
                             <th>Matching Criteria</th>
                             <th width="100"></th>
                         </tr>
                     </thead>
                     <tbody class="no_records" data-bind="if: itemsObs().length === 0">
                         <tr>
-                            <td data-bind="attr:{colspan: $parent.isDeveloper ? 5 : 4}, html: recordsMessageObs"></td>
+                            <td data-bind="attr:{colspan: $parent.isDeveloper ? 4 : 3}, html: recordsMessageObs"></td>
                         </tr>
                     </tbody>  
                     <tbody data-bind="foreach: itemsObs">
@@ -37,13 +36,13 @@
                                 <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                             </td>
                             <td>
-                                <a data-bind="attr: {'href': '#/subpopulations/'+encodeURIComponent($data.guid)}, text: $data.name"></a>
+                                <div><a data-bind="attr: {'href': '#/subpopulations/'+encodeURIComponent($data.guid)}, text: $data.name"></a></div>
+                                <div data-bind="text: $data.description"></div>
                             </td>
-                            <td data-bind="text: $data.description"></td>
                             <td data-bind="html: $parent.criteriaLabel($data.criteria)"></td>
                             <td>
-                                <span data-bind="visible: $data.required" class="green ui text">
-                                    <i class="checkmark icon"></i> Required
+                                <span data-bind="visible: $data.required">
+                                    <i class="green checkmark icon"></i> Required
                                 </span>
                             </td>
                         </tr>
