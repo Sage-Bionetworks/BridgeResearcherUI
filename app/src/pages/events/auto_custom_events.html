@@ -15,11 +15,24 @@
         <div class="ten wide column" >
             <div data-bind="foreach: itemsObs">
                 <div class="auto_event">
-                    <input placeholder="Event Key" class="ui input" data-bind="textInput: eventKeyObs"/>
-                    <div>Schedule for</div>
-                    <ui-duration style="margin: 0 1rem" 
-                        params="fieldObs: periodObs, noHours: true"></ui-duration>
-                    <div>after enrollment</div>
+                    <div style="padding-right:1.5rem">
+                        <label>Event ID</label>
+                        <input class="ui input" data-bind="textInput: eventKeyObs"/>
+                    </div>
+                    <div>
+                        <label>Schedule for</label>
+                        <div style="display:flex">
+                            <ui-duration style="margin-right: 1.5rem"
+                                params="fieldObs: periodObs, noHours: true"></ui-duration>
+                            <select style="width: 8rem; margin-right: .5rem" class="ui dropdown" 
+                                data-bind="options: $parent.allDeltasObs, optionsText: 'label', 
+                                optionsValue: 'value', value: deltaObs">
+                            </select>
+                            <select class="ui dropdown" data-bind="options: $parent.allEventsObs,
+                                optionsText: 'label', optionsValue: 'value', value: originEventObs">
+                            </select>
+                        </div>
+                    </div>
                     <div class="activity-controls">
                         <i class="red large times circle outline link icon" 
                             data-bind="fadeRemove: { selector: '.auto_event', object: $data, 
@@ -27,8 +40,7 @@
                     </div>
                 </div>
             </div>
-            <button data-bind="click: addCustomEvent" style="margin-top: 2rem"
-                class="ui tiny button">Add Custom Event</button>
+            <button data-bind="click: addCustomEvent" class="ui tiny button">Add Custom Event</button>
         </div>
         <div class="six wide column">
             <div class="ui message">

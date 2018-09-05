@@ -15,9 +15,7 @@
     <div class="ui grid">
         <div class="ten wide column">
             <div class="ui warning message" data-bind="visible: !notificationsEnabledObs()">
-                <p>No notification services have been configured (APNS, GCM). Client applications cannot register for 
-                    notifications until this is done. Please contact the Bridge server team if you wish to include push 
-                    notifications in your app. </p>
+                <p>No push notification services have been configured (APNS, GCM). Client applications can only register for SMS messages until this is done. Contact Bridge server administration if you wish to include push notifications in your app. </p>
             </div>
             <table class="ui compact selectable table" style="margin-top: 0">
                 <thead>
@@ -26,7 +24,7 @@
                             <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
                         </th>
                         <th>Topic Name</th>
-                        <th>Description</th>
+                        <th>Membership criteria</th>
                     </tr>
                 </thead>
                 <tbody class="no_records" data-bind="if: itemsObs().length === 0">
@@ -40,10 +38,11 @@
                             <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                         </td>
                         <td>
-                            <a data-bind="text: $data.name, href: 
-                                '#/topics/' + encodeURIComponent($data.guid)"></a>
+                            <div><a data-bind="text: $data.name, href: 
+                                '#/topics/' + encodeURIComponent($data.guid)"></a></div>
+                            <div data-bind="text: $data.description"></div>
                         </td>
-                        <td data-bind="text: $data.description"></td>
+                        <td data-bind="text: $parent.label($data.criteria)"></td>
                     </tr>
                 </tbody>
             </table>

@@ -17,28 +17,35 @@
 <div class="scrollbox">
     <errors> </errors>
     <form class="ui form">
-        <div class="ui grid">
-            <div class="eight wide column">
-                <div class="required field" id="name">
-                    <label>Topic name</label>
-                    <input type="text" data-bind="textInput: nameObs, hasFocus: true, attr:{readonly: !isDeveloper()}"/>
-                </div>
-                <div class="field">
-                    <label>Description</label>
-                    <textarea data-bind="textInput: descriptionObs">
-                    </textarea>
-                </div>
+        <div class="two fields">
+            <div class="required field" id="name">
+                <label>Name</label>
+                <input type="text" data-bind="textInput: nameObs, hasFocus: true, attr:{readonly: !isDeveloper()}"/>
             </div>
-            <div class="eight wide column">
-                <div class="field" data-bind="visible: !isNewObs()">
-                    <label>Created On</label>
-                    <div class="input-field-padding" data-bind="text: createdOnObs"></div>
-                </div>
-                <div class="field" data-bind="visible: !isNewObs()">
-                    <label>Modified On</label>
-                    <div class="input-field-padding" data-bind="text: modifiedOnObs"></div>
-                </div>
+            <div class="required field" id="shortName">
+                <label>Short name (10 chars or less)</label>
+                <input type="text" style="width: 14rem" maxLength="10" data-bind="textInput: shortNameObs, 
+                    attr:{readonly: !isDeveloper()}"/>
+                <p class="help-text">The name shown in constrained contexts (e.g. the title of an SMS message).</p>
             </div>
+        </div>
+        <div class="two fields">
+            <div class="field">
+                <label>Description</label>
+                <input data-bind="textInput: descriptionObs">
+            </div>
+        </div>
+        <h4>Assignment based on</h4>
+        <criteria params="id: '', criteriaObs: criteriaObs"></criteria>
+        <div class="three fields" data-bind="visible: !isNewObs()" style="margin-top: 2rem">
+            <div class="field">
+                <label>Created On</label>
+                <div class="input-field-padding" data-bind="text: createdOnObs"></div>
+            </div>
+            <div class="field">
+                <label>Modified On</label>
+                <div class="input-field-padding" data-bind="text: modifiedOnObs"></div>
+            </div>            
         </div>
     </form>
 </div>

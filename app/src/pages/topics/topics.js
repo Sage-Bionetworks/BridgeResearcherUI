@@ -1,4 +1,5 @@
 import {serverService} from '../../services/server_service';
+import criteriaUtils from '../../criteria_utils';
 import fn from '../../functions';
 import root from '../../root';
 import tables from '../../tables';
@@ -12,12 +13,23 @@ module.exports = function() {
     let self = this;
 
     fn.copyProps(self, root, 'isDeveloper', 'notificationsEnabledObs');
+    fn.copyProps(self, criteriaUtils, 'label');
     
     tables.prepareTable(self, {name: 'topic', type: 'NotificationTopic', 
         delete: deleteTopic, refresh: load});
 
+    function initCriteria(response) {
+        response.items.forEach((topic) => {
+            if (!fn.isDefined(topic.criteria)) {
+                topic.criteria = criteriaUtils.newCriteria();
+            }
+        });
+        return response;
+    }
+    
     function load() {
         serverService.getAllTopics()
+            .then(initCriteria)
             .then(fn.handleSort('items','name'))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))
             .catch(utils.failureHandler());
