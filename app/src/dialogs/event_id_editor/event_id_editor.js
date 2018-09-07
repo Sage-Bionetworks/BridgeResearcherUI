@@ -31,7 +31,6 @@ function collectActivityEventKeys(eventKeys) {
                 value: "activity:"+activity.value+":finished"
             });
         });
-        console.log(eventKeys);
         return eventKeys;
     };
 }
@@ -43,7 +42,6 @@ function collectActivityEventKeys(eventKeys) {
  */
 module.exports = function(params) {
     let self = this;
-    console.log(params.eventIdObs());
 
     new Binder(self)
         .obs('activity')
