@@ -276,6 +276,16 @@ function animatedDeleter(scrollTo, elementsObs, selectedElementObs) {
     };
 }
 
+// TODO
+// Some objects come back without a deleted property when the property is new or deleted=false.
+// In order for table functionality to work the property needs to be set to deleted.
+// 1. why is this necessary? because we require the property exists, we don't need to
+// 2. fix tables.js, delete this function
+function setDeletedProperty(response) {
+    response.items.forEach(item => item.deleted = item.deleted || false);
+    return response;
+}
+
 export default {
     clearErrors,
     /**
@@ -324,5 +334,6 @@ export default {
     findStudyName,
     atLeastOneSignedConsent,
     copyString,
-    failureHandler
+    failureHandler,
+    setDeletedProperty
 };

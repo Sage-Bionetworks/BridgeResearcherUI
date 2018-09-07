@@ -5,10 +5,6 @@ import root from '../../root';
 import tables from '../../tables';
 import utils from '../../utils';
 
-function deleteItem(plan) {
-    return serverService.deleteSubpopulation(plan.guid);
-}
-
 module.exports = function() {
     let self = this;
 
@@ -18,12 +14,25 @@ module.exports = function() {
     tables.prepareTable(self, {
         name: "consent group",
         type: "Subpopulation",
-        delete: deleteItem,
-        refresh: load
+        refresh: load,
+        delete: function(plan) {
+            return serverService.deleteSubpopulation(plan.guid, false);
+        }, 
+        deletePermanently: function(plan) {
+            return serverService.deleteSubpopulation(plan.guid, true);
+        },
+        undelete: function(plan) {
+            return serverService.updateSubpopulation(plan);
+        }        
     });
 
+    function getSubpopulations() {
+        return serverService.getAllSubpopulations(self.showDeletedObs());
+    }
+
     function load() {
-        serverService.getAllSubpopulations()
+        getSubpopulations()
+            .then(utils.setDeletedProperty)
             .then(fn.handleSort('items','name'))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))
             .catch(utils.failureHandler());

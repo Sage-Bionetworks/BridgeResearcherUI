@@ -12,6 +12,7 @@ const FLAGS = {
     'CA': '🇨🇦'
 };
 const LOCAL_TIMEZONE = Date().split("(")[1].split(")")[0];
+const IS_BROWSER = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 
 function flagForRegionCode(regionCode) {
     return FLAGS[regionCode];
@@ -405,11 +406,12 @@ function _asDate(value) {
         return new Date();
     }
 }
+
 function _format(format) {
     if (DATE_TIME[format]) {
         return format;
     }
-    return localStorage.getItem('timezone') || 'iso';
+    return IS_BROWSER ? (localStorage.getItem('timezone') || 'iso') : 'iso';
 }
 const DATE_TIME = {
     'local': formatDateTimeLocal,

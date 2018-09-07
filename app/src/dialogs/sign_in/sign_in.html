@@ -57,32 +57,28 @@
                     </select>
                 </div>
             </div>
-
-        </form>
+            <div data-bind="visible: !isLockedObs() && stateObs() !== 'ForgotPassword'"
+                style="padding: .5rem 0 0 .5rem">
+                <ui-checkbox params="checkedObs: imAnAdminObs">
+                    I’m an admin
+                </ui-checkbox>
+            </div>
+    </form>
     </div>
     <div class="actions" style="display: flex; align-items: center">
         <div style="flex:1">
             <button id="submitButton" class="ui primary small button" 
                 data-bind="click: submit, text: buttonTextObs"></button>
-
-            <span style="padding-left:1rem" data-bind="visible: !isLockedObs()">
-                <ui-checkbox params="checkedObs: imAnAdminObs">
-                    I’m an admin
-                </ui-checkbox>
-            </span>
+            <a style="padding-left: 1rem"  href="" data-bind="click: useForgotPassword">Forgot Password?</a>
         </div>
         <div data-bind="visible: stateObs() === 'SignIn'">
-            <a href="" data-bind="click: useForgotPassword">Forgot Password?</a>
-            <span style="padding: 0 1rem"> </span>
-            Sign In Using
-            <a href="" data-bind="click: useExternalId">External ID</a>
-            &bull;
-            <a href="" data-bind="click: usePhone">Phone</a>
+            Sign in using
+            <a href="" data-bind="click: useExternalId">external ID</a>
+            or
+            <a href="" data-bind="click: usePhone">phone</a>
         </div>
         <div data-bind="visible: stateObs() !== 'SignIn'">
-            <button class="ui small button" data-bind="click: cancel">
-                Cancel
-            </button>
+            Sign in using <a href="" data-bind="click: cancel">email</a>
         </div>
     </div>
 </div>

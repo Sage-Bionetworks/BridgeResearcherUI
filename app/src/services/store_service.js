@@ -6,16 +6,16 @@ localStorage.removeItem('participants-page');
 
 export default {
     set: function(key, value) {
-        console.debug("[cache] Setting", key);
+        //console.debug("[cache] Setting", key);
         localStorage.setItem(key, JSON.stringify(value));
     },
     get: function(key) {
         let value = localStorage.getItem(key);
         if (typeof value !== "string") {
-            console.debug("[cache] Load miss from cache", key);
+            //console.debug("[cache] Load miss from cache", key);
             return null;
         }
-        console.debug("[cache] Loading from cache", key);
+        //console.debug("[cache] Loading from cache", key);
         try {
             return JSON.parse(value);
         } catch(e) {

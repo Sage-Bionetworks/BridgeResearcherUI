@@ -1,67 +1,92 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <h3>Consent Groups</h3>
-        </div>
-        <div class="fixed-header-buttons" data-bind="visible: isDeveloper">
-            <button class="ui tiny button" data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: copyToClipboard">Copy to Clipboard</button>
-            <button class="ui red tiny button" data-bind="disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
-            <a href="#/subpopulations/new" class="ui primary tiny button">New Consent Group</a>
-        </div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <h3>Consent Groups</h3>
     </div>
-    <div class="ui empty secondary pointing menu"></div>
+    <div class="fixed-header-buttons" data-bind="visible: isDeveloper">
+      <button data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: copyToClipboard" 
+        class="ui tiny button" >Copy to Clipboard</button>
+
+      <button class="ui red tiny button" data-bind="visible: !isAdmin(), 
+        disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
+      <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
+        <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()},
+          semantic: 'dropdown-button-toggle', container: '.buttons'">Delete</div>
+        <div class="ui primary tiny floating dropdown icon button" 
+          data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" data-bind="click: deleteItems">Delete</div>
+            <div class="item" data-bind="click: deletePermanently">Delete <b>Permanently</b></div>
+          </div>
+        </div>
+      </div>
+
+      <a href="#/subpopulations/new" class="ui primary tiny button">New Consent Group</a>
+    </div>
+  </div>
+  <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
-    <errors></errors>
+  <errors></errors>
 
-    <div class="ui grid">
-        <div class="ten wide column">
-            <table class="ui compact selectable table">
-                    <thead>
-                        <tr>
-                            <th width="10" data-bind="visible: isDeveloper"></th>
-                            <th>Name</th>
-                            <th>Matching Criteria</th>
-                            <th width="100"></th>
-                        </tr>
-                    </thead>
-                    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-                        <tr>
-                            <td data-bind="attr:{colspan: $parent.isDeveloper ? 4 : 3}, html: recordsMessageObs"></td>
-                        </tr>
-                    </tbody>  
-                    <tbody data-bind="foreach: itemsObs">
-                        <tr data-bind="css: { positive: $data.active }">
-                            <td data-bind="visible: $parent.isDeveloper">
-                                <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
-                            </td>
-                            <td>
-                                <div><a data-bind="attr: {'href': '#/subpopulations/'+encodeURIComponent($data.guid)}, text: $data.name"></a></div>
-                                <div data-bind="text: $data.description"></div>
-                            </td>
-                            <td data-bind="html: $parent.criteriaLabel($data.criteria)"></td>
-                            <td>
-                                <span data-bind="visible: $data.required">
-                                    <i class="green checkmark icon"></i> Required
-                                </span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-        </div>
-        <div class="six wide column">
-            <div class="ui message">
-                <p>A consent group defines a set of users who must agree to a specific consent to participate in a study. Consents can be optional; these will not prevent participants from using Bridge.</p>
+  <div class="ui grid">
+    <div class="ten wide column">
+      <table class="ui compact selectable table">
+        <thead>
+          <tr>
+            <th width="10" data-bind="visible: isDeveloper"></th>
+            <th>Name</th>
+            <th>Matching Criteria</th>
+            <th width="100"></th>
+          </tr>
+        </thead>
+        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+          <tr>
+            <td data-bind="attr:{colspan: $parent.isDeveloper ? 4 : 3}, html: recordsMessageObs"></td>
+          </tr>
+        </tbody>
+        <tbody data-bind="foreach: itemsObs">
+          <tr data-bind="css: { negative: $data.deleted}">
+            <td data-bind="visible: $parent.isDeveloper">
+              <ui-checkbox data-bind="visible: !$data.deletedObs()" 
+                params="checkedObs: $data.checkedObs"></ui-checkbox>
+              <i data-bind="visible: $data.deletedObs, click: $parent.undelete" 
+                style="cursor: pointer" class="green undo icon"></i>
+            </td>
+            <td>
+              <div><a data-bind="attr: {'href': '#/subpopulations/'+encodeURIComponent($data.guid)}, 
+                  text: $data.name"></a></div>
+              <div data-bind="text: $data.description"></div>
+            </td>
+            <td data-bind="html: $parent.criteriaLabel($data.criteria)"></td>
+            <td>
+              <span data-bind="visible: $data.required">
+                <i class="green checkmark icon"></i> Required
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
+        <ui-checkbox params="checkedObs: showDeletedObs">
+          Show deleted schedule plans
+        </ui-checkbox>
+      </div>
+    </div>
+    <div class="six wide column">
+      <div class="ui message">
+        <p>A consent group defines a set of users who must agree to a specific consent to participate in a study. Consents can be optional; these will not prevent participants from using Bridge.</p>
 
-                <!-- Strange but true: .ui.message p has an opacity set in semantic.css -->
-                <ul style="padding-left:1rem; opacity: .85">
-                    <li>Users are assigned to one or more consent groups on every request (always at least one);</li>
-                    <li>Bridge verifies that the user has signed all their required consents;</li>
-                    <li>If they have, the request proceeds normally. If not, Bridge returns a 412 status code and the body of the response will include the user's session and consent status. The user is signed in, but unconsented.</li>
-                </ul>
-                
-                <p><b>Note:</b> filtering on Bridge is opt-in: if a user does not match <i>any</i> consent goup, then they are assumed to match <i>all</i> consent groups. To disable consent for a group of users, create an optional consent group that matches those users, so they do not have to sign it. Then Bridge will not block their requests.</p>
-            </div>
-        </div>
-    </div>    
+        <!-- Strange but true: .ui.message p has an opacity set in semantic.css -->
+        <ul style="padding-left:1rem; opacity: .85">
+          <li>Users are assigned to one or more consent groups on every request (always at least one);</li>
+          <li>Bridge verifies that the user has signed all their required consents;</li>
+          <li>If they have, the request proceeds normally. If not, Bridge returns a 412 status code and the body of the response will include the user's session and consent status. The user is signed in, but unconsented.</li>
+        </ul>
+
+        <p><b>Note:</b> filtering on Bridge is opt-in: if a user does not match <i>any</i> consent goup, then they are assumed to match <i>all</i> consent groups. To disable consent for a group of users, create an optional consent group that matches those users, so they do not have to sign it. Then Bridge will not block their requests.</p>
+      </div>
+    </div>
+  </div>
 </div>
