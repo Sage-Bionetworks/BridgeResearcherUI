@@ -22,25 +22,11 @@ const taskOptionsLabel = utils.makeOptionLabelFinder(taskOptionsObs);
 
 const compoundActivityOptionsObs = ko.observableArray([]);
 
-const TYPE_OPTIONS = Object.freeze([
+const STRATEGY_OPTIONS = Object.freeze([
     {value: 'SimpleScheduleStrategy', label: 'Simple Schedule'},
     {value: 'ABTestScheduleStrategy', label: 'A/B Test Schedule'},
     {value: 'CriteriaScheduleStrategy', label: 'Criteria-based Schedule'}
 ]);
-
-const UNARY_EVENTS = Object.freeze({
-    'enrollment': 'On enrollment',
-    'activities_retrieved': 'On first retrieving activities'
-});
-
-const TIME_OPTIONS = [];
-for (let i=0; i < 24; i++) {
-    let hour = (i === 0) ? 12 : (i > 12) ? i-12 : i;
-    let hour24 = (i < 10) ? ("0"+i) : (""+i);
-    let meridian = (i < 12) ? "AM" : "PM";
-    TIME_OPTIONS.push({label: hour+":00 "+meridian,value: hour24+":00"});
-    TIME_OPTIONS.push({label: hour+":30 "+meridian,value: hour24+":30"});
-}
 
 function newStrategy(type, existingStrategy) {
     let schedules = (existingStrategy) ? extractSchedules(existingStrategy) : [newSchedule()];
@@ -116,7 +102,7 @@ function formatStrategy(strategy) {
     }
 }
 function formatScheduleStrategyType(type) {
-    return TYPE_OPTIONS[type].label;
+    return STRATEGY_OPTIONS[type].label;
 }
 function formatCompoundActivity(task) {
     let phrase = [];
@@ -194,17 +180,13 @@ export default {
     formatStrategy,
     formatSchedule,
     formatCompoundActivity,
-    timeOptions: TIME_OPTIONS,
-    timeOptionsLabel: utils.makeOptionLabelFinder(TIME_OPTIONS),
     formatScheduleStrategyType,
-    timeOptionsFinder: utils.makeOptionFinder(TIME_OPTIONS),
     activitiesObs,
     surveysOptionsObs,
     taskOptionsObs,
     compoundActivityOptionsObs,
     getActivitiesWithStrategyInfo,
-    TYPE_OPTIONS,
-    UNARY_EVENTS,
+    STRATEGY_OPTIONS,
     loadOptions: function() {
         let p1 = optionsService.getActivityOptions().then(activitiesObs);
         let p2 = optionsService.getSurveyOptions().then(surveysOptionsObs);
@@ -214,4 +196,3 @@ export default {
         return Promise.all([p1, p2, p3, p4, p5]);
     }
 };
-export { UNARY_EVENTS };

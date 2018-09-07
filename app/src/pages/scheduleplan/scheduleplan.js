@@ -28,8 +28,8 @@ module.exports = function(params) {
         
     self.strategyObs.callback = fn.identity;
     // Fields for this form
-    self.schedulePlanTypeOptions = scheduleUtils.TYPE_OPTIONS;
-    self.schedulePlanTypeLabel = utils.makeOptionLabelFinder(scheduleUtils.TYPE_OPTIONS);
+    self.schedulePlanTypeOptions = scheduleUtils.STRATEGY_OPTIONS;
+    self.schedulePlanTypeLabel = utils.makeOptionLabelFinder(scheduleUtils.STRATEGY_OPTIONS);
 
     self.schedulePlanTypeObs.subscribe(function(newType) {
         if (self.strategyObs.callback()) {

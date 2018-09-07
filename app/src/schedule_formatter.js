@@ -1,8 +1,8 @@
 import fn from './functions';
 
-const UNARY_LABELS = Object.freeze({
-    /*'enrollment': 'enrollment',*/
-    'activities_retrieved': 'activities first retrieved'
+const UNARY_EVENTS = Object.freeze({
+    'enrollment': 'On enrollment',
+    'activities_retrieved': 'On activities first retrieved'
 });
 const PERIOD_WORDS = Object.freeze({
     'H': 'hour',
@@ -14,80 +14,122 @@ const PERIOD_WORDS = Object.freeze({
 const EMPTY = () => { 
     return ''; 
 };
-const TIME_OPTIONS = [];
-for (let i=0; i < 24; i++) {
-    let hour = (i === 0) ? 12 : (i > 12) ? i-12 : i;
-    let hour24 = (i < 10) ? ("0"+i) : (""+i);
-    let meridian = (i < 12) ? "AM" : "PM";
-    TIME_OPTIONS.push({label: hour+":00 "+meridian,value: hour24+":00"});
-    TIME_OPTIONS.push({label: hour+":30 "+meridian,value: hour24+":30"});
+const TIME_OPTIONS = (function() {
+    let array = [];
+    for (let i=0; i < 24; i++) {
+        let hour = (i === 0) ? 12 : (i > 12) ? i-12 : i;
+        let hour24 = (i < 10) ? ("0"+i) : (""+i);
+        let meridian = (i < 12) ? "AM" : "PM";
+        array.push({ label: hour+":00 "+meridian, value: hour24+":00" });
+        array.push({ label: hour+":30 "+meridian, value: hour24+":30" });
+    }
+    return array;
+}());
+const TIME_LABEL_FINDER = makeOptionLabelFinder(TIME_OPTIONS);
+const TIME_OPTION_FINDER = makeOptionFinder(TIME_OPTIONS);
+
+// I'm not sure these need to be knockout observables in schedule_utils, and as a result, I've brought in 
+// a dependency that makes testing more difficult
+function makeOptionFinder(array) {
+    return function(value) {
+        for (let i= 0; i < array.length; i++) {
+            let option = array[i];
+            if (option.value === value) {
+                return option;
+            }
+        }
+    };
 }
-const TIME_FORMATTER = function(value) {
-    let opt = TIME_OPTIONS.filter((opt) => {
-        return opt.value === value;
-    })[0];
-    return (opt) ? opt.label : value;
-};
+function makeOptionLabelFinder(array) {
+    let finder = makeOptionFinder(array);
+    return function(value) {
+        let option = finder(value);
+        return option ? option.label : "";
+    };
+}
 
 function formatSchedule(schedule, activityFormatter = EMPTY, taskFormatter = EMPTY, surveyFormatter = EMPTY) {
     if (schedule == null || Object.keys(schedule).length === 0) {
         return "<i>No schedule</i>";
     }
-    let buffer = [];
 
     let eventClause = (schedule.delay) ?
-        (periodToWords(schedule.delay) + " after ") : "on ";
-    eventClause += formatEventId(schedule.eventId, activityFormatter);
-    buffer.push(eventClause);
+        `${periodToWords(schedule.delay)} after ${formatEventId(schedule.eventId, activityFormatter)}` :
+        `on ${formatEventId(schedule.eventId, activityFormatter)}`;
+
+    let phrase = [eventClause];
 
     if (fn.is(schedule.activities, 'Array')) {
-        let activityMap = formatActivities(schedule.activities, taskFormatter, surveyFormatter);
-        let activitylabels = Object.keys(activityMap).map((activityLabel) => {
-            let count = activityMap[activityLabel];
-
-            if (schedule.scheduleType === 'persistent') {
-                return pluralize(count, `make the ${activityLabel} permanently available`, 
-                    ` to do ${count} times`);
-            } else if (schedule.scheduleType === 'recurring') {
-                let recurringString = '';
-                if (schedule.cronTrigger) {
-                    recurringString = `and thereafter on the cron expression '${schedule.cronTrigger}'`;
-                } else {
-                    recurringString = `and every ${periodToWordsNoArticle(schedule.interval)} `+
-                        `thereafter at ${formatTimesArray(schedule.times)}`;
-                }
-                return pluralize(count, `${recurringString}, do ${activityLabel}`, ` ${count} times`);
-            } else {
-                return pluralize(count, `do ${activityLabel}`, ` ${count} times`);
-            }
-        });
-        buffer.push(activitylabels.join(', '));
+        let activityMap = mapActivityCounts(schedule.activities, taskFormatter, surveyFormatter);
+        phrase.push( formatActivityArray(activityMap, schedule) );
     }
 
-    let phrase = buffer.join(', ') + ".";
+    let buffer = [phrase.join(", ")];
+
     if (schedule.expires) {
-        phrase = `${phrase} Expire tasks after ${periodToWords(schedule.expires)}.`;
+        buffer.push(`Expire activity after ${periodToWords(schedule.expires)}`);
     }
     if (schedule.sequencePeriod) {
-        phrase = `${phrase} End this sequence of activities at ${periodToWords(schedule.sequencePeriod)}.`;
+        buffer.push(`End this sequence of activities at ${periodToWords(schedule.sequencePeriod)}`);
     }
     if (schedule.startsOn || schedule.endsOn) {
-        let range = '';
-        if (schedule.startsOn) {
-            range = `after <span class='times-label'>${fn.formatDateTime(schedule.startsOn)}</span>`;
-        }
-        if (schedule.startsOn && schedule.endsOn) {
-            range += " and ";
-        }
-        if (schedule.endsOn) {
-            range += `before <span class='times-label'>${fn.formatDateTime(schedule.endsOn)}</span>`;
-        }
-        phrase = `${phrase} Only schedule tasks ${range}.`;
+        buffer.push(formatTimeWindow(schedule));
     }
-    return phrase.split(". ").map(sentenceCase).join(". ");
+    return buffer.map(sentenceCase).join(". ") + ".";
+}
+function formatActivityArray(activityMap, schedule) {
+    if (schedule.scheduleType === 'persistent') {
+        return formatActivityPhrase(activityMap, 
+            '#{label}', 
+            ' (to do #{count} times)', 
+            'make the #{list} permanently available');
+    } else if (schedule.scheduleType === 'recurring') {
+        if (schedule.cronTrigger) {
+            return formatActivityPhrase(activityMap, 
+                'do #{label}', 
+                ' #{count} times', 
+                `and thereafter on the cron expression '${schedule.cronTrigger}', #{list}`);
+        } else {
+            let periodString = periodToWordsNoArticle(schedule.interval);
+            let timeString = formatTimesArray(schedule.times);
+            return formatActivityPhrase(activityMap, 
+                'do #{label}', 
+                ' #{count} times', 
+                `and every ${periodString} thereafter at ${timeString}, #{list}`);
+        }
+    } else if (schedule.scheduleType === 'once') {
+        return formatActivityPhrase(activityMap, 
+            'do #{label}', 
+            ' #{count} times', 
+            `#{list}`);
+    }
+    return formatActivityPhrase(activityMap, 
+        'do #{label}', 
+        ' #{count} times', 
+        `#{list} at ${formatTimesArray(schedule.times)}`);
+}
+function formatActivityPhrase(activityMap, activityLabel, pluralLabel, phrase) {
+    let activityPhrase = Object.keys(activityMap).map((label) => {
+        let count = activityMap[label];
+        return pluralize(count, activityLabel.replace('#{label}', label), pluralLabel.replace('#{count}', count));
+    });
+    return phrase.replace('#{list}', fn.formatList(activityPhrase));
 }
 function pluralize(count, string, postfix) {
     return (count > 1) ? (string + postfix) : string;
+}
+function formatTimeWindow(schedule) {
+    let range = '';
+    if (schedule.startsOn) {
+        range = `after <span class='times-label'>${fn.formatDateTime(schedule.startsOn)}</span>`;
+    }
+    if (schedule.startsOn && schedule.endsOn) {
+        range += " and ";
+    }
+    if (schedule.endsOn) {
+        range += `before <span class='times-label'>${fn.formatDateTime(schedule.endsOn)}</span>`;
+    }
+    return `Only schedule activities ${range}`;
 }
 function formatTimesArray(times) {
     return (fn.is(times,'Array') && times.length) ? fn.formatList(times.map(formatTime)) : "<None>";
@@ -95,7 +137,7 @@ function formatTimesArray(times) {
 function formatTime(time) {
     time = time.replace(":00.000","");
     // If there's no label, it's an odd time. Just leave it for now.
-    return TIME_FORMATTER(time) || time;
+    return TIME_LABEL_FINDER(time) || time;
 }
 function formatEventId(eventId, activityFormatter) {
     // Still the server default if no eventId is provided. We now prefer activities_retrieved
@@ -105,8 +147,9 @@ function formatEventId(eventId, activityFormatter) {
     let phrases = eventId.split(',').reverse().map((oneEventId) => {
         let [object, guid, eventType] = oneEventId.split(":");
 
-        if (UNARY_LABELS[object]) {
-            return UNARY_LABELS[object];
+        if (UNARY_EVENTS[object]) {
+            // Remove "On " from the string
+            return UNARY_EVENTS[object].replace(/^On\s/,"");
         } else if (object === 'custom') {
             return `when '${guid}' occurs`;
         } else if (object === 'activity') {
@@ -146,7 +189,7 @@ function periodToWordsNoArticle(periodStr) {
             `${period.amt} ${period.measure}s`;
     }).join(', ');
 }
-function formatActivities(activities, taskFormatter, surveyFormatter) {
+function mapActivityCounts(activities, taskFormatter, surveyFormatter) {
     return activities.reduce((map, act) => {
         let label = 'task (not specified)';
         if (act.activityType === "task" && act.task) {
@@ -167,5 +210,9 @@ function sentenceCase(string) {
 export default {
     formatEventId: fn.seq(formatEventId, sentenceCase),
     formatSchedule,
-    formatTimesArray
+    formatTimesArray,
+    timeOptions: TIME_OPTIONS,
+    timeOptionsLabel: TIME_LABEL_FINDER,
+    timeOptionsFinder: TIME_OPTION_FINDER
 };
+export { UNARY_EVENTS };

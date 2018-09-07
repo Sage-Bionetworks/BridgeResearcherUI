@@ -5,10 +5,6 @@ import root from '../../root';
 import tables from '../../tables';
 import utils from '../../utils';
 
-function deleteTopic(topic) {
-    return serverService.deleteTopic(topic.guid);
-}
-
 module.exports = function() {
     let self = this;
 
@@ -45,7 +41,6 @@ module.exports = function() {
     
     function load() {
         getTopics()
-            .then(utils.setDeletedProperty)
             .then(initCriteria)
             .then(fn.handleSort('items','name'))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))

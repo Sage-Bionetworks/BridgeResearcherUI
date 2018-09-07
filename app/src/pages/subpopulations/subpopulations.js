@@ -32,7 +32,6 @@ module.exports = function() {
 
     function load() {
         getSubpopulations()
-            .then(utils.setDeletedProperty)
             .then(fn.handleSort('items','name'))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))
             .catch(utils.failureHandler());
