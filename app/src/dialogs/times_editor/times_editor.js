@@ -1,7 +1,7 @@
 import fn from '../../functions';
 import ko from 'knockout';
 import root from '../../root';
-import scheduleUtils from '../../pages/schedule/schedule_utils';
+import scheduleFormatter from '../../schedule_formatter';
 
 function hourMinuteValue(value) {
     return value.replace(":00.000","");
@@ -14,7 +14,7 @@ module.exports = function(params) {
         ko.utils.arrayMap(params.timesObs(), hourMinuteValue)
     );
     fn.copyProps(self, params, 'timesObs', 'clearTimesFunc');
-    fn.copyProps(self, scheduleUtils, 'timeOptions->timesOptions', 'timeOptionsLabel->timesLabel');
+    fn.copyProps(self, scheduleFormatter, 'timeOptions->timesOptions', 'timeOptionsLabel->timesLabel');
     self.scheduleType = params.scheduleTypeObs();
     self.timeObs = ko.observable();
 
@@ -26,7 +26,7 @@ module.exports = function(params) {
 
     self.addTime = function(vm, event) {
         event.preventDefault();
-        let time = scheduleUtils.timeOptionsFinder(self.timeObs());
+        let time = scheduleFormatter.timeOptionsFinder(self.timeObs());
         if (self.itemsObs().indexOf(time.value) === -1) {
             self.itemsObs.push(time.value);
             self.itemsObs.sort();

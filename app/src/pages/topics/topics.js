@@ -5,18 +5,26 @@ import root from '../../root';
 import tables from '../../tables';
 import utils from '../../utils';
 
-function deleteTopic(topic) {
-    return serverService.deleteTopic(topic.guid);
-}
-
 module.exports = function() {
     let self = this;
 
     fn.copyProps(self, root, 'isDeveloper', 'notificationsEnabledObs');
     fn.copyProps(self, criteriaUtils, 'label');
     
-    tables.prepareTable(self, {name: 'topic', type: 'NotificationTopic', 
-        delete: deleteTopic, refresh: load});
+    tables.prepareTable(self, {
+        name: "topic",
+        type: "NotificationTopic",
+        refresh: load,
+        delete: function(topic) {
+            return serverService.deleteTopic(topic.guid, false);
+        }, 
+        deletePermanently: function(topic) {
+            return serverService.deleteTopic(topic.guid, true);
+        },
+        undelete: function(topic) {
+            return serverService.updateTopic(topic);
+        }        
+    });        
 
     function initCriteria(response) {
         response.items.forEach((topic) => {
@@ -26,9 +34,13 @@ module.exports = function() {
         });
         return response;
     }
+
+    function getTopics() {
+        return serverService.getAllTopics(self.showDeletedObs());
+    }
     
     function load() {
-        serverService.getAllTopics()
+        getTopics()
             .then(initCriteria)
             .then(fn.handleSort('items','name'))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))

@@ -385,8 +385,9 @@ export class ServerService {
         let queryString = fn.queryString({physical:(physical === true)});
         return this.del(config.schemaPlans + "/" + guid + queryString);
     }
-    getAllSubpopulations() {
-        return this.gethttp(config.subpopulations);
+    getAllSubpopulations(includeDeleted) {
+        let queryString = fn.queryString({includeDeleted:(includeDeleted === true)});
+        return this.gethttp(config.subpopulations + queryString);
     }
     getSubpopulation(guid) {
         return this.gethttp(config.subpopulations + "/" + guid);
@@ -401,8 +402,9 @@ export class ServerService {
             return response;
         });
     }
-    deleteSubpopulation(guid) {
-        return this.del(config.subpopulations + "/" + guid);
+    deleteSubpopulation(guid, physical) {
+        let queryString = fn.queryString({physical:(physical === true)});
+        return this.del(config.subpopulations + "/" + guid + queryString);
     }
     verifyEmail() {
         return this.post(config.verifyEmail);
@@ -562,8 +564,9 @@ export class ServerService {
     withdrawParticipantFromSubpopulation(userId, subpopGuid, reason) {
         return this.post(config.participants + '/' + userId + '/consents/' + subpopGuid + '/withdraw', reason);
     }
-    getAllTopics() {
-        return this.gethttp(config.topics);
+    getAllTopics(includeDeleted) {
+        let queryString = fn.queryString({includeDeleted:(includeDeleted === true)});
+        return this.gethttp(config.topics + queryString);
     }
     getTopic(guid) {
         return this.gethttp(config.topics + "/" + guid);
@@ -574,8 +577,9 @@ export class ServerService {
     updateTopic(topic) {
         return this.post(config.topics + "/" + topic.guid, topic);
     }
-    deleteTopic(guid) {
-        return this.del(config.topics + "/" + guid);
+    deleteTopic(guid, physical) {
+        let queryString = fn.queryString({physical:(physical === true)});
+        return this.del(config.topics + "/" + guid + queryString);
     }
     getTaskDefinitions() {
         return this.gethttp(config.compoundactivitydefinitions);
@@ -649,8 +653,9 @@ export class ServerService {
     updateAppConfig(appConfig) {
         return this.post(config.appConfigs + '/' + appConfig.guid, appConfig);
     }
-    deleteAppConfig(guid, physicalDelete) {
-        return this.del(config.appConfigs + '/' + guid + '?physical=' + physicalDelete);
+    deleteAppConfig(guid, physical) {
+        let queryString = fn.queryString({physical:(physical === true)});
+        return this.del(config.appConfigs + '/' + guid + queryString);
     }
     adminSignIn(studyName, environment, signIn) {
         return postInt(config.host[environment] + config.adminAuth + '/signIn', signIn)

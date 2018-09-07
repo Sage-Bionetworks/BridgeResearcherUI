@@ -1,5 +1,5 @@
 import {serverService} from '../../services/server_service';
-import {UNARY_EVENTS} from '../../pages/schedule/schedule_utils';
+import {UNARY_EVENTS} from '../../schedule_formatter';
 import Binder from '../../binder';
 import fn from '../../functions';
 import optionsService from '../../services/options_service';
