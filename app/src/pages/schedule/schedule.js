@@ -2,6 +2,7 @@ import fn from '../../functions';
 import ko from 'knockout';
 import root from '../../root';
 import scheduleUtils from './schedule_utils';
+import scheduleFormatter from '../../schedule_formatter';
 import utils from '../../utils';
 import Binder from '../../binder';
 
@@ -83,7 +84,8 @@ module.exports = function(params) {
     fn.copyProps(self, params, 'collectionName');
     fn.copyProps(self, fn, 'formatDateTime');
     fn.copyProps(self, scheduleUtils, 'surveysOptionsObs', 'taskOptionsObs', 
-        'compoundActivityOptionsObs', 'formatEventId', 'formatTimesArray->formatTimes');
+        'compoundActivityOptionsObs');
+    fn.copyProps(self, scheduleFormatter, 'formatEventId', 'formatTimesArray->formatTimes');
         
     self.scheduleTypeOptions = SCHEDULE_TYPE_OPTIONS;
     self.scheduleTypeLabel = utils.makeOptionLabelFinder(SCHEDULE_TYPE_OPTIONS);

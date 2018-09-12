@@ -2,7 +2,6 @@ import 'knockout-postbox';
 import alerts from './widgets/alerts';
 import clipboard from './widgets/clipboard/clipboard';
 import ko from 'knockout';
-import fn from './functions';
 import Promise from 'bluebird';
 import root from './root';
 import utils from './utils';
@@ -15,9 +14,7 @@ function hasBeenChecked(item) {
 function makeChecked(item) {
     if (typeof item.checkedObs === "undefined") {
         item.checkedObs = ko.observable(false);
-        if (fn.is(item.deleted, 'Boolean')) {
-            item.deletedObs = ko.observable(item.deleted);
-        }
+        item.deletedObs = ko.observable(item.deleted || false);
     }
     return item;
 }

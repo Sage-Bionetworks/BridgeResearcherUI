@@ -26,10 +26,8 @@ module.exports = function(params) {
         .bind('label', '')
         .obs('schedulePlanType', (params.guid==="new") ? 'SimpleScheduleStrategy' : 'empty');
         
-    self.strategyObs.callback = fn.identity;
-    // Fields for this form
-    self.schedulePlanTypeOptions = scheduleUtils.TYPE_OPTIONS;
-    self.schedulePlanTypeLabel = utils.makeOptionLabelFinder(scheduleUtils.TYPE_OPTIONS);
+    fn.copyProps(self.strategyObs, fn, 'identity->callback');
+    fn.copyProps(self, scheduleUtils, 'schedulePlanTypeOptions', 'schedulePlanTypeLabel');
 
     self.schedulePlanTypeObs.subscribe(function(newType) {
         if (self.strategyObs.callback()) {

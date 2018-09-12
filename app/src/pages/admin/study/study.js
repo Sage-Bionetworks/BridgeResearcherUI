@@ -13,7 +13,8 @@ module.exports = function(params) {
     let self = this;
 
     let binder = new Binder(self)
-        .bind('name', 'New Study')
+        .bind('title', 'New Study')
+        .bind('name')
         .bind('sponsorName')
         .bind('supportEmail')
         .bind('technicalEmail')
@@ -43,29 +44,35 @@ module.exports = function(params) {
     };
     self.save = function(vm, event) {
         let study = binder.persist({});
-        let users = self.usersObs().map(function(user) {
-            return {
-                email: user.emailObs(),
-                firstName: user.firstNameObs(),
-                lastName: user.lastNameObs(),
-                roles: user.rolesObs()
-            };
-        });
-        let adminIds = SYNAPSE_ADMINS
-            .filter(admin => self[admin.obs]())
-            .map(admin => admin.id);
 
-        delete study.allRoles;
-        delete study.users;
-        let payload = {
-            study: study,
-            adminIds: adminIds,
-            users: users
-        };
         utils.startHandler(vm, event);
-        serverService.createStudy(payload)
-            .then(utils.successHandler(vm, event, "Study created."))
-            .catch(utils.failureHandler());
+
+        serverService.getSession().then((session) => {
+            study.supportEmail = session.email;
+            study.technicalEmail = session.email;
+            study.consentNotificationEmail = session.email;
+            study.dataGroups = ['test_user'];
+            delete study.allRoles;
+            delete study.users;
+
+            let users = self.usersObs().map(function(user) {
+                return {
+                    email: user.emailObs(),
+                    firstName: user.firstNameObs(),
+                    lastName: user.lastNameObs(),
+                    roles: user.rolesObs(),
+                    dataGroups: ['test_user']
+                };
+            });
+            let adminIds = SYNAPSE_ADMINS
+                .filter(admin => self[admin.obs]())
+                .map(admin => admin.id);
+    
+            return serverService.createStudy({study, adminIds, users});
+        })
+        .then(utils.successHandler(vm, event, "Study created."))
+        .then(() => self.titleObs(self.nameObs()))
+        .catch(utils.failureHandler());
     };
     function load() {
         return (params.id === "new") ?
