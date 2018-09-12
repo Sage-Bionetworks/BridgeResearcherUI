@@ -28,6 +28,9 @@ const STRATEGY_OPTIONS = Object.freeze([
     {value: 'CriteriaScheduleStrategy', label: 'Criteria-based Schedule'}
 ]);
 
+const schedulePlanTypeOptions = STRATEGY_OPTIONS;
+const schedulePlanTypeLabel = utils.makeOptionLabelFinder(STRATEGY_OPTIONS);
+
 function newStrategy(type, existingStrategy) {
     let schedules = (existingStrategy) ? extractSchedules(existingStrategy) : [newSchedule()];
     switch(type) {
@@ -185,8 +188,8 @@ export default {
     surveysOptionsObs,
     taskOptionsObs,
     compoundActivityOptionsObs,
-    getActivitiesWithStrategyInfo,
-    STRATEGY_OPTIONS,
+    schedulePlanTypeOptions,
+    schedulePlanTypeLabel,
     loadOptions: function() {
         let p1 = optionsService.getActivityOptions().then(activitiesObs);
         let p2 = optionsService.getSurveyOptions().then(surveysOptionsObs);

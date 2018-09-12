@@ -2,16 +2,6 @@ import {serverService} from '../../services/server_service';
 import Binder from '../../binder';
 import fn from '../../functions';
 
-function partialRelay(criteriaObs) {
-    return function(func) {
-        return function(newValue) {
-            let crit = criteriaObs();
-            func(crit, newValue);
-            criteriaObs(crit);
-        };
-    };
-}
-
 /**
  * Params
  *  id - the id root to use for error message HTML ids
@@ -34,7 +24,21 @@ module.exports = function(params) {
         .obs('androidMax')
         .obs('dataGroupsOptions[]');
 
-    function updateVM(crit) {
+    self.languageObs.subscribe(value => 
+        self.criteriaObs().language = value);
+    self.allOfGroupsObs.subscribe(value => 
+        self.criteriaObs().allOfGroups = value);
+    self.noneOfGroupsObs.subscribe(value => 
+        self.criteriaObs().noneOfGroups = value);
+    self.iosMinObs.subscribe(value => 
+        self.criteriaObs().minAppVersions['iPhone OS'] = intValue(value));
+    self.iosMaxObs.subscribe(value => 
+        self.criteriaObs().maxAppVersions['iPhone OS'] = intValue(value));
+    self.androidMinObs.subscribe(value => 
+        self.criteriaObs().minAppVersions.Android = intValue(value));
+    self.androidMaxObs.subscribe(value => 
+        self.criteriaObs().maxAppVersions.Android = intValue(value));
+    self.criteriaObs.subscribe(crit => {
         crit.minAppVersions = crit.minAppVersions || {};
         crit.maxAppVersions = crit.maxAppVersions || {};
         binder.update()(crit);
@@ -42,50 +46,13 @@ module.exports = function(params) {
         self.iosMaxObs(crit.maxAppVersions['iPhone OS']);
         self.androidMinObs(crit.minAppVersions.Android);
         self.androidMaxObs(crit.maxAppVersions.Android);
-    }
+    });
 
-    let relay = partialRelay(self.criteriaObs);
-
-    self.languageObs.subscribe(relay(function(crit, newValue) {
-        crit.language = newValue;
-    }));
-
-    self.languageObs.subscribe(relay(function(crit, newValue) {
-        crit.language = newValue;
-    }));
-    self.allOfGroupsObs.subscribe(relay(function(crit, newValue) {
-        crit.allOfGroups = newValue;
-    }));
-    self.noneOfGroupsObs.subscribe(relay(function(crit, newValue) {
-        crit.noneOfGroups = newValue;
-    }));
-    self.iosMinObs.subscribe(relay(function(crit, newValue) {
-        crit.minAppVersions['iPhone OS'] = intValue(newValue);
-    }));
-    self.iosMaxObs.subscribe(relay(function(crit, newValue) {
-        crit.maxAppVersions['iPhone OS'] = intValue(newValue);
-    }));
-    self.androidMinObs.subscribe(relay(function(crit, newValue) {
-        crit.minAppVersions.Android = intValue(newValue);
-    }));
-    self.androidMaxObs.subscribe(relay(function(crit, newValue) {
-        crit.maxAppVersions.Android = intValue(newValue);
-    }));
-
-    function intValue(newValue) {
-        return (fn.isNotBlank(newValue)) ? parseInt(newValue,10) : null;
+    function intValue(value) {
+        return (fn.isNotBlank(value)) ? parseInt(value,10) : null;
     }
 
     serverService.getStudy().then(function(study) {
         self.dataGroupsOptionsObs(study.dataGroups);
-
-        let crit = self.criteriaObs();
-        if (crit) {
-            updateVM(crit);    
-        }
-        let sub = self.criteriaObs.subscribe(function(newValue) {
-            sub.dispose();
-            updateVM(newValue);
-        });
     });
 };

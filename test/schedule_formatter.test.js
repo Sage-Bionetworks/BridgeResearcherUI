@@ -57,6 +57,15 @@ describe("formatSchedule", () => {
                 "On enrollment and when activity 'activity1' is finished, do survey 'My Thoughts' 2 times."
             );
         });
+        it("formats once schedule with times", () => {
+            let sch = {"scheduleType":"once","activities":[{"label":"Do This","labelDetail":"Yes","guid":"64aaf918-b8a1-464f-9bff-416e4a377a34","task":{"identifier":"APHTimedWalking","type":"TaskReference"},"activityType":"task","type":"Activity"}],"persistent":false,"delay":"P1D","expires":"P1D","times":["19:00:00.000","20:00:00.000"],"type":"Schedule"}
+
+            expect(
+                fmt.formatSchedule(sch, null, TASK_FORMATTER)
+            ).to.equal(
+                "A day after enrollment, do task 'Timed Walk' at 7:00 PM and 8:00 PM. Expire activity after a day."
+            );
+        });
     });
     describe("persistent schedule", () => {
         it("formats persistent schedule", () => {
@@ -107,7 +116,7 @@ describe("formatSchedule", () => {
             let sch = {"scheduleType":"recurring","cronTrigger":"0 0 12 1/1 * ? *","activities":[{"label":"Test","guid":"6767397f-f021-4233-8fb7-2d96e78672ce","compoundActivity":{"schemaList":[],"surveyList":[],"taskIdentifier":"My Task","type":"CompoundActivity"},"activityType":"compound"}],"persistent":false,"expires":"P3D","times":[]};
 
             expect(fmt.formatSchedule(sch, ACTIVITY_FORMATTER, TASK_FORMATTER, SURVEY_FORMATTER)).to.equal(
-                "On enrollment, and thereafter on the cron expression '0 0 12 1/1 * ? *', do compound task 'My Task'. Expire activity after 3 days."
+                "On enrollment, and thereafter on the cron '0 0 12 1/1 * ? *', do compound task 'My Task'. Expire activity after 3 days."
             );
         });
     });
@@ -122,15 +131,34 @@ describe("formatSchedule", () => {
     });    
     describe("activities", () => {
         it("formats a task activity", () => {
+            let sch = {"scheduleType":"once","activities":[{"label":"Study Burst Task","guid":"fe79d987-28a2-4ccd-bcf3-b3d07b925a6b","task":{"identifier":"APHTimedWalking","type":"TaskReference"},"activityType":"task"}]};
 
+            expect(
+                fmt.formatSchedule(sch, ACTIVITY_FORMATTER, TASK_FORMATTER, SURVEY_FORMATTER)
+            ).to.equal("On enrollment, do task 'Timed Walk'.");
         });
         it("formats a survey activity", () => {
+            let sch = {"scheduleType":"once","activities":[{"label":"My Thoughts","guid":"1c0cba59","survey":{"guid":"46ca2bd1"},"activityType":"survey"}]};
 
+            expect(
+                fmt.formatSchedule(sch, ACTIVITY_FORMATTER, TASK_FORMATTER, SURVEY_FORMATTER)
+            ).to.equal("On enrollment, do survey 'My Thoughts'.");
         });
         it("formats a compound activity", () => {
+            let sch = {"scheduleType":"once","activities":[{"label":"Test","guid":"6767397f-f021-4233-8fb7-2d96e78672ce","compoundActivity":{"schemaList":[],"surveyList":[],"taskIdentifier":"My Task","type":"CompoundActivity"},"activityType":"compound","type":"Activity"}]}
 
+            expect(
+                fmt.formatSchedule(sch, ACTIVITY_FORMATTER, TASK_FORMATTER, SURVEY_FORMATTER)
+            ).to.equal("On enrollment, do compound task 'My Task'.");
         });
         it("formats multiple activities", () => {
+            let sch = {"scheduleType":"once","activities":[{"label":"Study Burst Task","guid":"fe79d987-28a2-4ccd-bcf3-b3d07b925a6b","task":{"identifier":"APHTimedWalking","type":"TaskReference"},"activityType":"task"},{"label":"My Thoughts","guid":"1c0cba59","survey":{"guid":"46ca2bd1"},"activityType":"survey"},{"label":"Test","guid":"6767397f-f021-4233-8fb7-2d96e78672ce","compoundActivity":{"schemaList":[],"surveyList":[],"taskIdentifier":"My Task","type":"CompoundActivity"},"activityType":"compound","type":"Activity"}]};
+
+            expect(
+                fmt.formatSchedule(sch, ACTIVITY_FORMATTER, TASK_FORMATTER, SURVEY_FORMATTER)
+            ).to.equal(
+                "On enrollment, do task 'Timed Walk', do survey 'My Thoughts', and do compound task 'My Task'."
+            );
         });
     });
     describe("expiration", () => {
