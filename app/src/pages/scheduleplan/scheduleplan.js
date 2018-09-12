@@ -26,7 +26,6 @@ module.exports = function(params) {
         .bind('label', '')
         .obs('schedulePlanType', (params.guid==="new") ? 'SimpleScheduleStrategy' : 'empty');
         
-    //self.strategyObs.callback = fn.identity;
     fn.copyProps(self.strategyObs, fn, 'identity->callback');
     fn.copyProps(self, scheduleUtils, 'schedulePlanTypeOptions', 'schedulePlanTypeLabel');
 
