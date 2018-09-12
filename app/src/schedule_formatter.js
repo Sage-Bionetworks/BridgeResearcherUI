@@ -11,9 +11,8 @@ const PERIOD_WORDS = Object.freeze({
     'W': 'week',
     'Y': 'year'
 });
-const EMPTY = () => { 
-    return ''; 
-};
+const EMPTY = () => '';
+
 const TIME_OPTIONS = (function() {
     let array = [];
     for (let i=0; i < 24; i++) {
@@ -48,7 +47,10 @@ function makeOptionLabelFinder(array) {
     };
 }
 
-function formatSchedule(schedule, activityFormatter = EMPTY, taskFormatter = EMPTY, surveyFormatter = EMPTY) {
+function formatSchedule(schedule, activityFormatter, taskFormatter, surveyFormatter) {
+    activityFormatter = activityFormatter || EMPTY;
+    taskFormatter = taskFormatter || EMPTY;
+    surveyFormatter = surveyFormatter || EMPTY;
     if (schedule == null || Object.keys(schedule).length === 0) {
         return "<i>No schedule</i>";
     }
@@ -78,35 +80,32 @@ function formatSchedule(schedule, activityFormatter = EMPTY, taskFormatter = EMP
     return buffer.map(sentenceCase).join(". ") + ".";
 }
 function formatActivityArray(activityMap, schedule) {
-    if (schedule.scheduleType === 'persistent') {
-        return formatActivityPhrase(activityMap, 
-            '#{label}', 
-            ' (to do #{count} times)', 
-            'make the #{list} permanently available');
-    } else if (schedule.scheduleType === 'recurring') {
-        if (schedule.cronTrigger) {
+    let hasTimesOfDay = schedule.times && schedule.times.length;
+    let timeString = (hasTimesOfDay) ? formatTimesArray(schedule.times) : '';
+
+    switch(schedule.scheduleType) {
+        case 'persistent':
             return formatActivityPhrase(activityMap, 
-                'do #{label}', 
-                ' #{count} times', 
-                `and thereafter on the cron expression '${schedule.cronTrigger}', #{list}`);
-        } else {
+                '#{label}', ' (to do #{count} times)', 
+                'make the #{list} permanently available');
+        case 'recurring':
+            if (schedule.cronTrigger) {
+                return formatActivityPhrase(activityMap, 
+                    'do #{label}', ' #{count} times', 
+                    `and thereafter on the cron '${schedule.cronTrigger}', #{list}`);
+            }
             let periodString = periodToWordsNoArticle(schedule.interval);
-            let timeString = formatTimesArray(schedule.times);
             return formatActivityPhrase(activityMap, 
-                'do #{label}', 
-                ' #{count} times', 
+                'do #{label}', ' #{count} times', 
                 `and every ${periodString} thereafter at ${timeString}, #{list}`);
-        }
-    } else if (schedule.scheduleType === 'once') {
-        return formatActivityPhrase(activityMap, 
-            'do #{label}', 
-            ' #{count} times', 
-            `#{list}`);
+        case 'once':
+            if(hasTimesOfDay) {
+                return formatActivityPhrase(activityMap, 
+                    `do #{label} at ${timeString}`, ` #{count} times`, `#{list}`);
+            }
+            return formatActivityPhrase(activityMap, 
+                'do #{label}', ' #{count} times', `#{list}`);
     }
-    return formatActivityPhrase(activityMap, 
-        'do #{label}', 
-        ' #{count} times', 
-        `#{list} at ${formatTimesArray(schedule.times)}`);
 }
 function formatActivityPhrase(activityMap, activityLabel, pluralLabel, phrase) {
     let activityPhrase = Object.keys(activityMap).map((label) => {
