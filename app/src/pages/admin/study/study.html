@@ -5,7 +5,7 @@
                     <a href="#/admin/studies" class="section">Studies</a>
                     <i class="right chevron icon divider"></i>
                 </div>
-                <h3 data-bind="text: nameObs"></h3>
+                <h3 data-bind="text: titleObs"></h3>
             </div>
             <div class="fixed-header-buttons">
                 <button class="ui tiny primary button" data-bind="click: save">Save</button>
@@ -21,9 +21,9 @@
                     <label>Study name</label>
                     <input data-bind="textInput: nameObs">
                 </div>
-                <div class="field" id="supportEmail">
-                    <label>Support Email</label>
-                    <input data-bind="textInput: supportEmailObs">
+                <div class="field" id="identifier">
+                    <label>Study Identifier</label>
+                    <input data-bind="textInput: identifierObs">
                 </div>
             </div>
             <div class="two fields">
@@ -31,33 +31,19 @@
                     <label>Sponsor name</label>
                     <input data-bind="textInput: sponsorNameObs">
                 </div>
-                <div class="field">
-                    <label>Technical Email</label>
-                    <input data-bind="textInput: technicalEmailObs">
-                </div>
-            </div>
-            <div class="two fields">
-                <div class="field" id="identifier">
-                    <label>Study Identifier</label>
-                    <input data-bind="textInput: identifierObs">
-                </div>
-                <div class="field">
-                    <label>Consent Notification Email</label>
-                    <input data-bind="textInput: consentNotificationEmailObs">
-                </div>
             </div>
             
             <h4 class="ui dividing header">Bridge Users</h4>
             <div data-bind="foreach: usersObs" class="users">
                 <div class="four fields">
-                    <div class="field" data-bind="attr: {id: 'users'+$index()+'_email'}">
-                        <input placeholder="Email" data-bind="textInput: $data.emailObs">
-                    </div>
                     <div class="field">
                         <input placeholder="First Name" data-bind="textInput: $data.firstNameObs">
                     </div>
                     <div class="field">
                         <input placeholder="Last Name" data-bind="textInput: $data.lastNameObs">
+                    </div>
+                    <div class="field" data-bind="attr: {id: 'users'+$index()+'_email'}">
+                        <input placeholder="Email" data-bind="textInput: $data.emailObs">
                     </div>
                     <div class="field" data-bind="attr: {id: 'users'+$index()+'_roles'}">
                         <tag-editor params="selectedObs: $data.rolesObs, 

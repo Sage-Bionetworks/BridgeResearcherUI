@@ -1,34 +1,35 @@
 <div class="fields">
-        <!-- Doesn't handle errors targeted for minAppVersions_iphone_os -->
-        <div data-bind="attr:{
-            class:'three wide field '+$data.id+'minAppVersions_iphone_os ' + $data.id+'maxAppVersions_iphone_os'}">
-            <label>iOS version</label>
-            <div class="field range-control-border" data-bind="focusable">
-                <input type="text" placeholder="Min" data-bind="textInput: $data.iosMinObs"/>
-                <span>&mdash;</span>
-                <input type="text" placeholder="Max" data-bind="textInput: $data.iosMaxObs"/>
-            </div>
-        </div>
-        <div data-bind="attr:{
-            class:'three wide field '+$data.id+'minAppVersions_android ' + $data.id+'maxAppVersions_android'}">
-            <label>Android version</label>
-            <div class="field range-control-border" data-bind="focusable">
-                <input type="text" placeholder="Min" data-bind="textInput: $data.androidMinObs"/>
-                <span>&mdash;</span>
-                <input type="text" placeholder="Max" data-bind="textInput: $data.androidMaxObs"/>
-            </div>
-        </div>
-        <div class="two wide field" data-bind="attr:{id:$data.id+'language'}">
-            <label>Language</label>
-            <input type="text" class="field" data-bind="textInput: $data.languageObs"/>
-        </div>
-        <div class="five wide field tag-editor" data-bind="attr:{id: $data.id+'allOfGroups'}">
-            <label>User has all these data group(s)</label>
-            <tag-editor params="selectedObs: allOfGroupsObs, allObs: dataGroupsOptionsObs, type: 'data groups'"></tag-editor>
-        </div>
-        <div class="five wide field tag-editor" data-bind="attr:{id: $data.id+'noneOfGroups'}">
-            <label>And none of these group(s)</label>
-            <tag-editor params="selectedObs: noneOfGroupsObs, allObs: dataGroupsOptionsObs, type: 'data groups'"></tag-editor>
-        </div>
+  <!-- Doesn't handle errors targeted for minAppVersions_iphone_os -->
+  <div data-bind="attr:{class:'three wide field '+$data.id+'minAppVersions_iphone_os ' + 
+    $data.id+'maxAppVersions_iphone_os'}">
+    <label>iOS version</label>
+    <div class="field range-control-border" data-bind="focusable">
+      <input type="text" placeholder="Min" data-bind="textInput: $data.iosMinObs" />
+      <span>&mdash;</span>
+      <input type="text" placeholder="Max" data-bind="textInput: $data.iosMaxObs" />
     </div>
-    
+  </div>
+  <div data-bind="attr:{
+    class:'three wide field '+$data.id+'minAppVersions_android ' + $data.id+'maxAppVersions_android'}">
+    <label>Android version</label>
+    <div class="field range-control-border" data-bind="focusable">
+      <input type="text" placeholder="Min" data-bind="textInput: $data.androidMinObs" />
+      <span>&mdash;</span>
+      <input type="text" placeholder="Max" data-bind="textInput: $data.androidMaxObs" />
+    </div>
+  </div>
+  <div class="two wide field" data-bind="attr:{id:$data.id+'language'}">
+    <label>Language</label>
+    <input type="text" class="field" data-bind="textInput: $data.languageObs" />
+  </div>
+  <div class="five wide field tag-editor" data-bind="attr:{id: $data.id+'allOfGroups'}">
+    <label>User has all these data group(s)</label>
+    <tag-editor params="selectedObs: allOfGroupsObs, 
+      allObs: dataGroupsOptionsObs, type: 'data groups'"></tag-editor>
+  </div>
+  <div class="five wide field tag-editor" data-bind="attr:{id: $data.id+'noneOfGroups'}">
+    <label>And none of these group(s)</label>
+    <tag-editor params="selectedObs: noneOfGroupsObs, 
+      allObs: dataGroupsOptionsObs, type: 'data groups'"></tag-editor>
+  </div>
+</div>
