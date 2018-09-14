@@ -67,7 +67,6 @@ module.exports = function() {
 
     serverService.getStudy().then(function(study) {
         self.study = study;
-        console.log(study);
         let eventKeys = study.activityEventKeys || [];
         self.allEventsObs.pushAll(eventKeys.map(activityEventKeyToOpt));
         self.itemsObs(

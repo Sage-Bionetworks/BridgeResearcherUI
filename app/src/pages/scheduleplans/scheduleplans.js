@@ -65,9 +65,6 @@ module.exports = function() {
         scheduleUtils.loadOptions()
             .then(getSchedulePlans)
             .then(fn.handleSort('items', 'label'))
-            .then(fn.handleForEach('items', (plan) => {
-                plan.deletedObs = ko.observable(plan.deleted || false);
-            }))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))
             .then(function(response) {
                 return Promise.map(response.items, function(plan) {
