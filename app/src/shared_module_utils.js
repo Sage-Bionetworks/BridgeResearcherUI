@@ -52,7 +52,7 @@ function formatDescription(metadata, withVersion) {
     if (withVersion) {
         array.push("v"+metadata.version);
     }
-    return array.join("; ") + ".";
+    return (array.length) ? (array.join("; ") + ".") : "";
 }
 function formatTags(metadata) {
     return (metadata.tags) ? metadata.tags.join(", ") : "";

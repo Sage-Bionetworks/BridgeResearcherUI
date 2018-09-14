@@ -27,6 +27,7 @@ module.exports = function(params) {
 
     self.importItem = function(item, event) {
         utils.startHandler(self, event);
+        console.log(item);
         serverService.importMetadata(item.id, item.version)
             .then(params.closeModuleBrowser)
             .then(utils.successHandler(self, event))

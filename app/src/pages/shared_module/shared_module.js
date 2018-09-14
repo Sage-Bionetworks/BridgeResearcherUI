@@ -128,7 +128,6 @@ module.exports = function(params) {
         }
     }
     function updateTitle(metadata) {
-        console.log(metadata);
         self.titleObs(metadata.name);
         return metadata;
     }

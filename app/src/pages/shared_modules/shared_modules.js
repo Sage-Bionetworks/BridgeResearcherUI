@@ -17,25 +17,6 @@ module.exports = function() {
     let self = this;
     self.isAdmin = root.isAdmin;
 
-    function doSearch() {
-        let text = self.searchObs();
-        let tagsOnly = self.tagsOnlyObs();
-        console.log("tagsOnly", tagsOnly);
-        let modType = self.moduleTypeFilterObs();
-
-        let query = {mostrecent:false};
-        if (text === "") {
-            query.mostrecent = true;
-        } else if (tagsOnly) {
-            query.tags = text;
-        } else {
-            query.name = text;
-            query.notes = text;
-        }
-        serverService.getMetadata(query, modType)
-            .catch(utils.failureHandler());
-    }
-
     tables.prepareTable(self, {
         name: "shared module",
         type: "SharedModuleMetadata", 
@@ -50,6 +31,25 @@ module.exports = function() {
             return serverService.updateMetadata(metadata);
         }
     });
+
+    function doSearch() {
+        let text = self.searchObs();
+        let tagsOnly = self.tagsOnlyObs();
+        let modType = self.moduleTypeFilterObs();
+
+        let query = {mostrecent:false, includeDeleted: self.showDeletedObs()};
+        if (text === "") {
+            query.mostrecent = true;
+        } else if (tagsOnly) {
+            query.tags = text;
+        } else {
+            query.name = text;
+            query.notes = text;
+        }
+        serverService.getMetadata(query, modType)
+            .then(fn.handleObsUpdate(self.itemsObs, 'items'))
+            .catch(utils.failureHandler());
+    }
 
     self.moduleTypeOptions = OPTIONS;
     self.formatDescription = sharedModuleUtils.formatDescription;
@@ -79,14 +79,10 @@ module.exports = function() {
                 .catch(utils.failureHandler());
         });
     };
-    function loadMetadata() {
-        return serverService.getMetadata({includeDeleted: self.showDeletedObs()})
-            .then(fn.handleObsUpdate(self.itemsObs, 'items'));
-    }
 
     function load() {
         sharedModuleUtils.loadNameMaps()
-            .then(loadMetadata)
+            .then(doSearch)
             .catch(utils.failureHandler());
     }
     load();

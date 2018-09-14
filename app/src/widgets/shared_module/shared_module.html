@@ -1,45 +1,19 @@
 <div sm class="ui disable card">
-    <div class="content">
-        <div class="right floated" data-bind="text: formatVersions(model)"></div>
-        <a class="header" data-bind="attr: link(), text: model.name"></a>
-        <div class="meta" data-bind="text: formatDescription(model)"></div>
-        <div class="description" data-bind="html: model.notes"></div>
-    </div>
-    <div class="extra">
-        <span data-bind="text: formatTags(model)"></span>
-        <span>
-            <span data-bind="visible: publishOn && model.published" style="padding-right: .5rem" 
-                class="ui green text"><i class="green checkmark icon"></i> Published
-            </span>
-            <span data-bind="visible: isImported" style="padding-right: .5rem" 
-                class="ui green text"><i class="green checkmark icon"></i> Imported
-            </span>
-            <button data-bind="visible: importOn && !isImported, click: importFunc" 
-                class="ui primary compact mini button">Import</button>
-            <button data-bind="visible: publishOn && !model.published, click: publishFunc" 
-                class="ui basic compact mini button">Publish</button>
-
-
-            <button class="ui red mini button" 
-                data-bind="visible: !isAdmin(), click: deleteFunc">Delete</button>
-            <div class="ui red compact mini buttons" data-bind="visible: isAdmin()">
-                <div class="ui mini compact button" data-bind="click: deleteFunc, css:{
-                    semantic: 'dropdown-button-toggle', container: '.buttons'">Delete</div>
-                <div class="ui primary compact mini floating dropdown icon button" 
-                    data-bind="semantic: 'dropdown-button'">
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                    <div class="item" data-bind="click: deleteFunc">Delete</div>
-                    <div class="item" data-bind="click: deletePermanentlyFunc">Delete <b>Permanently</b></div>
-                    </div>
-                </div>
-            </div>
-            <!--
-            <button data-bind="visible: deleteOn, click: deleteFunc" 
-                class="ui basic red compact mini button">Delete</button>
-            <button data-bind="visible: deleteOn, click: deletePermanentlyFunc" 
-                class="ui basic red compact mini button">Delete Permanently</button>
-            -->
-        </span>
-    </div>
+  <div class="content">
+    <div class="right floated" data-bind="text: formatVersions(model)"></div>
+    <div class="header" data-bind="text: model.name"></div>
+    <div class="meta" data-bind="text: formatDescription(model)"></div>
+    <div class="description" data-bind="html: model.notes"></div>
+  </div>
+  <div class="extra">
+    <span data-bind="text: formatTags(model)"></span>
+    <span>
+      <span data-bind="visible: isImported(model)" class="ui green text" 
+        style="padding-right: .5rem"><i class="green checkmark icon"></i>
+        Imported
+      </span>
+      <button data-bind="visible: !isImported(model), click: importFunc" 
+        class="ui primary compact mini button">Import</button>
+    </span>
+  </div>
 </div>

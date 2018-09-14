@@ -38,7 +38,7 @@
     </div>
     <ui-select params="fieldObs: moduleTypeFilterObs, optionsSrc: moduleTypeOptions"></ui-select>
     <ui-checkbox params="checkedObs: tagsOnlyObs" style="margin-left: 1.5rem">
-        Search tags
+        Search tags only
     </ui-checkbox>
 
     <table class="ui compact selectable table">
@@ -67,25 +67,16 @@
                 </td>
                 <td>
                     <a style="font-weight: bold" data-bind="text: $data.name, 
-                        href: '#/shared_modules/'+encodeURIComponent($data.id)"></a>
+                        href: '#/shared_modules/'+encodeURIComponent($data.id) + '/versions/' + $data.version + '/editor'"></a>
                     <div style="color: #333" data-bind="text: $parent.formatDescription($data)"></div>
                 </td>
                 <td data-bind="text: $data.version"></td>
                 <td style="text-align: right">
-                    <!-- NOTE: Not sure what imported does anymore, or why it's here. I think if you 
-                        import, it moves it into another study... but I don't know how it knows which
-                        study to import into
-                    <span data-bind="visible: publishOn && $data.published" style="padding-right: .5rem" 
+                    <span data-bind="visible: $data.published" style="padding-right: .5rem" 
                         class="ui green text"><i class="green checkmark icon"></i> Published
                     </span>
-                    <span data-bind="visible: isImported" style="padding-right: .5rem" 
-                        class="ui green text"><i class="green checkmark icon"></i> Imported
-                    </span>
-                    <button data-bind="visible: importOn && !isImported, click: importFunc" 
-                        class="ui primary compact mini button">Import</button>
-                    <button data-bind="visible: publishOn && !$data.published, click: publishFunc" 
+                    <button data-bind="visible: !$data.published, click: $parent.publishItem" 
                         class="ui basic compact mini button">Publish</button>
-                    -->
                 </td>
             </tr>
         </tbody>
