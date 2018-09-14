@@ -27,7 +27,6 @@ module.exports = function(params) {
 
     self.importItem = function(item, event) {
         utils.startHandler(self, event);
-        console.log(item);
         serverService.importMetadata(item.id, item.version)
             .then(params.closeModuleBrowser)
             .then(utils.successHandler(self, event))
@@ -49,8 +48,6 @@ module.exports = function(params) {
         }
         return serverService.getMetadata(query, params.type);
     }
-    // TODO: Why isn't this all centralised in the sharedModuleUtils file? Why is it
-    // happening here if it's needed in the browser, the main list of modules, etc.?
     function addImportedModules(response) {
         response.items.filter(function(item) {
             return item.moduleId;
