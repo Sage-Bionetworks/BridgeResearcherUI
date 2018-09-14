@@ -4,6 +4,24 @@
             <h3>Shared Modules</h3>
         </div>
         <div class="fixed-header-buttons">
+
+            <button data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems" 
+                class="ui red tiny button">Delete</button>
+            <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
+                <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()},
+                    semantic: 'dropdown-button-toggle', container: '.buttons'">
+                    Delete
+                </div>
+                <div class="ui primary tiny floating dropdown icon button" 
+                    data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item" data-bind="click: deleteItems">Delete</div>
+                        <div class="item" data-bind="click: deletePermanently">Delete <b>Permanently</b></div>
+                    </div>
+                </div>
+            </div>
+            
             <a href="#/shared_modules/new" class="ui primary tiny button">New Shared Module</a>
         </div>
     </div>
@@ -23,13 +41,58 @@
         Search tags
     </ui-checkbox>
 
-    <div class="no_records" data-bind="if: itemsObs().length === 0">
-        <p data-bind="html: recordsMessageObs"></p>
+    <table class="ui compact selectable table">
+        <thead>
+            <tr>
+                <th width="10">
+                    <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+                </th>
+                <th>Module</th>
+                <th>Version</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+            <tr>
+                <td colspan="4" data-bind="html: recordsMessageObs"></td>
+            </tr>
+        </tbody>            
+        <tbody data-bind="foreach: itemsObs">
+            <tr data-bind="css: {negative: $data.deleted}">
+                <td>
+                    <ui-checkbox data-bind="visible: !$data.deletedObs()" 
+                        params="checkedObs: $data.checkedObs"></ui-checkbox>
+                    <i data-bind="visible: $data.deletedObs, click: $parent.undelete" 
+                        style="cursor: pointer" class="green undo icon"></i>
+                </td>
+                <td>
+                    <a style="font-weight: bold" data-bind="text: $data.name, 
+                        href: '#/shared_modules/'+encodeURIComponent($data.id)"></a>
+                    <div style="color: #333" data-bind="text: $parent.formatDescription($data)"></div>
+                </td>
+                <td data-bind="text: $data.version"></td>
+                <td style="text-align: right">
+                    <!-- NOTE: Not sure what imported does anymore, or why it's here. I think if you 
+                        import, it moves it into another study... but I don't know how it knows which
+                        study to import into
+                    <span data-bind="visible: publishOn && $data.published" style="padding-right: .5rem" 
+                        class="ui green text"><i class="green checkmark icon"></i> Published
+                    </span>
+                    <span data-bind="visible: isImported" style="padding-right: .5rem" 
+                        class="ui green text"><i class="green checkmark icon"></i> Imported
+                    </span>
+                    <button data-bind="visible: importOn && !isImported, click: importFunc" 
+                        class="ui primary compact mini button">Import</button>
+                    <button data-bind="visible: publishOn && !$data.published, click: publishFunc" 
+                        class="ui basic compact mini button">Publish</button>
+                    -->
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
+        <ui-checkbox params="checkedObs: showDeletedObs">
+            Show deleted schedule plans
+        </ui-checkbox>
     </div>
-    <!-- ko foreach: itemsObs -->
-        <!-- ko component: { name: 'shared-module', params: { 
-                model: $data, importFunc: $parent.importItem, publishFunc: $parent.publishItem, 
-                    deleteFunc: $parent.deleteItem 
-        }} --><!-- /ko -->
-    <!-- /ko -->
 </div>

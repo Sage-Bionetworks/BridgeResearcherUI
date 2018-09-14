@@ -16,7 +16,7 @@
                     </div>
                 </div>
             </div>
-            <!--
+
             <button data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems" 
                 class="ui red tiny button">Delete</button>
             <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
@@ -33,7 +33,7 @@
                     </div>
                 </div>
             </div>
-            -->
+
             <div class="ui primary tiny buttons">
                 <div class="ui primary tiny button" 
                     data-bind="semantic: 'dropdown-button-toggle', container: '.buttons'">
@@ -78,13 +78,10 @@
         <tbody data-bind="foreach: itemsObs">
             <tr data-bind="css: {negative: $data.deleted}">
                 <td>
-                    <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
-                    <!--
                     <ui-checkbox data-bind="visible: !$data.deletedObs()" 
                         params="checkedObs: $data.checkedObs"></ui-checkbox>
                     <i data-bind="visible: $data.deletedObs, click: $parent.undelete" 
                         style="cursor: pointer" class="green undo icon"></i>
-                    -->
                 </td>
                 <td>
                     <a data-bind="attr: {'href': '#/schemas/'+encodeURIComponent($data.schemaId)+
@@ -98,11 +95,9 @@
             </tr>
         </tbody>
     </table>
-    <!--
     <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
         <ui-checkbox params="checkedObs: showDeletedObs">
             Show deleted upload schemas
         </ui-checkbox>
     </div>
-    -->
 </div>

@@ -48,6 +48,7 @@ module.exports = function(params) {
 
     let binder = new Binder(self)
         .obs('isNew', params.id === "new")
+        .obs('title', 'New Shared Module')
         .bind('published', false)
         .bind('id', params.id)
         .bind('licenseRestricted', false)
@@ -95,7 +96,9 @@ module.exports = function(params) {
             });
         } else if (metadata.schemaId) {
             loadSchemaRevisions(self, {schemaId: metadata.schemaId}).then(function() {
-                self.linkedVersionObs(metadata.revision);
+                // Sometimes this is metadata.revision, and sometimes it's metadata.schemaRevision,
+                // which is really a problem...
+                self.linkedVersionObs(metadata.schemaRevision);
             });
         } else {
             self.linkedVersionOptionsObs([]);
@@ -123,6 +126,11 @@ module.exports = function(params) {
         } else {
             return serverService.getMetadataLatestVersion(params.id);
         }
+    }
+    function updateTitle(metadata) {
+        console.log(metadata);
+        self.titleObs(metadata.name);
+        return metadata;
     }
 
     self.osOptions = OPTIONS;
@@ -160,6 +168,7 @@ module.exports = function(params) {
         });
         root.closeDialog();
     };
+
     self.addSurveys = function(surveys) {
         self.schemaIdObs(null);
         self.schemaRevisionObs(null);
@@ -191,12 +200,14 @@ module.exports = function(params) {
         utils.startHandler(vm, event);
         serverService[methodName](self.metadata)
             .then(updateId)
+            .then(updateTitle)
             .then(utils.successHandler(vm, event, "Shared module saved."))
             .catch(utils.failureHandler());
     };
     if (params.id !== "new") {
         sharedModuleUtils.loadNameMaps()
             .then(loadMetadata)
+            .then(updateTitle)
             .then(binder.assign('metadata'))
             .then(binder.update())
             .then(updateSharedModuleWithNames)

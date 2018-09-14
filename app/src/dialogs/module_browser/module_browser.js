@@ -48,6 +48,8 @@ module.exports = function(params) {
         }
         return serverService.getMetadata(query, params.type);
     }
+    // TODO: Why isn't this all centralised in the sharedModuleUtils file? Why is it
+    // happening here if it's needed in the browser, the main list of modules, etc.?
     function addImportedModules(response) {
         response.items.filter(function(item) {
             return item.moduleId;

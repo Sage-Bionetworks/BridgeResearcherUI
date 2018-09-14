@@ -66,6 +66,7 @@ module.exports = function() {
             .then(getSchedulePlans)
             .then(fn.handleSort('items', 'label'))
             .then(fn.handleForEach('items', (plan) => {
+                // REMOVEME
                 plan.deletedObs = ko.observable(plan.deleted || false);
             }))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))

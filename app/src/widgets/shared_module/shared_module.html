@@ -18,8 +18,28 @@
                 class="ui primary compact mini button">Import</button>
             <button data-bind="visible: publishOn && !model.published, click: publishFunc" 
                 class="ui basic compact mini button">Publish</button>
+
+
+            <button class="ui red mini button" 
+                data-bind="visible: !isAdmin(), click: deleteFunc">Delete</button>
+            <div class="ui red compact mini buttons" data-bind="visible: isAdmin()">
+                <div class="ui mini compact button" data-bind="click: deleteFunc, css:{
+                    semantic: 'dropdown-button-toggle', container: '.buttons'">Delete</div>
+                <div class="ui primary compact mini floating dropdown icon button" 
+                    data-bind="semantic: 'dropdown-button'">
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                    <div class="item" data-bind="click: deleteFunc">Delete</div>
+                    <div class="item" data-bind="click: deletePermanentlyFunc">Delete <b>Permanently</b></div>
+                    </div>
+                </div>
+            </div>
+            <!--
             <button data-bind="visible: deleteOn, click: deleteFunc" 
                 class="ui basic red compact mini button">Delete</button>
+            <button data-bind="visible: deleteOn, click: deletePermanentlyFunc" 
+                class="ui basic red compact mini button">Delete Permanently</button>
+            -->
         </span>
     </div>
 </div>
