@@ -2,15 +2,15 @@ import {serverService} from '../../services/server_service';
 import alerts from '../../widgets/alerts';
 import Binder from '../../binder';
 import config from '../../config';
+import fn from '../../functions';
 import sharedModuleUtils from '../../shared_module_utils';
 import tables from '../../tables';
 import utils from '../../utils';
 
-const DELETE_MSG = "Are you sure you want to delete this shared module version?";
-
-function deleteItem(item) {
-    return serverService.deleteMetadataVersion(item.id, item.version);
-}
+const FAILURE_HANDLER = utils.failureHandler({
+    redirectTo: "shared_modules",
+    redirectMsg: "Shared module not found"
+});
 
 module.exports = function(params) {
     let self = this;
@@ -18,8 +18,17 @@ module.exports = function(params) {
 
     tables.prepareTable(self, {
         name: 'shared module version',
-        delete: deleteItem,
-        redirect: "#/shared_modules"
+        redirect: "#/shared_modules",
+        refresh: load,
+        delete: function(item) {
+            return serverService.deleteMetadataVersion(item.id, item.version, false);
+        }, 
+        deletePermanently: function(item) {
+            return serverService.deleteMetadataVersion(item.id, item.version, true);
+        },
+        undelete: function(item) {
+            return serverService.updateMetadata(item);
+        }
     });
 
     let binder = new Binder(self)
@@ -29,9 +38,7 @@ module.exports = function(params) {
         .obs('id', params.id)
         .obs('version', params.version);
 
-    self.formatDescription = sharedModuleUtils.formatDescription;
-    self.formatTags = sharedModuleUtils.formatTags;
-    self.formatVersions = sharedModuleUtils.formatVersions;
+    fn.copyProps(self, sharedModuleUtils, 'formatDescription', 'formatTags', 'formatVersions');
 
     self.publishItem = function(item, event) {
         alerts.confirmation(config.msgs.shared_modules.PUBLISH, function() {
@@ -43,31 +50,19 @@ module.exports = function(params) {
                 .catch(utils.failureHandler());
         });
     };
-    self.deleteItem = function(item, event) {
-        alerts.deleteConfirmation(DELETE_MSG, function() {
-            utils.startHandler(self, event);
-            serverService.deleteMetadataVersion(item.id, item.version)
-                .then(load)
-                .then(utils.successHandler(self, event, "Shared module version deleted."))
-                .catch(utils.failureHandler());
-        });
-    };
+
+    function getMetadataAllVersions() {
+        return serverService.getMetadataAllVersions(params.id, self.showDeletedObs());
+    }
 
     function load() {
         return serverService.getMetadataVersion(params.id, params.version)
             .then(binder.update())
             .then(binder.assign('metadata'))
             .then(sharedModuleUtils.loadNameMaps)
-            .then(function() {
-                return serverService.getMetadataAllVersions(params.id);
-            }).then(function(response) {
-                self.itemsObs(response.items.reverse());
-                return response;
-            })
-            .catch(utils.failureHandler({
-                redirectTo: "shared_modules",
-                redirectMsg: "Shared module not found"
-            }));
+            .then(getMetadataAllVersions)
+            .then(fn.handleObsUpdate(self.itemsObs, 'items'))
+            .catch(FAILURE_HANDLER);
     }
     load();
 };

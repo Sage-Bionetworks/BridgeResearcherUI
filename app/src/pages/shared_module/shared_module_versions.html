@@ -8,8 +8,22 @@
             <h3 data-bind="text: nameObs"></h3>
         </div>
         <div class="fixed-header-buttons">
-            <button class="ui red tiny button" 
-                data-bind="disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
+            <button data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems" 
+                class="ui red tiny button">Delete</button>
+            <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
+                <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()},
+                    semantic: 'dropdown-button-toggle', container: '.buttons'">
+                    Delete
+                </div>
+                <div class="ui primary tiny floating dropdown icon button" 
+                    data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item" data-bind="click: deleteItems">Delete</div>
+                        <div class="item" data-bind="click: deletePermanently">Delete <b>Permanently</b></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <sharedmodule-tabset params="viewModel: $data"></sharedmodule-tabset>
@@ -33,10 +47,12 @@
             </tr>
         </tbody>        
         <tbody data-bind="foreach: itemsObs">
-            <tr data-bind="css: { positive: $data.published }">
+            <tr data-bind="css: { positive: $data.published, negative: $data.deleted }">
                 <td>
-                    <ui-checkbox params="checkedObs: $data.checkedObs, 
-                        disabled: $data.published"></ui-checkbox>
+                    <ui-checkbox data-bind="visible: !$data.deletedObs()" 
+                        params="checkedObs: $data.checkedObs"></ui-checkbox>
+                    <i data-bind="visible: $data.deletedObs, click: $parent.undelete" 
+                        style="cursor: pointer" class="green undo icon"></i>
                 </td>
                 <td>
                     <a data-bind="text: $data.name, href: 
@@ -46,12 +62,17 @@
                 <td data-bind="text: $component.formatVersions($data)"></td>
                 <td style="text-align: right">
                     <button class="ui basic compact mini button" 
-                        data-bind="visible: !$data.published, click: $parent.publishItem">Publish</button>
+                        data-bind="visible: !$data.deleted && !$data.published, click: $parent.publishItem">Publish</button>
                     <div data-bind="visible: $data.published">
                         <i class="checkmark icon"></i> Published
                     </div>
                 </td>
             </tr>
         </tbody>
-    </table>    
+    </table>
+    <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
+        <ui-checkbox params="checkedObs: showDeletedObs">
+            Show deleted shared modules
+        </ui-checkbox>
+    </div>
 </div>

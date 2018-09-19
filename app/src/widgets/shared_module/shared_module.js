@@ -1,28 +1,20 @@
 import sharedModuleUtils from '../../shared_module_utils';
+import fn from '../../functions';
+import root from '../../root';
 
 /**
  * params:
- *  publishFunc
- *  importFunc
- *  deleteFunc
+ *  importFunc - function to import this object into the study
+ *  isImported - determine if object has been imported in this study (not the shared study)
  *  model - the shared module object
  */
 module.exports = function(params) {
     var self = this;
     
-    self.model = params.model;
-    self.isImported = !!params.importFunc && params.isImported(params.model);
-    var url = '#/shared_modules/'+encodeURIComponent(self.model.id);
-
-    Object.assign(self, sharedModuleUtils);
-
-    ['import','publish','delete'].forEach(function(methName) {
-        self[methName+'On'] = !!params[methName+'Func'];
-        self[methName+'Func'] = function(item, event) {
-            params[methName+'Func'](self.model, event);
-        };
-    });
-    self.link = function() {
-        return (self.deleteOn) ? {'href': url} : {};
+    self.importFunc = function(item, event) {
+        params.importFunc(params.model, event);
     };
+    fn.copyProps(self, params, 'model', 'isImported');
+    fn.copyProps(self, root, 'isAdmin');
+    Object.assign(self, sharedModuleUtils);
 };

@@ -530,8 +530,7 @@ export class ServerService {
         return this.gethttp(config.participants + '/' + userId + '/uploads' + queryString);
     }
     getParticipantReport(userId, identifier, startDate, endDate) {
-        // TODO: let queryString = fn.queryString({startDate, endDate});
-        let queryString = fn.queryString({startDate: startDate, endDate: endDate});
+        let queryString = fn.queryString({startDate, endDate});
         return this.gethttp(config.participants + '/' + userId + '/reports/' + identifier + queryString);
     }
     getParticipantActivityEvents(userId) {
@@ -618,18 +617,21 @@ export class ServerService {
     getMetadataVersion(id, version) {
         return this.gethttp(config.metadata + '/' + esc(id) + '/versions/' + esc(version));
     }
-    getMetadataAllVersions(id) {
+    getMetadataAllVersions(id, includeDeleted) {
         // id, mostrecent: "true", published: "false", name: null, notes: null, tags: null
-        return this.gethttp(config.metadata+'/'+esc(id)+'/versions?mostrecent=false');
+        let queryString = fn.queryString({includeDeleted:(includeDeleted === true), mostrecent:false});
+        return this.gethttp(config.metadata+'/'+esc(id)+'/versions' + queryString);
     }
     updateMetadata(metadata) {
         return this.post(config.metadata+'/'+esc(metadata.id)+'/versions/'+esc(metadata.version), metadata);
     }
-    deleteMetadata(id) {
-        return this.del(config.metadata+'/'+esc(id)+'/versions');
+    deleteMetadata(id, physical) {
+        let queryString = fn.queryString({physical:(physical === true)});
+        return this.del(config.metadata+'/'+esc(id)+'/versions' + queryString);
     }
-    deleteMetadataVersion(id, version) {
-        return this.del(config.metadata+'/'+esc(id)+'/versions/'+esc(version));
+    deleteMetadataVersion(id, version, physical) {
+        let queryString = fn.queryString({physical:(physical === true)});
+        return this.del(config.metadata+'/'+esc(id)+'/versions/'+esc(version) + queryString);
     }
     importMetadata(id, version) {
         let url = (typeof version === "number") ?

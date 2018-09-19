@@ -1,4 +1,5 @@
 import {serverService} from './services/server_service';
+import fn from './functions';
 
 const sharedModuleNameMap = {};
 const sharedModuleHTMLMap = {};
@@ -39,10 +40,11 @@ function formatDescription(metadata, withVersion) {
         array.push(metadata.os + " only");
     }
     if (metadata.surveyGuid && surveyNameMap[metadata.surveyGuid]) {
-        array.push("Survey: " + surveyNameMap[metadata.surveyGuid]);
+        array.push("Survey: " + surveyNameMap[metadata.surveyGuid] + 
+            " pub. " + fn.formatDateTime(metadata.surveyCreatedOn));
     }
     if (metadata.schemaId && schemaNameMap[metadata.schemaId]) {
-        array.push("Schema: " + schemaNameMap[metadata.schemaId]);
+        array.push("Schema: " + schemaNameMap[metadata.schemaId] + " v. " + metadata.schemaRevision);
     }
     if (metadata.licenseRestricted) {
         array.push("some licensing restrictions");
@@ -50,7 +52,7 @@ function formatDescription(metadata, withVersion) {
     if (withVersion) {
         array.push("v"+metadata.version);
     }
-    return array.join("; ");
+    return (array.length) ? (array.join("; ") + ".") : "";
 }
 function formatTags(metadata) {
     return (metadata.tags) ? metadata.tags.join(", ") : "";
