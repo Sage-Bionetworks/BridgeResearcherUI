@@ -38,7 +38,11 @@ module.exports = function(params) {
     self.criteriaObs().minAppVersions.Android = intValue(value));
   self.androidMaxObs.subscribe(value =>
     self.criteriaObs().maxAppVersions.Android = intValue(value));
-  self.criteriaObs.subscribe(crit => {
+
+  self.criteriaObs.subscribe(updateObservers);
+  updateObservers(self.criteriaObs());
+
+  function updateObservers(crit) {
     crit.minAppVersions = crit.minAppVersions || {};
     crit.maxAppVersions = crit.maxAppVersions || {};
     binder.update()(crit);
@@ -46,7 +50,7 @@ module.exports = function(params) {
     self.iosMaxObs(crit.maxAppVersions['iPhone OS']);
     self.androidMinObs(crit.minAppVersions.Android);
     self.androidMaxObs(crit.maxAppVersions.Android);
-  });
+  }
 
   function intValue(value) {
     return (fn.isNotBlank(value)) ? parseInt(value, 10) : null;

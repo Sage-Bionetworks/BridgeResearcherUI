@@ -39,12 +39,15 @@ module.exports = function(params) {
     self.collectionName = params.collectionName;
     self.selectedElementObs = ko.observable(0);
 
-    params.strategyObs.subscribe(function(strategy) {
+    params.strategyObs.subscribe(updateObservers);
+    updateObservers(params.strategyObs());
+
+    function updateObservers(strategy) {
         if (strategy && strategy.scheduleGroups) {
             self.scheduleGroupsObs(strategy.scheduleGroups.map(groupToObservables));
             root.setEditorPanel('ABTestScheduleStrategyPanel', {viewModel:self});
         }
-    });
+    }
    
     params.strategyObs.callback = function () {
         let strategy = params.strategyObs();
