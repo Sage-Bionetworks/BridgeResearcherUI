@@ -38,7 +38,7 @@ module.exports = function(params) {
     self.collectionName = params.collectionName;
     self.scheduleCriteriaObs = ko.observableArray([]);
     self.selectedElementObs = ko.observable(0);
-    
+
     params.strategyObs.callback = function () {
         let strategy = params.strategyObs();
         strategy.scheduleCriteria = self.scheduleCriteriaObs().map(observablesToGroup);
@@ -47,12 +47,15 @@ module.exports = function(params) {
 
     root.setEditorPanel('CriteriaScheduleStrategyPanel', {viewModel:self});
 
-    params.strategyObs.subscribe(function(strategy) {
+    params.strategyObs.subscribe(updateObservers);
+    updateObservers(params.strategyObs());
+
+    function updateObservers(strategy) {
         if (strategy && strategy.scheduleCriteria) {
             self.scheduleCriteriaObs(strategy.scheduleCriteria.map(groupToObservables));
             root.setEditorPanel('CriteriaScheduleStrategyPanel', {viewModel:self});
         }
-    });    
+    }
 
     let scrollTo = utils.makeScrollTo(".schedulegroup-fieldset");
     self.fadeUp = utils.fadeUp();
