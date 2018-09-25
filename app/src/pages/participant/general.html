@@ -37,13 +37,21 @@
             </div>
         </div>
 
-        <div class="equal width fields" data-bind="visible: isNewObs">
+        <div class="equal width fields"> <!--  data-bind="visible: isNewObs" -->
             <div class="field" id="email">
-                <label>Email</label>
+                <label>
+                    Email
+                    <i data-bind="css: observerIcon(emailVerifiedObs), semantic: 'popup', 
+                        attr: {'data-content': observerText(emailVerifiedObs)}"></i>
+                </label>
                 <input type="text" data-bind="textInput: emailObs"/>
             </div>
             <div class="field" id="phone">
-                <label>Phone</label>
+                <label>
+                    Phone
+                    <i data-bind="css: observerIcon(phoneVerifiedObs), semantic: 'popup', 
+                        attr: {'data-content': observerText(phoneVerifiedObs)}"></i>
+                </label>
                 <div class="ui left labeled input">
                     <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
                         <div class="text" data-bind="text: phoneRegionObs"></div>
@@ -63,7 +71,7 @@
             </div>
         </div>
             
-        
+        <!--
         <div class="equal width fields" data-bind="visible: !isNewObs()">
             <div class="field" id="email">
                 <label>Email</label>
@@ -90,7 +98,7 @@
                 <span class="input-field-padding" data-bind="visible: !externalIdObs()">—</a>
             </div>
         </div>
-
+        -->
         <div class="equal width fields">
             <div class="field">
                 <label>Languages</label>
