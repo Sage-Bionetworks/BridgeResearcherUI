@@ -6,13 +6,14 @@
         <div class="fixed-header-buttons" data-bind="visible: isDeveloper">
             <button class="ui tiny button" style="margin-left: 3rem" data-bind="click: openImportDialog">Import&hellip;</button>
             <button class="ui tiny button" data-bind="click: createFromNext">Assign Next ID</button>
-            <button data-bind="visible: canDeleteObs, disable: !atLeastOneChecked(), click: deleteItems" 
+            <button data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: deleteItems" 
                 class="ui red tiny button">Delete</button>
         </div>
     </div>
     <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
+    <errors></errors>
     <div class="ui success icon message" style="margin-bottom: 1.4rem" data-bind="visible: showResultsObs">
         <i class="check sign icon"></i>
         <div class="content">
@@ -36,7 +37,7 @@
     <table class="ui compact selectable table">
         <thead>
             <tr>
-                <th width="10" data-bind="visible: canDeleteObs">
+                <th width="10" data-bind="visible: isDeveloper">
                     <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
                 </th>
                 <th>Identifier</th>
@@ -45,12 +46,12 @@
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
-                <td data-bind="attr:{colspan: $parent.canDeleteObs ? 3 : 2}, html: recordsMessageObs"></td>
+                <td data-bind="attr:{colspan: $parent.isDeveloper ? 3 : 2}, html: recordsMessageObs"></td>
             </tr>
         </tbody>                    
         <tbody data-bind="foreach: itemsObs">
             <tr>
-                <td data-bind="visible: $parent.canDeleteObs">
+                <td data-bind="visible: $parent.isDeveloper">
                     <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                 </td>
                 <td style="white-space: nowrap; width:100%">

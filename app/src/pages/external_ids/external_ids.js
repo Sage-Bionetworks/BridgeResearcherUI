@@ -6,7 +6,6 @@ import ko from 'knockout';
 import root from '../../root';
 import tables from '../../tables';
 import utils from '../../utils';
-import toastr from 'toastr';
 
 let OPTIONS = {offsetBy:null, pageSize: 1, assignmentFilter:false};
 
@@ -24,7 +23,6 @@ module.exports = function() {
         .obs('searchLoading', false)
         .obs('externalIdValidationEnabled', false)
         .obs('idFilter')
-        .obs('canDelete', false)
         .obs('useLegacyFormat', false)
         .obs('showResults', false);
 
@@ -33,7 +31,11 @@ module.exports = function() {
     self.callback = fn.identity;
 
     fn.copyProps(self, root, 'isDeveloper', 'isResearcher');
-    tables.prepareTable(self, {name: 'external ID', delete: deleteItem});
+    tables.prepareTable(self, {
+        name: 'external ID', 
+        delete: deleteItem, 
+        refresh: load
+    });
 
     function extractId(response) {
         if (response.items.length === 0) {
@@ -111,7 +113,6 @@ module.exports = function() {
     function initFromStudy(study) {
         let legacy = study.emailVerificationEnabled === false && study.externalIdValidationEnabled === true;
         self.useLegacyFormatObs(legacy);
-        self.canDeleteObs(root.isDeveloper() && !study.externalIdValidationEnabled);
         return study;
     }
     
@@ -119,12 +120,14 @@ module.exports = function() {
         .then(binder.assign('study'))
         .then(initFromStudy);
     
-    self.loadingFunc = function loadPage(params) {
+    function load(params) {
         params = params || {};
         params.idFilter = self.idFilterObs();
         return serverService.getExternalIds(params)
             .then(binder.update('total','items'))
             .then(msgIfNoRecords)
             .catch(utils.failureHandler());
-    };
+    }
+
+    self.loadingFunc = load;
 };
