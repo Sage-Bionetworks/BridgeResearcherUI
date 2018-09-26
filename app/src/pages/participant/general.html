@@ -41,16 +41,16 @@
             <div class="field" id="email">
                 <label>
                     Email
-                    <i data-bind="css: observerIcon(emailVerifiedObs), semantic: 'popup', 
-                        attr: {'data-content': observerText(emailVerifiedObs)}"></i>
+                    <i data-bind="css: observerIcon(emailVerifiedObs, emailObs), semantic: 'popup', 
+                        attr: {'data-content': observerText(emailVerifiedObs, emailObs)}"></i>
                 </label>
                 <input type="text" data-bind="textInput: emailObs"/>
             </div>
             <div class="field" id="phone">
                 <label>
                     Phone
-                    <i data-bind="css: observerIcon(phoneVerifiedObs), semantic: 'popup', 
-                        attr: {'data-content': observerText(phoneVerifiedObs)}"></i>
+                    <i data-bind="css: observerIcon(phoneVerifiedObs, phoneObs), semantic: 'popup', 
+                        attr: {'data-content': observerText(phoneVerifiedObs, phoneObs)}"></i>
                 </label>
                 <div class="ui left labeled input">
                     <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">

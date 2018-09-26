@@ -129,10 +129,12 @@ module.exports = function(params) {
     self.formatPhone = function(phone, phoneRegion) {
         return (phone) ? (fn.flagForRegionCode(phoneRegion) + ' ' + phone) : '';
     };
-    self.observerIcon = function(obs) {
+    self.observerIcon = function(obs, valueObs) {
+        if (valueObs() === null || valueObs() === '') { return ''; }
         return (obs()) ? "green ui check icon" : "orange ui exclamation triangle icon";
     };
-    self.observerText = function(obs) {
+    self.observerText = function(obs, valueObs) {
+        if (valueObs() === null || valueObs() === '') { return ''; }
         return (obs()) ? "Verified" : "Unverified";
     };
 
