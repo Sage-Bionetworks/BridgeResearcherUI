@@ -37,20 +37,20 @@
             </div>
         </div>
 
-        <div class="equal width fields"> <!--  data-bind="visible: isNewObs" -->
+        <div class="equal width fields" data-bind="visible: isNewObs">
             <div class="field" id="email">
                 <label>
                     Email
-                    <i data-bind="css: observerIcon(emailVerifiedObs, emailObs), semantic: 'popup', 
-                        attr: {'data-content': observerText(emailVerifiedObs, emailObs)}"></i>
+                    <verified-icon params="valueObs: emailObs, verifiedObs: emailVerifiedObs">
+                    </verified-icon>
                 </label>
                 <input type="text" data-bind="textInput: emailObs"/>
             </div>
             <div class="field" id="phone">
                 <label>
                     Phone
-                    <i data-bind="css: observerIcon(phoneVerifiedObs, phoneObs), semantic: 'popup', 
-                        attr: {'data-content': observerText(phoneVerifiedObs, phoneObs)}"></i>
+                    <verified-icon params="valueObs: phoneObs, verifiedObs: phoneVerifiedObs">
+                    </verified-icon>
                 </label>
                 <div class="ui left labeled input">
                     <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
@@ -71,14 +71,13 @@
             </div>
         </div>
             
-        <!--
         <div class="equal width fields" data-bind="visible: !isNewObs()">
             <div class="field" id="email">
                 <label>Email</label>
                 <span data-bind="visible: emailObs()">
                     <a class="input-field-padding" data-bind="href: emailLink, text: emailObs"></a>
-                    <i data-bind="css: observerIcon(emailVerifiedObs), semantic: 'popup', 
-                        attr: {'data-content': observerText(emailVerifiedObs)}"></i>
+                    <verified-icon params="valueObs: emailObs, verifiedObs: emailVerifiedObs">
+                    </verified-icon>
                 </span>
                 <span class="input-field-padding" data-bind="visible: !emailObs()">—</span>
             </div>
@@ -87,18 +86,17 @@
                 <span data-bind="visible: phoneObs()">
                     <a class="input-field-padding" data-bind="href: phoneLink, 
                         text: $component.formatPhone(phoneObs(), phoneRegionObs())"></a>
-                    <i data-bind="css: observerIcon(phoneVerifiedObs), semantic: 'popup', 
-                        attr: {'data-content': observerText(phoneVerifiedObs)}"></i>
+                    <verified-icon params="valueObs: phoneObs, verifiedObs: phoneVerifiedObs">
+                    </verified-icon>
                 </span>
                 <span class="input-field-padding" data-bind="visible: !phoneObs()">—</span>
             </div>
             <div class="field" id="externalId">
                 <label>External ID</label>
-                <span class="input-field-padding" data-bind="visible: externalIdObs(), text: externalIdObs"></span>
-                <span class="input-field-padding" data-bind="visible: !externalIdObs()">—</a>
+                <input type="text" data-bind="textInput: externalIdObs"/>
             </div>
         </div>
-        -->
+
         <div class="equal width fields">
             <div class="field">
                 <label>Languages</label>

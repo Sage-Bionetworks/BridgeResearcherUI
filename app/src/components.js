@@ -457,6 +457,11 @@ reg('schema-tabset', {
     viewModel: require('./pages/schema/tabset'),
     template: require('./pages/schema/tabset.html')
 });
+reg('verified-icon', {
+    viewModel: require('./pages/participant/verified-icon'),
+    template: require('./pages/participant/verified-icon.html')
+});
+
 reg('not_found', {
     template: require('./pages/not_found/not_found.html')
 });
