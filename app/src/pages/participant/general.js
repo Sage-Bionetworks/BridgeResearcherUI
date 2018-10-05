@@ -129,12 +129,6 @@ module.exports = function(params) {
     self.formatPhone = function(phone, phoneRegion) {
         return (phone) ? (fn.flagForRegionCode(phoneRegion) + ' ' + phone) : '';
     };
-    self.observerIcon = function(obs) {
-        return (obs()) ? "green ui check icon" : "orange ui exclamation triangle icon";
-    };
-    self.observerText = function(obs) {
-        return (obs()) ? "Verified" : "Unverified";
-    };
 
     self.save = function(vm, event) {
         let participant = binder.persist(self.participant);

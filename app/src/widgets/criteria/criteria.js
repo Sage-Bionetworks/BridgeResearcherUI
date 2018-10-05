@@ -43,13 +43,15 @@ module.exports = function(params) {
   updateObservers(self.criteriaObs());
 
   function updateObservers(crit) {
-    crit.minAppVersions = crit.minAppVersions || {};
-    crit.maxAppVersions = crit.maxAppVersions || {};
-    binder.update()(crit);
-    self.iosMinObs(crit.minAppVersions['iPhone OS']);
-    self.iosMaxObs(crit.maxAppVersions['iPhone OS']);
-    self.androidMinObs(crit.minAppVersions.Android);
-    self.androidMaxObs(crit.maxAppVersions.Android);
+    if (crit) {
+      crit.minAppVersions = crit.minAppVersions || {};
+      crit.maxAppVersions = crit.maxAppVersions || {};
+      binder.update()(crit);
+      self.iosMinObs(crit.minAppVersions['iPhone OS']);
+      self.iosMaxObs(crit.maxAppVersions['iPhone OS']);
+      self.androidMinObs(crit.minAppVersions.Android);
+      self.androidMaxObs(crit.maxAppVersions.Android);
+    }
   }
 
   function intValue(value) {
