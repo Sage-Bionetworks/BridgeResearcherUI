@@ -8,6 +8,17 @@ const SYNAPSE_ADMINS = [
     {name: "Brian Bot", id: '273979', obs: 'botObs'},
     {name: "Mike Kellen", id: '273984', obs: 'kellenObs'}
 ];
+const UPLOAD_SHARED_METADATA_FIELD_DEFS = [  
+    {"name":"taskIdentifier", "maxLength":100, "type":"string"},
+    {"name":"rsdFrameworkVersion", "maxLength":100, "type":"string"},
+    {"name":"startDate", "type":"timestamp"},
+    {"name":"endDate", "type":"timestamp"},
+    {"name":"taskRunUUID", "maxLength":100, "type":"string"},
+    {"name":"deviceTypeIdentifier", "maxLength":100, "type":"string"},
+    {"name":"dataGroups", "maxLength":100, "type":"string"},
+    {"name":"appVersion", "maxLength":100, "type":"string"},
+    {"name":"deviceInfo", "maxLength":100, "type":"string"}
+ ];
 
 module.exports = function(params) {
     let self = this;
@@ -44,6 +55,8 @@ module.exports = function(params) {
     };
     self.save = function(vm, event) {
         let study = binder.persist({});
+
+        study.uploadMetadataFieldDefinitions = UPLOAD_SHARED_METADATA_FIELD_DEFS;
 
         utils.startHandler(vm, event);
 
