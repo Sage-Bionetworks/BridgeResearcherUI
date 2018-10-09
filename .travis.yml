@@ -15,5 +15,5 @@ install:
 script:
 - npm install test
 - npm run release
-- echo $AWS_BUCKET_$TRAVIS_BRANCH
-- aws s3 cp app/ s3://$AwsBucket_$TRAVIS_BRANCH/ --recursive --acl public-read
+- echo ${AWS_BUCKET}_${TRAVIS_BRANCH}
+- aws s3 cp app/ s3://${AWS_BUCKET}_${TRAVIS_BRANCH}/ --recursive --acl public-read
