@@ -14,6 +14,6 @@ install:
 - ./setup_aws_cli.sh || travis_terminate 1
 script:
 - npm install test
-- webpack -p
-- echo $AwsBucket_$TRAVIS_BRANCH
+- npm run release
+- echo $AWS_BUCKET_$TRAVIS_BRANCH
 - aws s3 cp app/ s3://$AwsBucket_$TRAVIS_BRANCH/ --recursive --acl public-read
