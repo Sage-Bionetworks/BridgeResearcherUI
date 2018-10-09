@@ -15,4 +15,4 @@ install:
 script:
 - npm install test
 - webpack -p
-- aws s3 cp app/ s3://${AwsBucket}/ --recursive --acl public-read
+- aws s3 cp app/ s3://$AwsBucket/ --recursive --acl public-read
