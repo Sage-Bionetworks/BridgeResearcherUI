@@ -1,28 +1,17 @@
-sudo: required
-language: node_js
-node_js:
-    - "8.12.0"
+sudo: false
+language: python
+python: 3.5
+cache: pip
+fast_finish: true
+branches:
+  only:
+  - develop
+  - release
+install:
+- wget https://github.com/Sage-Bionetworks/infra-utils/archive/master.zip -O /tmp/infra-utils.zip
+- unzip -j -n /tmp/infra-utils.zip -x infra-utils-master/.gitignore infra-utils-master/LICENSE infra-utils-master/README.md
+- ./setup_aws_cli.sh || travis_terminate 1
 script:
-    - npm test
-    - webpack -p
-deploy:
-    - provider: s3
-      access_key_id: ${AWS_KEY}
-      secret_access_key: ${AWS_SECRET_KEY}
-      bucket: "research-staging.sagebridge.org"
-      skip_cleanup: true
-      acl: public_read
-      detect_encoding: false
-      local_dir: app
-      on:
-          branch: develop
-    - provider: s3
-      access_key_id: ${AWS_KEY}
-      secret_access_key: ${AWS_SECRET_KEY}
-      bucket: "research.sagebridge.org"
-      skip_cleanup: true
-      acl: public_read
-      detect_encoding: false
-      local_dir: app
-      on:
-          branch: release
+- npm install test
+- webpack -p
+- aws s3 cp app/ s3://${AwsBucket}/ --recursive --acl public-read
