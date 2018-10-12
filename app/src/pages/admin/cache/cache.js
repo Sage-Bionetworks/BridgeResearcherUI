@@ -32,13 +32,17 @@ module.exports = function() {
 
     tables.prepareTable(self, {
         name: 'cache key',
-        delete: deleteItem
+        delete: deleteItem,
+        refresh: load
     });
 
-    serverService.getCacheKeys().then(function(response) {
-        let items = response.map(mapKey);
-        self.itemsObs(items.sort(fn.makeFieldSorter("key")));
-    }).catch(utils.failureHandler());
+    function load() {
+        serverService.getCacheKeys().then(function(response) {
+            let items = response.map(mapKey);
+            self.itemsObs(items.sort(fn.makeFieldSorter("key")));
+        }).catch(utils.failureHandler());
+    }
+    load();
 
     self.signEveryoneOut = function() {
         alerts.deleteConfirmation(MSG, function() {
