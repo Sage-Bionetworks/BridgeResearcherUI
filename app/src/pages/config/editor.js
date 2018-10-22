@@ -5,7 +5,7 @@ import fn from '../../functions';
 import jsonFormatter from '../../json_formatter';
 import utils from '../../utils';
 
-var failureHandler = utils.failureHandler({
+let failureHandler = utils.failureHandler({
     redirectMsg:"Config element not found.", 
     redirectTo:"configs",
     transient: false

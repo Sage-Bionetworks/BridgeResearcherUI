@@ -1,11 +1,11 @@
 import {serverService} from '../../services/server_service';
 import Binder from '../../binder';
 import fn from '../../functions';
+import root from '../../root';
 import tables from '../../tables';
 import utils from '../../utils';
-import root from '../../root';
 
-var failureHandler = utils.failureHandler({
+let failureHandler = utils.failureHandler({
     redirectMsg:"Config element not found.", 
     redirectTo:"configs",
     transient: false
