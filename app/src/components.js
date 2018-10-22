@@ -583,6 +583,22 @@ reg('appconfig', {
     viewModel: require('./pages/appconfig/appconfig'),
     template: require('./pages/appconfig/appconfig.html')
 });
+reg('configs', {
+    viewModel: require('./pages/configs/configs'),
+    template: require('./pages/configs/configs.html')
+});
+reg('config_editor', {
+    viewModel: require('./pages/config/editor'),
+    template: require('./pages/config/editor.html')
+});
+reg('config_history', {
+    viewModel: require('./pages/config/history'),
+    template: require('./pages/config/history.html')
+});
+reg('config-tabset', {
+    viewModel: require('./pages/config/tabset'),
+    template: require('./pages/config/tabset.html')
+});
 
 // Attribute editors
 reg('user_attributes', { 

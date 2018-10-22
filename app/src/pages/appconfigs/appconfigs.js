@@ -5,7 +5,7 @@ import scheduleUtils from '../schedule/schedule_utils';
 import tables from '../../tables';
 import utils from '../../utils';
 
-module.exports = function(params) {
+module.exports = function() {
     let self = this;
 
     tables.prepareTable(self, {
