@@ -16,6 +16,7 @@ import root from './root';
 const GUID_CREATEDON = ['guid','createdOn'];
 const GUID = ['guid'];
 const ID = ['id'];
+const ID_REVISION = ['id','revision'];
 const ID_VERSION = ['id','version'];
 const SCHEMAID = ['schemaId'];
 const SCHEMAID_REVISION = ['schemaId','revision'];
@@ -96,6 +97,12 @@ router.on('/subpopulations/:guid/editor/:createdOn', routeTo('subpopulation_edit
 router.on('/subpopulations/:guid/editor/recent/history', routeTo('subpopulation_history', 'subpops', GUID));
 router.on('/subpopulations/:guid/editor/:createdOn/history', routeTo('subpopulation_history', 'subpops', GUID_CREATEDON));
 router.on('/subpopulations/:guid/download', routeTo('subpopulation_download', 'subpops', GUID));
+
+router.on('/configs', routeTo('configs', 'configs'));
+router.on('/configs/new', redirectTo('/configs/new/revisions/1/editor'));
+router.on('/configs/:id/revisions/:revision', redirectTo('/configs/{0}/revisions/{1}/editor'));
+router.on('/configs/:id/revisions/:revision/editor', routeTo('config_editor', 'configs', ID_REVISION));
+router.on('/configs/:id/revisions/:revision/history', routeTo('config_history', 'configs', ID_REVISION));
 
 router.on('/reports', redirectTo('/reports/uploads'));
 router.on('/reports/uploads', routeTo('dailyUploads', 'reports'));

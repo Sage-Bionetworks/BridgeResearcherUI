@@ -34,6 +34,8 @@ export default {
         }
     },
     adminAuth: '/v3/auth/admin',
+    appConfigs: '/v3/appconfigs',
+    appConfigElements: '/v3/appconfigs/elements',
     cache: '/v3/cache',
     compoundactivitydefinitions: '/v3/compoundactivitydefinitions',
     emailStatus: '/v3/studies/self/emailStatus',
@@ -61,10 +63,9 @@ export default {
     survey: '/v3/surveys/',
     surveys: '/v3/surveys',
     topics: '/v3/topics',
-    uploadstatuses: '/v3/uploadstatuses',
     uploads: '/v3/uploads',
+    uploadstatuses: '/v3/uploadstatuses',
     users: '/v3/users',
     verifyEmail: '/v3/studies/self/verifyEmail',
-    verifyStudyEmail: '/v3/studies/self/emails/resendVerify',
-    appConfigs: '/v3/appconfigs'
+    verifyStudyEmail: '/v3/studies/self/emails/resendVerify'
 };

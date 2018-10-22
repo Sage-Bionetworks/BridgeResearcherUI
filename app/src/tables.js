@@ -77,6 +77,7 @@ export default {
      * - refresh: a function to call to refresh items in the collection 
      */
     prepareTable: function(vm, options) {
+        // TODO: Know what's confusing? Renaming all the options like this
         let objName = options.name;
         let objPlural = options.plural;
         let objType = options.type;
