@@ -563,6 +563,10 @@ reg('select_surveys', {
     viewModel: require('./dialogs/select_surveys/select_surveys'),
     template: require('./dialogs/select_surveys/select_surveys.html'), synchronous: true
 });
+reg('select_configs', {
+    viewModel: require('./dialogs/select_configs/select_configs'),
+    template: require('./dialogs/select_configs/select_configs.html'), synchronous: true
+});
 reg('edit_apple_link', {
     viewModel: require('./dialogs/edit_apple_link/edit_apple_link'),
     template: require('./dialogs/edit_apple_link/edit_apple_link.html'), synchronous: true

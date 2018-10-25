@@ -36,11 +36,12 @@
                 <th nowrap>Label</th>
                 <th>Matching Criteria</th>
                 <th>Description</th>
+                <th>Last Modified</th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
-                <td colspan="4" data-bind="html: recordsMessageObs"></td>
+                <td colspan="5" data-bind="html: recordsMessageObs"></td>
             </tr>
         </tbody>        
         <tbody data-bind="foreach: itemsObs">
@@ -58,6 +59,7 @@
                 </td>
                 <td data-bind="html: $parent.criteriaLabel($data.criteria)"></td>
                 <td data-bind="html: $parent.formatCompoundActivity($data)"></td>
+                <td style="white-space: nowrap" data-bind="text: $parent.formatDateTime($data.modifiedOn)"></td>
             </tr>
         </tbody>
     </table>

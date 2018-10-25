@@ -16,57 +16,82 @@
 <div class="scrollbox">
     <errors></errors>
     <form class="ui form">
-        <div class="ui relaxed grid" style="margin-top:1rem">
-            <div class="two column row">
-                <div class="column">
-                    <div class="field" id="label">
-                        <label>Label</label>
-                        <input type="text" data-bind="textInput: labelObs, hasFocus: true" />
-                    </div>
-                </div>
-                <div class="column">
-                    <!-- ko component: {name:"app_version_criteria", params:{
-                        id:"", criteriaObs:criteriaObs}} -->
-                    <!-- /ko -->
+        <div class="fields">
+            <div class="six wide field">
+                <div class="field" id="label">
+                    <label>Label</label>
+                    <input type="text" data-bind="textInput: labelObs, hasFocus: true" />
                 </div>
             </div>
-            <div class="two column row">
-                <div class="column">
-                    <h3>Schemas (Tasks)</h3>
-                    <table class="ui compact table" data-bind="visible: schemaReferencesObs().length > 0">
-                        <tbody data-bind="foreach: schemaReferencesObs, 
-                            dragula: {listObs: schemaReferencesObs, indexObs: schemaIndexObs, dragHandleSelector: 'dragHandle'}">
+            <div class="four wide field"></div>
+            <div class="three wide field">
+                <div class="field" id="createdOn">
+                    <label>Created On</label>
+                    <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
+                </div>
+            </div>
+            <div class="three wide field">
+                <div class="field" id="modifiedOn">
+                    <label>Modified On</label>
+                    <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="column">
+                <h4>Assignment based on</h4>
+                <!-- ko component: {name:"app_version_criteria", params:{
+                    id:"", criteriaObs:criteriaObs}} -->
+                <!-- /ko -->
+            </div>
+        </div>
+        <div class="ui grid" style="width: 100%; margin-top: 2rem">
+            <div class="three wide column">
+                <div class="ui vertical fluid right tabular menu">
+                    <a class="item" data-tab="schemas" 
+                        data-bind="css: isActive('schemas'), click: setTab">Schemas</a>
+                    <a class="item" data-tab="surveys" 
+                        data-bind="css: isActive('surveys'), click: setTab">Surveys</a>
+                    <a class="item" data-tab="config" 
+                        data-bind="css: isActive('config'), click: setTab">Config Elements</a>
+                    <a class="item" data-tab="clientData" 
+                        data-bind="css: isActive('clientData'), click: setTab">Client Data</a>
+                </div>
+            </div>
+            <div class="thirteen wide stretched column">
+                <div data-bind="visible: selectedTabObs() === 'schemas'">
+                    <table class="ui compact table" style="width:auto" data-bind="visible: schemaReferencesObs().length > 0">
+                        <tbody data-bind="foreach: schemaReferencesObs">
                             <tr>
-                                <td class="dragHandle" data-bind="text: $data.name"></td>
+                                <td data-bind="text: $data.name"></td>
                                 <td>
-                                    <div data-bind="attr: {id: 'schemaReferences'+$index()+'_revision'}">
+                                    <div style="width:10rem" data-bind="attr: {id: 'schemaReferences'+$index()+'_revision'}">
                                         <ui-select params="fieldObs: $data.revisionObs, 
                                             optionsSrc: $data.revisionList, 
                                             optionsCaption: 'Select Revision:'"></ui-select>
                                     </div>
                                 </td>
-                                <td>
+                                <td width="5rem">
                                     <i class="red large times circle outline link icon" data-bind="click: $component.removeSchema.bind($component)"></i>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                     <button class="ui tiny button" data-bind="click: openSchemaSelector">Edit Schemas</button>
-
-                    <h3>Surveys</h3>
-                    <table class="ui compact table" data-bind="visible: surveyReferencesObs().length > 0">
-                        <tbody data-bind="foreach: surveyReferencesObs, 
-                            dragula: {listObs: surveyReferencesObs, indexObs: surveyIndexObs, dragHandleSelector: 'dragHandle'}">
+                </div>
+                <div data-bind="visible: selectedTabObs() === 'surveys'">
+                    <table class="ui compact table" style="width:auto" data-bind="visible: surveyReferencesObs().length > 0">
+                        <tbody data-bind="foreach: surveyReferencesObs">
                             <tr>
-                                <td class="dragHandle" data-bind="text: $data.name"></td>
+                                <td data-bind="text: $data.name"></td>
                                 <td>
-                                    <div data-bind="attr: {id: 'surveyReferences'+$index()+'_createdOn'}">
+                                    <div style="width:15rem" data-bind="attr: {id: 'surveyReferences'+$index()+'_createdOn'}">
                                         <ui-select params="fieldObs: $data.createdOnObs, 
                                             optionsSrc: $data.createdOnList, 
                                             optionsCaption: 'Select Revision:'"></ui-select>
                                     </div>
                                 </td>
-                                <td>
+                                <td width="5rem">
                                     <i class="red large times circle outline link icon" data-bind="click: $component.removeSurvey.bind($component)"></i>
                                 </td>
                             </tr>
@@ -74,28 +99,34 @@
                     </table>
                     <button class="ui tiny button" data-bind="click: openSurveySelector">Edit Surveys</button>
                 </div>
-                <div class="column field">
-                    <h3>Client Data</h3>
+                <div data-bind="visible: selectedTabObs() === 'config'">
+                    <table class="ui compact table" style="width:auto" data-bind="visible: configReferencesObs().length > 0">
+                        <tbody data-bind="foreach: configReferencesObs">
+                            <tr>
+                                <td data-bind="text: $data.name"></td>
+                                <td>
+                                    <div style="width:10rem" data-bind="attr: {id: 'configReferences'+$index()+'_revision'}">
+                                        <ui-select params="fieldObs: $data.revisionObs, 
+                                            optionsSrc: $data.revisionList, 
+                                            optionsCaption: 'Select Revision:'"></ui-select>
+                                    </div>
+                                </td>
+                                <td width="5rem">
+                                    <i class="red large times circle outline link icon" 
+                                        data-bind="click: $component.removeConfig.bind($component)"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="ui tiny button" data-bind="click: openConfigSelector">Edit Config Elements</button>
+                </div>
+                <div data-bind="visible: selectedTabObs() === 'clientData'">
                     <label>Client data should be in JSON format</label>
                     <div id="clientData">
                         <textarea style="font-family: monospace; height: 50rem" data-bind="textInput: clientDataObs"></textarea>
                     </div>
                     <div style="padding-top:1rem">
                         <button class="ui tiny primary button" data-bind="click: reformat">Reformat</button>
-                    </div>
-                </div>
-            </div>
-            <div class="two column row" style="padding-top:2rem">
-                <div class="column">
-                    <div class="field" id="createdOn">
-                        <label>Created On</label>
-                        <div class="inline-form-text" data-bind="text: formatDateTime(createdOnObs())"></div>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="field" id="modifiedOn">
-                        <label>Modified On</label>
-                        <div class="inline-form-text" data-bind="text: formatDateTime(modifiedOnObs())"></div>
                     </div>
                 </div>
             </div>

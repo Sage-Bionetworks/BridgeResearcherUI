@@ -38,11 +38,12 @@
                 </th>
                 <th nowrap>Identifier</th>
                 <th>Revision</th>
+                <th>Last Modified</th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
-                <td colspan="3" data-bind="html: recordsMessageObs"></td>
+                <td colspan="4" data-bind="html: recordsMessageObs"></td>
             </tr>
         </tbody>        
         <tbody data-bind="foreach: itemsObs">
@@ -59,6 +60,7 @@
                         text: $data.id, visible: !$data.deletedObs()"></a>
                 </td>
                 <td data-bind="text: $data.revision"></td>
+                <td data-bind="text: $parent.formatDateTime($data.modifiedOn)"></td>
             </tr>
         </tbody>
     </table>
