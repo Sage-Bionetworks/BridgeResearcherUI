@@ -23,8 +23,7 @@ function newAppConfig() {
         'criteria': criteriaUtils.newCriteria(),
         'surveyReferences': [],
         'schemaReferences': [],
-        'configReferences': [],
-        'configIncluded': false
+        'configReferences': []
     };
 }
 
@@ -40,12 +39,12 @@ module.exports = function(params) {
         .obs('schemaIndex')
         .obs('surveyIndex')
         .obs('configIndex')
+        .obs('enablePreview', false)
         .obs('selectedTab', 'schemas')
         .bind('version')
         .bind('label')
         .bind('criteria')
         .bind('clientData', null, Binder.fromJson, Binder.toJson)
-        .bind('configIncluded', false)
         .bind('surveyReferences[]', [], Task.surveyListToView, Task.surveyListToTask)
         .bind('schemaReferences[]', [], Task.schemaListToView, Task.schemaListToTask)
         .bind('configReferences[]', [], Task.configListToView, Task.configListToTask);
@@ -54,6 +53,7 @@ module.exports = function(params) {
     fn.copyProps(self, fn, 'formatDateTime');
 
     function saveAppConfig() {
+        self.enablePreviewObs(false);
         return (self.appConfig.guid) ?
             serverService.updateAppConfig(self.appConfig) :
             serverService.createAppConfig(self.appConfig);
@@ -66,12 +66,14 @@ module.exports = function(params) {
         if (params.guid === "new") {
             return Promise.resolve(newAppConfig())
                 .then(binder.assign('appConfig'))
-                .then(binder.update());
+                .then(binder.update())
+                .then(() => self.enablePreviewObs(true));
         } else {
             return serverService.getAppConfig(params.guid)
                 .then(binder.assign('appConfig'))
                 .then(binder.update())
-                .then(titleUpdated);
+                .then(titleUpdated)
+                .then(() => self.enablePreviewObs(true));
         }
     }
     function updateClientData() {
@@ -93,9 +95,7 @@ module.exports = function(params) {
         self.selectedTabObs(e.target.dataset.tab);
     };
     self.isActive = function(tab) {
-        return ko.computed(() => {
-            return self.selectedTabObs() === tab ? 'active' : '';
-        });
+        return ko.computed(() => self.selectedTabObs() === tab ? 'active' : '');
     };
 
     self.openSchemaSelector = function(vm, event) {
@@ -157,6 +157,15 @@ module.exports = function(params) {
     self.removeConfig = function(object, event) {
         this.configReferencesObs.remove(object);
     };
+    self.preview = function(vm, event) {
+        if (updateClientData()) {
+            return;
+        }
+        self.appConfig = binder.persist(self.appConfig);
+        root.openDialog('preview_appconfig', {
+            appConfig: self.appConfig
+        });
+    };
     self.save = function(vm, event) {
         if (updateClientData()) {
             return;
@@ -171,6 +180,7 @@ module.exports = function(params) {
             .then(updateModifiedOn)
             .then(fn.returning(self.appConfig))
             .then(titleUpdated)
+            .then(() => self.enablePreviewObs(true))
             .then(utils.successHandler(vm, event, "App configuration has been saved."))
             .catch(failureHandler);
     };

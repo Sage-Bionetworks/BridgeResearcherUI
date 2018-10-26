@@ -64,9 +64,6 @@ var handlers = {
     'popup': function($element) {
         $element.popup();
     },
-    'tab': function($element) {
-        $element.tab();
-    },
     'multi-search-select': function($element, allBindings) {
         let collectionObs = allBindings().updateSelect;
 

@@ -567,6 +567,10 @@ reg('select_configs', {
     viewModel: require('./dialogs/select_configs/select_configs'),
     template: require('./dialogs/select_configs/select_configs.html'), synchronous: true
 });
+reg('preview_appconfig', {
+    viewModel: require('./dialogs/preview_appconfig/preview_appconfig'),
+    template: require('./dialogs/preview_appconfig/preview_appconfig.html'), synchronous: true
+});
 reg('edit_apple_link', {
     viewModel: require('./dialogs/edit_apple_link/edit_apple_link'),
     template: require('./dialogs/edit_apple_link/edit_apple_link.html'), synchronous: true
