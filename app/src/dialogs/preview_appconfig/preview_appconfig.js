@@ -21,9 +21,6 @@ module.exports = function(params) {
     let elementIds = Object.keys(map);
 
     function errorHandler(e) {
-        console.log(e);
-        console.log(e.responseJSON.message);
-        console.log("self.errorsObs()", self.errorsObs());
         self.errorsObs.push(e.responseJSON.message);
     }
 
@@ -31,14 +28,7 @@ module.exports = function(params) {
         return serverService.getAppConfigElement(id, map[id])
             .then(el => appConfig.configElements[el.id] = el.data)
             .catch(errorHandler);
-    }).then(() => {
-        self.contentObs(jsonFormatter.prettyPrint(appConfig));
-    }).catch(errorHandler);
-
-    /*
-    Promise.all(elementIds, (id) => serverService.getAppConfigElement(id, map[id]))
-        .then(el => appConfig.configElements[el.id] = el.data)
-        .then(() => self.contentObs(jsonFormatter.prettyPrint(appConfig)))
-        .catch(errorHandler);
-    */
+    })
+    .then(() => self.contentObs(jsonFormatter.prettyPrint(appConfig)))
+    .catch(errorHandler);
 };
