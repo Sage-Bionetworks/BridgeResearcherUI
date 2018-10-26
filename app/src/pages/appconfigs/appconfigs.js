@@ -24,6 +24,7 @@ module.exports = function() {
 
     fn.copyProps(self, criteriaUtils, 'label->criteriaLabel');
     fn.copyProps(self, scheduleUtils, 'formatCompoundActivity');
+    fn.copyProps(self, fn, 'formatDateTime');
 
     function getAppConfigs() {
         return serverService.getAppConfigs(self.showDeletedObs());

@@ -109,6 +109,41 @@ module.exports = class Task {
             .then(this.loadTaskDefinition.bind(this))
             .catch(utils.failureHandler());
     }
+
+
+    static configToView(config) {
+        return {
+            id: config.id, 
+            name: config.id,
+            revision: config.revision,
+            idObs: ko.observable(config.id),
+            revisionObs: ko.observable(config.revision),
+            revisionList: ko.observableArray([Task.configToOption(config)])
+        };
+    }
+    static configListToView(configList, context) {
+        return (configList || []).map(Task.configToView).map(Task.loadConfigRevisions);
+    }
+    static configListToTask(configList, context) {
+        return configList.map((config) => {
+            return {id: config.idObs(), revision: config.revisionObs()};
+        });
+    }
+    static loadConfigRevisions(newConfig) {
+        serverService.getAppConfigElementRevisions(newConfig.id, false).then((response) => {
+            response.items.forEach((config) => {
+                if (newConfig.revisionList().every(opt => opt.value !== config.revision)) {
+                    newConfig.revisionList.push(Task.configToOption(config));
+                }
+            });
+        });
+        return newConfig;
+    }
+    static configToOption(config) {
+        return {label: config.revision, value: config.revision};
+    }
+
+
     static schemaListToView(schemaList, context) {
         return schemaList.map(Task.schemaToView).map(Task.loadSchemaRevisions);
     }
@@ -130,6 +165,21 @@ module.exports = class Task {
             return obj;
         });
     }
+    static loadSchemaRevisions(newSchema) {
+        serverService.getUploadSchemaAllRevisions(newSchema.id).then(function(response) {
+            response.items.forEach((schema) => {
+                if (newSchema.revisionList().every(opt => opt.value !== schema.revision)) {
+                    newSchema.revisionList.push(Task.schemaToOption(schema));
+                }
+            });
+        });
+        return newSchema;
+    }
+    static schemaToOption(schema) {
+        return {label: schema.revision, value: schema.revision};
+    }
+
+
     static surveyListToView(surveyList, context) {
         return surveyList.map(Task.surveyToView).map(Task.loadSurveyRevisions);
     }
@@ -152,25 +202,21 @@ module.exports = class Task {
         });
     }
     static loadSurveyRevisions(surveyRef) {
-        serverService.getSurveyAllRevisions(surveyRef.guid).then(function(response) {
-            surveyRef.createdOnList(response.items.filter(function(survey) {
-                return survey.published;
-            }).map(Task.surveyToOption));
-        });
+        serverService.getSurveyAllRevisions(surveyRef.guid)
+            .then((response) => {
+                response.items = response.items.filter(survey => survey.published);
+                return response;
+            })
+            .then(function(response) {
+                response.items.forEach((survey) => {
+                    if (surveyRef.createdOnList().every(opt => opt.value !== survey.createdOn)) {
+                        surveyRef.createdOnList.push(Task.surveyToOption(survey));
+                    }
+                });
+            });
         return surveyRef;
-    }
-    static loadSchemaRevisions(newSchema) {
-        serverService.getUploadSchemaAllRevisions(newSchema.id).then(function(response) {
-            newSchema.revisionList(response.items.filter(function(schema) {
-                return schema.revision;
-            }).map(Task.schemaToOption));
-        });
-        return newSchema;
     }
     static surveyToOption(survey) {
         return {label: fn.formatDateTime(survey.createdOn), value: survey.createdOn};
-    }
-    static schemaToOption(schema) {
-        return {label: schema.revision, value: schema.revision};
     }
 };

@@ -49,17 +49,14 @@ module.exports = function(params) {
     }
     function surveyToView(survey) {
         let selectedSurvey = match(survey);
-        let obj = {
-            guid: survey.guid, 
-            name: survey.name, 
-            checkedObs: ko.observable(!!selectedSurvey)
+        let checked = !!selectedSurvey;
+        selectedSurvey = selectedSurvey || {};
+        return {
+            guid: selectedSurvey.guid || survey.guid, 
+            name: selectedSurvey.name || survey.name, 
+            createdOn: selectedSurvey.createdOn || survey.createdOn,
+            checkedObs: ko.observable(checked)
         };
-        if (params.allowMostRecent && selectedSurvey) {
-            obj.createdOn = selectedSurvey.createdOn;
-        } else if (!params.allowMostRecent) {
-            obj.createdOn = survey.createdOn;
-        }
-        return obj;
     }
 
     function load() { 

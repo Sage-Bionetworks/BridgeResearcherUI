@@ -8,20 +8,19 @@ import utils from '../../utils';
 /**
  * params:
  *  selectOne: allow selection of only one element
- *  allowMostRecent: boolean to clear most createdOn 
- *  addSchemas: function to receive selected schemas(s)
- *  selected: schema list
+ *  addConfigs: function to receive selected schemas(s)
+ *  selected: config list
  */
 module.exports = function(params) {
     let self = this;
 
-    self.title = params.selectOne ? 'Select Schema' : 'Select Schemas';
+    self.title = params.selectOne ? 'Select Config' : 'Select Configs';
     self.controlName = params.selectOne ? 'ui-radio' : 'ui-checkbox';
     self.cancel = root.closeDialog;
     
-    function selectById(selSchemaId)  {
+    function selectById(selConfigId)  {
         return function(item) {
-            return item.id === selSchemaId;
+            return item.id === selConfigId;
         };
     }
     function selectByChecked(item) {
@@ -32,37 +31,37 @@ module.exports = function(params) {
         let filterFunc = (params.selectOne) ?
             selectById($("input[type=radio]:checked").toArray()[0].id.substring(1)) :
             selectByChecked;
-        let schemas = self.itemsObs().filter(filterFunc);
-        params.addSchemas(schemas);
+        let configs = self.itemsObs().filter(filterFunc);
+        params.addConfigs(configs);
     };
 
     tables.prepareTable(self, {
-        name: "schema",
-        type: "UploadSchema",
+        name: "config element",
+        type: "AppConfigElement",
         refresh: load
     });
 
-    function match(schema) {
-        return params.selected.filter(function(selectedSchema) {
-            return (selectedSchema.id === schema.schemaId);
+    function match(config) {
+        return params.selected.filter(function(selectedConfig) {
+            return (selectedConfig.id === config.id);
         })[0];
     }
-    function schemaToView(schema) {
-        let selectedSchema = match(schema);
-        let checked = !!selectedSchema;
-        selectedSchema = selectedSchema || {};
+    function configToView(config) {
+        let selectedConfig = match(config);
+        let checked = !!selectedConfig;
+        selectedConfig = selectedConfig || {};
         return {
-            id: selectedSchema.schemaId || schema.schemaId, 
-            name: selectedSchema.name || schema.name, 
-            revision: selectedSchema.revision || schema.revision,
+            id: selectedConfig.id || config.id, 
+            name: selectedConfig.id || config.id,
+            revision: selectedConfig.revision || config.revision,
             checkedObs: ko.observable(checked)
         };
     }
 
     function load() { 
-        serverService.getAllUploadSchemas()
-            .then(fn.handleMap('items', schemaToView))
-            .then(fn.handleSort('items','name'))
+        serverService.getAppConfigElements()
+            .then(fn.handleMap('items', configToView))
+            .then(fn.handleSort('items','id'))
             .then(fn.handleObsUpdate(self.itemsObs, 'items'))
             .catch(utils.failureHandler());
     }

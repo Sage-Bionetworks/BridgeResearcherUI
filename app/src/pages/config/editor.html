@@ -16,46 +16,42 @@
 <div class="scrollbox">
     <errors></errors>
     <form class="ui form">
-        <div class="ui relaxed grid" style="margin-top:1rem">
-            <div class="two column row">
-                <div class="column">
-                    <div class="field" id="id" data-bind="visible: isNewObs">
-                        <label>Identifier</label>
-                        <input type="text" data-bind="textInput: idObs, hasFocus: true" />
-                    </div>
-                    <div class="field" id="id" data-bind="visible: !isNewObs()">
-                        <label>Identifier</label>
-                        <div class="input-field-padding" data-bind="text: idObs"></div>
-                    </div>
-                    <div class="field" id="revision">
-                        <label>Revision</label>
-                        <input type="text" style="width: 8rem" data-bind="textInput: revisionObs" />
-                    </div>
+        <div class="fields">
+            <div class="six wide field">
+                <div class="field" id="id" data-bind="visible: isNewObs">
+                    <label>Identifier</label>
+                    <input type="text" data-bind="textInput: idObs, hasFocus: true" />
                 </div>
-                <div class="column">
-                    <label>JSON</label>
-                    <div id="data">
-                        <textarea style="font-family: monospace; height: 30rem" data-bind="textInput: dataObs"></textarea>
-                    </div>
-                    <div style="padding-top:1rem">
-                        <button class="ui tiny primary button" data-bind="click: reformat">Reformat</button>
-                    </div>
+                <div class="field" id="id" data-bind="visible: !isNewObs()">
+                    <label>Identifier</label>
+                    <div class="input-field-padding" data-bind="text: idObs"></div>
                 </div>
             </div>
-            <div class="two column row" style="padding-top:2rem">
-                <div class="column">
-                    <div class="field" id="createdOn">
-                        <label>Created On</label>
-                        <div class="inline-form-text" data-bind="text: formatDateTime(createdOnObs())"></div>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="field" id="modifiedOn">
-                        <label>Modified On</label>
-                        <div class="inline-form-text" data-bind="text: formatDateTime(modifiedOnObs())"></div>
-                    </div>
+            <div class="four wide field">
+                <div class="field" id="revision">
+                    <label>Revision</label>
+                    <input type="text" style="width: 8rem" data-bind="textInput: revisionObs" />
                 </div>
             </div>
+            <div class="three wide field">
+                <div class="field" id="createdOn">
+                    <label>Created On</label>
+                    <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
+                </div>
+            </div>
+            <div class="three wide field">
+                <div class="field" id="modifiedOn">
+                    <label>Modified On</label>
+                    <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
+                </div>
+            </div>
+        </div>
+        <h4>JSON</h4>
+        <div id="data">
+            <textarea style="font-family: monospace; height: 30rem" data-bind="textInput: dataObs"></textarea>
+        </div>
+        <div style="padding-top:1rem">
+            <button class="ui tiny primary button" data-bind="click: reformat">Reformat</button>
         </div>
     </form>
 </div>

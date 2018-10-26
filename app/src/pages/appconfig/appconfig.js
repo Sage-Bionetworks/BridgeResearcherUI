@@ -3,6 +3,7 @@ import Binder from '../../binder';
 import BridgeError from '../../bridge_error';
 import criteriaUtils from '../../criteria_utils';
 import fn from '../../functions';
+import ko from 'knockout';
 import jsonFormatter from '../../json_formatter';
 import root from '../../root';
 import sharedModuleUtils from '../../shared_module_utils';
@@ -21,7 +22,8 @@ function newAppConfig() {
         'clientData': {},
         'criteria': criteriaUtils.newCriteria(),
         'surveyReferences': [],
-        'schemaReferences': []
+        'schemaReferences': [],
+        'configReferences': []
     };
 }
 
@@ -36,35 +38,42 @@ module.exports = function(params) {
         .obs('modifiedOn')
         .obs('schemaIndex')
         .obs('surveyIndex')
+        .obs('configIndex')
+        .obs('enablePreview', false)
+        .obs('selectedTab', 'schemas')
         .bind('version')
         .bind('label')
         .bind('criteria')
         .bind('clientData', null, Binder.fromJson, Binder.toJson)
         .bind('surveyReferences[]', [], Task.surveyListToView, Task.surveyListToTask)
-        .bind('schemaReferences[]', [], Task.schemaListToView, Task.schemaListToTask);
+        .bind('schemaReferences[]', [], Task.schemaListToView, Task.schemaListToTask)
+        .bind('configReferences[]', [], Task.configListToView, Task.configListToTask);
 
     let titleUpdated = fn.handleObsUpdate(self.titleObs, 'label');
     fn.copyProps(self, fn, 'formatDateTime');
 
     function saveAppConfig() {
+        self.enablePreviewObs(false);
         return (self.appConfig.guid) ?
             serverService.updateAppConfig(self.appConfig) :
             serverService.createAppConfig(self.appConfig);
     }
     function updateModifiedOn(response) {
-        self.modifiedOnObs(fn.formatDateTime(response.modifiedOn));
+        self.modifiedOnObs(new Date());
         return response;
     }
     function load() {
         if (params.guid === "new") {
             return Promise.resolve(newAppConfig())
                 .then(binder.assign('appConfig'))
-                .then(binder.update());
+                .then(binder.update())
+                .then(() => self.enablePreviewObs(true));
         } else {
             return serverService.getAppConfig(params.guid)
                 .then(binder.assign('appConfig'))
                 .then(binder.update())
-                .then(titleUpdated);
+                .then(titleUpdated)
+                .then(() => self.enablePreviewObs(true));
         }
     }
     function updateClientData() {
@@ -81,6 +90,13 @@ module.exports = function(params) {
         }
         return false;
     }
+    
+    self.setTab = function(vm, e) {
+        self.selectedTabObs(e.target.dataset.tab);
+    };
+    self.isActive = function(tab) {
+        return ko.computed(() => self.selectedTabObs() === tab ? 'active' : '');
+    };
 
     self.openSchemaSelector = function(vm, event) {
         self.appConfig = binder.persist(self.appConfig);
@@ -96,6 +112,13 @@ module.exports = function(params) {
             addSurveys: self.addSurveys.bind(self),
             allowMostRecent: true,
             selected: self.appConfig.surveyReferences
+        });
+    };
+    self.openConfigSelector = function(vm, event) {
+        self.task = binder.persist(self.appConfig);
+        root.openDialog('select_configs', {
+            addConfigs: self.addConfigs.bind(self),
+            selected: self.appConfig.configReferences
         });
     };
     self.addSchemas = function(schemas) {
@@ -116,11 +139,32 @@ module.exports = function(params) {
         }
         root.closeDialog();
     };
+    self.addConfigs = function(configs) {
+        self.configReferencesObs([]);
+        for (let i=0; i < configs.length; i++) {
+            let newConfig = Task.configToView(configs[i]);
+            this.configReferencesObs.push(newConfig);
+            Task.loadConfigRevisions(newConfig);
+        }
+        root.closeDialog();
+    };
     self.removeSchema = function(object, event) {
         self.schemaReferencesObs.remove(object);
     };
     self.removeSurvey = function(object, event) {
         this.surveyReferencesObs.remove(object);
+    };
+    self.removeConfig = function(object, event) {
+        this.configReferencesObs.remove(object);
+    };
+    self.preview = function(vm, event) {
+        if (updateClientData()) {
+            return;
+        }
+        self.appConfig = binder.persist(self.appConfig);
+        root.openDialog('preview_appconfig', {
+            appConfig: self.appConfig
+        });
     };
     self.save = function(vm, event) {
         if (updateClientData()) {
@@ -136,7 +180,7 @@ module.exports = function(params) {
             .then(updateModifiedOn)
             .then(fn.returning(self.appConfig))
             .then(titleUpdated)
-            //.then(sharedModuleUtils.loadNameMaps)
+            .then(() => self.enablePreviewObs(true))
             .then(utils.successHandler(vm, event, "App configuration has been saved."))
             .catch(failureHandler);
     };

@@ -6,6 +6,8 @@ import utils from '../../utils';
 module.exports = function() {
     let self = this;
 
+    self.formatDateTime = fn.formatDateTime;
+
     tables.prepareTable(self, {
         name:'configuration element',
         refresh: load,

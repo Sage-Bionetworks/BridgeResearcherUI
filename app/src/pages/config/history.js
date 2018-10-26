@@ -15,6 +15,7 @@ module.exports = function(params) {
     let self = this;
 
     fn.copyProps(self, root, 'isAdmin');
+    fn.copyProps(self, fn, 'formatDateTime');
 
     new Binder(self)
         .obs('title', params.id)
