@@ -5,8 +5,11 @@ import utils from '../../utils';
 
 module.exports = function() {
     let self = this;
+    fn.copyProps(self, fn, 'formatDateTime');
 
-    self.formatDateTime = fn.formatDateTime;
+    self.createLink = function(config) {
+        return '#/configs/'+config.id+'/revisions/'+config.revision;
+    };
 
     tables.prepareTable(self, {
         name:'configuration element',
