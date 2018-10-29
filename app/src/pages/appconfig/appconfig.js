@@ -23,12 +23,14 @@ function newAppConfig() {
         'criteria': criteriaUtils.newCriteria(),
         'surveyReferences': [],
         'schemaReferences': [],
-        'configReferences': []
+        'configReferences': [],
+        'configElements': {}
     };
 }
 
 module.exports = function(params) {
     let self = this;
+    self.appConfig = newAppConfig();
 
     let binder = new Binder(self)
         .obs('isNew', params.guid === "new")
