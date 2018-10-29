@@ -477,17 +477,6 @@ function formatDateISO(date) {
 function formatTimeISO(date) {
     return _asDate(date).toISOString().split("T")[1].split(".")[0];
 }
-const SPECIAL_CHAR_ESCAPES = {
-    "-": "%27",
-    "_": "%5F",
-    ".": "%2E",
-    "!": "%21",
-    "~": "%7E",
-    "*": "%2A",
-    "'": "%27",
-    "(": "%28",
-    ")": "%29"
-};
 
 export default {
     copyProps,
