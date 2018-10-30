@@ -5,7 +5,7 @@ import scheduleUtils from '../schedule/schedule_utils';
 import tables from '../../tables';
 import utils from '../../utils';
 
-module.exports = function(params) {
+module.exports = function() {
     let self = this;
 
     tables.prepareTable(self, {
@@ -24,6 +24,7 @@ module.exports = function(params) {
 
     fn.copyProps(self, criteriaUtils, 'label->criteriaLabel');
     fn.copyProps(self, scheduleUtils, 'formatCompoundActivity');
+    fn.copyProps(self, fn, 'formatDateTime');
 
     function getAppConfigs() {
         return serverService.getAppConfigs(self.showDeletedObs());

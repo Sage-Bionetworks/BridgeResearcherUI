@@ -667,6 +667,35 @@ export class ServerService {
         return postInt(config.host[session.environment] + config.adminAuth + '/study', {study: studyId})
             .then(this.cacheSession(studyName, studyId, session.environment));
     }
+    getAppConfigElements(includeDeleted) {
+        let queryString = fn.queryString({includeDeleted:(includeDeleted === true)});
+        return this.gethttp(config.appConfigElements + queryString);
+    }
+    getAppConfigElementRevisions(id, includeDeleted) {
+        let queryString = fn.queryString({includeDeleted:(includeDeleted === true)});
+        return this.gethttp(config.appConfigElements + '/' + id + queryString);
+    }
+    getMostRecentAppConfigElement(id) {
+        return this.gethttp(config.appConfigElements + '/' + id + '/recent');
+    }
+    getAppConfigElement(id, revision) {
+        return this.gethttp(config.appConfigElements + '/' + id + '/revisions/' + revision);
+    }
+    deleteAppConfigElement(id, physical) {
+        let queryString = fn.queryString({physical:(physical === true)});
+        return this.del(config.appConfigElements + '/' + id + queryString);
+    }
+    deleteAppConfigElementRevision(id, revision, physical) {
+        let queryString = fn.queryString({physical:(physical === true)});
+        return this.del(config.appConfigElements + '/' + id + '/revisions/' + revision + queryString);
+    }
+    createAppConfigElement(element) {
+        return this.post(config.appConfigElements, element);
+    }
+    updateAppConfigElement(element) {
+        return this.post(config.appConfigElements + '/' + element.id + 
+            '/revisions/' + element.revision, element);
+    }
     addSessionStartListener(listener) {
         if (typeof listener !== "function") {
             throw Error("Session listener not a function");

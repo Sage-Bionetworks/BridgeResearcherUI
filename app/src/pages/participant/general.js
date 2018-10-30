@@ -41,6 +41,7 @@ function selectRoles(session) {
 
 module.exports = function(params) {
     let self = this;
+    self.participant = NEW_PARTICIPANT;
 
     let binder = new Binder(self)
         .obs('showEnableAccount', false)
@@ -61,7 +62,7 @@ module.exports = function(params) {
         .bind('notifyByEmail')
         .bind('dataGroups[]')
         .bind('password')
-        .bind('externalId')
+        .bind('externalId', null, null, Binder.emptyToNull)
         .bind('languages', null, fn.formatLanguages, fn.persistLanguages)
         .bind('status')
         .bind('userId', params.userId)
@@ -115,7 +116,9 @@ module.exports = function(params) {
     }
     function saveParticipant(participant) {
         if (self.isNewObs()) {
-            return serverService.createParticipant(participant).then(afterCreate);
+            return serverService.createParticipant(participant)
+                .then(afterCreate)
+                .then((response) => window.location = '#/participants/'+response.identifier+'/general');
         } else {
             return serverService.updateParticipant(participant);
         }
@@ -126,17 +129,11 @@ module.exports = function(params) {
     self.formatPhone = function(phone, phoneRegion) {
         return (phone) ? (fn.flagForRegionCode(phoneRegion) + ' ' + phone) : '';
     };
-    self.observerIcon = function(obs) {
-        return (obs()) ? "green ui check icon" : "orange ui exclamation triangle icon";
-    };
-    self.observerText = function(obs) {
-        return (obs()) ? "Verified" : "Unverified";
-    };
 
     self.save = function(vm, event) {
-        let participant = binder.persist(NEW_PARTICIPANT);
+        let participant = binder.persist(self.participant);
         // This should be updating the title, but it isn't, because the id is still "new".
-        binder.persist(participant);
+        //binder.persist(participant);
 
         let updatedTitle = self.study.emailVerificationEnabled ? 
             fn.formatNameAsFullLabel(participant) : participant.externalId;
@@ -168,6 +165,7 @@ module.exports = function(params) {
         .then(binder.assign('study'))
         .then(initStudy)
         .then(getParticipant)
+        .then(binder.assign('participant'))
         .then(noteInitialStatus)
         .then(binder.update())
         .catch(failureHandler);

@@ -11,7 +11,8 @@ const FLAGS = {
     'MX': '🇲🇽',
     'CA': '🇨🇦'
 };
-const LOCAL_TIMEZONE = Date().split("(")[1].split(")")[0];
+const LOCAL_TIMEZONE = Date().split("(")[1].split(")")[0].replace(/[^A-Z]/g,'');
+//const LOCAL_TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
 const IS_BROWSER = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 
 function flagForRegionCode(regionCode) {

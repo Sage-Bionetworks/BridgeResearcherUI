@@ -457,6 +457,11 @@ reg('schema-tabset', {
     viewModel: require('./pages/schema/tabset'),
     template: require('./pages/schema/tabset.html')
 });
+reg('verified-icon', {
+    viewModel: require('./pages/participant/verified-icon'),
+    template: require('./pages/participant/verified-icon.html')
+});
+
 reg('not_found', {
     template: require('./pages/not_found/not_found.html')
 });
@@ -558,6 +563,14 @@ reg('select_surveys', {
     viewModel: require('./dialogs/select_surveys/select_surveys'),
     template: require('./dialogs/select_surveys/select_surveys.html'), synchronous: true
 });
+reg('select_configs', {
+    viewModel: require('./dialogs/select_configs/select_configs'),
+    template: require('./dialogs/select_configs/select_configs.html'), synchronous: true
+});
+reg('preview_appconfig', {
+    viewModel: require('./dialogs/preview_appconfig/preview_appconfig'),
+    template: require('./dialogs/preview_appconfig/preview_appconfig.html'), synchronous: true
+});
 reg('edit_apple_link', {
     viewModel: require('./dialogs/edit_apple_link/edit_apple_link'),
     template: require('./dialogs/edit_apple_link/edit_apple_link.html'), synchronous: true
@@ -577,6 +590,22 @@ reg('appconfigs', {
 reg('appconfig', {
     viewModel: require('./pages/appconfig/appconfig'),
     template: require('./pages/appconfig/appconfig.html')
+});
+reg('configs', {
+    viewModel: require('./pages/configs/configs'),
+    template: require('./pages/configs/configs.html')
+});
+reg('config_editor', {
+    viewModel: require('./pages/config/editor'),
+    template: require('./pages/config/editor.html')
+});
+reg('config_history', {
+    viewModel: require('./pages/config/history'),
+    template: require('./pages/config/history.html')
+});
+reg('config-tabset', {
+    viewModel: require('./pages/config/tabset'),
+    template: require('./pages/config/tabset.html')
 });
 
 // Attribute editors

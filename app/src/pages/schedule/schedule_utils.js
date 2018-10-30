@@ -110,7 +110,7 @@ function formatScheduleStrategyType(type) {
 function formatCompoundActivity(task) {
     let phrase = [];
     let schemas = (task.schemaList || task.schemaReferences).map(function(schema) {
-        return (schema.revision) ? `${schema.id} <i>(rev. ${schema.revision})</i>`: schema.id;
+        return (schema.revision) ? `${schema.id} schema <i>(rev. ${schema.revision})</i>`: schema.id;
     }).join(', ');
     if (schemas) {
         phrase.push(schemas);
@@ -118,12 +118,18 @@ function formatCompoundActivity(task) {
     let surveys = (task.surveyList || task.surveyReferences).map(function(survey) {
         let surveyName = surveyNameMap[survey.guid];
         return (survey.createdOn) ? 
-            `${surveyName} <i>(pub. ${fn.formatDateTime(survey.createdOn)})</i>` : surveyName;
+            `${surveyName} survey <i>(pub. ${fn.formatDateTime(survey.createdOn)})</i>` : surveyName;
     }).join(', ');
+    let configs = (task.configList || task.configReferences || []).map(function(config) {
+        return `${config.id} config <i>(rev. ${config.revision})</i>`;
+    }).join(', ');
+    if (configs) {
+        phrase.push(configs);
+    }
     if (surveys) {
         phrase.push(surveys);
     }
-    return phrase.join('; ');
+    return phrase.join('<br>');
 }
 function loadFormatCompoundActivity() {
     return serverService.getSurveys().then(function(response) {
