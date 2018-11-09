@@ -696,6 +696,23 @@ export class ServerService {
         return this.post(config.appConfigElements + '/' + element.id + 
             '/revisions/' + element.revision, element);
     }
+    getSubstudies(includeDeleted) {
+        let queryString = fn.queryString({includeDeleted:(includeDeleted === true)});
+        return this.gethttp(config.substudies + queryString);
+    }
+    createSubstudy(substudy) {
+        return this.post(config.substudies, substudy);
+    }
+    getSubstudy(id) {
+        return this.gethttp(config.substudies + '/' + id);
+    }
+    updateSubstudy(substudy) {
+        return this.post(config.substudies + '/' + substudy.id, substudy);
+    }
+    deleteSubstudy(id, physical) {
+        let queryString = fn.queryString({physical:(physical === true)});
+        return this.del(config.substudies + '/' + id + queryString);        
+    }
     addSessionStartListener(listener) {
         if (typeof listener !== "function") {
             throw Error("Session listener not a function");

@@ -18,7 +18,7 @@
     <form class="ui form">
         <div class="fields">
             <div class="six wide field">
-                <div class="field" id="id" data-bind="visible: isNewObs">
+                <div class="field required" id="id" data-bind="visible: isNewObs">
                     <label>Identifier</label>
                     <input type="text" data-bind="textInput: idObs, hasFocus: true" />
                 </div>
@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="four wide field">
-                <div class="field" id="revision">
+                <div class="field required" id="revision">
                     <label>Revision</label>
                     <input type="text" style="width: 8rem" data-bind="textInput: revisionObs" />
                 </div>

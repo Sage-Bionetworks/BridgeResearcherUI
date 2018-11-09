@@ -150,6 +150,8 @@ router.on('/admin/cache', routeTo('admin_cache', 'cache'));
 router.on('/admin/uploads', routeTo('admin_upload', 'admin_upload'));
 router.on('/admin/studies', routeTo('admin_studies', 'studies'));
 router.on('/admin/studies/:id', routeTo('admin_study', 'studies', ID));
+router.on('/admin/substudies', routeTo('admin_substudies', 'substudies'));
+router.on('/admin/substudies/:id', routeTo('admin_substudy', 'substudies', ID));
 router.on('/shared_modules', routeTo('shared_modules', 'modules'));
 router.on('/shared_modules/:id', routeTo('shared_module', 'modules', ID)); // unused now?
 router.on('/shared_modules/:id/versions/:version/editor', routeTo('shared_module', 'modules', ID_VERSION));
