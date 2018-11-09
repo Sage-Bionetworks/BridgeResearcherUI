@@ -320,6 +320,14 @@ reg('admin_study', {
     viewModel: require('./pages/admin/study/study'),
     template: require('./pages/admin/study/study.html')
 });
+reg('admin_substudies', {
+    viewModel: require('./pages/admin/substudies/substudies'),
+    template: require('./pages/admin/substudies/substudies.html')
+});
+reg('admin_substudy', {
+    viewModel: require('./pages/admin/substudy/substudy'),
+    template: require('./pages/admin/substudy/substudy.html')
+});
 reg('BooleanConstraints', {
     viewModel: require('./pages/survey/constraints/boolean_constraints'),
     template: require('./pages/survey/constraints/boolean_constraints.html')

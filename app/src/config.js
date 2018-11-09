@@ -60,6 +60,7 @@ export default {
     signIn: '/v3/auth/signIn',
     signOut: '/v3/auth/signOut',
     subpopulations: '/v3/subpopulations',
+    substudies: '/v3/substudies',
     survey: '/v3/surveys/',
     surveys: '/v3/surveys',
     topics: '/v3/topics',
