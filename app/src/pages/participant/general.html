@@ -109,11 +109,9 @@
                 <label>Data Groups</label>
                 <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
             </div>
-            <div class="field" data-bind="!isNewObs()">
-                <label style="margin-bottom: .9rem">Email Preference</label>
-                <ui-checkbox params="checkedObs: notifyByEmailObs">
-                    Consents to receive email from study
-                </ui-checkbox>
+            <div class="field">
+                <label>Substudy Membership</label>
+                <tag-editor params="selectedObs: substudyIdsObs, allObs: allSubstudiesObs, type: 'substudies'"></tag-editor>
             </div>
         </div>
         
@@ -144,6 +142,15 @@
                 <div class="input-field-padding" data-bind="text: createdOnObs"></div>
             </div>
         </div>
+
+        <div class="equal width fields">
+            <div class="field">
+                <label style="margin-bottom: .9rem">Email Preference</label>
+                <ui-checkbox params="checkedObs: notifyByEmailObs">
+                    Consents to receive email from study
+                </ui-checkbox>
+            </div>
+        </div>        
         
         <h4 class="ui dividing header">Attributes</h4>
         <div class="equal width fields">

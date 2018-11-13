@@ -19,13 +19,13 @@
         <div class="two fields">
             <div class="field required" id="name">
                 <label>Name</label>
-                <input data-bind="textInput: nameObs">
+                <input data-bind="textInput: nameObs, hasFocus: true">
             </div>
         </div>
         <div class="four fields">
             <div class="field required" id="id" data-bind="visible: isNewObs">
                 <label>Identifier</label>
-                <input type="text" data-bind="textInput: idObs, hasFocus: true" />
+                <input type="text" data-bind="textInput: idObs" />
             </div>
             <div class="field" id="id" data-bind="visible: !isNewObs()">
                 <label>Identifier</label>
