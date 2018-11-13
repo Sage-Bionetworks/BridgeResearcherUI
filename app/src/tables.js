@@ -47,7 +47,7 @@ function arrayListener(recordsMessageObs, objName) {
         if (array.length) {
             return array.map(makeChecked);
         } else {
-            recordsMessageObs("<p>There are currently no "+objName+"s.</p>");
+            recordsMessageObs("<p>There are currently no "+objName+".</p>");
         }
     };
 }
@@ -91,7 +91,7 @@ export default {
             vm.itemsObs = ko.observableArray([]);
         }
         vm.recordsMessageObs = ko.observable(LOADER_TEXT);
-        vm.itemsObs.subscribe(arrayListener(vm.recordsMessageObs, objName));
+        vm.itemsObs.subscribe(arrayListener(vm.recordsMessageObs, objPlural || objName+"s"));
         vm.atLeastOneChecked = function () {
             return vm.itemsObs().some(hasBeenChecked);
         };
