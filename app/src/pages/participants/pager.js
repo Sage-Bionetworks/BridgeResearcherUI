@@ -3,7 +3,6 @@ import fn from '../../functions';
 import ko from 'knockout';
 import storeService from '../../services/store_service';
 import utils from '../../utils';
-import root from '../../root';
 import { serverService } from '../../services/server_service';
 
 const PAGE_SIZE = 25;
@@ -100,13 +99,6 @@ module.exports = function(params) {
         wrappedLoadingFunc(0);
     };
 
-    function makeDate(date) {
-        // I don't know why this ends up sending an empty array, but it does.
-        if (date) {
-            return fn.formatDateTime(date, 'iso');
-        }
-        return null;
-    }
     function updateModel(response) {
         // If you're not a researcher, it can happen this gets called without a response.
         if (response) {
@@ -127,7 +119,7 @@ module.exports = function(params) {
 
     ko.postbox.subscribe('page-refresh', wrappedLoadingFunc.bind(self));
 
-    function wrappedLoadingFunc(offsetBy, vm, event) {
+    function wrappedLoadingFunc(offsetBy) {
         let search = {
             offsetBy: offsetBy,
             emailFilter: self.emailFilterObs(),

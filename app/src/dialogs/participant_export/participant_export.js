@@ -121,15 +121,18 @@ FetchParticipantWorker.prototype = {
         return Promise.resolve();
     },
     _canExport: function(participant) {
+        return participant && participant.status === "enabled";
+        /*
         return participant &&
             participant.status === "enabled" && 
-            participant.email && 
+            (participant.email || participant.phone) && 
             (!this.canContactByEmail || this._canContact(participant));
     },
     _canContact: function(participant) {
         return participant.notifyByEmail === true &&
             participant.sharingScope !== "no_sharing" &&
             utils.atLeastOneSignedConsent(participant.consentHistories);
+    */
     },
     _formatOneParticipant: function(participant) {
         let array = this.fields.map(function(field) {
