@@ -364,7 +364,10 @@ function formatList(array = [], finalWord = 'and', separator = ', ') {
     }
     return '';
 }
-function formatSearch(search) {
+function formatSearch(originalSearch) {
+    // TODO: This fixes a bug in the use of formatList which is destructive; that
+    // should be fixed everywhere, then this can be removed
+    let search = JSON.parse(JSON.stringify(originalSearch));
     if (!search) {
         return '';
     }
