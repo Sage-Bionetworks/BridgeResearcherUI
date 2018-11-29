@@ -27,7 +27,8 @@ module.exports = function(params) {
     function load() {
         return (params.id === "new") ?
             Promise.resolve({}) :
-            serverService.getSubstudy(params.id).then(titleUpdated);
+            serverService.getSubstudy(params.id)
+                .then(fn.handleObsUpdate(self.titleObs, 'name'));
     }
     function saveSubstudy() {
         return (params.id === "new") ?
@@ -36,23 +37,26 @@ module.exports = function(params) {
     }
     function updateModifiedOn(response) {
         params.id = self.idObs();
-        self.modifiedOnObs(new Date());
-        self.versionObs(response.version);
         return response;
     }
-
-    let titleUpdated = fn.handleObsUpdate(self.titleObs, 'name');
 
     self.save = function(vm, event) {
         self.substudy = binder.persist(self.substudy);
 
         utils.startHandler(vm, event);
         saveSubstudy()
+            .then((response) => {
+                if (params.id === "new") {
+                    document.location = "#/admin/substudies/" + self.idObs();
+                }
+                return response;
+            })
             .then(fn.handleStaticObsUpdate(self.isNewObs, false))
             .then(fn.handleObsUpdate(self.versionObs, 'version'))
+            .then(fn.handleStaticObsUpdate(self.modifiedOnObs, new Date()))
             .then(updateModifiedOn)
             .then(fn.returning(self.substudy))
-            .then(titleUpdated)
+            .then(fn.handleObsUpdate(self.titleObs, 'name'))
             .then(utils.successHandler(vm, event, "Sub-study has been saved."))
             .catch(failureHandler);
     };

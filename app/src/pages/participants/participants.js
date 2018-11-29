@@ -50,7 +50,6 @@ module.exports = function() {
         refresh: () => ko.postbox.publish('page-refresh')
     });
 
-    self.recordsObs = ko.observable("");
     self.findObs = ko.observable("");
     fn.copyProps(self, fn, 'formatName', 'formatDateTime', 'formatNameAsFullLabel');
     fn.copyProps(self, root, 'isAdmin', 'isDeveloper', 'isResearcher');
@@ -75,9 +74,6 @@ module.exports = function() {
         return encodeURIComponent(fn.formatName(user));
     };
     
-    function formatCount(total) {
-        return (total+"").replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " user records";
-    }
     function updateParticipantStatus(participant) {
         participant.status = "enabled";
         return serverService.updateParticipant(participant);
@@ -96,7 +92,6 @@ module.exports = function() {
             }
             return item;
         });
-        self.recordsObs(formatCount(response.total));
         self.itemsObs(response.items);
         if (response.items.length === 0) {
             self.recordsMessageObs("There are no user accounts, or none that match the filter.");

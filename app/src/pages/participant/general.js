@@ -68,6 +68,8 @@ module.exports = function(params) {
         .bind('userId', params.userId)
         .bind('id', params.userId)
         .bind('roles[]', null, fn.formatRoles, fn.persistRoles)
+        .bind('substudyIds[]')
+        .bind('allSubstudies[]')
         .obs('title', (params.userId === "new") ? "New participant" : "&#160;");
     
     fn.copyProps(self, root, 'isAdmin');
@@ -160,10 +162,24 @@ module.exports = function(params) {
         }
         return participant;
     }
+    function getSubstudies() {
+        return serverService.getSession();
+    }
+    function updateAllSubstudiesObs(session) {
+        if (session.substudyIds.length === 0) {
+            serverService.getSubstudies(false).then(response => {
+                self.allSubstudiesObs(response.items.map(item => item.id));
+            });
+        } else {
+            self.allSubstudiesObs(session.substudyIds);
+        }
+    }
     
     serverService.getStudy()
         .then(binder.assign('study'))
         .then(initStudy)
+        .then(getSubstudies)
+        .then(updateAllSubstudiesObs)
         .then(getParticipant)
         .then(binder.assign('participant'))
         .then(noteInitialStatus)
