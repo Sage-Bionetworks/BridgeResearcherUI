@@ -40,7 +40,7 @@ export default {
     compoundactivitydefinitions: '/v3/compoundactivitydefinitions',
     emailStatus: '/v3/studies/self/emailStatus',
     export: '/v3/export',
-    externalIds: '/v3/externalIds',
+    externalIds: '/v4/externalids',
     getCurrentStudy: '/v3/studies/self',
     getStudy: '/v3/studies/',
     getStudyList: '/v3/studies?format=summary',

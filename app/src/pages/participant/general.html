@@ -109,9 +109,13 @@
                 <label>Data Groups</label>
                 <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
             </div>
-            <div class="field">
+            <div class="field" data-bind="visible: isNewObs() || isAdmin()">
                 <label>Substudy Membership</label>
                 <tag-editor params="selectedObs: substudyIdsObs, allObs: allSubstudiesObs, type: 'substudies'"></tag-editor>
+            </div>
+            <div class="field" data-bind="visible: !isNewObs() && !isAdmin()">
+                <label>Substudy Membership</label>
+                <span class="input-field-padding" data-bind="text: substudyIdsObs().join(', ')"></span>
             </div>
         </div>
         

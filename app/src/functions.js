@@ -194,6 +194,8 @@ function formatNameAsFullLabel(summary) {
         }
     } else if (summary.externalId) {
         name = summary.externalId;
+    } else if (summary.id) {
+        name = "Withdrawn (#"+summary.id.split('-')[0]+"…)";
     }
     return name;
 }
