@@ -485,7 +485,6 @@ export class ServerService {
         return this.gethttp(config.externalIds + fn.queryString(params || {}));
     }
     createExternalId(identifier) {
-        console.log("identifier", JSON.stringify(identifier));
         return this.post(config.externalIds, identifier);
     }
     // @Deprecated
