@@ -167,7 +167,7 @@ module.exports = function(params) {
     }
     function updateAllSubstudiesObs(session) {
         if (session.substudyIds.length === 0) {
-            serverService.getSubstudies(false).then(response => {
+            return serverService.getSubstudies(false).then(response => {
                 self.allSubstudiesObs(response.items.map(item => item.id));
             });
         } else {

@@ -40,7 +40,6 @@ function prompt(message, okFunc) {
         }
     }).then(result => {
         if (result.value) {
-            console.log(result.value);
             okFunc(result.value);
             swal.close();
         }

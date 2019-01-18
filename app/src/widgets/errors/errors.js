@@ -84,7 +84,10 @@ module.exports = function() {
             let id = errorFieldKeyToId(fieldName);
             let fieldEl = document.getElementById(id);
             if (!fieldEl) {
-                fieldEl = document.querySelector("."+id);
+                // When you search by class, 1) there can be more than one, 2) some can be hidden. Filter
+                // out the hidden ones and take the first one that is not hidden.
+                fieldEl = Array.from(document.querySelectorAll("."+id))
+                    .filter((el) => el.offsetParent !== null)[0];
             }
             if (fieldEl) {
                 let containerDiv = fieldEl.querySelector(".error.box");

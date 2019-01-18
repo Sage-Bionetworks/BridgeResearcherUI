@@ -7,8 +7,8 @@ module.exports = function() {
     let self = this;
 
     tables.prepareTable(self, {
-        name: 'sub-study',
-        plural: 'sub-studies',
+        name: 'substudy',
+        plural: 'substudies',
         refresh: load,
         delete: function(item) {
             return serverService.deleteSubstudy(item.id, false);

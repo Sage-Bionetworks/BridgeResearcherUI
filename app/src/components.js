@@ -340,6 +340,14 @@ reg('DateTimeConstraints', {
     viewModel: require('./pages/survey/constraints/datetime_constraints'),
     template: require('./pages/survey/constraints/datetime_constraints.html')
 });
+reg('YearMonthConstraints', {
+    viewModel: require('./pages/survey/constraints/yearmonth_constraints'),
+    template: require('./pages/survey/constraints/yearmonth_constraints.html')
+});
+reg('PostalCodeConstraints', {
+    viewModel: require('./pages/survey/constraints/postalcode_constraints'),
+    template: require('./pages/survey/constraints/postalcode_constraints.html')
+});
 reg('DurationConstraints', {
     viewModel: require('./pages/survey/constraints/duration_constraints'),
     template: require('./pages/survey/constraints/duration_constraints.html')

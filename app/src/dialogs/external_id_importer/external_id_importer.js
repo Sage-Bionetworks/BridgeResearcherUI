@@ -14,10 +14,11 @@ import utils from '../../utils';
 // * currentWorkItem: Object, the item just processed by performWork
 // * postFetch: Promise: results of worker's sequential execution
 
-function IdImportWorker(input) {
+function IdImportWorker(input, substudyId) {
     this.identifiers = input.split(/[,\s\t\r\n]+/).filter(function(value) {
         return value.length > 0;
     });
+    this.substudyId = substudyId;
     this.importedIdentifiers = [];
 }
 IdImportWorker.prototype = {
@@ -32,7 +33,10 @@ IdImportWorker.prototype = {
     },
     performWork: function(){ 
         this.currentId = this.identifiers.shift();
-        return serverService.addExternalIds([this.currentId]).then(this._success.bind(this));
+        return serverService.createExternalId({
+            "identifier":this.currentId,
+            "substudyId":this.substudyId
+        }).then(this._success.bind(this));
     },
     _success: function(response) {
         this.importedIdentifiers.push(this.currentId);
@@ -92,7 +96,9 @@ module.exports = function(params) {
         .obs('createCredentials', true)
         .obs('useLegacyFormat', false)
         .obs('dataGroups[]')
-        .obs('allDataGroups[]');
+        .obs('allDataGroups[]')
+        .obs('substudyId')
+        .obs('substudyIds[]');
 
     self.statusObs("Please enter a list of identifiers, separated by commas or new lines.");
     self.createCredentialsObs.subscribe(function(newValue) {
@@ -103,6 +109,11 @@ module.exports = function(params) {
         self.useLegacyFormatObs(legacy);
         self.allDataGroupsObs(study.dataGroups);
         supportEmail = study.supportEmail;
+    }).then(serverService.getSubstudies.bind(serverService)).then((response) => {
+        let opts = response.items.map((substudy) => {
+            return {value: substudy.id, label: substudy.name};
+        });
+        self.substudyIdsObs(opts);
     });
     
     function displayComplete() {
@@ -112,7 +123,7 @@ module.exports = function(params) {
         self.statusObs("Preparing to import...");
 
         let useLegacyFormat = self.useLegacyFormatObs();
-        let importWorker = new IdImportWorker(self.importObs());
+        let importWorker = new IdImportWorker(self.importObs(), self.substudyIdObs());
         if (!importWorker.hasWork()) {
             self.errorMessagesObs.unshift("You must enter some identifiers.");
             return;
@@ -123,7 +134,8 @@ module.exports = function(params) {
 
         self.run(importWorker).then(function(identifiers) {
             if (self.createCredentialsObs()) {
-                let credentialsWorker = new CreateCredentialsWorker(supportEmail, identifiers, self.dataGroupsObs(), useLegacyFormat);
+                let credentialsWorker = new CreateCredentialsWorker(supportEmail, identifiers, 
+                    self.dataGroupsObs(), useLegacyFormat);
                 self.run(credentialsWorker).then(displayComplete);
             } else {
                 displayComplete();

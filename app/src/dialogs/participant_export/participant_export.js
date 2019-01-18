@@ -62,7 +62,7 @@ CollectParticipantsWorker.prototype = {
         return this.offsetBy;
     },
     performWork: function(promise) {
-        this.search.offsetBy = this.pageOffsets[0];
+        this.offsetBy = this.pageOffsets[0];
         this.search.offsetBy = this.offsetBy;
         this.search.pageSize = PAGE_SIZE;
         return serverService.searchAccountSummaries(this.search).then(this._success.bind(this));

@@ -62,8 +62,9 @@ module.exports = function () {
     if (item.phone) {
       array.push(item.phone);
     }
-    if (item.externalId) {
-      array.push(item.externalId);
+    let arrays = Object.values(item.externalIds || []);
+    if (arrays.length) {
+      array.push(arrays.join(", "));
     }
     return array.join(', ');
   };

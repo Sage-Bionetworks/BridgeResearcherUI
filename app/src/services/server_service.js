@@ -484,12 +484,15 @@ export class ServerService {
     getExternalIds(params) {
         return this.gethttp(config.externalIds + fn.queryString(params || {}));
     }
+    createExternalId(identifier) {
+        return this.post(config.externalIds, identifier);
+    }
+    // @Deprecated
     addExternalIds(identifiers) {
         return this.post(config.externalIds, identifiers);
     }
     deleteExternalId(id) {
-        let params = {'externalId':id};
-        return this.del(config.externalIds + fn.queryString(params));
+        return this.del(config.externalIds + '/' + id);
     }
     getSession() {
         if (session) {
