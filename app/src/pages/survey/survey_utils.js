@@ -58,6 +58,7 @@ const uiHintLabels = Object.freeze({
     'combobox':'Combobox',
     'datepicker':'Date Picker',
     'datetimepicker':'Date & Time Picker',
+    'yearmonth': 'Month & Year Picker',
     'list':'List',
     'multilinetext':'Multiline Text Field',
     'numberfield':'Number Field',
@@ -69,7 +70,8 @@ const uiHintLabels = Object.freeze({
     'toggle':'Toggle Button',
     'weight':'Weight',
     'height':'Height',
-    'bloodpressure':'Blood Pressure'
+    'bloodpressure':'Blood Pressure',
+    'postalcode': 'Postal Code'
 });
 const UI_HINT_OPTIONS = Object.freeze(Object.keys(uiHintLabels).reduce(function(object, key) {
     object[key] = {value: key, label: uiHintLabels[key]};
@@ -80,6 +82,7 @@ const SELECT_OPTIONS_BY_TYPE = Object.freeze({
     'BooleanConstraints':[UI_HINT_OPTIONS.checkbox, UI_HINT_OPTIONS.toggle],
     'DateConstraints':[UI_HINT_OPTIONS.datepicker],
     'DateTimeConstraints':[UI_HINT_OPTIONS.datetimepicker],
+    'YearMonthConstraints':[UI_HINT_OPTIONS.yearmonth],
     'DecimalConstraints':[UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider, UI_HINT_OPTIONS.select],
     'DurationConstraints': [UI_HINT_OPTIONS.numberfield, UI_HINT_OPTIONS.slider, UI_HINT_OPTIONS.select],
     'MultiValueConstraints':[UI_HINT_OPTIONS.checkbox, UI_HINT_OPTIONS.combobox, UI_HINT_OPTIONS.list,
@@ -89,7 +92,8 @@ const SELECT_OPTIONS_BY_TYPE = Object.freeze({
     'TimeConstraints':[UI_HINT_OPTIONS.timepicker],
     'BloodPressureConstraints':[UI_HINT_OPTIONS.bloodpressure],
     'HeightConstraints':[UI_HINT_OPTIONS.height],
-    'WeightConstraints':[UI_HINT_OPTIONS.weight]
+    'WeightConstraints':[UI_HINT_OPTIONS.weight],
+    'PostalCodeConstraints':[UI_HINT_OPTIONS.postalcode]
 });
 const ELEMENT_TEMPLATE = Object.freeze({
     'SurveyInfoScreen': {type:'SurveyInfoScreen', title:'', prompt:'', promptDetail:'', 
@@ -108,12 +112,15 @@ const DATA_TYPE_OPTIONS = Object.freeze([
     {label: 'Decimal', value: 'decimal'},
     {label: 'Blood Pressure', value: 'bloodpressure'},
     {label: 'Height', value: 'height'},
-    {label: 'Weight', value: 'weight'}
+    {label: 'Weight', value: 'weight'},
+    {label: 'Month & Year', value: 'yearmonth'},
+    {label: 'Postal Code', value: 'postalcode'}
 ]);
 const CONSTRAINTS_TEMPLATES = Object.freeze({
     'BooleanConstraints': {dataType:'boolean'},
     'DateConstraints': {dataType:'date', allowFuture:false, earliestValue:'', latestValue:'' },
     'DateTimeConstraints': {dataType:'datetime', allowFuture:false, earliestValue:'', latestValue:'' },
+    'YearMonthConstraints': {dataType:'yearmonth', allowFuture:false, earliestValue:'', latestValue:'' },
     'TimeConstraints': {dataType:'time'},
     'IntegerConstraints': {dataType:'integer', minValue:0, maxValue:255, unit: '', step:1.0},
     'DecimalConstraints': {dataType:'decimal', minValue:0, maxValue:255, unit: '', step:1.0},
@@ -123,11 +130,13 @@ const CONSTRAINTS_TEMPLATES = Object.freeze({
     'BloodPressureConstraints': {dataType:'bloodpressure'},
     'HeightConstraints': {dataType:'height', forInfant:false},
     'WeightConstraints': {dataType:'weight', forInfant:false},
+    'PostalCodeConstraints': {dataType:'postalcode', countryCode: 'us'}
 });
 const UI_HINT_FOR_CONSTRAINTS = Object.freeze({
     'BooleanConstraints': 'checkbox',
     'DateConstraints': 'datepicker',
     'DateTimeConstraints': 'datetimepicker',
+    'YearMonthConstraints': 'yearmonth',
     'TimeConstraints': 'timepicker',
     'IntegerConstraints': 'numberfield',
     'DecimalConstraints': 'numberfield',
@@ -136,7 +145,8 @@ const UI_HINT_FOR_CONSTRAINTS = Object.freeze({
     'MultiValueConstraints': 'list',
     'BloodPressureConstraints': 'bloodpressure',
     'HeightConstraints': 'height',
-    'WeightConstraints': 'weight'
+    'WeightConstraints': 'weight',
+    'PostalCodeConstraints': 'postalcode'
 });
 
 const SURVEY_FIELDS = ['name','createdOn','guid','identifier','published','version','copyrightNotice'];
@@ -211,6 +221,7 @@ function observablesToElement(element) {
  */
 function updateModelField(model, fieldName) {
     let obsName = fieldName + "Obs";
+
     if (typeof model[obsName]() !== "undefined") {
         if (model.dataType === "date" && model[obsName]() instanceof Date) {
             model[fieldName] = model[obsName]().toISOString().split("T")[0];
