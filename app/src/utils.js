@@ -158,20 +158,6 @@ function createEmailTemplate(email, identifier) {
     }
     return parts[0] + "+" + identifier + "@" + parts[1];
 }
-function atLeastOneSignedConsent(consentHistories) {
-    if (Object.keys(consentHistories).length === 0) {
-        return true;
-    }
-    // At least one consent history whose last item has not been withdrawn.
-    return Object.keys(consentHistories).some(function(guid) {
-        let history = consentHistories[guid];
-        if (history.length === 0) {
-            return true;
-        }
-        let last = history[history.length-1];
-        return (last && typeof last.withdrewOn === "undefined");
-    });
-}
 function copyString(value) {
     let p = document.createElement("textarea");
     p.style = "position:fixed;top:0;left:0";
@@ -322,7 +308,6 @@ export default {
     oldCreateParticipantForID,
     animatedDeleter,
     findStudyName,
-    atLeastOneSignedConsent,
     copyString,
     failureHandler
 };
