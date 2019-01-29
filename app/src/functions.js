@@ -405,6 +405,9 @@ function formatSearch(originalSearch) {
     }
     return formatList(array, 'and', '; ');
 }
+function substudyMatchesUser(userSubstudies, substudyId) {
+    return userSubstudies.length === 0 || userSubstudies.includes(substudyId);
+}
 
 /* ==================================== DATE FUNCTIONS ==================================== */
 
@@ -532,5 +535,6 @@ export default {
     queryString,
     queryToObject,
     returning,
-    seq
+    seq,
+    substudyMatchesUser
 };

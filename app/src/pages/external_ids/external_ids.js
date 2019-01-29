@@ -3,6 +3,7 @@ import {serverService} from '../../services/server_service';
 import Binder from '../../binder';
 import fn from '../../functions';
 import ko from 'knockout';
+import Promise from 'bluebird';
 import root from '../../root';
 import tables from '../../tables';
 import utils from '../../utils';
@@ -23,12 +24,14 @@ module.exports = function() {
         .obs('searchLoading', false)
         .obs('externalIdValidationEnabled', false)
         .obs('idFilter')
+        .obs('substudyId')
         .obs('useLegacyFormat', false)
         .obs('showResults', false);
 
     // For the forward pager control.
     self.vm = self;
     self.callback = fn.identity;
+    self.userSubstudies = [];
 
     fn.copyProps(self, root, 'isDeveloper', 'isResearcher');
     tables.prepareTable(self, {
@@ -36,6 +39,25 @@ module.exports = function() {
         delete: deleteItem, 
         refresh: load
     });
+    self.canDeleteObs = ko.computed(function() {
+        return true; // until migration is over
+        // return !self.externalIdValidationEnabledObs() && self.isDeveloper();
+    });
+
+    function hasBeenChecked(item) {
+        return item.checkedObs() && (!item.deletedObs || !item.deletedObs());
+    }
+    function migrateFunc(extId) {
+        return serverService.migrateExternalId(extId.identifier, self.substudyIdObs());
+    }
+    self.migrateItems = function(vm, event) {
+        utils.startHandler(vm, event);
+        let migratables = self.itemsObs().filter(hasBeenChecked);
+        Promise.each(migratables, migrateFunc)
+            .then(utils.successHandler(self, event, "External IDs migrated."))
+            .then(self.loadingFunc)
+            .catch(utils.failureHandler());
+    };
 
     function extractId(response) {
         if (response.items.length === 0) {
@@ -66,6 +88,17 @@ module.exports = function() {
         }
         return response;
     }
+    function initFromStudy(study) {
+        let legacy = study.emailVerificationEnabled === false && study.externalIdValidationEnabled === true;
+        self.useLegacyFormatObs(legacy);
+        self.externalIdValidationEnabledObs(study.externalIdValidationEnabled);
+        return study;
+    }
+    function initFromSession(session) {
+        self.userSubstudies = session.substudyIds;
+        return serverService.getStudy();
+    }
+
     self.openImportDialog = function(vm, event) {
         self.showResultsObs(false);
         root.openDialog('external_id_importer', {
@@ -98,7 +131,6 @@ module.exports = function() {
     self.doSearch = function(vm, event) {
         self.callback(event);
     };
-    
     // This is called from the dialog that allows a user to enter a new external identifier.
     self.createFromNew = function(identifier) {
         serverService.addExternalIds([identifier])
@@ -109,14 +141,12 @@ module.exports = function() {
             .then(utils.successHandler())
             .catch(utils.failureHandler());
     };
-
-    function initFromStudy(study) {
-        let legacy = study.emailVerificationEnabled === false && study.externalIdValidationEnabled === true;
-        self.useLegacyFormatObs(legacy);
-        return study;
-    }
+    self.matchesSubstudy = function(substudyId) {
+        return fn.substudyMatchesUser(self.userSubstudies, substudyId);
+    };
     
-    serverService.getStudy()
+    serverService.getSession()
+        .then(initFromSession)
         .then(binder.assign('study'))
         .then(initFromStudy);
     
