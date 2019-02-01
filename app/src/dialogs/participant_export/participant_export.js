@@ -62,7 +62,7 @@ CollectParticipantsWorker.prototype = {
         return this.offsetBy;
     },
     performWork: function(promise) {
-        this.search.offsetBy = this.pageOffsets[0];
+        this.offsetBy = this.pageOffsets[0];
         this.search.offsetBy = this.offsetBy;
         this.search.pageSize = PAGE_SIZE;
         return serverService.searchAccountSummaries(this.search).then(this._success.bind(this));
@@ -121,8 +121,6 @@ FetchParticipantWorker.prototype = {
         return Promise.resolve();
     },
     _canExport: function(participant) {
-        return participant && participant.status === "enabled";
-        /*
         return participant &&
             participant.status === "enabled" && 
             (participant.email || participant.phone) && 
@@ -130,9 +128,7 @@ FetchParticipantWorker.prototype = {
     },
     _canContact: function(participant) {
         return participant.notifyByEmail === true &&
-            participant.sharingScope !== "no_sharing" &&
-            utils.atLeastOneSignedConsent(participant.consentHistories);
-    */
+            participant.sharingScope !== "no_sharing";
     },
     _formatOneParticipant: function(participant) {
         let array = this.fields.map(function(field) {

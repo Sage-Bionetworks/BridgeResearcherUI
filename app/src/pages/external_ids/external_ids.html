@@ -4,10 +4,15 @@
             <h3>External Identifiers</h3>
         </div>
         <div class="fixed-header-buttons" data-bind="visible: isDeveloper">
+            <div class="ui input">
+                <input type="text" data-bind="textInput: substudyIdObs"/>
+            </div>
             <button class="ui tiny button" style="margin-left: 3rem" data-bind="click: openImportDialog">Import&hellip;</button>
             <button class="ui tiny button" data-bind="click: createFromNext">Assign Next ID</button>
-            <button data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: deleteItems" 
+            <button data-bind="visible: canDeleteObs, disable: !atLeastOneChecked(), click: deleteItems" 
                 class="ui red tiny button">Delete</button>
+            <button data-bind="disable: !atLeastOneChecked(), click: migrateItems" 
+                class="ui orange tiny button">Migrate</button>
         </div>
     </div>
     <div class="ui empty secondary pointing menu"></div>
@@ -37,24 +42,25 @@
     <table class="ui compact selectable table">
         <thead>
             <tr>
-                <th width="10" data-bind="visible: isDeveloper">
+                <th width="10" data-bind="visible: canDeleteObs">
                     <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
                 </th>
                 <th>Identifier</th>
+                <th>Substudy</th>
                 <th></th>
             </tr>
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
             <tr>
-                <td data-bind="attr:{colspan: $parent.isDeveloper ? 3 : 2}, html: recordsMessageObs"></td>
+                <td data-bind="attr:{colspan: $parent.canDeleteObs ? 3 : 2}, html: recordsMessageObs"></td>
             </tr>
         </tbody>                    
         <tbody data-bind="foreach: itemsObs">
             <tr>
-                <td data-bind="visible: $parent.isDeveloper">
+                <td data-bind="visible: $parent.canDeleteObs">
                     <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
                 </td>
-                <td style="white-space: nowrap; width:100%">
+                <td>
                     <span data-bind="text: $data.identifier, visible: !$data.assigned"></span>
                     <span data-bind="visible: $data.assigned">
                         <span data-bind="visible: !$parent.isResearcher(), text: $data.identifier"></span>
@@ -63,12 +69,15 @@
                         </a>
                     </span>
                 </td>
-                <td style="white-space: nowrap">
-                    <div data-bind="visible: $data.assigned === true">
-                        <i class="green check icon"> </i> Credentials Created
+                <td data-bind="text: $data.substudyId"></td>
+                <td style="white-space: nowrap; text-align: right">
+                    <div data-bind="visible: $parent.matchesSubstudy($data.substudyId)">
+                        <div data-bind="visible: $data.assigned === true">
+                            <i class="green check icon"> </i> Credentials Created
+                        </div>
+                        <button data-bind="visible: $data.assigned == false, click: $component.createFrom" 
+                            class="ui compact mini button">Create Credentials</button>
                     </div>
-                    <button data-bind="visible: $data.assigned == false, click: $component.createFrom" 
-                        class="ui compact mini button">Create Credentials</button>
                 </td>
             </tr>
         </tbody>

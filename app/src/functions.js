@@ -140,6 +140,12 @@ function formatVersionRange(minValue, maxValue) {
     }
     return "<i>All versions</i>";
 }
+function formatYearMonth(year, month) {
+    if (year && month) {
+        return new Date(year, month,0,0,0,0,0).toISOString().split(/(\d{4}-\d{2})/)[1];
+    }
+    return null;
+}
 function formatLanguages(value) {
     return (value) ? value.join(", ") : '';
 }
@@ -192,8 +198,11 @@ function formatNameAsFullLabel(summary) {
         } else {
             name = summary.phone;
         }
-    } else if (summary.externalId) {
-        name = summary.externalId;
+    } else if (summary.externalIds.length || Object.keys(summary.externalIds).length) {
+        name = isArray(summary.externalIds) ?
+            summary.externalIds.join(", ") : Object.values(summary.externalIds).join(", ");
+    } else if (summary.id) {
+        name = "Withdrawn (#"+summary.id.split('-')[0]+"…)";
     }
     return name;
 }
@@ -396,6 +405,9 @@ function formatSearch(originalSearch) {
     }
     return formatList(array, 'and', '; ');
 }
+function substudyMatchesUser(userSubstudies, substudyId) {
+    return userSubstudies.length === 0 || userSubstudies.includes(substudyId);
+}
 
 /* ==================================== DATE FUNCTIONS ==================================== */
 
@@ -497,6 +509,7 @@ export default {
     formatSearch,
     formatTitleCase,
     formatVersionRange,
+    formatYearMonth,
     getRangeInDays,
     handleConditionalObsUpdate,
     handleCopyProps,
@@ -522,5 +535,6 @@ export default {
     queryString,
     queryToObject,
     returning,
-    seq
+    seq,
+    substudyMatchesUser
 };

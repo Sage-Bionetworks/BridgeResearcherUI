@@ -435,4 +435,20 @@ describe("queryToObject", function() {
         expect(object.isArray).to.eql([2]);
     });
 });
+describe("substudyMatchesUser", function() {
+    it("returns true for user with no substudies", function() {
+        expect(fn.substudyMatchesUser([], "substudyA")).to.be.true;
+        expect(fn.substudyMatchesUser([], null)).to.be.true;
+        expect(fn.substudyMatchesUser([])).to.be.true;
+    });
+    it("returns true for a matching substudy", function() {
+        expect(fn.substudyMatchesUser(["substudyA"], "substudyA")).to.be.true;
+        expect(fn.substudyMatchesUser(["substudyB", "substudyA"], "substudyA")).to.be.true;
+    });
+    it("returns false when substudy does not match", function() {
+        expect(fn.substudyMatchesUser(["substudyA"], null)).to.be.false;
+        expect(fn.substudyMatchesUser(["substudyB", "substudyA"], "substudyC")).to.be.false;
+        expect(fn.substudyMatchesUser(["substudyA"])).to.be.false;
+    });
+});
 });
