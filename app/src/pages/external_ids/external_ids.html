@@ -4,15 +4,19 @@
             <h3>External Identifiers</h3>
         </div>
         <div class="fixed-header-buttons" data-bind="visible: isDeveloper">
+            <!--
             <div class="ui input">
                 <input type="text" data-bind="textInput: substudyIdObs"/>
             </div>
+            -->
             <button class="ui tiny button" style="margin-left: 3rem" data-bind="click: openImportDialog">Import&hellip;</button>
             <button class="ui tiny button" data-bind="click: createFromNext">Assign Next ID</button>
             <button data-bind="visible: canDeleteObs, disable: !atLeastOneChecked(), click: deleteItems" 
                 class="ui red tiny button">Delete</button>
+            <!--
             <button data-bind="disable: !atLeastOneChecked(), click: migrateItems" 
                 class="ui orange tiny button">Migrate</button>
+            -->
         </div>
     </div>
     <div class="ui empty secondary pointing menu"></div>
