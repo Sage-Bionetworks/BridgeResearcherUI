@@ -39,6 +39,10 @@ module.exports = function() {
             delete copy.modifiedOn;
             delete copy.guid;
             delete copy.version;
+            copy.criteria = copy.criteria || {};
+            copy.criteria.minAppVersions = copy.criteria.minAppVersions || {};
+            copy.criteria.minAppVersions['iPhone OS'] = 1000;
+            copy.criteria.minAppVersions.Android = 1000;
             copy.label += " (Copy)";
             return serverService.createAppConfig(copy);
         }).then(load.bind(self))
