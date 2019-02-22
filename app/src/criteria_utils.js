@@ -37,6 +37,8 @@ function label(criteria) {
     let language = valueForObs(criteria, "language");
     let allOfGroups = valueForObs(criteria, "allOfGroups");
     let noneOfGroups = valueForObs(criteria, "noneOfGroups");
+    let allOfSubstudyIds = valueForObs(criteria, "allOfSubstudyIds");
+    let noneOfSubstudyIds = valueForObs(criteria, "noneOfSubstudyIds");
     let iosRange = formatVersionRange(iosMin, iosMax);
     let androidRange = formatVersionRange(androidMin, androidMax);
 
@@ -52,13 +54,19 @@ function label(criteria) {
         }
     }
     if (fn.isNotBlank(language)) {
-        arr.push("'" + language + "' language");
+        arr.push('"' + language + '" language');
     }
     if (allOfGroups && allOfGroups.length) {
-        arr.push(quotedList(allOfGroups) + " required");
+        arr.push(quotedList(allOfGroups) + " data groups required");
     }
     if (noneOfGroups && noneOfGroups.length) {
-        arr.push(quotedList(noneOfGroups) + " prohibited");
+        arr.push(quotedList(noneOfGroups) + " data groups prohibited");
+    }
+    if (allOfSubstudyIds && allOfSubstudyIds.length) {
+        arr.push(quotedList(allOfSubstudyIds) + " substudy membership(s) required");
+    }
+    if (noneOfSubstudyIds && noneOfSubstudyIds.length) {
+        arr.push(quotedList(noneOfSubstudyIds) + " substudy membership(s) prohibited");
     }
     return (arr.length) ? arr.join("; ") : "No criteria";
 }

@@ -10,20 +10,16 @@
         <legend class="schedulegroup-fieldset-legend">
             <h4>Assignment based on</h4>
         </legend>
-        <div class="schedulegroup-fieldset-remove">
+        <div style="display: flex; align-items: center">
+            <div style="flex: 1">
+                <!-- ko component: { name: "criteria", params: { criteriaObs: $data.criteriaObs } } -->
+                <!-- /ko -->
+            </div>
             <button class="ui basic mini red button" data-bind="click: $parent.removeCriteria">
                 <i class="delete square icon"></i>Remove Schedule
             </button>
         </div>
-        <!-- ko component: {
-            name: "criteria",
-            params: { 
-                id: 'strategy_scheduleCriteria'+$index()+'_criteria_', 
-                criteriaObs: $data.criteriaObs,
-                eventObj: $component.scheduleCriteriaObs
-            }
-        } -->
-        <!-- /ko -->
+
         <h4 class="schedulegroup-fieldset-h4">Schedule</h4>
         <div data-bind="component: {name: 'schedule', params: {
                 scheduleHolder: $data,

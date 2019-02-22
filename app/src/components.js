@@ -415,6 +415,11 @@ reg('criteria', {
     viewModel: require('./widgets/criteria/criteria'),
     template: require('./widgets/criteria/criteria.html')
 });
+reg('criteria_editor', {
+    viewModel: require('./dialogs/criteria_editor/criteria_editor'),
+    template: require('./dialogs/criteria_editor/criteria_editor.html'),
+    synchronous: true
+});
 reg('app_version_criteria', {
     viewModel: require('./widgets/criteria/criteria'),
     template: require('./widgets/criteria/app_version_criteria.html')

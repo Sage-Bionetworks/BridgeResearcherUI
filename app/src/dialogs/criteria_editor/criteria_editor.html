@@ -1,0 +1,64 @@
+<div class="ui small modal">
+  <i data-bind="click: closeDialog" class="close icon"></i>
+  <div class="header">
+    Edit Criteria
+  </div>
+  <div class="content">
+    <div class="ui form" style="padding-left: 2rem; padding-right: 2rem">
+      <div class="fields">
+        <div class="four wide field minAppVersions_iphone_os">
+          <label>iOS version</label>
+          <div class="field range-control-border" data-bind="focusable">
+            <input type="text" placeholder="Min" data-bind="textInput: $data.iosMinObs" />
+            <span>&mdash;</span>
+            <input type="text" placeholder="Max" data-bind="textInput: $data.iosMaxObs" />
+          </div>
+        </div>
+        <div class="four wide field minAppVersions_android_os">
+          <label>Android version</label>
+          <div class="field range-control-border" data-bind="focusable">
+            <input type="text" placeholder="Min" data-bind="textInput: $data.androidMinObs" />
+            <span>&mdash;</span>
+            <input type="text" placeholder="Max" data-bind="textInput: $data.androidMaxObs" />
+          </div>
+        </div>
+        <div class="eight wide field">
+          <label>Language</label>
+          <input type="text" style="width: 6rem" data-bind="textInput: $data.languageObs" />
+        </div>
+      </div>
+
+      <h4 class="ui dividing header">Data Groups</h4>
+      <div class="two fields">
+        <div class="field tag-editor dataGroups">
+          <label>User has all these data group(s)</label>
+          <tag-editor params="selectedObs: allOfGroupsObs, 
+            allObs: dataGroupsOptionsObs, type: 'data groups'"></tag-editor>
+        </div>
+        <div class="field tag-editor">
+          <label>And none of these group(s)</label>
+          <tag-editor params="selectedObs: noneOfGroupsObs, 
+            allObs: dataGroupsOptionsObs, type: 'data groups'"></tag-editor>
+        </div>
+      </div>
+
+      <h4 class="ui dividing header">Substudy IDs</h4>
+      <div class="two fields">
+        <div class="field tag-editor substudyIds">
+          <label>User is in all these substudies</label>
+          <tag-editor params="selectedObs: allOfSubstudyIdsObs, 
+            allObs: substudyOptionsObs, type: 'substudy IDs'"></tag-editor>
+        </div>
+        <div class="field tag-editor">
+          <label>And is not in any of these substudies</label>
+          <tag-editor params="selectedObs: noneOfSubstudyIdsObs, 
+            allObs: substudyOptionsObs, type: 'substudy IDs'"></tag-editor>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="ui small primary button" data-bind="click: update">Update</button>
+    <button class="ui small button" data-bind="click: closeDialog">Cancel</button>
+  </div>
+</div>
