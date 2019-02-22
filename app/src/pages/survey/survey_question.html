@@ -1,8 +1,15 @@
 <div data-bind="attr:{id: $data.collectionName+'prompt'}">
-    <ui-textarea params="fieldObs: $data.element.promptObs, className: 'focus element-content-prompt', placeholder: 'Prompt'"></ui-textarea>
+  <ui-textarea
+    params="fieldObs: $data.element.promptObs, className: 'focus element-content-prompt', placeholder: 'Prompt'"
+  ></ui-textarea>
 </div>
-<ui-textarea params="fieldObs: $data.element.promptDetailObs, className: 'element-content-prompt-detail', placeholder: 'Prompt Detail'"></ui-textarea>
-<div class="ui segment element-content-segment" data-bind="component: {
+<ui-textarea
+  params="fieldObs: $data.element.promptDetailObs, className: 'element-content-prompt-detail', placeholder: 'Prompt Detail'"
+></ui-textarea>
+<div
+  class="ui segment element-content-segment"
+  data-bind="component: {
     name: element.constraintsTypeObs,
     params: {elementsObs: $data.elementsObs, element: element, collectionName: $data.collectionName}
-}"></div>
+}"
+></div>

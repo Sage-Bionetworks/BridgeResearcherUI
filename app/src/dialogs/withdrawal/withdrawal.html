@@ -1,20 +1,22 @@
 <div class="ui small modal">
-    <i data-bind="click:cancel" class="close icon"></i>
-    <div class="header" data-bind="text: title"></div>
-    <div class="content">
-        <form id="withdrawalForm" class="ui form" action="" data-bind="submitByButton: 'withdrawBtn'">
-            <div class="field" id="username">
-                <label for="username">Reason</label>
-                <textarea rows="4" data-bind="textInput: reasonObs"></textarea>
-            </div>
-        </form>
-        <div class="ui warning message">
-            <p>This person may have to go through the whole consent process again before submitting more data. 
-                After you do this, you should also sign the user out of the app (under the General tab).</p>
-        </div>
+  <i data-bind="click:cancel" class="close icon"></i>
+  <div class="header" data-bind="text: title"></div>
+  <div class="content">
+    <form id="withdrawalForm" class="ui form" action="" data-bind="submitByButton: 'withdrawBtn'">
+      <div class="field" id="username">
+        <label for="username">Reason</label>
+        <textarea rows="4" data-bind="textInput: reasonObs"></textarea>
+      </div>
+    </form>
+    <div class="ui warning message">
+      <p>
+        This person may have to go through the whole consent process again before submitting more data. After you do
+        this, you should also sign the user out of the app (under the General tab).
+      </p>
     </div>
-    <div class="actions">
-        <button id="withdrawBtn" class="ui primary small button" data-bind="click: withdraw">Withdraw</button>
-        <button class="ui small button" data-bind="click: cancel">Cancel</button>
-    </div>
+  </div>
+  <div class="actions">
+    <button id="withdrawBtn" class="ui primary small button" data-bind="click: withdraw">Withdraw</button>
+    <button class="ui small button" data-bind="click: cancel">Cancel</button>
+  </div>
 </div>

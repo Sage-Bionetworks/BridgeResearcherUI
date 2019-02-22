@@ -1,69 +1,73 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <div class="ui breadcrumb">
-                <a class="section" href="#/participants">Participants</a>
-                <i class="right chevron icon divider"></i>
-            </div>            
-            <h3 data-bind="html: titleObs"></h3>
-        </div>
-        <div class="fixed-header-buttons">
-        </div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a class="section" href="#/participants">Participants</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="html: titleObs"></h3>
     </div>
-    <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
+    <div class="fixed-header-buttons"></div>
+  </div>
+  <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
 </div>
 <div class="scrollbox">
-    <errors></errors>
-    <div class="ui grid">
-        <div class="ten wide column">
-            <form class="ui form">
-                <div class="two fields">
-                    <div class="field">
-                        <label>Data groups</label>
-                        <p data-bind="text: userDataGroupsObs"></p>
-                    </div>
-                    <div class="field">
-                        <label>Last signed in</label>
-                        <p data-bind="text: signedInOnObs"></p>
-                    </div>
-                </div>
-                <div class="two fields">
-                    <div class="field">
-                        <label>Languages</label>
-                        <p data-bind="text: languagesObs"></p>
-                    </div>
-                    <div class="field">
-                        <label>Activities last accessed on</label>
-                        <p data-bind="text: activitiesAccessedOnObs"></p>
-                    </div>
-                </div>
-                <div class="two fields">
-                    <div class="field">
-                        <label>Time zone</label>
-                        <p data-bind="text: timeZoneObs"></p>
-                    </div>
-                    <div class="field">
-                        <label>Last uploads on</label>
-                        <p data-bind="text: uploadedOnObs"></p>
-                    </div>
-                </div>
-                <div class="field">
-                    <label>User Agent</label>
-                    <p data-bind="text: userAgentObs"></p>
-                </div>
-                <div class="field">
-                    <label>Client info</label>
-                    <p data-bind="html: clientInfoObs"></p>
-                </div>
-            </form>
+  <errors></errors>
+  <div class="ui grid">
+    <div class="ten wide column">
+      <form class="ui form">
+        <div class="two fields">
+          <div class="field">
+            <label>Data groups</label>
+            <p data-bind="text: userDataGroupsObs"></p>
+          </div>
+          <div class="field">
+            <label>Last signed in</label>
+            <p data-bind="text: signedInOnObs"></p>
+          </div>
         </div>
-        <div class="six wide column">
-            <div class="ui message">
-                <p>The client info is parsed from the User-Agent header, but the two may be different if the header does not follow the Bridge format. </p>
-
-                <p>This information is cached on requests to the server using a transient cache. It may not always be available for all users depending 
-                    on how active they are in using your application. </p>
-            </div>
+        <div class="two fields">
+          <div class="field">
+            <label>Languages</label>
+            <p data-bind="text: languagesObs"></p>
+          </div>
+          <div class="field">
+            <label>Activities last accessed on</label>
+            <p data-bind="text: activitiesAccessedOnObs"></p>
+          </div>
         </div>
+        <div class="two fields">
+          <div class="field">
+            <label>Time zone</label>
+            <p data-bind="text: timeZoneObs"></p>
+          </div>
+          <div class="field">
+            <label>Last uploads on</label>
+            <p data-bind="text: uploadedOnObs"></p>
+          </div>
+        </div>
+        <div class="field">
+          <label>User Agent</label>
+          <p data-bind="text: userAgentObs"></p>
+        </div>
+        <div class="field">
+          <label>Client info</label>
+          <p data-bind="html: clientInfoObs"></p>
+        </div>
+      </form>
     </div>
+    <div class="six wide column">
+      <div class="ui message">
+        <p>
+          The client info is parsed from the User-Agent header, but the two may be different if the header does not
+          follow the Bridge format.
+        </p>
+
+        <p>
+          This information is cached on requests to the server using a transient cache. It may not always be available
+          for all users depending on how active they are in using your application.
+        </p>
+      </div>
+    </div>
+  </div>
 </div>

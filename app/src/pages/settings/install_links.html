@@ -1,42 +1,45 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <h3>App Install Links</h3>
-        </div>
-        <div class="fixed-header-buttons">
-            <button class="ui tiny primary button" 
-                data-bind="click: $component.save">Save</button>
-        </div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <h3>App Install Links</h3>
     </div>
-    <!-- ko component: {name: 'settings-tabset', params: {active: 'install_links'}} --><!-- /ko -->
+    <div class="fixed-header-buttons">
+      <button class="ui tiny primary button" data-bind="click: $component.save">Save</button>
+    </div>
+  </div>
+  <!-- ko component: {name: 'settings-tabset', params: {active: 'install_links'}} --><!-- /ko -->
 </div>
 <div class="scrollbox">
-    <div class="ui grid">
-        <div class="ten wide column">
-            <errors></errors>
-            <form class="ui form">
-                <div class="field">
-                    <label>iOS Link</label>
-                    <input type="text" data-bind="textInput: iosObs, hasFocus: true"/>
-                </div>
-                <div class="field">
-                    <label>Android Link</label>
-                    <input type="text" data-bind="textInput: androidObs"/>
-                </div>
-                <div class="field">
-                    <label>Universal Link</label>
-                    <input type="text" data-bind="textInput: universalObs"/>
-                </div>
-            </form>
+  <div class="ui grid">
+    <div class="ten wide column">
+      <errors></errors>
+      <form class="ui form">
+        <div class="field">
+          <label>iOS Link</label>
+          <input type="text" data-bind="textInput: iosObs, hasFocus: true" />
         </div>
-        <div class="six wide column">
-            <div class="ui message">
-                <p>Some Bridge features send the user a link to your app so they can download it. After you register your app with the App Store or Google Play Store, enter the link to the app here to enable these features.</p>
-
-                <p>If you wish to send the user to a landing page that will negotiate the final download site, you can enter a "Universal" link. It will take precedence over a link for one of the specific app stores.</p>
-            </div>
+        <div class="field">
+          <label>Android Link</label>
+          <input type="text" data-bind="textInput: androidObs" />
         </div>
+        <div class="field">
+          <label>Universal Link</label>
+          <input type="text" data-bind="textInput: universalObs" />
+        </div>
+      </form>
     </div>
+    <div class="six wide column">
+      <div class="ui message">
+        <p>
+          Some Bridge features send the user a link to your app so they can download it. After you register your app
+          with the App Store or Google Play Store, enter the link to the app here to enable these features.
+        </p>
+
+        <p>
+          If you wish to send the user to a landing page that will negotiate the final download site, you can enter a
+          "Universal" link. It will take precedence over a link for one of the specific app stores.
+        </p>
+      </div>
+    </div>
+  </div>
 </div>
-
-

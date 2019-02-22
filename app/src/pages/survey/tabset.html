@@ -1,26 +1,18 @@
 <div class="ui secondary pointing menu">
-    <a data-bind="href: linkMaker('editor'), tabber">
-        <i class="file outline icon"></i> Editor
-    </a>
-    <a data-bind="href: linkMaker('schema'), tabber, visible: !!createdOnObs()">
-        <i class="puzzle icon"></i> Schema
-    </a>
-    <a data-bind="href: linkMaker('history'), tabber, visible: !!createdOnObs()">
-        <i class="history icon"></i> History &amp; Publication
-    </a>
-    <div class="right menu pub-status">
-        <div class="item" data-bind="visible: !!createdOnObs()">
-            <i class="clock icon"></i> <span data-bind="text: formatDateTime(createdOnObs())"></span>
-        </div>
-        <div class="item" data-bind="visible: publishedObs">
-            <span class="green ui mini label">
-                <i class="checkmark icon"></i> Published
-            </span>
-        </div>
-        <div class="item" data-bind="visible: !publishedObs()">
-            <span class="orange ui mini label">
-                <i class="warning icon"></i> Not Published
-            </span>
-        </div>
+  <a data-bind="href: linkMaker('editor'), tabber"> <i class="file outline icon"></i> Editor </a>
+  <a data-bind="href: linkMaker('schema'), tabber, visible: !!createdOnObs()"> <i class="puzzle icon"></i> Schema </a>
+  <a data-bind="href: linkMaker('history'), tabber, visible: !!createdOnObs()">
+    <i class="history icon"></i> History &amp; Publication
+  </a>
+  <div class="right menu pub-status">
+    <div class="item" data-bind="visible: !!createdOnObs()">
+      <i class="clock icon"></i> <span data-bind="text: formatDateTime(createdOnObs())"></span>
     </div>
+    <div class="item" data-bind="visible: publishedObs">
+      <span class="green ui mini label"> <i class="checkmark icon"></i> Published </span>
+    </div>
+    <div class="item" data-bind="visible: !publishedObs()">
+      <span class="orange ui mini label"> <i class="warning icon"></i> Not Published </span>
+    </div>
+  </div>
 </div>

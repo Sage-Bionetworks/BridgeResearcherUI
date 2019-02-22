@@ -1,45 +1,51 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <div class="ui breadcrumb">
-                <a class="section" href="#/participants">Participants</a>
-                <i class="right chevron icon divider"></i>
-            </div>            
-            <h3 data-bind="html: titleObs"></h3>
-        </div>
-        <div class="fixed-header-buttons">
-            <button class="ui red tiny button" data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
-            <button class="ui primary tiny button" data-bind="visible: isDeveloper, click: addReport">Add report&hellip;</button>
-        </div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a class="section" href="#/participants">Participants</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="html: titleObs"></h3>
     </div>
-    <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
+    <div class="fixed-header-buttons">
+      <button
+        class="ui red tiny button"
+        data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: deleteItems"
+      >
+        Delete
+      </button>
+      <button class="ui primary tiny button" data-bind="visible: isDeveloper, click: addReport">
+        Add report&hellip;
+      </button>
+    </div>
+  </div>
+  <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
 </div>
 <div class="scrollbox">
-    <errors></errors>
-    <div data-bind="visible: isResearcher">
-        <table class="ui compact selectable table">
-            <thead>
-                <tr>
-                    <th width="10" data-bind="visible: isDeveloper"></th>
-                    <th>Report identifier</th>
-                </tr>
-            </thead>
-            <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-                <tr>
-                    <td colspan="2" data-bind="html: recordsMessageObs"></td>
-                </tr>
-            </tbody>
-            <tbody data-bind="foreach: itemsObs">
-                <tr>
-                    <td data-bind="visible: $component.isDeveloper">
-                        <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
-                    </td>
-                    <td width="100%">
-                        <a data-bind="href: $component.reportURL($data), text: $data.identifier">
-                        </a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+  <errors></errors>
+  <div data-bind="visible: isResearcher">
+    <table class="ui compact selectable table">
+      <thead>
+        <tr>
+          <th width="10" data-bind="visible: isDeveloper"></th>
+          <th>Report identifier</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="2" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr>
+          <td data-bind="visible: $component.isDeveloper">
+            <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+          </td>
+          <td width="100%">
+            <a data-bind="href: $component.reportURL($data), text: $data.identifier"> </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

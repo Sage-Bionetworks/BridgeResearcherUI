@@ -1,34 +1,34 @@
 <div class="ui small modal">
-    <i data-bind="click:closeDialog" class="close icon"></i>
-    <div class="header">
-        Add OAuth Provider
+  <i data-bind="click:closeDialog" class="close icon"></i>
+  <div class="header">
+    Add OAuth Provider
+  </div>
+  <div class="content ui form">
+    <errors></errors>
+    <div class="field" id="vendorId">
+      <label>Vendor Identifier</label>
+      <input placeholder="my_vendor" data-bind="textInput: vendorIdObs, hasFocus: true" />
+      <p class="help-text">Lower-case, no spaces. Used to select a provider through the Bridge API</p>
     </div>
-    <div class="content ui form">
-        <errors></errors>
-        <div class="field" id="vendorId">
-            <label>Vendor Identifier</label>
-            <input placeholder="my_vendor" data-bind="textInput: vendorIdObs, hasFocus: true">
-            <p class="help-text">Lower-case, no spaces. Used to select a provider through the Bridge API</p>
-        </div>
-        <div class="field" id="clientId">
-            <label>Client ID</label>
-            <input placeholder="Identifier issued by the vendor for your app" data-bind="textInput: clientIdObs">
-        </div>
-        <div class="field" id="secret">
-            <label>Secret Token</label>
-            <input placeholder="Secret issued by the vendor for your app" data-bind="textInput: secretObs">
-        </div>
-        <div class="field" id="endpoint">
-                <label>URL</label>
-                <input placeholder="https://api.company.com/oauth2/token" data-bind="textInput: endpointObs">
-        </div>
-        <div class="field" id="callbackUrl">
-            <label>Callback URL</label>
-            <input placeholder="https://mycompany.company/receive-token" data-bind="textInput: callbackUrlObs">
-        </div>
+    <div class="field" id="clientId">
+      <label>Client ID</label>
+      <input placeholder="Identifier issued by the vendor for your app" data-bind="textInput: clientIdObs" />
     </div>
-<div class="actions">
-        <button class="ui primary small button" data-bind="click: save">Save</button>
-        <button class="ui small button" data-bind="click: closeDialog">Cancel</button>
+    <div class="field" id="secret">
+      <label>Secret Token</label>
+      <input placeholder="Secret issued by the vendor for your app" data-bind="textInput: secretObs" />
     </div>
+    <div class="field" id="endpoint">
+      <label>URL</label>
+      <input placeholder="https://api.company.com/oauth2/token" data-bind="textInput: endpointObs" />
+    </div>
+    <div class="field" id="callbackUrl">
+      <label>Callback URL</label>
+      <input placeholder="https://mycompany.company/receive-token" data-bind="textInput: callbackUrlObs" />
+    </div>
+  </div>
+  <div class="actions">
+    <button class="ui primary small button" data-bind="click: save">Save</button>
+    <button class="ui small button" data-bind="click: closeDialog">Cancel</button>
+  </div>
 </div>

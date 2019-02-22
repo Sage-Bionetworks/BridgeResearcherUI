@@ -1,46 +1,46 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <div class="ui breadcrumb">
-                <a href="#/admin/substudies" class="section">Substudies</a>
-                <i class="right chevron icon divider"></i>
-            </div>
-            <h3 data-bind="text: titleObs"></h3>
-        </div>
-        <div class="fixed-header-buttons">
-            <button class="ui tiny primary button" data-bind="click: save">Save</button>
-        </div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/admin/substudies" class="section">Substudies</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="text: titleObs"></h3>
     </div>
-    <div class="ui empty secondary pointing menu"></div>
+    <div class="fixed-header-buttons">
+      <button class="ui tiny primary button" data-bind="click: save">Save</button>
+    </div>
+  </div>
+  <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
-    <errors></errors>
-    <form class="ui form">
-        <div class="two fields">
-            <div class="field required" id="name">
-                <label>Name</label>
-                <input data-bind="textInput: nameObs, hasFocus: true">
-            </div>
-        </div>
-        <div class="four fields">
-            <div class="field required" id="id" data-bind="visible: isNewObs">
-                <label>Identifier</label>
-                <input type="text" data-bind="textInput: idObs" />
-            </div>
-            <div class="field" id="id" data-bind="visible: !isNewObs()">
-                <label>Identifier</label>
-                <div class="input-field-padding" data-bind="text: idObs"></div>
-            </div>
-        </div>
-        <div class="two fields" data-bind="visible: !isNewObs()">
-            <div class="field" id="createdOn">
-                <label>Created On</label>
-                <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
-            </div>
-            <div class="field" id="modifiedOn">
-                <label>Modified On</label>
-                <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
-            </div>
-        </div>
-    </form>
+  <errors></errors>
+  <form class="ui form">
+    <div class="two fields">
+      <div class="field required" id="name">
+        <label>Name</label>
+        <input data-bind="textInput: nameObs, hasFocus: true" />
+      </div>
+    </div>
+    <div class="four fields">
+      <div class="field required" id="id" data-bind="visible: isNewObs">
+        <label>Identifier</label>
+        <input type="text" data-bind="textInput: idObs" />
+      </div>
+      <div class="field" id="id" data-bind="visible: !isNewObs()">
+        <label>Identifier</label>
+        <div class="input-field-padding" data-bind="text: idObs"></div>
+      </div>
+    </div>
+    <div class="two fields" data-bind="visible: !isNewObs()">
+      <div class="field" id="createdOn">
+        <label>Created On</label>
+        <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
+      </div>
+      <div class="field" id="modifiedOn">
+        <label>Modified On</label>
+        <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
+      </div>
+    </div>
+  </form>
 </div>

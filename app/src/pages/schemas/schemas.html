@@ -1,103 +1,127 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <h3>Upload Schemas</h3>
-        </div>
-        <div class="fixed-header-buttons">
-            <div class="ui tiny buttons">
-                <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()}, 
-                    semantic: 'dropdown-button-toggle', container: '.buttons'">Copy</div>
-                <div class="ui tiny floating dropdown icon button" 
-                    data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <div class="item" data-bind="click: copySchemasDialog">Copy&hellip;</div>
-                        <div class="item" data-bind="click: copyToClipboard">Copy to Clipboard</div>
-                    </div>
-                </div>
-            </div>
-
-            <button data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems" 
-                class="ui red tiny button">Delete</button>
-            <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
-                <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()},
-                    semantic: 'dropdown-button-toggle', container: '.buttons'">
-                    Delete
-                </div>
-                <div class="ui primary tiny floating dropdown icon button" 
-                    data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <div class="item" data-bind="click: deleteItems">Delete</div>
-                        <div class="item" data-bind="click: deletePermanently">Delete <b>Permanently</b></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="ui primary tiny buttons">
-                <div class="ui primary tiny button" 
-                    data-bind="semantic: 'dropdown-button-toggle', container: '.buttons'">
-                    Create Schema</div>
-                <div class="ui primary tiny floating dropdown icon button" 
-                    data-bind="semantic: 'dropdown-button'">
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <a href="#/schemas/new" class="item">New Schema</a>
-                        <div class="item" data-bind="click: openModuleBrowser">Import Upload Schema&hellip;</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <h3>Upload Schemas</h3>
     </div>
-    <div class="ui empty secondary pointing menu">
+    <div class="fixed-header-buttons">
+      <div class="ui tiny buttons">
+        <div
+          class="ui tiny button"
+          data-bind="css:{disabled: !atLeastOneChecked()}, 
+                    semantic: 'dropdown-button-toggle', container: '.buttons'"
+        >
+          Copy
+        </div>
+        <div
+          class="ui tiny floating dropdown icon button"
+          data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}"
+        >
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" data-bind="click: copySchemasDialog">Copy&hellip;</div>
+            <div class="item" data-bind="click: copyToClipboard">Copy to Clipboard</div>
+          </div>
+        </div>
+      </div>
+
+      <button
+        data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems"
+        class="ui red tiny button"
+      >
+        Delete
+      </button>
+      <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
+        <div
+          class="ui tiny button"
+          data-bind="css:{disabled: !atLeastOneChecked()},
+                    semantic: 'dropdown-button-toggle', container: '.buttons'"
+        >
+          Delete
+        </div>
+        <div
+          class="ui primary tiny floating dropdown icon button"
+          data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}"
+        >
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" data-bind="click: deleteItems">Delete</div>
+            <div class="item" data-bind="click: deletePermanently">Delete <b>Permanently</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ui primary tiny buttons">
+        <div class="ui primary tiny button" data-bind="semantic: 'dropdown-button-toggle', container: '.buttons'">
+          Create Schema
+        </div>
+        <div class="ui primary tiny floating dropdown icon button" data-bind="semantic: 'dropdown-button'">
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <a href="#/schemas/new" class="item">New Schema</a>
+            <div class="item" data-bind="click: openModuleBrowser">Import Upload Schema&hellip;</div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+  <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
-    <errors></errors>
+  <errors></errors>
 
-    <p>Schemas are also produced for published surveys. View these schemas under the schema tab in the survey editor. Common metadata fields can be configured study-wide through <a href="#/shared_upload_metadata">shared upload medata configuration</a>.</p>
+  <p>
+    Schemas are also produced for published surveys. View these schemas under the schema tab in the survey editor.
+    Common metadata fields can be configured study-wide through
+    <a href="#/shared_upload_metadata">shared upload medata configuration</a>.
+  </p>
 
-    <table class="ui compact selectable table">
-        <thead>
-            <tr>
-                <th width="10">
-                    <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
-                </th>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Latest Revision</th>
-                <th>Matching Criteria</th>
-                <th>Shared</th>
-            </tr>
-        </thead>
-        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-            <tr>
-                <td colspan="6" data-bind="html: recordsMessageObs"></td>
-            </tr>
-        </tbody>        
-        <tbody data-bind="foreach: itemsObs">
-            <tr data-bind="css: {negative: $data.deleted}">
-                <td>
-                    <ui-checkbox data-bind="visible: !$data.deletedObs()" 
-                        params="checkedObs: $data.checkedObs"></ui-checkbox>
-                    <i data-bind="visible: $data.deletedObs, click: $parent.undelete" 
-                        style="cursor: pointer" class="green undo icon"></i>
-                </td>
-                <td>
-                    <a data-bind="attr: {'href': '#/schemas/'+encodeURIComponent($data.schemaId)+
-                        '/versions/'+$data.revision+'/editor'}, text: $data.name"></a>
-                </td>
-                <td data-bind="text: $parent.schemaTypeLabel($data.schemaType)"></td>
-                <td data-bind="text: $data.revision"></td>
-                <td data-bind="html: $parent.label($data)"></td>
-                <td data-bind="attr: {'data-html': $parent.moduleHTML($data)}, 
-                    semantic: 'popup', html: $parent.formatModuleLink($data)"></td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
-        <ui-checkbox params="checkedObs: showDeletedObs">
-            Show deleted upload schemas
-        </ui-checkbox>
-    </div>
+  <table class="ui compact selectable table">
+    <thead>
+      <tr>
+        <th width="10">
+          <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+        </th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Latest Revision</th>
+        <th>Matching Criteria</th>
+        <th>Shared</th>
+      </tr>
+    </thead>
+    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+      <tr>
+        <td colspan="6" data-bind="html: recordsMessageObs"></td>
+      </tr>
+    </tbody>
+    <tbody data-bind="foreach: itemsObs">
+      <tr data-bind="css: {negative: $data.deleted}">
+        <td>
+          <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
+          <i
+            data-bind="visible: $data.deletedObs, click: $parent.undelete"
+            style="cursor: pointer"
+            class="green undo icon"
+          ></i>
+        </td>
+        <td>
+          <a
+            data-bind="attr: {'href': '#/schemas/'+encodeURIComponent($data.schemaId)+
+                        '/versions/'+$data.revision+'/editor'}, text: $data.name"
+          ></a>
+        </td>
+        <td data-bind="text: $parent.schemaTypeLabel($data.schemaType)"></td>
+        <td data-bind="text: $data.revision"></td>
+        <td data-bind="html: $parent.label($data)"></td>
+        <td
+          data-bind="attr: {'data-html': $parent.moduleHTML($data)}, 
+                    semantic: 'popup', html: $parent.formatModuleLink($data)"
+        ></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
+    <ui-checkbox params="checkedObs: showDeletedObs">
+      Show deleted upload schemas
+    </ui-checkbox>
+  </div>
 </div>

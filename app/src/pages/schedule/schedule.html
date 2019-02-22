@@ -1,123 +1,162 @@
 <form class="ui form">
-    <div class="three fields">
-        <div class="field">
-            <label>When to start schedule</label>
-            <div style="margin: .5rem 0" data-bind="text: formatEventId(eventIdObs())"></div>
-            <div class="inline-editor-controls">
-                <a data-bind="click: editEventId"><i class="write icon"></i>Edit&hellip;</a>
-                <a data-bind="click: clearEventId"><i class="delete icon"></i>Clear</a>
-            </div>
-        </div>
-        <div class="field">
-            <label for="scheduleType">Schedule Type</label>
-            <select class="ui short-input dropdown" data-bind="value: editorScheduleTypeObs">
-                <option value="once">Once</option>
-                <option value="interval">Recurring</option>
-                <option value="cron">Recurring on cron schedule</option>
-                <option value="sequence">Sequence</option>
-                <option value="persistent">Persistent</option>
-            </select>            
-        </div>
-        <div class="field">
-            <label>Execution Window</label>
-            <div style="margin: .5rem 0" data-bind="html: formatWindow($data)"></div>
-            <div class="inline-editor-controls">
-                <span class="link" data-bind="click: editWindow"><i class="write icon"></i>Edit&hellip;</span>
-                <span class="link" data-bind="click: clearWindow"><i class="delete icon"></i>Clear</span>
-            </div>
-        </div>
+  <div class="three fields">
+    <div class="field">
+      <label>When to start schedule</label>
+      <div style="margin: .5rem 0" data-bind="text: formatEventId(eventIdObs())"></div>
+      <div class="inline-editor-controls">
+        <a data-bind="click: editEventId"><i class="write icon"></i>Edit&hellip;</a>
+        <a data-bind="click: clearEventId"><i class="delete icon"></i>Clear</a>
+      </div>
     </div>
-    <div class="three fields" data-bind="visible: editorScheduleTypeObs() !== 'persistent'">
-        <div class="field">
-            <label>Delay first task by</label>
-            <ui-duration params="fieldObs: delayObs"></ui-duration>
-        </div>
-        <div class="field" data-bind="attr:{id:'strategy_'+$component.collectionName+'schedule_interval'}, 
-            visible: editorScheduleTypeObs() === 'interval' || editorScheduleTypeObs() === 'sequence'">
-            <label>Then schedule every</label>
-            <ui-duration params="fieldObs: intervalObs, noHours: true"></ui-duration>
-        </div>
-        <div class="field" data-bind="attr:{id:
-            'strategy_'+$component.collectionName+'schedule_times'}, visible: editorScheduleTypeObs() !== 'cron'">
-            <label data-bind="text: (scheduleTypeObs() === 'recurring') ? 'At these times' : 'At this time'"></label>
-            <div class="text" style="margin: .5rem 0" data-bind="text: formatTimes(timesObs())"></div>
-            <div class="inline-editor-controls">
-                <a class="pointing" data-bind="click: editTimes"><i class="write icon"></i>Edit&hellip;</a>
-                <a class="pointing" data-bind="click: clearTimes"><i class="delete icon"></i>Clear</a>
-            </div>
-        </div>
-        <div class="field" data-bind="visible: editorScheduleTypeObs() === 'cron', attr:{id:
-            'strategy_'+$component.collectionName+'schedule_cronTrigger'}">
-            <label>Then follow <a href="http://www.cronmaker.com/" target="_blank" rel="noopener">cron expression</a></label>
-            <input type="text" class="editor short-input" data-bind="textInput: cronTriggerObs"/>
-        </div>
-        <div class="field" data-bind="attr:{id:
-            'strategy_'+$component.collectionName+'schedule_expires'}">
-            <label data-bind="text: (editorScheduleTypeObs() !== 'once') ? 'Tasks expire after' : 'Task expires after'"></label>
-            <ui-duration params="fieldObs: expiresObs"></ui-duration>
-        </div>
-        <div class="field" data-bind="visible: editorScheduleTypeObs() === 'sequence', 
-            attr:{id:'strategy_'+$component.collectionName+'schedule_expires'}">
-            <label>Ending sequence after</label>
-            <ui-duration params="fieldObs: sequencePeriodObs, noHours: true"></ui-duration>
-        </div>
+    <div class="field">
+      <label for="scheduleType">Schedule Type</label>
+      <select class="ui short-input dropdown" data-bind="value: editorScheduleTypeObs">
+        <option value="once">Once</option>
+        <option value="interval">Recurring</option>
+        <option value="cron">Recurring on cron schedule</option>
+        <option value="sequence">Sequence</option>
+        <option value="persistent">Persistent</option>
+      </select>
     </div>
+    <div class="field">
+      <label>Execution Window</label>
+      <div style="margin: .5rem 0" data-bind="html: formatWindow($data)"></div>
+      <div class="inline-editor-controls">
+        <span class="link" data-bind="click: editWindow"><i class="write icon"></i>Edit&hellip;</span>
+        <span class="link" data-bind="click: clearWindow"><i class="delete icon"></i>Clear</span>
+      </div>
+    </div>
+  </div>
+  <div class="three fields" data-bind="visible: editorScheduleTypeObs() !== 'persistent'">
+    <div class="field">
+      <label>Delay first task by</label>
+      <ui-duration params="fieldObs: delayObs"></ui-duration>
+    </div>
+    <div
+      class="field"
+      data-bind="attr:{id:'strategy_'+$component.collectionName+'schedule_interval'}, 
+            visible: editorScheduleTypeObs() === 'interval' || editorScheduleTypeObs() === 'sequence'"
+    >
+      <label>Then schedule every</label>
+      <ui-duration params="fieldObs: intervalObs, noHours: true"></ui-duration>
+    </div>
+    <div
+      class="field"
+      data-bind="attr:{id:
+            'strategy_'+$component.collectionName+'schedule_times'}, visible: editorScheduleTypeObs() !== 'cron'"
+    >
+      <label data-bind="text: (scheduleTypeObs() === 'recurring') ? 'At these times' : 'At this time'"></label>
+      <div class="text" style="margin: .5rem 0" data-bind="text: formatTimes(timesObs())"></div>
+      <div class="inline-editor-controls">
+        <a class="pointing" data-bind="click: editTimes"><i class="write icon"></i>Edit&hellip;</a>
+        <a class="pointing" data-bind="click: clearTimes"><i class="delete icon"></i>Clear</a>
+      </div>
+    </div>
+    <div
+      class="field"
+      data-bind="visible: editorScheduleTypeObs() === 'cron', attr:{id:
+            'strategy_'+$component.collectionName+'schedule_cronTrigger'}"
+    >
+      <label>Then follow <a href="http://www.cronmaker.com/" target="_blank" rel="noopener">cron expression</a></label>
+      <input type="text" class="editor short-input" data-bind="textInput: cronTriggerObs" />
+    </div>
+    <div
+      class="field"
+      data-bind="attr:{id:
+            'strategy_'+$component.collectionName+'schedule_expires'}"
+    >
+      <label
+        data-bind="text: (editorScheduleTypeObs() !== 'once') ? 'Tasks expire after' : 'Task expires after'"
+      ></label>
+      <ui-duration params="fieldObs: expiresObs"></ui-duration>
+    </div>
+    <div
+      class="field"
+      data-bind="visible: editorScheduleTypeObs() === 'sequence', 
+            attr:{id:'strategy_'+$component.collectionName+'schedule_expires'}"
+    >
+      <label>Ending sequence after</label>
+      <ui-duration params="fieldObs: sequencePeriodObs, noHours: true"></ui-duration>
+    </div>
+  </div>
 
-    <h5 style="margin:0">Activities</h5>
-    
-    <p class="help-text">One or more activities can be scheduled together. They will appear as separate 
-        scheduled activities in your application. </p>
-        
-    <p data-bind="visible: $component.taskOptionsObs().length == 0">
-        <b>There are no task identifiers defined,</b> so you cannot schedule any tasks.
-        <a href="#/task_identifiers" target="_blank" rel="noopener">Create</a> some identifiers, then refresh this page
-        in order to schedule tasks.
-    </p>
-    <div class="ui form" data-bind="visible: activitiesObs().length == 0">
-        <a class="ui primary button" data-bind="click: addFirstActivity">
-            <i class="add square icon"></i>Add Activity
-        </a>
-    </div>
-    <div data-bind="visible: activitiesObs().length > 0, foreach: activitiesObs">
-        <div class="activity">
-            <div data-bind="attr: {
-                id: 'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_label'}">
-                <input type="text" placeholder="Label" data-bind="textInput: $data.labelObs"/>
-            </div>
-            <div>
-                <input type="text" placeholder="Label Detail" data-bind="textInput: $data.labelDetailObs"/>
-            </div>
-            <div>
-                <select class="ui dropdown" data-bind="options: $component.activityTypeOptions,
-                    optionsText: 'label', optionsValue: 'value', value: $data.activityTypeObs"></select>                    
-            </div>
-            <div data-bind="attr:{class:
+  <h5 style="margin:0">Activities</h5>
+
+  <p class="help-text">
+    One or more activities can be scheduled together. They will appear as separate scheduled activities in your
+    application.
+  </p>
+
+  <p data-bind="visible: $component.taskOptionsObs().length == 0">
+    <b>There are no task identifiers defined,</b> so you cannot schedule any tasks.
+    <a href="#/task_identifiers" target="_blank" rel="noopener">Create</a> some identifiers, then refresh this page in
+    order to schedule tasks.
+  </p>
+  <div class="ui form" data-bind="visible: activitiesObs().length == 0">
+    <a class="ui primary button" data-bind="click: addFirstActivity"> <i class="add square icon"></i>Add Activity </a>
+  </div>
+  <div data-bind="visible: activitiesObs().length > 0, foreach: activitiesObs">
+    <div class="activity">
+      <div
+        data-bind="attr: {
+                id: 'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_label'}"
+      >
+        <input type="text" placeholder="Label" data-bind="textInput: $data.labelObs" />
+      </div>
+      <div>
+        <input type="text" placeholder="Label Detail" data-bind="textInput: $data.labelDetailObs" />
+      </div>
+      <div>
+        <select
+          class="ui dropdown"
+          data-bind="options: $component.activityTypeOptions,
+                    optionsText: 'label', optionsValue: 'value', value: $data.activityTypeObs"
+        ></select>
+      </div>
+      <div
+        data-bind="attr:{class:
                 'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_task_identifier '+
                 'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_survey_guid '+
                 'strategy_'+$component.collectionName+'schedule_activities'+$index()+'_compoundActivity_taskIdentifier '
-            }">
-                <select class="ui dropdown" data-bind="visible: $data.activityTypeObs() == 'task', 
+            }"
+      >
+        <select
+          class="ui dropdown"
+          data-bind="visible: $data.activityTypeObs() == 'task', 
                     options: $component.taskOptionsObs,
-                    optionsText: 'label', optionsValue: 'value', value: $data.taskIdObs"></select>                    
-                <select class="ui dropdown" data-bind="visible: $data.activityTypeObs() == 'survey',
+                    optionsText: 'label', optionsValue: 'value', value: $data.taskIdObs"
+        ></select>
+        <select
+          class="ui dropdown"
+          data-bind="visible: $data.activityTypeObs() == 'survey',
                     options: $component.surveysOptionsObs,
-                    optionsText: 'label', optionsValue: 'value', value: $data.surveyGuidObs"></select>                    
-                <select class="ui dropdown" data-bind="visible: $data.activityTypeObs() == 'compound',
+                    optionsText: 'label', optionsValue: 'value', value: $data.surveyGuidObs"
+        ></select>
+        <select
+          class="ui dropdown"
+          data-bind="visible: $data.activityTypeObs() == 'compound',
                     options: $component.compoundActivityOptionsObs,
-                    optionsText: 'label', optionsValue: 'value', value: $data.compoundTaskIdObs"></select>
-            </div>
-            <div>
-                <div class="activity-controls">
-                    <i class="large grey plus square outline link icon" 
-                        data-bind="click: $component.addActivityAfter, semantic: 'popup'"
-                        data-content="Add below"></i>
-                    <i class="red large times circle outline link icon"
-                        data-bind="fadeRemove: {selector: '.activity', object: $data, 'collection': 'activitiesObs'}"></i>
-                    <i class="blue large copy outline link icon"
-                        data-bind="click: $component.copyGuid, visible: $data.guid, semantic: 'popup'" 
-                        data-content="Copy GUID"></i>
-                </div>
-            </div>
+                    optionsText: 'label', optionsValue: 'value', value: $data.compoundTaskIdObs"
+        ></select>
+      </div>
+      <div>
+        <div class="activity-controls">
+          <i
+            class="large grey plus square outline link icon"
+            data-bind="click: $component.addActivityAfter, semantic: 'popup'"
+            data-content="Add below"
+          ></i>
+          <i
+            class="red large times circle outline link icon"
+            data-bind="fadeRemove: {selector: '.activity', object: $data, 'collection': 'activitiesObs'}"
+          ></i>
+          <i
+            class="blue large copy outline link icon"
+            data-bind="click: $component.copyGuid, visible: $data.guid, semantic: 'popup'"
+            data-content="Copy GUID"
+          ></i>
         </div>
+      </div>
     </div>
+  </div>
 </form>

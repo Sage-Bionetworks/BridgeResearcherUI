@@ -1,53 +1,61 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <h3>Email Templates</h3>
-        </div>
-        <div class="fixed-header-buttons">
-            <button class="ui tiny primary button" data-bind="click: save">Save</button>
-        </div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <h3>Email Templates</h3>
     </div>
-    <template-tabset></template-tabset>
+    <div class="fixed-header-buttons">
+      <button class="ui tiny primary button" data-bind="click: save">Save</button>
+    </div>
+  </div>
+  <template-tabset></template-tabset>
 </div>
 <div class="scrollbox">
-    <div class="ui grid">
-        <div class="ten wide column">
-            <errors></errors>
-            <form class="ui form">
-                <div class="required field" id="emailSignInTemplate_subject">
-                    <label>Subject</label>
-                    <input type="text" name="subject" data-bind="textInput: subjectObs, hasFocus: true"/>
-                </div>
-                <div class="field" id="emailSignInTemplate_body">
-                    <textarea id="rpTemplate" data-bind="ckeditor: $component.initEditor" class="ui textarea doc"></textarea>
-                </div>
-            </form>
+  <div class="ui grid">
+    <div class="ten wide column">
+      <errors></errors>
+      <form class="ui form">
+        <div class="required field" id="emailSignInTemplate_subject">
+          <label>Subject</label>
+          <input type="text" name="subject" data-bind="textInput: subjectObs, hasFocus: true" />
         </div>
-        <div class="six wide column">
-            <div class="ui message">
-                <p>This is the email sent to a user that will contain a link to sign in to the app. This requires coordination with the app itself to capture the link and process the token accordingly. </p>
-
-                <p><strong>It <em>must</em> contain the value <code>${url}</code>,</strong> which is a variable that will be replaced with the address the application must intercept to complete the sign in. The URL will take the format <code class="wrap-long-line">https://ws.sagebridge.org/s/<span data-bind="text: studyIdObs"></span></code>. Most web email clients will link these URLs automatically, but you can also create a link. </p>
-
-                <p>There are other values available for use in your template: </p>
-
-                <dl>
-                    <dt>${studyName}</dt>
-                    <dd>the name you entered for your study</dd>
-
-                    <dt>${studyShortName}</dt>
-                    <dd>the short name you entered for your study</dd>
-
-                    <dt>${sponsorName}</dt>
-                    <dd>the name you entered for the group sponsoring the study</dd>
-
-                    <dt>${supportEmail}</dt>
-                    <dd>your support email address</dd>
-
-                    <dt>${expirationPeriod}</dt>
-                    <dd>the period before authentication links in the email will expire (e.g. "2 hours")</dd>
-                </dl>
-            </div>
+        <div class="field" id="emailSignInTemplate_body">
+          <textarea id="rpTemplate" data-bind="ckeditor: $component.initEditor" class="ui textarea doc"></textarea>
         </div>
+      </form>
     </div>
+    <div class="six wide column">
+      <div class="ui message">
+        <p>
+          This is the email sent to a user that will contain a link to sign in to the app. This requires coordination
+          with the app itself to capture the link and process the token accordingly.
+        </p>
+
+        <p>
+          <strong>It <em>must</em> contain the value <code>${url}</code>,</strong> which is a variable that will be
+          replaced with the address the application must intercept to complete the sign in. The URL will take the format
+          <code class="wrap-long-line">https://ws.sagebridge.org/s/<span data-bind="text: studyIdObs"></span></code>.
+          Most web email clients will link these URLs automatically, but you can also create a link.
+        </p>
+
+        <p>There are other values available for use in your template:</p>
+
+        <dl>
+          <dt>${studyName}</dt>
+          <dd>the name you entered for your study</dd>
+
+          <dt>${studyShortName}</dt>
+          <dd>the short name you entered for your study</dd>
+
+          <dt>${sponsorName}</dt>
+          <dd>the name you entered for the group sponsoring the study</dd>
+
+          <dt>${supportEmail}</dt>
+          <dd>your support email address</dd>
+
+          <dt>${expirationPeriod}</dt>
+          <dd>the period before authentication links in the email will expire (e.g. "2 hours")</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
 </div>

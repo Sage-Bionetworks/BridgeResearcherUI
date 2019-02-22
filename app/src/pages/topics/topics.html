@@ -1,19 +1,36 @@
 <div class="fixed-header">
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
-      <h3>Push Notifications</h3> 
+      <h3>Push Notifications</h3>
     </div>
     <div class="fixed-header-buttons" data-bind="visible: isDeveloper">
-      <button class="ui tiny button" data-bind="visible: isDeveloper, 
-        disable: !atLeastOneChecked(), click: copyToClipboard">Copy to Clipboard</button>
+      <button
+        class="ui tiny button"
+        data-bind="visible: isDeveloper, 
+        disable: !atLeastOneChecked(), click: copyToClipboard"
+      >
+        Copy to Clipboard
+      </button>
 
-      <button class="ui red tiny button" data-bind="visible: !isAdmin(), 
-        disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
+      <button
+        class="ui red tiny button"
+        data-bind="visible: !isAdmin(), 
+        disable: !atLeastOneChecked(), click: deleteItems"
+      >
+        Delete
+      </button>
       <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
-        <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()},
-          semantic: 'dropdown-button-toggle', container: '.buttons'">Delete</div>
-        <div class="ui primary tiny floating dropdown icon button" 
-          data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
+        <div
+          class="ui tiny button"
+          data-bind="css:{disabled: !atLeastOneChecked()},
+          semantic: 'dropdown-button-toggle', container: '.buttons'"
+        >
+          Delete
+        </div>
+        <div
+          class="ui primary tiny floating dropdown icon button"
+          data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}"
+        >
           <i class="dropdown icon"></i>
           <div class="menu">
             <div class="item" data-bind="click: deleteItems">Delete</div>
@@ -31,7 +48,11 @@
   <div class="ui grid">
     <div class="ten wide column">
       <div class="ui warning message" data-bind="visible: !notificationsEnabledObs()">
-        <p>No push notification services have been configured (APNS, GCM). Client applications can only register for SMS messages until this is done. Contact Bridge server administration if you wish to include push notifications in your app. </p>
+        <p>
+          No push notification services have been configured (APNS, GCM). Client applications can only register for SMS
+          messages until this is done. Contact Bridge server administration if you wish to include push notifications in
+          your app.
+        </p>
       </div>
       <table class="ui compact selectable table" style="margin-top: 0">
         <thead>
@@ -51,10 +72,12 @@
         <tbody data-bind="foreach: itemsObs">
           <tr data-bind="css: { negative: $data.deleted}">
             <td data-bind="visible: $parent.isDeveloper">
-              <ui-checkbox data-bind="visible: !$data.deletedObs()" 
-                params="checkedObs: $data.checkedObs"></ui-checkbox>
-              <i data-bind="visible: $data.deletedObs, click: $parent.undelete" 
-                style="cursor: pointer" class="green undo icon"></i>
+              <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
+              <i
+                data-bind="visible: $data.deletedObs, click: $parent.undelete"
+                style="cursor: pointer"
+                class="green undo icon"
+              ></i>
             </td>
             <td nowrap>
               <div><a data-bind="text: $data.name, href: '#/topics/' + encodeURIComponent($data.guid)"></a></div>
@@ -68,17 +91,28 @@
         <ui-checkbox params="checkedObs: showDeletedObs">
           Show deleted schedule plans
         </ui-checkbox>
-      </div>      
+      </div>
     </div>
     <div class="six wide column">
       <div class="ui message">
-        <p><b>To send a push notification to a group of users, send the message through a topic.</b> </p>
+        <p><b>To send a push notification to a group of users, send the message through a topic.</b></p>
 
-        <p>You can define any topics you want for your study. Then, if an app has registered to receive notifications, <em>and</em> subscribed to a specific topic, that user will receive any notifications you send to that topic. </p>
+        <p>
+          You can define any topics you want for your study. Then, if an app has registered to receive notifications,
+          <em>and</em> subscribed to a specific topic, that user will receive any notifications you send to that topic.
+        </p>
 
-        <p>The user always has a choice to receive notifications or not (this relates to registering the device through the Bridge API). It is up to your application's design whether to expose topic subscriptions as a user preference, but these can be likened to selecting the <em>kinds</em> of topics a participant would like to receive. </p>
+        <p>
+          The user always has a choice to receive notifications or not (this relates to registering the device through
+          the Bridge API). It is up to your application's design whether to expose topic subscriptions as a user
+          preference, but these can be likened to selecting the <em>kinds</em> of topics a participant would like to
+          receive.
+        </p>
 
-        <p>It is strongly recommended you create a "General" topic and subscribe all users to it who agree to notifications, in the event you wish to message your entire community of participants. </p>
+        <p>
+          It is strongly recommended you create a "General" topic and subscribe all users to it who agree to
+          notifications, in the event you wish to message your entire community of participants.
+        </p>
       </div>
     </div>
   </div>

@@ -1,49 +1,60 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <h3>Shared Upload Metadata</h3>
-        </div>
-        <div class="fixed-header-buttons">
-            <button class="ui tiny primary button" data-bind="click: save">Save</button>
-        </div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <h3>Shared Upload Metadata</h3>
     </div>
-    <div class="ui empty secondary pointing menu">
+    <div class="fixed-header-buttons">
+      <button class="ui tiny primary button" data-bind="click: save">Save</button>
     </div>
+  </div>
+  <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
-    <div class="ui grid">
-        <div class="eleven wide column">
-            <errors></errors>
-            <div data-bind="visible: fieldDefinitionsObs().length === 0">
-                <p>There are currently no upload metadata fields.</p>
-                <p>
-                    <button class="ui primary button" data-bind="click: addFirst">
-                        <i class="add square icon"></i> Add Field
-                    </button>
-                <p>
-            </div>
-            <div class="ui form schema sfieldZone" data-bind="foreach: fieldDefinitionsObs, 
+  <div class="ui grid">
+    <div class="eleven wide column">
+      <errors></errors>
+      <div data-bind="visible: fieldDefinitionsObs().length === 0">
+        <p>There are currently no upload metadata fields.</p>
+        <p>
+          <button class="ui primary button" data-bind="click: addFirst">
+            <i class="add square icon"></i> Add Field
+          </button>
+        </p>
+
+        <p></p>
+      </div>
+
+      <div
+        class="ui form schema sfieldZone"
+        data-bind="foreach: fieldDefinitionsObs, 
             dragula: { 
                 dragHandleSelector: '.draggable', 
                 indexObs: indexObs, 
                 listObs: fieldDefinitionsObs 
-            }">
-            <div class="field_definitions" data-bind="component: {
+            }"
+      >
+        <div
+          class="field_definitions"
+          data-bind="component: {
                     name: 'field_definition', 
                     params: {
                         field: $data, 
                         itemsObs: $parent.fieldDefinitionsObs, 
                         indexObs: $index 
                     }
-                }"></div>
-            </div>
-        </div>
-        <div class="five wide column">
-            <div class="ui message">
-                <p>You can define common metadata fields that should be included in the JSON of every upload, such as the start and end date of the activity. </p>
-
-                <p>You do not need to add these fields to every upload schema you create. </p>
-            </div>
-        </div>
+                }"
+        ></div>
+      </div>
     </div>
+    <div class="five wide column">
+      <div class="ui message">
+        <p>
+          You can define common metadata fields that should be included in the JSON of every upload, such as the start
+          and end date of the activity.
+        </p>
+
+        <p>You do not need to add these fields to every upload schema you create.</p>
+      </div>
+    </div>
+  </div>
 </div>

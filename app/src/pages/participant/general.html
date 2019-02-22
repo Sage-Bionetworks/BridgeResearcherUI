@@ -1,169 +1,180 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <div class="ui breadcrumb">
-                <a class="section" href="#/participants">Participants</a>
-                <i class="right chevron icon divider"></i>
-            </div>            
-            <h3 data-bind="html: titleObs"></h3>
-        </div>
-        <div class="fixed-header-buttons">
-            <button class="ui tiny primary button" data-bind="click: save">Save</button>
-        </div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a class="section" href="#/participants">Participants</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="html: titleObs"></h3>
     </div>
-    <participant-tabset params="isNewObs: isNewObs, userIdObs: userIdObs, 
-        statusObs: statusObs"></participant-tabset>
+    <div class="fixed-header-buttons">
+      <button class="ui tiny primary button" data-bind="click: save">Save</button>
+    </div>
+  </div>
+  <participant-tabset
+    params="isNewObs: isNewObs, userIdObs: userIdObs, 
+        statusObs: statusObs"
+  ></participant-tabset>
 </div>
 <div class="scrollbox">
-    <errors></errors>
-    <form class="ui form">
-        <div class="equal width fields">
-            <div class="field">
-                <label>Name</label>
-                <div class="two fields" style="margin-right:.1rem">
-                    <input type="text" style="margin-left:.4rem" placeholder="First Name" 
-                        data-bind="textInput: firstNameObs, hasFocus: true" />&#160;&#160;
-                    <input type="text" data-bind="textInput: lastNameObs" placeholder="Last Name"/>
-                </div>
-            </div>
-            <div class="field">
-                <label>Sharing Scope</label>
-                <select class="ui dropdown" data-bind="options: sharingScopeOptions, optionsText: 'label', 
-                    optionsValue: 'value', value: sharingScopeObs"></select>
-            </div>
-            <div class="field">
-                <label>Roles</label>
-                <tag-editor params="selectedObs: rolesObs, allObs: allRolesObs, type: 'roles'"></tag-editor>
-            </div>
+  <errors></errors>
+  <form class="ui form">
+    <div class="equal width fields">
+      <div class="field">
+        <label>Name</label>
+        <div class="two fields" style="margin-right:.1rem">
+          <input
+            type="text"
+            style="margin-left:.4rem"
+            placeholder="First Name"
+            data-bind="textInput: firstNameObs, hasFocus: true"
+          />&#160;&#160;
+          <input type="text" data-bind="textInput: lastNameObs" placeholder="Last Name" />
         </div>
+      </div>
+      <div class="field">
+        <label>Sharing Scope</label>
+        <select
+          class="ui dropdown"
+          data-bind="options: sharingScopeOptions, optionsText: 'label', 
+                    optionsValue: 'value', value: sharingScopeObs"
+        ></select>
+      </div>
+      <div class="field">
+        <label>Roles</label>
+        <tag-editor params="selectedObs: rolesObs, allObs: allRolesObs, type: 'roles'"></tag-editor>
+      </div>
+    </div>
 
-        <div class="equal width fields" data-bind="visible: isNewObs">
-            <div class="field" id="email">
-                <label>
-                    Email
-                    <verified-icon params="valueObs: emailObs, verifiedObs: emailVerifiedObs">
-                    </verified-icon>
-                </label>
-                <input type="text" data-bind="textInput: emailObs"/>
+    <div class="equal width fields" data-bind="visible: isNewObs">
+      <div class="field" id="email">
+        <label>
+          Email
+          <verified-icon params="valueObs: emailObs, verifiedObs: emailVerifiedObs"> </verified-icon>
+        </label>
+        <input type="text" data-bind="textInput: emailObs" />
+      </div>
+      <div class="field" id="phone">
+        <label>
+          Phone
+          <verified-icon params="valueObs: phoneObs, verifiedObs: phoneVerifiedObs"> </verified-icon>
+        </label>
+        <div class="ui left labeled input">
+          <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
+            <div class="text" data-bind="text: phoneRegionObs"></div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <div class="item">US</div>
+              <div class="item">CA</div>
+              <div class="item">MX</div>
             </div>
-            <div class="field" id="phone">
-                <label>
-                    Phone
-                    <verified-icon params="valueObs: phoneObs, verifiedObs: phoneVerifiedObs">
-                    </verified-icon>
-                </label>
-                <div class="ui left labeled input">
-                    <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
-                        <div class="text" data-bind="text: phoneRegionObs"></div>
-                        <i class="dropdown icon"></i>
-                        <div class="menu">
-                            <div class="item">US</div>
-                            <div class="item">CA</div>
-                            <div class="item">MX</div>
-                        </div>
-                    </div>
-                    <input type="text" placeholder="Phone number" data-bind="textInput: phoneObs">
-                </div>
-            </div>
-            <div class="field externalId">
-                <label>External ID</label>
-                <input type="text" data-bind="textInput: externalIdObs"/>
-            </div>
+          </div>
+          <input type="text" placeholder="Phone number" data-bind="textInput: phoneObs" />
         </div>
-            
-        <div class="equal width fields" data-bind="visible: !isNewObs()">
-            <div class="field" id="email">
-                <label>Email</label>
-                <span data-bind="visible: emailObs()">
-                    <a class="input-field-padding" data-bind="href: emailLink, text: emailObs"></a>
-                    <verified-icon params="valueObs: emailObs, verifiedObs: emailVerifiedObs">
-                    </verified-icon>
-                </span>
-                <span class="input-field-padding" data-bind="visible: !emailObs()">—</span>
-            </div>
-            <div class="field" id="phone">
-                <label>Phone</label>
-                <span data-bind="visible: phoneObs()">
-                    <a class="input-field-padding" data-bind="href: phoneLink, 
-                        text: $component.formatPhone(phoneObs(), phoneRegionObs())"></a>
-                    <verified-icon params="valueObs: phoneObs, verifiedObs: phoneVerifiedObs">
-                    </verified-icon>
-                </span>
-                <span class="input-field-padding" data-bind="visible: !phoneObs()">—</span>
-            </div>
-            <div class="field externalId">
-                <label>External ID</label>
-                <input type="text" data-bind="textInput: externalIdObs"/>
-            </div>
-        </div>
+      </div>
+      <div class="field externalId">
+        <label>External ID</label>
+        <input type="text" data-bind="textInput: externalIdObs" />
+      </div>
+    </div>
 
-        <div class="equal width fields">
-            <div class="field">
-                <label>Languages</label>
-                <input type="text" data-bind="textInput: languagesObs"/>
-                <div class="help-text">
-                    For example, "en, fr"
-                </div>
-            </div>
-            <div class="field">
-                <label>Data Groups</label>
-                <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
-            </div>
-            <div class="field" data-bind="visible: isNewObs() || isAdmin()">
-                <label>Substudy Membership</label>
-                <tag-editor params="selectedObs: substudyIdsObs, allObs: allSubstudiesObs, type: 'substudies'"></tag-editor>
-            </div>
-            <div class="field" data-bind="visible: !isNewObs() && !isAdmin()">
-                <label>Substudy Membership</label>
-                <span class="input-field-padding" data-bind="text: substudyIdsObs().join(', ')"></span>
-            </div>
-        </div>
-        
-        <div class="equal width fields" data-bind="visible: isNewObs()">
-            <div class="required field" id="password">
-                <label>Password</label>
-                <input type="password" autocomplete="new-password" data-bind="textInput: passwordObs"/>
-            </div>
-            <div class="field"></div>
-            <div class="field"></div>
-        </div>
+    <div class="equal width fields" data-bind="visible: !isNewObs()">
+      <div class="field" id="email">
+        <label>Email</label>
+        <span data-bind="visible: emailObs()">
+          <a class="input-field-padding" data-bind="href: emailLink, text: emailObs"></a>
+          <verified-icon params="valueObs: emailObs, verifiedObs: emailVerifiedObs"> </verified-icon>
+        </span>
+        <span class="input-field-padding" data-bind="visible: !emailObs()">—</span>
+      </div>
+      <div class="field" id="phone">
+        <label>Phone</label>
+        <span data-bind="visible: phoneObs()">
+          <a
+            class="input-field-padding"
+            data-bind="href: phoneLink, 
+                        text: $component.formatPhone(phoneObs(), phoneRegionObs())"
+          ></a>
+          <verified-icon params="valueObs: phoneObs, verifiedObs: phoneVerifiedObs"> </verified-icon>
+        </span>
+        <span class="input-field-padding" data-bind="visible: !phoneObs()">—</span>
+      </div>
+      <div class="field externalId">
+        <label>External ID</label>
+        <input type="text" data-bind="textInput: externalIdObs" />
+      </div>
+    </div>
 
-        <div class="equal width fields" data-bind="visible: !isNewObs()">
-            <div class="field">
-                <label>Health Code</label>
-                <div data-bind="text: healthCodeObs" class="input-field-padding"
-                    style="margin-bottom: 0; padding-bottom: 0"></div>
-                <div class="ui small red text" data-bind="visible: healthCodeObs() !== 'N/A'">
-                    Confidential. Do not redistribute.
-                </div>
-            </div>
-            <div class="field">
-                <label>User ID</label>
-                <div data-bind="text: idObs" class="input-field-padding"></div>
-            </div>
-            <div class="field">
-                <label>Created On</label>
-                <div class="input-field-padding" data-bind="text: createdOnObs"></div>
-            </div>
+    <div class="equal width fields">
+      <div class="field">
+        <label>Languages</label>
+        <input type="text" data-bind="textInput: languagesObs" />
+        <div class="help-text">
+          For example, "en, fr"
         </div>
+      </div>
+      <div class="field">
+        <label>Data Groups</label>
+        <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
+      </div>
+      <div class="field" data-bind="visible: isNewObs() || isAdmin()">
+        <label>Substudy Membership</label>
+        <tag-editor params="selectedObs: substudyIdsObs, allObs: allSubstudiesObs, type: 'substudies'"></tag-editor>
+      </div>
+      <div class="field" data-bind="visible: !isNewObs() && !isAdmin()">
+        <label>Substudy Membership</label>
+        <span class="input-field-padding" data-bind="text: substudyIdsObs().join(', ')"></span>
+      </div>
+    </div>
 
-        <div class="equal width fields">
-            <div class="field">
-                <label style="margin-bottom: .9rem">Email Preference</label>
-                <ui-checkbox params="checkedObs: notifyByEmailObs">
-                    Consents to receive email from study
-                </ui-checkbox>
-            </div>
-        </div>        
-        
-        <h4 class="ui dividing header">Attributes</h4>
-        <div class="equal width fields">
-            <!-- ko foreach: attributesObs -->
-                <div class="field" style="margin-right: 2rem; max-width: 12rem">
-                    <label data-bind="text: $data.label"></label>
-                    <input type="text" data-bind="textInput: $data.obs"/>
-                </div>
-            <!-- /ko -->
+    <div class="equal width fields" data-bind="visible: isNewObs()">
+      <div class="required field" id="password">
+        <label>Password</label>
+        <input type="password" autocomplete="new-password" data-bind="textInput: passwordObs" />
+      </div>
+      <div class="field"></div>
+      <div class="field"></div>
+    </div>
+
+    <div class="equal width fields" data-bind="visible: !isNewObs()">
+      <div class="field">
+        <label>Health Code</label>
+        <div
+          data-bind="text: healthCodeObs"
+          class="input-field-padding"
+          style="margin-bottom: 0; padding-bottom: 0"
+        ></div>
+        <div class="ui small red text" data-bind="visible: healthCodeObs() !== 'N/A'">
+          Confidential. Do not redistribute.
         </div>
-    </form>
+      </div>
+      <div class="field">
+        <label>User ID</label>
+        <div data-bind="text: idObs" class="input-field-padding"></div>
+      </div>
+      <div class="field">
+        <label>Created On</label>
+        <div class="input-field-padding" data-bind="text: createdOnObs"></div>
+      </div>
+    </div>
+
+    <div class="equal width fields">
+      <div class="field">
+        <label style="margin-bottom: .9rem">Email Preference</label>
+        <ui-checkbox params="checkedObs: notifyByEmailObs">
+          Consents to receive email from study
+        </ui-checkbox>
+      </div>
+    </div>
+
+    <h4 class="ui dividing header">Attributes</h4>
+    <div class="equal width fields">
+      <!-- ko foreach: attributesObs -->
+      <div class="field" style="margin-right: 2rem; max-width: 12rem">
+        <label data-bind="text: $data.label"></label>
+        <input type="text" data-bind="textInput: $data.obs" />
+      </div>
+      <!-- /ko -->
+    </div>
+  </form>
 </div>

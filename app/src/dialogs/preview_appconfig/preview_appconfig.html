@@ -1,17 +1,17 @@
 <div class="ui small modal">
-    <i data-bind="click: close" class="close icon"></i>
-    <div class="header">
-        App Config Preview
+  <i data-bind="click: close" class="close icon"></i>
+  <div class="header">
+    App Config Preview
+  </div>
+  <div class="content">
+    <div data-bind="text: contentObs" class="ui segment public-key"></div>
+    <div class="batch-process-errors" data-bind="visible: errorsObs().length > 0">
+      <ul class="ui text red" data-bind="foreach: errorsObs">
+        <li data-bind="text: $data"></li>
+      </ul>
     </div>
-    <div class="content">
-        <div data-bind="text: contentObs" class="ui segment public-key"></div>
-        <div class="batch-process-errors" data-bind="visible: errorsObs().length > 0">
-            <ul class="ui text red" data-bind="foreach: errorsObs">
-                <li data-bind="text: $data"></li>
-            </ul>
-        </div>          
-    </div>
-    <div class="actions">
-        <button class="ui small button" data-bind="click: close">Close</button>
-    </div>
+  </div>
+  <div class="actions">
+    <button class="ui small button" data-bind="click: close">Close</button>
+  </div>
 </div>

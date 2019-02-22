@@ -1,16 +1,16 @@
-<div class="panel-vertical-scrollbox" data-bind="foreach: scheduleCriteriaObs, dragula: {
+<div
+  class="panel-vertical-scrollbox"
+  data-bind="foreach: scheduleCriteriaObs, dragula: {
     dragHandleSelector: '.vs-item-content', indexObs: selectedElementObs,  
-    listObs: scheduleCriteriaObs}">
-    <div class="vs-item" data-bind="click: $component.selectCriteria">
-        <div class="vs-item-content" data-bind="text: $data.labelObs"></div>
-        <div class="vs-item-delete link">
-            <i class="red times circle outline link icon" 
-                data-bind="click: $component.removeCriteria"></i> 
-        </div>
+    listObs: scheduleCriteriaObs}"
+>
+  <div class="vs-item" data-bind="click: $component.selectCriteria">
+    <div class="vs-item-content" data-bind="text: $data.labelObs"></div>
+    <div class="vs-item-delete link">
+      <i class="red times circle outline link icon" data-bind="click: $component.removeCriteria"></i>
     </div>
+  </div>
 </div>
 <div class="item" style="padding: .5rem">
-    <a class="ui link" data-bind="click: $component.addCriteria">
-        <i class="add square icon"></i>Add Schedule
-    </a>
+  <a class="ui link" data-bind="click: $component.addCriteria"> <i class="add square icon"></i>Add Schedule </a>
 </div>

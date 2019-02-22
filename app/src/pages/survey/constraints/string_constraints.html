@@ -1,39 +1,43 @@
 <constraints-label params="title: 'String Question', element: element"></constraints-label>
 <div class="ui constraints grid">
-    <div class="eight wide column">
-        <div class="field" data-bind="attr:{id:$parent.collectionName+'constraints_pattern'}">
-            <label style="white-space:pre">Pattern (regular expression)</label>
-            <input type="text" data-bind="textInput: patternObs"/>
-        </div>
-        <div class="field" data-bind="attr:{id:$parent.collectionName+'constraints_patternPlaceholder'}">
-            <label>Pattern Placeholder</label>
-            <input type="text" data-bind="textInput: patternPlaceholderObs"/>
-        </div>
-        <div class="field" data-bind="attr:{id:$parent.collectionName+'constraints_patternErrorMessage'}">
-            <label style="white-space: pre">Pattern Error Message</label>
-            <input type="text" data-bind="textInput: patternErrorMessageObs"/>
-        </div>
-        <div class="constraints-group">
-            <div class="field" data-bind="attr:{id:$parent.collectionName+'constraints_minLength'}">
-                <label>Min length</label>
-                <input type="text" data-bind="textInput: minLengthObs"/>
-            </div>
-            <div class="field">
-                <label>Max length</label>
-                <input type="text" data-bind="textInput: maxLengthObs"/>
-            </div>
-        </div>
+  <div class="eight wide column">
+    <div class="field" data-bind="attr:{id:$parent.collectionName+'constraints_pattern'}">
+      <label style="white-space:pre">Pattern (regular expression)</label>
+      <input type="text" data-bind="textInput: patternObs" />
     </div>
-    <div class="eight wide column">
-        <div class="field">
-            <label>Before Rules</label>
-            <ui-rules params="element: element, fieldName: 'beforeRulesObs', 
-                elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>            
-        </div>
-        <div class="field">
-            <label>After Rules</label>
-            <ui-rules params="element: element, fieldName: 'afterRulesObs', 
-                elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>
-        </div>
+    <div class="field" data-bind="attr:{id:$parent.collectionName+'constraints_patternPlaceholder'}">
+      <label>Pattern Placeholder</label>
+      <input type="text" data-bind="textInput: patternPlaceholderObs" />
     </div>
+    <div class="field" data-bind="attr:{id:$parent.collectionName+'constraints_patternErrorMessage'}">
+      <label style="white-space: pre">Pattern Error Message</label>
+      <input type="text" data-bind="textInput: patternErrorMessageObs" />
+    </div>
+    <div class="constraints-group">
+      <div class="field" data-bind="attr:{id:$parent.collectionName+'constraints_minLength'}">
+        <label>Min length</label>
+        <input type="text" data-bind="textInput: minLengthObs" />
+      </div>
+      <div class="field">
+        <label>Max length</label>
+        <input type="text" data-bind="textInput: maxLengthObs" />
+      </div>
+    </div>
+  </div>
+  <div class="eight wide column">
+    <div class="field">
+      <label>Before Rules</label>
+      <ui-rules
+        params="element: element, fieldName: 'beforeRulesObs', 
+                elementsObs: elementsObs, collectionName: $data.collectionName"
+      ></ui-rules>
+    </div>
+    <div class="field">
+      <label>After Rules</label>
+      <ui-rules
+        params="element: element, fieldName: 'afterRulesObs', 
+                elementsObs: elementsObs, collectionName: $data.collectionName"
+      ></ui-rules>
+    </div>
+  </div>
 </div>

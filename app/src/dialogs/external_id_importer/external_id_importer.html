@@ -1,54 +1,58 @@
 <div class="ui small modal">
-    <div class="header">
-        Import External Identifiers
-    </div>
-    <div class="content">
-        <form id="importExternalId" class="ui form" action="" data-bind="submit: startImport">
-            <errors></errors>
-            <div class="ui form">
-                <div class="field">
-                    <textarea data-bind="textInput:importObs, hasFocus: true"></textarea>
-                </div>
-            </div>
-            <progress data-bind="attr:{ value: valueObs, max: maxObs }"></progress>
-            <div class="progress-status">
-                <div data-bind="text: statusObs"></div>
-                <div class="progress-status-perc" data-bind="text: percentageObs"></div>
-            </div>
-            <div class="batch-process-errors" data-bind="visible: errorMessagesObs().length > 0">
-                <ul class="ui text red" data-bind="foreach: errorMessagesObs">
-                    <li data-bind="text: $data"></li>
-                </ul>
-            </div>
-            <div class="ui two fields" style="margin-top: 1rem">
-                <div class="field">
-                    <ui-checkbox params="checkedObs: createCredentialsObs">
-                        Create credentials for these IDs
-                    </ui-checkbox>
-                </div>
-                <div class="field">
-                    <ui-checkbox params="checkedObs: useLegacyFormatObs">
-                        Use the legacy (email) format for external IDs
-                    </ui-checkbox>
-                </div>
-            </div>
-            <div class="ui two fields">
-                <div class="field">
-                    <select class="ui dropdown" data-bind="options: substudyIdsObs,
+  <div class="header">
+    Import External Identifiers
+  </div>
+  <div class="content">
+    <form id="importExternalId" class="ui form" action="" data-bind="submit: startImport">
+      <errors></errors>
+      <div class="ui form">
+        <div class="field">
+          <textarea data-bind="textInput:importObs, hasFocus: true"></textarea>
+        </div>
+      </div>
+      <progress data-bind="attr:{ value: valueObs, max: maxObs }"></progress>
+      <div class="progress-status">
+        <div data-bind="text: statusObs"></div>
+        <div class="progress-status-perc" data-bind="text: percentageObs"></div>
+      </div>
+      <div class="batch-process-errors" data-bind="visible: errorMessagesObs().length > 0">
+        <ul class="ui text red" data-bind="foreach: errorMessagesObs">
+          <li data-bind="text: $data"></li>
+        </ul>
+      </div>
+      <div class="ui two fields" style="margin-top: 1rem">
+        <div class="field">
+          <ui-checkbox params="checkedObs: createCredentialsObs">
+            Create credentials for these IDs
+          </ui-checkbox>
+        </div>
+        <div class="field">
+          <ui-checkbox params="checkedObs: useLegacyFormatObs">
+            Use the legacy (email) format for external IDs
+          </ui-checkbox>
+        </div>
+      </div>
+      <div class="ui two fields">
+        <div class="field">
+          <select
+            class="ui dropdown"
+            data-bind="options: substudyIdsObs,
                         optionsText: 'label', optionsValue: 'value', value: substudyIdObs,
-                        optionsCaption: 'Select substudy...'">
-                    </select>                        
-                </div>
-                <div class="field" data-bind="css: {disabled: isDisabledObs}">
-                    <label>Add these data groups to the created account</label>
-                    <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="actions">
-        <button form="importExternalId" class="ui primary small button" 
-            data-bind="enable: enableObs, click: startImport">Import</button>
-        <button class="ui small button" data-bind="click: cancelDialog, text: closeTextObs"></button>
-    </div>
+                        optionsCaption: 'Select substudy...'"
+          >
+          </select>
+        </div>
+        <div class="field" data-bind="css: {disabled: isDisabledObs}">
+          <label>Add these data groups to the created account</label>
+          <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="actions">
+    <button form="importExternalId" class="ui primary small button" data-bind="enable: enableObs, click: startImport">
+      Import
+    </button>
+    <button class="ui small button" data-bind="click: cancelDialog, text: closeTextObs"></button>
+  </div>
 </div>

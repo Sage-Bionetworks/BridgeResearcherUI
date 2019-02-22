@@ -1,40 +1,42 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <div class="ui breadcrumb">
-                <a class="section" href="#/participants">Participants</a>
-                <i class="right chevron icon divider"></i>
-            </div>            
-            <h3 data-bind="html: titleObs"></h3>
-        </div>
-        <div class="fixed-header-buttons"></div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a class="section" href="#/participants">Participants</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="html: titleObs"></h3>
     </div>
-    <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
+    <div class="fixed-header-buttons"></div>
+  </div>
+  <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
 </div>
 <div class="scrollbox">
-    <p>
-        View the <a data-bind="href: '#/participants/'+userIdObs()+'/activities/events'">
-            <i style="margin-right:0" class="calendar alternate outline icon"></i>Events</a> 
-            we’re using to schedule this participant.
-    </p>
-    <errors></errors>
-    <table class="ui compact selectable table">
-        <thead>
-            <tr>
-                <th>Activity</th>
-            </tr>
-        </thead>
-        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-            <tr>
-                <td data-bind="html: recordsMessageObs"></td>
-            </tr>
-        </tbody>
-        <tbody data-bind="foreach: itemsObs">
-            <tr>
-                <td>
-                    <a data-bind="attr:{href: $parent.linkMaker($data)}, text: label"></a>
-                </td>
-            </tr>
-        </tbody>
-    </table> 
+  <p>
+    View the
+    <a data-bind="href: '#/participants/'+userIdObs()+'/activities/events'">
+      <i style="margin-right:0" class="calendar alternate outline icon"></i>Events</a
+    >
+    we’re using to schedule this participant.
+  </p>
+  <errors></errors>
+  <table class="ui compact selectable table">
+    <thead>
+      <tr>
+        <th>Activity</th>
+      </tr>
+    </thead>
+    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+      <tr>
+        <td data-bind="html: recordsMessageObs"></td>
+      </tr>
+    </tbody>
+    <tbody data-bind="foreach: itemsObs">
+      <tr>
+        <td>
+          <a data-bind="attr:{href: $parent.linkMaker($data)}, text: label"></a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
