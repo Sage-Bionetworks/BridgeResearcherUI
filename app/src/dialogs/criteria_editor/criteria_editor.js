@@ -67,8 +67,6 @@ module.exports = function(params) {
       if (error.hasErrors()) {
           return utils.failureHandler({transient:false})(error);
       }      
-
-
       params.criteriaObs(crit);
       root.closeDialog();
     };
