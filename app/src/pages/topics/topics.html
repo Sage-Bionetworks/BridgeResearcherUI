@@ -39,7 +39,7 @@
             <th width="10" data-bind="visible: isDeveloper">
               <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
             </th>
-            <th>Topic Name</th>
+            <th nowrap>Topic Name</th>
             <th>Membership criteria</th>
           </tr>
         </thead>
@@ -56,7 +56,7 @@
               <i data-bind="visible: $data.deletedObs, click: $parent.undelete" 
                 style="cursor: pointer" class="green undo icon"></i>
             </td>
-            <td>
+            <td nowrap>
               <div><a data-bind="text: $data.name, href: '#/topics/' + encodeURIComponent($data.guid)"></a></div>
               <div data-bind="text: $data.description"></div>
             </td>

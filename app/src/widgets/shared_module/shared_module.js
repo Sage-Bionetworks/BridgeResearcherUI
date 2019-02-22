@@ -1,6 +1,6 @@
-import sharedModuleUtils from '../../shared_module_utils';
-import fn from '../../functions';
-import root from '../../root';
+import sharedModuleUtils from "../../shared_module_utils";
+import fn from "../../functions";
+import root from "../../root";
 
 /**
  * params:
@@ -9,12 +9,12 @@ import root from '../../root';
  *  model - the shared module object
  */
 module.exports = function(params) {
-    var self = this;
-    
-    self.importFunc = function(item, event) {
-        params.importFunc(params.model, event);
-    };
-    fn.copyProps(self, params, 'model', 'isImported');
-    fn.copyProps(self, root, 'isAdmin');
-    Object.assign(self, sharedModuleUtils);
+  var self = this;
+
+  self.importFunc = function(item, event) {
+    params.importFunc(params.model, event);
+  };
+  fn.copyProps(self, params, "model", "isImported");
+  fn.copyProps(self, root, "isAdmin");
+  Object.assign(self, sharedModuleUtils);
 };

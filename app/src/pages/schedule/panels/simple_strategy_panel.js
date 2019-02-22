@@ -1,5 +1,5 @@
 module.exports = function(params) {
-    let self = this;
+  let self = this;
 
-    self.labelObs = params.viewModel.labelObs;
+  self.labelObs = params.viewModel.labelObs;
 };

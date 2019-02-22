@@ -1,7 +1,7 @@
-import root from '../../root';
+import root from "../../root";
 
 module.exports = function(params) {
-    let self = this;
+  let self = this;
 
-    self.close = root.closeDialog;
+  self.close = root.closeDialog;
 };

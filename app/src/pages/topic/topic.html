@@ -35,17 +35,21 @@
                 <input data-bind="textInput: descriptionObs">
             </div>
         </div>
-        <h4>Assignment based on</h4>
-        <criteria params="id: '', criteriaObs: criteriaObs"></criteria>
-        <div class="three fields" data-bind="visible: !isNewObs()" style="margin-top: 2rem">
+        <div class="two fields">
             <div class="field">
-                <label>Created On</label>
-                <div class="input-field-padding" data-bind="text: createdOnObs"></div>
+                <h4>Assignment based on</h4>
+                <criteria params="id: '', criteriaObs: criteriaObs"></criteria>
             </div>
-            <div class="field">
-                <label>Modified On</label>
-                <div class="input-field-padding" data-bind="text: modifiedOnObs"></div>
-            </div>            
+            <div class="two fields" data-bind="visible: !isNewObs()">
+                <div class="field">
+                    <label>Created On</label>
+                    <div class="input-field-padding" data-bind="text: createdOnObs"></div>
+                </div>
+                <div class="field">
+                    <label>Modified On</label>
+                    <div class="input-field-padding" data-bind="text: modifiedOnObs"></div>
+                </div>            
+            </div>
         </div>
     </form>
 </div>
