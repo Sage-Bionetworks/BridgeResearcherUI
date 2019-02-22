@@ -1,4 +1,4 @@
-import ko from 'knockout';
+import ko from "knockout";
 
 /**
  * params:
@@ -7,14 +7,14 @@ import ko from 'knockout';
  *  saveFunc - the function to call on save
  */
 module.exports = function(params) {
-    let self = this;
+  let self = this;
 
-    self.dataObs = ko.observable(JSON.stringify(params.data));
+  self.dataObs = ko.observable(JSON.stringify(params.data));
 
-    self.save = function(vm, event) {
-        let string = self.dataObs();
-        let jsonData = JSON.parse(string);
-        params.saveFunc(params.item, jsonData);
-    };
-    self.close = params.closeFunc;
+  self.save = function(vm, event) {
+    let string = self.dataObs();
+    let jsonData = JSON.parse(string);
+    params.saveFunc(params.item, jsonData);
+  };
+  self.close = params.closeFunc;
 };

@@ -1,6 +1,6 @@
-import criteriaUtils from '../../criteria_utils';
-import ko from 'knockout';
-import root from '../../root';
+import criteriaUtils from "../../criteria_utils";
+import ko from "knockout";
+import root from "../../root";
 
 /**
  * Params
@@ -13,11 +13,11 @@ module.exports = function(params) {
     if (params.criteriaObs()) {
       return criteriaUtils.label(params.criteriaObs());
     }
-    return '';
+    return "";
   });
 
   self.editCriteria = function() {
-    root.openDialog('criteria_editor', {
+    root.openDialog("criteria_editor", {
       criteriaObs: params.criteriaObs
     });
   };

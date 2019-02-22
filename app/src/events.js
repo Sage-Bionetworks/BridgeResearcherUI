@@ -2,56 +2,58 @@
 // Rewritten to ES5, changed case of variables, trimmed a bit.
 // As released it doesn't work with webpack.
 
-function validate(event, callback){
-    if(typeof event !== 'string' || typeof callback !== 'function'){
-        throw new Error("Invalid Arguments");
-    }
-    this.events[event] = this.events[event] || [];
+function validate(event, callback) {
+  if (typeof event !== "string" || typeof callback !== "function") {
+    throw new Error("Invalid Arguments");
+  }
+  this.events[event] = this.events[event] || [];
 }
 
 export default class EventEmitter {
-    constructor() {
-        this.events = {};
+  constructor() {
+    this.events = {};
+  }
+  addEventListener(event, callback) {
+    validate.call(this, event, callback);
+    this.events[event].push(callback);
+    return this;
+  }
+  once(event, callback) {
+    validate.call(this, event, callback);
+    this.events[event].push(
+      function callee() {
+        this.removeEventListener(event, callee);
+        callback.apply(this, arguments);
+      }.bind(this)
+    );
+    return this;
+  }
+  removeEventListener(event, callback) {
+    if (typeof event !== "string") {
+      throw new Error("Invalid Arguments");
     }
-    addEventListener(event, callback        ) {
-        validate.call(this, event, callback);
-        this.events[event].push(callback);
-        return this;
-    }
-    once(event, callback) {
-        validate.call(this, event, callback);
-        this.events[event].push(function callee() {
-            this.removeEventListener(event, callee);
-            callback.apply(this, arguments);
-        }.bind(this));
-        return this;
-    }
-    removeEventListener(event, callback){
-        if(typeof event !== 'string') {
-            throw new Error("Invalid Arguments");
+    if (this.events[event]) {
+      if (typeof callback === "function") {
+        let index = this.events[event].indexOf(callback);
+        if (index !== -1) {
+          this.events[event].splice(index, 1);
         }
-        if (this.events[event]) {
-            if(typeof callback === 'function'){
-                let index = this.events[event].indexOf(callback);
-                if(index !== -1){
-                    this.events[event].splice(index, 1);
-                }
-            } else if(typeof callback === 'undefined') {
-                this.events[event] = [];
-            }
-        }
-        return this;
+      } else if (typeof callback === "undefined") {
+        this.events[event] = [];
+      }
     }
-    emit(event){
-        if(typeof event !== 'string') {
-            throw new Error("Invalid Arguments");
-        }
-        if (this.events[event]) {
-            let args = Array.prototype.slice.call(arguments,1);
-            this.events[event].forEach(function(callback) {
-                callback.apply(this, args);
-            }, this);
-        }
-        return this;
+    return this;
+  }
+  emit(event) {
+    if (typeof event !== "string") {
+      throw new Error("Invalid Arguments");
     }
+    if (this.events[event]) {
+      let args = Array.prototype.slice.call(arguments, 1);
+      this.events[event].forEach(function(callback) {
+        callback.apply(this, args);
+      }, this);
+    }
+    return this;
+  }
 }
