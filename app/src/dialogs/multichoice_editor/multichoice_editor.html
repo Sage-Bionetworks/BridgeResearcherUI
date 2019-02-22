@@ -1,55 +1,60 @@
 <div class="ui small modal">
-    <i data-bind="click:cancel" class="close icon"></i>
-    <div class="header">
-        Enumerated Values
+  <i data-bind="click:cancel" class="close icon"></i>
+  <div class="header">
+    Enumerated Values
+  </div>
+  <div class="content" style="padding-top:.2rem">
+    <div class="ui secondary pointing menu">
+      <div class="item" data-bind="css:{active:isActive('editor')}, click: setTab('editor')">
+        Edit List
+      </div>
+      <div class="item" data-bind="css:{active:isActive('existing')}, click: setTab('existing')">
+        Use Existing List
+      </div>
     </div>
-    <div class="content" style="padding-top:.2rem">
-        <div class="ui secondary pointing menu">
-            <div class="item" data-bind="css:{active:isActive('editor')}, click: setTab('editor')">
-                Edit List
+    <div data-bind="visible: isActive('editor')">
+      <div class="ui two column grid" style="padding-left: 1rem; padding-right: 1rem">
+        <div
+          class="column enum-list"
+          data-bind="foreach: listObs, 
+                        dragula: {indexObs: selectedIndexObs, listObs: listObs}"
+        >
+          <div class="vs-item">
+            <div class="vs-item-content">
+              <span data-bind="text: $data"></span>
             </div>
-            <div class="item" data-bind="css:{active:isActive('existing')}, click: setTab('existing')">
-                Use Existing List
+            <div class="vs-item-delete">
+              <i class="delete icon link" data-bind="click: $parent.removeListItem"></i>
             </div>
+          </div>
         </div>
-        <div data-bind="visible: isActive('editor')">
-            <div class="ui two column grid" style="padding-left: 1rem; padding-right: 1rem">
-                <div class="column enum-list" 
-                    data-bind="foreach: listObs, 
-                        dragula: {indexObs: selectedIndexObs, listObs: listObs}">
-                    <div class="vs-item">
-                        <div class="vs-item-content">
-                            <span data-bind="text: $data"></span>
-                        </div>
-                        <div class="vs-item-delete">
-                            <i class="delete icon link" data-bind="click: $parent.removeListItem"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="ui form">
-                        <div class="field">
-                            <input type="text" data-bind="textInput: valueObs, returnHandler: handleKeyEvent">
-                            <p class="help-text">These are the values that are sent to the server, not what you show to users. </p>
+        <div class="column">
+          <div class="ui form">
+            <div class="field">
+              <input type="text" data-bind="textInput: valueObs, returnHandler: handleKeyEvent" />
+              <p class="help-text">These are the values that are sent to the server, not what you show to users.</p>
 
-                            <p class="help-text">Comma-separated items will be split out into separate entries. </p>
-                        </div>
-                    </div>
-                </div>
+              <p class="help-text">Comma-separated items will be split out into separate entries.</p>
             </div>
+          </div>
         </div>
-        <div data-bind="visible: isActive('existing'), foreach: allListsObs" class="ui list enum-scrollbox">
-            <div class="item">
-                <i class="list layout icon"></i>
-                <div class="content">
-                    <span class="link" data-bind="click: $parent.selectList, 
-                        html: $data[0] + '&hellip;' + $data[$data.length-1]"></span>
-                </div>
-            </div>
-        </div>            
+      </div>
     </div>
-    <div class="actions">
-        <button data-bind="click: save" class="ui small primary button">Save</button>
-        <button data-bind="click: cancel" class="ui small button">Cancel</button>
+    <div data-bind="visible: isActive('existing'), foreach: allListsObs" class="ui list enum-scrollbox">
+      <div class="item">
+        <i class="list layout icon"></i>
+        <div class="content">
+          <span
+            class="link"
+            data-bind="click: $parent.selectList, 
+                        html: $data[0] + '&hellip;' + $data[$data.length-1]"
+          ></span>
+        </div>
+      </div>
     </div>
+  </div>
+  <div class="actions">
+    <button data-bind="click: save" class="ui small primary button">Save</button>
+    <button data-bind="click: cancel" class="ui small button">Cancel</button>
+  </div>
 </div>

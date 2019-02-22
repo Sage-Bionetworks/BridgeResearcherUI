@@ -1,23 +1,30 @@
 <div class="ui small modal">
-    <i data-bind="click:close" class="close icon"></i>
-    <div class="header">
-        Cross-Study Clipboard
-    </div>
-    <div class="content">
-        <p>Clipboard items stay in the clipboard when you switch between studies. It allows you to copy items between two 
-            studies. <b>When you add an item, any dependencies will be copied into the clipboard as well.</b> </p>
-            
-        <p>To maintain these dependencies, you are only allowed to copy everything in the clipboard to a target study you 
-            sign in to, <em>or</em> to clear the clipboard and start over.</p>
+  <i data-bind="click:close" class="close icon"></i>
+  <div class="header">
+    Cross-Study Clipboard
+  </div>
+  <div class="content">
+    <p>
+      Clipboard items stay in the clipboard when you switch between studies. It allows you to copy items between two
+      studies. <b>When you add an item, any dependencies will be copied into the clipboard as well.</b>
+    </p>
 
-        <p>We'll do the right thing for this to work. For example, if you copy a schedule that references a survey, 
-            we'll copy over the survey and we'll published it too, so the survey will work in the new study. </p>
+    <p>
+      To maintain these dependencies, you are only allowed to copy everything in the clipboard to a target study you
+      sign in to, <em>or</em> to clear the clipboard and start over.
+    </p>
 
-        <p>Copying within a study will also work: it will make copies of all the dependencies, or a "deep" copy rather than the 
-            "shallow" copy available through the Copy command.
-        </p>
-    </div>
-    <div class="actions">
-        <button class="ui small button" data-bind="click: close">Close</button>
-    </div>
+    <p>
+      We'll do the right thing for this to work. For example, if you copy a schedule that references a survey, we'll
+      copy over the survey and we'll published it too, so the survey will work in the new study.
+    </p>
+
+    <p>
+      Copying within a study will also work: it will make copies of all the dependencies, or a "deep" copy rather than
+      the "shallow" copy available through the Copy command.
+    </p>
+  </div>
+  <div class="actions">
+    <button class="ui small button" data-bind="click: close">Close</button>
+  </div>
 </div>

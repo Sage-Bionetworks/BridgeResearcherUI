@@ -1,51 +1,67 @@
 <div class="ui modal">
-    <i data-bind="click:cancelRules" class="close icon"></i>
-    <div class="header">
-        Rules
+  <i data-bind="click:cancelRules" class="close icon"></i>
+  <div class="header">
+    Rules
+  </div>
+  <div class="ui form">
+    <div class="rules-table" data-bind="visible: rulesObs().length === 0">
+      <div class="rules-table-rule">
+        There are no rules for this question.
+      </div>
     </div>
-    <div class="ui form">
-        <div class="rules-table" data-bind="visible: rulesObs().length === 0">
-            <div class="rules-table-rule">
-                There are no rules for this question.
-            </div>
+    <div data-bind="foreach: rulesObs, visible: rulesObs().length !== 0" class="rules-table">
+      <div class="rules-table-rule">
+        <div class="rule-cell">
+          <select
+            class="ui dropdown"
+            style="flex: 1"
+            data-bind="options: $parent.operatorOptions,
+                        optionsText: 'label', optionsValue: 'value', value: $data.operatorObs"
+          ></select>
         </div>
-        <div data-bind="foreach: rulesObs, visible: rulesObs().length !== 0" class="rules-table">
-            <div class="rules-table-rule">
-                <div class="rule-cell">
-                    <select class="ui dropdown" style="flex: 1" data-bind="options: $parent.operatorOptions,
-                        optionsText: 'label', optionsValue: 'value', value: $data.operatorObs"></select>
-                </div>
-                <div class="rule-cell">
-                    <input type="text" data-bind="textInput: $data.valueObs, 
+        <div class="rule-cell">
+          <input
+            type="text"
+            data-bind="textInput: $data.valueObs, 
                         visible: $data.operatorObs() !== 'de' && $data.operatorObs() !== 'always' && 
-                                $data.operatorObs() !== 'all' && $data.operatorObs() !== 'any'"/>
-                    <div data-bind="visible: $data.operatorObs() === 'any' || $data.operatorObs() === 'all'">
-
-                        <tag-editor params="selectedObs: $data.dataGroupsObs, allObs: $parent.dataGroupStringOptionsObs, type: 'data groups'"></tag-editor>
-                    </div>
-                </div>
-                <div class="rule-cell">
-                    <select class="ui dropdown" data-bind="options: $parent.actionOptions, 
-                        value: actionSelectedObs, optionsText: 'label', optionsValue: 'value'"></select>
-                </div>
-                <div class="rule-cell" style="flex: 1">
-                    <select class="ui dropdown" data-bind="value: $data.skipToObs, 
-                        options: $parent.identifierOptions, optionsText: 'label', 
-                        visible: $data.actionSelectedObs() === 'skipTo', optionsValue: 'value'"></select>
-                    <select class="ui dropdown" data-bind="value: $data.assignDataGroupObs, 
-                        options: $parent.dataGroupOptionsObs, optionsText: 'label', 
-                        visible: $data.actionSelectedObs() === 'assignDataGroup', optionsValue: 'value'"></select>
-                </div>
-                <div class="rule-cell">
-                    <i class="red large times circle outline link icon" 
-                        data-bind="click: $parent.deleteRule"></i>
-                </div>
-            </div>
+                                $data.operatorObs() !== 'all' && $data.operatorObs() !== 'any'"
+          />
+          <div data-bind="visible: $data.operatorObs() === 'any' || $data.operatorObs() === 'all'">
+            <tag-editor
+              params="selectedObs: $data.dataGroupsObs, allObs: $parent.dataGroupStringOptionsObs, type: 'data groups'"
+            ></tag-editor>
+          </div>
         </div>
+        <div class="rule-cell">
+          <select
+            class="ui dropdown"
+            data-bind="options: $parent.actionOptions, 
+                        value: actionSelectedObs, optionsText: 'label', optionsValue: 'value'"
+          ></select>
+        </div>
+        <div class="rule-cell" style="flex: 1">
+          <select
+            class="ui dropdown"
+            data-bind="value: $data.skipToObs, 
+                        options: $parent.identifierOptions, optionsText: 'label', 
+                        visible: $data.actionSelectedObs() === 'skipTo', optionsValue: 'value'"
+          ></select>
+          <select
+            class="ui dropdown"
+            data-bind="value: $data.assignDataGroupObs, 
+                        options: $parent.dataGroupOptionsObs, optionsText: 'label', 
+                        visible: $data.actionSelectedObs() === 'assignDataGroup', optionsValue: 'value'"
+          ></select>
+        </div>
+        <div class="rule-cell">
+          <i class="red large times circle outline link icon" data-bind="click: $parent.deleteRule"></i>
+        </div>
+      </div>
     </div>
-    <div class="actions">
-        <button class="ui primary small button" data-bind="click: addRule">Add Rule</button>
-        <button class="ui small button" data-bind="click: saveRules">Save</button>
-        <button class="ui small button" data-bind="click: cancelRules">Cancel</button>
-    </div>
+  </div>
+  <div class="actions">
+    <button class="ui primary small button" data-bind="click: addRule">Add Rule</button>
+    <button class="ui small button" data-bind="click: saveRules">Save</button>
+    <button class="ui small button" data-bind="click: cancelRules">Cancel</button>
+  </div>
 </div>

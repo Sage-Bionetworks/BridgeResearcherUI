@@ -1,50 +1,71 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <h3>Study Reports</h3>
-        </div>
-        <div class="fixed-header-buttons">
-            <button class="ui red tiny button" data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
-            <button class="ui primary tiny button" data-bind="visible: isDeveloper, click: addReport">Add report&hellip;</button>
-        </div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <h3>Study Reports</h3>
     </div>
-    <studyreports-tabset></studyreports-tabset>
+    <div class="fixed-header-buttons">
+      <button
+        class="ui red tiny button"
+        data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: deleteItems"
+      >
+        Delete
+      </button>
+      <button class="ui primary tiny button" data-bind="visible: isDeveloper, click: addReport">
+        Add report&hellip;
+      </button>
+    </div>
+  </div>
+  <studyreports-tabset></studyreports-tabset>
 </div>
 <div class="scrollbox">
-    <p>For reports on individual participants, look up that participant and find the <i>Reports</i> tab under their record.</p>
-    <table class="ui compact selectable table">
-        <thead>
-            <tr>
-                <th width="10" data-bind="visible: isDeveloper"></th>
-                <th width="250">Report</th>
-                <th colspan="2">Visibility</th>
-            </tr>
-        </thead>
-        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-            <tr>
-                <td data-bind="attr:{colspan: $component.isDeveloper ? 4 : 3}, html: recordsMessageObs"></td>
-            </tr>
-        </tbody>
-        <tbody data-bind="foreach: itemsObs">
-            <tr class="non-breaking-rows">
-                <td data-bind="visible: $component.isDeveloper">
-                    <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
-                </td>
-                <td width="100%">
-                    <a data-bind="href: '#/reports/raw/' + encodeURIComponent($data.identifier), 
-                        text: $data.identifier"></a>
-                </td>
-                <td data-bind="text: $data.publicObs() ? 
-                    'Public' : 'Signed in users only'"></td>
-                <td data-bind="visible: $parent.isDeveloper">
-                    <div class="ui toggle checkbox" data-bind="semantic: 'checkbox', 
-                        checkboxObs: $data.toggleObs">
-                        <input type="checkbox" name="gift" tabindex="0" 
-                            class="hidden" data-bind="attr: {checked: $data.toggleObs}">
-                        <label></label>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+  <p>
+    For reports on individual participants, look up that participant and find the <i>Reports</i> tab under their record.
+  </p>
+  <table class="ui compact selectable table">
+    <thead>
+      <tr>
+        <th width="10" data-bind="visible: isDeveloper"></th>
+        <th width="250">Report</th>
+        <th colspan="2">Visibility</th>
+      </tr>
+    </thead>
+    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+      <tr>
+        <td data-bind="attr:{colspan: $component.isDeveloper ? 4 : 3}, html: recordsMessageObs"></td>
+      </tr>
+    </tbody>
+    <tbody data-bind="foreach: itemsObs">
+      <tr class="non-breaking-rows">
+        <td data-bind="visible: $component.isDeveloper">
+          <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+        </td>
+        <td width="100%">
+          <a
+            data-bind="href: '#/reports/raw/' + encodeURIComponent($data.identifier), 
+                        text: $data.identifier"
+          ></a>
+        </td>
+        <td
+          data-bind="text: $data.publicObs() ? 
+                    'Public' : 'Signed in users only'"
+        ></td>
+        <td data-bind="visible: $parent.isDeveloper">
+          <div
+            class="ui toggle checkbox"
+            data-bind="semantic: 'checkbox', 
+                        checkboxObs: $data.toggleObs"
+          >
+            <input
+              type="checkbox"
+              name="gift"
+              tabindex="0"
+              class="hidden"
+              data-bind="attr: {checked: $data.toggleObs}"
+            />
+            <label></label>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>

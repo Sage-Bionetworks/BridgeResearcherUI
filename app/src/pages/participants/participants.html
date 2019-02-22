@@ -5,13 +5,23 @@
     </div>
     <div class="fixed-header-buttons">
       <button class="ui tiny button" data-bind="click: exportDialog">Export&hellip;</button>
-      <button class="ui red tiny button" data-bind="visible: isAdmin, 
-        disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
+      <button
+        class="ui red tiny button"
+        data-bind="visible: isAdmin, 
+        disable: !atLeastOneChecked(), click: deleteItems"
+      >
+        Delete
+      </button>
       <a href="#/participants/new/general" class="ui primary tiny button">New Participant</a>
       <div class="ui search">
         <div class="ui icon input">
-          <input class="prompt" type="text" style="padding: .47857143em 1em" placeholder="Find by any identifier"
-            data-bind="textInput: findObs, returnHandler: doSearch">
+          <input
+            class="prompt"
+            type="text"
+            style="padding: .47857143em 1em"
+            placeholder="Find by any identifier"
+            data-bind="textInput: findObs, returnHandler: doSearch"
+          />
           <i class="search icon"></i>
         </div>
       </div>
@@ -50,24 +60,39 @@
           <span data-bind="semantic: 'dropdown'">
             <i class="ui vertical ellipsis icon"></i>
             <div class="menu" style="display:none">
-              <div class="item" data-bind="click: $parent.resendEmailVerification, 
-                visible: $parent.resendVisible($data)">
+              <div
+                class="item"
+                data-bind="click: $parent.resendEmailVerification, 
+                visible: $parent.resendVisible($data)"
+              >
                 Send email verification
               </div>
-              <div class="item" data-bind="click: $parent.requestResetPassword, 
-                visible: $parent.resetPwdVisible($data)">
+              <div
+                class="item"
+                data-bind="click: $parent.requestResetPassword, 
+                visible: $parent.resetPwdVisible($data)"
+              >
                 Send reset password email
               </div>
-              <div class="item" data-bind="click: $parent.enableAccount, 
-                visible: $parent.enableVisible($data)">
+              <div
+                class="item"
+                data-bind="click: $parent.enableAccount, 
+                visible: $parent.enableVisible($data)"
+              >
                 Enable Account
               </div>
-              <div class="item" data-bind="click: $parent.disableAccount, 
-                visible: $parent.disableVisible($data)">
+              <div
+                class="item"
+                data-bind="click: $parent.disableAccount, 
+                visible: $parent.disableVisible($data)"
+              >
                 Disable Account
               </div>
-              <div class="item" data-bind="click: $parent.signOutUser, 
-                visible: $parent.signOutVisible($data)">
+              <div
+                class="item"
+                data-bind="click: $parent.signOutUser, 
+                visible: $parent.signOutVisible($data)"
+              >
                 Sign out user&hellip;
               </div>
               <div class="item" data-bind="click: $parent.deleteTestUser, visible: $parent.deleteVisible($data)">
@@ -77,16 +102,18 @@
           </span>
         </td>
         <td>
-          <a data-bind="href: '#/participants/'+$data.id+'/general',
-            text: $component.formatNameAsFullLabel($data)"></a>
+          <a
+            data-bind="href: '#/participants/'+$data.id+'/general',
+            text: $component.formatNameAsFullLabel($data)"
+          ></a>
         </td>
-        <td data-bind="text: $component.formatIdentifiers($data)">
-        </td>
+        <td data-bind="text: $component.formatIdentifiers($data)"></td>
         <td style="white-space: nowrap" data-bind="text: $component.formatDateTime($data.createdOn)"></td>
         <td data-bind="text: $data.substudyIds.join(', ')"></td>
         <td style="padding: 0; text-align:right">
           <span style="padding-right: .6rem; white-space: nowrap" data-bind="visible: $data.status === 'disabled'">
-            <i class="warning sign icon"></i>Disabled</span>
+            <i class="warning sign icon"></i>Disabled</span
+          >
         </td>
       </tr>
     </tbody>

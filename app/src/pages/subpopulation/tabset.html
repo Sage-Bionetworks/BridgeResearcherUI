@@ -1,12 +1,6 @@
 <div class="ui secondary pointing menu" data-bind="visible: !isNewObs()">
-    <a data-bind="tabber, href: linkMaker('general')">
-        <i class="setting icon"></i> General
-    </a>
-    <a data-bind="tabber, href: linkMaker('editor')">
-        <i class="file outline icon"></i> Consent Editor
-    </a>
-    <a data-bind="tabber, href: linkMaker('download')">
-        <i class="download icon"></i> Download
-    </a>
+  <a data-bind="tabber, href: linkMaker('general')"> <i class="setting icon"></i> General </a>
+  <a data-bind="tabber, href: linkMaker('editor')"> <i class="file outline icon"></i> Consent Editor </a>
+  <a data-bind="tabber, href: linkMaker('download')"> <i class="download icon"></i> Download </a>
 </div>
 <div class="ui empty secondary pointing menu" data-bind="visible: isNewObs"></div>

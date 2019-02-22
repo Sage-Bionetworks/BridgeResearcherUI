@@ -1,37 +1,46 @@
-<constraints-label params="title: 'Multiple Choice Question', element: element"
-    data-bind="attr:{id:'elements'+$index()+'_constraints_uiHint'}"></constraints-label>
+<constraints-label
+  params="title: 'Multiple Choice Question', element: element"
+  data-bind="attr:{id:'elements'+$index()+'_constraints_uiHint'}"
+></constraints-label>
 <div class="ui constraints grid">
-    <div class="eight wide column">
-        <div class="field">
-            <label>Data Type</label>
-            <ui-select style="width:3rem" params="fieldObs: dataTypeObs, fieldLabel: dataTypeLabel, optionsSrc: dataTypeOptions"></ui-select>
-        </div>
-        <div class="field">
-            <label>Enumeration</label>
-            <span class="link" data-bind="click: editEnum">
-                <span data-bind="text: enumerationObs().length"></span> options&hellip;
-            </span>
-        </div>
-        <div class="field">
-            <label>Allow other?</label>
-            <ui-checkbox params="checkedObs: allowOtherObs"></ui-checkbox>
-        </div>
-        <div class="field">
-            <label>Allow multiple?</label>
-            <ui-checkbox params="checkedObs: allowMultipleObs"></ui-checkbox>
-        </div>
+  <div class="eight wide column">
+    <div class="field">
+      <label>Data Type</label>
+      <ui-select
+        style="width:3rem"
+        params="fieldObs: dataTypeObs, fieldLabel: dataTypeLabel, optionsSrc: dataTypeOptions"
+      ></ui-select>
     </div>
-    <div class="eight wide column">
-        <div class="field">
-            <label>Before Rules</label>
-            <ui-rules params="element: element, fieldName: 'beforeRulesObs', 
-                elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>            
-        </div>
-        <div class="field">
-            <label>After Rules</label>
-            <ui-rules params="element: element, fieldName: 'afterRulesObs', 
-                elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>
-        </div>
+    <div class="field">
+      <label>Enumeration</label>
+      <span class="link" data-bind="click: editEnum">
+        <span data-bind="text: enumerationObs().length"></span> options&hellip;
+      </span>
     </div>
+    <div class="field">
+      <label>Allow other?</label>
+      <ui-checkbox params="checkedObs: allowOtherObs"></ui-checkbox>
+    </div>
+    <div class="field">
+      <label>Allow multiple?</label>
+      <ui-checkbox params="checkedObs: allowMultipleObs"></ui-checkbox>
+    </div>
+  </div>
+  <div class="eight wide column">
+    <div class="field">
+      <label>Before Rules</label>
+      <ui-rules
+        params="element: element, fieldName: 'beforeRulesObs', 
+                elementsObs: elementsObs, collectionName: $data.collectionName"
+      ></ui-rules>
+    </div>
+    <div class="field">
+      <label>After Rules</label>
+      <ui-rules
+        params="element: element, fieldName: 'afterRulesObs', 
+                elementsObs: elementsObs, collectionName: $data.collectionName"
+      ></ui-rules>
+    </div>
+  </div>
 </div>
 <div data-bind="attr:{class:$data.collectionName+'constraints_enumeration'}"></div>

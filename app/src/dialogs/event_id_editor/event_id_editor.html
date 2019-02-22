@@ -1,44 +1,57 @@
 <div class="ui small modal">
-    <i data-bind="click:closeDialog" class="close icon"></i>
-    <div class="header">
-        Edit Scheduling Events
-    </div>
-    <div class="content">
-        <div class="ui grid">
-            <div class="eight wide column">
-                <form class="ui form event-id-editor">
-                    <div data-bind="foreach: selectedEventKeysObs, dragula: { 
+  <i data-bind="click:closeDialog" class="close icon"></i>
+  <div class="header">
+    Edit Scheduling Events
+  </div>
+  <div class="content">
+    <div class="ui grid">
+      <div class="eight wide column">
+        <form class="ui form event-id-editor">
+          <div
+            data-bind="foreach: selectedEventKeysObs, dragula: { 
                         dragHandleSelector: '.draggable', indexObs: indexObs, 
-                        listObs: selectedEventKeysObs }">
-                        <table>
-                            <tr>
-                                <td style="width:100%" class="draggable label" 
-                                    data-bind="text: $component.activityLabel($data)"></td>
-                                <td>
-                                    <i data-bind="click: $component.removeEventKey" 
-                                        class="red large times circle outline icon" style="cursor:pointer"></i>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="selector">
-                        <select class="ui dropdown" data-bind="options: allEventKeysObs,
+                        listObs: selectedEventKeysObs }"
+          >
+            <table>
+              <tr>
+                <td style="width:100%" class="draggable label" data-bind="text: $component.activityLabel($data)"></td>
+                <td>
+                  <i
+                    data-bind="click: $component.removeEventKey"
+                    class="red large times circle outline icon"
+                    style="cursor:pointer"
+                  ></i>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="selector">
+            <select
+              class="ui dropdown"
+              data-bind="options: allEventKeysObs,
                             optionsText: 'label', optionsValue: 'value', value: activityObs,
-                            optionsCaption: 'Select event...'">
-                        </select>
-                        <button data-bind="click: addEventKey" class="ui tiny primary button">Add</button>
-                    </div>
-                </form>
-            </div>
-            <div class="eight wide column">
-                <p>All events that apply will be used to schedule activities. <b>Events higher up in the list take precedence over events below them in the case of one-time activities.</b> </p>
-                <p>The scheduler will look for an event timestamp under each key, in turn, until it finds one (for one-time activities), or it will match all keys for recurring schedules.</p>
-            </div>
-        </div>
+                            optionsCaption: 'Select event...'"
+            >
+            </select>
+            <button data-bind="click: addEventKey" class="ui tiny primary button">Add</button>
+          </div>
+        </form>
+      </div>
+      <div class="eight wide column">
+        <p>
+          All events that apply will be used to schedule activities.
+          <b>Events higher up in the list take precedence over events below them in the case of one-time activities.</b>
+        </p>
+        <p>
+          The scheduler will look for an event timestamp under each key, in turn, until it finds one (for one-time
+          activities), or it will match all keys for recurring schedules.
+        </p>
+      </div>
     </div>
-    <div class="actions">
-        <button class="ui primary small button" data-bind="click: saveAndCloseDialog">Save</button>
-        <button class="ui small button" data-bind="click: clearAndCloseDialog">Clear</button>
-        <button class="ui small button" data-bind="click: closeDialog">Cancel</button>
-    </div>
+  </div>
+  <div class="actions">
+    <button class="ui primary small button" data-bind="click: saveAndCloseDialog">Save</button>
+    <button class="ui small button" data-bind="click: clearAndCloseDialog">Clear</button>
+    <button class="ui small button" data-bind="click: closeDialog">Cancel</button>
+  </div>
 </div>

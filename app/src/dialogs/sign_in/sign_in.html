@@ -1,84 +1,100 @@
 <div class="ui small modal">
-    <div class="header" data-bind="text: titleObs">
-    </div>
-    <div class="content">
-        <errors></errors>
-        <form class="ui form" action="" data-bind="returnHandler: submit">
-            <div class="two fields" data-bind="visible: stateObs() === 'SignIn' || 
-                stateObs() === 'ExternalIdSignIn' || stateObs() === 'ForgotPassword'">
-                <div class="field" id="email" data-bind="visible: stateObs() === 'SignIn' || stateObs() === 'ForgotPassword'">
-                    <label>Email address</label>
-                    <input autocomplete="email" data-bind="visible: stateObs() === 'SignIn', 
-                        textInput: emailObs, hasFocus: handleFocus('SignIn')"/>
-                    <input autocomplete="email" data-bind="visible: stateObs() === 'ForgotPassword', 
-                        textInput: emailObs, hasFocus: handleFocus('ForgotPassword')"/>
-                </div>
-                <div class="field" id="externalId" data-bind="visible: stateObs() === 'ExternalIdSignIn'">
-                    <label>External ID</label>
-                    <input data-bind="textInput: externalIdObs, hasFocus: handleFocus('ExternalIdSignIn')"/>
-                </div>
-                <div class="field password" id="password" data-bind="visible: stateObs() !== 'ForgotPassword'">
-                    <label>Password</label>
-                    <input type="password" autocomplete="current-password" data-bind="textInput: passwordObs"/>
-                </div>
+  <div class="header" data-bind="text: titleObs"></div>
+  <div class="content">
+    <errors></errors>
+    <form class="ui form" action="" data-bind="returnHandler: submit">
+      <div
+        class="two fields"
+        data-bind="visible: stateObs() === 'SignIn' || 
+                stateObs() === 'ExternalIdSignIn' || stateObs() === 'ForgotPassword'"
+      >
+        <div class="field" id="email" data-bind="visible: stateObs() === 'SignIn' || stateObs() === 'ForgotPassword'">
+          <label>Email address</label>
+          <input
+            autocomplete="email"
+            data-bind="visible: stateObs() === 'SignIn', 
+                        textInput: emailObs, hasFocus: handleFocus('SignIn')"
+          />
+          <input
+            autocomplete="email"
+            data-bind="visible: stateObs() === 'ForgotPassword', 
+                        textInput: emailObs, hasFocus: handleFocus('ForgotPassword')"
+          />
+        </div>
+        <div class="field" id="externalId" data-bind="visible: stateObs() === 'ExternalIdSignIn'">
+          <label>External ID</label>
+          <input data-bind="textInput: externalIdObs, hasFocus: handleFocus('ExternalIdSignIn')" />
+        </div>
+        <div class="field password" id="password" data-bind="visible: stateObs() !== 'ForgotPassword'">
+          <label>Password</label>
+          <input type="password" autocomplete="current-password" data-bind="textInput: passwordObs" />
+        </div>
+      </div>
+      <div class="field" id="phone" data-bind="visible: stateObs() === 'PhoneSignIn'">
+        <label>Phone Number</label>
+        <div class="ui left labeled input">
+          <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
+            <div class="text" data-bind="text: phoneRegionObs"></div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <div class="item">US</div>
+              <div class="item">CA</div>
+              <div class="item">MX</div>
             </div>
-            <div class="field" id="phone" data-bind="visible: stateObs() === 'PhoneSignIn'">
-                <label>Phone Number</label>
-                <div class="ui left labeled input">
-                    <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
-                        <div class="text" data-bind="text: phoneRegionObs"></div>
-                        <i class="dropdown icon"></i>
-                        <div class="menu">
-                            <div class="item">US</div>
-                            <div class="item">CA</div>
-                            <div class="item">MX</div>
-                        </div>
-                    </div>
-                    <input type="text" placeholder="Phone number" autocomplete="mobile"
-                        data-bind="textInput: phoneObs, hasFocus: handleFocus('PhoneSignIn')">
-                </div>        
-            </div>
-            <div class="field" id="token" data-bind="visible: stateObs() === 'EnterCode'">
-                <label for="token">Code</label>
-                <input type="text" placeholder="### ###" 
-                    data-bind="textInput: tokenObs, hasFocus: handleFocus('EnterCode')">
-            </div>
-            <div class="two fields" data-bind="if: !isLockedObs()">
-                <div class="field">
-                    <label>Environment</label>
-                    <select taborder="-1" name="environment" class="ui dropdown" data-bind="value: environmentObs,
-                        options: environmentOptions, optionsText: 'label', optionsValue: 'value'">
-                    </select>
-                </div>
-                <div class="field">
-                    <label>Study</label>
-                    <select taborder="-1" class="ui dropdown" data-bind="value: studyObs,
-                        options: studyOptionsObs, optionsText: 'name', optionsValue: 'identifier'">
-                    </select>
-                </div>
-            </div>
-            <div data-bind="visible: !isLockedObs() && stateObs() !== 'ForgotPassword'"
-                style="padding: .5rem 0 0 .5rem">
-                <ui-checkbox params="checkedObs: imAnAdminObs">
-                    I’m an admin
-                </ui-checkbox>
-            </div>
+          </div>
+          <input
+            type="text"
+            placeholder="Phone number"
+            autocomplete="mobile"
+            data-bind="textInput: phoneObs, hasFocus: handleFocus('PhoneSignIn')"
+          />
+        </div>
+      </div>
+      <div class="field" id="token" data-bind="visible: stateObs() === 'EnterCode'">
+        <label for="token">Code</label>
+        <input type="text" placeholder="### ###" data-bind="textInput: tokenObs, hasFocus: handleFocus('EnterCode')" />
+      </div>
+      <div class="two fields" data-bind="if: !isLockedObs()">
+        <div class="field">
+          <label>Environment</label>
+          <select
+            taborder="-1"
+            name="environment"
+            class="ui dropdown"
+            data-bind="value: environmentObs,
+                        options: environmentOptions, optionsText: 'label', optionsValue: 'value'"
+          >
+          </select>
+        </div>
+        <div class="field">
+          <label>Study</label>
+          <select
+            taborder="-1"
+            class="ui dropdown"
+            data-bind="value: studyObs,
+                        options: studyOptionsObs, optionsText: 'name', optionsValue: 'identifier'"
+          >
+          </select>
+        </div>
+      </div>
+      <div data-bind="visible: !isLockedObs() && stateObs() !== 'ForgotPassword'" style="padding: .5rem 0 0 .5rem">
+        <ui-checkbox params="checkedObs: imAnAdminObs">
+          I’m an admin
+        </ui-checkbox>
+      </div>
     </form>
+  </div>
+  <div class="actions" style="display: flex; align-items: center">
+    <div style="flex:1">
+      <button id="submitButton" class="ui primary small button" data-bind="click: submit, text: buttonTextObs"></button>
+      <a style="padding-left: 1rem" href="" data-bind="click: useForgotPassword">Forgot Password?</a>
     </div>
-    <div class="actions" style="display: flex; align-items: center">
-        <div style="flex:1">
-            <button id="submitButton" class="ui primary small button" 
-                data-bind="click: submit, text: buttonTextObs"></button>
-            <a style="padding-left: 1rem"  href="" data-bind="click: useForgotPassword">Forgot Password?</a>
-        </div>
-        <div data-bind="visible: stateObs() === 'SignIn'">
-            Sign in using
-            <a href="" data-bind="click: useExternalId">external ID</a>
-            or
-            <a href="" data-bind="click: usePhone">phone</a>
-        </div>
-        <div data-bind="visible: stateObs() !== 'SignIn'">
-            Sign in using <a href="" data-bind="click: cancel">email</a>
-        </div>
+    <div data-bind="visible: stateObs() === 'SignIn'">
+      Sign in using
+      <a href="" data-bind="click: useExternalId">external ID</a>
+      or
+      <a href="" data-bind="click: usePhone">phone</a>
     </div>
+    <div data-bind="visible: stateObs() !== 'SignIn'">Sign in using <a href="" data-bind="click: cancel">email</a></div>
+  </div>
 </div>

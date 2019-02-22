@@ -61,20 +61,28 @@
             <tbody data-bind="foreach: schemaReferencesObs">
               <tr>
                 <td>
-                  <a target="_blank" data-bind="attr: {
-                    href: '#/schemas/'+$data.id+'/versions/'+$data.revisionObs()+'/editor'}">
+                  <a
+                    target="_blank"
+                    data-bind="attr: {
+                    href: '#/schemas/'+$data.id+'/versions/'+$data.revisionObs()+'/editor'}"
+                  >
                     <span data-bind="text: $data.name"></span>
                     <i class="ui external icon"></i>
                   </a>
                 </td>
                 <td>
                   <div style="width:10rem" data-bind="attr: {id: 'schemaReferences'+$index()+'_revision'}">
-                    <ui-select params="fieldObs: $data.revisionObs, 
-                      optionsSrc: $data.revisionList, optionsCaption: 'Select Revision:'"></ui-select>
+                    <ui-select
+                      params="fieldObs: $data.revisionObs, 
+                      optionsSrc: $data.revisionList, optionsCaption: 'Select Revision:'"
+                    ></ui-select>
                   </div>
                 </td>
                 <td width="5rem">
-                  <i class="red large times circle outline link icon" data-bind="click: $component.removeSchema.bind($component)"></i>
+                  <i
+                    class="red large times circle outline link icon"
+                    data-bind="click: $component.removeSchema.bind($component)"
+                  ></i>
                 </td>
               </tr>
             </tbody>
@@ -86,20 +94,28 @@
             <tbody data-bind="foreach: surveyReferencesObs">
               <tr>
                 <td>
-                  <a target="_blank" data-bind="attr: {
-                    href: '#/surveys/'+$data.guid+'/'+$data.createdOnObs()+'/editor'}">
+                  <a
+                    target="_blank"
+                    data-bind="attr: {
+                    href: '#/surveys/'+$data.guid+'/'+$data.createdOnObs()+'/editor'}"
+                  >
                     <span data-bind="text: $data.name"></span>
                     <i class="ui external icon"></i>
                   </a>
                 </td>
                 <td>
                   <div style="width:15rem" data-bind="attr: {id: 'surveyReferences'+$index()+'_createdOn'}">
-                    <ui-select params="fieldObs: $data.createdOnObs, 
-                      optionsSrc: $data.createdOnList, optionsCaption: 'Select Revision:'"></ui-select>
+                    <ui-select
+                      params="fieldObs: $data.createdOnObs, 
+                      optionsSrc: $data.createdOnList, optionsCaption: 'Select Revision:'"
+                    ></ui-select>
                   </div>
                 </td>
                 <td width="5rem">
-                  <i class="red large times circle outline link icon" data-bind="click: $component.removeSurvey.bind($component)"></i>
+                  <i
+                    class="red large times circle outline link icon"
+                    data-bind="click: $component.removeSurvey.bind($component)"
+                  ></i>
                 </td>
               </tr>
             </tbody>
@@ -111,20 +127,28 @@
             <tbody data-bind="foreach: configReferencesObs">
               <tr>
                 <td>
-                  <a target="_blank" data-bind="attr: {
-                    href: '#/configs/'+$data.id+'/revisions/'+$data.revisionObs()+'/editor'}">
+                  <a
+                    target="_blank"
+                    data-bind="attr: {
+                    href: '#/configs/'+$data.id+'/revisions/'+$data.revisionObs()+'/editor'}"
+                  >
                     <span data-bind="text: $data.name"></span>
                     <i class="ui external icon"></i>
                   </a>
                 </td>
                 <td>
                   <div style="width:10rem" data-bind="attr: {id: 'configReferences'+$index()+'_revision'}">
-                    <ui-select params="fieldObs: $data.revisionObs, 
-                      optionsSrc: $data.revisionList, optionsCaption: 'Select Revision:'"></ui-select>
+                    <ui-select
+                      params="fieldObs: $data.revisionObs, 
+                      optionsSrc: $data.revisionList, optionsCaption: 'Select Revision:'"
+                    ></ui-select>
                   </div>
                 </td>
                 <td width="5rem">
-                  <i class="red large times circle outline link icon" data-bind="click: $component.removeConfig.bind($component)"></i>
+                  <i
+                    class="red large times circle outline link icon"
+                    data-bind="click: $component.removeConfig.bind($component)"
+                  ></i>
                 </td>
               </tr>
             </tbody>

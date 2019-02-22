@@ -1,15 +1,18 @@
 <div class="ui small modal">
-    <i data-bind="click:close" class="close icon"></i>
-    <div class="header">
-        CMS Public Key
-    </div>
-    <div class="content">
-        <div data-bind="text:contentObs" class="ui segment public-key">
-        </div>
-    </div>
-    <div class="actions">
-        <a class="ui primary small button" data-bind="attr: {
-            download: downloadHrefObs, href: downloadFileNameObs}">Download</a>
-        <button class="ui small button" data-bind="click: close">Close</button>
-    </div>
+  <i data-bind="click:close" class="close icon"></i>
+  <div class="header">
+    CMS Public Key
+  </div>
+  <div class="content">
+    <div data-bind="text:contentObs" class="ui segment public-key"></div>
+  </div>
+  <div class="actions">
+    <a
+      class="ui primary small button"
+      data-bind="attr: {
+            download: downloadHrefObs, href: downloadFileNameObs}"
+      >Download</a
+    >
+    <button class="ui small button" data-bind="click: close">Close</button>
+  </div>
 </div>

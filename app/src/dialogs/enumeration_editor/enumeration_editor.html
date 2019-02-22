@@ -1,82 +1,116 @@
 <div class="ui small modal">
-    <i data-bind="click:cancel" class="close icon"></i>
-    <div class="header">
-        Enumerated Values
+  <i data-bind="click:cancel" class="close icon"></i>
+  <div class="header">
+    Enumerated Values
+  </div>
+  <div class="content" style="padding-top:.2rem">
+    <div class="ui secondary pointing menu">
+      <div class="item" data-bind="css:{active:isActive('editor')}, click: setTab('editor')">
+        Edit List
+      </div>
+      <div class="item" data-bind="css:{active:isActive('existing')}, click: setTab('existing')">
+        Use Existing List
+      </div>
     </div>
-    <div class="content" style="padding-top:.2rem">
-        <div class="ui secondary pointing menu">
-            <div class="item" data-bind="css:{active:isActive('editor')}, click: setTab('editor')">
-                Edit List
-            </div>
-            <div class="item" data-bind="css:{active:isActive('existing')}, click: setTab('existing')">
-                Use Existing List
-            </div>
-        </div>
-        <div data-bind="visible: isActive('editor')">
-            <div class="ui two column grid" style="padding-left: 1rem; padding-right: 1rem">
-                <div class="column enum-list" data-bind="foreach: listObs, dragula: {
+    <div data-bind="visible: isActive('editor')">
+      <div class="ui two column grid" style="padding-left: 1rem; padding-right: 1rem">
+        <div
+          class="column enum-list"
+          data-bind="foreach: listObs, dragula: {
                     indexObs: selectedIndexObs, listObs: listObs},
-                    css: {'list-being-edited': $component.indexObs() !== null}">
-                    <div class="vs-item" data-bind="css:{'item-being-edited': $component.indexObs() == $index()}">
-                        <div class="vs-item-content" data-bind="click: $component.moveToEditor">
-                            <span data-bind="text: $data.label"></span>
-                            <span data-bind="visible: $parent.hasDetail($data)">&mdash;<span data-bind="text: $data.detail"></span></span>
-                            <div class="enum-list-server-text" data-bind="visible: $data.label !== $data.value, text: 'Value sent to server: '+$data.value"></div>
-                        </div>
-                        <div class="vs-item-delete">
-                            <i class="delete icon link" data-bind="click: $parent.removeListItem"></i>
-                            <i class="angle right icon"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="column">
-                    <form class="ui form">
-                        <h4 class="ui dividing header" data-bind="text: editorTitleObs"></h4>
-                        <div class="field">
-                            <input type="text" data-bind="textInput: labelObs, 
-                                returnHandler: addListItem" placeholder="Label" autofocus/>
-                        </div>
-                        <div class="field">
-                            <input type="text" data-bind="textInput: detailObs, 
-                                returnHandler: addListItem" placeholder="Detail (optional)"/>
-                        </div>
-                        <div class="field">
-                            <input type="text" data-bind="textInput: valueObs, 
-                                returnHandler: addListItem" placeholder="Server value (optional)"/>
-                        </div>
-                        <div class="field">
-                            <button class="ui small primary button" data-bind="click: addListItem, 
-                                text: editorCommandObs">Add</button>
-                            <button class="ui small button" data-bind="click: cancelEditMode, 
-                                visible: indexObs() !== null">Cancel</button>
-                            <p class="help-text" style="margin-top:.5rem">The server value (or the label if there is none) can only contain 
-                                alphanumeric characters. It can also have spaces, dashes, 
-                                underscores and periods in the middle, but not more than one 
-                                at a time.</p>
-                        </div>
-                    </form>
-                </div>
+                    css: {'list-being-edited': $component.indexObs() !== null}"
+        >
+          <div class="vs-item" data-bind="css:{'item-being-edited': $component.indexObs() == $index()}">
+            <div class="vs-item-content" data-bind="click: $component.moveToEditor">
+              <span data-bind="text: $data.label"></span>
+              <span data-bind="visible: $parent.hasDetail($data)"
+                >&mdash;<span data-bind="text: $data.detail"></span
+              ></span>
+              <div
+                class="enum-list-server-text"
+                data-bind="visible: $data.label !== $data.value, text: 'Value sent to server: '+$data.value"
+              ></div>
             </div>
-            <div style="margin-top:1rem">
-                <ui-checkbox params="checkedObs: copyToAllEnumsObs">
-                    Update this list in every question where it is used
-                </ui-checkbox>
+            <div class="vs-item-delete">
+              <i class="delete icon link" data-bind="click: $parent.removeListItem"></i>
+              <i class="angle right icon"></i>
             </div>
+          </div>
         </div>
-        <div data-bind="visible: isActive('existing'), foreach: allListsObs" class="ui list enum-scrollbox">
-            <div class="item">
-                <i class="list layout icon"></i>
-                <div class="content">
-                    <span class="link" data-bind="click: $parent.selectList, html: $data.name"></span> (<span data-bind="text: $data.occurrences"></span> uses)
-                </div>
+        <div class="column">
+          <form class="ui form">
+            <h4 class="ui dividing header" data-bind="text: editorTitleObs"></h4>
+            <div class="field">
+              <input
+                type="text"
+                data-bind="textInput: labelObs, 
+                                returnHandler: addListItem"
+                placeholder="Label"
+                autofocus
+              />
             </div>
+            <div class="field">
+              <input
+                type="text"
+                data-bind="textInput: detailObs, 
+                                returnHandler: addListItem"
+                placeholder="Detail (optional)"
+              />
+            </div>
+            <div class="field">
+              <input
+                type="text"
+                data-bind="textInput: valueObs, 
+                                returnHandler: addListItem"
+                placeholder="Server value (optional)"
+              />
+            </div>
+            <div class="field">
+              <button
+                class="ui small primary button"
+                data-bind="click: addListItem, 
+                                text: editorCommandObs"
+              >
+                Add
+              </button>
+              <button
+                class="ui small button"
+                data-bind="click: cancelEditMode, 
+                                visible: indexObs() !== null"
+              >
+                Cancel
+              </button>
+              <p class="help-text" style="margin-top:.5rem">
+                The server value (or the label if there is none) can only contain alphanumeric characters. It can also
+                have spaces, dashes, underscores and periods in the middle, but not more than one at a time.
+              </p>
+            </div>
+          </form>
         </div>
+      </div>
+      <div style="margin-top:1rem">
+        <ui-checkbox params="checkedObs: copyToAllEnumsObs">
+          Update this list in every question where it is used
+        </ui-checkbox>
+      </div>
     </div>
-    <div class="actions" data-bind="visible: isActive('editor')">
-        <button data-bind="click: saveList, disable: listObs().length === 0" class="ui small primary button">Save</button>
-        <button data-bind="click: cancel" class="ui small button">Cancel</button>
+    <div data-bind="visible: isActive('existing'), foreach: allListsObs" class="ui list enum-scrollbox">
+      <div class="item">
+        <i class="list layout icon"></i>
+        <div class="content">
+          <span class="link" data-bind="click: $parent.selectList, html: $data.name"></span> (<span
+            data-bind="text: $data.occurrences"
+          ></span>
+          uses)
+        </div>
+      </div>
     </div>
-    <div class="actions" data-bind="visible: isActive('existing')">
-        <button data-bind="click: cancel" class="ui small button">Cancel</button>
-    </div>
+  </div>
+  <div class="actions" data-bind="visible: isActive('editor')">
+    <button data-bind="click: saveList, disable: listObs().length === 0" class="ui small primary button">Save</button>
+    <button data-bind="click: cancel" class="ui small button">Cancel</button>
+  </div>
+  <div class="actions" data-bind="visible: isActive('existing')">
+    <button data-bind="click: cancel" class="ui small button">Cancel</button>
+  </div>
 </div>

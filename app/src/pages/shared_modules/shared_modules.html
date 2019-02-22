@@ -1,89 +1,106 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <h3>Shared Modules</h3>
-        </div>
-        <div class="fixed-header-buttons">
-
-            <button data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems" 
-                class="ui red tiny button">Delete</button>
-            <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
-                <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()},
-                    semantic: 'dropdown-button-toggle', container: '.buttons'">
-                    Delete
-                </div>
-                <div class="ui primary tiny floating dropdown icon button" 
-                    data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <div class="item" data-bind="click: deleteItems">Delete</div>
-                        <div class="item" data-bind="click: deletePermanently">Delete <b>Permanently</b></div>
-                    </div>
-                </div>
-            </div>
-            
-            <a href="#/shared_modules/new" class="ui primary tiny button">New Shared Module</a>
-        </div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <h3>Shared Modules</h3>
     </div>
-    <div class="ui empty secondary pointing menu"></div>
+    <div class="fixed-header-buttons">
+      <button
+        data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems"
+        class="ui red tiny button"
+      >
+        Delete
+      </button>
+      <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
+        <div
+          class="ui tiny button"
+          data-bind="css:{disabled: !atLeastOneChecked()},
+                    semantic: 'dropdown-button-toggle', container: '.buttons'"
+        >
+          Delete
+        </div>
+        <div
+          class="ui primary tiny floating dropdown icon button"
+          data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}"
+        >
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" data-bind="click: deleteItems">Delete</div>
+            <div class="item" data-bind="click: deletePermanently">Delete <b>Permanently</b></div>
+          </div>
+        </div>
+      </div>
+
+      <a href="#/shared_modules/new" class="ui primary tiny button">New Shared Module</a>
+    </div>
+  </div>
+  <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
-    <errors></errors>
-    <div class="ui action input" style="margin-right: 1.5rem; margin-bottom: 1rem">
-        <input type="text" placeholder="Search all versions" data-bind="textInput: searchObs">
-        <div data-toggle></div>
-        <button class="ui icon button" data-bind="click: clearSearch">
-            <i class="remove circle icon"></i>
-        </button>
-    </div>
-    <ui-select params="fieldObs: moduleTypeFilterObs, optionsSrc: moduleTypeOptions"></ui-select>
-    <ui-checkbox params="checkedObs: tagsOnlyObs" style="margin-left: 1.5rem">
-        Search tags only
-    </ui-checkbox>
+  <errors></errors>
+  <div class="ui action input" style="margin-right: 1.5rem; margin-bottom: 1rem">
+    <input type="text" placeholder="Search all versions" data-bind="textInput: searchObs" />
+    <div data-toggle></div>
+    <button class="ui icon button" data-bind="click: clearSearch">
+      <i class="remove circle icon"></i>
+    </button>
+  </div>
+  <ui-select params="fieldObs: moduleTypeFilterObs, optionsSrc: moduleTypeOptions"></ui-select>
+  <ui-checkbox params="checkedObs: tagsOnlyObs" style="margin-left: 1.5rem">
+    Search tags only
+  </ui-checkbox>
 
-    <table class="ui compact selectable table">
-        <thead>
-            <tr>
-                <th width="10">
-                    <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
-                </th>
-                <th>Module</th>
-                <th>Version</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-            <tr>
-                <td colspan="4" data-bind="html: recordsMessageObs"></td>
-            </tr>
-        </tbody>            
-        <tbody data-bind="foreach: itemsObs">
-            <tr data-bind="css: {negative: $data.deleted}">
-                <td>
-                    <ui-checkbox data-bind="visible: !$data.deletedObs()" 
-                        params="checkedObs: $data.checkedObs"></ui-checkbox>
-                    <i data-bind="visible: $data.deletedObs, click: $parent.undelete" 
-                        style="cursor: pointer" class="green undo icon"></i>
-                </td>
-                <td>
-                    <a style="font-weight: bold" data-bind="text: $data.name, 
-                        href: '#/shared_modules/'+encodeURIComponent($data.id) + '/versions/' + $data.version + '/editor'"></a>
-                    <div style="color: #333" data-bind="text: $parent.formatDescription($data)"></div>
-                </td>
-                <td data-bind="text: $data.version"></td>
-                <td style="text-align: right">
-                    <span data-bind="visible: $data.published" style="padding-right: .5rem" 
-                        class="ui green text"><i class="green checkmark icon"></i> Published
-                    </span>
-                    <button data-bind="visible: !$data.published, click: $parent.publishItem" 
-                        class="ui basic compact mini button">Publish</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
-        <ui-checkbox params="checkedObs: showDeletedObs">
-            Show deleted schedule plans
-        </ui-checkbox>
-    </div>
+  <table class="ui compact selectable table">
+    <thead>
+      <tr>
+        <th width="10">
+          <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+        </th>
+        <th>Module</th>
+        <th>Version</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+      <tr>
+        <td colspan="4" data-bind="html: recordsMessageObs"></td>
+      </tr>
+    </tbody>
+    <tbody data-bind="foreach: itemsObs">
+      <tr data-bind="css: {negative: $data.deleted}">
+        <td>
+          <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
+          <i
+            data-bind="visible: $data.deletedObs, click: $parent.undelete"
+            style="cursor: pointer"
+            class="green undo icon"
+          ></i>
+        </td>
+        <td>
+          <a
+            style="font-weight: bold"
+            data-bind="text: $data.name, 
+                        href: '#/shared_modules/'+encodeURIComponent($data.id) + '/versions/' + $data.version + '/editor'"
+          ></a>
+          <div style="color: #333" data-bind="text: $parent.formatDescription($data)"></div>
+        </td>
+        <td data-bind="text: $data.version"></td>
+        <td style="text-align: right">
+          <span data-bind="visible: $data.published" style="padding-right: .5rem" class="ui green text"
+            ><i class="green checkmark icon"></i> Published
+          </span>
+          <button
+            data-bind="visible: !$data.published, click: $parent.publishItem"
+            class="ui basic compact mini button"
+          >
+            Publish
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
+    <ui-checkbox params="checkedObs: showDeletedObs">
+      Show deleted schedule plans
+    </ui-checkbox>
+  </div>
 </div>

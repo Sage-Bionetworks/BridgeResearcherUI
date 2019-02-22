@@ -1,29 +1,30 @@
 <div class="ui small modal">
-    <i data-bind="click:cancel" class="close icon"></i>
-    <div class="header">
-        Execution Window
-    </div>
-    <div class="content">
-        <div class="ui form">
-            <div class="two fields">
-                <div class="field">
-                    <label>Schedule tasks from date</label>
-                    <input data-enableTime="true" data-bind="flatpickr: startsOnObs"/>
-                </div>
-                <div class="field">
-                    <label>to date</label>
-                    <input data-enableTime="true" data-bind="flatpickr: endsOnObs"/>
-                </div>
-            </div>
+  <i data-bind="click:cancel" class="close icon"></i>
+  <div class="header">
+    Execution Window
+  </div>
+  <div class="content">
+    <div class="ui form">
+      <div class="two fields">
+        <div class="field">
+          <label>Schedule tasks from date</label>
+          <input data-enableTime="true" data-bind="flatpickr: startsOnObs" />
         </div>
-        <p class="help-text"><b>Dates and times are in UTC.</b></p> 
-        <p class="help-text">If set, tasks will not be scheduled if they start outside of 
-            this time window. The window applies to all participants in the study at the same time, 
-            regardless of their time zone. </p> 
+        <div class="field">
+          <label>to date</label>
+          <input data-enableTime="true" data-bind="flatpickr: endsOnObs" />
+        </div>
+      </div>
     </div>
-    <div class="actions">
-        <button class="ui primary small button" data-bind="click: save">Save</button>
-        <button class="ui small button" data-bind="click: clear">Clear</button>
-        <button class="ui small button" data-bind="click: cancel">Cancel</button>
-    </div>
+    <p class="help-text"><b>Dates and times are in UTC.</b></p>
+    <p class="help-text">
+      If set, tasks will not be scheduled if they start outside of this time window. The window applies to all
+      participants in the study at the same time, regardless of their time zone.
+    </p>
+  </div>
+  <div class="actions">
+    <button class="ui primary small button" data-bind="click: save">Save</button>
+    <button class="ui small button" data-bind="click: clear">Clear</button>
+    <button class="ui small button" data-bind="click: cancel">Cancel</button>
+  </div>
 </div>

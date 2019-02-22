@@ -1,53 +1,56 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <h3>Scheduling Events</h3>
-        </div>
-        <div class="fixed-header-buttons">
-            <button class="ui tiny primary button" data-bind="disable: $component.noChangesObs, click: $component.save">Save</button>
-        </div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <h3>Scheduling Events</h3>
     </div>
-    <events-tabset></events-tabset>
+    <div class="fixed-header-buttons">
+      <button class="ui tiny primary button" data-bind="disable: $component.noChangesObs, click: $component.save">
+        Save
+      </button>
+    </div>
+  </div>
+  <events-tabset></events-tabset>
 </div>
 <div class="scrollbox">
-    <errors></errors>
-    <div class="ui grid">
-        <div class="ten wide column">
-            <div class="ui large labels" data-bind="foreach: recordsObs">
-                <div class="ui label">
-                    <span data-bind="text: $data"></span>
-                </div><br/>
-            </div>
-            <div class="ui large labels" data-bind="foreach: newRecordsObs">
-                <div class="ui label">
-                    <span data-bind="text: $data"></span> <i class="icon close" data-bind="click: $component.remove"></i>
-                </div><br/>
-            </div>
-            <div class="ui action input">
-                <input placeholder="Event Key" type="text" 
-                    data-bind="textInput: $component.addFieldObs, hasFocus: true,
-                    event: {keypress: $component.keyHandler}, hasFocus: true"/>
-                <button class="ui button" data-bind="click: $component.add">Add</button>
-            </div>
+  <errors></errors>
+  <div class="ui grid">
+    <div class="ten wide column">
+      <div class="ui large labels" data-bind="foreach: recordsObs">
+        <div class="ui label">
+          <span data-bind="text: $data"></span>
         </div>
-        <div class="six wide column">
-            <div class="ui message">
-                <p>
-                    You can create custom events for a user and then use those events to drive 
-                    your scheduling. 
-                </p>
-                <p>
-                    For example, if your study involved pregancy, you could collect and record 
-                    the conception date, and use that to schedule activities over the 40 weeks of 
-                    the pregnancy.
-                </p>
-                <p>
-                    To create custom events, define a key for the event here. When creating a 
-                    schedule, you will be able to select that event key in the “when to start scheduling” editor. 
-                </p>
-            </div>
+        <br />
+      </div>
+      <div class="ui large labels" data-bind="foreach: newRecordsObs">
+        <div class="ui label">
+          <span data-bind="text: $data"></span> <i class="icon close" data-bind="click: $component.remove"></i>
         </div>
+        <br />
+      </div>
+      <div class="ui action input">
+        <input
+          placeholder="Event Key"
+          type="text"
+          data-bind="textInput: $component.addFieldObs, hasFocus: true,
+                    event: {keypress: $component.keyHandler}, hasFocus: true"
+        />
+        <button class="ui button" data-bind="click: $component.add">Add</button>
+      </div>
     </div>
+    <div class="six wide column">
+      <div class="ui message">
+        <p>
+          You can create custom events for a user and then use those events to drive your scheduling.
+        </p>
+        <p>
+          For example, if your study involved pregancy, you could collect and record the conception date, and use that
+          to schedule activities over the 40 weeks of the pregnancy.
+        </p>
+        <p>
+          To create custom events, define a key for the event here. When creating a schedule, you will be able to select
+          that event key in the “when to start scheduling” editor.
+        </p>
+      </div>
+    </div>
+  </div>
 </div>
-
-

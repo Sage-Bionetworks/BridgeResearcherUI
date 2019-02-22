@@ -1,31 +1,30 @@
 <span class="ui medium gray ribbon label constraints-label">
-    <div class="link" 
-        data-bind="semantic: 'dropdown', dropdownChange: $parents[3].changeElementType">
-        <div data-bind="text: title">File</div>
-        <i style="margin-left: .2rem" class="dropdown icon"></i>
-        <div class="menu">
-            <a class="item" data-type="SurveyInfoScreen">Information Screen</a>
-            <a class="item" data-type="BooleanConstraints">Boolean</a>
-            <a class="item" data-type="DateConstraints">Date</a>
-            <a class="item" data-type="DateTimeConstraints">Date & Time</a>
-            <a class="item" data-type="YearMonthConstraints">Month & Year</a>
-            <a class="item" data-type="DecimalConstraints">Decimal</a>
-            <a class="item" data-type="IntegerConstraints">Integer</a>
-            <a class="item" data-type="MultiValueConstraints">Multi-Choice</a>
-            <a class="item" data-type="StringConstraints">String</a>
-            <a class="item" data-type="TimeConstraints">Time</a>       
-            <a class="item" data-type="WeightConstraints">Weight</a>
-            <a class="item" data-type="HeightConstraints">Height</a>
-            <a class="item" data-type="BloodPressureConstraints">Blood Pressure</a>
-            <a class="item" data-type="PostalCodeConstraints">Postal Code</a>
-        </div>
+  <div class="link" data-bind="semantic: 'dropdown', dropdownChange: $parents[3].changeElementType">
+    <div data-bind="text: title">File</div>
+    <i style="margin-left: .2rem" class="dropdown icon"></i>
+    <div class="menu">
+      <a class="item" data-type="SurveyInfoScreen">Information Screen</a>
+      <a class="item" data-type="BooleanConstraints">Boolean</a>
+      <a class="item" data-type="DateConstraints">Date</a>
+      <a class="item" data-type="DateTimeConstraints">Date & Time</a>
+      <a class="item" data-type="YearMonthConstraints">Month & Year</a>
+      <a class="item" data-type="DecimalConstraints">Decimal</a>
+      <a class="item" data-type="IntegerConstraints">Integer</a>
+      <a class="item" data-type="MultiValueConstraints">Multi-Choice</a>
+      <a class="item" data-type="StringConstraints">String</a>
+      <a class="item" data-type="TimeConstraints">Time</a>
+      <a class="item" data-type="WeightConstraints">Weight</a>
+      <a class="item" data-type="HeightConstraints">Height</a>
+      <a class="item" data-type="BloodPressureConstraints">Blood Pressure</a>
+      <a class="item" data-type="PostalCodeConstraints">Postal Code</a>
     </div>
-    <span style="padding: 0 .3rem">using a</span>
-    <div class="link" data-bind="semantic: 'dropdown', dropdownChange: $parents[2].changeUiHint">
-        <div data-bind="text: $parent.uiHintLabel(element.uiHintObs())">File</div>
-        <i style="margin-left: .2rem" class="dropdown icon"></i>
-        <div class="menu" data-bind="foreach: $parent.uiHintOptions">
-            <a class="item" data-bind="text: $data.label, attr:{'data-type':$data.value}"></a>
-        </div>
+  </div>
+  <span style="padding: 0 .3rem">using a</span>
+  <div class="link" data-bind="semantic: 'dropdown', dropdownChange: $parents[2].changeUiHint">
+    <div data-bind="text: $parent.uiHintLabel(element.uiHintObs())">File</div>
+    <i style="margin-left: .2rem" class="dropdown icon"></i>
+    <div class="menu" data-bind="foreach: $parent.uiHintOptions">
+      <a class="item" data-bind="text: $data.label, attr:{'data-type':$data.value}"></a>
     </div>
+  </div>
 </span>

@@ -1,20 +1,26 @@
 <div style="display:flex">
-  <div style="margin-right: 1rem" data-bind="attr:{
-    class:'field '+$data.id+'minAppVersions_iphone_os ' + $data.id+'maxAppVersions_iphone_os'}">
+  <div
+    style="margin-right: 1rem"
+    data-bind="attr:{
+    class:'field '+$data.id+'minAppVersions_iphone_os ' + $data.id+'maxAppVersions_iphone_os'}"
+  >
     <label>iOS version</label>
     <div class="field range-control-border" data-bind="focusable">
-      <input type="text" placeholder="Min" data-bind="textInput: $data.iosMinObs"/>
+      <input type="text" placeholder="Min" data-bind="textInput: $data.iosMinObs" />
       <span>&mdash;</span>
-      <input type="text" placeholder="Max" data-bind="textInput: $data.iosMaxObs"/>
+      <input type="text" placeholder="Max" data-bind="textInput: $data.iosMaxObs" />
     </div>
   </div>
-  <div style="flex: 1" data-bind="attr:{
-    class:'field '+$data.id+'minAppVersions_android ' + $data.id+'maxAppVersions_android'}">
+  <div
+    style="flex: 1"
+    data-bind="attr:{
+    class:'field '+$data.id+'minAppVersions_android ' + $data.id+'maxAppVersions_android'}"
+  >
     <label>Android version</label>
     <div class="field range-control-border" data-bind="focusable">
-      <input type="text" placeholder="Min" data-bind="textInput: $data.androidMinObs"/>
+      <input type="text" placeholder="Min" data-bind="textInput: $data.androidMinObs" />
       <span>&mdash;</span>
-      <input type="text" placeholder="Max" data-bind="textInput: $data.androidMaxObs"/>
+      <input type="text" placeholder="Max" data-bind="textInput: $data.androidMaxObs" />
     </div>
   </div>
 </div>

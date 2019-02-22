@@ -1,28 +1,31 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <h3>Find An Upload</h3>
-        </div>
-        <div class="fixed-header-buttons">
-            <div class="ui search" data-bind="css: {loading: isLoadingObs}">
-                <div class="ui icon input">
-                    <input class="prompt" type="text" style="padding: .47857143em 1em; width: 25rem"
-                        placeholder="Find by upload or record ID"
-                        data-bind="textInput: findObs, returnHandler: doSearch" >
-                    <i class="search icon"></i>
-                </div>
-            </div>
-        </div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <h3>Find An Upload</h3>
     </div>
-    <div class="ui empty secondary pointing menu"></div>
+    <div class="fixed-header-buttons">
+      <div class="ui search" data-bind="css: {loading: isLoadingObs}">
+        <div class="ui icon input">
+          <input
+            class="prompt"
+            type="text"
+            style="padding: .47857143em 1em; width: 25rem"
+            placeholder="Find by upload or record ID"
+            data-bind="textInput: findObs, returnHandler: doSearch"
+          />
+          <i class="search icon"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
-    <p data-bind="visible: !uploadDetailsObs()">
-        Search for a specific upload or record ID.
-    </p>
-    <errors></errors>
-    <div data-bind="visible: uploadDetailsObs">
-        <upload-details params="uploadDetailsObs: uploadDetailsObs, showStudy: true"></upload-details>
-    </div>
+  <p data-bind="visible: !uploadDetailsObs()">
+    Search for a specific upload or record ID.
+  </p>
+  <errors></errors>
+  <div data-bind="visible: uploadDetailsObs">
+    <upload-details params="uploadDetailsObs: uploadDetailsObs, showStudy: true"></upload-details>
+  </div>
 </div>
-        

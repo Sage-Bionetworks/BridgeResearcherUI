@@ -1,19 +1,17 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <div class="ui breadcrumb">
-                <a class="section" href="#/uploads">Uploads</a>
-                <i class="right chevron icon divider"></i>
-            </div>            
-            <h3 data-bind="html: titleObs"></h3>
-        </div>
-        <div class="fixed-header-buttons">
-        </div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a class="section" href="#/uploads">Uploads</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="html: titleObs"></h3>
     </div>
-    <div class="ui empty secondary pointing menu"></div>
+    <div class="fixed-header-buttons"></div>
+  </div>
+  <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
-    <errors></errors>
-    <upload-details params="uploadDetailsObs: uploadDetailsObs"></upload-details>
+  <errors></errors>
+  <upload-details params="uploadDetailsObs: uploadDetailsObs"></upload-details>
 </div>
-    

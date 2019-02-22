@@ -1,72 +1,90 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <div class="ui breadcrumb">
-                <a class="section" href="#/participants">Participants</a>
-                <i class="right chevron icon divider"></i>
-            </div>            
-            <h3 data-bind="html: titleObs"></h3>
-        </div>
-        <div class="fixed-header-buttons">
-            <button class="ui red tiny button" data-bind="click: withdraw, visible: !noConsentObs()">Withdraw from study&hellip;</button>
-        </div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a class="section" href="#/participants">Participants</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="html: titleObs"></h3>
     </div>
-    <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
+    <div class="fixed-header-buttons">
+      <button class="ui red tiny button" data-bind="click: withdraw, visible: !noConsentObs()">
+        Withdraw from study&hellip;
+      </button>
+    </div>
+  </div>
+  <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
 </div>
 <div class="scrollbox">
-    <errors></errors>
-    <table class="ui compact selectable table">
-        <thead>
-            <tr>
-                <th>Consent Group</th>
-                <th>Name</th>
-                <th>Consented On</th>
-                <th>Withdrew On</th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-            <tr>
-                <td colspan="6" data-bind="html: recordsMessageObs"></td>
-            </tr>
-        </tbody>        
-        <tbody data-bind="foreach: itemsObs">
-            <tr>
-                <td style="white-space:pre" data-bind="text: $data.consentGroupName"></td>
-                <td>
-                    <div data-bind="if: $data.name === 'No consent'">
-                        <i>Not consented</i>
-                    </div>
-                    <div data-bind="visible: $data.name !== 'No consent', text: $data.name"></div>
-                </td>
-                <td>
-                    <div data-bind="visible: !$parent.isUpToDateConsent($data), semantic: 'popup'" 
-                        data-content="Participant signed an older version of this consent (not currently published).">
-                        <span data-bind="text: $data.signedOn"></span>
-                    </div>
-                    <div data-bind="visible: $parent.isUpToDateConsent($data), semantic: 'popup'" 
-                        data-content="The currently published version of this consent has been signed.">
-                        <span data-bind="text: $data.signedOn"></span>
-                        <i class="ui green checkmark icon"> </i>
-                    </div>
-                </td>
-                <td>
-                    <button data-bind="visible: $data.eligibleToWithdraw, click: $component.withdrawFromSubpopulation"
-                        class="ui basic red compact mini button">Withdraw consent</button>
-                    <span class="red" data-bind="text: $data.withdrewOn"></span>
-                </td>
-                <td>
-                    <button data-bind="visible: $data.eligibleToWithdraw, click: $component.resendConsent" 
-                        class="ui basic compact mini button">Resend consent</button>
-                </td>
-                <td>
-                    <a target="_blank" rel="noopener" data-bind="visible: $data.name !== 'No consent', 
-                        href: $parent.linkToDocument($data)">
-                        View document <i class="ui external icon"> </i>
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+  <errors></errors>
+  <table class="ui compact selectable table">
+    <thead>
+      <tr>
+        <th>Consent Group</th>
+        <th>Name</th>
+        <th>Consented On</th>
+        <th>Withdrew On</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+      <tr>
+        <td colspan="6" data-bind="html: recordsMessageObs"></td>
+      </tr>
+    </tbody>
+    <tbody data-bind="foreach: itemsObs">
+      <tr>
+        <td style="white-space:pre" data-bind="text: $data.consentGroupName"></td>
+        <td>
+          <div data-bind="if: $data.name === 'No consent'">
+            <i>Not consented</i>
+          </div>
+          <div data-bind="visible: $data.name !== 'No consent', text: $data.name"></div>
+        </td>
+        <td>
+          <div
+            data-bind="visible: !$parent.isUpToDateConsent($data), semantic: 'popup'"
+            data-content="Participant signed an older version of this consent (not currently published)."
+          >
+            <span data-bind="text: $data.signedOn"></span>
+          </div>
+          <div
+            data-bind="visible: $parent.isUpToDateConsent($data), semantic: 'popup'"
+            data-content="The currently published version of this consent has been signed."
+          >
+            <span data-bind="text: $data.signedOn"></span>
+            <i class="ui green checkmark icon"> </i>
+          </div>
+        </td>
+        <td>
+          <button
+            data-bind="visible: $data.eligibleToWithdraw, click: $component.withdrawFromSubpopulation"
+            class="ui basic red compact mini button"
+          >
+            Withdraw consent
+          </button>
+          <span class="red" data-bind="text: $data.withdrewOn"></span>
+        </td>
+        <td>
+          <button
+            data-bind="visible: $data.eligibleToWithdraw, click: $component.resendConsent"
+            class="ui basic compact mini button"
+          >
+            Resend consent
+          </button>
+        </td>
+        <td>
+          <a
+            target="_blank"
+            rel="noopener"
+            data-bind="visible: $data.name !== 'No consent', 
+                        href: $parent.linkToDocument($data)"
+          >
+            View document <i class="ui external icon"> </i>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>

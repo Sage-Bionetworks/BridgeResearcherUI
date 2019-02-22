@@ -1,52 +1,62 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <h3>Task Identifiers</h3>
-        </div>
-        <div class="fixed-header-buttons">
-            <button class="ui primary tiny button" data-bind="disable: $component.noChangesObs, click: $component.save">Save</button>
-        </div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <h3>Task Identifiers</h3>
     </div>
-    <div class="ui empty secondary pointing menu"></div>
+    <div class="fixed-header-buttons">
+      <button class="ui primary tiny button" data-bind="disable: $component.noChangesObs, click: $component.save">
+        Save
+      </button>
+    </div>
+  </div>
+  <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
-    <errors></errors>
-    <div class="ui grid">
-        <div class="ten wide column">
-            <div class="ui large labels" data-bind="foreach: recordsObs">
-                <div class="ui label">
-                    <span data-bind="text: $data"></span>
-                </div><br/>
-            </div>
-            <div class="ui large labels" data-bind="foreach: newRecordsObs">
-                <div class="ui label">
-                    <span data-bind="text: $data"></span> <i class="icon close" data-bind="click: $component.remove"></i>
-                </div><br/>
-            </div>
-            <div class="field" id="value">
-                <div class="ui action input">
-                    <input type="text" data-bind="textInput: $component.addFieldObs, 
-                        event: {keypress: $component.keyHandler}, hasFocus: true"/>
-                    <button class="ui button" data-bind="click: $component.add">Add</button>
-                </div>
-            </div>
+  <errors></errors>
+  <div class="ui grid">
+    <div class="ten wide column">
+      <div class="ui large labels" data-bind="foreach: recordsObs">
+        <div class="ui label">
+          <span data-bind="text: $data"></span>
         </div>
-        <div class="six wide column">
-            <div class="ui message">
-                <p>You can schedule activities for participants that include either <em>surveys</em> or <em>tasks</em>.</p>
-
-                <p>Surveys can be created here through the research manager, then scheduled to run in your application
-                    through the Bridge SDK. </p>
-
-                <p>Tasks are known only to your application. However you can schedule them by assigning them unique
-                    <em>identifiers</em>. A complete list of these should be defined here. </p>
-
-                <p>Once this is done, these identifiers will be available to you when you schedule tasks in the scheduler.
-                    Your application should know what task to run when a schedule references one
-                    of these identifiers. </p>
-            </div>
+        <br />
+      </div>
+      <div class="ui large labels" data-bind="foreach: newRecordsObs">
+        <div class="ui label">
+          <span data-bind="text: $data"></span> <i class="icon close" data-bind="click: $component.remove"></i>
         </div>
+        <br />
+      </div>
+      <div class="field" id="value">
+        <div class="ui action input">
+          <input
+            type="text"
+            data-bind="textInput: $component.addFieldObs, 
+                        event: {keypress: $component.keyHandler}, hasFocus: true"
+          />
+          <button class="ui button" data-bind="click: $component.add">Add</button>
+        </div>
+      </div>
     </div>
+    <div class="six wide column">
+      <div class="ui message">
+        <p>You can schedule activities for participants that include either <em>surveys</em> or <em>tasks</em>.</p>
+
+        <p>
+          Surveys can be created here through the research manager, then scheduled to run in your application through
+          the Bridge SDK.
+        </p>
+
+        <p>
+          Tasks are known only to your application. However you can schedule them by assigning them unique
+          <em>identifiers</em>. A complete list of these should be defined here.
+        </p>
+
+        <p>
+          Once this is done, these identifiers will be available to you when you schedule tasks in the scheduler. Your
+          application should know what task to run when a schedule references one of these identifiers.
+        </p>
+      </div>
+    </div>
+  </div>
 </div>
-
-
