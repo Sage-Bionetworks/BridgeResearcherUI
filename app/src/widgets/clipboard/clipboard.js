@@ -265,7 +265,7 @@ MODEL_METADATA.Survey = {
     function incrementCopyInteger(value) {
       if (/-[0-9]+$/.test(value)) {
         let int = Math.abs(parseInt(value.match(/-[0-9]+$/), 10));
-        return value + "-" + ++int;
+        return value + "-" + (++int);
       }
       return value + "-1";
     }
@@ -339,17 +339,17 @@ MODEL_METADATA.CompoundActivityDefinition = {
   label: "taskId",
   copyMethod: function(task) {
     Promise.map(task.schemaList, function(schemaRef) {
-      let p = schemaRef.revision
-        ? serverService.getUploadSchema(schemaRef.id, schemaRef.revision)
-        : serverService.getMostRecentUploadSchema(schemaRef.id);
+      let p = schemaRef.revision ? 
+        serverService.getUploadSchema(schemaRef.id, schemaRef.revision) : 
+        serverService.getMostRecentUploadSchema(schemaRef.id);
       return p.then(function(schema) {
         clipboard.copy("UploadSchema", schema);
       });
     });
     Promise.map(task.surveyList, function(surveyRef) {
-      let p = surveyRef.createdOn
-        ? serverService.getSurvey(surveyRef.guid, surveyRef.createdOn)
-        : serverService.getMostRecentlyPublishedSurvey(surveyRef.guid);
+      let p = surveyRef.createdOn ? 
+        serverService.getSurvey(surveyRef.guid, surveyRef.createdOn) : 
+        serverService.getMostRecentlyPublishedSurvey(surveyRef.guid);
       return p.then(function(survey) {
         clipboard.copy("Survey", survey);
       });

@@ -136,9 +136,9 @@ function formatCompoundActivity(task) {
   let surveys = (task.surveyList || task.surveyReferences)
     .map(function(survey) {
       let surveyName = surveyNameMap[survey.guid];
-      return survey.createdOn
-        ? `${surveyName} survey <i>(pub. ${fn.formatDateTime(survey.createdOn)})</i>`
-        : surveyName;
+      return survey.createdOn ? 
+        `${surveyName} survey <i>(pub. ${fn.formatDateTime(survey.createdOn)})</i>` : 
+        surveyName;
     })
     .join(", ");
   let configs = (task.configList || task.configReferences || [])
@@ -160,50 +160,6 @@ function loadFormatCompoundActivity() {
       surveyNameMap[survey.guid] = survey.name;
     });
   });
-}
-function getActivitiesWithStrategyInfo(plan) {
-  let activities = [];
-  switch (plan.strategy.type) {
-    case "SimpleScheduleStrategy":
-      plan.strategy.schedule.activities.forEach(function(activity) {
-        activities.push({
-          plan: plan.label,
-          planGuid: plan.guid,
-          label: activity.label,
-          qualifier: "",
-          guid: activity.guid
-        });
-      });
-      break;
-    case "ABTestScheduleStrategy":
-      plan.strategy.scheduleGroups.forEach(function(group, index) {
-        group.activities.forEach(function(activity) {
-          activities.push({
-            plan: plan.label,
-            planGuid: plan.guid,
-            label: activity.label,
-            qualifier: "Group #" + index,
-            guid: activity.guid
-          });
-        });
-      });
-      break;
-    case "CriteriaScheduleStrategy":
-      plan.strategy.scheduleCriteria.forEach(function(group) {
-        group.schedule.activities.forEach(function(activity) {
-          let critLabel = criteriaUtils.label(group.criteria);
-          activities.push({
-            plan: plan.label,
-            planGuid: plan.guid,
-            label: activity.label,
-            qualifier: critLabel,
-            guid: activity.guid
-          });
-        });
-      });
-      break;
-  }
-  return activities;
 }
 export default {
   newSchedule,

@@ -27,9 +27,9 @@ function getExternalId(id) {
 }
 function getEmail(id) {
   return serverService.getParticipants(0, 5, id).then(function(response) {
-    return response.items.length === 1
-      ? serverService.getParticipant(response.items[0].id)
-      : Promise.reject("Participant not found");
+    return response.items.length === 1 ? 
+      serverService.getParticipant(response.items[0].id) : 
+      Promise.reject("Participant not found");
   });
 }
 function makeSuccess(vm, event) {
@@ -108,18 +108,10 @@ module.exports = function() {
     let success = makeSuccess(self, event);
     utils.startHandler(self, event);
 
-    getHealthCode(id)
-      .then(success)
-      .catch(function() {
-        getExternalId(id)
-          .then(success)
-          .catch(function() {
-            getId(id)
-              .then(success)
-              .catch(function() {
-                getEmail(id)
-                  .then(success)
-                  .catch(function(e) {
+    getHealthCode(id).then(success).catch(function() {
+        getExternalId(id).then(success).catch(function() {
+            getId(id).then(success).catch(function() {
+                getEmail(id).then(success).catch(function(e) {
                     event.target.parentNode.parentNode.classList.remove("loading");
                     utils.failureHandler({ transient: false })(e);
                   });

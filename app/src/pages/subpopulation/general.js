@@ -30,9 +30,9 @@ module.exports = function(params) {
   let titleUpdated = fn.handleObsUpdate(self.titleObs, "name");
 
   function saveSubpop() {
-    return self.subpopulation.guid
-      ? serverService.updateSubpopulation(self.subpopulation)
-      : serverService.createSubpopulation(self.subpopulation);
+    return self.subpopulation.guid ? 
+      serverService.updateSubpopulation(self.subpopulation) : 
+      serverService.createSubpopulation(self.subpopulation);
   }
 
   self.save = function(vm, event) {

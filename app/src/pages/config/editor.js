@@ -34,9 +34,9 @@ module.exports = function(params) {
   fn.copyProps(self, fn, "formatDateTime");
 
   function saveConfigElement(identityChanged, configElement) {
-    return identityChanged
-      ? serverService.createAppConfigElement(configElement)
-      : serverService.updateAppConfigElement(configElement);
+    return identityChanged ? 
+      serverService.createAppConfigElement(configElement) : 
+      serverService.updateAppConfigElement(configElement);
   }
   function load() {
     if (self.isNewObs()) {

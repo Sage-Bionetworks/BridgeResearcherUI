@@ -88,9 +88,9 @@ module.exports = function(params) {
     });
   }
   function schedulePlan() {
-    return params.guid !== "new"
-      ? serverService.getSchedulePlan(params.guid)
-      : Promise.resolve(scheduleUtils.newSchedulePlan());
+    return params.guid !== "new" ? 
+      serverService.getSchedulePlan(params.guid) : 
+      Promise.resolve(scheduleUtils.newSchedulePlan());
   }
 
   scheduleUtils.loadOptions().then(function() {

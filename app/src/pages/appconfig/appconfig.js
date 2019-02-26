@@ -56,9 +56,9 @@ module.exports = function(params) {
 
   function saveAppConfig() {
     self.enablePreviewObs(false);
-    return self.appConfig.guid
-      ? serverService.updateAppConfig(self.appConfig)
-      : serverService.createAppConfig(self.appConfig);
+    return self.appConfig.guid ? 
+      serverService.updateAppConfig(self.appConfig) : 
+      serverService.createAppConfig(self.appConfig);
   }
   function updateModifiedOn(response) {
     self.modifiedOnObs(new Date());

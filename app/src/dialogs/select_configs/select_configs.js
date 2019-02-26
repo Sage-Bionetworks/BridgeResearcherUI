@@ -28,13 +28,9 @@ module.exports = function(params) {
   }
 
   self.select = function() {
-    let filterFunc = params.selectOne
-      ? selectById(
-          $("input[type=radio]:checked")
-            .toArray()[0]
-            .id.substring(1)
-        )
-      : selectByChecked;
+    let filterFunc = params.selectOne ? 
+      selectById($("input[type=radio]:checked").toArray()[0].id.substring(1)) : 
+      selectByChecked;
     let configs = self.itemsObs().filter(filterFunc);
     params.addConfigs(configs);
   };

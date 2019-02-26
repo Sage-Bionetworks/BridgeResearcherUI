@@ -55,9 +55,9 @@ function formatSchedule(schedule, activityFormatter, taskFormatter, surveyFormat
     return "<i>No schedule</i>";
   }
 
-  let eventClause = schedule.delay
-    ? `${periodToWords(schedule.delay)} after ${formatEventId(schedule.eventId, activityFormatter)}`
-    : `on ${formatEventId(schedule.eventId, activityFormatter)}`;
+  let eventClause = schedule.delay ? 
+    `${periodToWords(schedule.delay)} after ${formatEventId(schedule.eventId, activityFormatter)}` : 
+    `on ${formatEventId(schedule.eventId, activityFormatter)}`;
 
   let phrase = [eventClause];
 
