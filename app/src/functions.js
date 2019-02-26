@@ -111,26 +111,23 @@ function queryString(object, prefix) {
 function queryToObject(query, arrayPropertyNames, prefix) {
   let obj = {};
   let ns = prefix ? prefix + "." : "";
-  query
-    .replace(/^\?/, "")
-    .split("&")
-    .forEach(function(pair) {
-      let [key, value] = pair.split("=").map(value => decodeURIComponent(value));
-      if (key.startsWith(ns)) {
-        if (ns !== "") {
-          key = key.split(ns)[1];
-        }
-        if (obj[key] && isArray(obj[key])) {
-          obj[key].push(convertValue(value));
-        } else if (obj[key]) {
-          obj[key] = [obj[key], convertValue(value)];
-        } else if (arrayPropertyNames.includes(key)) {
-          obj[key] = [convertValue(value)];
-        } else {
-          obj[key] = convertValue(value);
-        }
+  query.replace(/^\?/, "").split("&").forEach(function(pair) {
+    let [key, value] = pair.split("=").map(value => decodeURIComponent(value));
+    if (key.startsWith(ns)) {
+      if (ns !== "") {
+        key = key.split(ns)[1];
       }
-    });
+      if (obj[key] && isArray(obj[key])) {
+        obj[key].push(convertValue(value));
+      } else if (obj[key]) {
+        obj[key] = [obj[key], convertValue(value)];
+      } else if (arrayPropertyNames.includes(key)) {
+        obj[key] = [convertValue(value)];
+      } else {
+        obj[key] = convertValue(value);
+      }
+    }
+  });
   return obj;
 }
 function convertValue(value) {
@@ -161,16 +158,12 @@ function formatLanguages(value) {
   return value ? value.join(", ") : "";
 }
 function persistLanguages(value) {
-  return value
-    ? value
-        .split(/\W*,\W*/)
-        .map(function(value) {
-          return value.trim();
-        })
-        .filter(function(value) {
-          return value.length > 0;
-        })
-    : null;
+  return value ? value .split(/\W*,\W*/) .map(function(value) {
+    return value.trim();
+  }).filter(function(value) {
+    return value.length > 0;
+  }) :
+  null;
 }
 function formatRoles(roles) {
   return (roles || []).map(function(role) {
@@ -215,9 +208,9 @@ function formatNameAsFullLabel(summary) {
       name = summary.phone;
     }
   } else if (summary.externalIds.length || Object.keys(summary.externalIds).length) {
-    name = isArray(summary.externalIds)
-      ? summary.externalIds.join(", ")
-      : Object.values(summary.externalIds).join(", ");
+    name = isArray(summary.externalIds) ? 
+      summary.externalIds.join(", ") : 
+      Object.values(summary.externalIds).join(", ");
   } else if (summary.id) {
     name = "Withdrawn (#" + summary.id.split("-")[0] + "…)";
   }

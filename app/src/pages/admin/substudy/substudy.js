@@ -25,14 +25,14 @@ module.exports = function(params) {
     .bind("id", params.id === "new" ? null : params.id);
 
   function load() {
-    return params.id === "new"
-      ? Promise.resolve({})
-      : serverService.getSubstudy(params.id).then(fn.handleObsUpdate(self.titleObs, "name"));
+    return params.id === "new" ? 
+      Promise.resolve({}) : 
+      serverService.getSubstudy(params.id).then(fn.handleObsUpdate(self.titleObs, "name"));
   }
   function saveSubstudy() {
-    return params.id === "new"
-      ? serverService.createSubstudy(self.substudy)
-      : serverService.updateSubstudy(self.substudy);
+    return params.id === "new" ? 
+      serverService.createSubstudy(self.substudy) : 
+      serverService.updateSubstudy(self.substudy);
   }
   function updateModifiedOn(response) {
     params.id = self.idObs();

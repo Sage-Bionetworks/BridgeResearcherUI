@@ -29,13 +29,9 @@ module.exports = function(params) {
   }
 
   self.select = function() {
-    let filterFunc = params.selectOne
-      ? selectByGuid(
-          $("input[type=radio]:checked")
-            .toArray()[0]
-            .id.substring(1)
-        )
-      : selectByChecked;
+    let filterFunc = params.selectOne ? 
+      selectByGuid($("input[type=radio]:checked").toArray()[0].id.substring(1)) : 
+      selectByChecked;
     let surveys = self.itemsObs().filter(filterFunc);
     params.addSurveys(surveys);
   };

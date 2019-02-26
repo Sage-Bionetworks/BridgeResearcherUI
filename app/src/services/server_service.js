@@ -261,7 +261,7 @@ export class ServerService {
     return this.gethttp(config.subpopulations + "/" + guid + "/consents");
   }
   emailRoster() {
-    return this.post(config.users + "/emailParticipantRoster");
+    return this.post(config.users + "/email ParticipantRoster");
   }
   getSurveys(includeDeleted) {
     let queryString = fn.queryString({ includeDeleted: includeDeleted === true });
@@ -430,11 +430,10 @@ export class ServerService {
   }
   getParticipantName(id) {
     let name = cache.get(id + ":name");
-    return name
-      ? Promise.resolve(name)
-      : this.gethttp(config.participants + "/" + id)
-          .then(this.cacheParticipantName.bind(this))
-          .then(() => Promise.resolve(cache.get(id + ":name")));
+    return name ? Promise.resolve(name) : 
+      this.gethttp(config.participants + "/" + id)
+        .then(this.cacheParticipantName.bind(this))
+        .then(() => Promise.resolve(cache.get(id + ":name")));
   }
   getParticipantRequestInfo(id) {
     return this.gethttp(config.participants + "/" + id + "/requestInfo");
@@ -554,15 +553,8 @@ export class ServerService {
   }
   getParticipantNewActivities(userId, referentType, guid, params) {
     let queryString = fn.queryString(params);
-    return this.gethttp(
-      config.participants +
-        "/" +
-        userId +
-        "/activities/" +
-        referentType.toLowerCase() +
-        "/" +
-        encodeURIComponent(guid) +
-        queryString
+    return this.gethttp(config.participants + "/" + userId + "/activities/" + referentType.toLowerCase() + 
+      "/" + encodeURIComponent(guid) + queryString
     );
   }
   deleteParticipantActivities(userId) {
@@ -645,10 +637,9 @@ export class ServerService {
     return this.del(config.metadata + "/" + esc(id) + "/versions/" + esc(version) + queryString);
   }
   importMetadata(id, version) {
-    let url =
-      typeof version === "number"
-        ? config.sharedmodules + "/" + esc(id) + "/versions/" + esc(version) + "/import"
-        : config.sharedmodules + "/" + esc(id) + "/import";
+    let url = typeof version === "number" ? 
+      config.sharedmodules + "/" + esc(id) + "/versions/" + esc(version) + "/import" : 
+      config.sharedmodules + "/" + esc(id) + "/import";
     return this.post(url);
   }
   startExport() {

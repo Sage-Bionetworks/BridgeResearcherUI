@@ -69,9 +69,9 @@ CreateCredentialsWorker.prototype = {
   },
   performWork: function() {
     this.currentId = this.identifiers.shift();
-    let participant = this.useLegacyFormat
-      ? utils.oldCreateParticipantForID(this.supportEmail, this.currentId)
-      : utils.createParticipantForID(this.currentId);
+    let participant = this.useLegacyFormat ? 
+      utils.oldCreateParticipantForID(this.supportEmail, this.currentId) : 
+      utils.createParticipantForID(this.currentId);
     participant.dataGroups = this.dataGroups;
     return serverService.createParticipant(participant);
   },

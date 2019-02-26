@@ -1,5 +1,4 @@
 import { serverService } from "../../services/server_service";
-import alerts from "../../widgets/alerts";
 import Binder from "../../binder";
 import fn from "../../functions";
 import ko from "knockout";
@@ -136,9 +135,9 @@ module.exports = function(params) {
     // This should be updating the title, but it isn't, because the id is still "new".
     //binder.persist(participant);
 
-    let updatedTitle = self.study.emailVerificationEnabled
-      ? fn.formatNameAsFullLabel(participant)
-      : participant.externalId;
+    let updatedTitle = self.study.emailVerificationEnabled ? 
+      fn.formatNameAsFullLabel(participant) : 
+      participant.externalId;
     function updateName(response) {
       self.titleObs(updatedTitle);
       return serverService.getParticipant(self.userIdObs());
@@ -169,7 +168,7 @@ module.exports = function(params) {
     return serverService.getSession();
   }
   function updateAllSubstudiesObs(session) {
-    if (session.substudyIds.length === 0) {
+    if (self.isAdmin() && session.substudyIds.length === 0) {
       return serverService.getSubstudies(false).then(response => {
         self.allSubstudiesObs(response.items.map(item => item.id));
       });

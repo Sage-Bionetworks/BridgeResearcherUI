@@ -20,9 +20,9 @@ module.exports = class AddReport {
       .bind("data", AddReport.jsonAsString(params.data), null, AddReport.stringAsJson);
   }
   addReport(entry) {
-    return this.type === "participant"
-      ? serverService.addParticipantReport(this.userId, entry.identifier, entry)
-      : serverService.addStudyReport(entry.identifier, entry);
+    return this.type === "participant" ? 
+      serverService.addParticipantReport(this.userId, entry.identifier, entry) : 
+      serverService.addStudyReport(entry.identifier, entry);
   }
   save(vm, event) {
     let entry = this.binder.persist({});

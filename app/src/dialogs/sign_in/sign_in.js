@@ -31,16 +31,16 @@ const BUTTONS = {
 // There will be stale data in the UI if we don't reload when changing studies or environments.
 function makeReloader(studyKey, environment) {
   let requiresReload = storeService.get(STUDY_KEY) !== studyKey || storeService.get(ENVIRONMENT) !== environment;
-  return requiresReload
-    ? function(response) {
-        storeService.set(STUDY_KEY, studyKey);
-        storeService.set(ENVIRONMENT, environment);
-        root.closeDialog();
-        window.location.reload();
-      }
-    : function() {
-        root.closeDialog();
-      };
+  return requiresReload ? 
+    function() {
+      storeService.set(STUDY_KEY, studyKey);
+      storeService.set(ENVIRONMENT, environment);
+      root.closeDialog();
+      window.location.reload();
+    } : 
+    function() {
+      root.closeDialog();
+    };
 }
 
 module.exports = function() {
@@ -148,9 +148,9 @@ module.exports = function() {
       let { studyKey, studyName, environment } = collectValues();
       utils.startHandler(self, SYNTH_EVENT);
 
-      let promise = self.imAnAdminObs()
-        ? serverService.adminSignIn(studyName, environment, payload)
-        : serverService.signIn(studyName, environment, payload);
+      let promise = self.imAnAdminObs() ? 
+        serverService.adminSignIn(studyName, environment, payload) : 
+        serverService.signIn(studyName, environment, payload);
       promise
         .then(clear)
         .then(makeReloader(studyKey, environment))

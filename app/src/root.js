@@ -123,7 +123,9 @@ let RootViewModel = function() {
     self.rolesObs([]);
     self.openDialog("sign_in_dialog", { closeable: false });
   });
-  setTimeout(checkVerifyStatus, 1000);
+  if (self.isDeveloper()) {
+    setTimeout(checkVerifyStatus, 1000);
+  }
 };
 
 let root = new RootViewModel();

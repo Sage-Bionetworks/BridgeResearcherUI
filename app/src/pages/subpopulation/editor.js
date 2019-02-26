@@ -101,9 +101,9 @@ module.exports = function(params) {
   };
 
   function studyConsent() {
-    return params.createdOn
-      ? serverService.getStudyConsent(params.guid, params.createdOn)
-      : serverService.getMostRecentStudyConsent(params.guid);
+    return params.createdOn ? 
+      serverService.getStudyConsent(params.guid, params.createdOn) : 
+      serverService.getMostRecentStudyConsent(params.guid);
   }
   studyConsent()
     .then(loadIntoEditor)

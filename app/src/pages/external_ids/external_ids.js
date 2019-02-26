@@ -69,9 +69,9 @@ module.exports = function() {
   }
   function createNewCredentials(identifier) {
     self.resultObs(identifier);
-    let participant = self.useLegacyFormatObs()
-      ? utils.oldCreateParticipantForID(self.study.supportEmail, identifier)
-      : utils.createParticipantForID(identifier);
+    let participant = self.useLegacyFormatObs() ? 
+      utils.oldCreateParticipantForID(self.study.supportEmail, identifier) : 
+      utils.createParticipantForID(identifier);
     return serverService.createParticipant(participant);
   }
   function updatePageWithResult(response) {

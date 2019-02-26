@@ -24,10 +24,9 @@ function titleCase(string) {
 function prepareDelete(vm, objName, objPlural) {
   let deletables = vm.itemsObs().filter(hasBeenChecked);
 
-  let msg =
-    deletables.length > 1
-      ? "Are you sure you want to delete these " + (objPlural || objName + "s") + "?"
-      : "Are you sure you want to delete this " + objName + "?";
+  let msg = deletables.length > 1 ? 
+    "Are you sure you want to delete these " + (objPlural || objName + "s") + "?" : 
+    "Are you sure you want to delete this " + objName + "?";
   let confirmMsg = deletables.length > 1 ? titleCase(objName) + "s deleted." : titleCase(objName) + " deleted.";
   return { deletables: deletables, msg: msg, confirmMsg: confirmMsg };
 }
@@ -134,19 +133,15 @@ export default {
       vm.deletePermanently = function(vm, event) {
         let del = prepareDelete(vm, objName, objPlural);
         let msg = del.msg + " We cannot undo this kind of delete. Are you in production? Maybe rethink this.";
-        alerts.deleteConfirmation(
-          msg,
-          function() {
-            utils.startHandler(self, event);
-            Promise.each(del.deletables, deletePermanentlyFunc)
-              .then(utils.successHandler(vm, event, del.confirmMsg))
-              .then(uncheckAll(vm))
-              .then(loadFunc)
-              .then(redirectHandler(vm, redirectTo))
-              .catch(utils.failureHandler());
-          },
-          "Delete FOREVER"
-        );
+        alerts.deleteConfirmation(msg, function() {
+          utils.startHandler(self, event);
+          Promise.each(del.deletables, deletePermanentlyFunc)
+            .then(utils.successHandler(vm, event, del.confirmMsg))
+            .then(uncheckAll(vm))
+            .then(loadFunc)
+            .then(redirectHandler(vm, redirectTo))
+            .catch(utils.failureHandler());
+        }, "Delete FOREVER");
       };
     }
     if (undeleteFunc && loadFunc) {
