@@ -1,9 +1,6 @@
 import { serverService } from "../../services/server_service";
 import Binder from "../../binder";
 import fn from "../../functions";
-import jsonFormatter from "../../json_formatter";
-import root from "../../root";
-import scheduleUtils from "../../pages/schedule/schedule_utils";
 import tables from "../../tables";
 import utils from "../../utils";
 import optionsService from "../../services/options_service";

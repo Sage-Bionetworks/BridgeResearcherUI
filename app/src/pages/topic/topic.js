@@ -43,7 +43,7 @@ module.exports = function(params) {
     return response;
   }
 
-  fn.copyProps(self, root, "isDeveloper", "isResearcher");
+  fn.copyProps(self, root, "isAdmin");
 
   self.sendNotification = function(vm, event) {
     root.openDialog("send_notification", { topicId: self.guidObs() });
