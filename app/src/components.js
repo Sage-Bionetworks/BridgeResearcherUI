@@ -308,10 +308,6 @@ reg("admin_cache", {
   viewModel: require("./pages/admin/cache/cache"),
   template: require("./pages/admin/cache/cache.html")
 });
-reg("admin_upload", {
-  viewModel: require("./pages/admin/upload/upload"),
-  template: require("./pages/admin/upload/upload.html")
-});
 reg("admin_studies", {
   viewModel: require("./pages/admin/studies/studies"),
   template: require("./pages/admin/studies/studies.html")

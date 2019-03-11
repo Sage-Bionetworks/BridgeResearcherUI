@@ -32,7 +32,7 @@ module.exports = class UploadsViewModel {
   makeSuccess(vm, event) {
     return response => {
       event.target.parentNode.parentNode.classList.remove("loading");
-      document.location = "#/uploads/" + response.uploadId;
+      document.location = "#/admin/uploads/" + response.uploadId;
     };
   }
   classFor(item) {

@@ -8,7 +8,7 @@ import utils from "../../utils";
 module.exports = function() {
   let self = this;
 
-  fn.copyProps(self, root, "isDeveloper", "notificationsEnabledObs");
+  fn.copyProps(self, root, "isAdmin", "notificationsEnabledObs");
   fn.copyProps(self, criteriaUtils, "label");
 
   tables.prepareTable(self, {

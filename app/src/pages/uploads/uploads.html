@@ -4,15 +4,11 @@
       <h3>Uploads</h3>
     </div>
     <div class="fixed-header-buttons">
-      <div class="ui search" data-bind="visible: isAdmin">
+      <div class="ui search">
         <div class="ui icon input">
-          <input
-            class="prompt"
-            type="text"
-            style="padding: .47857143em 1em; width: 25rem"
-            placeholder="Find by upload or record ID"
-            data-bind="textInput: findObs, returnHandler: doSearch"
-          />
+          <input class="prompt" type="text" style="padding: .47857143em 1em; width: 25rem"
+            placeholder="Find by upload or record ID" 
+            data-bind="textInput: findObs, returnHandler: doSearch"/>
           <i class="search icon"></i>
         </div>
       </div>
@@ -23,12 +19,9 @@
 <div class="scrollbox">
   <errors></errors>
   <div class="line-control">
-    <div
-      style="width: 30rem"
-      class="ui icon input flatpickr"
-      data-bind="range: {onChange: doCalSearch, 
-            startDateObs: uploadsStartDateObs, endDateObs: uploadsEndDateObs}"
-    >
+    <div style="width: 30rem" class="ui icon input flatpickr"
+      data-bind="range: {onChange: doCalSearch, startDateObs: uploadsStartDateObs, 
+        endDateObs: uploadsEndDateObs}">
       <input type="text" placeholder="Uploaded in range" readonly />
       <i class="calendar icon"></i>
     </div>
@@ -59,8 +52,7 @@
           <i data-bind="attr:{class:$component.iconFor($data)}"></i>
         </td>
         <td>
-          <span data-bind="visible: !$component.isAdmin(), text: $data.uploadId"></span>
-          <a data-bind="visible: $component.isAdmin, text: $data.uploadId, href: '#/uploads/' + $data.uploadId"></a>
+          <a data-bind="text: $data.uploadId, href: '#/admin/uploads/' + $data.uploadId"></a>
         </td>
         <td data-bind="text: $data.requestedOnFormatted"></td>
         <td data-bind="html: $data.completedByObs"></td>

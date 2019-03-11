@@ -87,7 +87,6 @@ router.on("/sms_templates/verify_phone/account_exists", routeTo("sms_account_exi
 router.on("/sms_templates/phone_signin", routeTo("sms_phone_signin", "sms"));
 router.on("/sms_templates/app_install_link", routeTo("sms_app_install_link", "sms"));
 router.on("/sms_templates/signed_consent", routeTo("sms_signed_consent", "sms"));
-
 router.on("/subpopulations", routeTo("subpopulations", "subpops"));
 router.on("/subpopulations/:guid", redirectTo("/subpopulations/{0}/general"));
 router.on("/subpopulations/:guid/general", routeTo("subpopulation", "subpops", GUID));
@@ -95,18 +94,13 @@ router.on("/subpopulations/:guid/editor", redirectTo("/subpopulations/{0}/editor
 router.on("/subpopulations/:guid/editor/recent", routeTo("subpopulation_editor", "subpops", GUID));
 router.on("/subpopulations/:guid/editor/:createdOn", routeTo("subpopulation_editor", "subpops", GUID_CREATEDON));
 router.on("/subpopulations/:guid/editor/recent/history", routeTo("subpopulation_history", "subpops", GUID));
-router.on(
-  "/subpopulations/:guid/editor/:createdOn/history",
-  routeTo("subpopulation_history", "subpops", GUID_CREATEDON)
-);
+router.on("/subpopulations/:guid/editor/:createdOn/history", routeTo("subpopulation_history", "subpops", GUID_CREATEDON));
 router.on("/subpopulations/:guid/download", routeTo("subpopulation_download", "subpops", GUID));
-
 router.on("/configs", routeTo("configs", "configs"));
 router.on("/configs/new", redirectTo("/configs/new/revisions/1/editor"));
 router.on("/configs/:id/revisions/:revision", redirectTo("/configs/{0}/revisions/{1}/editor"));
 router.on("/configs/:id/revisions/:revision/editor", routeTo("config_editor", "configs", ID_REVISION));
 router.on("/configs/:id/revisions/:revision/history", routeTo("config_history", "configs", ID_REVISION));
-
 router.on("/reports", redirectTo("/reports/uploads"));
 router.on("/reports/uploads", routeTo("dailyUploads", "reports"));
 router.on("/reports/signUps", routeTo("signUps", "reports"));
@@ -123,15 +117,9 @@ router.on("/schemas/:schemaId/versions/:revision/history", routeTo("schema_versi
 router.on("/schemas/:schemaId", routeTo("schema", "schemas", SCHEMAID));
 router.on("/scheduleplans", routeTo("scheduleplans", "scheduling"));
 router.on("/scheduleplans/:guid", routeTo("scheduleplan", "scheduling", GUID));
-router.on(
-  "/participants/:userId/reports/:identifier",
-  routeTo("participant_report", "participants", USERID_IDENTIFIER)
-);
+router.on("/participants/:userId/reports/:identifier", routeTo("participant_report", "participants", USERID_IDENTIFIER));
 router.on("/participants/:userId/activities/events", routeTo("participant_activity_events", "participants", USERID));
-router.on(
-  "/participants/:userId/activities/:referentType/:guid",
-  routeTo("participant_activity", "participants", USERID_REFERENT_GUID)
-);
+router.on("/participants/:userId/activities/:referentType/:guid", routeTo("participant_activity", "participants", USERID_REFERENT_GUID));
 router.on("/participants/:userId/activities", routeTo("participant_activities", "participants", USERID));
 router.on("/participants/:userId/consents", routeTo("participant_consents", "participants", USERID));
 router.on("/participants/:userId/notifications", routeTo("participant_notifications", "participants", USERID));
@@ -153,19 +141,18 @@ router.on("/topics/:guid", routeTo("topic", "notifications", GUID));
 router.on("/topics", routeTo("topics", "notifications"));
 router.on("/admin/info", routeTo("admin_info", "info"));
 router.on("/admin/cache", routeTo("admin_cache", "cache"));
-router.on("/admin/uploads", routeTo("admin_upload", "admin_upload"));
 router.on("/admin/studies", routeTo("admin_studies", "studies"));
 router.on("/admin/studies/:id", routeTo("admin_study", "studies", ID));
 router.on("/admin/substudies", routeTo("admin_substudies", "substudies"));
 router.on("/admin/substudies/:id", routeTo("admin_substudy", "substudies", ID));
+router.on("/admin/uploads", routeTo("uploads", "uploads"));
+router.on("/admin/uploads/:guid", routeTo("upload", "uploads", GUID));
 router.on("/shared_modules", routeTo("shared_modules", "modules"));
 router.on("/shared_modules/:id", routeTo("shared_module", "modules", ID)); // unused now?
 router.on("/shared_modules/:id/versions/:version/editor", routeTo("shared_module", "modules", ID_VERSION));
 router.on("/shared_modules/:id/versions/:version/history", routeTo("shared_module_versions", "modules", ID_VERSION));
 router.on("/app_configs", routeTo("appconfigs", "appConfigs"));
 router.on("/app_configs/:guid", routeTo("appconfig", "appConfigs", GUID));
-router.on("/uploads", routeTo("uploads", "uploads"));
-router.on("/uploads/:guid", routeTo("upload", "uploads", GUID));
 
 router.configure({
   notfound: routeTo("not_found"),

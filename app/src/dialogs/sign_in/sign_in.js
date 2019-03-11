@@ -12,6 +12,8 @@ const ENVIRONMENT = "environment";
 const PHONE_SUCCESS_MSG = "An SMS message has been sent to that phone number; enter the code to sign in.";
 const STUDY_KEY = "studyKey";
 const SUCCESS_MSG = "An email has been sent to that address with instructions on changing your password.";
+const COLLECTING_EMAIL = ['SignIn', 'ForgotPassword'];
+const OTHER_THAN_PHONE = ['SignIn', 'ExternalIdSignIn', 'ForgotPassword'];
 
 const TITLES = {
   EnterCode: "Enter Code",
@@ -136,6 +138,15 @@ module.exports = function() {
     let studyName = utils.findStudyName(self.studyOptionsObs(), studyKey);
     return { studyKey, studyName, environment };
   }
+  self.isOtherThanPhone = ko.computed(() => {
+    return OTHER_THAN_PHONE.includes(self.stateObs());
+  });
+  self.isCollectingEmail = ko.computed(() => {
+    return COLLECTING_EMAIL.includes(self.stateObs());
+  });
+  self.isState = function(state) {
+    return self.stateObs() === state;
+  };
 
   self.submit = function(vm, event) {
     let key = self.stateObs();
