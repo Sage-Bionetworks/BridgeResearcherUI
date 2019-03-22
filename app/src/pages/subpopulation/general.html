@@ -1,54 +1,57 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <div class="ui breadcrumb">
-                <a href="#/subpopulations" class="section">Consent Groups</a>
-                <i class="right chevron icon divider"></i>
-            </div>
-            <h3 data-bind="text: titleObs"></h3>
-        </div>
-        <div class="fixed-header-buttons">
-            <button class="ui tiny primary button" data-bind="click: save">Save</button>
-        </div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/subpopulations" class="section">Consent Groups</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="text: titleObs"></h3>
     </div>
-    <subpop-tabset params="isNewObs: isNewObs, guidObs: guidObs"></subpop-tabset>
+    <div class="fixed-header-buttons">
+      <button class="ui tiny primary button" data-bind="click: save">Save</button>
+    </div>
+  </div>
+  <subpop-tabset params="isNewObs: isNewObs, guidObs: guidObs"></subpop-tabset>
 </div>
 <div class="scrollbox">
-    <errors></errors>
-    <form class="ui form">
-        <div class="ui grid">
-            <div class="eight wide column">
-                <div class="field" id="name">
-                    <label>Name</label>
-                    <input type="text" data-bind="textInput: nameObs, hasFocus: true"/>
-                </div>
-                <div class="field" id="description">
-                    <label>Description</label>
-                    <input type="text" data-bind="textInput: descriptionObs"/>
-                </div>                
-            </div>
-            <div class="eight wide column">
-                <label>&#160;</label>
-                <div class="field">
-                    <ui-checkbox params="checkedObs: requiredObs">
-                        User must consent to this agreement
-                    </ui-checkbox>
-                    <p class="checkbox-help-text">
-                        If a user matches this consent group, they <i>must</i> sign the consent to access Bridge.
-                    </p>
-                </div>
-                <div class="field">
-                    <ui-checkbox params="checkedObs: autoSendConsentSuppressedObs">
-                        Do not automatically send the signed consent to the user
-                    </ui-checkbox>
-                    <p class="checkbox-help-text">
-                        They can still request the signed consent agreement via our APIs.
-                    </p>
-                </div>
-            </div>
+  <errors></errors>
+  <form class="ui form">
+    <div class="ui grid">
+      <div class="eight wide column">
+        <div class="field" id="name">
+          <label>Name</label>
+          <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
         </div>
-
-        <h4>Assignment based on</h4>
-        <criteria params="id: '', criteriaObs: criteriaObs"></criteria>
-    </form>
+        <div class="field" id="description">
+          <label>Description</label>
+          <input type="text" data-bind="textInput: descriptionObs" />
+        </div>
+      </div>
+      <div class="eight wide column">
+        <label>&#160;</label>
+        <div class="field">
+          <ui-checkbox params="checkedObs: requiredObs">
+            User must consent to this agreement
+          </ui-checkbox>
+          <p class="checkbox-help-text">
+            If a user matches this consent group, they <i>must</i> sign the consent to access Bridge.
+          </p>
+        </div>
+        <div class="field">
+          <ui-checkbox params="checkedObs: autoSendConsentSuppressedObs">
+            Do not automatically send the signed consent to the user
+          </ui-checkbox>
+          <p class="checkbox-help-text">
+            They can still request the signed consent agreement via our APIs.
+          </p>
+        </div>
+      </div>
+      <div class="eight wide column">
+        <div class="field">
+          <label>Assignment based on</label>
+          <criteria params="id: '', criteriaObs: criteriaObs"></criteria>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>

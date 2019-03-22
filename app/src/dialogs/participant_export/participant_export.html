@@ -1,37 +1,48 @@
 <div class="ui small modal">
-    <div class="header">
-        Export Participants
+  <div class="header">
+    Export Participants
+  </div>
+  <div class="content">
+    <div class="ui error message" data-bind="visible: !reauthenticationEnabledObs()">
+      <p>
+        We have not enabled automatic reauthentication for this study. If you have more than hundreds of participants in
+        your study, your session may expire before you entirely export your participant data. Before exporting all
+        participants, please contact Sage Bionetworks to have reauthentication enabled.
+      </p>
     </div>
-    <div class="content">
-        <div class="ui error message" data-bind="visible: !reauthenticationEnabledObs()">
-            <p>We have not enabled automatic reauthentication for this study. If you have more than hundreds of 
-                participants in your study, your session may expire before you entirely export your participant 
-                data. Before exporting all participants, please contact Sage Bionetworks to have reauthentication 
-                enabled. </p>
-        </div>
-        <p>Any search filters you created to view participants will be used to select records for export. </p>
-        <div class="ui info message" data-bind="visible: exportText(), text: exportText()"></div>
-        <progress data-bind="attr:{ value: valueObs, max: maxObs}"></progress>
-        <div class="progress-status">
-            <div data-bind="text: statusObs"></div>
-            <div class="progress-status-perc" data-bind="text: percentageObs"></div>
-        </div>
-        <div class="batch-process-errors" data-bind="visible: errorMessagesObs().length > 0">
-            <ul class="ui text red" data-bind="foreach: errorMessagesObs">
-                <li data-bind="text: $data"></li>
-            </ul>
-        </div>
-        <div class="field" style="margin-top:1rem">
-            <ui-checkbox params="checkedObs: canContactByEmailObs">
-                Only include participants you can contact by email
-            </ui-checkbox>
-        </div>
+    <p>Any search filters you created to view participants will be used to select records for export.</p>
+    <div class="ui info message" data-bind="visible: exportText(), text: exportText()"></div>
+    <progress data-bind="attr:{ value: valueObs, max: maxObs}"></progress>
+    <div class="progress-status">
+      <div data-bind="text: statusObs"></div>
+      <div class="progress-status-perc" data-bind="text: percentageObs"></div>
     </div>
-    <div class="actions">
-        <button class="ui small primary button" data-bind="click: startExport, 
-            visible: !enableObs()">Start</button>
-        <button class="ui small primary button" data-bind="click: download, 
-            visible: enableObs">Download</button>
-        <button class="ui small button" data-bind="click: close">Cancel</button>
+    <div class="batch-process-errors" data-bind="visible: errorMessagesObs().length > 0">
+      <ul class="ui text red" data-bind="foreach: errorMessagesObs">
+        <li data-bind="text: $data"></li>
+      </ul>
     </div>
+    <div class="field" style="margin-top:1rem">
+      <ui-checkbox params="checkedObs: canContactByEmailObs">
+        Only include participants you can contact by email
+      </ui-checkbox>
+    </div>
+  </div>
+  <div class="actions">
+    <button
+      class="ui small primary button"
+      data-bind="click: startExport, 
+            visible: !enableObs()"
+    >
+      Start
+    </button>
+    <button
+      class="ui small primary button"
+      data-bind="click: download, 
+            visible: enableObs"
+    >
+      Download
+    </button>
+    <button class="ui small button" data-bind="click: close">Cancel</button>
+  </div>
 </div>

@@ -1,10 +1,13 @@
-<div class="panel-vertical-scrollbox" data-bind="foreach: elementsObs, dragula: {
-    dragHandleSelector: '.vs-item-content', indexObs: selectedElementObs, listObs: elementsObs}">
-    <div class="vs-item" data-bind="click: $component.selectElement">
-        <div class="vs-item-content" data-bind="html: $component.truncate($data.titleObs() || $data.promptObs())"></div>
-        <div class="vs-item-delete link"><i class="delete icon" data-bind="click: $component.removeElement"></i></div>
-    </div>
+<div
+  class="panel-vertical-scrollbox"
+  data-bind="foreach: elementsObs, dragula: {
+    dragHandleSelector: '.vs-item-content', indexObs: selectedElementObs, listObs: elementsObs}"
+>
+  <div class="vs-item" data-bind="click: $component.selectElement">
+    <div class="vs-item-content" data-bind="html: $component.truncate($data.titleObs() || $data.promptObs())"></div>
+    <div class="vs-item-delete link"><i class="delete icon" data-bind="click: $component.removeElement"></i></div>
+  </div>
 </div>
 <div class="item" style="padding: .5rem">
-    <i>Drag list items to reorder them.</i>
+  <i>Drag list items to reorder them.</i>
 </div>

@@ -1,130 +1,130 @@
 <div class="ui form">
-    <h4 data-bind="visible: healthDataExistsObs" class="ui dividing header">Upload</h4>
+  <h4 data-bind="visible: healthDataExistsObs" class="ui dividing header">Upload</h4>
+  <div class="field">
+    <div class="field" data-bind="visible: showStudyObs">
+      <label>Study ID</label>
+      <div><span data-bind="text: studyNameObs"></span> (<span data-bind="text: studyIdObs"></span>)</div>
+    </div>
+    <div class="three fields">
+      <div class="field">
+        <label>Status</label>
+        <div>
+          <i data-bind="attr:{class:$component.iconFor(statusObs())}"></i>
+          <span data-bind="text: statusObs"></span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Health Code</label>
+        <a target="_blank" data-bind="visible: sameStudyObs, href: $component.linkObs, text: healthCodeObs"></a>
+        <span data-bind="visible: !sameStudyObs(), text: healthCodeObs"></span>
+      </div>
+      <div class="field">
+        <label>S3 key name</label>
+        <div data-bind="text: objectIdObs"></div>
+      </div>
+    </div>
+    <div class="three fields">
+      <div class="field">
+        <label>Requested On</label>
+        <div data-bind="text: $component.formatDateTime(requestedOnObs())"></div>
+      </div>
+      <div class="field">
+        <label>Completed On</label>
+        <div data-bind="visible: completedOnObs">
+          <span data-bind="text: $component.formatDateTime(completedOnObs())"></span>
+          (by <span data-bind="text: completedByObs"></span>)
+        </div>
+      </div>
+      <div class="field">
+        <label>Upload Date</label>
+        <div data-bind="text: uploadDateObs"></div>
+      </div>
+    </div>
+    <div class="three fields">
+      <div class="field">
+        <label>Content Type</label>
+        <div data-bind="text: contentTypeObs"></div>
+      </div>
+      <div class="field">
+        <label>Content MD5</label>
+        <div data-bind="text: contentMd5Obs"></div>
+      </div>
+      <div class="field">
+        <label>Content Length</label>
+        <div data-bind="text: contentLengthObs"></div>
+      </div>
+    </div>
+  </div>
+  <div class="field" data-bind="visible: !healthDataExistsObs()">
+    <label>File Name</label>
+    <div data-bind="text: filenameObs"></div>
+  </div>
+
+  <div data-bind="visible: validationMessageListObs().length > 0">
+    <h4 class="ui dividing header">Validation Errors</h4>
+    <ul class="validation_errors" data-bind="foreach: validationMessageListObs">
+      <li data-bind="text: $data"></li>
+    </ul>
+  </div>
+
+  <div data-bind="visible: healthDataExistsObs">
+    <h4 class="upload-dividing-header">Health Data</h4>
     <div class="field">
-        <div class="field" data-bind="visible: showStudyObs">
-            <label>Study ID</label>
-            <div><span data-bind="text: studyNameObs"></span> (<span data-bind="text: studyIdObs"></span>)</div>
-        </div>
-        <div class="three fields">
-            <div class="field">
-                <label>Status</label>
-                <div>
-                    <i data-bind="attr:{class:$component.iconFor(statusObs())}"></i>
-                    <span data-bind="text: statusObs"></span>
-                </div>
-            </div>
-            <div class="field">
-                <label>Health Code</label>
-                <a target="_blank" data-bind="visible: sameStudyObs, href: $component.linkObs, text: healthCodeObs"></a>
-                <span data-bind="visible: !sameStudyObs(), text: healthCodeObs"></span>
-            </div>
-            <div class="field">
-                <label>S3 key name</label>
-                <div data-bind="text: objectIdObs"></div>
-            </div>
-        </div>
-        <div class="three fields">
-            <div class="field">
-                <label>Requested On</label>
-                <div data-bind="text: $component.formatDateTime(requestedOnObs())"></div>
-            </div>
-            <div class="field">
-                <label>Completed On</label>
-                <div data-bind="visible: completedOnObs">
-                    <span data-bind="text: $component.formatDateTime(completedOnObs())"></span>
-                    (by <span data-bind="text: completedByObs"></span>)
-                </div>
-            </div>
-            <div class="field">
-                <label>Upload Date</label>
-                <div data-bind="text: uploadDateObs"></div>
-            </div>
-        </div>
-        <div class="three fields">
-            <div class="field">
-                <label>Content Type</label>
-                <div data-bind="text: contentTypeObs"></div>
-            </div>
-            <div class="field">
-                <label>Content MD5</label>
-                <div data-bind="text: contentMd5Obs"></div>
-            </div>
-            <div class="field">
-                <label>Content Length</label>
-                <div data-bind="text: contentLengthObs"></div>
-            </div>
-        </div>
-    </div>
-    <div class="field" data-bind="visible: !healthDataExistsObs()">
-        <label>File Name</label>
-        <div data-bind="text: filenameObs"></div>
-    </div>
-
-    <div data-bind="visible: validationMessageListObs().length > 0">
-        <h4 class="ui dividing header">Validation Errors</h4>
-        <ul class="validation_errors" data-bind="foreach: validationMessageListObs">
-            <li data-bind="text: $data"></li>
-        </ul>
-    </div>
-
-    <div data-bind="visible: healthDataExistsObs">
-        <h4 class="upload-dividing-header">Health Data</h4>
+      <div class="three fields">
         <div class="field">
-            <div class="three fields">
-                <div class="field">
-                    <label>Created On</label>
-                    <div data-bind="text: $component.formatDateTime(createdOnObs())"></div>
-                </div>
-                <div class="field">
-                    <label>Created On Time Zone</label>
-                    <div data-bind="text: createdOnTimeZoneObs"></div>
-                </div>
-                <div class="field">
-                    <label>Synapse Exporter Status</label>
-                    <div>
-                        <i data-bind="attr:{class:$component.iconFor(synapseExporterStatusObs())}"></i>
-                        <span data-bind="text: synapseExporterStatusObs"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="three fields">
-                <div class="field">
-                    <label>App Version</label>
-                    <div data-bind="text: appVersionObs"></div>
-                </div>
-                <div class="field">
-                    <label>Phone Info</label>
-                    <div data-bind="text: phoneInfoObs"></div>
-                </div>
-                <div class="field">
-                    <label>User Sharing Scope</label>
-                    <div data-bind="text: userSharingScopeObs"></div>
-                </div>
-            </div>
-            <div class="three fields">
-                <div class="field">
-                    <label>Upload Schema</label>
-                    <a target="_blank" data-bind="visible: sameStudyObs, href: schemaLinkObs, text: schemaLabel"></a>
-                    <span data-bind="visible: !sameStudyObs(), text: schemaLabel"></span>
-                </div>
-                <div class="field">
-                    <label>Health Data ID</label>
-                    <div data-bind="text: idObs"></div>
-                </div>
-            </div>
+          <label>Created On</label>
+          <div data-bind="text: $component.formatDateTime(createdOnObs())"></div>
         </div>
-    
-        <h4 class="upload-dividing-header">JSON</h4>
-        <pre style="overflow: auto" data-bind="html: prettyPrintStringAsHTML(dataObs())"></pre>
-    
-        <h4 class="upload-dividing-header" data-bind="text: filenameObs">Files</h4>
-        <table class="ui very basic table" data-bind="visible: filesObs().length > 0">
-            <tbody data-bind="foreach: filesObs">
-                <tr>
-                    <td data-bind="text: $data.filename"></td>
-                    <td data-bind="text: $component.formatDateTime($data.timestamp)"></td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="field">
+          <label>Created On Time Zone</label>
+          <div data-bind="text: createdOnTimeZoneObs"></div>
+        </div>
+        <div class="field">
+          <label>Synapse Exporter Status</label>
+          <div>
+            <i data-bind="attr:{class:$component.iconFor(synapseExporterStatusObs())}"></i>
+            <span data-bind="text: synapseExporterStatusObs"></span>
+          </div>
+        </div>
+      </div>
+      <div class="three fields">
+        <div class="field">
+          <label>App Version</label>
+          <div data-bind="text: appVersionObs"></div>
+        </div>
+        <div class="field">
+          <label>Phone Info</label>
+          <div data-bind="text: phoneInfoObs"></div>
+        </div>
+        <div class="field">
+          <label>User Sharing Scope</label>
+          <div data-bind="text: userSharingScopeObs"></div>
+        </div>
+      </div>
+      <div class="three fields">
+        <div class="field">
+          <label>Upload Schema</label>
+          <a target="_blank" data-bind="visible: sameStudyObs, href: schemaLinkObs, text: schemaLabel"></a>
+          <span data-bind="visible: !sameStudyObs(), text: schemaLabel"></span>
+        </div>
+        <div class="field">
+          <label>Health Data ID</label>
+          <div data-bind="text: idObs"></div>
+        </div>
+      </div>
     </div>
+
+    <h4 class="upload-dividing-header">JSON</h4>
+    <pre style="overflow: auto" data-bind="html: prettyPrintStringAsHTML(dataObs())"></pre>
+
+    <h4 class="upload-dividing-header" data-bind="text: filenameObs">Files</h4>
+    <table class="ui very basic table" data-bind="visible: filesObs().length > 0">
+      <tbody data-bind="foreach: filesObs">
+        <tr>
+          <td data-bind="text: $data.filename"></td>
+          <td data-bind="text: $component.formatDateTime($data.timestamp)"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

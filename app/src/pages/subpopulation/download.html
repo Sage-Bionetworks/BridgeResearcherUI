@@ -1,46 +1,49 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <div class="ui breadcrumb">
-                <a href="#/subpopulations" class="section">Consent Groups</a>
-                <i class="right chevron icon divider"></i>
-            </div>
-            <h3 data-bind="text: nameObs"></h3>
-        </div>
-        <div class="fixed-header-buttons"></div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/subpopulations" class="section">Consent Groups</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="text: nameObs"></h3>
     </div>
-    <subpop-tabset params="guidObs: guidObs"></subpop-tabset>
+    <div class="fixed-header-buttons"></div>
+  </div>
+  <subpop-tabset params="guidObs: guidObs"></subpop-tabset>
 </div>
 <div class="scrollbox">
-    <div class="ui grid">
-        <div class="ten wide column">
-            <table class="ui compact table">
-                <thead>
-                    <tr>
-                        <th>Format</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>HTML</td>
-                        <td>
-                            <a target="_blank" rel="noopener" data-bind="attr: {'href': htmlUrlObs}, text: htmlUrlObs"></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>PDF</td>
-                        <td>
-                            <a target="_blank" rel="noopener" data-bind="attr: {'href': pdfUrlObs}, text: pdfUrlObs"></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="six wide column">
-            <div class="ui message">
-                <p>The published version of the consent can be accessed from your mobile app, or from other support materials, at the following addresses. </p>
-            </div>
-        </div>
+  <div class="ui grid">
+    <div class="ten wide column">
+      <table class="ui compact table">
+        <thead>
+          <tr>
+            <th>Format</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>HTML</td>
+            <td>
+              <a target="_blank" rel="noopener" data-bind="attr: {'href': htmlUrlObs}, text: htmlUrlObs"></a>
+            </td>
+          </tr>
+          <tr>
+            <td>PDF</td>
+            <td>
+              <a target="_blank" rel="noopener" data-bind="attr: {'href': pdfUrlObs}, text: pdfUrlObs"></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+    <div class="six wide column">
+      <div class="ui message">
+        <p>
+          The published version of the consent can be accessed from your mobile app, or from other support materials, at
+          the following addresses.
+        </p>
+      </div>
+    </div>
+  </div>
 </div>

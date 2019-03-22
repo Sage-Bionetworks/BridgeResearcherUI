@@ -1,41 +1,40 @@
+<p class="help-text">
+  Define any number of schedules, each will have conditions the user must match to return that schedule to the user.
+  Schedules are evaluated in order and the first one that matches is assigned to the user.
+</p>
 
-<p class="help-text">Define any number of schedules, each will have conditions the user must match to return that
-    schedule to the user. Schedules are evaluated in order and the first one that matches is assigned to the user. </p>
-
-<form class="ui form schedulegroup" data-bind="template: {
+<form
+  class="ui form schedulegroup"
+  data-bind="template: {
         foreach: scheduleCriteriaObs,
         beforeRemove: fadeUp
-    }">
-    <fieldset class="schedulegroup-fieldset">
-        <legend class="schedulegroup-fieldset-legend">
-            <h4>Assignment based on</h4>
-        </legend>
-        <div class="schedulegroup-fieldset-remove">
-            <button class="ui basic mini red button" data-bind="click: $parent.removeCriteria">
-                <i class="delete square icon"></i>Remove Schedule
-            </button>
-        </div>
-        <!-- ko component: {
-            name: "criteria",
-            params: { 
-                id: 'strategy_scheduleCriteria'+$index()+'_criteria_', 
-                criteriaObs: $data.criteriaObs,
-                eventObj: $component.scheduleCriteriaObs
-            }
-        } -->
+    }"
+>
+  <fieldset class="schedulegroup-fieldset">
+    <legend class="schedulegroup-fieldset-legend">
+      <h4>Assignment based on</h4>
+    </legend>
+    <div style="display: flex; align-items: center">
+      <div style="flex: 1">
+        <!-- ko component: { name: "criteria", params: { criteriaObs: $data.criteriaObs } } -->
         <!-- /ko -->
-        <h4 class="schedulegroup-fieldset-h4">Schedule</h4>
-        <div data-bind="component: {name: 'schedule', params: {
+      </div>
+      <button class="ui basic mini red button" data-bind="click: $parent.removeCriteria">
+        <i class="delete square icon"></i>Remove Schedule
+      </button>
+    </div>
+
+    <h4 class="schedulegroup-fieldset-h4">Schedule</h4>
+    <div
+      data-bind="component: {name: 'schedule', params: {
                 scheduleHolder: $data,
                 scheduleObs: $data.scheduleObs, 
                 collectionName: 'scheduleCriteria'+$index()+'_'
             }
-        }"></div>
-    </fieldset>
+        }"
+    ></div>
+  </fieldset>
 </form>
 <div class="ui form">
-    <a class="ui primary button" data-bind="click: addCriteria">
-        <i class="add square icon"></i>Add Schedule
-    </a>
+  <a class="ui primary button" data-bind="click: addCriteria"> <i class="add square icon"></i>Add Schedule </a>
 </div>
-

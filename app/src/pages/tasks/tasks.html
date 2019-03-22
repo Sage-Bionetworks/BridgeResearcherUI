@@ -1,55 +1,61 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <h3>Compound Tasks</h3>
-        </div>
-        <div class="fixed-header-buttons">
-            <div class="ui tiny buttons">
-                <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()}, 
-                    semantic: 'dropdown-button-toggle', container: '.buttons'">Copy</div>
-                <div class="ui tiny floating dropdown icon button" 
-                    data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <div class="item" data-bind="click: copy">Copy</div>
-                        <div class="item" data-bind="click: copyToClipboard">Copy to Clipboard</div>
-                    </div>
-                </div>
-            </div>
-            <button class="ui red tiny button" data-bind="disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
-            <a href="#/tasks/new" class="ui primary tiny button">New Task</a>
-        </div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <h3>Compound Tasks</h3>
     </div>
-    <div class="ui empty secondary pointing menu">
+    <div class="fixed-header-buttons">
+      <div class="ui tiny buttons">
+        <div
+          class="ui tiny button"
+          data-bind="css:{disabled: !atLeastOneChecked()}, 
+                    semantic: 'dropdown-button-toggle', container: '.buttons'"
+        >
+          Copy
+        </div>
+        <div
+          class="ui tiny floating dropdown icon button"
+          data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}"
+        >
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" data-bind="click: copy">Copy</div>
+            <div class="item" data-bind="click: copyToClipboard">Copy to Clipboard</div>
+          </div>
+        </div>
+      </div>
+      <button class="ui red tiny button" data-bind="disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
+      <a href="#/tasks/new" class="ui primary tiny button">New Task</a>
     </div>
+  </div>
+  <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
-    <errors></errors>
-    <table class="ui compact selectable table">
-        <thead>
-            <tr>
-                <th width="10">
-                    <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
-                </th>
-                <th>Task ID</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-            <tr>
-                <td colspan="3" data-bind="html: recordsMessageObs"></td>
-            </tr>
-        </tbody>        
-        <tbody data-bind="foreach: itemsObs">
-            <tr>
-                <td>
-                    <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
-                </td>
-                <td style="white-space: nowrap">
-                    <a data-bind="href: '#/tasks/'+ encodeURIComponent($data.taskId), text: $data.taskId"></a>
-                </td>
-                <td data-bind="html: $parent.formatCompoundActivity($data)"></td>
-            </tr>
-        </tbody>
-    </table>
+  <errors></errors>
+  <table class="ui compact selectable table">
+    <thead>
+      <tr>
+        <th width="10">
+          <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+        </th>
+        <th>Task ID</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+      <tr>
+        <td colspan="3" data-bind="html: recordsMessageObs"></td>
+      </tr>
+    </tbody>
+    <tbody data-bind="foreach: itemsObs">
+      <tr>
+        <td>
+          <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+        </td>
+        <td style="white-space: nowrap">
+          <a data-bind="href: '#/tasks/'+ encodeURIComponent($data.taskId), text: $data.taskId"></a>
+        </td>
+        <td data-bind="html: $parent.formatCompoundActivity($data)"></td>
+      </tr>
+    </tbody>
+  </table>
 </div>

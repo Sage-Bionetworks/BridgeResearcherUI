@@ -1,34 +1,36 @@
 <div class="ui small modal">
-    <i data-bind="click:closeDialog" class="close icon"></i>
-    <div class="header">
-        Add Apple Universal Link
-    </div>
-    <div class="content ui form" style="padding-bottom: 0">
-        <errors></errors>
-        <div class="two fields">
-            <div class="field" id="appId">
-                <label>App ID</label>
-                <input data-bind="textInput: appIdObs">
-            </div>
-            <div class="field" id="paths">
-                <label>Paths</label>
-                <div class="ui action input">
-                    <input type="text" data-bind="textInput: $component.addFieldObs, hasFocus: true,
-                        event: {keypress: $component.keyHandler}, hasFocus: true"/>
-                    <button class="ui button" data-bind="click: $component.add">Add</button>
-                </div>
-                <div class="ui large labels" style="margin-top: 1rem" data-bind="foreach: pathsObs">
-                    <div class="ui label">
-                        <span data-bind="text: $data"></span> 
-                        <i class="icon close" data-bind="click: $component.remove"></i>
-                    </div>
-                </div>
-            </div>
+  <i data-bind="click:closeDialog" class="close icon"></i>
+  <div class="header">
+    Add Apple Universal Link
+  </div>
+  <div class="content ui form" style="padding-bottom: 0">
+    <errors></errors>
+    <div class="two fields">
+      <div class="field" id="appId">
+        <label>App ID</label>
+        <input data-bind="textInput: appIdObs" />
+      </div>
+      <div class="field" id="paths">
+        <label>Paths</label>
+        <div class="ui action input">
+          <input
+            type="text"
+            data-bind="textInput: $component.addFieldObs, hasFocus: true,
+                        event: {keypress: $component.keyHandler}, hasFocus: true"
+          />
+          <button class="ui button" data-bind="click: $component.add">Add</button>
         </div>
+        <div class="ui large labels" style="margin-top: 1rem" data-bind="foreach: pathsObs">
+          <div class="ui label">
+            <span data-bind="text: $data"></span>
+            <i class="icon close" data-bind="click: $component.remove"></i>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="actions">
-        <button class="ui small primary button" data-bind="click: save">Save</button>
-        <button class="ui small button" data-bind="click: closeDialog">Cancel</button>
-    </div>
+  </div>
+  <div class="actions">
+    <button class="ui small primary button" data-bind="click: save">Save</button>
+    <button class="ui small button" data-bind="click: closeDialog">Cancel</button>
+  </div>
 </div>
-        

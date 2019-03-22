@@ -1,40 +1,43 @@
+<p class="help-text">
+  Define any number of schedules to be randomly assigned to study participants. Each is given a percentage weight and
+  that proportion of the population will receive the survey (small numbers of participants may vary from these
+  percentages due to random assignment). Percentages for all groups must add up to 100%.
+</p>
 
-<p class="help-text">Define any number of schedules to be randomly assigned to study participants. Each is given
-a percentage weight and that proportion of the population will receive the survey (small numbers of participants
-may vary from these percentages due to random assignment). Percentages for all groups must add up to 100%. </p>
-
-<form class="ui form schedulegroup" data-bind="template: {
+<form
+  class="ui form schedulegroup"
+  data-bind="template: {
         foreach: scheduleGroupsObs,
         beforeRemove: fadeUp
-    }">
-    <fieldset class="schedulegroup-fieldset">
-        <legend class="schedulegroup-fieldset-legend">
-            <h4 data-bind="text: 'Group #' + ($index()+1)"></h4>
-        </legend>
-        <div class="two fields">
-            <div class="field">
-                <label>Percentage of users to receive this schedule</label>
-                <div>
-                    <span class="ui large label" data-bind="text: $data.percentLabel"></span>
-                    <input type="range" min="1" max="100" data-bind="value: $data.percentageObs, valueUpdate: 'input'"/>
-                </div>
-            </div>
-            <div class="field schedulegroup-field-delete">
-                <button class="ui basic mini red button" data-bind="click: $parent.removeGroup">
-                    <i class="delete square icon"></i>Remove Schedule
-                </button>                
-            </div>
+    }"
+>
+  <fieldset class="schedulegroup-fieldset">
+    <legend class="schedulegroup-fieldset-legend">
+      <h4 data-bind="text: 'Group #' + ($index()+1)"></h4>
+    </legend>
+    <div style="margin-top: .5rem; display: flex; align-items: center">
+      <div class="field" style="flex:1">
+        <label>Percentage of users to receive this schedule</label>
+        <div>
+          <span class="ui large label" data-bind="text: $data.percentLabel"></span>
+          <input type="range" min="1" max="100" data-bind="value: $data.percentageObs, valueUpdate: 'input'" />
         </div>
-        
-        <h4 style="margin-top:0">Schedule</h4>
-        <div data-bind="component: {name: 'schedule', params: {
+      </div>
+      <button class="ui basic mini red button" data-bind="click: $parent.removeGroup">
+        <i class="delete square icon"></i>Remove Schedule
+      </button>
+    </div>
+
+    <h4 style="margin-top:0">Schedule</h4>
+    <div
+      data-bind="component: {name: 'schedule', params: {
             scheduleObs: $data.scheduleObs, collectionName: 'scheduleGroups'+$index()+'_'
-        }}"></div>
-    </fieldset>
+        }}"
+    ></div>
+  </fieldset>
 </form>
 <div class="ui form">
-    <button class="ui primary button" data-bind="click: addGroup">
-        <i class="add square icon"></i>Add Schedule Group
-    </button>
+  <button class="ui primary button" data-bind="click: addGroup">
+    <i class="add square icon"></i>Add Schedule Group
+  </button>
 </div>
-

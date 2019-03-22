@@ -1,16 +1,16 @@
-<div class="panel-vertical-scrollbox" data-bind="foreach: scheduleGroupsObs, dragula: {
+<div
+  class="panel-vertical-scrollbox"
+  data-bind="foreach: scheduleGroupsObs, dragula: {
         dragHandleSelector: '.vs-item-content', indexObs: selectedElementObs, 
-        listObs: scheduleGroupsObs}">
-    <div class="vs-item" data-bind="click: $component.selectGroup">
-        <div class="vs-item-content" data-bind="text: $component.groupLabel($data, $index)"></div>
-        <div class="vs-item-delete link">
-            <i class="red times circle outline link icon" 
-                data-bind="click: $component.removeGroup"></i> 
-        </div>
+        listObs: scheduleGroupsObs}"
+>
+  <div class="vs-item" data-bind="click: $component.selectGroup">
+    <div class="vs-item-content" data-bind="text: $component.groupLabel($data, $index)"></div>
+    <div class="vs-item-delete link">
+      <i class="red times circle outline link icon" data-bind="click: $component.removeGroup"></i>
     </div>
+  </div>
 </div>
 <div class="item" style="padding:.5rem">
-    <a class="ui link" data-bind="click: $component.addGroup">
-        <i class="add square icon"></i>Add Schedule
-    </a>
+  <a class="ui link" data-bind="click: $component.addGroup"> <i class="add square icon"></i>Add Schedule </a>
 </div>

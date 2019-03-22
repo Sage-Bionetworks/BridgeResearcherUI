@@ -1,38 +1,44 @@
 <constraints-label params="title: 'Decimal Question', element: element"></constraints-label>
 <div class="ui constraints grid">
-    <div class="seven wide column">
-        <div class="constraints-group">
-            <div class="field" data-bind="attr:{id: $parent.collectionName+'constraints_minValue'}">
-                <label>Min value</label>
-                <input class="numeric" type="text" data-bind="textInput: minValueObs"/>
-            </div>
-            <div class="field">
-                <label>Max value</label>
-                <input class="numeric" type="text" data-bind="textInput: maxValueObs"/>
-            </div>
-        </div>
-        <div class="constraints-group">
-            <div class="field" data-bind="attr:{id: $parent.collectionName+'constraints_step'}">
-                <label>Step</label>
-                <input class="numeric" type="text" data-bind="textInput: stepObs"/>
-            </div>
-            <div class="field" data-bind="attr:{id: $parent.collectionName+'constraints_unit'}">
-                <label>Unit</label>
-                <ui-select params="fieldObs: unitObs, fieldLabel: unitLabel, 
-                    optionsSrc: unitOptions"></ui-select>
-            </div>
-        </div>
+  <div class="seven wide column">
+    <div class="constraints-group">
+      <div class="field" data-bind="attr:{id: $parent.collectionName+'constraints_minValue'}">
+        <label>Min value</label>
+        <input class="numeric" type="text" data-bind="textInput: minValueObs" />
+      </div>
+      <div class="field">
+        <label>Max value</label>
+        <input class="numeric" type="text" data-bind="textInput: maxValueObs" />
+      </div>
     </div>
-    <div class="nine wide column">
-        <div class="field">
-            <label>Before Rules</label>
-            <ui-rules params="element: element, fieldName: 'beforeRulesObs', 
-                elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>            
-        </div>
-        <div class="field">
-            <label>After Rules</label>
-            <ui-rules params="element: element, fieldName: 'afterRulesObs', 
-                elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>
-        </div>
+    <div class="constraints-group">
+      <div class="field" data-bind="attr:{id: $parent.collectionName+'constraints_step'}">
+        <label>Step</label>
+        <input class="numeric" type="text" data-bind="textInput: stepObs" />
+      </div>
+      <div class="field" data-bind="attr:{id: $parent.collectionName+'constraints_unit'}">
+        <label>Unit</label>
+        <ui-select
+          params="fieldObs: unitObs, fieldLabel: unitLabel, 
+                    optionsSrc: unitOptions"
+        ></ui-select>
+      </div>
     </div>
+  </div>
+  <div class="nine wide column">
+    <div class="field">
+      <label>Before Rules</label>
+      <ui-rules
+        params="element: element, fieldName: 'beforeRulesObs', 
+                elementsObs: elementsObs, collectionName: $data.collectionName"
+      ></ui-rules>
+    </div>
+    <div class="field">
+      <label>After Rules</label>
+      <ui-rules
+        params="element: element, fieldName: 'afterRulesObs', 
+                elementsObs: elementsObs, collectionName: $data.collectionName"
+      ></ui-rules>
+    </div>
+  </div>
 </div>

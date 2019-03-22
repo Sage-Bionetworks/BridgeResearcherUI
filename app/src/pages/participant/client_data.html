@@ -1,27 +1,27 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <div class="ui breadcrumb">
-                <a class="section" href="#/participants">Participants</a>
-                <i class="right chevron icon divider"></i>
-            </div>            
-            <h3 data-bind="html: titleObs"></h3>
-        </div>
-        <div class="fixed-header-buttons">
-            <button class="ui tiny primary button" data-bind="click: save">Save</button>
-        </div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a class="section" href="#/participants">Participants</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="html: titleObs"></h3>
     </div>
-    <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
+    <div class="fixed-header-buttons">
+      <button class="ui tiny primary button" data-bind="click: save">Save</button>
+    </div>
+  </div>
+  <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
 </div>
 <div class="scrollbox">
-    <errors></errors>
-    <div class="ui form">
-        <div class="field" id="clientData">
-            <label>Client data should be in JSON format</label>
-            <textarea style="font-family: monospace" data-bind="textInput: clientDataObs"></textarea>
-        </div>
+  <errors></errors>
+  <div class="ui form">
+    <div class="field" id="clientData">
+      <label>Client data should be in JSON format</label>
+      <textarea style="font-family: monospace" data-bind="textInput: clientDataObs"></textarea>
     </div>
-    <div style="padding-top:1rem">
-        <button class="ui tiny primary button" data-bind="click: reformat">Reformat</button>
-    </div>
+  </div>
+  <div style="padding-top:1rem">
+    <button class="ui tiny primary button" data-bind="click: reformat">Reformat</button>
+  </div>
 </div>

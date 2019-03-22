@@ -1,5 +1,11 @@
-<div class="fields">
+<div class="field">
+  <div class="input-field-padding" data-bind="text: formatCriteriaObs"></div>
+  <div class="inline-editor-controls">
+    <a class="pointing" data-bind="click: editCriteria"><i class="write icon"></i>Edit&hellip;</a>
+    <a class="pointing" data-bind="click: clearCriteria"><i class="delete icon"></i>Clear</a>
+  </div>
   <!-- Doesn't handle errors targeted for minAppVersions_iphone_os -->
+  <!--
   <div data-bind="attr:{class:'three wide field '+$data.id+'minAppVersions_iphone_os ' + 
     $data.id+'maxAppVersions_iphone_os'}">
     <label>iOS version</label>
@@ -32,4 +38,5 @@
     <tag-editor params="selectedObs: noneOfGroupsObs, 
       allObs: dataGroupsOptionsObs, type: 'data groups'"></tag-editor>
   </div>
+  -->
 </div>

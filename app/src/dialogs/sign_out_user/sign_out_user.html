@@ -1,33 +1,49 @@
 <div class="ui small modal">
-    <i data-bind="click:cancel" class="close icon"></i>
-    <div class="header">
-        Sign Out User
+  <i data-bind="click:cancel" class="close icon"></i>
+  <div class="header">
+    Sign Out User
+  </div>
+  <div class="ui form content">
+    <errors></errors>
+    <p style="margin-top:0">
+      End the user's session and invalidate the reauthentication token the user was given on sign in.
+    </p>
+    <p>
+      For debugging purposes during development, you can also end the user's session <em>without</em> invalidating the
+      reauth token.
+    </p>
+    <div class="grouped fields">
+      <div class="field">
+        <div class="ui radio checkbox">
+          <input
+            id="uvs2"
+            type="radio"
+            name="signOutOption"
+            class="hidden"
+            value="false"
+            data-bind="checked: signOutOptionObs"
+          />
+          <label for="uvs2">Sign out but do <b>not</b> delete the user's reauth token <b>(development only)</b></label>
+        </div>
+      </div>
+      <div class="field">
+        <div class="ui radio checkbox">
+          <input
+            id="uvs3"
+            type="radio"
+            name="signOutOption"
+            class="hidden"
+            value="true"
+            checked
+            data-bind="checked: signOutOptionObs"
+          />
+          <label for="uvs3">Sign out and destroy the user's reauth token <b>(default, safe)</b></label>
+        </div>
+      </div>
     </div>
-    <div class="ui form content">
-        <errors></errors>
-        <p style="margin-top:0">End the user's session and invalidate the reauthentication 
-            token the user was given on sign in. </p>
-        <p>For debugging purposes during development, you can also end the user's session 
-            <em>without</em> invalidating the reauth token. </p>
-        <div class="grouped fields">
-            <div class="field">
-                <div class="ui radio checkbox">
-                    <input id="uvs2" type="radio" name="signOutOption" class="hidden" 
-                        value="false" data-bind="checked: signOutOptionObs">
-                    <label for="uvs2">Sign out but do <b>not</b> delete the user's reauth token <b>(development only)</b></label>
-                </div>
-            </div>
-            <div class="field">
-                <div class="ui radio checkbox">
-                    <input id="uvs3" type="radio" name="signOutOption" class="hidden" 
-                        value="true" checked data-bind="checked: signOutOptionObs">
-                    <label for="uvs3">Sign out and destroy the user's reauth token <b>(default, safe)</b></label>
-                </div>
-            </div>
-        </div>        
-    </div>
-    <div class="actions">
-        <button class="ui primary small button" data-bind="click: signOutUser">Sign Out User</button>
-        <button class="ui small button" data-bind="click: cancel">Cancel</button>
-    </div>
+  </div>
+  <div class="actions">
+    <button class="ui primary small button" data-bind="click: signOutUser">Sign Out User</button>
+    <button class="ui small button" data-bind="click: cancel">Cancel</button>
+  </div>
 </div>

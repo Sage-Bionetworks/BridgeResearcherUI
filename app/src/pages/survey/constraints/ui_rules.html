@@ -1,11 +1,10 @@
 <div data-bind="foreach: rulesObs">
-    <div data-bind="attr: {id: $parent.collectionName + $parent.fieldProperty + $index()}">
-        <div class="rule" data-bind="html: $parents[1].formatRule($data)"></div>
-    </div>
+  <div data-bind="attr: {id: $parent.collectionName + $parent.fieldProperty + $index()}">
+    <div class="rule" data-bind="html: $parents[1].formatRule($data)"></div>
+  </div>
 </div>
 <div>
-    <button class="ui mini compact circular icon button"
-        data-bind="click: $parent.editRules(fieldName)">
-        <i class="horizontal ellipsis icon"></i>
-    </button>
+  <button class="ui mini compact circular icon button" data-bind="click: $parent.editRules(fieldName)">
+    <i class="horizontal ellipsis icon"></i>
+  </button>
 </div>

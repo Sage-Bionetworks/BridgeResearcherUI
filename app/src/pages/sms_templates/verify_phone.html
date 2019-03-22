@@ -1,70 +1,85 @@
 <div class="fixed-header">
-    <div class="fixed-header-title">
-        <div class="fixed-header-heading">
-            <h3>Text Message Templates</h3>
-        </div>        
-        <div class="fixed-header-buttons">
-            <button class="ui tiny primary button" data-bind="click: save">Save</button>
-        </div>
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <h3>Text Message Templates</h3>
     </div>
-    <sms-template-tabset></sms-template-tabset>
+    <div class="fixed-header-buttons">
+      <button class="ui tiny primary button" data-bind="click: save">Save</button>
+    </div>
+  </div>
+  <sms-template-tabset></sms-template-tabset>
 </div>
 <div class="scrollbox">
-    <div class="subtab-button-selector">
-        <div class="field">
-            <ui-checkbox params="checkedObs: autoVerificationPhoneEnabledObs">
-                Verify a phone number as part of sign up
-            </ui-checkbox>
-        </div>
-        <div class="tiny ui buttons">
-            <a class="active ui button" href="#/sms_templates/verify_phone">
-                Verify Phone Number
-            </a>
-            <a class="ui button" href="#/sms_templates/verify_phone/account_exists">
-                Account Exists
-            </a>
-        </div>
-    </div>    
-    <div class="ui grid">
-        <div class="ten wide column">
-            <errors></errors>
-            <form class="ui form" data-bind="attr: {disabled: !autoVerificationPhoneEnabledObs()}">
-                <div class="disable-pane">
-                    <div class="required field" id="verifyPhoneSmsTemplate_message"
-                        data-bind="css: {error: formattedMessageObs().length > 159}">
-                        <label>Message</label>
-                        <input type="text" name="message" data-bind="textInput: messageObs, hasFocus: true,
-                            attr: {disabled: !autoVerificationPhoneEnabledObs()}" autocomplete="off"/>
-                    </div>
-                    <p class="error-message" data-bind="visible: formattedMessageObs().length > 159">
-                        When formatted, the message will be too long for SMS (max. 160 characters).
-                    </p>
-                    <p class="help-text" data-bind="text: formattedMessageObs"></p>
-                </div>
-            </form>
-        </div>
-        <div class="six wide column">
-            <div class="ui message">
-                <p>This message is sent to users when they sign up for your study with a phone number, so we can verify they own the number. </p>
-
-                <p><strong>It <em>must</em> contain the value <code>${token}</code>,</strong> which is the numeric token the user will need to enter into the app to verify the phone number. The app will send this number back to the server to complete the verification setp. </p>
-
-                <p>There are other values available for use in your template: </p>
-
-                <dl>
-                    <dt>${studyShortName}</dt>
-                    <dd>the short name you entered for your study</dd>
-                    
-                    <dt>${sponsorName}</dt>
-                    <dd>the name you entered for the group sponsoring the study</dd>
-
-                    <dt>${supportEmail}</dt>
-                    <dd>your support email address</dd>
-
-                    <dt>${expirationPeriod}</dt>
-                    <dd>the period before the verification token in the message will expire (e.g. "2 hours")</dd>
-                </dl>
-            </div>
-        </div>
+  <div class="subtab-button-selector">
+    <div class="field">
+      <ui-checkbox params="checkedObs: autoVerificationPhoneEnabledObs">
+        Verify a phone number as part of sign up
+      </ui-checkbox>
     </div>
+    <div class="tiny ui buttons">
+      <a class="active ui button" href="#/sms_templates/verify_phone">
+        Verify Phone Number
+      </a>
+      <a class="ui button" href="#/sms_templates/verify_phone/account_exists">
+        Account Exists
+      </a>
+    </div>
+  </div>
+  <div class="ui grid">
+    <div class="ten wide column">
+      <errors></errors>
+      <form class="ui form" data-bind="attr: {disabled: !autoVerificationPhoneEnabledObs()}">
+        <div class="disable-pane">
+          <div
+            class="required field"
+            id="verifyPhoneSmsTemplate_message"
+            data-bind="css: {error: formattedMessageObs().length > 159}"
+          >
+            <label>Message</label>
+            <input
+              type="text"
+              name="message"
+              data-bind="textInput: messageObs, hasFocus: true,
+                            attr: {disabled: !autoVerificationPhoneEnabledObs()}"
+              autocomplete="off"
+            />
+          </div>
+          <p class="error-message" data-bind="visible: formattedMessageObs().length > 159">
+            When formatted, the message will be too long for SMS (max. 160 characters).
+          </p>
+          <p class="help-text" data-bind="text: formattedMessageObs"></p>
+        </div>
+      </form>
+    </div>
+    <div class="six wide column">
+      <div class="ui message">
+        <p>
+          This message is sent to users when they sign up for your study with a phone number, so we can verify they own
+          the number.
+        </p>
+
+        <p>
+          <strong>It <em>must</em> contain the value <code>${token}</code>,</strong> which is the numeric token the user
+          will need to enter into the app to verify the phone number. The app will send this number back to the server
+          to complete the verification setp.
+        </p>
+
+        <p>There are other values available for use in your template:</p>
+
+        <dl>
+          <dt>${studyShortName}</dt>
+          <dd>the short name you entered for your study</dd>
+
+          <dt>${sponsorName}</dt>
+          <dd>the name you entered for the group sponsoring the study</dd>
+
+          <dt>${supportEmail}</dt>
+          <dd>your support email address</dd>
+
+          <dt>${expirationPeriod}</dt>
+          <dd>the period before the verification token in the message will expire (e.g. "2 hours")</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
 </div>

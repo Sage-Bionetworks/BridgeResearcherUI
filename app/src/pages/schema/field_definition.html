@@ -1,58 +1,77 @@
 <div class="field_definition draggable" data-bind="with: field">
-    <div class="draggable">
-        <div class="field" data-bind="attr:{id:'fieldDefinitions'+$index()+'_name'}">
-            <input type="text" data-bind="textInput: nameObs" placeholder="Name"/>
-        </div>
+  <div class="draggable">
+    <div class="field" data-bind="attr:{id:'fieldDefinitions'+$index()+'_name'}">
+      <input type="text" data-bind="textInput: nameObs" placeholder="Name" />
     </div>
-    <div class="draggable">
-        <div class="field">
-            <ui-select params="fieldObs: typeObs, fieldLabel: $parent.fieldTypeLabel,
-                optionsSrc: $parent.fieldTypeOptions, optionsCaption: 'Select type...'"></ui-select>
-        </div>
+  </div>
+  <div class="draggable">
+    <div class="field">
+      <ui-select
+        params="fieldObs: typeObs, fieldLabel: $parent.fieldTypeLabel,
+                optionsSrc: $parent.fieldTypeOptions, optionsCaption: 'Select type...'"
+      ></ui-select>
     </div>
-    <!-- ko if: $parent.extraObs() === 'string' || $parent.extraObs() === 'single' -->
-        <div class="draggable">
-            <ui-checkbox params="checkedObs: unboundedTextObs">Any length, or</ui-checkbox>
-        </div>
-        <div class="draggable extra">
-            <input placeholder="Max length" data-bind="textInput: maxLengthObs, 
+  </div>
+  <!-- ko if: $parent.extraObs() === 'string' || $parent.extraObs() === 'single' -->
+  <div class="draggable">
+    <ui-checkbox params="checkedObs: unboundedTextObs">Any length, or</ui-checkbox>
+  </div>
+  <div class="draggable extra">
+    <input
+      placeholder="Max length"
+      data-bind="textInput: maxLengthObs, 
                 disable: unboundedTextObs(), hasFocus: $parent.focusObs"
-                style="padding: auto 0; width:4rem"></input>
-        </div>
-    <!-- /ko -->
-    <!-- ko if: $parent.extraObs() === 'attachment' -->
-        <div class="draggable">
-            <div class="ui search" style="width:8rem" data-bind="semantic: 'search', 
-                source: $parent.mimeTypes, observer: mimeTypeObs">
-                <input class="prompt" placeholder="Mime type" 
-                    data-bind="textInput: mimeTypeObs, event:{selectedItem: $parent.updateExt}">
-            </div>
-        </div>
-        <div class="draggable extra">
-            <input placeholder="File ext" 
-                data-bind="textInput: fileExtensionObs" style="width:6rem"></input>
-        </div>
-    <!-- /ko -->
-    <!-- ko if: $parent.extraObs() === 'multi' -->
-        <div class="draggable">
-            <a class="link" style="padding: .4rem" data-bind="click: $parents[2].editMultiChoiceAnswerList,
-                attr:{id:'fieldDefinitions'+$index()+'_multiChoiceAnswerList'}">
-                <span data-bind="text: multiChoiceAnswerListObs().length"></span> items&hellip;
-            </a>
-        </div>
-        <div class="draggable required">
-            <ui-checkbox params="checkedObs: allowOtherChoicesObs">Allow Other Choices</ui-checkbox>
-        </div>
-    <!-- /ko -->
-    <div class="draggable required">
-        <ui-checkbox params="checkedObs: requiredObs">Required</ui-checkbox>
+      style="padding: auto 0; width:4rem"
+    />
+  </div>
+  <!-- /ko -->
+  <!-- ko if: $parent.extraObs() === 'attachment' -->
+  <div class="draggable">
+    <div
+      class="ui search"
+      style="width:8rem"
+      data-bind="semantic: 'search', 
+                source: $parent.mimeTypes, observer: mimeTypeObs"
+    >
+      <input
+        class="prompt"
+        placeholder="Mime type"
+        data-bind="textInput: mimeTypeObs, event:{selectedItem: $parent.updateExt}"
+      />
     </div>
-    <div class="draggable activity-controls">
-        <i class="large plus square outline link icon" 
-            data-bind="click: $parents[2].addBelow, semantic: 'popup'" 
-            data-content="Add below"></i>
-        <i class="red large times circle outline link icon" 
-            data-bind="fadeRemove: {selector: '.field_definition', object: $data, 
-            collection: 'fieldDefinitionsObs'}"></i>
-    </div>
+  </div>
+  <div class="draggable extra">
+    <input placeholder="File ext" data-bind="textInput: fileExtensionObs" style="width:6rem" />
+  </div>
+  <!-- /ko -->
+  <!-- ko if: $parent.extraObs() === 'multi' -->
+  <div class="draggable">
+    <a
+      class="link"
+      style="padding: .4rem"
+      data-bind="click: $parents[2].editMultiChoiceAnswerList,
+                attr:{id:'fieldDefinitions'+$index()+'_multiChoiceAnswerList'}"
+    >
+      <span data-bind="text: multiChoiceAnswerListObs().length"></span> items&hellip;
+    </a>
+  </div>
+  <div class="draggable required">
+    <ui-checkbox params="checkedObs: allowOtherChoicesObs">Allow Other Choices</ui-checkbox>
+  </div>
+  <!-- /ko -->
+  <div class="draggable required">
+    <ui-checkbox params="checkedObs: requiredObs">Required</ui-checkbox>
+  </div>
+  <div class="draggable activity-controls">
+    <i
+      class="large plus square outline link icon"
+      data-bind="click: $parents[2].addBelow, semantic: 'popup'"
+      data-content="Add below"
+    ></i>
+    <i
+      class="red large times circle outline link icon"
+      data-bind="fadeRemove: {selector: '.field_definition', object: $data, 
+            collection: 'fieldDefinitionsObs'}"
+    ></i>
+  </div>
 </div>
