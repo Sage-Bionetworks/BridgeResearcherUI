@@ -75,6 +75,10 @@ reg("account_exists", {
   viewModel: require("./pages/email_templates/account_exists"),
   template: require("./pages/email_templates/account_exists.html")
 });
+reg("app_install_link", {
+  viewModel: require("./pages/email_templates/app_install_link"),
+  template: require("./pages/email_templates/app_install_link.html")
+});
 reg("sms_verify_phone", {
   viewModel: require("./pages/sms_templates/verify_phone"),
   template: require("./pages/sms_templates/verify_phone.html")

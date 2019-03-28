@@ -14,11 +14,8 @@
     <div class="ten wide column">
       <errors></errors>
       <form class="ui form">
-        <div
-          class="required field"
-          id="accountExistsSmsTemplate_message"
-          data-bind="css: {error: formattedMessageObs().length > 159}"
-        >
+        <div class="required field" id="accountExistsSmsTemplate_message"
+          data-bind="css: {error: formattedMessageObs().length > 159}">
           <label>Message</label>
           <input type="text" name="message" data-bind="textInput: messageObs, hasFocus: true" autocomplete="off" />
         </div>
@@ -51,9 +48,6 @@
 
           <dt>${supportEmail}</dt>
           <dd>your support email address</dd>
-
-          <dt>${expirationPeriod}</dt>
-          <dd>the period before authentication link/token in the message will expire (e.g. "2 hours")</dd>
         </dl>
       </div>
     </div>
