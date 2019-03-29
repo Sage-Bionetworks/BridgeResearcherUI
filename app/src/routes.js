@@ -80,6 +80,7 @@ router.on("/email_templates/verify_email", routeTo("verify_email", "templates"))
 router.on("/email_templates/verify_email/account_exists", routeTo("account_exists", "templates"));
 router.on("/email_templates/email_signin", routeTo("email_signin", "templates"));
 router.on("/email_templates/signed_consent", routeTo("signed_consent", "templates"));
+router.on("/email_templates/app_install_link", routeTo("app_install_link", "templates"));
 router.on("/sms_templates", redirectTo("/sms_templates/verify_phone", "sms"));
 router.on("/sms_templates/reset_password", routeTo("sms_reset_password", "sms"));
 router.on("/sms_templates/verify_phone", routeTo("sms_verify_phone", "sms"));
