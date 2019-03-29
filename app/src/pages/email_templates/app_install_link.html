@@ -13,11 +13,10 @@
     <div class="ui grid">
       <div class="ten wide column">
         <errors></errors>
-        <form class="ui form" data-bind="attr: {disabled: !autoVerificationEnabledObs()}">
+        <form class="ui form">
           <div class="required field" id="appInstallLinkTemplate_subject">
             <label>Subject</label>
-            <input type="text" name="subject" data-bind="textInput: subjectObs, 
-              hasFocus: true, attr: {disabled: !autoVerificationEnabledObs()}"/>
+            <input type="text" name="subject" data-bind="textInput: subjectObs, hasFocus: true"/>
           </div>
           <div class="field" id="appInstallLinkTemplate_body">
             <textarea id="rpTemplate" data-bind="ckeditor: $component.initEditor" class="ui textarea doc"></textarea>
