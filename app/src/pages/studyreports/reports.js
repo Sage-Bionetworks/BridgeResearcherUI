@@ -13,13 +13,16 @@ module.exports = function() {
   let self = this;
 
   self.isDeveloper = root.isDeveloper;
+  self.substudyIds = [];
 
   tables.prepareTable(self, {
     name: "report",
-    delete: deleteItem
+    delete: deleteItem,
+    refresh: load
   });
   self.addReport = function(vm, event) {
     root.openDialog("report_editor", {
+      add: true,
       closeDialog: self.closeDialog,
       type: "study"
     });
@@ -28,6 +31,12 @@ module.exports = function() {
     root.closeDialog();
     load();
   };
+  self.isVisible = function(item) {
+    return item.public || 
+      self.substudyIds.length === 0 || 
+      self.substudyIds.some((el) => item.substudyIds.includes(el));
+  };
+
   function processStudyReport(item) {
     item.publicObs = ko.observable(item.public);
     item.toggleObs = ko.observable(item.public);
@@ -40,8 +49,9 @@ module.exports = function() {
     });
   }
   function load() {
-    serverService
-      .getStudyReports()
+    serverService.getSession()
+      .then((session) => self.substudyIds = session.substudyIds)
+      .then(() => serverService.getStudyReports())
       .then(fn.handleForEach("items", processStudyReport))
       .then(fn.handleSort("items", "identifier"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))

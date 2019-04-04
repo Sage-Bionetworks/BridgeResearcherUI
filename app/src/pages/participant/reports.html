@@ -29,11 +29,12 @@
         <tr>
           <th width="10" data-bind="visible: isDeveloper"></th>
           <th>Report identifier</th>
+          <th>Substudies</th>
         </tr>
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td colspan="2" data-bind="html: recordsMessageObs"></td>
+          <td colspan="3" data-bind="html: recordsMessageObs"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
@@ -41,8 +42,12 @@
           <td data-bind="visible: $component.isDeveloper">
             <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
           </td>
-          <td width="100%">
-            <a data-bind="href: $component.reportURL($data), text: $data.identifier"> </a>
+          <td>
+            <a data-bind="visible: $component.isVisible($data), href: $component.reportURL($data), 
+              text: $data.identifier"> </a>
+            <span data-bind="visible: !$component.isVisible($data), text: $data.identifier"> </span>
+          </td>
+          <td data-bind="text: ($data.substudyIds || []).join(', ')">
           </td>
         </tr>
       </tbody>

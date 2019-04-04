@@ -52,7 +52,6 @@ module.exports = function(params) {
   }
   function save() {
     surveyUtils.observablesToSurvey(self, self.survey);
-    console.log(self.survey);
     return serverService.updateSurvey(self.survey);
   }
   function unpublish() {

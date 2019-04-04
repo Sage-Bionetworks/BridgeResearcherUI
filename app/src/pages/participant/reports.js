@@ -12,6 +12,7 @@ const failureHandler = utils.failureHandler({
 
 module.exports = function(params) {
   let self = this;
+  self.substudyIds = [];
 
   new Binder(self)
     .obs("userId", params.userId)
@@ -32,7 +33,8 @@ module.exports = function(params) {
 
   tables.prepareTable(self, {
     name: "report",
-    delete: deleteItem
+    delete: deleteItem,
+    refresh: load
   });
 
   self.reportURL = function(item) {
@@ -40,6 +42,7 @@ module.exports = function(params) {
   };
   self.addReport = function(vm, event) {
     root.openDialog("report_editor", {
+      add: true,
       closeDialog: self.closeDialog,
       userId: params.userId,
       type: "participant"
@@ -49,13 +52,19 @@ module.exports = function(params) {
     root.closeDialog();
     load();
   };
+  self.isVisible = function(item) {
+    return item.public || 
+      self.substudyIds.length === 0 || 
+      self.substudyIds.some((el) => item.substudyIds.includes(el));
+  };
 
   function deleteItem(item) {
     return serverService.deleteParticipantReport(item.identifier, params.userId);
   }
   function load() {
-    serverService
-      .getParticipant(params.userId)
+    serverService.getSession()
+      .then((session) => self.substudyIds = session.substudyIds)
+      .then(() => serverService.getParticipant(params.userId))
       .then(serverService.getParticipantReports.bind(serverService))
       .then(fn.handleSort("items", "identifier"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))

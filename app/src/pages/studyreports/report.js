@@ -30,6 +30,7 @@ function lastDayOfMonth(year, month) {
 
 module.exports = function(params) {
   let self = this;
+  self.studyId = null;
 
   new Binder(self)
     .obs("identifier", params.id)
@@ -71,9 +72,11 @@ module.exports = function(params) {
 
   self.addReport = function(vm, event) {
     root.openDialog("report_editor", {
+      add: false,
       closeDialog: self.closeDialog,
       identifier: params.id,
-      type: "study"
+      type: "study",
+      substudyIds: self.substudyIds
     });
   };
   self.closeDialog = function() {
@@ -85,10 +88,12 @@ module.exports = function(params) {
   };
   self.editReportRecord = function(item) {
     root.openDialog("report_editor", {
+      add: false,
       closeDialog: self.closeDialog,
       identifier: params.id,
       date: item.date,
-      data: item.data
+      data: item.data,
+      substudyIds: self.substudyIds
     });
     return false;
   };
@@ -120,14 +125,24 @@ module.exports = function(params) {
   function deleteItem(item) {
     return serverService.deleteStudyReportRecord(params.id, item.date);
   }
+  function loadStudyReportRecords(index) {
+    self.substudyIds = index.substudyIds;
+    let startDate = firstDayOfMonth(self.currentYear, self.currentMonth);
+    let endDate = lastDayOfMonth(self.currentYear, self.currentMonth);
+    if (index.public) {
+      return serverService.getPublicStudyReport(self.studyId, params.id, startDate, endDate);
+    } else {
+      return serverService.getStudyReport(params.id, startDate, endDate);
+    }
+  }
 
   function load() {
     self.showLoaderObs(true);
     self.formatMonthObs(MONTHS[self.currentMonth] + " " + self.currentYear);
-    let startDate = firstDayOfMonth(self.currentYear, self.currentMonth);
-    let endDate = lastDayOfMonth(self.currentYear, self.currentMonth);
-    serverService
-      .getStudyReport(params.id, startDate, endDate)
+    serverService.getSession()
+      .then((session) => self.studyId = session.studyId)
+      .then(() => serverService.getStudyReportIndex(params.id))
+      .then(loadStudyReportRecords)
       .then(fn.handleSort("items", "date", true))
       .then(fn.handleMap("items", jsonFormatter.mapItem))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
