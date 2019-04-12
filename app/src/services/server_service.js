@@ -509,6 +509,10 @@ export class ServerService {
     let queryString = fn.queryString({ startDate: startDate, endDate: endDate });
     return this.gethttp(config.reports + "/" + identifier + queryString);
   }
+  getPublicStudyReport(studyId, identifier, startDate, endDate) {
+    let queryString = fn.queryString({ startDate: startDate, endDate: endDate });
+    return this.gethttp(config.studies + "/" + studyId + "/reports/" + identifier + queryString);
+  }
   addStudyReport(identifier, report) {
     return this.post(config.reports + "/" + identifier, report);
   }
@@ -534,6 +538,9 @@ export class ServerService {
   getParticipantReport(userId, identifier, startDate, endDate) {
     let queryString = fn.queryString({ startDate, endDate });
     return this.gethttp(config.participants + "/" + userId + "/reports/" + identifier + queryString);
+  }
+  getParticipantReportIndex(identifier) {
+    return this.gethttp(config.participants + "/reports/" + identifier + "/index");
   }
   getParticipantActivityEvents(userId) {
     return this.gethttp(config.participants + "/" + userId + "/activityEvents");

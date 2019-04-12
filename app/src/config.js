@@ -59,6 +59,7 @@ export default {
   sharedmodules: "/v3/sharedmodules",
   signIn: "/v3/auth/signIn",
   signOut: "/v3/auth/signOut",
+  studies: "/v3/studies",
   subpopulations: "/v3/subpopulations",
   substudies: "/v3/substudies",
   survey: "/v3/surveys/",

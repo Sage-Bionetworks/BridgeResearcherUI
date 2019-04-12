@@ -37,7 +37,8 @@ module.exports = function(params) {
 
   tables.prepareTable(self, {
     name: "report",
-    delete: deleteItem
+    delete: deleteItem,
+    refresh: load
   });
 
   new Binder(self)
@@ -69,10 +70,12 @@ module.exports = function(params) {
 
   self.addReport = function(vm, event) {
     root.openDialog("report_editor", {
+      add: false,
       closeDialog: self.closeDialog,
       identifier: params.identifier,
       userId: params.userId,
-      type: "participant"
+      type: "participant",
+      substudyIds: self.substudyIds
     });
   };
   self.closeDialog = function() {
@@ -84,12 +87,14 @@ module.exports = function(params) {
   };
   self.editReportRecord = function(item) {
     root.openDialog("report_editor", {
+      add: false,
       closeDialog: self.closeDialog,
       identifier: params.identifier,
       userId: params.userId,
       date: item.date,
       data: item.data,
-      type: "participant"
+      type: "participant",
+      substudyIds: self.substudyIds
     });
     return false;
   };
@@ -131,8 +136,10 @@ module.exports = function(params) {
   function load() {
     self.showLoaderObs(true);
     self.formatMonthObs(MONTHS[self.currentMonth] + " " + self.currentYear);
-    serverService
-      .getParticipant(params.userId)
+
+    serverService.getParticipantReportIndex(params.identifier)
+      .then((index) => self.substudyIds = index.substudyIds)
+      .then(() => serverService.getParticipant(params.userId))
       .then(loadReport)
       .then(fn.handleMap("items", jsonFormatter.mapItem))
       .then(fn.handleSort("items", "date", true))
