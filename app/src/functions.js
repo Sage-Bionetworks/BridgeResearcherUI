@@ -189,6 +189,7 @@ function formatName(participant) {
   return array.length === 0 ? "—" : array.join(" ");
 }
 function formatNameAsFullLabel(summary) {
+  summary.externalIds = summary.externalIds || [];
   let name = formatName(summary);
   if (name !== "—") {
     return name;
