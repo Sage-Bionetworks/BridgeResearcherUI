@@ -55,32 +55,20 @@ function label(criteria) {
     arr.push('"' + language + '" language');
   }
   if (allOfGroups && allOfGroups.length) {
-    if (allOfGroups.length > 1) {
-      arr.push(quotedList(allOfGroups) + " data groups are required");
-    } else {
-      arr.push(quotedList(allOfGroups) + " data group is required");
-    }
+    let str = (allOfGroups.length > 1) ? "data groups are" : "data group is";
+    arr.push(`${quotedList(allOfGroups)} ${str} required`);
   }
   if (noneOfGroups && noneOfGroups.length) {
-    if (noneOfGroups.length > 1) {
-      arr.push(quotedList(noneOfGroups) + " data groups are prohibited");
-    } else {
-      arr.push(quotedList(noneOfGroups) + " data group is prohibited");
-    }
+    let str = (noneOfGroups.length > 1) ? "data groups are" : "data group is";
+    arr.push(`${quotedList(noneOfGroups)} ${str} prohibited`);
   }
   if (allOfSubstudyIds && allOfSubstudyIds.length) {
-    if (allOfSubstudyIds.length > 1) {
-      arr.push(quotedList(allOfSubstudyIds) + " substudy memberships are required");
-    } else {
-      arr.push(quotedList(allOfSubstudyIds) + " substudy membership is required");
-    }
+    let str = (allOfSubstudyIds.length > 1) ? "substudy memberships are" : "substudy membership is";
+    arr.push(`${quotedList(allOfSubstudyIds)} ${str} required`);
   }
   if (noneOfSubstudyIds && noneOfSubstudyIds.length) {
-    if (noneOfSubstudyIds.length > 1) {
-      arr.push(quotedList(noneOfSubstudyIds) + " substudy memberships are prohibited");
-    } else {
-      arr.push(quotedList(noneOfSubstudyIds) + " substudy membership is prohibited");
-    }
+    let str = (noneOfSubstudyIds.length > 1) ? "substudy memberships are" : "substudy membership is";
+    arr.push(`${quotedList(noneOfSubstudyIds)} ${str} prohibited`);
   }
   return arr.length ? arr.join("; ") : "No criteria";
 }
