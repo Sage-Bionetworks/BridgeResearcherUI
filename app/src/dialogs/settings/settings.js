@@ -2,6 +2,7 @@ import { serverService } from "../../services/server_service";
 import Binder from "../../binder";
 import root from "../../root";
 import fn from "../../functions";
+import utils from "../../utils";
 
 module.exports = function(params) {
   let self = this;
@@ -15,6 +16,8 @@ module.exports = function(params) {
   fn.copyProps(self, root, "closeDialog", "isAdmin");
 
   self.save = function(vm, event) {
+    utils.startHandler(vm, event);
+    
     localStorage.setItem("timezone", self.dateFormattingObs());
 
     let p = Promise.resolve();
