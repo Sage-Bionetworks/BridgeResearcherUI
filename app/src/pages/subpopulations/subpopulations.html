@@ -54,18 +54,13 @@
           <tr data-bind="css: { negative: $data.deleted}">
             <td data-bind="visible: $parent.isDeveloper">
               <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
-              <i
-                data-bind="visible: $data.deletedObs, click: $parent.undelete"
-                style="cursor: pointer"
-                class="green undo icon"
-              ></i>
+              <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
+                style="cursor: pointer" class="green undo icon"></i>
             </td>
             <td>
               <div>
-                <a
-                  data-bind="attr: {'href': '#/subpopulations/'+encodeURIComponent($data.guid)}, 
-                  text: $data.name"
-                ></a>
+                <a data-bind="attr: {'href': '#/subpopulations/'+encodeURIComponent($data.guid)}, 
+                  text: $data.name"></a>
               </div>
               <div data-bind="text: $data.description"></div>
             </td>
