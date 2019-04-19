@@ -90,11 +90,8 @@
       <div class="field" id="phone">
         <label>Phone</label>
         <span data-bind="visible: phoneObs()">
-          <a
-            class="input-field-padding"
-            data-bind="href: phoneLink, 
-                        text: $component.formatPhone(phoneObs(), phoneRegionObs())"
-          ></a>
+          <a class="input-field-padding" data-bind="href: phoneLink, 
+            text: $component.formatPhone(phoneObs(), phoneRegionObs())"></a>
           <verified-icon params="valueObs: phoneObs, verifiedObs: phoneVerifiedObs"> </verified-icon>
         </span>
         <span class="input-field-padding" data-bind="visible: !phoneObs()">—</span>

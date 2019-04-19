@@ -66,14 +66,19 @@ module.exports = function() {
     if (arrays.length) {
       array.push(arrays.join(", "));
     }
+    if (array.length === 0) {
+      array.push("<i>None</i>");
+    }
     return array.join(", ");
   };
-  self.classNameForStatus = function(user) {
-    return cssClassNameForStatus[user.status];
-  };
-  self.fullName = function(user) {
-    return encodeURIComponent(fn.formatName(user));
-  };
+  self.classNameForStatus = (user) => cssClassNameForStatus[user.status];
+  self.deleteVisible = () => root.isResearcher();
+  self.disableVisible = (item) => item.status === "enabled" && root.isAdmin();
+  self.enableVisible = (item) => item.status === "disabled" && root.isAdmin();
+  self.fullName = (user) => encodeURIComponent(fn.formatName(user));
+  self.resendVisible = (item) => item.status === "unverified";
+  self.resetPwdVisible = (item) => item.status !== "disabled";
+  self.signOutVisible = (item) => item.status !== "disabled" && item.status !== "unverified";
 
   function updateParticipantStatus(participant) {
     participant.status = "enabled";
@@ -109,31 +114,29 @@ module.exports = function() {
     utils.startHandler(self, event);
 
     getHealthCode(id).then(success).catch(function() {
-        getExternalId(id).then(success).catch(function() {
-            getId(id).then(success).catch(function() {
-                getEmail(id).then(success).catch(function(e) {
-                    event.target.parentNode.parentNode.classList.remove("loading");
-                    utils.failureHandler({ transient: false })(e);
-                  });
-              });
+      getExternalId(id).then(success).catch(function() {
+        getId(id).then(success).catch(function() {
+          getEmail(id).then(success).catch(function(e) {
+            event.target.parentNode.parentNode.classList.remove("loading");
+            utils.failureHandler({ transient: false })(e);
           });
+        });
       });
+    });
   };
 
   self.resendEmailVerification = function(vm, event) {
     alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
       let userId = vm.id;
       utils.startHandler(vm, event);
-      serverService
-        .resendEmailVerification(userId)
+      serverService.resendEmailVerification(userId)
         .then(utils.successHandler(vm, event, "Sent email to verify participant's email address."))
         .catch(utils.failureHandler());
     });
   };
   self.enableAccount = function(item, event) {
     utils.startHandler(item, event);
-    serverService
-      .getParticipant(item.id)
+    serverService.getParticipant(item.id)
       .then(updateParticipantStatus)
       .then(publishPageUpdate)
       .then(utils.successHandler(item, event, "User account activated."))
@@ -146,15 +149,13 @@ module.exports = function() {
     utils.clearErrors();
     self.search = search;
 
-    return serverService
-      .searchAccountSummaries(search)
+    return serverService.searchAccountSummaries(search)
       .then(load)
       .catch(utils.failureHandler());
   };
 
   self.enableAccount = function(user, event) {
-    serverService
-      .getParticipant(user.id)
+    serverService.getParticipant(user.id)
       .then(function(participant) {
         participant.status = "enabled";
         return serverService.updateParticipant(participant);
@@ -166,8 +167,7 @@ module.exports = function() {
       .catch(utils.failureHandler());
   };
   self.disableAccount = function(user, event) {
-    serverService
-      .getParticipant(user.id)
+    serverService.getParticipant(user.id)
       .then(function(participant) {
         participant.status = "disabled";
         return serverService.updateParticipant(participant);
@@ -181,8 +181,7 @@ module.exports = function() {
   self.requestResetPassword = function(user, event) {
     alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
       utils.startHandler(self, event);
-      serverService
-        .requestResetPasswordUser(user.id)
+      serverService.requestResetPasswordUser(user.id)
         .then(utils.successHandler(self, event, "Reset password email has been sent to user."))
         .catch(utils.failureHandler());
     });
@@ -193,30 +192,10 @@ module.exports = function() {
   self.deleteTestUser = function(user, event) {
     alerts.confirmation("This will delete the account.\n\nDo you wish to continue?", function() {
       utils.startHandler(self, event);
-      serverService
-        .deleteTestUser(user.id)
+      serverService.deleteTestUser(user.id)
         .then(utils.successHandler(self, event, "User deleted."))
         .then(() => ko.postbox.publish("page-refresh"))
         .catch(utils.failureHandler({ redirect: false }));
     });
-  };
-
-  self.resendVisible = function(item) {
-    return item.status === "unverified";
-  };
-  self.resetPwdVisible = function(item) {
-    return item.status !== "disabled";
-  };
-  self.enableVisible = function(item) {
-    return item.status === "disabled" && root.isAdmin();
-  };
-  self.disableVisible = function(item) {
-    return item.status === "enabled" && root.isAdmin();
-  };
-  self.signOutVisible = function(item) {
-    return item.status !== "disabled" && item.status !== "unverified";
-  };
-  self.deleteVisible = function(item) {
-    return root.isResearcher();
   };
 };

@@ -24,13 +24,13 @@ function selectRoles(session) {
       case "admin":
         set.add("Worker");
         set.add("Administrator");
-      /* falls through */
+        /* falls through */
       case "researcher":
         set.add("Researcher");
-      /* falls through */
+        /* falls through */
       case "developer":
         set.add("Developer");
-      /* falls through */
+        /* falls through */
     }
   }
   var roles = Array.from(set);
@@ -49,6 +49,8 @@ module.exports = function(params) {
     .obs("allDataGroups[]")
     .obs("createdOn", null, fn.formatDateTime)
     .obs("allRoles[]", [])
+    .obs("allSubstudies[]")
+    .obs("title", params.userId === "new" ? "New participant" : "&#160;")    
     .bind("email", null, null, value => (fn.isBlank(value) ? null : value))
     .bind("phone", null, Binder.formatPhone, Binder.persistPhone)
     .bind("phoneRegion", "US")
@@ -67,9 +69,7 @@ module.exports = function(params) {
     .bind("userId", params.userId)
     .bind("id", params.userId)
     .bind("roles[]", null, fn.formatRoles, fn.persistRoles)
-    .bind("substudyIds[]")
-    .bind("allSubstudies[]")
-    .obs("title", params.userId === "new" ? "New participant" : "&#160;");
+    .bind("substudyIds[]");
 
   fn.copyProps(self, root, "isAdmin");
 
@@ -132,8 +132,6 @@ module.exports = function(params) {
 
   self.save = function(vm, event) {
     let participant = binder.persist(self.participant);
-    // This should be updating the title, but it isn't, because the id is still "new".
-    //binder.persist(participant);
 
     let updatedTitle = self.study.emailVerificationEnabled ? 
       fn.formatNameAsFullLabel(participant) : 
