@@ -13,6 +13,10 @@ const cssClassNameForStatus = {
   verified: ""
 };
 
+function assignClassForStatus(participant) {
+  // does not have sharing scope so we can't show it on summary page.
+  return cssClassNameForStatus[participant.status];
+}
 function deleteItem(participant) {
   return serverService.deleteParticipant(participant.id);
 }
@@ -71,7 +75,7 @@ module.exports = function() {
     }
     return array.join(", ");
   };
-  self.classNameForStatus = (user) => cssClassNameForStatus[user.status];
+  self.classNameForStatus = assignClassForStatus;
   self.deleteVisible = () => root.isResearcher();
   self.disableVisible = (item) => item.status === "enabled" && root.isAdmin();
   self.enableVisible = (item) => item.status === "disabled" && root.isAdmin();
