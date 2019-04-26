@@ -162,11 +162,11 @@ module.exports = function(params) {
     }
     return participant;
   }
-  function getSubstudies() {
+  function getSession() {
     return serverService.getSession();
   }
   function updateAllSubstudiesObs(session) {
-    if (self.isAdmin() && session.substudyIds.length === 0) {
+    if (self.isNewObs() || self.isAdmin()) {
       return serverService.getSubstudies(false).then(response => {
         self.allSubstudiesObs(response.items.map(item => item.id));
       });
@@ -179,11 +179,11 @@ module.exports = function(params) {
     .getStudy()
     .then(binder.assign("study"))
     .then(initStudy)
-    .then(getSubstudies)
-    .then(updateAllSubstudiesObs)
     .then(getParticipant)
     .then(binder.assign("participant"))
     .then(noteInitialStatus)
     .then(binder.update())
+    .then(getSession)
+    .then(updateAllSubstudiesObs)
     .catch(failureHandler);
 };
