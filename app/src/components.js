@@ -421,7 +421,7 @@ reg("criteria_editor", {
   synchronous: true
 });
 reg("app_version_criteria", {
-  viewModel: require("./widgets/criteria/criteria"),
+  viewModel: require("./widgets/criteria/app_version_criteria"),
   template: require("./widgets/criteria/app_version_criteria.html")
 });
 reg("participants-pager", {
