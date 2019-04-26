@@ -8,9 +8,20 @@
         <label>Report identifier</label>
         <input type="text" data-bind="textInput: identifierObs, hasFocus: true" />
       </div>
-      <div class="field" id="date">
-        <label>Date</label>
-        <input data-bind="flatpickr: dateObs" />
+      <div class="two fields">
+        <div class="field" id="date">
+          <label>Date</label>
+          <input data-bind="flatpickr: dateObs" />
+        </div>
+        <div class="field tag-editor substudyIds" data-bind="visible: isAddObs">
+          <label>Restricted to substudies</label>
+          <tag-editor params="selectedObs: substudyIdsObs, 
+            allObs: substudyOptionsObs, type: 'substudy IDs'"></tag-editor>
+        </div>
+        <div class="field" data-bind="visible: !isAddObs()">
+          <label>Restricted to substudies</label>
+          <div class="inline-form-text" data-bind="text: (substudyIdsObs() || []).join(', ')"></div>
+        </div>
       </div>
       <div class="field" id="data">
         <label>JSON</label>

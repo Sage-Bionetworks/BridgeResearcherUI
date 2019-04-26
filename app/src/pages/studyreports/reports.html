@@ -4,10 +4,8 @@
       <h3>Study Reports</h3>
     </div>
     <div class="fixed-header-buttons">
-      <button
-        class="ui red tiny button"
-        data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: deleteItems"
-      >
+      <button class="ui red tiny button"
+        data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: deleteItems">
         Delete
       </button>
       <button class="ui primary tiny button" data-bind="visible: isDeveloper, click: addReport">
@@ -26,6 +24,7 @@
       <tr>
         <th width="10" data-bind="visible: isDeveloper"></th>
         <th width="250">Report</th>
+        <th>Substudies</th>
         <th colspan="2">Visibility</th>
       </tr>
     </thead>
@@ -39,29 +38,19 @@
         <td data-bind="visible: $component.isDeveloper">
           <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
         </td>
-        <td width="100%">
-          <a
-            data-bind="href: '#/reports/raw/' + encodeURIComponent($data.identifier), 
-                        text: $data.identifier"
-          ></a>
+        <td style="width:50%">
+          <a data-bind="visible: $component.isVisible($data), 
+                        href: '#/reports/raw/' + encodeURIComponent($data.identifier), 
+                        text: $data.identifier"></a>
+          <span data-bind="visible: !$component.isVisible($data), text: $data.identifier"></span>
         </td>
-        <td
-          data-bind="text: $data.publicObs() ? 
-                    'Public' : 'Signed in users only'"
-        ></td>
+        <td style="width: 50%" data-bind="text: ($data.substudyIds || []).join(', ')"></td>
+        <td data-bind="text: $data.publicObs() ? 'Public' : 'Signed in users only'"></td>
         <td data-bind="visible: $parent.isDeveloper">
-          <div
-            class="ui toggle checkbox"
-            data-bind="semantic: 'checkbox', 
-                        checkboxObs: $data.toggleObs"
-          >
-            <input
-              type="checkbox"
-              name="gift"
-              tabindex="0"
-              class="hidden"
-              data-bind="attr: {checked: $data.toggleObs}"
-            />
+          <div class="ui toggle checkbox" data-bind="semantic: 'checkbox', 
+                      checkboxObs: $data.toggleObs">
+            <input type="checkbox" name="gift" tabindex="0" class="hidden"
+              data-bind="attr: {checked: $data.toggleObs}"/>
             <label></label>
           </div>
         </td>

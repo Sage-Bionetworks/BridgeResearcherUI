@@ -21,10 +21,14 @@ module.exports = function(params) {
     .obs("isNew", params.guid === "new")
     .obs("guid", params.guid)
     .obs("title", "New Consent Group")
+    .obs("allDataGroups[]")
+    .obs("allSubstudyIds[]")    
     .bind("name")
     .bind("description")
     .bind("required", true)
     .bind("autoSendConsentSuppressed")
+    .bind("dataGroupsAssignedWhileConsented[]")
+    .bind("substudyIdsAssignedOnConsent[]")
     .bind("criteria");
 
   let titleUpdated = fn.handleObsUpdate(self.titleObs, "name");
@@ -52,7 +56,10 @@ module.exports = function(params) {
   serverService
     .getStudy()
     .then(binder.assign("study"))
-    .then(function(study) {
+    .then((study) => self.allDataGroupsObs(study.dataGroups))
+    .then(() => serverService.getSubstudies())
+    .then((substudies) => self.allSubstudyIdsObs(substudies.items.map(sub => sub.id)))
+    .then(() => {
       if (params.guid === "new") {
         return Promise.resolve(newSubpop())
           .then(binder.assign("subpopulation"))

@@ -15,13 +15,8 @@
       <a href="#/participants/new/general" class="ui primary tiny button">New Participant</a>
       <div class="ui search">
         <div class="ui icon input">
-          <input
-            class="prompt"
-            type="text"
-            style="padding: .47857143em 1em"
-            placeholder="Find by any identifier"
-            data-bind="textInput: findObs, returnHandler: doSearch"
-          />
+          <input class="prompt" type="text" style="padding: .47857143em 1em"
+            placeholder="Find by any identifier" data-bind="textInput: findObs, returnHandler: doSearch"/>
           <i class="search icon"></i>
         </div>
       </div>
@@ -107,7 +102,7 @@
             text: $component.formatNameAsFullLabel($data)"
           ></a>
         </td>
-        <td data-bind="text: $component.formatIdentifiers($data)"></td>
+        <td data-bind="html: $component.formatIdentifiers($data)"></td>
         <td style="white-space: nowrap" data-bind="text: $component.formatDateTime($data.createdOn)"></td>
         <td data-bind="text: $data.substudyIds.join(', ')"></td>
         <td style="padding: 0; text-align:right">

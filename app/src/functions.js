@@ -40,9 +40,6 @@ function seq(...funcs) {
     }, startValue);
   };
 }
-function blankInvalidDateString(string) {
-  return string === "Invalid Date" ? "" : string;
-}
 function formatMs(ms) {
   if (!is(ms, "Number")) {
     throw Error("formatMs cannot format a non-number value: " + ms);
@@ -207,20 +204,16 @@ function formatNameAsFullLabel(summary) {
     } else {
       name = summary.phone;
     }
-  } else if (summary.externalIds.length || Object.keys(summary.externalIds).length) {
+  } else if (summary.externalIds && (summary.externalIds.length || Object.keys(summary.externalIds).length)) {
     name = isArray(summary.externalIds) ? 
       summary.externalIds.join(", ") : 
       Object.values(summary.externalIds).join(", ");
+  } else if (summary.externalId) {
+    name = summary.externalId;
   } else if (summary.id) {
-    name = "Withdrawn (#" + summary.id.split("-")[0] + "…)";
+    name = summary.id.split("-")[0] + "…";
   }
   return name;
-}
-function checkArgs(value) {
-  if (arguments.length !== 1) {
-    throw new Error(arguments);
-  }
-  return value;
 }
 function makeFieldSorter(fieldName) {
   return function sorter(a, b) {

@@ -17,7 +17,14 @@ module.exports = class AddReport {
       .obs("title", params.data ? "Edit report record" : "Add report record")
       .bind("identifier", params.identifier)
       .bind("date", AddReport.getLocalDate(params.date), null, formatDateISO)
-      .bind("data", AddReport.jsonAsString(params.data), null, AddReport.stringAsJson);
+      .bind("data", AddReport.jsonAsString(params.data), null, AddReport.stringAsJson)
+      .bind("substudyIds[]", params.substudyIds)
+      .obs("substudyOptions[]")
+      .obs("isAdd", params.add);
+
+      serverService.getSubstudies().then((substudies) => {
+        this.substudyOptionsObs(substudies.items.map(sub => sub.id));
+      });
   }
   addReport(entry) {
     return this.type === "participant" ? 

@@ -17,8 +17,8 @@
   <errors></errors>
   <form class="ui form">
     <div class="ui grid">
-      <div class="eight wide column">
-        <div class="field" id="name">
+      <div class="seven wide column">
+        <div class="required field" id="name">
           <label>Name</label>
           <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
         </div>
@@ -27,7 +27,7 @@
           <input type="text" data-bind="textInput: descriptionObs" />
         </div>
       </div>
-      <div class="eight wide column">
+      <div class="nine wide column">
         <label>&#160;</label>
         <div class="field">
           <ui-checkbox params="checkedObs: requiredObs">
@@ -46,10 +46,22 @@
           </p>
         </div>
       </div>
-      <div class="eight wide column">
+      <div class="seven wide column">
         <div class="field">
           <label>Assignment based on</label>
           <criteria params="id: '', criteriaObs: criteriaObs"></criteria>
+        </div>
+      </div>
+      <div class="nine wide column">
+        <div class="field">
+          <label>While a user is enrolled in this subpopulation, assign these data groups:</label>
+          <tag-editor params="selectedObs: dataGroupsAssignedWhileConsentedObs, 
+            allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
+        </div>
+        <div class="field">
+          <label>When a user enrolls in this subpopulation, include them in these substudies:</label>
+          <tag-editor params="selectedObs: substudyIdsAssignedOnConsentObs, 
+            allObs: allSubstudyIdsObs, type: 'substudy IDs'"></tag-editor>
         </div>
       </div>
     </div>

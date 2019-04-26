@@ -4,32 +4,21 @@
       <h3>Consent Groups</h3>
     </div>
     <div class="fixed-header-buttons" data-bind="visible: isDeveloper">
-      <button
-        data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: copyToClipboard"
-        class="ui tiny button"
-      >
+      <button class="ui tiny button"
+        data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: copyToClipboard">
         Copy to Clipboard
       </button>
-
-      <button
-        class="ui red tiny button"
-        data-bind="visible: !isAdmin(), 
-        disable: !atLeastOneChecked(), click: deleteItems"
-      >
+      <button class="ui red tiny button"
+        data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems">
         Delete
       </button>
       <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
-        <div
-          class="ui tiny button"
-          data-bind="css:{disabled: !atLeastOneChecked()},
-          semantic: 'dropdown-button-toggle', container: '.buttons'"
-        >
+        <div class="ui tiny button"
+          data-bind="css:{disabled: !atLeastOneChecked()}, semantic: 'dropdown-button-toggle', container: '.buttons'">
           Delete
         </div>
-        <div
-          class="ui primary tiny floating dropdown icon button"
-          data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}"
-        >
+        <div class="ui primary tiny floating dropdown icon button"
+          data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
           <i class="dropdown icon"></i>
           <div class="menu">
             <div class="item" data-bind="click: deleteItems">Delete</div>
@@ -37,7 +26,6 @@
           </div>
         </div>
       </div>
-
       <a href="#/subpopulations/new" class="ui primary tiny button">New Consent Group</a>
     </div>
   </div>
@@ -66,18 +54,13 @@
           <tr data-bind="css: { negative: $data.deleted}">
             <td data-bind="visible: $parent.isDeveloper">
               <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
-              <i
-                data-bind="visible: $data.deletedObs, click: $parent.undelete"
-                style="cursor: pointer"
-                class="green undo icon"
-              ></i>
+              <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
+                style="cursor: pointer" class="green undo icon"></i>
             </td>
             <td>
               <div>
-                <a
-                  data-bind="attr: {'href': '#/subpopulations/'+encodeURIComponent($data.guid)}, 
-                  text: $data.name"
-                ></a>
+                <a data-bind="attr: {'href': '#/subpopulations/'+encodeURIComponent($data.guid)}, 
+                  text: $data.name"></a>
               </div>
               <div data-bind="text: $data.description"></div>
             </td>

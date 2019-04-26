@@ -4,7 +4,7 @@ function quote(a) {
   return '"' + a + '"';
 }
 function quotedList(array) {
-  return array.map(quote).join(", ");
+  return fn.formatList(array.map(quote));
 }
 function valueForObs(criteria, field) {
   if (criteria[field + "Obs"]) {
@@ -15,11 +15,9 @@ function valueForObs(criteria, field) {
 function formatVersionRange(minAppVersion, maxAppVersion) {
   if (minAppVersion === 0 && maxAppVersion === 0) {
     return "never";
-  } else if (minAppVersion === 0 && !fn.isNotBlank(maxAppVersion)) {
-    return "always";
   } else if (fn.isNotBlank(minAppVersion) && fn.isNotBlank(maxAppVersion)) {
     return "v" + minAppVersion + "-" + maxAppVersion;
-  } else if (fn.isNotBlank(minAppVersion)) {
+  } else if (fn.isNotBlank(minAppVersion) && minAppVersion > 0) {
     return "v" + minAppVersion + "+";
   } else if (fn.isNotBlank(maxAppVersion)) {
     return "v" + "0-" + maxAppVersion;
@@ -57,16 +55,20 @@ function label(criteria) {
     arr.push('"' + language + '" language');
   }
   if (allOfGroups && allOfGroups.length) {
-    arr.push(quotedList(allOfGroups) + " data groups required");
+    let str = (allOfGroups.length > 1) ? "data groups are" : "data group is";
+    arr.push(`${quotedList(allOfGroups)} ${str} required`);
   }
   if (noneOfGroups && noneOfGroups.length) {
-    arr.push(quotedList(noneOfGroups) + " data groups prohibited");
+    let str = (noneOfGroups.length > 1) ? "data groups are" : "data group is";
+    arr.push(`${quotedList(noneOfGroups)} ${str} prohibited`);
   }
   if (allOfSubstudyIds && allOfSubstudyIds.length) {
-    arr.push(quotedList(allOfSubstudyIds) + " substudy membership(s) required");
+    let str = (allOfSubstudyIds.length > 1) ? "substudy memberships are" : "substudy membership is";
+    arr.push(`${quotedList(allOfSubstudyIds)} ${str} required`);
   }
   if (noneOfSubstudyIds && noneOfSubstudyIds.length) {
-    arr.push(quotedList(noneOfSubstudyIds) + " substudy membership(s) prohibited");
+    let str = (noneOfSubstudyIds.length > 1) ? "substudy memberships are" : "substudy membership is";
+    arr.push(`${quotedList(noneOfSubstudyIds)} ${str} prohibited`);
   }
   return arr.length ? arr.join("; ") : "No criteria";
 }
