@@ -36,7 +36,10 @@ export default {
         }
         vm.updateStatus(++vm.progressIndex, vm.steps);
         if (isErrorHandler) {
-          vm.errorMessagesObs.unshift(worker.currentWorkItem() + ": " + errorMessage(e));
+          vm.errorMessagesObs.unshift(JSON.stringify(worker.currentWorkItem()) + ": " + errorMessage(e));
+          if (vm.enableObs) {
+            vm.enableObs(true);
+          }
         }
         if (vm._cancel) {
           return Promise.resolve();

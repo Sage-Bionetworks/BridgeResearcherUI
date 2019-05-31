@@ -7,6 +7,7 @@ import Promise from "bluebird";
 import root from "../../root";
 import tables from "../../tables";
 import utils from "../../utils";
+import password from "../../password_generator";
 
 let OPTIONS = { offsetBy: null, pageSize: 1, assignmentFilter: false };
 
@@ -40,8 +41,7 @@ module.exports = function() {
     refresh: load
   });
   self.canDeleteObs = ko.computed(function() {
-    return true; // until migration is over
-    // return !self.externalIdValidationEnabledObs() && self.isDeveloper();
+    return !self.externalIdValidationEnabledObs() && self.isDeveloper();
   });
 
   function hasBeenChecked(item) {
@@ -71,7 +71,7 @@ module.exports = function() {
     self.resultObs(identifier);
     let participant = self.useLegacyFormatObs() ? 
       utils.oldCreateParticipantForID(self.study.supportEmail, identifier) : 
-      utils.createParticipantForID(identifier);
+      utils.createParticipantForID(identifier, password.generatePassword(32));
     return serverService.createParticipant(participant);
   }
   function updatePageWithResult(response) {
@@ -115,7 +115,7 @@ module.exports = function() {
     createNewCredentials(data.identifier)
       .then(updatePageWithResult)
       .then(utils.successHandler(self, event))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({transient:false}));
   };
   self.createFromNext = function(vm, event) {
     self.showResultsObs(false);
@@ -126,7 +126,7 @@ module.exports = function() {
       .then(createNewCredentials)
       .then(updatePageWithResult)
       .then(utils.successHandler(vm, event))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({transient:false}));
   };
   self.link = function(item) {
     return "#/participants/" + encodeURIComponent("externalId:" + item.identifier) + "/general";

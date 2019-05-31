@@ -4,25 +4,14 @@
       <h3>External Identifiers</h3>
     </div>
     <div class="fixed-header-buttons" data-bind="visible: isDeveloper">
-      <!--
-            <div class="ui input">
-                <input type="text" data-bind="textInput: substudyIdObs"/>
-            </div>
-            -->
       <button class="ui tiny button" style="margin-left: 3rem" data-bind="click: openImportDialog">
         Import&hellip;
       </button>
       <button class="ui tiny button" data-bind="click: createFromNext">Assign Next ID</button>
-      <button
-        data-bind="visible: canDeleteObs, disable: !atLeastOneChecked(), click: deleteItems"
-        class="ui red tiny button"
-      >
+      <button class="ui red tiny button" data-bind="visible: canDeleteObs, 
+        disable: !atLeastOneChecked(), click: deleteItems">
         Delete
       </button>
-      <!--
-            <button data-bind="disable: !atLeastOneChecked(), click: migrateItems" 
-                class="ui orange tiny button">Migrate</button>
-            -->
     </div>
   </div>
   <div class="ui empty secondary pointing menu"></div>
@@ -42,12 +31,8 @@
   <div class="line-control">
     <div class="line-control-stretch">
       <div class="ui icon input" data-bind="css:{loading: searchLoadingObs}">
-        <input
-          type="text"
-          placeholder="Start of ID"
-          data-bind="textInput: idFilterObs, 
-                    returnHandler: doSearch"
-        />
+        <input type="text" placeholder="Start of ID"
+          data-bind="textInput: idFilterObs, returnHandler: doSearch"/>
         <i class="search icon"></i>
       </div>
     </div>
@@ -80,11 +65,8 @@
           <span data-bind="text: $data.identifier, visible: !$data.assigned"></span>
           <span data-bind="visible: $data.assigned">
             <span data-bind="visible: !$parent.isResearcher(), text: $data.identifier"></span>
-            <a
-              data-bind="text: $data.identifier, visible: $parent.isResearcher, 
-                            attr: {'href': $parent.link($data)}"
-            >
-            </a>
+            <a data-bind="text: $data.identifier, visible: $parent.isResearcher, 
+              attr: {'href': $parent.link($data)}"></a>
           </span>
         </td>
         <td data-bind="text: $data.substudyId"></td>
@@ -93,10 +75,8 @@
             <div data-bind="visible: $data.assigned === true">
               <i class="green check icon"> </i> Credentials Created
             </div>
-            <button
-              data-bind="visible: $data.assigned == false, click: $component.createFrom"
-              class="ui compact mini button"
-            >
+            <button class="ui compact mini button" 
+              data-bind="visible: $data.assigned == false, click: $component.createFrom">
               Create Credentials
             </button>
           </div>
