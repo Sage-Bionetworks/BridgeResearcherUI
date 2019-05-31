@@ -5,6 +5,7 @@ import fn from "../../functions";
 import Promise from "bluebird";
 import root from "../../root";
 import utils from "../../utils";
+import password from "../../password_generator";
 
 // Worker
 // * calculateSteps: int
@@ -14,69 +15,82 @@ import utils from "../../utils";
 // * currentWorkItem: Object, the item just processed by performWork
 // * postFetch: Promise: results of worker's sequential execution
 
-function IdImportWorker(input, substudyId) {
-  this.identifiers = input.split(/[,\s\t\r\n]+/).filter(function(value) {
+function IdImportWorker(study, input, substudyId) {
+  this.study = study;
+  this.credentialPairs = input.split(/[,\s\t\r\n]+/).filter(function(value) {
     return value.length > 0;
+  }).map(function(value) {
+      if (value.includes('=')) {
+        let parts = value.split('=');
+        return {identifier: parts[0], password: parts[1]};
+      } else {
+        return {identifier: value, password: password.generatePassword(32)};
+      }
   });
   this.substudyId = substudyId;
-  this.importedIdentifiers = [];
+  this.importedCredentialPairs = [];
 }
 IdImportWorker.prototype = {
   calculateSteps: function() {
-    return this.identifiers.length;
+    return this.credentialPairs.length;
   },
   hasWork: function() {
-    return this.identifiers.length > 0;
+    return this.credentialPairs.length > 0;
   },
   workDescription: function() {
-    return "Importing " + this.identifiers[0];
+    if (this.currentCredentialPair) {
+      return "Importing " + this.currentCredentialPair.identifier;
+    } else {
+      return "";
+    }
   },
   performWork: function() {
-    this.currentId = this.identifiers.shift();
-    return serverService
-      .createExternalId({
-        identifier: this.currentId,
-        substudyId: this.substudyId
-      })
-      .then(this._success.bind(this));
+    this.currentCredentialPair = this.credentialPairs.shift();
+    if (!password.isPasswordValid(this.study.passwordPolicy, this.currentCredentialPair.password)) {
+      return Promise.reject(new Error("Password is invalid"));
+    }
+    return serverService.createExternalId({
+      identifier: this.currentCredentialPair.identifier,
+      substudyId: this.substudyId
+    }).then(this._success.bind(this));
   },
   _success: function(response) {
-    this.importedIdentifiers.push(this.currentId);
+    this.importedCredentialPairs.push(this.currentCredentialPair);
   },
   currentWorkItem: function() {
-    return this.currentId;
+    return this.currentCredentialPair;
   },
   postFetch: function() {
-    return Promise.resolve(this.importedIdentifiers);
+    return Promise.resolve(this.importedCredentialPairs);
   }
 };
 
-function CreateCredentialsWorker(supportEmail, identifiers, dataGroups, useLegacyFormat) {
+function CreateCredentialsWorker(supportEmail, credentialPairs, dataGroups, useLegacyFormat) {
   this.supportEmail = supportEmail;
-  this.identifiers = identifiers;
+  this.credentialPairs = credentialPairs;
   this.dataGroups = dataGroups;
   this.useLegacyFormat = useLegacyFormat;
 }
 CreateCredentialsWorker.prototype = {
   calculateSteps: function() {
-    return this.identifiers.length;
+    return this.credentialPairs.length;
   },
   hasWork: function() {
-    return this.identifiers.length > 0;
+    return this.credentialPairs.length > 0;
   },
   workDescription: function() {
-    return "Creating credentials for " + this.identifiers[0];
+    return "Creating credentials for " + this.credentialPairs[0].identifier;
   },
   performWork: function() {
-    this.currentId = this.identifiers.shift();
+    this.credentialPair = this.credentialPairs.shift();
     let participant = this.useLegacyFormat ? 
-      utils.oldCreateParticipantForID(this.supportEmail, this.currentId) : 
-      utils.createParticipantForID(this.currentId);
+      utils.oldCreateParticipantForID(this.supportEmail, this.credentialPair) : 
+      utils.createParticipantForID(this.credentialPair.identifier, this.credentialPair.password);
     participant.dataGroups = this.dataGroups;
     return serverService.createParticipant(participant);
   },
   currentWorkItem: function() {
-    return this.currentId;
+    return this.credentialPair;
   },
   postFetch: function() {
     Promise.resolve();
@@ -102,16 +116,16 @@ module.exports = function(params) {
     .obs("substudyId")
     .obs("substudyIds[]");
 
-  self.statusObs("Please enter a list of identifiers, separated by commas or new lines.");
+  self.statusObs("Please enter a list of identifiers, separated by commas or new lines. If you wish to include passwords, use the format <code>externalid=password</code> (again these can be separated by commas or new lines).");
   self.createCredentialsObs.subscribe(function(newValue) {
     self.isDisabledObs(!newValue);
   });
-  serverService
-    .getStudy()
+  serverService.getStudy()
     .then(function(study) {
       let legacy = study.emailVerificationEnabled === false && study.externalIdValidationEnabled === true;
       self.useLegacyFormatObs(legacy);
       self.allDataGroupsObs(study.dataGroups);
+      self.study = study;
       supportEmail = study.supportEmail;
     })
     .then(serverService.getSubstudies.bind(serverService))
@@ -129,7 +143,7 @@ module.exports = function(params) {
     self.statusObs("Preparing to import...");
 
     let useLegacyFormat = self.useLegacyFormatObs();
-    let importWorker = new IdImportWorker(self.importObs(), self.substudyIdObs());
+    let importWorker = new IdImportWorker(self.study, self.importObs(), self.substudyIdObs());
     if (!importWorker.hasWork()) {
       self.errorMessagesObs.unshift("You must enter some identifiers.");
       return;
@@ -139,7 +153,7 @@ module.exports = function(params) {
     }
 
     self.run(importWorker).then(function(identifiers) {
-      if (self.createCredentialsObs()) {
+      if (self.createCredentialsObs() && identifiers.length) {
         let credentialsWorker = new CreateCredentialsWorker(
           supportEmail,
           identifiers,

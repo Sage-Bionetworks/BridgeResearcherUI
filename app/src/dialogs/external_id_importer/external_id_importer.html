@@ -12,7 +12,7 @@
       </div>
       <progress data-bind="attr:{ value: valueObs, max: maxObs }"></progress>
       <div class="progress-status">
-        <div data-bind="text: statusObs"></div>
+        <div data-bind="html: statusObs"></div>
         <div class="progress-status-perc" data-bind="text: percentageObs"></div>
       </div>
       <div class="batch-process-errors" data-bind="visible: errorMessagesObs().length > 0">
@@ -25,22 +25,10 @@
           <ui-checkbox params="checkedObs: createCredentialsObs">
             Create credentials for these IDs
           </ui-checkbox>
-        </div>
-        <div class="field">
-          <ui-checkbox params="checkedObs: useLegacyFormatObs">
-            Use the legacy (email) format for external IDs
-          </ui-checkbox>
-        </div>
-      </div>
-      <div class="ui two fields">
-        <div class="field">
-          <select
-            class="ui dropdown"
-            data-bind="options: substudyIdsObs,
-                        optionsText: 'label', optionsValue: 'value', value: substudyIdObs,
-                        optionsCaption: 'Select substudy...'"
-          >
-          </select>
+          <select style="margin-top: .5rem" class="ui dropdown" data-bind="options: substudyIdsObs,
+            optionsText: 'label', optionsValue: 'value', value: substudyIdObs,
+            optionsCaption: 'Select substudy...'">
+          </select>          
         </div>
         <div class="field" data-bind="css: {disabled: isDisabledObs}">
           <label>Add these data groups to the created account</label>
