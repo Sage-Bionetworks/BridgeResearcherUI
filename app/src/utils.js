@@ -6,6 +6,7 @@ import fn from "./functions";
 import ko from "knockout";
 import root from "./root";
 import toastr from "toastr";
+import password from "./password_generator";
 
 const FAILURE_HANDLER = failureHandler({ transient: true });
 const GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
@@ -218,9 +219,10 @@ function makeScrollTo(itemSelector) {
     }
   };
 }
-function createParticipantForID(identifier) {
+function createParticipantForID(identifier, password) {
   return {
     externalId: identifier,
+    password: password,
     sharingScope: "all_qualified_researchers"
   };
 }
