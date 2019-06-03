@@ -1,6 +1,6 @@
 import SmsViewModel from "./sms_view_model";
 
-module.exports = class SmsResetPasswordTemplate extends SmsViewModel {
+export default class SmsResetPasswordTemplate extends SmsViewModel {
   constructor() {
     super("resetPasswordSmsTemplate");
   }

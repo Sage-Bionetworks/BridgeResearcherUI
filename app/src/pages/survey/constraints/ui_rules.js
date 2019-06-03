@@ -1,7 +1,7 @@
 import fn from "../../../functions";
 import ko from "knockout";
 
-module.exports = function(params) {
+export default function uiRules(params) {
   let self = this;
 
   fn.copyProps(self, params, "element", "fieldName", "elementsObs", "collectionName");
@@ -17,6 +17,6 @@ module.exports = function(params) {
       .join(" ");
   });
 };
-module.exports.prototype.dispose = function() {
+uiRules.prototype.dispose = function() {
   this.cssTokensObs.dispose();
 };

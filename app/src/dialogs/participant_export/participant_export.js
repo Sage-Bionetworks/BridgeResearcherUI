@@ -162,7 +162,7 @@ FetchParticipantWorker.prototype = {
   }
 };
 
-module.exports = function(params /*total, search*/) {
+export default function(params /*total, search*/) {
   let self = this;
   self.total = params.total;
   self.search = params.search;

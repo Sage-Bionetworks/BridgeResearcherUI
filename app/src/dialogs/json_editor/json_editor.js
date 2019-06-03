@@ -6,7 +6,7 @@ import ko from "knockout";
  *  data - a string that represents JSON data
  *  saveFunc - the function to call on save
  */
-module.exports = function(params) {
+export default function(params) {
   let self = this;
 
   self.dataObs = ko.observable(JSON.stringify(params.data));

@@ -52,7 +52,7 @@ function isNotSelf(self) {
   return errorComponentStack[errorComponentStack.length - 1] !== self;
 }
 
-module.exports = function() {
+export default function errors() {
   let self = this;
   errorComponentStack.push(this);
 
@@ -135,7 +135,7 @@ module.exports = function() {
     errorLabelQueue = [];
   });
 };
-module.exports.prototype.dispose = function() {
+errors.prototype.dispose = function() {
   errorComponentStack.pop(this);
   this.displayObs.dispose();
 };

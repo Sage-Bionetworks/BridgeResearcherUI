@@ -2,7 +2,7 @@ import fn from "../../../functions";
 
 const MAX_LENGTH = 65;
 
-module.exports = function(params) {
+export default function survey(params) {
   let self = this;
 
   fn.copyProps(self, params.viewModel, "nameObs", "elementsObs", "selectedElementObs", "selectElement");

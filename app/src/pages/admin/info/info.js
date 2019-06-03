@@ -4,7 +4,7 @@ import ko from "knockout";
 import root from "../../../root";
 import utils from "../../../utils";
 
-module.exports = function() {
+export default function info() {
   let self = this;
 
   let android = Binder.objPropDelegates("pushNotificationARNs", "Android");
@@ -49,6 +49,6 @@ module.exports = function() {
     .then(binder.update())
     .catch(utils.failureHandler());
 };
-module.exports.prototype.dispose = function() {
+info.prototype.dispose = function() {
   this.accountLimitLabel.dispose();
 };

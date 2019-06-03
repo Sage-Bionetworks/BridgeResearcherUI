@@ -1,6 +1,6 @@
 import SmsViewModel from "./sms_view_model";
 
-module.exports = class SmsAppInstallLinkTemplate extends SmsViewModel {
+export default class SmsAppInstallLinkTemplate extends SmsViewModel {
   constructor() {
     super("appInstallLinkSmsTemplate");
   }

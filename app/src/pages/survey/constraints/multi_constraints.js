@@ -1,7 +1,7 @@
 import root from "../../../root";
 import surveyUtils from "../survey_utils";
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
 
   surveyUtils.initConstraintsVM(self, params);

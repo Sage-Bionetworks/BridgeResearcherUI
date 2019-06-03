@@ -16,7 +16,7 @@ const failureHandler = utils.failureHandler({
  * and the strategy can entirely change the data model.
  * @param params
  */
-module.exports = function(params) {
+export default function schedulePlan(params) {
   let self = this;
 
   // The callback function will be called when saving the schedule plan; the strategy

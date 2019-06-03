@@ -8,7 +8,7 @@ import root from "../../root";
  *  isImported - determine if object has been imported in this study (not the shared study)
  *  model - the shared module object
  */
-module.exports = function(params) {
+export default function(params) {
   var self = this;
 
   self.importFunc = function(item, event) {

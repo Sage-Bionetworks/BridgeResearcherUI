@@ -2,7 +2,7 @@ import fn from "../../functions";
 import ko from "knockout";
 import root from "../../root";
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
 
   self.startsOnObs = ko.observable(params.startsOnObs() || new Date());

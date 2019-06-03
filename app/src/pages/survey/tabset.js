@@ -7,7 +7,7 @@ const POSTFIXES = {
   editor: "/editor"
 };
 
-module.exports = function(params) {
+export default function tabset(params) {
   let self = this;
 
   fn.copyProps(self, fn, "formatDateTime");
@@ -31,7 +31,7 @@ module.exports = function(params) {
     return c;
   };
 };
-module.exports.prototype.dispose = function() {
+tabset.prototype.dispose = function() {
   this.computeds.forEach(function(c) {
     c.dispose();
   });

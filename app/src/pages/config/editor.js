@@ -15,7 +15,7 @@ function newAppConfigElement() {
   return { id: "", revision: 1, data: {} };
 }
 
-module.exports = function(params) {
+export default function editor(params) {
   let self = this;
 
   let binder = new Binder(self)

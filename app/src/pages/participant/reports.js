@@ -10,7 +10,7 @@ const failureHandler = utils.failureHandler({
   redirectMsg: "Participant not found"
 });
 
-module.exports = function(params) {
+export default function reports(params) {
   let self = this;
   self.substudyIds = [];
 

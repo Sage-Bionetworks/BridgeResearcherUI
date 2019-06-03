@@ -5,7 +5,7 @@ import root from "../../root";
 import tables from "../../tables";
 import utils from "../../utils";
 
-module.exports = function() {
+export default function() {
   let self = this;
 
   fn.copyProps(self, root, "isAdmin", "notificationsEnabledObs");

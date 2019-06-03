@@ -20,7 +20,7 @@ const UPLOAD_SHARED_METADATA_FIELD_DEFS = [
   { name: "deviceInfo", maxLength: 100, type: "string" }
 ];
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
 
   let binder = new Binder(self)

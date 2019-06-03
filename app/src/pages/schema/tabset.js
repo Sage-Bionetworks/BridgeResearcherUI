@@ -6,7 +6,7 @@ import ko from "knockout";
  *  viewModel
  *      the parent view model
  */
-module.exports = function(params) {
+export default function tabset(params) {
   let self = this;
 
   fn.copyProps(self, params.viewModel, "isNewObs", "schemaIdObs", "revisionObs", "moduleIdObs", "moduleVersionObs");
@@ -27,7 +27,7 @@ module.exports = function(params) {
   });
   self.computeds.push(self.revisionLabel);
 };
-module.exports.prototype.dispose = function() {
+tabset.prototype.dispose = function() {
   this.computeds.forEach(function(c) {
     c.dispose();
   });

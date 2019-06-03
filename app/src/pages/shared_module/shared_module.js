@@ -43,7 +43,7 @@ function loadSchemaRevisions(vm, schema) {
     vm.linkedVersionOptionsObs(revisions);
   });
 }
-module.exports = function(params) {
+export default function sharedModule(params) {
   let self = this;
   self.editor = null;
   self.metadata = { tags: [], version: 1 };
@@ -215,7 +215,7 @@ module.exports = function(params) {
       .catch(failureHandler);
   }
 };
-module.exports.prototype.dispose = function() {
+sharedModule.prototype.dispose = function() {
   if (this.editor) {
     this.editor.destroy();
   }

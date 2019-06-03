@@ -1,6 +1,6 @@
 import root from "../../root";
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
 
   self.close = root.closeDialog;

@@ -13,7 +13,7 @@ const OPTIONS = [
   { label: "Upload schemas only", value: "schema" },
   { label: "Both", value: "both" }
 ];
-module.exports = function() {
+export default function() {
   let self = this;
   self.isAdmin = root.isAdmin;
 

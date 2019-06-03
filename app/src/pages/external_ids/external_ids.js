@@ -15,7 +15,7 @@ function deleteItem(item) {
   return serverService.deleteExternalId(item.identifier);
 }
 
-module.exports = function() {
+export default function externalIds() {
   let self = this;
 
   let binder = new Binder(self)

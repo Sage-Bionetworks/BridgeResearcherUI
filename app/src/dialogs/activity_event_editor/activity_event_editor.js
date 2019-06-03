@@ -6,7 +6,7 @@ import Promise from "bluebird";
 import root from "../../root";
 import utils from "../../utils";
 
-module.exports = function(params) {
+export default function activityEventEditor(params) {
   let self = this;
   params = params || {};
 

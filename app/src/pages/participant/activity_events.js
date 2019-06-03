@@ -10,7 +10,7 @@ const failureHandler = utils.failureHandler({
   redirectMsg: "Activity events not found"
 });
 
-module.exports = function(params) {
+export default function activityEvents(params) {
   let self = this;
 
   new Binder(self)

@@ -12,7 +12,7 @@ const failureHandler = utils.failureHandler({
   redirectMsg: "Participant not found"
 });
 
-module.exports = class ParticipantUploadsViewModel extends UploadsViewModel {
+export default class ParticipantUploadsViewModel extends UploadsViewModel {
   constructor(params) {
     super(params);
     new Binder(this)

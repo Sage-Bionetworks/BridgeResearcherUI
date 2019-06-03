@@ -15,7 +15,7 @@ const LINK_COMPONENTS = {
   compound: "compoundActivities/"
 };
 
-module.exports = function(params) {
+export default function activities(params) {
   let self = this;
 
   self.tempDedupMap = {};

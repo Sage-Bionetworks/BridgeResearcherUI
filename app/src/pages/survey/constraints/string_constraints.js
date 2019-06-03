@@ -1,7 +1,7 @@
 import fn from "../../../functions";
 import surveyUtils from "../survey_utils";
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
   surveyUtils.initConstraintsVM(self, params);
   fn.copyProps(

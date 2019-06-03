@@ -13,7 +13,7 @@ const failureHandler = utils.failureHandler({
   transient: false
 });
 
-module.exports = function(params) {
+export default function schema(params) {
   let self = this;
   self.schema = {};
 

@@ -4,7 +4,7 @@ import BridgeError from "../../bridge_error";
 import root from "../../root";
 import utils from "../../utils";
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
 
   self.cancel = root.closeDialog;

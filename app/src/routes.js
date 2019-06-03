@@ -1,6 +1,6 @@
-import "../css/main";
-import "../lib/toastr.min";
-import "../lib/dragula.min";
+import "../css/main.scss";
+import "../lib/toastr.min.css";
+import "../lib/dragula.min.css";
 
 import "../lib/jquery.scrollTo";
 import "./bindings";
@@ -9,7 +9,6 @@ import "./bindings/semantic";
 import "./components";
 import "knockout-postbox";
 import { Router } from "director/build/director";
-import { serverService } from "./services/server_service";
 import ko from "knockout";
 import root from "./root";
 
