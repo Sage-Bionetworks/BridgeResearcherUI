@@ -10,7 +10,7 @@ function deleteStudy(item) {
   }
 }
 
-module.exports = function() {
+export default function() {
   let self = this;
 
   tables.prepareTable(self, {

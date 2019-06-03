@@ -5,7 +5,7 @@ import fn from "../../functions";
 import root from "../../root";
 import utils from "../../utils";
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
 
   let binder = new Binder(self)

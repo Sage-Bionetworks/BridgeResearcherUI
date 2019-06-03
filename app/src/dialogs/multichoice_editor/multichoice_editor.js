@@ -1,7 +1,7 @@
 import Binder from "../../binder";
 import root from "../../root";
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
 
   new Binder(self)

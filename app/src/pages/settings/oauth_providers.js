@@ -2,7 +2,6 @@ import { serverService } from "../../services/server_service";
 import Binder from "../../binder";
 import root from "../../root";
 import utils from "../../utils";
-import ko from "knockout";
 import alert from "../../widgets/alerts";
 
 // This is a trivial change because Travis doesn't seem to think the branch is there for deployment.
@@ -26,7 +25,7 @@ function obsToModel(array) {
   }, {});
 }
 
-module.exports = function() {
+export default function() {
   let self = this;
 
   let binder = new Binder(self).bind("oAuthProviders[]", [], modelToObs, obsToModel);

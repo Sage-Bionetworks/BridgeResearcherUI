@@ -1,59 +1,38 @@
 {
-  "name": "bridge-researcher-ui",
-  "version": "0.0.3",
-  "description": "The Bridge Study Manager for the Sage Bionetworks Bridge Server",
-  "main": "index.js",
-  "engine": "node 8.1.3",
-  "scripts": {
-    "clean": "rm app/index.html; rm npm-debug*; rm -rf app/dist; mkdir app/dist",
-    "start": "webpack-dev-server --content-base app",
-    "watch": "webpack --progress --colors --watch",
-    "release": "webpack -p",
-    "test": "mocha --require babel-core/register"
-  },
-  "author": "Bridge Server Team <bridgeit@sagebase.org>",
+  "name": "boilerplate-babel-webpack",
+  "version": "1.0.6",
+  "description": "Starter with Babel.js and Webpack",
   "license": "MIT",
+  "author": {
+    "name": "Piotr Kowalski",
+    "email": "piecioshka@gmail.com",
+    "url": "https://piecioshka.pl"
+  },
+  "scripts": {
+    "clear": "rm -rf app/dist/",
+    "clear:all": "rm -rf node_modules/ && npm run clear",
+    "count": "find app/src -name '*.js' | xargs wc -l | sort -r",
+    "release": "webpack --config webpack/webpack.config.prod.js",
+    "dev": "webpack-dev-server --contentBase app --config webpack/webpack.config.dev.js",
+    "test": "./node_modules/.bin/mocha --require @babel/register"
+  },
   "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.5",
-    "babel-preset-env": "^1.7.0",
-    "babel-register": "^6.24.1",
-    "bluebird": "^3.5.5",
-    "bundle-loader": "^0.5.5",
-    "chai": "^4.2.0",
-    "chart.js": "^2.8.0",
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/register": "^7.4.4",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-add-module-exports": "^1.0.2",
     "css-loader": "^2.1.1",
-    "director": "^1.2.8",
-    "dom-autoscroller": "^2.3.1 ",
-    "dragula": "^3.7.2",
-    "extract-text-webpack-plugin": "3.0.2",
     "flatpickr": "^4.5.7",
-    "html-loader": "^0.4.4",
-    "html-webpack-plugin": "^2.22.0",
-    "jquery": "^3.4.1",
-    "jshint": "^2.10.2",
-    "jshint-loader": "^0.8.4",
-    "knockout": "^3.5.0",
-    "knockout-postbox": "^0.6.0",
-    "mocha": "^5.2.0",
-    "node-libs-browser": "^2.2.0",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "mocha": "^6.1.4",
     "node-sass": "^4.12.0",
     "sass-loader": "^7.1.0",
-    "sinon": "^6.3.5",
-    "style-loader": "^0.18.2",
-    "sweetalert2": "^7.33.1",
-    "toastr": "^2.1.2",
-    "webpack": "^3.12.0",
+    "source-map-explorer": "^1.8.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.31.0",
     "webpack-cli": "^3.3.2",
-    "webpack-dev-server": "^2.11.5"
-  },
-  "peerDependencies": {
-    "node-sass": "^3.3.2"
-  },
-  "babel": {
-    "plugins": [
-      "transform-es2015-modules-commonjs"
-    ]
+    "webpack-dev-server": "^3.5.0"
   }
 }

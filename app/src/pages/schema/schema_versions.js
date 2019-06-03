@@ -12,7 +12,7 @@ const notFound = utils.failureHandler({
   redirectMsg: "Schema not found."
 });
 
-module.exports = function(params) {
+export default function schemaVersions(params) {
   let self = this;
 
   new Binder(self)

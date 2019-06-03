@@ -1,7 +1,7 @@
 import Binder from "../../binder";
 import fn from "../../functions";
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
 
   self.id = '';

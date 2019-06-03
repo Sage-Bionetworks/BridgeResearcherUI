@@ -2,7 +2,7 @@ import Binder from "../../binder";
 import utils from "../../utils";
 import ko from "knockout";
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
   let loadingFunc = params.vm.loadingFunc;
   let pendingRequest = false;

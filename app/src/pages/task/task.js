@@ -20,7 +20,7 @@ const taskFailure = utils.failureHandler({
  * One thing I found is that $component.function references in the template do not have
  * the correct this reference... which is practically a show stopper by itself.
  */
-module.exports = class Task {
+export default class Task {
   constructor(params) {
     this.taskId = params.taskId;
     this.task = {};

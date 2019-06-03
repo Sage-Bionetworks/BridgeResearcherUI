@@ -4,7 +4,7 @@ import Binder from "../../binder";
 import fn from "../../functions";
 import tables from "../../tables";
 
-module.exports = function(params) {
+export default function surveySchema(params) {
   let self = this;
 
   schemaUtils.initVM(self);

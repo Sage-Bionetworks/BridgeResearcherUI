@@ -4,7 +4,7 @@ import root from "../../root";
 import fn from "../../functions";
 import utils from "../../utils";
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
   self.studyId = null;
 

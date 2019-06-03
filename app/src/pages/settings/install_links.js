@@ -1,14 +1,12 @@
 import { serverService } from "../../services/server_service";
 import Binder from "../../binder";
-import root from "../../root";
 import utils from "../../utils";
-import fn from "../../functions";
 
 const IOS = "iPhone OS";
 const ANDROID = "Android";
 const UNIVERSAL = "Universal";
 
-module.exports = function() {
+export default function() {
   let self = this;
   let ios = Binder.objPropDelegates("installLinks", IOS);
   let android = Binder.objPropDelegates("installLinks", ANDROID);

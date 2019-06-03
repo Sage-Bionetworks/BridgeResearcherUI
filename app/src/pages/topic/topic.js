@@ -15,7 +15,7 @@ function newTopic() {
   };
 }
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
   self.topic = {};
 

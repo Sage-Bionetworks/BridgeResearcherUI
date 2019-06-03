@@ -1,10 +1,9 @@
 import Binder from "../../binder";
 import BridgeError from "../../bridge_error";
-import fn from "../../functions";
 import root from "../../root";
 import utils from "../../utils";
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
   self.closeDialog = root.closeDialog;
 

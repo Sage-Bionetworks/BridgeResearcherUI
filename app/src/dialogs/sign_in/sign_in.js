@@ -45,7 +45,7 @@ function makeReloader(studyKey, environment) {
     };
 }
 
-module.exports = function() {
+export default function() {
   let self = this;
 
   let isLocked = fn.isNotBlank(root.queryParams.studyPath);

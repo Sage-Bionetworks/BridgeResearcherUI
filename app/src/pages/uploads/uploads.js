@@ -9,7 +9,7 @@ import utils from "../../utils";
 const PAGE_SIZE = 50;
 const PAGE_KEY = "u";
 
-module.exports = class UploadsViewModel {
+export default class UploadsViewModel {
   constructor(params) {
     let { start, end } = fn.getRangeInDays(-14, 0);
     this.query = storeService.restoreQuery(PAGE_KEY);

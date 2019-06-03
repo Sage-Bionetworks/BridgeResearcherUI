@@ -11,7 +11,7 @@ import utils from "../../utils";
  *  addConfigs: function to receive selected schemas(s)
  *  selected: config list
  */
-module.exports = function(params) {
+export default function(params) {
   let self = this;
 
   self.title = params.selectOne ? "Select Config" : "Select Configs";

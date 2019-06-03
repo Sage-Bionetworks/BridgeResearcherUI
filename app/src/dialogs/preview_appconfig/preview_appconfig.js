@@ -4,7 +4,7 @@ import root from "../../root";
 import jsonFormatter from "../../json_formatter";
 import Promise from "bluebird";
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
   let appConfig = params.appConfig;
 

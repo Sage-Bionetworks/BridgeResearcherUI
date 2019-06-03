@@ -1,8 +1,7 @@
 import fn from "../../functions";
 import ko from "knockout";
-import root from "../../root";
 
-module.exports = function(params) {
+export default function tabset(params) {
   let self = this;
 
   if (!params.isNewObs) {
@@ -19,7 +18,7 @@ module.exports = function(params) {
     return c;
   };
 };
-module.exports.prototype.dispose = function() {
+tabset.prototype.dispose = function() {
   this.computeds.forEach(function(c) {
     c.dispose();
   });

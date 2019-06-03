@@ -38,7 +38,7 @@ function selectRoles(session) {
   return roles;
 }
 
-module.exports = function(params) {
+export default function general(params) {
   let self = this;
   self.participant = NEW_PARTICIPANT;
 

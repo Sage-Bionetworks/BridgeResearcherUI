@@ -130,7 +130,7 @@ function isValueValidOnServer(value) {
   return /^[a-zA-Z0-9][a-zA-Z0-9-._\s]*[a-zA-Z0-9]$/.test(value) && !/[-._\s]{2,}/.test(value);
 }
 
-module.exports = function(params) {
+export default function enumEditor(params) {
   let self = this;
 
   let parent = params.parentViewModel;
@@ -237,7 +237,7 @@ module.exports = function(params) {
   // Should we copy edits over to all the same lists.
   self.cancel = fn.seq(self.cancelEditMode, root.closeDialog);
 };
-module.exports.prototype.dispose = function() {
+enumEditor.prototype.dispose = function() {
   this.editorTitleObs.dispose();
   this.editorCommandObs.dispose();
   this.newListItemValid.dispose();

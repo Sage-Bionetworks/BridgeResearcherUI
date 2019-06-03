@@ -36,7 +36,7 @@ function obsToMap(accumulator, currentValue) {
   return accumulator;
 }
 
-module.exports = function() {
+export default function() {
   let self = this;
 
   self.itemsObs = ko.observableArray([]);

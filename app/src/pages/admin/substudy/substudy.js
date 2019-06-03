@@ -9,7 +9,7 @@ var failureHandler = utils.failureHandler({
   transient: false
 });
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
   self.substudy = {};
 

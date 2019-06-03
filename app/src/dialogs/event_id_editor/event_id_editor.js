@@ -37,7 +37,7 @@ function collectActivityEventKeys(eventKeys) {
  * are supported by the event system. These events are not generated when surveys are answered
  * and submitted to Bridge, so there's no point in exposing a scheduling UI for these at this time.
  */
-module.exports = function(params) {
+export default function(params) {
   let self = this;
 
   new Binder(self)

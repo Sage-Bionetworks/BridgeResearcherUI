@@ -29,7 +29,7 @@ function getDateRange(range) {
   };
 }
 
-module.exports = function() {
+export default function dailyUploads() {
   let self = this;
 
   self.isLoadingObs = ko.observable(false);
@@ -118,7 +118,7 @@ module.exports = function() {
   }
   loadChart("2");
 };
-module.exports.prototype.dispose = function() {
+dailyUploads.prototype.dispose = function() {
   this.comps.forEach(function(comp) {
     comp.dispose();
   });

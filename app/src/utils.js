@@ -154,13 +154,6 @@ function clearPendingControl() {
     pendingControl = null;
   }
 }
-function createEmailTemplate(email, identifier) {
-  let parts = email.split("@");
-  if (parts[0].indexOf("+") > -1) {
-    parts[0] = parts[0].split("+")[0];
-  }
-  return parts[0] + "+" + identifier + "@" + parts[1];
-}
 function copyString(value) {
   let p = document.createElement("textarea");
   p.style = "position:fixed;top:0;left:0";

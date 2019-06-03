@@ -39,7 +39,7 @@ function androidObsToModel(array) {
   });
 }
 
-module.exports = function() {
+export default function() {
   let self = this;
 
   let binder = new Binder(this)

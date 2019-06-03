@@ -5,7 +5,7 @@ import jsonFormatter from "../../json_formatter";
 import ko from "knockout";
 import utils from "../../utils";
 
-module.exports = function(params) {
+export default function uploadDetails(params) {
   let self = this;
 
   var binder = new Binder(this)

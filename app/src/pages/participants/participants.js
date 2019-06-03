@@ -43,7 +43,7 @@ function makeSuccess(vm, event) {
   };
 }
 
-module.exports = function() {
+export default function participants() {
   let self = this;
 
   self.total = 0;

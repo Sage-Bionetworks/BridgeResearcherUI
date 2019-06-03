@@ -215,11 +215,6 @@ function formatNameAsFullLabel(summary) {
   }
   return name;
 }
-function makeFieldSorter(fieldName) {
-  return function sorter(a, b) {
-    return a[fieldName] && b[fieldName] ? a[fieldName].localeCompare(b[fieldName]) : 0;
-  };
-}
 function handleObsUpdate(obs, fieldName) {
   return function(response) {
     obs(response[fieldName]);

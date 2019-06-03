@@ -7,7 +7,7 @@ import sharedModuleUtils from "../../shared_module_utils";
 import tables from "../../tables";
 import utils from "../../utils";
 
-module.exports = function() {
+export default function schemas() {
   let self = this;
 
   schemaUtils.initSchemasVM(self);

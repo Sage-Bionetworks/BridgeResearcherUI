@@ -33,7 +33,7 @@ function annotateSurveys(surveys, plans) {
   });
 }
 
-module.exports = function() {
+export default function surveys() {
   let self = this;
 
   fn.copyProps(self, fn, "formatDateTime");

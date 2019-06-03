@@ -21,7 +21,7 @@ const DURATION_NO_HOURS_OPTIONS = Object.freeze([
  *  fieldObs - the field this control represents
  *  noHours - if true, no hours will be shown in the dropdown menu
  */
-module.exports = function(params) {
+export default function uiDuration(params) {
   let self = this;
 
   self.fieldObs = params.fieldObs;
@@ -63,6 +63,6 @@ module.exports = function(params) {
     }
   }
 };
-module.exports.prototype.dispose = function() {
+uiDuration.prototype.dispose = function() {
   this.computedUpdateSubFields.dispose();
 };

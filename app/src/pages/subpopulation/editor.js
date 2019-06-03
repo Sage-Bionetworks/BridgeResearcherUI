@@ -10,7 +10,7 @@ const failureHandler = utils.failureHandler({
   redirectTo: "subpopulations"
 });
 
-module.exports = function(params) {
+export default function editor(params) {
   let self = this;
   self.editor = null;
 
@@ -109,7 +109,7 @@ module.exports = function(params) {
     .then(loadIntoEditor)
     .catch(failureHandler);
 };
-module.exports.prototype.dispose = function() {
+editor.prototype.dispose = function() {
   if (this.editor) {
     this.editor.destroy();
   }

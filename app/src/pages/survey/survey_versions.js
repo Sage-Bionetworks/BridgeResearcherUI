@@ -6,7 +6,7 @@ import tables from "../../tables";
 import utils from "../../utils";
 import root from "../../root";
 
-module.exports = function(params) {
+export default function surveyVersions(params) {
   let self = this;
   self.keys = params;
 

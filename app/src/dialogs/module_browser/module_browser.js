@@ -10,7 +10,7 @@ import utils from "../../utils";
 - See if your import is up-to-date or not in survey list or browser
 - import an updated version
 */
-module.exports = function(params) {
+export default function(params) {
   let self = this;
   let importedMods = {};
   let methName = params.type === "survey" ? "getSurveys" : "getAllUploadSchemas";

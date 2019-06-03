@@ -15,7 +15,7 @@ function exportingMsg() {
   alerts.notification("Starting Data Export", EXPORT_MSG);
 }
 
-module.exports = function() {
+export default function exportSettings() {
   let self = this;
 
   let binder = new Binder(self)
@@ -76,7 +76,7 @@ module.exports = function() {
     .then(binder.update())
     .catch(utils.failureHandler());
 };
-module.exports.prototype.dispose = function() {
+exportSettings.prototype.dispose = function() {
   this.isLinked.dispose();
   this.projectLinkObs.dispose();
   this.teamLinkObs.dispose();

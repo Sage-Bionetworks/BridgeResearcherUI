@@ -3,7 +3,7 @@ import Binder from "../../binder";
 import root from "../../root";
 import utils from "../../utils";
 
-module.exports = function() {
+export default function() {
   let self = this;
 
   let binder = new Binder(self)

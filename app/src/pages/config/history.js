@@ -11,7 +11,7 @@ let failureHandler = utils.failureHandler({
   transient: false
 });
 
-module.exports = function(params) {
+export default function history(params) {
   let self = this;
 
   fn.copyProps(self, root, "isAdmin");

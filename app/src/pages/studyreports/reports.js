@@ -9,7 +9,7 @@ function deleteItem(item) {
   return serverService.deleteStudyReport(item.identifier);
 }
 
-module.exports = function() {
+export default function reports() {
   let self = this;
 
   self.isDeveloper = root.isDeveloper;
