@@ -1,13 +1,11 @@
 {
-  "name": "boilerplate-babel-webpack",
-  "version": "1.0.6",
-  "description": "Starter with Babel.js and Webpack",
+  "name": "bridge-researcher-ui",
+  "version": "0.0.4",
+  "description": "The Bridge Study Manager for the Sage Bionetworks Bridge Server",
+  "main": "index.js",
+  "engine": "node 11.10.0",
+  "author": "Bridge Server Team <bridgeit@sagebase.org>",
   "license": "MIT",
-  "author": {
-    "name": "Piotr Kowalski",
-    "email": "piecioshka@gmail.com",
-    "url": "https://piecioshka.pl"
-  },
   "scripts": {
     "clear": "rm -rf app/dist/",
     "clear:all": "rm -rf node_modules/ && npm run clear",
