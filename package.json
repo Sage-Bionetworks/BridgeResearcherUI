@@ -7,8 +7,8 @@
   "author": "Bridge Server Team <bridgeit@sagebase.org>",
   "license": "MIT",
   "scripts": {
-    "clear": "rm -rf app/dist/",
-    "clear:all": "rm -rf node_modules/ && npm run clear",
+    "clean": "rm -rf app/dist/",
+    "clean:all": "rm -rf node_modules/ && npm run clean",
     "count": "find app/src -name '*.js' | xargs wc -l | sort -r",
     "release": "webpack --config webpack/webpack.config.prod.js",
     "dev": "webpack-dev-server --contentBase app --config webpack/webpack.config.dev.js",
