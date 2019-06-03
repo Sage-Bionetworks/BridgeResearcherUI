@@ -21,6 +21,7 @@
     "babel-loader": "^8.0.6",
     "babel-plugin-add-module-exports": "^1.0.2",
     "bluebird": "^3.4.0",
+    "chai": "^4.0.2",
     "chart.js": "^2.7.2",
     "css-loader": "^2.1.1",
     "director": "^1.2.8",
