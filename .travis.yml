@@ -1,8 +1,13 @@
 # Change to update
 sudo: false
-language: python
-python: 3.5
-cache: pip
+matrix:
+  include:
+    - language: python
+      python: 3.5
+      cache: pip
+    - language: node_js
+      - node_js:
+        - 10.15.1
 fast_finish: true
 branches:
   only:
