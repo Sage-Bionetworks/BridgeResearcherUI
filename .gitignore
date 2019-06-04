@@ -1,6 +1,7 @@
 node_modules
 note.txt
 .idea
+index.html
 nbproject
 dist/
 npm-debug.log*
