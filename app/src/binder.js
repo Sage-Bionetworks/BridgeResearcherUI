@@ -2,9 +2,6 @@ import ko from "knockout";
 import fn from "./functions.js";
 import jsonFormatter from "./json_formatter";
 
-// REMOVEME LATER. Need a gratuitous change to acknowledge .travis.yml
-var foo = function() {return "1"};
-
 function nameInspector(string) {
   let isArray = /\[\]$/.test(string);
   let name = isArray ? string.match(/[^\[]*/)[0] : string;
