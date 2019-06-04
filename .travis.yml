@@ -1,14 +1,16 @@
 # Change to update
-sudo: false
-matrix:
-  include:
-    - language: python
-      python: 3.5
-      cache: pip
-    - language: node_js
-      - node_js:
-        - 10.15.1
-fast_finish: true
+# sudo: false
+# matrix:
+#   include:
+#     - language: python
+#       python: 3.5
+#       cache: pip
+#     - language: node_js
+#       node_js: 10.15.1
+# fast_finish: true
+language: node_js
+node_js:
+  - "10.15.1"
 branches:
   only:
   - develop
