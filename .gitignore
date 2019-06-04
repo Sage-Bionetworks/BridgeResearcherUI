@@ -1,10 +1,9 @@
 node_modules
 note.txt
 .idea
-nbproject
 app/index.html
+nbproject
 dist/
 npm-debug.log*
 .vscode
-design.html
 Untitled-1

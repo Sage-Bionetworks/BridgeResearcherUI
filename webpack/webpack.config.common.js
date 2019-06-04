@@ -12,7 +12,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'app/template.html', filename: 'index.html'
+      template: path.resolve('app/template.html'), 
+      filename: path.resolve('./app/index.html')
     })
   ],  
   module: {
@@ -20,7 +21,13 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: 'babel-loader'
+        use: {
+          loader: 'babel-loader', 
+          options: {
+            "presets": [["@babel/env", { "modules": false }]],
+            "plugins": ["add-module-exports"]
+          }
+        }
       },
       {
         test: /\.(scss|css)$/,
@@ -28,7 +35,13 @@ module.exports = {
       },
       {
         test: /\.html$/, 
-        use: {loader: 'html-loader', options: {removeComments: false, minimize: true}}
+        use: {
+          loader: 'html-loader', 
+          options: {
+            removeComments: false, 
+            minimize: true
+          }
+        }
       }    
     ]
   }
