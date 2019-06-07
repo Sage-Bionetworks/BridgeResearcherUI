@@ -31,7 +31,7 @@ function newGroup() {
   return group;
 }
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
 
   self.labelObs = params.labelObs;

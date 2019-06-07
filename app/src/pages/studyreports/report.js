@@ -28,7 +28,7 @@ function lastDayOfMonth(year, month) {
   return fn.formatDate(new Date(year, month + 1, 0), "iso");
 }
 
-module.exports = function(params) {
+export default function report(params) {
   let self = this;
   self.studyId = null;
 

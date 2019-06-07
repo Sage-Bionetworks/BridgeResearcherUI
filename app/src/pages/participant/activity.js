@@ -12,7 +12,7 @@ const failureHandler = utils.failureHandler({
   redirectMsg: "Participant not found"
 });
 
-module.exports = function(params) {
+export default function activity(params) {
   let self = this;
 
   self.vm = self;

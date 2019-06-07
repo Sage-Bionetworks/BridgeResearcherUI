@@ -24,7 +24,7 @@ function noner(value) {
   return value ? value : "<none>";
 }
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
 
   let binder = new Binder(self)

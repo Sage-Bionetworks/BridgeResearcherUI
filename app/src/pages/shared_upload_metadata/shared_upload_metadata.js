@@ -11,7 +11,7 @@ const failureHandler = utils.failureHandler({
   transient: false
 });
 
-module.exports = function(params) {
+export default function sharedUploadMetadata(params) {
   let self = this;
 
   self.isAdmin = root.isAdmin;

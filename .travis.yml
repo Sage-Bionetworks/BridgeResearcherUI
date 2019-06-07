@@ -3,7 +3,6 @@ sudo: false
 language: python
 python: 3.5
 cache: pip
-fast_finish: true
 branches:
   only:
   - develop
@@ -13,6 +12,8 @@ install:
 - unzip -j -n /tmp/infra-utils.zip -x infra-utils-master/.gitignore infra-utils-master/LICENSE infra-utils-master/README.md
 - ./setup_aws_cli.sh || travis_terminate 1
 script:
+- nvm install 10.15.1
+- nvm use 10.15.1
 - eval export "AwsBucket=\$AwsBucket_$TRAVIS_BRANCH"    
 - npm install
 - npm run test

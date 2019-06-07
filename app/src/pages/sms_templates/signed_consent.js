@@ -1,6 +1,6 @@
 import SmsViewModel from "./sms_view_model";
 
-module.exports = class SmsSignedConsentTemplate extends SmsViewModel {
+export default class SmsSignedConsentTemplate extends SmsViewModel {
   constructor() {
     super("signedConsentSmsTemplate");
   }

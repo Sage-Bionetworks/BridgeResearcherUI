@@ -12,7 +12,7 @@ import utils from "../../utils";
  *  addSurveys: function to receive selected survey(s)
  *  selected: survey list
  */
-module.exports = function(params) {
+export default function(params) {
   let self = this;
 
   self.title = params.selectOne ? "Select Survey" : "Select Surveys";

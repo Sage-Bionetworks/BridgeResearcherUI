@@ -1,7 +1,7 @@
 import Binder from "../../binder";
 import * as schemaUtils from "./schema_utils";
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
   let type = params.field.typeObs();
 

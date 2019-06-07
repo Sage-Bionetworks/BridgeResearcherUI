@@ -14,7 +14,7 @@ function newSubpop() {
   return { name: "", description: "", criteria: criteriaUtils.newCriteria() };
 }
 
-module.exports = function(params) {
+export default function general(params) {
   let self = this;
 
   let binder = new Binder(self)

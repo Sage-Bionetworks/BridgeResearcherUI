@@ -12,7 +12,7 @@ import utils from "../../utils";
  *  addSchemas: function to receive selected schemas(s)
  *  selected: schema list
  */
-module.exports = function(params) {
+export default function(params) {
   let self = this;
 
   self.title = params.selectOne ? "Select Schema" : "Select Schemas";

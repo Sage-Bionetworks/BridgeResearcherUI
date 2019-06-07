@@ -1,6 +1,6 @@
 import fn from "../../functions";
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
 
   fn.copyProps(self, params, "valueObs", "verifiedObs");

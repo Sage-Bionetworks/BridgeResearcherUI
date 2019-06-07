@@ -2,7 +2,7 @@ import { serverService } from "../../services/server_service";
 import fn from "../../functions";
 import ko from "knockout";
 
-module.exports = function(params) {
+export default function tabset(params) {
   let self = this;
   fn.copyProps(self, params, "isNewObs", "idObs", "revisionObs");
 
@@ -22,7 +22,7 @@ module.exports = function(params) {
   });
   self.computeds.push(self.revisionLabel);
 };
-module.exports.prototype.dispose = function() {
+tabset.prototype.dispose = function() {
   this.computeds.forEach(function(c) {
     c.dispose();
   });

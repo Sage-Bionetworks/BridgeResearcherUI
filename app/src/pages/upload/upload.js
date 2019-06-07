@@ -2,7 +2,7 @@ import { serverService } from "../../services/server_service";
 import utils from "../../utils";
 import Binder from "../../binder";
 
-module.exports = function(params) {
+export default function upload(params) {
   var self = this;
 
   var binder = new Binder(self).obs("title", params.guid).obs("uploadDetails");

@@ -9,21 +9,24 @@ Study management application for Bridge researchers.
 Install node and npm. We recommend using something like nvm to manage your node installation. Then in the directory where you would like to create a project directory: 
 
     npm install
-    npm install webpack -g
-    webpack
-    
-Run a server (localhost:8080)
+    npm run dev
 
-    npm run start
-    
-Rebuild when a file changes
+Clean the build files
 
-    npm run watch
+    npm run clean
 
-Continuously run tests
+Clean the build and node_modules files
 
-    npm run test:watch
-    
+    npm run clean:all
+
+Run a dev server for development (webpack-dev-server)
+
+    npm run dev
+
+Run tests (mocha)
+
+    npm run test
+
 Build a release
 
     npm run release

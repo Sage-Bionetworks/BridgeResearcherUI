@@ -21,7 +21,7 @@ serverService.addSessionEndListener(function() {
   session = null;
 });
 
-module.exports = function(params) {
+export default function consents(params) {
   let self = this;
 
   new Binder(self)

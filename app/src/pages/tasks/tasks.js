@@ -6,7 +6,7 @@ import sharedModuleUtils from "../../shared_module_utils";
 import tables from "../../tables";
 import utils from "../../utils";
 
-module.exports = class Tasks {
+export default class Tasks {
   constructor() {
     tables.prepareTable(this, {
       name: "task",

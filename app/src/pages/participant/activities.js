@@ -4,6 +4,7 @@ import optionsService from "../../services/options_service";
 import sharedModuleUtils from "../../shared_module_utils";
 import tables from "../../tables";
 import utils from "../../utils";
+import alerts from "../../widgets/alerts";
 
 const FAILURE_HANDLER = utils.failureHandler({
   redirectTo: "participants",
@@ -15,7 +16,7 @@ const LINK_COMPONENTS = {
   compound: "compoundActivities/"
 };
 
-module.exports = function(params) {
+export default function activities(params) {
   let self = this;
 
   self.tempDedupMap = {};
@@ -30,8 +31,7 @@ module.exports = function(params) {
     type: "Activity"
   });
 
-  serverService
-    .getParticipantName(params.userId)
+  serverService.getParticipantName(params.userId)
     .then(function(part) {
       self.titleObs(part.name);
       self.statusObs(part.status);
@@ -74,6 +74,15 @@ module.exports = function(params) {
       return a.label.localeCompare(b.label);
     });
     self.itemsObs(array);
+  }
+
+  self.deleteActivities = function(vm, event) {
+    alerts.deleteConfirmation("Are you sure? You should never do this to an account in production.", () => {
+      utils.startHandler(vm, event);
+      serverService.deleteParticipantActivities(params.userId)
+        .then(utils.successHandler(vm, event, "All activities for this participant have been deleted."))
+        .catch(utils.failureHandler());
+    });
   }
 
   sharedModuleUtils

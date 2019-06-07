@@ -13,7 +13,7 @@ const PAGE_SIZE = 25;
  * @params pageKey - a key to make the pagination on this table unique from other pagination on
  *      the screen
  */
-module.exports = function(params) {
+export default function pager(params) {
   let self = this;
   let pageKey = params.pageKey;
   let loadingFunc = params.loadingFunc;
@@ -153,6 +153,6 @@ module.exports = function(params) {
     wrappedLoadingFunc(0);
   });
 };
-module.exports.prototype.dispose = function() {
+pager.prototype.dispose = function() {
   document.body.removeEventListener("click", this.closeHandler, true);
 };

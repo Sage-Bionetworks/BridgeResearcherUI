@@ -12,7 +12,7 @@ let failureHandler = utils.failureHandler({
   redirectMsg: "Participant not found"
 });
 
-module.exports = function(params) {
+export default function clientData(params) {
   let self = this;
   self.participant = null;
 

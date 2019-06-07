@@ -18,7 +18,7 @@ function valueToObservers(self, prefix) {
   self[monthObs].subscribe(v => self[targetObs](fn.formatYearMonth(self[yearObs](), v)));
 }
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
   surveyUtils.initConstraintsVM(self, params);
   fn.copyProps(self, self.element.constraints, "earliestValueObs", "latestValueObs", "allowFutureObs");

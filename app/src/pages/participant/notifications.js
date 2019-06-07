@@ -5,7 +5,7 @@ import root from "../../root";
 import tables from "../../tables";
 import utils from "../../utils";
 
-module.exports = function(params) {
+export default function notifications(params) {
   let self = this;
 
   fn.copyProps(self, root, "isDeveloper", "isResearcher", "notificationsEnabledObs");

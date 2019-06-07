@@ -6,7 +6,7 @@ import root from "../../root";
  * Params
  *  criteriaObs - the criteria observer
  */
-module.exports = function(params) {
+export default function(params) {
   let self = this;
 
   self.formatCriteriaObs = ko.computed(function() {

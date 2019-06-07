@@ -1,7 +1,7 @@
 import EmailViewModel from "./email_view_model";
 import ko from "knockout";
 
-module.exports = class AccountExistsTemplate extends EmailViewModel {
+export default class AccountExistsTemplate extends EmailViewModel {
   constructor() {
     super("accountExistsTemplate");
     this.autoVerificationEnabledObs = ko.observable();

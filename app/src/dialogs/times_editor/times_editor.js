@@ -7,7 +7,7 @@ function hourMinuteValue(value) {
   return value.replace(":00.000", "");
 }
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
 
   self.itemsObs = ko.observableArray(ko.utils.arrayMap(params.timesObs(), hourMinuteValue));

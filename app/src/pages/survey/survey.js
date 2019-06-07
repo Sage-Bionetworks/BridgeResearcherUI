@@ -11,7 +11,7 @@ const notFound = utils.failureHandler({
   redirectMsg: "Survey not found."
 });
 
-module.exports = function(params) {
+export default function survey(params) {
   let self = this;
 
   new Binder(self)
@@ -153,6 +153,6 @@ module.exports = function(params) {
       .catch(notFound);
   }
 };
-module.exports.prototype.dispose = function() {
+survey.prototype.dispose = function() {
   this.titleObs.dispose();
 };

@@ -97,7 +97,7 @@ CreateCredentialsWorker.prototype = {
   }
 };
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
   let supportEmail;
 

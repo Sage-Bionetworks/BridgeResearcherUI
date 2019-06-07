@@ -23,7 +23,7 @@ function maxToZero(value) {
   return value === "121" ? 0 : parseInt(value);
 }
 
-module.exports = function() {
+export default function general() {
   let self = this;
 
   let binder = new Binder(self)
@@ -71,6 +71,6 @@ module.exports = function() {
     .then(updateObservers)
     .catch(utils.failureHandler());
 };
-module.exports.prototype.dispose = function() {
+general.prototype.dispose = function() {
   this.minAgeLabel.dispose();
 };

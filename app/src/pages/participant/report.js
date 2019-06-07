@@ -32,7 +32,7 @@ function lastDayOfMonth(year, month) {
   return new Date(year, month + 1, 0).toISOString().split("T")[0];
 }
 
-module.exports = function(params) {
+export default function report(params) {
   let self = this;
 
   tables.prepareTable(self, {

@@ -25,7 +25,7 @@ serverService.addSessionEndListener(function() {
   adminEmail = null;
 });
 
-module.exports = function() {
+export default function() {
   let self = this;
 
   self.signOutStatusObs = ko.observable();

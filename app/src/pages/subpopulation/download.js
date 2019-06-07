@@ -9,7 +9,7 @@ const failureHandler = utils.failureHandler({
   redirectTo: "subpopulations"
 });
 
-module.exports = function(params) {
+export default function download(params) {
   let self = this;
 
   new Binder(self)

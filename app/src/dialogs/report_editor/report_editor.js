@@ -8,7 +8,7 @@ function formatDateISO(value) {
   return fn.formatDate(value, "iso");
 }
 
-module.exports = class AddReport {
+export default class AddReport {
   constructor(params) {
     fn.copyProps(this, params, "type", "userId", "closeDialog->close");
 

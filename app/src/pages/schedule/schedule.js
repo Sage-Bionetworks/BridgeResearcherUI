@@ -78,7 +78,7 @@ function getScheduleType(editorType) {
   return editorType === "sequence" || editorType === "cron" || editorType === "interval" ? "recurring" : editorType;
 }
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
 
   fn.copyProps(self, params, "collectionName");

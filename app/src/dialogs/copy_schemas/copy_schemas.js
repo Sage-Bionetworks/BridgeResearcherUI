@@ -6,7 +6,7 @@ import Promise from "bluebird";
 import root from "../../root";
 import utils from "../../utils";
 
-module.exports = function(params) {
+export default function copySchemas(params) {
   let self = this;
 
   let copyables = params.copyables;
@@ -83,7 +83,7 @@ module.exports = function(params) {
       .catch(utils.failureHandler());
   };
 };
-module.exports.prototype.dispose = function() {
+copySchemas.prototype.dispose = function() {
   this.canGoPreviousObs.dispose();
   this.canGoNextObs.dispose();
   this.canCopyObs.dispose();

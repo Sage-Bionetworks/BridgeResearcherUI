@@ -12,7 +12,7 @@ const FAILURE_HANDLER = utils.failureHandler({
   redirectMsg: "Shared module not found"
 });
 
-module.exports = function(params) {
+export default function(params) {
   let self = this;
   self.metadata = {};
 

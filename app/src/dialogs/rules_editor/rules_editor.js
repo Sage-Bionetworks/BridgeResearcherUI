@@ -102,7 +102,7 @@ function getIdentifierOptions(elementsArray, startIdentifier) {
  *      fieldName property of the rules (afterRules, beforeRules)
  * @param params
  */
-module.exports = function(params) {
+export default function(params) {
   let self = this;
   let parent = params.parentViewModel;
 

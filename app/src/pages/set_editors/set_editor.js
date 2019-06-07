@@ -2,10 +2,9 @@ import { serverService } from "../../services/server_service";
 import Binder from "../../binder";
 import BridgeError from "../../bridge_error";
 import fn from "../../functions";
-import root from "../../root";
 import utils from "../../utils";
 
-module.exports = function(propertyName) {
+export default function(propertyName) {
   return function() {
     let self = this;
 
