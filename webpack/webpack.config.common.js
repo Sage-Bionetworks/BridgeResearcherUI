@@ -8,12 +8,13 @@ module.exports = {
   },
   output: {
     filename: '[name].[hash].js',
-    path: path.resolve('./app/dist')
+    path: path.resolve('app/dist')
   },
   plugins: [
     new HtmlWebpackPlugin({
+      hash: true,
       template: path.resolve('app/template.html'), 
-      filename: path.resolve('./app/index.html')
+      filename: path.resolve('app/index.html')
     })
   ],  
   module: {
