@@ -7,7 +7,9 @@
       </div>
       <h3 data-bind="html: titleObs"></h3>
     </div>
-    <div class="fixed-header-buttons"></div>
+    <div class="fixed-header-buttons">
+      <button class="ui tiny red button" data-bind="click: deleteActivities">Delete All Activities</button>
+    </div>
   </div>
   <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
 </div>
@@ -15,8 +17,7 @@
   <p>
     View the
     <a data-bind="href: '#/participants/'+userIdObs()+'/activities/events'">
-      <i style="margin-right:0" class="calendar alternate outline icon"></i>Events</a
-    >
+      <i style="margin-right:0" class="calendar alternate outline icon"></i>Events</a>
     we’re using to schedule this participant.
   </p>
   <errors></errors>

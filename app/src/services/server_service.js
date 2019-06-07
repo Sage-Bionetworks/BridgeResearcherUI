@@ -465,6 +465,9 @@ export class ServerService {
     cache.clear(id + ":name");
     return this.del(config.participants + "/" + id);
   }
+  deleteParticipantActivities(id) {
+    return this.del(`#{config.participants}/#{id}/activities`);
+  }
   signOutUser(id, deleteReauthToken) {
     return this.post(config.participants + "/" + id + "/signOut" + fn.queryString({ deleteReauthToken }));
   }
