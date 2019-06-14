@@ -2,8 +2,8 @@
   <h4 data-bind="visible: healthDataExistsObs" class="ui dividing header">Upload</h4>
   <div class="field">
     <div class="field" data-bind="visible: showStudyObs">
-      <label>Study ID</label>
-      <div><span data-bind="text: studyNameObs"></span> (<span data-bind="text: studyIdObs"></span>)</div>
+      <label>Study</label>
+      <div><span data-bind="text: studyNameObs"></span> (ID: <span data-bind="text: studyIdObs"></span>)</div>
     </div>
     <div class="three fields">
       <div class="field">
@@ -19,8 +19,8 @@
         <span data-bind="visible: !sameStudyObs(), text: healthCodeObs"></span>
       </div>
       <div class="field">
-        <label>S3 key name</label>
-        <div data-bind="text: objectIdObs"></div>
+        <label>Content Length</label>
+        <div data-bind="text: contentLengthObs"></div>
       </div>
     </div>
     <div class="three fields">
@@ -50,8 +50,8 @@
         <div data-bind="text: contentMd5Obs"></div>
       </div>
       <div class="field">
-        <label>Content Length</label>
-        <div data-bind="text: contentLengthObs"></div>
+        <label>S3 key name</label>
+        <div data-bind="text: objectIdObs"></div>
       </div>
     </div>
   </div>
