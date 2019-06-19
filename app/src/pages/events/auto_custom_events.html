@@ -23,27 +23,18 @@
             <label>Schedule for</label>
             <div style="display:flex">
               <ui-duration style="margin-right: 1.5rem" params="fieldObs: periodObs, noHours: true"></ui-duration>
-              <select
-                style="width: 8rem; margin-right: .5rem"
-                class="ui dropdown"
+              <select style="width: 8rem; margin-right: .5rem" class="ui dropdown"
                 data-bind="options: $parent.allDeltasObs, optionsText: 'label', 
-                                optionsValue: 'value', value: deltaObs"
-              >
+                  optionsValue: 'value', value: deltaObs">
               </select>
-              <select
-                class="ui dropdown"
-                data-bind="options: $parent.allEventsObs,
-                                optionsText: 'label', optionsValue: 'value', value: originEventObs"
-              >
+              <select class="ui dropdown" data-bind="options: $parent.allEventsObs,
+                  optionsText: 'label', optionsValue: 'value', value: originEventObs">
               </select>
             </div>
           </div>
           <div class="activity-controls">
-            <i
-              class="red large times circle outline link icon"
-              data-bind="fadeRemove: { selector: '.auto_event', object: $data, 
-                            collection: 'itemsObs'}"
-            ></i>
+            <i class="red large times circle outline link icon"
+              data-bind="fadeRemove: { selector: '.auto_event', object: $data, collection: 'itemsObs'}"></i>
           </div>
         </div>
       </div>
