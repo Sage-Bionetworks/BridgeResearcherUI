@@ -137,11 +137,8 @@
     <div class="equal width fields" data-bind="visible: !isNewObs()">
       <div class="field">
         <label>Health Code</label>
-        <div
-          data-bind="text: healthCodeObs"
-          class="input-field-padding"
-          style="margin-bottom: 0; padding-bottom: 0"
-        ></div>
+        <div class="input-field-padding" data-bind="text: healthCodeObs"
+          style="margin-bottom: 0; padding-bottom: 0"></div>
         <div class="ui small red text" data-bind="visible: healthCodeObs() !== 'N/A'">
           Confidential. Do not redistribute.
         </div>

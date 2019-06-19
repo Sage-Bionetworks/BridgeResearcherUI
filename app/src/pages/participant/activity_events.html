@@ -38,10 +38,8 @@
     <tbody data-bind="foreach: itemsObs">
       <tr>
         <td data-bind="text: $data.eventId"></td>
-        <td
-          data-bind="text: $parent.formatDateTime($data.timestamp),
-                    attr: {title: $data.timestamp}"
-        ></td>
+        <td data-bind="text: $parent.formatDateTime($data.timestamp),
+          attr: {title: $data.timestamp}"></td>
         <td data-bind="text: $parent.activityLabel($data)"></td>
       </tr>
     </tbody>

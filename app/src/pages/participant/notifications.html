@@ -7,23 +7,12 @@
       </div>
       <h3 data-bind="html: titleObs"></h3>
     </div>
-    <div
-      class="fixed-header-buttons"
-      data-bind="attr: {'data-html': 
-            hasPhoneObs() ? null : 'User does not have a phone number'},  semantic: 'popup'"
-    >
-      <button
-        class="ui tiny button"
-        data-bind="enable: hasPhoneObs, 
-                click: sendSmsMessage"
-      >
+    <div class="fixed-header-buttons"
+      data-bind="attr: {'data-html': hasPhoneObs() ? null : 'User does not have a phone number'},  semantic: 'popup'">
+      <button class="ui tiny button" data-bind="enable: hasPhoneObs, click: sendSmsMessage">
         Send SMS Message
       </button>
-      <button
-        class="ui primary tiny button"
-        data-bind="enable: isRegisteredObs, 
-                click: sendNotification"
-      >
+      <button class="ui primary tiny button" data-bind="click: sendNotification">
         Send Push Notification
       </button>
     </div>
@@ -35,7 +24,7 @@
     <div class="ten wide column">
       <div class="ui warning message" data-bind="visible: !notificationsEnabledObs()">
         <p>
-          No push notification services have been configured (APNS, GCM). Client applications can only register for SMS
+          No push notification services have been configured (APNS, FCM). Client applications can only register for SMS
           messages until this is done. Contact Bridge server administration if you wish to include push notifications in
           your Bridge participant management.
         </p>
@@ -68,12 +57,10 @@
           If the client application has registered with the Bridge server, there will be a record here of the
           registration. You can attempt to send a push notification directly to this user.
         </p>
-
         <p>
           If there is more than one record here, the user has installed your app on more than one device. If you message
           the user, we will send the message to all devices.
         </p>
-
         <p>
           The user is not guaranteed to receive your message. If they turn off notifications or delete the app without
           telling Bridge, there will still be a registration record here, but the notification will be rejected by the

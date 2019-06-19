@@ -33,7 +33,6 @@
         <th width="10" data-bind="visible: isAdmin">
           <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
         </th>
-        <th width="10"></th>
         <th>Name</th>
         <th>Identifier(s)</th>
         <th style="white-space: nowrap">Created On</th>
@@ -43,7 +42,7 @@
     </thead>
     <tbody class="no_records" data-bind="if: itemsObs().length === 0">
       <tr>
-        <td colspan="7" data-bind="html: recordsMessageObs"></td>
+        <td colspan="6" data-bind="html: recordsMessageObs"></td>
       </tr>
     </tbody>
     <tbody data-bind="foreach: itemsObs">
@@ -51,56 +50,38 @@
         <td data-bind="visible: $parent.isAdmin">
           <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
         </td>
-        <td style="text-align: right">
+        <td>
+          <a data-bind="href: '#/participants/'+$data.id+'/general',
+            text: $component.formatNameAsFullLabel($data)"></a>
           <span data-bind="semantic: 'dropdown'">
-            <i class="ui vertical ellipsis icon"></i>
+            <i class="ui caret down icon"></i>
             <div class="menu" style="display:none">
-              <div
-                class="item"
-                data-bind="click: $parent.resendEmailVerification, 
-                visible: $parent.resendVisible($data)"
-              >
+              <div class="item" data-bind="click: $parent.resendEmailVerification, 
+                visible: $parent.resendVisible($data)">
                 Send email verification
               </div>
-              <div
-                class="item"
-                data-bind="click: $parent.requestResetPassword, 
-                visible: $parent.resetPwdVisible($data)"
-              >
+              <div class="item" data-bind="click: $parent.requestResetPassword, 
+                visible: $parent.resetPwdVisible($data)">
                 Send reset password email
               </div>
-              <div
-                class="item"
-                data-bind="click: $parent.enableAccount, 
-                visible: $parent.enableVisible($data)"
-              >
+              <div class="item" data-bind="click: $parent.enableAccount, 
+                visible: $parent.enableVisible($data)">
                 Enable Account
               </div>
-              <div
-                class="item"
-                data-bind="click: $parent.disableAccount, 
-                visible: $parent.disableVisible($data)"
-              >
+              <div class="item" data-bind="click: $parent.disableAccount, 
+                visible: $parent.disableVisible($data)">
                 Disable Account
               </div>
-              <div
-                class="item"
-                data-bind="click: $parent.signOutUser, 
-                visible: $parent.signOutVisible($data)"
-              >
+              <div class="item" data-bind="click: $parent.signOutUser, 
+                visible: $parent.signOutVisible($data)">
                 Sign out user&hellip;
               </div>
               <div class="item" data-bind="click: $parent.deleteTestUser, visible: $parent.deleteVisible($data)">
                 <span class="red ui text">Delete Test Account</span>
               </div>
             </div>
-          </span>
-        </td>
-        <td>
-          <a
-            data-bind="href: '#/participants/'+$data.id+'/general',
-            text: $component.formatNameAsFullLabel($data)"
-          ></a>
+            </span>
+
         </td>
         <td data-bind="html: $component.formatIdentifiers($data)"></td>
         <td style="white-space: nowrap" data-bind="text: $component.formatDateTime($data.createdOn)"></td>

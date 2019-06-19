@@ -8,10 +8,8 @@
       <h3 data-bind="text: titleObs"></h3>
     </div>
     <div class="fixed-header-buttons">
-      <button
-        class="ui tiny red button"
-        data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: deleteItems"
-      >
+      <button class="ui tiny red button"
+        data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: deleteItems">
         Delete records
       </button>
       <button class="ui tiny primary button" data-bind="visible: isDeveloper, click: addReport">
@@ -79,17 +77,11 @@
               {<i style="margin:0;padding:0" class="plus square outline icon"></i>}
             </a>
           </div>
-          <div
-            style="position:relative"
-            class="json-expand-control"
-            data-bind="visible: !$data.collapsedObs() && $data.isJson"
-          >
-            <a
-              href=""
+          <div style="position:relative" class="json-expand-control"
+            data-bind="visible: !$data.collapsedObs() && $data.isJson">
+            <a href="" class="json-expand-control" 
               style="position:absolute; left:.75rem; top:.15rem"
-              class="json-expand-control"
-              data-bind="visible: !$data.collapsedObs(), click: $component.toggle"
-            >
+              data-bind="visible: !$data.collapsedObs(), click: $component.toggle">
               <i class="minus square outline icon"></i>
             </a>
             <pre data-bind="visible: !$data.collapsedObs(), html: $data.formattedData"></pre>

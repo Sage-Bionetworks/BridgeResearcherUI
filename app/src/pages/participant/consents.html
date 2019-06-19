@@ -43,44 +43,32 @@
           <div data-bind="visible: $data.name !== 'No consent', text: $data.name"></div>
         </td>
         <td>
-          <div
-            data-bind="visible: !$parent.isUpToDateConsent($data), semantic: 'popup'"
-            data-content="Participant signed an older version of this consent (not currently published)."
-          >
+          <div data-bind="visible: !$parent.isUpToDateConsent($data), semantic: 'popup'"
+            data-content="Participant signed an older version of this consent (not currently published).">
             <span data-bind="text: $data.signedOn"></span>
           </div>
-          <div
-            data-bind="visible: $parent.isUpToDateConsent($data), semantic: 'popup'"
-            data-content="The currently published version of this consent has been signed."
-          >
+          <div data-bind="visible: $parent.isUpToDateConsent($data), semantic: 'popup'"
+            data-content="The currently published version of this consent has been signed.">
             <span data-bind="text: $data.signedOn"></span>
             <i class="ui green checkmark icon"> </i>
           </div>
         </td>
         <td>
-          <button
-            data-bind="visible: $data.eligibleToWithdraw, click: $component.withdrawFromSubpopulation"
-            class="ui basic red compact mini button"
-          >
+          <button class="ui basic red compact mini button"
+            data-bind="visible: $data.eligibleToWithdraw, click: $component.withdrawFromSubpopulation">
             Withdraw consent
           </button>
           <span class="red" data-bind="text: $data.withdrewOn"></span>
         </td>
         <td>
-          <button
-            data-bind="visible: $data.eligibleToWithdraw, click: $component.resendConsent"
-            class="ui basic compact mini button"
-          >
+          <button class="ui basic compact mini button"
+            data-bind="visible: $data.eligibleToWithdraw, click: $component.resendConsent">
             Resend consent
           </button>
         </td>
         <td>
-          <a
-            target="_blank"
-            rel="noopener"
-            data-bind="visible: $data.name !== 'No consent', 
-                        href: $parent.linkToDocument($data)"
-          >
+          <a target="_blank" rel="noopener"
+            data-bind="visible: $data.name !== 'No consent', href: $parent.linkToDocument($data)">
             View document <i class="ui external icon"> </i>
           </a>
         </td>
