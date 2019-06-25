@@ -85,13 +85,11 @@
         </td>
         <td data-bind="text: $data.version"></td>
         <td style="text-align: right">
-          <span data-bind="visible: $data.published" style="padding-right: .5rem" class="ui green text"
-            ><i class="green checkmark icon"></i> Published
+          <span data-bind="visible: $data.published" style="padding-right: .5rem" class="ui green text">
+            <i class="green checkmark icon"></i> Published
           </span>
-          <button
-            data-bind="visible: !$data.published, click: $parent.publishItem"
-            class="ui basic compact mini button"
-          >
+          <button data-bind="visible: !$data.published, click: $parent.publishItem"
+            class="ui basic compact mini button">
             Publish
           </button>
         </td>

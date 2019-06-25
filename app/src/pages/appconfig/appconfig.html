@@ -18,24 +18,24 @@
   <errors></errors>
   <form class="ui form">
     <div class="fields">
-      <div class="six wide field">
+      <div class="seven wide field">
         <div class="field" id="label">
           <label>Label</label>
           <input type="text" data-bind="textInput: labelObs, hasFocus: true" />
         </div>
       </div>
-      <div class="four wide field"></div>
-      <div class="three wide field">
-        <div class="field" id="createdOn">
-          <label>Created On</label>
-          <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
-        </div>
-      </div>
-      <div class="three wide field">
-        <div class="field" id="modifiedOn">
-          <label>Modified On</label>
-          <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
-        </div>
+      <div class="two wide field"></div>
+      <div class="seven wide field">
+        <div class="two fields">
+          <div class="field" id="createdOn">
+              <label>Created On</label>
+              <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
+            </div>
+            <div class="field" id="modifiedOn">
+              <label>Modified On</label>
+              <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
+            </div>
+          </div>
       </div>
     </div>
     <div class="row">

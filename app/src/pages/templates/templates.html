@@ -1,0 +1,93 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+      <div class="fixed-header-heading">
+        <a href="#/templates" class="section">Templates</a>
+        <i class="right chevron icon divider"></i>
+        <h3 data-bind="text: titleObs"></h3>
+      </div>
+      <div class="fixed-header-buttons">
+        <button class="ui red tiny button"
+          data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems">
+          Delete
+        </button>
+        <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
+          <div class="ui tiny button"
+            data-bind="css:{disabled: !atLeastOneChecked()}, semantic: 'dropdown-button-toggle', container: '.buttons'">
+            Delete
+          </div>
+          <div class="ui primary tiny floating dropdown icon button"
+            data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <div class="item" data-bind="click: deleteItems">Delete</div>
+              <div class="item" data-bind="click: deletePermanently">Delete <b>Permanently</b></div>
+            </div>
+          </div>
+        </div>
+        <a class="ui primary tiny button"
+         data-bind="href: `#/templates/${templateTypeObs()}/new`">New Template</a>
+      </div>
+    </div>
+    <div class="ui empty secondary pointing menu"></div>
+  </div>
+  <div class="scrollbox">
+    <errors></errors>
+  
+    <div class="ui grid">
+      <div class="ten wide column">
+        <table class="ui compact selectable table">
+          <thead>
+            <tr>
+              <th width="10" data-bind="visible: isDeveloper"></th>
+              <th>Name</th>
+              <th>Matching Criteria</th>
+              <th width="100"></th>
+            </tr>
+          </thead>
+          <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+            <tr>
+              <td data-bind="attr:{colspan: $parent.isDeveloper ? 4 : 3}, html: recordsMessageObs"></td>
+            </tr>
+          </tbody>
+          <tbody data-bind="foreach: itemsObs">
+            <tr data-bind="css: {negative: $data.deleted, positive: $parent.isDefault($data)}">
+              <td data-bind="visible: $parent.isDeveloper">
+                <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
+                <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
+                  style="cursor: pointer" class="green undo icon"></i>
+              </td>
+              <td>
+                <div>
+                  <a data-bind="href: `#/templates/${$data.templateType}/${$data.guid}`, text: $data.name"></a>
+                </div>
+                <div data-bind="text: $data.description"></div>
+              </td>
+              <td data-bind="html: $parent.criteriaLabel($data.criteria)"></td>
+              <td style="text-align: right; white-space: nowrap">
+                <span data-bind="visible: $parent.isDefault($data)" style="padding-right: .5rem" class="ui green text">
+                  <i class="green checkmark icon"></i> Default
+                </span>
+                <button data-bind="visible: !$parent.isDefault($data), click: $parent.makeDefault"
+                  class="ui basic compact mini button">
+                  Make Default
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
+          <ui-checkbox params="checkedObs: showDeletedObs">
+            Show deleted templates
+          </ui-checkbox>
+        </div>
+      </div>
+      <div class="six wide column">
+        <div class="ui message">
+          <p>For most messages sent from the Bridge server, you can define different messages for different audiences, such as messages in different languages, or messages for different versions of your application. </p>
+
+          <p>If the user doesn't send enough information to select one template unambiguously, the system will return the template you mark as a default.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
