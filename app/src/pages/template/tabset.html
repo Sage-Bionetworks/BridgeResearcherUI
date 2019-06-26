@@ -1,0 +1,6 @@
+<div class="ui secondary pointing menu" data-bind="visible: !isNewObs()">
+    <a data-bind="tabber, href: linkMaker('general')"> <i class="setting icon"></i> General </a>
+    <a data-bind="tabber, href: linkMaker('editor')"> <i class="file outline icon"></i> Editor </a>
+  </div>
+  <div class="ui empty secondary pointing menu" data-bind="visible: isNewObs"></div>
+  

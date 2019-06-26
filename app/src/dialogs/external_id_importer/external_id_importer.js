@@ -47,7 +47,7 @@ IdImportWorker.prototype = {
   performWork: function() {
     this.currentCredentialPair = this.credentialPairs.shift();
     if (!password.isPasswordValid(this.study.passwordPolicy, this.currentCredentialPair.password)) {
-      return Promise.reject(new Error("Password is invalid"));
+      return Promise.reject(new Error("Password is invalid. " + password.passwordPolicyDescription(this.study.passwordPolicy)));
     }
     return serverService.createExternalId({
       identifier: this.currentCredentialPair.identifier,
@@ -116,7 +116,7 @@ export default function(params) {
     .obs("substudyId")
     .obs("substudyIds[]");
 
-  self.statusObs("Please enter a list of identifiers, separated by commas or new lines. If you wish to include passwords, use the format <code>externalid=password</code> (again these can be separated by commas or new lines).");
+  self.statusObs('');
   self.createCredentialsObs.subscribe(function(newValue) {
     self.isDisabledObs(!newValue);
   });
@@ -127,6 +127,7 @@ export default function(params) {
       self.allDataGroupsObs(study.dataGroups);
       self.study = study;
       supportEmail = study.supportEmail;
+      self.statusObs("Please enter a list of identifiers, separated by commas or new lines. If you wish to include passwords, use the format <code>externalid=password</code> (again these can be separated by commas or new lines). <em>" + password.passwordPolicyDescription(self.study.passwordPolicy) + "</em>");
     })
     .then(serverService.getSubstudies.bind(serverService))
     .then(response => {

@@ -1,4 +1,18 @@
 export default {
+  templateTitles: {
+    'email_account_exists':'Account already exists notification (email)',
+    'email_app_install_link':'Link to install app (email)',
+    'email_reset_password':'Reset password (email)',
+    'email_sign_in':'Sign in (via email)',
+    'email_signed_consent':'Consent agreement (email)',
+    'email_verify_email':'Verify email address',
+    'sms_account_exists':'Account already exists notification (SMS)',
+    'sms_app_install_link':'Link to install app (SMS)',
+    'sms_phone_sign_in':'Sign in (via SMS)',
+    'sms_reset_password':'Reset password (SMS)',
+    'sms_signed_consent':'Consent agreement (SMS)',
+    'sms_verify_phone':'Verify phone number'
+  },
   environments: [
     { value: "local", label: "Local" },
     { value: "develop", label: "Development" },
@@ -64,6 +78,7 @@ export default {
   substudies: "/v3/substudies",
   survey: "/v3/surveys/",
   surveys: "/v3/surveys",
+  templates: "/v3/templates",
   topics: "/v3/topics",
   uploads: "/v3/uploads",
   uploadstatuses: "/v3/uploadstatuses",

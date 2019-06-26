@@ -42,17 +42,16 @@
         <tbody data-bind="foreach: historyItemsObs">
           <tr data-bind="css: { positive: $data.active }">
             <td>
-              <a
-                data-bind="attr: {href: '#/subpopulations/'+$parent.guidObs()+
-                                '/editor/'+$data.createdOn}, text: $parent.formatDateTime($data.createdOn)"
-              ></a>
+              <a data-bind="attr: {href: '#/subpopulations/'+$parent.guidObs()+
+                '/editor/'+$data.createdOn}, text: $parent.formatDateTime($data.createdOn)"></a>
             </td>
             <td>
               <div data-bind="visible: $data.active" style="text-align: right">
                 <i class="icon checkmark"></i> Published
               </div>
               <div data-bind="visible: !$data.active" style="text-align: right">
-                <button class="ui basic compact mini button" data-bind="click: $component.publish">Publish</button>
+                <button class="ui basic compact mini button" 
+                  data-bind="click: $component.publish">Publish</button>
               </div>
             </td>
           </tr>

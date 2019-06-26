@@ -195,10 +195,12 @@ import uiDurHtml from "./widgets/form/ui_duration.html";
 import eventsTabsetHtml from "./pages/events/tabset.html";
 import surveyTabset from "./pages/survey/tabset";
 import surveyTabsetHtml from "./pages/survey/tabset.html";
+/*
 import templateTabset from "./pages/email_templates/tabset";
 import templateTabsetHtml from "./pages/email_templates/tabset.html";
 import smsTemplateTabset from "./pages/sms_templates/tabset";
 import smsTemplateTabsetHtml from "./pages/sms_templates/tabset.html";
+*/
 import subpopTabset from "./pages/subpopulation/tabset";
 import subpopTabsetHtml from "./pages/subpopulation/tabset.html";
 import crit from "./widgets/criteria/criteria";
@@ -304,6 +306,18 @@ import configTabsetHtml from "./pages/config/tabset.html";
 import taskIdentifiers from "./pages/set_editors/task_identifiers.html";
 import dataGroups from "./pages/settings/data_groups.html";
 import userAtts from "./pages/settings/user_attributes.html";
+import templatesList from './pages/templates/list';
+import templatesListHtml from './pages/templates/list.html';
+import templates from './pages/templates/templates';
+import templatesHtml from './pages/templates/templates.html';
+import templateGeneral from './pages/template/general';
+import templateGeneralHtml from './pages/template/general.html';
+import templateEditor from './pages/template/editor';
+import templateEditorHtml from './pages/template/editor.html';
+import templateHistory from './pages/template/history';
+import templateHistoryHtml from './pages/template/history.html';
+import templateTabset from './pages/template/tabset';
+import templateTabsetHtml from './pages/template/tabset.html';
 
 const reg = ko.components.register;
 reg("errors", {viewModel: errors, template: errorsHtml});
@@ -406,8 +420,8 @@ reg("tag-editor", {viewModel: tagEditor, template: tagEditorHtml});
 reg("ui-duration", {viewModel: uiDur, template: uiDurHtml});
 reg("events-tabset", {template: eventsTabsetHtml});
 reg("survey-tabset", {viewModel: surveyTabset, template: surveyTabsetHtml});
-reg("template-tabset", {viewModel: templateTabset, template: templateTabsetHtml});
-reg("sms-template-tabset", {viewModel: smsTemplateTabset, template: smsTemplateTabsetHtml});
+//reg("template-tabset", {viewModel: templateTabset, template: templateTabsetHtml});
+//reg("sms-template-tabset", {viewModel: smsTemplateTabset, template: smsTemplateTabsetHtml});
 reg("subpop-tabset", {viewModel: subpopTabset, template: subpopTabsetHtml});
 reg("criteria", {viewModel: crit, template: critHtml});
 reg("criteria_editor", {viewModel: critEditor, template: critEditorHtml, synchronous: true});
@@ -432,6 +446,12 @@ reg("verified-icon", {viewModel: verifiedIcon, template: verifiedIconHtml});
 reg("not_found", {template: nfHtml });
 reg("shared-module", {viewModel: sm, template: smHtml});
 reg("forward-pager", {viewModel: fp, template: fpHtml});
+reg("templatesList", {viewModel: templatesList, template: templatesListHtml});
+reg("templates", {viewModel: templates, template: templatesHtml});
+reg("template_general", {viewModel: templateGeneral, template: templateGeneralHtml});
+reg("template_editor", {viewModel: templateEditor, template: templateEditorHtml});
+reg("template_history", {viewModel: templateHistory, template: templateHistoryHtml});
+reg("template-tabset", {viewModel: templateTabset, template: templateTabsetHtml});
 
 // Dialogs. These must be synchronous.
 reg("sign_out_user", {viewModel: signOutUser, template: signOutUserHtml, synchronous: true});

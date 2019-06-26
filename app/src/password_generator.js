@@ -54,4 +54,39 @@ function isPasswordValid(policy, password) {
   return true;
 }
 
-export default { generatePassword, isPasswordValid };
+function passwordPolicyDescription(policy) {
+  let buffer = [];
+  buffer.push("Passwords must be ");
+  buffer.push(policy.minLength);
+  buffer.push(" or more characters");
+  console.log(policy);
+  if (policy.lowerCaseRequired || policy.numericRequired || policy.symbolRequired || policy.upperCaseRequired) {
+    buffer.push(", and must contain at least ");
+    let phrases = [];
+    if (policy.lowerCaseRequired) {
+        phrases.push("one lower-case letter");
+    }
+    if (policy.upperCaseRequired) {
+        phrases.push("one upper-case letter");
+    }
+    if (policy.numericRequired) {
+        phrases.push("one number");
+    }
+    if (policy.symbolRequired) {
+        // !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~
+        phrases.push("one symbolic character (non-alphanumerics like #$%&@)");
+    }
+    for (var i=0; i < phrases.length; i++) {
+        if (i == phrases.length-1) {
+          buffer.push(", and ")
+        } else if (i > 0) {
+          buffer.push(", ");
+        }
+        buffer.push(phrases[i]);
+    }
+  }
+  buffer.push(".");
+  return buffer.join('');
+}
+
+export default { generatePassword, isPasswordValid, passwordPolicyDescription };

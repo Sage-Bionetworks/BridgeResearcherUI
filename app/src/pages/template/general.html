@@ -1,0 +1,50 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+      <div class="fixed-header-heading">
+        <div class="ui breadcrumb">
+          <a data-bind="href: '#/templates'" class="section">Templates</a>
+          <i class="right chevron icon divider"></i>
+          <a data-bind="href: '#/templates/' + templateTypeObs(), text: templateTitleObs" class="section"></a>
+          <i class="right chevron icon divider"></i>
+        </div>
+        <h3 data-bind="text: titleObs"></h3>
+      </div>
+      <div class="fixed-header-buttons">
+        <button class="ui tiny primary button" data-bind="click: save">Save</button>
+      </div>
+    </div>
+    <template-tabset params="isNewObs: isNewObs, guidObs: guidObs, templateTypeObs: templateTypeObs">
+    </template-tabset>
+  </div>
+  <div class="scrollbox">
+    <errors></errors>
+    <form class="ui form">
+      <div class="ui grid">
+        <div class="seven wide column">
+          <div class="required field" id="name">
+            <label>Name</label>
+            <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
+          </div>
+          <div class="field" id="description">
+            <label>Description</label>
+            <input type="text" data-bind="textInput: descriptionObs" />
+          </div>
+        </div>
+        <div class="two wide column">
+        </div>
+        <div class="seven wide column">
+          <div class="two fields">
+            <div class="field" id="createdOn">
+                <label>Created On</label>
+                <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
+              </div>
+              <div class="field" id="modifiedOn">
+                <label>Modified On</label>
+                <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  

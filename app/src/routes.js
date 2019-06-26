@@ -20,6 +20,8 @@ const ID_VERSION = ["id", "version"];
 const SCHEMAID = ["schemaId"];
 const SCHEMAID_REVISION = ["schemaId", "revision"];
 const TASKID = ["taskId"];
+const TYPE = ["templateType"];
+const TYPE_GUID = ["templateType", "guid"];
 const USERID = ["userId"];
 const USERID_IDENTIFIER = ["userId", "identifier"];
 const USERID_GUID = ["userId", "guid"];
@@ -153,6 +155,13 @@ router.on("/shared_modules/:id/versions/:version/editor", routeTo("shared_module
 router.on("/shared_modules/:id/versions/:version/history", routeTo("shared_module_versions", "modules", ID_VERSION));
 router.on("/app_configs", routeTo("appconfigs", "appConfigs"));
 router.on("/app_configs/:guid", routeTo("appconfig", "appConfigs", GUID));
+
+router.on("/templates/:templateType/:guid/general", routeTo("template_general", "templates", TYPE_GUID));
+router.on("/templates/:templateType/:guid/editor", routeTo("template_editor", "templates", TYPE_GUID));
+router.on("/templates/:templateType/:guid/history", routeTo("template_history", "templates", TYPE_GUID));
+router.on("/templates/:templateType/:guid", redirectTo("/templates/{0}/{1}/general"));
+router.on("/templates/:templateType", routeTo("templates", "templates", TYPE));
+router.on("/templates", routeTo("templatesList", "templates"));
 
 router.configure({
   notfound: routeTo("not_found"),

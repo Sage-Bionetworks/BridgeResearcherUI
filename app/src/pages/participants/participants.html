@@ -5,11 +5,8 @@
     </div>
     <div class="fixed-header-buttons">
       <button class="ui tiny button" data-bind="click: exportDialog">Export&hellip;</button>
-      <button
-        class="ui red tiny button"
-        data-bind="visible: isAdmin, 
-        disable: !atLeastOneChecked(), click: deleteItems"
-      >
+      <button class="ui red tiny button" data-bind="visible: isAdmin, 
+        disable: !atLeastOneChecked(), click: deleteItems">
         Delete
       </button>
       <a href="#/participants/new/general" class="ui primary tiny button">New Participant</a>
@@ -80,16 +77,14 @@
                 <span class="red ui text">Delete Test Account</span>
               </div>
             </div>
-            </span>
-
+          </span>
         </td>
         <td data-bind="html: $component.formatIdentifiers($data)"></td>
         <td style="white-space: nowrap" data-bind="text: $component.formatDateTime($data.createdOn)"></td>
         <td data-bind="text: $data.substudyIds.join(', ')"></td>
         <td style="padding: 0; text-align:right">
           <span style="padding-right: .6rem; white-space: nowrap" data-bind="visible: $data.status === 'disabled'">
-            <i class="warning sign icon"></i>Disabled</span
-          >
+            <i class="warning sign icon"></i>Disabled</span>
         </td>
       </tr>
     </tbody>

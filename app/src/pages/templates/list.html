@@ -1,0 +1,70 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <h3>Templates</h3>
+    </div>
+    <div class="fixed-header-buttons">
+    </div>
+  </div>
+  <div class="ui empty secondary pointing menu"></div>
+</div>
+<div class="scrollbox">
+  <div class="ui grid">
+    <div class="eight wide column">
+      <div class="ui segment">
+        <h4 class="ui dividing header">Verify email address or phone number</h4>
+        <p>If the user signs up with an email address and verification is enabled, we will send an email to the address with a link the user should follow to verify control of the email address. If the user signs up with a phone number, we will send an SMS message with a code or a link that can be sent back to the server to verify the user controls the phone number.</p>
+        <div class="ui horizontal bulleted list">
+            <a class="item" href="#/templates/email_verify_email">Email Templates</a>
+            <a class="item" href="#/templates/sms_verify_phone">SMS Templates</a>
+        </div>
+      </div>
+  
+      <div class="ui segment">
+        <h4 class="ui dividing header">Account already exists</h4>
+        <p>If a user attempts to sign up for a study with an identifier that is already registered with the study (email or phone number), this message will be sent instead of a verification message. Note that if verification is turned off, we will not send this message either.</p>
+        <div class="ui horizontal bulleted list">
+            <a class="item" href="#/templates/email_account_exists">Email Templates</a>
+            <a class="item" href="#/templates/sms_account_exists">SMS Templates</a>
+        </div>
+      </div>
+
+      <div class="ui segment">
+        <h4 class="ui dividing header">Sign in</h4>
+        <p>A sign in message can be sent via email or SMS message. Either message will contain a link that should be intercepted by your mobile app when it is followed. The app extracts a token and sends it back to the server to complete the sign-in operation. </p>
+        <div class="ui horizontal bulleted list">
+            <a class="item" href="#/templates/email_sign_in">Email Templates</a>
+            <a class="item" href="#/templates/sms_phone_sign_in">SMS Templates</a>
+        </div>
+      </div>
+    </div>
+    <div class="eight wide column">
+      <div class="ui segment">
+        <h4 class="ui dividing header">Consent agreement</h4>
+        <p>If we send a signed copy of a consent agreement to the user, this is the message that will be used to send it. For email the consent is attached, for SMS the consent will be provided for download via a link.</p>
+        <div class="ui horizontal bulleted list">
+            <a class="item" href="#/templates/email_signed_consent">Email Templates</a>
+            <a class="item" href="#/templates/sms_signed_consent">SMS Templates</a>
+        </div>
+      </div>
+
+      <div class="ui segment">
+        <h4 class="ui dividing header">Reset password</h4>
+        <p>When the user requests to change their password, this message is sent with a link the user can follow to reset their password. This will require opening a web browser. </p>
+        <div class="ui horizontal bulleted list">
+            <a class="item" href="#/templates/email_reset_password">Email Templates</a>
+            <a class="item" href="#/templates/sms_reset_password">SMS Templates</a>
+        </div>
+      </div>
+
+      <div class="ui segment">
+        <h4 class="ui dividing header">Link to Install App</h4>
+        <p>Some workflows supported by Bridge (such as the “Intent to Participate” APIs) will send a link to the user so they can download and install the app. This is the message used to send that link. </p>
+        <div class="ui horizontal bulleted list">
+            <a class="item" href="#/templates/email_app_install_link">Email Templates</a>
+            <a class="item" href="#/templates/sms_app_install_link">SMS Templates</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
