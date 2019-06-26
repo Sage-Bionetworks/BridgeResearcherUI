@@ -24,11 +24,8 @@
   <errors></errors>
   <div class="line-control">
     <div class="line-control-stretch">
-      <div
-        class="ui icon input"
-        data-bind="css:{loading: searchLoadingObs}, range: {
-                startDateObs: startDateObs, endDateObs: endDateObs, onChange: doCalSearch}"
-      >
+      <div class="ui icon input" data-bind="css:{loading: searchLoadingObs}, range: {
+        startDateObs: startDateObs, endDateObs: endDateObs, onChange: doCalSearch}">
         <input type="text" placeholder="Created in range" readonly />
         <i class="calendar icon"></i>
       </div>
@@ -54,30 +51,19 @@
     </tbody>
     <tbody data-bind="foreach: itemsObs">
       <tr>
-        <td
-          data-bind="attr: {title: $parent.formatTitleCase($data.activity.activityType)},
-                     css: {disabled: $data.isDisabled}"
-        >
+        <td data-bind="attr: {title: $parent.formatTitleCase($data.activity.activityType)},
+          css: {disabled: $data.isDisabled}">
           <i data-bind="css: $parent.formatActivityClass($data)"></i>
-          <a
-            target="_blank"
-            rel="noopener"
+          <a target="_blank" rel="noopener"
             data-bind="text: $parent.formatActivity($data), 
-                        href: '#/scheduleplans/'+$data.schedulePlanGuid"
-          ></a>
+              href: '#/scheduleplans/'+$data.schedulePlanGuid"></a>
         </td>
-        <td
-          data-bind="text: $parent.formatTitleCase($data.status), 
-                    css: {disabled: $data.isDisabled}"
-        ></td>
-        <td
-          data-bind="css: {disabled: $data.isDisabled},
-                    html: $parent.formatDateTimeRange($data.scheduledOn, $data.expiresOn)"
-        ></td>
-        <td
-          data-bind="css: {disabled: $data.isDisabled}, 
-                    html: $parent.formatDateTimeRange($data.startedOn, $data.finishedOn)"
-        ></td>
+        <td data-bind="text: $parent.formatTitleCase($data.status), 
+          css: {disabled: $data.isDisabled}"></td>
+        <td data-bind="css: {disabled: $data.isDisabled},
+          html: $parent.formatDateTimeRange($data.scheduledOn, $data.expiresOn)"></td>
+        <td data-bind="css: {disabled: $data.isDisabled}, 
+          html: $parent.formatDateTimeRange($data.startedOn, $data.finishedOn)"></td>
         <td>
           <div data-bind="visible: $data.clientData">
             <div class="json-expand-control" data-bind="visible: $data.collapsedObs">
@@ -86,12 +72,8 @@
               </a>
             </div>
             <div style="position:relative" class="json-expand-control" data-bind="visible: !$data.collapsedObs()">
-              <a
-                href=""
-                style="position:absolute; left:.75rem; top:.15rem"
-                class="json-expand-control"
-                data-bind="visible: !$data.collapsedObs(), click: $component.toggle"
-              >
+              <a href="" style="position:absolute; left:.75rem; top:.15rem"
+                class="json-expand-control" data-bind="visible: !$data.collapsedObs(), click: $component.toggle">
                 <i class="minus square outline icon"></i>
               </a>
               <pre data-bind="visible: !$data.collapsedObs(), html: $data.formattedData"></pre>

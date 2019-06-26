@@ -14,12 +14,8 @@
 <div class="scrollbox">
   <errors></errors>
   <div class="line-control">
-    <div
-      style="width: 30rem"
-      class="ui icon input"
-      data-bind="range: {onChange: doCalSearch, 
-            startDateObs: uploadsStartDateObs, endDateObs: uploadsEndDateObs}"
-    >
+    <div style="width: 30rem" class="ui icon input"
+      data-bind="range: {onChange: doCalSearch, startDateObs: uploadsStartDateObs, endDateObs: uploadsEndDateObs}">
       <input type="text" placeholder="Uploaded in range" readonly />
       <i class="calendar icon"></i>
     </div>
@@ -50,10 +46,8 @@
           <i data-bind="attr:{class:$component.iconFor($data)}"></i>
         </td>
         <td>
-          <a
-            data-bind="visible: $component.isAdmin, text: $data.uploadId, 
-                        href: '#/participants/' + $component.userIdObs() + '/uploads/' + $data.uploadId"
-          ></a>
+          <a data-bind="visible: $component.isAdmin, text: $data.uploadId, 
+            href: '#/participants/' + $component.userIdObs() + '/uploads/' + $data.uploadId"></a>
           <span data-bind="visible: !$component.isAdmin(), text: $data.uploadId"></span>
         </td>
         <td data-bind="text: $component.formatDateTime($data.requestedOn)"></td>

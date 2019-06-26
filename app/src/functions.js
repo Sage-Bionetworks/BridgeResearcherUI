@@ -9,7 +9,8 @@ const WEEK = DAY * 7;
 const FLAGS = {
   US: "🇺🇸",
   MX: "🇲🇽",
-  CA: "🇨🇦"
+  CA: "🇨🇦",
+  IN: "🇮🇳"
 };
 const LOCAL_TIMEZONE = Date()
   .split("(")[1]
