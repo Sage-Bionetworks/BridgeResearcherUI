@@ -6,6 +6,9 @@ module.exports = {
   entry: {
     main: path.resolve('./app/src/routes.js')
   },
+  externals: {
+    moment: 'moment'
+  },
   output: {
     filename: '[name].[hash].js',
     path: path.resolve('app/dist')
@@ -21,7 +24,6 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
         use: ['babel-loader']
       },
       {
