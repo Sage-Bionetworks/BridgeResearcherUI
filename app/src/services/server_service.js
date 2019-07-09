@@ -748,6 +748,19 @@ export class ServerService {
     let queryString = fn.queryString({ physical: physical === true });
     return this.del(config.templates + "/" + guid + queryString);
   }
+  getTemplateRevisions(guid, offsetBy, pageSize) {
+    let queryString = fn.queryString({ offsetBy, pageSize });
+    return this.gethttp(config.templates + "/" + guid + "/revisions" + queryString);
+  }
+  createTemplateRevision(guid, revision) {
+    return this.post(config.templates + "/" + guid + "/revisions", revision);
+  }
+  getTemplateRevision(guid, createdOn) {
+    return this.gethttp(config.templates + "/" + guid + "/revisions/" + createdOn);
+  }
+  publishTemplateRevision(guid, createdOn) {
+    return this.post(config.templates + "/" + guid + "/revisions/" + createdOn + "/publish");
+  }
   addSessionStartListener(listener) {
     if (typeof listener !== "function") {
       throw Error("Session listener not a function");

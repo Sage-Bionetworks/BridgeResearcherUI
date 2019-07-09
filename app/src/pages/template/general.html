@@ -13,8 +13,10 @@
         <button class="ui tiny primary button" data-bind="click: save">Save</button>
       </div>
     </div>
-    <template-tabset params="isNewObs: isNewObs, guidObs: guidObs, templateTypeObs: templateTypeObs">
+    <template-tabset data-bind="visible: !isNewObs()" 
+      params="guidObs: guidObs, templateTypeObs: templateTypeObs">
     </template-tabset>
+    <div class="ui empty secondary pointing menu" data-bind="visible: isNewObs"></div>
   </div>
   <div class="scrollbox">
     <errors></errors>
@@ -33,7 +35,7 @@
         <div class="two wide column">
         </div>
         <div class="seven wide column">
-          <div class="two fields">
+          <div class="two fields" data-bind="visible: !isNewObs()">
             <div class="field" id="createdOn">
                 <label>Created On</label>
                 <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
@@ -43,6 +45,21 @@
                 <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
               </div>
             </div>
+        </div>
+
+        <div class="sixteen wide column">
+          <!--
+          <div class="row">
+            <div class="column">
+              -->
+              <h4>Assignment based on</h4>
+              <!-- ko component: {name:"template_criteria", 
+                params:{ id:"", criteriaObs: criteriaObs}} -->
+              <!-- /ko -->
+              <!--
+            </div>
+          </div>
+          -->
         </div>
       </div>
     </form>

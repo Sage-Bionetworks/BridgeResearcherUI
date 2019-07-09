@@ -36,13 +36,15 @@ export default function(params) {
 
   let titleUpdated = fn.handleObsUpdate(self.titleObs, "name");
 
+  function redirect(keys) {
+    document.location = `#/templates/${self.templateTypeObs()}/${keys.guid}`;
+    return keys;
+  }
+
   function saveTemplate() {
     return self.template.guid ? 
       serverService.updateTemplate(self.template) : 
-      serverService.createTemplate(self.template).then((keys) => {
-        document.location = `#/templates/${self.templateTypeObs()}/${keys.guid}`;
-        return keys;
-      });
+      serverService.createTemplate(self.template).then(redirect);
   }
 
   self.save = function(vm, event) {

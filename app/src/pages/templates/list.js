@@ -1,3 +1,1 @@
-export default function() {
-  let self = this;
-};
+export default function() {};
