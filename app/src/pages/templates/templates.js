@@ -45,7 +45,7 @@ export default function(params) {
   };
 
   self.isDefault = function(item) {
-    return self.study.defaultTemplates['email_verify_email'] === item.guid;
+    return self.study.defaultTemplates[params.templateType] === item.guid;
   };
 
   function getTemplates() {

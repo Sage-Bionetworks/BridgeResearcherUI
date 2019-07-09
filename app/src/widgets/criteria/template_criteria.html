@@ -1,0 +1,27 @@
+<div style="display:flex">
+  <div style="margin-right: 1rem" data-bind="attr:{
+    class:'field '+$data.id+'minAppVersions_iphone_os ' + $data.id+'maxAppVersions_iphone_os'}">
+    <label>iOS version</label>
+    <div class="field range-control-border" data-bind="focusable">
+      <input type="text" placeholder="Min" data-bind="textInput: $data.iosMinObs" />
+      <span>&mdash;</span>
+      <input type="text" placeholder="Max" data-bind="textInput: $data.iosMaxObs" />
+    </div>
+  </div>
+  <div style="margin-right: 3rem" data-bind="attr:{
+    class:'field '+$data.id+'minAppVersions_android ' + $data.id+'maxAppVersions_android'}">
+    <label>Android version</label>
+    <div class="field range-control-border" data-bind="focusable">
+      <input type="text" placeholder="Min" data-bind="textInput: $data.androidMinObs" />
+      <span>&mdash;</span>
+      <input type="text" placeholder="Max" data-bind="textInput: $data.androidMaxObs" />
+    </div>
+  </div>
+
+  <div style="margin-right: 1rem; flex: 1" data-bind="attr:{class:'field '+$data.id+'language'}">
+    <label>Language</label>
+    <div class="field">
+      <input style="width: 4rem" type="text" placeholder="lang" data-bind="textInput: $data.languageObs" />
+    </div>
+  </div>  
+</div>

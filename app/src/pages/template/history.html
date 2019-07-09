@@ -1,0 +1,86 @@
+<div class="fixed-header">
+    <div class="fixed-header-title">
+      <div class="fixed-header-heading">
+        <div class="ui breadcrumb">
+          <a data-bind="href: '#/templates'" class="section">Templates</a>
+          <i class="right chevron icon divider"></i>
+          <a data-bind="href: '#/templates/' + templateTypeObs(), text: templateTitleObs" class="section"></a>
+          <i class="right chevron icon divider"></i>
+        </div>
+        <h3 data-bind="text: titleObs"></h3>
+      </div>
+      <div class="fixed-header-buttons">
+      </div>
+    </div>
+    <template-tabset params="guidObs: guidObs, templateTypeObs: templateTypeObs"></template-tabset>
+  </div>
+  <div class="scrollbox">
+    <div class="line-control" style="margin-bottom: 1rem">
+      <div class="line-control-stretch">
+        <div class="ui breadcrumb">
+          <a class="section" data-bind="href: '#/templates/'+templateTypeObs()+'/'+
+            guidObs()+'/editor/'+createdOnObs()">Editor</a>
+          <i class="right chevron icon divider"></i>
+          <b>Edit History</b>
+        </div>
+      </div>
+      <div class="line-control">
+        <div data-bind="visible: !!createdOnObs()" style="margin-right: 1rem">
+          <i class="clock icon"></i> <span data-bind="text: formatDateTime(createdOnObs())"></span>
+        </div>
+        <div class="green mini ui label" data-bind="visible: activeObs"><i class="checkmark icon"></i> Published</div>
+        <div class="orange ui mini label" data-bind="visible: !activeObs()">
+          <i class="warning icon"></i> Not Published
+        </div>
+      </div>
+    </div>
+
+    <div data-bind="style: {'display': (totalPagesObs() > 1) ? 'flex' : 'none'}">
+      <div style="flex: 1"></div>
+      <div style="justify-content: flex-end" 
+        class="ui small pagination menu" data-bind="css:{loading:showLoaderObs}">
+        <a class="item" title="First page" data-bind="click: firstPage, visible: currentPageObs() != 0">1</a>
+        <a class="item" title="Previous page" data-bind="click: previousPage, visible: currentPageObs() != 0">
+          <i class="chevron left icon" style="margin:0!important"></i>
+        </a>
+        <div class="active item">
+          <div data-bind="visible: showLoaderObs" class="ui small active loader"></div>
+          <span data-bind="text: currentPageObs() + 1"></span>&nbsp;of&nbsp;
+          <span data-bind="text: totalPagesObs()"></span>
+        </div>
+        <a class="item" title="Next page" data-bind="click: nextPage, 
+          visible: currentPageObs() != (totalPagesObs()-1)">
+          <i class="chevron right icon"></i></a>
+        <a class="item" title="Last page" data-bind="click: lastPage, 
+          visible: currentPageObs() != (totalPagesObs()-1), text: totalPagesObs()"></a>
+      </div>
+    </div>
+
+    <table class="ui compact selectable table">
+      <thead>
+        <tr>
+          <th>Created On</th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody data-bind="foreach: itemsObs">
+        <tr data-bind="css: { positive: $data.active }">
+          <td>
+            <a data-bind="attr: {href: '#/templates/'+$parent.templateTypeObs()+'/'+$parent.guidObs()+
+              '/editor/'+$data.createdOn}, text: $parent.formatDateTime($data.createdOn)"></a>
+          </td>
+          <td>
+            <div data-bind="visible: $data.active" style="text-align: right">
+              <i class="icon checkmark"></i> Published
+            </div>
+            <div data-bind="visible: !$data.active" style="text-align: right">
+              <button class="ui basic compact mini button" 
+                data-bind="click: $component.publish">Publish</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+  

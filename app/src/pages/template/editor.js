@@ -1,79 +1,89 @@
 import { serverService } from "../../services/server_service";
 import Binder from "../../binder";
 import config from "../../config";
-import criteriaUtils from "../../criteria_utils";
 import fn from "../../functions";
 import ko from "knockout";
 import utils from "../../utils";
 
 const TITLES = config.templateTitles;
 
-const failureHandler = utils.failureHandler({
-  redirectMsg: "Template not found.",
-  redirectTo: "templates",
-  transient: false
-});
-
-function newTemplate(templateType) {
-  return { name: "", description: "", templateType: templateType, criteria: criteriaUtils.newCriteria() };
-}
-
 export default function(params) {
   let self = this;
 
-  let binder = new Binder(self)
-    .obs("isNew", params.guid === "new")
-    .obs("guid", params.guid)
-    .obs("templateType", params.templateType)
-    .obs("templateTitle", TITLES[params.templateType] + ' templates')
+  self.formatDateTime = fn.formatDateTime;
+  self.template = null;
+
+  new Binder(self)
     .obs("title", "New Template")
-    .obs("createdOn")
-    .obs("publishedConsentCreatedOn")
-    .bind("name")
-    .bind("description")
-    .bind("criteria");
+    .obs("active", false)
+    .obs("guid", params.guid)
+    .obs("createdOn", params.createdOn)
+    .obs("templateType", params.templateType)
+    .obs("isEmail", params.templateType.startsWith("email_"))
+    .obs("templateTitle", TITLES[params.templateType] + ' templates')
+    .obs("subject", "")
+    .obs("documentContent", "")
+    .obs("mimeType", "")
+    .obs("studyId");
 
-  let titleUpdated = fn.handleObsUpdate(self.titleObs, "name");
+  self.publish = function(vm, e) {
+    let content = (self.isEmailObs()) ? this.editor.getData() : self.documentContentObs().trim();
+    let revision = {templateGuid: self.guidObs(), subject: self.subjectObs(),
+      documentContent: content, mimeType: self.mimeTypeObs()};
 
-  function saveTemplate() {
-    return self.template.guid ? 
-      serverService.updateTemplate(self.template) : 
-      serverService.createTemplate(self.template);
-  }
+    utils.startHandler(vm, e);
+    serverService.createTemplateRevision(self.guidObs(), revision)
+      .then(fn.handleObsUpdate(self.createdOnObs, "createdOn"))
+      .then(fn.handleObsUpdate(self.activeObs, false))
+      .then(() => serverService.publishTemplateRevision(params.guid, self.createdOnObs()))
+      .then(utils.successHandler(vm, e, "Revision saved and published."))
+      .then(() => self.activeObs(true))
+      .catch(utils.failureHandler());
+  };
+  self.save = function(vm, e) {
+    let content = (self.isEmailObs()) ? this.editor.getData() : self.documentContentObs().trim();
+    let revision = {templateGuid: self.guidObs(), subject: self.subjectObs(),
+      documentContent: content, mimeType: self.mimeTypeObs()};
 
-  self.activeObs = ko.computed(function() {
-    return self.createdOnObs() === "recent" || self.createdOnObs() === self.publishedConsentCreatedOnObs();
+    utils.startHandler(vm, e);
+    serverService.createTemplateRevision(self.guidObs(), revision)
+      .then(fn.handleObsUpdate(self.createdOnObs, "createdOn"))
+      .then(fn.handleObsUpdate(self.activeObs, false))
+      .then(utils.successHandler(vm, e, "Revision saved."))
+      .catch(utils.failureHandler())
+  };
+  self.createHistoryLink = ko.computed(() => {
+    return `#/templates/${self.templateTypeObs()}/${self.guidObs()}/editor/${self.createdOnObs()}/history`;
   });
-  self.createHistoryLink = ko.computed(function() {
-    return `#/templates/${self.templateTypeObs()}/${self.guidObs()}/revisions/${self.createdOnObs()}`;
-    // return "#/templates/" + self.guidObs() + "/editor/" + self.createdOnObs() + "/history";
-  });
-
-  self.save = function(vm, event) {
-    self.template = binder.persist(self.template);
-    utils.startHandler(vm, event);
-
-    saveTemplate()
-      .then(fn.handleStaticObsUpdate(self.isNewObs, false))
-      .then(fn.handleObsUpdate(self.guidObs, "guid"))
-      .then(fn.handleCopyProps(params, "guid"))
-      .then(fn.returning(self.template))
-      .then(titleUpdated)
-      .then(utils.successHandler(vm, event, "Template has been saved."))
-      .catch(failureHandler);
+  self.initEditor = ckeditor => {
+    this.editor = ckeditor;
+    if (self.documentContentObs()) {
+      self.editor.setData(self.documentContentObs());
+    }
   };
 
-  if (params.guid === "new") {
-    Promise.resolve(newTemplate(params.templateType))
-      .then(binder.assign("template"))
-      .then(binder.update())
-      .catch(failureHandler);
-  } else {
-    serverService
-      .getTemplate(params.guid)
-      .then(binder.assign("template"))
-      .then(binder.update())
-      .then(titleUpdated)
-      .catch(failureHandler);
+  function initTemplate(template) {
+    self.template = template;
+    if (!self.createdOnObs()) {
+      self.createdOnObs(template.publishedCreatedOn);
+    }
+    self.activeObs(self.createdOnObs() === template.publishedCreatedOn);
+    return template;
   }
+  function initEditorContent() {
+    if (self.editor) {
+      self.editor.setData(self.documentContentObs());
+    }
+  }
+
+  serverService.getStudy()
+    .then(study => self.studyIdObs(study.identifier))
+    .then(() => serverService.getTemplate(params.guid))
+    .then(fn.handleObsUpdate(self.titleObs, "name"))
+    .then(initTemplate)
+    .then(() => serverService.getTemplateRevision(self.guidObs(), self.createdOnObs()))
+    .then(fn.handleObsUpdate(self.subjectObs, "subject"))
+    .then(fn.handleObsUpdate(self.documentContentObs, "documentContent"))
+    .then(fn.handleObsUpdate(self.mimeTypeObs, "mimeType"))
+    .then(initEditorContent);
 };

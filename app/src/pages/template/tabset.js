@@ -4,12 +4,7 @@ import ko from "knockout";
 export default function tabset(params) {
   let self = this;
 
-  fn.copyProps(self, params, "guidObs", "isNewObs", "templateTypeObs");
-
-  // Only passed in on the on the general tab
-  if (!self.isNewObs) {
-    self.isNewObs = ko.observable(false);
-  }
+  fn.copyProps(self, params, "guidObs", "templateTypeObs");
 
   self.computeds = [];
   self.linkMaker = function(tabName) {
