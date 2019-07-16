@@ -226,14 +226,6 @@ function createEmailTemplate(email, identifier) {
   }
   return parts[0] + "+" + identifier + "@" + parts[1];
 }
-function oldCreateParticipantForID(email, identifier) {
-  return {
-    email: createEmailTemplate(email, identifier),
-    password: identifier,
-    externalId: identifier,
-    sharingScope: "all_qualified_researchers"
-  };
-}
 function fadeUp() {
   return function(div) {
     if (div.nodeType === 1) {
@@ -307,7 +299,6 @@ export default {
   makeScrollTo,
   fadeUp,
   createParticipantForID,
-  oldCreateParticipantForID,
   animatedDeleter,
   findStudyName,
   copyString,

@@ -18,7 +18,6 @@ export default function info() {
     .bind("emailVerificationEnabled")
     .bind("reauthenticationEnabled")
     .bind("externalIdRequiredOnSignup")
-    .bind("externalIdValidationEnabled")
     .bind("healthCodeExportEnabled")
     .bind("usesCustomExportSchedule")
     .bind("verifyChannelOnSignInEnabled")

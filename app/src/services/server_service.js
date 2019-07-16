@@ -230,7 +230,7 @@ export class ServerService {
     return this.post(config.getStudy + "init", studyAndUsers);
   }
   deleteStudy(identifier) {
-    return this.del(config.getStudy + identifier + "?physical=false");
+    return this.del(`${config.getStudy}${identifier}?physical=false`);
   }
   getStudyPublicKey() {
     return this.gethttp(config.getStudyPublicKey);
@@ -243,65 +243,63 @@ export class ServerService {
     });
   }
   createSynapseProject(synapseUserId) {
-    return this.post(config.getCurrentStudy + "/synapseProject", [synapseUserId]);
+    return this.post(`${config.getCurrentStudy}/synapseProject`, [synapseUserId]);
   }
   getMostRecentStudyConsent(guid) {
-    return this.gethttp(config.subpopulations + "/" + guid + "/consents/recent");
+    return this.gethttp(`${config.subpopulations}/${guid}/consents/recent`);
   }
   getStudyConsent(guid, createdOn) {
-    return this.gethttp(config.subpopulations + "/" + guid + "/consents/" + createdOn);
+    return this.gethttp(`${config.subpopulations}/${guid}/consents/${createdOn}`);
   }
   saveStudyConsent(guid, consent) {
-    return this.post(config.subpopulations + "/" + guid + "/consents", consent);
+    return this.post(`${config.subpopulations}/${guid}/consents`, consent);
   }
   publishStudyConsent(guid, createdOn) {
-    return this.post(config.subpopulations + "/" + guid + "/consents/" + createdOn + "/publish");
+    return this.post(`${config.subpopulations}/${guid}/consents/${createdOn}/publish`);
   }
   getConsentHistory(guid) {
-    return this.gethttp(config.subpopulations + "/" + guid + "/consents");
+    return this.gethttp(`${config.subpopulations}/${guid}/consents`);
   }
   emailRoster() {
-    return this.post(config.users + "/email ParticipantRoster");
+    return this.post(`${config.users}/emailParticipantRoster`);
   }
   getSurveys(includeDeleted) {
     let queryString = fn.queryString({ includeDeleted: includeDeleted === true });
     return this.gethttp(config.surveys + queryString);
   }
   getPublishedSurveys() {
-    return this.gethttp(config.publishedSurveys);
+    return this.gethttp(`${config.surveys}/published`);
   }
   getMostRecentlyPublishedSurvey(guid) {
-    return this.gethttp(config.survey + guid + "/revisions/published");
+    return this.gethttp(`${config.survey}/${guid}/revisions/published`);
   }
   getSurveyAllRevisions(guid, includeDeleted) {
     let queryString = fn.queryString({ includeDeleted: includeDeleted === true });
-    return this.gethttp(config.survey + guid + "/revisions" + queryString);
+    return this.gethttp(`${config.survey}/${guid}/revisions${queryString}`);
   }
   getSurvey(guid, createdOn) {
-    return this.gethttp(config.survey + guid + "/revisions/" + createdOn);
+    return this.gethttp(`${config.survey}/${guid}/revisions/${createdOn}`);
   }
   getSurveyMostRecent(guid) {
-    return this.gethttp(config.survey + guid + "/revisions/recent");
+    return this.gethttp(`${config.survey}/${guid}/revisions/recent`);
   }
   createSurvey(survey) {
     return this.post(config.surveys, survey);
   }
   publishSurvey(guid, createdOn) {
-    return this.post(config.survey + guid + "/revisions/" + createdOn + "/publish");
+    return this.post(`${config.survey}/${guid}/revisions/${createdOn}/publish`);
   }
   versionSurvey(guid, createdOn) {
-    return this.post(config.survey + guid + "/revisions/" + createdOn + "/version");
+    return this.post(`${config.survey}/${guid}/revisions/${createdOn}/version`);
   }
   updateSurvey(survey) {
     let createdString = fn.formatDateTime(survey.createdOn, "iso");
-    let url = config.survey + survey.guid + "/revisions/" + createdString;
-    return this.post(url, survey);
+    return this.post(`${config.survey}/${survey.guid}/revisions/${createdString}`, survey);
   }
   deleteSurvey(survey, physical) {
     let queryString = fn.queryString({ physical: physical === true });
     let createdString = fn.formatDateTime(survey.createdOn, "iso");
-    let url = config.survey + survey.guid + "/revisions/" + createdString + queryString;
-    return this.del(url);
+    return this.del(`${config.survey}/${survey.guid}/revisions/${createdString}${queryString}`);
   }
   getAllUploadSchemas(includeDeleted) {
     let queryString = fn.queryString({ includeDeleted: includeDeleted === true });
@@ -313,27 +311,25 @@ export class ServerService {
     });
   }
   getMostRecentUploadSchema(identifier) {
-    return this.gethttp(config.schemas + "/" + identifier + "/recent");
+    return this.gethttp(`${config.schemas}/${identifier}/recent`);
   }
   getUploadSchemaAllRevisions(identifier, includeDeleted) {
     let queryString = fn.queryString({ includeDeleted: includeDeleted === true });
-    return this.gethttp(config.schemas + "/" + identifier + queryString);
+    return this.gethttp(`${config.schemas}/${identifier}${queryString}`);
   }
   getUploadSchema(identifier, revision) {
-    return this.gethttp(config.schemas + "/" + identifier + "/revisions/" + revision);
+    return this.gethttp(`${config.schemas}/${identifier}/revisions/${revision}`);
   }
   getUploads(args) {
     delete args.offsetBy;
     let queryString = fn.queryString(args);
-    return this.gethttp(config.getCurrentStudy + "/uploads" + queryString).then(function(response) {
-      return response;
-    });
+    return this.gethttp(`${config.getCurrentStudy}/uploads${queryString}`);
   }
   getUploadById(id) {
-    return this.gettext(config.uploads + "/" + id).then(convertDataToString);
+    return this.gettext(`${config.uploads}/${id}`).then(convertDataToString);
   }
   getUploadByRecordId(id) {
-    return this.gettext(config.uploads + "/recordId:" + id).then(convertDataToString);
+    return this.gettext(`${config.uploads}/recordId:${id}`).then(convertDataToString);
   }
   createUploadSchema(schema) {
     return this.post(config.schemasV4, schema).then(function(response) {
@@ -342,7 +338,7 @@ export class ServerService {
     });
   }
   updateUploadSchema(schema) {
-    let path = config.schemasV4 + "/" + esc(schema.schemaId) + "/revisions/" + esc(schema.revision);
+    let path = `${config.schemasV4}/${esc(schema.schemaId)}/revisions/${esc(schema.revision)}`
     return this.post(path, schema).then(function(response) {
       schema.version = response.version;
       return response;
@@ -350,18 +346,18 @@ export class ServerService {
   }
   deleteSchema(schemaId, physical) {
     let queryString = fn.queryString({ physical: physical === true });
-    return this.del(config.schemas + "/" + schemaId + queryString);
+    return this.del(`${config.schemas}/${schemaId}${queryString}`);
   }
   deleteSchemaRevision(schema, physical) {
     let queryString = fn.queryString({ physical: physical === true });
-    return this.del(config.schemas + "/" + schema.schemaId + "/revisions/" + schema.revision + queryString);
+    return this.del(`${config.schemas}/${schema.schemaId}/revisions/${schema.revision}${queryString}`);
   }
   getSchedulePlans(includeDeleted) {
     let queryString = fn.queryString({ includeDeleted: includeDeleted === true });
     return this.gethttp(config.schemaPlans + queryString);
   }
   getSchedulePlan(guid) {
-    return this.gethttp(config.schemaPlans + "/" + guid);
+    return this.gethttp(`${config.schemaPlans}/${guid}`);
   }
   createSchedulePlan(plan) {
     return this.post(config.schemaPlans, plan).then(function(newPlan) {
@@ -380,34 +376,33 @@ export class ServerService {
   }
   deleteSchedulePlan(guid, physical) {
     let queryString = fn.queryString({ physical: physical === true });
-    return this.del(config.schemaPlans + "/" + guid + queryString);
+    return this.del(`${config.schemaPlans}/${guid}${queryString}`);
   }
   getAllSubpopulations(includeDeleted) {
     let queryString = fn.queryString({ includeDeleted: includeDeleted === true });
     return this.gethttp(config.subpopulations + queryString);
   }
   getSubpopulation(guid) {
-    return this.gethttp(config.subpopulations + "/" + guid);
+    return this.gethttp(`${config.subpopulations}/${guid}`);
   }
   createSubpopulation(subpop) {
     return this.post(config.subpopulations, subpop);
   }
   updateSubpopulation(subpop) {
-    let path = config.subpopulations + "/" + subpop.guid;
-    return this.post(path, subpop).then(function(response) {
+    return this.post(`${config.subpopulations}/${subpop.guid}`, subpop).then(function(response) {
       subpop.version = response.version;
       return response;
     });
   }
   deleteSubpopulation(guid, physical) {
     let queryString = fn.queryString({ physical: physical === true });
-    return this.del(config.subpopulations + "/" + guid + queryString);
+    return this.del(`${config.subpopulations}/${guid}${queryString}`);
   }
   verifyEmail() {
     return this.post(config.verifyEmail);
   }
   verifyStudyEmail(type) {
-    return this.post(config.verifyStudyEmail + "?type=" + type);
+    return this.post(`${config.verifyStudyEmail}?type=${type}`);
   }
   emailStatus() {
     return this.gethttp(config.emailStatus);
@@ -416,17 +411,17 @@ export class ServerService {
     return this.gethttp(config.cache);
   }
   deleteCacheKey(cacheKey) {
-    return this.del(config.cache + "/" + esc(cacheKey));
+    return this.del(`${config.cache}/${esc(cacheKey)}`);
   }
   getParticipants(offsetBy, pageSize, emailFilter, phoneFilter, startTime, endTime) {
     let queryString = fn.queryString({ offsetBy, pageSize, emailFilter, phoneFilter, startTime, endTime });
     return this.gethttp(config.participants + queryString);
   }
   searchAccountSummaries(search) {
-    return this.post(config.participants + "/search", search);
+    return this.post(`${config.participants}/search`, search);
   }
   getParticipant(id) {
-    return this.gethttp(config.participants + "/" + id).then(this.cacheParticipantName.bind(this));
+    return this.gethttp(`${config.participants}/${id}`).then(this.cacheParticipantName.bind(this));
   }
   getParticipantName(id) {
     let name = cache.get(id + ":name");
@@ -436,65 +431,62 @@ export class ServerService {
         .then(() => Promise.resolve(cache.get(id + ":name")));
   }
   getParticipantRequestInfo(id) {
-    return this.gethttp(config.participants + "/" + id + "/requestInfo");
+    return this.gethttp(`${config.participants}/${id}/requestInfo`);
   }
   getParticipantNotifications(id) {
-    return this.gethttp(config.participants + "/" + id + "/notifications");
+    return this.gethttp(`${config.participants}/${id}/notifications`);
   }
   sendUserNotification(id, message) {
-    return this.post(config.participants + "/" + id + "/sendNotification", message);
+    return this.post(`${config.participants}/${id}/sendNotification`, message);
   }
   sendTopicNotification(guid, message) {
-    return this.post(config.topics + "/" + guid + "/sendNotification", message);
+    return this.post(`${config.topics}/${guid}/sendNotification`, message);
   }
   sendSmsMessage(id, message) {
-    return this.post(config.participants + "/" + id + "/sendSmsMessage", message);
+    return this.post(`${config.participants}/${id}/sendSmsMessage`, message);
   }
   createParticipant(participant) {
-    return this.post(config.participants + "?verifyEmail=false", participant);
+    return this.post(config.participants, participant);
   }
   updateParticipant(participant) {
     cache.clear(participant.id + ":name");
-    return this.post(config.participants + "/" + participant.id, participant);
+    return this.post(`${config.participants}/${participant.id}`, participant);
   }
   deleteParticipant(id) {
     cache.clear(id + ":name");
-    return this.del(config.users + "/" + id);
+    return this.del(`${config.users}/${id}`);
   }
   deleteTestUser(id) {
     cache.clear(id + ":name");
-    return this.del(config.participants + "/" + id);
+    return this.del(`${config.participants}/${id}`);
   }
   deleteParticipantActivities(id) {
-    return this.del(`#{config.participants}/#{id}/activities`);
+    return this.del(`${config.participants}/${id}/activities`);
   }
   signOutUser(id, deleteReauthToken) {
-    return this.post(config.participants + "/" + id + "/signOut" + fn.queryString({ deleteReauthToken }));
+    return this.post(`${config.participants}/${id}/signOut${fn.queryString({ deleteReauthToken })}`);
   }
   requestResetPasswordUser(id) {
-    return this.post(config.participants + "/" + id + "/requestResetPassword");
+    return this.post(`${config.participants}/${id}/requestResetPassword`);
   }
   resendConsentAgreement(id, subpopGuid) {
-    return this.post(config.participants + "/" + id + "/consents/" + subpopGuid + "/resendConsent");
+    return this.post(`${config.participants}/${id}/consents/${subpopGuid}/resendConsent`);
   }
   resendEmailVerification(id) {
-    return this.post(config.participants + "/" + id + "/resendEmailVerification");
+    return this.post(`${config.participants}/${id}/resendEmailVerification`);
   }
   getExternalIds(params) {
-    return this.gethttp(config.externalIds + fn.queryString(params || {}));
+    return this.gethttp(`${config.externalIds}${fn.queryString(params || {})}`);
   }
   createExternalId(identifier) {
     return this.post(config.externalIds, identifier);
-  }
-  migrateExternalId(externalId, substudyId) {
-    return this.post(config.externalIds + "/migrate", { externalId, substudyId });
   }
   // @Deprecated
   addExternalIds(identifiers) {
     return this.post(config.externalIds, identifiers);
   }
   deleteExternalId(id) {
-    return this.del(config.externalIds + "/" + id);
+    return this.del(`${config.externalIds}/${id}`);
   }
   getSession() {
     if (session) {
@@ -506,92 +498,92 @@ export class ServerService {
     }
   }
   getStudyReports() {
-    return this.gethttp(config.reports + fn.queryString({ type: "study" }));
+    return this.gethttp(`${config.reports}${fn.queryString({ type: "study" })}`);
   }
   getStudyReport(identifier, startDate, endDate) {
     let queryString = fn.queryString({ startDate: startDate, endDate: endDate });
-    return this.gethttp(config.reports + "/" + identifier + queryString);
+    return this.gethttp(`${config.reports}/${identifier}${queryString}`);
   }
   getPublicStudyReport(studyId, identifier, startDate, endDate) {
     let queryString = fn.queryString({ startDate: startDate, endDate: endDate });
-    return this.gethttp(config.studies + "/" + studyId + "/reports/" + identifier + queryString);
+    return this.gethttp(`${config.studies}/${studyId}/reports/${identifier}${queryString}`);
   }
   addStudyReport(identifier, report) {
-    return this.post(config.reports + "/" + identifier, report);
+    return this.post(`${config.reports}/${identifier}`, report);
   }
   deleteStudyReport(identifier) {
-    return this.del(config.reports + "/" + identifier);
+    return this.del(`${config.reports}/${identifier}`);
   }
   deleteStudyReportRecord(identifier, date) {
-    return this.del(config.reports + "/" + identifier + "/" + date);
+    return this.del(`${config.reports}/${identifier}/${date}`);
   }
   getStudyReportIndex(identifier) {
-    return this.gethttp(config.reports + "/" + identifier + "/index");
+    return this.gethttp(`${config.reports}/${identifier}/index`);
   }
   updateStudyReportIndex(index) {
-    return this.post(config.reports + "/" + index.identifier + "/index", index);
+    return this.post(`${config.reports}/${identifier}/index`, index);
   }
   getParticipantReports() {
-    return this.gethttp(config.reports + fn.queryString({ type: "participant" }));
+    return this.gethttp(`${config.reports}${fn.queryString({ type: "participant" })}`);
   }
   getParticipantUploads(userId, args) {
     let queryString = fn.queryString(args);
-    return this.gethttp(config.participants + "/" + userId + "/uploads" + queryString);
+    return this.gethttp(`${config.participants}/${userId}/uploads${queryString}`);
   }
   getParticipantReport(userId, identifier, startDate, endDate) {
     let queryString = fn.queryString({ startDate, endDate });
-    return this.gethttp(config.participants + "/" + userId + "/reports/" + identifier + queryString);
+    return this.gethttp(`${config.participants}/${userId}/reports/${identifier}${queryString}`);
   }
   getParticipantReportIndex(identifier) {
-    return this.gethttp(config.participants + "/reports/" + identifier + "/index");
+    return this.gethttp(`${config.participants}/reports/${identifier}/index`);
   }
   getParticipantActivityEvents(userId) {
-    return this.gethttp(config.participants + "/" + userId + "/activityEvents");
+    return this.gethttp(`${config.participants}/${userId}/activityEvents`);
   }
   addParticipantReport(userId, identifier, report) {
-    return this.post(config.participants + "/" + userId + "/reports/" + identifier, report);
+    return this.post(`${config.participants}/${userId}/reports/${identifier}`, report);
   }
   deleteParticipantReport(identifier, userId) {
-    return this.del(config.participants + "/" + userId + "/reports/" + identifier);
+    return this.del(`${config.participants}/${userId}/reports/${identifier}`);
   }
   deleteParticipantReportRecord(userId, identifier, date) {
-    return this.del(config.participants + "/" + userId + "/reports/" + identifier + "/" + date);
+    return this.del(`${config.participants}/${userId}/reports/${identifier}/${date}`);
   }
   getParticipantActivities(userId, activityGuid, params) {
     let queryString = fn.queryString(params);
-    return this.gethttp(config.participants + "/" + userId + "/activities/" + activityGuid + queryString);
+    return this.gethttp(`${config.participants}/${userId}/activities/${activityGuid}${queryString}`);
   }
   getParticipantNewActivities(userId, referentType, guid, params) {
+    let refType = referentType.toLowerCase();
+    let encGuid = encodeURIComponent(guid);
     let queryString = fn.queryString(params);
-    return this.gethttp(config.participants + "/" + userId + "/activities/" + referentType.toLowerCase() + 
-      "/" + encodeURIComponent(guid) + queryString
-    );
+    return this.gethttp(`${config.participants}/${userId}/activities/${refType}/${encGuid}${queryString}`);
   }
   deleteParticipantActivities(userId) {
-    return this.del(config.participants + "/" + userId + "/activities");
+    return this.del(`${config.participants}/${userId}/activities`);
   }
   withdrawParticipantFromStudy(userId, reason) {
-    return this.post(config.participants + "/" + userId + "/consents/withdraw", reason);
+    return this.post(`${config.participants}/${userId}/consents/withdraw`, reason);
   }
   withdrawParticipantFromSubpopulation(userId, subpopGuid, reason) {
-    return this.post(config.participants + "/" + userId + "/consents/" + subpopGuid + "/withdraw", reason);
+    return this.post(`${config.participants}/${userId}/consents/${subpopGuid}/withdraw`, reason);
   }
   getAllTopics(includeDeleted) {
     let queryString = fn.queryString({ includeDeleted: includeDeleted === true });
     return this.gethttp(config.topics + queryString);
   }
   getTopic(guid) {
-    return this.gethttp(config.topics + "/" + guid);
+    return this.gethttp(`${config.topics}/${guid}`);
   }
   createTopic(topic) {
     return this.post(config.topics, topic);
   }
   updateTopic(topic) {
-    return this.post(config.topics + "/" + topic.guid, topic);
+    return this.post(`${config.topics}/${topic.guid}`, topic);
   }
   deleteTopic(guid, physical) {
     let queryString = fn.queryString({ physical: physical === true });
-    return this.del(config.topics + "/" + guid + queryString);
+    return this.del(`${config.topics}/${guid}${queryString}`);
   }
   getTaskDefinitions() {
     return this.gethttp(config.compoundactivitydefinitions);
@@ -600,13 +592,13 @@ export class ServerService {
     return this.post(config.compoundactivitydefinitions, task);
   }
   getTaskDefinition(taskId) {
-    return this.gethttp(config.compoundactivitydefinitions + "/" + esc(taskId));
+    return this.gethttp(`${config.compoundactivitydefinitions}/${esc(taskId)}`);
   }
   updateTaskDefinition(task) {
-    return this.post(config.compoundactivitydefinitions + "/" + esc(task.taskId), task);
+    return this.post(`${config.compoundactivitydefinitions}/${esc(task.taskId)}`, task);
   }
   deleteTaskDefinition(taskId) {
-    return this.del(config.compoundactivitydefinitions + "/" + esc(taskId));
+    return this.del(`${config.compoundactivitydefinitions}/${esc(taskId)}`);
   }
   getMetadata(search, modType) {
     // mostrecent: "true", published: "false", name: null, notes: null, tags: null
@@ -625,60 +617,60 @@ export class ServerService {
     return this.post(config.metadata, metadata);
   }
   getMetadataLatestVersion(id) {
-    return this.gethttp(config.metadata + "/" + esc(id));
+    return this.gethttp(`${config.metadata}/${esc(id)}`);
   }
   getMetadataVersion(id, version) {
-    return this.gethttp(config.metadata + "/" + esc(id) + "/versions/" + esc(version));
+    return this.gethttp(`${config.metadata}/${esc(id)}/versions/${esc(version)}`);
   }
   getMetadataAllVersions(id, includeDeleted) {
     // id, mostrecent: "true", published: "false", name: null, notes: null, tags: null
     let queryString = fn.queryString({ includeDeleted: includeDeleted === true, mostrecent: false });
-    return this.gethttp(config.metadata + "/" + esc(id) + "/versions" + queryString);
+    return this.gethttp(`${config.metadata}/${esc(id)}/versions${queryString}`);
   }
   updateMetadata(metadata) {
-    return this.post(config.metadata + "/" + esc(metadata.id) + "/versions/" + esc(metadata.version), metadata);
+    return this.post(`${config.metadata}/${esc(metadata.id)}/versions/${esc(metadata.version)}`, metadata);
   }
   deleteMetadata(id, physical) {
     let queryString = fn.queryString({ physical: physical === true });
-    return this.del(config.metadata + "/" + esc(id) + "/versions" + queryString);
+    return this.del(`${config.metadata}/${esc(id)}/versions${queryString}`);
   }
   deleteMetadataVersion(id, version, physical) {
     let queryString = fn.queryString({ physical: physical === true });
-    return this.del(config.metadata + "/" + esc(id) + "/versions/" + esc(version) + queryString);
+    return this.del(`${config.metadata}/${esc(id)}/versions/${esc(version)}${queryString}`);
   }
   importMetadata(id, version) {
     let url = typeof version === "number" ? 
-      config.sharedmodules + "/" + esc(id) + "/versions/" + esc(version) + "/import" : 
-      config.sharedmodules + "/" + esc(id) + "/import";
+      `${config.sharedmodules}/${esc(id)}/versions/${esc(version)}/import` : 
+      `${config.sharedmodules}/${esc(id)}/import`;
     return this.post(url);
   }
   startExport() {
-    return this.post(config.export + "/start");
+    return this.post(`${config.export}/start`);
   }
   getAppConfigs(includeDeleted) {
     let queryString = fn.queryString({ includeDeleted: includeDeleted === true });
     return this.gethttp(config.appConfigs + queryString);
   }
   getAppConfig(guid) {
-    return this.gethttp(config.appConfigs + "/" + guid);
+    return this.gethttp(`${config.appConfigs}/${guid}`);
   }
   createAppConfig(appConfig) {
     return this.post(config.appConfigs, appConfig);
   }
   updateAppConfig(appConfig) {
-    return this.post(config.appConfigs + "/" + appConfig.guid, appConfig);
+    return this.post(`${config.appConfigs}/${appConfig.guid}`, appConfig);
   }
   deleteAppConfig(guid, physical) {
     let queryString = fn.queryString({ physical: physical === true });
-    return this.del(config.appConfigs + "/" + guid + queryString);
+    return this.del(`${config.appConfigs}/${guid}${queryString}`);
   }
   adminSignIn(studyName, environment, signIn) {
-    return postInt(config.host[environment] + config.adminAuth + "/signIn", signIn).then(
+    return postInt(`${config.host[environment]}${config.adminAuth}/signIn`, signIn).then(
       this.cacheSession(studyName, signIn.study, environment)
     );
   }
   changeAdminStudy(studyName, studyId) {
-    return postInt(config.host[session.environment] + config.adminAuth + "/study", { study: studyId }).then(
+    return postInt(`${config.host[session.environment]}${config.adminAuth}/study`, { study: studyId }).then(
       this.cacheSession(studyName, studyId, session.environment)
     );
   }
@@ -688,27 +680,27 @@ export class ServerService {
   }
   getAppConfigElementRevisions(id, includeDeleted) {
     let queryString = fn.queryString({ includeDeleted: includeDeleted === true });
-    return this.gethttp(config.appConfigElements + "/" + id + queryString);
+    return this.gethttp(`${config.appConfigElements}/${id}${queryString}`);
   }
   getMostRecentAppConfigElement(id) {
-    return this.gethttp(config.appConfigElements + "/" + id + "/recent");
+    return this.gethttp(`${config.appConfigElements}/${id}/recent`);
   }
   getAppConfigElement(id, revision) {
-    return this.gethttp(config.appConfigElements + "/" + id + "/revisions/" + revision);
+    return this.gethttp(`${config.appConfigElements}/${id}/revisions/${revision}`);
   }
   deleteAppConfigElement(id, physical) {
     let queryString = fn.queryString({ physical: physical === true });
-    return this.del(config.appConfigElements + "/" + id + queryString);
+    return this.del(`${config.appConfigElements}/${id}${queryString}`);
   }
   deleteAppConfigElementRevision(id, revision, physical) {
     let queryString = fn.queryString({ physical: physical === true });
-    return this.del(config.appConfigElements + "/" + id + "/revisions/" + revision + queryString);
+    return this.del(`${config.appConfigElements}/${id}/revisions/${revision}${queryString}`);
   }
   createAppConfigElement(element) {
     return this.post(config.appConfigElements, element);
   }
   updateAppConfigElement(element) {
-    return this.post(config.appConfigElements + "/" + element.id + "/revisions/" + element.revision, element);
+    return this.post(`${config.appConfigElements}/${element.id}/revisions/${element.revision}`, element);
   }
   getSubstudies(includeDeleted) {
     let queryString = fn.queryString({ includeDeleted: includeDeleted === true });
@@ -718,14 +710,14 @@ export class ServerService {
     return this.post(config.substudies, substudy);
   }
   getSubstudy(id) {
-    return this.gethttp(config.substudies + "/" + id);
+    return this.gethttp(`${config.substudies}/${id}`);
   }
   updateSubstudy(substudy) {
-    return this.post(config.substudies + "/" + substudy.id, substudy);
+    return this.post(`${config.substudies}/${substudy.id}`, substudy);
   }
   deleteSubstudy(id, physical) {
     let queryString = fn.queryString({ physical: physical === true });
-    return this.del(config.substudies + "/" + id + queryString);
+    return this.del(`${config.substudies}/${id}${queryString}`);
   }
   getTemplates(templateType, includeDeleted) {
     // TODO: Paging
@@ -733,33 +725,39 @@ export class ServerService {
       type: templateType,
       includeDeleted: includeDeleted === true 
     });
-    return this.gethttp(config.templates + "/" + queryString);
+    return this.gethttp(`${config.templates}${queryString}`);
   }
   getTemplate(guid) {
-    return this.gethttp(config.templates + "/" + guid);
+    return this.gethttp(`${config.templates}/${guid}`);
   }
   createTemplate(template) {
     return this.post(config.templates, template);
   }
   updateTemplate(template) {
-    return this.post(config.templates + "/" + template.guid, template);
+    return this.post(`${config.templates}/${template.guid}`, template);
   }
   deleteTemplate(guid, physical) {
     let queryString = fn.queryString({ physical: physical === true });
-    return this.del(config.templates + "/" + guid + queryString);
+    return this.del(`${config.templates}/${guid}${queryString}`);
   }
   getTemplateRevisions(guid, offsetBy, pageSize) {
     let queryString = fn.queryString({ offsetBy, pageSize });
-    return this.gethttp(config.templates + "/" + guid + "/revisions" + queryString);
+    return this.gethttp(`${config.templates}/${guid}/revisions${queryString}`);
   }
   createTemplateRevision(guid, revision) {
-    return this.post(config.templates + "/" + guid + "/revisions", revision);
+    return this.post(`${config.templates}/${guid}/revisions`, revision);
   }
   getTemplateRevision(guid, createdOn) {
-    return this.gethttp(config.templates + "/" + guid + "/revisions/" + createdOn);
+    return this.gethttp(`${config.templates}/${guid}/revisions/${createdOn}`);
   }
   publishTemplateRevision(guid, createdOn) {
-    return this.post(config.templates + "/" + guid + "/revisions/" + createdOn + "/publish");
+    return this.post(`${config.templates}/${guid}/revisions/${createdOn}/publish`);
+  }
+  migrateExternalId(userId, substudyId) {
+    let url = (substudyId) ?
+      `${config.participants}/${userId}/externalId/migrate?substudyId=${substudyId}` :
+      `${config.participants}/${userId}/externalId/migrate`;
+    return this.post(url);
   }
   addSessionStartListener(listener) {
     if (typeof listener !== "function") {

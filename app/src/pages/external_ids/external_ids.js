@@ -23,10 +23,8 @@ export default function externalIds() {
     .obs("total", 0)
     .obs("result", "")
     .obs("searchLoading", false)
-    .obs("externalIdValidationEnabled", false)
     .obs("idFilter")
     .obs("substudyId")
-    .obs("useLegacyFormat", false)
     .obs("showResults", false);
 
   // For the forward pager control.
@@ -34,15 +32,13 @@ export default function externalIds() {
   self.callback = fn.identity;
   self.userSubstudies = [];
 
-  fn.copyProps(self, root, "isDeveloper", "isResearcher");
+  fn.copyProps(self, root, "isAdmin", "isDeveloper", "isResearcher");
   tables.prepareTable(self, {
     name: "external ID",
     delete: deleteItem,
     refresh: load
   });
-  self.canDeleteObs = ko.computed(function() {
-    return !self.externalIdValidationEnabledObs() && self.isDeveloper();
-  });
+  self.canDeleteObs = ko.computed(() => self.isAdmin());
 
   function hasBeenChecked(item) {
     return item.checkedObs() && (!item.deletedObs || !item.deletedObs());
@@ -69,9 +65,7 @@ export default function externalIds() {
   }
   function createNewCredentials(identifier) {
     self.resultObs(identifier);
-    let participant = self.useLegacyFormatObs() ? 
-      utils.oldCreateParticipantForID(self.study.supportEmail, identifier) : 
-      utils.createParticipantForID(identifier, password.generatePassword(32));
+    let participant = utils.createParticipantForID(identifier, password.generatePassword(32));
     return serverService.createParticipant(participant);
   }
   function updatePageWithResult(response) {
@@ -89,12 +83,6 @@ export default function externalIds() {
       self.recordsMessageObs("There are no external IDs (or none that start with your search string).");
     }
     return response;
-  }
-  function initFromStudy(study) {
-    let legacy = study.emailVerificationEnabled === false && study.externalIdValidationEnabled === true;
-    self.useLegacyFormatObs(legacy);
-    self.externalIdValidationEnabledObs(study.externalIdValidationEnabled);
-    return study;
   }
   function initFromSession(session) {
     self.userSubstudies = session.substudyIds;
@@ -152,8 +140,7 @@ export default function externalIds() {
   serverService
     .getSession()
     .then(initFromSession)
-    .then(binder.assign("study"))
-    .then(initFromStudy);
+    .then(binder.assign("study"));
 
   function load(params) {
     params = params || {};

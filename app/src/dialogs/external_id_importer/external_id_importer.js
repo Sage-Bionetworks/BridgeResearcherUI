@@ -65,11 +65,10 @@ IdImportWorker.prototype = {
   }
 };
 
-function CreateCredentialsWorker(supportEmail, credentialPairs, dataGroups, useLegacyFormat) {
+function CreateCredentialsWorker(supportEmail, credentialPairs, dataGroups) {
   this.supportEmail = supportEmail;
   this.credentialPairs = credentialPairs;
   this.dataGroups = dataGroups;
-  this.useLegacyFormat = useLegacyFormat;
 }
 CreateCredentialsWorker.prototype = {
   calculateSteps: function() {
@@ -83,9 +82,7 @@ CreateCredentialsWorker.prototype = {
   },
   performWork: function() {
     this.credentialPair = this.credentialPairs.shift();
-    let participant = this.useLegacyFormat ? 
-      utils.oldCreateParticipantForID(this.supportEmail, this.credentialPair) : 
-      utils.createParticipantForID(this.credentialPair.identifier, this.credentialPair.password);
+    let participant = utils.createParticipantForID(this.credentialPair.identifier, this.credentialPair.password);
     participant.dataGroups = this.dataGroups;
     return serverService.createParticipant(participant);
   },
@@ -110,7 +107,6 @@ export default function(params) {
     .obs("isDisabled", false)
     .obs("closeText", "Close")
     .obs("createCredentials", true)
-    .obs("useLegacyFormat", false)
     .obs("dataGroups[]")
     .obs("allDataGroups[]")
     .obs("substudyId")
@@ -122,8 +118,6 @@ export default function(params) {
   });
   serverService.getStudy()
     .then(function(study) {
-      let legacy = study.emailVerificationEnabled === false && study.externalIdValidationEnabled === true;
-      self.useLegacyFormatObs(legacy);
       self.allDataGroupsObs(study.dataGroups);
       self.study = study;
       supportEmail = study.supportEmail;
@@ -143,7 +137,6 @@ export default function(params) {
   self.startImport = function(vm, event) {
     self.statusObs("Preparing to import...");
 
-    let useLegacyFormat = self.useLegacyFormatObs();
     let importWorker = new IdImportWorker(self.study, self.importObs(), self.substudyIdObs());
     if (!importWorker.hasWork()) {
       self.errorMessagesObs.unshift("You must enter some identifiers.");
@@ -158,8 +151,7 @@ export default function(params) {
         let credentialsWorker = new CreateCredentialsWorker(
           supportEmail,
           identifiers,
-          self.dataGroupsObs(),
-          useLegacyFormat
+          self.dataGroupsObs()
         );
         self.run(credentialsWorker).then(displayComplete);
       } else {
