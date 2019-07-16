@@ -32,6 +32,7 @@ export default function reports() {
     load();
   };
   self.isVisible = function(item) {
+    item.substudyIds = item.substudyIds || [];
     return item.public || 
       self.substudyIds.length === 0 || 
       self.substudyIds.some((el) => item.substudyIds.includes(el));
