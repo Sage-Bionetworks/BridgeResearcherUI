@@ -6,7 +6,8 @@ import utils from "../../../utils";
 const SYNAPSE_ADMINS = [
   { name: "Alx Dark", id: "2026857", obs: "darkObs" },
   { name: "Brian Bot", id: "273979", obs: "botObs" },
-  { name: "Mike Kellen", id: "273984", obs: "kellenObs" }
+  { name: "Mike Kellen", id: "273984", obs: "kellenObs" },
+  { name: "Dan Webster", id: "3373388", obs: "websterObs" }
 ];
 const UPLOAD_SHARED_METADATA_FIELD_DEFS = [
   { name: "taskIdentifier", maxLength: 100, type: "string" },
