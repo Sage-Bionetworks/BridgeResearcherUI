@@ -1,8 +1,8 @@
-import { serverService } from "../../services/server_service";
 import criteriaUtils from "../../criteria_utils";
 import fn from "../../functions";
 import Promise from "bluebird";
 import scheduleUtils from "../schedule/schedule_utils";
+import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
 

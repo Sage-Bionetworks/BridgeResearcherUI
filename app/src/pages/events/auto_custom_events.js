@@ -1,5 +1,5 @@
-import { serverService } from "../../services/server_service";
 import ko from "knockout";
+import serverService from "../../services/server_service";
 import utils from "../../utils";
 
 function mapToObservers(entry) {

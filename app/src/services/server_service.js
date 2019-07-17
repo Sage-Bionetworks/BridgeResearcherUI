@@ -17,6 +17,7 @@ import storeService from "./store_service";
 const SESSION_ENDED_EVENT_KEY = "sessionEnded";
 const SESSION_KEY = "session";
 const SESSION_STARTED_EVENT_KEY = "sessionStarted";
+const ERROR = "Session listener not a function";
 
 // We want this to be shared by all server service instances.
 const cache = new Cache();
@@ -761,16 +762,16 @@ export class ServerService {
   }
   addSessionStartListener(listener) {
     if (typeof listener !== "function") {
-      throw Error("Session listener not a function");
+      throw new Error(ERROR);
     }
     listeners.addEventListener(SESSION_STARTED_EVENT_KEY, listener);
   }
   addSessionEndListener(listener) {
     if (typeof listener !== "function") {
-      throw Error("Session listener not a function");
+      throw new Error(ERROR);
     }
     listeners.addEventListener(SESSION_ENDED_EVENT_KEY, listener);
   }
 }
 
-export const serverService = new ServerService();
+export default new ServerService();

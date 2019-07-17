@@ -1,8 +1,8 @@
-import { serverService } from "../../services/server_service";
 import Binder from "../../binder";
 import fn from "../../functions";
 import jsonFormatter from "../../json_formatter";
 import ko from "knockout";
+import serverService from "../../services/server_service";
 import utils from "../../utils";
 
 export default function uploadDetails(params) {

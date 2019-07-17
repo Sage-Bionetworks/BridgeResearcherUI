@@ -1,7 +1,7 @@
-import { serverService } from "../../services/server_service";
 import Binder from "../../binder";
 import config from "../../config";
 import fn from "../../functions";
+import serverService from "../../services/server_service";
 import utils from "../../utils";
 
 const failureHandler = utils.failureHandler({

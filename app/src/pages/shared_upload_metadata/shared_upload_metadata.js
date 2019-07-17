@@ -1,8 +1,8 @@
-import { serverService } from "../../services/server_service";
 import * as schemaUtils from "../../pages/schema/schema_utils";
 import Binder from "../../binder";
 import fn from "../../functions";
 import root from "../../root";
+import serverService from "../../services/server_service";
 import utils from "../../utils";
 
 const failureHandler = utils.failureHandler({
@@ -16,7 +16,7 @@ export default function sharedUploadMetadata(params) {
 
   self.isAdmin = root.isAdmin;
 
-  let binder = new Binder(this)
+  new Binder(this)
     .obs("index", 0)
     .bind("fieldDefinitions[]", [])
     .bind("version");
@@ -28,8 +28,7 @@ export default function sharedUploadMetadata(params) {
     utils.startHandler(vm, event);
 
     self.study.uploadMetadataFieldDefinitions = schemaUtils.fieldObsToDef(self.fieldDefinitionsObs());
-    serverService
-      .saveStudy(self.study, self.isAdmin())
+    serverService.saveStudy(self.study, self.isAdmin())
       .then(fn.handleObsUpdate(self.versionObs, "version"))
       .then(utils.successHandler(vm, event, "Upload metadata fields have been saved."))
       .catch(utils.failureHandler());
@@ -44,22 +43,16 @@ export default function sharedUploadMetadata(params) {
     self.fieldDefinitionsObs.push(field);
   };
   self.editMultiChoiceAnswerList = function(field, event) {
-    let otherLists = self
-      .fieldDefinitionsObs()
-      .filter(function(oneField) {
-        return oneField.typeObs() === "multi_choice" && oneField.multiChoiceAnswerListObs().length;
-      })
-      .map(function(oneField) {
-        return [].concat(oneField.multiChoiceAnswerListObs());
-      });
+    let otherLists = self.fieldDefinitionsObs()
+      .filter((oneField) => oneField.typeObs() === "multi_choice" && oneField.multiChoiceAnswerListObs().length)
+      .map((oneField) => [].concat(oneField.multiChoiceAnswerListObs()));
     root.openDialog("multichoice_editor", {
       listObs: field.multiChoiceAnswerListObs,
       otherLists: otherLists
     });
   };
 
-  serverService
-    .getStudy()
+  serverService.getStudy()
     .then(function(study) {
       self.study = study;
       self.fieldDefinitionsObs(schemaUtils.fieldDefToObs(study.uploadMetadataFieldDefinitions));

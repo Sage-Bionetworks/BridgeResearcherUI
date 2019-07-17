@@ -1,9 +1,9 @@
-import { serverService } from "../../services/server_service";
 import criteriaUtils from "../../criteria_utils";
 import fn from "../../functions";
 import ko from "knockout";
 import optionsService from "../../services/options_service";
 import Promise from "bluebird";
+import serverService from "../../services/server_service";
 import utils from "../../utils";
 
 import scheduleFormatter from "../../schedule_formatter";

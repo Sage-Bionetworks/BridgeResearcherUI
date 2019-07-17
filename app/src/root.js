@@ -1,8 +1,8 @@
-import { serverService } from "./services/server_service";
 import alerts from "./widgets/alerts";
 import Binder from "./binder";
 import clipboard from "./widgets/clipboard/clipboard";
 import ko from "knockout";
+import serverService from "./services/server_service";
 
 function roleFunc(observer, role) {
   return ko.computed(function() {

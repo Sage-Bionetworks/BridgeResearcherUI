@@ -1,7 +1,6 @@
-import { serverService } from "../../services/server_service";
-import BridgeError from "../../bridge_error";
 import ko from "knockout";
 import root from "../../root";
+import serverService from "../../services/server_service";
 import utils from "../../utils";
 
 export default function(params) {

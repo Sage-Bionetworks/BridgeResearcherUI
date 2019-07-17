@@ -1,11 +1,11 @@
-import { serverService } from "../../services/server_service";
 import batchDialogUtils from "../../batch_dialog_utils";
 import Binder from "../../binder";
 import fn from "../../functions";
+import password from "../../password_generator";
 import Promise from "bluebird";
 import root from "../../root";
+import serverService from "../../services/server_service";
 import utils from "../../utils";
-import password from "../../password_generator";
 
 // Worker
 // * calculateSteps: int

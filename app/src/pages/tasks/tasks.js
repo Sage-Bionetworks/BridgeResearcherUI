@@ -1,7 +1,7 @@
-import { serverService } from "../../services/server_service";
 import fn from "../../functions";
 import Promise from "bluebird";
 import scheduleUtils from "../schedule/schedule_utils";
+import serverService from "../../services/server_service";
 import sharedModuleUtils from "../../shared_module_utils";
 import tables from "../../tables";
 import utils from "../../utils";
@@ -35,8 +35,7 @@ export default class Tasks {
     return serverService.deleteTaskDefinition(task.taskId);
   }
   load() {
-    sharedModuleUtils
-      .loadNameMaps()
+    sharedModuleUtils.loadNameMaps()
       .then(scheduleUtils.loadOptions)
       .then(serverService.getTaskDefinitions.bind(serverService))
       .then(fn.handleSort("items", "taskId"))

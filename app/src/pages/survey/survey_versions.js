@@ -1,10 +1,10 @@
-import { serverService } from "../../services/server_service";
 import alerts from "../../widgets/alerts";
 import Binder from "../../binder";
 import fn from "../../functions";
+import root from "../../root";
+import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
-import root from "../../root";
 
 export default function surveyVersions(params) {
   let self = this;

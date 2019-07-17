@@ -1,9 +1,6 @@
-import { serverService } from "../../services/server_service";
 import Binder from "../../binder";
-import fn from "../../functions";
-import ko from "knockout";
-import Promise from "bluebird";
 import root from "../../root";
+import serverService from "../../services/server_service";
 import utils from "../../utils";
 
 export default function activityEventEditor(params) {

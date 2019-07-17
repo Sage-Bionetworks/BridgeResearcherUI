@@ -1,8 +1,8 @@
-import { serverService } from "../../services/server_service";
+import alert from "../../widgets/alerts";
 import Binder from "../../binder";
 import root from "../../root";
+import serverService from "../../services/server_service";
 import utils from "../../utils";
-import alert from "../../widgets/alerts";
 
 // This is a trivial change because Travis doesn't seem to think the branch is there for deployment.
 

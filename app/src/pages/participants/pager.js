@@ -1,9 +1,9 @@
 import Binder from "../../binder";
 import fn from "../../functions";
 import ko from "knockout";
+import serverService from "../../services/server_service";
 import storeService from "../../services/store_service";
 import utils from "../../utils";
-import { serverService } from "../../services/server_service";
 
 const PAGE_SIZE = 25;
 

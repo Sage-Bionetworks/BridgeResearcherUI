@@ -1,9 +1,14 @@
-import { serverService } from "../../services/server_service";
 import Binder from "../../binder";
 import criteriaUtils from "../../criteria_utils";
 import fn from "../../functions";
 import root from "../../root";
+import serverService from "../../services/server_service";
 import utils from "../../utils";
+
+const failureHandler = utils.failureHandler({
+  redirectTo: "topics",
+  redirectMsg: "Push notification topic not found."
+});
 
 function newTopic() {
   return {
@@ -71,18 +76,12 @@ export default function(params) {
   };
 
   if (params.guid !== "new") {
-    serverService
-      .getTopic(params.guid)
+    serverService.getTopic(params.guid)
       .then(fn.handleObsUpdate(self.titleObs, "name"))
       .then(initCriteria)
       .then(binder.assign("topic"))
       .then(binder.update())
-      .catch(
-        utils.failureHandler({
-          redirectTo: "topics",
-          redirectMsg: "Push notification topic not found."
-        })
-      );
+      .catch(failureHandler);
   } else {
     Promise.resolve(newTopic())
       .then(fn.handleObsUpdate(self.titleObs, "name"))

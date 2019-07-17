@@ -1,9 +1,9 @@
-import { serverService } from "../../services/server_service";
 import alerts from "../../widgets/alerts";
 import Binder from "../../binder";
 import fn from "../../functions";
-import utils from "../../utils";
 import ko from "knockout";
+import serverService from "../../services/server_service";
+import utils from "../../utils";
 
 const failureHandler = utils.failureHandler({
   redirectMsg: "Consent group not found.",
