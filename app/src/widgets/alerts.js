@@ -1,12 +1,42 @@
-import swal from "sweetalert2";
+// import swal from "sweetalert2";
+import Swal from "sweetalert2";
+
+const ConfirmToast = Swal.mixin({
+  title: "Hey now",
+  showCancelButton: true,
+  confirmButtonText: "OK",
+  confirmButtonColor: "#2185d0"
+});
+const ConfirmDeleteToast = Swal.mixin({
+  title: "Hey now",
+  showCancelButton: true,
+  allowEscapeKey: true,
+  confirmButtonColor: "#db2828"
+});
+const WarnToast = Swal.mixin({ 
+  title: "", 
+  type: "warning", 
+  confirmButtonText: "OK", 
+  confirmButtonColor: "#2185d0" 
+});
+const PromptToast = Swal.mixin({
+  input: "text",
+  showCancelButton: true,
+  preConfirm: value => {
+    if (value === "") {
+      swal.showValidationError("Please enter a value");
+      return false;
+    }
+    return value;
+  }  
+});
+const NotificationToast = Swal.mixin({
+  type: "success"
+});
 
 function confirmation(message, func) {
-  swal({
-    title: "Hey now",
+  ConfirmToast.fire({
     text: message,
-    showCancelButton: true,
-    confirmButtonText: "OK",
-    confirmButtonColor: "#2185d0"
   }).then(result => {
     if (result.value) {
       func();
@@ -14,12 +44,8 @@ function confirmation(message, func) {
   });
 }
 function deleteConfirmation(message, func, deleteButton) {
-  swal({
-    title: "Hey now",
+  ConfirmDeleteToast.fire({
     text: message,
-    showCancelButton: true,
-    allowEscapeKey: true,
-    confirmButtonColor: "#db2828",
     confirmButtonText: deleteButton || "Delete"
   }).then(result => {
     if (result.value) {
@@ -28,20 +54,13 @@ function deleteConfirmation(message, func, deleteButton) {
   });
 }
 function warn(message) {
-  swal({ title: "", text: message, type: "warning", confirmButtonText: "OK", confirmButtonColor: "#2185d0" });
+  WarnToast.fire({
+    text: message
+  });
 }
 function prompt(message, okFunc) {
-  swal({
-    text: message,
-    input: "text",
-    showCancelButton: true,
-    preConfirm: value => {
-      if (value === "") {
-        swal.showValidationError("Please enter a value");
-        return false;
-      }
-      return value;
-    }
+  PromptToast.fire({
+    text: message
   }).then(result => {
     if (result.value) {
       okFunc(result.value);
@@ -50,7 +69,10 @@ function prompt(message, okFunc) {
   });
 }
 function notification(title, message) {
-  swal({ title: title, text: message, type: "success" });
+  NotificationToast.fire({
+    title: title,
+    text: message
+  });
 }
 
 export default {

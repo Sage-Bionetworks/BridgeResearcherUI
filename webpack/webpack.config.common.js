@@ -36,26 +36,14 @@ module.exports = {
         test: /\.(scss|css)$/,
         use: [{
           loader: MiniCssExtractPlugin.loader,
-          options: {
-            publicPath: '../',
-            hmr: process.env.NODE_ENV === 'development',
-          }
+          options: {publicPath: '../', hmr: process.env.NODE_ENV === 'development'}
         }, 'css-loader', 'sass-loader']
       },
-      /*
-      {
-        test: /\.(scss|css)$/,
-        use: ["style-loader", "css-loader", "sass-loader"]
-      },
-      */
       {
         test: /\.html$/, 
         use: {
           loader: 'html-loader', 
-          options: {
-            removeComments: false, 
-            minimize: true
-          }
+          options: {removeComments: false, minimize: true}
         }
       }    
     ]
