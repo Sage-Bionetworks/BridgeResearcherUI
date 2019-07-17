@@ -37,7 +37,7 @@
     "querystringify": ">=2.0.0",
     "sass-loader": "^7.1.0",
     "sinon": "^2.3.4",
-    "source-map-explorer": "^1.8.0",
+    "source-map-explorer": "^2.0.1",
     "style-loader": "^0.23.1",
     "sweetalert2": "^8.13.6",
     "toastr": "^2.1.2",
