@@ -1,4 +1,3 @@
-// import swal from "sweetalert2";
 import Swal from "sweetalert2";
 
 const ConfirmToast = Swal.mixin({
