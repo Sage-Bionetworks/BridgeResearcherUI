@@ -36,7 +36,7 @@
     "node-sass": "^4.12.0",
     "querystringify": ">=2.0.0",
     "sass-loader": "^7.1.0",
-    "sinon": "^2.3.4",
+    "sinon": "^7.3.2",
     "source-map-explorer": "^1.8.0",
     "style-loader": "^0.23.1",
     "sweetalert2": "^8.13.6",
