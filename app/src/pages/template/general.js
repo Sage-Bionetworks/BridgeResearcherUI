@@ -1,9 +1,9 @@
-import { serverService } from "../../services/server_service";
 import Binder from "../../binder";
+import config from "../../config";
 import criteriaUtils from "../../criteria_utils";
 import fn from "../../functions";
+import serverService from "../../services/server_service";
 import utils from "../../utils";
-import config from "../../config";
 
 const TITLES = config.templateTitles;
 

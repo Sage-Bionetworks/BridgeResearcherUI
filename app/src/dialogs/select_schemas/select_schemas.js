@@ -1,7 +1,7 @@
-import { serverService } from "../../services/server_service";
 import fn from "../../functions";
 import ko from "knockout";
 import root from "../../root";
+import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
 
@@ -60,8 +60,7 @@ export default function(params) {
   }
 
   function load() {
-    serverService
-      .getAllUploadSchemas()
+    serverService.getAllUploadSchemas()
       .then(fn.handleMap("items", schemaToView))
       .then(fn.handleSort("items", "name"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))

@@ -1,10 +1,9 @@
-import { serverService } from "../../services/server_service";
 import Binder from "../../binder";
+import serverService from "../../services/server_service";
 import storeService from "../../services/store_service";
-import utils from "../../utils";
 import UploadsViewModel from "../uploads/uploads";
+import utils from "../../utils";
 
-const PAGE_SIZE = 25;
 const PAGE_KEY = "us";
 
 const failureHandler = utils.failureHandler({
@@ -20,8 +19,7 @@ export default class ParticipantUploadsViewModel extends UploadsViewModel {
       .obs("name", "")
       .obs("status")
       .obs("title", "&#160;");
-    serverService
-      .getParticipantName(params.userId)
+    serverService.getParticipantName(params.userId)
       .then(part => {
         this.titleObs(part.name);
         this.nameObs(part.name);
@@ -37,8 +35,7 @@ export default class ParticipantUploadsViewModel extends UploadsViewModel {
 
     storeService.persistQuery(PAGE_KEY, args);
 
-    return serverService
-      .getParticipantUploads(this.userIdObs(), args)
+    return serverService.getParticipantUploads(this.userIdObs(), args)
       .then(this.processUploads.bind(this))
       .catch(utils.failureHandler());
   }

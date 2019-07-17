@@ -1,6 +1,6 @@
-import { serverService } from "../../services/server_service";
 import Binder from "../../binder";
 import root from "../../root";
+import serverService from "../../services/server_service";
 
 export default function(params) {
   let self = this;

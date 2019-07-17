@@ -1,15 +1,14 @@
-import { serverService } from "../../services/server_service";
 import alerts from "../../widgets/alerts";
 import Binder from "../../binder";
 import fn from "../../functions";
 import ko from "knockout";
 import root from "../../root";
+import serverService from "../../services/server_service";
 import utils from "../../utils";
 
 const BASE = "https://www.synapse.org/#!";
 const CREATE_MSG = "Please enter your Synapse user account ID\n(you'll be made the administrator of the project):";
-const EXPORT_MSG =
-  "Unexported study data is being exported to Synapse.\n" +
+const EXPORT_MSG = "Unexported study data is being exported to Synapse.\n" +
   "This can take some time.\nVisit your project in Synapse to see your newly uploaded data.";
 function exportingMsg() {
   alerts.notification("Starting Data Export", EXPORT_MSG);
@@ -41,8 +40,7 @@ export default function exportSettings() {
   self.startExport = function(self, event) {
     utils.startHandler(self, event);
 
-    serverService
-      .startExport()
+    serverService.startExport()
       .then(utils.successHandler(self, event))
       .then(exportingMsg)
       .catch(utils.failureHandler({ transient: false }));
@@ -50,12 +48,9 @@ export default function exportSettings() {
   self.createSynapseProject = function(vm, event) {
     alerts.prompt(CREATE_MSG, function(synapseUserId) {
       utils.startHandler(self, event);
-      serverService
-        .createSynapseProject(synapseUserId)
-        .then(function(response) {
-          self.synapseDataAccessTeamIdObs(response.teamId);
-          self.synapseProjectIdObs(response.projectId);
-        })
+      serverService.createSynapseProject(synapseUserId)
+        .then(fn.handleObsUpdate(self.synapseDataAccessTeamIdObs, "teamId"))
+        .then(fn.handleObsUpdate(self.synapseProjectIdObs, "projectId"))
         .then(utils.successHandler(vm, event, "Synapse information created."))
         .catch(utils.failureHandler({ transient: false }));
     });
@@ -64,14 +59,12 @@ export default function exportSettings() {
     utils.startHandler(self, event);
     self.study = binder.persist(self.study);
 
-    serverService
-      .saveStudy(self.study)
+    serverService.saveStudy(self.study)
       .then(utils.successHandler(vm, event, "Synapse information saved."))
       .catch(utils.failureHandler());
   };
 
-  serverService
-    .getStudy()
+  serverService.getStudy()
     .then(binder.assign("study"))
     .then(binder.update())
     .catch(utils.failureHandler());

@@ -1,7 +1,7 @@
-import { serverService } from "../../services/server_service";
 import Binder from "../../binder";
 import ko from "knockout";
 import root from "../../root";
+import serverService from "../../services/server_service";
 import utils from "../../utils";
 
 function appleModelToObs(array, context) {

@@ -1,10 +1,10 @@
-import { serverService } from "../../services/server_service";
+import alerts from "../../widgets/alerts";
 import Binder from "../../binder";
 import optionsService from "../../services/options_service";
+import serverService from "../../services/server_service";
 import sharedModuleUtils from "../../shared_module_utils";
 import tables from "../../tables";
 import utils from "../../utils";
-import alerts from "../../widgets/alerts";
 
 const FAILURE_HANDLER = utils.failureHandler({
   redirectTo: "participants",

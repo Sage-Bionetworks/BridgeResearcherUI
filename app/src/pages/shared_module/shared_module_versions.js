@@ -1,8 +1,8 @@
-import { serverService } from "../../services/server_service";
 import alerts from "../../widgets/alerts";
 import Binder from "../../binder";
 import config from "../../config";
 import fn from "../../functions";
+import serverService from "../../services/server_service";
 import sharedModuleUtils from "../../shared_module_utils";
 import tables from "../../tables";
 import utils from "../../utils";

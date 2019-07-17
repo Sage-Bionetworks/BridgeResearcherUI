@@ -1,6 +1,6 @@
-import { serverService } from "../../services/server_service";
 import fn from "../../functions";
 import ko from "knockout";
+import serverService from "../../services/server_service";
 import sharedModuleUtils from "../../shared_module_utils";
 import tables from "../../tables";
 import utils from "../../utils";

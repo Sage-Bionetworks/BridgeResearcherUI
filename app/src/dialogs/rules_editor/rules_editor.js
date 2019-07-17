@@ -1,7 +1,7 @@
-import { serverService } from "../../services/server_service";
 import fn from "../../functions";
 import ko from "knockout";
 import root from "../../root";
+import serverService from "../../services/server_service";
 
 const ACTION_OPTIONS = Object.freeze([
   { value: "skipTo", label: "skip to question" },

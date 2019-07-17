@@ -1,7 +1,7 @@
-import { serverService } from "../../services/server_service";
 import Binder from "../../binder";
 import fn from "../../functions";
 import root from "../../root";
+import serverService from "../../services/server_service";
 import storeService from "../../services/store_service";
 import tables from "../../tables";
 import utils from "../../utils";

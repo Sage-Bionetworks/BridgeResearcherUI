@@ -1,8 +1,8 @@
 import "knockout-postbox";
-import { serverService } from "../../services/server_service";
 import ko from "knockout";
 import optionsService from "../../services/options_service";
 import Promise from "bluebird";
+import serverService from "../../services/server_service";
 import storeService from "../../services/store_service";
 import utils from "../../utils";
 

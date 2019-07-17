@@ -1,8 +1,8 @@
-import { serverService } from "../../services/server_service";
 import Binder from "../../binder";
 import BridgeError from "../../bridge_error";
 import fn from "../../functions";
 import jsonFormatter from "../../json_formatter";
+import serverService from "../../services/server_service";
 import utils from "../../utils";
 
 let failureHandler = utils.failureHandler({

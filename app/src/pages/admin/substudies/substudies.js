@@ -1,5 +1,5 @@
-import { serverService } from "../../../services/server_service";
 import fn from "../../../functions";
+import serverService from "../../../services/server_service";
 import tables from "../../../tables";
 import utils from "../../../utils";
 

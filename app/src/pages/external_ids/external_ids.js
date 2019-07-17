@@ -1,13 +1,13 @@
 import "knockout-postbox";
-import { serverService } from "../../services/server_service";
 import Binder from "../../binder";
 import fn from "../../functions";
 import ko from "knockout";
+import password from "../../password_generator";
 import Promise from "bluebird";
 import root from "../../root";
+import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
-import password from "../../password_generator";
 
 let OPTIONS = { offsetBy: null, pageSize: 1, assignmentFilter: false };
 

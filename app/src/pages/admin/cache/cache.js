@@ -1,8 +1,8 @@
-import { serverService } from "../../../services/server_service";
 import alerts from "../../../widgets/alerts";
 import fn from "../../../functions";
 import ko from "knockout";
 import Promise from "bluebird";
+import serverService from "../../../services/server_service";
 import tables from "../../../tables";
 import utils from "../../../utils";
 

@@ -1,5 +1,5 @@
-import { serverService } from "../../services/server_service";
 import Binder from "../../binder";
+import serverService from "../../services/server_service";
 import utils from "../../utils";
 
 const IOS = "iPhone OS";

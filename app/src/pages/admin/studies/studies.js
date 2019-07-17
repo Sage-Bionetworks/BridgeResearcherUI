@@ -1,5 +1,5 @@
-import { serverService } from "../../../services/server_service";
 import fn from "../../../functions";
+import serverService from "../../../services/server_service";
 import tables from "../../../tables";
 
 function deleteStudy(item) {
@@ -19,10 +19,7 @@ export default function() {
     delete: deleteStudy
   });
 
-  serverService
-    .getSession()
-    .then(function(session) {
-      return serverService.getStudyList(session.environment);
-    })
+  serverService.getSession()
+    .then((session) => serverService.getStudyList(session.environment))
     .then(fn.handleObsUpdate(self.itemsObs, "items"));
 };
