@@ -33,45 +33,33 @@ const NotificationToast = Swal.mixin({
   type: "success"
 });
 
-function confirmation(message, func) {
-  ConfirmToast.fire({
-    text: message,
-  }).then(result => {
+function confirmation(text, func) {
+  ConfirmToast.fire({text}).then(result => {
     if (result.value) {
       func();
     }
   });
 }
-function deleteConfirmation(message, func, deleteButton) {
-  ConfirmDeleteToast.fire({
-    text: message,
-    confirmButtonText: deleteButton || "Delete"
-  }).then(result => {
+function deleteConfirmation(text, func, confirmButtonText = "Delete") {
+  ConfirmDeleteToast.fire({text, confirmButtonText}).then(result => {
     if (result.value) {
       func();
     }
   });
 }
-function warn(message) {
-  WarnToast.fire({
-    text: message
-  });
+function warn(text) {
+  WarnToast.fire({text});
 }
-function prompt(message, okFunc) {
-  PromptToast.fire({
-    text: message
-  }).then(result => {
+function prompt(text, okFunc) {
+  PromptToast.fire({text}).then(result => {
     if (result.value) {
       okFunc(result.value);
-      swal.close();
+      Swal.close();
     }
   });
 }
-function notification(title, message) {
-  NotificationToast.fire({
-    title: title,
-    text: message
-  });
+function notification(title, text) {
+  NotificationToast.fire({title, text});
 }
 
 export default {
