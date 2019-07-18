@@ -93,6 +93,9 @@
               <div class="item" data-bind="click: $parent.deleteTestUser, visible: $parent.deleteVisible($data)">
                 <span class="red ui text">Delete Test Account</span>
               </div>
+              <div class="item" data-bind="click: $parent.migrateExternalId, visible: $parent.migrateVisible($data)">
+                Migrate External ID
+              </div>
             </div>
           </span>
         </td>

@@ -83,6 +83,7 @@ export default function participants() {
   self.resendVisible = (item) => item.status === "unverified";
   self.resetPwdVisible = (item) => item.status !== "disabled";
   self.signOutVisible = (item) => item.status !== "disabled" && item.status !== "unverified";
+  self.migrateVisible = () => root.isAdmin();
 
   function updateParticipantStatus(participant) {
     participant.status = "enabled";
@@ -200,6 +201,15 @@ export default function participants() {
         .then(utils.successHandler(self, event, "User deleted."))
         .then(() => ko.postbox.publish("page-refresh"))
         .catch(utils.failureHandler({ redirect: false }));
+    });
+  };
+  self.migrateExternalId = function(user, event) {
+    alerts.prompt("Enter a substudy ID:", function(substudyId) {
+      utils.startHandler(self, event);
+      serverService.migrateExternalId(user.id, substudyId)
+        .then(utils.successHandler(self, event, "User migrated."))
+        .then(() => ko.postbox.publish("page-refresh"))
+        .catch(utils.failureHandler());
     });
   };
 };

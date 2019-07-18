@@ -486,8 +486,8 @@ export class ServerService {
   createExternalId(identifier) {
     return this.post(config.externalIds, identifier);
   }
-  migrateExternalId(externalId, substudyId) {
-    return this.post(config.externalIds + "/migrate", { externalId, substudyId });
+  migrateExternalId(userId, substudyId) {
+    return this.post(`/v3/participants/${userId}/externalId/migrate?substudyId=${substudyId}`);
   }
   // @Deprecated
   addExternalIds(identifiers) {
