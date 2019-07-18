@@ -23,7 +23,6 @@ export default function externalIds() {
     .obs("total", 0)
     .obs("result", "")
     .obs("searchLoading", false)
-    .obs("externalIdValidationEnabled", false)
     .obs("idFilter")
     .obs("substudyId")
     .obs("useLegacyFormat", false)
@@ -34,15 +33,13 @@ export default function externalIds() {
   self.callback = fn.identity;
   self.userSubstudies = [];
 
-  fn.copyProps(self, root, "isDeveloper", "isResearcher");
+  fn.copyProps(self, root, "isDeveloper", "isResearcher", "isAdmin");
   tables.prepareTable(self, {
     name: "external ID",
     delete: deleteItem,
     refresh: load
   });
-  self.canDeleteObs = ko.computed(function() {
-    return !self.externalIdValidationEnabledObs() && self.isDeveloper();
-  });
+  self.canDeleteObs = ko.computed(() => self.isAdmin());
 
   function hasBeenChecked(item) {
     return item.checkedObs() && (!item.deletedObs || !item.deletedObs());
@@ -91,9 +88,8 @@ export default function externalIds() {
     return response;
   }
   function initFromStudy(study) {
-    let legacy = study.emailVerificationEnabled === false && study.externalIdValidationEnabled === true;
+    let legacy = study.emailVerificationEnabled === false;
     self.useLegacyFormatObs(legacy);
-    self.externalIdValidationEnabledObs(study.externalIdValidationEnabled);
     return study;
   }
   function initFromSession(session) {

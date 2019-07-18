@@ -36,7 +36,6 @@ let RootViewModel = function() {
     .obs("mainParams", {})
     .obs("editorPanel", "none")
     .obs("editorParams", {})
-    .obs("externalIdValidationEnabled", false)
     .obs("isEditorTabVisible", false)
     .obs("notificationsEnabled", false)
     .obs("sidePanel", "navigation")
@@ -112,7 +111,6 @@ let RootViewModel = function() {
     self.rolesObs(session.roles);
 
     serverService.getStudy().then(function(study) {
-      self.externalIdValidationEnabledObs(study.externalIdValidationEnabled);
       self.notificationsEnabledObs(Object.keys(study.pushNotificationARNs).length > 0);
     });
   });

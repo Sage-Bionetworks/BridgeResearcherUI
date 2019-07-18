@@ -122,7 +122,7 @@ export default function(params) {
   });
   serverService.getStudy()
     .then(function(study) {
-      let legacy = study.emailVerificationEnabled === false && study.externalIdValidationEnabled === true;
+      let legacy = study.emailVerificationEnabled === false;
       self.useLegacyFormatObs(legacy);
       self.allDataGroupsObs(study.dataGroups);
       self.study = study;
