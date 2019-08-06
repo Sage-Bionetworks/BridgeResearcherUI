@@ -39,7 +39,7 @@
     "sass-loader": "^7.1.0",
     "sinon": "^7.3.2",
     "source-map-explorer": "^2.0.1",
-    "style-loader": "^0.23.1",
+    "style-loader": "^1.0.0",
     "sweetalert2": "^8.13.6",
     "toastr": "^2.1.2",
     "webpack": "^4.36.1",
