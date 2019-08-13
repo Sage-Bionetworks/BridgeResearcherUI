@@ -52,13 +52,12 @@ export default function(params) {
     pendingRequest = true;
     let args = { offsetKey: self.history.pop() };
 
-    loadingFunc(args)
-      .then(function(response) {
-        self.showLoaderObs(false);
-        pendingRequest = false;
-        return response;
-      })
-      .catch(utils.failureHandler());
+    loadingFunc(args).then(function(response) {
+      self.showLoaderObs(false);
+      pendingRequest = false;
+      return response;
+    })
+    .catch(utils.failureHandler());
   }
 
   function wrappedLoadingFunc(offsetKey) {
@@ -66,20 +65,19 @@ export default function(params) {
     pendingRequest = true;
     let args = { offsetKey: offsetKey };
 
-    loadingFunc(args)
-      .then(function(response) {
-        if (response) {
-          self.history.push(self.nextOffset);
-          self.nextOffset = response.nextPageOffsetKey;
-          self.hasPreviousObs(self.history.length > 1);
-          self.hasNextObs(response.hasNext);
-          self.currentPageObs(self.history.length - 1);
-        }
-        self.showLoaderObs(false);
-        pendingRequest = false;
-        return response;
-      })
-      .catch(utils.failureHandler());
+    loadingFunc(args).then(function(response) {
+      if (response) {
+        self.history.push(self.nextOffset);
+        self.nextOffset = response.nextPageOffsetKey;
+        self.hasPreviousObs(self.history.length > 1);
+        self.hasNextObs(response.hasNext);
+        self.currentPageObs(self.history.length - 1);
+      }
+      self.showLoaderObs(false);
+      pendingRequest = false;
+      return response;
+    })
+    .catch(utils.failureHandler());
   }
   self.firstPage();
 };

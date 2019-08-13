@@ -34,11 +34,8 @@
       </div>
       <div class="field">
         <label>Sharing Scope</label>
-        <select
-          class="ui dropdown"
-          data-bind="options: sharingScopeOptions, optionsText: 'label', 
-                    optionsValue: 'value', value: sharingScopeObs"
-        ></select>
+        <select class="ui dropdown" data-bind="options: sharingScopeOptions, optionsText: 'label', 
+          optionsValue: 'value', value: sharingScopeObs"></select>
       </div>
       <div class="field">
         <label>Roles</label>
@@ -73,9 +70,13 @@
           <input type="text" placeholder="Phone number" data-bind="textInput: phoneObs" />
         </div>
       </div>
-      <div class="field externalId">
+      <div class="field externalId" data-bind="visible: rolesObs().length === 0">
         <label>External ID</label>
         <input type="text" data-bind="textInput: externalIdObs" />
+      </div>
+      <div class="field" data-bind="visible: rolesObs().length !== 0">
+        <label>Substudy Membership</label>
+        <tag-editor params="selectedObs: substudyIdsObs, allObs: allSubstudiesObs, type: 'substudies'"></tag-editor>
       </div>
     </div>
 
@@ -97,9 +98,13 @@
         </span>
         <span class="input-field-padding" data-bind="visible: !phoneObs()">—</span>
       </div>
-      <div class="field externalId">
-        <label>External ID</label>
-        <input type="text" data-bind="textInput: externalIdObs" />
+      <div class="field" data-bind="visible: isAdmin()">
+        <label>Substudy Membership</label>
+        <tag-editor params="selectedObs: substudyIdsObs, allObs: allSubstudiesObs, type: 'substudies'"></tag-editor>
+      </div>
+      <div class="field" data-bind="visible: !isAdmin()">
+        <label>Substudy Membership</label>
+        <span class="input-field-padding" data-bind="text: substudyIdsObs().join(', ')"></span>
       </div>
     </div>
 
@@ -115,13 +120,9 @@
         <label>Data Groups</label>
         <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
       </div>
-      <div class="field" data-bind="visible: isNewObs() || isAdmin()">
-        <label>Substudy Membership</label>
-        <tag-editor params="selectedObs: substudyIdsObs, allObs: allSubstudiesObs, type: 'substudies'"></tag-editor>
-      </div>
-      <div class="field" data-bind="visible: !isNewObs() && !isAdmin()">
-        <label>Substudy Membership</label>
-        <span class="input-field-padding" data-bind="text: substudyIdsObs().join(', ')"></span>
+      <div class="field externalIds">
+        <label>Assigned External ID(s)</label>
+        <span class="input-field-padding" data-bind="text: externalIdsObs"></span>
       </div>
     </div>
 

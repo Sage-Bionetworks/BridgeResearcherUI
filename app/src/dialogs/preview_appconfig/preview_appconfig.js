@@ -23,8 +23,7 @@ export default function(params) {
   }
 
   Promise.each(elementIds, id => {
-    return serverService
-      .getAppConfigElement(id, map[id])
+    return serverService.getAppConfigElement(id, map[id])
       .then(el => (appConfig.configElements[el.id] = el.data))
       .catch(errorHandler);
   })

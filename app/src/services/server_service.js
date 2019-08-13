@@ -53,7 +53,7 @@ function baseParams(method, url, data, responseType) {
     headers: headers,
     type: "application/json",
     dataType: responseType,
-    timeout: 10000
+    timeout: 20000
   });
 }
 // Some JSON needs to be displayed exactly as entered and cannot be parsed, because some details
@@ -231,7 +231,7 @@ export class ServerService {
     return this.post(config.getStudy + "init", studyAndUsers);
   }
   deleteStudy(identifier) {
-    return this.del(`${config.getStudy}${identifier}?physical=false`);
+    return this.del(`${config.getStudy}${identifier}?physical=true`);
   }
   getStudyPublicKey() {
     return this.gethttp(config.getStudyPublicKey);

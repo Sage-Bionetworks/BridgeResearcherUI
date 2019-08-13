@@ -223,4 +223,13 @@ export default class Binder {
   static emptyToNull(string, context) {
     return fn.isBlank(string) ? null : string;
   }
+  static formatExternalIds(object, context) {
+    let arr = [];
+    if (object) {
+      Object.keys(object).forEach(key => {
+        arr.push(`${object[key]} (${key})`);
+      });
+    }
+    return (arr.length) ? arr.join(', ') : '—';
+  }
 }

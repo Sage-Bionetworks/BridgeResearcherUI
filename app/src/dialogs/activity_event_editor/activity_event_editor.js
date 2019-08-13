@@ -14,9 +14,7 @@ export default function activityEventEditor(params) {
 
   var binder = new Binder(self)
     .bind("eventId", self.event.eventId)
-    .bind("timestamp", self.event.timestamp, null, function(d) {
-      return d.toISOString();
-    });
+    .bind("timestamp", self.event.timestamp, null, d => d.toISOString());
 
   self.closeDialog = root.closeDialog;
 
@@ -25,8 +23,7 @@ export default function activityEventEditor(params) {
     self.event.eventKey = self.event.eventId;
 
     utils.startHandler(vm, e);
-    serverService
-      .createParticipantActivityEvents(params.userId, self.event)
+    serverService.createParticipantActivityEvents(params.userId, self.event)
       .then(params.reload)
       .then(root.closeDialog)
       .then(utils.successHandler(vm, e))
