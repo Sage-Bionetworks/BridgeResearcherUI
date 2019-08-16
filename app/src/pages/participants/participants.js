@@ -202,22 +202,4 @@ export default function participants() {
         .catch(utils.failureHandler());
     });
   };
-  self.migrateId = function(user, event) {
-    alerts.prompt("Enter a substudy ID:", function(substudyId) {
-      utils.startHandler(self, event);
-      serverService.migrateExternalId(user.id, (substudyId === '') ? null : substudyId)
-        .then(utils.successHandler(self, event, "User migrated."))
-        .then(() => ko.postbox.publish("page-refresh"))
-        .catch(utils.failureHandler());
-    });
-  };
-  self.migrateExternalId = function(user, event) {
-    alerts.prompt("Enter a substudy ID:", function(substudyId) {
-      utils.startHandler(self, event);
-      serverService.migrateExternalId(user.id, substudyId)
-        .then(utils.successHandler(self, event, "User migrated."))
-        .then(() => ko.postbox.publish("page-refresh"))
-        .catch(utils.failureHandler());
-    });
-  };
 };
