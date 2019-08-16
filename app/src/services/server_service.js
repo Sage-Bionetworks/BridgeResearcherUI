@@ -222,7 +222,13 @@ export class ServerService {
     return postInt(config.host[env] + config.requestResetPassword, data);
   }
   getStudy() {
-    return this.gethttp(config.getCurrentStudy);
+    return this.gethttp(config.getCurrentStudy).then((study) => {
+      // Due to a change in the study object, enableReauthentication cannot be null, it must be set
+      if (typeof study.reauthenticationEnabled === "undefined") {
+        study.reauthenticationEnabled = false;
+      }
+      return study;
+    });
   }
   getStudyById(identifier) {
     return this.gethttp(config.getStudy + identifier);
@@ -735,7 +741,10 @@ export class ServerService {
     return this.post(config.templates, template);
   }
   updateTemplate(template) {
-    return this.post(`${config.templates}/${template.guid}`, template);
+    return this.post(`${config.templates}/${template.guid}`, template).then(keys => {
+      template.version = keys.version;
+      return keys;
+    });
   }
   deleteTemplate(guid, physical) {
     let queryString = fn.queryString({ physical: physical === true });
