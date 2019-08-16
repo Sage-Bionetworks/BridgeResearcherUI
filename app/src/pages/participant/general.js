@@ -50,7 +50,8 @@ export default function general(params) {
     .obs("createdOn", null, fn.formatDateTime)
     .obs("allRoles[]", [])
     .obs("allSubstudies[]")
-    .obs("title", params.userId === "new" ? "New participant" : "&#160;")    
+    .obs("title", params.userId === "new" ? "New participant" : "&#160;")
+    .obs("externalIds", '', Binder.formatExternalIds)
     .bind("email", null, null, value => (fn.isBlank(value) ? null : value))
     .bind("phone", null, Binder.formatPhone, Binder.persistPhone)
     .bind("phoneRegion", "US")
@@ -132,6 +133,7 @@ export default function general(params) {
 
   self.save = function(vm, event) {
     let participant = binder.persist(self.participant);
+    let confirmMsg = (self.isNewObs()) ? "Participant created." : "Participant updated.";
 
     let updatedTitle = self.study.emailVerificationEnabled ? 
       fn.formatNameAsFullLabel(participant) : 
@@ -145,7 +147,7 @@ export default function general(params) {
     return saveParticipant(participant)
       .then(updateName)
       .then(binder.update())
-      .then(utils.successHandler(vm, event, "Participant created."))
+      .then(utils.successHandler(vm, event, confirmMsg))
       .catch(failureHandler);
   };
   function noteInitialStatus(participant) {

@@ -29,12 +29,8 @@ const FIELDS = Object.freeze([
 const FIELD_FORMATTERS = {
   consentHistories: function(map) {
     return Object.keys(map)
-      .filter(function(guid) {
-        return map[guid] && map[guid].length > 0;
-      })
-      .map(function(guid) {
-        return guid + " [" + map[guid].map(formatConsentRecords).join("; ") + "]";
-      })
+      .filter(guid => map[guid] && map[guid].length > 0)
+      .map(guid => guid + " [" + map[guid].map(formatConsentRecords).join("; ") + "]")
       .join("; ");
   },
   notifyByEmail: function(value) {

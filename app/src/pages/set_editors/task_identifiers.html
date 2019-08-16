@@ -29,33 +29,18 @@
       </div>
       <div class="field" id="value">
         <div class="ui action input">
-          <input
-            type="text"
-            data-bind="textInput: $component.addFieldObs, 
-                        event: {keypress: $component.keyHandler}, hasFocus: true"
-          />
+          <input data-bind="textInput: $component.addFieldObs, 
+            event: {keypress: $component.keyHandler}, hasFocus: true" type="text"/>
           <button class="ui button" data-bind="click: $component.add">Add</button>
         </div>
       </div>
     </div>
     <div class="six wide column">
       <div class="ui message">
-        <p>You can schedule activities for participants that include either <em>surveys</em> or <em>tasks</em>.</p>
-
-        <p>
-          Surveys can be created here through the research manager, then scheduled to run in your application through
-          the Bridge SDK.
-        </p>
-
-        <p>
-          Tasks are known only to your application. However you can schedule them by assigning them unique
-          <em>identifiers</em>. A complete list of these should be defined here.
-        </p>
-
-        <p>
-          Once this is done, these identifiers will be available to you when you schedule tasks in the scheduler. Your
-          application should know what task to run when a schedule references one of these identifiers.
-        </p>
+        <p>Tasks are known only to your application. However you can schedule them by assigning them unique
+            <em>identifiers</em>. A complete list of these should be defined here.</p>
+  
+        <p>Once this is done, these identifiers will be available to you when you schedule tasks in the scheduler. Your application should know what task to run when a schedule references one of these identifiers.</p>
       </div>
     </div>
   </div>

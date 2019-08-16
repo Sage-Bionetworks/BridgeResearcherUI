@@ -18,16 +18,17 @@ const WarnToast = Swal.mixin({
   confirmButtonText: "OK", 
   confirmButtonColor: "#2185d0" 
 });
+const promptReply = (value) => {
+  if (value === "") {
+    swal.showValidationError("Please enter a value");
+    return false;
+  }
+  return value;
+};
 const PromptToast = Swal.mixin({
   input: "text",
   showCancelButton: true,
-  preConfirm: value => {
-    if (value === "") {
-      swal.showValidationError("Please enter a value");
-      return false;
-    }
-    return value;
-  }  
+  preConfirm: promptReply
 });
 const NotificationToast = Swal.mixin({
   type: "success"
@@ -62,10 +63,4 @@ function notification(title, text) {
   NotificationToast.fire({title, text});
 }
 
-export default {
-  confirmation,
-  deleteConfirmation,
-  notification,
-  prompt,
-  warn
-};
+export default { confirmation, deleteConfirmation, notification, prompt, warn };

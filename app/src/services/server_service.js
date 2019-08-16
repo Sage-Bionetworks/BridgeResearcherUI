@@ -53,7 +53,7 @@ function baseParams(method, url, data, responseType) {
     headers: headers,
     type: "application/json",
     dataType: responseType,
-    timeout: 10000
+    timeout: 20000
   });
 }
 // Some JSON needs to be displayed exactly as entered and cannot be parsed, because some details
@@ -222,7 +222,13 @@ export class ServerService {
     return postInt(config.host[env] + config.requestResetPassword, data);
   }
   getStudy() {
-    return this.gethttp(config.getCurrentStudy);
+    return this.gethttp(config.getCurrentStudy).then((study) => {
+      // Due to a change in the study object, enableReauthentication cannot be null, it must be set
+      if (typeof study.reauthenticationEnabled === "undefined") {
+        study.reauthenticationEnabled = false;
+      }
+      return study;
+    });
   }
   getStudyById(identifier) {
     return this.gethttp(config.getStudy + identifier);
@@ -231,7 +237,7 @@ export class ServerService {
     return this.post(config.getStudy + "init", studyAndUsers);
   }
   deleteStudy(identifier) {
-    return this.del(`${config.getStudy}${identifier}?physical=false`);
+    return this.del(`${config.getStudy}${identifier}?physical=true`);
   }
   getStudyPublicKey() {
     return this.gethttp(config.getStudyPublicKey);
@@ -735,7 +741,10 @@ export class ServerService {
     return this.post(config.templates, template);
   }
   updateTemplate(template) {
-    return this.post(`${config.templates}/${template.guid}`, template);
+    return this.post(`${config.templates}/${template.guid}`, template).then(keys => {
+      template.version = keys.version;
+      return keys;
+    });
   }
   deleteTemplate(guid, physical) {
     let queryString = fn.queryString({ physical: physical === true });

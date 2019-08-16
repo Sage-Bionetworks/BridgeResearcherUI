@@ -20,15 +20,9 @@ export default function schedulePlans() {
     name: "schedule",
     type: "SchedulePlan",
     refresh: load,
-    delete: function(plan) {
-      return serverService.deleteSchedulePlan(plan.guid, false);
-    },
-    deletePermanently: function(plan) {
-      return serverService.deleteSchedulePlan(plan.guid, true);
-    },
-    undelete: function(plan) {
-      return serverService.saveSchedulePlan(plan);
-    }
+    delete: plan => serverService.deleteSchedulePlan(plan.guid, false),
+    deletePermanently: plan => serverService.deleteSchedulePlan(plan.guid, true),
+    undelete: plan => serverService.saveSchedulePlan(plan)
   });
 
   function processActivity(activity) {
