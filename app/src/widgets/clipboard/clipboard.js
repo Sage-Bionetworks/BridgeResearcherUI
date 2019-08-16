@@ -305,7 +305,7 @@ MODEL_METADATA.TaskReference = {
   pasteMethod: function(task) {
     return serverService.getStudy().then(function(study) {
       study.taskIdentifiers.push(task.identifier);
-      return serverService.saveStudy(study, false);
+      return serverService.saveStudy(study);
     });
   }
 };
@@ -330,7 +330,7 @@ MODEL_METADATA.DataGroup = {
   pasteMethod: function(dataGroup) {
     return serverService.getStudy().then(function(study) {
       study.dataGroups.push(dataGroup.value);
-      return serverService.saveStudy(study, false);
+      return serverService.saveStudy(study);
     });
   }
 };

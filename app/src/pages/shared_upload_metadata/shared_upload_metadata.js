@@ -14,8 +14,6 @@ const failureHandler = utils.failureHandler({
 export default function sharedUploadMetadata(params) {
   let self = this;
 
-  self.isAdmin = root.isAdmin;
-
   new Binder(this)
     .obs("index", 0)
     .bind("fieldDefinitions[]", [])
@@ -28,7 +26,7 @@ export default function sharedUploadMetadata(params) {
     utils.startHandler(vm, event);
 
     self.study.uploadMetadataFieldDefinitions = schemaUtils.fieldObsToDef(self.fieldDefinitionsObs());
-    serverService.saveStudy(self.study, self.isAdmin())
+    serverService.saveStudy(self.study)
       .then(fn.handleObsUpdate(self.versionObs, "version"))
       .then(utils.successHandler(vm, event, "Upload metadata fields have been saved."))
       .catch(utils.failureHandler());

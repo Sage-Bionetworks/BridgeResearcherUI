@@ -37,7 +37,7 @@ export default function info() {
 
     utils.startHandler(self, event);
     serverService
-      .saveStudy(self.study, true)
+      .saveStudy(self.study)
       .then(utils.successHandler(vm, event, "Study information saved."))
       .catch(utils.failureHandler());
   };
