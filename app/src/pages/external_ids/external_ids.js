@@ -43,17 +43,6 @@ export default function externalIds() {
   function hasBeenChecked(item) {
     return item.checkedObs() && (!item.deletedObs || !item.deletedObs());
   }
-  function migrateFunc(extId) {
-    return serverService.migrateExternalId(extId.identifier, self.substudyIdObs());
-  }
-  self.migrateItems = function(vm, event) {
-    utils.startHandler(vm, event);
-    let migratables = self.itemsObs().filter(hasBeenChecked);
-    Promise.each(migratables, migrateFunc)
-      .then(utils.successHandler(self, event, "External IDs migrated."))
-      .then(self.loadingFunc)
-      .catch(utils.failureHandler());
-  };
 
   function extractId(response) {
     if (response.items.length === 0) {
