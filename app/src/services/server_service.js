@@ -242,8 +242,9 @@ export class ServerService {
   getStudyPublicKey() {
     return this.gethttp(config.getStudyPublicKey);
   }
-  saveStudy(study, isAdmin) {
-    let url = isAdmin ? config.getStudy + study.identifier : config.getCurrentStudy;
+  saveStudy(study) {
+    let asAdmin = (session && session.roles.indexOf("admin") > -1) ? true : false;
+    let url = asAdmin ? config.getStudy + study.identifier : config.getCurrentStudy;
     return this.post(url, study).then(function(response) {
       study.version = response.version;
       return response;

@@ -50,8 +50,7 @@ export default function() {
     self.study.automaticCustomEvents = self.itemsObs().reduce(obsToMap, {});
 
     utils.startHandler(vm, event);
-    serverService
-      .saveStudy(self.study, false)
+    serverService.saveStudy(self.study)
       .then(utils.successHandler(vm, event, "Automatic custom events saved."))
       .catch(utils.failureHandler());
   };
