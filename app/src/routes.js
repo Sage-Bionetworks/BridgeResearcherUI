@@ -146,7 +146,7 @@ router.on("/templates/:templateType/:guid/general", routeTo("template_general", 
 router.on("/templates/:templateType/:guid/editor", routeTo("template_editor", "templates", TYPE_GUID));
 router.on("/templates/:templateType/:guid/editor/:createdOn", routeTo("template_editor", "templates", TYPE_GUID_CREATEDON));
 router.on("/templates/:templateType/:guid/editor/:createdOn/history", routeTo("template_history", "templates", TYPE_GUID_CREATEDON));
-router.on("/templates/:templateType/:guid", redirectTo("/templates/{0}/{1}/general"));
+router.on("/templates/:templateType/:guid", redirectTo("/templates/{0}/{1}/editor"));
 router.on("/templates/:templateType", routeTo("templates", "templates", TYPE));
 router.on("/templates", routeTo("templatesList", "templates"));
 
