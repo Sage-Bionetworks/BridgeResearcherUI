@@ -764,12 +764,6 @@ export class ServerService {
   publishTemplateRevision(guid, createdOn) {
     return this.post(`${config.templates}/${guid}/revisions/${createdOn}/publish`);
   }
-  migrateExternalId(userId, substudyId) {
-    let url = (substudyId) ?
-      `${config.participants}/${userId}/externalId/migrate?substudyId=${substudyId}` :
-      `${config.participants}/${userId}/externalId/migrate`;
-    return this.post(url);
-  }
   addSessionStartListener(listener) {
     if (typeof listener !== "function") {
       throw new Error(ERROR);
