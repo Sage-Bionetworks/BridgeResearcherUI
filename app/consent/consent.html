@@ -4,13 +4,11 @@
     <title>Consent To Research</title>
     <script src="vue.min.js"></script>
     <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
-    <!--
     <link href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2/semantic.min.css" rel="stylesheet" />
-    -->
     <style>
-      * {
-        font-size: 14px;
-        font-family: sans-serif;
+      table:not(.signature-block) td {
+        padding: 3px 8px;
+        vertical-align: top;
       }
       #document {
         position: relative;
@@ -44,30 +42,21 @@
         right: 12px;
         transform: skew(5deg) rotate(5deg);
       }
+      .signature-block {
+        width: 100%;
+        visibility: hidden;
+        page-break-inside: avoid;
+      }
+      .signature-block td {
+        padding: 2 0;
+      }
+      .line {
+        border-top: 2px solid #333;
+      }
       img {
         width: calc(334px * 0.6);
         height: calc(156px * 0.6);
-      }
-      .bridge-sig-block{
-        width: 100%;
-        border-spacing: 1rem 0;
-      }
-      .bridge-sig-block td {
-        width: 33%;
-        vertical-align: bottom;
-      }
-      .bridge-sig-block .label {
-        display: block;
-        border-top: 2px solid;
-        padding-bottom: 1rem;
-      }
-      .withdrew {
-        color: #B22222;
-        margin: 1rem;
-      }
-      .ui.warning.message {
-        max-width: 8.5in;
-        margin: 1in auto;
+        visibility: hidden;
       }
       @media print {
         @page {
@@ -82,6 +71,10 @@
           box-shadow: none;
         }
       }
+      .ui.warning.message {
+        max-width: 8.5in;
+        margin: 1in auto;
+      }
     </style>
   </head>
   <body>
@@ -91,9 +84,54 @@
           <div class="ui text loader">Loading</div>
         </div>
       </div>
+      <table class="signature-block" cellspacing="0" :style="sigStyle">
+        <tr>
+          <td valign="bottom">{{name}}</td>
+          <td></td>
+          <td><img :style="imgStyle" :src="signature" /></td>
+          <td></td>
+          <td valign="bottom">{{signedOn}}</td>
+        </tr>
+        <tr>
+          <td class="line">Name of Participant</td>
+          <td></td>
+          <td class="line">Signature</td>
+          <td></td>
+          <td class="line">Date</td>
+        </tr>
+        <tr>
+          <td colspan="5"><br /></td>
+        </tr>
+        <tr>
+          <td>{{email}}</td>
+          <td></td>
+          <td>{{sharing_status}}</td>
+          <td></td>
+          <td>{{birthdate}}</td>
+        </tr>
+        <tr>
+          <td width="31%" class="line">Email</td>
+          <td width="3%">&#160;&#160;&#160;</td>
+          <td width="32%" class="line">Sharing Option</td>
+          <td width="3%">&#160;&#160;&#160;</td>
+          <td width="31%" class="line">Birth Date</td>
+        </tr>
+        <tr>
+          <td colspan="5"><br /></td>
+        </tr>
+        <tr>
+          <td width="15%">{{withdrewOn}}</td>
+        </tr>
+        <tr>
+          <td width="15%" class="line" v-show="hasWithdrawn">Withdrew On</td>
+        </tr>
+      </table>
     </div>
     <script>
-      var LOCAL_TIMEZONE = new Date().toString().split("(")[1].split(")")[0];
+      var LOCAL_TIMEZONE = new Date()
+        .toString()
+        .split("(")[1]
+        .split(")")[0];
 
       function showError() {
         document.body.innerHTML =
@@ -105,12 +143,15 @@
       }
       var queryParams = {};
       if (document.location.search) {
-        document.location.search.substring(1).split("&").forEach(function(pair) {
-          var fragments = pair.split("=");
-          var key = decodeURIComponent(fragments[0]);
-          var value = decodeURIComponent(fragments[1]);
-          queryParams[key] = value;
-        });
+        document.location.search
+          .substring(1)
+          .split("&")
+          .forEach(function(pair) {
+            var fragments = pair.split("=");
+            var key = decodeURIComponent(fragments[0]);
+            var value = decodeURIComponent(fragments[1]);
+            queryParams[key] = value;
+          });
       }
       var sharing = {
         no_sharing: "Not Sharing",
@@ -131,31 +172,42 @@
         };
       }
 
-      $.ajax(config("/v3/participants/" + queryParams.userId)).done(function(response) {
+      $.ajax(config("/v3/participants/" + queryParams.userId))
+        .done(function(response) {
           var user = response;
           // The index references the consents in reverse order, so we must reverse them here as well.
           var history = user.consentHistories[queryParams.guid].reverse()[queryParams.index];
           var signedOn = history.signedOn ? new Date(history.signedOn).toLocaleString() + " " + LOCAL_TIMEZONE : "";
-          var withdrewOn = history.withdrewOn ? 
-            new Date(history.withdrewOn).toLocaleString() + " " + LOCAL_TIMEZONE : "";
+          var withdrewOn = history.withdrewOn
+            ? new Date(history.withdrewOn).toLocaleString() + " " + LOCAL_TIMEZONE
+            : "";
           var signature = history.imageData ? "data:" + history.imageMimeType + ";base64," + history.imageData : "";
 
+          // Unfortunately, if the birthdate is 0, it is stored as 1969-12-31. So... we *could*
+          // hide that and if you were born on December 31, 1969, you're just out of luck... ?
+
+          var data = {
+            name: history.name,
+            signature: signature,
+            signedOn: signedOn,
+            birthdate: history.birthdate,
+            hasWithdrawn: typeof history.withdrewOn === "string",
+            withdrewOn: withdrewOn,
+            date: history.birthdate,
+            email: user.email,
+            sharing_status: sharing[user.sharingScope],
+            imgStyle: { visibility: history.imageData ? "visible" : "hidden" },
+            sigStyle: { visibility: "visible" }
+          };
           var url = "/v3/subpopulations/" + queryParams.guid + "/consents/" + history.consentCreatedOn;
-          return $.ajax(config(url)).done(function(response) {
-              var doc = response.documentContent;
-              console.log("doc", doc);
-              doc = doc.replace("${participant.name}", history.name);
-              doc = doc.replace("${participant.signing.date}", signedOn);
-              doc = doc.replace("${participant.contactInfo}", user.email);
-              doc = doc.replace("${participant.contactLabel}", "Email");
-              doc = doc.replace("${participant.sharing}", sharing[user.sharingScope]);
-              doc = doc.replace("cid:consentSignature", signature);
-              if (withdrewOn) {
-                doc += "<p class='withdrew'>Withdrew on: " + withdrewOn + "</p>";
-              }
-              new Vue({ el: document.getElementById("document"), data: {document: doc} });
-            }).fail(showError);
-        }).fail(showError);
+          return $.ajax(config(url))
+            .done(function(response) {
+              data.document = response.documentContent;
+              new Vue({ el: document.getElementById("document"), data: data });
+            })
+            .fail(showError);
+        })
+        .fail(showError);
     </script>
   </body>
 </html>
