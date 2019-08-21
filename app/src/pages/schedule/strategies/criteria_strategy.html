@@ -3,36 +3,29 @@
   Schedules are evaluated in order and the first one that matches is assigned to the user.
 </p>
 
-<form
-  class="ui form schedulegroup"
-  data-bind="template: {
-        foreach: scheduleCriteriaObs,
-        beforeRemove: fadeUp
-    }"
->
+<form class="ui form schedulegroup" data-bind="template: {
+  foreach: scheduleCriteriaObs, beforeRemove: fadeUp}">
   <fieldset class="schedulegroup-fieldset">
     <legend class="schedulegroup-fieldset-legend">
       <h4>Assignment based on</h4>
     </legend>
     <div style="display: flex; align-items: center">
-      <div style="flex: 1">
-        <!-- ko component: { name: "criteria", params: { criteriaObs: $data.criteriaObs } } -->
-        <!-- /ko -->
+      <div style="flex: 1" class="field">
+        <div style="margin: .5rem 0" data-bind="html: $parent.criteriaLabel(criteriaObs())"></div>
+        <div class="inline-editor-controls">
+          <span class="link" data-bind="click: $parent.openCriteriaDialog">
+            <i class="write icon"></i>Edit&hellip;
+          </span>
+        </div>
       </div>
       <button class="ui basic mini red button" data-bind="click: $parent.removeCriteria">
         <i class="delete square icon"></i>Remove Schedule
       </button>
     </div>
-
-    <h4 class="schedulegroup-fieldset-h4">Schedule</h4>
-    <div
-      data-bind="component: {name: 'schedule', params: {
-                scheduleHolder: $data,
-                scheduleObs: $data.scheduleObs, 
-                collectionName: 'scheduleCriteria'+$index()+'_'
-            }
-        }"
-    ></div>
+    <h4 style="margin-top: 0" class="schedulegroup-fieldset-h4">Schedule</h4>
+    <div data-bind="component: {name: 'schedule', params: {
+        scheduleHolder: $data, scheduleObs: $data.scheduleObs, 
+        collectionName: 'scheduleCriteria'+$index()+'_'}}"></div>
   </fieldset>
 </form>
 <div class="ui form">

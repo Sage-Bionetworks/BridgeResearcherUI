@@ -25,6 +25,7 @@ function formatVersionRange(minAppVersion, maxAppVersion) {
   return null;
 }
 function label(criteria) {
+  if (!criteria) { return ''; } // wait until loaded.
   // These properties don't necessarily exist, which throws reference errors. So init them.
   criteria.minAppVersions = criteria.minAppVersions || {};
   criteria.maxAppVersions = criteria.maxAppVersions || {};
