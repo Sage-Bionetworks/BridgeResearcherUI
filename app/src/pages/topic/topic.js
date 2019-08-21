@@ -24,6 +24,11 @@ export default function(params) {
   let self = this;
   self.topic = {};
 
+  fn.copyProps(self, criteriaUtils, "label->criteriaLabel");
+  self.openCriteriaDialog = function() {
+    root.openDialog("criteria_editor", { criteriaObs: self.criteriaObs });
+  };
+
   let binder = new Binder(self)
     .obs("isNew", params.guid === "new")
     .obs("title")

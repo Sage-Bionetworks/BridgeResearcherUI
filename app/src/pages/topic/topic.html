@@ -40,8 +40,13 @@
     </div>
     <div class="fields">
       <div class="seven wide field">
-        <h4>Assignment based on</h4>
-        <criteria params="id: '', criteriaObs: criteriaObs"></criteria>
+        <label>Assignment based on</label>
+        <div class="input-field-padding" data-bind="html: criteriaLabel(criteriaObs())"></div>
+        <div class="inline-editor-controls">
+          <a data-bind="click: openCriteriaDialog">
+            <i class="write icon"></i>Edit…
+          </a>
+        </div>
       </div>
       <div class="five wide field">
         <label>Created On</label>
