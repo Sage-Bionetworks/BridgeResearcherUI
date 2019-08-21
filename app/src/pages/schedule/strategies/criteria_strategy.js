@@ -39,6 +39,11 @@ export default function(params) {
   self.scheduleCriteriaObs = ko.observableArray([]);
   self.selectedElementObs = ko.observable(0);
 
+  fn.copyProps(self, criteriaUtils, "label->criteriaLabel");
+  self.openCriteriaDialog = function(group, event) {
+    root.openDialog("criteria_editor", { criteriaObs: group.criteriaObs });
+  };
+
   params.strategyObs.callback = function() {
     let strategy = params.strategyObs();
     strategy.scheduleCriteria = self.scheduleCriteriaObs().map(observablesToGroup);

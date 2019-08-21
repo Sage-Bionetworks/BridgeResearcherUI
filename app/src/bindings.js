@@ -166,6 +166,7 @@ ko.bindingHandlers.ckeditor = {
     if (!CKEDITOR) {
       throw new Error("CK editor has not been loaded in the page");
     }
+    CKEDITOR.addCss(".bridge-sig-block{width:100%;margin-top:30px;border-spacing:1rem 0;}.bridge-sig-block td{width:33%;vertical-align:bottom;}.bridge-sig-block .label{display:block;border-top:2px solid;margin-bottom:1rem}");
     CKEDITOR.on("dialogDefinition", function(event) {
       if (["image", "table", "link"].indexOf(event.data.name) > -1) {
         let dialogDefinition = event.data.definition;

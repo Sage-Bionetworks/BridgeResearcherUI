@@ -379,7 +379,7 @@ reg("ui-duration", {viewModel: uiDur, template: uiDurHtml});
 reg("events-tabset", {template: eventsTabsetHtml});
 reg("survey-tabset", {viewModel: surveyTabset, template: surveyTabsetHtml});
 reg("subpop-tabset", {viewModel: subpopTabset, template: subpopTabsetHtml});
-reg("criteria_editor", {viewModel: critEditor, template: critEditorHtml, synchronous: true});
+
 reg("app_version_criteria", {viewModel: appVersionCrit, template: appVersionCritHtml});
 reg("template_criteria", {viewModel: templateCrit, template: templateCritHtml});
 reg("participants-pager", {viewModel: partPager, template: partPagerHtml});
@@ -443,6 +443,7 @@ reg("configs", {viewModel: configs, template: configsHtml});
 reg("config_editor", {viewModel: configEditor, template: configEditorHtml});
 reg("config_history", {viewModel: configHistory, template: configHistoryHtml});
 reg("config-tabset", {viewModel: configTabset, template: configTabsetHtml});
+reg("criteria_editor", {viewModel: critEditor, template: critEditorHtml, synchronous: true});
 
 // Attribute editors
 reg("user_attributes", {template: userAtts, viewModel: setEditor("userProfileAttributes")});

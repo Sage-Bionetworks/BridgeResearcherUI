@@ -1,6 +1,7 @@
 import Binder from "../../binder";
 import criteriaUtils from "../../criteria_utils";
 import fn from "../../functions";
+import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
@@ -32,6 +33,11 @@ export default function general(params) {
     .bind("criteria");
 
   let titleUpdated = fn.handleObsUpdate(self.titleObs, "name");
+
+  fn.copyProps(self, criteriaUtils, "label->criteriaLabel");
+  self.openCriteriaDialog = function() {
+    root.openDialog("criteria_editor", { criteriaObs: self.criteriaObs });
+  };
 
   function saveSubpop() {
     return self.subpopulation.guid ? 

@@ -49,7 +49,12 @@
       <div class="seven wide column">
         <div class="field">
           <label>Assignment based on</label>
-          <criteria params="id: '', criteriaObs: criteriaObs"></criteria>
+          <div data-bind="html: criteriaLabel(criteriaObs())"></div>
+          <div class="inline-editor-controls">
+            <a data-bind="click: openCriteriaDialog">
+              <i class="write icon"></i>Edit…
+            </a>
+          </div>
         </div>
       </div>
       <div class="nine wide column">
