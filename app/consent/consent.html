@@ -6,10 +6,6 @@
     <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
     <link href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2/semantic.min.css" rel="stylesheet" />
     <style>
-      table:not(.signature-block) td {
-        padding: 3px 8px;
-        vertical-align: top;
-      }
       #document {
         position: relative;
         margin: 0.25in auto;
@@ -42,17 +38,10 @@
         right: 12px;
         transform: skew(5deg) rotate(5deg);
       }
-      .signature-block {
-        width: 100%;
-        visibility: hidden;
-        page-break-inside: avoid;
-      }
-      .signature-block td {
-        padding: 2 0;
-      }
-      .line {
-        border-top: 2px solid #333;
-      }
+      .bridge-sig-block { width: 100%; margin-top: 30px }
+      .bridge-sig-block td { width: 33%; vertical-align: bottom; padding: .5rem }
+      .bridge-sig-block .label { display: block; border-top: 2px solid; min-height: 3rem; }
+
       img {
         width: calc(334px * 0.6);
         height: calc(156px * 0.6);
@@ -84,48 +73,19 @@
           <div class="ui text loader">Loading</div>
         </div>
       </div>
-      <table class="signature-block" cellspacing="0" :style="sigStyle">
+
+      <table class="bridge-sig-block" :style="sigStyle">
         <tr>
-          <td valign="bottom">{{name}}</td>
-          <td></td>
-          <td><img :style="imgStyle" :src="signature" /></td>
-          <td></td>
-          <td valign="bottom">{{signedOn}}</td>
+          <td>{{name}}<div class="label">Name of Adult Participant</div></td>
+          <td><img :style="imgStyle" :src="signature" /><div class="label">Signature of Adult Participant</div></td>
+          <td>{{signedOn}}<div class="label">Date</div></td>
         </tr>
         <tr>
-          <td class="line">Name of Participant</td>
-          <td></td>
-          <td class="line">Signature</td>
-          <td></td>
-          <td class="line">Date</td>
-        </tr>
-        <tr>
-          <td colspan="5"><br /></td>
-        </tr>
-        <tr>
-          <td>{{email}}</td>
-          <td></td>
-          <td>{{sharing_status}}</td>
-          <td></td>
-          <td>{{birthdate}}</td>
-        </tr>
-        <tr>
-          <td width="31%" class="line">Email</td>
-          <td width="3%">&#160;&#160;&#160;</td>
-          <td width="32%" class="line">Sharing Option</td>
-          <td width="3%">&#160;&#160;&#160;</td>
-          <td width="31%" class="line">Birth Date</td>
-        </tr>
-        <tr>
-          <td colspan="5"><br /></td>
-        </tr>
-        <tr>
-          <td width="15%">{{withdrewOn}}</td>
-        </tr>
-        <tr>
-          <td width="15%" class="line" v-show="hasWithdrawn">Withdrew On</td>
+          <td>{{email}}<div class="label">Email</div></td>
+          <td>{{sharing_status}}<div class="label">Sharing Option</div></td>
         </tr>
       </table>
+
     </div>
     <script>
       var LOCAL_TIMEZONE = new Date()
