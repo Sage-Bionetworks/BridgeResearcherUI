@@ -10,13 +10,15 @@
       <input placeholder="my_vendor" data-bind="textInput: vendorIdObs, hasFocus: true" />
       <p class="help-text">Lower-case, no spaces. Used to select a provider through the Bridge API</p>
     </div>
-    <div class="field" id="clientId">
-      <label>Client ID</label>
-      <input placeholder="Identifier issued by the vendor for your app" data-bind="textInput: clientIdObs" />
-    </div>
-    <div class="field" id="secret">
-      <label>Secret Token</label>
-      <input placeholder="Secret issued by the vendor for your app" data-bind="textInput: secretObs" />
+    <div class="two fields">
+      <div class="field" id="clientId">
+        <label>Client ID</label>
+        <input placeholder="Identifier issued by the vendor for your app" data-bind="textInput: clientIdObs" />
+      </div>
+      <div class="field" id="secret">
+        <label>Secret Token</label>
+        <input placeholder="Secret issued by the vendor for your app" data-bind="textInput: secretObs" />
+      </div>
     </div>
     <div class="field" id="endpoint">
       <label>URL</label>
@@ -25,6 +27,10 @@
     <div class="field" id="callbackUrl">
       <label>Callback URL</label>
       <input placeholder="https://mycompany.company/receive-token" data-bind="textInput: callbackUrlObs" />
+    </div>
+    <div class="field" id="introspectEndpoint">
+      <label>Introspect Endpoint</label>
+      <input placeholder="https://api.company.com/introspection" data-bind="textInput: introspectEndpointObs" />
     </div>
   </div>
   <div class="actions">
