@@ -25,30 +25,40 @@
         <div class="ui card" style="width:100%; margin-bottom: 1rem">
           <div class="content">
             <span style="margin-bottom:.25rem" class="header" data-bind="text:$data.vendorId"></span>
+            <span class="right floated">
+              <div class="event">
+                <span class="header"><b>Secret</b></span>
+                <div class="content">
+                  <div class="summary" data-bind="text: $data.secret"></div>
+                </div>
+              </div>
+            </span>
             <div class="event">
               <span class="header"><b>Client ID</b></span>
               <div class="content">
                 <div class="summary" data-bind="text: $data.clientId"></div>
               </div>
             </div>
-            <div class="event">
-              <span class="header"><b>URL</b></span>
-              <div class="content">
-                <div class="summary" data-bind="text: $data.endpoint"></div>
+          </div>
+          <div class="content">
+              <div class="event">
+                <span class="header"><b>URL</b></span>
+                <div class="content">
+                  <div class="summary" data-bind="text: $data.endpoint"></div>
+                </div>
               </div>
-            </div>
-            <div class="event">
-              <span class="header"><b>Secret</b></span>
-              <div class="content">
-                <div class="summary" data-bind="text: $data.secret"></div>
+              <div class="event">
+                <span class="header"><b>Callback URL</b></span>
+                <div class="content">
+                  <div class="summary" data-bind="text: $data.callbackUrl"></div>
+                </div>
               </div>
-            </div>
-            <div class="event">
-              <span class="header"><b>Callback URL</b></span>
-              <div class="content">
-                <div class="summary" data-bind="text: $data.callbackUrl"></div>
+              <div class="event">
+                <span class="header"><b>Introspect Endpoint</b></span>
+                <div class="content">
+                  <div class="summary" data-bind="text: $data.introspectEndpoint"></div>
+                </div>
               </div>
-            </div>
           </div>
           <div class="extra content">
             <button class="ui basic red compact mini button" data-bind="click: $component.removeProvider">

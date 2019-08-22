@@ -4,8 +4,6 @@ import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
-// This is a trivial change because Travis doesn't seem to think the branch is there for deployment.
-
 function modelToObs(map, context) {
   return Object.keys(map || {}).map(function(vendorId) {
     let obj = map[vendorId];
@@ -19,7 +17,8 @@ function obsToModel(array) {
       clientId: obj.clientId,
       secret: obj.secret,
       endpoint: obj.endpoint,
-      callbackUrl: obj.callbackUrl
+      callbackUrl: obj.callbackUrl,
+      introspectEndpoint: obj.introspectEndpoint
     };
     return map;
   }, {});
