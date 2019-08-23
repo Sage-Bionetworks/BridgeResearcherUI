@@ -20,7 +20,7 @@ function zeroToMax(value) {
   return value === 0 ? 121 : value;
 }
 function maxToZero(value) {
-  return value === "121" ? 0 : parseInt(value);
+  return (value === "121" || value === 121) ? 0 : parseInt(value);
 }
 
 export default function general() {
