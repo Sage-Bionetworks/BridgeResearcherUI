@@ -121,6 +121,20 @@ $.ajax(config("/v3/participants/" + queryParams.userId)).done(function(response)
     ? new Date(history.withdrewOn).toLocaleString() + " " + LOCAL_TIMEZONE
     : "";
   var signature = history.imageData ? "data:" + history.imageMimeType + ";base64," + history.imageData : "";
+
+  var contactInfo = '';
+  var contactLabel = 'Email, Phone, or ID';
+  if (user.email) {
+    contactInfo = user.email;
+    contactLabel = 'Email';
+  } else if (user.phone) {
+    contactInfo = user.phone.nationalFormat;
+    contactLabel = 'Phone';
+  } else if (user.externalId) {
+    contactInfo = user.externalId;
+    contactLabel = 'External ID';
+  }
+
   // Unfortunately, if the birthdate is 0, it is stored as 1969-12-31. So... we *could*
   // hide that and if you were born on December 31, 1969, you're just out of luck... ?
   var url = "/v3/subpopulations/" + queryParams.guid + "/consents/" + history.consentCreatedOn;
@@ -128,8 +142,8 @@ $.ajax(config("/v3/participants/" + queryParams.userId)).done(function(response)
     let doc = response.documentContent;
     doc = doc.replace('${participant.name}', history.name);
     doc = doc.replace('${participant.signing.date}', signedOn);
-    doc = doc.replace('${participant.contactInfo}', user.email);
-    doc = doc.replace('${participant.contactLabel}', 'Email');
+    doc = doc.replace('${participant.contactInfo}', contactInfo);
+    doc = doc.replace('${participant.contactLabel}', contactLabel);
     doc = doc.replace('${participant.sharing}', sharing[user.sharingScope]);
     doc = doc.replace('cid:consentSignature', signature);
     if (hasWithdrawn) {
