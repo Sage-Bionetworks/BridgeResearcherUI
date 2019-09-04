@@ -37,6 +37,12 @@ function selectRoles(session) {
   roles.sort();
   return roles;
 }
+function persistExternalId(value, context) {
+  if (value) {
+    context.copy.externalId = value;
+  }
+  return value;
+}
 
 export default function general(params) {
   let self = this;
@@ -52,6 +58,7 @@ export default function general(params) {
     .obs("allSubstudies[]")
     .obs("title", params.userId === "new" ? "New participant" : "&#160;")
     .obs("externalIds", '', Binder.formatExternalIds)
+    .bind("newExternalId", null, null, persistExternalId)
     .bind("email", null, null, value => (fn.isBlank(value) ? null : value))
     .bind("phone", null, Binder.formatPhone, Binder.persistPhone)
     .bind("phoneRegion", "US")
@@ -64,7 +71,6 @@ export default function general(params) {
     .bind("notifyByEmail")
     .bind("dataGroups[]")
     .bind("password")
-    .bind("externalId", null, null, Binder.emptyToNull)
     .bind("languages", null, fn.formatLanguages, fn.persistLanguages)
     .bind("status")
     .bind("userId", params.userId)
@@ -124,7 +130,6 @@ export default function general(params) {
       return serverService.updateParticipant(participant);
     }
   }
-
   self.sharingScopeOptions = OPTIONS;
 
   self.formatPhone = function(phone, phoneRegion) {
@@ -138,7 +143,7 @@ export default function general(params) {
     let updatedTitle = self.study.emailVerificationEnabled ? 
       fn.formatNameAsFullLabel(participant) : 
       participant.externalId;
-    function updateName(response) {
+    function updateName() {
       self.titleObs(updatedTitle);
       return serverService.getParticipant(self.userIdObs());
     }
@@ -147,6 +152,7 @@ export default function general(params) {
     return saveParticipant(participant)
       .then(updateName)
       .then(binder.update())
+      .then(() => self.newExternalIdObs(null))
       .then(utils.successHandler(vm, event, confirmMsg))
       .catch(failureHandler);
   };

@@ -11,14 +11,13 @@
       <button class="ui tiny primary button" data-bind="click: save">Save</button>
     </div>
   </div>
-  <participant-tabset
-    params="isNewObs: isNewObs, userIdObs: userIdObs, 
-        statusObs: statusObs"
-  ></participant-tabset>
+  <participant-tabset params="isNewObs: isNewObs, userIdObs: userIdObs, 
+        statusObs: statusObs"></participant-tabset>
 </div>
 <div class="scrollbox">
   <errors></errors>
   <form class="ui form">
+    <!-- ROW 1: Always the same for all users, create or update -->
     <div class="equal width fields">
       <div class="field">
         <label>Name</label>
@@ -43,6 +42,7 @@
       </div>
     </div>
 
+    <!-- ROW 2: Create is the same for all users -->
     <div class="equal width fields" data-bind="visible: isNewObs">
       <div class="field" id="email">
         <label>
@@ -70,16 +70,13 @@
           <input type="text" placeholder="Phone number" data-bind="textInput: phoneObs" />
         </div>
       </div>
-      <div class="field externalId" data-bind="visible: rolesObs().length === 0">
+      <div class="field externalId">
         <label>External ID</label>
-        <input type="text" data-bind="textInput: externalIdObs" />
-      </div>
-      <div class="field" data-bind="visible: rolesObs().length !== 0">
-        <label>Substudy Membership</label>
-        <tag-editor params="selectedObs: substudyIdsObs, allObs: allSubstudiesObs, type: 'substudies'"></tag-editor>
+        <input type="text" data-bind="textInput: newExternalIdObs" />
       </div>
     </div>
 
+    <!-- ROW 2: Update, external ID field changes based on role -->
     <div class="equal width fields" data-bind="visible: !isNewObs()">
       <div class="field" id="email">
         <label>Email</label>
@@ -98,16 +95,17 @@
         </span>
         <span class="input-field-padding" data-bind="visible: !phoneObs()">—</span>
       </div>
-      <div class="field" data-bind="visible: isAdmin()">
-        <label>Substudy Membership</label>
-        <tag-editor params="selectedObs: substudyIdsObs, allObs: allSubstudiesObs, type: 'substudies'"></tag-editor>
-      </div>
-      <div class="field" data-bind="visible: !isAdmin()">
-        <label>Substudy Membership</label>
-        <span class="input-field-padding" data-bind="text: substudyIdsObs().join(', ')"></span>
+      <div class="field externalId externalIds">
+        <label>Assigned External ID(s)</label>
+        <div style="display:flex; align-items: center"> <!-- , visible: isAdmin() -->
+          <input data-bind="textInput: newExternalIdObs"
+            placeholder="Add ID" style="max-width: 5.5rem; margin-right: 1rem" type="text"/>
+          <span class="input-field-padding" data-bind="text: externalIdsObs"></span>
+        </div>
       </div>
     </div>
 
+    <!-- ROW 3: Varies in last row for admin (still can change substudies) -->
     <div class="equal width fields">
       <div class="field">
         <label>Languages</label>
@@ -120,12 +118,17 @@
         <label>Data Groups</label>
         <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
       </div>
-      <div class="field externalIds">
-        <label>Assigned External ID(s)</label>
-        <span class="input-field-padding" data-bind="text: externalIdsObs"></span>
+      <div class="field" data-bind="visible: isAdmin() || isNewObs()">
+        <label>Substudy Membership</label>
+        <tag-editor params="selectedObs: substudyIdsObs, allObs: allSubstudiesObs, type: 'substudies'"></tag-editor>
+      </div>
+      <div class="field" data-bind="visible: !isAdmin() && !isNewObs()">
+        <label>Substudy Membership</label>
+        <span class="input-field-padding" data-bind="text: substudyIdsObs().join(', ')"></span>
       </div>
     </div>
 
+    <!-- ROW 4: Create the same for everybody -->
     <div class="equal width fields" data-bind="visible: isNewObs()">
       <div class="required field" id="password">
         <label>Password</label>
@@ -135,6 +138,7 @@
       <div class="field"></div>
     </div>
 
+    <!-- ROW 4: Update the same for everybody -->
     <div class="equal width fields" data-bind="visible: !isNewObs()">
       <div class="field">
         <label>Health Code</label>
@@ -154,6 +158,7 @@
       </div>
     </div>
 
+    <!-- ROW 5: Same for everybody -->
     <div class="equal width fields">
       <div class="field">
         <label style="margin-bottom: .9rem">Email Preference</label>
