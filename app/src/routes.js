@@ -128,6 +128,8 @@ router.on("/tasks/:taskId", routeTo("task", "tasks", TASKID));
 router.on("/tasks", routeTo("tasks", "tasks"));
 router.on("/topics/:guid", routeTo("topic", "notifications", GUID));
 router.on("/topics", routeTo("topics", "notifications"));
+router.on("/files/:guid", routeTo("file", "files", GUID));
+router.on("/files", routeTo("files", "files"));
 router.on("/admin/info", routeTo("admin_info", "info"));
 router.on("/admin/cache", routeTo("admin_cache", "cache"));
 router.on("/admin/studies", routeTo("admin_studies", "studies"));

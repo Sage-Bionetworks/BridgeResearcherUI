@@ -104,6 +104,10 @@ import topics from "./pages/topics/topics";
 import topicsHtml from "./pages/topics/topics.html";
 import topic from "./pages/topic/topic";
 import topicHtml from "./pages/topic/topic.html";
+import files from "./pages/files/files";
+import filesHtml from "./pages/files/files.html";
+import file from "./pages/file/file";
+import fileHtml from "./pages/file/file.html";
 import schedule from "./pages/schedule/schedule";
 import scheduleHtml from "./pages/schedule/schedule.html";
 import uploads from "./pages/uploads/uploads";
@@ -288,6 +292,10 @@ import templateHistory from './pages/template/history';
 import templateHistoryHtml from './pages/template/history.html';
 import templateTabset from './pages/template/tabset';
 import templateTabsetHtml from './pages/template/tabset.html';
+// TODO: This is the most generic and reusable variant of the pager, and should replace the 
+// others. Participants might remain separate because of the complexity of the search UI.
+import pager from './widgets/pager/pager';
+import pagerHtml from './widgets/pager/pager.html';
 
 const reg = ko.components.register;
 reg("errors", {viewModel: errors, template: errorsHtml});
@@ -344,6 +352,8 @@ reg("tasks", {viewModel: tasks, template: tasksHtml});
 reg("task", {viewModel: task, template: taskHtml});
 reg("topics", {viewModel: topics, template: topicsHtml});
 reg("topic", {viewModel: topic, template: topicHtml});
+reg("files", {viewModel: files, template: filesHtml});
+reg("file", {viewModel: file, template: fileHtml});
 reg("schedule", {viewModel: schedule, template: scheduleHtml});
 reg("uploads", {viewModel: uploads, template: uploadsHtml});
 reg("upload", {viewModel: upload, template: uploadHtml});
@@ -408,6 +418,7 @@ reg("template_general", {viewModel: templateGeneral, template: templateGeneralHt
 reg("template_editor", {viewModel: templateEditor, template: templateEditorHtml});
 reg("template_history", {viewModel: templateHistory, template: templateHistoryHtml});
 reg("template-tabset", {viewModel: templateTabset, template: templateTabsetHtml});
+reg("pager", {viewModel: pager, template: pagerHtml});
 
 // Dialogs. These must be synchronous.
 reg("sign_out_user", {viewModel: signOutUser, template: signOutUserHtml, synchronous: true});

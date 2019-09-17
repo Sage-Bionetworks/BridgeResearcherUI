@@ -1,3 +1,4 @@
+import "knockout-postbox";
 import config from '../../config';
 import criteriaUtils from "../../criteria_utils";
 import fn from "../../functions";
@@ -11,6 +12,7 @@ const TITLES = config.templateTitles;
 
 export default function(params) {
   let self = this;
+  self.query = {}; // capture this for when the *parent* wants to refresh the page
 
   fn.copyProps(self, root, "isDeveloper", "isAdmin");
   self.criteriaLabel = criteriaUtils.label;
@@ -19,19 +21,19 @@ export default function(params) {
   self.templateTypeObs = ko.observable(params.templateType);
   self.titleObs = ko.observable(TITLES[params.templateType] + ' templates');
 
+  // capture post-processing of the pager control
+  self.postLoadPagerFunc = () => {};
+  self.postLoadFunc = function(func) {
+    self.postLoadPagerFunc = func;
+  }
+
   tables.prepareTable(self, {
     name: "templates",
     type: "Template",
-    refresh: load,
-    delete: function(template) {
-      return serverService.deleteTemplate(template.guid, false);
-    },
-    deletePermanently: function(template) {
-      return serverService.deleteTemplate(template.guid, true);
-    },
-    undelete: function(template) {
-      return serverService.updateTemplate(template);
-    }
+    refresh: () => load(self.query),
+    delete: (template) => serverService.deleteTemplate(template.guid, false),
+    deletePermanently: (template)  => serverService.deleteTemplate(template.guid, true),
+    undelete: (template) => serverService.updateTemplate(template)
   });
 
   self.makeDefault = function(item, event) {
@@ -49,19 +51,23 @@ export default function(params) {
   };
 
   function getTemplates() {
-    return serverService.getTemplates(params.templateType, self.showDeletedObs());
+    return serverService.getTemplates(self.query);
   }
   function captureStudy(study) {
     self.study = study;
   }
 
-  function load() {
+  function load(query) {
+    query.includeDeleted = self.showDeletedObs();
+    query.type = params.templateType;
+    self.query = query;
     serverService.getStudy()
       .then(captureStudy)
       .then(getTemplates)
       .then(fn.handleSort("items", "name"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
+      .then(self.postLoadPagerFunc)
       .catch(utils.failureHandler());
   }
-  load();
+  ko.postbox.subscribe('t-refresh', load);
 };

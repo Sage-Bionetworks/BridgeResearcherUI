@@ -32,10 +32,11 @@
   </div>
   <div class="scrollbox">
     <errors></errors>
-  
     <div class="ui grid">
       <div class="ten wide column">
-        <table class="ui compact selectable table">
+        <pager style="display: flex; justify-content: flex-end"
+          params="prefix: 't', postLoadFunc: postLoadFunc"></pager>
+        <table class="ui compact selectable table" style="margin-top:0">
           <thead>
             <tr>
               <th width="10" data-bind="visible: isDeveloper"></th>

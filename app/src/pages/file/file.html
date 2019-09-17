@@ -2,9 +2,7 @@
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
       <div class="ui breadcrumb">
-        <a data-bind="href: '#/templates'" class="section">Templates</a>
-        <i class="right chevron icon divider"></i>
-        <a data-bind="href: '#/templates/' + templateTypeObs(), text: templateTitleObs" class="section"></a>
+        <a href="#/files" class="section">Files</a>
         <i class="right chevron icon divider"></i>
       </div>
       <h3 data-bind="text: titleObs"></h3>
@@ -13,10 +11,9 @@
       <button class="ui tiny primary button" data-bind="click: save">Save</button>
     </div>
   </div>
-  <template-tabset data-bind="visible: !isNewObs()" 
-    params="guidObs: guidObs, templateTypeObs: templateTypeObs">
-  </template-tabset>
-  <div class="ui empty secondary pointing menu" data-bind="visible: isNewObs"></div>
+  <!--
+  <config-tabset params="guidObs: guidObs, isNewObs: isNewObs"></config-tabset>
+    -->
 </div>
 <div class="scrollbox">
   <errors></errors>
@@ -27,9 +24,13 @@
           <label>Name</label>
           <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
         </div>
+        <div class="six wide field" id="mimeType">
+          <label>Mime Type</label>
+          <input data-bind="textInput: mimeTypeObs" placeholder="text/html; utf-8"/>
+        </div>
         <div class="field" id="description">
           <label>Description</label>
-          <input type="text" data-bind="textInput: descriptionObs" />
+          <textarea data-bind="textInput: descriptionObs"></textarea>
         </div>
       </div>
       <div class="two wide column">
@@ -46,13 +47,6 @@
             </div>
           </div>
       </div>
-
-      <div class="sixteen wide column">
-        <h4>Assignment based on</h4>
-        <!-- ko component: {name:"template_criteria", params:{ id:"", criteriaObs: criteriaObs}} -->
-        <!-- /ko -->
-      </div>
     </div>
   </form>
 </div>
-  
