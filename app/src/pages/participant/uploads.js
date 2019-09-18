@@ -19,13 +19,12 @@ export default class ParticipantUploadsViewModel extends UploadsViewModel {
       .obs("name", "")
       .obs("status")
       .obs("title", "&#160;");
-    serverService.getParticipantName(params.userId)
-      .then(part => {
-        this.titleObs(part.name);
-        this.nameObs(part.name);
-        this.statusObs(part.status);
-      })
-      .catch(failureHandler);
+    serverService.getParticipantName(params.userId).then(part => {
+      this.titleObs(part.name);
+      this.nameObs(part.name);
+      this.statusObs(part.status);
+    })
+    .catch(failureHandler);
   }
   loadingFunc(args) {
     this.updateDateRange();
@@ -36,6 +35,7 @@ export default class ParticipantUploadsViewModel extends UploadsViewModel {
     storeService.persistQuery(PAGE_KEY, args);
 
     return serverService.getParticipantUploads(this.userIdObs(), args)
+      .then(this.preProcessItemsWithSharingStatus)
       .then(this.processUploads.bind(this))
       .catch(utils.failureHandler());
   }

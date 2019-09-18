@@ -1,19 +1,18 @@
 import Binder from "../../binder";
 import fn from "../../functions";
+import Promise from "bluebird";
 import root from "../../root";
 import serverService from "../../services/server_service";
 import storeService from "../../services/store_service";
 import tables from "../../tables";
 import utils from "../../utils";
 
-const PAGE_SIZE = 50;
 const PAGE_KEY = "u";
 
 export default class UploadsViewModel {
   constructor(params) {
     let { start, end } = fn.getRangeInDays(-14, 0);
     this.query = storeService.restoreQuery(PAGE_KEY);
-    this.query.pageSize = this.query.pageSize || PAGE_SIZE;
     this.query.startTime = this.query.startTime ? new Date(this.query.startTime) : start;
     this.query.endTime = this.query.endTime ? new Date(this.query.endTime) : end;
 
@@ -71,12 +70,10 @@ export default class UploadsViewModel {
       let success = this.makeSuccess(this, event);
 
       utils.startHandler(this, event);
-      serverService
-        .getUploadById(id)
+      serverService.getUploadById(id)
         .then(success)
         .catch(function() {
-          serverService
-            .getUploadByRecordId(id)
+          serverService.getUploadByRecordId(id)
             .then(success)
             .catch(function(e) {
               event.target.parentNode.parentNode.classList.remove("loading");
@@ -101,11 +98,9 @@ export default class UploadsViewModel {
   doCalSearch() {
     utils.clearErrors();
     this.updateDateRange();
-    //if (this.query.startTime !== null && this.query.endTime !== null) {
     this.itemsObs([]);
     this.recordsMessageObs("<div class='ui tiny active inline loader'></div>");
     this.callback();
-    //}
   }
   htmlFor(data) {
     if (data.validationMessageList === undefined) {
@@ -119,6 +114,17 @@ export default class UploadsViewModel {
   }
   toggle(item) {
     item.collapsedObs(!item.collapsedObs());
+  }
+  preProcessItemsWithSharingStatus(response) {
+    let promises = response.items.map((item) => serverService.getUploadById(item.uploadId));
+    return Promise.all(promises).then(dataArray => {
+      response.items.forEach((item, i) => {
+        if (dataArray[i].healthData) {
+          item.userSharingScope = dataArray[i].healthData.userSharingScope;
+        }
+      });
+      return response;
+    });
   }
   processItem(item) {
     new Binder(item)
@@ -149,24 +155,28 @@ export default class UploadsViewModel {
     return "";
   }
   uploadProgressBarState(item) {
-    let obj = { type: "progress", color: "gray", value: 1, label: "Upload Requested", total: 3 };
-    if (item.status === "succeeded") {
+    let obj = { type: "progress", color: "active", value: 1, label: "Upload Requested", total: 3 };
+    if (item.userSharingScope === 'no_sharing') {
+      obj.value = 3;
+      obj.label = "Sharing turned off";
+      obj.color = "warning";
+    } else if (item.status === "succeeded") {
       obj.value = 2;
       obj.label = "Upload Completed";
+      obj.color = "success";
       if (item.healthRecordExporterStatus === "succeeded") {
         obj.value = 3;
         obj.label = "Export Completed";
-        obj.color = "green";
-      } else if (typeof item.healthRecordExporterStatus === "undefined") {
-        obj.color = "green";
       }
     } else if (item.status === "duplicate") {
-      obj.value = 2;
+      obj.value = 3;
       obj.label = "Upload Error";
+      obj.color = "error";
     }
     return obj;
   }
   processUploads(response) {
+    console.log(JSON.stringify(response));
     if (response.items) {
       response.items.map(this.processItem.bind(this));
       this.itemsObs(response.items);
@@ -181,6 +191,7 @@ export default class UploadsViewModel {
 
     return serverService
       .getUploads(args)
+      .then(this.preProcessItemsWithSharingStatus)
       .then(this.processUploads.bind(this))
       .catch(utils.failureHandler());
   }

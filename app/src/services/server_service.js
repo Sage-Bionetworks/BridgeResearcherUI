@@ -329,7 +329,6 @@ export class ServerService {
     return this.gethttp(`${config.schemas}/${identifier}/revisions/${revision}`);
   }
   getUploads(args) {
-    delete args.offsetBy;
     let queryString = fn.queryString(args);
     return this.gethttp(`${config.getCurrentStudy}/uploads${queryString}`);
   }
@@ -535,6 +534,7 @@ export class ServerService {
     return this.gethttp(`${config.reports}${fn.queryString({ type: "participant" })}`);
   }
   getParticipantUploads(userId, args) {
+    console.log("getParticipantUploads", JSON.stringify(args));
     let queryString = fn.queryString(args);
     return this.gethttp(`${config.participants}/${userId}/uploads${queryString}`);
   }
