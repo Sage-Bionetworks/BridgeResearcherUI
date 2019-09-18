@@ -66,7 +66,6 @@ export default function(params) {
     let args = { offsetKey: offsetKey };
 
     loadingFunc(args).then(function(response) {
-      console.log("****", response);
       if (response) {
         self.history.push(self.nextOffset);
         self.nextOffset = response.nextPageOffsetKey;

@@ -116,12 +116,14 @@ export default class UploadsViewModel {
     item.collapsedObs(!item.collapsedObs());
   }
   preProcessItemsWithSharingStatus(response) {
-    let promises = response.items.map((item) => serverService.getUploadById(item.uploadId));
+    // Don't look up records that were successfully exported.
+    let f = (item) => item.healthRecordExporterStatus !== 'succeeded';
+    let promises = response.items
+      .filter(f)
+      .map((item) => serverService.getUploadById(item.uploadId));
     return Promise.all(promises).then(dataArray => {
-      response.items.forEach((item, i) => {
-        if (dataArray[i].healthData) {
-          item.userSharingScope = dataArray[i].healthData.userSharingScope;
-        }
+      response.items.filter(f).forEach((item, i) => {
+        item.userSharingScope = (dataArray[i].healthData || {}).userSharingScope;
       });
       return response;
     });
@@ -176,7 +178,6 @@ export default class UploadsViewModel {
     return obj;
   }
   processUploads(response) {
-    console.log(JSON.stringify(response));
     if (response.items) {
       response.items.map(this.processItem.bind(this));
       this.itemsObs(response.items);
