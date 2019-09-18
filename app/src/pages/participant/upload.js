@@ -5,7 +5,7 @@ import utils from "../../utils";
 export default function upload(params) {
   let self = this;
 
-  let binder = new Binder(self)
+  new Binder(self)
     .obs("title")
     .obs("name")
     .obs("status")
@@ -18,10 +18,7 @@ export default function upload(params) {
     self.nameObs(part.name);
     self.statusObs(part.status);
   });
-  serverService
-    .getUploadById(params.guid)
-    .then(response => {
-      self.uploadDetailsObs(response);
-    })
+  serverService.getUploadById(params.guid)
+    .then(response => self.uploadDetailsObs(response))
     .catch(utils.failureHandler());
 };
