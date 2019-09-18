@@ -10,23 +10,13 @@ export default function() {
     name: "substudy",
     plural: "substudies",
     refresh: load,
-    delete: function(item) {
-      return serverService.deleteSubstudy(item.id, false);
-    },
-    deletePermanently: function(item) {
-      return serverService.deleteSubstudy(item.id, true);
-    },
-    undelete: function(item) {
-      return serverService.updateSubstudy(item);
-    }
+    delete: (item) => serverService.deleteSubstudy(item.id, false),
+    deletePermanently: (item) => serverService.deleteSubstudy(item.id, true),
+    undelete: (item) => serverService.updateSubstudy(item)
   });
 
-  function getSubstudies() {
-    return serverService.getSubstudies(self.showDeletedObs());
-  }
-
   function load() {
-    return getSubstudies()
+    return serverService.getSubstudies(self.showDeletedObs())
       .then(fn.handleSort("items", "label"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .catch(utils.failureHandler());

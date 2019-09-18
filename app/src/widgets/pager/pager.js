@@ -3,9 +3,9 @@ import Binder from "../../binder";
 import ko from "knockout";
 import storeService from "../../services/store_service";
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 25;
 
-export default function files(params) {
+export default function pager(params) {
   let prefix = params.prefix;
   let postLoadFunc = params.postLoadFunc;
 
