@@ -534,7 +534,6 @@ export class ServerService {
     return this.gethttp(`${config.reports}${fn.queryString({ type: "participant" })}`);
   }
   getParticipantUploads(userId, args) {
-    console.log("getParticipantUploads", JSON.stringify(args));
     let queryString = fn.queryString(args);
     return this.gethttp(`${config.participants}/${userId}/uploads${queryString}`);
   }

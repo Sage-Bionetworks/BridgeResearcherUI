@@ -176,7 +176,6 @@ export default class UploadsViewModel {
     return obj;
   }
   processUploads(response) {
-    console.log(JSON.stringify(response));
     if (response.items) {
       response.items.map(this.processItem.bind(this));
       this.itemsObs(response.items);
