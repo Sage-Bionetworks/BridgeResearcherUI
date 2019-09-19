@@ -70,16 +70,11 @@ ko.bindingHandlers.range = {
     let f = flatpickr(input, {
       onChange: updateObservers,
       mode: "range",
-      //clickOpens: true,
       defaultDate: [startDateObs(), endDateObs()],
       enableTime: false,
       altInput: true,
       altFormat: "F j, Y",
-      dateFormat: "Y-m-d",
-      onOpen: function() {
-        startDateObs(null);
-        endDateObs(null);
-      }
+      dateFormat: "Y-m-d"
     });
 
     // control now does not close when you enter delete key, this fixes, but is not ideal
