@@ -13,7 +13,7 @@ const failureHandler = utils.failureHandler({
 
 export default class ParticipantUploadsViewModel extends UploadsViewModel {
   constructor(params) {
-    super(params);
+    super(params, PAGE_KEY);
     new Binder(this)
       .obs("userId", params.userId)
       .obs("name", "")
