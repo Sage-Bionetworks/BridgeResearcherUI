@@ -13,6 +13,7 @@ export default class UploadsViewModel {
     this.query = storeService.restoreQuery(pageKey);
     this.query.startTime = this.query.startTime ? new Date(this.query.startTime) : start;
     this.query.endTime = this.query.endTime ? new Date(this.query.endTime) : end;
+    this.pageKey = pageKey;
 
     new Binder(this)
       .obs("uploadsStartDate", this.query.startTime)
@@ -185,10 +186,10 @@ export default class UploadsViewModel {
     this.updateDateRange();
     args.startTime = this.query.startTime;
     args.endTime = this.query.endTime;
-    storeService.persistQuery(PAGE_KEY, args);
+    args.pageSize = 10;
+    storeService.persistQuery(this.pageKey, args);
 
-    return serverService
-      .getUploads(args)
+    return serverService.getUploads(args)
       .then(this.preProcessItemsWithSharingStatus)
       .then(this.processUploads.bind(this))
       .catch(utils.failureHandler());

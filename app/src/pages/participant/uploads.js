@@ -31,6 +31,7 @@ export default class ParticipantUploadsViewModel extends UploadsViewModel {
     this.updateDateRange();
     args.startTime = this.query.startTime;
     args.endTime = this.query.endTime;
+    args.pageSize = 10;
 
     storeService.persistQuery(PAGE_KEY, args);
 
