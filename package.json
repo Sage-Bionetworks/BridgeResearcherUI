@@ -43,7 +43,7 @@
     "style-loader": "^1.0.0",
     "toastr": "^2.1.2",
     "webpack-cli": "^3.3.9",
-    "webpack": "^4.39.3",
+    "webpack": "^4.40.2",
     "webpack-serve": "^3.2.0"
     "webpack-dev-server": "^3.8.1",
   }
