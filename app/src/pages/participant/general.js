@@ -1,3 +1,4 @@
+import alerts from "../../widgets/alerts";
 import Binder from "../../binder";
 import fn from "../../functions";
 import ko from "knockout";
@@ -95,6 +96,59 @@ export default function general(params) {
       self.phoneRegionObs(event.target.textContent);
     }
   };
+
+  function makeStatusChanger(status) {
+    return function(vm, event) {
+      serverService.getParticipant(self.userIdObs())
+        .then((participant) => {
+          participant.status = status;
+          return participant;
+        })
+        .then((p) => serverService.updateParticipant(p))
+        .then(() => self.statusObs(status))
+        .then(() => serverService.signOutUser(self.userIdObs()))
+        .then(utils.successHandler(self, event, "User account has been "+status+"."))
+        .catch(utils.failureHandler());
+    }
+  }
+
+  self.enableAccount = makeStatusChanger("enabled");
+  self.disableAccount = makeStatusChanger("disabled");
+  self.requestResetPassword = function(vm, event) {
+    alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
+      utils.startHandler(self, event);
+      serverService.requestResetPasswordUser(self.userIdObs())
+        .then(utils.successHandler(self, event, "Reset password email has been sent to user."))
+        .catch(utils.failureHandler());
+    });
+  };
+  self.signOutUser = function() {
+    root.openDialog("sign_out_user", { userId: self.userIdObs() });
+  };
+  self.deleteTestUser = function(vm, event) {
+    alerts.confirmation("This will delete the account.\n\nDo you wish to continue?", function() {
+      utils.startHandler(self, event);
+      serverService.deleteTestUser(self.userIdObs())
+        .then(utils.successHandler(self, event, "User deleted."))
+        .then(() => document.location = "#/participants")
+        .catch(utils.failureHandler());
+    });
+  };
+  self.resendEmailVerification = function(vm, event) {
+    alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
+      utils.startHandler(vm, event);
+      serverService.resendEmailVerification(self.userIdObs())
+        .then(utils.successHandler(vm, event, "Sent email to verify participant's email address."))
+        .catch(utils.failureHandler());
+    });
+  };
+
+  self.resendVisible = ko.computed(() => self.statusObs() === "unverified");
+  self.resetPwdVisible = ko.computed(() => self.statusObs() !== "disabled");
+  self.enableVisible = ko.computed(() => self.statusObs() === "disabled" && root.isAdmin());
+  self.disableVisible = ko.computed(() => self.statusObs() === "enabled" && root.isAdmin());
+  self.signOutVisible = ko.computed(() => !['disabled','unverified'].includes(self.statusObs()));
+  self.deleteVisible = ko.computed(() => root.isResearcher() && self.dataGroupsObs().includes('test_user'));
 
   serverService.getSession().then(session => {
     var roles = selectRoles(session);
