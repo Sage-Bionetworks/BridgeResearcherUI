@@ -42,7 +42,7 @@
     "sweetalert2": "^8.17.6",
     "style-loader": "^1.0.0",
     "toastr": "^2.1.2",
-    "webpack-cli": "^3.3.7",
+    "webpack-cli": "^3.3.9",
     "webpack": "^4.39.3",
     "webpack-dev-server": "^3.8.0",
     "webpack-serve": "^3.2.0"
