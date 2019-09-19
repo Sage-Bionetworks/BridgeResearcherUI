@@ -76,22 +76,7 @@ export default function participants() {
     return array.join(", ");
   };
   self.classNameForStatus = assignClassForStatus;
-  self.deleteVisible = () => root.isResearcher();
-  self.disableVisible = (item) => item.status === "enabled" && root.isAdmin();
-  self.enableVisible = (item) => item.status === "disabled" && root.isAdmin();
-  self.fullName = (user) => encodeURIComponent(fn.formatName(user));
-  self.resendVisible = (item) => item.status === "unverified";
-  self.resetPwdVisible = (item) => item.status !== "disabled";
-  self.signOutVisible = (item) => item.status !== "disabled" && item.status !== "unverified";
 
-  function updateParticipantStatus(participant) {
-    participant.status = "enabled";
-    return serverService.updateParticipant(participant);
-  }
-  function publishPageUpdate(response) {
-    ko.postbox.publish("page-refresh");
-    return response;
-  }
   function load(response) {
     self.total = response.total;
     response.items = response.items.map(function(item) {
@@ -128,24 +113,6 @@ export default function participants() {
       });
     });
   };
-
-  self.resendEmailVerification = function(vm, event) {
-    alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
-      let userId = vm.id;
-      utils.startHandler(vm, event);
-      serverService.resendEmailVerification(userId)
-        .then(utils.successHandler(vm, event, "Sent email to verify participant's email address."))
-        .catch(utils.failureHandler());
-    });
-  };
-  self.enableAccount = function(item, event) {
-    utils.startHandler(item, event);
-    serverService.getParticipant(item.id)
-      .then(updateParticipantStatus)
-      .then(publishPageUpdate)
-      .then(utils.successHandler(item, event, "User account activated."))
-      .catch(utils.failureHandler());
-  };
   self.exportDialog = function() {
     root.openDialog("participant_export", { total: self.total, search: self.search });
   };
@@ -158,48 +125,4 @@ export default function participants() {
       .catch(utils.failureHandler());
   };
 
-  self.enableAccount = function(user, event) {
-    serverService.getParticipant(user.id)
-      .then(function(participant) {
-        participant.status = "enabled";
-        return serverService.updateParticipant(participant);
-      })
-      .then(function() {
-        serverService.signOutUser(user.id);
-        ko.postbox.publish("page-refresh");
-      })
-      .catch(utils.failureHandler());
-  };
-  self.disableAccount = function(user, event) {
-    serverService.getParticipant(user.id)
-      .then(function(participant) {
-        participant.status = "disabled";
-        return serverService.updateParticipant(participant);
-      })
-      .then(function() {
-        serverService.signOutUser(user.id);
-        ko.postbox.publish("page-refresh");
-      })
-      .catch(utils.failureHandler());
-  };
-  self.requestResetPassword = function(user, event) {
-    alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
-      utils.startHandler(self, event);
-      serverService.requestResetPasswordUser(user.id)
-        .then(utils.successHandler(self, event, "Reset password email has been sent to user."))
-        .catch(utils.failureHandler());
-    });
-  };
-  self.signOutUser = function(user, event) {
-    root.openDialog("sign_out_user", { userId: user.id });
-  };
-  self.deleteTestUser = function(user, event) {
-    alerts.confirmation("This will delete the account.\n\nDo you wish to continue?", function() {
-      utils.startHandler(self, event);
-      serverService.deleteTestUser(user.id)
-        .then(utils.successHandler(self, event, "User deleted."))
-        .then(() => ko.postbox.publish("page-refresh"))
-        .catch(utils.failureHandler());
-    });
-  };
 };

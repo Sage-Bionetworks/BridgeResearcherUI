@@ -69,16 +69,12 @@ export default class UploadsViewModel {
       let success = this.makeSuccess(this, event);
 
       utils.startHandler(this, event);
-      serverService.getUploadById(id)
-        .then(success)
-        .catch(function() {
-          serverService.getUploadByRecordId(id)
-            .then(success)
-            .catch(function(e) {
-              event.target.parentNode.parentNode.classList.remove("loading");
-              utils.failureHandler({ transient: false })(e);
-            });
+      serverService.getUploadById(id).then(success).catch(function() {
+        serverService.getUploadByRecordId(id).then(success).catch(function(e) {
+          event.target.parentNode.parentNode.classList.remove("loading");
+          utils.failureHandler({ transient: false })(e);
         });
+      });
     }
   }
   updateDateRange() {
@@ -105,11 +101,9 @@ export default class UploadsViewModel {
     if (data.validationMessageList === undefined) {
       return null;
     }
-    return data.validationMessageList
-      .map(function(error) {
-        return "<p class='error-message'>" + error + "</p>";
-      })
-      .join("");
+    return data.validationMessageList.map(function(error) {
+      return "<p class='error-message'>" + error + "</p>";
+    }).join("");
   }
   toggle(item) {
     item.collapsedObs(!item.collapsedObs());
@@ -184,12 +178,11 @@ export default class UploadsViewModel {
   }
   loadingFunc(args) {
     this.updateDateRange();
-    args.startTime = this.query.startTime;
-    args.endTime = this.query.endTime;
-    args.pageSize = 10;
-    storeService.persistQuery(this.pageKey, args);
+    this.query.offsetKey = args.offsetKey;
+    this.query.pageSize = 10;
+    storeService.persistQuery(this.pageKey, this.query);
 
-    return serverService.getUploads(args)
+    return serverService.getUploads(this.query)
       .then(this.preProcessItemsWithSharingStatus)
       .then(this.processUploads.bind(this))
       .catch(utils.failureHandler());

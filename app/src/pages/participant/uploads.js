@@ -28,14 +28,11 @@ export default class ParticipantUploadsViewModel extends UploadsViewModel {
   }
   loadingFunc(args) {
     this.updateDateRange();
-    this.updateDateRange();
-    args.startTime = this.query.startTime;
-    args.endTime = this.query.endTime;
-    args.pageSize = 10;
+    this.query.offsetKey = args.offsetKey
+    this.query.pageSize = 10;
+    storeService.persistQuery(PAGE_KEY, this.query);
 
-    storeService.persistQuery(PAGE_KEY, args);
-
-    return serverService.getParticipantUploads(this.userIdObs(), args)
+    return serverService.getParticipantUploads(this.userIdObs(), this.query)
       .then(this.preProcessItemsWithSharingStatus)
       .then(this.processUploads.bind(this))
       .catch(utils.failureHandler());
