@@ -20,6 +20,7 @@
   <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
 </div>
 <div class="scrollbox">
+  <errors></errors>
   <div class="line-control">
     <div class="line-control-stretch">
       <div class="ui breadcrumb">
@@ -28,24 +29,10 @@
         <b data-bind="text: identifierObs"></b>
       </div>
     </div>
-    <div>
-      <div class="ui small pagination menu">
-        <div class="item" title="Prior month" data-bind="click: priorMonth">
-          <i class="chevron left icon"></i>
-        </div>
-        <div class="active item">
-          <div data-bind="visible: showLoaderObs" class="ui small active loader"></div>
-          <span data-bind="text: formatMonthObs"></span>
-        </div>
-        <div class="item" title="Next month" data-bind="click: nextMonth">
-          <i class="chevron right icon"></i>
-        </div>
-      </div>
-      <div style="margin-left:1rem!important" class="ui small pagination menu">
-        <div class="item" title="Current month" data-bind="click: thisMonth">
-          Today
-        </div>
-      </div>
+    <div style="width: 30rem" class="ui icon input" data-bind="range: {
+      onChange: doCalSearch, startDateObs: startDateObs, endDateObs: endDateObs}">
+      <input type="text" placeholder="Uploaded in range" readonly />
+      <i class="calendar icon"></i>
     </div>
   </div>
   <table class="ui compact selectable json table">

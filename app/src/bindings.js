@@ -70,7 +70,6 @@ ko.bindingHandlers.range = {
     let f = flatpickr(input, {
       onChange: updateObservers,
       mode: "range",
-      clickOpens: true,
       defaultDate: [startDateObs(), endDateObs()],
       enableTime: false,
       altInput: true,

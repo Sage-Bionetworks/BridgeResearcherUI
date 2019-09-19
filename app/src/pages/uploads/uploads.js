@@ -7,12 +7,10 @@ import storeService from "../../services/store_service";
 import tables from "../../tables";
 import utils from "../../utils";
 
-const PAGE_KEY = "u";
-
 export default class UploadsViewModel {
-  constructor(params) {
+  constructor(params, pageKey = "u") {
     let { start, end } = fn.getRangeInDays(-14, 0);
-    this.query = storeService.restoreQuery(PAGE_KEY);
+    this.query = storeService.restoreQuery(pageKey);
     this.query.startTime = this.query.startTime ? new Date(this.query.startTime) : start;
     this.query.endTime = this.query.endTime ? new Date(this.query.endTime) : end;
 
@@ -118,8 +116,7 @@ export default class UploadsViewModel {
   preProcessItemsWithSharingStatus(response) {
     // Don't look up records that were successfully exported.
     let f = (item) => item.healthRecordExporterStatus !== 'succeeded';
-    let promises = response.items
-      .filter(f)
+    let promises = response.items.filter(f)
       .map((item) => serverService.getUploadById(item.uploadId));
     return Promise.all(promises).then(dataArray => {
       response.items.filter(f).forEach((item, i) => {
