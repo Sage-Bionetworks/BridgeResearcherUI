@@ -1,6 +1,5 @@
 import Binder from "../../binder";
 import fn from "../../functions";
-import Promise from "bluebird";
 import root from "../../root";
 import serverService from "../../services/server_service";
 import storeService from "../../services/store_service";
