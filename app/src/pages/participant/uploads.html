@@ -12,6 +12,9 @@
   <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
 </div>
 <div class="scrollbox">
+  <div class="ui warning message" data-bind="visible: sharingScopeObs() == 'no_sharing'">
+    This user has data sharing turned off (either manually or by withdrawing from the study). Uploaded data will not be exported to Synapse.
+  </div>
   <errors></errors>
   <div class="line-control">
     <div style="width: 30rem" class="ui icon input" data-bind="range: {
@@ -19,7 +22,8 @@
       <input type="text" placeholder="Uploaded in range" readonly />
       <i class="calendar icon"></i>
     </div>
-    <div class="line-control-stretch"></div>
+    <div class="line-control-stretch">
+    </div>
     <div>
       <forward-pager params="vm: vm"></forward-pager>
     </div>

@@ -166,7 +166,7 @@ export class ServerService {
   cacheParticipantName(response) {
     if (response && response.id) {
       let name = fn.formatNameAsFullLabel(response);
-      cache.set(response.id + ":name", { name: name, status: response.status });
+      cache.set(response.id + ":name", { name: name, status: response.status, sharingScope: response.sharingScope });
     }
     return response;
   }
