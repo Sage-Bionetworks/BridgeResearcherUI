@@ -108,18 +108,6 @@ export default class UploadsViewModel {
   toggle(item) {
     item.collapsedObs(!item.collapsedObs());
   }
-  preProcessItemsWithSharingStatus(response) {
-    // Don't look up records that were successfully exported.
-    let f = (item) => item.healthRecordExporterStatus !== 'succeeded';
-    let promises = response.items.filter(f)
-      .map((item) => serverService.getUploadById(item.uploadId));
-    return Promise.all(promises).then(dataArray => {
-      response.items.filter(f).forEach((item, i) => {
-        item.userSharingScope = (dataArray[i].healthData || {}).userSharingScope;
-      });
-      return response;
-    });
-  }
   processItem(item) {
     new Binder(item)
       .obs("content", "")
@@ -149,23 +137,22 @@ export default class UploadsViewModel {
     return "";
   }
   uploadProgressBarState(item) {
-    let obj = { type: "progress", color: "active", value: 1, label: "Upload Requested", total: 3 };
-    if (item.userSharingScope === 'no_sharing') {
-      obj.value = 3;
-      obj.label = "Sharing turned off";
-      obj.color = "warning";
-    } else if (item.status === "succeeded") {
+    let sharingOff = (this.sharingScopeObs && this.sharingScopeObs() === 'no_sharing');
+    let obj = { type: "progress", state: "active", value: 1, label: "Upload Requested", total: 3 };
+    if (item.status === "succeeded") {
       obj.value = 2;
       obj.label = "Upload Completed";
-      obj.color = "success";
+      obj.state = "success";
       if (item.healthRecordExporterStatus === "succeeded") {
         obj.value = 3;
         obj.label = "Export Completed";
+      } else if (sharingOff) {
+        obj.state = "indicating";
       }
     } else if (item.status === "duplicate") {
       obj.value = 3;
       obj.label = "Upload Error";
-      obj.color = "error";
+      obj.state = "error";
     }
     return obj;
   }
@@ -183,7 +170,6 @@ export default class UploadsViewModel {
     storeService.persistQuery(this.pageKey, this.query);
 
     return serverService.getUploads(this.query)
-      .then(this.preProcessItemsWithSharingStatus)
       .then(this.processUploads.bind(this))
       .catch(utils.failureHandler());
   }
