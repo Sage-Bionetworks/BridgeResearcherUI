@@ -93,6 +93,7 @@ router.on("/configs/:id/revisions/:revision/history", routeTo("config_history", 
 router.on("/reports", redirectTo("/reports/uploads"));
 router.on("/reports/uploads", routeTo("dailyUploads", "reports"));
 router.on("/reports/signUps", routeTo("signUps", "reports"));
+router.on("/reports/retention", routeTo("retention", "reports"));
 router.on("/reports/raw/:identifier", routeTo("report", "reports", ID));
 router.on("/reports/raw", routeTo("reports", "reports"));
 router.on("/surveys", routeTo("surveys", "surveys"));
