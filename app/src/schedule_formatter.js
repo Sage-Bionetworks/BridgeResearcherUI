@@ -1,8 +1,12 @@
 import fn from "./functions";
 
+//“On start of study” is the time of account creation, enrollment (consent), or first retrieval of activities, whichever happened last.
+
 const UNARY_EVENTS = Object.freeze({
-  enrollment: "On enrollment",
-  activities_retrieved: "On activities first retrieved"
+  enrollment: "On consent to participate",
+  activities_retrieved: "On activities first retrieved",
+  created_on: "On account created",
+  study_start_date: "On most recent of account creation, consent, or activity retrieval"
 });
 const PERIOD_WORDS = Object.freeze({
   H: "hour",
