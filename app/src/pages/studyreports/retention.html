@@ -1,0 +1,17 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <h3>Study Reports</h3>
+    </div>
+    <div class="fixed-header-buttons">
+    </div>
+  </div>
+  <studyreports-tabset></studyreports-tabset>
+</div>
+<div class="scrollbox">
+  <div style="padding: 0 2rem">
+    <p data-bind="visible: !hasDataObs()">No data available.</p>
+    <canvas data-bind="visible: hasDataObs, chart: chartObs"></canvas>
+    <p style="text-align:center">Number of days into the study</p>
+  </div>
+</div>
