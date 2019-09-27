@@ -50,8 +50,10 @@ export default function dailyUploads() {
 
   const chartMaker = makeChart(
     ['requested', 'duplicate', 'succeeded', 'validation_failed'], 
-    ['Failed (Started, Not Finished)', 'Disabled', 'Successful', 'Failed (Data Invalid)'], 
-    ['#21ba45', '#6435c9', '#db2828', '#fbbd08'], 
+    ['Failed (Started, Not Finished)', 'Duplicate', 'Successful', 'Failed (Data Invalid)'], 
+    // red, gray, green, yellow
+    // gray, yellow, green, red
+    ['gray', '#fbbd08', '#21ba45', '#db2828'],
     'succeeded', '');
 
   function loadChart(rangeNum) {

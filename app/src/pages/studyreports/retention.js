@@ -2,9 +2,8 @@ import fn from "../../functions";
 import ko from "knockout";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
-import { getDateRange, makeChart } from "./report_utils";
 
-const STUDY_NAME = "Bridge-Reporter-Scheduler-prod-daily-upload-report";
+const STUDY_NAME = "-daily-retention-report";
 
 function convertToChartConfig(data) {
   return {
@@ -26,54 +25,59 @@ function convertToChartConfig(data) {
   };
 }
 
-export default function dailyUploads() {
+export default function retention() {
   let self = this;
+
+  let dd = new Date();
+  dd.setDate(dd.getDate()-1)
+  const DATE = dd.toISOString().split("T")[0];
 
   self.isLoadingObs = ko.observable(false);
   self.chartObs = ko.observable();
-  self.rangeObs = ko.observable("2");
   self.hasDataObs = ko.observable(false);
 
-  self.comps = [];
-  self.isActive = function(value) {
-    let comp = ko.computed(function() {
-      return self.rangeObs() === value;
-    });
-    self.comps.push(comp);
-    return comp;
-  };
-  self.selectRange = function(vm, event) {
-    let rangeNum = event.target.getAttribute("data-range");
-    self.rangeObs(rangeNum);
-    loadChart(rangeNum);
+  const chartMaker = (response) => {
+    let labels = ['Daily Sign Ins', 'Daily Uploads'];
+    let stepSize = 10;
+    let labelArray = [];
+    let max = Math.max(
+      Math.max.apply(null, response.bySignIn), 
+      Math.max.apply(null, response.byUploadedOn));
+    let maxArraySize = Math.max(response.bySignIn.length, response.byUploadedOn.length);
+    for (let i=0; i < maxArraySize; i++) {
+      labelArray.push(i+'');
+    } 
+    let datasets = [
+      {
+        label: "Daily Sign Ins",
+        data: response.bySignIn,
+        fill: false,
+        lineWidth: 1,
+        pointRadius: (max > 50) ? 1 : 2,
+        backgroundColor: 'violet'
+      },
+      {
+        label: "Daily Uploads",
+        data: response.byUploadedOn,
+        fill: false,
+        lineWidth: 1,
+        pointRadius: (max > 50) ? 1 : 2,
+        backgroundColor: 'teal'
+      }      
+    ];
+    return {labels, datasets, stepSize, labels: labelArray, max}
   };
 
-  const chartMaker = makeChart(
-    ['requested', 'duplicate', 'succeeded', 'validation_failed'], 
-    ['Failed (Started, Not Finished)', 'Disabled', 'Successful', 'Failed (Data Invalid)'], 
-    ['#21ba45', '#6435c9', '#db2828', '#fbbd08'], 
-    'succeeded', '');
-
-  function loadChart(rangeNum) {
+  function loadChart() {
     utils.startHandler(self);
     self.isLoadingObs(true);
-    let range = getDateRange(rangeNum);
-    serverService.getStudyReport(STUDY_NAME, range.startDate, range.endDate)
+    serverService.getStudyReport(STUDY_NAME, DATE, DATE)
       .then(fn.handleStaticObsUpdate(self.isLoadingObs, false))
       .then(function(response) {
-        if (self.rangeObs() === rangeNum) {
-          let data = chartMaker(response);
-          self.hasDataObs(data.datasets.length > 0);
-          self.chartObs(convertToChartConfig(data));
-        }
+        let data = chartMaker(response.items[0].data);
+        self.hasDataObs(data.datasets.length > 0);
+        self.chartObs(convertToChartConfig(data));
       })
-      .then(utils.successHandler(self))
-      .catch(utils.failureHandler());
   }
-  loadChart("2");
-};
-dailyUploads.prototype.dispose = function() {
-  this.comps.forEach(function(comp) {
-    comp.dispose();
-  });
+  loadChart();
 };

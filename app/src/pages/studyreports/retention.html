@@ -4,17 +4,6 @@
       <h3>Study Reports</h3>
     </div>
     <div class="fixed-header-buttons">
-      <div class="ui tiny buttons">
-        <button data-bind="click: selectRange, css:{active: isActive('2')}" data-range="2" class="ui tiny button">
-          2 weeks
-        </button>
-        <button data-bind="click: selectRange, css:{active: isActive('4')}" data-range="4" class="ui tiny button">
-          4 weeks
-        </button>
-        <button data-bind="click: selectRange, css:{active: isActive('6')}" data-range="6" class="ui tiny button">
-          6 weeks
-        </button>
-      </div>
     </div>
   </div>
   <studyreports-tabset></studyreports-tabset>
@@ -23,5 +12,6 @@
   <div style="padding: 0 2rem">
     <p data-bind="visible: !hasDataObs()">No data available.</p>
     <canvas data-bind="visible: hasDataObs, chart: chartObs"></canvas>
+    <p style="text-align:center">Number of days into the study</p>
   </div>
 </div>
