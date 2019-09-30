@@ -47,6 +47,7 @@ export default {
       PUBLISH: "Are you sure you want to publish this shared module version?"
     }
   },
+  retentionReports: ['api', 'biomarin-pku-study', 'crf-module', 'sage-mpower-2'],
   adminAuth: "/v3/auth/admin",
   appConfigs: "/v3/appconfigs",
   appConfigElements: "/v3/appconfigs/elements",

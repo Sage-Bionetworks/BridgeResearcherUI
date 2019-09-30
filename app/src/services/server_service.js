@@ -166,7 +166,7 @@ export class ServerService {
   cacheParticipantName(response) {
     if (response && response.id) {
       let name = fn.formatNameAsFullLabel(response);
-      cache.set(response.id + ":name", { name: name, status: response.status });
+      cache.set(response.id + ":name", { name: name, status: response.status, sharingScope: response.sharingScope });
     }
     return response;
   }
@@ -329,7 +329,6 @@ export class ServerService {
     return this.gethttp(`${config.schemas}/${identifier}/revisions/${revision}`);
   }
   getUploads(args) {
-    delete args.offsetBy;
     let queryString = fn.queryString(args);
     return this.gethttp(`${config.getCurrentStudy}/uploads${queryString}`);
   }

@@ -50,34 +50,6 @@
         <td>
           <a data-bind="href: '#/participants/'+$data.id+'/general',
             text: $component.formatNameAsFullLabel($data)"></a>
-          <span data-bind="semantic: 'dropdown'">
-            <i class="ui caret down icon"></i>
-            <div class="menu" style="display:none">
-              <div class="item" data-bind="click: $parent.resendEmailVerification, 
-                visible: $parent.resendVisible($data)">
-                Send email verification
-              </div>
-              <div class="item" data-bind="click: $parent.requestResetPassword, 
-                visible: $parent.resetPwdVisible($data)">
-                Send reset password email
-              </div>
-              <div class="item" data-bind="click: $parent.enableAccount, 
-                visible: $parent.enableVisible($data)">
-                Enable Account
-              </div>
-              <div class="item" data-bind="click: $parent.disableAccount, 
-                visible: $parent.disableVisible($data)">
-                Disable Account
-              </div>
-              <div class="item" data-bind="click: $parent.signOutUser, 
-                visible: $parent.signOutVisible($data)">
-                Sign out user&hellip;
-              </div>
-              <div class="item" data-bind="click: $parent.deleteTestUser, visible: $parent.deleteVisible($data)">
-                <span class="red ui text">Delete Test Account</span>
-              </div>
-            </div>
-          </span>
         </td>
         <td data-bind="html: $component.formatIdentifiers($data)"></td>
         <td style="white-space: nowrap" data-bind="text: $component.formatDateTime($data.createdOn)"></td>

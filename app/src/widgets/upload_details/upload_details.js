@@ -102,8 +102,7 @@ export default function uploadDetails(params) {
   }
 
   function load() {
-    return serverService
-      .getStudy()
+    return serverService.getStudy()
       .then(setSameStudy)
       .then(getSession)
       .then(getStudyList)

@@ -6,16 +6,13 @@ import storeService from "../../services/store_service";
 import tables from "../../tables";
 import utils from "../../utils";
 
-const PAGE_SIZE = 50;
-const PAGE_KEY = "u";
-
 export default class UploadsViewModel {
-  constructor(params) {
+  constructor(params, pageKey = "u") {
     let { start, end } = fn.getRangeInDays(-14, 0);
-    this.query = storeService.restoreQuery(PAGE_KEY);
-    this.query.pageSize = this.query.pageSize || PAGE_SIZE;
+    this.query = storeService.restoreQuery(pageKey);
     this.query.startTime = this.query.startTime ? new Date(this.query.startTime) : start;
     this.query.endTime = this.query.endTime ? new Date(this.query.endTime) : end;
+    this.pageKey = pageKey;
 
     new Binder(this)
       .obs("uploadsStartDate", this.query.startTime)
@@ -71,18 +68,12 @@ export default class UploadsViewModel {
       let success = this.makeSuccess(this, event);
 
       utils.startHandler(this, event);
-      serverService
-        .getUploadById(id)
-        .then(success)
-        .catch(function() {
-          serverService
-            .getUploadByRecordId(id)
-            .then(success)
-            .catch(function(e) {
-              event.target.parentNode.parentNode.classList.remove("loading");
-              utils.failureHandler({ transient: false })(e);
-            });
+      serverService.getUploadById(id).then(success).catch(function() {
+        serverService.getUploadByRecordId(id).then(success).catch(function(e) {
+          event.target.parentNode.parentNode.classList.remove("loading");
+          utils.failureHandler({ transient: false })(e);
         });
+      });
     }
   }
   updateDateRange() {
@@ -101,21 +92,17 @@ export default class UploadsViewModel {
   doCalSearch() {
     utils.clearErrors();
     this.updateDateRange();
-    //if (this.query.startTime !== null && this.query.endTime !== null) {
     this.itemsObs([]);
     this.recordsMessageObs("<div class='ui tiny active inline loader'></div>");
     this.callback();
-    //}
   }
   htmlFor(data) {
     if (data.validationMessageList === undefined) {
       return null;
     }
-    return data.validationMessageList
-      .map(function(error) {
-        return "<p class='error-message'>" + error + "</p>";
-      })
-      .join("");
+    return data.validationMessageList.map(function(error) {
+      return "<p class='error-message'>" + error + "</p>";
+    }).join("");
   }
   toggle(item) {
     item.collapsedObs(!item.collapsedObs());
@@ -149,20 +136,22 @@ export default class UploadsViewModel {
     return "";
   }
   uploadProgressBarState(item) {
-    let obj = { type: "progress", color: "gray", value: 1, label: "Upload Requested", total: 3 };
+    let sharingOff = (this.sharingScopeObs && this.sharingScopeObs() === 'no_sharing');
+    let obj = { type: "progress", state: "active", value: 1, label: "Upload Requested", total: 3 };
     if (item.status === "succeeded") {
       obj.value = 2;
       obj.label = "Upload Completed";
+      obj.state = "success";
       if (item.healthRecordExporterStatus === "succeeded") {
         obj.value = 3;
         obj.label = "Export Completed";
-        obj.color = "green";
-      } else if (typeof item.healthRecordExporterStatus === "undefined") {
-        obj.color = "green";
+      } else if (sharingOff) {
+        obj.state = "indicating";
       }
     } else if (item.status === "duplicate") {
-      obj.value = 2;
+      obj.value = 3;
       obj.label = "Upload Error";
+      obj.state = "error";
     }
     return obj;
   }
@@ -175,12 +164,11 @@ export default class UploadsViewModel {
   }
   loadingFunc(args) {
     this.updateDateRange();
-    args.startTime = this.query.startTime;
-    args.endTime = this.query.endTime;
-    storeService.persistQuery(PAGE_KEY, args);
+    this.query.offsetKey = args.offsetKey;
+    this.query.pageSize = 10;
+    storeService.persistQuery(this.pageKey, this.query);
 
-    return serverService
-      .getUploads(args)
+    return serverService.getUploads(this.query)
       .then(this.processUploads.bind(this))
       .catch(utils.failureHandler());
   }

@@ -9,6 +9,39 @@
     </div>
     <div class="fixed-header-buttons">
       <button class="ui tiny primary button" data-bind="click: save">Save</button>
+
+      <div class="ui tiny buttons">
+        <div class="ui tiny button"
+          data-bind="semantic: 'dropdown-button-toggle', container: '.buttons'">
+          More Actions
+        </div>
+        <div class="ui tiny floating dropdown icon button" data-bind="semantic: 'dropdown-button'">
+          <i class="dropdown icon"></i>
+          <div class="menu">
+
+            <div class="item" data-bind="click: resendEmailVerification, visible: resendVisible">
+              Send email verification
+            </div>
+            <div class="item" data-bind="click: requestResetPassword, visible: resetPwdVisible">
+              Send reset password email
+            </div>
+            <div class="item" data-bind="click: enableAccount, visible: enableVisible">
+              Enable Account
+            </div>
+            <div class="item" data-bind="click: disableAccount, visible: disableVisible">
+              Disable Account
+            </div>
+            <div class="item" data-bind="click: signOutUser, visible: signOutVisible">
+              Sign out user&hellip;
+            </div>
+            <div class="item" data-bind="click: deleteTestUser, visible: deleteVisible">
+              <span class="red ui text">Delete Test Account</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
   <participant-tabset params="isNewObs: isNewObs, userIdObs: userIdObs, 

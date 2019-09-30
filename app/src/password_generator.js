@@ -59,7 +59,6 @@ function passwordPolicyDescription(policy) {
   buffer.push("Passwords must be ");
   buffer.push(policy.minLength);
   buffer.push(" or more characters");
-  console.log(policy);
   if (policy.lowerCaseRequired || policy.numericRequired || policy.symbolRequired || policy.upperCaseRequired) {
     buffer.push(", and must contain at least ");
     let phrases = [];

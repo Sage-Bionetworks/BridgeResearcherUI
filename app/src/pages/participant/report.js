@@ -6,31 +6,10 @@ import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
 
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December"
-];
 const failureHandler = utils.failureHandler({
   redirectTo: "participants",
   redirectMsg: "Participant not found"
 });
-
-function firstDayOfMonth(year, month) {
-  return new Date(year, month, 1).toISOString().split("T")[0];
-}
-function lastDayOfMonth(year, month) {
-  return new Date(year, month + 1, 0).toISOString().split("T")[0];
-}
 
 export default function report(params) {
   let self = this;
@@ -46,27 +25,29 @@ export default function report(params) {
     .obs("name", "")
     .obs("title", "&#160;")
     .obs("identifier", params.identifier)
-    .obs("formatMonth")
-    .obs("status")
-    .obs("showLoader", false);
+    .obs("startDate")
+    .obs("endDate")
+    .obs("status");
 
-  serverService
-    .getParticipantName(params.userId)
-    .then(function(part) {
-      self.titleObs(part.name);
-      self.nameObs(part.name);
-      self.statusObs(part.status);
-    })
-    .catch(failureHandler);
+  self.doCalSearch = () => {
+    if (self.startDateObs() && self.endDateObs()) {
+      utils.clearErrors();
+      self.itemsObs([]);
+      self.recordsMessageObs("<div class='ui tiny active inline loader'></div>");
+      load();
+    }
+  };
+
+  serverService.getParticipantName(params.userId).then(function(part) {
+    self.titleObs(part.name);
+    self.nameObs(part.name);
+    self.statusObs(part.status);
+  }).catch(failureHandler);
 
   self.isDeveloper = root.isDeveloper;
   self.linkMaker = function() {
     return "#/participants/" + self.userIdObs() + "/reports";
   };
-
-  let d = new Date();
-  self.currentMonth = d.getMonth();
-  self.currentYear = d.getFullYear();
 
   self.addReport = function(vm, event) {
     root.openDialog("report_editor", {
@@ -99,53 +80,25 @@ export default function report(params) {
     return false;
   };
 
-  self.priorMonth = function() {
-    if (self.currentMonth === 0) {
-      self.currentYear--;
-      self.currentMonth = 11;
-    } else {
-      self.currentMonth--;
-    }
-    load();
-  };
-  self.nextMonth = function() {
-    if (self.currentMonth === 11) {
-      self.currentYear++;
-      self.currentMonth = 0;
-    } else {
-      self.currentMonth++;
-    }
-    load();
-  };
-  self.thisMonth = function() {
-    let d = new Date();
-    self.currentMonth = d.getMonth();
-    self.currentYear = d.getFullYear();
-    load();
-  };
-
   function deleteItem(item) {
     return serverService.deleteParticipantReportRecord(params.userId, params.identifier, item.date);
   }
   function loadReport() {
-    let startDate = firstDayOfMonth(self.currentYear, self.currentMonth);
-    let endDate = lastDayOfMonth(self.currentYear, self.currentMonth);
-    return serverService.getParticipantReport(params.userId, params.identifier, startDate, endDate);
+    let startDate = fn.formatDate(self.startDateObs(), 'iso');
+    let endDate = fn.formatDate(self.endDateObs(), 'iso');
+    return serverService.getParticipantReport(
+      params.userId, params.identifier, startDate, endDate);
   }
 
   function load() {
-    self.showLoaderObs(true);
-    self.formatMonthObs(MONTHS[self.currentMonth] + " " + self.currentYear);
-
-    serverService.getParticipantReportIndex(params.identifier)
+    return serverService.getParticipantReportIndex(params.identifier)
       .then((index) => self.substudyIds = index.substudyIds)
       .then(() => serverService.getParticipant(params.userId))
       .then(loadReport)
       .then(fn.handleMap("items", jsonFormatter.mapItem))
       .then(fn.handleSort("items", "date", true))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
-      .then(fn.handleStaticObsUpdate(self.showLoaderObs, false))
-      .catch(failureHandler);
+      .catch(fn.seq(utils.failureHandler(), () => self.itemsObs([])));
   }
   load();
 };

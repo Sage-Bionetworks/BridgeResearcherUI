@@ -6,11 +6,9 @@ var handlers = {
     $element.addClass("ui styled fluid accordion").accordion({ exclusive: false });
   },
   progress: function($element, allBindings, config) {
-    $element
-      .addClass("ui tiny progress")
+    $element.addClass("ui tiny progress " + config.state)
       .attr("data-value", config.value)
       .attr("data-total", config.total);
-    $element.addClass(config.color);
     $element.progress();
   },
   checkbox: function($element, allBindings) {
