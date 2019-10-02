@@ -776,6 +776,13 @@ export class ServerService {
   updateFile(guid, file) {
     return this.post(`${config.files}/${guid}`, file);
   }
+  getFileRevisions(guid, query) {
+    let queryString = fn.queryString(query);
+    return this.gethttp(`${config.files}/${guid}/revisions${queryString}`);
+  }
+  createFileRevision(guid, revision) {
+    return this.post(`${config.files}/${guid}/revisions`, revision);
+  }
   addSessionStartListener(listener) {
     if (typeof listener !== "function") {
       throw new Error(ERROR);

@@ -1,0 +1,28 @@
+<div class="ui small modal">
+    <i data-bind="click:closeDialog" class="close icon"></i>
+    <div class="header">
+      Upload File
+    </div>
+    <div class="content">
+      <form method="post" class="ui form">
+        <div class="field">
+          <label for="file" class="ui icon button">
+            <i class="file icon"></i> 
+            <span data-bind="text: nameObs">Select File</span>
+          </label>
+          <input id="file" type="file" style="display:none" 
+            data-bind="event: {change: updateFileControl}">
+        </div>
+        <div class="field">
+          <label>Status</label>
+          <div data-bind="html: statusObs"></div>
+        </div>
+      </form>
+    </div>
+    <div class="actions">
+      <button class="ui primary small button" 
+        data-bind="click: uploadAndClose, disable: disabledObs">Upload</button>
+      <button class="ui small button" data-bind="click: closeDialog">Cancel</button>
+    </div>
+  </div>
+  
