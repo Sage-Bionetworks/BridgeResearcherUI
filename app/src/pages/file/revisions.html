@@ -20,24 +20,35 @@
   <table class="ui compact selectable table" style="margin-top:0">
     <thead>
       <tr>
+        <th>Name</th>
         <th>Created On</th>
-        <th>Description</th>
+        <th>File Size</th>
         <th>Status</th>
+        <th width="10"></th>
       </tr>
     </thead>
     <tbody class="no_records" data-bind="if: itemsObs().length === 0">
       <tr>
-        <td colspan="3" data-bind="html: recordsMessageObs"></td>
+        <td colspan="5" data-bind="html: recordsMessageObs"></td>
       </tr>
     </tbody>
     <tbody data-bind="foreach: itemsObs">
-      <tr data-bind="css: {negative: $data.deleted}">
-        <td>
-          <a target="_blank" data-bind="text: $parent.formatDateTime($data.createdOn), 
-            attr: {href: $data.downloadURL}"></a>
+      <tr data-bind="css: $component.classNameForStatus($data)">
+        <td style="line-height:1.1">
+          <div>
+            <a data-bind="text: $data.name, attr: {href: $data.downloadURL}"></a>
+          </div>
+          <div style="color: #bbb; font-size: smaller" data-bind="text: $data.description"></div>
         </td>
-        <td data-bind="text: $data.description"></td>
-        <td data-bind="text: $data.status"></td>
+        <td data-bind="text: $parent.formatDateTime($data.createdOn)"></td>
+        <td data-bind="text: $parent.formatFileSize($data.size)"></td>
+        <td data-bind="text: $parent.formatTitleCase($data.status)"></td>
+        <td>
+          <button class="ui tiny basic icon button" 
+            data-bind="visible: $data.status === 'pending', click: $parent.verify">
+            <i class="redo icon"></i>
+          </button>          
+        </td>
       </tr>
     </tbody>
   </table>  

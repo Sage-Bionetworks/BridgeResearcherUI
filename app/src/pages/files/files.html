@@ -39,12 +39,11 @@
         </th>
         <th>Name</th>
         <th>Description</th>
-        <th>Mime Type</th>
       </tr>
     </thead>
     <tbody class="no_records" data-bind="if: itemsObs().length === 0">
       <tr>
-        <td colspan="4" data-bind="html: recordsMessageObs"></td>
+        <td colspan="3" data-bind="html: recordsMessageObs"></td>
       </tr>
     </tbody>
     <tbody data-bind="foreach: itemsObs">
@@ -60,7 +59,6 @@
             visible: !$data.deletedObs()"></a>
         </td>
         <td data-bind="text: $data.description"></td>
-        <td data-bind="text: $data.mimeType"></td>
       </tr>
     </tbody>
   </table>

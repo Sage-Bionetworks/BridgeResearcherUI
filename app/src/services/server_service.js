@@ -783,6 +783,9 @@ export class ServerService {
   createFileRevision(guid, revision) {
     return this.post(`${config.files}/${guid}/revisions`, revision);
   }
+  finishFileRevision(guid, createdOn) {
+    return this.post(`${config.files}/${guid}/revisions/${createdOn}`);
+  }
   addSessionStartListener(listener) {
     if (typeof listener !== "function") {
       throw new Error(ERROR);

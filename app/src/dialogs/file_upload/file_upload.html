@@ -13,10 +13,16 @@
           <input id="file" type="file" style="display:none" 
             data-bind="event: {change: updateFileControl}">
         </div>
-        <div class="field">
-          <label>Status</label>
+        <progress data-bind="attr:{ value: valueObs, max: maxObs }"></progress>
+        <div class="field progress-status">
           <div data-bind="html: statusObs"></div>
+          <div class="progress-status-perc" data-bind="text: percentageObs"></div>
         </div>
+        <div class="field">
+          <label>Description (optional)</label>
+          <input type="text" data-bind="textInput: descriptionObs">
+        </div>
+        <div style="color: #B22222" data-bind="text: errorObs, visible: errorObs()"></div>
       </form>
     </div>
     <div class="actions">

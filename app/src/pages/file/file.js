@@ -19,7 +19,6 @@ export default function editor(params) {
     .bind("name")
     .bind("guid")
     .bind("description")
-    .bind("mimeType")
     .bind("createdOn")
     .bind("modifiedOn")
     .bind("version");

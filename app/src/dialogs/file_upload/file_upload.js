@@ -1,49 +1,91 @@
 import serverService from '../../services/server_service';
-import ko from 'knockout';
+import Binder from '../../binder';
+import utils from '../../utils';
+
+function promiseXHR() {
+  const request = new XMLHttpRequest();
+  const promise = new Promise((resolve, reject) => {
+    request.onload = () => {
+      if (request.status >= 200 && request.status < 300) {
+        resolve(request.response);
+      } else {
+        reject(request.statusText);
+      }
+    };
+    request.onerror = () => reject(request.statusText);
+  });
+  return [promise, request];
+}
 
 export default function(params) {
-  let self = this;
+  const self = this;
+
+  new Binder(self)
+    .obs('disabled', true)
+    .obs('name', 'Select File')
+    .obs('status')
+    .obs('description')
+    .obs('value', 0)
+    .obs('max', 100)
+    .obs('percentage', '0%')
+    .obs('error');
+
+  function ok(status) {
+    self.statusObs(status);
+    self.errorObs('');
+  }
+  function error(error) {
+    self.statusObs('Upload failed');
+    self.errorObs(error);
+  }
+  function updateProgress(e) {
+    self.valueObs(e.loaded);
+    self.maxObs(e.total);
+    self.percentageObs(Math.round(e.loaded/e.total*100) + '%');
+  }
 
   self.fileInfo = {};
-
+  self.revision = null;
   self.closeDialog = params.closeFunc;
-  self.uploadAndClose = () => {
+
+  self.uploadAndClose = (vm, event) => {
     let f = self.fileInfo;
     let rev = {
-      description: `name=${f.name}, size=${f.size}, mimeType=${f.type}`,
+      name: f.name,
+      size: f.size,
+      description: self.descriptionObs(),
       mimeType: f.type
     };
+    utils.startHandler(vm, event);
     serverService.createFileRevision(params.guid, rev).then((revision) => {
-      var formData = new FormData();
-      formData.append('file', f);
+      self.revision = revision;
+      
+      let [promise, request] = promiseXHR();
 
-      var request = new XMLHttpRequest();
-      request.addEventListener('readystatechange', (e) => {
-        if (e.target.readyState === 4) {
-          if (e.target.status !== 200) {
-            self.statusObs(e.target.responseText);
-          } else {
-            self.statusObs('Upload completed');
-          }
-        }
-      });
-      request.upload.addEventListener('loadstart', () => self.statusObs('Upload started'));
-      request.upload.addEventListener('abort', () => self.statusObs('Upload aborted'));
-      request.upload.addEventListener('timeout', () => self.statusObs('Upload timed out'));
-      request.upload.addEventListener('error', (e) => self.statusObs('Upload error: ' + JSON.stringify(e)));
-      request.upload.addEventListener('load', (e) => self.statusObs('Upload being processed'));
-      request.upload.addEventListener('progress', (e) => self.statusObs('Progress: ' + (e.loaded/e.total*100) + '%'));
-      request.open('PUT', revision.uploadURL, true);
-      request.setRequestHeader('Content-Type', f.type);
-      request.send(formData);
-      return false;
+      const reader = new FileReader(); 
+      reader.onload = function(evt) {
+        request.upload.addEventListener('loadstart', () => ok('Upload started'));
+        request.upload.addEventListener('abort', () => error('Request aborted.'));
+        request.upload.addEventListener('timeout', () => error('Upload timed out'));
+        request.upload.addEventListener('progress', updateProgress);
+        request.open('PUT', revision.uploadURL, true);
+        request.setRequestHeader('Content-Type', f.type);
+        request.setRequestHeader('Content-Disposition', `attachment; filename="${f.name}"`);
+        request.send(evt.target.result);
+      };
+      reader.readAsArrayBuffer(self.fileInfo);
+      return promise;
+    })
+    .then(() => {
+      ok('Upload completed');
+      return serverService.finishFileRevision(params.guid, self.revision.createdOn);
+    })
+    .then(params.closeFunc)
+    .catch((e) => {
+      utils.failureHandler(vm, event)(e);
+      error(e.statusText);
     });
   };
-
-  self.disabledObs = ko.observable(true);
-  self.nameObs = ko.observable('Select File');
-  self.statusObs = ko.observable('');
-
   self.updateFileControl = function(vm, event) {
     self.fileInfo = event.target.files[0];
     let f = self.fileInfo;
