@@ -6,6 +6,7 @@ import password from "../../password_generator";
 import Promise from "bluebird";
 import root from "../../root";
 import serverService from "../../services/server_service";
+import utils from "../../utils";
 
 // Worker
 // * calculateSteps: int
@@ -124,6 +125,7 @@ export default function(params) {
     self.statusObs("Import finished. There were " + self.errorMessagesObs().length + " errors.");
   }
   self.startImport = function(vm, event) {
+    utils.startHandler(vm, event);
     self.errorMessagesObs([]);
     self.statusObs("Preparing to import...");
 

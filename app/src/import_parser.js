@@ -26,7 +26,8 @@ function parseStanzas(string) {
 }
 
 function parseOneStanza(stanza) {
-  if (stanza.trim().length === 0) {
+  stanza = stanza.trim();
+  if (stanza.length === 0) {
     return null;
   }
   let obj = {};
@@ -44,12 +45,15 @@ function parseOneStanza(stanza) {
         i=0;
       }
     }
-    records.push(stanza.trim()); // one last time
+    records.push(stanza);
     records.forEach((pair) => {
       let [prop, value] = pair.split('=');
+      prop = prop.trim();
+      value = value.trim();
       if (FIELDS.includes(prop)) {
-        value = ((value.charAt(0) === '"') && value.charAt(value.length-1) === '"') ?
-        value.substring(1, value.length-1) : value;
+        if ((value.charAt(0) === '"') && value.charAt(value.length-1) === '"') {
+          value = value.substring(1, value.length-1);
+        }
         obj[prop] = value;
       } else {
         obj.externalId = prop;
