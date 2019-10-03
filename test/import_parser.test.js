@@ -3,7 +3,7 @@ import parser from '../app/src/import_parser';
 
 describe("import_parser", function() {
   it("splits simple records", () => {
-    let results = parser("A,B, ,C");
+    let results = parser("A , B , , C");
     expect(results.length).to.equal(3);
     expect(results[0].externalId).to.equal("A");
     expect(results[1].externalId).to.equal("B");
