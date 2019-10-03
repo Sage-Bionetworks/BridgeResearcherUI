@@ -6,7 +6,6 @@ import password from "../../password_generator";
 import Promise from "bluebird";
 import root from "../../root";
 import serverService from "../../services/server_service";
-import utils from "../../utils";
 
 // Worker
 // * calculateSteps: int
