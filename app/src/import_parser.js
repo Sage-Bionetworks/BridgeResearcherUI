@@ -10,16 +10,25 @@ function parseStanzas(string) {
       inQuote = !inQuote;
     }
     if (string.charAt(i) === ',' && !inQuote) {
-      records.push(string.substring(0,i));
+      let obj = parseOneStanza(string.substring(0,i));
+      if (obj) {
+        records.push(obj);
+      }
       string = string.substring(i+1);
       i=0;
     }
   }
-  records.push(string);
-  return records.map(stanza => stanza.trim()).filter((value) => value.length > 0);
+  let obj = parseOneStanza(string);
+  if (obj) {
+    records.push(obj);
+  }
+  return records;
 }
 
 function parseOneStanza(stanza) {
+  if (stanza.trim().length === 0) {
+    return null;
+  }
   let obj = {};
   // We need something more complex to suss this out.
   if (stanza.indexOf('=') > -1) {
@@ -50,12 +59,8 @@ function parseOneStanza(stanza) {
   } else {
     obj.externalId = stanza;
   }
-  if (!obj.password) {
-    obj.password = password.generatePassword(32)
-  }
-  if (!obj.sharingScope) {
-    obj.sharingScope = "all_qualified_researchers"
-  }
+  obj.password = obj.password || password.generatePassword(32);
+  obj.sharingScope = obj.sharingScope || "all_qualified_researchers";
   if (obj.externalId && !obj.identifier) {
     obj.identifier = obj.externalId;
   }
@@ -66,5 +71,5 @@ function parseOneStanza(stanza) {
 }
 
 export default function(string) {
-  return parseStanzas(string).map(parseOneStanza);
+  return parseStanzas(string);
 }
