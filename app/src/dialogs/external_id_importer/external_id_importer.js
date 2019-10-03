@@ -1,11 +1,11 @@
 import batchDialogUtils from "../../batch_dialog_utils";
 import Binder from "../../binder";
 import fn from "../../functions";
+import parser from "../../import_parser";
 import password from "../../password_generator";
 import Promise from "bluebird";
 import root from "../../root";
 import serverService from "../../services/server_service";
-import utils from "../../utils";
 
 // Worker
 // * calculateSteps: int
@@ -17,16 +17,7 @@ import utils from "../../utils";
 
 function IdImportWorker(study, input, substudyId) {
   this.study = study;
-  this.credentialPairs = input.split(/[,\s\t\r\n]+/).filter(function(value) {
-    return value.length > 0;
-  }).map(function(value) {
-      if (value.includes('=')) {
-        let parts = value.split('=');
-        return {identifier: parts[0], password: parts[1]};
-      } else {
-        return {identifier: value, password: password.generatePassword(32)};
-      }
-  });
+  this.credentialPairs = parser(input);
   this.substudyId = substudyId;
   this.importedCredentialPairs = [];
 }
@@ -39,7 +30,7 @@ IdImportWorker.prototype = {
   },
   workDescription: function() {
     if (this.currentCredentialPair) {
-      return "Importing " + this.currentCredentialPair.identifier;
+      return "Importing " + this.currentCredentialPair.externalId;
     } else {
       return "";
     }
@@ -49,10 +40,9 @@ IdImportWorker.prototype = {
     if (!password.isPasswordValid(this.study.passwordPolicy, this.currentCredentialPair.password)) {
       return Promise.reject(new Error("Password is invalid. " + password.passwordPolicyDescription(this.study.passwordPolicy)));
     }
-    return serverService.createExternalId({
-      identifier: this.currentCredentialPair.identifier,
-      substudyId: this.substudyId
-    }).then(this._success.bind(this));
+    this.currentCredentialPair.substudyId = this.substudyId;
+    return serverService.createExternalId(this.currentCredentialPair)
+      .then(this._success.bind(this));
   },
   _success: function(response) {
     this.importedCredentialPairs.push(this.currentCredentialPair);
@@ -78,13 +68,12 @@ CreateCredentialsWorker.prototype = {
     return this.credentialPairs.length > 0;
   },
   workDescription: function() {
-    return "Creating credentials for " + this.credentialPairs[0].identifier;
+    return "Creating credentials for " + this.credentialPairs[0].externalId;
   },
   performWork: function() {
     this.credentialPair = this.credentialPairs.shift();
-    let participant = utils.createParticipantForID(this.credentialPair.identifier, this.credentialPair.password);
-    participant.dataGroups = this.dataGroups;
-    return serverService.createParticipant(participant);
+    this.credentialPair.dataGroups = this.dataGroups;
+    return serverService.createParticipant(this.credentialPair);
   },
   currentWorkItem: function() {
     return this.credentialPair;
@@ -135,6 +124,7 @@ export default function(params) {
     self.statusObs("Import finished. There were " + self.errorMessagesObs().length + " errors.");
   }
   self.startImport = function(vm, event) {
+    self.errorMessagesObs([]);
     self.statusObs("Preparing to import...");
 
     let importWorker = new IdImportWorker(self.study, self.importObs(), self.substudyIdObs());
