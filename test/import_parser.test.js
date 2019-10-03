@@ -43,4 +43,10 @@ describe("import_parser", function() {
     expect(results2[0].password.length).to.equal(32);
     expect(results2[1].password.length).to.equal(32);
   });
+  it("is not confused by special characters", () => {
+    let results = parser('firstName="Alx, Dark"');
+    expect(results.length).to.equal(1);
+    expect(results[0].firstName).to.equal("Alx, Dark");
+    expect(results[0].password.length).to.equal(32);
+  });
 });
