@@ -4,18 +4,14 @@ import surveyUtils from "../survey_utils";
 
 function valueToObservers(self, prefix) {
   let yearObs = `${prefix}ValueYearObs`;
-  let monthObs = `${prefix}ValueMonthObs`;
   let targetObs = `${prefix}ValueObs`;
   let value = self[targetObs]();
 
   self[yearObs] = ko.observable();
-  self[monthObs] = ko.observable();
   if (value) {
-    self[yearObs](value.split("-")[0]);
-    self[monthObs](value.split("-")[1]);
+    self[yearObs](value);
   }
-  self[yearObs].subscribe(v => self[targetObs](fn.formatYearMonth(v, self[monthObs]())));
-  self[monthObs].subscribe(v => self[targetObs](fn.formatYearMonth(self[yearObs](), v)));
+  self[yearObs].subscribe(v => self[targetObs](self[yearObs]()));
 }
 
 export default function(params) {

@@ -1,13 +1,13 @@
-<constraints-label params="title: 'Date & Time Question', element: element"></constraints-label>
+<constraints-label params="title: 'Year Question', element: element"></constraints-label>
 <div class="ui constraints grid">
   <div class="eight wide column">
     <div class="field" data-bind="attr:{id: $parent.collectionName+'constraints_earliestValue'}">
-      <label>Earliest date/time</label>
-      <ui-datetime params="fieldObs: earliestValueObs"></ui-datetime>
+      <label>Earliest year</label>
+      <input placeholder="YYYY" style="width: 4.5rem" data-bind="textInput: earliestValueYearObs" />
     </div>
     <div class="field">
-      <label>Latest date/time</label>
-      <ui-datetime params="fieldObs: latestValueObs"></ui-datetime>
+      <label>Latest year</label>
+      <input placeholder="YYYY" style="width: 4.5rem" data-bind="textInput: latestValueYearObs" />
     </div>
     <div class="field">
       <label>Allow future dates?</label>
