@@ -1,0 +1,6 @@
+<div class="ui secondary pointing menu" style="flex-wrap: wrap" data-bind="visible: !isNewObs()">
+  <a data-bind="tabber, href: linkMaker('general')"> <i class="setting icon"></i> General </a>
+  <a data-bind="tabber, href: linkMaker('revisions')"> <i class="history icon"></i> Revisions </a>
+</div>
+<div class="ui empty secondary pointing menu" data-bind="visible: isNewObs"></div>
+  

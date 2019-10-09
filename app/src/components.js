@@ -107,6 +107,14 @@ import topics from "./pages/topics/topics";
 import topicsHtml from "./pages/topics/topics.html";
 import topic from "./pages/topic/topic";
 import topicHtml from "./pages/topic/topic.html";
+import files from "./pages/files/files";
+import filesHtml from "./pages/files/files.html";
+import file from "./pages/file/file";
+import fileHtml from "./pages/file/file.html";
+import fileRevisions from "./pages/file/revisions";
+import fileRevisionsHtml from "./pages/file/revisions.html";
+import fileTabset from "./pages/file/tabset";
+import fileTabsetHtml from "./pages/file/tabset.html";
 import schedule from "./pages/schedule/schedule";
 import scheduleHtml from "./pages/schedule/schedule.html";
 import uploads from "./pages/uploads/uploads";
@@ -266,6 +274,8 @@ import editAndroidLink from "./dialogs/edit_android_link/edit_android_link";
 import editAndroidLinkHtml from "./dialogs/edit_android_link/edit_android_link.html";
 import oauthProvider from "./dialogs/oauth_provider/oauth_provider";
 import oauthProviderHtml from "./dialogs/oauth_provider/oauth_provider.html";
+import fileUpload from "./dialogs/file_upload/file_upload";
+import fileUploadHtml from "./dialogs/file_upload/file_upload.html";
 import appConfigs from "./pages/appconfigs/appconfigs";
 import appConfigsHtml from "./pages/appconfigs/appconfigs.html";
 import appConfig from "./pages/appconfig/appconfig";
@@ -293,6 +303,10 @@ import templateHistory from './pages/template/history';
 import templateHistoryHtml from './pages/template/history.html';
 import templateTabset from './pages/template/tabset';
 import templateTabsetHtml from './pages/template/tabset.html';
+// TODO: This is the most generic and reusable variant of the pager, and should replace the 
+// others. Participants might remain separate because of the complexity of the search UI.
+import pager from './widgets/pager/pager';
+import pagerHtml from './widgets/pager/pager.html';
 
 const reg = ko.components.register;
 reg("errors", {viewModel: errors, template: errorsHtml});
@@ -350,6 +364,9 @@ reg("tasks", {viewModel: tasks, template: tasksHtml});
 reg("task", {viewModel: task, template: taskHtml});
 reg("topics", {viewModel: topics, template: topicsHtml});
 reg("topic", {viewModel: topic, template: topicHtml});
+reg("files", {viewModel: files, template: filesHtml});
+reg("file", {viewModel: file, template: fileHtml});
+reg("file_revisions", {viewModel: fileRevisions, template: fileRevisionsHtml});
 reg("schedule", {viewModel: schedule, template: scheduleHtml});
 reg("uploads", {viewModel: uploads, template: uploadsHtml});
 reg("upload", {viewModel: upload, template: uploadHtml});
@@ -386,6 +403,7 @@ reg("ui-duration", {viewModel: uiDur, template: uiDurHtml});
 reg("events-tabset", {template: eventsTabsetHtml});
 reg("survey-tabset", {viewModel: surveyTabset, template: surveyTabsetHtml});
 reg("subpop-tabset", {viewModel: subpopTabset, template: subpopTabsetHtml});
+reg("file-tabset", {viewModel: fileTabset, template: fileTabsetHtml});
 
 reg("app_version_criteria", {viewModel: appVersionCrit, template: appVersionCritHtml});
 reg("template_criteria", {viewModel: templateCrit, template: templateCritHtml});
@@ -415,6 +433,7 @@ reg("template_general", {viewModel: templateGeneral, template: templateGeneralHt
 reg("template_editor", {viewModel: templateEditor, template: templateEditorHtml});
 reg("template_history", {viewModel: templateHistory, template: templateHistoryHtml});
 reg("template-tabset", {viewModel: templateTabset, template: templateTabsetHtml});
+reg("pager", {viewModel: pager, template: pagerHtml});
 
 // Dialogs. These must be synchronous.
 reg("sign_out_user", {viewModel: signOutUser, template: signOutUserHtml, synchronous: true});
@@ -443,6 +462,7 @@ reg("select_configs", {viewModel: selectConfigs, template: selectConfigsHtml, sy
 reg("preview_appconfig", {viewModel: previewAppConfig, template: previewAppConfigHtml, synchronous: true});
 reg("edit_apple_link", {viewModel: editAppleLink, template: editAppleLinkHtml, synchronous: true});
 reg("edit_android_link", {viewModel: editAndroidLink, template: editAndroidLinkHtml, synchronous: true});
+reg("file_upload", {viewModel: fileUpload, template: fileUploadHtml, synchronous: true});
 reg("oauth_provider", {viewModel: oauthProvider, template: oauthProviderHtml, synchronous: true});
 reg("appconfigs", {viewModel: appConfigs, template: appConfigsHtml});
 reg("appconfig", {viewModel: appConfig, template: appConfigHtml});
