@@ -96,26 +96,26 @@ function newSchedulePlan() {
 function formatSchedule(sch) {
   return scheduleFormatter.formatSchedule(sch, activityOptionsLabel, taskOptionsLabel, surveysOptionsLabel);
 }
+function formatEventId(eventId) {
+  console.log("1", eventId, activityOptionsLabel);
+  return scheduleFormatter.formatEventId(eventId, activityOptionsLabel);
+}
 function formatStrategy(strategy) {
   if (strategy.type === "SimpleScheduleStrategy") {
     return formatSchedule(strategy.schedule);
   } else if (strategy.type === "ABTestScheduleStrategy") {
-    return strategy.scheduleGroups
-      .map(function(group) {
-        return "<span class='times-label'>" + group.percentage + "%:</span> " + formatSchedule(group.schedule);
-      })
-      .join("<br>");
+    return strategy.scheduleGroups.map(function(group) {
+      return "<span class='times-label'>" + group.percentage + "%:</span> " + formatSchedule(group.schedule);
+    }).join("<br>");
   } else if (strategy.type === "CriteriaScheduleStrategy") {
-    return strategy.scheduleCriteria
-      .map(function(group) {
+    return strategy.scheduleCriteria.map(function(group) {
         return (
           "<span class='times-label'>" +
           criteriaUtils.label(group.criteria) +
           ":</span> " +
           formatSchedule(group.schedule)
         );
-      })
-      .join("<br>");
+      }).join("<br>");
   } else {
     return "<i>Unknown</i>";
   }
@@ -165,6 +165,7 @@ export default {
   newSchedule,
   newSchedulePlan,
   newStrategy,
+  formatEventId,
   formatStrategy,
   formatSchedule,
   formatCompoundActivity,
