@@ -97,7 +97,6 @@ function formatSchedule(sch) {
   return scheduleFormatter.formatSchedule(sch, activityOptionsLabel, taskOptionsLabel, surveysOptionsLabel);
 }
 function formatEventId(eventId) {
-  console.log("1", eventId, activityOptionsLabel);
   return scheduleFormatter.formatEventId(eventId, activityOptionsLabel);
 }
 function formatStrategy(strategy) {
