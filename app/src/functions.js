@@ -178,6 +178,9 @@ function notBlankName(array, value) {
     array.push(value);
   }
 }
+function formatSentenceCase(string) {
+  return string.substring(0, 1).toUpperCase() + string.substring(1);
+}
 function formatName(participant) {
   let array = [];
   if (participant) {
@@ -523,6 +526,7 @@ export default {
   formatNameAsFullLabel,
   formatRoles,
   formatSearch,
+  formatSentenceCase,
   formatTitleCase,
   formatVersionRange,
   formatYearMonth,

@@ -78,7 +78,7 @@ function formatSchedule(schedule, activityFormatter = EMPTY, taskFormatter = EMP
   if (schedule.startsOn || schedule.endsOn) {
     buffer.push(formatTimeWindow(schedule));
   }
-  return buffer.map(sentenceCase).join(". ") + ".";
+  return buffer.map(fn.formatSentenceCase).join(". ") + ".";
 }
 function formatActivityArray(activityMap, schedule) {
   let hasTimesOfDay = schedule.times && schedule.times.length;
@@ -214,9 +214,6 @@ function mapActivityCounts(activities, taskFormatter, surveyFormatter) {
     map[label] = ++map[label] || 1;
     return map;
   }, {});
-}
-function sentenceCase(string) {
-  return string.substring(0, 1).toUpperCase() + string.substring(1);
 }
 
 export default {

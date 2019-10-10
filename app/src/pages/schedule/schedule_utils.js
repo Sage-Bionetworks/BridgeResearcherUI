@@ -97,7 +97,7 @@ function formatSchedule(sch) {
   return scheduleFormatter.formatSchedule(sch, activityOptionsLabel, taskOptionsLabel, surveysOptionsLabel);
 }
 function formatEventId(eventId) {
-  return scheduleFormatter.formatEventId(eventId, activityOptionsLabel);
+  return fn.formatSentenceCase(scheduleFormatter.formatEventId(eventId, activityOptionsLabel));
 }
 function formatStrategy(strategy) {
   if (strategy.type === "SimpleScheduleStrategy") {
