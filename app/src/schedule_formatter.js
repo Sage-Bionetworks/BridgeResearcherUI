@@ -51,10 +51,7 @@ function makeOptionLabelFinder(array) {
   };
 }
 
-function formatSchedule(schedule, activityFormatter, taskFormatter, surveyFormatter) {
-  activityFormatter = activityFormatter || EMPTY;
-  taskFormatter = taskFormatter || EMPTY;
-  surveyFormatter = surveyFormatter || EMPTY;
+function formatSchedule(schedule, activityFormatter = EMPTY, taskFormatter = EMPTY, surveyFormatter = EMPTY) {
   if (schedule == null || Object.keys(schedule).length === 0) {
     return "<i>No schedule</i>";
   }
@@ -174,7 +171,7 @@ function formatEventId(eventId, activityFormatter) {
         return oneEventId;
       }
     });
-  return fn.formatList(phrases);
+  return sentenceCase(fn.formatList(phrases));
 }
 function periodToWords(periodStr) {
   let periods = parsePeriods(periodStr);
@@ -223,7 +220,7 @@ function sentenceCase(string) {
 }
 
 export default {
-  formatEventId: fn.seq(formatEventId, sentenceCase),
+  formatEventId,
   formatSchedule,
   formatTimesArray,
   timeOptions: TIME_OPTIONS,

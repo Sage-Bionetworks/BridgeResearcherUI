@@ -83,8 +83,8 @@ export default function(params) {
 
   fn.copyProps(self, params, "collectionName");
   fn.copyProps(self, fn, "formatDateTime");
-  fn.copyProps(self, scheduleUtils, "surveysOptionsObs", "taskOptionsObs", "compoundActivityOptionsObs");
-  fn.copyProps(self, scheduleFormatter, "formatEventId", "formatTimesArray->formatTimes");
+  fn.copyProps(self, scheduleUtils, "formatEventId", "surveysOptionsObs", "taskOptionsObs", "compoundActivityOptionsObs");
+  fn.copyProps(self, scheduleFormatter, "formatTimesArray->formatTimes");
 
   self.scheduleTypeOptions = SCHEDULE_TYPE_OPTIONS;
   self.scheduleTypeLabel = utils.makeOptionLabelFinder(SCHEDULE_TYPE_OPTIONS);
