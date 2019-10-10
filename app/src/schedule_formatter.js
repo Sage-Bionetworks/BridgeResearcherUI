@@ -171,7 +171,7 @@ function formatEventId(eventId, activityFormatter) {
         return oneEventId;
       }
     });
-  return sentenceCase(fn.formatList(phrases));
+  return fn.formatList(phrases);
 }
 function periodToWords(periodStr) {
   let periods = parsePeriods(periodStr);
