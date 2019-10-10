@@ -41,129 +41,125 @@
     <div class="row">
       <div class="column">
         <h4>Assignment based on</h4>
-        <!-- ko component: {name:"template_criteria", 
-          params:{ id:"", criteriaObs:criteriaObs}} -->
+        <!-- ko component: {name:"template_criteria", params:{ id:"", criteriaObs:criteriaObs}} -->
         <!-- /ko -->
       </div>
     </div>
-    <div class="ui grid" style="width: 100%; margin-top: 2rem">
-      <div class="three wide column">
-        <div class="ui vertical fluid right tabular menu">
-          <a class="item" data-tab="schemas" data-bind="css: isActive('schemas'), click: setTab">Schemas</a>
-          <a class="item" data-tab="surveys" data-bind="css: isActive('surveys'), click: setTab">Surveys</a>
-          <a class="item" data-tab="config" data-bind="css: isActive('config'), click: setTab">Config Elements</a>
-          <a class="item" data-tab="clientData" data-bind="css: isActive('clientData'), click: setTab">Client Data</a>
-        </div>
+    <div class="ui tabular menu" style="margin-bottom:2rem">
+      <a class="item" data-tab="schemas" data-bind="css: isActive('schemas'), click: setTab">Schemas</a>
+      <a class="item" data-tab="surveys" data-bind="css: isActive('surveys'), click: setTab">Surveys</a>
+      <a class="item" data-tab="files" data-bind="css: isActive('files'), click: setTab">Hosted Files</a>
+      <a class="item" data-tab="config" data-bind="css: isActive('config'), click: setTab">Config Elements</a>
+      <a class="item" data-tab="clientData" data-bind="css: isActive('clientData'), click: setTab">Client Data</a>
+    </div>
+    <div data-bind="visible: selectedTabObs() === 'schemas'">
+      <table class="ui compact table" style="width:auto" data-bind="visible: schemaReferencesObs().length > 0">
+        <tbody data-bind="foreach: schemaReferencesObs">
+          <tr>
+            <td>
+              <a target="_blank" data-bind="attr: {
+                href: '#/schemas/'+$data.id+'/versions/'+$data.revisionObs()+'/editor'}">
+                <span data-bind="text: $data.name"></span>
+                <i class="ui external icon"></i>
+              </a>
+            </td>
+            <td>
+              <div style="width:100%" data-bind="attr: {id: 'schemaReferences'+$index()+'_revision'}">
+                <ui-select params="fieldObs: $data.revisionObs, 
+                  optionsSrc: $data.revisionList, optionsCaption: 'Select Revision:'"></ui-select>
+              </div>
+            </td>
+            <td width="5rem">
+              <i class="red large times circle outline link icon"
+                data-bind="click: $component.removeSchema.bind($component)"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="ui tiny button" data-bind="click: openSchemaSelector">Edit Schemas</button>
+    </div>
+    <div data-bind="visible: selectedTabObs() === 'surveys'">
+      <table class="ui compact table" style="width:auto" data-bind="visible: surveyReferencesObs().length > 0">
+        <tbody data-bind="foreach: surveyReferencesObs">
+          <tr>
+            <td>
+              <a target="_blank" data-bind="attr: {
+                href: '#/surveys/'+$data.guid+'/'+$data.createdOnObs()+'/editor'}">
+                <span data-bind="text: $data.name"></span>
+                <i class="ui external icon"></i>
+              </a>
+            </td>
+            <td>
+              <div style="width:100%" data-bind="attr: {id: 'surveyReferences'+$index()+'_createdOn'}">
+                <ui-select params="fieldObs: $data.createdOnObs, 
+                  optionsSrc: $data.createdOnList, optionsCaption: 'Select Revision:'"></ui-select>
+              </div>
+            </td>
+            <td width="5rem">
+              <i class="red large times circle outline link icon"
+                data-bind="click: $component.removeSurvey.bind($component)"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="ui tiny button" data-bind="click: openSurveySelector">Edit Surveys</button>
+    </div>
+    <div data-bind="visible: selectedTabObs() === 'files'">
+      <table class="ui compact table" style="width: auto" data-bind="visible: fileReferencesObs().length > 0">
+        <tbody data-bind="foreach: fileReferencesObs">
+          <td>
+            <a target="_blank" data-bind="attr: {href: '#/files/'+$data.guid}">
+              <span data-bind="text: $data.name"></span>
+              <i class="ui external icon"></i>
+            </a>
+          </td>
+          <td>
+            <div style="width:100%" data-bind="attr: {id: 'fileReferences'+$index()+'_createdOn'}">
+              <ui-select params="fieldObs: $data.createdOnObs, 
+                optionsSrc: $data.createdOnList, optionsCaption: 'Select Revision:'"></ui-select>
+            </div>
+          </td>
+          <td width="5rem">
+            <i class="red large times circle outline link icon"
+              data-bind="click: $component.removeFile.bind($component)"></i>
+          </td>
+        </tbody>
+      </table>
+      <button class="ui tiny button" data-bind="click: openFileSelector">Edit Files</button>
+    </div>
+    <div data-bind="visible: selectedTabObs() === 'config'">
+      <table class="ui compact table" style="width:auto" data-bind="visible: configReferencesObs().length > 0">
+        <tbody data-bind="foreach: configReferencesObs">
+          <tr>
+            <td>
+              <a target="_blank" data-bind="attr: {
+                href: '#/configs/'+$data.id+'/revisions/'+$data.revisionObs()+'/editor'}">
+                <span data-bind="text: $data.name"></span>
+                <i class="ui external icon"></i>
+              </a>
+            </td>
+            <td>
+              <div style="width:100%" data-bind="attr: {id: 'configReferences'+$index()+'_revision'}">
+                <ui-select params="fieldObs: $data.revisionObs, 
+                  optionsSrc: $data.revisionList, optionsCaption: 'Select Revision:'"></ui-select>
+              </div>
+            </td>
+            <td width="5rem">
+              <i class="red large times circle outline link icon"
+                data-bind="click: $component.removeConfig.bind($component)"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="ui tiny button" data-bind="click: openConfigSelector">Edit Config Elements</button>
+    </div>
+    <div data-bind="visible: selectedTabObs() === 'clientData'">
+      <label>Client data should be in JSON format</label>
+      <div id="clientData">
+        <textarea style="font-family: monospace; height: 50rem" data-bind="textInput: clientDataObs"></textarea>
       </div>
-      <div class="thirteen wide stretched column">
-        <div data-bind="visible: selectedTabObs() === 'schemas'">
-          <table class="ui compact table" style="width:auto" data-bind="visible: schemaReferencesObs().length > 0">
-            <tbody data-bind="foreach: schemaReferencesObs">
-              <tr>
-                <td>
-                  <a
-                    target="_blank"
-                    data-bind="attr: {
-                    href: '#/schemas/'+$data.id+'/versions/'+$data.revisionObs()+'/editor'}"
-                  >
-                    <span data-bind="text: $data.name"></span>
-                    <i class="ui external icon"></i>
-                  </a>
-                </td>
-                <td>
-                  <div style="width:10rem" data-bind="attr: {id: 'schemaReferences'+$index()+'_revision'}">
-                    <ui-select
-                      params="fieldObs: $data.revisionObs, 
-                      optionsSrc: $data.revisionList, optionsCaption: 'Select Revision:'"
-                    ></ui-select>
-                  </div>
-                </td>
-                <td width="5rem">
-                  <i
-                    class="red large times circle outline link icon"
-                    data-bind="click: $component.removeSchema.bind($component)"
-                  ></i>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <button class="ui tiny button" data-bind="click: openSchemaSelector">Edit Schemas</button>
-        </div>
-        <div data-bind="visible: selectedTabObs() === 'surveys'">
-          <table class="ui compact table" style="width:auto" data-bind="visible: surveyReferencesObs().length > 0">
-            <tbody data-bind="foreach: surveyReferencesObs">
-              <tr>
-                <td>
-                  <a
-                    target="_blank"
-                    data-bind="attr: {
-                    href: '#/surveys/'+$data.guid+'/'+$data.createdOnObs()+'/editor'}"
-                  >
-                    <span data-bind="text: $data.name"></span>
-                    <i class="ui external icon"></i>
-                  </a>
-                </td>
-                <td>
-                  <div style="width:15rem" data-bind="attr: {id: 'surveyReferences'+$index()+'_createdOn'}">
-                    <ui-select
-                      params="fieldObs: $data.createdOnObs, 
-                      optionsSrc: $data.createdOnList, optionsCaption: 'Select Revision:'"
-                    ></ui-select>
-                  </div>
-                </td>
-                <td width="5rem">
-                  <i
-                    class="red large times circle outline link icon"
-                    data-bind="click: $component.removeSurvey.bind($component)"
-                  ></i>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <button class="ui tiny button" data-bind="click: openSurveySelector">Edit Surveys</button>
-        </div>
-        <div data-bind="visible: selectedTabObs() === 'config'">
-          <table class="ui compact table" style="width:auto" data-bind="visible: configReferencesObs().length > 0">
-            <tbody data-bind="foreach: configReferencesObs">
-              <tr>
-                <td>
-                  <a
-                    target="_blank"
-                    data-bind="attr: {
-                    href: '#/configs/'+$data.id+'/revisions/'+$data.revisionObs()+'/editor'}"
-                  >
-                    <span data-bind="text: $data.name"></span>
-                    <i class="ui external icon"></i>
-                  </a>
-                </td>
-                <td>
-                  <div style="width:10rem" data-bind="attr: {id: 'configReferences'+$index()+'_revision'}">
-                    <ui-select
-                      params="fieldObs: $data.revisionObs, 
-                      optionsSrc: $data.revisionList, optionsCaption: 'Select Revision:'"
-                    ></ui-select>
-                  </div>
-                </td>
-                <td width="5rem">
-                  <i
-                    class="red large times circle outline link icon"
-                    data-bind="click: $component.removeConfig.bind($component)"
-                  ></i>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <button class="ui tiny button" data-bind="click: openConfigSelector">Edit Config Elements</button>
-        </div>
-        <div data-bind="visible: selectedTabObs() === 'clientData'">
-          <label>Client data should be in JSON format</label>
-          <div id="clientData">
-            <textarea style="font-family: monospace; height: 50rem" data-bind="textInput: clientDataObs"></textarea>
-          </div>
-          <div style="padding-top:1rem">
-            <button class="ui tiny primary button" data-bind="click: reformat">Reformat</button>
-          </div>
-        </div>
+      <div style="padding-top:1rem">
+        <button class="ui tiny primary button" data-bind="click: reformat">Reformat</button>
       </div>
     </div>
   </form>

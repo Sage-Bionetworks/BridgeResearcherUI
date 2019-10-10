@@ -1,12 +1,8 @@
 <div class="pp">
   <div class="pp_filter_control">
     <div class="ui left icon input">
-      <input
-        data-bind="textInput: formattedSearchObs, click: openSearchDialog, returnHandler: openSearchDialog"
-        readonly
-        type="text"
-        placeholder="Filter participants..."
-      />
+      <input readonly type="text" placeholder="Filter participants..." 
+        data-bind="textInput: formattedSearchObs, click: openSearchDialog, returnHandler: openSearchDialog"/>
       <i class="filter icon"></i>
     </div>
   </div>
@@ -16,23 +12,15 @@
         <div class="row">
           <div class="eight wide column">
             <div class="ui icon input">
-              <input
-                type="text"
-                placeholder="Email address"
-                data-bind="textInput: emailFilterObs, 
-                hasFocus: true, returnHandler: doSearch"
-              />
+              <input type="text" placeholder="Email address"
+                data-bind="textInput: emailFilterObs, hasFocus: true, returnHandler: doSearch"/>
               <i class="mail icon"></i>
             </div>
           </div>
           <div class="eight wide column">
             <div class="ui icon input">
-              <input
-                type="text"
-                placeholder="Phone number"
-                data-bind="textInput: phoneFilterObs, 
-                returnHandler: doSearch"
-              />
+              <input type="text" placeholder="Phone number"
+                data-bind="textInput: phoneFilterObs, returnHandler: doSearch"/>
               <i class="phone icon"></i>
             </div>
           </div>
@@ -44,11 +32,8 @@
             </div>
           </div>
           <div class="eight wide column">
-            <div
-              class="ui icon input"
-              data-bind="range: {
-                startDateObs: startTimeObs, endDateObs: endTimeObs}"
-            >
+            <div class="ui icon input" data-bind="range: {
+                startDateObs: startTimeObs, endDateObs: endTimeObs}">
               <input type="text" placeholder="Created in date range" readonly />
               <i class="calendar icon"></i>
             </div>

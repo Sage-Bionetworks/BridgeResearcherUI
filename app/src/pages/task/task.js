@@ -219,4 +219,38 @@ export default class Task {
   static surveyToOption(survey) {
     return { label: fn.formatDateTime(survey.createdOn), value: survey.createdOn };
   }
+
+  /** Update to a file set of methods. */
+  static fileListToView(fileList = [], context) {
+    return fileList.map(Task.fileToView).map(Task.loadFileRevisions);
+  }
+  static fileToView(fileRef) {
+    return {
+      name: sharedModuleUtils.getFileName(fileRef.guid),
+      guid: fileRef.guid,
+      createdOn: fileRef.createdOn,
+      createdOnObs: ko.observable(),
+      createdOnList: ko.observableArray([])
+    };
+  }
+  static fileListToTask(fileList, context) {
+    return fileList.map(function(file) {
+      return { guid: file.guid, createdOn: file.createdOnObs() };
+    });
+  }
+  static loadFileRevisions(fileRef) {
+    serverService.getFileRevisions(fileRef.guid).then(function(response) {
+      response.items.forEach(revision => {
+        fileRef.createdOnList.push(Task.fileRevisionToOption(revision));
+        if (fileRef.createdOn === revision.createdOn) {
+          fileRef.createdOnObs(revision.createdOn);
+        }
+      });
+    });
+    return fileRef;
+  }
+  static fileRevisionToOption(revision) {
+    let label = `${fn.formatDateTime(revision.createdOn)} (${revision.name})`;
+    return { label: label, value: revision.createdOn };
+  }  
 };

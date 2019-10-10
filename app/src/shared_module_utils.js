@@ -5,6 +5,7 @@ const sharedModuleNameMap = {};
 const sharedModuleHTMLMap = {};
 const surveyNameMap = {};
 const schemaNameMap = {};
+const fileNameMap = {};
 const objImported = {};
 
 function updateSharedModuleNameMap(response) {
@@ -26,6 +27,11 @@ function updateSchemaNameMap(response) {
     schemaNameMap[schema.schemaId] = schema.name;
   });
 }
+function updateFileNameMap(response) {
+  response.items.forEach(function(file) {
+    fileNameMap[file.guid] = file.name;
+  });
+}
 function loadNameMaps() {
   return serverService
     .getMetadata({ mostrecent: true, published: true })
@@ -33,7 +39,9 @@ function loadNameMaps() {
     .then(serverService.getSurveys.bind(serverService))
     .then(updateSurveyNameMap)
     .then(serverService.getAllUploadSchemas.bind(serverService))
-    .then(updateSchemaNameMap);
+    .then(updateSchemaNameMap)
+    .then(serverService.getFiles.bind(serverService))
+    .then(updateFileNameMap);
 }
 function formatDescription(metadata, withVersion) {
   let array = [];
@@ -76,6 +84,9 @@ function getSurveyName(guid) {
 function getSchemaName(id) {
   return schemaNameMap[id];
 }
+function getFileName(guid) {
+  return fileNameMap[guid];
+}
 function formatModuleLink(object) {
   if (object.moduleId) {
     return sharedModuleNameMap[object.moduleId];
@@ -94,6 +105,7 @@ export default {
   formatVersions,
   getSurveyName,
   getSchemaName,
+  getFileName,
   formatModuleLink,
   moduleHTML
 };
