@@ -1,0 +1,20 @@
+<div class="ui small modal">
+  <i data-bind="click:cancel" class="close icon"></i>
+  <div class="header">Select Files</div>
+  <div class="content" style="max-height: 25rem; padding-bottom: .5rem; overflow-y: auto">
+    <div class="ui list" data-bind="visible: itemsObs().length > 0, foreach: itemsObs">
+      <div class="item">
+        <ui-checkbox params="checkedObs: $data.checkedObs">
+          <span data-bind="text: $parent.name"></span>
+        </ui-checkbox>
+      </div>
+    </div>
+    <div data-bind="visible: itemsObs().length === 0, html: recordsMessageObs" class="selector-loading-indicator">
+      <div class="ui tiny active inline loader"></div>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="ui small primary button" data-bind="click: select">Select</button>
+    <button class="ui small button" data-bind="click: cancel">Cancel</button>
+  </div>
+</div>

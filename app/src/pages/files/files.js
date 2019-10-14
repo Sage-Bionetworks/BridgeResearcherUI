@@ -7,6 +7,11 @@ import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
 
+const notFound = utils.failureHandler({
+  redirectTo: "files",
+  redirectMsg: "File not found."
+});
+
 export default function files() {
   let self = this;
   self.query = {}; // capture this for when the *parent* wants to refresh the page
@@ -41,7 +46,7 @@ export default function files() {
         return Promise.map(response.items, function(file) {
           file.deletedObs = ko.observable(file.deleted || false);
         });
-      }).catch(utils.failureHandler());
+      }).catch(notFound);
   }
   ko.postbox.subscribe('f-refresh', load);
 };

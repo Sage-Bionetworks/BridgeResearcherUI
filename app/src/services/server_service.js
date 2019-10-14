@@ -659,7 +659,10 @@ export class ServerService {
     return this.gethttp(config.appConfigs + queryString);
   }
   getAppConfig(guid) {
-    return this.gethttp(`${config.appConfigs}/${guid}`);
+    return this.gethttp(`${config.appConfigs}/${guid}`).then((response) => {
+      response.fileReferences = response.fileReferences || [];
+      return response;
+    });
   }
   createAppConfig(appConfig) {
     return this.post(config.appConfigs, appConfig);
@@ -759,7 +762,7 @@ export class ServerService {
   publishTemplateRevision(guid, createdOn) {
     return this.post(`${config.templates}/${guid}/revisions/${createdOn}/publish`);
   }
-  getFiles(query) { 
+  getFiles(query = {}) { 
     let queryString = fn.queryString(query);
     return this.gethttp(`${config.files}${queryString}`);
   }

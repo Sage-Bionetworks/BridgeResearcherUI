@@ -12,7 +12,7 @@ import utils from "../../utils";
 
 var failureHandler = utils.failureHandler({
   redirectMsg: "App config not found.",
-  redirectTo: "appconfigs",
+  redirectTo: "app_configs",
   transient: false
 });
 
@@ -24,6 +24,7 @@ function newAppConfig() {
     surveyReferences: [],
     schemaReferences: [],
     configReferences: [],
+    fileReferences: [],
     configElements: {}
   };
 }
@@ -41,6 +42,7 @@ export default function(params) {
     .obs("schemaIndex")
     .obs("surveyIndex")
     .obs("configIndex")
+    .obs("fileIndex")
     .obs("enablePreview", false)
     .obs("selectedTab", "schemas")
     .bind("version")
@@ -49,7 +51,8 @@ export default function(params) {
     .bind("clientData", null, Binder.fromJson, Binder.toJson)
     .bind("surveyReferences[]", [], Task.surveyListToView, Task.surveyListToTask)
     .bind("schemaReferences[]", [], Task.schemaListToView, Task.schemaListToTask)
-    .bind("configReferences[]", [], Task.configListToView, Task.configListToTask);
+    .bind("configReferences[]", [], Task.configListToView, Task.configListToTask)
+    .bind("fileReferences[]", [], Task.fileListToView, Task.fileListToTask);
 
   let titleUpdated = fn.handleObsUpdate(self.titleObs, "label");
   fn.copyProps(self, fn, "formatDateTime");
@@ -124,6 +127,14 @@ export default function(params) {
       selected: self.appConfig.configReferences
     });
   };
+  self.openFileSelector = function(vm, event) {
+    self.task = binder.persist(self.appConfig);
+    root.openDialog("select_files", {
+      addFiles: self.addFiles.bind(self),
+      allowMostRecent: true,
+      selected: self.appConfig.fileReferences
+    });
+  }
   self.addSchemas = function(schemas) {
     self.schemaReferencesObs([]);
     for (let i = 0; i < schemas.length; i++) {
@@ -151,6 +162,15 @@ export default function(params) {
     }
     root.closeDialog();
   };
+  self.addFiles = function(files) {
+    self.fileReferencesObs([]);
+    for (let i = 0; i < files.length; i++) {
+      let newFile = Task.fileToView(files[i]);
+      this.fileReferencesObs.push(newFile);
+      Task.loadFileRevisions(newFile);
+    }
+    root.closeDialog();
+  }
   self.removeSchema = function(object, event) {
     self.schemaReferencesObs.remove(object);
   };
@@ -160,6 +180,9 @@ export default function(params) {
   self.removeConfig = function(object, event) {
     this.configReferencesObs.remove(object);
   };
+  self.removeFile = function(object, event) {
+    this.fileReferencesObs.remove(object);
+  }
   self.preview = function(vm, event) {
     if (updateClientData()) {
       return;
@@ -174,6 +197,7 @@ export default function(params) {
       return;
     }
     self.appConfig = binder.persist(self.appConfig);
+
     utils.startHandler(vm, event);
     saveAppConfig()
       .then(fn.handleStaticObsUpdate(self.isNewObs, false))
@@ -192,8 +216,7 @@ export default function(params) {
     updateClientData();
   };
 
-  sharedModuleUtils
-    .loadNameMaps()
+  sharedModuleUtils.loadNameMaps()
     .then(load)
     .catch(failureHandler);
 };
