@@ -107,6 +107,10 @@ import topics from "./pages/topics/topics";
 import topicsHtml from "./pages/topics/topics.html";
 import topic from "./pages/topic/topic";
 import topicHtml from "./pages/topic/topic.html";
+import files from "./pages/files/files";
+import filesHtml from "./pages/files/files.html";
+import file from "./pages/file/file";
+import fileHtml from "./pages/file/file.html";
 import schedule from "./pages/schedule/schedule";
 import scheduleHtml from "./pages/schedule/schedule.html";
 import uploads from "./pages/uploads/uploads";
@@ -258,6 +262,8 @@ import selectSurveys from "./dialogs/select_surveys/select_surveys";
 import selectSurveysHtml from "./dialogs/select_surveys/select_surveys.html";
 import selectConfigs from "./dialogs/select_configs/select_configs";
 import selectConfigsHtml from "./dialogs/select_configs/select_configs.html";
+import selectFiles from "./dialogs/select_files/select_files";
+import selectFilesHtml from "./dialogs/select_files/select_files.html";
 import previewAppConfig from "./dialogs/preview_appconfig/preview_appconfig";
 import previewAppConfigHtml from "./dialogs/preview_appconfig/preview_appconfig.html";
 import editAppleLink from "./dialogs/edit_apple_link/edit_apple_link";
@@ -266,6 +272,8 @@ import editAndroidLink from "./dialogs/edit_android_link/edit_android_link";
 import editAndroidLinkHtml from "./dialogs/edit_android_link/edit_android_link.html";
 import oauthProvider from "./dialogs/oauth_provider/oauth_provider";
 import oauthProviderHtml from "./dialogs/oauth_provider/oauth_provider.html";
+import fileUpload from "./dialogs/file_upload/file_upload";
+import fileUploadHtml from "./dialogs/file_upload/file_upload.html";
 import appConfigs from "./pages/appconfigs/appconfigs";
 import appConfigsHtml from "./pages/appconfigs/appconfigs.html";
 import appConfig from "./pages/appconfig/appconfig";
@@ -293,6 +301,10 @@ import templateHistory from './pages/template/history';
 import templateHistoryHtml from './pages/template/history.html';
 import templateTabset from './pages/template/tabset';
 import templateTabsetHtml from './pages/template/tabset.html';
+// TODO: This is the most generic and reusable variant of the pager, and should replace the 
+// others. Participants might remain separate because of the complexity of the search UI.
+import pager from './widgets/pager/pager';
+import pagerHtml from './widgets/pager/pager.html';
 
 const reg = ko.components.register;
 reg("errors", {viewModel: errors, template: errorsHtml});
@@ -350,6 +362,8 @@ reg("tasks", {viewModel: tasks, template: tasksHtml});
 reg("task", {viewModel: task, template: taskHtml});
 reg("topics", {viewModel: topics, template: topicsHtml});
 reg("topic", {viewModel: topic, template: topicHtml});
+reg("files", {viewModel: files, template: filesHtml});
+reg("file", {viewModel: file, template: fileHtml});
 reg("schedule", {viewModel: schedule, template: scheduleHtml});
 reg("uploads", {viewModel: uploads, template: uploadsHtml});
 reg("upload", {viewModel: upload, template: uploadHtml});
@@ -415,6 +429,7 @@ reg("template_general", {viewModel: templateGeneral, template: templateGeneralHt
 reg("template_editor", {viewModel: templateEditor, template: templateEditorHtml});
 reg("template_history", {viewModel: templateHistory, template: templateHistoryHtml});
 reg("template-tabset", {viewModel: templateTabset, template: templateTabsetHtml});
+reg("pager", {viewModel: pager, template: pagerHtml});
 
 // Dialogs. These must be synchronous.
 reg("sign_out_user", {viewModel: signOutUser, template: signOutUserHtml, synchronous: true});
@@ -440,9 +455,11 @@ reg("settings", {viewModel: settings, template: settingsHtml, synchronous: true}
 reg("select_schemas", {viewModel: selectSchemas, template: selectSchemasHtml, synchronous: true});
 reg("select_surveys", {viewModel: selectSurveys, template: selectSurveysHtml, synchronous: true});
 reg("select_configs", {viewModel: selectConfigs, template: selectConfigsHtml, synchronous: true});
+reg("select_files", {viewModel: selectFiles, template: selectFilesHtml, synchronous: true});
 reg("preview_appconfig", {viewModel: previewAppConfig, template: previewAppConfigHtml, synchronous: true});
 reg("edit_apple_link", {viewModel: editAppleLink, template: editAppleLinkHtml, synchronous: true});
 reg("edit_android_link", {viewModel: editAndroidLink, template: editAndroidLinkHtml, synchronous: true});
+reg("file_upload", {viewModel: fileUpload, template: fileUploadHtml, synchronous: true});
 reg("oauth_provider", {viewModel: oauthProvider, template: oauthProviderHtml, synchronous: true});
 reg("appconfigs", {viewModel: appConfigs, template: appConfigsHtml});
 reg("appconfig", {viewModel: appConfig, template: appConfigHtml});

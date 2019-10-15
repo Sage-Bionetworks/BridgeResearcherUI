@@ -1,23 +1,20 @@
 <div class="fixed-header">
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
-      <h3>App Configs</h3>
+      <h3>File Hosting</h3>
     </div>
     <div class="fixed-header-buttons">
-      <button class="ui tiny button" data-bind="disable: !atLeastOneChecked(), click: copyItems">
-        Copy
-      </button>
       <button data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems"
         class="ui red tiny button">
         Delete
       </button>
       <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
-        <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()},
-          semantic: 'dropdown-button-toggle', container: '.buttons'">
+        <div data-bind="css:{disabled: !atLeastOneChecked()},
+          semantic: 'dropdown-button-toggle', container: '.buttons'" class="ui tiny button">
           Delete
         </div>
-        <div class="ui primary tiny floating dropdown icon button"
-          data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
+        <div data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}"
+          class="ui primary tiny floating dropdown icon button">
           <i class="dropdown icon"></i>
           <div class="menu">
             <div class="item" data-bind="click: deleteItems">Delete</div>
@@ -25,28 +22,28 @@
           </div>
         </div>
       </div>
-      <a href="#/app_configs/new" class="ui primary tiny button">New App Config</a>
+      <a href="#/files/new" class="ui primary tiny button">New File</a>
     </div>
   </div>
   <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
   <errors></errors>
-  <table class="ui compact selectable table">
+  <pager style="display: flex; justify-content: flex-end"
+    params="prefix: 'f', postLoadFunc: postLoadFunc"></pager>
+  <table class="ui compact selectable table" style="margin-top:0">
     <thead>
       <tr>
         <th width="10">
-          <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+          <ui-checkbox params="checkedObs: checkAllObs, visible: isDeveloper"></ui-checkbox>
         </th>
-        <th nowrap>Label</th>
-        <th>Matching Criteria</th>
+        <th>Name</th>
         <th>Description</th>
-        <th>Last Modified</th>
       </tr>
     </thead>
     <tbody class="no_records" data-bind="if: itemsObs().length === 0">
       <tr>
-        <td colspan="5" data-bind="html: recordsMessageObs"></td>
+        <td colspan="3" data-bind="html: recordsMessageObs"></td>
       </tr>
     </tbody>
     <tbody data-bind="foreach: itemsObs">
@@ -56,20 +53,18 @@
           <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
             style="cursor: pointer" class="green undo icon"></i>
         </td>
-        <td nowrap>
-          <span data-bind="text: $data.label, visible: $data.deletedObs"></span>
-          <a data-bind="href: '#/app_configs/' + $data.guid, 
-            text: $data.label, visible: !$data.deletedObs()"></a>
+        <td>
+          <span data-bind="text: $data.name, visible: $data.deletedObs"></span>
+          <a data-bind="href: '#/files/'+$data.guid, text: $data.name, 
+            visible: !$data.deletedObs()"></a>
         </td>
-        <td data-bind="html: $parent.criteriaLabel($data.criteria)"></td>
-        <td data-bind="html: $parent.formatCompoundActivity($data)"></td>
-        <td style="white-space: nowrap" data-bind="text: $parent.formatDateTime($data.modifiedOn)"></td>
+        <td data-bind="text: $data.description"></td>
       </tr>
     </tbody>
   </table>
   <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
     <ui-checkbox params="checkedObs: showDeletedObs">
-      Show deleted app configs
+      Show deleted files
     </ui-checkbox>
   </div>
 </div>

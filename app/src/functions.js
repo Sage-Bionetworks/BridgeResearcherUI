@@ -16,8 +16,8 @@ const LOCAL_TIMEZONE = Date()
   .split("(")[1]
   .split(")")[0]
   .replace(/[^A-Z]/g, "");
-//const LOCAL_TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
 const IS_BROWSER = typeof window !== "undefined" && typeof window.document !== "undefined";
+const BYTE_UNITS = [' KB', ' MB', ' GB', ' TB'];
 
 function flagForRegionCode(regionCode) {
   return FLAGS[regionCode];
@@ -412,6 +412,18 @@ function substudyMatchesUser(userSubstudies, substudyId) {
   return userSubstudies.length === 0 || userSubstudies.includes(substudyId);
 }
 
+function formatFileSize(fileSize) {
+  if (!fileSize) {
+    return '—';
+  }
+  var i = -1;
+  do {
+      fileSize = fileSize / 1024;
+      i++;
+  } while (fileSize > 1024);
+  return Math.max(fileSize, 0.1).toFixed(1) + BYTE_UNITS[i];
+}
+
 /* ==================================== DATE FUNCTIONS ==================================== */
 
 function _asDate(value) {
@@ -518,6 +530,7 @@ export default {
   flagForRegionCode,
   formatDate,
   formatDateTime,
+  formatFileSize,
   formatTime,
   formatLanguages,
   formatList,

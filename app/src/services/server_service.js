@@ -659,7 +659,10 @@ export class ServerService {
     return this.gethttp(config.appConfigs + queryString);
   }
   getAppConfig(guid) {
-    return this.gethttp(`${config.appConfigs}/${guid}`);
+    return this.gethttp(`${config.appConfigs}/${guid}`).then((response) => {
+      response.fileReferences = response.fileReferences || [];
+      return response;
+    });
   }
   createAppConfig(appConfig) {
     return this.post(config.appConfigs, appConfig);
@@ -726,12 +729,8 @@ export class ServerService {
     let queryString = fn.queryString({ physical: physical === true });
     return this.del(`${config.substudies}/${id}${queryString}`);
   }
-  getTemplates(templateType, includeDeleted) {
-    // TODO: Paging
-    let queryString = fn.queryString({ 
-      type: templateType,
-      includeDeleted: includeDeleted === true 
-    });
+  getTemplates(query) {
+    let queryString = fn.queryString(query);
     return this.gethttp(`${config.templates}${queryString}`);
   }
   getTemplate(guid) {
@@ -762,6 +761,33 @@ export class ServerService {
   }
   publishTemplateRevision(guid, createdOn) {
     return this.post(`${config.templates}/${guid}/revisions/${createdOn}/publish`);
+  }
+  getFiles(query = {}) { 
+    let queryString = fn.queryString(query);
+    return this.gethttp(`${config.files}${queryString}`);
+  }
+  deleteFile(guid, physical) {
+    let queryString = fn.queryString({ physical: physical === true });
+    return this.del(`${config.files}/${guid}${queryString}`);
+  }
+  getFile(guid) {
+    return this.gethttp(`${config.files}/${guid}`);
+  }
+  createFile(guid, file) {
+    return this.post(`${config.files}`, file);
+  }
+  updateFile(guid, file) {
+    return this.post(`${config.files}/${guid}`, file);
+  }
+  getFileRevisions(guid, query) {
+    let queryString = fn.queryString(query);
+    return this.gethttp(`${config.files}/${guid}/revisions${queryString}`);
+  }
+  createFileRevision(guid, revision) {
+    return this.post(`${config.files}/${guid}/revisions`, revision);
+  }
+  finishFileRevision(guid, createdOn) {
+    return this.post(`${config.files}/${guid}/revisions/${createdOn}`);
   }
   addSessionStartListener(listener) {
     if (typeof listener !== "function") {
