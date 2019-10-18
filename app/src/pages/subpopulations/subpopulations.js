@@ -15,15 +15,9 @@ export default function subpopulations() {
     name: "consent group",
     type: "Subpopulation",
     refresh: load,
-    delete: function(plan) {
-      return serverService.deleteSubpopulation(plan.guid, false);
-    },
-    deletePermanently: function(plan) {
-      return serverService.deleteSubpopulation(plan.guid, true);
-    },
-    undelete: function(plan) {
-      return serverService.updateSubpopulation(plan);
-    }
+    delete: (plan) => serverService.deleteSubpopulation(plan.guid, false),
+    deletePermanently: (plan) => serverService.deleteSubpopulation(plan.guid, true),
+    undelete: (plan) => serverService.updateSubpopulation(plan)
   });
 
   function getSubpopulations() {
