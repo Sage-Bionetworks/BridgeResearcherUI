@@ -202,9 +202,9 @@
     </div>
 
     <h4 class="ui dividing header">Attributes</h4>
-    <div class="equal width fields">
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; grid-column-gap: 1rem">
       <!-- ko foreach: attributesObs -->
-      <div class="field" style="margin-right: 2rem; max-width: 12rem">
+      <div class="field">
         <label data-bind="text: $data.label"></label>
         <input type="text" data-bind="textInput: $data.obs" />
       </div>
