@@ -4,37 +4,18 @@
       <h3>Surveys</h3>
     </div>
     <div class="fixed-header-buttons">
-      <div class="ui tiny buttons">
-        <div
-          class="ui tiny button"
-          data-bind="css:{disabled: !atLeastOneChecked()}, 
-                    semantic: 'dropdown-button-toggle', container: '.buttons'"
-        >
-          Copy
-        </div>
-        <div
-          class="ui tiny floating dropdown icon button"
-          data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}"
-        >
-          <i class="dropdown icon"></i>
-          <div class="menu">
-            <div class="item" data-bind="click: copySurveys">Copy</div>
-            <div class="item" data-bind="click: copyToClipboard">Copy to Clipboard</div>
-          </div>
-        </div>
-      </div>
+      <button data-bind="css:{disabled: !atLeastOneChecked()}, click: copySurveys" 
+        class="ui tiny button">
+        Copy
+      </button>
+
       <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
-        <div
-          class="ui tiny button"
-          data-bind="css:{disabled: !atLeastOneChecked()},
-                    semantic: 'dropdown-button-toggle', container: '.buttons'"
-        >
+        <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()},
+          semantic: 'dropdown-button-toggle', container: '.buttons'">
           Delete
         </div>
-        <div
-          class="ui primary tiny floating dropdown icon button"
-          data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}"
-        >
+        <div class="ui primary tiny floating dropdown icon button"
+          data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
           <i class="dropdown icon"></i>
           <div class="menu">
             <div class="item" data-bind="click: deleteItems">Delete</div>

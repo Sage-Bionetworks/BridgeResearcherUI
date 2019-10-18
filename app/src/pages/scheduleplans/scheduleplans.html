@@ -4,21 +4,10 @@
       <h3>Scheduling</h3>
     </div>
     <div class="fixed-header-buttons">
-      <div class="ui tiny buttons">
-        <div data-bind="css:{disabled: !atLeastOneChecked()}, 
-          semantic: 'dropdown-button-toggle', container: '.buttons'" class="ui tiny button">
-          Copy
-        </div>
-        <div data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}" 
-          class="ui tiny floating dropdown icon button">
-          <i class="dropdown icon"></i>
-          <div class="menu">
-            <div class="item" data-bind="click: copy">Copy</div>
-            <div class="item" data-bind="click: copyToClipboard">Copy to Clipboard</div>
-          </div>
-        </div>
-      </div>
-
+      <button data-bind="css:{disabled: !atLeastOneChecked()}, click: copy" 
+        class="ui tiny button">
+        Copy
+      </button>
       <button data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems"
         class="ui red tiny button">
         Delete

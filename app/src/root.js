@@ -1,6 +1,5 @@
 import alerts from "./widgets/alerts";
 import Binder from "./binder";
-import clipboard from "./widgets/clipboard/clipboard";
 import ko from "knockout";
 import serverService from "./services/server_service";
 
@@ -42,8 +41,6 @@ let RootViewModel = function() {
     .obs("showNavigation", true)
     .obs("dialog", { name: "none" });
 
-  self.clipboard = clipboard;
-
   self.mainPageObs.subscribe(self.selectedObs);
   self.mainPageObs.subscribe(function() {
     self.setEditorPanel("none", {});
@@ -79,9 +76,6 @@ let RootViewModel = function() {
     self.sidePanelObs("navigation");
     self.mainPageObs(name);
     self.mainParamsObs(params);
-  };
-  self.readAboutClipboard = function() {
-    self.openDialog("read_about_clipboard");
   };
 
   self.isResearcher = roleFunc(self.rolesObs, "researcher");
