@@ -224,8 +224,6 @@ import publicKey from "./dialogs/publickey/publickey";
 import publicKeyHtml from "./dialogs/publickey/publickey.html";
 import jsonEditor from "./dialogs/json_editor/json_editor";
 import jsonEditorHtml from "./dialogs/json_editor/json_editor.html";
-import readClipboard from "./dialogs/read_about_clipboard/read_about_clipboard";
-import readClipboardHtml from "./dialogs/read_about_clipboard/read_about_clipboard.html";
 import reportEditor from "./dialogs/report_editor/report_editor";
 import reportEditorHtml from "./dialogs/report_editor/report_editor.html";
 import signIn from "./dialogs/sign_in/sign_in";
@@ -436,7 +434,6 @@ reg("sign_out_user", {viewModel: signOutUser, template: signOutUserHtml, synchro
 reg("module_browser", {viewModel: moduleBrowser, template: moduleBrowserHtml, synchronous: true});
 reg("publickey", {viewModel: publicKey, template: publicKeyHtml, synchronous: true});
 reg("json_editor", {viewModel: jsonEditor, template: jsonEditorHtml, synchronous: true});
-reg("read_about_clipboard", {viewModel: readClipboard, template: readClipboardHtml, synchronous: true});
 reg("report_editor", {viewModel: reportEditor, template: reportEditorHtml, synchronous: true});
 reg("sign_in_dialog", {viewModel: signIn, template: signInHtml, synchronous: true});
 reg("enumeration_editor", {viewModel: enumEditor, template: enumEditorHtml, synchronous: true});

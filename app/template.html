@@ -30,31 +30,6 @@
           <div class="active content" data-bind="component: {name: editorPanelObs, params: editorParamsObs}"
             style="padding:0!important"></div>
         </div>
-        <div data-bind="semantic: 'accordion', visible: clipboard.entries().length > 0" style="margin-bottom: 1rem">
-          <div class="active title">
-            <i class="paste icon"></i> Clipboard
-            <i class="dropdown icon"></i>
-          </div>
-          <div class="active content scroll-container">
-            <div class="ui secondary vertical menu vertical-scrollbox" data-bind="foreach: clipboard.entries">
-              <div class="item" data-bind="text: $data._label"></div>
-            </div>
-            <div class="item" style="padding: .5rem; text-align: center">
-              <button data-bind="click: clipboard.clearAll" class="ui compact mini button">
-                <i class="remove icon"></i>Clear All
-              </button>
-              <button data-bind="click: clipboard.pasteAll" class="ui compact mini button">
-                <i class="paste icon"></i>Paste All
-              </button>
-              <div style="text-align: left; line-height:1; margin-top: .5rem">
-                <i style="font-size:smaller">
-                  Clipboard items can be transferred between studies.
-                  <a class="link" data-bind="click: readAboutClipboard">Read More</a>
-                </i>
-              </div>
-            </div>
-          </div>
-        </div>
         <div data-bind="semantic: 'accordion'" id="nav-accordian">
           <div class="title" data-bind="visible: !isSharedStudy()">
             <i class="lab icon"></i> Study

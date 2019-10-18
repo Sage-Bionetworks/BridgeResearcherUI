@@ -86,6 +86,7 @@ export default function surveys() {
     Promise.mapSeries(copyables, function(survey) {
       return serverService.getSurvey(survey.guid, survey.createdOn).then(function(fullSurvey) {
         fullSurvey.name += " (Copy)";
+        fullSurvey.identifier += "-copy";
         SURVEY_FIELDS_TO_DELETE.forEach(function(field) {
           delete fullSurvey[field];
         });
@@ -94,10 +95,9 @@ export default function surveys() {
         });
         return serverService.createSurvey(fullSurvey);
       });
-    })
-      .then(load)
-      .then(utils.successHandler(vm, event, confirmMsg))
-      .catch(utils.failureHandler());
+    }).then(load)
+    .then(utils.successHandler(vm, event, confirmMsg))
+    .catch(utils.failureHandler());
   };
   self.openModuleBrowser = function() {
     root.openDialog("module_browser", {

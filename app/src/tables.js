@@ -1,6 +1,5 @@
 import "knockout-postbox";
 import alerts from "./widgets/alerts";
-import clipboard from "./widgets/clipboard/clipboard";
 import ko from "knockout";
 import Promise from "bluebird";
 import root from "./root";
@@ -103,15 +102,6 @@ export default {
       });
     });
 
-    vm.copyToClipboard = function() {
-      root.sidePanelObs("clipboard");
-      vm.itemsObs().forEach(function(item) {
-        if (item.checkedObs()) {
-          clipboard.copy(objType, item);
-          item.checkedObs(false);
-        }
-      });
-    };
     if (loadFunc) {
       ko.postbox.subscribe("list-updated", loadFunc);
     }
