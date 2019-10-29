@@ -29,6 +29,9 @@ function getHealthCode(id) {
 function getExternalId(id) {
   return serverService.getParticipant("externalId:" + id);
 }
+function getSynapseUserId(id) {
+  return serverService.getParticipant("synapseUserId:" + id);
+}
 function getEmail(id) {
   return serverService.getParticipants(0, 5, id).then(function(response) {
     return response.items.length === 1 ? 
@@ -70,6 +73,9 @@ export default function participants() {
     if (arrays.length) {
       array.push(arrays.join(", "));
     }
+    if (item.synapseUserId) {
+      array.push('Synapse ID ' + item.synapseUserId);
+    }
     if (array.length === 0) {
       array.push("<i>None</i>");
     }
@@ -102,12 +108,14 @@ export default function participants() {
     let success = makeSuccess(self, event);
     utils.startHandler(self, event);
 
-    getHealthCode(id).then(success).catch(function() {
-      getExternalId(id).then(success).catch(function() {
-        getId(id).then(success).catch(function() {
-          getEmail(id).then(success).catch(function(e) {
-            event.target.parentNode.parentNode.classList.remove("loading");
-            utils.failureHandler({ transient: false })(e);
+    getHealthCode(id).then(success).catch(() => {
+      getExternalId(id).then(success).catch(() => {
+        getId(id).then(success).catch(() => {
+          getSynapseUserId(id).then(success).catch(() => {
+            getEmail(id).then(success).catch((e) => {
+              event.target.parentNode.parentNode.classList.remove("loading");
+              utils.failureHandler({ transient: false })(e);
+            });
           });
         });
       });
