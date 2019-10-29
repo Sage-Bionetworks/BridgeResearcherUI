@@ -180,10 +180,11 @@
     </section>
     <footer>
       <p>
-        &copy; 2015-2019 Sage Bionetworks &middot; 
-        <a target="_blank" href="/privacy.html">Privacy Policy</a>
-        <span data-bind="html: '&middot; '+environmentObs(),
-            visible: environmentObs() !== 'production'"></span>
+        <span style="color: silver" data-bind="html: '[' + environmentObs() + ']',
+          visible: environmentObs() !== 'production'"></span>
+        &copy; 2015-2019 Sage Bionetworks | 
+        <a target="_blank" href="/privacy.html">Privacy Policy</a> | 
+        <a target="_blank" href="/terms-of-use.html">Terms of Use</a> 
       </p>
     </footer>
     <div data-bind="modal: dialogObs"></div>
