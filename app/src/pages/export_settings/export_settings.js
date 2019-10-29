@@ -31,7 +31,7 @@ export default function exportSettings() {
   });
   self.projectLinkObs = ko.computed(function() {
     let value = self.synapseProjectIdObs();
-    return value ? BASE + "Synapse:" + value : null;
+    return value ? BASE + "" + value : null;
   });
   self.teamLinkObs = ko.computed(function() {
     let value = self.synapseDataAccessTeamIdObs();

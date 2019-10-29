@@ -66,6 +66,8 @@ export default function general(params) {
     .bind("attributes[]", [], Binder.formatAttributes, Binder.persistAttributes)
     .bind("emailVerified", false)
     .bind("phoneVerified", false)
+    .bind("lookingUpSynapseId", false)
+    .bind("synapseUserId", null, null, (value) => (value) ? value : null)
     .bind("firstName")
     .bind("lastName")
     .bind("sharingScope")
@@ -80,6 +82,28 @@ export default function general(params) {
     .bind("substudyIds[]");
 
   fn.copyProps(self, root, "isAdmin");
+
+  self.synapseUserIdObs.extend({ rateLimit: 1000 });
+  self.synapseUserIdObs.subscribe((value) => {
+    if (value === '' || /^\d+$/.test(value)) {
+      self.lookingUpSynapseIdObs(false);
+      return;
+    }
+    self.lookingUpSynapseIdObs(true);
+    value = value.replace('@synapse.org', '');
+    fetch('https://repo-prod.prod.sagebase.org/repo/v1/principal/alias', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({"alias": value, "type": "USER_NAME"})
+    }).then(response => {
+      response.json().then((json) => {
+        if (json.principalId) {
+          self.synapseUserIdObs(json.principalId);
+        }
+      })
+    }).catch(() => self.lookingUpSynapseIdObs(false));
+  });
 
   self.statusObs.subscribe(function(status) {
     self.showEnableAccountObs(status !== "enabled");
@@ -96,6 +120,9 @@ export default function general(params) {
       self.phoneRegionObs(event.target.textContent);
     }
   };
+  self.formatSynapseUserId = function(value) {
+    return (value) ? value : '—';
+  }
 
   function makeStatusChanger(status) {
     return function(vm, event) {

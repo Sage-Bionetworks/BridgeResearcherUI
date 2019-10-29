@@ -209,11 +209,11 @@ function formatNameAsFullLabel(summary) {
       name = summary.phone;
     }
   } else if (summary.externalIds && (summary.externalIds.length || Object.keys(summary.externalIds).length)) {
-    name = isArray(summary.externalIds) ? 
-      summary.externalIds.join(", ") : 
-      Object.values(summary.externalIds).join(", ");
+    name = Object.values(summary.externalIds).join(', ');
   } else if (summary.externalId) {
     name = summary.externalId;
+  } else if (summary.synapseUserId) {
+    name = 'Synapse ID ' + summary.synapseUserId;
   } else if (summary.id) {
     name = summary.id.split("-")[0] + "…";
   }
