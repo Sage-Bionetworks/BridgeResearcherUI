@@ -9,6 +9,7 @@ import storeService from "../../services/store_service";
 import utils from "../../utils";
 
 const ENVIRONMENT = "environment";
+const OAUTH_STATE = "synState";
 const PHONE_SUCCESS_MSG = "An SMS message has been sent to that phone number; enter the code to sign in.";
 const STUDY_KEY = "studyKey";
 const SUCCESS_MSG = "An email has been sent to that address with instructions on changing your password.";
@@ -20,14 +21,16 @@ const TITLES = {
   ExternalIdSignIn: "Sign In",
   ForgotPassword: "Forgot Password",
   PhoneSignIn: "Sign In",
-  SignIn: "Sign In"
+  SignIn: "Sign In",
+  Oauth: "Authenticating..."
 };
 const BUTTONS = {
   EnterCode: "Sign In",
   ExternalIdSignIn: "Sign In",
   ForgotPassword: "Send Email",
   PhoneSignIn: "Send Text Message",
-  SignIn: "Sign In"
+  SignIn: "Sign In",
+  Oauth: ""
 };
 
 // There will be stale data in the UI if we don't reload when changing studies or environments.
@@ -73,30 +76,35 @@ export default function() {
     .obs("studyOptions[]")
     .obs("isLocked", isLocked);
 
-  self.titleObs = ko.computed(() => TITLES[self.stateObs()]);
-  self.buttonTextObs = ko.computed(() => BUTTONS[self.stateObs()]);
-
-  self.handleFocus = function(focusOnState) {
-    return ko.computed(function() {
-      return focusOnState === self.stateObs();
-    });
-  };
-
-  self.environmentOptions = config.environments;
-  self.environmentObs.subscribe(function(newValue) {
-    self.studyOptionsObs({ name: "Updating...", identifier: "" });
-    loadStudyList(newValue);
-  });
-  loadStudyList(env);
-
+  let stateKey = storeService.get(OAUTH_STATE);
+  let oauth = (stateKey && stateKey === root.queryParams.state && root.queryParams.code);
+  if (oauth) {
+    self.stateObs("Oauth");
+  }
   function loadStudies(studies) {
     self.studyOptionsObs(studies.items);
     self.studyObs(studyKey);
   }
+  function finishOAuth() {
+    if (oauth) {
+      let studyKey = storeService.get(STUDY_KEY);
+      let environment = storeService.get(ENVIRONMENT);
+      let studyName = utils.findStudyName(self.studyOptionsObs(), studyKey);
+      storeService.remove(OAUTH_STATE);
+      let obj = {study: studyKey, vendorId: 'synapse', authToken: root.queryParams.code};
+      serverService.oauthSignIn(studyName, environment, obj)
+        .then(() => document.location = '/' + document.location.hash)
+        .then(utils.successHandler(self, SYNTH_EVENT))
+        .catch((e) => {
+          self.stateObs('SignIn');
+          utils.failureHandler({ transient: false })(e);
+        });
+    }
+  }
   function loadStudyList(newValue) {
-    return serverService
-      .getStudyList(newValue)
+    return serverService.getStudyList(newValue)
       .then(loadStudies)
+      .then(finishOAuth)
       .catch(utils.failureHandler());
   }
   function clear(response) {
@@ -147,7 +155,6 @@ export default function() {
   self.isState = function(state) {
     return self.stateObs() === state;
   };
-
   self.submit = function(vm, event) {
     let key = self.stateObs();
     let methodName = key.substring(0, 1).toLowerCase() + key.substring(1);
@@ -162,8 +169,7 @@ export default function() {
       let promise = self.imAnAdminObs() ? 
         serverService.adminSignIn(studyName, environment, payload) : 
         serverService.signIn(studyName, environment, payload);
-      promise
-        .then(clear)
+      promise.then(clear)
         .then(makeReloader(studyKey, environment))
         .then(utils.successHandler(self, SYNTH_EVENT))
         .catch(utils.failureHandler({ transient: false }));
@@ -247,4 +253,34 @@ export default function() {
       self.phoneRegionObs(event.target.textContent);
     }
   };
+  self.titleObs = ko.computed(() => TITLES[self.stateObs()]);
+  self.buttonTextObs = ko.computed(() => BUTTONS[self.stateObs()]);
+  self.synapse = function(vm, event) {
+    event.stopPropagation();
+    event.preventDefault();
+    let studyKey = self.studyObs();
+    let state = new Date().getTime().toString(32);
+    storeService.set(STUDY_KEY, studyKey);
+    storeService.set(OAUTH_STATE, state);
+    storeService.set(ENVIRONMENT, self.environmentObs());
+    let array = [];
+    array.push('response_type=code');
+    array.push('client_id=100018');
+    array.push('scope=openid');
+    array.push('state=' + encodeURIComponent(state));
+    array.push('redirect_uri=' + encodeURIComponent('https://research.sagebridge.org'));
+    array.push('claims=' + encodeURIComponent('{"id_token":{"userid":null}}'));
+    document.location = 'https://signin.synapse.org/?' + array.join('&');
+  }
+  self.handleFocus = function(focusOnState) {
+    return ko.computed(function() {
+      return focusOnState === self.stateObs();
+    });
+  };
+  self.environmentOptions = config.environments;
+  self.environmentObs.subscribe(function(newValue) {
+    self.studyOptionsObs({ name: "Updating...", identifier: "" });
+    loadStudyList(newValue);
+  });
+  loadStudyList(env);  
 };

@@ -23,6 +23,7 @@ export default {
     }
   },
   remove: function(key) {
+    console.debug("[cache] Remove from cache", key);
     localStorage.removeItem(key);
   },
   persistQuery: function(prefix, object) {
