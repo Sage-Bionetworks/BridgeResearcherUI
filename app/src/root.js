@@ -108,7 +108,7 @@ let RootViewModel = function() {
       self.notificationsEnabledObs(Object.keys(study.pushNotificationARNs).length > 0);
     });
   });
-  serverService.addSessionEndListener(function(session) {
+  serverService.addSessionEndListener(function() {
     self.studyNameObs("");
     self.environmentObs("");
     self.studyIdentifierObs("");
@@ -122,16 +122,15 @@ let RootViewModel = function() {
 
 let root = new RootViewModel();
 
-root.queryParams = { studyPath: document.location.pathname.substring(1) };
-if (document.location.search) {
-  document.location.search
-    .substring(1)
-    .split("&")
-    .forEach(function(pair) {
-      let fragments = pair.split("=");
-      root.queryParams[decodeURIComponent(fragments[0])] = decodeURIComponent(fragments[1]);
-    });
+
+
+root.queryParams = {};
+let params = new URLSearchParams(document.location.search);
+// eventually, will use Object.fromEntries (not supported in Edge yet)
+for (let p of params.keys()) {
+  root.queryParams[p] = params.get(p);
 }
+root.queryParams.studyPath = document.location.pathname.substring(1);
 console.debug("root.queryParams", root.queryParams);
 
 export default root;
@@ -139,4 +138,5 @@ export default root;
 window.addEventListener("DOMContentLoaded", function() {
   ko.applyBindings(root, document.documentElement);
   document.body.style.opacity = "1.0";
+  serverService.initSession();
 }, false);

@@ -90,15 +90,14 @@ function convertDataToString(textResponse) {
 export class ServerService {
   constructor(reloadNoAuth = true) {
     this.reloadNoAuth = reloadNoAuth;
+  }
+  initSession() {
     session = storeService.get(SESSION_KEY);
-    $(() => {
-      if (session && session.environment) {
-        listeners.emit(SESSION_STARTED_EVENT_KEY, session);
-      } else {
-        session = null;
-        listeners.emit(SESSION_ENDED_EVENT_KEY);
-      }
-    });
+    if (session && session.environment) {
+      listeners.emit(SESSION_STARTED_EVENT_KEY, session);
+    } else {
+      listeners.emit(SESSION_ENDED_EVENT_KEY, session);
+    }    
   }
   reloadPageWhenSessionLost(response) {
     if (response.status === 401) {
@@ -118,9 +117,7 @@ export class ServerService {
     console.info("[queuing]", httpAction);
     return new Promise((resolve, reject) => {
       listeners.once(SESSION_STARTED_EVENT_KEY, resolve);
-    })
-      .then(func)
-      .catch(this.reloadPageWhenSessionLost.bind(this));
+    }).then(func).catch(this.reloadPageWhenSessionLost.bind(this));
   }
   gethttp(path) {
     if (cache.get(path)) {
@@ -174,6 +171,7 @@ export class ServerService {
     // Initial sign in we capture some information not in the session. Thereafer we have
     // to copy it on reauthentication to any newly acquired session.
     return function(sess) {
+      console.log('session', JSON.stringify(sess));
       if (studyName) {
         sess.studyName = studyName;
         sess.studyId = studyId;
@@ -193,10 +191,16 @@ export class ServerService {
     return session !== null;
   }
   signIn(studyName, env, signIn) {
-    return postInt(config.host[env] + config.signIn, signIn).then(this.cacheSession(studyName, signIn.study, env));
+    return postInt(config.host[env] + config.signIn, signIn)
+      .then(this.cacheSession(studyName, signIn.study, env));
   }
   phoneSignIn(studyName, env, signIn) {
-    return postInt(config.host[env] + config.phoneSignIn, signIn).then(this.cacheSession(studyName, signIn.study, env));
+    return postInt(config.host[env] + config.phoneSignIn, signIn)
+      .then(this.cacheSession(studyName, signIn.study, env));
+  }
+  oauthSignIn(studyName, env, signIn) {
+    return postInt(config.host[env] + config.oauthSignIn, signIn)
+      .then(this.cacheSession(studyName, signIn.study, env));
   }
   signOut() {
     postInt(session.host + config.signOut);
