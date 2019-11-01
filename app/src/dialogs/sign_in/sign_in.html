@@ -3,15 +3,13 @@
   <div class="content" data-bind="visible: stateObs() !== 'Oauth'">
     <errors></errors>
     <form class="ui form" data-bind="returnHandler: submit" action="">
-      <div class="field" data-bind="if: !isLockedObs()">
-        <div style="display:flex; align-items: center">
-          <div style="padding-right: 1rem">Study</div>
-          <select taborder="-1" class="ui dropdown" data-bind="value: studyObs,
-            options: studyOptionsObs, optionsText: 'name', optionsValue: 'identifier'">
-          </select>
-        </div>
+      <div class="field" id="study" data-bind="visible: !isLockedObs()">
+        <select taborder="-1" class="ui dropdown" data-bind="value: studyObs,
+          optionsCaption: 'Select a study…', options: studyOptionsObs, 
+          optionsText: 'name', optionsValue: 'identifier'">
+        </select>
       </div>
-      <div style="text-align: right" data-bind="visible: stateObs() !== 'ForgotPassword'">
+      <div style="text-align: center" data-bind="visible: stateObs() !== 'ForgotPassword'">
         <button class="ui basic button" data-bind="click: synapse" style="margin:0">
           <i class="icon" style="background: url('/images/sage-bionetworks-logo.svg') no-repeat; background-size: contain"></i>
           Sign in with your Synapse account
@@ -86,19 +84,16 @@
       </div>
 -->
       <div data-bind="if: !isLockedObs()">
-        <!--<div class="ui divider"></div>-->
-        <div class="field" style="margin-top: 1rem">
-          <div style="display:flex; align-items: center">
-            <i class="cloud upload icon" style="margin-right: .5rem"></i>
-            <select taborder="-1" name="environment" class="ui dropdown" data-bind="value: environmentObs,
-              options: environmentOptions, optionsText: 'label', optionsValue: 'value'">
-            </select>
-            <div style="width: 14rem; margin: 0 0 0 1rem">
-              <ui-checkbox params="checkedObs: imAnAdminObs">
-                I’m an admin
-              </ui-checkbox>
-            </div>
-          </div>
+        <div class="field" style="margin-top: 1rem" id="environment">
+          <select taborder="-1" name="environment" class="ui dropdown" data-bind="value: environmentObs,
+            options: environmentOptions, optionsText: 'label', optionsValue: 'value',
+            optionsCaption: 'Select an environment…'">
+          </select>
+        </div>
+        <div class="field" data-bind="visible: stateObs() !== 'ForgotPassword'">
+          <ui-checkbox params="checkedObs: imAnAdminObs">
+            I’m an admin
+          </ui-checkbox>
         </div>
       </div>
     </form>

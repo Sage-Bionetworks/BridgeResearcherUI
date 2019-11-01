@@ -108,17 +108,24 @@ export default function participants() {
     let success = makeSuccess(self, event);
     utils.startHandler(self, event);
 
-    getHealthCode(id).then(success).catch(() => {
-      getExternalId(id).then(success).catch(() => {
-        getId(id).then(success).catch(() => {
-          getSynapseUserId(id).then(success).catch(() => {
-            getEmail(id).then(success).catch((e) => {
-              event.target.parentNode.parentNode.classList.remove("loading");
-              utils.failureHandler({ transient: false })(e);
+    let promise = null;
+    if (id.endsWith('@synapse.org')) {
+      promise = utils.synapseAliasToUserId(id)
+        .then(getSynapseUserId).then(success);
+    } else {
+      promise = getHealthCode(id).then(success).catch(() => {
+        getExternalId(id).then(success).catch(() => {
+          getId(id).then(success).catch(() => {
+            getSynapseUserId(id).then(success).catch(() => {
+              getEmail(id).then(success);
             });
           });
         });
       });
+    }
+    promise.catch((e) => {
+      event.target.parentNode.parentNode.classList.remove("loading");
+      utils.failureHandler({ transient: false })(e);
     });
   };
   self.exportDialog = function() {

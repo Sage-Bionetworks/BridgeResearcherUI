@@ -59,7 +59,7 @@ export default function() {
     studyKey = root.queryParams.studyPath;
     env = "production";
   } else {
-    studyKey = storeService.get(STUDY_KEY) || "api";
+    studyKey = storeService.get(STUDY_KEY);
     env = storeService.get(ENVIRONMENT) || "production";
   }
   new Binder(self)
@@ -102,10 +102,14 @@ export default function() {
     }
   }
   function loadStudyList(newValue) {
-    return serverService.getStudyList(newValue)
-      .then(loadStudies)
-      .then(finishOAuth)
-      .catch(utils.failureHandler());
+    if (newValue) {
+      return serverService.getStudyList(newValue)
+        .then(loadStudies)
+        .then(finishOAuth)
+        .catch(utils.failureHandler());
+    } else {
+      Promise.resolve();
+    }
   }
   function clear(response) {
     self.emailObs("");
@@ -121,7 +125,10 @@ export default function() {
     let payload = {};
     fields.forEach(field => {
       payload[field] = self[field + "Obs"]();
-      if (!payload[field]) {
+      console.log(payload[field]);
+      /*if (payload[field] === 'Select a study…' || payload[field] === 'Select an environment…') {
+        error.addError(field, "is required");
+      } else*/ if (!payload[field]) {
         error.addError(field, "is required");
       }
     });
@@ -156,12 +163,13 @@ export default function() {
     return self.stateObs() === state;
   };
   self.submit = function(vm, event) {
+    (event || vm).preventDefault();
     let key = self.stateObs();
     let methodName = key.substring(0, 1).toLowerCase() + key.substring(1);
-    self[methodName](vm, event);
+    self[methodName](self, event);
   };
   self.signIn = function(vm, event) {
-    let payload = createPayload("email", "password", "study");
+    let payload = createPayload("email", "password", "study", "environment");
     if (payload) {
       let { studyKey, studyName, environment } = collectValues();
       utils.startHandler(self, SYNTH_EVENT);
@@ -180,8 +188,7 @@ export default function() {
     if (payload) {
       let { studyKey, studyName, environment } = collectValues();
       utils.startHandler(self, SYNTH_EVENT);
-      return serverService
-        .requestResetPassword(environment, payload)
+      return serverService.requestResetPassword(environment, payload)
         .then(clear)
         .then(self.cancel)
         .then(utils.successHandler(self, SYNTH_EVENT, SUCCESS_MSG))
@@ -195,8 +202,7 @@ export default function() {
       clear();
       let { studyKey, studyName, environment } = collectValues();
       utils.startHandler(vm, SYNTH_EVENT);
-      return serverService
-        .phoneSignIn(studyName, environment, payload)
+      return serverService.phoneSignIn(studyName, environment, payload)
         .then(clear)
         .then(makeReloader(studyKey, environment))
         .then(utils.successHandler(vm, SYNTH_EVENT))
@@ -208,8 +214,7 @@ export default function() {
     if (payload) {
       let { studyKey, studyName, environment } = collectValues();
       utils.startHandler(vm, SYNTH_EVENT);
-      return serverService
-        .requestPhoneSignIn(environment, payload)
+      return serverService.requestPhoneSignIn(environment, payload)
         .then(self.useCode)
         .then(utils.successHandler(vm, SYNTH_EVENT, PHONE_SUCCESS_MSG))
         .catch(utils.failureHandler());
@@ -220,8 +225,7 @@ export default function() {
     if (payload) {
       let { studyKey, studyName, environment } = collectValues();
       utils.startHandler(self, SYNTH_EVENT);
-      serverService
-        .signIn(studyName, environment, payload)
+      serverService.signIn(studyName, environment, payload)
         .then(clear)
         .then(makeReloader(studyKey, environment))
         .then(utils.successHandler(self, SYNTH_EVENT))

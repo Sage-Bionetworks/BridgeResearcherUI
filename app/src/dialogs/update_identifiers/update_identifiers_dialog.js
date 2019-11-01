@@ -19,8 +19,20 @@ export default function(params) {
     .obs("phoneRegion", params.phoneRegion)
     .obs("phoneDisabled", params.phone)
     .obs("credentialType", "Email")
-    .obs("externalId");
+    .obs("externalId")
+    .obs("lookingUpSynapseId", false);
 
+  self.synapseUserIdObs.extend({ rateLimit: 1000 });
+  self.synapseUserIdObs.subscribe((value) => {
+    if (value === '' || /^\d+$/.test(value)) {
+      self.lookingUpSynapseIdObs(false);
+      return;
+    }
+    self.lookingUpSynapseIdObs(true);
+    utils.synapseAliasToUserId(value).then((id) => {
+      self.synapseUserIdObs(id);
+    }).catch(() => self.lookingUpSynapseIdObs(false));
+  });    
   self.updateRegion = function(model, event) {
     if (event.target.classList.contains("item")) {
       self.phoneRegionObs(event.target.textContent);

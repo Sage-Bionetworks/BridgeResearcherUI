@@ -44,7 +44,7 @@
         </div>
       </div>
       <div class="ui divider"></div>
-      <h4>Add these credentials:</h4>
+      <h4>Add one of these credentials:</h4>
       <div class="field">
         <label>Email</label>
         <input data-bind="textInput: emailObs, disable: emailDisabledObs">
@@ -68,7 +68,10 @@
       </div>
       <div class="field">
         <label>Synapse User ID</label>
-        <input data-bind="textInput: synapseUserIdObs, disable: synapseUserIdDisabledObs">
+        <div class="ui right icon input loading" data-bind="css: {loading: lookingUpSynapseIdObs}">
+          <input type="text"  data-bind="textInput: synapseUserIdObs, disable: synapseUserIdDisabledObs">
+          <i class="search icon"></i>
+        </div>        
       </div>
     </form>
   </div>

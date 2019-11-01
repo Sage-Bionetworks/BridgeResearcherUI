@@ -90,18 +90,8 @@ export default function general(params) {
       return;
     }
     self.lookingUpSynapseIdObs(true);
-    value = value.replace('@synapse.org', '');
-    fetch('https://repo-prod.prod.sagebase.org/repo/v1/principal/alias', {
-      method: 'POST',
-      mode: 'cors',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({"alias": value, "type": "USER_NAME"})
-    }).then(response => {
-      response.json().then((json) => {
-        if (json.principalId) {
-          self.synapseUserIdObs(json.principalId);
-        }
-      })
+    utils.synapseAliasToUserId(value).then((id) => {
+      self.synapseUserIdObs(id);
     }).catch(() => self.lookingUpSynapseIdObs(false));
   });
 
