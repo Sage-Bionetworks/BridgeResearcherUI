@@ -1,0 +1,79 @@
+<div class="ui mini modal">
+  <i data-bind="click: cancel" class="close icon"></i>
+  <div class="header">
+    Add an identifier
+  </div>
+  <div class="content">
+    <form class="ui form">
+      <h4>Enter your sign in credentials again:</h4>
+      <div class="field">
+        <div class="two fields">
+          <div class="six wide field">
+            <select class="ui dropdown" data-bind="value: credentialTypeObs">
+              <option>Email</option>
+              <option>External ID</option>
+              <option>Phone</option>
+            </select>
+          </div>
+          <div class="ten wide field">
+            <input type="text" data-bind="visible: credentialTypeObs() === 'Email', 
+              textInput: signInEmailObs" placeholder="Email">
+            <input type="text" data-bind="visible: credentialTypeObs() === 'External ID', 
+              textInput: externalIdObs" placeholder="External ID">
+            <div class="ui left labeled input" data-bind="visible: credentialTypeObs() === 'Phone'">
+              <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
+                <div class="text" data-bind="text: phoneRegionObs"></div>
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                  <div class="item">US</div>
+                  <div class="item">CA</div>
+                  <div class="item">IN</div>
+                  <div class="item">MX</div>
+                </div>
+              </div>
+              <input type="text" placeholder="Phone number" data-bind="textInput: phoneObs" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="ui left icon input">
+          <i class="lock icon"></i>
+          <input type="password" autocomplete="current-password" placeholder="Password" 
+            data-bind="textInput: signInPasswordObs" />
+        </div>
+      </div>
+      <div class="ui divider"></div>
+      <h4>Add these credentials:</h4>
+      <div class="field">
+        <label>Email</label>
+        <input data-bind="textInput: emailObs, disable: emailDisabledObs">
+      </div>
+      <div class="field">
+        <label>Phone</label>
+        <div class="ui left labeled input">
+          <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
+            <div class="text" data-bind="text: phoneRegionObs"></div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <div class="item">US</div>
+              <div class="item">CA</div>
+              <div class="item">IN</div>
+              <div class="item">MX</div>
+            </div>
+          </div>
+          <input type="text" placeholder="Phone number" 
+            data-bind="textInput: phoneObs, disable: phoneDisabledObs" />
+        </div>
+      </div>
+      <div class="field">
+        <label>Synapse User ID</label>
+        <input data-bind="textInput: synapseUserIdObs, disable: synapseUserIdDisabledObs">
+      </div>
+    </form>
+  </div>
+  <div class="actions">
+    <button class="ui primary small button" data-bind="click: save">Update</button>
+    <button class="ui small button" data-bind="click: cancel">Cancel</button>
+  </div>
+</div>

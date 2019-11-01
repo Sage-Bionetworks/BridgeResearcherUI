@@ -19,6 +19,9 @@
           <i class="dropdown icon"></i>
           <div class="menu">
 
+            <div class="item" data-bind="click: updateIdentifiers, visible: updateIdsVisible">
+              Add an identifier
+            </div>
             <div class="item" data-bind="click: resendEmailVerification, visible: resendVisible">
               Send email verification
             </div>
@@ -99,8 +102,11 @@
       </div>
       <div class="field synapseUserId">
         <label>Synapse User ID</label>
-        <input type="text" data-bind="textInput: synapseUserIdObs" />
-      </div>      
+        <div class="ui right icon input loading" data-bind="css: {loading: lookingUpSynapseIdObs}">
+          <input type="text"  data-bind="textInput: synapseUserIdObs">
+          <i class="search icon"></i>
+        </div>
+      </div>
     </div>
 
     <!-- ROW 2: Update, external ID field changes based on role -->
@@ -124,13 +130,8 @@
       </div>
       <div class="field synapseUserId">
         <label>Synapse User ID</label>
-        <div class="ui right icon input loading" data-bind="css: {loading: lookingUpSynapseIdObs}">
-          <input type="text"  data-bind="textInput: synapseUserIdObs">
-          <i class="search icon"></i>
-        </div>
-            <!--<input type="text" data-bind="textInput: synapseUserIdObs" />-->
+        <span class="input-field-padding" data-bind="text: formatSynapseUserId(synapseUserIdObs())">—</span>
       </div>
-
     </div>
 
     <!-- ROW 3: Varies in last row for admin (still can change substudies) -->
@@ -160,7 +161,6 @@
         <label>External ID</label>
         <input type="text" data-bind="textInput: newExternalIdObs" />
       </div>
-  
     </div>
 
     <!-- ROW 4: Create the same for everybody -->

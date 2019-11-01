@@ -176,10 +176,23 @@ export default function general(params) {
   self.disableVisible = ko.computed(() => self.statusObs() === "enabled" && root.isAdmin());
   self.signOutVisible = ko.computed(() => !['disabled','unverified'].includes(self.statusObs()));
   self.deleteVisible = ko.computed(() => root.isResearcher() && self.dataGroupsObs().includes('test_user'));
+  self.updateIdsVisible = ko.observable(false);
+
+  self.updateIdentifiers = function() { 
+    root.openDialog('update_identifiers_dialog', {
+      closeDialog: root.closeDialog,
+      studyId: root.studyIdentifierObs(),
+      email: self.emailObs(),
+      phone: self.phoneObs(),
+      phoneRegion: self.phoneRegionObs(),
+      synapseUserId: self.synapseUserIdObs()
+    });
+  };
 
   serverService.getSession().then(session => {
     var roles = selectRoles(session);
     self.allRolesObs(roles);
+    self.updateIdsVisible(session.id === self.idObs());
   });
 
   function initStudy(study) {
