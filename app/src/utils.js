@@ -256,6 +256,23 @@ function animatedDeleter(scrollTo, elementsObs, selectedElementObs) {
   };
 }
 
+function synapseAliasToUserId(alias, checkFormat) {
+  if (checkFormat && (!alias || !alias.endsWith('@synapse.org'))) {
+    return Promise.resolve(alias);
+  }
+  alias = alias.replace('@synapse.org', '');
+  return fetch('https://repo-prod.prod.sagebase.org/repo/v1/principal/alias', {
+    method: 'POST',
+    mode: 'cors',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({"alias": alias, "type": "USER_NAME"})
+  }).then(response => {
+    return response.json().then((json) => {
+      return Promise.resolve(json.principalId);
+    })
+  });  
+}
+
 export default {
   clearErrors,
   /**
@@ -302,5 +319,6 @@ export default {
   animatedDeleter,
   findStudyName,
   copyString,
-  failureHandler
+  failureHandler,
+  synapseAliasToUserId
 };
