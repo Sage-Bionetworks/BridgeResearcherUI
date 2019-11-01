@@ -303,6 +303,8 @@ import templateTabsetHtml from './pages/template/tabset.html';
 // others. Participants might remain separate because of the complexity of the search UI.
 import pager from './widgets/pager/pager';
 import pagerHtml from './widgets/pager/pager.html';
+import updateIdentifiers from './dialogs/update_identifiers/update_identifiers_dialog';
+import updateIdentifiersHtml from './dialogs/update_identifiers/update_identifiers_dialog.html';
 
 const reg = ko.components.register;
 reg("errors", {viewModel: errors, template: errorsHtml});
@@ -465,7 +467,7 @@ reg("config_editor", {viewModel: configEditor, template: configEditorHtml});
 reg("config_history", {viewModel: configHistory, template: configHistoryHtml});
 reg("config-tabset", {viewModel: configTabset, template: configTabsetHtml});
 reg("criteria_editor", {viewModel: critEditor, template: critEditorHtml, synchronous: true});
-
+reg("update_identifiers_dialog", {viewModel: updateIdentifiers, template: updateIdentifiersHtml, synchronous: true});
 // Attribute editors
 reg("user_attributes", {template: userAtts, viewModel: setEditor("userProfileAttributes")});
 reg("task_identifiers", {template: taskIdentifiers, viewModel: setEditor("taskIdentifiers")});

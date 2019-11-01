@@ -499,6 +499,9 @@ export class ServerService {
   deleteExternalId(id) {
     return this.del(`${config.externalIds}/${id}`);
   }
+  updateIdentifiers(payload) {
+    return this.post(config.participants + '/self/identifiers', payload);
+  }
   getSession() {
     if (session) {
       return Promise.resolve(session);
