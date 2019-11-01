@@ -26,8 +26,7 @@ export default function surveySchema(params) {
     self.nameObs(survey.name);
     self.publishedObs(survey.published);
     if (survey.published) {
-      serverService
-        .getUploadSchema(survey.identifier, survey.schemaRevision)
+      serverService.getUploadSchema(survey.identifier, survey.schemaRevision)
         .then(function(schema) {
           self.schemaObs(schema);
           self.itemsObs.pushAll(schema.fieldDefinitions);
