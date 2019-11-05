@@ -73,13 +73,13 @@
 
     <!-- ROW 2: Create is the same for all users -->
     <div class="equal width fields" data-bind="visible: isNewObs">
-      <div class="field" id="email">
+      <div class="field" class="email">
         <label>Email
           <verified-icon params="valueObs: emailObs, verifiedObs: emailVerifiedObs"> </verified-icon>
         </label>
         <input type="text" data-bind="textInput: emailObs" />
       </div>
-      <div class="field" id="phone">
+      <div class="field" class="phone">
         <label>Phone
           <verified-icon params="valueObs: phoneObs, verifiedObs: phoneVerifiedObs"> </verified-icon>
         </label>
@@ -108,7 +108,7 @@
 
     <!-- ROW 2: Update, external ID field changes based on role -->
     <div class="equal width fields" data-bind="visible: !isNewObs()">
-      <div class="field" id="email">
+      <div class="field" class="email">
         <label>Email</label>
         <span data-bind="visible: showIdentifier('email')">
           <a class="input-field-padding" data-bind="href: emailLink, text: emailObs"></a>
@@ -119,7 +119,7 @@
         <span data-bind="visible: showDash('email')"
           class="input-field-padding">—</span>
       </div>
-      <div class="field" id="phone">
+      <div class="field" class="phone">
         <label>Phone</label>
         <span data-bind="visible: showIdentifier('phone')">
           <a class="input-field-padding" data-bind="href: phoneLink, 
@@ -171,7 +171,7 @@
 
     <!-- ROW 4: Create the same for everybody -->
     <div class="equal width fields" data-bind="visible: isNewObs()">
-      <div class="required field" id="password">
+      <div class="required field" class="password">
         <label>Password</label>
         <input type="password" autocomplete="new-password" data-bind="textInput: passwordObs" />
       </div>

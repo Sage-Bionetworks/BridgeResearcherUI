@@ -7,8 +7,6 @@ const ENUM_ERROR = [
   "Enumeration values can only contain alphanumeric characters (they can also have spaces, dashes, underscores and periods in the middle, but not more than one of these special characters in a row)."
 ];
 
-const errorComponentStack = [];
-
 function truncateErrorFieldKey(errorString) {
   let parts = errorString.split(" ");
   let keyParts = parts[0].split(".");
@@ -48,13 +46,9 @@ function errorFieldKeyToId(errorKey) {
     .replace(/}/g, "");
 }
 
-function isNotSelf(self) {
-  return errorComponentStack[errorComponentStack.length - 1] !== self;
-}
-
 export default function errors() {
   let self = this;
-  errorComponentStack.push(this);
+  self.domObs = ko.observable();
 
   let errorQueue = [];
   let errorLabelQueue = [];
@@ -65,15 +59,17 @@ export default function errors() {
   });
 
   ko.postbox.subscribe("showErrors", function(payload) {
-    if (isNotSelf(self)) {
-      return;
-    }
     let message = payload.message;
     let errors = payload.errors || {};
     fixEnumErrorsForTopLevelEditor(errors);
 
     // Scroll to top of scrollbox. jQuery is included globally in the page
-    $(".scrollbox").scrollTo(0);
+    let container = self.domObs().closest(".scrollbox");
+    if (container) {
+      container.scrollTo(0, 0);
+    } else {
+      container = self.domObs().closest(".content");
+    }
 
     let globalErrors = [];
     // This was basically a payload with a message and no errors... so show the message.
@@ -88,11 +84,12 @@ export default function errors() {
       // I might be inclined to switch over entirely to class tokens rather than IDs to
       // simplify this, but it introduces new difficulties.
       let id = errorFieldKeyToId(fieldName);
-      let fieldEl = document.getElementById(id);
+      let fieldEl = container.querySelector('#'+id);
       if (!fieldEl) {
         // When you search by class, 1) there can be more than one, 2) some can be hidden. Filter
-        // out the hidden ones and take the first one that is not hidden.
-        fieldEl = Array.from(document.querySelectorAll("." + id)).filter(el => el.offsetParent !== null)[0];
+        // out the hidden ones and take the LAST one that is not hidden.
+        let elements = Array.from(container.querySelectorAll("." + id)).filter(el => el.offsetParent !== null);
+        fieldEl = (elements.length) ? elements[elements.length-1] : null;
       }
       if (fieldEl) {
         let containerDiv = fieldEl.querySelector(".error.box");
@@ -120,9 +117,6 @@ export default function errors() {
     self.errorsObs.pushAll(globalErrors);
   });
   ko.postbox.subscribe("clearErrors", function() {
-    if (isNotSelf(self)) {
-      return;
-    }
     self.errorsObs.removeAll();
     toastr.clear();
     errorQueue.forEach(function(field) {
@@ -136,6 +130,5 @@ export default function errors() {
   });
 };
 errors.prototype.dispose = function() {
-  errorComponentStack.pop(this);
   this.displayObs.dispose();
 };

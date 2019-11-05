@@ -126,7 +126,6 @@ export default function() {
     let payload = {};
     fields.forEach(field => {
       payload[field] = self[field + "Obs"]();
-      console.log(payload[field]);
       /*if (payload[field] === 'Select a study…' || payload[field] === 'Select an environment…') {
         error.addError(field, "is required");
       } else*/ if (!payload[field]) {
