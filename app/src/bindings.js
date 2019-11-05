@@ -22,6 +22,13 @@ ko.observableArray.fn.contains = function(value) {
   return this().indexOf(value) > -1;
 };
 
+ko.bindingHandlers.dom = {
+  init: function(element, valueAccessor) {
+    var value = valueAccessor();
+    value(element);    
+  }
+};
+
 ko.bindingHandlers.chart = {
   init: function(element, valueAccessor) {
     let context = element.getContext("2d");

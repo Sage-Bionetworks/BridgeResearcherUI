@@ -256,8 +256,8 @@ function animatedDeleter(scrollTo, elementsObs, selectedElementObs) {
   };
 }
 
-function synapseAliasToUserId(alias, checkFormat) {
-  if (checkFormat && (!alias || !alias.endsWith('@synapse.org'))) {
+function synapseAliasToUserId(alias) {
+  if (!alias) {
     return Promise.resolve(alias);
   }
   alias = alias.replace('@synapse.org', '');

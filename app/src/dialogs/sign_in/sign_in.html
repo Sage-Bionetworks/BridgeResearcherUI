@@ -3,13 +3,12 @@
   <div class="content" data-bind="visible: stateObs() !== 'Oauth'">
     <errors></errors>
     <form class="ui form" data-bind="returnHandler: submit" action="">
-      <div class="field" id="study" data-bind="visible: !isLockedObs()">
+      <div class="field study" data-bind="visible: !isLockedObs()">
         <select taborder="-1" class="ui dropdown" data-bind="value: studyObs,
           optionsCaption: 'Select a study…', options: studyOptionsObs, 
           optionsText: 'name', optionsValue: 'identifier'">
         </select>
       </div>
-      <!--
       <div style="text-align: center" data-bind="visible: stateObs() !== 'ForgotPassword'">
         <button class="ui basic button" data-bind="click: synapse" style="margin:0">
           <i class="icon" style="background: url('/images/sage-bionetworks-logo.svg') no-repeat; background-size: contain"></i>
@@ -18,9 +17,9 @@
       </div>
 
       <div class="ui horizontal divider" data-bind="visible: stateObs() !== 'ForgotPassword'">Or</div>
-      -->
+
       <div data-bind="visible: isOtherThanPhone">
-        <div class="field" id="email" data-bind="visible: isCollectingEmail">
+        <div class="field email" data-bind="visible: isCollectingEmail">
           <div class="ui left icon input">
             <i class="envelope outline icon"></i>
             <input autocomplete="email" placeholder="Email address" data-bind="visible: isState('SignIn'), 
@@ -29,14 +28,14 @@
               textInput: emailObs, hasFocus: handleFocus('ForgotPassword')"/>
           </div>
         </div>
-        <div class="field" id="externalId" data-bind="visible: isState('ExternalIdSignIn')">
+        <div class="field externalId" data-bind="visible: isState('ExternalIdSignIn')">
           <div class="ui left icon input">
             <i class="globe icon"></i>
             <input data-bind="textInput: externalIdObs, hasFocus: handleFocus('ExternalIdSignIn')" 
               placeholder="External ID"/>
           </div>
         </div>
-        <div class="field password" id="password" data-bind="visible: !isState('ForgotPassword')">
+        <div class="field password" data-bind="visible: !isState('ForgotPassword')">
           <div class="ui left icon input">
             <i class="lock icon"></i>
             <input type="password" autocomplete="current-password" placeholder="Password" 
@@ -44,7 +43,7 @@
           </div>
         </div>
       </div>
-      <div class="field" id="phone" data-bind="visible: isState('PhoneSignIn')">
+      <div class="field phone" data-bind="visible: isState('PhoneSignIn')">
         <div class="ui left labeled input">
           <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
             <div class="text" data-bind="text: phoneRegionObs"></div>
@@ -60,7 +59,7 @@
             data-bind="textInput: phoneObs, hasFocus: handleFocus('PhoneSignIn')"/>
         </div>
       </div>
-      <div class="field" id="token" data-bind="visible: isState('EnterCode')">
+      <div class="field token" data-bind="visible: isState('EnterCode')">
         <div class="ui left icon input">
           <i class="phone icon"></i>
           <input type="text" placeholder="Code" 
@@ -85,7 +84,7 @@
       </div>
 -->
       <div data-bind="if: !isLockedObs()">
-        <div class="field" style="margin-top: 1rem" id="environment">
+        <div class="field environment" style="margin-top: 1rem">
           <select taborder="-1" name="environment" class="ui dropdown" data-bind="value: environmentObs,
             options: environmentOptions, optionsText: 'label', optionsValue: 'value',
             optionsCaption: 'Select an environment…'">

@@ -1,6 +1,3 @@
-import fn from "../../functions";
-import ko from "knockout";
-import root from "../../root";
 import Binder from "../../binder";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
@@ -12,27 +9,26 @@ export default function(params) {
     .obs("signInEmail")
     .obs("signInPassword")
     .obs("email", params.email)
-    .obs("emailDisabled", params.email)
     .obs("synapseUserId", params.synapseUserId)
-    .obs("synapseUserIdDisabled", params.synapseUserId)
     .obs("phone", params.phone, Binder.formatPhone, Binder.persistPhone)
     .obs("phoneRegion", params.phoneRegion)
-    .obs("phoneDisabled", params.phone)
     .obs("credentialType", "Email")
-    .obs("externalId")
-    .obs("lookingUpSynapseId", false);
+    .obs("externalId");
 
-  self.synapseUserIdObs.extend({ rateLimit: 1000 });
-  self.synapseUserIdObs.subscribe((value) => {
+  self.isVisible = function(field) {
+    return params.editor === field;
+  }
+  self.lookupSynapseUserId = function(vm, event) {
+    let value = self.synapseUserIdObs();
     if (value === '' || /^\d+$/.test(value)) {
-      self.lookingUpSynapseIdObs(false);
       return;
     }
-    self.lookingUpSynapseIdObs(true);
-    utils.synapseAliasToUserId(value).then((id) => {
-      self.synapseUserIdObs(id);
-    }).catch(() => self.lookingUpSynapseIdObs(false));
-  });    
+    utils.startHandler(vm, event);
+    utils.synapseAliasToUserId(value)
+      .then(self.synapseUserIdObs)
+      .then(utils.successHandler(self, event))
+      .catch(utils.failureHandler());
+  };  
   self.updateRegion = function(model, event) {
     if (event.target.classList.contains("item")) {
       self.phoneRegionObs(event.target.textContent);
@@ -52,13 +48,13 @@ export default function(params) {
     } else if (self.credentialTypeObs() === 'Phone') {
       payload.signIn.phone = { number: self.phoneObs(), regionCode: self.phoneRegionObs() };
     }
-    if (!self.emailDisabledObs()) {
+    if (self.isVisible('email')) {
       payload.emailUpdate = self.emailObs();
     }
-    if (!self.synapseUserIdDisabledObs()) {
-      payload.synapseUserIdUpdate = self.synapseUserIdObs();
+    if (self.isVisible('synapseUserId')) {
+      payload.synapseUserIdUpdate = new String(self.synapseUserIdObs());
     }
-    if (!self.phoneDisabledObs() && self.phoneObs()) {
+    if (self.isVisible('phone')) {
       payload.phoneUpdate = {number: self.phoneObs(), regionCode: self.phoneRegionObs()};
     }
     serverService.updateIdentifiers(payload)

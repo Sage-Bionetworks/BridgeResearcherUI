@@ -19,9 +19,6 @@
           <i class="dropdown icon"></i>
           <div class="menu">
 
-            <div class="item" data-bind="click: updateIdentifiers, visible: updateIdsVisible">
-              Add an identifier
-            </div>
             <div class="item" data-bind="click: resendEmailVerification, visible: resendVisible">
               Send email verification
             </div>
@@ -76,13 +73,13 @@
 
     <!-- ROW 2: Create is the same for all users -->
     <div class="equal width fields" data-bind="visible: isNewObs">
-      <div class="field" id="email">
+      <div class="field" class="email">
         <label>Email
           <verified-icon params="valueObs: emailObs, verifiedObs: emailVerifiedObs"> </verified-icon>
         </label>
         <input type="text" data-bind="textInput: emailObs" />
       </div>
-      <div class="field" id="phone">
+      <div class="field" class="phone">
         <label>Phone
           <verified-icon params="valueObs: phoneObs, verifiedObs: phoneVerifiedObs"> </verified-icon>
         </label>
@@ -102,35 +99,44 @@
       </div>
       <div class="field synapseUserId">
         <label>Synapse User ID</label>
-        <div class="ui right icon input loading" data-bind="css: {loading: lookingUpSynapseIdObs}">
-          <input type="text"  data-bind="textInput: synapseUserIdObs">
-          <i class="search icon"></i>
+        <div class="ui action input">
+          <input type="text" data-bind="textInput: synapseUserIdObs">
+          <button data-bind="click: lookupSynapseUserId" class="ui button">Lookup…</button>
         </div>
       </div>
     </div>
 
     <!-- ROW 2: Update, external ID field changes based on role -->
     <div class="equal width fields" data-bind="visible: !isNewObs()">
-      <div class="field" id="email">
+      <div class="field" class="email">
         <label>Email</label>
-        <span data-bind="visible: emailObs()">
+        <span data-bind="visible: showIdentifier('email')">
           <a class="input-field-padding" data-bind="href: emailLink, text: emailObs"></a>
           <verified-icon params="valueObs: emailObs, verifiedObs: emailVerifiedObs"> </verified-icon>
         </span>
-        <span class="input-field-padding" data-bind="visible: !emailObs()">—</span>
+        <a href="#" class="input-field-padding" data-bind="visible: showAddIdentifier('email'), 
+          click: addIdentifier('email')">Add&hellip;</a>
+        <span data-bind="visible: showDash('email')"
+          class="input-field-padding">—</span>
       </div>
-      <div class="field" id="phone">
+      <div class="field" class="phone">
         <label>Phone</label>
-        <span data-bind="visible: phoneObs()">
+        <span data-bind="visible: showIdentifier('phone')">
           <a class="input-field-padding" data-bind="href: phoneLink, 
             text: $component.formatPhone(phoneObs(), phoneRegionObs())"></a>
           <verified-icon params="valueObs: phoneObs, verifiedObs: phoneVerifiedObs"> </verified-icon>
         </span>
-        <span class="input-field-padding" data-bind="visible: !phoneObs()">—</span>
+        <a href="#" class="input-field-padding" data-bind="visible: showAddIdentifier('phone'), 
+          click: addIdentifier('phone')">Add&hellip;</a>
+        <span data-bind="visible: showDash('phone')"
+          class="input-field-padding">—</span>
       </div>
       <div class="field synapseUserId">
         <label>Synapse User ID</label>
-        <span class="input-field-padding" data-bind="text: formatSynapseUserId(synapseUserIdObs())">—</span>
+        <span data-bind="visible: showIdentifier('synapseUserId'), text: synapseUserIdObs"></span>
+        <a href="#" class="input-field-padding" data-bind="visible: showAddIdentifier('synapseUserId'), 
+          click: addIdentifier('synapseUserId')">Add&hellip;</a>
+        <span class="input-field-padding" data-bind="visible: showDash('synapseUserId')">—</span>
       </div>
     </div>
 
@@ -165,7 +171,7 @@
 
     <!-- ROW 4: Create the same for everybody -->
     <div class="equal width fields" data-bind="visible: isNewObs()">
-      <div class="required field" id="password">
+      <div class="required field" class="password">
         <label>Password</label>
         <input type="password" autocomplete="new-password" data-bind="textInput: passwordObs" />
       </div>

@@ -91,7 +91,8 @@ export default function() {
       let environment = storeService.get(ENVIRONMENT);
       let studyName = utils.findStudyName(self.studyOptionsObs(), studyKey);
       storeService.remove(OAUTH_STATE);
-      let obj = {study: studyKey, vendorId: 'synapse', authToken: root.queryParams.code};
+      let obj = {study: studyKey, vendorId: 'synapse', 
+        authToken: root.queryParams.code, callbackUrl: document.location.origin};
       serverService.oauthSignIn(studyName, environment, obj)
         .then(() => document.location = '/' + document.location.hash)
         .then(utils.successHandler(self, SYNTH_EVENT))
@@ -125,7 +126,6 @@ export default function() {
     let payload = {};
     fields.forEach(field => {
       payload[field] = self[field + "Obs"]();
-      console.log(payload[field]);
       /*if (payload[field] === 'Select a study…' || payload[field] === 'Select an environment…') {
         error.addError(field, "is required");
       } else*/ if (!payload[field]) {
@@ -259,20 +259,32 @@ export default function() {
   };
   self.titleObs = ko.computed(() => TITLES[self.stateObs()]);
   self.buttonTextObs = ko.computed(() => BUTTONS[self.stateObs()]);
+
+  function getClientId() {
+    if (document.location.origin.indexOf('127.0.0.1') > -1) {
+      return config.client.local;
+    } else if (document.location.origin.indexOf('-staging') > -1) {
+      return config.client.staging;
+    }
+    return config.client.production;
+  }
+
   self.synapse = function(vm, event) {
     event.stopPropagation();
     event.preventDefault();
-    let studyKey = self.studyObs();
+
+    let payload = createPayload('study');
+    let studyKey = payload.study;
     let state = new Date().getTime().toString(32);
     storeService.set(STUDY_KEY, studyKey);
     storeService.set(OAUTH_STATE, state);
     storeService.set(ENVIRONMENT, self.environmentObs());
     let array = [];
     array.push('response_type=code');
-    array.push('client_id=100018');
+    array.push('client_id=' + getClientId());
     array.push('scope=openid');
     array.push('state=' + encodeURIComponent(state));
-    array.push('redirect_uri=' + encodeURIComponent('https://research.sagebridge.org'));
+    array.push('redirect_uri=' + encodeURIComponent(document.location.origin));
     array.push('claims=' + encodeURIComponent('{"id_token":{"userid":null}}'));
     document.location = 'https://signin.synapse.org/?' + array.join('&');
   }
