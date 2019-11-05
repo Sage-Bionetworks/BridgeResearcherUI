@@ -25,6 +25,11 @@ export default {
     staging: "https://ws-staging.sagebridge.org",
     production: "https://ws.sagebridge.org"
   },
+  client: {
+    local: "100019",
+    staging: "100020",
+    production: "100018"
+  },
   toastr: {
     closeButton: true,
     debug: false,

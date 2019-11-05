@@ -66,7 +66,6 @@ export default function general(params) {
     .bind("attributes[]", [], Binder.formatAttributes, Binder.persistAttributes)
     .bind("emailVerified", false)
     .bind("phoneVerified", false)
-    .bind("lookingUpSynapseId", false)
     .bind("synapseUserId", null, null, (value) => (value) ? value : null)
     .bind("firstName")
     .bind("lastName")
@@ -83,22 +82,38 @@ export default function general(params) {
 
   fn.copyProps(self, root, "isAdmin");
 
-  self.synapseUserIdObs.extend({ rateLimit: 1000 });
-  self.synapseUserIdObs.subscribe((value) => {
+  self.lookupSynapseUserId = function(vm, event) {
+    let value = self.synapseUserIdObs();
     if (value === '' || /^\d+$/.test(value)) {
-      self.lookingUpSynapseIdObs(false);
       return;
     }
-    self.lookingUpSynapseIdObs(true);
-    utils.synapseAliasToUserId(value).then((id) => {
-      self.synapseUserIdObs(id);
-    }).catch(() => self.lookingUpSynapseIdObs(false));
-  });
-
+    utils.startHandler(vm, event);
+    utils.synapseAliasToUserId(value)
+      .then(self.synapseUserIdObs)
+      .then(utils.successHandler(self, event))
+      .catch(utils.failureHandler());
+  };
   self.statusObs.subscribe(function(status) {
     self.showEnableAccountObs(status !== "enabled");
   });
-
+  self.addIdentifier = function(credential) {
+    return () => {
+      let params = {
+        editor: credential,
+        closeDialog: root.closeDialog,
+        studyId: root.studyIdentifierObs()
+      };
+      if (credential === 'email') {
+        params.email = self.emailObs();
+      } else if (credential === 'phone') {
+        params.phone = self.phoneObs();
+        params.phoneRegion = self.phoneRegionObs();
+      } else if (credential === 'synapseUserId') {
+        params.synapseUserId = self.synapseUserIdObs();
+      }
+      root.openDialog('update_identifiers_dialog', params);
+    };
+  };
   self.emailLink = ko.computed(function() {
     return "mailto:" + self.emailObs();
   });
@@ -110,9 +125,22 @@ export default function general(params) {
       self.phoneRegionObs(event.target.textContent);
     }
   };
-  self.formatSynapseUserId = function(value) {
-    return (value) ? value : '—';
-  }
+
+  self.showIdentifier = function(credential) {
+    return ko.computed(() => {
+      return self[credential + 'Obs']();
+    });
+  };
+  self.showAddIdentifier = function(credential) {
+    return ko.computed(() => {
+      return !self[credential + 'Obs']() && self.updateIdsVisible();
+    });
+  };
+  self.showDash = function(credential) {
+    return ko.computed(() => {
+      return !self[credential + 'Obs']() && !self.updateIdsVisible();
+    });
+  };
 
   function makeStatusChanger(status) {
     return function(vm, event) {
@@ -167,17 +195,6 @@ export default function general(params) {
   self.signOutVisible = ko.computed(() => !['disabled','unverified'].includes(self.statusObs()));
   self.deleteVisible = ko.computed(() => root.isResearcher() && self.dataGroupsObs().includes('test_user'));
   self.updateIdsVisible = ko.observable(false);
-
-  self.updateIdentifiers = function() { 
-    root.openDialog('update_identifiers_dialog', {
-      closeDialog: root.closeDialog,
-      studyId: root.studyIdentifierObs(),
-      email: self.emailObs(),
-      phone: self.phoneObs(),
-      phoneRegion: self.phoneRegionObs(),
-      synapseUserId: self.synapseUserIdObs()
-    });
-  };
 
   serverService.getSession().then(session => {
     var roles = selectRoles(session);

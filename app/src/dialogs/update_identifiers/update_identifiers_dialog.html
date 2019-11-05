@@ -43,13 +43,15 @@
             data-bind="textInput: signInPasswordObs" />
         </div>
       </div>
+
       <div class="ui divider"></div>
-      <h4>Add one of these credentials:</h4>
-      <div class="field">
+
+      <h4>New credential:</h4>
+      <div class="field" data-bind="visible: isVisible('email')">
         <label>Email</label>
-        <input data-bind="textInput: emailObs, disable: emailDisabledObs">
+        <input data-bind="textInput: emailObs">
       </div>
-      <div class="field">
+      <div class="field" data-bind="visible: isVisible('phone')">
         <label>Phone</label>
         <div class="ui left labeled input">
           <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
@@ -63,14 +65,14 @@
             </div>
           </div>
           <input type="text" placeholder="Phone number" 
-            data-bind="textInput: phoneObs, disable: phoneDisabledObs" />
+            data-bind="textInput: phoneObs" />
         </div>
       </div>
-      <div class="field">
+      <div class="field" data-bind="visible: isVisible('synapseUserId')">
         <label>Synapse User ID</label>
-        <div class="ui right icon input loading" data-bind="css: {loading: lookingUpSynapseIdObs}">
-          <input type="text"  data-bind="textInput: synapseUserIdObs, disable: synapseUserIdDisabledObs">
-          <i class="search icon"></i>
+        <div class="ui action input">
+          <input type="text" data-bind="textInput: synapseUserIdObs">
+          <button data-bind="click: lookupSynapseUserId" class="ui button">Lookup…</button>
         </div>        
       </div>
     </form>
