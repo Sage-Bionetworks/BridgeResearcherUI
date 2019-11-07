@@ -59,7 +59,6 @@ function extractActivityFromObservables(activity) {
 }
 function updateView(self, schedule, fields) {
   fields.forEach(function(field) {
-    console.log(field, schedule[field]);
     self[field + "Obs"](schedule[field]);
   });
 }
