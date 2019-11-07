@@ -9,7 +9,7 @@ function parseStanzas(string) {
     if (string.charAt(i) === '"') {
       inQuote = !inQuote;
     }
-    if (string.charAt(i) === ',' && !inQuote) {
+    if ((string.charAt(i) === ',' || string.charAt(i) === '\n') && !inQuote) {
       let obj = parseOneStanza(string.substring(0,i));
       if (obj) {
         records.push(obj);

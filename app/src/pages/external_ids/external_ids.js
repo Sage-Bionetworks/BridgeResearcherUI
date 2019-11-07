@@ -39,10 +39,6 @@ export default function externalIds() {
   });
   self.canDeleteObs = ko.computed(() => self.isAdmin());
 
-  function hasBeenChecked(item) {
-    return item.checkedObs() && (!item.deletedObs || !item.deletedObs());
-  }
-
   function extractId(response) {
     if (response.items.length === 0) {
       throw new Error(

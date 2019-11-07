@@ -49,4 +49,10 @@ describe("import_parser", function() {
     expect(results[0].firstName).to.equal("Alx, Dark");
     expect(results[0].password.length).to.equal(32);
   });
+  it("parses multiple lines", () => {
+    let results = parser('A\nB');
+    expect(results.length).to.equal(2);
+    expect(results[0].externalId).to.equal("A");
+    expect(results[1].externalId).to.equal("B");
+  });
 });

@@ -59,6 +59,7 @@ function extractActivityFromObservables(activity) {
 }
 function updateView(self, schedule, fields) {
   fields.forEach(function(field) {
+    console.log(field, schedule[field]);
     self[field + "Obs"](schedule[field]);
   });
 }
@@ -99,7 +100,7 @@ export default function(params) {
     .obs("endsOn")
     .obs("delay")
     .obs("interval")
-    .obs("times")
+    .obs("times", [])
     .obs("cronTrigger")
     .obs("expires")
     .obs("sequencePeriod")
@@ -145,10 +146,11 @@ export default function(params) {
       sequencePeriod: self.sequencePeriodObs(),
       activities: self.activitiesObs().map(extractActivityFromObservables)
     };
-    fn.deleteUnusedProperties(sch);
     // some of these properties are mutually exclusive so based on the type of schedule,
     // delete some fields. This comes up if you schedule one way, then change and schedule another
     // way.
+    /*
+    fn.deleteUnusedProperties(sch);
     switch (self.editorScheduleTypeObs()) {
       case "once":
         delete sch.interval;
@@ -172,6 +174,7 @@ export default function(params) {
         delete sch.expires;
         delete sch.sequencePeriod;
     }
+    */
     return sch;
   }
   params.scheduleObs.subscribe(updateEditor);
