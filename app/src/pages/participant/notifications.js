@@ -1,7 +1,6 @@
 import Binder from "../../binder";
 import fn from "../../functions";
 import root from "../../root";
-import ko from "knockout";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
@@ -20,12 +19,10 @@ export default function notifications(params) {
     .obs("status")
     .obs("hasPhone", false)
     .obs("items[]")
-    
     .obs('smsType')
     .obs('messageId')
     .obs('messageBody')
-    .obs('sentOn')
-    ;
+    .obs('sentOn');
 
   serverService
     .getParticipantName(params.userId)
