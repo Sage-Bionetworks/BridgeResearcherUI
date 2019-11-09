@@ -50,6 +50,16 @@
           </tr>
         </tbody>
       </table>
+
+      <div class="ui message" style="margin-top: 3rem" 
+        data-bind="visible: isAdmin() && smsTypeObs()">
+        <div class="header">Most recent SMS message</div>
+          <p style="margin-top: .5rem"><span data-bind="text: messageBodyObs"></span></p>
+          <p><b>Sent On:</b> <span data-bind="text: formatDate(sentOnObs())"></span></p>
+          <p><b>Type:</b> <span data-bind="text: smsTypeObs"></span></p>
+          <p><b>ID:</b> <span data-bind="text: messageIdObs"></span></p>
+      </div>
+
     </div>
     <div class="six wide column">
       <div class="ui message">

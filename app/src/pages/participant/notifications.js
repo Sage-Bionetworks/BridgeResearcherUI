@@ -8,7 +8,7 @@ import utils from "../../utils";
 export default function notifications(params) {
   let self = this;
 
-  fn.copyProps(self, root, "isDeveloper", "isResearcher", "notificationsEnabledObs");
+  fn.copyProps(self, root, "isDeveloper", "isResearcher", "isAdmin", "notificationsEnabledObs");
   self.formatDate = fn.formatDateTime;
 
   new Binder(self)
@@ -18,7 +18,11 @@ export default function notifications(params) {
     .obs("isRegistered", false)
     .obs("status")
     .obs("hasPhone", false)
-    .obs("items[]");
+    .obs("items[]")
+    .obs('smsType')
+    .obs('messageId')
+    .obs('messageBody')
+    .obs('sentOn');
 
   serverService
     .getParticipantName(params.userId)
@@ -53,6 +57,16 @@ export default function notifications(params) {
       .then(function(response) {
         self.isRegisteredObs(response.items.length > 0);
         self.itemsObs(response.items);
+      })
+      .then(() => {
+        if (self.isAdmin()) {
+          serverService.getParticipantRecentSmsMessage(params.userId).then((response) => {
+            self.smsTypeObs(response.smsType);
+            self.messageIdObs(response.messageId);
+            self.messageBodyObs('“' + response.messageBody + '”');
+            self.sentOnObs(response.sentOn);
+          });
+        }
       })
       .catch(utils.failureHandler());
   }
