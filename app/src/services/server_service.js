@@ -447,6 +447,9 @@ export class ServerService {
   getParticipantNotifications(id) {
     return this.gethttp(`${config.participants}/${id}/notifications`);
   }
+  getParticipantRecentSmsMessage(id) {
+    return this.gethttp(`${config.participants}/${id}/sms/recent`);
+  }
   sendUserNotification(id, message) {
     return this.post(`${config.participants}/${id}/sendNotification`, message);
   }
