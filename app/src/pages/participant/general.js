@@ -83,6 +83,8 @@ export default function general(params) {
   fn.copyProps(self, root, "isAdmin");
 
   self.lookupSynapseUserId = function(vm, event) {
+    alert('Now happens automatically. Remove me.');
+    /*
     let value = self.synapseUserIdObs();
     if (value === '' || /^\d+$/.test(value)) {
       return;
@@ -92,6 +94,7 @@ export default function general(params) {
       .then(self.synapseUserIdObs)
       .then(utils.successHandler(self, event))
       .catch(utils.failureHandler());
+    */
   };
   self.statusObs.subscribe(function(status) {
     self.showEnableAccountObs(status !== "enabled");
@@ -223,8 +226,7 @@ export default function general(params) {
   }
   function saveParticipant(participant) {
     if (self.isNewObs()) {
-      return serverService
-        .createParticipant(participant)
+      return serverService.createParticipant(participant)
         .then(afterCreate)
         .then(response => (window.location = "#/participants/" + response.identifier + "/general"));
     } else {
@@ -236,6 +238,17 @@ export default function general(params) {
   self.formatPhone = function(phone, phoneRegion) {
     return phone ? fn.flagForRegionCode(phoneRegion) + " " + phone : "";
   };
+
+  function updateSynapseUserId(participant) {
+    let value = self.synapseUserIdObs();
+    if (value === '' || /^\d+$/.test(value)) {
+      return Promise.resolve();
+    }
+    return utils.synapseAliasToUserId(value).then((id) => {
+      participant.synapseUserId = id;
+      self.synapseUserIdObs(id);
+    });
+  }
 
   self.save = function(vm, event) {
     let participant = binder.persist(self.participant);
@@ -250,7 +263,8 @@ export default function general(params) {
     }
 
     utils.startHandler(vm, event);
-    return saveParticipant(participant)
+    return updateSynapseUserId(participant)
+      .then(() => saveParticipant(participant))
       .then(updateName)
       .then(binder.update())
       .then(() => self.newExternalIdObs(null))
