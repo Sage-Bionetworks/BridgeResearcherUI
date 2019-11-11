@@ -6,8 +6,10 @@ import ko from "knockout";
 import root from "../../root";
 import serverService from "../../services/server_service";
 import storeService from "../../services/store_service";
+import toastr from 'toastr';
 import utils from "../../utils";
 
+const FAILURE_HANDLER = utils.failureHandler({transient: false});
 const ENVIRONMENT = "environment";
 const OAUTH_STATE = "synState";
 const PHONE_SUCCESS_MSG = "An SMS message has been sent to that phone number; enter the code to sign in.";
@@ -85,33 +87,32 @@ export default function() {
     self.studyOptionsObs(studies.items);
     self.studyObs(studyKey);
   }
-  function finishOAuth() {
-    if (oauth) {
-      let studyKey = storeService.get(STUDY_KEY);
-      let environment = storeService.get(ENVIRONMENT);
-      let studyName = utils.findStudyName(self.studyOptionsObs(), studyKey);
-      storeService.remove(OAUTH_STATE);
-      let obj = {study: studyKey, vendorId: 'synapse', 
-        authToken: root.queryParams.code, callbackUrl: document.location.origin};
-      serverService.oauthSignIn(studyName, environment, obj)
-        .then(() => document.location = '/' + document.location.hash)
-        .then(utils.successHandler(self, SYNTH_EVENT))
-        .catch((e) => {
-          self.stateObs('SignIn');
-          utils.failureHandler({ transient: false })(e);
-        });
-    }
-  }
   function loadStudyList(newValue) {
     if (newValue) {
       return serverService.getStudyList(newValue)
         .then(loadStudies)
-        .then(finishOAuth)
-        .catch(utils.failureHandler());
-    } else {
-      Promise.resolve();
+        .catch(FAILURE_HANDLER);
     }
   }
+  function handleOAuthCallback() { 
+    if (!oauth) {
+      return;
+    }
+    let studyKey = storeService.get(STUDY_KEY);
+    let environment = storeService.get(ENVIRONMENT);
+    let studyName = utils.findStudyName(self.studyOptionsObs(), studyKey);
+    storeService.remove(OAUTH_STATE);
+    let obj = {study: studyKey, vendorId: 'synapse', 
+      authToken: root.queryParams.code, callbackUrl: document.location.origin};
+    return serverService.oauthSignIn(studyName, environment, obj)
+      .then(() => document.location = '/' + document.location.hash)
+      .then(utils.successHandler(self, SYNTH_EVENT))
+      .catch((e) => {
+        self.stateObs("SignIn");
+        toastr.error(e.responseJSON.message);
+      });
+  }
+
   function clear(response) {
     self.emailObs("");
     self.externalIdObs("");
@@ -126,14 +127,12 @@ export default function() {
     let payload = {};
     fields.forEach(field => {
       payload[field] = self[field + "Obs"]();
-      /*if (payload[field] === 'Select a study…' || payload[field] === 'Select an environment…') {
-        error.addError(field, "is required");
-      } else*/ if (!payload[field]) {
+      if (!payload[field]) {
         error.addError(field, "is required");
       }
     });
     if (error.hasErrors()) {
-      return utils.failureHandler({ transient: false })(error);
+      return FAILURE_HANDLER(error);
     }
     if (payload.phone && payload.phoneRegion) {
       payload.phone = {
@@ -180,7 +179,7 @@ export default function() {
       promise.then(clear)
         .then(makeReloader(studyKey, environment))
         .then(utils.successHandler(self, SYNTH_EVENT))
-        .catch(utils.failureHandler({ transient: false }));
+        .catch(FAILURE_HANDLER);
     }
   };
   self.forgotPassword = function(vm, event) {
@@ -192,7 +191,7 @@ export default function() {
         .then(clear)
         .then(self.cancel)
         .then(utils.successHandler(self, SYNTH_EVENT, SUCCESS_MSG))
-        .catch(utils.failureHandler());
+        .catch(FAILURE_HANDLER);
     }
   };
   self.enterCode = function(vm, event) {
@@ -206,7 +205,7 @@ export default function() {
         .then(clear)
         .then(makeReloader(studyKey, environment))
         .then(utils.successHandler(vm, SYNTH_EVENT))
-        .catch(utils.failureHandler({ transient: false }));
+        .catch(FAILURE_HANDLER);
     }
   };
   self.phoneSignIn = function(vm, event) {
@@ -217,7 +216,7 @@ export default function() {
       return serverService.requestPhoneSignIn(environment, payload)
         .then(self.useCode)
         .then(utils.successHandler(vm, SYNTH_EVENT, PHONE_SUCCESS_MSG))
-        .catch(utils.failureHandler());
+        .catch(FAILURE_HANDLER);
     }
   };
   self.externalIdSignIn = function(vm, event) {
@@ -229,7 +228,7 @@ export default function() {
         .then(clear)
         .then(makeReloader(studyKey, environment))
         .then(utils.successHandler(self, SYNTH_EVENT))
-        .catch(utils.failureHandler({ transient: false }));
+        .catch(FAILURE_HANDLER);
     }
   };
   self.usePhone = function(vm, event) {
@@ -298,5 +297,5 @@ export default function() {
     self.studyOptionsObs({ name: "Updating...", identifier: "" });
     loadStudyList(newValue);
   });
-  loadStudyList(env);  
+  loadStudyList(env).then(handleOAuthCallback);  
 };
