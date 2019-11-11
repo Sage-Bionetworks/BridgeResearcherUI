@@ -15,20 +15,19 @@ export default function(params) {
     .obs("credentialType", "Email")
     .obs("externalId");
 
+  function updateSynapseUserId(payload) {
+    let value = self.synapseUserIdObs();
+    if (value === '' || /^\d+$/.test(value)) {
+      return Promise.resolve();
+    }
+    return utils.synapseAliasToUserId(value).then((id) => {
+      payload.synapseUserIdUpdate = id;
+      self.synapseUserIdObs(id);
+    });
+  }
   self.isVisible = function(field) {
     return params.editor === field;
   }
-  self.lookupSynapseUserId = function(vm, event) {
-    let value = self.synapseUserIdObs();
-    if (value === '' || /^\d+$/.test(value)) {
-      return;
-    }
-    utils.startHandler(vm, event);
-    utils.synapseAliasToUserId(value)
-      .then(self.synapseUserIdObs)
-      .then(utils.successHandler(self, event))
-      .catch(utils.failureHandler());
-  };  
   self.updateRegion = function(model, event) {
     if (event.target.classList.contains("item")) {
       self.phoneRegionObs(event.target.textContent);
@@ -57,7 +56,8 @@ export default function(params) {
     if (self.isVisible('phone')) {
       payload.phoneUpdate = {number: self.phoneObs(), regionCode: self.phoneRegionObs()};
     }
-    serverService.updateIdentifiers(payload)
+    updateSynapseUserId(payload)
+      .then(() => serverService.updateIdentifiers(payload))
       .then(() => document.location.reload())
       .catch(utils.failureHandler(vm, event));
   };
