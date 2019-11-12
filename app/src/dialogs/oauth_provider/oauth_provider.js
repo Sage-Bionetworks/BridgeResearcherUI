@@ -43,7 +43,7 @@ export default function(params) {
     }
     // the introspect endpoint is optional
     if (error.hasErrors()) {
-      return utils.failureHandler({ transient: false })(error);
+      return utils.failureHandler({ transient: false, id: 'oauth-provider' })(error);
     }
     let op = {
       vendorId: self.vendorIdObs().toLowerCase(),

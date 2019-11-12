@@ -6,6 +6,12 @@ import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
 
+const FAILURE_HANDLER = utils.failureHandler({
+  redirectTo: "surveys",
+  redirectMsg: "Survey not found.",
+  id: 'survey-versions'
+});
+
 export default function surveyVersions(params) {
   let self = this;
   self.keys = params;
@@ -49,13 +55,11 @@ export default function surveyVersions(params) {
   self.deleteSurvey = function(survey, event) {
     alerts.deleteConfirmation("Are you sure you want to delete this survey version?", function() {
       utils.startHandler(self, event);
-      serverService
-        .deleteSurvey(survey)
+      serverService.deleteSurvey(survey)
         .then(load)
-        //.then(tables.makeTableRowHandler(self, [survey], 'survey versions'))
         .then(redirectIfDeleteSelf(survey))
         .then(utils.successHandler(self, event, "Survey version deleted."))
-        .catch(utils.failureHandler());
+        .catch(utils.failureHandler({ id: 'survey-versions' }));
     });
   };
   self.publish = function(vm, event) {
@@ -63,11 +67,10 @@ export default function surveyVersions(params) {
       "Are you sure you want to publish this survey version?\n\nOnce published, it can't be deleted.",
       function() {
         utils.startHandler(self, event);
-        serverService
-          .publishSurvey(vm.guid, vm.createdOn)
+        serverService.publishSurvey(vm.guid, vm.createdOn)
           .then(load)
           .then(utils.successHandler(vm, event, "Survey has been published."))
-          .catch(utils.failureHandler());
+          .catch(utils.failureHandler({ id: 'survey-versions' }));
       }
     );
   };
@@ -84,12 +87,7 @@ export default function surveyVersions(params) {
       .then(binder.update())
       .then(getHistoryItems)
       .then(binder.update())
-      .catch(
-        utils.failureHandler({
-          redirectTo: "surveys",
-          redirectMsg: "Survey not found."
-        })
-      );
+      .catch(FAILURE_HANDLER);
   }
   load();
 };

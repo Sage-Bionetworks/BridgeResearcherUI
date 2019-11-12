@@ -19,7 +19,7 @@ export default function(params) {
       error.addError("message", "is required");
     }
     if (error.hasErrors()) {
-      return utils.failureHandler({ transient: false })(error);
+      return utils.failureHandler({ transient: false, id: 'send-sms-message' })(error);
     }
 
     utils.startHandler(vm, event);
@@ -27,6 +27,6 @@ export default function(params) {
       .sendSmsMessage(params.userId, template)
       .then(utils.successHandler(vm, event, "SMS message has been sent."))
       .then(self.cancel)
-      .catch(utils.failureHandler({ transient: false }));
+      .catch(utils.failureHandler({ transient: false, id: 'send-sms-message' }));
   };
 };

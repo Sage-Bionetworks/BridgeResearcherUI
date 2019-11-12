@@ -16,7 +16,7 @@ export default function schemas() {
   fn.copyProps(self, criteriaUtils, "label");
 
   tables.prepareTable(self, {
-    name: "schema",
+    name: "schemas",
     type: "UploadSchema",
     refresh: load,
     delete: function(item) {
@@ -62,7 +62,7 @@ export default function schemas() {
       .then(getAllUploadSchemas)
       .then(fn.handleSort("items", "name"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'schemas' }));
   }
   load();
 };

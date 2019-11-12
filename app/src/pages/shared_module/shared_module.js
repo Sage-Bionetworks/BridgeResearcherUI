@@ -12,7 +12,8 @@ const OPTIONS = Object.freeze([
 ]);
 const failureHandler = utils.failureHandler({
   redirectTo: "shared_modules",
-  redirectMsg: "Shared module not found."
+  redirectMsg: "Shared module not found.",
+  id: 'shared-module'
 });
 
 function tagsToView(tags) {
@@ -202,7 +203,7 @@ export default function sharedModule(params) {
       .then(updateId)
       .then(updateTitle)
       .then(utils.successHandler(vm, event, "Shared module saved."))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'shared-module' }));
   };
   if (params.id !== "new") {
     sharedModuleUtils

@@ -51,7 +51,7 @@ export default function general() {
     serverService
       .saveStudy(self.study, false)
       .then(utils.successHandler(vm, event, "Study information saved."))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'general' }));
   };
   self.publicKey = function() {
     if (self.study) {
@@ -69,7 +69,7 @@ export default function general() {
     .then(binder.assign("study"))
     .then(binder.update())
     .then(updateObservers)
-    .catch(utils.failureHandler());
+    .catch(utils.failureHandler({ id: 'general' }));
 };
 general.prototype.dispose = function() {
   this.minAgeLabel.dispose();

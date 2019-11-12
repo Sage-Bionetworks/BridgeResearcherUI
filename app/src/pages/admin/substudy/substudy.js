@@ -6,7 +6,8 @@ import utils from "../../../utils";
 var failureHandler = utils.failureHandler({
   redirectMsg: "Substudy not found.",
   redirectTo: "admin/substudies",
-  transient: false
+  transient: false,
+  id: 'substudy'
 });
 
 export default function(params) {

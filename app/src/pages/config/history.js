@@ -8,7 +8,8 @@ import utils from "../../utils";
 let failureHandler = utils.failureHandler({
   redirectMsg: "Config element not found.",
   redirectTo: "configs",
-  transient: false
+  transient: false,
+  id: 'config-el-history'
 });
 
 export default function history(params) {

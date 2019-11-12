@@ -53,10 +53,9 @@ export default function() {
     self.study = binder.persist(self.study);
 
     utils.startHandler(vm, event);
-    serverService
-      .saveStudy(self.study)
+    serverService.saveStudy(self.study)
       .then(utils.successHandler(vm, event, "Study information saved."))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'applinks' }));
   };
   self.removeAppleAppLink = function(element, event) {
     self.appleAppLinksObs.remove(element);
@@ -88,9 +87,8 @@ export default function() {
       .join(", ");
   };
 
-  serverService
-    .getStudy()
+  serverService.getStudy()
     .then(binder.assign("study"))
     .then(binder.update())
-    .catch(utils.failureHandler());
+    .catch(utils.failureHandler({ id: 'applinks' }));
 };

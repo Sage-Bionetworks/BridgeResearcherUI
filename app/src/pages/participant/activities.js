@@ -8,7 +8,8 @@ import utils from "../../utils";
 
 const FAILURE_HANDLER = utils.failureHandler({
   redirectTo: "participants",
-  redirectMsg: "Participant not found"
+  redirectMsg: "Participant not found",
+  id: 'participant-activities'
 });
 const LINK_COMPONENTS = {
   task: "tasks/",
@@ -81,7 +82,7 @@ export default function activities(params) {
       utils.startHandler(vm, event);
       serverService.deleteParticipantActivities(params.userId)
         .then(utils.successHandler(vm, event, "All activities for this participant have been deleted."))
-        .catch(utils.failureHandler());
+        .catch(utils.failureHandler({ id: 'participant-activities' }));
     });
   }
 

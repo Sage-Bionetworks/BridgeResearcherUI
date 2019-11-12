@@ -44,8 +44,7 @@ export default function(params) {
     return serverService.getParticipantRequestInfo(params.userId);
   }
 
-  serverService
-    .getParticipantName(params.userId)
+  serverService.getParticipantName(params.userId)
     .then(function(part) {
       self.titleObs(part.name);
       self.nameObs(part.name);
@@ -53,5 +52,5 @@ export default function(params) {
     })
     .then(requestInfo)
     .then(binder.update())
-    .catch(utils.failureHandler());
+    .catch(utils.failureHandler({ id: 'participant-request-info' }));
 };

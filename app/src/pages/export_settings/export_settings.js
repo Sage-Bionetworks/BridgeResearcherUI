@@ -43,7 +43,7 @@ export default function exportSettings() {
     serverService.startExport()
       .then(utils.successHandler(self, event))
       .then(exportingMsg)
-      .catch(utils.failureHandler({ transient: false }));
+      .catch(utils.failureHandler({ transient: false, id: 'export-settings' }));
   };
   self.createSynapseProject = function(vm, event) {
     alerts.prompt(CREATE_MSG, function(synapseUserId) {
@@ -52,7 +52,7 @@ export default function exportSettings() {
         .then(fn.handleObsUpdate(self.synapseDataAccessTeamIdObs, "teamId"))
         .then(fn.handleObsUpdate(self.synapseProjectIdObs, "projectId"))
         .then(utils.successHandler(vm, event, "Synapse information created."))
-        .catch(utils.failureHandler({ transient: false }));
+        .catch(utils.failureHandler({ transient: false, id: 'export-settings' }));
     });
   };
   self.save = function(vm, event) {
@@ -61,13 +61,13 @@ export default function exportSettings() {
 
     serverService.saveStudy(self.study)
       .then(utils.successHandler(vm, event, "Synapse information saved."))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'export-settings' }));
   };
 
   serverService.getStudy()
     .then(binder.assign("study"))
     .then(binder.update())
-    .catch(utils.failureHandler());
+    .catch(utils.failureHandler({ id: 'export-settings' }));
 };
 exportSettings.prototype.dispose = function() {
   this.isLinked.dispose();

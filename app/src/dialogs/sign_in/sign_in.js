@@ -9,7 +9,7 @@ import storeService from "../../services/store_service";
 import toastr from 'toastr';
 import utils from "../../utils";
 
-const FAILURE_HANDLER = utils.failureHandler({transient: false});
+const FAILURE_HANDLER = utils.failureHandler({transient: false, id: 'sign-in'});
 const ENVIRONMENT = "environment";
 const OAUTH_STATE = "synState";
 const PHONE_SUCCESS_MSG = "An SMS message has been sent to that phone number; enter the code to sign in.";
@@ -109,7 +109,8 @@ export default function() {
       .then(utils.successHandler(self, SYNTH_EVENT))
       .catch((e) => {
         self.stateObs("SignIn");
-        toastr.error(e.responseJSON.message);
+        FAILURE_HANDLER(e);
+        // toastr.error(e.responseJSON.message);
       });
   }
 

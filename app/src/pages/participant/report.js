@@ -8,7 +8,8 @@ import utils from "../../utils";
 
 const failureHandler = utils.failureHandler({
   redirectTo: "participants",
-  redirectMsg: "Participant not found"
+  redirectMsg: "Participant not found",
+  id: 'participant-report'
 });
 
 export default function report(params) {
@@ -98,7 +99,7 @@ export default function report(params) {
       .then(fn.handleMap("items", jsonFormatter.mapItem))
       .then(fn.handleSort("items", "date", true))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
-      .catch(fn.seq(utils.failureHandler(), () => self.itemsObs([])));
+      .catch(fn.seq(utils.failureHandler({ id: 'participant-report' }), () => self.itemsObs([])));
   }
   load();
 };

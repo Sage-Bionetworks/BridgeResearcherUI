@@ -7,7 +7,8 @@ import utils from "../../utils";
 
 const failureHandler = utils.failureHandler({
   redirectTo: "topics",
-  redirectMsg: "Push notification topic not found."
+  redirectMsg: "Push notification topic not found.",
+  id: 'topic'
 });
 
 function newTopic() {
@@ -77,7 +78,7 @@ export default function(params) {
     saveTopic(self.topic)
       .then(updateTopic)
       .then(utils.successHandler(vm, event, "Topic has been saved."))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'topic' }));
   };
 
   if (params.guid !== "new") {

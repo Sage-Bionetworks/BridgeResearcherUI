@@ -13,7 +13,8 @@ import utils from "../../utils";
 var failureHandler = utils.failureHandler({
   redirectMsg: "App config not found.",
   redirectTo: "app_configs",
-  transient: false
+  transient: false,
+  id: 'appconfig'
 });
 
 function newAppConfig() {
@@ -90,7 +91,7 @@ export default function(params) {
       } catch (e) {
         let error = new BridgeError();
         error.addError("clientData", "is not valid JSON");
-        utils.failureHandler({ transient: false })(error);
+        utils.failureHandler({ transient: false, id: 'appconfig' })(error);
         return true;
       }
     }

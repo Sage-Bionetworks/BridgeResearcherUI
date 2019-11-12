@@ -71,7 +71,7 @@ export default class UploadsViewModel {
       serverService.getUploadById(id).then(success).catch(function() {
         serverService.getUploadByRecordId(id).then(success).catch(function(e) {
           event.target.parentNode.parentNode.classList.remove("loading");
-          utils.failureHandler({ transient: false })(e);
+          utils.failureHandler({ transient: false, id: 'uploads' })(e);
         });
       });
     }
@@ -170,6 +170,6 @@ export default class UploadsViewModel {
 
     return serverService.getUploads(this.query)
       .then(this.processUploads.bind(this))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'uploads' }));
   }
 };

@@ -52,7 +52,7 @@ export default function() {
     utils.startHandler(vm, event);
     serverService.saveStudy(self.study)
       .then(utils.successHandler(vm, event, "Automatic custom events saved."))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'auto-custom-events' }));
   };
   self.addCustomEvent = function(vm, event) {
     self.itemsObs.push(mapToObservers(["", "P1D"]));

@@ -24,11 +24,11 @@ export default function() {
     serverService
       .saveStudy(self.study)
       .then(utils.successHandler(vm, event, "Install links saved."))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'install-links' }));
   };
   serverService
     .getStudy()
     .then(binder.assign("study"))
     .then(binder.update())
-    .catch(utils.failureHandler());
+    .catch(utils.failureHandler({ id: 'install-links' }));
 };

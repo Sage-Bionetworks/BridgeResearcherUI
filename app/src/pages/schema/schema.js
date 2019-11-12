@@ -8,7 +8,8 @@ import utils from "../../utils";
 const failureHandler = utils.failureHandler({
   redirectTo: "schemas",
   redirectMsg: "Upload schema not found.",
-  transient: false
+  transient: false,
+  id: 'schema'
 });
 
 export default function schema(params) {

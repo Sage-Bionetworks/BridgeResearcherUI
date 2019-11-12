@@ -21,15 +21,9 @@ export default function() {
     name: "shared module",
     type: "SharedModuleMetadata",
     refresh: load,
-    delete: function(item) {
-      serverService.deleteMetadata(item.id, false);
-    },
-    deletePermanently: function(item) {
-      serverService.deleteMetadata(item.id, true);
-    },
-    undelete: function(metadata) {
-      return serverService.updateMetadata(metadata);
-    }
+    delete: (item) => serverService.deleteMetadata(item.id, false),
+    deletePermanently: (item) => serverService.deleteMetadata(item.id, true),
+    undelete: (metadata) => serverService.updateMetadata(metadata)
   });
 
   function doSearch() {
@@ -46,10 +40,9 @@ export default function() {
       query.name = text;
       query.notes = text;
     }
-    serverService
-      .getMetadata(query, modType)
+    serverService.getMetadata(query, modType)
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'shared-modules' }));
   }
 
   self.moduleTypeOptions = OPTIONS;
@@ -75,18 +68,16 @@ export default function() {
       utils.startHandler(self, event);
       item.published = true;
       serverService
-        .updateMetadata(item)
         .then(load)
         .then(utils.successHandler(self, event, "Shared module deleted."))
-        .catch(utils.failureHandler());
+        .catch(utils.failureHandler({ id: 'shared-modules' }));
     });
   };
 
   function load() {
-    sharedModuleUtils
-      .loadNameMaps()
+    sharedModuleUtils.loadNameMaps()
       .then(doSearch)
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'shared-modules' }));
   }
   load();
 };

@@ -43,7 +43,7 @@ export default class AddReport {
       this.addReport(entry)
         .then(this.close)
         .then(utils.successHandler(vm, event))
-        .catch(utils.failureHandler());
+        .catch(utils.failureHandler({id: 'report-editor'}));
     }
   }
   static getLocalDate(value) {

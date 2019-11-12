@@ -44,7 +44,7 @@ export default function(params) {
       error.addError("paths", "are required");
     }
     if (error.hasErrors()) {
-      return utils.failureHandler({ transient: false })(error);
+      return utils.failureHandler({ transient: false, id: 'edit-apple-link' })(error);
     }
     // We want to add this with all the observers and everything
     params.appleAppLinksObs.push({

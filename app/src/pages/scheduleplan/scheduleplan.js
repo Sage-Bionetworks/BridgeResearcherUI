@@ -8,7 +8,8 @@ import utils from "../../utils";
 
 const failureHandler = utils.failureHandler({
   redirectTo: "scheduleplans",
-  redirectMsg: "Schedule plan not found."
+  redirectMsg: "Schedule plan not found.",
+  id: 'scheduleplan'
 });
 
 /**

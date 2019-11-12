@@ -1,4 +1,3 @@
-import "knockout-postbox";
 import $ from "jquery";
 import alerts from "./widgets/alerts";
 import config from "./config";
@@ -6,7 +5,7 @@ import fn from "./functions";
 import ko from "knockout";
 import root from "./root";
 import toastr from "toastr";
-import password from "./password_generator";
+import { ERROR_BUS } from './widgets/errors/errors';
 
 const FAILURE_HANDLER = failureHandler({ transient: true });
 const GENERIC_ERROR = "A server error happened. We don't know what exactly. Please try again.";
@@ -46,10 +45,9 @@ function badResponse(response, params) {
   // and that gets sorted out here.
   let payload = response.responseJSON || {};
   payload.message = payload.message || response.responseText;
-  if (!params.transient && !payload.errors) {
-    payload.errors = {};
-  }
-  ko.postbox.publish("showErrors", payload);
+  payload.id = params.id;
+  payload.errors = payload.errors || {};
+  ERROR_BUS.emit('showErrors', payload);
 }
 function localError(response) {
   if (response.statusText === "timeout") {
@@ -83,8 +81,8 @@ function errorMessageHandler(message, params) {
   if (params.transient) {
     toastr.error(message);
   } else {
-    let payload = { message: message };
-    ko.postbox.publish("showErrors", payload);
+    let payload = { message: message, id: params.id };
+    ERROR_BUS.emit('showErrors', payload);
   }
 }
 function statusNotHandled(res) {
@@ -99,17 +97,10 @@ function statusNotHandled(res) {
  *  scrollTo: scrollTo function to execute.
  */
 function failureHandler(params) {
-  if (arguments.length === 0) {
-    return FAILURE_HANDLER;
-  }
-  if (typeof params.transient !== "boolean") {
-    params.transient = true;
-  }
   return function(response) {
     clearPendingControl();
-    ko.postbox.publish("clearErrors");
 
-    console.error(response);
+    ERROR_BUS.emit('clearErrors');
     if (typeof response === "string") {
       errorMessageHandler(response, params);
     } else if (fn.is(response.status, "Number")) {
@@ -123,8 +114,9 @@ function failureHandler(params) {
     if (params.scrollTo) {
       scrollTo(1);
     }
-  };
+  }
 }
+
 function makeOptionFinder(arrayOrObs) {
   return function(value) {
     let options = ko.unwrap(arrayOrObs);
@@ -180,12 +172,12 @@ function startHandler(vm, event) {
   if (event && event.target) {
     displayPendingControl(event.target);
   }
-  ko.postbox.publish("clearErrors");
+  ERROR_BUS.emit('clearErrors');
 }
 function successHandler(vm, event, message) {
   return function(response) {
     clearPendingControl();
-    ko.postbox.publish("clearErrors");
+    ERROR_BUS.emit('clearErrors');
     if (message) {
       toastr.success(message);
     }
@@ -194,7 +186,7 @@ function successHandler(vm, event, message) {
 }
 function clearErrors() {
   clearPendingControl();
-  ko.postbox.publish("clearErrors");
+  ERROR_BUS.emit('clearErrors');
 }
 function makeScrollTo(itemSelector) {
   return function scrollTo(index) {
@@ -218,13 +210,6 @@ function createParticipantForID(identifier, password) {
     password: password,
     sharingScope: "all_qualified_researchers"
   };
-}
-function createEmailTemplate(email, identifier) {
-  var parts = email.split("@");
-  if (parts[0].indexOf("+") > -1) {
-    parts[0] = parts[0].split("+")[0];
-  }
-  return parts[0] + "+" + identifier + "@" + parts[1];
 }
 function fadeUp() {
   return function(div) {

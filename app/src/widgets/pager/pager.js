@@ -1,4 +1,3 @@
-import "knockout-postbox";
 import Binder from "../../binder";
 import ko from "knockout";
 import storeService from "../../services/store_service";

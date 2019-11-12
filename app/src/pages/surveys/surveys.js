@@ -97,7 +97,7 @@ export default function surveys() {
       });
     }).then(load)
     .then(utils.successHandler(vm, event, confirmMsg))
-    .catch(utils.failureHandler());
+    .catch(utils.failureHandler({ id: 'surveys' }));
   };
   self.openModuleBrowser = function() {
     root.openDialog("module_browser", {
@@ -121,14 +121,13 @@ export default function surveys() {
     return serverService.getSurveys(self.showDeletedObs());
   }
   function load() {
-    return sharedModuleUtils
-      .loadNameMaps()
+    return sharedModuleUtils.loadNameMaps()
       .then(loadSurveys)
       .then(fn.handleSort("items", "name"))
       .then(fn.handleForEach("items", addScheduleField))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .then(getSchedulePlans)
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'surveys' }));
   }
   load();
 };

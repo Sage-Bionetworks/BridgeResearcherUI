@@ -7,7 +7,8 @@ import utils from "../../utils";
 
 const failureHandler = utils.failureHandler({
   redirectTo: "participants",
-  redirectMsg: "Participant not found"
+  redirectMsg: "Participant not found",
+  id: 'participant-reports'
 });
 
 export default function reports(params) {

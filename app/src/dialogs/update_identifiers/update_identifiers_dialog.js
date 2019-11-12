@@ -59,7 +59,7 @@ export default function(params) {
     updateSynapseUserId(payload)
       .then(() => serverService.updateIdentifiers(payload))
       .then(() => document.location.reload())
-      .catch(utils.failureHandler(vm, event));
+      .catch(utils.failureHandler({id: 'update-identifiers-dialog'}));
   };
   self.cancel = params.closeDialog;
 };

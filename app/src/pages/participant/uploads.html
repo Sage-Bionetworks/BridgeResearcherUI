@@ -15,7 +15,7 @@
   <div class="ui warning message" data-bind="visible: sharingScopeObs() == 'no_sharing'">
     This user has data sharing turned off (either manually or by withdrawing from the study). Uploaded data will not be exported to Synapse while sharing is off. To determine if a specific upload has failed to export for this or some other reason, click on the upload and look at the “User Sharing Scope” field in the upload’s metadata.
   </div>
-  <errors></errors>
+  <errors id="participant-uploads"></errors>
   <div class="line-control">
     <div style="width: 30rem" class="ui icon input" data-bind="range: {
       onChange: doCalSearch, startDateObs: uploadsStartDateObs, endDateObs: uploadsEndDateObs}">

@@ -50,7 +50,7 @@ export default function(params) {
       error.addError("fingerprints", "are not valid");
     }
     if (error.hasErrors()) {
-      return utils.failureHandler({ transient: false })(error);
+      return utils.failureHandler({ transient: false, id: 'edit-android-link' })(error);
     }
     // We want to add this with all the observers and everything
     params.androidAppLinksObs.push({

@@ -1,4 +1,3 @@
-import "knockout-postbox";
 import alerts from "../../widgets/alerts";
 import fn from "../../functions";
 import ko from "knockout";

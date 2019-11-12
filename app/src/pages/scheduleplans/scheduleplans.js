@@ -48,7 +48,7 @@ export default function schedulePlans() {
     })
       .then(load)
       .then(utils.successHandler(vm, event, confirmMsg))
-      .catch(utils.failureHandler({ transient: false }));
+      .catch(utils.failureHandler({ transient: false, id: 'scheduleplans' }));
   };
   function getSchedulePlans() {
     return serverService.getSchedulePlans(self.showDeletedObs());
@@ -66,7 +66,7 @@ export default function schedulePlans() {
           return Promise.map(optionsService.getActivities(plan), processActivity);
         });
       })
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'scheduleplans' }));
   }
   load();
 };

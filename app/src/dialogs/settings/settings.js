@@ -32,20 +32,15 @@ export default function(params) {
     return self.studyOptionsObs().filter(option => option.identifier === studyId)[0].name;
   }
 
-  serverService
-    .getSession()
+  serverService.getSession()
     .then(session => {
       self.studyId = session.studyId;
       return session.environment;
     })
-    .then(env => {
-      return serverService.getStudyList(env);
-    })
+    .then(env => serverService.getStudyList(env))
     .then(response => {
       self.studyOptionsObs(response.items);
       return serverService.getStudy();
     })
-    .then(study => {
-      self.studyObs(study.identifier);
-    });
+    .then(study => self.studyObs(study.identifier));
 };

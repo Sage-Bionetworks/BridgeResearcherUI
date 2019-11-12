@@ -7,7 +7,8 @@ import utils from "../../utils";
 
 const failureHandler = utils.failureHandler({
   redirectTo: "events",
-  redirectMsg: "Activity events not found"
+  redirectMsg: "Activity events not found",
+  id: 'participant-activity-events'
 });
 
 export default function activityEvents(params) {

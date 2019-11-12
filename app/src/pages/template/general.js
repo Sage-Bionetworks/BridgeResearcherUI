@@ -10,7 +10,8 @@ const TITLES = config.templateTitles;
 const failureHandler = utils.failureHandler({
   redirectMsg: "Template not found.",
   redirectTo: "templates",
-  transient: false
+  transient: false,
+  id: 'template-general'
 });
 
 function newTemplate(templateType) {

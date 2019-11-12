@@ -1,4 +1,3 @@
-import "knockout-postbox";
 import alerts from "./widgets/alerts";
 import ko from "knockout";
 import Promise from "bluebird";
