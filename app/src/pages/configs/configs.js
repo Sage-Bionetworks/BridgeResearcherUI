@@ -30,7 +30,7 @@ export default function() {
       .getAppConfigElements(self.showDeletedObs())
       .then(fn.handleSort("items", "label"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'configs' }));
   }
   load();
 };

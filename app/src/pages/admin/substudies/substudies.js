@@ -19,7 +19,7 @@ export default function() {
     return serverService.getSubstudies(self.showDeletedObs())
       .then(fn.handleSort("items", "label"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({id: 'substudies'}));
   }
   load();
 };

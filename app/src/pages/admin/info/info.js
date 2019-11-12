@@ -39,14 +39,14 @@ export default function info() {
     serverService
       .saveStudy(self.study)
       .then(utils.successHandler(vm, event, "Study information saved."))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({id: 'info'}));
   };
 
   serverService
     .getStudy()
     .then(binder.assign("study"))
     .then(binder.update())
-    .catch(utils.failureHandler());
+    .catch(utils.failureHandler({id: 'info'}));
 };
 info.prototype.dispose = function() {
   this.accountLimitLabel.dispose();

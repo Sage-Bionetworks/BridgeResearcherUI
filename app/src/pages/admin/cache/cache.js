@@ -43,7 +43,7 @@ export default function() {
         let items = response.map(mapKey);
         self.itemsObs(items.sort(fn.makeFieldSorter("key")));
       })
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({id: 'cache'}));
   }
   load();
 

@@ -28,7 +28,7 @@ export default function subpopulations() {
     getSubpopulations()
       .then(fn.handleSort("items", "name"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'subpops' }));
   }
   load();
 };

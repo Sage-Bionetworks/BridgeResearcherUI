@@ -7,6 +7,7 @@ import surveyUtils from "./survey_utils";
 import utils from "../../utils";
 
 const notFound = utils.failureHandler({
+  id: "survey",
   redirectTo: "surveys",
   redirectMsg: "Survey not found."
 });
@@ -125,17 +126,17 @@ export default function survey(params) {
         .then(updateVM)
         .then(unpublish)
         .then(utils.successHandler(vm, event, "New version of survey saved."))
-        .catch(utils.failureHandler());
+        .catch(utils.failureHandler({id: 'survey'}));
     } else if (self.survey.guid) {
       save()
         .then(updateVM)
         .then(utils.successHandler(vm, event, "Survey saved."))
-        .catch(utils.failureHandler());
+        .catch(utils.failureHandler({id: 'survey'}));
     } else {
       create()
         .then(updateVM)
         .then(utils.successHandler(vm, event, "Survey created."))
-        .catch(utils.failureHandler());
+        .catch(utils.failureHandler({id: 'survey'}));
     }
   };
 

@@ -8,7 +8,8 @@ const PAGE_KEY = "us";
 
 const failureHandler = utils.failureHandler({
   redirectTo: "participants",
-  redirectMsg: "Participant not found"
+  redirectMsg: "Participant not found",
+  id: 'participant-uploads'
 });
 
 export default class ParticipantUploadsViewModel extends UploadsViewModel {
@@ -34,6 +35,6 @@ export default class ParticipantUploadsViewModel extends UploadsViewModel {
       this.sharingScopeObs(part.sharingScope);
     }).then(() => serverService.getParticipantUploads(this.userIdObs(), this.query))
       .then(this.processUploads.bind(this))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'participant-uploads' }));
   }
 };

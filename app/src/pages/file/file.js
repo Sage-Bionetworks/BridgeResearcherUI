@@ -10,7 +10,8 @@ import utils from "../../utils";
 let failureHandler = utils.failureHandler({
   redirectMsg: "File not found.",
   redirectTo: "files",
-  transient: false
+  transient: false,
+  id: 'file'
 });
 const cssClassNameForStatus = {
   pending: "warning",
@@ -91,7 +92,7 @@ export default function editor(params) {
       .then(fn.handleSort("items", "label"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .then(self.postLoadPagerFunc)
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'file' }));
   }
 
   self.save = function(vm, event) {

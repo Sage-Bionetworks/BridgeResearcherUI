@@ -32,13 +32,13 @@ export default function(params) {
       error.addError("message", "is required");
     }
     if (error.hasErrors()) {
-      return utils.failureHandler({ transient: false })(error);
+      return utils.failureHandler({ transient: false, id: 'send-notification' })(error);
     }
 
     utils.startHandler(vm, event);
     sendNotification(msgObj)
       .then(utils.successHandler(vm, event, "Notification has been sent."))
       .then(self.cancel)
-      .catch(utils.failureHandler({ transient: false }));
+      .catch(utils.failureHandler({ transient: false, id: 'send-notification' }));
   };
 };

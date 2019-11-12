@@ -38,7 +38,7 @@ export default function(propertyName) {
         error.addError("value", "can only be letters, numbers, underscores and dashes");
       }
       if (error.hasErrors()) {
-        return utils.failureHandler()(error);
+        return utils.failureHandler({ id: propertyName })(error);
       }
       let array = self.newRecordsObs();
       array.push(self.addFieldObs());
@@ -61,7 +61,7 @@ export default function(propertyName) {
         .then(updateTaskIdentifiers)
         .then(fn.handleStaticObsUpdate(self.noChangesObs, true))
         .then(utils.successHandler(self, event, "Values saved."))
-        .catch(utils.failureHandler({ transient: false }));
+        .catch(utils.failureHandler({ transient: false, id: propertyName }));
     };
 
     function updateTaskIdentifiers(study) {
@@ -75,6 +75,6 @@ export default function(propertyName) {
       .getStudy()
       .then(updateTaskIdentifiers)
       .then(binder.assign("study"))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: propertyName }));
   };
 };

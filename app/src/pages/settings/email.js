@@ -28,7 +28,7 @@ export default function() {
       .saveStudy(self.study)
       .then(checkEmailStatus)
       .then(utils.successHandler(vm, event, "Study information saved."))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'email' }));
   };
   self.verifyEmail = function(vm, event) {
     utils.startHandler(vm, event);
@@ -36,21 +36,20 @@ export default function() {
       .verifyEmail()
       .then(binder.update("status"))
       .then(utils.successHandler(vm, event, "Request to verify email has been sent."))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'email' }));
   };
   self.verifyConsentEmail = function(vm, event) {
     utils.startHandler(vm, event);
     serverService
       .verifyStudyEmail("consent_notification")
       .then(utils.successHandler(vm, event, "Request to verify email has been sent."))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'email' }));
   };
   self.refreshStatus = checkEmailStatus;
 
-  serverService
-    .getStudy()
+  serverService.getStudy()
     .then(binder.assign("study"))
     .then(binder.update())
     .then(checkEmailStatus)
-    .catch(utils.failureHandler());
+    .catch(utils.failureHandler({ id: 'email' }));
 };

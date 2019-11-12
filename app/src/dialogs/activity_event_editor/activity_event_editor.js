@@ -27,6 +27,6 @@ export default function activityEventEditor(params) {
       .then(params.reload)
       .then(root.closeDialog)
       .then(utils.successHandler(vm, e))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({id: 'activity-event-editor'}));
   };
 };

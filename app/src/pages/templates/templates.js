@@ -1,4 +1,3 @@
-import "knockout-postbox";
 import config from '../../config';
 import criteriaUtils from "../../criteria_utils";
 import fn from "../../functions";
@@ -43,7 +42,7 @@ export default function(params) {
     serverService.saveStudy(self.study)
       .then(load)
       .then(utils.successHandler(self, event))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'templates' }));
   };
 
   self.isDefault = function(item) {
@@ -67,7 +66,7 @@ export default function(params) {
       .then(fn.handleSort("items", "name"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .then(self.postLoadPagerFunc)
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'templates' }));
   }
   ko.postbox.subscribe('t-refresh', load);
 };

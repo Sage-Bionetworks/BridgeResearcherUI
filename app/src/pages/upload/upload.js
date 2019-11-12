@@ -7,10 +7,7 @@ export default function upload(params) {
 
   var binder = new Binder(self).obs("title", params.guid).obs("uploadDetails");
 
-  serverService
-    .getUploadById(params.guid)
-    .then(response => {
-      self.uploadDetailsObs(response);
-    })
-    .catch(utils.failureHandler());
+  serverService.getUploadById(params.guid)
+    .then(response => self.uploadDetailsObs(response))
+    .catch(utils.failureHandler({ id: 'upload' }));
 };

@@ -1,4 +1,3 @@
-import "knockout-postbox";
 import fn from "../../functions";
 import ko from "knockout";
 import Promise from "bluebird";
@@ -9,7 +8,8 @@ import utils from "../../utils";
 
 const notFound = utils.failureHandler({
   redirectTo: "files",
-  redirectMsg: "File not found."
+  redirectMsg: "File not found.",
+  id: "files"
 });
 
 export default function files() {

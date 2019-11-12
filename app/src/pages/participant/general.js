@@ -7,6 +7,7 @@ import serverService from "../../services/server_service";
 import utils from "../../utils";
 
 const failureHandler = utils.failureHandler({
+  id: "participant-general",
   redirectTo: "participants",
   redirectMsg: "Participant not found"
 });
@@ -82,20 +83,6 @@ export default function general(params) {
 
   fn.copyProps(self, root, "isAdmin");
 
-  self.lookupSynapseUserId = function(vm, event) {
-    alert('Now happens automatically. Remove me.');
-    /*
-    let value = self.synapseUserIdObs();
-    if (value === '' || /^\d+$/.test(value)) {
-      return;
-    }
-    utils.startHandler(vm, event);
-    utils.synapseAliasToUserId(value)
-      .then(self.synapseUserIdObs)
-      .then(utils.successHandler(self, event))
-      .catch(utils.failureHandler());
-    */
-  };
   self.statusObs.subscribe(function(status) {
     self.showEnableAccountObs(status !== "enabled");
   });
@@ -156,7 +143,7 @@ export default function general(params) {
         .then(() => self.statusObs(status))
         .then(() => serverService.signOutUser(self.userIdObs()))
         .then(utils.successHandler(self, event, "User account has been "+status+"."))
-        .catch(utils.failureHandler());
+        .catch(utils.failureHandler({id: 'participant-general'}));
     }
   }
 
@@ -167,7 +154,7 @@ export default function general(params) {
       utils.startHandler(self, event);
       serverService.requestResetPasswordUser(self.userIdObs())
         .then(utils.successHandler(self, event, "Reset password email has been sent to user."))
-        .catch(utils.failureHandler());
+        .catch(utils.failureHandler({id: 'participant-general'}));
     });
   };
   self.signOutUser = function() {
@@ -179,7 +166,7 @@ export default function general(params) {
       serverService.deleteTestUser(self.userIdObs())
         .then(utils.successHandler(self, event, "User deleted."))
         .then(() => document.location = "#/participants")
-        .catch(utils.failureHandler());
+        .catch(utils.failureHandler({id: 'participant-general'}));
     });
   };
   self.resendEmailVerification = function(vm, event) {
@@ -187,7 +174,7 @@ export default function general(params) {
       utils.startHandler(vm, event);
       serverService.resendEmailVerification(self.userIdObs())
         .then(utils.successHandler(vm, event, "Sent email to verify participant's email address."))
-        .catch(utils.failureHandler());
+        .catch(utils.failureHandler({id: 'participant-general'}));
     });
   };
 

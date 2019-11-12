@@ -47,7 +47,7 @@ export default function() {
     })
       .then(load.bind(self))
       .then(utils.successHandler(vm, event, confirmMsg))
-      .catch(utils.failureHandler({ transient: false }));
+      .catch(utils.failureHandler({ transient: false, id: 'appconfigs' }));
   };
 
   function getAppConfigs() {
@@ -60,7 +60,7 @@ export default function() {
       .then(getAppConfigs)
       .then(fn.handleSort("items", "label"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'appconfigs' }));
   }
   load();
 };

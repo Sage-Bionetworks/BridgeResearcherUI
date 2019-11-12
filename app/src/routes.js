@@ -1,15 +1,14 @@
 import "../css/main.scss";
 import "../lib/toastr.min.css";
 import "../lib/dragula.min.css";
-
 import "../lib/jquery.scrollTo";
 import "./bindings";
 import "./bindings/dragula";
 import "./bindings/semantic";
 import "./components";
-import "knockout-postbox";
 import { Router } from "director/build/director";
 import ko from "knockout";
+import "knockout-postbox";
 import root from "./root";
 
 const GUID_CREATEDON = ["guid", "createdOn"];

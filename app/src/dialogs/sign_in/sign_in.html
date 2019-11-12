@@ -1,7 +1,8 @@
 <div class="ui mini modal">
   <div class="header" data-bind="text: titleObs"></div>
   <div class="content" data-bind="visible: stateObs() !== 'Oauth'">
-    <errors></errors>
+    <div data-bind="component: 'errors'" id="sign-in"></div>
+    <!--<errors id="sign-in"></errors>-->
     <form class="ui form" data-bind="returnHandler: submit" action="">
       <div class="field study" data-bind="visible: !isLockedObs()">
         <select taborder="-1" class="ui dropdown" data-bind="value: studyObs,

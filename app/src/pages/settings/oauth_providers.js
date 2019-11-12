@@ -36,7 +36,7 @@ export default function() {
     serverService
       .saveStudy(self.study)
       .then(utils.successHandler(vm, event, "Study information saved."))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'oauth-providers' }));
   };
   self.removeProvider = function(element) {
     alert.deleteConfirmation("Do you want to delete this OAuth provider?", function() {
@@ -54,9 +54,8 @@ export default function() {
     root.openDialog("oauth_provider", { index: index, study: self.study, oAuthProvidersObs: self.oAuthProvidersObs });
   };
 
-  serverService
-    .getStudy()
+  serverService.getStudy()
     .then(binder.assign("study"))
     .then(binder.update())
-    .catch(utils.failureHandler());
+    .catch(utils.failureHandler({ id: 'oauth-providers' }));
 };

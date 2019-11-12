@@ -8,7 +8,8 @@ import utils from "../../utils";
 const failureHandler = utils.failureHandler({
   redirectMsg: "Consent group not found.",
   redirectTo: "subpopulations",
-  transient: false
+  transient: false,
+  id: 'subpop-general'
 });
 
 function newSubpop() {

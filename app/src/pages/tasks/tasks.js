@@ -29,7 +29,7 @@ export default class Tasks {
     })
       .then(this.load.bind(this))
       .then(utils.successHandler(vm, event, confirmMsg))
-      .catch(utils.failureHandler({ transient: false }));
+      .catch(utils.failureHandler({ transient: false, id: 'tasks' }));
   }
   deleteItem(task) {
     return serverService.deleteTaskDefinition(task.taskId);
@@ -40,6 +40,6 @@ export default class Tasks {
       .then(serverService.getTaskDefinitions.bind(serverService))
       .then(fn.handleSort("items", "taskId"))
       .then(fn.handleObsUpdate(this.itemsObs, "items"))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'tasks' }));
   }
 };

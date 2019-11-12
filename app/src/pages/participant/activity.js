@@ -8,7 +8,8 @@ import utils from "../../utils";
 
 const failureHandler = utils.failureHandler({
   redirectTo: "participants",
-  redirectMsg: "Participant not found"
+  redirectMsg: "Participant not found",
+  id: 'participant-activity'
 });
 
 export default function activity(params) {
@@ -44,18 +45,15 @@ export default function activity(params) {
     .obs("searchLoading", false)
     .obs("activityLabel", "&#160;");
 
-  serverService
-    .getParticipantName(params.userId)
+  serverService.getParticipantName(params.userId)
     .then(function(part) {
       self.titleObs(part.name);
       self.statusObs(part.status);
-    })
-    .catch(failureHandler);
+    }).catch(failureHandler);
 
   tables.prepareTable(self, {
     name: "activitie",
-    type: "Activity" /*,
-        refresh: loadingFunc*/
+    type: "Activity"
   });
 
   self.toggle = function(model) {

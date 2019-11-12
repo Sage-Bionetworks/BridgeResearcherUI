@@ -8,7 +8,8 @@ import utils from "../../utils";
 const failureHandler = utils.failureHandler({
   redirectTo: "study",
   redirectMsg: "Study not found.",
-  transient: false
+  transient: false,
+  id: 'shared-upload-metadata'
 });
 
 export default function sharedUploadMetadata(params) {
@@ -29,7 +30,7 @@ export default function sharedUploadMetadata(params) {
     serverService.saveStudy(self.study)
       .then(fn.handleObsUpdate(self.versionObs, "version"))
       .then(utils.successHandler(vm, event, "Upload metadata fields have been saved."))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'shared-upload-metadata' }));
   };
   self.addBelow = function(field, event) {
     let index = self.fieldDefinitionsObs.indexOf(field);

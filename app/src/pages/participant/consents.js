@@ -9,7 +9,8 @@ import utils from "../../utils";
 
 let failureHandler = utils.failureHandler({
   redirectTo: "participants",
-  redirectMsg: "Participant not found"
+  redirectMsg: "Participant not found",
+  id: 'participant-consents'
 });
 
 let session = null;

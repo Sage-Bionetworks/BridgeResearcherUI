@@ -8,7 +8,8 @@ import utils from "../../utils";
 
 const taskFailure = utils.failureHandler({
   redirectTo: "tasks",
-  redirectMsg: "Task not found."
+  redirectMsg: "Task not found.",
+  id: 'task'
 });
 
 /**
@@ -94,7 +95,7 @@ export default class Task {
     serverService[methodName](this.task)
       .then(this.updateId.bind(this))
       .then(utils.successHandler(vm, event, "Task saved."))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'task' }));
   }
   loadTaskDefinition() {
     if (this.taskId !== "new") {
@@ -109,7 +110,7 @@ export default class Task {
     sharedModuleUtils
       .loadNameMaps()
       .then(this.loadTaskDefinition.bind(this))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'task' }));
   }
 
   static configToView(config) {

@@ -6,7 +6,8 @@ import utils from "../../utils";
 
 let failureHandler = utils.failureHandler({
   redirectTo: "participants",
-  redirectMsg: "Participant not found"
+  redirectMsg: "Participant not found",
+  id: 'participant-client-data'
 });
 
 export default function clientData(params) {
@@ -52,7 +53,7 @@ export default function clientData(params) {
     } catch (e) {
       let error = new BridgeError();
       error.addError("clientData", "is not valid JSON");
-      utils.failureHandler({ transient: false })(error);
+      utils.failureHandler({ transient: false, id: 'participant-client-data' })(error);
       return false;
     }
     return true;
@@ -67,7 +68,7 @@ export default function clientData(params) {
     serverService
       .updateParticipant(self.participant)
       .then(utils.successHandler(vm, event, "Client data updated."))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'participant-client-data' }));
   };
   self.reformat = function(vm, event) {
     utils.clearErrors();

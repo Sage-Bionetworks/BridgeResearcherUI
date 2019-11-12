@@ -8,7 +8,8 @@ import utils from "../../utils";
 let failureHandler = utils.failureHandler({
   redirectMsg: "Config element not found.",
   redirectTo: "configs",
-  transient: false
+  transient: false,
+  id: 'config-el-editor'
 });
 
 function newAppConfigElement() {
@@ -60,7 +61,7 @@ export default function editor(params) {
       } catch (e) {
         let error = new BridgeError();
         error.addError("data", "is not valid JSON");
-        utils.failureHandler({ transient: false })(error);
+        utils.failureHandler({ transient: false, id: 'config-el-editor' })(error);
         return true;
       }
     }
@@ -78,7 +79,9 @@ export default function editor(params) {
     if (updateClientData()) {
       return;
     }
-    let identityChanged = self.configElement.id !== self.idObs() || self.configElement.revision !== self.revisionObs();
+    let identityChanged = self.isNewObs() || 
+      self.configElement.id !== self.idObs() || 
+      self.configElement.revision !== self.revisionObs();
     self.configElement = binder.persist(self.configElement);
 
     utils.startHandler(vm, event);

@@ -48,7 +48,7 @@
         statusObs: statusObs"></participant-tabset>
 </div>
 <div class="scrollbox">
-  <errors></errors>
+  <errors id="participant-general"></errors>
   <form class="ui form">
     <!-- ROW 1: Always the same for all users, create or update -->
     <div class="equal width fields">
@@ -73,13 +73,13 @@
 
     <!-- ROW 2: Create is the same for all users -->
     <div class="equal width fields" data-bind="visible: isNewObs">
-      <div class="field" class="email">
+      <div class="field email">
         <label>Email
           <verified-icon params="valueObs: emailObs, verifiedObs: emailVerifiedObs"> </verified-icon>
         </label>
         <input type="text" data-bind="textInput: emailObs" />
       </div>
-      <div class="field" class="phone">
+      <div class="field phone">
         <label>Phone
           <verified-icon params="valueObs: phoneObs, verifiedObs: phoneVerifiedObs"> </verified-icon>
         </label>
@@ -105,7 +105,7 @@
 
     <!-- ROW 2: Update, external ID field changes based on role -->
     <div class="equal width fields" data-bind="visible: !isNewObs()">
-      <div class="field" class="email">
+      <div class="field email">
         <label>Email</label>
         <span data-bind="visible: showIdentifier('email')">
           <a class="input-field-padding" data-bind="href: emailLink, text: emailObs"></a>
@@ -116,7 +116,7 @@
         <span data-bind="visible: showDash('email')"
           class="input-field-padding">—</span>
       </div>
-      <div class="field" class="phone">
+      <div class="field phone">
         <label>Phone</label>
         <span data-bind="visible: showIdentifier('phone')">
           <a class="input-field-padding" data-bind="href: phoneLink, 
@@ -168,7 +168,7 @@
 
     <!-- ROW 4: Create the same for everybody -->
     <div class="equal width fields" data-bind="visible: isNewObs()">
-      <div class="required field" class="password">
+      <div class="required field password">
         <label>Password</label>
         <input type="password" autocomplete="new-password" data-bind="textInput: passwordObs" />
       </div>

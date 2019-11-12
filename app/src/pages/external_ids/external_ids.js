@@ -1,4 +1,3 @@
-import "knockout-postbox";
 import Binder from "../../binder";
 import fn from "../../functions";
 import ko from "knockout";
@@ -87,7 +86,7 @@ export default function externalIds() {
     createNewCredentials(data.identifier)
       .then(updatePageWithResult)
       .then(utils.successHandler(self, event))
-      .catch(utils.failureHandler({transient:false}));
+      .catch(utils.failureHandler({ transient: false, id: 'external-ids' }));
   };
   self.createFromNext = function(vm, event) {
     self.showResultsObs(false);
@@ -98,7 +97,7 @@ export default function externalIds() {
       .then(createNewCredentials)
       .then(updatePageWithResult)
       .then(utils.successHandler(vm, event))
-      .catch(utils.failureHandler({transient:false}));
+      .catch(utils.failureHandler({ transient: false, id: 'external-ids' }));
   };
   self.link = function(item) {
     return "#/participants/" + encodeURIComponent("externalId:" + item.identifier) + "/general";
@@ -115,7 +114,7 @@ export default function externalIds() {
       .then(createNewCredentials)
       .then(updatePageWithResult)
       .then(utils.successHandler())
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'external-ids' }));
   };
   self.matchesSubstudy = function(substudyId) {
     return fn.substudyMatchesUser(self.userSubstudies, substudyId);
@@ -133,7 +132,7 @@ export default function externalIds() {
       .getExternalIds(params)
       .then(binder.update("total", "items"))
       .then(msgIfNoRecords)
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'external-ids' }));
   }
 
   self.loadingFunc = load;

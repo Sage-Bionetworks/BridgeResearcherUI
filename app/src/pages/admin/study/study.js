@@ -86,7 +86,7 @@ export default function(params) {
       })
       .then(utils.successHandler(vm, event, "Study created."))
       .then(() => self.titleObs(self.nameObs()))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({id: 'study'}));
   };
   function load() {
     return params.id === "new" ? Promise.resolve({}) : serverService.getStudyById(params.id);
