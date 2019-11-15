@@ -23,6 +23,14 @@ body {
     background-color: white;
     opacity: 0.0;
 }
+#sidebar {
+    height: 100%;
+}
+    .pusher {
+        height:  100vh; 
+        display: flex; 
+        flex-direction: column;
+    }
 section {
     @include flex-box(row);
     @include flex(1);

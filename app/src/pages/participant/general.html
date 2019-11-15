@@ -99,7 +99,7 @@
       </div>
       <div class="field synapseUserId">
         <label>Synapse User ID (or email address, or alias)</label>
-        <input type="text" data-bind="textInput: synapseUserIdObs">
+        <input type="text" class="input-field-padding" data-bind="textInput: synapseUserIdObs">
       </div>
     </div>
 
@@ -130,7 +130,8 @@
       </div>
       <div class="field synapseUserId">
         <label>Synapse User ID</label>
-        <span data-bind="visible: showIdentifier('synapseUserId'), text: synapseUserIdObs"></span>
+        <span class="input-field-padding" data-bind="visible: showIdentifier('synapseUserId'), 
+          text: synapseUserIdObs"></span>
         <a href="#" class="input-field-padding" data-bind="visible: showAddIdentifier('synapseUserId'), 
           click: addIdentifier('synapseUserId')">Add&hellip;</a>
         <span class="input-field-padding" data-bind="visible: showDash('synapseUserId')">—</span>
