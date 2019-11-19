@@ -143,22 +143,22 @@ const DATA_TYPE_OPTIONS = Object.freeze([
   { label: "Postal Code", value: "postalcode" }
 ]);
 const CONSTRAINTS_TEMPLATES = Object.freeze({
-  BooleanConstraints: { dataType: "boolean" },
-  DateConstraints: { dataType: "date", allowFuture: false, allowPast: true, earliestValue: "", latestValue: "" },
-  DateTimeConstraints: { dataType: "datetime", allowFuture: false, allowPast: true, earliestValue: "", latestValue: "" },
-  YearMonthConstraints: { dataType: "yearmonth", allowFuture: false, allowPast: true, earliestValue: "", latestValue: "" },
-  YearConstraints: { dataType: "year", allowFuture: false, allowPast: true, earliestValue: "", latestValue: "" },
-  TimeConstraints: { dataType: "time" },
-  IntegerConstraints: { dataType: "integer", minValue: 0, maxValue: 255, unit: "", step: 1.0 },
-  DecimalConstraints: { dataType: "decimal", minValue: 0, maxValue: 255, unit: "", step: 1.0 },
-  DurationConstraints: { dataType: "duration", minValue: 0, maxValue: 255, unit: "", step: 1.0 },
+  BooleanConstraints: { dataType: "boolean", required: false },
+  DateConstraints: { dataType: "date", allowFuture: false, allowPast: true, earliestValue: "", latestValue: "", required: false },
+  DateTimeConstraints: { dataType: "datetime", allowFuture: false, allowPast: true, earliestValue: "", latestValue: "", required: false },
+  YearMonthConstraints: { dataType: "yearmonth", allowFuture: false, allowPast: true, earliestValue: "", latestValue: "", required: false },
+  YearConstraints: { dataType: "year", allowFuture: false, allowPast: true, earliestValue: "", latestValue: "", required: false },
+  TimeConstraints: { dataType: "time", required: false },
+  IntegerConstraints: { dataType: "integer", minValue: 0, maxValue: 255, unit: "", step: 1.0, required: false },
+  DecimalConstraints: { dataType: "decimal", minValue: 0, maxValue: 255, unit: "", step: 1.0, required: false },
+  DurationConstraints: { dataType: "duration", minValue: 0, maxValue: 255, unit: "", step: 1.0, required: false },
   StringConstraints: { dataType: "string", minLength: 0, maxLength: 255, pattern: "",
-    patternPlaceholder: "", patternErrorMessage: "" },
-  MultiValueConstraints: { dataType: "string", enumeration: [], allowOther: false, allowMultiple: false },
-  BloodPressureConstraints: { dataType: "bloodpressure" },
-  HeightConstraints: { dataType: "height", forInfant: false },
-  WeightConstraints: { dataType: "weight", forInfant: false },
-  PostalCodeConstraints: { dataType: "postalcode", countryCode: "us" }
+    patternPlaceholder: "", patternErrorMessage: "", required: false },
+  MultiValueConstraints: { dataType: "string", enumeration: [], allowOther: false, allowMultiple: false, required: false },
+  BloodPressureConstraints: { dataType: "bloodpressure", required: false, required: false },
+  HeightConstraints: { dataType: "height", forInfant: false, required: false },
+  WeightConstraints: { dataType: "weight", forInfant: false, required: false },
+  PostalCodeConstraints: { dataType: "postalcode", countryCode: "us", required: false }
 });
 const UI_HINT_FOR_CONSTRAINTS = Object.freeze({
   BooleanConstraints: "checkbox",

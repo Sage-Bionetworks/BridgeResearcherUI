@@ -40,6 +40,10 @@
     opacity: .5; 
     font-style: italic;
 }
+constraints-label {
+  margin-bottom: 1rem;
+  display: block;
+}
 input[disabled], form[disabled='true'] iframe {
     opacity: .7;
     background-color: #f5f5f5;

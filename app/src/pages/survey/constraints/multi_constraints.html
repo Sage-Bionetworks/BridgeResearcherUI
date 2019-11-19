@@ -25,21 +25,21 @@
       <label>Allow multiple?</label>
       <ui-checkbox params="checkedObs: allowMultipleObs"></ui-checkbox>
     </div>
+    <div class="field">
+      <label>Required question?</label>
+      <ui-checkbox params="checkedObs: requiredObs"></ui-checkbox>
+    </div>    
   </div>
   <div class="eight wide column">
     <div class="field">
       <label>Before Rules</label>
-      <ui-rules
-        params="element: element, fieldName: 'beforeRulesObs', 
-                elementsObs: elementsObs, collectionName: $data.collectionName"
-      ></ui-rules>
+      <ui-rules params="element: element, fieldName: 'beforeRulesObs', 
+        elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>
     </div>
     <div class="field">
       <label>After Rules</label>
-      <ui-rules
-        params="element: element, fieldName: 'afterRulesObs', 
-                elementsObs: elementsObs, collectionName: $data.collectionName"
-      ></ui-rules>
+      <ui-rules params="element: element, fieldName: 'afterRulesObs', 
+        elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>
     </div>
   </div>
 </div>

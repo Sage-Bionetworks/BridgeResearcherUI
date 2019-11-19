@@ -1,3 +1,4 @@
+import fn from "../../../functions";
 import root from "../../../root";
 import surveyUtils from "../survey_utils";
 
@@ -5,11 +6,8 @@ export default function(params) {
   let self = this;
 
   surveyUtils.initConstraintsVM(self, params);
-  self.allowOtherObs = self.element.constraints.allowOtherObs;
-  self.allowMultipleObs = self.element.constraints.allowMultipleObs;
-  self.enumerationObs = self.element.constraints.enumerationObs;
-  self.dataTypeObs = self.element.constraints.dataTypeObs;
-
+  fn.copyProps(self, self.element.constraints, "allowOtherObs", "allowMultipleObs", "enumerationObs",
+    "dataTypeObs", "requiredObs");
   self.editEnum = function() {
     root.openDialog("enumeration_editor", { parentViewModel: self, enumerationObs: self.enumerationObs });
   };

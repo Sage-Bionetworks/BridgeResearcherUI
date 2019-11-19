@@ -21,7 +21,8 @@ function valueToObservers(self, prefix) {
 export default function(params) {
   let self = this;
   surveyUtils.initConstraintsVM(self, params);
-  fn.copyProps(self, self.element.constraints, "earliestValueObs", "latestValueObs", "allowFutureObs", "allowPastObs");
+  fn.copyProps(self, self.element.constraints, "earliestValueObs", "latestValueObs", 
+    "allowFutureObs", "allowPastObs", "requiredObs");
 
   valueToObservers(self, "earliest");
   valueToObservers(self, "latest");
