@@ -1,7 +1,9 @@
 import alerts from "./widgets/alerts";
 import Binder from "./binder";
+import $ from 'jquery';
 import ko from "knockout";
 import serverService from "./services/server_service";
+import toastr from 'toastr';
 
 function roleFunc(observer, role) {
   return ko.computed(function() {
@@ -37,8 +39,8 @@ let RootViewModel = function() {
     .obs("editorParams", {})
     .obs("isEditorTabVisible", false)
     .obs("notificationsEnabled", false)
+    .obs("studyMemberships[]")
     .obs("sidePanel", "navigation")
-    .obs("showNavigation", true)
     .obs("dialog", { name: "none" });
 
   self.mainPageObs.subscribe(self.selectedObs);
@@ -46,10 +48,7 @@ let RootViewModel = function() {
     self.setEditorPanel("none", {});
   });
   self.showNav = function() {
-    self.showNavigationObs(true);
-  };
-  self.hideNav = function() {
-    self.showNavigationObs(false);
+    $('#sidebar').sidebar('toggle');
   };
   self.setEditorPanel = function(name, params) {
     self.editorPanelObs(name);
@@ -98,6 +97,18 @@ let RootViewModel = function() {
   self.isDevEnvObs = ko.computed(function() {
     return ["local", "develop", "staging"].indexOf(self.environmentObs()) > -1;
   });
+  self.changeStudy = function(studyId) {
+    $('#sidebar').sidebar('toggle');
+    document.body.style.opacity = 0.0;
+    setTimeout(() => {
+      serverService.changeStudy(studyId.name, studyId.identifier)
+        .then(() => document.location.reload())
+        .catch(() => {
+          document.body.style.opacity = 1.0;
+          setTimeout(() => toastr.error('Could not switch studies.'), 500);
+        });
+    }, 500);
+  };
   serverService.addSessionStartListener(function(session) {
     self.studyNameObs(session.studyName);
     self.environmentObs(session.environment);
@@ -107,6 +118,8 @@ let RootViewModel = function() {
     serverService.getStudy().then(function(study) {
       self.notificationsEnabledObs(Object.keys(study.pushNotificationARNs).length > 0);
     });
+    serverService.getStudyMemberships()
+        .then((response) => self.studyMembershipsObs(response.items));
   });
   serverService.addSessionEndListener(function() {
     self.studyNameObs("");
@@ -139,4 +152,7 @@ window.addEventListener("DOMContentLoaded", function() {
   ko.applyBindings(root, document.documentElement);
   document.body.style.opacity = "1.0";
   serverService.initSession();
+
+  $('#sidebar').sidebar();
+
 }, false);

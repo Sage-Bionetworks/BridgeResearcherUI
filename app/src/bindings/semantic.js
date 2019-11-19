@@ -2,6 +2,9 @@ import ko from "knockout";
 import "../../lib/semantic-2.3.min";
 
 var handlers = {
+  sidebar: function($element) {
+    $element.sidebar();
+  },
   accordion: function($element) {
     $element.addClass("ui styled fluid accordion").accordion({ exclusive: false });
   },

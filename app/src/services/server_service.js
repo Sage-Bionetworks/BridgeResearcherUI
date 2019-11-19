@@ -694,6 +694,14 @@ export class ServerService {
       this.cacheSession(studyName, studyId, session.environment)
     );
   }
+  getStudyMemberships() {
+    return this.gethttp('/v3/studies/memberships');
+  }
+  changeStudy(studyName, studyId) {
+    return this.post('/v3/auth/study', { study: studyId }).then(
+      this.cacheSession(studyName, studyId, session.environment)
+    );
+  }
   getAppConfigElements(includeDeleted) {
     let queryString = fn.queryString({ includeDeleted: includeDeleted === true });
     return this.gethttp(config.appConfigElements + queryString);
