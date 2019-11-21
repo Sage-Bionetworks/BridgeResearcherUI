@@ -11,7 +11,7 @@
     <div id="sidebar" class="ui sidebar vertical menu" 
       style="background-color: rgb(186, 223, 172)"
       data-bind="semantic: 'sidebar'">
-      <div style="text-align: center; margin: 1rem 0"><h3>Select a study</h3></div>
+      <div style="text-align: center; margin: 1rem 0"><h3>Select a study:</h3></div>
       <!-- ko foreach: studyMembershipsObs -->
         <a class="item" data-bind="text: $data.name, click: $parent.changeStudy"></a>
       <!-- /ko -->
