@@ -1,46 +1,16 @@
 import Binder from "../../binder";
 import fn from "../../functions";
 import root from "../../root";
-import serverService from "../../services/server_service";
-import utils from "../../utils";
 
 export default function(params) {
   let self = this;
-  self.studyId = null;
 
-  new Binder(self)
-    .obs("dateFormatting", localStorage.getItem("timezone") || "local")
-    .obs("study")
-    .obs("studyOptions[]");
+  new Binder(self).obs("dateFormatting", localStorage.getItem("timezone") || "local");
 
-  fn.copyProps(self, root, "closeDialog", "isAdmin");
+  fn.copyProps(self, root, "closeDialog");
 
-  self.save = function(vm, event) {
-    utils.startHandler(vm, event);
-    
+  self.save = function() {
     localStorage.setItem("timezone", self.dateFormattingObs());
-
-    let p = Promise.resolve();
-    if (self.studyId !== self.studyObs()) {
-      let studyName = findStudyName(self.studyObs());
-      p = serverService.changeAdminStudy(studyName, self.studyObs());
-    }
-    p.then(() => setTimeout(() => document.location.reload(), 100));
+    setTimeout(() => document.location.reload(), 100);
   };
-
-  function findStudyName(studyId) {
-    return self.studyOptionsObs().filter(option => option.identifier === studyId)[0].name;
-  }
-
-  serverService.getSession()
-    .then(session => {
-      self.studyId = session.studyId;
-      return session.environment;
-    })
-    .then(env => serverService.getStudyList(env))
-    .then(response => {
-      self.studyOptionsObs(response.items);
-      return serverService.getStudy();
-    })
-    .then(study => self.studyObs(study.identifier));
 };

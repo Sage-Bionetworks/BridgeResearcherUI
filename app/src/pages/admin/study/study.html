@@ -45,24 +45,20 @@
         <div class="field" data-bind="attr: {id: 'users'+$index()+'_email'}">
           <input placeholder="Email" data-bind="textInput: $data.emailObs" />
         </div>
+        <div class="field" data-bind="attr: {id: 'users'+$index()+'_synapseUserIdObs'}">
+            <input placeholder="Synapse Email" data-bind="textInput: $data.synapseUserIdObs" />
+          </div>
         <div class="field" data-bind="attr: {id: 'users'+$index()+'_roles'}">
-          <tag-editor
-            params="selectedObs: $data.rolesObs, 
-                            allObs: $parent.allRolesObs, type: 'roles'"
-          ></tag-editor>
+          <tag-editor params="selectedObs: $data.rolesObs, 
+            allObs: $parent.allRolesObs, type: 'roles'"></tag-editor>
         </div>
-        <div class="field" style="width:6rem">
+        <div class="field" style="width:7rem">
           <div class="input-field-padding">
-            <i
-              class="large plus square outline link icon"
-              data-bind="click: $parent.addBelow, semantic: 'popup'"
-              data-content="Add below"
-            ></i>
-            <i
-              class="red large times circle outline link icon"
+            <i class="large plus square outline link icon" data-content="Add below"
+              data-bind="click: $parent.addBelow, semantic: 'popup'"></i>
+            <i class="red large times circle outline link icon"
               data-bind="fadeRemove: {selector: '.four.fields', object: $data, 
-                                collection: 'usersObs'}"
-            ></i>
+                collection: 'usersObs'}"></i>
           </div>
         </div>
       </div>

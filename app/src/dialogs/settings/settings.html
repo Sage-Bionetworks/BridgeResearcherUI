@@ -10,14 +10,8 @@
         <label>Display dates & times</label>
         <div class="field">
           <div class="ui radio checkbox">
-            <input
-              id="df3"
-              type="radio"
-              name="dateFormatting"
-              class="hidden"
-              value="local"
-              data-bind="checked: dateFormattingObs"
-            />
+            <input id="df3" type="radio" name="dateFormatting" class="hidden"
+              value="local" data-bind="checked: dateFormattingObs"/>
             <label for="df3">Local time zone</label>
             <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
               in your local time zone
@@ -26,14 +20,8 @@
         </div>
         <div class="field">
           <div class="ui radio checkbox">
-            <input
-              id="df2"
-              type="radio"
-              name="dateFormatting"
-              class="hidden"
-              value="gmt"
-              data-bind="checked: dateFormattingObs"
-            />
+            <input id="df2" type="radio" name="dateFormatting" class="hidden"
+              value="gmt" data-bind="checked: dateFormattingObs"/>
             <label for="df2">GMT / UTC</label>
             <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
               in GMT (close to UTC, more readable)
@@ -42,30 +30,14 @@
         </div>
         <div class="field">
           <div class="ui radio checkbox">
-            <input
-              id="df1"
-              type="radio"
-              name="dateFormatting"
-              class="hidden"
-              value="iso"
-              data-bind="checked: dateFormattingObs"
-            />
+            <input id="df1" type="radio" name="dateFormatting" class="hidden"
+              value="iso" data-bind="checked: dateFormattingObs"/>
             <label for="df1">ISO 8601</label>
             <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
               in UTC (hard to read format, but may be useful for matching timestamps across repositories)
             </div>
           </div>
         </div>
-      </div>
-      <div class="field" data-bind="visible: isAdmin" style="flex: 1">
-        <label>Change your study to</label>
-        <select
-          taborder="-1"
-          class="ui dropdown"
-          data-bind="value: studyObs,
-                    options: studyOptionsObs, optionsText: 'name', optionsValue: 'identifier'"
-        >
-        </select>
       </div>
     </div>
   </div>

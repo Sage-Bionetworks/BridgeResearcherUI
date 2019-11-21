@@ -43,6 +43,7 @@ export default function(params) {
   self.addUser = function(index) {
     self.usersObs.splice(index + 1, 0, {
       emailObs: ko.observable(),
+      synapseUserIdObs: ko.observable(),
       firstNameObs: ko.observable(),
       lastNameObs: ko.observable(),
       rolesObs: ko.observableArray([])
@@ -61,28 +62,35 @@ export default function(params) {
 
     utils.startHandler(vm, event);
 
-    serverService
-      .getSession()
-      .then(session => {
+    serverService.getSession().then(session => {
         study.supportEmail = session.email;
         study.technicalEmail = session.email;
         study.consentNotificationEmail = session.email;
         study.dataGroups = ["test_user"];
         delete study.allRoles;
         delete study.users;
+        let adminIds = SYNAPSE_ADMINS.filter(admin => self[admin.obs]()).map(admin => admin.id);
 
-        let users = self.usersObs().map(function(user) {
-          return {
+        let userPromises = self.usersObs().map(function(user) {
+          let userObj = {
             email: user.emailObs(),
             firstName: user.firstNameObs(),
             lastName: user.lastNameObs(),
+            synapseUserId: user.synapseUserIdObs(),
             roles: user.rolesObs(),
             dataGroups: ["test_user"]
           };
+          if (userObj.synapseUserId) {
+            return utils.synapseAliasToUserId(userObj.synapseUserId).then((id) => {
+              userObj.synapseUserId = id;
+              return userObj;
+            });
+          } else {
+            return Promise.resolve(userObj);
+          }
         });
-        let adminIds = SYNAPSE_ADMINS.filter(admin => self[admin.obs]()).map(admin => admin.id);
-
-        return serverService.createStudy({ study, adminIds, users });
+        return Promise.all(userPromises).then(
+          (users) => serverService.createStudy({ study, adminIds, users }));
       })
       .then(utils.successHandler(vm, event, "Study created."))
       .then(() => self.titleObs(self.nameObs()))
@@ -92,8 +100,7 @@ export default function(params) {
     return params.id === "new" ? Promise.resolve({}) : serverService.getStudyById(params.id);
   }
 
-  load()
-    .then(binder.assign("study"))
+  load().then(binder.assign("study"))
     .then(binder.update())
     .then(self.addUser(0));
 };

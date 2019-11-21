@@ -1,19 +1,21 @@
 <constraints-label params="title: 'Boolean Question', element: element"></constraints-label>
 <div class="ui constraints grid">
-  <div class="sixteen wide column">
+  <div class="five wide column">
+    <div class="field">
+      <label>Required question?</label>
+      <ui-checkbox params="checkedObs: requiredObs"></ui-checkbox>
+    </div>
+  </div>
+  <div class="eleven wide column">
     <div class="field">
       <label>Before Rules</label>
-      <ui-rules
-        params="element: element, fieldName: 'beforeRulesObs', 
-                elementsObs: elementsObs, collectionName: $data.collectionName"
-      ></ui-rules>
+      <ui-rules params="element: element, fieldName: 'beforeRulesObs', 
+        elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>
     </div>
     <div class="field">
       <label>After Rules</label>
-      <ui-rules
-        params="element: element, fieldName: 'afterRulesObs', 
-                elementsObs: elementsObs, collectionName: $data.collectionName"
-      ></ui-rules>
+      <ui-rules params="element: element, fieldName: 'afterRulesObs', 
+        elementsObs: elementsObs, collectionName: $data.collectionName"></ui-rules>
     </div>
   </div>
 </div>

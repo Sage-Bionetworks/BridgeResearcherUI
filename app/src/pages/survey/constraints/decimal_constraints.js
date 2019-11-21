@@ -4,5 +4,6 @@ import fn from "../../../functions";
 export default function(params) {
   let self = this;
   surveyUtils.initConstraintsVM(self, params);
-  fn.copyProps(self, self.element.constraints, "minValueObs", "maxValueObs", "stepObs", "unitObs");
+  fn.copyProps(self, self.element.constraints, "minValueObs", "maxValueObs", "stepObs", 
+    "unitObs", "requiredObs");
 };
