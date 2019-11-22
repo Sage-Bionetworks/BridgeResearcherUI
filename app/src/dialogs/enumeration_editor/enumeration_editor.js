@@ -20,6 +20,7 @@ function hash(array) {
     let label = object.label;
     let detail = object.detail;
     let value = object.value;
+    let exclusive = object.exclusive;
     if (typeof label !== "undefined" && label !== null) {
       total += checksum(label);
     }
@@ -28,6 +29,9 @@ function hash(array) {
     }
     if (typeof value !== "undefined" && value !== null) {
       total += checksum(value);
+    }
+    if (typeof exclusive !== "undefined" && exclusive !== null) {
+      total += checksum(exclusive);
     }
   }
   return total;
@@ -98,7 +102,7 @@ function makeListMapEntry(enumeration, isSelectedEnumeration) {
 
 function copyEnum(enumeration) {
   return enumeration.map(function(item) {
-    return { label: item.label, value: item.value, detail: item.detail };
+    return { label: item.label, value: item.value, detail: item.detail, exclusive: item.exclusive };
   });
 }
 
@@ -142,6 +146,7 @@ export default function enumEditor(params) {
     .obs("label")
     .obs("detail")
     .obs("value")
+    .obs("exclusive")
     .obs("index", null)
     .obs("currentTab", "editor")
     .obs("selectedIndex", 0)
@@ -166,6 +171,7 @@ export default function enumEditor(params) {
     self.labelObs(item.label);
     self.detailObs(item.detail);
     self.valueObs(item.value);
+    self.exclusiveObs(item.exclusive);
   };
   self.editorTitleObs = ko.computed(function() {
     return self.indexObs() !== null ? "Edit List Item" : "Add New List Item";
@@ -181,6 +187,7 @@ export default function enumEditor(params) {
     self.labelObs("");
     self.detailObs("");
     self.valueObs("");
+    self.exclusiveObs(false);
     self.indexObs(null);
   };
   self.selectedIndexObs.subscribe(self.cancelEditMode);
@@ -194,10 +201,13 @@ export default function enumEditor(params) {
         item.label = self.labelObs();
         item.value = value;
         item.detail = self.detailObs();
+        item.exclusive = self.exclusiveObs();
         self.listObs.splice(self.indexObs(), 1);
         self.listObs.splice(self.indexObs(), 0, item);
       } else {
-        self.listObs.push({ label: label, value: value, detail: self.detailObs() });
+        let detail = self.detailObs();
+        let exclusive = self.exclusiveObs();
+        self.listObs.push({ label, value, detail, exclusive });
       }
     }
     self.cancelEditMode();
