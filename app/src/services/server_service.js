@@ -157,7 +157,7 @@ export class ServerService {
   }
   isSupportedUser() {
     return this.roles.some(function(role) {
-      return ["developer", "researcher", "admin"].indexOf(role) > -1;
+      return ["developer", "researcher", "admin", "superadmin"].indexOf(role) > -1;
     });
   }
   cacheParticipantName(response) {
@@ -170,8 +170,7 @@ export class ServerService {
   cacheSession(studyName, studyId, env) {
     // Initial sign in we capture some information not in the session. Thereafer we have
     // to copy it on reauthentication to any newly acquired session.
-    return function(sess) {
-      console.log('session', JSON.stringify(sess));
+    return (sess) => {
       if (studyName) {
         sess.studyName = studyName;
         sess.studyId = studyId;
@@ -180,11 +179,15 @@ export class ServerService {
       } else {
         fn.copyProps(sess, session, "studyName", "studyId", "host", "isSupportedUser");
       }
+      // Easier than testing for superadmin everywhere.
+      if (sess.roles.includes('superadmin')) {
+        sess.roles = ['developer', 'researcher', 'admin', 'superadmin'];
+      }
       session = sess;
       storeService.set(SESSION_KEY, session);
       listeners.emit(SESSION_STARTED_EVENT_KEY, session);
       return session;
-    }.bind(this);
+    };
   }
 
   isAuthenticated() {
@@ -379,6 +382,8 @@ export class ServerService {
   }
   saveSchedulePlan(plan) {
     let path = plan.guid ? config.schemaPlans + "/" + plan.guid : config.schemaPlans;
+    // TODO: User this pattern for updating keys/versions/revisions in all calls and remove
+    // from viewmodel code.
     return this.post(path, plan).then(function(newPlan) {
       plan.guid = newPlan.guid;
       plan.version = newPlan.version;

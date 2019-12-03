@@ -23,6 +23,9 @@ function selectRoles(session) {
   for (let i = 0; i < session.roles.length; i++) {
     var role = session.roles[i];
     switch (role) {
+      case "superadmin":
+        set.add("Super Admin");
+        /* falls through */
       case "admin":
         set.add("Worker");
         set.add("Administrator");

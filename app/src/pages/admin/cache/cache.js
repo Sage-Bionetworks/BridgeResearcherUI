@@ -37,25 +37,19 @@ export default function() {
   });
 
   function load() {
-    serverService
-      .getCacheKeys()
+    serverService.getCacheKeys()
       .then(function(response) {
         let items = response.map(mapKey);
         self.itemsObs(items.sort(fn.makeFieldSorter("key")));
-      })
-      .catch(utils.failureHandler({id: 'cache'}));
+      }).catch(utils.failureHandler({id: 'cache'}));
   }
   load();
 
   self.signEveryoneOut = function() {
-    alerts.deleteConfirmation(
-      MSG,
-      function() {
-        // Call the first time to get the total number of records
-        serverService.getParticipants(0, 5).then(processAllPages);
-      },
-      "Yes, sign everyone out"
-    );
+    alerts.deleteConfirmation(MSG, function() {
+      // Call the first time to get the total number of records
+      serverService.getParticipants(0, 5).then(processAllPages);
+    }, "Yes, sign everyone out");
   };
   function processAllPages(response) {
     let pages = Math.ceil(response.total / PAGE_SIZE);
@@ -68,9 +62,8 @@ export default function() {
     });
   }
   function processOnePage(promise, i) {
-    return function() {
-      return serverService.getParticipants(PAGE_SIZE * i, PAGE_SIZE).then(processAllRecords(promise));
-    };
+    return () => serverService.getParticipants(PAGE_SIZE * i, PAGE_SIZE)
+      .then(processAllRecords(promise));
   }
   function processAllRecords(promise) {
     return function(response) {

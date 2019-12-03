@@ -165,12 +165,13 @@ function persistLanguages(value) {
 }
 function formatRoles(roles) {
   return (roles || []).map(function(role) {
-    return role === "admin" ? "Administrator" : formatTitleCase(role);
+    return role === "admin" ? "Administrator" : 
+      role === "superadmin" ? "Super Admin" : formatTitleCase(role);
   });
 }
 function persistRoles(roles) {
   return (roles || []).map(function(role) {
-    return role === "Administrator" ? "admin" : role.toLowerCase().replace(" ", "_");
+    return role === "Administrator" ? "admin" : role.toLowerCase().replace(" ", "");
   });
 }
 function notBlankName(array, value) {
