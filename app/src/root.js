@@ -80,6 +80,7 @@ let RootViewModel = function() {
   self.isResearcher = roleFunc(self.rolesObs, "researcher");
   self.isDeveloper = roleFunc(self.rolesObs, "developer");
   self.isAdmin = roleFunc(self.rolesObs, "admin");
+  self.isSuperadmin = roleFunc(self.rolesObs, "superadmin");
   self.isSharedStudy = ko.computed(function() {
     return self.studyIdentifierObs() === "shared";
   });

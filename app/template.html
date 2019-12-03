@@ -164,6 +164,14 @@
                 <a href="#/admin/uploads" class="item" data-ref="uploads">
                   Uploads
                 </a>
+              </div>
+            </div>
+            <div class="title" data-bind="visible: isSuperadmin() && !isSharedStudy()">
+              <i class="heartbeat icon"></i> Sage Admin
+              <i class="dropdown icon"></i>
+            </div>
+            <div class="content" data-bind="visible: isAdmin() && !isSharedStudy()">
+              <div class="ui secondary vertical menu">
                 <a href="#/admin/substudies" class="item" data-ref="substudies">
                   Substudies
                 </a>
@@ -173,6 +181,9 @@
                 <a href="#/admin/studies" class="item" data-ref="studies">
                   Studies
                 </a>
+                <div class="item">
+                  Master Schedules [TBD]
+                </div>
               </div>
             </div>
           </div>
