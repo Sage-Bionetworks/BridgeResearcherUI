@@ -165,9 +165,9 @@
 .enum-list {
     padding:0!important;
     overflow-y: auto;
+    min-height: 300px;
     max-height: 315px;
     border: 1px solid #e5e5e5;
-    border-top: none;
 }
     .enum-list-server-text {
         font-size: .8rem;

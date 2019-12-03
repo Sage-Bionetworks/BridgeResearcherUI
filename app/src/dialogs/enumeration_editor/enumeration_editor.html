@@ -14,84 +14,68 @@
     </div>
     <div data-bind="visible: isActive('editor')">
       <div class="ui two column grid" style="padding-left: 1rem; padding-right: 1rem">
-        <div
-          class="column enum-list"
-          data-bind="foreach: listObs, dragula: {
-                    indexObs: selectedIndexObs, listObs: listObs},
-                    css: {'list-being-edited': $component.indexObs() !== null}"
-        >
-          <div class="vs-item" data-bind="css:{'item-being-edited': $component.indexObs() == $index()}">
-            <div class="vs-item-content" data-bind="click: $component.moveToEditor">
-              <span data-bind="text: $data.label"></span>
-              <span data-bind="visible: $parent.hasDetail($data)"
-                >&mdash;<span data-bind="text: $data.detail"></span
-              ></span>
-              <div
-                class="enum-list-server-text"
-                data-bind="visible: $data.label !== $data.value, text: 'Value sent to server: '+$data.value"
-              ></div>
+        <div class="column">
+          <div class="enum-list" data-bind="foreach: listObs, dragula: {
+            indexObs: selectedIndexObs, listObs: listObs},
+            css: {'list-being-edited': $component.indexObs() !== null}">
+            <div class="vs-item" data-bind="css:{'item-being-edited': $component.indexObs() == $index()}">
+              <div class="vs-item-content" data-bind="click: $component.moveToEditor">
+                <span data-bind="text: $data.label"></span>
+                <span data-bind="visible: $parent.hasDetail($data)">
+                  &mdash;<span data-bind="text: $data.detail"></span></span>
+                <div class="enum-list-server-text">
+                  <span data-bind="visible: $data.exclusive" style="font-variant: small-caps; font-size: smaller; color: #b22222"> EXCLUSIVE</span>
+                  <span data-bind="visible: $data.label !== $data.value, 
+                    text: 'Value sent to server: '+$data.value"></span>
+                </div>
+              </div>
+              <div class="vs-item-delete">
+                <i class="delete icon link" data-bind="click: $parent.removeListItem"></i>
+                <i class="angle right icon"></i>
+              </div>
             </div>
-            <div class="vs-item-delete">
-              <i class="delete icon link" data-bind="click: $parent.removeListItem"></i>
-              <i class="angle right icon"></i>
-            </div>
+          </div>
+          <div style="margin-top:1rem">
+            <ui-checkbox params="checkedObs: copyToAllEnumsObs">
+              Update this list in every question where it is used
+            </ui-checkbox>
           </div>
         </div>
         <div class="column">
           <form class="ui form">
             <h4 class="ui dividing header" data-bind="text: editorTitleObs"></h4>
             <div class="field">
-              <input
-                type="text"
-                data-bind="textInput: labelObs, 
-                                returnHandler: addListItem"
-                placeholder="Label"
-                autofocus
-              />
+              <input type="text" data-bind="textInput: labelObs, returnHandler: addListItem"
+                placeholder="Label" autofocus/>
             </div>
             <div class="field">
-              <input
-                type="text"
-                data-bind="textInput: detailObs, 
-                                returnHandler: addListItem"
-                placeholder="Detail (optional)"
-              />
+              <input type="text" data-bind="textInput: detailObs, returnHandler: addListItem"
+                placeholder="Detail (optional)"/>
             </div>
             <div class="field">
-              <input
-                type="text"
-                data-bind="textInput: valueObs, 
-                                returnHandler: addListItem"
-                placeholder="Server value (optional)"
-              />
+              <input type="text" data-bind="textInput: valueObs, returnHandler: addListItem"
+                placeholder="Server value (optional)"/>
             </div>
             <div class="field">
-              <button
-                class="ui small primary button"
-                data-bind="click: addListItem, 
-                                text: editorCommandObs"
-              >
+              <ui-checkbox params="checkedObs: exclusiveObs">
+                Deselect other options when selected
+              </ui-checkbox>
+            </div>
+            <div class="field">
+              <button class="ui small primary button" data-bind="click: addListItem, 
+                text: editorCommandObs">
                 Add
               </button>
-              <button
-                class="ui small button"
-                data-bind="click: cancelEditMode, 
-                                visible: indexObs() !== null"
-              >
+              <button class="ui small button" data-bind="click: cancelEditMode, 
+                visible: indexObs() !== null">
                 Cancel
               </button>
               <p class="help-text" style="margin-top:.5rem">
-                The server value (or the label if there is none) can only contain alphanumeric characters. It can also
-                have spaces, dashes, underscores and periods in the middle, but not more than one at a time.
+                The server value (or the label if there is none) can only contain alphanumeric characters. It can also have spaces, dashes, underscores and periods in the middle, but not more than one at a time.
               </p>
             </div>
           </form>
         </div>
-      </div>
-      <div style="margin-top:1rem">
-        <ui-checkbox params="checkedObs: copyToAllEnumsObs">
-          Update this list in every question where it is used
-        </ui-checkbox>
       </div>
     </div>
     <div data-bind="visible: isActive('existing'), foreach: allListsObs" class="ui list enum-scrollbox">
