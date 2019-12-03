@@ -143,8 +143,8 @@ describe("formatList", function() {
 describe("roles", function() {
     describe("formatRoles", function() {
         it("works", function() {
-            var roles = ["developer","researcher", "admin", "test_users", "worker"];
-            var targetRoles = ["Developer", "Researcher", "Administrator", "Test users", "Worker"];
+            var roles = ["developer","researcher", "admin", "testusers", "worker"];
+            var targetRoles = ["Developer", "Researcher", "Administrator", "Testusers", "Worker"];
             
             var formattedRoles = fn.formatRoles(roles);
             expect(formattedRoles).to.eql(targetRoles);
@@ -152,8 +152,8 @@ describe("roles", function() {
     });
     describe("persistRoles", function() {
         it("works", function() {
-            var roles = ["Developer", "Researcher", "Administrator", "Test users", "Worker"];
-            var targetRoles = ["developer","researcher", "admin", "test_users", "worker"];
+            var roles = ["Developer", "Researcher", "Administrator", "Testusers", "Worker"];
+            var targetRoles = ["developer","researcher", "admin", "testusers", "worker"];
             
             var formattedRoles = fn.persistRoles(roles);
             expect(formattedRoles).to.eql(targetRoles);
