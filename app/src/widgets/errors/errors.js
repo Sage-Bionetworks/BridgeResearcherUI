@@ -86,6 +86,7 @@ export default class Errors {
       if (fieldEl) {
         this.renderFieldError(fieldEl, string);
       } else {
+        console.log('could not find', fieldEl);
         globalErrors.push(string);
       }
     }

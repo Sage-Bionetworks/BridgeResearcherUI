@@ -16,10 +16,14 @@ export default function() {
   tables.prepareTable(self, {
     name: "study",
     plural: "studies",
-    delete: deleteStudy
+    delete: deleteStudy,
+    refresh: load
   });
 
-  serverService.getSession()
-    .then((session) => serverService.getStudyList(session.environment))
-    .then(fn.handleObsUpdate(self.itemsObs, "items"));
+  function load() {
+    return serverService.getSession()
+      .then((session) => serverService.getStudyList(session.environment))
+      .then(fn.handleObsUpdate(self.itemsObs, "items"));
+  }
+  load();
 };

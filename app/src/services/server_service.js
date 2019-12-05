@@ -53,7 +53,7 @@ function baseParams(method, url, data, responseType) {
     headers: headers,
     type: "application/json",
     dataType: responseType,
-    timeout: 20000
+    timeout: 40000
   });
 }
 // Some JSON needs to be displayed exactly as entered and cannot be parsed, because some details

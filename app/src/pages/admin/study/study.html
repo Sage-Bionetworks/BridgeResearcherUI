@@ -17,17 +17,17 @@
   <errors id="study"></errors>
   <form class="ui form">
     <div class="two fields">
-      <div class="field required" id="name">
+      <div class="field required study_name">
         <label>Study name</label>
         <input data-bind="textInput: nameObs" />
       </div>
-      <div class="field" id="identifier">
+      <div class="field required study_identifier">
         <label>Study Identifier</label>
         <input data-bind="textInput: identifierObs" />
       </div>
     </div>
     <div class="two fields">
-      <div class="field required" id="sponsorName">
+      <div class="field required study_sponsorName">
         <label>Sponsor name</label>
         <input data-bind="textInput: sponsorNameObs" />
       </div>
@@ -45,7 +45,7 @@
         <div class="field" data-bind="attr: {id: 'users'+$index()+'_email'}">
           <input placeholder="Email" data-bind="textInput: $data.emailObs" />
         </div>
-        <div class="field" data-bind="attr: {id: 'users'+$index()+'_synapseUserIdObs'}">
+        <div class="field" data-bind="attr: {id: 'users'+$index()+'_synapseUserId'}">
             <input placeholder="Synapse Email" data-bind="textInput: $data.synapseUserIdObs" />
           </div>
         <div class="field" data-bind="attr: {id: 'users'+$index()+'_roles'}">
