@@ -66,6 +66,7 @@ export default {
   getStudy: "/v3/studies/",
   getStudyList: "/v3/studies?format=summary",
   getStudyPublicKey: "/v3/studies/self/publicKey",
+  masterschedule: "/v3/schedulerconfigs",
   metadata: "/v3/sharedmodules/metadata",
   oauthSignIn: "/v3/auth/oauth/signIn",
   participants: "/v3/participants",

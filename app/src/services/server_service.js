@@ -812,6 +812,21 @@ export class ServerService {
   finishFileRevision(guid, createdOn) {
     return this.post(`${config.files}/${guid}/revisions/${createdOn}`);
   }
+  getMasterSchedules() {
+    return this.gethttp(config.masterschedule);
+  }
+  createMasterSchedule(schedule) {
+    return this.post(config.masterschedule, schedule);
+  }
+  getMasterSchedule(scheduleId) {
+    return this.gethttp(`${config.masterschedule}/${scheduleId}`);
+  }
+  updateMasterSchedule(masterschedule) {
+    return this.post(`${config.masterschedule}/${masterschedule.scheduleId}`, masterschedule);
+  }
+  deleteMasterSchedule(scheduleId) {
+    return this.del(`${config.masterschedule}/${scheduleId}`);
+  }
   addSessionStartListener(listener) {
     if (typeof listener !== "function") {
       throw new Error(ERROR);
