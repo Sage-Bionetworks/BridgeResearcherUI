@@ -245,7 +245,10 @@ function synapseAliasToUserId(alias) {
   if (!alias) {
     return Promise.resolve(alias);
   }
-  alias = alias.replace('@synapse.org', '');
+  alias = alias.replace('@synapse.org', '').trim();
+  if (/^\d+$/.test(alias)) {
+    return Promise.resolve(alias);
+  }
   return fetch('https://repo-prod.prod.sagebase.org/repo/v1/principal/alias', {
     method: 'POST',
     mode: 'cors',

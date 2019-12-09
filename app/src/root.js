@@ -44,12 +44,9 @@ let RootViewModel = function() {
     .obs("dialog", { name: "none" });
 
   self.mainPageObs.subscribe(self.selectedObs);
-  self.mainPageObs.subscribe(function() {
-    self.setEditorPanel("none", {});
-  });
-  self.showNav = function() {
-    $('#sidebar').sidebar('toggle');
-  };
+  self.mainPageObs.subscribe(() => self.setEditorPanel("none", {}));
+  self.showNav = () => $('#sidebar').sidebar('toggle');
+  
   self.setEditorPanel = function(name, params) {
     self.editorPanelObs(name);
     self.editorParamsObs(params);

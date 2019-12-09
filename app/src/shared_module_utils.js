@@ -98,7 +98,7 @@ function moduleHTML(object) {
 }
 
 export default {
-  loadNameMaps: loadNameMaps,
+  loadNameMaps,
   formatDescription,
   formatMetadataLinkedItem,
   formatTags,
