@@ -1,0 +1,41 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <h3>Master Schedules</h3>
+    </div>
+    <div class="fixed-header-buttons">
+      <button class="ui red tiny button" data-bind="disable: !atLeastOneChecked(), 
+        click: deleteItems">Delete</button>
+      <a href="#/admin/masterschedules/new" class="ui primary tiny button">New Master Schedule</a>
+    </div>
+  </div>
+  <div class="ui empty secondary pointing menu"></div>
+</div>
+<div class="scrollbox">
+  <errors id="studies"></errors>
+  <table class="ui compact selectable table">
+    <thead>
+      <tr>
+        <th width="10">
+          <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+        </th>
+        <th nowrap>Master Schedule</th>
+      </tr>
+    </thead>
+    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+      <tr>
+        <td colspan="2" data-bind="html: recordsMessageObs"></td>
+      </tr>
+    </tbody>
+    <tbody data-bind="foreach: itemsObs">
+      <tr>
+        <td>
+          <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+        </td>
+        <td nowrap>
+          <a data-bind="href: '#/admin/masterschedules/' + $data.scheduledId, text: $data.scheduledId"></a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
