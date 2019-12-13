@@ -22,7 +22,6 @@ export default function(params) {
 
   new Binder(self)
     .obs('disabled', true)
-    .obs('name', 'Select File')
     .obs('status')
     .obs('description')
     .obs('value', 0)
@@ -90,7 +89,6 @@ export default function(params) {
     self.fileInfo = event.target.files[0];
     let f = self.fileInfo;
     self.statusObs(f.description);
-    self.nameObs(f.name);
     self.disabledObs(false);
   }
 }

@@ -6,12 +6,7 @@
     <div class="content">
       <form method="post" class="ui form">
         <div class="field">
-          <label for="file" class="ui icon button">
-            <i class="file icon"></i> 
-            <span data-bind="text: nameObs">Select File</span>
-          </label>
-          <input id="file" type="file" style="display:none" 
-            data-bind="event: {change: updateFileControl}">
+          <input id="file" type="file" style="border:none" data-bind="event: {change: updateFileControl}">
         </div>
         <progress data-bind="attr:{ value: valueObs, max: maxObs }"></progress>
         <div class="field progress-status">
