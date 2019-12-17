@@ -63,6 +63,7 @@ export default function(params) {
   tables.prepareTable(self, { 
     name: "template",
     plural: "templates",
+    id: "template-history",
     refresh: load
   });
 
@@ -72,7 +73,7 @@ export default function(params) {
     serverService.publishTemplateRevision(params.guid, item.createdOn)
       .then(load)
       .then(utils.successHandler(self, e, "Revision published."))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: "template-history" }));
   };
   self.createHistoryLink = ko.computed(function() {
     return `#/templates/${self.templateTypeObs()}/${self.guidObs()}/history`;

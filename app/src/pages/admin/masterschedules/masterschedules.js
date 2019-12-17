@@ -13,6 +13,7 @@ export default function() {
     name: "master schedule",
     plural: "master schedules",
     delete: deleteMasterSchedule,
+    id: "masterschedules",
     refresh: load
   });
 

@@ -2,12 +2,10 @@
   <i data-bind="click:cancel" class="close icon"></i>
   <div class="header" data-bind="text: title"></div>
   <div class="content" style="max-height: 25rem; padding-bottom: .5rem; overflow-y: auto">
+    <errors id="select-surveys"></errors>
     <div class="ui list" data-bind="visible: itemsObs().length > 0, foreach: itemsObs">
-      <div
-        class="item"
-        data-bind="component: {name: $component.controlName, 
-                params: {checkedObs: $data.checkedObs, name: 'surveys', id: $data.guid}}"
-      >
+      <div class="item" data-bind="component: {name: $component.controlName, 
+        params: {checkedObs: $data.checkedObs, name: 'surveys', id: $data.guid}}">
         <span data-bind="text: $parent.name"></span>
       </div>
     </div>

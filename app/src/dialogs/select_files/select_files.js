@@ -28,13 +28,12 @@ export default function(params) {
   tables.prepareTable(self, {
     name: "file",
     type: "File",
+    id: "select-files",
     refresh: load
   });
 
   function match(file) {
-    return params.selected.filter(function(selectedFile) {
-      return selectedFile.guid === file.guid;
-    })[0];
+    return params.selected.filter((selectedFile) => selectedFile.guid === file.guid)[0];
   }
   function configToView(file) {
     let selectedFile = match(file);

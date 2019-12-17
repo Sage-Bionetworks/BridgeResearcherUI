@@ -5,10 +5,6 @@ import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
 
-function deleteItem(item) {
-  return serverService.deleteStudyReport(item.identifier);
-}
-
 export default function reports() {
   let self = this;
 
@@ -17,7 +13,8 @@ export default function reports() {
 
   tables.prepareTable(self, {
     name: "report",
-    delete: deleteItem,
+    delete: (item) => serverService.deleteStudyReport(item.identifier),
+    id: 'reports',
     refresh: load
   });
   self.addReport = function(vm, event) {
@@ -56,7 +53,7 @@ export default function reports() {
       .then(fn.handleForEach("items", processStudyReport))
       .then(fn.handleSort("items", "identifier"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'reports' }));
   }
   load();
 };

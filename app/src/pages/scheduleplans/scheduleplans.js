@@ -19,6 +19,7 @@ export default function schedulePlans() {
   tables.prepareTable(self, {
     name: "schedule",
     type: "SchedulePlan",
+    id: 'scheduleplans',
     refresh: load,
     delete: plan => serverService.deleteSchedulePlan(plan.guid, false),
     deletePermanently: plan => serverService.deleteSchedulePlan(plan.guid, true),
@@ -50,14 +51,10 @@ export default function schedulePlans() {
       .then(utils.successHandler(vm, event, confirmMsg))
       .catch(utils.failureHandler({ transient: false, id: 'scheduleplans' }));
   };
-  function getSchedulePlans() {
-    return serverService.getSchedulePlans(self.showDeletedObs());
-  }
 
   function load() {
-    scheduleUtils
-      .loadOptions()
-      .then(getSchedulePlans)
+    scheduleUtils.loadOptions()
+      .then(() => serverService.getSchedulePlans(self.showDeletedObs()))
       .then(fn.handleSort("items", "label"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .then(function(response) {

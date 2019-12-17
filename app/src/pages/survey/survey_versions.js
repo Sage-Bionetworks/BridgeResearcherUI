@@ -30,12 +30,9 @@ export default function surveyVersions(params) {
   tables.prepareTable(self, {
     name: "survey version",
     type: "Survey Version",
-    delete: function(item) {
-      return serverService.deleteSurvey(item, false);
-    },
-    deletePermanently: function(item) {
-      return serverService.deleteSurvey(item, true);
-    },
+    id: 'survey-versions',
+    delete: (item) => serverService.deleteSurvey(item, false),
+    deletePermanently: (item) => serverService.deleteSurvey(item, true),
     refresh: load,
     redirect: "#/surveys"
   });
@@ -82,8 +79,7 @@ export default function surveyVersions(params) {
   }
   function load() {
     // This is faster than it looks because of client-side caching
-    return serverService
-      .getSurvey(params.guid, params.createdOn)
+    return serverService.getSurvey(params.guid, params.createdOn)
       .then(binder.update())
       .then(getHistoryItems)
       .then(binder.update())

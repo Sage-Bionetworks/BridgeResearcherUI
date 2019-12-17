@@ -17,6 +17,7 @@
   <survey-tabset params="viewModel: $data"></survey-tabset>
 </div>
 <div class="scrollbox">
+  <errors id="survey-schema"></errors>
   <div data-bind="if: !publishedObs()">
     <p>This is a draft version of the survey. It has not been published, so there is no schema for it.</p>
   </div>

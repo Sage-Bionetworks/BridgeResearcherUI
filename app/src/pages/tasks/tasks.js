@@ -11,6 +11,7 @@ export default class Tasks {
     tables.prepareTable(this, {
       name: "task",
       type: "CompoundActivityDefinition",
+      id: 'tasks',
       delete: this.deleteItem,
       refresh: this.load.bind(this)
     });

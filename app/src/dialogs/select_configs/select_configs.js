@@ -19,9 +19,7 @@ export default function(params) {
   self.cancel = root.closeDialog;
 
   function selectById(selConfigId) {
-    return function(item) {
-      return item.id === selConfigId;
-    };
+    return (item) => item.id === selConfigId;
   }
   function selectByChecked(item) {
     return item.checkedObs();
@@ -38,13 +36,12 @@ export default function(params) {
   tables.prepareTable(self, {
     name: "config element",
     type: "AppConfigElement",
+    id: "select-configs",
     refresh: load
   });
 
   function match(config) {
-    return params.selected.filter(function(selectedConfig) {
-      return selectedConfig.id === config.id;
-    })[0];
+    return params.selected.filter((selectedConfig) => selectedConfig.id === config.id)[0];
   }
   function configToView(config) {
     let selectedConfig = match(config);

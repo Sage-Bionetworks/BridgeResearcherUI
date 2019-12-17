@@ -49,9 +49,7 @@ function arrayListener(recordsMessageObs, objName) {
   };
 }
 function uncheckAll(vm) {
-  return function() {
-    vm.checkAllObs(false);
-  };
+  return () => vm.checkAllObs(false);
 }
 function redirectHandler(vm, redirect) {
   return function(request) {
@@ -75,9 +73,9 @@ export default {
    */
   prepareTable: function(vm, options) {
     // TODO: Know what's confusing? Renaming all the options like this
+    let id = options.id;
     let objName = options.name;
     let objPlural = options.plural;
-    let objType = options.type;
     let deleteFunc = options.delete;
     let deletePermanentlyFunc = options.deletePermanently;
     let loadFunc = options.refresh;
@@ -89,16 +87,12 @@ export default {
     }
     vm.recordsMessageObs = ko.observable(LOADER_TEXT);
     vm.itemsObs.subscribe(arrayListener(vm.recordsMessageObs, objPlural || objName + "s"));
-    vm.atLeastOneChecked = function() {
-      return vm.itemsObs().some(hasBeenChecked);
-    };
+    vm.atLeastOneChecked = () => vm.itemsObs().some(hasBeenChecked);
 
     // Control on left side of header row that checks/unchecks all boxes on the page.
     vm.checkAllObs = ko.observable();
     vm.checkAllObs.subscribe(function(newValue) {
-      vm.itemsObs().map(function(item) {
-        item.checkedObs(newValue);
-      });
+      vm.itemsObs().map((item) => item.checkedObs(newValue));
     });
 
     if (loadFunc) {
@@ -114,7 +108,7 @@ export default {
             .then(loadFunc)
             .then(utils.successHandler(vm, event, del.confirmMsg))
             .then(redirectHandler(vm, redirectTo))
-            .catch(utils.failureHandler());
+            .catch(utils.failureHandler({ id }));
         });
       };
     }
@@ -129,7 +123,7 @@ export default {
             .then(uncheckAll(vm))
             .then(loadFunc)
             .then(redirectHandler(vm, redirectTo))
-            .catch(utils.failureHandler());
+            .catch(utils.failureHandler({ id }));
         }, "Delete FOREVER");
       };
     }
@@ -145,15 +139,12 @@ export default {
         item.deleted = false;
 
         event.target.parentNode.innerHTML = LOADER_TEXT;
-        return undeleteFunc(item)
-          .then(loadFunc)
+        return undeleteFunc(item).then(loadFunc)
           .then(utils.successHandler(self, event, titleCase(objName) + " has been restored."))
-          .catch(utils.failureHandler());
+          .catch(utils.failureHandler({ id }));
       };
     }
   },
-  hasBeenChecked: function(item) {
-    return item.checkedObs();
-  },
+  hasBeenChecked: (item) => item.checkedObs(),
   makeTableRowHandler: makeTableRowHandler
 };

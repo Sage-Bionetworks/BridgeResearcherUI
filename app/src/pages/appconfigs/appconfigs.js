@@ -12,15 +12,10 @@ export default function() {
   tables.prepareTable(self, {
     name: "app config",
     refresh: load,
-    delete: function(item) {
-      return serverService.deleteAppConfig(item.guid, false);
-    },
-    deletePermanently: function(item) {
-      return serverService.deleteAppConfig(item.guid, true);
-    },
-    undelete: function(item) {
-      return serverService.updateAppConfig(item);
-    }
+    id: "appconfigs",
+    delete: (item) => serverService.deleteAppConfig(item.guid, false),
+    deletePermanently: (item) => serverService.deleteAppConfig(item.guid, true),
+    undelete: (item) => serverService.updateAppConfig(item)
   });
 
   fn.copyProps(self, criteriaUtils, "label->criteriaLabel");
@@ -50,14 +45,9 @@ export default function() {
       .catch(utils.failureHandler({ transient: false, id: 'appconfigs' }));
   };
 
-  function getAppConfigs() {
-    return serverService.getAppConfigs(self.showDeletedObs());
-  }
-
   function load() {
-    scheduleUtils
-      .loadOptions()
-      .then(getAppConfigs)
+    scheduleUtils.loadOptions()
+      .then(() => serverService.getAppConfigs(self.showDeletedObs()))
       .then(fn.handleSort("items", "label"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .catch(utils.failureHandler({ id: 'appconfigs' }));

@@ -15,12 +15,8 @@ let failureHandler = utils.failureHandler({
 
 let session = null;
 
-serverService.addSessionStartListener(function(sess) {
-  session = sess;
-});
-serverService.addSessionEndListener(function() {
-  session = null;
-});
+serverService.addSessionStartListener((sess) => session = sess);
+serverService.addSessionEndListener(() => session = null);
 
 export default function consents(params) {
   let self = this;
@@ -32,10 +28,12 @@ export default function consents(params) {
     .obs("status")
     .obs("title", "&#160;");
 
-  tables.prepareTable(self, { name: "consent" });
+  tables.prepareTable(self, { 
+    name: "consent",
+    id: 'participant-consents'
+  });
 
-  serverService
-    .getParticipantName(params.userId)
+  serverService.getParticipantName(params.userId)
     .then(function(part) {
       self.titleObs(part.name);
       self.statusObs(part.status);
@@ -46,8 +44,7 @@ export default function consents(params) {
     let subpopGuid = vm.consentURL.split("/subpopulations/")[1].split("/consents/")[0];
     alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
       utils.startHandler(vm, event);
-      serverService
-        .resendConsentAgreement(params.userId, subpopGuid)
+      serverService.resendConsentAgreement(params.userId, subpopGuid)
         .then(utils.successHandler(vm, event, "Resent consent agreement."))
         .catch(failureHandler);
     });
@@ -61,8 +58,7 @@ export default function consents(params) {
   };
   self.finishWithdrawal = function(reasonString) {
     let reason = reasonString ? { reason: reasonString } : {};
-    serverService
-      .withdrawParticipantFromStudy(params.userId, reason)
+    serverService.withdrawParticipantFromStudy(params.userId, reason)
       .then(root.closeDialog)
       .then(load)
       .then(utils.successHandler(self, null, "User has been withdrawn from the study."))
@@ -78,8 +74,7 @@ export default function consents(params) {
   };
   self.finishSubpopWithdrawal = function(reasonString, subpopGuid) {
     let reason = reasonString ? { reason: reasonString } : {};
-    serverService
-      .withdrawParticipantFromSubpopulation(params.userId, subpopGuid, reason)
+    serverService.withdrawParticipantFromSubpopulation(params.userId, subpopGuid, reason)
       .then(root.closeDialog)
       .then(load)
       .then(utils.successHandler(self, null, "User has been withdrawn from this consent group."))

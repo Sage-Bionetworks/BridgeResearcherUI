@@ -20,9 +20,7 @@ export default function(params) {
   self.cancel = root.closeDialog;
 
   function selectById(selSchemaId) {
-    return function(item) {
-      return item.id === selSchemaId;
-    };
+    return (item) => item.id === selSchemaId;
   }
   function selectByChecked(item) {
     return item.checkedObs();
@@ -39,13 +37,12 @@ export default function(params) {
   tables.prepareTable(self, {
     name: "schema",
     type: "UploadSchema",
+    id: "select-schemas",
     refresh: load
   });
 
   function match(schema) {
-    return params.selected.filter(function(selectedSchema) {
-      return selectedSchema.id === schema.schemaId;
-    })[0];
+    return params.selected.filter((selectedSchema) => selectedSchema.id === schema.schemaId)[0];
   }
   function schemaToView(schema) {
     let selectedSchema = match(schema);

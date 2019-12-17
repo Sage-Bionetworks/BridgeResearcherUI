@@ -23,7 +23,7 @@ export default function(params) {
   self.searchObs.subscribe(load);
   self.cancel = params.closeModuleBrowser;
 
-  tables.prepareTable(self, { name: params.type });
+  tables.prepareTable(self, { name: params.type, id: 'module-browser' });
 
   self.importItem = function(item, event) {
     utils.startHandler(self, event);

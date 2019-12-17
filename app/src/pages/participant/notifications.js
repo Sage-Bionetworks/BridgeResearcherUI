@@ -24,16 +24,18 @@ export default function notifications(params) {
     .obs('messageBody')
     .obs('sentOn');
 
-  serverService
-    .getParticipantName(params.userId)
+  serverService.getParticipantName(params.userId)
     .then(function(part) {
       self.titleObs(part.name);
       self.nameObs(part.name);
       self.statusObs(part.status);
     })
-    .catch(utils.failureHandler());
+    .catch(utils.failureHandler({ id: 'notifications' }));
 
-  tables.prepareTable(self, { name: "notification registration" });
+  tables.prepareTable(self, { 
+    name: "notification registration",
+    id: 'notifications'
+  });
 
   self.sendNotification = function() {
     root.openDialog("send_notification", {
@@ -47,8 +49,7 @@ export default function notifications(params) {
   };
 
   function load() {
-    serverService
-      .getParticipant(params.userId)
+    serverService.getParticipant(params.userId)
       .then(participant => {
         self.hasPhoneObs(participant.phone != null);
         return participant.id;
@@ -68,7 +69,7 @@ export default function notifications(params) {
           });
         }
       })
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'notifications' }));
   }
   load();
 };

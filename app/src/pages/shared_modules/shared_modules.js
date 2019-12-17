@@ -20,6 +20,7 @@ export default function() {
   tables.prepareTable(self, {
     name: "shared module",
     type: "SharedModuleMetadata",
+    id: 'shared-modules',
     refresh: load,
     delete: (item) => serverService.deleteMetadata(item.id, false),
     deletePermanently: (item) => serverService.deleteMetadata(item.id, true),
@@ -67,8 +68,7 @@ export default function() {
     alerts.confirmation(config.msgs.shared_modules.PUBLISH, function() {
       utils.startHandler(self, event);
       item.published = true;
-      serverService
-        .then(load)
+      serverService.then(load)
         .then(utils.successHandler(self, event, "Shared module deleted."))
         .catch(utils.failureHandler({ id: 'shared-modules' }));
     });

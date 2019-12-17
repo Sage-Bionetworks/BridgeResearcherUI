@@ -9,7 +9,8 @@ import utils from "../../utils";
 
 const notFound = utils.failureHandler({
   redirectTo: "schemas",
-  redirectMsg: "Schema not found."
+  redirectMsg: "Schema not found.",
+  id: 'schema-versions'
 });
 
 export default function schemaVersions(params) {
@@ -27,16 +28,11 @@ export default function schemaVersions(params) {
   tables.prepareTable(self, {
     name: "schema revision",
     type: "UploadSchema",
+    id: 'schema-versions',
     refresh: load,
-    delete: function(item) {
-      return serverService.deleteSchemaRevision(item, false);
-    },
-    deletePermanently: function(item) {
-      return serverService.deleteSchemaRevision(item, true);
-    },
-    undelete: function(item) {
-      return serverService.updateUploadSchema(item);
-    }
+    delete: (item) => serverService.deleteSchemaRevision(item, false),
+    deletePermanently: (item) => serverService.deleteSchemaRevision(item, true),
+    undelete: (item) => serverService.updateUploadSchema(item)
   });
 
   fn.copyProps(self, criteriaUtils, "label->criteriaLabel");
@@ -60,18 +56,16 @@ export default function schemaVersions(params) {
   self.publish = function(item) {
     utils.startHandler(item, event);
 
-    serverService
-      .getUploadSchema(item.schemaId, item.revision)
+    serverService.getUploadSchema(item.schemaId, item.revision)
       .then(markSchemaPublished)
       .then(serverService.updateUploadSchema.bind(serverService))
       .then(load)
       .then(utils.successHandler(item, event, "Schema published."))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: 'schema-versions' }));
   };
 
   function load() {
-    sharedModuleUtils
-      .loadNameMaps()
+    sharedModuleUtils.loadNameMaps()
       .then(getUploadSchema)
       .then(fn.handleObsUpdate(self.nameObs, "name"))
       .then(fn.handleObsUpdate(self.moduleIdObs, "moduleId"))

@@ -8,24 +8,17 @@
       <h3 data-bind="text: nameObs"></h3>
     </div>
     <div class="fixed-header-buttons">
-      <button
-        data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems"
-        class="ui red tiny button"
-      >
+      <button data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems"
+        class="ui red tiny button">
         Delete
       </button>
       <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
-        <div
-          class="ui tiny button"
-          data-bind="css:{disabled: !atLeastOneChecked()},
-                    semantic: 'dropdown-button-toggle', container: '.buttons'"
-        >
+        <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()},
+          semantic: 'dropdown-button-toggle', container: '.buttons'">
           Delete
         </div>
-        <div
-          class="ui primary tiny floating dropdown icon button"
-          data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}"
-        >
+        <div class="ui primary tiny floating dropdown icon button"
+          data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
           <i class="dropdown icon"></i>
           <div class="menu">
             <div class="item" data-bind="click: deleteItems">Delete</div>
@@ -38,6 +31,7 @@
   <sharedmodule-tabset params="viewModel: $data"></sharedmodule-tabset>
 </div>
 <div class="scrollbox">
+  <errors id="shared-module-versions"></errors>
   <table class="ui compact selectable table">
     <thead>
       <tr>

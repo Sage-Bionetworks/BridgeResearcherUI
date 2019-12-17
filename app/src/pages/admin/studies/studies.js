@@ -17,6 +17,7 @@ export default function() {
     name: "study",
     plural: "studies",
     delete: deleteStudy,
+    id: "studies",
     refresh: load
   });
 

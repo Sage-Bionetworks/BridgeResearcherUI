@@ -21,13 +21,12 @@ export default function files() {
 
   // capture post-processing of the pager control
   self.postLoadPagerFunc = () => {};
-  self.postLoadFunc = function(func) {
-    self.postLoadPagerFunc = func;
-  }
+  self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
 
   tables.prepareTable(self, {
     name: "file",
     type: "File",
+    id: "files",
     refresh: () => load(self.query),
     delete: file => serverService.deleteFile(file.guid, false),
     deletePermanently: file => serverService.deleteFile(file.guid, true),
@@ -43,9 +42,7 @@ export default function files() {
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .then(self.postLoadPagerFunc)
       .then(function(response) {
-        return Promise.map(response.items, function(file) {
-          file.deletedObs = ko.observable(file.deleted || false);
-        });
+        return Promise.map(response.items, (file) => file.deletedObs = ko.observable(file.deleted || false));
       }).catch(notFound);
   }
   ko.postbox.subscribe('f-refresh', load);

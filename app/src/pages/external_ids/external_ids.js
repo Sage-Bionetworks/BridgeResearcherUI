@@ -9,10 +9,6 @@ import utils from "../../utils";
 
 let OPTIONS = { offsetBy: null, pageSize: 1, assignmentFilter: false };
 
-function deleteItem(item) {
-  return serverService.deleteExternalId(item.identifier);
-}
-
 export default function externalIds() {
   let self = this;
 
@@ -33,7 +29,8 @@ export default function externalIds() {
   fn.copyProps(self, root, "isAdmin", "isDeveloper", "isResearcher");
   tables.prepareTable(self, {
     name: "external ID",
-    delete: deleteItem,
+    delete: (item) => serverService.deleteExternalId(item.identifier),
+    id: 'external-ids',
     refresh: load
   });
   self.canDeleteObs = ko.computed(() => self.isAdmin());
@@ -57,9 +54,7 @@ export default function externalIds() {
     return response;
   }
   function convertToPaged(identifier) {
-    return function() {
-      return { items: [{ identifier: identifier }] };
-    };
+    return () => { items: [{ identifier }] };
   }
   function msgIfNoRecords(response) {
     if (response.items.length === 0) {
@@ -91,24 +86,19 @@ export default function externalIds() {
   self.createFromNext = function(vm, event) {
     self.showResultsObs(false);
     utils.startHandler(vm, event);
-    serverService
-      .getExternalIds(OPTIONS)
+    serverService.getExternalIds(OPTIONS)
       .then(extractId)
       .then(createNewCredentials)
       .then(updatePageWithResult)
       .then(utils.successHandler(vm, event))
       .catch(utils.failureHandler({ transient: false, id: 'external-ids' }));
   };
-  self.link = function(item) {
-    return "#/participants/" + encodeURIComponent("externalId:" + item.identifier) + "/general";
-  };
-  self.doSearch = function(vm, event) {
-    self.callback(event);
-  };
+  self.link = (item) => "#/participants/" + encodeURIComponent("externalId:" + item.identifier) + "/general";
+  self.doSearch = (vm, event) => self.callback(event);
+
   // This is called from the dialog that allows a user to enter a new external identifier.
   self.createFromNew = function(identifier) {
-    serverService
-      .addExternalIds([identifier])
+    serverService.addExternalIds([identifier])
       .then(convertToPaged(identifier))
       .then(extractId)
       .then(createNewCredentials)
@@ -116,20 +106,16 @@ export default function externalIds() {
       .then(utils.successHandler())
       .catch(utils.failureHandler({ id: 'external-ids' }));
   };
-  self.matchesSubstudy = function(substudyId) {
-    return fn.substudyMatchesUser(self.userSubstudies, substudyId);
-  };
+  self.matchesSubstudy = (substudyId) => fn.substudyMatchesUser(self.userSubstudies, substudyId);
 
-  serverService
-    .getSession()
+  serverService.getSession()
     .then(initFromSession)
     .then(binder.assign("study"));
 
   function load(params) {
     params = params || {};
     params.idFilter = self.idFilterObs();
-    return serverService
-      .getExternalIds(params)
+    return serverService.getExternalIds(params)
       .then(binder.update("total", "items"))
       .then(msgIfNoRecords)
       .catch(utils.failureHandler({ id: 'external-ids' }));
