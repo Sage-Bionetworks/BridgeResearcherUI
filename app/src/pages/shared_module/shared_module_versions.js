@@ -9,7 +9,8 @@ import utils from "../../utils";
 
 const FAILURE_HANDLER = utils.failureHandler({
   redirectTo: "shared_modules",
-  redirectMsg: "Shared module not found"
+  redirectMsg: "Shared module not found",
+  id: 'shared-module-versions'
 });
 
 export default function(params) {
@@ -19,16 +20,11 @@ export default function(params) {
   tables.prepareTable(self, {
     name: "shared module version",
     redirect: "#/shared_modules",
+    id: 'shared-module-versions',
     refresh: load,
-    delete: function(item) {
-      return serverService.deleteMetadataVersion(item.id, item.version, false);
-    },
-    deletePermanently: function(item) {
-      return serverService.deleteMetadataVersion(item.id, item.version, true);
-    },
-    undelete: function(item) {
-      return serverService.updateMetadata(item);
-    }
+    delete: (item) => serverService.deleteMetadataVersion(item.id, item.version, false),
+    deletePermanently: (item) => serverService.deleteMetadataVersion(item.id, item.version, true),
+    undelete: (item) => serverService.updateMetadata(item)
   });
 
   let binder = new Binder(self)
@@ -48,13 +44,9 @@ export default function(params) {
         .updateMetadata(item)
         .then(load)
         .then(utils.successHandler(self, event, "Shared module published."))
-        .catch(utils.failureHandler());
+        .catch(utils.failureHandler({ id: 'shared-module-versions' }));
     });
   };
-
-  function getMetadataAllVersions() {
-    return serverService.getMetadataAllVersions(params.id, self.showDeletedObs());
-  }
 
   function load() {
     return serverService
@@ -62,7 +54,7 @@ export default function(params) {
       .then(binder.update())
       .then(binder.assign("metadata"))
       .then(sharedModuleUtils.loadNameMaps)
-      .then(getMetadataAllVersions)
+      .then(() => serverService.getMetadataAllVersions(params.id, self.showDeletedObs()))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .catch(FAILURE_HANDLER);
   }

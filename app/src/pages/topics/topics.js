@@ -14,16 +14,11 @@ export default function() {
   tables.prepareTable(self, {
     name: "topic",
     type: "NotificationTopic",
+    id: "topics",
     refresh: load,
-    delete: function(topic) {
-      return serverService.deleteTopic(topic.guid, false);
-    },
-    deletePermanently: function(topic) {
-      return serverService.deleteTopic(topic.guid, true);
-    },
-    undelete: function(topic) {
-      return serverService.updateTopic(topic);
-    }
+    delete: (topic) => serverService.deleteTopic(topic.guid, false),
+    deletePermanently: (topic) => serverService.deleteTopic(topic.guid, true),
+    undelete: (topic) => serverService.updateTopic(topic)
   });
 
   function initCriteria(response) {
@@ -35,16 +30,12 @@ export default function() {
     return response;
   }
 
-  function getTopics() {
-    return serverService.getAllTopics(self.showDeletedObs());
-  }
-
   function load() {
-    getTopics()
+    return serverService.getAllTopics(self.showDeletedObs())
       .then(initCriteria)
       .then(fn.handleSort("items", "name"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: "topics" }));
   }
   load();
 };

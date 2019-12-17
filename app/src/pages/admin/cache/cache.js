@@ -18,12 +18,8 @@ function mapKey(cacheKey) {
 function deleteItem(item) {
   return serverService.deleteCacheKey(item.key);
 }
-serverService.addSessionStartListener(function(session) {
-  adminEmail = session.email;
-});
-serverService.addSessionEndListener(function() {
-  adminEmail = null;
-});
+serverService.addSessionStartListener((session) => adminEmail = session.email);
+serverService.addSessionEndListener(() => adminEmail = null);
 
 export default function() {
   let self = this;
@@ -33,6 +29,7 @@ export default function() {
   tables.prepareTable(self, {
     name: "cache key",
     delete: deleteItem,
+    id: "cache",
     refresh: load
   });
 
@@ -57,18 +54,14 @@ export default function() {
     for (let i = 0; i <= pages; i++) {
       promise = promise.delay(DELAY).then(processOnePage(promise, i));
     }
-    promise.then(function() {
-      self.signOutStatusObs("That's it. Everyone has been signed out.");
-    });
+    promise.then(() => self.signOutStatusObs("That's it. Everyone has been signed out."));
   }
   function processOnePage(promise, i) {
     return () => serverService.getParticipants(PAGE_SIZE * i, PAGE_SIZE)
       .then(processAllRecords(promise));
   }
   function processAllRecords(promise) {
-    return function(response) {
-      return response.items.filter(filterParticipants).reduce(processOneRecord, promise);
-    };
+    return (response) => response.items.filter(filterParticipants).reduce(processOneRecord, promise);
   }
   function filterParticipants(participant) {
     return participant.status !== "unverified" && participant.email !== adminEmail;

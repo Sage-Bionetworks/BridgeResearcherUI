@@ -18,16 +18,11 @@ export default function schemas() {
   tables.prepareTable(self, {
     name: "schemas",
     type: "UploadSchema",
+    id: 'schemas',
     refresh: load,
-    delete: function(item) {
-      return serverService.deleteSchema(item.schemaId, false);
-    },
-    deletePermanently: function(item) {
-      return serverService.deleteSchema(item.schemaId, true);
-    },
-    undelete: function(item) {
-      return serverService.updateUploadSchema(item);
-    }
+    delete: (item) => serverService.deleteSchema(item.schemaId, false),
+    deletePermanently: (item) => serverService.deleteSchema(item.schemaId, true),
+    undelete: (item) => serverService.updateUploadSchema(item)
   });
 
   function closeCopySchemasDialog() {
@@ -52,14 +47,10 @@ export default function schemas() {
     load();
   };
 
-  function getAllUploadSchemas() {
-    return serverService.getAllUploadSchemas(self.showDeletedObs());
-  }
-
   function load() {
     return sharedModuleUtils
       .loadNameMaps()
-      .then(getAllUploadSchemas)
+      .then(() => serverService.getAllUploadSchemas(self.showDeletedObs()))
       .then(fn.handleSort("items", "name"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .catch(utils.failureHandler({ id: 'schemas' }));

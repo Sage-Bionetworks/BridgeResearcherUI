@@ -24,7 +24,7 @@ export default class UploadsViewModel {
     this.vm = this;
     fn.copyProps(this, fn, "formatDateTime", "identity->callback");
     fn.copyProps(this, root, "isAdmin");
-    tables.prepareTable(this, { name: "upload" });
+    tables.prepareTable(this, { name: "upload", id: "uploads" });
   }
   makeSuccess(vm, event) {
     return response => {

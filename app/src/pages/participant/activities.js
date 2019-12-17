@@ -29,7 +29,8 @@ export default function activities(params) {
 
   tables.prepareTable(self, {
     name: "activitie",
-    type: "Activity"
+    type: "Activity",
+    id: 'participant-activities'
   });
 
   serverService.getParticipantName(params.userId)
@@ -86,8 +87,7 @@ export default function activities(params) {
     });
   }
 
-  sharedModuleUtils
-    .loadNameMaps()
+  sharedModuleUtils.loadNameMaps()
     .then(serverService.getSchedulePlans.bind(serverService))
     .then(processPlans)
     .then(sortPlans);

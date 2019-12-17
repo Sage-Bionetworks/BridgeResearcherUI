@@ -18,7 +18,10 @@ export default function surveySchema(params) {
     .obs("items[]", [])
     .obs("name");
 
-  tables.prepareTable(self, { name: "schema" });
+  tables.prepareTable(self, { 
+    name: "schema",
+    if: 'survey-schema'
+   });
 
   self.formatDateTime = fn.formatDateTime;
 

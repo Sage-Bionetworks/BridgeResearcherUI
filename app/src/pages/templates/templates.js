@@ -29,6 +29,7 @@ export default function(params) {
   tables.prepareTable(self, {
     name: "templates",
     type: "Template",
+    id: 'templates',
     refresh: () => load(self.query),
     delete: (template) => serverService.deleteTemplate(template.guid, false),
     deletePermanently: (template)  => serverService.deleteTemplate(template.guid, true),

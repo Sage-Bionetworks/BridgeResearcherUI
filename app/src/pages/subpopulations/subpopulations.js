@@ -14,18 +14,15 @@ export default function subpopulations() {
   tables.prepareTable(self, {
     name: "consent group",
     type: "Subpopulation",
+    id: 'subpops',
     refresh: load,
     delete: (plan) => serverService.deleteSubpopulation(plan.guid, false),
     deletePermanently: (plan) => serverService.deleteSubpopulation(plan.guid, true),
     undelete: (plan) => serverService.updateSubpopulation(plan)
   });
 
-  function getSubpopulations() {
-    return serverService.getAllSubpopulations(self.showDeletedObs());
-  }
-
   function load() {
-    getSubpopulations()
+    return serverService.getAllSubpopulations(self.showDeletedObs())
       .then(fn.handleSort("items", "name"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .catch(utils.failureHandler({ id: 'subpops' }));

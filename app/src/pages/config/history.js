@@ -27,26 +27,17 @@ export default function history(params) {
   tables.prepareTable(self, {
     name: "configuration element revision",
     refresh: load,
+    id: "config-el-history",
     redirect: "#/configs",
-    delete: function(item) {
-      return serverService.deleteAppConfigElementRevision(item.id, item.revision, false);
-    },
-    deletePermanently: function(item) {
-      return serverService.deleteAppConfigElementRevision(item.id, item.revision, true);
-    },
-    undelete: function(item) {
-      return serverService.updateAppConfigElement(item);
-    }
+    delete: (item) => serverService.deleteAppConfigElementRevision(item.id, item.revision, false),
+    deletePermanently: (item) => serverService.deleteAppConfigElementRevision(item.id, item.revision, true),
+    undelete: (item) => serverService.updateAppConfigElement(item)
   });
-
-  function getRevisions() {
-    return serverService.getAppConfigElementRevisions(params.id, self.showDeletedObs());
-  }
 
   function load() {
     serverService
       .getAppConfigElement(params.id, params.revision)
-      .then(getRevisions)
+      .then(() => serverService.getAppConfigElementRevisions(params.id, self.showDeletedObs()))
       .then(fn.handleSort("items", "label"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .catch(failureHandler);

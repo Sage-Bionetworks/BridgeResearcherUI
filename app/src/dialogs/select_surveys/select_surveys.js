@@ -20,9 +20,7 @@ export default function(params) {
   self.cancel = root.closeDialog;
 
   function selectByGuid(selGuid) {
-    return function(item) {
-      return item.guid === selGuid;
-    };
+    return (item) => item.guid === selGuid;
   }
   function selectByChecked(item) {
     return item.checkedObs();
@@ -39,13 +37,12 @@ export default function(params) {
   tables.prepareTable(self, {
     name: "survey",
     type: "Survey",
+    id: "select-surveys",
     refresh: load
   });
 
   function match(survey) {
-    return params.selected.filter(function(selectedSurvey) {
-      return selectedSurvey.guid === survey.guid;
-    })[0];
+    return params.selected.filter((selectedSurvey) => selectedSurvey.guid === survey.guid)[0];
   }
   function surveyToView(survey) {
     let selectedSurvey = match(survey);
@@ -60,8 +57,7 @@ export default function(params) {
   }
 
   function load() {
-    serverService
-      .getSurveys()
+    serverService.getSurveys()
       .then(fn.handleMap("items", surveyToView))
       .then(fn.handleSort("items", "name"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))

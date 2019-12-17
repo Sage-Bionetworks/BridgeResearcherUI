@@ -22,7 +22,8 @@ export default function activityEvents(params) {
 
   tables.prepareTable(self, {
     name: "activity event",
-    type: "Activity Event"
+    type: "Activity Event",
+    id: 'participant-activity-events'
   });
 
   self.formatDateTime = fn.formatDateTime;
@@ -35,32 +36,25 @@ export default function activityEvents(params) {
     return "";
   };
 
-  serverService
-    .getParticipantName(params.userId)
+  serverService.getParticipantName(params.userId)
     .then(function(part) {
       self.titleObs(part.name);
       self.statusObs(part.status);
     })
     .catch(failureHandler);
 
-  serverService
-    .getParticipantActivityEvents(params.userId)
+  serverService.getParticipantActivityEvents(params.userId)
     .then(fn.handleSort("items", "timestamp", true))
     .then(fn.handleObsUpdate(self.itemsObs, "items"))
     .catch(failureHandler);
 
   var activitiesMap = {};
 
-  optionsService
-    .getActivityOptions()
+  optionsService.getActivityOptions()
     .then(function(array) {
-      array.forEach(function(option) {
-        activitiesMap[option.value] = option.label;
-      });
+      array.forEach((option) => activitiesMap[option.value] = option.label);
     })
-    .then(function() {
-      return serverService.getParticipantActivityEvents(params.userId);
-    })
+    .then(() => serverService.getParticipantActivityEvents(params.userId))
     .then(fn.handleSort("items", "timestamp", true))
     .then(fn.handleObsUpdate(self.itemsObs, "items"))
     .catch(failureHandler);

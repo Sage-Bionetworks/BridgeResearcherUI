@@ -12,6 +12,7 @@
   <schema-tabset params="viewModel: $data"></schema-tabset>
 </div>
 <div class="scrollbox">
+  <errors id="schema-versions"></errors>
   <table class="ui compact selectable table">
     <thead>
       <tr>
@@ -28,14 +29,6 @@
     </tbody>
     <tbody data-bind="foreach: itemsObs">
       <tr data-bind="css: {negative: $data.deleted}">
-        <!--
-                <td>
-                    <ui-checkbox data-bind="visible: !$data.deletedObs()" 
-                        params="checkedObs: $data.checkedObs"></ui-checkbox>
-                    <i data-bind="visible: $data.deletedObs, click: $parent.undelete" 
-                        style="cursor: pointer" class="green undo icon"></i>
-                </td>
-                -->
         <td width="50%">
           <a data-bind="href: $parent.link($data), text: $data.name"></a>
         </td>
@@ -48,11 +41,4 @@
       </tr>
     </tbody>
   </table>
-  <!--
-    <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
-        <ui-checkbox params="checkedObs: showDeletedObs">
-            Show deleted upload schema revisions
-        </ui-checkbox>
-    </div>
-    -->
 </div>

@@ -17,7 +17,8 @@ export default function report(params) {
 
   tables.prepareTable(self, {
     name: "report",
-    delete: deleteItem,
+    delete: (item) => serverService.deleteParticipantReportRecord(params.userId, params.identifier, item.date),
+    id: 'participant-report',
     refresh: load
   });
 
@@ -46,9 +47,7 @@ export default function report(params) {
   }).catch(failureHandler);
 
   self.isDeveloper = root.isDeveloper;
-  self.linkMaker = function() {
-    return "#/participants/" + self.userIdObs() + "/reports";
-  };
+  self.linkMaker = () => "#/participants/" + self.userIdObs() + "/reports";
 
   self.addReport = function(vm, event) {
     root.openDialog("report_editor", {
@@ -64,9 +63,7 @@ export default function report(params) {
     root.closeDialog();
     load();
   };
-  self.toggle = function(model) {
-    model.collapsedObs(!model.collapsedObs());
-  };
+  self.toggle = (model) => model.collapsedObs(!model.collapsedObs());
   self.editReportRecord = function(item) {
     root.openDialog("report_editor", {
       add: false,
@@ -81,9 +78,6 @@ export default function report(params) {
     return false;
   };
 
-  function deleteItem(item) {
-    return serverService.deleteParticipantReportRecord(params.userId, params.identifier, item.date);
-  }
   function loadReport() {
     let startDate = fn.formatDate(self.startDateObs(), 'iso');
     let endDate = fn.formatDate(self.endDateObs(), 'iso');

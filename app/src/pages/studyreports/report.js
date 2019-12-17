@@ -43,21 +43,17 @@ export default function report(params) {
 
   function publicToggled(newValue) {
     utils.startHandler(self, event);
-    serverService
-      .updateStudyReportIndex({ identifier: params.id, public: newValue })
+    serverService.updateStudyReportIndex({ identifier: params.id, public: newValue })
       .then(fn.handleStaticObsUpdate(self.publicObs, newValue))
       .then(fn.handleStaticObsUpdate(self.toggleObs, newValue))
       .then(utils.successHandler(self, event, "Report updated."))
       .catch(utils.failureHandler());
   }
   function loadIndex() {
-    return serverService
-      .getStudyReportIndex(params.id)
+    return serverService.getStudyReportIndex(params.id)
       .then(fn.handleObsUpdate(self.publicObs, "public"))
       .then(fn.handleObsUpdate(self.toggleObs, "public"))
-      .then(function(response) {
-        self.toggleObs.subscribe(publicToggled, null, "change");
-      });
+      .then(() => self.toggleObs.subscribe(publicToggled, null, "change"));
   }
   loadIndex();
 
@@ -67,7 +63,8 @@ export default function report(params) {
 
   tables.prepareTable(self, {
     name: "report record",
-    delete: deleteItem
+    delete: (item) => serverService.deleteStudyReportRecord(params.id, item.date),
+    id: "report"
   });
 
   self.addReport = function(vm, event) {
@@ -122,9 +119,6 @@ export default function report(params) {
     load();
   };
 
-  function deleteItem(item) {
-    return serverService.deleteStudyReportRecord(params.id, item.date);
-  }
   function loadStudyReportRecords(index) {
     self.substudyIds = index.substudyIds;
     let startDate = firstDayOfMonth(self.currentYear, self.currentMonth);

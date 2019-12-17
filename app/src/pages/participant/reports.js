@@ -23,8 +23,7 @@ export default function reports(params) {
 
   fn.copyProps(self, root, "isDeveloper", "isResearcher");
 
-  serverService
-    .getParticipantName(params.userId)
+  serverService.getParticipantName(params.userId)
     .then(function(part) {
       self.titleObs(part.name);
       self.nameObs(part.name);
@@ -34,13 +33,13 @@ export default function reports(params) {
 
   tables.prepareTable(self, {
     name: "report",
-    delete: deleteItem,
+    delete: (item) => serverService.deleteParticipantReport(item.identifier, params.userId),
+    id: 'participant-reports',
     refresh: load
   });
 
-  self.reportURL = function(item) {
-    return "#/participants/" + self.userIdObs() + "/reports/" + item.identifier;
-  };
+  self.reportURL = (item) => "#/participants/" + self.userIdObs() + "/reports/" + item.identifier;
+
   self.addReport = function(vm, event) {
     root.openDialog("report_editor", {
       add: true,
@@ -59,10 +58,7 @@ export default function reports(params) {
       self.substudyIds.length === 0 || 
       self.substudyIds.some((el) => item.substudyIds.includes(el));
   };
-
-  function deleteItem(item) {
-    return serverService.deleteParticipantReport(item.identifier, params.userId);
-  }
+  
   function load() {
     serverService.getSession()
       .then((session) => self.substudyIds = session.substudyIds)

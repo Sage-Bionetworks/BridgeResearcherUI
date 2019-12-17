@@ -43,25 +43,23 @@ export default function surveys() {
   tables.prepareTable(self, {
     name: "survey",
     type: "Survey",
+    id: 'surveys',
     refresh: load,
     delete: function(item) {
       return serverService.getSurveyAllRevisions(item.guid).then(response => {
-        return Promise.map(response.items, item => {
-          return serverService.deleteSurvey(item, false);
-        });
+        return Promise.map(response.items, 
+          (item) => serverService.deleteSurvey(item, false));
       });
     },
     deletePermanently: function(item) {
       return serverService.getSurveyAllRevisions(item.guid, true).then(response => {
-        return Promise.map(response.items, item => {
-          return serverService.deleteSurvey(item, true);
-        });
+        return Promise.map(response.items, 
+          (item) => serverService.deleteSurvey(item, true));
       });
     },
     undelete: function(item) {
       // We need to pick up the existing questions or we'll wipe out the elements
-      return serverService
-        .getSurvey(item.guid, item.createdOn)
+      return serverService.getSurvey(item.guid, item.createdOn)
         .then(item => {
           item.deleted = false;
           return item;
@@ -71,12 +69,7 @@ export default function surveys() {
   });
 
   self.formatSchedules = function(survey) {
-    return survey
-      .schedulePlanObs()
-      .map(function(obj) {
-        return obj.label;
-      })
-      .join(", ");
+    return survey.schedulePlanObs().map((obj) => obj.label).join(", ");
   };
   self.copySurveys = function(vm, event) {
     let copyables = self.itemsObs().filter(tables.hasBeenChecked);

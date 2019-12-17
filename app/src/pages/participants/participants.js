@@ -16,9 +16,6 @@ function assignClassForStatus(participant) {
   // does not have sharing scope so we can't show it on summary page.
   return cssClassNameForStatus[participant.status];
 }
-function deleteItem(participant) {
-  return serverService.deleteParticipant(participant.id);
-}
 function getId(id) {
   return serverService.getParticipant(id);
 }
@@ -52,7 +49,8 @@ export default function participants() {
 
   tables.prepareTable(self, {
     name: "participant",
-    delete: deleteItem,
+    id: "participants",
+    delete: (item) => serverService.deleteParticipant(item.id),
     refresh: () => ko.postbox.publish("page-refresh")
   });
 
@@ -124,7 +122,7 @@ export default function participants() {
     }
     promise.catch((e) => {
       event.target.parentNode.parentNode.classList.remove("loading");
-      utils.failureHandler({ transient: false })(e);
+      utils.failureHandler({ transient: false, id: "participants" })(e);
     });
   };
   self.exportDialog = function() {
@@ -136,7 +134,7 @@ export default function participants() {
 
     return serverService.searchAccountSummaries(search)
       .then(load)
-      .catch(utils.failureHandler());
+      .catch(utils.failureHandler({ id: "participants" }));
   };
 
 };

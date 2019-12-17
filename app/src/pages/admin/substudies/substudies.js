@@ -9,6 +9,7 @@ export default function() {
   tables.prepareTable(self, {
     name: "substudy",
     plural: "substudies",
+    id: "substudies",
     refresh: load,
     delete: (item) => serverService.deleteSubstudy(item.id, false),
     deletePermanently: (item) => serverService.deleteSubstudy(item.id, true),

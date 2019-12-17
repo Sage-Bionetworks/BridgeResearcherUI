@@ -30,12 +30,12 @@ export default function editor(params) {
 
   // capture post-processing of the pager control
   self.postLoadPagerFunc = () => {};
-  self.postLoadFunc = function(func) {
-    self.postLoadPagerFunc = func;
-  }
+  self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
+  
   tables.prepareTable(self, {
     name: "file revisions",
     type: "File Revisions",
+    id: "file",
     refresh: () => loadRevisions(self.query)
   });
 

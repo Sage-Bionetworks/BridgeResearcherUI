@@ -53,12 +53,11 @@ export default function activity(params) {
 
   tables.prepareTable(self, {
     name: "activitie",
-    type: "Activity"
+    type: "Activity",
+    id: 'participant-activity'
   });
 
-  self.toggle = function(model) {
-    model.collapsedObs(!model.collapsedObs());
-  };
+  self.toggle = (model) => model.collapsedObs(!model.collapsedObs());
   self.editReportRecord = function(item, event) {
     root.openDialog("json_editor", {
       saveFunc: self.saveFunc,
@@ -84,9 +83,8 @@ export default function activity(params) {
   };
 
   if (params.referentType === "surveys") {
-    serverService.getSurveyMostRecent(params.guid).then(function(response) {
-      self.activityLabelObs(response.name);
-    });
+    serverService.getSurveyMostRecent(params.guid)
+      .then((response) => self.activityLabelObs(response.name));
   } else {
     self.activityLabelObs(params.guid);
   }
