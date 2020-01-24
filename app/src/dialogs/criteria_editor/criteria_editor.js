@@ -52,10 +52,10 @@ export default function(params) {
       noneOfSubstudyIds: self.noneOfSubstudyIdsObs()
     };
     let error = new BridgeError();
-    if (crit.minAppVersions["iPhone OS"] > crit.maxAppVersions["iPhone OS"]) {
+    if ((crit.minAppVersions["iPhone OS"] || 0) > (crit.maxAppVersions["iPhone OS"] || Number.MAX_VALUE)) {
       error.addError("minAppVersions_iphone_os", "cannot be greater than the maximum version");
     }
-    if (crit.minAppVersions.Android > crit.maxAppVersions.Android) {
+    if ((crit.minAppVersions.Android || 0) > (crit.maxAppVersions.Android || Number.MAX_VALUE)) {
       error.addError("minAppVersions_android_os", "cannot be greater than the maximum version");
     }
     if (intersect(crit.allOfGroups, crit.noneOfGroups)) {
@@ -65,7 +65,7 @@ export default function(params) {
       error.addError("substudyIds", "cannot require and prohibit the same IDs");
     }
     if (error.hasErrors()) {
-      return utils.failureHandler({ transient: false })(error);
+      return utils.failureHandler({ transient: false, id: 'criteria_editor' })(error);
     }
     params.criteriaObs(crit);
     root.closeDialog();
