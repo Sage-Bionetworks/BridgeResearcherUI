@@ -52,10 +52,10 @@ export default function(params) {
       noneOfSubstudyIds: self.noneOfSubstudyIdsObs()
     };
     let error = new BridgeError();
-    if ((crit.minAppVersions["iPhone OS"] || 0) > (crit.maxAppVersions["iPhone OS"] || Number.MAX_VALUE)) {
+    if (greaterThan(crit, 'iPhone OS')) {
       error.addError("minAppVersions_iphone_os", "cannot be greater than the maximum version");
     }
-    if ((crit.minAppVersions.Android || 0) > (crit.maxAppVersions.Android || Number.MAX_VALUE)) {
+    if (greaterThan(crit, 'Android')) {
       error.addError("minAppVersions_android_os", "cannot be greater than the maximum version");
     }
     if (intersect(crit.allOfGroups, crit.noneOfGroups)) {
@@ -71,6 +71,11 @@ export default function(params) {
     root.closeDialog();
   };
 
+  function greaterThan(crit, field) {
+    let min = crit.minAppVersions[field] || 0;
+    let max = crit.maxAppVersions[field] || Number.MAX_VALUE;
+    return min > max;
+  }
   function intersect(array1, array2) {
     return array1.filter(value => -1 !== array2.indexOf(value)).length > 0;
   }
