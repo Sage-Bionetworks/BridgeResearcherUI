@@ -41,9 +41,12 @@ module.exports = {
       },
       {
         test: /\.html$/, 
-        use: {
-          loader: 'html-loader', 
-          options: {minimize: {removeComments: false, collapseWhitespace:true}}
+        loader: 'html-loader', 
+        options: {
+          minimize: {
+            removeComments: false,
+            collapseWhitespace: false
+          }
         }
       }    
     ]
