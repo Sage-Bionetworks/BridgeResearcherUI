@@ -41,11 +41,11 @@ module.exports = {
       },
       {
         test: /\.html$/, 
-        loader: 'html-loader', 
-        options: {
-          minimize: {
-            removeComments: false,
-            collapseWhitespace: false
+        use: {
+          loader: 'html-loader', 
+          options: {
+            removeComments: false, 
+            minimize: true
           }
         }
       }    
