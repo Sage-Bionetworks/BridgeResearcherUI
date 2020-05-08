@@ -2,7 +2,7 @@
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
       <div class="ui breadcrumb">
-        <a href="#/admin/studies" class="section">Studies</a>
+        <a href="#/admin/apps" class="section">Apps</a>
         <i class="right chevron icon divider"></i>
       </div>
       <h3 data-bind="text: titleObs"></h3>
@@ -14,20 +14,20 @@
   <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
-  <errors id="study"></errors>
+  <errors id="app"></errors>
   <form class="ui form">
     <div class="two fields">
-      <div class="field required study_name">
-        <label>Study name</label>
+      <div class="field required app_name">
+        <label>App name</label>
         <input data-bind="textInput: nameObs" />
       </div>
-      <div class="field required study_identifier">
-        <label>Study Identifier</label>
+      <div class="field required app_identifier">
+        <label>App Identifier</label>
         <input data-bind="textInput: identifierObs" />
       </div>
     </div>
     <div class="two fields">
-      <div class="field required study_sponsorName">
+      <div class="field required app_sponsorName">
         <label>Sponsor name</label>
         <input data-bind="textInput: sponsorNameObs" />
       </div>

@@ -17,7 +17,7 @@
       <form class="ui form">
         <div class="fields">
           <div class="twelve wide required field" id="name">
-            <label>Study name</label>
+            <label>App name</label>
             <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
           </div>
           <div class="six wide field" id="shortName">
@@ -52,11 +52,11 @@
     </div>
     <div class="six wide column">
       <div class="ui message">
-        <p> The identifier for this study is <b style="color:black; font-family: monospace" data-bind="text: identifierObs"></b>. Your technical staff will need this identifier to integrate with the Bridge server. </p>
+        <p> The identifier for this app is <b style="color:black; font-family: monospace" data-bind="text: identifierObs"></b>. Your technical staff will need this identifier to integrate with the Bridge server. </p>
 
-        <p>If your study no longer supports an older app version on a particular platform, lock that version out by setting a <b>minimum supported app version</b>. Apps older than this version on that platform will receive a 410 response from the server. Your app should prevent the user from doing anything but upgrading when it receives this response.</p>
+        <p>If your app no longer supports an older app version on a particular platform, lock that version out by setting a <b>minimum supported app version</b>. Apps older than this version on that platform will receive a 410 response from the server. Your app should prevent the user from doing anything but upgrading when it receives this response.</p>
 
-        <p> The CMS key is provided to encrypt data you send to the Bridge server. The encryption key (specific to your study) ensures that the data cannot be read on the phone, or in transit to the Bridge server. </p>
+        <p> The CMS key is provided to encrypt data you send to the Bridge server. The encryption key (specific to your app) ensures that the data cannot be read on the phone, or in transit to the Bridge server. </p>
       </div>
     </div>
   </div>

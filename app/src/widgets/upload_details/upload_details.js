@@ -9,10 +9,10 @@ export default function uploadDetails(params) {
   let self = this;
 
   var binder = new Binder(this)
-    .obs("showStudy", params.showStudy || false)
-    .obs("sameStudy", false)
-    .obs("studyId")
-    .obs("studyName")
+    .obs("showApp", params.showApp || false)
+    .obs("sameApp", false)
+    .obs("appId")
+    .obs("appName")
     .obs("filename") // upload
     .obs("status")
     .obs("healthCode")
@@ -87,25 +87,25 @@ export default function uploadDetails(params) {
     }
   };
 
-  function setSameStudy(study) {
-    self.sameStudyObs(study.identifier === self.studyIdObs());
+  function setSameApp(app) {
+    self.sameAppObs(app.identifier === self.appIdObs());
   }
   function getSession() {
     return serverService.getSession();
   }
-  function getStudyList(session) {
-    return serverService.getStudyList(session.environment);
+  function getAppList(session) {
+    return serverService.getAppList(session.environment);
   }
-  function setStudyName(list) {
-    var name = utils.findStudyName(list.items, self.studyIdObs());
-    self.studyNameObs(name);
+  function setAppName(list) {
+    var name = utils.findAppName(list.items, self.appIdObs());
+    self.appNameObs(name);
   }
 
   function load() {
-    return serverService.getStudy()
-      .then(setSameStudy)
+    return serverService.getApp()
+      .then(setSameApp)
       .then(getSession)
-      .then(getStudyList)
-      .then(setStudyName);
+      .then(getAppList)
+      .then(setAppName);
   }
 };

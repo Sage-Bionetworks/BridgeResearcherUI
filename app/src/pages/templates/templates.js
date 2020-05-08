@@ -16,7 +16,7 @@ export default function(params) {
   fn.copyProps(self, root, "isDeveloper", "isAdmin");
   self.criteriaLabel = criteriaUtils.label;
   self.defaultTemplatesObs = ko.observable({});
-  self.study = null;
+  self.app = null;
   self.templateTypeObs = ko.observable(params.templateType);
   self.titleObs = ko.observable(TITLES[params.templateType] + ' templates');
 
@@ -37,32 +37,32 @@ export default function(params) {
   });
 
   self.makeDefault = function(item, event) {
-    self.study.defaultTemplates[item.templateType] = item.guid;
+    self.app.defaultTemplates[item.templateType] = item.guid;
 
     utils.startHandler(self, event);
-    serverService.saveStudy(self.study)
+    serverService.saveApp(self.app)
       .then(load)
       .then(utils.successHandler(self, event))
       .catch(utils.failureHandler({ id: 'templates' }));
   };
 
   self.isDefault = function(item) {
-    return self.study.defaultTemplates[params.templateType] === item.guid;
+    return self.app.defaultTemplates[params.templateType] === item.guid;
   };
 
   function getTemplates() {
     return serverService.getTemplates(self.query);
   }
-  function captureStudy(study) {
-    self.study = study;
+  function captureApp(app) {
+    self.app = app;
   }
 
   function load(query) {
     query.includeDeleted = self.showDeletedObs();
     query.type = params.templateType;
     self.query = query;
-    serverService.getStudy()
-      .then(captureStudy)
+    serverService.getApp()
+      .then(captureApp)
       .then(getTemplates)
       .then(fn.handleSort("items", "name"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))

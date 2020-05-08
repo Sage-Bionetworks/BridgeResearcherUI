@@ -1,5 +1,5 @@
 const LOG_CACHE = false;
-const NO_CACHE_PATHS = ["studies/self/emailStatus", "/participants", "externalIds?"];
+const NO_CACHE_PATHS = ["apps/self/emailStatus", "/participants", "externalIds?"];
 
 function matchesNoCachePath(path) {
   return NO_CACHE_PATHS.some(function(matchPath) {

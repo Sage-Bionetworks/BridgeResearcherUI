@@ -12,12 +12,12 @@ function keyToUnary(key) {
 function keyToCustom(key) {
   return { label: "When “" + key + "” occurs", value: "custom:" + key };
 }
-function collectStudyEventKeys(eventKeys) {
-  return function(study) {
+function collectAppEventKeys(eventKeys) {
+  return function(app) {
     Object.keys(UNARY_EVENTS).forEach(key => eventKeys.push(keyToUnary(key)));
-    Object.keys(study.automaticCustomEvents).forEach(key => eventKeys.push(keyToCustom(key)));
-    study.activityEventKeys.forEach(key => eventKeys.push(keyToCustom(key)));
-    return study;
+    Object.keys(app.automaticCustomEvents).forEach(key => eventKeys.push(keyToCustom(key)));
+    app.activityEventKeys.forEach(key => eventKeys.push(keyToCustom(key)));
+    return app;
   };
 }
 function collectActivityEventKeys(eventKeys) {
@@ -89,9 +89,8 @@ export default function(params) {
   }
 
   let eventKeys = [];
-  serverService
-    .getStudy()
-    .then(collectStudyEventKeys(eventKeys))
+  serverService.getApp()
+    .then(collectAppEventKeys(eventKeys))
     .then(optionsService.getActivityOptions)
     .then(collectActivityEventKeys(eventKeys))
     .then(self.allEventKeysObs)

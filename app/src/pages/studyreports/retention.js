@@ -3,7 +3,7 @@ import ko from "knockout";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
-const STUDY_NAME = "-daily-retention-report";
+const APP_NAME = "-daily-retention-report";
 
 function convertToChartConfig(data) {
   return {
@@ -71,7 +71,7 @@ export default function retention() {
   function loadChart() {
     utils.startHandler(self);
     self.isLoadingObs(true);
-    serverService.getStudyReport(STUDY_NAME, DATE, DATE)
+    serverService.getStudyReport(APP_NAME, DATE, DATE)
       .then(fn.handleStaticObsUpdate(self.isLoadingObs, false))
       .then(function(response) {
         let data = chartMaker(response.items[0].data);

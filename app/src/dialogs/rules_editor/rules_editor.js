@@ -133,12 +133,12 @@ export default function(params) {
     root.closeDialog();
   };
 
-  serverService.getStudy().then(function(study) {
-    let dataGroups = study.dataGroups.map(function(group) {
+  serverService.getApp().then(function(app) {
+    let dataGroups = app.dataGroups.map(function(group) {
       return { value: group, label: group };
     });
     self.dataGroupOptionsObs(dataGroups);
-    self.dataGroupStringOptionsObs([].concat(study.dataGroups));
+    self.dataGroupStringOptionsObs([].concat(app.dataGroups));
 
     let obs = params.element[params.fieldName]().map(createRule);
     self.rulesObs(obs);

@@ -2,9 +2,9 @@ import fn from "../../../functions";
 import serverService from "../../../services/server_service";
 import tables from "../../../tables";
 
-function deleteStudy(item) {
+function deleteApp(item) {
   if (item.identifier !== "api" && item.identifier !== "shared") {
-    return serverService.deleteStudy(item.identifier);
+    return serverService.deleteApp(item.identifier);
   } else {
     return Promise.resolve();
   }
@@ -14,16 +14,16 @@ export default function() {
   let self = this;
 
   tables.prepareTable(self, {
-    name: "study",
-    plural: "studies",
-    delete: deleteStudy,
-    id: "studies",
+    name: "app",
+    plural: "apps",
+    delete: deleteApp,
+    id: "apps",
     refresh: load
   });
 
   function load() {
     return serverService.getSession()
-      .then((session) => serverService.getStudyList(session.environment))
+      .then((session) => serverService.getAppList(session.environment))
       .then(fn.handleObsUpdate(self.itemsObs, "items"));
   }
   load();

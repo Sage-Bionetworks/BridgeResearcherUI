@@ -148,8 +148,8 @@ export default function pager(params) {
       .catch(utils.failureHandler());
   }
   // not sure why we would call a function to get this or even use binder for all of this
-  serverService.getStudy().then(study => {
-    self.dataGroupsObs(study.dataGroups);
+  serverService.getApp().then(app => {
+    self.dataGroupsObs(app.dataGroups);
     wrappedLoadingFunc(0);
   });
 };

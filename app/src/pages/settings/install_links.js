@@ -18,17 +18,17 @@ export default function() {
     .bind("universal", "", universal.fromObject, universal.toObject);
 
   self.save = function(vm, event) {
-    self.study = binder.persist(self.study);
+    self.app = binder.persist(self.app);
 
     utils.startHandler(self, event);
     serverService
-      .saveStudy(self.study)
+      .saveApp(self.app)
       .then(utils.successHandler(vm, event, "Install links saved."))
       .catch(utils.failureHandler({ id: 'install-links' }));
   };
   serverService
-    .getStudy()
-    .then(binder.assign("study"))
+    .getApp()
+    .then(binder.assign("app"))
     .then(binder.update())
     .catch(utils.failureHandler({ id: 'install-links' }));
 };

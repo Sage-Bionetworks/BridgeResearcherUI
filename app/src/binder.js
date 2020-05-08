@@ -18,7 +18,7 @@ function createObservable(doBinding) {
 
     let value = typeof defaultValue === "undefined" ? undefined : defaultValue;
     // Don't call the transform for the initial value. We have transforms that
-    // require study to be loaded and this is usually too early in the cycle for
+    // require app to be loaded and this is usually too early in the cycle for
     // that to be true. Just init the value you want to see in the world.
     let obs = info.isArray ? ko.observableArray(value) : ko.observable(value);
     this.vm[info.observableName] = info.observable = obs;
@@ -182,7 +182,7 @@ export default class Binder {
     return context.vm.attributesObs();
   }
   static formatHealthCode(value, context) {
-    return context.vm.study.healthCodeExportEnabled ? value : "N/A";
+    return context.vm.app.healthCodeExportEnabled ? value : "N/A";
   }
   static callObsCallback(value, context) {
     return context.observer.callback();

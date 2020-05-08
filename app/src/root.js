@@ -29,8 +29,8 @@ let RootViewModel = function() {
 
   new Binder(self)
     .obs("environment", "")
-    .obs("studyName", "")
-    .obs("studyIdentifier")
+    .obs("appName", "")
+    .obs("appId")
     .obs("selected", "")
     .obs("roles[]", [])
     .obs("mainPage", "empty")
@@ -39,7 +39,7 @@ let RootViewModel = function() {
     .obs("editorParams", {})
     .obs("isEditorTabVisible", false)
     .obs("notificationsEnabled", false)
-    .obs("studyMemberships[]")
+    .obs("appMemberships[]")
     .obs("sidePanel", "navigation")
     .obs("dialog", { name: "none" });
 
@@ -78,8 +78,8 @@ let RootViewModel = function() {
   self.isDeveloper = roleFunc(self.rolesObs, "developer");
   self.isAdmin = roleFunc(self.rolesObs, "admin");
   self.isSuperadmin = roleFunc(self.rolesObs, "superadmin");
-  self.isSharedStudy = ko.computed(function() {
-    return self.studyIdentifierObs() === "shared";
+  self.isSharedApp = ko.computed(function() {
+    return self.appIdObs() === "shared";
   });
   self.isResearcherOnly = ko.computed(function() {
     let roles = self.rolesObs();
@@ -95,34 +95,34 @@ let RootViewModel = function() {
   self.isDevEnvObs = ko.computed(function() {
     return ["local", "develop", "staging"].indexOf(self.environmentObs()) > -1;
   });
-  self.changeStudy = function(studyId) {
+  self.changeApp = function(appId) {
     $('#sidebar').sidebar('toggle');
     document.body.style.opacity = 0.0;
     setTimeout(() => {
-      serverService.changeStudy(studyId.name, studyId.identifier)
+      serverService.changeApp(appId.name, appId.identifier)
         .then(() => document.location.reload())
         .catch(() => {
           document.body.style.opacity = 1.0;
-          setTimeout(() => toastr.error('Could not switch studies.'), 500);
+          setTimeout(() => toastr.error('Could not switch apps.'), 500);
         });
     }, 500);
   };
   serverService.addSessionStartListener(function(session) {
-    self.studyNameObs(session.studyName);
+    self.appNameObs(session.appName);
     self.environmentObs(session.environment);
-    self.studyIdentifierObs(session.studyId);
+    self.appIdObs(session.appId);
     self.rolesObs(session.roles);
 
-    serverService.getStudy().then(function(study) {
-      self.notificationsEnabledObs(Object.keys(study.pushNotificationARNs).length > 0);
+    serverService.getApp().then(function(app) {
+      self.notificationsEnabledObs(Object.keys(app.pushNotificationARNs).length > 0);
     });
-    serverService.getStudyMemberships()
-        .then((response) => self.studyMembershipsObs(response.items));
+    serverService.getAppMemberships()
+        .then((response) => self.appMembershipsObs(response.items));
   });
   serverService.addSessionEndListener(function() {
-    self.studyNameObs("");
+    self.appNameObs("");
     self.environmentObs("");
-    self.studyIdentifierObs("");
+    self.appIdObs("");
     self.rolesObs([]);
     self.openDialog("sign_in_dialog", { closeable: false });
   });
@@ -133,15 +133,13 @@ let RootViewModel = function() {
 
 let root = new RootViewModel();
 
-
-
 root.queryParams = {};
 let params = new URLSearchParams(document.location.search);
 // eventually, will use Object.fromEntries (not supported in Edge yet)
 for (let p of params.keys()) {
   root.queryParams[p] = params.get(p);
 }
-root.queryParams.studyPath = document.location.pathname.substring(1);
+root.queryParams.appPath = document.location.pathname.substring(1);
 console.debug("root.queryParams", root.queryParams);
 
 export default root;

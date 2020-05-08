@@ -7,18 +7,18 @@ import utils from "../../utils";
 export default function(params) {
   let self = this;
   self.link = {};
-  self.studyPrefix = "/" + params.study.identifier + "/";
+  self.appPrefix = "/" + params.app.identifier + "/";
   self.closeDialog = root.closeDialog;
 
   let binder = new Binder(self)
     .bind("addField")
     .bind("appId")
-    .bind("paths[]", [self.studyPrefix, self.studyPrefix + "*"]);
+    .bind("paths[]", [self.appPrefix, self.appPrefix + "*"]);
 
   self.add = function() {
     let value = self.addFieldObs();
-    if (value && value.indexOf(self.studyPrefix) === -1) {
-      value = self.studyPrefix + value;
+    if (value && value.indexOf(self.appPrefix) === -1) {
+      value = self.appPrefix + value;
       value = value.replace("//", "/");
       self.pathsObs.push(value);
       self.addFieldObs("");

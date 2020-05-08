@@ -4,9 +4,9 @@
     <div data-bind="component: 'errors'" id="sign-in"></div>
     <!--<errors id="sign-in"></errors>-->
     <form class="ui form" data-bind="returnHandler: submit" action="">
-      <div class="field study" data-bind="visible: !isLockedObs()">
-        <select taborder="-1" class="ui dropdown" data-bind="value: studyObs,
-          optionsCaption: 'Select a study…', options: studyOptionsObs, 
+      <div class="field app" data-bind="visible: !isLockedObs()">
+        <select taborder="-1" class="ui dropdown" data-bind="value: appIdObs,
+          optionsCaption: 'Select a app…', options: appOptionsObs, 
           optionsText: 'name', optionsValue: 'identifier'">
         </select>
       </div>
