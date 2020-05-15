@@ -61,9 +61,9 @@ export default function general(params) {
   };
 
   serverService
-    .getStudy()
-    .then(binder.assign("study"))
-    .then((study) => self.allDataGroupsObs(study.dataGroups))
+    .getApp()
+    .then(binder.assign("app"))
+    .then((app) => self.allDataGroupsObs(app.dataGroups))
     .then(() => serverService.getSubstudies())
     .then((substudies) => self.allSubstudyIdsObs(substudies.items.map(sub => sub.id)))
     .then(() => {

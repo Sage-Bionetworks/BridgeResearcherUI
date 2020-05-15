@@ -21,13 +21,13 @@ export default function() {
   }
 
   self.save = function(vm, event) {
-    self.study = binder.persist(self.study);
+    self.app = binder.persist(self.app);
 
     utils.startHandler(vm, event);
     serverService
-      .saveStudy(self.study)
+      .saveApp(self.app)
       .then(checkEmailStatus)
-      .then(utils.successHandler(vm, event, "Study information saved."))
+      .then(utils.successHandler(vm, event, "App information saved."))
       .catch(utils.failureHandler({ id: 'email' }));
   };
   self.verifyEmail = function(vm, event) {
@@ -41,14 +41,14 @@ export default function() {
   self.verifyConsentEmail = function(vm, event) {
     utils.startHandler(vm, event);
     serverService
-      .verifyStudyEmail("consent_notification")
+      .verifyAppEmail("consent_notification")
       .then(utils.successHandler(vm, event, "Request to verify email has been sent."))
       .catch(utils.failureHandler({ id: 'email' }));
   };
   self.refreshStatus = checkEmailStatus;
 
-  serverService.getStudy()
-    .then(binder.assign("study"))
+  serverService.getApp()
+    .then(binder.assign("app"))
     .then(binder.update())
     .then(checkEmailStatus)
     .catch(utils.failureHandler({ id: 'email' }));

@@ -173,9 +173,9 @@ export default function(params /*total, search*/) {
     .obs("canContactByEmail", false)
     .obs("filterMessage[]", []);
 
-  serverService.getStudy().then(function(study) {
-    self.reauthenticationEnabledObs(study.reauthenticationEnabled);
-    ATTRIBUTES = Object.freeze([].concat(study.userProfileAttributes));
+  serverService.getApp().then(function(app) {
+    self.reauthenticationEnabledObs(app.reauthenticationEnabled);
+    ATTRIBUTES = Object.freeze([].concat(app.userProfileAttributes));
     HEADERS = Object.freeze(
       []
         .concat(FIELDS)

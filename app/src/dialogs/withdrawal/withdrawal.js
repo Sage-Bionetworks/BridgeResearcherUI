@@ -7,7 +7,7 @@ export default function(params /*userId, vm, closeMethod, subpopGuid */) {
 
   self.reasonObs = ko.observable();
   self.cancel = root.closeDialog;
-  self.title = params.subpopGuid ? "Withdraw from consent group" : "Withdraw user from study";
+  self.title = params.subpopGuid ? "Withdraw from consent group" : "Withdraw user from all studies in the app";
 
   self.withdraw = function(vm, event) {
     utils.startHandler(vm, event);

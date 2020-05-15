@@ -24,7 +24,7 @@ export default function(params) {
     .obs("subject", "")
     .obs("documentContent", "")
     .obs("mimeType", "")
-    .obs("studyId");
+    .obs("appId");
 
   self.publish = function(vm, e) {
     let content = (self.isEmailObs()) ? this.editor.getData() : self.documentContentObs().trim();
@@ -76,8 +76,8 @@ export default function(params) {
     }
   }
 
-  serverService.getStudy()
-    .then(study => self.studyIdObs(study.identifier))
+  serverService.getApp()
+    .then(app => self.appIdObs(app.identifier))
     .then(() => serverService.getTemplate(params.guid))
     .then(fn.handleObsUpdate(self.titleObs, "name"))
     .then(initTemplate)

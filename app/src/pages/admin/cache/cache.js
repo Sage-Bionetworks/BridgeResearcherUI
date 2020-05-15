@@ -8,7 +8,7 @@ import utils from "../../../utils";
 
 const PAGE_SIZE = 100;
 const DELAY = 200;
-const MSG = "Are you sure you want to sign out everyone in this study?";
+const MSG = "Are you sure you want to sign out everyone in this app?";
 
 let adminEmail = null;
 

@@ -159,13 +159,13 @@ function copyString(value) {
   }
   document.body.removeChild(p);
 }
-function findStudyName(studies, studyIdentifier) {
+function findAppName(apps, appId) {
   try {
-    return (studies || []).filter(function(studyOption) {
-      return studyOption.identifier === studyIdentifier;
+    return (apps || []).filter(function(appOption) {
+      return appOption.identifier === appId;
     })[0].name;
   } catch (e) {
-    return "Study '" + studyIdentifier + "' not found.";
+    return "App '" + appId + "' not found.";
   }
 }
 function startHandler(vm, event) {
@@ -305,7 +305,7 @@ export default {
   fadeUp,
   createParticipantForID,
   animatedDeleter,
-  findStudyName,
+  findAppName,
   copyString,
   failureHandler,
   synapseAliasToUserId

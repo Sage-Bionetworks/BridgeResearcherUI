@@ -38,7 +38,7 @@ export default function externalIds() {
   function extractId(response) {
     if (response.items.length === 0) {
       throw new Error(
-        "There are no unassigned external IDs registered with your study. Please import more IDs to create more credentials."
+        "There are no unassigned external IDs registered with your app. Please import more IDs to create more credentials."
       );
     }
     return response.items[0].identifier;
@@ -64,7 +64,7 @@ export default function externalIds() {
   }
   function initFromSession(session) {
     self.userSubstudies = session.substudyIds;
-    return serverService.getStudy();
+    return serverService.getApp();
   }
 
   self.openImportDialog = function(vm, event) {
@@ -110,7 +110,7 @@ export default function externalIds() {
 
   serverService.getSession()
     .then(initFromSession)
-    .then(binder.assign("study"));
+    .then(binder.assign("app"));
 
   function load(params) {
     params = params || {};

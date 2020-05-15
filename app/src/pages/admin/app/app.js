@@ -25,7 +25,7 @@ export default function(params) {
   let self = this;
 
   let binder = new Binder(self)
-    .bind("title", "New Study")
+    .bind("title", "New App")
     .bind("name")
     .bind("sponsorName")
     .bind("supportEmail")
@@ -56,19 +56,19 @@ export default function(params) {
     self.addUser(0);
   };
   self.save = function(vm, event) {
-    let study = binder.persist({});
+    let app = binder.persist({});
 
-    study.uploadMetadataFieldDefinitions = UPLOAD_SHARED_METADATA_FIELD_DEFS;
+    app.uploadMetadataFieldDefinitions = UPLOAD_SHARED_METADATA_FIELD_DEFS;
 
     utils.startHandler(vm, event);
 
     serverService.getSession().then(session => {
-        study.supportEmail = session.email;
-        study.technicalEmail = session.email;
-        study.consentNotificationEmail = session.email;
-        study.dataGroups = ["test_user"];
-        delete study.allRoles;
-        delete study.users;
+        app.supportEmail = session.email;
+        app.technicalEmail = session.email;
+        app.consentNotificationEmail = session.email;
+        app.dataGroups = ["test_user"];
+        delete app.allRoles;
+        delete app.users;
         let adminIds = SYNAPSE_ADMINS.filter(admin => self[admin.obs]()).map(admin => admin.id);
 
         let userPromises = self.usersObs().map(function(user) {
@@ -90,17 +90,17 @@ export default function(params) {
           }
         });
         return Promise.all(userPromises).then(
-          (users) => serverService.createStudy({ study, adminIds, users }));
+          (users) => serverService.createApp({ app, adminIds, users }));
       })
-      .then(utils.successHandler(vm, event, "Study created."))
+      .then(utils.successHandler(vm, event, "App created."))
       .then(() => self.titleObs(self.nameObs()))
-      .catch(utils.failureHandler({id: 'study'}));
+      .catch(utils.failureHandler({id: 'app'}));
   };
   function load() {
-    return params.id === "new" ? Promise.resolve({}) : serverService.getStudyById(params.id);
+    return params.id === "new" ? Promise.resolve({}) : serverService.getAppById(params.id);
   }
 
-  load().then(binder.assign("study"))
+  load().then(binder.assign("app"))
     .then(binder.update())
     .then(self.addUser(0));
 };

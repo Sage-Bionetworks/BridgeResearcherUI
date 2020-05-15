@@ -47,10 +47,10 @@ export default function() {
   ]);
 
   self.save = function(vm, event) {
-    self.study.automaticCustomEvents = self.itemsObs().reduce(obsToMap, {});
+    self.app.automaticCustomEvents = self.itemsObs().reduce(obsToMap, {});
 
     utils.startHandler(vm, event);
-    serverService.saveStudy(self.study)
+    serverService.saveApp(self.app)
       .then(utils.successHandler(vm, event, "Automatic custom events saved."))
       .catch(utils.failureHandler({ id: 'auto-custom-events' }));
   };
@@ -62,12 +62,12 @@ export default function() {
     return { label: key, value: "custom:" + key };
   }
 
-  serverService.getStudy().then(function(study) {
-    self.study = study;
-    let eventKeys = study.activityEventKeys || [];
+  serverService.getApp().then(function(app) {
+    self.app = app;
+    let eventKeys = app.activityEventKeys || [];
     self.allEventsObs.pushAll(eventKeys.map(activityEventKeyToOpt));
     self.itemsObs(
-      Object.entries(study.automaticCustomEvents || {})
+      Object.entries(app.automaticCustomEvents || {})
         .sort((a, b) => a[0].localeCompare(b[0]))
         .map(mapToObservers)
     );

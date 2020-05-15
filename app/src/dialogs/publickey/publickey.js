@@ -6,12 +6,12 @@ export default function(params) {
   let self = this;
 
   new Binder(self)
-    .obs("downloadHref", params.study.identifier + ".pem")
+    .obs("downloadHref", params.app.identifier + ".pem")
     .obs("downloadFileName", "")
     .obs("content");
   self.close = root.closeDialog;
 
-  serverService.getStudyPublicKey().then(function(response) {
+  serverService.getAppPublicKey().then(function(response) {
     let fileContents = "data:text/plain;charset=utf-8," + encodeURIComponent(response.publicKey);
     self.contentObs(response.publicKey);
     self.downloadFileNameObs(fileContents);

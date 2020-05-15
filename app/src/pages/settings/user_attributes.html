@@ -28,28 +28,20 @@
         <br />
       </div>
       <div class="ui action input">
-        <input
-          placeholder="User Profile Attribute"
-          type="text"
+        <input placeholder="User Profile Attribute" type="text"
           data-bind="textInput: $component.addFieldObs, hasFocus: true,
-                    event: {keypress: $component.keyHandler}, hasFocus: true"
-        />
+                    event: {keypress: $component.keyHandler}, hasFocus: true"/>
         <button class="ui button" data-bind="click: $component.add">Add</button>
       </div>
     </div>
     <div class="six wide column">
       <div class="ui message">
         <p>
-          Bridge stores personally identifiable information separately from the health information collected for a
-          study. By default, we accept a participant's first and last name, and an email address, through that
-          participant’s user profile.
+          Bridge stores personally identifiable information separately from the health information collected for an
+          app. In addition to the default information we collect, a study designer can define additional attributes to collect and store as part of the participant’s health record.
         </p>
-
-        <p>You can configure your study to extend the user profile and include additional attributes.</p>
-
         <p>
-          Like a participant's name or email address, this information will not be included in the data set exported
-          from the study.
+          Like a participant’s name or email address, this information will not be included in health data exported to Synapse, but it can be exported as part of the user’s personally identifying information from the Bridge Study Manager.
         </p>
       </div>
     </div>

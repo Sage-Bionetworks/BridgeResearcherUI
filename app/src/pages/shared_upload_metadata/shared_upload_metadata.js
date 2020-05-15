@@ -6,8 +6,8 @@ import serverService from "../../services/server_service";
 import utils from "../../utils";
 
 const failureHandler = utils.failureHandler({
-  redirectTo: "study",
-  redirectMsg: "Study not found.",
+  redirectTo: "app",
+  redirectMsg: "App not found.",
   transient: false,
   id: 'shared-upload-metadata'
 });
@@ -21,13 +21,13 @@ export default function sharedUploadMetadata(params) {
     .bind("version");
 
   self.save = function(vm, event) {
-    if (!self.study) {
+    if (!self.app) {
       return;
     }
     utils.startHandler(vm, event);
 
-    self.study.uploadMetadataFieldDefinitions = schemaUtils.fieldObsToDef(self.fieldDefinitionsObs());
-    serverService.saveStudy(self.study)
+    self.app.uploadMetadataFieldDefinitions = schemaUtils.fieldObsToDef(self.fieldDefinitionsObs());
+    serverService.saveApp(self.app)
       .then(fn.handleObsUpdate(self.versionObs, "version"))
       .then(utils.successHandler(vm, event, "Upload metadata fields have been saved."))
       .catch(utils.failureHandler({ id: 'shared-upload-metadata' }));
@@ -51,11 +51,11 @@ export default function sharedUploadMetadata(params) {
     });
   };
 
-  serverService.getStudy()
-    .then(function(study) {
-      self.study = study;
-      self.fieldDefinitionsObs(schemaUtils.fieldDefToObs(study.uploadMetadataFieldDefinitions));
-      return study;
+  serverService.getApp()
+    .then(function(app) {
+      self.app = app;
+      self.fieldDefinitionsObs(schemaUtils.fieldDefToObs(app.uploadMetadataFieldDefinitions));
+      return app;
     })
     .catch(failureHandler);
 };

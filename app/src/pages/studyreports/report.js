@@ -30,7 +30,7 @@ function lastDayOfMonth(year, month) {
 
 export default function report(params) {
   let self = this;
-  self.studyId = null;
+  self.appId = null;
 
   new Binder(self)
     .obs("identifier", params.id)
@@ -124,7 +124,7 @@ export default function report(params) {
     let startDate = firstDayOfMonth(self.currentYear, self.currentMonth);
     let endDate = lastDayOfMonth(self.currentYear, self.currentMonth);
     if (index.public) {
-      return serverService.getPublicStudyReport(self.studyId, params.id, startDate, endDate);
+      return serverService.getPublicStudyReport(self.appId, params.id, startDate, endDate);
     } else {
       return serverService.getStudyReport(params.id, startDate, endDate);
     }
@@ -134,7 +134,7 @@ export default function report(params) {
     self.showLoaderObs(true);
     self.formatMonthObs(MONTHS[self.currentMonth] + " " + self.currentYear);
     serverService.getSession()
-      .then((session) => self.studyId = session.studyId)
+      .then((session) => self.appId = session.appId)
       .then(() => serverService.getStudyReportIndex(params.id))
       .then(loadStudyReportRecords)
       .then(fn.handleSort("items", "date", true))

@@ -23,28 +23,28 @@ export default function info() {
     .bind("verifyChannelOnSignInEnabled")
     .bind("iosArn", null, ios.fromObject, ios.toObject)
     .bind("strictUploadValidationEnabled")
-    .bind("studyIdExcludedInExport");
+    .bind("appIdExcludedInExport");
 
   self.accountLimitLabel = ko.computed(function() {
     return self.accountLimitObs() == "0" ? "None" : self.accountLimitObs();
   });
 
   self.save = function(vm, event) {
-    self.study = binder.persist(self.study);
+    self.app = binder.persist(self.app);
 
-    let enabled = Object.keys(self.study.pushNotificationARNs).length > 0;
+    let enabled = Object.keys(self.app.pushNotificationARNs).length > 0;
     root.notificationsEnabledObs(enabled);
 
     utils.startHandler(self, event);
     serverService
-      .saveStudy(self.study)
-      .then(utils.successHandler(vm, event, "Study information saved."))
+      .saveApp(self.app)
+      .then(utils.successHandler(vm, event, "App information saved."))
       .catch(utils.failureHandler({id: 'info'}));
   };
 
   serverService
-    .getStudy()
-    .then(binder.assign("study"))
+    .getApp()
+    .then(binder.assign("app"))
     .then(binder.update())
     .catch(utils.failureHandler({id: 'info'}));
 };

@@ -8,7 +8,7 @@ import utils from "../../utils";
 
 const BASE = "https://www.synapse.org/#!";
 const CREATE_MSG = "Please enter your Synapse user account ID\n(you'll be made the administrator of the project):";
-const EXPORT_MSG = "Unexported study data is being exported to Synapse.\n" +
+const EXPORT_MSG = "Unexported app data is being exported to Synapse.\n" +
   "This can take some time.\nVisit your project in Synapse to see your newly uploaded data.";
 function exportingMsg() {
   alerts.notification("Starting Data Export", EXPORT_MSG);
@@ -57,15 +57,15 @@ export default function exportSettings() {
   };
   self.save = function(vm, event) {
     utils.startHandler(self, event);
-    self.study = binder.persist(self.study);
+    self.app = binder.persist(self.app);
 
-    serverService.saveStudy(self.study)
+    serverService.saveApp(self.app)
       .then(utils.successHandler(vm, event, "Synapse information saved."))
       .catch(utils.failureHandler({ id: 'export-settings' }));
   };
 
-  serverService.getStudy()
-    .then(binder.assign("study"))
+  serverService.getApp()
+    .then(binder.assign("app"))
     .then(binder.update())
     .catch(utils.failureHandler({ id: 'export-settings' }));
 };

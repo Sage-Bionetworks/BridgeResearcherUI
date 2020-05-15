@@ -1,7 +1,7 @@
 <div class="fixed-header">
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
-      <h3>Study Settings</h3>
+      <h3>App Settings</h3>
     </div>
     <div class="fixed-header-buttons">
       <button class="ui tiny primary button" data-bind="click: save">Save</button>
@@ -28,7 +28,7 @@
         </div>
         <div class="field">
           <ui-checkbox params="checkedObs: usesCustomExportScheduleObs">
-            This study has a custom export schedule set up for it
+            This app has a custom export schedule set up for it
           </ui-checkbox>
         </div>
         <div class="field">
@@ -61,9 +61,9 @@
           </ui-checkbox>
         </div>
 
-        <h4 class="ui dividing header">Legacy Study Support</h4>
+        <h4 class="ui dividing header">Legacy App Support</h4>
         <p class="error-message">
-          Unless this is a legacy study, all these feature flags should be enabled.
+          Unless this is a legacy app, all these feature flags should be enabled.
         </p>
         <div class="field">
           <ui-checkbox params="checkedObs: verifyChannelOnSignInEnabledObs">
@@ -76,8 +76,8 @@
           </ui-checkbox>
         </div>
         <div class="field">
-          <ui-checkbox params="checkedObs: studyIdExcludedInExportObs">
-            Exclude study ID from columnn names of export data
+          <ui-checkbox params="checkedObs: appIdExcludedInExportObs">
+            Exclude app ID from columnn names of export data
           </ui-checkbox>
         </div>
 
@@ -98,11 +98,11 @@
         
         <p></p>
 
-        <p>&#8226; through an email requesting verification of the email (which can be turned on or off by study developers where the template is defined), or</p>
+        <p>&#8226; through an email requesting verification of the email (which can be turned on or off by app developers where the template is defined), or</p>
 
-        <p>&#8226; by signing in through an email with a link that is sent to the user's email address. In the latter case, signing in via email only API needs to be enabled for the study.</p>
+        <p>&#8226; by signing in through an email with a link that is sent to the user’s email address. In the latter case, signing in via email only API needs to be enabled for the app.</p>
 
-        <p>If email verification is disabled, then the study must either require an external ID on sign up, it must validate the external ID against a list of IDs maintained by Bridge, or both must be enabled.</p>
+        <p>If email verification is disabled, then the app must either require an external ID on sign up, it must validate the external ID against a list of IDs maintained by Bridge, or both must be enabled.</p>
       </div>
     </div>
   </div>

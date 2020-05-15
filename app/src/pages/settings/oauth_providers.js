@@ -30,12 +30,12 @@ export default function() {
   let binder = new Binder(self).bind("oAuthProviders[]", [], modelToObs, obsToModel);
 
   self.save = function(vm, event) {
-    self.study = binder.persist(self.study);
+    self.app = binder.persist(self.app);
 
     utils.startHandler(vm, event);
     serverService
-      .saveStudy(self.study)
-      .then(utils.successHandler(vm, event, "Study information saved."))
+      .saveApp(self.app)
+      .then(utils.successHandler(vm, event, "App information saved."))
       .catch(utils.failureHandler({ id: 'oauth-providers' }));
   };
   self.removeProvider = function(element) {
@@ -45,17 +45,17 @@ export default function() {
   };
   self.addProvider = function() {
     root.openDialog("oauth_provider", {
-      study: self.study,
+      app: self.app,
       oAuthProvidersObs: self.oAuthProvidersObs
     });
   };
   self.editProvider = function(provider) {
     let index = self.oAuthProvidersObs().indexOf(provider);
-    root.openDialog("oauth_provider", { index: index, study: self.study, oAuthProvidersObs: self.oAuthProvidersObs });
+    root.openDialog("oauth_provider", { index: index, app: self.app, oAuthProvidersObs: self.oAuthProvidersObs });
   };
 
-  serverService.getStudy()
-    .then(binder.assign("study"))
+  serverService.getApp()
+    .then(binder.assign("app"))
     .then(binder.update())
     .catch(utils.failureHandler({ id: 'oauth-providers' }));
 };
