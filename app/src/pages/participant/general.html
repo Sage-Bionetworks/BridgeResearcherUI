@@ -177,7 +177,22 @@
       <div class="field"></div>
     </div>
 
-    <!-- ROW 4: Update the same for everybody -->
+    <!-- ROW 4: Same for everybody -->
+    <div class="equal width fields">
+      <div class="field">
+        <label style="margin-bottom: .9rem">Email Preference</label>
+        <ui-checkbox params="checkedObs: notifyByEmailObs">
+          Consents to receive email from study
+        </ui-checkbox>
+      </div>
+      <div class="field">
+        <label>Language(s)</label>
+        <input type="text" class="input-field-padding" data-bind="textInput: languagesObs">
+      </div>
+      <div class="field"></div>
+    </div>
+
+    <!-- ROW 5: Update the same for everybody -->
     <div class="equal width fields" data-bind="visible: !isNewObs()">
       <div class="field">
         <label>Health Code</label>
@@ -194,16 +209,6 @@
       <div class="field">
         <label>Created On</label>
         <div class="input-field-padding" data-bind="text: createdOnObs"></div>
-      </div>
-    </div>
-
-    <!-- ROW 5: Same for everybody -->
-    <div class="equal width fields">
-      <div class="field">
-        <label style="margin-bottom: .9rem">Email Preference</label>
-        <ui-checkbox params="checkedObs: notifyByEmailObs">
-          Consents to receive email from study
-        </ui-checkbox>
       </div>
     </div>
 

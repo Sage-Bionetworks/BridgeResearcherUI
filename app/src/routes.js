@@ -135,7 +135,7 @@ router.on("/admin/cache", routeTo("admin_cache", "cache"));
 router.on("/admin/apps", routeTo("admin_apps", "apps"));
 router.on("/admin/apps/:id", routeTo("admin_app", "apps", ID));
 router.on("/admin/substudies", routeTo("admin_substudies", "substudies"));
-router.on("/admin/substudies/:id", routeTo("admin_sub", "substudies", ID));
+router.on("/admin/substudies/:id", routeTo("admin_substudy", "substudies", ID));
 router.on("/admin/uploads", routeTo("uploads", "uploads"));
 router.on("/admin/uploads/:guid", routeTo("upload", "uploads", GUID));
 router.on("/admin/masterschedules", routeTo("masterschedules"));
