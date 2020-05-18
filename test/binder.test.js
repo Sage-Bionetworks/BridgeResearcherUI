@@ -181,10 +181,10 @@ describe("transforms", function() {
     });
     describe("formatHealthCode", function() {
         it("works", function() {
-            var context = { vm: { study: { healthCodeExportEnabled: false } } };
+            var context = { vm: { app: { healthCodeExportEnabled: false } } };
             expect(Binder.formatHealthCode("ABC", context) ).to.equal("N/A");
             
-            context = { vm: { study: { healthCodeExportEnabled: true } } };
+            context = { vm: { app: { healthCodeExportEnabled: true } } };
             expect(Binder.formatHealthCode("ABC", context) ).to.equal("ABC");
         });
     });

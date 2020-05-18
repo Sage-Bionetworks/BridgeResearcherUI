@@ -58,10 +58,10 @@ export default function consents(params) {
   };
   self.finishWithdrawal = function(reasonString) {
     let reason = reasonString ? { reason: reasonString } : {};
-    serverService.withdrawParticipantFromStudy(params.userId, reason)
+    serverService.withdrawParticipantFromApp(params.userId, reason)
       .then(root.closeDialog)
       .then(load)
-      .then(utils.successHandler(self, null, "User has been withdrawn from the study."))
+      .then(utils.successHandler(self, null, "User has been withdrawn from all studies in the app."))
       .catch(failureHandler);
   };
   self.withdrawFromSubpopulation = function(model, event) {

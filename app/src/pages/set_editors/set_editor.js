@@ -54,27 +54,26 @@ export default function(propertyName) {
       });
 
       utils.startHandler(self, event);
-      self.study[propertyName] = array;
+      self.app[propertyName] = array;
       serverService
-        .saveStudy(self.study)
-        .then(serverService.getStudy.bind(serverService))
+        .saveApp(self.app)
+        .then(serverService.getApp.bind(serverService))
         .then(updateTaskIdentifiers)
         .then(fn.handleStaticObsUpdate(self.noChangesObs, true))
         .then(utils.successHandler(self, event, "Values saved."))
         .catch(utils.failureHandler({ transient: false, id: propertyName }));
     };
 
-    function updateTaskIdentifiers(study) {
+    function updateTaskIdentifiers(app) {
       self.newRecordsObs([]);
-      study[propertyName].sort();
-      self.recordsObs(study[propertyName]);
-      return study;
+      app[propertyName].sort();
+      self.recordsObs(app[propertyName]);
+      return app;
     }
 
-    serverService
-      .getStudy()
+    serverService.getApp()
       .then(updateTaskIdentifiers)
-      .then(binder.assign("study"))
+      .then(binder.assign("app"))
       .catch(utils.failureHandler({ id: propertyName }));
   };
 };

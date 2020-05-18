@@ -50,11 +50,11 @@ export default function() {
     .obs("identifier");
 
   self.save = function(vm, event) {
-    self.study = binder.persist(self.study);
+    self.app = binder.persist(self.app);
 
     utils.startHandler(vm, event);
-    serverService.saveStudy(self.study)
-      .then(utils.successHandler(vm, event, "Study information saved."))
+    serverService.saveApp(self.app)
+      .then(utils.successHandler(vm, event, "App information saved."))
       .catch(utils.failureHandler({ id: 'applinks' }));
   };
   self.removeAppleAppLink = function(element, event) {
@@ -62,7 +62,7 @@ export default function() {
   };
   self.openAppleAppLinkEditor = function(element, event) {
     root.openDialog("edit_apple_link", {
-      study: self.study,
+      app: self.app,
       appleAppLinksObs: self.appleAppLinksObs
     });
   };
@@ -74,7 +74,7 @@ export default function() {
   };
   self.openAndroidAppLinkEditor = function(element, event) {
     root.openDialog("edit_android_link", {
-      study: self.study,
+      app: self.app,
       androidAppLinksObs: self.androidAppLinksObs
     });
   };
@@ -87,8 +87,8 @@ export default function() {
       .join(", ");
   };
 
-  serverService.getStudy()
-    .then(binder.assign("study"))
+  serverService.getApp()
+    .then(binder.assign("app"))
     .then(binder.update())
     .catch(utils.failureHandler({ id: 'applinks' }));
 };

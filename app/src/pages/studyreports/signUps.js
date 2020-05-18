@@ -4,7 +4,7 @@ import serverService from "../../services/server_service";
 import utils from "../../utils";
 import { getDateRange, makeChart } from "./report_utils";
 
-const STUDY_NAME = "SignUp-Report-Prod-daily-signups-report";
+const APP_NAME = "SignUp-Report-Prod-daily-signups-report";
 
 function convertToChartConfig(data) {
   return {
@@ -62,7 +62,7 @@ export default function signUps() {
     utils.startHandler(self);
     self.isLoadingObs(true);
     let range = getDateRange(rangeNum);
-    serverService.getStudyReport(STUDY_NAME, range.startDate, range.endDate)
+    serverService.getStudyReport(APP_NAME, range.startDate, range.endDate)
       .then(fn.handleStaticObsUpdate(self.isLoadingObs, false))
       .then(function(response) {
         if (self.rangeObs() === rangeNum) {

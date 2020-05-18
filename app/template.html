@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title data-bind="text: studyNameObs() ? (studyNameObs() + ' | Bridge Study Manager') : 'Bridge Study Manager'">Bridge Study Manager</title>
+    <title data-bind="text: appNameObs() ? (appNameObs() + ' | Bridge Study Manager') : 'Bridge Study Manager'">Bridge Study Manager</title>
     <script src="//cdn.polyfill.io/v2/polyfill.min.js"></script>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css" />
     <script src="//cdn.ckeditor.com/4.10.0/full/ckeditor.js"></script>
@@ -11,20 +11,20 @@
     <div id="sidebar" class="ui sidebar vertical menu" 
       style="background-color: rgb(186, 223, 172)"
       data-bind="semantic: 'sidebar'">
-      <div style="text-align: center; margin: 1rem 0"><h3>Select a study:</h3></div>
-      <!-- ko foreach: studyMembershipsObs -->
-        <a class="item" data-bind="text: $data.name, click: $parent.changeStudy"></a>
+      <div style="text-align: center; margin: 1rem 0"><h3>Select an app:</h3></div>
+      <!-- ko foreach: appMembershipsObs -->
+        <a class="item" data-bind="text: $data.name, click: $parent.changeApp"></a>
       <!-- /ko -->
     </div>
     <div class="pusher">
 
       <header data-bind="css: {dev: isDevEnvObs}">
         <h2>
-          <i class="white bars icon" data-html="Select a different study"
+          <i class="white bars icon" data-html="Select a different app"
             data-bind="click: showNav, semantic: 'popup'"></i>
-          <span data-bind="text: studyNameObs"></span>
+          <span data-bind="text: appNameObs"></span>
         </h2>
-        <div class="header-study-name">
+        <div class="header-app-name">
           <span>Bridge Study Manager</span>
           <i class="white heartbeat icon"></i>
         </div>
@@ -41,11 +41,11 @@
               style="padding:0!important"></div>
           </div>
           <div data-bind="semantic: 'accordion'" id="nav-accordian">
-            <div class="title" data-bind="visible: (isDeveloper() || isResearcher()) && !isSharedStudy()">
+            <div class="title" data-bind="visible: (isDeveloper() || isResearcher()) && !isSharedApp()">
               <i class="lab icon"></i> Study
               <i class="dropdown icon"></i>
             </div>
-            <div class="content" data-bind="visible: (isDeveloper() || isResearcher()) && !isSharedStudy()">
+            <div class="content" data-bind="visible: (isDeveloper() || isResearcher()) && !isSharedApp()">
               <div class="ui secondary vertical menu">
                 <a href="#/settings" class="item" data-ref="settings" data-bind="visible: isDeveloper()">
                   Settings
@@ -71,11 +71,11 @@
               </div>
             </div>
 
-            <div class="title" data-bind="visible: isDeveloper() && !isSharedStudy()">
+            <div class="title" data-bind="visible: isDeveloper() && !isSharedApp()">
               <i class="server icon"></i> Study Data
               <i class="dropdown icon"></i>
             </div>
-            <div class="content" data-bind="visible: isDeveloper() && !isSharedStudy()">
+            <div class="content" data-bind="visible: isDeveloper() && !isSharedApp()">
               <div class="ui secondary vertical menu">
                 <a href="#/scheduleplans" class="item" data-ref="scheduling">
                   Scheduling
@@ -83,9 +83,11 @@
                 <a href="#/events" class="item" data-ref="events">
                   Scheduling Events
                 </a>
+                <!--
                 <a href="#/tasks" class="item" data-ref="tasks">
                   Compound Tasks
                 </a>
+                -->
                 <a href="#/surveys" class="item" data-ref="surveys">
                   Surveys
                 </a>
@@ -95,11 +97,11 @@
               </div>
             </div>
   
-            <div class="title" data-bind="visible: isDeveloper() && !isSharedStudy()">
+            <div class="title" data-bind="visible: isDeveloper() && !isSharedApp()">
               <i class="mobile alternate icon"></i> App Support
               <i class="dropdown icon"></i>
             </div>
-            <div class="content" data-bind="visible: isDeveloper() && !isSharedStudy()">
+            <div class="content" data-bind="visible: isDeveloper() && !isSharedApp()">
               <div class="ui secondary vertical menu">
                 <a href="#/app_configs" class="item" data-ref="appConfigs">
                   App Configs
@@ -116,11 +118,11 @@
               </div>
             </div>
   
-            <div class="title" data-bind="visible: isDeveloper() && !isSharedStudy()">
+            <div class="title" data-bind="visible: isDeveloper() && !isSharedApp()">
               <i class="upload icon"></i> Upload &amp; Export
               <i class="dropdown icon"></i>
             </div>
-            <div class="content" data-bind="visible: isDeveloper() && !isSharedStudy()">
+            <div class="content" data-bind="visible: isDeveloper() && !isSharedApp()">
               <div class="ui secondary vertical menu">
                 <a href="#/schemas" class="item" data-ref="schemas">
                   Upload Schemas
@@ -134,11 +136,11 @@
               </div>
             </div>
   
-            <div class="title" data-bind="visible: isDeveloper() && isSharedStudy()">
-              <i class="server icon"></i> Shared Study Data
+            <div class="title" data-bind="visible: isDeveloper() && isSharedApp()">
+              <i class="server icon"></i> Shared App Data
               <i class="dropdown icon"></i>
             </div>
-            <div class="content" data-bind="visible: isDeveloper() && isSharedStudy()">
+            <div class="content" data-bind="visible: isDeveloper() && isSharedApp()">
               <div class="ui secondary vertical menu">
                 <a href="#/shared_modules" class="item" data-ref="modules">
                   Shared Modules
@@ -152,25 +154,25 @@
               </div>
             </div>
   
-            <div class="title" data-bind="visible: isAdmin() && !isSharedStudy()">
+            <div class="title" data-bind="visible: isAdmin() && !isSharedApp()">
               <i class="settings icon"></i> Administration
               <i class="dropdown icon"></i>
             </div>
-            <div class="content" data-bind="visible: isAdmin() && !isSharedStudy()">
+            <div class="content" data-bind="visible: isAdmin() && !isSharedApp()">
               <div class="ui secondary vertical menu">
                 <a href="#/admin/info" class="item" data-ref="info">
-                  Study Settings
+                  App Settings
                 </a>
                 <a href="#/admin/uploads" class="item" data-ref="uploads">
                   Uploads
                 </a>
               </div>
             </div>
-            <div class="title" data-bind="visible: isSuperadmin() && !isSharedStudy()">
+            <div class="title" data-bind="visible: isSuperadmin() && !isSharedApp()">
               <i class="heartbeat icon"></i> Sage Admin
               <i class="dropdown icon"></i>
             </div>
-            <div class="content" data-bind="visible: isSuperadmin() && !isSharedStudy()">
+            <div class="content" data-bind="visible: isSuperadmin() && !isSharedApp()">
               <div class="ui secondary vertical menu">
                 <a href="#/admin/substudies" class="item" data-ref="substudies">
                   Substudies
@@ -178,8 +180,8 @@
                 <a href="#/admin/cache" class="item" data-ref="cache">
                   Cache Control
                 </a>
-                <a href="#/admin/studies" class="item" data-ref="studies">
-                  Studies
+                <a href="#/admin/apps" class="item" data-ref="apps">
+                  Apps
                 </a>
                 <!--
                 <a href="#/admin/masterschedules" class="item" data-ref="masterschedules">

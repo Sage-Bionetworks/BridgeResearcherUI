@@ -7,6 +7,6 @@ export default function studyReportTabset() {
 
   self.isVisibleObs = ko.observable(false);
   serverService.getSession().then((session) => {
-    self.isVisibleObs(config.retentionReports.includes(session.studyId));
+    self.isVisibleObs(config.retentionReports.includes(session.appId));
   });
 };

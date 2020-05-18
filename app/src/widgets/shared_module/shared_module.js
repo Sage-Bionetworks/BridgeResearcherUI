@@ -4,8 +4,8 @@ import root from "../../root";
 
 /**
  * params:
- *  importFunc - function to import this object into the study
- *  isImported - determine if object has been imported in this study (not the shared study)
+ *  importFunc - function to import this object into the app
+ *  isImported - determine if object has been imported in this app (not the shared app)
  *  model - the shared module object
  */
 export default function(params) {

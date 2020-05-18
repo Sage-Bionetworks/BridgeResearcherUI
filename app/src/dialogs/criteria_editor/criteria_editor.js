@@ -84,8 +84,8 @@ export default function(params) {
     return fn.isNotBlank(value) ? parseInt(value, 10) : null;
   }
 
-  serverService.getStudy().then(function(study) {
-    self.dataGroupsOptionsObs(study.dataGroups);
+  serverService.getApp().then(function(app) {
+    self.dataGroupsOptionsObs(app.dataGroups);
   });
   serverService.getSubstudies().then(function(substudies) {
     self.substudyOptionsObs(substudies.items.map(sub => sub.id));

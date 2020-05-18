@@ -7,13 +7,13 @@ import utils from "../../utils";
 function updateMinAppVersion(vm, obs, name) {
   let value = parseInt(obs(), 10);
   if (value >= 0) {
-    vm.study.minSupportedAppVersions[name] = value;
+    vm.app.minSupportedAppVersions[name] = value;
   }
   obs(value);
 }
-function updateMinAppObservers(study, obs, name) {
-  if (study.minSupportedAppVersions[name]) {
-    obs(study.minSupportedAppVersions[name]);
+function updateMinAppObservers(app, obs, name) {
+  if (app.minSupportedAppVersions[name]) {
+    obs(app.minSupportedAppVersions[name]);
   }
 }
 function zeroToMax(value) {
@@ -42,31 +42,31 @@ export default function general() {
 
   self.save = function(vm, event) {
     utils.startHandler(self, event);
-    self.study = binder.persist(self.study);
+    self.app = binder.persist(self.app);
 
-    self.study.minSupportedAppVersions = {};
+    self.app.minSupportedAppVersions = {};
     updateMinAppVersion(self, self.minIosObs, "iPhone OS");
     updateMinAppVersion(self, self.minAndroidObs, "Android");
 
     serverService
-      .saveStudy(self.study, false)
-      .then(utils.successHandler(vm, event, "Study information saved."))
+      .saveApp(self.app, false)
+      .then(utils.successHandler(vm, event, "App information saved."))
       .catch(utils.failureHandler({ id: 'general' }));
   };
   self.publicKey = function() {
-    if (self.study) {
-      root.openDialog("publickey", { study: self.study });
+    if (self.app) {
+      root.openDialog("publickey", { app: self.app });
     }
   };
 
-  function updateObservers(study) {
-    updateMinAppObservers(study, self.minIosObs, "iPhone OS");
-    updateMinAppObservers(study, self.minAndroidObs, "Android");
+  function updateObservers(app) {
+    updateMinAppObservers(app, self.minIosObs, "iPhone OS");
+    updateMinAppObservers(app, self.minAndroidObs, "Android");
   }
 
   serverService
-    .getStudy()
-    .then(binder.assign("study"))
+    .getApp()
+    .then(binder.assign("app"))
     .then(binder.update())
     .then(updateObservers)
     .catch(utils.failureHandler({ id: 'general' }));

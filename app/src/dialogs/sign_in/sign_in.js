@@ -13,7 +13,7 @@ const FAILURE_HANDLER = utils.failureHandler({transient: false, id: 'sign-in'});
 const ENVIRONMENT = "environment";
 const OAUTH_STATE = "synState";
 const PHONE_SUCCESS_MSG = "An SMS message has been sent to that phone number; enter the code to sign in.";
-const STUDY_KEY = "studyKey";
+const APP_KEY = "appKey";
 const SUCCESS_MSG = "An email has been sent to that address with instructions on changing your password.";
 const COLLECTING_EMAIL = ['SignIn', 'ForgotPassword'];
 const OTHER_THAN_PHONE = ['SignIn', 'ExternalIdSignIn', 'ForgotPassword'];
@@ -35,12 +35,12 @@ const BUTTONS = {
   Oauth: ""
 };
 
-// There will be stale data in the UI if we don't reload when changing studies or environments.
-function makeReloader(studyKey, environment) {
-  let requiresReload = storeService.get(STUDY_KEY) !== studyKey || storeService.get(ENVIRONMENT) !== environment;
+// There will be stale data in the UI if we don't reload when changing apps or environments.
+function makeReloader(appKey, environment) {
+  let requiresReload = storeService.get(APP_KEY) !== appKey || storeService.get(ENVIRONMENT) !== environment;
   return requiresReload ? 
     function() {
-      storeService.set(STUDY_KEY, studyKey);
+      storeService.set(APP_KEY, appKey);
       storeService.set(ENVIRONMENT, environment);
       root.closeDialog();
       window.location.reload();
@@ -53,20 +53,20 @@ function makeReloader(studyKey, environment) {
 export default function() {
   let self = this;
 
-  let isLocked = fn.isNotBlank(root.queryParams.studyPath);
+  let isLocked = fn.isNotBlank(root.queryParams.appPath);
   const SYNTH_EVENT = { target: document.querySelector("#submitButton") };
 
-  let studyKey, env;
+  let appKey, env;
   if (isLocked) {
-    studyKey = root.queryParams.studyPath;
+    appKey = root.queryParams.appPath;
     env = "production";
   } else {
-    studyKey = storeService.get(STUDY_KEY);
+    appKey = storeService.get(APP_KEY);
     env = storeService.get(ENVIRONMENT) || "production";
   }
   new Binder(self)
     .obs("state", "SignIn")
-    .obs("study", studyKey)
+    .obs("appId", appKey)
     .obs("environment", env)
     .obs("email")
     .obs("password")
@@ -75,7 +75,7 @@ export default function() {
     .obs("token")
     .obs("imAnAdmin", false)
     .obs("externalId")
-    .obs("studyOptions[]")
+    .obs("appOptions[]")
     .obs("isLocked", isLocked);
 
   let stateKey = storeService.get(OAUTH_STATE);
@@ -83,14 +83,14 @@ export default function() {
   if (oauth) {
     self.stateObs("Oauth");
   }
-  function loadStudies(studies) {
-    self.studyOptionsObs(studies.items);
-    self.studyObs(studyKey);
+  function loadApps(apps) {
+    self.appOptionsObs(apps.items);
+    self.appIdObs(appKey);
   }
-  function loadStudyList(newValue) {
+  function loadAppList(newValue) {
     if (newValue) {
-      return serverService.getStudyList(newValue)
-        .then(loadStudies)
+      return serverService.getAppList(newValue)
+        .then(loadApps)
         .catch(FAILURE_HANDLER);
     }
   }
@@ -98,13 +98,13 @@ export default function() {
     if (!oauth) {
       return;
     }
-    let studyKey = storeService.get(STUDY_KEY);
+    let appKey = storeService.get(APP_KEY);
     let environment = storeService.get(ENVIRONMENT);
-    let studyName = utils.findStudyName(self.studyOptionsObs(), studyKey);
+    let appName = utils.findAppName(self.appOptionsObs(), appKey);
     storeService.remove(OAUTH_STATE);
-    let obj = {study: studyKey, vendorId: 'synapse', 
+    let obj = {appId: appKey, vendorId: 'synapse', 
       authToken: root.queryParams.code, callbackUrl: document.location.origin};
-    return serverService.oauthSignIn(studyName, environment, obj)
+    return serverService.oauthSignIn(appName, environment, obj)
       .then(() => document.location = '/' + document.location.hash)
       .then(utils.successHandler(self, SYNTH_EVENT))
       .catch((e) => {
@@ -148,10 +148,10 @@ export default function() {
     return payload;
   }
   function collectValues() {
-    let studyKey = self.studyObs();
+    let appKey = self.appIdObs();
     let environment = self.environmentObs();
-    let studyName = utils.findStudyName(self.studyOptionsObs(), studyKey);
-    return { studyKey, studyName, environment };
+    let appName = utils.findAppName(self.appOptionsObs(), appKey);
+    return { appKey, appName, environment };
   }
   self.isOtherThanPhone = ko.computed(() => {
     return OTHER_THAN_PHONE.includes(self.stateObs());
@@ -169,24 +169,24 @@ export default function() {
     self[methodName](self, event);
   };
   self.signIn = function(vm, event) {
-    let payload = createPayload("email", "password", "study", "environment");
+    let payload = createPayload("email", "password", "appId", "environment");
     if (payload) {
-      let { studyKey, studyName, environment } = collectValues();
+      let { appKey, appName, environment } = collectValues();
       utils.startHandler(self, SYNTH_EVENT);
 
       let promise = self.imAnAdminObs() ? 
-        serverService.adminSignIn(studyName, environment, payload) : 
-        serverService.signIn(studyName, environment, payload);
+        serverService.adminSignIn(appName, environment, payload) : 
+        serverService.signIn(appName, environment, payload);
       promise.then(clear)
-        .then(makeReloader(studyKey, environment))
+        .then(makeReloader(appKey, environment))
         .then(utils.successHandler(self, SYNTH_EVENT))
         .catch(FAILURE_HANDLER);
     }
   };
   self.forgotPassword = function(vm, event) {
-    let payload = createPayload("email", "study");
+    let payload = createPayload("email", "appId");
     if (payload) {
-      let { studyKey, studyName, environment } = collectValues();
+      let { appKey, appName, environment } = collectValues();
       utils.startHandler(self, SYNTH_EVENT);
       return serverService.requestResetPassword(environment, payload)
         .then(clear)
@@ -196,23 +196,23 @@ export default function() {
     }
   };
   self.enterCode = function(vm, event) {
-    let payload = createPayload("token", "phone", "phoneRegion", "study");
+    let payload = createPayload("token", "phone", "phoneRegion", "appId");
     if (payload) {
       self.cancel();
       clear();
-      let { studyKey, studyName, environment } = collectValues();
+      let { appKey, appName, environment } = collectValues();
       utils.startHandler(vm, SYNTH_EVENT);
-      return serverService.phoneSignIn(studyName, environment, payload)
+      return serverService.phoneSignIn(appName, environment, payload)
         .then(clear)
-        .then(makeReloader(studyKey, environment))
+        .then(makeReloader(appKey, environment))
         .then(utils.successHandler(vm, SYNTH_EVENT))
         .catch(FAILURE_HANDLER);
     }
   };
   self.phoneSignIn = function(vm, event) {
-    let payload = createPayload("phone", "phoneRegion", "study");
+    let payload = createPayload("phone", "phoneRegion", "appId");
     if (payload) {
-      let { studyKey, studyName, environment } = collectValues();
+      let { appKey, appName, environment } = collectValues();
       utils.startHandler(vm, SYNTH_EVENT);
       return serverService.requestPhoneSignIn(environment, payload)
         .then(self.useCode)
@@ -221,13 +221,13 @@ export default function() {
     }
   };
   self.externalIdSignIn = function(vm, event) {
-    let payload = createPayload("externalId", "password", "study");
+    let payload = createPayload("externalId", "password", "appId");
     if (payload) {
-      let { studyKey, studyName, environment } = collectValues();
+      let { appKey, appName, environment } = collectValues();
       utils.startHandler(self, SYNTH_EVENT);
-      serverService.signIn(studyName, environment, payload)
+      serverService.signIn(appName, environment, payload)
         .then(clear)
-        .then(makeReloader(studyKey, environment))
+        .then(makeReloader(appKey, environment))
         .then(utils.successHandler(self, SYNTH_EVENT))
         .catch(FAILURE_HANDLER);
     }
@@ -273,10 +273,10 @@ export default function() {
     event.stopPropagation();
     event.preventDefault();
 
-    let payload = createPayload('study');
-    let studyKey = payload.study;
+    let payload = createPayload('app');
+    let appKey = payload.app;
     let state = new Date().getTime().toString(32);
-    storeService.set(STUDY_KEY, studyKey);
+    storeService.set(APP_KEY, appKey);
     storeService.set(OAUTH_STATE, state);
     storeService.set(ENVIRONMENT, self.environmentObs());
     let array = [];
@@ -295,8 +295,8 @@ export default function() {
   };
   self.environmentOptions = config.environments;
   self.environmentObs.subscribe(function(newValue) {
-    self.studyOptionsObs({ name: "Updating...", identifier: "" });
-    loadStudyList(newValue);
+    self.appOptionsObs({ name: "Updating...", identifier: "" });
+    loadAppList(newValue);
   });
-  loadStudyList(env).then(handleOAuthCallback);  
+  loadAppList(env).then(handleOAuthCallback);  
 };

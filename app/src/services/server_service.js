@@ -167,17 +167,17 @@ export class ServerService {
     }
     return response;
   }
-  cacheSession(studyName, studyId, env) {
+  cacheSession(appName, appId, env) {
     // Initial sign in we capture some information not in the session. Thereafer we have
     // to copy it on reauthentication to any newly acquired session.
     return (sess) => {
-      if (studyName) {
-        sess.studyName = studyName;
-        sess.studyId = studyId;
+      if (appName) {
+        sess.appName = appName;
+        sess.appId = appId;
         sess.host = config.host[env];
         sess.isSupportedUser = this.isSupportedUser;
       } else {
-        fn.copyProps(sess, session, "studyName", "studyId", "host", "isSupportedUser");
+        fn.copyProps(sess, session, "appName", "appId", "host", "isSupportedUser");
       }
       // Easier than testing for superadmin everywhere.
       if (sess.roles.includes('superadmin')) {
@@ -189,21 +189,20 @@ export class ServerService {
       return session;
     };
   }
-
   isAuthenticated() {
     return session !== null;
   }
-  signIn(studyName, env, signIn) {
+  signIn(appName, env, signIn) {
     return postInt(config.host[env] + config.signIn, signIn)
-      .then(this.cacheSession(studyName, signIn.study, env));
+      .then(this.cacheSession(appName, signIn.appId, env));
   }
-  phoneSignIn(studyName, env, signIn) {
+  phoneSignIn(appName, env, signIn) {
     return postInt(config.host[env] + config.phoneSignIn, signIn)
-      .then(this.cacheSession(studyName, signIn.study, env));
+      .then(this.cacheSession(appName, signIn.appId, env));
   }
-  oauthSignIn(studyName, env, signIn) {
+  oauthSignIn(appName, env, signIn) {
     return postInt(config.host[env] + config.oauthSignIn, signIn)
-      .then(this.cacheSession(studyName, signIn.study, env));
+      .then(this.cacheSession(appName, signIn.appId, env));
   }
   signOut() {
     postInt(session.host + config.signOut);
@@ -216,11 +215,11 @@ export class ServerService {
     if (!session) {
       console.error("Cannot reauthenticate: session has expired and been removed.");
     }
-    let reauth = { study: session.studyId, email: session.email, reauthToken: session.reauthToken };
+    let reauth = { appId: session.appId, email: session.email, reauthToken: session.reauthToken };
     return postInt(config.host[session.environment] + config.reauth, reauth).then(this.cacheSession());
   }
-  getStudyList(env) {
-    return getInt(config.host[env] + config.getStudyList).then(fn.handleSort("items", "name"));
+  getAppList(env) {
+    return getInt(config.host[env] + config.getAppList).then(fn.handleSort("items", "name"));
   }
   requestPhoneSignIn(env, data) {
     return postInt(config.host[env] + config.requestPhoneSignIn, data);
@@ -228,37 +227,40 @@ export class ServerService {
   requestResetPassword(env, data) {
     return postInt(config.host[env] + config.requestResetPassword, data);
   }
-  getStudy() {
-    return this.gethttp(config.getCurrentStudy).then((study) => {
-      // Due to a change in the study object, enableReauthentication cannot be null, it must be set
-      if (typeof study.reauthenticationEnabled === "undefined") {
-        study.reauthenticationEnabled = false;
+  getApp() {
+    return this.gethttp(config.getCurrentApp).then((app) => {
+      // Due to a change in the app object, enableReauthentication cannot be null, it must be set
+      if (typeof app.reauthenticationEnabled === "undefined") {
+        app.reauthenticationEnabled = false;
       }
-      return study;
+      return app;
     });
   }
-  getStudyById(identifier) {
-    return this.gethttp(config.getStudy + identifier);
+  getAppById(identifier) {
+    return this.gethttp(config.getApp + identifier);
   }
-  createStudy(studyAndUsers) {
-    return this.post(config.getStudy + "init", studyAndUsers);
+  createApp(appAndUsers) {
+    return this.post(config.getApp + "init", appAndUsers);
   }
-  deleteStudy(identifier) {
-    return this.del(`${config.getStudy}${identifier}?physical=true`);
+  deleteApp(appId) {
+    return this.del(`${config.getApp}${appId}?physical=true`);
   }
-  getStudyPublicKey() {
-    return this.gethttp(config.getStudyPublicKey);
+  getAppPublicKey() {
+    return this.gethttp(config.getAppPublicKey);
   }
-  saveStudy(study) {
+  saveApp(app) {
     let asAdmin = (session && session.roles.indexOf("admin") > -1) ? true : false;
-    let url = asAdmin ? config.getStudy + study.identifier : config.getCurrentStudy;
-    return this.post(url, study).then(function(response) {
-      study.version = response.version;
+    let url = asAdmin ? config.getApp + app.identifier : config.getCurrentApp;
+    return this.post(url, app).then(function(response) {
+      app.version = response.version;
       return response;
     });
   }
   createSynapseProject(synapseUserId) {
-    return this.post(`${config.getCurrentStudy}/synapseProject`, [synapseUserId]);
+    return this.post(`${config.getCurrentApp}/synapseProject`, [synapseUserId]);
+  }
+  getMostRecentStudyConsent(guid) {
+    return this.gethttp(`${config.subpopulations}/${guid}/consents/recent`);
   }
   getMostRecentStudyConsent(guid) {
     return this.gethttp(`${config.subpopulations}/${guid}/consents/recent`);
@@ -337,7 +339,7 @@ export class ServerService {
   }
   getUploads(args) {
     let queryString = fn.queryString(args);
-    return this.gethttp(`${config.getCurrentStudy}/uploads${queryString}`);
+    return this.gethttp(`${config.getCurrentApp}/uploads${queryString}`);
   }
   getUploadById(id) {
     return this.gettext(`${config.uploads}/${id}`).then(convertDataToString);
@@ -417,8 +419,8 @@ export class ServerService {
   verifyEmail() {
     return this.post(config.verifyEmail);
   }
-  verifyStudyEmail(type) {
-    return this.post(`${config.verifyStudyEmail}?type=${type}`);
+  verifyAppEmail(type) {
+    return this.post(`${config.verifyAppEmail}?type=${type}`);
   }
   emailStatus() {
     return this.gethttp(config.emailStatus);
@@ -526,9 +528,9 @@ export class ServerService {
     let queryString = fn.queryString({ startDate: startDate, endDate: endDate });
     return this.gethttp(`${config.reports}/${identifier}${queryString}`);
   }
-  getPublicStudyReport(studyId, identifier, startDate, endDate) {
+  getPublicStudyReport(appId, identifier, startDate, endDate) {
     let queryString = fn.queryString({ startDate: startDate, endDate: endDate });
-    return this.gethttp(`${config.studies}/${studyId}/reports/${identifier}${queryString}`);
+    return this.gethttp(`${config.apps}/${appId}/reports/${identifier}${queryString}`);
   }
   addStudyReport(identifier, report) {
     return this.post(`${config.reports}/${identifier}`, report);
@@ -584,7 +586,7 @@ export class ServerService {
   deleteParticipantActivities(userId) {
     return this.del(`${config.participants}/${userId}/activities`);
   }
-  withdrawParticipantFromStudy(userId, reason) {
+  withdrawParticipantFromApp(userId, reason) {
     return this.post(`${config.participants}/${userId}/consents/withdraw`, reason);
   }
   withdrawParticipantFromSubpopulation(userId, subpopGuid, reason) {
@@ -689,22 +691,22 @@ export class ServerService {
     let queryString = fn.queryString({ physical: physical === true });
     return this.del(`${config.appConfigs}/${guid}${queryString}`);
   }
-  adminSignIn(studyName, environment, signIn) {
+  adminSignIn(appName, environment, signIn) {
     return postInt(`${config.host[environment]}${config.adminAuth}/signIn`, signIn).then(
-      this.cacheSession(studyName, signIn.study, environment)
+      this.cacheSession(appName, signIn.appId, environment)
     );
   }
-  changeAdminStudy(studyName, studyId) {
-    return postInt(`${config.host[session.environment]}${config.adminAuth}/study`, { study: studyId }).then(
-      this.cacheSession(studyName, studyId, session.environment)
+  changeAdminApp(appName, appId) {
+    return postInt(`${config.host[session.environment]}${config.adminAuth}/app`, { appId }).then(
+      this.cacheSession(appName, appId, session.environment)
     );
   }
-  getStudyMemberships() {
-    return this.gethttp('/v3/studies/memberships');
+  getAppMemberships() {
+    return this.gethttp('/v1/apps/memberships');
   }
-  changeStudy(studyName, studyId) {
-    return this.post('/v3/auth/study', { study: studyId }).then(
-      this.cacheSession(studyName, studyId, session.environment)
+  changeApp(appName, appId) {
+    return this.post('/v3/auth/app', { appId }).then(
+      this.cacheSession(appName, appId, session.environment)
     );
   }
   getAppConfigElements(includeDeleted) {

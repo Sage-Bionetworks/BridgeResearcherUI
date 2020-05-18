@@ -43,7 +43,10 @@ module.exports = {
         test: /\.html$/, 
         use: {
           loader: 'html-loader', 
-          options: {removeComments: false, minimize: true}
+          options: {
+            removeComments: false, 
+            minimize: true
+          }
         }
       }    
     ]

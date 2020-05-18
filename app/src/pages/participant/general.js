@@ -94,7 +94,7 @@ export default function general(params) {
       let params = {
         editor: credential,
         closeDialog: root.closeDialog,
-        studyId: root.studyIdentifierObs()
+        appId: root.appIdObs()
       };
       if (credential === 'email') {
         params.email = self.emailObs();
@@ -195,11 +195,11 @@ export default function general(params) {
     self.updateIdsVisible(session.id === self.idObs());
   });
 
-  function initStudy(study) {
+  function initApp(app) {
     // there's a timer in the control involved here, we need to use an observer
-    self.allDataGroupsObs(study.dataGroups || []);
+    self.allDataGroupsObs(app.dataGroups || []);
 
-    let attrs = self.study.userProfileAttributes.map(function(key) {
+    let attrs = self.app.userProfileAttributes.map(function(key) {
       return { key: key, label: fn.formatTitleCase(key, ""), obs: ko.observable() };
     });
     self.attributesObs(attrs);
@@ -244,7 +244,7 @@ export default function general(params) {
     let participant = binder.persist(self.participant);
     let confirmMsg = (self.isNewObs()) ? "Participant created." : "Participant updated.";
 
-    let updatedTitle = self.study.emailVerificationEnabled ? 
+    let updatedTitle = self.app.emailVerificationEnabled ? 
       fn.formatNameAsFullLabel(participant) : 
       participant.externalId;
     function updateName() {
@@ -289,9 +289,9 @@ export default function general(params) {
   }
 
   serverService
-    .getStudy()
-    .then(binder.assign("study"))
-    .then(initStudy)
+    .getApp()
+    .then(binder.assign("app"))
+    .then(initApp)
     .then(getParticipant)
     .then(binder.assign("participant"))
     .then(noteInitialStatus)

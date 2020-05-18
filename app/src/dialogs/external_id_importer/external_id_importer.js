@@ -15,8 +15,8 @@ import serverService from "../../services/server_service";
 // * currentWorkItem: Object, the item just processed by performWork
 // * postFetch: Promise: results of worker's sequential execution
 
-function IdImportWorker(study, input, substudyId) {
-  this.study = study;
+function IdImportWorker(app, input, substudyId) {
+  this.app = app;
   this.credentialPairs = parser(input);
   this.substudyId = substudyId;
   this.importedCredentialPairs = [];
@@ -37,8 +37,8 @@ IdImportWorker.prototype = {
   },
   performWork: function() {
     this.currentCredentialPair = this.credentialPairs.shift();
-    if (!password.isPasswordValid(this.study.passwordPolicy, this.currentCredentialPair.password)) {
-      return Promise.reject(new Error("Password is invalid. " + password.passwordPolicyDescription(this.study.passwordPolicy)));
+    if (!password.isPasswordValid(this.app.passwordPolicy, this.currentCredentialPair.password)) {
+      return Promise.reject(new Error("Password is invalid. " + password.passwordPolicyDescription(this.app.passwordPolicy)));
     }
     this.currentCredentialPair.substudyId = this.substudyId;
     return serverService.createExternalId(this.currentCredentialPair)
@@ -105,12 +105,12 @@ export default function(params) {
   self.createCredentialsObs.subscribe(function(newValue) {
     self.isDisabledObs(!newValue);
   });
-  serverService.getStudy()
-    .then(function(study) {
-      self.allDataGroupsObs(study.dataGroups);
-      self.study = study;
-      supportEmail = study.supportEmail;
-      self.statusObs("Please enter a list of identifiers, separated by commas or new lines. If you wish to include passwords, use the format <code>externalid=password</code> (again these can be separated by commas or new lines). <em>" + password.passwordPolicyDescription(self.study.passwordPolicy) + "</em>");
+  serverService.getApp()
+    .then(function(app) {
+      self.allDataGroupsObs(app.dataGroups);
+      self.app = app;
+      supportEmail = app.supportEmail;
+      self.statusObs("Please enter a list of identifiers, separated by commas or new lines. If you wish to include passwords, use the format <code>externalid=password</code> (again these can be separated by commas or new lines). <em>" + password.passwordPolicyDescription(self.app.passwordPolicy) + "</em>");
     })
     .then(serverService.getSubstudies.bind(serverService))
     .then(response => {
@@ -127,7 +127,7 @@ export default function(params) {
     self.errorMessagesObs([]);
     self.statusObs("Preparing to import...");
 
-    let importWorker = new IdImportWorker(self.study, self.importObs(), self.substudyIdObs());
+    let importWorker = new IdImportWorker(self.app, self.importObs(), self.substudyIdObs());
     if (!importWorker.hasWork()) {
       self.errorMessagesObs.unshift("You must enter some identifiers.");
       return;

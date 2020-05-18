@@ -1,25 +1,25 @@
 <div class="fixed-header">
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
-      <h3>Studies</h3>
+      <h3>Apps</h3>
     </div>
     <div class="fixed-header-buttons">
       <button class="ui red tiny button" data-bind="disable: !atLeastOneChecked(), 
         click: deleteItems">Delete</button>
-      <a href="#/admin/studies/new" class="ui primary tiny button">New Study</a>
+      <a href="#/admin/apps/new" class="ui primary tiny button">New App</a>
     </div>
   </div>
   <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
-  <errors id="studies"></errors>
+  <errors id="apps"></errors>
   <table class="ui compact selectable table">
     <thead>
       <tr>
         <th width="10">
           <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
         </th>
-        <th nowrap>Study</th>
+        <th nowrap>App</th>
       </tr>
     </thead>
     <tbody class="no_records" data-bind="if: itemsObs().length === 0">
@@ -36,7 +36,7 @@
         </td>
         <td nowrap>
           <span data-bind="text: $data.name"></span>
-          <!--<a data-bind="href: '#/admin/studies/' + $data.identifier, text: $data.name"></a>-->
+          <!--<a data-bind="href: '#/admin/apps/' + $data.identifier, text: $data.name"></a>-->
         </td>
       </tr>
     </tbody>

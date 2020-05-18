@@ -45,8 +45,8 @@ function collectSurveyOptions(surveys) {
   return [{ value: "", label: "Select survey:" }].concat(surveyOpts);
 }
 function getTaskIdentifierOptions() {
-  return serverService.getStudy().then(function(study) {
-    let taskOpts = study.taskIdentifiers.map(function(id) {
+  return serverService.getApp().then(function(app) {
+    let taskOpts = app.taskIdentifiers.map(function(id) {
       return { label: id, value: id };
     });
     return [{ value: "", label: "Select task:" }].concat(taskOpts);
