@@ -273,8 +273,8 @@ export default function() {
     event.stopPropagation();
     event.preventDefault();
 
-    let payload = createPayload('app');
-    let appKey = payload.app;
+    let payload = createPayload('appId');
+    let appKey = payload.appId;
     let state = new Date().getTime().toString(32);
     storeService.set(APP_KEY, appKey);
     storeService.set(OAUTH_STATE, state);
