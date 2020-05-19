@@ -38,7 +38,7 @@ export default function(params) {
     utils.startHandler(vm, event);
 
     const payload = {
-      signIn: { app: params.appId, password: self.signInPasswordObs() },
+      signIn: { appId: params.appId, password: self.signInPasswordObs() },
     };
     if (self.credentialTypeObs() === 'Email') {
       payload.signIn.email = self.signInEmailObs();
