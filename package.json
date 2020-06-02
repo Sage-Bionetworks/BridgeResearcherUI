@@ -14,8 +14,8 @@
     "test": "./node_modules/.bin/mocha --require @babel/register"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.6.3",
     "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
     "@babel/register": "^7.6.2",
     "acorn": ">=6.4.1",
     "babel-loader": "^8.0.6",
@@ -38,17 +38,18 @@
     "minimist": ">=1.2.3",
     "mocha": "^6.2.1",
     "node-sass": "^4.12.0",
+    "pretty-print-json": "^0.2.1",
     "querystringify": ">=2.0.0",
     "sass-loader": "^7.3.1",
     "serialize-javascript": ">=2.1.1",
     "sinon": "^7.5.0",
     "source-map-explorer": "^2.1.0",
-    "sweetalert2": "^8.18.3",
     "style-loader": "^1.0.0",
+    "sweetalert2": "^8.18.3",
     "toastr": "^2.1.2",
-    "webpack-cli": "^3.3.9",
     "webpack": "^4.41.1",
-    "webpack-serve": "^3.2.0",
-    "webpack-dev-server": "^3.8.1"
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.1",
+    "webpack-serve": "^3.2.0"
   }
 }
