@@ -116,7 +116,6 @@ let RootViewModel = function() {
     serverService.getApp().then(function(app) {
       self.notificationsEnabledObs(Object.keys(app.pushNotificationARNs).length > 0);
     });
-    console.log( self.isSuperadmin );
     if (session.synapseUserId || self.isSuperadmin()) {
       serverService.getAppMemberships()
       .then((response) => self.appMembershipsObs(response.items));
