@@ -116,8 +116,10 @@ let RootViewModel = function() {
     serverService.getApp().then(function(app) {
       self.notificationsEnabledObs(Object.keys(app.pushNotificationARNs).length > 0);
     });
-    serverService.getAppMemberships()
-        .then((response) => self.appMembershipsObs(response.items));
+    if (session.synapseUserId) {
+      serverService.getAppMemberships()
+      .then((response) => self.appMembershipsObs(response.items));
+    }
   });
   serverService.addSessionEndListener(function() {
     self.appNameObs("");
