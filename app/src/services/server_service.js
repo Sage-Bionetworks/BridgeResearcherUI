@@ -829,6 +829,31 @@ export class ServerService {
   deleteMasterSchedule(scheduleId) {
     return this.del(`${config.masterschedule}/${scheduleId}`);
   }
+  getOrganizations(offsetBy, pageSize) {
+    let queryString = fn.queryString({ offsetBy, pageSize });
+    return this.gethttp(config.organizations + queryString);
+  }
+  getOrganization(id) {
+    return this.gethttp(`${config.organizations}/${id}`);
+  }
+  createOrganization(organization) {
+    return this.post(config.organizations, organization);
+  }
+  updateOrganization(id, organization) {
+    return this.post(`${config.organizations}/${id}`, organization);
+  }
+  deleteOrganization(id) {
+    return this.del(`${config.organizations}/${id}`);
+  }
+  getOrganizationMembers(identifier, search) {
+    return this.post(`${config.organizations}/${identifier}/members`, search);
+  }
+  addOrgMember(identifier, userId) {
+    return this.post(`${config.organizations}/${identifier}/members/${userId}`);
+  }
+  removeOrgMember(identifier, userId) {
+    return this.del(`${config.organizations}/${identifier}/members/${userId}`);
+  }
   addSessionStartListener(listener) {
     if (typeof listener !== "function") {
       throw new Error(ERROR);

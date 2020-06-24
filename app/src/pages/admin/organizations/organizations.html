@@ -1,0 +1,50 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <h3>Organizations</h3>
+    </div>
+    <div class="fixed-header-buttons">
+      <button data-bind="disable: !atLeastOneChecked(), click: deleteItems"
+        class="ui red tiny button">
+        Delete
+      </button>
+      <a href="#/admin/organizations/new" class="ui primary tiny button">New Organization</a>
+    </div>
+  </div>
+  <div class="ui empty secondary pointing menu"></div>
+</div>
+<div class="scrollbox">
+  <errors id="orgs"></errors>
+  <pager style="display: flex; justify-content: flex-end" 
+    params="prefix: 'org', postLoadFunc: postLoadFunc"></pager>
+  <table class="ui compact selectable table" style="margin-top:0">
+    <thead>
+      <tr>
+        <th width="10">
+          <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+        </th>
+        <th>Name</th>
+        <th>ID</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+      <tr>
+        <td colspan="4" data-bind="html: recordsMessageObs"></td>
+      </tr>
+    </tbody>
+    <tbody data-bind="foreach: itemsObs">
+      <tr>
+        <td>
+          <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+        </td>
+        <td>
+          <span data-bind="text: $data.name, visible: $data.deletedObs"></span>
+          <a data-bind="href: '#/admin/organizations/'+$data.identifier, text: $data.name"></a>
+        </td>
+        <td data-bind="text: $data.identifier"></td>
+        <td data-bind="text: $data.description"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
