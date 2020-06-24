@@ -32,7 +32,7 @@
         </th>
         <th>Name</th>
         <th>Identifier(s)</th>
-        <th style="white-space: nowrap">Created On</th>
+        <th>Organization</th>
         <th>Substudies</th>
         <th></th>
       </tr>
@@ -52,7 +52,7 @@
             text: $component.formatNameAsFullLabel($data)"></a>
         </td>
         <td data-bind="html: $component.formatIdentifiers($data)"></td>
-        <td style="white-space: nowrap" data-bind="text: $component.formatDateTime($data.createdOn)"></td>
+        <td data-bind="text: $parent.orgNames[$data.orgMembership]"></td>
         <td data-bind="text: $data.substudyIds.join(', ')"></td>
         <td style="padding: 0; text-align:right">
           <span style="padding-right: .6rem; white-space: nowrap" data-bind="visible: $data.status === 'disabled'">
