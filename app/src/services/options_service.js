@@ -1,5 +1,6 @@
 import fn from "../functions";
 import serverService from "./server_service";
+import Promise from "bluebird";
 
 const LABEL_SORTER = fn.makeFieldSorter("label");
 
@@ -65,10 +66,25 @@ function getCompoundActivityOptions() {
     return [{ value: "", label: "Select compound task:" }].concat(opts);
   });
 }
+
+let orgNamesMap = {};
+
+function getOrganizationNames() {
+  if (Object.keys(orgNamesMap).length) {
+    return Promise.resolve(orgNamesMap);
+  }
+  return serverService.getOrganizations(0, 100).then(response => {
+    return response.items.reduce((map, org) => {
+      map[org.identifier] = org.name;
+      return map;
+    }, orgNamesMap);
+  });
+}
 export default {
   getActivities,
   getSchedules,
   getActivityOptions,
+  getOrganizationNames,
   getSurveyOptions,
   getTaskIdentifierOptions,
   getCompoundActivityOptions

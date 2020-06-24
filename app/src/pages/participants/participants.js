@@ -5,6 +5,7 @@ import root from "../../root";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
+import options_service from "../../services/options_service";
 
 const cssClassNameForStatus = {
   disabled: "negative",
@@ -94,27 +95,30 @@ export default function participants() {
         getExternalId(id).then(success).catch(() => {
           getId(id).then(success).catch(() => {
             getSynapseUserId(id).then(success).catch(() => {
-              getEmail(id).then(success);
+              getEmail(id).then(success).catch((e) => {
+                event.target.parentNode.parentNode.classList.remove("loading");
+                utils.failureHandler({ transient: false, id: "participants" })(e);
+              });
             });
           });
         });
       });
     }
-    promise.catch((e) => {
-      event.target.parentNode.parentNode.classList.remove("loading");
-      utils.failureHandler({ transient: false, id: "participants" })(e);
-    });
   };
   self.exportDialog = function() {
     root.openDialog("participant_export", { total: self.total, search: self.search });
   };
+
+  options_service.getOrganizationNames().then(map => console.log(map));
+
   self.loadingFunc = function(search) {
     utils.clearErrors();
     self.search = search;
 
-    return serverService.searchAccountSummaries(search)
+    return options_service.getOrganizationNames()
+      .then((map) => self.orgNames = map)
+      .then(() => serverService.searchAccountSummaries(search))
       .then(load)
       .catch(utils.failureHandler({ id: "participants" }));
   };
-
 };
