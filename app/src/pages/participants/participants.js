@@ -55,29 +55,9 @@ export default function participants() {
   });
 
   self.findObs = ko.observable("");
-  fn.copyProps(self, fn, "formatName", "formatDateTime", "formatNameAsFullLabel");
+  fn.copyProps(self, fn, "formatName", "formatDateTime", "formatIdentifiers", "formatNameAsFullLabel");
   fn.copyProps(self, root, "isAdmin", "isDeveloper", "isResearcher");
 
-  self.formatIdentifiers = function(item) {
-    var array = [];
-    if (item.email) {
-      array.push(item.email);
-    }
-    if (item.phone) {
-      array.push(item.phone);
-    }
-    let arrays = Object.values(item.externalIds || []);
-    if (arrays.length) {
-      array.push(arrays.join(", "));
-    }
-    if (item.synapseUserId) {
-      array.push('Synapse ID ' + item.synapseUserId);
-    }
-    if (array.length === 0) {
-      array.push("<i>None</i>");
-    }
-    return array.join(", ");
-  };
   self.classNameForStatus = assignClassForStatus;
 
   function load(response) {

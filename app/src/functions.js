@@ -424,6 +424,27 @@ function formatFileSize(fileSize) {
   } while (fileSize > 1024);
   return Math.max(fileSize, 0.1).toFixed(1) + BYTE_UNITS[i];
 }
+function formatIdentifiers(item) {
+  var array = [];
+  if (item.email) {
+    array.push(item.email);
+  }
+  if (item.phone) {
+    array.push(item.phone);
+  }
+  let arrays = Object.values(item.externalIds || []);
+  if (arrays.length) {
+    array.push(arrays.join(", "));
+  }
+  if (item.synapseUserId) {
+    array.push('Synapse ID ' + item.synapseUserId);
+  }
+  if (array.length === 0) {
+    array.push("<i>None</i>");
+  }
+  return array.join(", ");
+};
+
 
 /* ==================================== DATE FUNCTIONS ==================================== */
 
@@ -532,6 +553,7 @@ export default {
   formatDate,
   formatDateTime,
   formatFileSize,
+  formatIdentifiers,
   formatTime,
   formatLanguages,
   formatList,

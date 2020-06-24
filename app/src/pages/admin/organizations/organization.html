@@ -2,7 +2,7 @@
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
       <div class="ui breadcrumb">
-        <a href="#/files" class="section">Files</a>
+        <a href="#/admin/organizations" class="section">Organizations</a>
         <i class="right chevron icon divider"></i>
       </div>
       <h3 data-bind="text: titleObs"></h3>
@@ -14,13 +14,21 @@
   <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
-  <errors id="file"></errors>
+  <errors id="org"></errors>
   <form class="ui form">
     <div class="ui grid">
       <div class="seven wide column">
         <div class="required field" id="name">
           <label>Name</label>
           <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
+        </div>
+        <div class="field required" id="identifier" data-bind="visible: isNewObs">
+          <label>Identifier</label>
+          <input type="text" data-bind="textInput: identifierObs" />
+        </div>
+        <div class="field" data-bind="visible: !isNewObs()">
+          <label>Identifier</label>
+          <div class="input-field-padding" data-bind="text: identifierObs"></div>
         </div>
         <div class="field" id="description">
           <label>Description</label>
@@ -43,46 +51,43 @@
       </div>
     </div>
   </form>
-  <h4 data-bind="visible: !isNewObs()" class="ui dividing header">Revisions</h4>
+
+  <h4 data-bind="visible: !isNewObs()" class="ui dividing header">Members</h4>
   <div class="line-control" data-bind="visible: !isNewObs()">
     <div class="line-control-stretch ">
-      <button class="ui tiny primary button" data-bind="click: newRevisionDialog">Upload New Revision</button>
+      <button class="ui compact mini primary button" data-bind="click: addMemberDialog">
+        Add Member&hellip;
+      </button>
     </div>
-    <pager params="prefix: 'fr', postLoadFunc: postLoadFunc"></pager>
+    <pager params="prefix: 'members', postLoadFunc: postLoadFunc, pageSize: 100"></pager>
   </div>
   <table class="ui compact selectable table" data-bind="visible: !isNewObs()">
     <thead>
       <tr>
         <th>Name</th>
-        <th>Created On</th>
-        <th>File Size</th>
-        <th>Status</th>
+        <th>Identifiers</th>
         <th width="10"></th>
       </tr>
     </thead>
     <tbody class="no_records" data-bind="if: itemsObs().length === 0">
       <tr>
-        <td colspan="5" data-bind="html: recordsMessageObs"></td>
+        <td colspan="3" data-bind="html: recordsMessageObs"></td>
       </tr>
     </tbody>
     <tbody data-bind="foreach: itemsObs">
-      <tr data-bind="css: $component.classNameForStatus($data)">
-        <td style="line-height:1.1">
-          <div>
-            <a data-bind="text: $data.name, attr: {href: $data.downloadURL}"></a>
-          </div>
-          <div style="color: #bbb; font-size: smaller" data-bind="text: $data.description"></div>
-        </td>
-        <td data-bind="text: $parent.formatDateTime($data.createdOn)"></td>
-        <td data-bind="text: $parent.formatFileSize($data.size)"></td>
-        <td data-bind="text: $parent.formatTitleCase($data.status)"></td>
+      <tr>
         <td>
-          <button class="ui tiny basic icon button" 
-            data-bind="visible: $data.status === 'pending', click: $parent.verify">
-            <i class="redo icon"></i>
-          </button>          
+          <a data-bind="href: '#/participants/'+$data.id+'/general',
+            text: $component.formatNameAsFullLabel($data)"></a>
+        </td>
+        <td data-bind="html: $component.formatIdentifiers($data)"></td>
+        <td style="white-space: nowrap">
+          <button class="ui basic compact mini red button" data-bind="click: $parent.removeOrgMember">
+            Remove
+          </button>
         </td>
       </tr>
     </tbody>
   </table>  
+
 </div>

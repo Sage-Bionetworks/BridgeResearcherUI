@@ -1,0 +1,51 @@
+<div class="ui small modal">
+  <i data-bind="click:closeDialog" class="close icon"></i>
+  <div class="header">
+    Add Organization Member
+  </div>
+  <div class="content" style="height: 30rem; overflow: hidden; overflow-y: scroll">
+
+    <errors id="add_member"></errors>
+
+    <div class="ui left icon input">
+      <input type="text" placeholder="Email filter..." 
+        data-bind="textInput: emailObs, returnHandler: search"/>
+      <i class="filter icon"></i>
+    </div>
+
+    <table class="ui compact selectable table">
+      <thead>
+        <tr>
+          <th width="10">
+            <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+          </th>
+          <th>Name</th>
+          <th>Identifier(s)</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="3" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr>
+          <td>
+            <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+          </td>
+          <td>
+            <a data-bind="href: '#/participants/'+$data.id+'/general',
+              text: $component.formatNameAsFullLabel($data)"></a>
+          </td>
+          <td data-bind="html: $component.formatIdentifiers($data)"></td>
+        </tr>
+      </tbody>
+    </table>
+  
+  </div>
+  <div class="actions">
+    <button class="ui primary small button" 
+      data-bind="click: addAndClose, disable: !atLeastOneChecked()">Add</button>
+    <button class="ui small button" data-bind="click: closeDialog">Cancel</button>
+  </div>
+</div>

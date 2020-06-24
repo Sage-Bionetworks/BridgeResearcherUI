@@ -2,16 +2,15 @@ import Binder from "../../binder";
 import ko from "knockout";
 import storeService from "../../services/store_service";
 
-const PAGE_SIZE = 25;
-
 export default function pager(params) {
   let prefix = params.prefix;
   let postLoadFunc = params.postLoadFunc;
+  let pageSize = params.pageSize || 25;
 
   let self = this;
   let query = storeService.restoreQuery(prefix);
   if (!query || !query.pageSize) {
-    query = {includeDeleted:false, pageSize: PAGE_SIZE, offsetBy: 0};
+    query = {includeDeleted:false, pageSize: pageSize, offsetBy: 0};
   }
 
   new Binder(self)
@@ -25,7 +24,7 @@ export default function pager(params) {
     let page = self.currentPageObs() - 1;
     if (page >= 0) {
       self.showLoaderObs(true);
-      query.offsetBy = page * PAGE_SIZE;
+      query.offsetBy = page * pageSize;
       ko.postbox.publish(`${prefix}-refresh`, query);
     }
   };
@@ -33,7 +32,7 @@ export default function pager(params) {
     let page = self.currentPageObs() + 1;
     if (page <= self.totalPagesObs() - 1) {
       self.showLoaderObs(true);
-      query.offsetBy = page * PAGE_SIZE;
+      query.offsetBy = page * pageSize;
       ko.postbox.publish(`${prefix}-refresh`, query);
     }
   };
@@ -44,7 +43,7 @@ export default function pager(params) {
   };
   self.lastPage = function() {
     self.showLoaderObs(true);
-    query.offsetBy = (self.totalPagesObs() - 1) * PAGE_SIZE;
+    query.offsetBy = (self.totalPagesObs() - 1) * pageSize;
     ko.postbox.publish(`${prefix}-refresh`, query);
   };
 
@@ -53,8 +52,8 @@ export default function pager(params) {
     let rp = response.requestParams;
     self.offsetByObs(rp.offsetBy);
     self.totalRecordsObs(response.total);
-    self.currentPageObs(Math.round(rp.offsetBy / PAGE_SIZE));
-    self.totalPagesObs(Math.ceil(response.total / PAGE_SIZE));
+    self.currentPageObs(Math.round(rp.offsetBy / pageSize));
+    self.totalPagesObs(Math.ceil(response.total / pageSize));
     self.showLoaderObs(false);
     // This deals with the case of deleting all the items on a page, such that
     // you are past the current end of records.

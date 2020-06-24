@@ -70,6 +70,7 @@ export default {
   masterschedule: "/v3/schedulerconfigs",
   metadata: "/v3/sharedmodules/metadata",
   oauthSignIn: "/v3/auth/oauth/signIn",
+  organizations: "/v1/organizations",
   participants: "/v3/participants",
   phoneSignIn: "/v3/auth/phone/signIn",
   reauth: "/v3/auth/reauth",

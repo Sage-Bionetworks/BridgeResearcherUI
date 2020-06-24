@@ -141,8 +141,13 @@ import adminApp from "./pages/admin/app/app";
 import adminAppHtml from "./pages/admin/app/app.html";
 import adminSubstudies from "./pages/admin/substudies/substudies";
 import adminSubstudiesHtml from "./pages/admin/substudies/substudies.html";
-import adminMasterSchedules from "./pages/admin/masterschedules/masterschedules";
-import adminMasterSchedulesHtml from "./pages/admin/masterschedules/masterschedules.html";
+// import adminMasterSchedules from "./pages/admin/masterschedules/masterschedules";
+// import adminMasterSchedulesHtml from "./pages/admin/masterschedules/masterschedules.html";
+import adminOrgs from "./pages/admin/organizations/organizations";
+import adminOrgsHtml from "./pages/admin/organizations/organizations.html";
+import adminOrg from "./pages/admin/organizations/organization";
+import adminOrgHtml from "./pages/admin/organizations/organization.html";
+
 import substudy from "./pages/admin/substudy/substudy";
 import substudyHtml from "./pages/admin/substudy/substudy.html";
 import boolConst from "./pages/survey/constraints/boolean_constraints";
@@ -274,6 +279,8 @@ import oauthProvider from "./dialogs/oauth_provider/oauth_provider";
 import oauthProviderHtml from "./dialogs/oauth_provider/oauth_provider.html";
 import fileUpload from "./dialogs/file_upload/file_upload";
 import fileUploadHtml from "./dialogs/file_upload/file_upload.html";
+import addOrgMember from "./dialogs/add_org_member/add_org_member";
+import addOrgMemberHtml from "./dialogs/add_org_member/add_org_member.html";
 import appConfigs from "./pages/appconfigs/appconfigs";
 import appConfigsHtml from "./pages/appconfigs/appconfigs.html";
 import appConfig from "./pages/appconfig/appconfig";
@@ -369,7 +376,7 @@ reg("file", {viewModel: file, template: fileHtml});
 reg("schedule", {viewModel: schedule, template: scheduleHtml});
 reg("uploads", {viewModel: uploads, template: uploadsHtml});
 reg("upload", {viewModel: upload, template: uploadHtml});
-reg("masterschedules", {viewModel: adminMasterSchedules, template: adminMasterSchedulesHtml});
+//reg("masterschedules", {viewModel: adminMasterSchedules, template: adminMasterSchedulesHtml});
 reg("SimpleScheduleStrategy", {viewModel: ss, template: ssHtml});
 reg("ABTestScheduleStrategy", {viewModel: abs, template: absHtml});
 reg("CriteriaScheduleStrategy", {viewModel: cs, template: csHtml});
@@ -383,6 +390,9 @@ reg("admin_apps", {viewModel: adminApps, template: adminAppsHtml});
 reg("admin_app", {viewModel: adminApp, template: adminAppHtml});
 reg("admin_substudies", {viewModel: adminSubstudies, template: adminSubstudiesHtml});
 reg("admin_substudy", {viewModel: substudy, template: substudyHtml});
+reg("admin_organizations", {viewModel: adminOrgs, template: adminOrgsHtml})
+reg("admin_organization", {viewModel: adminOrg, template: adminOrgHtml})
+
 reg("BooleanConstraints", {viewModel: boolConst, template: boolConstHtml});
 reg("DateConstraints", {viewModel: dateConst, template:  dateConstHtml});
 reg("DateTimeConstraints", {viewModel: dateTimeConst, template: dateTimeConstHtml});
@@ -462,6 +472,7 @@ reg("preview_appconfig", {viewModel: previewAppConfig, template: previewAppConfi
 reg("edit_apple_link", {viewModel: editAppleLink, template: editAppleLinkHtml, synchronous: true});
 reg("edit_android_link", {viewModel: editAndroidLink, template: editAndroidLinkHtml, synchronous: true});
 reg("file_upload", {viewModel: fileUpload, template: fileUploadHtml, synchronous: true});
+reg("add_org_member", {viewModel: addOrgMember, template: addOrgMemberHtml, synchronous: true});
 reg("oauth_provider", {viewModel: oauthProvider, template: oauthProviderHtml, synchronous: true});
 reg("appconfigs", {viewModel: appConfigs, template: appConfigsHtml});
 reg("appconfig", {viewModel: appConfig, template: appConfigHtml});
