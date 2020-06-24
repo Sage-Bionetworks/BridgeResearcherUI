@@ -24,11 +24,12 @@ export default function(params) {
     utils.startHandler(vm, event);
 
     let fn = (acct) => {
-      if (acct.checkedObs()) {
-        serverService.addOrgMember(params.orgId, acct.id)
-      }
+      return serverService.addOrgMember(params.orgId, acct.id)
     };
-    Promise.each(self.itemsObs(), (acct) => fn(acct))
+
+    let adds = self.itemsObs().filter(acct => acct.checkedObs());
+
+    Promise.each(adds, (acct) => fn(acct))
       .then(params.closeFunc)
       .catch(utils.failureHandler({ id: "add_member" }));
   };
@@ -39,16 +40,16 @@ export default function(params) {
       .catch(utils.failureHandler({ id: "add_member" }));
   };
 
+  function formatAccount(acct) {
+    acct.substudyIds = acct.substudyIds || [];
+    acct.phone = (acct.phone) ?
+      fn.flagForRegionCode(acct.phone.regionCode) + " " + acct.phone.nationalFormat :
+      "";
+    return acct;
+  }
+
   function load(response) {
-    response.items = response.items.map(function(item) {
-      item.substudyIds = item.substudyIds || [];
-      if (item.phone) {
-        item.phone = fn.flagForRegionCode(item.phone.regionCode) + " " + item.phone.nationalFormat;
-      } else {
-        item.phone = "";
-      }
-      return item;
-    });
+    response.items = response.items.map(formatAccount);
     self.itemsObs(response.items);
     if (response.items.length === 0) {
       self.recordsMessageObs("There are no user accounts, or none that match the filter.");
