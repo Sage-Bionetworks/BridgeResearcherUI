@@ -37,7 +37,8 @@ export default function(params) {
   };
 
   self.search = function() {
-    serverService.searchAccountSummaries({emailFilter: self.emailObs()})
+    let params = Object.assign({emailFilter: self.emailObs()}, PAGE_OPTS);
+    serverService.searchAccountSummaries(params)
       .then(load)
       .catch(utils.failureHandler({ id: "add_member" }));
   };
