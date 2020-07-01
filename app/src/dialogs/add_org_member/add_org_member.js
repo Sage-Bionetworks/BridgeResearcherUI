@@ -5,6 +5,8 @@ import serverService from '../../services/server_service';
 import tables from '../../tables';
 import utils from '../../utils';
 
+const PAGE_OPTS = {pageSize: 100, adminOnly: true, orgMembership: "<none>"};
+
 export default function(params) {
   const self = this;
 
@@ -42,9 +44,6 @@ export default function(params) {
 
   function formatAccount(acct) {
     acct.substudyIds = acct.substudyIds || [];
-    acct.phone = (acct.phone) ?
-      fn.flagForRegionCode(acct.phone.regionCode) + " " + acct.phone.nationalFormat :
-      "";
     return acct;
   }
 
@@ -57,7 +56,7 @@ export default function(params) {
     return response;
   }
 
-  serverService.searchAccountSummaries({pageSize: 100})
+  serverService.searchAccountSummaries(PAGE_OPTS)
       .then(load)
       .catch(utils.failureHandler({ id: "add_member" }));
 }

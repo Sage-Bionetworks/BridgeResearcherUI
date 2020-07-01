@@ -33,10 +33,7 @@
           <td>
             <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
           </td>
-          <td>
-            <a data-bind="href: '#/participants/'+$data.id+'/general',
-              text: $component.formatNameAsFullLabel($data)"></a>
-          </td>
+          <td data-bind="text: $component.formatNameAsFullLabel($data)"></td>
           <td data-bind="html: $component.formatIdentifiers($data)"></td>
         </tr>
       </tbody>

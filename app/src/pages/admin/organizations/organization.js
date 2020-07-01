@@ -105,7 +105,7 @@ export default function organization(params) {
   });
 
   let mapItems = (response) => {
-    response.items.forEach((acct) => acct.fullName = fn.formatNameAsFullLabel(acct));
+    response.items.forEach((acct) => fn.formatNameAsFullLabel(acct));
     return response;
   }
 

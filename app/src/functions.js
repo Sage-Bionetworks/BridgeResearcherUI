@@ -430,7 +430,11 @@ function formatIdentifiers(item) {
     array.push(item.email);
   }
   if (item.phone) {
-    array.push(item.phone);
+    if (typeof item.phone === 'string') {
+      array.push(item.phone);
+    } else {
+      array.push(flagForRegionCode(item.phone.regionCode) + " " + item.phone.nationalFormat);
+    }
   }
   let arrays = Object.values(item.externalIds || []);
   if (arrays.length) {
