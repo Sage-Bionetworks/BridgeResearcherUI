@@ -104,10 +104,6 @@ export default function organization(params) {
     refresh: () => loadMembers(self.query)
   });
 
-  function formatPhone(phone) {
-    return fn.flagForRegionCode(phone.regionCode) + " " + phone.nationalFormat;
-  }
-
   let mapItems = (response) => {
     response.items.forEach((acct) => fn.formatNameAsFullLabel(acct));
     return response;
