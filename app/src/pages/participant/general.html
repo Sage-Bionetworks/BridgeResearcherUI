@@ -144,6 +144,12 @@
         <label>Data Groups</label>
         <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
       </div>
+      <div class="field">
+        <label>Organization</label>
+        <select class="ui dropdown" data-bind="options: allOrganizationsObs, optionsText: 'label', 
+          optionsValue: 'value', value: orgMembershipObs"></select>
+      </div>
+      <!--
       <div class="field" data-bind="visible: isAdmin() || isNewObs()">
         <label>Study Membership</label>
         <tag-editor params="selectedObs: studyIdsObs, allObs: allStudiesObs, type: 'studies'"></tag-editor>
@@ -152,6 +158,7 @@
         <label>Study Membership</label>
         <span class="input-field-padding" data-bind="text: studyIdsObs().join(', ')"></span>
       </div>
+      -->
 
       <div class="field externalId externalIds" data-bind="visible: !isNewObs()">
         <label>Assigned External ID(s)</label>

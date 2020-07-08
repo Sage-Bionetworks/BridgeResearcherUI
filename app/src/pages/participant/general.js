@@ -3,6 +3,7 @@ import Binder from "../../binder";
 import fn from "../../functions";
 import ko from "knockout";
 import root from "../../root";
+import optionsService from "../../services/options_service";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
@@ -82,7 +83,9 @@ export default function general(params) {
     .bind("userId", params.userId)
     .bind("id", params.userId)
     .bind("roles[]", null, fn.formatRoles, fn.persistRoles)
-    .bind("studyIds[]");
+    .bind("studyIds[]")
+    .bind("orgMembership")
+    .bind("allOrganizations[]");
 
   fn.copyProps(self, root, "isAdmin");
 
@@ -288,10 +291,11 @@ export default function general(params) {
     }
   }
 
-  serverService
-    .getApp()
+  serverService.getApp()
     .then(binder.assign("app"))
     .then(initApp)
+    .then(optionsService.getOrganizationOptions)
+    .then(self.allOrganizationsObs)
     .then(getParticipant)
     .then(binder.assign("participant"))
     .then(noteInitialStatus)

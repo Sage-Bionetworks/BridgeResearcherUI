@@ -66,6 +66,13 @@ function getCompoundActivityOptions() {
     return [{ value: "", label: "Select compound task:" }].concat(opts);
   });
 }
+function getOrganizationOptions() {
+  return serverService.getOrganizations(0, 100).then(response => {
+    let opts = response.items.map(org => ({"label": org.name, "value": org.identifier}));
+    console.log(JSON.stringify(opts));
+    return [{ value: "", label: "Select organization:" }].concat(opts);
+  });
+}
 
 let orgNamesMap = {};
 
@@ -85,6 +92,7 @@ export default {
   getSchedules,
   getActivityOptions,
   getOrganizationNames,
+  getOrganizationOptions,
   getSurveyOptions,
   getTaskIdentifierOptions,
   getCompoundActivityOptions
