@@ -13,14 +13,14 @@
           <label>Date</label>
           <input data-bind="flatpickr: dateObs" />
         </div>
-        <div class="field tag-editor substudyIds" data-bind="visible: isAddObs">
-          <label>Restricted to substudies</label>
-          <tag-editor params="selectedObs: substudyIdsObs, 
-            allObs: substudyOptionsObs, type: 'substudy IDs'"></tag-editor>
+        <div class="field tag-editor studyIds" data-bind="visible: isAddObs">
+          <label>Restricted to studies</label>
+          <tag-editor params="selectedObs: studyIdsObs, 
+            allObs: studyOptionsObs, type: 'study IDs'"></tag-editor>
         </div>
         <div class="field" data-bind="visible: !isAddObs()">
-          <label>Restricted to substudies</label>
-          <div class="inline-form-text" data-bind="text: (substudyIdsObs() || []).join(', ')"></div>
+          <label>Restricted to studies</label>
+          <div class="inline-form-text" data-bind="text: (studyIdsObs() || []).join(', ')"></div>
         </div>
       </div>
       <div class="field" id="data">

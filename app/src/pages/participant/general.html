@@ -138,19 +138,19 @@
       </div>
     </div>
 
-    <!-- ROW 3: Varies in last row for admin (still can change substudies) -->
+    <!-- ROW 3: Varies in last row for admin (still can change studies) -->
     <div class="equal width fields">
       <div class="field">
         <label>Data Groups</label>
         <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
       </div>
       <div class="field" data-bind="visible: isAdmin() || isNewObs()">
-        <label>Substudy Membership</label>
-        <tag-editor params="selectedObs: substudyIdsObs, allObs: allSubstudiesObs, type: 'substudies'"></tag-editor>
+        <label>Study Membership</label>
+        <tag-editor params="selectedObs: studyIdsObs, allObs: allStudiesObs, type: 'studies'"></tag-editor>
       </div>
       <div class="field" data-bind="visible: !isAdmin() && !isNewObs()">
-        <label>Substudy Membership</label>
-        <span class="input-field-padding" data-bind="text: substudyIdsObs().join(', ')"></span>
+        <label>Study Membership</label>
+        <span class="input-field-padding" data-bind="text: studyIdsObs().join(', ')"></span>
       </div>
 
       <div class="field externalId externalIds" data-bind="visible: !isNewObs()">

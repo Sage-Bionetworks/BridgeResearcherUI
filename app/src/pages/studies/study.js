@@ -1,23 +1,23 @@
-import Binder from "../../../binder";
-import fn from "../../../functions";
-import serverService from "../../../services/server_service";
-import utils from "../../../utils";
+import Binder from "../../binder";
+import fn from "../../functions";
+import serverService from "../../services/server_service";
+import utils from "../../utils";
 
 var failureHandler = utils.failureHandler({
-  redirectMsg: "Substudy not found.",
-  redirectTo: "admin/substudies",
+  redirectMsg: "Study not found.",
+  redirectTo: "admin/studies",
   transient: false,
-  id: 'substudy'
+  id: 'study'
 });
 
 export default function(params) {
   let self = this;
-  self.substudy = {};
+  self.study = {};
 
   fn.copyProps(self, fn, "formatDateTime");
 
   let binder = new Binder(self)
-    .obs("title", "New Substudy")
+    .obs("title", "New Study")
     .obs("isNew", params.id === "new")
     .obs("createdOn")
     .obs("modifiedOn")
@@ -28,12 +28,12 @@ export default function(params) {
   function load() {
     return params.id === "new" ? 
       Promise.resolve({}) : 
-      serverService.getSubstudy(params.id).then(fn.handleObsUpdate(self.titleObs, "name"));
+      serverService.getStudy(params.id).then(fn.handleObsUpdate(self.titleObs, "name"));
   }
-  function saveSubstudy() {
+  function saveStudy() {
     return params.id === "new" ? 
-      serverService.createSubstudy(self.substudy) : 
-      serverService.updateSubstudy(self.substudy);
+      serverService.createStudy(self.study) : 
+      serverService.updateStudy(self.study);
   }
   function updateModifiedOn(response) {
     params.id = self.idObs();
@@ -41,13 +41,13 @@ export default function(params) {
   }
 
   self.save = function(vm, event) {
-    self.substudy = binder.persist(self.substudy);
+    self.study = binder.persist(self.study);
 
     utils.startHandler(vm, event);
-    saveSubstudy()
+    saveStudy()
       .then(response => {
         if (params.id === "new") {
-          document.location = "#/admin/substudies/" + self.idObs();
+          document.location = "#/admin/studies/" + self.idObs();
         }
         return response;
       })
@@ -55,9 +55,9 @@ export default function(params) {
       .then(fn.handleObsUpdate(self.versionObs, "version"))
       .then(fn.handleStaticObsUpdate(self.modifiedOnObs, new Date()))
       .then(updateModifiedOn)
-      .then(fn.returning(self.substudy))
+      .then(fn.returning(self.study))
       .then(fn.handleObsUpdate(self.titleObs, "name"))
-      .then(utils.successHandler(vm, event, "Sub-study has been saved."))
+      .then(utils.successHandler(vm, event, "Study has been saved."))
       .catch(failureHandler);
   };
 

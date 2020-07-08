@@ -1,8 +1,9 @@
-import fn from "../../../functions";
+import fn from "../../functions";
 import ko from "knockout";
-import serverService from "../../../services/server_service";
-import tables from "../../../tables";
-import utils from "../../../utils";
+import root from "../../root";
+import serverService from "../../services/server_service";
+import tables from "../../tables";
+import utils from "../../utils";
 
 const notFound = utils.failureHandler({
   redirectTo: "organizations",
@@ -17,6 +18,8 @@ export default function organizations() {
   // capture post-processing of the pager control
   self.postLoadPagerFunc = () => {};
   self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
+
+  fn.copyProps(self, root, "isSuperadmin");
 
   tables.prepareTable(self, {
     name: "organization",

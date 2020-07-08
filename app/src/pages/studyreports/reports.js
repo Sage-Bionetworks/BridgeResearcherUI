@@ -9,7 +9,7 @@ export default function reports() {
   let self = this;
 
   self.isDeveloper = root.isDeveloper;
-  self.substudyIds = [];
+  self.studyIds = [];
 
   tables.prepareTable(self, {
     name: "report",
@@ -29,10 +29,10 @@ export default function reports() {
     load();
   };
   self.isVisible = function(item) {
-    item.substudyIds = item.substudyIds || [];
+    item.studyIds = item.studyIds || [];
     return item.public || 
-      self.substudyIds.length === 0 || 
-      self.substudyIds.some((el) => item.substudyIds.includes(el));
+      self.studyIds.length === 0 || 
+      self.studyIds.some((el) => item.studyIds.includes(el));
   };
 
   function processStudyReport(item) {
@@ -48,7 +48,7 @@ export default function reports() {
   }
   function load() {
     serverService.getSession()
-      .then((session) => self.substudyIds = session.substudyIds)
+      .then((session) => self.studyIds = session.studyIds)
       .then(() => serverService.getStudyReports())
       .then(fn.handleForEach("items", processStudyReport))
       .then(fn.handleSort("items", "identifier"))

@@ -47,7 +47,7 @@
           <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
         </th>
         <th>Identifier</th>
-        <th>Substudy</th>
+        <th>Study</th>
         <th></th>
       </tr>
     </thead>
@@ -69,9 +69,9 @@
               attr: {'href': $parent.link($data)}"></a>
           </span>
         </td>
-        <td data-bind="text: $data.substudyId"></td>
+        <td data-bind="text: $data.studyId"></td>
         <td style="white-space: nowrap; text-align: right">
-          <div data-bind="visible: $parent.matchesSubstudy($data.substudyId)">
+          <div data-bind="visible: $parent.matchesStudy($data.studyId)">
             <div data-bind="visible: $data.assigned === true">
               <i class="green check icon"> </i> Credentials Created
             </div>

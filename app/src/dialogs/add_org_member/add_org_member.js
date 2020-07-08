@@ -25,9 +25,7 @@ export default function(params) {
   self.addAndClose = (vm, event) => {
     utils.startHandler(vm, event);
 
-    let fn = (acct) => {
-      return serverService.addOrgMember(params.orgId, acct.id)
-    };
+    let fn = (acct) => serverService.addOrgMember(params.orgId, acct.id);
 
     let adds = self.itemsObs().filter(acct => acct.checkedObs());
 
@@ -44,7 +42,7 @@ export default function(params) {
   };
 
   function formatAccount(acct) {
-    acct.substudyIds = acct.substudyIds || [];
+    acct.studyIds = acct.studyIds || [];
     return acct;
   }
 

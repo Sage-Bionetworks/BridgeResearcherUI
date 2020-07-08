@@ -13,7 +13,7 @@ const failureHandler = utils.failureHandler({
 
 export default function reports(params) {
   let self = this;
-  self.substudyIds = [];
+  self.studyIds = [];
 
   new Binder(self)
     .obs("userId", params.userId)
@@ -53,15 +53,15 @@ export default function reports(params) {
     load();
   };
   self.isVisible = function(item) {
-    item.substudyIds = item.substudyIds || [];
+    item.studyIds = item.studyIds || [];
     return item.public || 
-      self.substudyIds.length === 0 || 
-      self.substudyIds.some((el) => item.substudyIds.includes(el));
+      self.studyIds.length === 0 || 
+      self.studyIds.some((el) => item.studyIds.includes(el));
   };
   
   function load() {
     serverService.getSession()
-      .then((session) => self.substudyIds = session.substudyIds)
+      .then((session) => self.studyIds = session.studyIds)
       .then(() => serverService.getParticipant(params.userId))
       .then(serverService.getParticipantReports.bind(serverService))
       .then(fn.handleSort("items", "identifier"))

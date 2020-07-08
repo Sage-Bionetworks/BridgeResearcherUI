@@ -1,10 +1,9 @@
-import Binder from "../../../binder";
-import fn from "../../../functions";
-import ko from 'knockout';
-import root from '../../../root';
-import serverService from "../../../services/server_service";
-import tables from '../../../tables';
-import utils from "../../../utils";
+import Binder from "../../binder";
+import fn from "../../functions";
+import root from '../../root';
+import serverService from "../../services/server_service";
+import tables from '../../tables';
+import utils from "../../utils";
 
 let failureHandler = utils.failureHandler({
   redirectMsg: "Organization not found.",

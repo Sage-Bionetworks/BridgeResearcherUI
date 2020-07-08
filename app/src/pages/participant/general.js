@@ -60,7 +60,7 @@ export default function general(params) {
     .obs("allDataGroups[]")
     .obs("createdOn", null, fn.formatDateTime)
     .obs("allRoles[]", [])
-    .obs("allSubstudies[]")
+    .obs("allStudies[]")
     .obs("title", params.userId === "new" ? "New participant" : "&#160;")
     .obs("externalIds", '', Binder.formatExternalIds)
     .bind("newExternalId", null, null, persistExternalId)
@@ -82,7 +82,7 @@ export default function general(params) {
     .bind("userId", params.userId)
     .bind("id", params.userId)
     .bind("roles[]", null, fn.formatRoles, fn.persistRoles)
-    .bind("substudyIds[]");
+    .bind("studyIds[]");
 
   fn.copyProps(self, root, "isAdmin");
 
@@ -278,13 +278,13 @@ export default function general(params) {
   function getSession() {
     return serverService.getSession();
   }
-  function updateAllSubstudiesObs(session) {
+  function updateAllStudiesObs(session) {
     if (self.isNewObs() || self.isAdmin()) {
-      return serverService.getSubstudies(false).then(response => {
-        self.allSubstudiesObs(response.items.map(item => item.id));
+      return serverService.getStudies(false).then(response => {
+        self.allStudiesObs(response.items.map(item => item.id));
       });
     } else {
-      self.allSubstudiesObs(session.substudyIds);
+      self.allStudiesObs(session.studyIds);
     }
   }
 
@@ -297,6 +297,6 @@ export default function general(params) {
     .then(noteInitialStatus)
     .then(binder.update())
     .then(getSession)
-    .then(updateAllSubstudiesObs)
+    .then(updateAllStudiesObs)
     .catch(failureHandler);
 };

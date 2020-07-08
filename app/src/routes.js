@@ -71,6 +71,8 @@ router.on("/settings/password_policy", routeTo("password_policy", "settings"));
 router.on("/settings/user_attributes", routeTo("user_attributes", "settings"));
 router.on("/settings/oauth_providers", routeTo("oauth_providers", "settings"));
 router.on("/settings/install_links", routeTo("install_links", "settings"));
+router.on("/settings/advanced", routeTo("advanced", "settings"));
+//DELETEME
 router.on("/app_links", routeTo("app_links", "links"));
 router.on("/export_settings", routeTo("export_settings", "export"));
 router.on("/shared_upload_metadata", routeTo("shared_upload_metadata", "metadata"));
@@ -130,17 +132,16 @@ router.on("/topics/:guid", routeTo("topic", "notifications", GUID));
 router.on("/topics", routeTo("topics", "notifications"));
 router.on("/files/:guid", routeTo("file", "files", GUID));
 router.on("/files", routeTo("files", "files"));
-router.on("/admin/info", routeTo("admin_info", "info"));
 router.on("/admin/cache", routeTo("admin_cache", "cache"));
 router.on("/admin/apps", routeTo("admin_apps", "apps"));
 router.on("/admin/apps/:id", routeTo("admin_app", "apps", ID));
-router.on("/admin/substudies", routeTo("admin_substudies", "substudies"));
-router.on("/admin/substudies/:id", routeTo("admin_substudy", "substudies", ID));
 router.on("/admin/uploads", routeTo("uploads", "uploads"));
 router.on("/admin/uploads/:guid", routeTo("upload", "uploads", GUID));
 // router.on("/admin/masterschedules", routeTo("masterschedules"));
-router.on("/admin/organizations", routeTo("admin_organizations", "organizations"));
-router.on("/admin/organizations/:id", routeTo("admin_organization", "organizations", ID));
+router.on("/organizations", routeTo("organizations", "organizations"));
+router.on("/organizations/:id", routeTo("organization", "organizations", ID));
+router.on("/studies", routeTo("studies", "studies"));
+router.on("/studies/:id", routeTo("study", "studies", ID));
 
 router.on("/shared_modules", routeTo("shared_modules", "modules"));
 router.on("/shared_modules/:id", routeTo("shared_module", "modules", ID)); // unused now?

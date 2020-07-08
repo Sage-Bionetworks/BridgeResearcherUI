@@ -18,13 +18,13 @@ export default function externalIds() {
     .obs("result", "")
     .obs("searchLoading", false)
     .obs("idFilter")
-    .obs("substudyId")
+    .obs("studyId")
     .obs("showResults", false);
 
   // For the forward pager control.
   self.vm = self;
   self.callback = fn.identity;
-  self.userSubstudies = [];
+  self.userStudies = [];
 
   fn.copyProps(self, root, "isAdmin", "isDeveloper", "isResearcher");
   tables.prepareTable(self, {
@@ -63,7 +63,7 @@ export default function externalIds() {
     return response;
   }
   function initFromSession(session) {
-    self.userSubstudies = session.substudyIds;
+    self.userStudies = session.studyIds;
     return serverService.getApp();
   }
 
@@ -106,7 +106,7 @@ export default function externalIds() {
       .then(utils.successHandler())
       .catch(utils.failureHandler({ id: 'external-ids' }));
   };
-  self.matchesSubstudy = (substudyId) => fn.substudyMatchesUser(self.userSubstudies, substudyId);
+  self.matchesStudy = (studyId) => fn.studyMatchesUser(self.userStudies, studyId);
 
   serverService.getSession()
     .then(initFromSession)

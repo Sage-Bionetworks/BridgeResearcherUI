@@ -409,8 +409,8 @@ function formatSearch(originalSearch) {
   }
   return formatList(array, "and", "; ");
 }
-function substudyMatchesUser(userSubstudies, substudyId) {
-  return userSubstudies.length === 0 || userSubstudies.includes(substudyId);
+function studyMatchesUser(userStudies, studyId) {
+  return userStudies.length === 0 || userStudies.includes(studyId);
 }
 
 function formatFileSize(fileSize) {
@@ -596,5 +596,5 @@ export default {
   queryToObject,
   returning,
   seq,
-  substudyMatchesUser
+  studyMatchesUser
 };

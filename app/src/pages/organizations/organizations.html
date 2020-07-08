@@ -3,7 +3,7 @@
     <div class="fixed-header-heading">
       <h3>Organizations</h3>
     </div>
-    <div class="fixed-header-buttons">
+    <div class="fixed-header-buttons" data-bind="visible: isSuperadmin()">
       <button data-bind="disable: !atLeastOneChecked(), click: deleteItems"
         class="ui red tiny button">
         Delete
@@ -20,7 +20,7 @@
   <table class="ui compact selectable table" style="margin-top:0">
     <thead>
       <tr>
-        <th width="10">
+        <th width="10" data-bind="visible: isSuperadmin()">
           <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
         </th>
         <th>Name</th>
@@ -35,12 +35,12 @@
     </tbody>
     <tbody data-bind="foreach: itemsObs">
       <tr>
-        <td>
+        <td data-bind="visible: $parent.isSuperadmin()">
           <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
         </td>
         <td>
           <span data-bind="text: $data.name, visible: $data.deletedObs"></span>
-          <a data-bind="href: '#/admin/organizations/'+$data.identifier, text: $data.name"></a>
+          <a data-bind="href: '#/organizations/'+$data.identifier, text: $data.name"></a>
         </td>
         <td data-bind="text: $data.identifier"></td>
         <td data-bind="text: $data.description"></td>

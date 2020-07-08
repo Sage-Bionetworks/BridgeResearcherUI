@@ -24,13 +24,13 @@ export default function general(params) {
     .obs("guid", params.guid)
     .obs("title", "New Consent Group")
     .obs("allDataGroups[]")
-    .obs("allSubstudyIds[]")    
+    .obs("allStudyIds[]")    
     .bind("name")
     .bind("description")
     .bind("required", true)
     .bind("autoSendConsentSuppressed")
     .bind("dataGroupsAssignedWhileConsented[]")
-    .bind("substudyIdsAssignedOnConsent[]")
+    .bind("studyIdsAssignedOnConsent[]")
     .bind("criteria");
 
   let titleUpdated = fn.handleObsUpdate(self.titleObs, "name");
@@ -64,8 +64,8 @@ export default function general(params) {
     .getApp()
     .then(binder.assign("app"))
     .then((app) => self.allDataGroupsObs(app.dataGroups))
-    .then(() => serverService.getSubstudies())
-    .then((substudies) => self.allSubstudyIdsObs(substudies.items.map(sub => sub.id)))
+    .then(() => serverService.getStudies())
+    .then((studies) => self.allStudyIdsObs(studies.items.map(sub => sub.id)))
     .then(() => {
       if (params.guid === "new") {
         return Promise.resolve(newSubpop())

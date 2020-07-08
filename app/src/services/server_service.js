@@ -737,22 +737,22 @@ export class ServerService {
   updateAppConfigElement(element) {
     return this.post(`${config.appConfigElements}/${element.id}/revisions/${element.revision}`, element);
   }
-  getSubstudies(includeDeleted) {
+  getStudies(includeDeleted) {
     let queryString = fn.queryString({ includeDeleted: includeDeleted === true });
-    return this.gethttp(config.substudies + queryString);
+    return this.gethttp(config.studies + queryString);
   }
-  createSubstudy(substudy) {
-    return this.post(config.substudies, substudy);
+  createStudy(study) {
+    return this.post(config.studies, study);
   }
-  getSubstudy(id) {
-    return this.gethttp(`${config.substudies}/${id}`);
+  getStudy(id) {
+    return this.gethttp(`${config.studies}/${id}`);
   }
-  updateSubstudy(substudy) {
-    return this.post(`${config.substudies}/${substudy.id}`, substudy);
+  updateStudy(study) {
+    return this.post(`${config.studies}/${study.id}`, study);
   }
-  deleteSubstudy(id, physical) {
+  deleteStudy(id, physical) {
     let queryString = fn.queryString({ physical: physical === true });
-    return this.del(`${config.substudies}/${id}${queryString}`);
+    return this.del(`${config.studies}/${id}${queryString}`);
   }
   getTemplates(query) {
     let queryString = fn.queryString(query);

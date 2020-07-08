@@ -12,14 +12,14 @@ export default function(params) {
     .bind("language")
     .bind("allOfGroups[]")
     .bind("noneOfGroups[]")
-    .bind("allOfSubstudyIds[]")
-    .bind("noneOfSubstudyIds[]")
+    .bind("allOfStudyIds[]")
+    .bind("noneOfStudyIds[]")
     .obs("iosMin")
     .obs("iosMax")
     .obs("androidMin")
     .obs("androidMax")
     .obs("dataGroupsOptions[]")
-    .obs("substudyOptions[]");
+    .obs("studyOptions[]");
 
   function updateObservers(crit) {
     if (crit) {
@@ -48,8 +48,8 @@ export default function(params) {
       language: self.languageObs(),
       allOfGroups: self.allOfGroupsObs(),
       noneOfGroups: self.noneOfGroupsObs(),
-      allOfSubstudyIds: self.allOfSubstudyIdsObs(),
-      noneOfSubstudyIds: self.noneOfSubstudyIdsObs()
+      allOfStudyIds: self.allOfStudyIdsObs(),
+      noneOfStudyIds: self.noneOfStudyIdsObs()
     };
     let error = new BridgeError();
     if (greaterThan(crit, 'iPhone OS')) {
@@ -61,8 +61,8 @@ export default function(params) {
     if (intersect(crit.allOfGroups, crit.noneOfGroups)) {
       error.addError("dataGroups", "cannot require and prohibit the same groups");
     }
-    if (intersect(crit.allOfSubstudyIds, crit.noneOfSubstudyIds)) {
-      error.addError("substudyIds", "cannot require and prohibit the same IDs");
+    if (intersect(crit.allOfStudyIds, crit.noneOfStudyIds)) {
+      error.addError("studyIds", "cannot require and prohibit the same IDs");
     }
     if (error.hasErrors()) {
       return utils.failureHandler({ transient: false, id: 'criteria_editor' })(error);
@@ -87,7 +87,7 @@ export default function(params) {
   serverService.getApp().then(function(app) {
     self.dataGroupsOptionsObs(app.dataGroups);
   });
-  serverService.getSubstudies().then(function(substudies) {
-    self.substudyOptionsObs(substudies.items.map(sub => sub.id));
+  serverService.getStudies().then(function(studies) {
+    self.studyOptionsObs(studies.items.map(sub => sub.id));
   });
 };
