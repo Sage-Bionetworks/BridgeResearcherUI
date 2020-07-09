@@ -64,7 +64,7 @@ export default function participants() {
   function load(response) {
     self.total = response.total;
     response.items = response.items.map(function(item) {
-      item.substudyIds = item.substudyIds || [];
+      item.studyIds = item.studyIds || [];
       if (item.phone) {
         item.phone = fn.flagForRegionCode(item.phone.regionCode) + " " + item.phone.nationalFormat;
       } else {

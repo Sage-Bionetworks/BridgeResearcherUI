@@ -3,11 +3,12 @@
     <div class="fixed-header-heading">
       <h3>External Identifiers</h3>
     </div>
-    <div class="fixed-header-buttons" data-bind="visible: isDeveloper">
+    <div class="fixed-header-buttons" data-bind="visible: isDeveloper() || isResearcher()">
       <button class="ui tiny button" style="margin-left: 3rem" data-bind="click: openImportDialog">
         Import&hellip;
       </button>
-      <button class="ui tiny button" data-bind="click: createFromNext">Assign Next ID</button>
+      <button class="ui tiny button" data-bind="click: createFromNext, 
+        visible: isResearcher()">Assign Next ID</button>
       <button class="ui red tiny button" data-bind="visible: canDeleteObs, 
         disable: !atLeastOneChecked(), click: deleteItems">
         Delete
@@ -47,7 +48,7 @@
           <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
         </th>
         <th>Identifier</th>
-        <th>Substudy</th>
+        <th>Study</th>
         <th></th>
       </tr>
     </thead>
@@ -69,9 +70,9 @@
               attr: {'href': $parent.link($data)}"></a>
           </span>
         </td>
-        <td data-bind="text: $data.substudyId"></td>
+        <td data-bind="text: $data.studyId"></td>
         <td style="white-space: nowrap; text-align: right">
-          <div data-bind="visible: $parent.matchesSubstudy($data.substudyId)">
+          <div data-bind="visible: $parent.matchesStudy($data.studyId) && $parent.isResearcher()">
             <div data-bind="visible: $data.assigned === true">
               <i class="green check icon"> </i> Credentials Created
             </div>

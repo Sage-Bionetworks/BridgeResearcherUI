@@ -27,7 +27,7 @@
         <tr>
           <th width="10" data-bind="visible: isDeveloper"></th>
           <th>Report identifier</th>
-          <th>Substudies</th>
+          <th>Studies</th>
         </tr>
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
@@ -45,7 +45,7 @@
               text: $data.identifier"> </a>
             <span data-bind="visible: !$component.isVisible($data), text: $data.identifier"> </span>
           </td>
-          <td data-bind="text: ($data.substudyIds || []).join(', ')">
+          <td data-bind="text: ($data.studyIds || []).join(', ')">
           </td>
         </tr>
       </tbody>

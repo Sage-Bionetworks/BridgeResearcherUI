@@ -18,12 +18,12 @@ export default class AddReport {
       .bind("identifier", params.identifier)
       .bind("date", AddReport.getLocalDate(params.date), null, formatDateISO)
       .bind("data", AddReport.jsonAsString(params.data), null, AddReport.stringAsJson)
-      .bind("substudyIds[]", params.substudyIds)
-      .obs("substudyOptions[]")
+      .bind("studyIds[]", params.studyIds)
+      .obs("studyOptions[]")
       .obs("isAdd", params.add);
 
-      serverService.getSubstudies().then((substudies) => {
-        this.substudyOptionsObs(substudies.items.map(sub => sub.id));
+      serverService.getStudies().then((studies) => {
+        this.studyOptionsObs(studies.items.map(sub => sub.id));
       });
   }
   addReport(entry) {

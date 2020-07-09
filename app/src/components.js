@@ -27,6 +27,8 @@ import oauthProviders from "./pages/settings/oauth_providers";
 import oauthProvidersHtml from "./pages/settings/oauth_providers.html";
 import installLinks from "./pages/settings/install_links";
 import installLinksHtml from "./pages/settings/install_links.html";
+import advanced from "./pages/settings/advanced";
+import advancedHtml from "./pages/settings/advanced.html";
 import externalIds from "./pages/external_ids/external_ids";
 import externalIdsHtml from "./pages/external_ids/external_ids.html";
 import signUps from "./pages/studyreports/signUps";
@@ -131,25 +133,23 @@ import ssPanel from "./pages/schedule/panels/simple_strategy_panel";
 import ssPanelHtml from "./pages/schedule/panels/simple_strategy_panel.html";
 import surveyPanel from "./pages/survey/panels/survey";
 import surveyPanelHtml from "./pages/survey/panels/survey.html";
-import adminInfo from "./pages/admin/info/info";
-import adminInfoHtml from "./pages/admin/info/info.html";
 import adminCache from "./pages/admin/cache/cache";
 import adminCacheHtml from "./pages/admin/cache/cache.html";
 import adminApps from "./pages/admin/apps/apps";
 import adminAppsHtml from "./pages/admin/apps/apps.html";
 import adminApp from "./pages/admin/app/app";
 import adminAppHtml from "./pages/admin/app/app.html";
-import adminSubstudies from "./pages/admin/substudies/substudies";
-import adminSubstudiesHtml from "./pages/admin/substudies/substudies.html";
 // import adminMasterSchedules from "./pages/admin/masterschedules/masterschedules";
 // import adminMasterSchedulesHtml from "./pages/admin/masterschedules/masterschedules.html";
-import adminOrgs from "./pages/admin/organizations/organizations";
-import adminOrgsHtml from "./pages/admin/organizations/organizations.html";
-import adminOrg from "./pages/admin/organizations/organization";
-import adminOrgHtml from "./pages/admin/organizations/organization.html";
+import orgs from "./pages/organizations/organizations";
+import orgsHtml from "./pages/organizations/organizations.html";
+import org from "./pages/organizations/organization";
+import orgHtml from "./pages/organizations/organization.html";
 
-import substudy from "./pages/admin/substudy/substudy";
-import substudyHtml from "./pages/admin/substudy/substudy.html";
+import studies from "./pages/studies/studies";
+import studiesHtml from "./pages/studies/studies.html";
+import study from "./pages/studies/study";
+import studyHtml from "./pages/studies/study.html";
 import boolConst from "./pages/survey/constraints/boolean_constraints";
 import boolConstHtml from "./pages/survey/constraints/boolean_constraints.html";
 import dateConst from "./pages/survey/constraints/date_constraints";
@@ -211,7 +211,8 @@ import dateHtml from "./widgets/form/ui_date.html";
 import datetimeHtml from "./widgets/form/ui_datetime.html";
 import selectHtml from "./widgets/form/ui_select.html";
 import textareaHtml from "./widgets/form/ui_textarea.html";
-import settingsTabset from "./pages/settings/tabset.html";
+import settingsTabset from "./pages/settings/tabset";
+import settingsTabsetHtml from "./pages/settings/tabset.html";
 import partTabset from "./pages/participant/tabset";
 import partTabsetHtml from "./pages/participant/tabset.html";
 import schemaTabset from "./pages/schema/tabset";
@@ -331,6 +332,7 @@ reg("app_links", {viewModel: applinks, template: applinksHtml});
 reg("password_policy", {viewModel: passwordPolicy, template: passwordPolicyHtml});
 reg("oauth_providers", {viewModel: oauthProviders, template: oauthProvidersHtml});
 reg("install_links", {viewModel: installLinks, template: installLinksHtml});
+reg("advanced", {viewModel: advanced, template: advancedHtml});
 reg("external_ids", {viewModel: externalIds, template: externalIdsHtml});
 reg("signUps", {viewModel: signUps, template: signUpsHtml});
 reg("reports", {viewModel: reports, template: reportsHtml});
@@ -384,14 +386,13 @@ reg("ABTestScheduleStrategyPanel", {viewModel: absPanel, template: absPanelHtml}
 reg("CriteriaScheduleStrategyPanel", {viewModel: csPanel, template: csPanelHtml});
 reg("SimpleScheduleStrategyPanel", {viewModel: ssPanel, template: ssPanelHtml});
 reg("SurveyPanel", {viewModel: surveyPanel, template: surveyPanelHtml});
-reg("admin_info", {viewModel: adminInfo, template: adminInfoHtml});
 reg("admin_cache", {viewModel: adminCache, template: adminCacheHtml});
 reg("admin_apps", {viewModel: adminApps, template: adminAppsHtml});
 reg("admin_app", {viewModel: adminApp, template: adminAppHtml});
-reg("admin_substudies", {viewModel: adminSubstudies, template: adminSubstudiesHtml});
-reg("admin_substudy", {viewModel: substudy, template: substudyHtml});
-reg("admin_organizations", {viewModel: adminOrgs, template: adminOrgsHtml})
-reg("admin_organization", {viewModel: adminOrg, template: adminOrgHtml})
+reg("organizations", {viewModel: orgs, template: orgsHtml})
+reg("organization", {viewModel: org, template: orgHtml})
+reg("studies", {viewModel: studies, template: studiesHtml});
+reg("study", {viewModel: study, template: studyHtml});
 
 reg("BooleanConstraints", {viewModel: boolConst, template: boolConstHtml});
 reg("DateConstraints", {viewModel: dateConst, template:  dateConstHtml});
@@ -429,7 +430,7 @@ reg("ui-datetime", {template: datetimeHtml});
 reg("ui-select", {template: selectHtml});
 reg("ui-textarea", {template: textareaHtml});
 /* reg('fire-event', {template: require('./widgets/fire_event.html') }); */
-reg("settings-tabset", {template: settingsTabset});
+reg("settings-tabset", {viewModel: settingsTabset, template: settingsTabsetHtml});
 reg("participant-tabset", {viewModel: partTabset, template: partTabsetHtml});
 reg("schema-tabset", {viewModel: schemaTabset, template: schemaTabsetHtml});
 reg("verified-icon", {viewModel: verifiedIcon, template: verifiedIconHtml});

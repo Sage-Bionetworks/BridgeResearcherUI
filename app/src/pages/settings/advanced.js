@@ -1,8 +1,8 @@
-import Binder from "../../../binder";
+import Binder from "../../binder";
 import ko from "knockout";
-import root from "../../../root";
-import serverService from "../../../services/server_service";
-import utils from "../../../utils";
+import root from "../../root";
+import serverService from "../../services/server_service";
+import utils from "../../utils";
 
 export default function info() {
   let self = this;

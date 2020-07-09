@@ -56,7 +56,7 @@ export default function report(params) {
       identifier: params.identifier,
       userId: params.userId,
       type: "participant",
-      substudyIds: self.substudyIds
+      studyIds: self.studyIds
     });
   };
   self.closeDialog = function() {
@@ -73,7 +73,7 @@ export default function report(params) {
       date: item.date,
       data: item.data,
       type: "participant",
-      substudyIds: self.substudyIds
+      studyIds: self.studyIds
     });
     return false;
   };
@@ -87,7 +87,7 @@ export default function report(params) {
 
   function load() {
     return serverService.getParticipantReportIndex(params.identifier)
-      .then((index) => self.substudyIds = index.substudyIds)
+      .then((index) => self.studyIds = index.studyIds)
       .then(() => serverService.getParticipant(params.userId))
       .then(loadReport)
       .then(fn.handleMap("items", jsonFormatter.mapItem))

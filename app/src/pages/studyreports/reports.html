@@ -25,7 +25,7 @@
       <tr>
         <th width="10" data-bind="visible: isDeveloper"></th>
         <th width="250">Report</th>
-        <th>Substudies</th>
+        <th>Studies</th>
         <th colspan="2">Visibility</th>
       </tr>
     </thead>
@@ -45,7 +45,7 @@
                         text: $data.identifier"></a>
           <span data-bind="visible: !$component.isVisible($data), text: $data.identifier"></span>
         </td>
-        <td style="width: 50%" data-bind="text: ($data.substudyIds || []).join(', ')"></td>
+        <td style="width: 50%" data-bind="text: ($data.studyIds || []).join(', ')"></td>
         <td data-bind="text: $data.publicObs() ? 'Public' : 'Signed in users only'"></td>
         <td data-bind="visible: $parent.isDeveloper">
           <div class="ui toggle checkbox" data-bind="semantic: 'checkbox', 

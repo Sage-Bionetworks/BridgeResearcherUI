@@ -435,20 +435,20 @@ describe("queryToObject", function() {
         expect(object.isArray).to.eql([2]);
     });
 });
-describe("substudyMatchesUser", function() {
-    it("returns true for user with no substudies", function() {
-        expect(fn.substudyMatchesUser([], "substudyA")).to.be.true;
-        expect(fn.substudyMatchesUser([], null)).to.be.true;
-        expect(fn.substudyMatchesUser([])).to.be.true;
+describe("studyMatchesUser", function() {
+    it("returns true for user with no studies", function() {
+        expect(fn.studyMatchesUser([], "studyA")).to.be.true;
+        expect(fn.studyMatchesUser([], null)).to.be.true;
+        expect(fn.studyMatchesUser([])).to.be.true;
     });
-    it("returns true for a matching substudy", function() {
-        expect(fn.substudyMatchesUser(["substudyA"], "substudyA")).to.be.true;
-        expect(fn.substudyMatchesUser(["substudyB", "substudyA"], "substudyA")).to.be.true;
+    it("returns true for a matching study", function() {
+        expect(fn.studyMatchesUser(["studyA"], "studyA")).to.be.true;
+        expect(fn.studyMatchesUser(["studyB", "studyA"], "studyA")).to.be.true;
     });
-    it("returns false when substudy does not match", function() {
-        expect(fn.substudyMatchesUser(["substudyA"], null)).to.be.false;
-        expect(fn.substudyMatchesUser(["substudyB", "substudyA"], "substudyC")).to.be.false;
-        expect(fn.substudyMatchesUser(["substudyA"])).to.be.false;
+    it("returns false when study does not match", function() {
+        expect(fn.studyMatchesUser(["studyA"], null)).to.be.false;
+        expect(fn.studyMatchesUser(["studyB", "studyA"], "studyC")).to.be.false;
+        expect(fn.studyMatchesUser(["studyA"])).to.be.false;
     });
 });
 });

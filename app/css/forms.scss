@@ -13,6 +13,10 @@
         margin-left: .5rem;
         width: 6rem!important;
     }
+
+.ui.skinny.form {
+  max-width: 50rem;
+}
 /* This is a magic number that aligns text with Semantic UI controls. */
 /* As such I have a special class for it. */
 .inline-form-text {

@@ -36,8 +36,8 @@ function label(criteria) {
   let language = valueForObs(criteria, "language");
   let allOfGroups = valueForObs(criteria, "allOfGroups");
   let noneOfGroups = valueForObs(criteria, "noneOfGroups");
-  let allOfSubstudyIds = valueForObs(criteria, "allOfSubstudyIds");
-  let noneOfSubstudyIds = valueForObs(criteria, "noneOfSubstudyIds");
+  let allOfStudyIds = valueForObs(criteria, "allOfStudyIds");
+  let noneOfStudyIds = valueForObs(criteria, "noneOfStudyIds");
   let iosRange = formatVersionRange(iosMin, iosMax);
   let androidRange = formatVersionRange(androidMin, androidMax);
 
@@ -63,13 +63,13 @@ function label(criteria) {
     let str = (noneOfGroups.length > 1) ? "data groups are" : "data group is";
     arr.push(`${quotedList(noneOfGroups)} ${str} prohibited`);
   }
-  if (allOfSubstudyIds && allOfSubstudyIds.length) {
-    let str = (allOfSubstudyIds.length > 1) ? "substudy memberships are" : "substudy membership is";
-    arr.push(`${quotedList(allOfSubstudyIds)} ${str} required`);
+  if (allOfStudyIds && allOfStudyIds.length) {
+    let str = (allOfStudyIds.length > 1) ? "study memberships are" : "study membership is";
+    arr.push(`${quotedList(allOfStudyIds)} ${str} required`);
   }
-  if (noneOfSubstudyIds && noneOfSubstudyIds.length) {
-    let str = (noneOfSubstudyIds.length > 1) ? "substudy memberships are" : "substudy membership is";
-    arr.push(`${quotedList(noneOfSubstudyIds)} ${str} prohibited`);
+  if (noneOfStudyIds && noneOfStudyIds.length) {
+    let str = (noneOfStudyIds.length > 1) ? "study memberships are" : "study membership is";
+    arr.push(`${quotedList(noneOfStudyIds)} ${str} prohibited`);
   }
   return arr.length ? arr.join("; ") : "No criteria";
 }

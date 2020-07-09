@@ -1,12 +1,11 @@
 <div class="fixed-header">
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
-      <h3>Substudies</h3>
+      <h3>Studies</h3>
     </div>
-    <div class="fixed-header-buttons">
-      <button class="ui red tiny button" data-bind="visible: !isAdmin(), 
-        disable: !atLeastOneChecked(), click: deleteItems">Delete</button>
-      <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
+    <div class="fixed-header-buttons" data-bind="visible: isAdmin()"">
+      <div class="ui red tiny buttons" 
+        data-bind="disable: !atLeastOneChecked()">
         <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()},
           semantic: 'dropdown-button-toggle', container: '.buttons'">Delete</div>
         <div class="ui primary tiny floating dropdown icon button"
@@ -18,20 +17,20 @@
           </div>
         </div>
       </div>
-      <a href="#/admin/substudies/new" class="ui primary tiny button">New Sub-Study</a>
+      <a href="#/studies/new" class="ui primary tiny button">New Study</a>
     </div>
   </div>
   <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
-  <errors id="substudies"></errors>
+  <errors id="studies"></errors>
   <table class="ui compact selectable table">
     <thead>
       <tr>
-        <th width="10">
+        <th width="10" data-bind="visible: $parent.isAdmin()">
           <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
         </th>
-        <th nowrap>Sub-Study</th>
+        <th nowrap>Study</th>
         <th nowrap>ID</th>
       </tr>
     </thead>
@@ -42,14 +41,14 @@
     </tbody>
     <tbody data-bind="foreach: itemsObs">
       <tr data-bind="css: {negative: $data.deleted}">
-        <td>
+        <td data-bind="visible: $parent.isAdmin()">
           <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
           <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
             style="cursor: pointer" class="green undo icon"></i>
         </td>
         <td nowrap>
           <span data-bind="text: $data.name, visible: $data.deletedObs"></span>
-          <a data-bind="attr: {href: '#/admin/substudies/' + $data.id}, 
+          <a data-bind="attr: {href: '#/studies/' + $data.id}, 
             text: $data.name, visible: !$data.deletedObs()"></a>
         </td>
         <td data-bind="text: $data.id"></td>
@@ -58,7 +57,7 @@
   </table>
   <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
     <ui-checkbox params="checkedObs: showDeletedObs">
-      Show deleted substudies
+      Show deleted studies
     </ui-checkbox>
   </div>
 </div>

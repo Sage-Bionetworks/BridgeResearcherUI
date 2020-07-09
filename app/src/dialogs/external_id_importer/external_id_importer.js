@@ -15,10 +15,10 @@ import serverService from "../../services/server_service";
 // * currentWorkItem: Object, the item just processed by performWork
 // * postFetch: Promise: results of worker's sequential execution
 
-function IdImportWorker(app, input, substudyId) {
+function IdImportWorker(app, input, studyId) {
   this.app = app;
   this.credentialPairs = parser(input);
-  this.substudyId = substudyId;
+  this.studyId = studyId;
   this.importedCredentialPairs = [];
 }
 IdImportWorker.prototype = {
@@ -40,7 +40,7 @@ IdImportWorker.prototype = {
     if (!password.isPasswordValid(this.app.passwordPolicy, this.currentCredentialPair.password)) {
       return Promise.reject(new Error("Password is invalid. " + password.passwordPolicyDescription(this.app.passwordPolicy)));
     }
-    this.currentCredentialPair.substudyId = this.substudyId;
+    this.currentCredentialPair.studyId = this.studyId;
     return serverService.createExternalId(this.currentCredentialPair)
       .then(this._success.bind(this));
   },
@@ -90,6 +90,8 @@ export default function(params) {
   batchDialogUtils.initBatchDialog(self);
   self.cancelDialog = fn.seq(self.cancel, params.reload, root.closeDialog);
 
+  fn.copyProps(self, root, "isResearcher");
+
   new Binder(self)
     .obs("import", "")
     .obs("enable", true)
@@ -98,8 +100,8 @@ export default function(params) {
     .obs("createCredentials", true)
     .obs("dataGroups[]")
     .obs("allDataGroups[]")
-    .obs("substudyId")
-    .obs("substudyIds[]");
+    .obs("studyId")
+    .obs("studyIds[]");
 
   self.statusObs('');
   self.createCredentialsObs.subscribe(function(newValue) {
@@ -112,12 +114,12 @@ export default function(params) {
       supportEmail = app.supportEmail;
       self.statusObs("Please enter a list of identifiers, separated by commas or new lines. If you wish to include passwords, use the format <code>externalid=password</code> (again these can be separated by commas or new lines). <em>" + password.passwordPolicyDescription(self.app.passwordPolicy) + "</em>");
     })
-    .then(serverService.getSubstudies.bind(serverService))
+    .then(serverService.getStudies.bind(serverService))
     .then(response => {
-      let opts = response.items.map(substudy => {
-        return { value: substudy.id, label: substudy.name };
+      let opts = response.items.map(study => {
+        return { value: study.id, label: study.name };
       });
-      self.substudyIdsObs(opts);
+      self.studyIdsObs(opts);
     });
 
   function displayComplete() {
@@ -127,7 +129,7 @@ export default function(params) {
     self.errorMessagesObs([]);
     self.statusObs("Preparing to import...");
 
-    let importWorker = new IdImportWorker(self.app, self.importObs(), self.substudyIdObs());
+    let importWorker = new IdImportWorker(self.app, self.importObs(), self.studyIdObs());
     if (!importWorker.hasWork()) {
       self.errorMessagesObs.unshift("You must enter some identifiers.");
       return;

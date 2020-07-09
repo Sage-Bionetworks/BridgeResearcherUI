@@ -2,27 +2,21 @@
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
       <div class="ui breadcrumb">
-        <a href="#/admin/substudies" class="section">Substudies</a>
+        <a href="#/studies" class="section">Studies</a>
         <i class="right chevron icon divider"></i>
       </div>
       <h3 data-bind="text: titleObs"></h3>
     </div>
-    <div class="fixed-header-buttons">
+    <div class="fixed-header-buttons" data-bind="visible: isSuperadmin()">
       <button class="ui tiny primary button" data-bind="click: save">Save</button>
     </div>
   </div>
   <div class="ui empty secondary pointing menu"></div>
 </div>
 <div class="scrollbox">
-  <errors id="substudy"></errors>
-  <form class="ui form">
+  <errors id="study"></errors>
+  <form class="ui skinny form">
     <div class="two fields">
-      <div class="field required" id="name">
-        <label>Name</label>
-        <input data-bind="textInput: nameObs, hasFocus: true" />
-      </div>
-    </div>
-    <div class="four fields">
       <div class="field required" id="id" data-bind="visible: isNewObs">
         <label>Identifier</label>
         <input type="text" data-bind="textInput: idObs" />
@@ -30,6 +24,11 @@
       <div class="field" id="id" data-bind="visible: !isNewObs()">
         <label>Identifier</label>
         <div class="input-field-padding" data-bind="text: idObs"></div>
+      </div>
+      <div class="field required" id="name">
+        <label>Name</label>
+        <input data-bind="textInput: nameObs, hasFocus: true, visible: isSuperadmin()" />
+        <div class="input-field-padding" data-bind="text: nameObs, visible: !isSuperadmin()"></div>
       </div>
     </div>
     <div class="two fields" data-bind="visible: !isNewObs()">

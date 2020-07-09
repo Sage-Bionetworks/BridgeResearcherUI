@@ -3,6 +3,7 @@ import Binder from "../../binder";
 import fn from "../../functions";
 import ko from "knockout";
 import root from "../../root";
+import optionsService from "../../services/options_service";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
@@ -59,8 +60,9 @@ export default function general(params) {
     .obs("healthCode", "N/A", Binder.formatHealthCode)
     .obs("allDataGroups[]")
     .obs("createdOn", null, fn.formatDateTime)
+    .obs("modifiedOn", null, fn.formatDateTime)
     .obs("allRoles[]", [])
-    .obs("allSubstudies[]")
+    .obs("allStudies[]")
     .obs("title", params.userId === "new" ? "New participant" : "&#160;")
     .obs("externalIds", '', Binder.formatExternalIds)
     .bind("newExternalId", null, null, persistExternalId)
@@ -82,7 +84,8 @@ export default function general(params) {
     .bind("userId", params.userId)
     .bind("id", params.userId)
     .bind("roles[]", null, fn.formatRoles, fn.persistRoles)
-    .bind("substudyIds[]");
+    .bind("studyIds[]")
+    .bind("orgMembership");
 
   fn.copyProps(self, root, "isAdmin");
 
@@ -134,6 +137,9 @@ export default function general(params) {
       return !self[credential + 'Obs']() && !self.updateIdsVisible();
     });
   };
+  self.formatOrg = function() {
+    return self.orgMembershipObs() ? self.orgNames[self.orgMembershipObs()] : '—';
+  }
 
   function makeStatusChanger(status) {
     return function(vm, event) {
@@ -278,25 +284,27 @@ export default function general(params) {
   function getSession() {
     return serverService.getSession();
   }
-  function updateAllSubstudiesObs(session) {
+  function updateAllStudiesObs(session) {
     if (self.isNewObs() || self.isAdmin()) {
-      return serverService.getSubstudies(false).then(response => {
-        self.allSubstudiesObs(response.items.map(item => item.id));
+      return serverService.getStudies(false).then(response => {
+        self.allStudiesObs(response.items.map(item => item.id));
       });
     } else {
-      self.allSubstudiesObs(session.substudyIds);
+      self.allStudiesObs(session.studyIds);
     }
   }
+  self.orgNames = {};
 
-  serverService
-    .getApp()
+  serverService.getApp()
     .then(binder.assign("app"))
     .then(initApp)
+    .then(optionsService.getOrganizationNames)
+    .then((response) => self.orgNames = response)
     .then(getParticipant)
     .then(binder.assign("participant"))
     .then(noteInitialStatus)
     .then(binder.update())
     .then(getSession)
-    .then(updateAllSubstudiesObs)
+    .then(updateAllStudiesObs)
     .catch(failureHandler);
 };

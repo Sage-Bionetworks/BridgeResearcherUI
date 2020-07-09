@@ -73,7 +73,7 @@ export default function report(params) {
       closeDialog: self.closeDialog,
       identifier: params.id,
       type: "study",
-      substudyIds: self.substudyIds
+      studyIds: self.studyIds
     });
   };
   self.closeDialog = function() {
@@ -90,7 +90,7 @@ export default function report(params) {
       identifier: params.id,
       date: item.date,
       data: item.data,
-      substudyIds: self.substudyIds
+      studyIds: self.studyIds
     });
     return false;
   };
@@ -120,7 +120,7 @@ export default function report(params) {
   };
 
   function loadStudyReportRecords(index) {
-    self.substudyIds = index.substudyIds;
+    self.studyIds = index.studyIds;
     let startDate = firstDayOfMonth(self.currentYear, self.currentMonth);
     let endDate = lastDayOfMonth(self.currentYear, self.currentMonth);
     if (index.public) {
