@@ -17,6 +17,11 @@ export default function organization(params) {
   self.organization = {};
 
   fn.copyProps(self, fn, 'formatDateTime', 'formatTitleCase');
+  fn.copyProps(self, root, 'isAdmin');
+
+  self.isUserNavigable = function() {
+    return root.isAdmin() || root.isResearcher();
+  }
 
   let binder = new Binder(self)
     .obs("isNew", params.id === "new")

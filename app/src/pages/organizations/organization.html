@@ -7,7 +7,7 @@
       </div>
       <h3 data-bind="text: titleObs"></h3>
     </div>
-    <div class="fixed-header-buttons">
+    <div class="fixed-header-buttons" data-bind="visible: isAdmin()">
       <button class="ui tiny primary button" data-bind="click: save">Save</button>
     </div>
   </div>
@@ -15,79 +15,78 @@
 </div>
 <div class="scrollbox">
   <errors id="org"></errors>
-  <form class="ui form">
-    <div class="ui grid">
-      <div class="seven wide column">
-        <div class="required field" id="name">
-          <label>Name</label>
-          <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
-        </div>
-        <div class="field required" id="identifier" data-bind="visible: isNewObs">
-          <label>Identifier</label>
-          <input type="text" data-bind="textInput: identifierObs" />
-        </div>
-        <div class="field" data-bind="visible: !isNewObs()">
-          <label>Identifier</label>
-          <div class="input-field-padding" data-bind="text: identifierObs"></div>
-        </div>
-        <div class="field" id="description">
-          <label>Description</label>
-          <input type="text" data-bind="textInput: descriptionObs">
-        </div>
+  <form class="ui skinny form">
+    <div class="two fields">
+      <div class="required field" id="name">
+        <label>Name</label>
+        <input type="text" data-bind="textInput: nameObs, hasFocus: true, visible: isAdmin()" />
+        <div class="input-field-padding" data-bind="text: nameObs, visible: !isAdmin()"></div>
       </div>
-      <div class="two wide column">
-      </div>
-      <div class="seven wide column">
-        <div class="two fields" data-bind="visible: !isNewObs()">
-          <div class="field" id="createdOn">
-              <label>Created On</label>
-              <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
-            </div>
-            <div class="field" id="modifiedOn">
-              <label>Modified On</label>
-              <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
-            </div>
-          </div>
+      <div class="field required" id="identifier">
+        <label>Identifier</label>
+        <input type="text" data-bind="textInput: identifierObs, visible: isNewObs" />
+        <div class="input-field-padding" data-bind="text: identifierObs, visible: !isNewObs()"></div>
       </div>
     </div>
-  </form>
+    <div class="two fields">
+      <div class="field" id="description">
+        <label>Description</label>
+        <input type="text" data-bind="textInput: descriptionObs, visible: isAdmin()">
+        <div class="input-field-padding" data-bind="text: descriptionObs" data-bind="visible: !isAdmin()"></div>
+      </div>
+    </div>
+    <div class="two fields" data-bind="visible: !isNewObs()">
+      <div class="field" id="createdOn">
+        <label>Created On</label>
+        <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
+      </div>
+      <div class="field" id="modifiedOn">
+        <label>Modified On</label>
+        <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
+      </div>
+    </div>
 
-  <h4 data-bind="visible: !isNewObs()" class="ui dividing header">Members</h4>
-  <div class="line-control" data-bind="visible: !isNewObs()">
-    <div class="line-control-stretch ">
-      <button class="ui compact mini primary button" data-bind="click: addMemberDialog">
-        Add Member&hellip;
-      </button>
+    <h4 data-bind="visible: !isNewObs()" class="ui dividing header">Members</h4>
+    <div class="line-control" data-bind="visible: !isNewObs() && isAdmin()">
+      <div class="line-control-stretch ">
+        <button class="ui compact mini primary button" data-bind="click: addMemberDialog">
+          Add Member&hellip;
+        </button>
+      </div>
+      <pager params="prefix: 'members', postLoadFunc: postLoadFunc, pageSize: 100"></pager>
     </div>
-    <pager params="prefix: 'members', postLoadFunc: postLoadFunc, pageSize: 100"></pager>
+    <table class="ui compact selectable table" data-bind="visible: !isNewObs()">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Identifiers</th>
+          <th width="10"></th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="3" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr>
+          <td>
+            <a data-bind="href: '#/participants/'+$data.id+'/general',
+              text: $component.formatNameAsFullLabel($data), 
+              visible: $parent.isUserNavigable()"></a>
+            <span data-bind="text: $component.formatNameAsFullLabel($data), 
+              visible: !$parent.isUserNavigable()"></span>
+          </td>
+          <td data-bind="html: $component.formatIdentifiers($data)"></td>
+          <td style="white-space: nowrap">
+            <button class="ui basic compact mini red button" data-bind="click: $parent.removeOrgMember,
+              visible: $component.isAdmin">
+              Remove
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  <table class="ui compact selectable table" data-bind="visible: !isNewObs()">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Identifiers</th>
-        <th width="10"></th>
-      </tr>
-    </thead>
-    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-      <tr>
-        <td colspan="3" data-bind="html: recordsMessageObs"></td>
-      </tr>
-    </tbody>
-    <tbody data-bind="foreach: itemsObs">
-      <tr>
-        <td>
-          <a data-bind="href: '#/participants/'+$data.id+'/general',
-            text: $component.formatNameAsFullLabel($data)"></a>
-        </td>
-        <td data-bind="html: $component.formatIdentifiers($data)"></td>
-        <td style="white-space: nowrap">
-          <button class="ui basic compact mini red button" data-bind="click: $parent.removeOrgMember">
-            Remove
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>  
-
+</form>
 </div>

@@ -90,6 +90,8 @@ export default function(params) {
   batchDialogUtils.initBatchDialog(self);
   self.cancelDialog = fn.seq(self.cancel, params.reload, root.closeDialog);
 
+  fn.copyProps(self, root, "isResearcher");
+
   new Binder(self)
     .obs("import", "")
     .obs("enable", true)

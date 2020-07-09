@@ -1,5 +1,6 @@
 import Binder from "../../binder";
 import fn from "../../functions";
+import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
@@ -15,6 +16,7 @@ export default function(params) {
   self.study = {};
 
   fn.copyProps(self, fn, "formatDateTime");
+  fn.copyProps(self, root, 'isSuperadmin');
 
   let binder = new Binder(self)
     .obs("title", "New Study")

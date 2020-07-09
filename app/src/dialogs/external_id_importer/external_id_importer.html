@@ -20,7 +20,7 @@
           <li data-bind="text: $data"></li>
         </ul>
       </div>
-      <div class="ui two fields" style="margin-top: 1rem">
+      <div class="ui two fields" style="margin-top: 1rem" data-bind="visible: isResearcher()">
         <div class="field">
           <ui-checkbox params="checkedObs: createCredentialsObs">
             Create credentials for these IDs

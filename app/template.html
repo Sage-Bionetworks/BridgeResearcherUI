@@ -90,14 +90,21 @@
               </div>
             </div>
 
-            <div class="title" data-bind="visible: isDeveloper() && !isResearcher()">
+            <div class="title">
               <i class="server icon"></i> Studies
               <i class="dropdown icon"></i>
             </div>
-            <div class="content" data-bind="visible: isDeveloper() && !isResearcher()">
+            <div class="content">
               <div class="ui secondary vertical menu">
                 <a href="#/studies" class="item" data-ref="studies">
                   Studies
+                </a>
+                <a href="#/participants" class="item" data-ref="participants"
+                  data-bind="visible: isResearcher()">
+                  Participants
+                </a>
+                <a href="#/organizations" class="item" data-ref="organizations">
+                  Organizations
                 </a>
                 <a href="#/external_ids" class="item" data-ref="extids">
                   External IDs
@@ -108,27 +115,6 @@
               </div>
             </div>
   
-            <div class="title" data-bind="visible: isResearcher()">
-              <i class="server icon"></i> Studies
-              <i class="dropdown icon"></i>
-            </div>
-            <div class="content" data-bind="visible: isResearcher()">
-              <div class="ui secondary vertical menu">
-                <a href="#/studies" class="item" data-ref="studies">
-                  Studies
-                </a>
-                <a href="#/participants" class="item" data-ref="participants">
-                  Participants
-                </a>
-                <a href="#/external_ids" class="item" data-ref="extids">
-                  External IDs
-                </a>
-                <a href="#/reports" class="item" data-ref="reports">
-                  Study Reports
-                </a>
-              </div>
-            </div>
-
             <div class="title" data-bind="visible: isDeveloper()">
               <i class="archive icon"></i> Legacy Support
               <i class="dropdown icon"></i>
@@ -164,9 +150,6 @@
               <div class="ui secondary vertical menu">
                 <a href="#/admin/apps" class="item" data-ref="apps">
                   Apps
-                </a>
-                <a href="#/organizations" class="item" data-ref="organizations">
-                  Organizations
                 </a>
                 <a href="#/admin/cache" class="item" data-ref="cache">
                   Cache Control
