@@ -60,6 +60,7 @@ export default function general(params) {
     .obs("healthCode", "N/A", Binder.formatHealthCode)
     .obs("allDataGroups[]")
     .obs("createdOn", null, fn.formatDateTime)
+    .obs("modifiedOn", null, fn.formatDateTime)
     .obs("allRoles[]", [])
     .obs("allStudies[]")
     .obs("title", params.userId === "new" ? "New participant" : "&#160;")
@@ -84,8 +85,7 @@ export default function general(params) {
     .bind("id", params.userId)
     .bind("roles[]", null, fn.formatRoles, fn.persistRoles)
     .bind("studyIds[]")
-    .bind("orgMembership")
-    .bind("allOrganizations[]");
+    .bind("orgMembership");
 
   fn.copyProps(self, root, "isAdmin");
 
@@ -137,6 +137,9 @@ export default function general(params) {
       return !self[credential + 'Obs']() && !self.updateIdsVisible();
     });
   };
+  self.formatOrg = function() {
+    return self.orgMembershipObs() ? self.orgNames[self.orgMembershipObs()] : '—';
+  }
 
   function makeStatusChanger(status) {
     return function(vm, event) {
@@ -290,12 +293,13 @@ export default function general(params) {
       self.allStudiesObs(session.studyIds);
     }
   }
+  self.orgNames = {};
 
   serverService.getApp()
     .then(binder.assign("app"))
     .then(initApp)
-    .then(optionsService.getOrganizationOptions)
-    .then(self.allOrganizationsObs)
+    .then(optionsService.getOrganizationNames)
+    .then((response) => self.orgNames = response)
     .then(getParticipant)
     .then(binder.assign("participant"))
     .then(noteInitialStatus)

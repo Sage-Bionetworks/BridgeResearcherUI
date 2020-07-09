@@ -15,13 +15,19 @@
 </div>
 <div class="scrollbox">
   <errors id="participant-client-data"></errors>
-  <div class="ui form">
-    <div class="field" id="clientData">
-      <label>Client data should be in JSON format</label>
-      <textarea style="font-family: monospace" data-bind="textInput: clientDataObs"></textarea>
+  <div class="ui grid">
+    <div class="ten wide column">
+      <div class="ui form">
+        <div class="field" id="clientData">
+          <label>Client data should be in JSON format</label>
+          <textarea style="font-family: monospace" data-bind="textInput: clientDataObs"></textarea>
+        </div>
+      </div>
+      <div style="padding-top:1rem">
+        <button class="ui tiny primary button" data-bind="click: reformat">Reformat</button>
+      </div>
     </div>
-  </div>
-  <div style="padding-top:1rem">
-    <button class="ui tiny primary button" data-bind="click: reformat">Reformat</button>
+    <div class="six wide column">
+    </div>
   </div>
 </div>
