@@ -7,7 +7,7 @@ import utils from "../../utils";
 
 let failureHandler = utils.failureHandler({
   redirectMsg: "Organization not found.",
-  redirectTo: "admin/organizations",
+  redirectTo: "organizations",
   transient: false,
   id: 'org'
 });
@@ -41,7 +41,7 @@ export default function organization(params) {
   function saveOrg(org) {
     if (self.isNewObs()) {
       return serverService.createOrganization(org).then(response => {
-        document.location = "#/admin/organizations/" + response.identifier;
+        document.location = "#/organizations/" + response.identifier;
         return response;
       });
     }
