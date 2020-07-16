@@ -87,7 +87,7 @@ export default function general(params) {
     .bind("studyIds[]")
     .bind("orgMembership");
 
-  fn.copyProps(self, root, "isAdmin");
+  fn.copyProps(self, root, "isAdmin", "isResearcher");
 
   self.statusObs.subscribe(function(status) {
     self.showEnableAccountObs(status !== "enabled");

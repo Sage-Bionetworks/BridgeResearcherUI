@@ -1,4 +1,6 @@
 import Binder from "../../binder";
+import fn from "../../functions";
+import root from "../../root";
 import serverService from "../../services/server_service";
 import storeService from "../../services/store_service";
 import UploadsViewModel from "../uploads/uploads";
@@ -15,6 +17,7 @@ const failureHandler = utils.failureHandler({
 export default class ParticipantUploadsViewModel extends UploadsViewModel {
   constructor(params) {
     super(params, PAGE_KEY);
+    fn.copyProps(this, root, "isResearcher");
     new Binder(this)
       .obs("userId", params.userId)
       .obs("name", "")

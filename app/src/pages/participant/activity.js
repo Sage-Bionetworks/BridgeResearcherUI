@@ -17,6 +17,7 @@ export default function activity(params) {
 
   self.vm = self;
   self.callback = fn.identity;
+  fn.copyProps(self, root, "isResearcher");
 
   self.formatTitleCase = fn.formatTitleCase;
   self.formatDateTime = fn.formatDateTime;

@@ -14,6 +14,7 @@ const failureHandler = utils.failureHandler({
 
 export default function report(params) {
   let self = this;
+  fn.copyProps(self, root, "isResearcher");
 
   tables.prepareTable(self, {
     name: "report",

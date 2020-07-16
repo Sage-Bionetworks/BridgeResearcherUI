@@ -182,7 +182,7 @@ export default class Binder {
     return context.vm.attributesObs();
   }
   static formatHealthCode(value, context) {
-    return context.vm.app.healthCodeExportEnabled ? value : "N/A";
+    return value ? value : "N/A";
   }
   static callObsCallback(value, context) {
     return context.observer.callback();
