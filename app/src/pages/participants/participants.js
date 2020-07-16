@@ -108,9 +108,6 @@ export default function participants() {
   self.exportDialog = function() {
     root.openDialog("participant_export", { total: self.total, search: self.search });
   };
-
-  options_service.getOrganizationNames().then(map => console.log(map));
-
   self.loadingFunc = function(search) {
     utils.clearErrors();
     self.search = search;

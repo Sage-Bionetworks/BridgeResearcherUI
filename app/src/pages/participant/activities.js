@@ -1,6 +1,8 @@
 import alerts from "../../widgets/alerts";
 import Binder from "../../binder";
+import fn from "../../functions";
 import optionsService from "../../services/options_service";
+import root from "../../root";
 import serverService from "../../services/server_service";
 import sharedModuleUtils from "../../shared_module_utils";
 import tables from "../../tables";
@@ -21,6 +23,7 @@ export default function activities(params) {
   let self = this;
 
   self.tempDedupMap = {};
+  fn.copyProps(self, root, "isResearcher");
 
   new Binder(self)
     .obs("userId", params.userId)

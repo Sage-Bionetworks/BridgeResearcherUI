@@ -1,7 +1,7 @@
 <div class="fixed-header">
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
-      <div class="ui breadcrumb">
+      <div class="ui breadcrumb" data-bind="visible: isResearcher()">
         <a class="section" href="#/participants">Participants</a>
         <i class="right chevron icon divider"></i>
       </div>
@@ -21,34 +21,32 @@
 </div>
 <div class="scrollbox">
   <errors id="participant-reports"></errors>
-  <div data-bind="visible: isResearcher">
-    <table class="ui compact selectable table">
-      <thead>
-        <tr>
-          <th width="10" data-bind="visible: isDeveloper"></th>
-          <th>Report identifier</th>
-          <th>Studies</th>
-        </tr>
-      </thead>
-      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-        <tr>
-          <td colspan="3" data-bind="html: recordsMessageObs"></td>
-        </tr>
-      </tbody>
-      <tbody data-bind="foreach: itemsObs">
-        <tr>
-          <td data-bind="visible: $component.isDeveloper">
-            <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
-          </td>
-          <td>
-            <a data-bind="visible: $component.isVisible($data), href: $component.reportURL($data), 
-              text: $data.identifier"> </a>
-            <span data-bind="visible: !$component.isVisible($data), text: $data.identifier"> </span>
-          </td>
-          <td data-bind="text: ($data.studyIds || []).join(', ')">
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <table class="ui compact selectable table">
+    <thead>
+      <tr>
+        <th width="10" data-bind="visible: isDeveloper"></th>
+        <th>Report identifier</th>
+        <th>Studies</th>
+      </tr>
+    </thead>
+    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+      <tr>
+        <td colspan="3" data-bind="html: recordsMessageObs"></td>
+      </tr>
+    </tbody>
+    <tbody data-bind="foreach: itemsObs">
+      <tr>
+        <td data-bind="visible: $component.isDeveloper">
+          <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+        </td>
+        <td>
+          <a data-bind="visible: $component.isVisible($data), href: $component.reportURL($data), 
+            text: $data.identifier"> </a>
+          <span data-bind="visible: !$component.isVisible($data), text: $data.identifier"> </span>
+        </td>
+        <td data-bind="text: ($data.studyIds || []).join(', ')">
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>

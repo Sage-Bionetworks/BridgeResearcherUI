@@ -1,7 +1,7 @@
 <div class="fixed-header">
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
-      <div class="ui breadcrumb">
+      <div class="ui breadcrumb" data-bind="visible: isResearcher()">
         <a class="section" href="#/participants">Participants</a>
         <i class="right chevron icon divider"></i>
       </div>
@@ -201,7 +201,8 @@
     <div class="two fields">
       <div class="field">
         <label>Health Code</label>
-        <div class="input-field-padding" data-bind="text: healthCodeObs" style="margin-bottom: 0; padding-bottom: 0">
+        <div class="input-field-padding" data-bind="text: healthCodeObs" 
+          style="margin-bottom: 0; padding-bottom: 0">
         </div>
         <div class="ui small red text" data-bind="visible: healthCodeObs() !== 'N/A'">
           Confidential. Do not redistribute.

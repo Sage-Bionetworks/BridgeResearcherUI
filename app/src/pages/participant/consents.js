@@ -20,7 +20,8 @@ serverService.addSessionEndListener(() => session = null);
 
 export default function consents(params) {
   let self = this;
-
+  fn.copyProps(self, root, "isResearcher");
+  
   new Binder(self)
     .obs("userId", params.userId)
     .obs("items[]")

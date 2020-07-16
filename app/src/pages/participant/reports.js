@@ -14,7 +14,8 @@ const failureHandler = utils.failureHandler({
 export default function reports(params) {
   let self = this;
   self.studyIds = [];
-
+  fn.copyProps(self, root, "isResearcher");
+  
   new Binder(self)
     .obs("userId", params.userId)
     .obs("name", "")

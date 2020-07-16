@@ -1,5 +1,6 @@
 import Binder from "../../binder";
 import fn from "../../functions";
+import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
@@ -25,6 +26,7 @@ function noner(value) {
 
 export default function(params) {
   let self = this;
+  fn.copyProps(self, root, "isResearcher");
 
   let binder = new Binder(self)
     .obs("userId", params.userId)
