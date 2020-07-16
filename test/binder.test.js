@@ -181,8 +181,10 @@ describe("transforms", function() {
     });
     describe("formatHealthCode", function() {
         it("works", function() {
-            var context = { vm: { app: { healthCodeExportEnabled: false } } };
-            expect(Binder.formatHealthCode("ABC", context) ).to.equal("N/A");
+            var context = { vm: { app: {} } };
+            expect(Binder.formatHealthCode("", context) ).to.equal("N/A");
+
+            expect(Binder.formatHealthCode(null, context) ).to.equal("N/A");
             
             context = { vm: { app: { healthCodeExportEnabled: true } } };
             expect(Binder.formatHealthCode("ABC", context) ).to.equal("ABC");
