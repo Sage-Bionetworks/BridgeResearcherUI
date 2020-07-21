@@ -1,0 +1,39 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/assessments" class="section">Assessments</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="text: pageTitleObs"></h3>
+    </div>
+    <div class="fixed-header-buttons">
+      <button class="ui tiny primary button" data-bind="click: save">Save</button>
+    </div>
+  </div>
+  <assessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
+    revisionObs: pageRevObs, originGuidObs: originGuidObs">
+  </assessment-tabset>
+</div>
+<div class="scrollbox">
+  <errors id="assessment_config"></errors>
+  <div class="ui grid">
+    <div class="ten wide column">
+      <form class="ui skinny form">
+        <div id="config">
+          <textarea style="font-family: monospace; height: 50rem" data-bind="textInput: configObs"></textarea>
+        </div>
+        <div style="padding-top:1rem">
+          <button class="ui tiny primary button" data-bind="click: reformat">Reformat</button>
+        </div>
+      </form>
+    </div>
+    <div class="six wide column">
+      <div class="ui message">
+        <p>This is the JSON configuration that a client can download to drive UI behavior. It is defined by our client SDKs and it is not validated by the server.</p>
+
+        <p>Modifying this JSON can break apps. To allow for controlled change to assessments when they are used in an app, we have a <em>customization API</em> that limits specific changes to safe parts of the JSON (e.g. to labels, colors, or behavior that can be toggled). Defining the fields that can be customized is a responsibility of the assessment developer (availiable in another tab of this editor).</p>
+      </div>
+    </div>
+  </div>
+</div>

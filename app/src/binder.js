@@ -1,3 +1,4 @@
+import config from "./config";
 import ko from "knockout";
 import fn from "./functions.js";
 import jsonFormatter from "./json_formatter";
@@ -231,5 +232,39 @@ export default class Binder {
       });
     }
     return (arr.length) ? arr.join(', ') : '—';
+  }
+  static fromCustomizationFields(object, context) {
+    let editorsObs = context.vm.editorsObs;
+    let cf = object || {};
+    Object.keys(cf).forEach(fieldIdentifier => {
+      for (let i=0; i < cf[fieldIdentifier].length; i++) {
+        let props = cf[fieldIdentifier][i];
+        props.identifierObs = ko.observable(fieldIdentifier);
+        props.propNameObs = ko.observable(props.propName);
+        props.labelObs = ko.observable(props.label);
+        props.descriptionObs = ko.observable(props.description);
+        props.propTypeObs = ko.observable(props.propType);
+        props.propTypeOptions = config.assessmentPropTypes;
+        editorsObs.push(props);
+      }
+    });
+  }
+  static toCustomizationFields(object, context) {
+    let editorsObs = context.vm.editorsObs;
+    let cf = {};
+    for (let i=0; i < editorsObs().length; i++) {
+      let editor = editorsObs()[i];
+      let id = editor.identifierObs(); 
+      if (id) {
+        cf[id] = cf[id] || [];
+        cf[id].push({
+          propName: editor.propNameObs(),
+          label: editor.labelObs(),
+          description: editor.descriptionObs(),
+          propType: editor.propTypeObs()
+        });
+      }
+    }
+    return cf;
   }
 }

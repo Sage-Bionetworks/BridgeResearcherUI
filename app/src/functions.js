@@ -82,29 +82,24 @@ function formatTitleCase(string, defaultValue) {
   return defaultValue || "";
 }
 function queryString(object, prefix) {
-  let string = "";
   let ns = prefix ? prefix + "." : "";
+  let query = new URLSearchParams();
   if (object) {
-    var array = [];
-    Object.keys(object)
-      .filter(function(key) {
-        return typeof object[key] !== "undefined" && object[key] !== null && object[key] !== "";
-      })
-      .forEach(function(key) {
-        var finalKey = encodeURIComponent(ns + key) + "=";
-        if (isDate(object[key])) {
-          array.push(finalKey + object[key].toISOString());
-        } else if (isArray(object[key])) {
-          for (var i = 0; i < object[key].length; i++) {
-            array.push(finalKey + encodeURIComponent(object[key][i]));
-          }
-        } else {
-          array.push(finalKey + encodeURIComponent(object[key]));
+    let keyFilter = (key) => typeof object[key] !== "undefined" && object[key] !== null && object[key] !== "";
+    Object.keys(object).filter(keyFilter).forEach((key) => {
+      let finalKey = ns + key;
+      if (isDate(object[key])) {
+        query.append(finalKey, object[key].toISOString());
+      } else if (isArray(object[key])) {
+        for (var i = 0; i < object[key].length; i++) {
+          query.append(finalKey, object[key][i]);
         }
-      });
-    string = array.join("&");
+      } else {
+        query.append(finalKey, object[key]);
+      }
+    });
   }
-  return string ? "?" + string : string;
+  return query.toString() ? ('?' + query.toString()) : '';
 }
 function queryToObject(query, arrayPropertyNames, prefix) {
   let obj = {};

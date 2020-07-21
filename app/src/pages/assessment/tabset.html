@@ -1,0 +1,24 @@
+<div class="ui secondary pointing menu" data-bind="visible: !isNewObs()">
+  <a data-bind="tabber, href: linkMaker('general')"> <i class="setting icon"></i> General </a>
+
+  <a data-bind="tabber, href: linkMaker('template'), visible: !originGuidObs()"> 
+    <i class="list icon"></i> Configure Customization Template </a>
+
+  <a data-bind="tabber, href: linkMaker('customize'), visible: originGuidObs()"> 
+    <i class="list icon"></i> Customize </a>
+
+  <a data-bind="tabber, href: linkMaker('config'), visible: !originGuidObs()">
+      <i class="code branch icon"></i> Raw Configuration </a>
+
+  <a data-bind="tabber, href: linkMaker('resources')"> <i class="copy outline icon"></i> Resources </a>
+  
+  <div class="right menu pub-status">
+    <div class="item">
+      <i class="clock icon"></i> <span data-bind="text: revisionObs()"></span>
+    </div>
+    <div class="item" data-bind="visible: originGuidObs()">
+      <span class="ui green mini label"> <i class="lock icon"></i> Shared Assessment</span>
+    </div>
+  </div>
+</div>
+<div class="ui empty secondary pointing menu" data-bind="visible: isNewObs"></div>

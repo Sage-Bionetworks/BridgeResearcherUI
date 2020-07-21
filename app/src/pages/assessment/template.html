@@ -1,0 +1,73 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/assessments" class="section">Assessments</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="text: pageTitleObs"></h3>
+    </div>
+    <div class="fixed-header-buttons">
+      <button class="ui tiny primary button" data-bind="click: save">Save</button>
+    </div>
+  </div>
+  <assessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
+    revisionObs: pageRevObs, originGuidObs: originGuidObs">
+  </assessment-tabset>
+</div>
+<div class="scrollbox">
+  <errors id="assessment_template"></errors>
+  <div class="ui grid">
+    <div class="ten wide column">
+      <form class="ui form">
+        <div data-bind="foreach: editorsObs">
+          <div class="ui segment">
+            <div class="two fields">
+              <div class="field">
+                <label>Node Identifier</label>
+                <input data-bind="textInput: identifierObs">
+              </div>
+              <div class="field">
+                <div style="float:right; width: 8rem">
+                  <button class="fluid ui compact red mini basic button" 
+                    data-bind="click: $parent.removeEditor">
+                    <i class="delete icon"></i>Delete
+                  </button>                  
+                </div>
+              </div>
+            </div>
+            <div class="two fields">
+              <div class="field">
+                <label>Property Name</label>
+                <input data-bind="textInput: propNameObs">
+              </div>
+              <div class="field">
+                <label>Property Type</label>
+                <select class="ui dropdown" data-bind="options: propTypeOptions, optionsText: 'label', 
+                  optionsValue: 'value', value: propTypeObs"></select>                
+              </div>
+            </div>
+            <div class="two fields">
+              <div class="field">
+                <label>Editor Label</label>
+                <input data-bind="textInput: labelObs">
+              </div>
+              <div class="field">
+                <label>Editor Description</label>
+                <input data-bind="textInput: descriptionObs">
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <button style="margin-top: 1rem" class="ui primary button" data-bind="click: addEditor">Add Field</button>
+    </div>
+    <div class="six wide column">
+      <div class="ui message">
+        <p>A published assessment can be imported into an app and customized through our <em>customization API</em>. Here you can define one or more “property inspectors” that will indicate which fields a study designer can change without invalidating the shared assessment.</p>
+
+        <p>This assessment is not derived from a shared assessment, so you can edit the entire configuration JSON right now (in a separate tab). As an assessment author, you are responsible for defining the configuration, as well as the fields that can be configured without invalidating the assessment (if any). </p>
+      </div>
+    </div>
+  </div>
+</div>

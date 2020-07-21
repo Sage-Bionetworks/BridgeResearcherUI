@@ -30,6 +30,11 @@ export default {
     staging: "100020",
     production: "100018"
   },
+  assessmentPropTypes: [
+    {label: 'String', value: 'string'},
+    {label: 'Boolean', value: 'boolean'},
+    {label: 'Number', value: 'number'}
+  ],
   toastr: {
     closeButton: true,
     debug: false,
@@ -57,6 +62,7 @@ export default {
   appConfigs: "/v3/appconfigs",
   appConfigElements: "/v3/appconfigs/elements",
   apps: "/v1/apps",
+  assessments: '/v1/assessments',
   cache: "/v3/cache",
   compoundactivitydefinitions: "/v3/compoundactivitydefinitions",
   emailStatus: "/v1/apps/self/emailStatus",

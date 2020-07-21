@@ -1,0 +1,110 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/assessments" class="section">Assessments</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="text: pageTitleObs"></h3>
+    </div>
+    <div class="fixed-header-buttons">
+      <button class="ui tiny primary button" data-bind="click: save">Save</button>
+    </div>
+  </div>
+  <assessment-tabset params="isNewObs: isAssessmentNewObs, guidObs: assessmentGuidObs, 
+    revisionObs: pageRevObs, originGuidObs: originGuidObs">
+  </assessment-tabset>
+</div>
+<div class="scrollbox">
+  <div class="line-control" style="margin-bottom: 1rem">
+    <div class="line-control-stretch">
+      <div class="ui breadcrumb">
+        <a class="section" data-bind="href:'#/assessments/'+assessmentGuidObs()+'/resources'">All Resources</a>
+        <i class="right chevron icon divider"></i>
+        <b data-bind="text: subPageTitleObs"></b>
+      </div>
+    </div>
+  </div>
+  <errors id="assessment_resource"></errors>
+  <form class="ui skinny form">
+    <div class="two fields">
+      <div id="title" class="required field">
+        <label>Title</label>
+        <input type="text" data-bind="textInput: titleObs, hasFocus: true" />
+      </div>
+      <div class="field" id="category">
+        <label>Category</label>
+        <select class="ui dropdown" data-bind="options: categoriesOptionsObs,
+          optionsText: 'label', optionsValue: 'value', value: categoryObs,
+          optionsCaption: 'Select category...'">
+        </select>
+      </div>
+    </div>
+    <div class="two fields">
+      <div id="url" class="required field">
+        <label>URL</label>
+        <input type="text" data-bind="textInput: urlObs" />
+      </div>
+      <div class="field">
+        <label>Format</label>
+        <input type="text" data-bind="textInput: formatObs" />
+      </div>
+    </div>
+    <div class="two fields">
+      <div class="field">
+        <label>Language</label>
+        <input type="text" data-bind="textInput: languageObs" />
+      </div>
+      <div class="field">
+        <label>Date</label>
+        <input type="text" data-bind="textInput: dateObs" />
+      </div>
+    </div>
+    <div class="two fields">
+      <div class="field">
+        <label>Description</label>
+        <textarea type="text" data-bind="textInput: descriptionObs"></textarea>
+      </div>
+      <div class="field">
+        <div class="two fields">
+          <div class="field">
+            <label>Min Revision</label>
+            <input type="text" data-bind="textInput: minRevisionObs" />
+          </div>
+          <div class="field">
+            <label>Max Revision</label>
+            <input type="text" data-bind="textInput: maxRevisionObs" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="two fields">
+      <div class="field">
+        <label>Creators</label>
+        <line-editor params="arrayObs: creatorsObs, label: 'Creator'"></line-editor>
+      </div>
+    </div>
+    <div class="two fields">
+      <div class="field">
+        <label>Contributors</label>
+        <line-editor params="arrayObs: contributorsObs, label: 'Contributor'"></line-editor>
+      </div>
+    </div>
+    <div class="two fields">
+      <div class="field">
+        <label>Publishers</label>
+        <line-editor params="arrayObs: publishersObs, label: 'Publisher'"></line-editor>
+      </div>
+    </div>
+    <div class="two fields">
+      <div class="field">
+        <label>Created On</label>
+        <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
+      </div>
+      <div class="field">
+        <label>Modified On</label>
+        <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,47 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/assessments" class="section">Assessments</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="text: pageTitleObs"></h3>
+    </div>
+    <div class="fixed-header-buttons">
+      <button class="ui tiny primary button" data-bind="click: save">Customize</button>
+    </div>
+  </div>
+  <assessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
+    revisionObs: pageRevObs, originGuidObs: originGuidObs">
+  </assessment-tabset>
+</div>
+<div class="scrollbox">
+  <errors id="assessment_config"></errors>
+  <div class="ui grid">
+    <div class="ten wide column">
+      <div class="ui warning message" data-bind="visible: editorsObs().length === 0">
+        <p>No customizable fields have been set for this assessment (the whole configuration will need to be edited as JSON, but this assessment will no longer be an instance of a shared assessment). </p>
+      </div>
+      <form class="ui skinny form" data-bind="foreach: editorsObs">
+        <div class="two fields">
+          <div class="field">
+            <label>
+              <span data-bind="text: $data.label"></span> 
+              <span style="float:right; color:#bbb"
+                data-bind="text: '[' + $data.fieldIdentifier + ']'"></span>
+            </label>
+            <input type="text" data-bind="textInput: $data.valueObs" />
+            <div class="help-text" data-bind="text: $data.description"></div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="six wide column">
+      <div class="ui message">
+        <p>This assessment is a copy of a shared assessment. Only limited modifications to the assessment’s configuration can be made, as specified by the original author of the shared assessment. </p>
+        
+        <p><b>If you wish to edit the configuration (which will delete the link to a shared component), you can <a class="link" data-bind="click: unlink">click on this link.</a></b></p>
+      </div>
+    </div>
+  </div>
+</div>

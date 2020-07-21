@@ -1,0 +1,14 @@
+<div class="ui divided selection list" data-bind="foreach: arrayObs, 
+  dragula: { dragHandleSelector: '.draggable', indexObs: indexObs, listObs: arrayObs }">
+    <div class="item">
+      <div class="draggable">
+        <i class="ui times circle outline icon" data-bind="click: $parent.remove"></i>
+        <span data-bind="text: $data"></span>
+      </div>
+    </div>
+</div>
+<div class="ui action input">
+  <input type="text" data-bind="textInput: addObs, attr: {placeholder: label},
+    event: {keypress: keyHandler}">
+  <button class="ui button" data-bind="click: add">Add</button>
+</div>
