@@ -272,8 +272,7 @@ export default function general(params) {
     // fix the ID to the be real ID, then use that to call getParticipantName
     self.userIdObs(participant.id);
     if (!self.isNewObs()) {
-      serverService
-        .getParticipantName(participant.id)
+      serverService.getParticipantName(participant.id)
         .then(function(part) {
           self.titleObs(part.name);
         })

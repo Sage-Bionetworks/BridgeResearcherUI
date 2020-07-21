@@ -1,0 +1,97 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/assessments" class="section">Assessments</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="text: pageTitleObs"></h3>
+    </div>
+    <div class="fixed-header-buttons">
+      <button data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems"
+        class="ui red tiny button">
+        Delete
+      </button>
+      <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
+        <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()},
+          semantic: 'dropdown-button-toggle', container: '.buttons'">
+          Delete
+        </div>
+        <div class="ui primary tiny floating dropdown icon button"
+          data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" data-bind="click: deleteItems">Delete</div>
+            <div class="item" data-bind="click: deletePermanently">Delete <b>Permanently</b></div>
+          </div>
+        </div>
+      </div>
+      <a data-bind="href: '#/assessments/' + guidObs() + '/resources/new'" 
+        class="ui primary tiny button">New Assessment Resource</a>
+    </div>
+  </div>
+  <assessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
+    revisionObs: pageRevObs, originGuidObs: originGuidObs">
+  </assessment-tabset>
+</div>
+<div class="scrollbox">
+  <errors id="assessment_resources"></errors>
+  <form class="ui form" onsubmit="return false">
+    <div class="line-control">
+      <input type="text" style="width: 8rem; margin-right: 1rem"
+        data-bind="textInput: forRevisionObs, hasFocus: true" placeholder="Target Rev"/>
+      <div>
+        <select class="ui dropdown" data-bind="options: categoriesOptionsObs,
+          optionsText: 'label', optionsValue: 'value', value: categoryObs,
+          optionsCaption: 'Select category...'">
+      </div>
+    </div>
+    <div class="line-control-stretch">
+      <pager style="display: flex; justify-content: flex-end" 
+        params="prefix: 'asmr', postLoadFunc: postLoadFunc"></pager>
+    </div>
+  </form>
+  <table class="ui compact selectable table">
+    <thead>
+      <tr>
+        <th width="10">
+          <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+        </th>
+        <th nowrap>Title</th>
+        <th>Description</th>
+        <th>Category</th>
+        <th>Creators</th>
+        <th>Revisions</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+      <tr>
+        <td colspan="7" data-bind="html: recordsMessageObs"></td>
+      </tr>
+    </tbody>
+    <tbody data-bind="foreach: itemsObs">
+      <tr data-bind="css: {negative: $data.deleted}">
+        <td>
+          <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
+          <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
+            style="cursor: pointer" class="green undo icon"></i>
+        </td>
+        <td nowrap>
+          <a data-bind="text: $data.title, href: '#/assessments/' + $parent.guidObs() 
+            + '/resources/' + $data.guid"></a>
+        </td>
+        <td data-bind="text: $data.description"></td>
+        <td data-bind="text: $parent.formatCategory($data.category)"></td>
+        <td data-bind="text: $data.creators.join(', ')"></td>
+        <td data-bind="text: $parent.formatRevisions($data)"></td>
+        <td data-bind="text: $data.date"></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
+    <ui-checkbox params="checkedObs: showDeletedObs">
+      Show deleted assessment resources
+    </ui-checkbox>
+  </div>
+</div>

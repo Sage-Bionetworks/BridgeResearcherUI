@@ -14,6 +14,7 @@ import root from "./root";
 const GUID_CREATEDON = ["guid", "createdOn"];
 const GUID = ["guid"];
 const ID = ["id"];
+const ID_GUID = ["id", "guid"];
 const ID_REVISION = ["id", "revision"];
 const ID_VERSION = ["id", "version"];
 const SCHEMAID = ["schemaId"];
@@ -143,10 +144,19 @@ router.on("/organizations/:id", routeTo("organization", "organizations", ID));
 router.on("/studies", routeTo("studies", "studies"));
 router.on("/studies/:id", routeTo("study", "studies", ID));
 
-router.on("/shared_modules", routeTo("shared_modules", "modules"));
-router.on("/shared_modules/:id", routeTo("shared_module", "modules", ID)); // unused now?
-router.on("/shared_modules/:id/versions/:version/editor", routeTo("shared_module", "modules", ID_VERSION));
-router.on("/shared_modules/:id/versions/:version/history", routeTo("shared_module_versions", "modules", ID_VERSION));
+router.on("/assessments", routeTo("assessments", "assessments"));
+router.on("/assessments/:guid", redirectTo("/assessments/{0}/general"));
+router.on("/assessments/:guid/general", routeTo("assessment", "assessments", GUID));
+router.on("/assessments/:guid/config", routeTo("assessment_config", "assessments", GUID));
+router.on("/assessments/:guid/template", routeTo("assessment_template", "assessments", GUID));
+router.on("/assessments/:guid/history", routeTo("assessment_history", "assessments", GUID));
+router.on("/assessments/:guid/resources", routeTo("assessment_resources", "assessments", GUID));
+router.on("/assessments/:id/resources/:guid", routeTo("assessment_resource", "assessments", ID_GUID));
+router.on("/assessments/:guid/customize", routeTo("assessment_customize", "assessments", GUID));
+// router.on("/shared_modules", routeTo("shared_modules", "modules"));
+// router.on("/shared_modules/:id", routeTo("shared_module", "modules", ID)); // unused now?
+// router.on("/shared_modules/:id/versions/:version/editor", routeTo("shared_module", "modules", ID_VERSION));
+// router.on("/shared_modules/:id/versions/:version/history", routeTo("shared_module_versions", "modules", ID_VERSION));
 router.on("/app_configs", routeTo("appconfigs", "appConfigs"));
 router.on("/app_configs/:guid", routeTo("appconfig", "appConfigs", GUID));
 router.on("/templates/:templateType/:guid/general", routeTo("template_general", "templates", TYPE_GUID));

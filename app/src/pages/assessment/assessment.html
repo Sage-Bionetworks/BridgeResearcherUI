@@ -1,0 +1,85 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/assessments" class="section">Assessments</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="text: pageTitleObs"></h3>
+    </div>
+    <div class="fixed-header-buttons">
+      <button class="ui tiny primary button" data-bind="click: save">Save</button>
+    </div>
+  </div>
+  <assessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
+    revisionObs: pageRevObs, originGuidObs: originGuidObs">
+  </assessment-tabset>
+</div>
+<div class="scrollbox">
+  <errors id="assessment"></errors>
+  <p> View the <a data-bind="href: createHistoryLink"> 
+    <i style="margin-right:0" class="history icon"></i>Edit History</a> of this document.
+  </p>
+
+  <form class="ui skinny form">
+    <div class="two fields">
+      <div class="required field" id="title">
+        <label>Title</label>
+        <input type="text" data-bind="textInput: titleObs, hasFocus: true" />
+      </div>
+      <div class="field" id="revision" style="width: 10rem">
+        <label>Revision</label>
+        <input type="text" data-bind="textInput: revisionObs" />
+      </div>
+    </div>
+    <div class="two fields">
+      <div class="required field" id="identifier">
+        <label>Identifier</label>
+        <input type="text" data-bind="textInput: identifierObs, visible: isNewObs()" />
+        <div class="input-field-padding" data-bind="text: identifierObs, visible: !isNewObs()"></div>
+      </div>
+      <div class="required field" id="ownerId">
+        <label>Organization</label>
+        <select class="ui dropdown" data-bind="options: orgOptionsObs,
+          optionsText: 'label', optionsValue: 'value', value: ownerIdObs,
+          optionsCaption: 'Select owner...'">
+        </select>
+      </div>
+    </div>
+    <div class="two fields">
+      <div class="field" id="summary">
+        <label>Summary</label>
+        <textarea id="summary" data-bind="textInput: summaryObs" class="ui textarea"></textarea>
+      </div>
+      <div class="required field" id="osName">
+        <label>Operation System</label>
+        <select class="ui dropdown" data-bind="options: osNameOpts,
+          optionsText: 'label', optionsValue: 'value', value: osNameObs,
+          optionsCaption: 'Select operating system...'">
+        </select>
+      </div>
+    </div>
+    <div class="two fields">
+      <div class="field" id="validationStatus">
+        <label>Validation Status</label>
+        <textarea id="validationStatus" data-bind="textInput: validationStatusObs" class="ui textarea">
+        </textarea>
+      </div>
+      <div class="field" id="normingStatus">
+        <label>Norming Status</label>
+        <textarea id="normingStatus" data-bind="textInput: normingStatusObs" class="ui textarea">
+        </textarea>
+      </div>
+    </div>
+    <div class="two fields">
+      <div class="field">
+        <label>Created On</label>
+        <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
+      </div>
+      <div class="field">
+        <label>Modified On</label>
+        <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -691,6 +691,67 @@ export class ServerService {
     let queryString = fn.queryString({ physical: physical === true });
     return this.del(`${config.appConfigs}/${guid}${queryString}`);
   }
+
+  getAssessment(guid) {
+    return this.gethttp(`${config.assessments}/${guid}`);
+  }
+  getAssessmentRevisions(guid, query, includeDeleted) {
+    let queryString = fn.queryString({ 
+      offsetBy: query.offsetBy, 
+      pageSize: query.pageSize, 
+      includeDeleted: includeDeleted === true
+    });
+    return this.gethttp(`${config.assessments}/${guid}/revisions${queryString}`)
+  }
+  getAssessments(tags = '', offsetBy, pageSize, includeDeleted) { 
+    let tag = tags.replace(/[^\sa-zA-Z0-9]+/g,' ').replace(/\s+/g, ' ')
+      .trim().split(' ').filter(s => s.length);
+    let queryString = fn.queryString({ tag, offsetBy, pageSize, includeDeleted: includeDeleted === true});
+    return this.gethttp(config.assessments + queryString);
+  }
+  deleteAssessment(guid, physical) {
+    let queryString = fn.queryString({ physical: physical === true });
+    return this.del(`${config.assessments}/${guid}${queryString}`);
+  }
+  createAssessment(assessment) { 
+    return this.post(config.assessments, assessment);
+  }
+  updateAssessment(assessment) { 
+    return this.post(`${config.assessments}/${assessment.guid}`, assessment);
+  }
+  getAssessmentConfig(guid) {
+    return this.gethttp(`${config.assessments}/${guid}/config`);
+  }
+  updateAssessmentConfig(guid, assessmentConfig) {
+    return this.post(`${config.assessments}/${guid}/config`, assessmentConfig);
+  }
+  customizeAssessmentConfig(guid, map) {
+    return this.post(`${config.assessments}/${guid}/config/customize`, map);
+  }
+
+  getAssessmentResources(id, query, includeDeleted) {
+    query.includeDeleted = includeDeleted === true;
+    let queryString = fn.queryString(query);
+    return this.gethttp(`${config.assessments}/identifier:${id}/resources${queryString}`);
+  }
+  createAssessmentResource(id, resource) {
+    return this.post(`${config.assessments}/identifier:${id}/resources`, resource);
+  }
+  getAssessmentResource(id, resourceGuid) {
+    return this.gethttp(`${config.assessments}/identifier:${id}/resources/${resourceGuid}`);
+  }
+  updateAssessmentResource(id, resource) {
+    return this.post(`${config.assessments}/identifier:${id}/resources/${resource.guid}`, resource);
+  }
+  deleteAssessmentResource(id, resourceGuid, physical) {
+    let queryString = fn.queryString({ physical: physical === true });
+    return this.del(`${config.assessments}/identifier:${id}/resources/${resourceGuid}${queryString}`);
+  }
+  publishAssessmentResource(id) {
+    return this.post(`${config.assessments}/identifier:{id}/resources/publish`);
+  }
+
+
   adminSignIn(appName, environment, signIn) {
     return postInt(`${config.host[environment]}${config.adminAuth}/signIn`, signIn).then(
       this.cacheSession(appName, signIn.appId, environment)

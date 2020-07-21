@@ -7,11 +7,9 @@
     <div class="ui grid">
       <div class="eight wide column">
         <form class="ui form event-id-editor">
-          <div
-            data-bind="foreach: selectedEventKeysObs, dragula: { 
-                        dragHandleSelector: '.draggable', indexObs: indexObs, 
-                        listObs: selectedEventKeysObs }"
-          >
+          <div data-bind="foreach: selectedEventKeysObs, dragula: { 
+            dragHandleSelector: '.draggable', indexObs: indexObs, 
+            listObs: selectedEventKeysObs }">
             <table>
               <tr>
                 <td style="width:100%" class="draggable label" data-bind="text: $component.activityLabel($data)"></td>

@@ -57,6 +57,7 @@ export default {
   appConfigs: "/v3/appconfigs",
   appConfigElements: "/v3/appconfigs/elements",
   apps: "/v1/apps",
+  assessments: '/v1/assessments',
   cache: "/v3/cache",
   compoundactivitydefinitions: "/v3/compoundactivitydefinitions",
   emailStatus: "/v1/apps/self/emailStatus",

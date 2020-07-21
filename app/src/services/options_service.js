@@ -2,6 +2,39 @@ import fn from "../functions";
 import serverService from "./server_service";
 import Promise from "bluebird";
 
+const CATEGORIES = {
+  'Customization Options': 'customization_options',
+  'Data Repositories': 'data_repository',
+  'Science Documentation': 'science_documentation',
+  'Developer Documentation': 'developer_documentation',
+  'Licenses': 'license',
+  'Publications': 'publication',
+  'Release Notes': 'release_note',
+  'Sample Apps': 'sample_app',
+  'Sample Data': 'sample_data',
+  'Screenshots': 'screenshot',
+  'Video Previews': 'video_preview',
+  'See Also': 'see_also',
+  'Used in Studies': 'used_in_study',
+  'Websites': 'website',
+  'Other': 'other'
+};
+
+const CATEGORY_LABELS = {};
+
+Object.keys(CATEGORIES).map(label => {
+  CATEGORY_LABELS[CATEGORIES[label]] = label;
+});
+
+function getCategoryOptions() {
+  // let opts = Objects.keys(CATEGORIES).map(key => ({label: CATEGORIES[key], value: key}));
+  // return [{ value: "", label: "Select category:" }].concat(opts);
+  return Object.keys(CATEGORIES).map(key => ({label: key, value: CATEGORIES[key]}));
+}
+function getCategorylabel(value) {
+
+}
+
 const LABEL_SORTER = fn.makeFieldSorter("label");
 
 function getSchedule(group) {
@@ -81,6 +114,9 @@ function getOrganizationNames() {
   });
 }
 export default {
+  CATEGORIES,
+  CATEGORY_LABELS,
+  getCategoryOptions,
   getActivities,
   getSchedules,
   getActivityOptions,
