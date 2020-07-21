@@ -31,6 +31,8 @@ export default function(params) {
   let self = this;
   self.assessment = newAssessment();
 
+  fn.copyProps(self, fn, "formatDateTime");
+
   self.osNameOpts = [
     {label: "Android", value: "Android"},
     {label: "iOS", value: "iPhone OS"},
@@ -104,9 +106,16 @@ export default function(params) {
       .catch(failureHandler);
   };
 
+  self.orgMap = null;
+
   function setOrgOptions(orgMap) {
+    self.orgMap = orgMap;
     let opts = Object.keys(orgMap).map((key) => ({label: orgMap[key], value: key}));
     self.orgOptionsObs.pushAll(opts);
+  }
+
+  self.formatOrgId = function(orgId) {
+    return (orgId && self.orgMap[orgId]) ? self.orgMap[orgId] : orgId;
   }
 
   optionsService.getOrganizationNames()

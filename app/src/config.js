@@ -30,6 +30,11 @@ export default {
     staging: "100020",
     production: "100018"
   },
+  assessmentPropTypes: [
+    {label: 'String', value: 'string'},
+    {label: 'Boolean', value: 'boolean'},
+    {label: 'Number', value: 'number'}
+  ],
   toastr: {
     closeButton: true,
     debug: false,

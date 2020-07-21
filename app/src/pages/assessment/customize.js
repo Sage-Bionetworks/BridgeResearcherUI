@@ -32,6 +32,15 @@ function findByIdAndProp(data, nodeId, propName) {
   return null;
 }
 
+function convertValue(type, value) {
+  if (type === 'boolean') {
+    return value === 'true';
+  } else if (type === 'number') {
+    return Number.parseInt(value);
+  }
+  return value;
+}
+
 export default function(params) {
   let self = this;
 
@@ -52,7 +61,8 @@ export default function(params) {
       if (!map[editor.fieldIdentifier]) {
         map[editor.fieldIdentifier] = {};
       }
-      map[editor.fieldIdentifier][editor.propName] = editor.valueObs();
+      map[editor.fieldIdentifier][editor.propName] = 
+        convertValue(editor.propType, editor.valueObs());
     }
 
     serverService.customizeAssessmentConfig(params.guid, map)

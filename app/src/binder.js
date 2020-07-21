@@ -1,3 +1,4 @@
+import config from "./config";
 import ko from "knockout";
 import fn from "./functions.js";
 import jsonFormatter from "./json_formatter";
@@ -243,6 +244,7 @@ export default class Binder {
         props.labelObs = ko.observable(props.label);
         props.descriptionObs = ko.observable(props.description);
         props.propTypeObs = ko.observable(props.propType);
+        props.propTypeOptions = config.assessmentPropTypes;
         editorsObs.push(props);
       }
     });
@@ -252,15 +254,16 @@ export default class Binder {
     let cf = {};
     for (let i=0; i < editorsObs().length; i++) {
       let editor = editorsObs()[i];
-      console.log(editor);
       let id = editor.identifierObs(); 
-      cf[id] = cf[id] || [];
-      cf[id].push({
-        propName: editor.propNameObs(),
-        label: editor.labelObs(),
-        description: editor.descriptionObs(),
-        propType: editor.propTypeObs()
-      });
+      if (id) {
+        cf[id] = cf[id] || [];
+        cf[id].push({
+          propName: editor.propNameObs(),
+          label: editor.labelObs(),
+          description: editor.descriptionObs(),
+          propType: editor.propTypeObs()
+        });
+      }
     }
     return cf;
   }

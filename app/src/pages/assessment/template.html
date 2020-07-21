@@ -19,7 +19,6 @@
   <errors id="assessment_template"></errors>
   <div class="ui grid">
     <div class="ten wide column">
-
       <form class="ui form">
         <div data-bind="foreach: editorsObs">
           <div class="ui segment">
@@ -34,11 +33,6 @@
                     data-bind="click: $parent.removeEditor">
                     <i class="delete icon"></i>Delete
                   </button>                  
-                  <!--
-                  <a href="#" data-bind="click: $parent.removeEditor">
-                    <i style="margin:1rem" class="ui large trash icon"></i>
-                  </a>
-                -->
                 </div>
               </div>
             </div>
@@ -49,7 +43,8 @@
               </div>
               <div class="field">
                 <label>Property Type</label>
-                <input data-bind="textInput: propTypeObs">
+                <select class="ui dropdown" data-bind="options: propTypeOptions, optionsText: 'label', 
+                  optionsValue: 'value', value: propTypeObs"></select>                
               </div>
             </div>
             <div class="two fields">

@@ -1,5 +1,6 @@
 import alerts from "../../widgets/alerts";
 import Binder from "../../binder";
+import config from "../../config";
 import fn from "../../functions";
 import ko from "knockout";
 import optionsService from "../../services/options_service";
@@ -43,6 +44,7 @@ export default function(params) {
       labelObs: ko.observable(),
       descriptionObs: ko.observable(),
       propTypeObs: ko.observable(),
+      propTypeOptions: config.assessmentPropTypes,
       identifierObs: ko.observable()
     }
     self.editorsObs.push(editor);
