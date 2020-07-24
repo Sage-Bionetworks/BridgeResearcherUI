@@ -2,78 +2,75 @@
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
       <div class="ui breadcrumb">
-        <a href="#/assessments" class="section">Assessments</a>
+        <a href="#/sharedassessments" class="section">Shared Assessments</a>
         <i class="right chevron icon divider"></i>
       </div>
       <h3 data-bind="text: pageTitleObs"></h3>
     </div>
     <div class="fixed-header-buttons">
-      <button class="ui tiny primary button" data-bind="click: save">Save</button>
     </div>
   </div>
-  <assessment-tabset params="isNewObs: isAssessmentNewObs, guidObs: assessmentGuidObs, 
-    revisionObs: pageRevObs, originGuidObs: originGuidObs, canEditObs: canEditObs">
-  </assessment-tabset>
+  <sharedassessment-tabset params="isNewObs: isAssessmentNewObs, guidObs: assessmentGuidObs, 
+    revisionObs: pageRevObs, originGuidObs: originGuidObs">
+  </sharedassessment-tabset>
 </div>
 <div class="scrollbox">
   <div class="line-control" style="margin-bottom: 1rem">
     <div class="line-control-stretch">
       <div class="ui breadcrumb">
-        <a class="section" data-bind="href:'#/assessments/'+assessmentGuidObs()+'/resources'">All Resources</a>
+        <a class="section" data-bind="href:'#/sharedassessments/'+assessmentGuidObs()+'/resources'">All Resources</a>
         <i class="right chevron icon divider"></i>
         <b data-bind="text: subPageTitleObs"></b>
       </div>
     </div>
   </div>
-  <errors id="assessment_resource"></errors>
+  <errors id="sharedassessment_resource"></errors>
   <form class="ui skinny form">
     <div class="two fields">
-      <div id="title" class="required field">
+      <div class="field">
         <label>Title</label>
-        <input type="text" data-bind="textInput: titleObs, hasFocus: true" />
+        <div class="input-field-padding" data-bind="text: titleObs"></div>
       </div>
-      <div class="field" id="category">
+      <div class="field">
         <label>Category</label>
-        <select class="ui dropdown" data-bind="options: categoriesOptionsObs,
-          optionsText: 'label', optionsValue: 'value', value: categoryObs,
-          optionsCaption: 'Select category...'">
-        </select>
+        <div class="input-field-padding" data-bind="text: categoryObs"></div>
       </div>
     </div>
     <div class="two fields">
-      <div id="url" class="required field">
+      <div class="field">
         <label>URL</label>
-        <input type="text" data-bind="textInput: urlObs" />
+        <a class="input-field-padding" style="display:block; overflow: hidden; text-overflow: ellipsis"
+          data-bind="attr: {'href': urlObs}, text: urlObs"></a>
       </div>
       <div class="field">
         <label>Format</label>
-        <input type="text" data-bind="textInput: formatObs" />
+        <div class="input-field-padding" data-bind="text: formatObs"></div>
       </div>
     </div>
     <div class="two fields">
       <div class="field">
         <label>Language</label>
-        <input type="text" data-bind="textInput: languageObs" />
+        <div class="input-field-padding" data-bind="text: languageObs"></div>
       </div>
       <div class="field">
         <label>Date</label>
-        <input type="text" data-bind="textInput: dateObs" />
+        <div class="input-field-padding" data-bind="text: dateObs"></div>
       </div>
     </div>
     <div class="two fields">
       <div class="field">
         <label>Description</label>
-        <textarea type="text" data-bind="textInput: descriptionObs"></textarea>
+        <div class="input-field-padding" data-bind="text: descriptionObs"></div>
       </div>
       <div class="field">
         <div class="two fields">
           <div class="field">
             <label>Min Revision</label>
-            <input type="text" data-bind="textInput: minRevisionObs" />
+            <div class="input-field-padding" data-bind="text: minRevisionObs"></div>
           </div>
           <div class="field">
             <label>Max Revision</label>
-            <input type="text" data-bind="textInput: maxRevisionObs" />
+            <div class="input-field-padding" data-bind="text: maxRevisionObs"></div>
           </div>
         </div>
       </div>
@@ -81,19 +78,19 @@
     <div class="two fields">
       <div class="field">
         <label>Creators</label>
-        <line-editor params="arrayObs: creatorsObs, label: 'Creator'"></line-editor>
+        <div class="input-field-padding" data-bind="text: creatorsObs().join(', ')"></div>
       </div>
     </div>
     <div class="two fields">
       <div class="field">
         <label>Contributors</label>
-        <line-editor params="arrayObs: contributorsObs, label: 'Contributor'"></line-editor>
+        <div class="input-field-padding" data-bind="text: contributorsObs().join(', ')"></div>
       </div>
     </div>
     <div class="two fields">
       <div class="field">
         <label>Publishers</label>
-        <line-editor params="arrayObs: publishersObs, label: 'Publisher'"></line-editor>
+        <div class="input-field-padding" data-bind="text: publishersObs().join(', ')"></div>
       </div>
     </div>
     <div class="two fields">

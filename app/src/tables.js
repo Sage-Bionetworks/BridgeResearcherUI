@@ -81,6 +81,7 @@ export default {
     let loadFunc = options.refresh;
     let redirectTo = options.redirect;
     let undeleteFunc = options.undelete;
+    let publishFunc = options.publish;
 
     if (!vm.itemsObs) {
       vm.itemsObs = ko.observableArray([]);
@@ -126,6 +127,16 @@ export default {
             .catch(utils.failureHandler({ id }));
         }, "Delete FOREVER");
       };
+    }
+    if (publishFunc) {
+      vm.publish = function(vm, event) {
+        let items = vm.itemsObs().filter(hasBeenChecked);
+    
+        utils.startHandler(vm, event);
+        Promise.each(items, publishFunc)
+          .then(utils.successHandler(vm, event, "The selected resources have been published."))
+          .catch(utils.failureHandler({ id, redirect: false }));
+      }
     }
     if (undeleteFunc && loadFunc) {
       vm.isAdmin = root.isAdmin;

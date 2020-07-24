@@ -1,14 +1,8 @@
 <div class="ui secondary pointing menu" data-bind="visible: !isNewObs()">
   <a data-bind="tabber, href: linkMaker('general')"> <i class="setting icon"></i> General </a>
 
-  <a data-bind="tabber, href: linkMaker('template'), visible: !originGuidObs() && canEditObs()"> 
-    <i class="list icon"></i> Customization Template </a>
-
-  <a data-bind="tabber, href: linkMaker('customize'), visible: originGuidObs() && canEditObs()"> 
-    <i class="list icon"></i> Customize Configuration</a>
-
-  <a data-bind="tabber, href: linkMaker('config'), visible: !originGuidObs()">
-      <i class="code branch icon"></i> Configuration</a>
+  <a data-bind="tabber, href: linkMaker('config')">
+    <i class="code branch icon"></i> Configuration</a>
 
   <a data-bind="tabber, href: linkMaker('resources')"> <i class="copy outline icon"></i> Documentation </a>
   

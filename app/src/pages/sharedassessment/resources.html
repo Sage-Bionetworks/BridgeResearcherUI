@@ -1,0 +1,50 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/sharedassessments" class="section">Shared Assessments</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="text: pageTitleObs"></h3>
+    </div>
+    <div class="fixed-header-buttons">
+      <button data-bind="click: doImport" class="ui tiny button">Import</button>
+    </div>
+  </div>
+  <sharedassessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
+    revisionObs: pageRevObs, originGuidObs: originGuidObs">
+  </sharedassessment-tabset>
+</div>
+<div class="scrollbox">
+  <errors id="sharedassessment_resources"></errors>
+  <table class="ui compact selectable table">
+    <thead>
+      <tr>
+        <th nowrap>Title</th>
+        <th>Description</th>
+        <th>Category</th>
+        <th>Creators</th>
+        <th>Revisions</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+      <tr>
+        <td colspan="6" data-bind="html: recordsMessageObs"></td>
+      </tr>
+    </tbody>
+    <tbody data-bind="foreach: itemsObs">
+      <tr data-bind="css: {negative: $data.deleted}">
+        <td nowrap>
+          <a data-bind="text: $data.title, href: '#/sharedassessments/' + $parent.guidObs() 
+            + '/resources/' + $data.guid"></a>
+        </td>
+        <td data-bind="text: $data.description"></td>
+        <td data-bind="text: $parent.formatCategory($data.category)"></td>
+        <td data-bind="text: $data.creators.join(', ')"></td>
+        <td data-bind="text: $parent.formatRevisions($data)"></td>
+        <td data-bind="text: $data.date"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

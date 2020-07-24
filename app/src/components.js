@@ -3,8 +3,8 @@ import errors from "./widgets/errors/errors";
 import errorsHtml from "./widgets/errors/errors.html";
 import assessments from "./pages/assessments/assessments";
 import assessmentsHtml from "./pages/assessments/assessments.html";
-import assessment from "./pages/assessment/assessment";
-import assessmentHtml from "./pages/assessment/assessment.html";
+import assessment from "./pages/assessment/general";
+import assessmentHtml from "./pages/assessment/general.html";
 import assessmentConfig from "./pages/assessment/config";
 import assessmentConfigHtml from "./pages/assessment/config.html";
 import assessmentTemplate from "./pages/assessment/template";
@@ -19,6 +19,22 @@ import assessmentCustomize from "./pages/assessment/customize";
 import assessmentCustomizeHtml from "./pages/assessment/customize.html";
 import assessmentTabs from "./pages/assessment/tabset";
 import assessmentTabsHtml from "./pages/assessment/tabset.html";
+import sharedassessments from "./pages/sharedassessments/sharedassessments";
+import sharedassessmentsHtml from "./pages/sharedassessments/sharedassessments.html";
+import sharedassessment from "./pages/sharedassessment/general";
+import sharedassessmentHtml from "./pages/sharedassessment/general.html";
+import sharedassessmentHistory from "./pages/sharedassessment/history";
+import sharedassessmentHistoryHtml from "./pages/sharedassessment/history.html";
+import sharedassessmentConfig from "./pages/sharedassessment/config";
+import sharedassessmentConfigHtml from "./pages/sharedassessment/config.html";
+import sharedassessmentResources from "./pages/sharedassessment/resources";
+import sharedassessmentResourcesHtml from "./pages/sharedassessment/resources.html";
+import sharedassessmentResource from "./pages/sharedassessment/resource";
+import sharedassessmentResourceHtml from "./pages/sharedassessment/resource.html";
+import sharedassessmentTabs from "./pages/sharedassessment/tabset";
+import sharedassessmentTabsHtml from "./pages/sharedassessment/tabset.html";
+import tags from "./pages/admin/tags/tags";
+import tagsHtml from "./pages/admin/tags/tags.html";
 // import sharedModules from "./pages/shared_modules/shared_modules";
 // import sharedModulesHtml from "./pages/shared_modules/shared_modules.html";
 import dailyUploads from "./pages/studyreports/dailyUploads";
@@ -344,7 +360,7 @@ reg("errors", {viewModel: errors, template: errorsHtml});
 // reg("sharedmodule-tabset", {viewModel: shTabset, template: shTabsetHtml});
 reg("none", {template: '<div class="ui modal dialog"></div>'});
 reg("assessments", {viewModel: assessments, template: assessmentsHtml});
-reg("assessment", {viewModel: assessment, template: assessmentHtml});
+reg("assessment_general", {viewModel: assessment, template: assessmentHtml});
 reg("assessment_config", {viewModel: assessmentConfig, template: assessmentConfigHtml});
 reg("assessment_template", {viewModel: assessmentTemplate, template: assessmentTemplateHtml});
 reg("assessment_history", {viewModel: assessmentHistory, template: assessmentHistoryHtml});
@@ -352,6 +368,21 @@ reg("assessment_resources", {viewModel: assessmentResources, template: assessmen
 reg("assessment_resource", {viewModel: assessmentResource, template: assessmentResourceHtml});
 reg("assessment_customize", {viewModel: assessmentCustomize, template: assessmentCustomizeHtml});
 reg("assessment-tabset", {viewModel: assessmentTabs, template: assessmentTabsHtml});
+reg("sharedassessments", 
+  {viewModel: sharedassessments, template: sharedassessmentsHtml});
+reg("sharedassessment_general", 
+  {viewModel: sharedassessment, template: sharedassessmentHtml});
+reg("sharedassessment_history", 
+  {viewModel: sharedassessmentHistory, template: sharedassessmentHistoryHtml});
+reg("sharedassessment_config", 
+  {viewModel: sharedassessmentConfig, template: sharedassessmentConfigHtml});
+reg("sharedassessment_resources", 
+  {viewModel: sharedassessmentResources, template: sharedassessmentResourcesHtml});
+reg("sharedassessment_resource", 
+  {viewModel: sharedassessmentResource, template: sharedassessmentResourceHtml});
+reg("sharedassessment-tabset", 
+  {viewModel: sharedassessmentTabs, template: sharedassessmentTabsHtml});
+reg("tags", {viewModel: tags, template: tagsHtml});
 reg("dailyUploads", {viewModel: dailyUploads, template: dailyUploadsHtml});
 reg("retention", {viewModel: retention, template: retentionHtml});
 reg("studyreports-tabset", {viewModel: studyReportsTabset, template: studyReportsTabsetHtml});

@@ -51,8 +51,8 @@ function deleteConfirmation(text, func, confirmButtonText = "Delete") {
 function warn(text) {
   WarnToast.fire({text});
 }
-function prompt(text, okFunc) {
-  PromptToast.fire({text}).then(result => {
+function prompt(text, okFunc, inputValue = '') {
+  PromptToast.fire({text, inputValue}).then(result => {
     if (result.value) {
       okFunc(result.value);
       Swal.close();

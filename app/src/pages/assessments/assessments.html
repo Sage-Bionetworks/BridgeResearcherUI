@@ -48,6 +48,8 @@
         <th width="10">
           <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
         </th>
+        <th width="10">
+        </th>
         <th nowrap>Title</th>
         <th>Summary</th>
         <th>Identifier</th>
@@ -57,7 +59,7 @@
     </thead>
     <tbody class="no_records" data-bind="if: itemsObs().length === 0">
       <tr>
-        <td colspan="6" data-bind="html: recordsMessageObs"></td>
+        <td colspan="7" data-bind="html: recordsMessageObs"></td>
       </tr>
     </tbody>
     <tbody data-bind="foreach: itemsObs">
@@ -66,6 +68,11 @@
           <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
           <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
             style="cursor: pointer" class="green undo icon"></i>
+        </td>
+        <td>
+          <i class="ui green globe icon"
+            data-content="This is an imported shared component"
+            data-bind="visible: $data.originGuid, semantic: 'popup'"></i>
         </td>
         <td nowrap>
           <a data-bind="text: $data.title, href: '#/assessments/' + $data.guid"></a>

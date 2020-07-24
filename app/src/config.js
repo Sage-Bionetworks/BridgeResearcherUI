@@ -86,6 +86,7 @@ export default {
   schemaPlans: "/v3/scheduleplans",
   schemas: "/v3/uploadschemas",
   schemasV4: "/v4/uploadschemas",
+  sharedassessments: "/v1/sharedassessments",
   sharedmodules: "/v3/sharedmodules",
   signIn: "/v3/auth/signIn",
   signOut: "/v3/auth/signOut",

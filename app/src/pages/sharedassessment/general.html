@@ -2,74 +2,70 @@
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
       <div class="ui breadcrumb">
-        <a href="#/assessments" class="section">Assessments</a>
+        <a href="#/sharedassessments" class="section">Shared Assessments</a>
         <i class="right chevron icon divider"></i>
       </div>
       <h3 data-bind="text: pageTitleObs"></h3>
     </div>
     <div class="fixed-header-buttons">
-      <button class="ui tiny primary button" data-bind="click: save">Save</button>
+      <button data-bind="click: doImport" class="ui tiny button">Import</button>
     </div>
   </div>
-  <assessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
+  <sharedassessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
     revisionObs: pageRevObs, originGuidObs: originGuidObs">
-  </assessment-tabset>
+  </sharedassessment-tabset>
 </div>
 <div class="scrollbox">
   <errors id="assessment"></errors>
   <p> View the <a data-bind="href: createHistoryLink"> 
-    <i style="margin-right:0" class="history icon"></i>Edit History</a> of this document.
+    <i style="margin-right:0" class="history icon"></i>Edit History</a> of this assessment.
   </p>
 
   <form class="ui skinny form">
     <div class="two fields">
       <div class="required field" id="title">
         <label>Title</label>
-        <input type="text" data-bind="textInput: titleObs, hasFocus: true" />
+        <div class="input-field-padding" data-bind="text: titleObs"></div>
       </div>
       <div class="field" id="revision" style="width: 10rem">
         <label>Revision</label>
-        <input type="text" data-bind="textInput: revisionObs" />
+        <div class="input-field-padding" data-bind="text: revisionObs"></div>
       </div>
     </div>
     <div class="two fields">
       <div class="required field" id="identifier">
         <label>Identifier</label>
-        <input type="text" data-bind="textInput: identifierObs, visible: isNewObs()" />
-        <div class="input-field-padding" data-bind="text: identifierObs, visible: !isNewObs()"></div>
+        <div class="input-field-padding" data-bind="text: identifierObs"></div>
       </div>
       <div class="required field" id="ownerId">
         <label>Organization</label>
-        <select class="ui dropdown" data-bind="visible: isNewObs(), options: orgOptionsObs,
-          optionsText: 'label', optionsValue: 'value', value: ownerIdObs,
-          optionsCaption: 'Select owner...'">
-        </select>
-        <div class="input-field-padding" data-bind="text: formatOrgId(ownerIdObs()), visible: !isNewObs()"></div>
+        <div class="input-field-padding" data-bind="text: formatOrgId(ownerIdObs())"></div>
       </div>
     </div>
     <div class="two fields">
       <div class="field" id="summary">
         <label>Summary</label>
-        <textarea id="summary" data-bind="textInput: summaryObs" class="ui textarea"></textarea>
+        <div class="input-field-padding" data-bind="text: summaryObs"></div>
       </div>
-      <div class="required field" id="osName">
-        <label>Operation System</label>
-        <select class="ui dropdown" data-bind="options: osNameOpts,
-          optionsText: 'label', optionsValue: 'value', value: osNameObs,
-          optionsCaption: 'Select operating system...'">
-        </select>
+      <div class="field">
+        <div class="required field" id="osName">
+          <label>Operation System</label>
+          <div class="input-field-padding" data-bind="text: osNameObs"></div>
+        </div>
+        <div class="field" id="tags" style="margin-top: 1rem">
+          <label>Tags</label>
+          <div class="input-field-padding" data-bind="text: tagsObs"></div>
+        </div>
       </div>
     </div>
     <div class="two fields">
       <div class="field" id="validationStatus">
         <label>Validation Status</label>
-        <textarea id="validationStatus" data-bind="textInput: validationStatusObs" class="ui textarea">
-        </textarea>
+        <div class="input-field-padding" data-bind="text: validationStatusObs"></div>
       </div>
       <div class="field" id="normingStatus">
         <label>Norming Status</label>
-        <textarea id="normingStatus" data-bind="textInput: normingStatusObs" class="ui textarea">
-        </textarea>
+        <div class="input-field-padding" data-bind="text: normingStatusObs"></div>
       </div>
     </div>
     <div class="two fields">
