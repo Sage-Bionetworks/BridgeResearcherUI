@@ -1,0 +1,30 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/sharedassessments" class="section">Shared Assessments</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="text: pageTitleObs"></h3>
+    </div>
+    <div class="fixed-header-buttons">
+    </div>
+  </div>
+  <sharedassessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
+    revisionObs: pageRevObs, originGuidObs: originGuidObs, canEditObs: canEditObs">
+  </sharedassessment-tabset>
+</div>
+<div class="scrollbox">
+  <errors id="sharedassessment_config"></errors>
+  <div class="ui grid">
+    <div class="ten wide column">
+      <div style="white-space: pre" data-bind="html: configFormatted(configObs())">
+      </div>
+    </div>
+    <div class="six wide column">
+      <div class="ui message">
+        <p>This is the JSON configuration that a client can download to drive UI behavior. It is defined by our client SDKs and it is not validated by the server. To customize this config or to modify it, first import it into your app.</p>
+      </div>
+    </div>
+  </div>
+</div>

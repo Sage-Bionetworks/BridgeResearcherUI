@@ -14,20 +14,19 @@ export default function(params) {
 
   fn.copyProps(self, fn, "isAdmin");
 
-  let binder = new Binder(self)
+  new Binder(self)
     .obs("isNew", false)
     .obs("guid", params.guid)
     .obs("pageTitle")
     .obs("pageRev")
     .obs("originGuid")
     .obs("showDeleted", false)
-    .bind("orgOptions[]")
-    .bind("canEdit", false);
+    .bind("orgOptions[]");
 
   tables.prepareTable(self, {
-    name: "assessment history",
+    name: "sharedassessment history",
     refresh: self.reload,
-    id: "assessment_history"
+    id: "sharedassessment_history"
   });
 
   // some nonsense related to the pager that I copy now by rote
@@ -44,39 +43,19 @@ export default function(params) {
     return self.orgNames[orgId] ? self.orgNames[orgId] : orgId;
   }
   
-  function responseLookups(response) {
-    response.items.forEach(lookupSharedTitle);
-    return response;
-  }
-  function lookupSharedTitle(item) {
-    item.originGuidObs = ko.observable(item.originGuid);
-    if (item.originGuid) {
-      serverService.getSharedAssessment(item.originGuid)
-            .then(shared => item.originGuidObs(
-              `<a target="_blank" href="#/sharedassessments/${shared.guid}">${shared.title}</a>`));
-    }
-  }
-
   function load(query) {
     self.query = query;
-    return serverService.getAssessmentRevisions(params.guid, query, self.showDeletedObs())
-      .then(responseLookups)
+    return serverService.getSharedAssessmentRevisions(params.guid, query, self.showDeletedObs())
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .then(self.postLoadPagerFunc)
       .catch(utils.failureHandler({ id: 'assessment_history' }));
   }
 
-  serverService.getAssessment(params.guid)
-    .then(assessment => self.assessment = assessment)
-    .then(serverService.getSession)
-    .then((session) => self.canEditObs(
-        root.isSuperadmin() || self.assessment.ownerId === session.orgMembership))
-    .then(optionsService.getOrganizationNames)
-    .then((map) => self.orgNames = map)
-    .then(() => serverService.getAssessment(params.guid))
-    .then(binder.assign('assessment'))
-    .then(fn.handleObsUpdate(self.pageRevObs, "revision"))
-    .then(fn.handleObsUpdate(self.pageTitleObs, "title"))
+  optionsService.getOrganizationNames()
+    .then(map => self.orgNames = map)
+    .then(() => serverService.getSharedAssessment(params.guid))
+    .then(fn.handleObsUpdate(self.pageRevObs, "pageRev"))
+    .then(fn.handleObsUpdate(self.pageTitleObs, "pageTitle"))
     .then(fn.handleObsUpdate(self.originGuidObs, "originGuid"))
     .then(() => ko.postbox.subscribe('asmh-refresh', self.load))
     .then(self.reload);

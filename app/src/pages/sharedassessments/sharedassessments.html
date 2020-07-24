@@ -1,0 +1,53 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <h3>Shared Assessments</h3>
+    </div>
+    <div class="fixed-header-buttons">
+    </div>
+  </div>
+  <div class="ui empty secondary pointing menu"></div>
+</div>
+<div class="scrollbox">
+  <errors id="assessments"></errors>
+  <div class="line-control">
+    <div>
+      <div class="ui left icon input">
+        <input type="text" placeholder="Filter with tags..."
+          data-bind="textInput: tagsObs, click: reload, returnHandler: reload"/>
+        <i class="filter icon"></i>
+      </div>
+    </div>
+    <div class="line-control-stretch">
+      <pager style="display: flex; justify-content: flex-end" 
+        params="prefix: 'asm', postLoadFunc: postLoadFunc"></pager>
+    </div>
+  </div>
+  <table class="ui compact selectable table">
+    <thead>
+      <tr>
+        <th nowrap>Title</th>
+        <th>Summary</th>
+        <th>Identifier</th>
+        <th>Owner</th>
+        <th>Tags</th>
+      </tr>
+    </thead>
+    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+      <tr>
+        <td colspan="5" data-bind="html: recordsMessageObs"></td>
+      </tr>
+    </tbody>
+    <tbody data-bind="foreach: itemsObs">
+      <tr data-bind="css: {negative: $data.deleted}">
+        <td nowrap>
+          <a data-bind="text: $data.title, href: '#/sharedassessments/' + $data.guid"></a>
+        </td>
+        <td data-bind="text: $data.summary"></td>
+        <td data-bind="text: $data.identifier"></td>
+        <td data-bind="text: $parent.formatOrg($data.ownerId)"></td>
+        <td data-bind="text: $data.tags.join(', ')"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

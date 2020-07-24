@@ -1,6 +1,7 @@
 import Binder from "../../binder";
 import fn from "../../functions";
 import optionsService from "../../services/options_service";
+import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
@@ -48,6 +49,7 @@ export default function(params) {
     .obs("subPageTitle", "New Assessment Resource")
     .obs("pageRev")
     .obs("originGuid")
+    .obs("canEdit", false)
 
     .obs("guid")// resource GUID
     .bind("title")
@@ -98,6 +100,7 @@ export default function(params) {
   }
 
   serverService.getAssessment(params.assessmentGuid)
+    .then(binder.assign('assessment'))
     .then(fn.handleObsUpdate(self.pageRevObs, "revision"))
     .then(fn.handleObsUpdate(self.pageTitleObs, "title"))
     .then(fn.handleObsUpdate(self.originGuidObs, "originGuid"))
@@ -105,5 +108,8 @@ export default function(params) {
     .then(loadAssessmentResource)
     .then(binder.update())
     .then(binder.assign('resource'))
-    .then(fn.handleObsUpdate(self.subPageTitleObs, "title"));
+    .then(fn.handleObsUpdate(self.subPageTitleObs, "title"))
+    .then(serverService.getSession)
+    .then((session) => self.canEditObs(
+      root.isSuperadmin() || self.assessment.ownerId === session.orgMembership));
 };

@@ -4,6 +4,7 @@ import config from "../../config";
 import fn from "../../functions";
 import ko from "knockout";
 import optionsService from "../../services/options_service";
+import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
@@ -24,6 +25,7 @@ export default function(params) {
     .obs("pageRev")
     .obs("editors[]")
     .obs("originGuid")
+    .obs("canEdit", false)
     .bind("customizationFields", null, Binder.fromCustomizationFields, Binder.toCustomizationFields);
   fn.copyProps(self, fn, "formatDateTime");
       
@@ -56,9 +58,11 @@ export default function(params) {
   }
 
   serverService.getAssessment(params.guid)
-    .then(fn.log("assessment"))
     .then(fn.handleObsUpdate(self.pageTitleObs, "title"))
     .then(fn.handleObsUpdate(self.pageRevObs, "revision"))
     .then(binder.assign("assessment"))
-    .then(binder.update());
+    .then(binder.update())
+    .then(serverService.getSession)
+    .then((session) => self.canEditObs(
+      root.isSuperadmin() || self.assessment.ownerId === session.orgMembership));
 };

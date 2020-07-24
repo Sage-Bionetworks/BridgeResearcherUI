@@ -24,20 +24,16 @@ export default function(params) {
     .obs("forRevision")
     .obs('categories[]')
     .obs('categoriesOptions[]', optionsService.getCategoryOptions())
-    .obs('category')
-    .bind('canEdit', false);
+    .obs('category');
 
   tables.prepareTable(self, {
-    name: "assessment documentation resource",
+    name: "shared assessment resource",
     refresh: self.reload,
-    id: "assessment_resources",
+    id: "sharedassessment_resources",
     delete: (item) => serverService.deleteAssessmentResource(self.idObs(), item.guid, false),
     deletePermanently: (item) => serverService.deleteAssessmentResource(self.idObs(), item.guid, true),
     undelete: (item) => serverService.updateAssessmentResource(self.idObs(), item),
-    publish: (item) => {
-      return serverService.getSharedAssessment(self.originGuidObs())
-        .then(shared => serverService.publishAssessmentResources(shared.identifier, [item.guid]));
-    }
+    publish: (item) => serverService.importSharedAssessmentResources(self.idObs(), [item.guid])
   });
 
   // some nonsense related to the pager that I copy now by rote
@@ -62,26 +58,23 @@ export default function(params) {
   }
   self.load = function(query) {
     query.category = self.categoryObs() ? [self.categoryObs()] : null;
-    query.minRevision = self.forRevisionObs();
-    query.maxRevision = self.forRevisionObs();
+    delete query.minRevision;// = self.forRevisionObs();
+    delete query.maxRevision;// = self.forRevisionObs();
     self.query = query;
 
-    return serverService.getAssessmentResources(self.idObs(), query, self.showDeletedObs())
+    return serverService.getSharedAssessmentResources(self.idObs(), query, self.showDeletedObs())
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .then(self.postLoadPagerFunc)
-      .catch(utils.failureHandler({ id: 'assessment_resources' }));
+      .catch(utils.failureHandler({ id: 'sharedassessment_resources' }));
   }
+  self.doImport = 
 
-  serverService.getAssessment(params.guid)
-    .then(binder.assign('assessment'))
+  serverService.getSharedAssessment(params.guid)
     .then(fn.handleObsUpdate(self.pageRevObs, "revision"))
     .then(fn.handleObsUpdate(self.forRevisionObs, "revision"))
     .then(fn.handleObsUpdate(self.originGuidObs, "originGuid"))
     .then(fn.handleObsUpdate(self.pageTitleObs, "title"))
     .then(fn.handleObsUpdate(self.idObs, "identifier"))
-    .then(serverService.getSession)
-    .then((session) => self.canEditObs(
-      root.isSuperadmin() || self.assessment.ownerId === session.orgMembership))
     .then(() => {
       ko.postbox.subscribe('asmr-refresh', self.load);
       self.forRevisionObs.subscribe(self.reload);
@@ -89,5 +82,4 @@ export default function(params) {
     })
     .then(self.reload)
     .catch(utils.failureHandler({ id: 'assessment_resources' }));
-
 };

@@ -3,6 +3,7 @@ import Binder from "../../binder";
 import fn from "../../functions";
 import ko from "knockout";
 import optionsService from "../../services/options_service";
+import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
@@ -57,7 +58,10 @@ export default function(params) {
     .bind("originGuid")
     .bind("validationStatus")
     .bind("normingStatus")
-    .bind("tags[]");
+    .bind("tags[]")
+    .obs("allTags[]")
+    .obs("addTag")
+    .obs("canEdit", false);
   fn.copyProps(self, fn, "formatDateTime");
 
   self.createHistoryLink = ko.computed(function() {
@@ -72,6 +76,7 @@ export default function(params) {
   }
   function load() {
     if (params.guid === "new") {
+      self.canEditObs(true);
       return Promise.resolve(newAssessment())
         .then(binder.assign("assessment"))
         .then(binder.update())
@@ -83,8 +88,22 @@ export default function(params) {
         .then(binder.assign("assessment"))
         .then(binder.update())
         .then(fn.handleObsUpdate(self.pageTitleObs, "title"))
-        .then(fn.handleObsUpdate(self.pageRevObs, "revision"));
+        .then(fn.handleObsUpdate(self.pageRevObs, "revision"))
+        .then(serverService.getSession)
+        .then((session) => self.canEditObs(
+          root.isSuperadmin() || self.assessment.ownerId === session.orgMembership));
     }
+  }
+
+  self.publish = function(vm, event) {
+    alerts.prompt("Do you want to define a new identifier for this assessment "+
+      "when it is published as a shared assessment?", function(newIdentifier) {
+      utils.startHandler(vm, event);
+      serverService.publishAssessment(params.guid, newIdentifier)
+        .then(load)
+        .then(utils.successHandler(vm, event, "Assessment has been published as a shared assessment."))
+        .catch(failureHandler);
+    }, self.identifierObs());
   }
 
   self.save = function(vm, event) {
@@ -117,8 +136,27 @@ export default function(params) {
   self.formatOrgId = function(orgId) {
     return (orgId && self.orgMap[orgId]) ? self.orgMap[orgId] : orgId;
   }
+  self.addTag = function() {
+    let tag = self.addTagObs();
+    if (tag.trim()) {
+      self.tagsObs.push(tag.trim());
+    }
+  }
 
-  optionsService.getOrganizationNames()
+  function addTags(response) {
+    let array = [];
+    Object.keys(response).forEach(ns => {
+      let nsString = (ns === 'default') ? '' : (ns+":");
+      response[ns].forEach(value => {
+        array.push(nsString + value);
+      });
+    });
+    self.allTagsObs.pushAll(array);
+  }
+
+  serverService.getTags()
+    .then(addTags)
+    .then(() => optionsService.getOrganizationNames())
     .then(setOrgOptions)
     .then(load);
 };

@@ -2,6 +2,7 @@ import alerts from "../../widgets/alerts";
 import Binder from "../../binder";
 import fn from "../../functions";
 import ko from "knockout";
+import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
@@ -50,7 +51,8 @@ export default function(params) {
     .obs("originGuid")
     .obs("pageTitle", "New Assessment")
     .obs("pageRev")
-    .obs("editors[]");
+    .obs("editors[]")
+    .obs("canEdit", false);
 
   self.save = function(vm, event) {
     utils.startHandler(vm, event);
@@ -97,5 +99,8 @@ export default function(params) {
     .then(() => serverService.getAssessmentConfig(params.guid))
     .then(binder.assign('config'))
     .then((response) => self.data = response.config)
-    .then(updateEditors);
+    .then(updateEditors)
+    .then(serverService.getSession)
+    .then((session) => self.canEditObs(
+      root.isSuperadmin() || self.assessment.ownerId === session.orgMembership));
 };

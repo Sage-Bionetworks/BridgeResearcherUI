@@ -12,13 +12,13 @@
     </div>
   </div>
   <assessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
-    revisionObs: pageRevObs, originGuidObs: originGuidObs">
+    revisionObs: pageRevObs, originGuidObs: originGuidObs, canEditObs: canEditObs">
   </assessment-tabset>
 </div>
 <div class="scrollbox">
   <errors id="assessment_config"></errors>
   <div class="ui grid">
-    <div class="ten wide column">
+    <div class="ten wide column" data-bind="visible: canEditObs">
       <form class="ui skinny form">
         <div id="config">
           <textarea style="font-family: monospace; height: 50rem" data-bind="textInput: configObs"></textarea>
@@ -27,6 +27,10 @@
           <button class="ui tiny primary button" data-bind="click: reformat">Reformat</button>
         </div>
       </form>
+    </div>
+    <div class="ten wide column" data-bind="visible: !canEditObs()">
+      <div style="white-space: pre" data-bind="html: configFormatted(configObs())">
+      </div>
     </div>
     <div class="six wide column">
       <div class="ui message">

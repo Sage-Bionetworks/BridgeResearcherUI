@@ -692,6 +692,13 @@ export class ServerService {
     return this.del(`${config.appConfigs}/${guid}${queryString}`);
   }
 
+  getTags() {
+    return this.gethttp(`/v1/tags`);
+  }
+  deleteTag(name) {
+    return this.del(`/v1/tags/${name}`);
+  }
+
   getAssessment(guid) {
     return this.gethttp(`${config.assessments}/${guid}`);
   }
@@ -708,6 +715,9 @@ export class ServerService {
       .trim().split(' ').filter(s => s.length);
     let queryString = fn.queryString({ tag, offsetBy, pageSize, includeDeleted: includeDeleted === true});
     return this.gethttp(config.assessments + queryString);
+  }
+  publishAssessment(guid, newIdentifier) {
+    return this.post(`${config.assessments}/${guid}/publish?newIdentifier=${newIdentifier}`);
   }
   deleteAssessment(guid, physical) {
     let queryString = fn.queryString({ physical: physical === true });
@@ -747,11 +757,59 @@ export class ServerService {
     let queryString = fn.queryString({ physical: physical === true });
     return this.del(`${config.assessments}/identifier:${id}/resources/${resourceGuid}${queryString}`);
   }
-  publishAssessmentResource(id) {
-    return this.post(`${config.assessments}/identifier:{id}/resources/publish`);
+  publishAssessmentResources(id, guids) {
+    return this.post(`${config.assessments}/identifier:${id}/resources/publish`, guids);
   }
 
+  importSharedAssessment(guid, newIdentifier) {
+    return this.post(`${config.sharedassessments}/${guid}/import?newIdentifier=${newIdentifier}`);
+  }
+  getSharedAssessments(query, includeDeleted) {
+    query.includeDeleted = includeDeleted === true;
+    let queryString = fn.queryString(query);
+    return this.gethttp(`${config.sharedassessments}${queryString}`);
+  }
+  getSharedAssessment(guid) {
+    return this.gethttp(`${config.sharedassessments}/${guid}`);
+  }
+  getSharedAssessmentRevisions(guid, query, includeDeleted) {
+    let queryString = fn.queryString({ 
+      offsetBy: query.offsetBy, 
+      pageSize: query.pageSize, 
+      includeDeleted: includeDeleted === true
+    });
+    return this.gethttp(`${config.sharedassessments}/${guid}/revisions${queryString}`)
+  }
+  updateSharedAssessment(assessment) { 
+    return this.post(`${config.sharedassessments}/${assessment.guid}`, assessment);
+  }
+  deleteSharedAssessment(guid, physical) {
+    let queryString = fn.queryString({ physical: physical === true });
+    return this.del(`${config.sharedassessments}/${guid}${queryString}`);
+  }
+  getSharedAssessmentConfig(guid) {
+    return this.gethttp(`${config.sharedassessments}/${guid}/config`);
+  }
 
+  getSharedAssessmentResources(id, query, includeDeleted) {
+    query.includeDeleted = includeDeleted === true;
+    let queryString = fn.queryString(query);
+    return this.gethttp(`${config.sharedassessments}/identifier:${id}/resources${queryString}`);
+  }
+  getSharedAssessmentResource(id, resourceGuid) {
+    return this.gethttp(`${config.sharedassessments}/identifier:${id}/resources/${resourceGuid}`);
+  }
+  updateSharedAssessmentResource(id, resource) {
+    return this.post(`${config.sharedassessments}/identifier:${id}/resources/${resource.guid}`, resource);
+  }
+  deleteSharedAssessmentResource(id, resourceGuid, physical) {
+    let queryString = fn.queryString({ physical: physical === true });
+    return this.del(`${config.sharedassessments}/identifier:${id}/resources/${resourceGuid}${queryString}`);
+  }
+  importAssessmentResource(id) {
+    return this.post(`${config.sharedassessments}/identifier:${id}/resources/import`);
+  }
+  
   adminSignIn(appName, environment, signIn) {
     return postInt(`${config.host[environment]}${config.adminAuth}/signIn`, signIn).then(
       this.cacheSession(appName, signIn.appId, environment)

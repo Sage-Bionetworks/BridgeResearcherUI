@@ -146,13 +146,30 @@ router.on("/studies/:id", routeTo("study", "studies", ID));
 
 router.on("/assessments", routeTo("assessments", "assessments"));
 router.on("/assessments/:guid", redirectTo("/assessments/{0}/general"));
-router.on("/assessments/:guid/general", routeTo("assessment", "assessments", GUID));
+router.on("/assessments/:guid/general", routeTo("assessment_general", "assessments", GUID));
 router.on("/assessments/:guid/config", routeTo("assessment_config", "assessments", GUID));
-router.on("/assessments/:guid/template", routeTo("assessment_template", "assessments", GUID));
 router.on("/assessments/:guid/history", routeTo("assessment_history", "assessments", GUID));
 router.on("/assessments/:guid/resources", routeTo("assessment_resources", "assessments", GUID));
-router.on("/assessments/:id/resources/:guid", routeTo("assessment_resource", "assessments", ID_GUID));
+router.on("/assessments/:guid/template", routeTo("assessment_template", "assessments", GUID));
 router.on("/assessments/:guid/customize", routeTo("assessment_customize", "assessments", GUID));
+router.on("/assessments/:id/resources/:guid", routeTo("assessment_resource", "assessments", ID_GUID));
+
+router.on("/sharedassessments", routeTo("sharedassessments", "sharedassessments"));
+
+router.on("/sharedassessments/:guid", redirectTo("/sharedassessments/{0}/general"));
+router.on("/sharedassessments/:guid/general", 
+  routeTo("sharedassessment_general", "sharedassessments", GUID));
+router.on("/sharedassessments/:guid/history", 
+  routeTo("sharedassessment_history", "sharedassessments", GUID));
+router.on("/sharedassessments/:guid/config", 
+  routeTo("sharedassessment_config", "sharedassessments", GUID));
+router.on("/sharedassessments/:guid/resources", 
+  routeTo("sharedassessment_resources", "sharedassessments", GUID));
+router.on("/sharedassessments/:id/resources/:guid", 
+  routeTo("sharedassessment_resource", "sharedassessments", ID_GUID));
+
+router.on("/admin/tags", routeTo("tags", "tags"));
+
 // router.on("/shared_modules", routeTo("shared_modules", "modules"));
 // router.on("/shared_modules/:id", routeTo("shared_module", "modules", ID)); // unused now?
 // router.on("/shared_modules/:id/versions/:version/editor", routeTo("shared_module", "modules", ID_VERSION));
