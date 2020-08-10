@@ -163,7 +163,12 @@ export class ServerService {
   cacheParticipantName(response) {
     if (response && response.id) {
       let name = fn.formatNameAsFullLabel(response);
-      cache.set(response.id + ":name", { name: name, status: response.status, sharingScope: response.sharingScope });
+      let id = (session && session.id === response.id) ? 'self' : response.id;
+      cache.set(id + ":name", { 
+        name: name, 
+        status: response.status, 
+        sharingScope: response.sharingScope 
+      });
     }
     return response;
   }
@@ -439,9 +444,15 @@ export class ServerService {
     return this.post(`${config.participants}/search`, search);
   }
   getParticipant(id) {
+    if (session && session.id === id) {
+      id = 'self';
+    }
     return this.gethttp(`${config.participants}/${id}`).then(this.cacheParticipantName.bind(this));
   }
   getParticipantName(id) {
+    if (session && session.id === id) {
+      id = 'self';
+    }
     let name = cache.get(id + ":name");
     return name ? Promise.resolve(name) : 
       this.gethttp(config.participants + "/" + id)
