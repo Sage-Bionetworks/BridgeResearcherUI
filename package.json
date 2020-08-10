@@ -10,7 +10,7 @@
     "clean": "rm -rf app/dist/",
     "clean:all": "rm -rf node_modules/ && npm run clean",
     "release": "webpack --config webpack/webpack.config.prod.js",
-    "dev": "webpack-serve --live-reload --host localhost --port 8080 --static app --config webpack/webpack.config.dev.js",
+    "dev": "webpack-dev-server --live-reload --host localhost --port 8080 --static app --config webpack/webpack.config.dev.js",
     "test": "./node_modules/.bin/mocha --require @babel/register"
   },
   "devDependencies": {
@@ -27,6 +27,7 @@
     "director": "^1.2.8",
     "dom-autoscroller": "^2.3.1 ",
     "dragula": "^3.7.2",
+    "elliptic": "^6.5.3",
     "flatpickr": "^4.6.3",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
@@ -34,6 +35,7 @@
     "kind-of": ">=6.0.3",
     "knockout": "^3.4.0",
     "knockout-postbox": "^0.6.0",
+    "lodash": "^4.17.19",
     "mini-css-extract-plugin": "^0.8.0",
     "minimist": ">=1.2.3",
     "mocha": "^6.2.1",
@@ -50,6 +52,6 @@
     "webpack": "^4.41.1",
     "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.8.1",
-    "webpack-serve": "^3.2.0"
+    "websocket-extensions": "^0.1.4"
   }
 }
