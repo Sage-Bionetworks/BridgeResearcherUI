@@ -39,8 +39,9 @@
           <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
         </td>
         <td>
-          <span data-bind="text: $data.name, visible: $data.deletedObs"></span>
-          <a data-bind="href: '#/organizations/'+$data.identifier, text: $data.name"></a>
+          <span data-bind="text: $data.name, visible: !$parent.isSuperadmin()"></span>
+          <a data-bind="href: '#/organizations/'+$data.identifier, text: $data.name,
+            visible: $parent.isSuperadmin()"></a>
         </td>
         <td data-bind="text: $data.identifier"></td>
         <td data-bind="text: $data.description"></td>
