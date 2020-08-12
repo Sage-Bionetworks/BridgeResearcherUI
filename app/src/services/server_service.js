@@ -254,7 +254,7 @@ export class ServerService {
     return this.gethttp(config.getAppPublicKey);
   }
   saveApp(app) {
-    let asAdmin = (session && session.roles.indexOf("admin") > -1) ? true : false;
+    let asAdmin = (session && session.roles.indexOf("superadmin") > -1) ? true : false;
     let url = asAdmin ? config.getApp + app.identifier : config.getCurrentApp;
     return this.post(url, app).then(function(response) {
       app.version = response.version;
