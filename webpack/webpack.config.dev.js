@@ -9,6 +9,6 @@ module.exports = Object.assign({}, {
     mode: 'development',
     devtool: '#source-map',
     devServer: {
-        contentBase: 'app'
+        writeToDisk: true
     }
 }, common);
