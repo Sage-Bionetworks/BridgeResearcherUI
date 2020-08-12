@@ -184,6 +184,7 @@ ko.bindingHandlers.ckeditor = {
     let config = {
       height: "25rem",
       resize_dir: "vertical",
+      allowedContent: true,
       on: {
         instanceReady: function(event) {
           let callback = valueAccessor();
