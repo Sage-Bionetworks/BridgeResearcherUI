@@ -18,7 +18,7 @@
 </div>
 <div class="scrollbox">
   <errors id="assessment"></errors>
-  <p> View the <a data-bind="href: createHistoryLink"> 
+  <p data-bind="visible: !isNewObs()"> View the <a data-bind="href: createHistoryLink"> 
     <i style="margin-right:0" class="history icon"></i>Edit History</a> of this assessment.
   </p>
   <form class="ui skinny form">
