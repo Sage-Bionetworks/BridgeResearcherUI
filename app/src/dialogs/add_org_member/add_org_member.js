@@ -10,8 +10,7 @@ const PAGE_OPTS = {pageSize: 100, adminOnly: true, orgMembership: "<none>"};
 export default function(params) {
   const self = this;
 
-  new Binder(self).obs('disabled', true)
-    .obs('email');
+  new Binder(self).obs('email');
 
   self.closeDialog = params.closeFunc;
   fn.copyProps(self, fn, "formatIdentifiers", "formatNameAsFullLabel");

@@ -179,8 +179,15 @@ import adminAppHtml from "./pages/admin/app/app.html";
 // import adminMasterSchedulesHtml from "./pages/admin/masterschedules/masterschedules.html";
 import orgs from "./pages/organizations/organizations";
 import orgsHtml from "./pages/organizations/organizations.html";
-import org from "./pages/organizations/organization";
-import orgHtml from "./pages/organizations/organization.html";
+
+import orgEditor from "./pages/organization/editor";
+import orgEditorHtml from "./pages/organization/editor.html";
+import orgMembers from "./pages/organization/members";
+import orgMembersHtml from "./pages/organization/members.html";
+import orgStudies from "./pages/organization/studies";
+import orgStudiesHtml from "./pages/organization/studies.html";
+import orgTabset from "./pages/organization/tabset";
+import orgTabsetHtml from "./pages/organization/tabset.html";
 
 import studies from "./pages/studies/studies";
 import studiesHtml from "./pages/studies/studies.html";
@@ -318,6 +325,8 @@ import fileUpload from "./dialogs/file_upload/file_upload";
 import fileUploadHtml from "./dialogs/file_upload/file_upload.html";
 import addOrgMember from "./dialogs/add_org_member/add_org_member";
 import addOrgMemberHtml from "./dialogs/add_org_member/add_org_member.html";
+import addSponsor from "./dialogs/add_sponsor/add_sponsor";
+import addSponsorHtml from "./dialogs/add_sponsor/add_sponsor.html";
 import appConfigs from "./pages/appconfigs/appconfigs";
 import appConfigsHtml from "./pages/appconfigs/appconfigs.html";
 import appConfig from "./pages/appconfig/appconfig";
@@ -450,7 +459,10 @@ reg("admin_cache", {viewModel: adminCache, template: adminCacheHtml});
 reg("admin_apps", {viewModel: adminApps, template: adminAppsHtml});
 reg("admin_app", {viewModel: adminApp, template: adminAppHtml});
 reg("organizations", {viewModel: orgs, template: orgsHtml})
-reg("organization", {viewModel: org, template: orgHtml})
+reg("orgEditor", {viewModel: orgEditor, template: orgEditorHtml})
+reg("orgMembers", {viewModel: orgMembers, template: orgMembersHtml})
+reg("orgStudies", {viewModel: orgStudies, template: orgStudiesHtml})
+reg("org-tabset", {viewModel: orgTabset, template: orgTabsetHtml});
 reg("studies", {viewModel: studies, template: studiesHtml});
 reg("study", {viewModel: study, template: studyHtml});
 
@@ -472,6 +484,8 @@ reg("BloodPressureConstraints", {viewModel: bpConst, template: bpConstHtml});
 reg("tag-editor", {viewModel: tagEditor, template: tagEditorHtml});
 reg("ui-duration", {viewModel: uiDur, template: uiDurHtml});
 reg("events-tabset", {template: eventsTabsetHtml});
+
+
 reg("survey-tabset", {viewModel: surveyTabset, template: surveyTabsetHtml});
 reg("subpop-tabset", {viewModel: subpopTabset, template: subpopTabsetHtml});
 reg("line-editor", {viewModel: lineEditor, template: lineEditorHtml});
@@ -535,6 +549,7 @@ reg("edit_apple_link", {viewModel: editAppleLink, template: editAppleLinkHtml, s
 reg("edit_android_link", {viewModel: editAndroidLink, template: editAndroidLinkHtml, synchronous: true});
 reg("file_upload", {viewModel: fileUpload, template: fileUploadHtml, synchronous: true});
 reg("add_org_member", {viewModel: addOrgMember, template: addOrgMemberHtml, synchronous: true});
+reg("add_sponsor", {viewModel: addSponsor, template: addSponsorHtml, synchronous: true});
 reg("oauth_provider", {viewModel: oauthProvider, template: oauthProviderHtml, synchronous: true});
 reg("appconfigs", {viewModel: appConfigs, template: appConfigsHtml});
 reg("appconfig", {viewModel: appConfig, template: appConfigHtml});

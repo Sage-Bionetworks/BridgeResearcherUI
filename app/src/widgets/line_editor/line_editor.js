@@ -12,7 +12,6 @@ export default function(params) {
   self.label = 'New ' + params.label + '...';
 
   self.remove = function(item) {
-    console.log(arguments);
     self.arrayObs.remove(item);
   }
   self.add = function() {

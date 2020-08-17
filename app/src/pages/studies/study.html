@@ -17,6 +17,11 @@
   <errors id="study"></errors>
   <form class="ui skinny form">
     <div class="two fields">
+      <div class="field required" id="name">
+        <label>Name</label>
+        <input data-bind="textInput: nameObs, hasFocus: true, visible: isSuperadmin()" />
+        <div class="input-field-padding" data-bind="text: nameObs, visible: !isSuperadmin()"></div>
+      </div>
       <div class="field required" id="id" data-bind="visible: isNewObs">
         <label>Identifier</label>
         <input type="text" data-bind="textInput: idObs" />
@@ -25,12 +30,18 @@
         <label>Identifier</label>
         <div class="input-field-padding" data-bind="text: idObs"></div>
       </div>
-      <div class="field required" id="name">
-        <label>Name</label>
-        <input data-bind="textInput: nameObs, hasFocus: true, visible: isSuperadmin()" />
-        <div class="input-field-padding" data-bind="text: nameObs, visible: !isSuperadmin()"></div>
+    </div>
+
+    <div class="two fields" data-bind="visible: isNewObs()">
+      <div class="required field" id="orgId">
+        <label>Sponsoring Organization</label>
+        <select class="ui dropdown" data-bind="visible: isNewObs(), options: orgOptionsObs,
+          optionsText: 'label', optionsValue: 'value', value: orgIdObs,
+          optionsCaption: 'Select sponsor...'">
+        </select>
       </div>
     </div>
+
     <div class="two fields" data-bind="visible: !isNewObs()">
       <div class="field" id="createdOn">
         <label>Created On</label>
@@ -41,5 +52,39 @@
         <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
       </div>
     </div>
+
+    <h4 data-bind="visible: !isNewObs()" class="ui dividing header">Sponsors</h4>
+    <div class="line-control" data-bind="visible: !isNewObs() && isAdmin()">
+      <div class="line-control-stretch ">
+        <button class="ui compact mini primary button" data-bind="click: addSponsorDialog">
+          Add Sponsor&hellip;
+        </button>
+      </div>
+      <pager params="prefix: 'sponsors', postLoadFunc: postLoadFunc, pageSize: 100"></pager>
+    </div>
+    <table class="ui compact selectable table" data-bind="visible: !isNewObs()">
+      <thead>
+        <tr>
+          <th>Organization</th>
+          <th width="10"></th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="2" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr>
+          <td data-bind="text: $data.name"></td>
+          <td style="white-space: nowrap">
+            <button class="ui basic compact mini red button" data-bind="click: $parent.removeSponsor,
+              visible: $component.isAdmin">
+              Remove
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </form>
 </div>

@@ -140,7 +140,10 @@ router.on("/admin/uploads", routeTo("uploads", "uploads"));
 router.on("/admin/uploads/:guid", routeTo("upload", "uploads", GUID));
 // router.on("/admin/masterschedules", routeTo("masterschedules"));
 router.on("/organizations", routeTo("organizations", "organizations"));
-router.on("/organizations/:id", routeTo("organization", "organizations", ID));
+router.on("/organizations/:id", redirectTo("/organizations/{0}/general"));
+router.on("/organizations/:id/general", routeTo("orgEditor", "organizations", ID));
+router.on("/organizations/:id/members", routeTo("orgMembers", "organizations", ID));
+router.on("/organizations/:id/studies", routeTo("orgStudies", "organizations", ID));
 router.on("/studies", routeTo("studies", "studies"));
 router.on("/studies/:id", routeTo("study", "studies", ID));
 

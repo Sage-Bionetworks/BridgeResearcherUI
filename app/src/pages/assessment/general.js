@@ -125,16 +125,12 @@ export default function(params) {
       .catch(failureHandler);
   };
 
-  self.orgMap = null;
-
-  function setOrgOptions(orgMap) {
-    self.orgMap = orgMap;
-    let opts = Object.keys(orgMap).map((key) => ({label: orgMap[key], value: key}));
-    self.orgOptionsObs.pushAll(opts);
-  }
-
   self.formatOrgId = function(orgId) {
-    return (orgId && self.orgMap[orgId]) ? self.orgMap[orgId] : orgId;
+    const orgs = self.orgOptionsObs();
+    if (orgId && orgs.some(opt => opt.value === orgId)) {
+      return orgs.filter(opt => opt.value === orgId)[0].label;
+    }
+    return orgId;
   }
   self.addTag = function() {
     let tag = self.addTagObs();
@@ -156,7 +152,7 @@ export default function(params) {
 
   serverService.getTags()
     .then(addTags)
-    .then(() => optionsService.getOrganizationNames())
-    .then(setOrgOptions)
+    .then(optionsService.getOrganizationOptions)
+    .then((opts) => self.orgOptionsObs.pushAll(opts))
     .then(load);
 };
