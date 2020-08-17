@@ -7,43 +7,48 @@
       </div>
       <h3 data-bind="text: titleObs"></h3>
     </div>
-    <div class="fixed-header-buttons"></div>
+    <div class="fixed-header-buttons">
+      <button class="ui tiny primary button" data-bind="click: addSponsoredStudyDialog">
+        Add Study&hellip;
+      </button>      
+    </div>
   </div>
   <org-tabset params="identifierObs: identifierObs, isNewObs: isNewObs"></org-tabset>
 </div>
 <div class="scrollbox">
   <errors id="org_sponsored"></errors>
-
-  <div class="line-control">
-    <pager params="prefix: 'sponsored', postLoadFunc: postLoadFunc"></pager>
-  </div>
-  <table class="ui compact selectable table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Identifier</th>
-        <th width="10"></th>
-      </tr>
-    </thead>
-    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-      <tr>
-        <td colspan="3" data-bind="html: recordsMessageObs"></td>
-      </tr>
-    </tbody>
-    <tbody data-bind="foreach: itemsObs">
-      <tr>
-        <td>
-          <a data-bind="href: '#/studies/'+$data.id, text: $data.name, visible: $parent.isAdmin()"></a>
-          <span data-bind="text: $data.name, visible: !$parent.isAdmin()"></span>
-        </td>
-        <td data-bind="text: $data.id"></td>
-        <td style="white-space: nowrap">
-          <button class="ui basic compact mini red button" data-bind="visible: $parent.isAdmin(),
-            click: $parent.removeSponsored">
-            Remove
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>  
+  <form class="ui skinny form">
+    <div class="line-control">
+      <pager params="prefix: 'sponsored', postLoadFunc: postLoadFunc"></pager>
+    </div>
+    <table class="ui compact selectable table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Identifier</th>
+          <th width="10"></th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="3" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr>
+          <td>
+            <a data-bind="href: '#/studies/'+$data.id, text: $data.name, visible: $parent.isAdmin()"></a>
+            <span data-bind="text: $data.name, visible: !$parent.isAdmin()"></span>
+          </td>
+          <td data-bind="text: $data.id"></td>
+          <td style="white-space: nowrap">
+            <button class="ui basic compact mini red button" data-bind="visible: $parent.isAdmin(),
+              click: $parent.removeSponsored">
+              Remove
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
 </div>

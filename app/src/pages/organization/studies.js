@@ -1,4 +1,5 @@
 import alerts from "../../widgets/alerts";
+import config from "../../config";
 import Binder from "../../binder";
 import fn from "../../functions";
 import root from '../../root';
@@ -32,8 +33,18 @@ export default function(params) {
   self.postLoadPagerFunc = () => {};
   self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
 
+  self.addSponsoredStudyDialog = function() {
+    root.openDialog("add_sponsored_study", {
+      closeFunc: fn.seq(root.closeDialog, () => {
+        self.query.offsetBy = 0;
+        loadSponsored(self.query)
+      }),
+      orgId: params.id
+    });
+
+  };
   self.removeSponsored = (item, event) => {
-    alerts.deleteConfirmation("This changes permission (and can be undone), but are you sure?", () => {
+    alerts.deleteConfirmation(config.msgs.UNDO_SPONSOR, () => {
       utils.startHandler(self, event);
       serverService.removeSponsored(params.id, item.id)
         .then(() => loadSponsored(self.query))
@@ -43,7 +54,7 @@ export default function(params) {
   };
 
   tables.prepareTable(self, {
-    name: "sponsored study",
+    name: "sponsored studie",
     type: "Sponsored Studies",
     id: "org_sponsored",
     refresh: () => loadSponsored(self.query)

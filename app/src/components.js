@@ -191,8 +191,14 @@ import orgTabsetHtml from "./pages/organization/tabset.html";
 
 import studies from "./pages/studies/studies";
 import studiesHtml from "./pages/studies/studies.html";
-import study from "./pages/studies/study";
-import studyHtml from "./pages/studies/study.html";
+
+import studyEditor from "./pages/study/editor";
+import studyEditorHtml from "./pages/study/editor.html";
+import studySponsors from "./pages/study/sponsors";
+import studySponsorsHtml from "./pages/study/sponsors.html";
+import studyTabset from "./pages/study/tabset";
+import studyTabsetHtml from "./pages/study/tabset.html";
+
 import boolConst from "./pages/survey/constraints/boolean_constraints";
 import boolConstHtml from "./pages/survey/constraints/boolean_constraints.html";
 import dateConst from "./pages/survey/constraints/date_constraints";
@@ -327,6 +333,8 @@ import addOrgMember from "./dialogs/add_org_member/add_org_member";
 import addOrgMemberHtml from "./dialogs/add_org_member/add_org_member.html";
 import addSponsor from "./dialogs/add_sponsor/add_sponsor";
 import addSponsorHtml from "./dialogs/add_sponsor/add_sponsor.html";
+import addSponsoredStudy from "./dialogs/add_sponsored_study/add_sponsored_study";
+import addSponsoredStudyHtml from "./dialogs/add_sponsored_study/add_sponsored_study.html";
 import appConfigs from "./pages/appconfigs/appconfigs";
 import appConfigsHtml from "./pages/appconfigs/appconfigs.html";
 import appConfig from "./pages/appconfig/appconfig";
@@ -464,8 +472,9 @@ reg("orgMembers", {viewModel: orgMembers, template: orgMembersHtml})
 reg("orgStudies", {viewModel: orgStudies, template: orgStudiesHtml})
 reg("org-tabset", {viewModel: orgTabset, template: orgTabsetHtml});
 reg("studies", {viewModel: studies, template: studiesHtml});
-reg("study", {viewModel: study, template: studyHtml});
-
+reg("studyEditor", {viewModel: studyEditor, template: studyEditorHtml});
+reg("studySponsors", {viewModel: studySponsors, template: studySponsorsHtml});
+reg("study-tabset", {viewModel: studyTabset, template: studyTabsetHtml});
 reg("BooleanConstraints", {viewModel: boolConst, template: boolConstHtml});
 reg("DateConstraints", {viewModel: dateConst, template:  dateConstHtml});
 reg("DateTimeConstraints", {viewModel: dateTimeConst, template: dateTimeConstHtml});
@@ -550,6 +559,7 @@ reg("edit_android_link", {viewModel: editAndroidLink, template: editAndroidLinkH
 reg("file_upload", {viewModel: fileUpload, template: fileUploadHtml, synchronous: true});
 reg("add_org_member", {viewModel: addOrgMember, template: addOrgMemberHtml, synchronous: true});
 reg("add_sponsor", {viewModel: addSponsor, template: addSponsorHtml, synchronous: true});
+reg("add_sponsored_study", {viewModel: addSponsoredStudy, template: addSponsoredStudyHtml, synchronous: true});
 reg("oauth_provider", {viewModel: oauthProvider, template: oauthProviderHtml, synchronous: true});
 reg("appconfigs", {viewModel: appConfigs, template: appConfigsHtml});
 reg("appconfig", {viewModel: appConfig, template: appConfigHtml});

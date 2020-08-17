@@ -7,11 +7,11 @@
       </div>
       <h3 data-bind="text: titleObs"></h3>
     </div>
-    <div class="fixed-header-buttons" data-bind="visible: isSuperadmin()">
+    <div class="fixed-header-buttons" data-bind="visible: isAdmin()">
       <button class="ui tiny primary button" data-bind="click: save">Save</button>
     </div>
   </div>
-  <div class="ui empty secondary pointing menu"></div>
+  <study-tabset params="identifierObs: idObs, isNewObs: isNewObs"></study-tabset>
 </div>
 <div class="scrollbox">
   <errors id="study"></errors>
@@ -19,8 +19,8 @@
     <div class="two fields">
       <div class="field required" id="name">
         <label>Name</label>
-        <input data-bind="textInput: nameObs, hasFocus: true, visible: isSuperadmin()" />
-        <div class="input-field-padding" data-bind="text: nameObs, visible: !isSuperadmin()"></div>
+        <input data-bind="textInput: nameObs, hasFocus: true, visible: isAdmin()" />
+        <div class="input-field-padding" data-bind="text: nameObs, visible: !isAdmin()"></div>
       </div>
       <div class="field required" id="id" data-bind="visible: isNewObs">
         <label>Identifier</label>
@@ -52,39 +52,5 @@
         <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
       </div>
     </div>
-
-    <h4 data-bind="visible: !isNewObs()" class="ui dividing header">Sponsors</h4>
-    <div class="line-control" data-bind="visible: !isNewObs() && isAdmin()">
-      <div class="line-control-stretch ">
-        <button class="ui compact mini primary button" data-bind="click: addSponsorDialog">
-          Add Sponsor&hellip;
-        </button>
-      </div>
-      <pager params="prefix: 'sponsors', postLoadFunc: postLoadFunc, pageSize: 100"></pager>
-    </div>
-    <table class="ui compact selectable table" data-bind="visible: !isNewObs()">
-      <thead>
-        <tr>
-          <th>Organization</th>
-          <th width="10"></th>
-        </tr>
-      </thead>
-      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-        <tr>
-          <td colspan="2" data-bind="html: recordsMessageObs"></td>
-        </tr>
-      </tbody>
-      <tbody data-bind="foreach: itemsObs">
-        <tr>
-          <td data-bind="text: $data.name"></td>
-          <td style="white-space: nowrap">
-            <button class="ui basic compact mini red button" data-bind="click: $parent.removeSponsor,
-              visible: $component.isAdmin">
-              Remove
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
   </form>
 </div>

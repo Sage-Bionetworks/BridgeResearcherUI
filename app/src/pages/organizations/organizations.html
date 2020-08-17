@@ -3,7 +3,7 @@
     <div class="fixed-header-heading">
       <h3>Organizations</h3>
     </div>
-    <div class="fixed-header-buttons" data-bind="visible: isSuperadmin()">
+    <div class="fixed-header-buttons" data-bind="visible: isAdmin()">
       <button data-bind="disable: !atLeastOneChecked(), click: deleteItems"
         class="ui red tiny button">
         Delete
@@ -15,37 +15,39 @@
 </div>
 <div class="scrollbox">
   <errors id="orgs"></errors>
-  <pager style="display: flex; justify-content: flex-end" 
-    params="prefix: 'org', postLoadFunc: postLoadFunc"></pager>
-  <table class="ui compact selectable table" style="margin-top:0">
-    <thead>
-      <tr>
-        <th width="10" data-bind="visible: isSuperadmin()">
-          <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
-        </th>
-        <th>Name</th>
-        <th>ID</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-      <tr>
-        <td colspan="4" data-bind="html: recordsMessageObs"></td>
-      </tr>
-    </tbody>
-    <tbody data-bind="foreach: itemsObs">
-      <tr>
-        <td data-bind="visible: $parent.isSuperadmin()">
-          <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
-        </td>
-        <td>
-          <span data-bind="text: $data.name, visible: !$parent.isSuperadmin()"></span>
-          <a data-bind="href: '#/organizations/'+$data.identifier, text: $data.name,
-            visible: $parent.isSuperadmin()"></a>
-        </td>
-        <td data-bind="text: $data.identifier"></td>
-        <td data-bind="text: $data.description"></td>
-      </tr>
-    </tbody>
-  </table>
+  <form class="ui skinny form">
+    <pager style="display: flex; justify-content: flex-end" 
+      params="prefix: 'org', postLoadFunc: postLoadFunc"></pager>
+    <table class="ui compact selectable table" style="margin-top:0">
+      <thead>
+        <tr>
+          <th width="10" data-bind="visible: isAdmin()">
+            <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+          </th>
+          <th>Name</th>
+          <th>ID</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="4" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr>
+          <td data-bind="visible: $parent.isAdmin()">
+            <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+          </td>
+          <td>
+            <span data-bind="text: $data.name, visible: !$parent.isAdmin()"></span>
+            <a data-bind="href: '#/organizations/'+$data.identifier, text: $data.name,
+              visible: $parent.isAdmin()"></a>
+          </td>
+          <td data-bind="text: $data.identifier"></td>
+          <td data-bind="text: $data.description"></td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
 </div>

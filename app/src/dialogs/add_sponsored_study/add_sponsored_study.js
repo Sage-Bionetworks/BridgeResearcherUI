@@ -11,32 +11,30 @@ export default function(params) {
   self.closeDialog = params.closeFunc;
 
   tables.prepareTable(self, {
-    name: "available organization",
-    id: "add_sponsor",
+    name: "study",
+    id: "add_sponsored_study",
     refresh: () => ko.postbox.publish("page-refresh")
   });
 
   self.addAndClose = (vm, event) => {
     utils.startHandler(vm, event);
 
-    let fn = (org) => serverService.addSponsor(params.studyId, org.identifier);
-
+    let fn = (study) => serverService.addSponsor(study.id, params.orgId);
     let adds = self.itemsObs().filter(acct => acct.checkedObs());
-
     Promise.each(adds, (org) => fn(org))
       .then(params.closeFunc)
-      .catch(utils.failureHandler({ id: "add_sponsor" }));
+      .catch(utils.failureHandler({ id: "add_sponsored_study" }));
   };
 
-  self.sponsorIds = new Set();
+  self.sponsoredStudiesIds = new Set();
 
-  serverService.getSponsors(params.studyId, {offsetBy: 0, pageSize: 100})
-    .then((response) => self.sponsorIds = new Set(response.items.map(org => org.identifier)))
-    .then(() => serverService.getOrganizations(0, 100))
+  serverService.getSponsoredStudies(params.orgId, {offsetBy: 0, pageSize: 100})
+    .then((response) => self.sponsoredStudiesIds = new Set(response.items.map(study => study.id)))
+    .then(() => serverService.getStudies(0, 100))
     .then((response) => {
-      response.items = response.items.filter(item => !self.sponsorIds.has(item.identifier));
+      response.items = response.items.filter(item => !self.sponsoredStudiesIds.has(item.id));
       return response;
     })
     .then(fn.handleObsUpdate(self.itemsObs, "items"))
-    .catch(utils.failureHandler({ id: "add_sponsor" }));
+    .catch(utils.failureHandler({ id: "add_sponsored_study" }));
 }

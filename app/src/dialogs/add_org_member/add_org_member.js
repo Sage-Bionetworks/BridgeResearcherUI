@@ -35,7 +35,7 @@ export default function(params) {
 
   self.search = function() {
     let params = Object.assign({emailFilter: self.emailObs()}, PAGE_OPTS);
-    serverService.searchAccountSummaries(params)
+    serverService.searchUnassignedAdminAccounts(params)
       .then(load)
       .catch(utils.failureHandler({ id: "add_member" }));
   };
@@ -54,7 +54,7 @@ export default function(params) {
     return response;
   }
 
-  serverService.searchAccountSummaries(PAGE_OPTS)
+  serverService.searchUnassignedAdminAccounts(PAGE_OPTS)
       .then(load)
       .catch(utils.failureHandler({ id: "add_member" }));
 }

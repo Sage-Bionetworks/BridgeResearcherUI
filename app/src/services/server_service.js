@@ -443,6 +443,9 @@ export class ServerService {
   searchAccountSummaries(search) {
     return this.post(`${config.participants}/search`, search);
   }
+  searchUnassignedAdminAccounts(search) {
+    return this.post(`${config.organizations}/members/unassigned`, search);
+  }
   getParticipant(id) {
     if (session && session.id === id) {
       id = 'self';
