@@ -119,7 +119,6 @@ export default function(params) {
   self.save = function(vm, event) {
     let isNew = !self.assessment.guid;
     let revisionChanged = self.revisionObs() !== self.assessment.revision
-    console.log("isNew", isNew, "revisionChanged", revisionChanged);
 
     self.assessment = binder.persist(self.assessment);
 

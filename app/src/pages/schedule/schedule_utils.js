@@ -122,44 +122,6 @@ function formatStrategy(strategy) {
 function formatScheduleStrategyType(type) {
   return STRATEGY_OPTIONS[type].label;
 }
-function formatCompoundActivity(task) {
-  let phrase = [];
-  let schemas = (task.schemaList || task.schemaReferences)
-    .map(function(schema) {
-      return schema.revision ? `${schema.id} schema <i>(rev. ${schema.revision})</i>` : schema.id;
-    })
-    .join(", ");
-  if (schemas) {
-    phrase.push(schemas);
-  }
-  let surveys = (task.surveyList || task.surveyReferences)
-    .map(function(survey) {
-      let surveyName = surveyNameMap[survey.guid];
-      return survey.createdOn ? 
-        `${surveyName} survey <i>(pub. ${fn.formatDateTime(survey.createdOn)})</i>` : 
-        surveyName;
-    })
-    .join(", ");
-  let configs = (task.configList || task.configReferences || [])
-    .map(function(config) {
-      return `${config.id} config <i>(rev. ${config.revision})</i>`;
-    })
-    .join(", ");
-  if (configs) {
-    phrase.push(configs);
-  }
-  if (surveys) {
-    phrase.push(surveys);
-  }
-  return phrase.join("<br>");
-}
-function loadFormatCompoundActivity() {
-  return serverService.getSurveys().then(function(response) {
-    response.items.forEach(function(survey) {
-      surveyNameMap[survey.guid] = survey.name;
-    });
-  });
-}
 export default {
   newSchedule,
   newSchedulePlan,
@@ -167,7 +129,6 @@ export default {
   formatEventId,
   formatStrategy,
   formatSchedule,
-  formatCompoundActivity,
   formatScheduleStrategyType,
   activitiesObs,
   surveysOptionsObs,
@@ -179,8 +140,7 @@ export default {
     let p1 = optionsService.getActivityOptions().then(activitiesObs);
     let p2 = optionsService.getSurveyOptions().then(surveysOptionsObs);
     let p3 = optionsService.getTaskIdentifierOptions().then(taskOptionsObs);
-    let p4 = loadFormatCompoundActivity();
-    let p5 = optionsService.getCompoundActivityOptions().then(compoundActivityOptionsObs);
-    return Promise.all([p1, p2, p3, p4, p5]);
+    let p4 = optionsService.getCompoundActivityOptions().then(compoundActivityOptionsObs);
+    return Promise.all([p1, p2, p3, p4]);
   }
 };

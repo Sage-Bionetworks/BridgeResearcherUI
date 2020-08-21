@@ -1,13 +1,52 @@
 import criteriaUtils from "../../criteria_utils";
 import fn from "../../functions";
 import Promise from "bluebird";
-import scheduleUtils from "../schedule/schedule_utils";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
 
+function formatReferencedModels(appconfig) {
+  let array = [];
+  let promises = [];
+
+  promises = promises.concat((appconfig.surveyReferences || []).map(ref => {
+    return serverService.getSurvey(ref.guid, ref.createdOn).then(survey => {
+      array.push(`survey “${survey.name}” <i>(pub. ${fn.formatDateTime(survey.createdOn)})</i>`);
+    });
+  }));
+  promises = promises.concat((appconfig.schemaReferences || []).map(ref => {
+    return serverService.getUploadSchema(ref.id, ref.revision).then(schema => {
+      array.push(`schema “${schema.name}” <i>(rev. ${schema.revision})</i>`);
+    });
+  }));
+  promises = promises.concat((appconfig.configReferences || []).map(ref => {
+    array.push(`config “${ref.id}” <i>(rev. ${ref.revision})</i>`);
+    return Promise.resolve();
+  }));
+  promises = promises.concat((appconfig.fileReferences || []).map(ref => {
+    array.push(`file “${ref.guid}” <i>(rev. ${ref.createdOn})</i>`);
+    return Promise.resolve();
+    /* This call doesn't currently exist, but I might add it for the file name.
+    return serverService.getFileRevision(ref.guid, ref.createdOn).then(fileRev => {
+      array.push(`file ${fileRev.name} <i>(pub. ${fn.formatDateTime(fileRev.createdOn)})</i>`);
+    });
+    */
+  }));
+  promises = promises.concat((appconfig.assessmentReferences || []).map(ref => {
+    return serverService.getAssessment(ref.guid).then(assessment => {
+      array.push(`assessment “${assessment.title}” <i>(rev. ${assessment.revision})</i>`);
+    });
+  }));
+  return Promise.all(promises).then(() => {
+    appconfig.refLabel = array.join('; ');
+    return Promise.resolve(appconfig);
+  });
+}
+
 export default function() {
   let self = this;
+
+  self.formatReferencedModels = formatReferencedModels;
 
   tables.prepareTable(self, {
     name: "app config",
@@ -19,7 +58,6 @@ export default function() {
   });
 
   fn.copyProps(self, criteriaUtils, "label->criteriaLabel");
-  fn.copyProps(self, scheduleUtils, "formatCompoundActivity");
   fn.copyProps(self, fn, "formatDateTime");
 
   self.copyItems = function(vm, event) {
@@ -46,8 +84,12 @@ export default function() {
   };
 
   function load() {
-    scheduleUtils.loadOptions()
-      .then(() => serverService.getAppConfigs(self.showDeletedObs()))
+    serverService.getAppConfigs(self.showDeletedObs())
+      .then(response => {
+        let promises = response.items.map(formatReferencedModels);
+        return Promise.all(promises).then(() => Promise.resolve(response));
+      })
+      .then(fn.log("response"))
       .then(fn.handleSort("items", "label"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .catch(utils.failureHandler({ id: 'appconfigs' }));

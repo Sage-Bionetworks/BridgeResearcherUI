@@ -699,7 +699,6 @@ export class ServerService {
     return this.post(config.appConfigs, appConfig);
   }
   updateAppConfig(appConfig) {
-    console.log(JSON.stringify(appConfig));
     return this.post(`${config.appConfigs}/${appConfig.guid}`, appConfig);
   }
   deleteAppConfig(guid, physical) {
@@ -963,6 +962,9 @@ export class ServerService {
   getFileRevisions(guid, query) {
     let queryString = fn.queryString(query);
     return this.gethttp(`${config.files}/${guid}/revisions${queryString}`);
+  }
+  getFileRevision(guid, createdOn) {
+    return this.gethttp(`${config.files}/${guid}/revisions/${createdOn}`);
   }
   createFileRevision(guid, revision) {
     return this.post(`${config.files}/${guid}/revisions`, revision);

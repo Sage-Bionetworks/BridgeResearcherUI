@@ -185,7 +185,6 @@ export default function(params) {
     for (let i = 0; i < assessments.length; i++) {
       let newAssessment = Task.assessmentToView(assessments[i]);
       this.assessmentReferencesObs.push(newAssessment);
-      Task.loadAssessmentRevisions(newAssessment);
     }
     root.closeDialog();
   };

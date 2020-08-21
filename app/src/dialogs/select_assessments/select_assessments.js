@@ -21,6 +21,8 @@ export default function(params) {
     return item.checkedObs();
   }
 
+  const selectedGuids = new Set(params.selected.map(item => item.id));
+
   self.select = function() {
     let assessments = self.itemsObs().filter(selectByChecked);
     params.addAssessments(assessments);
@@ -34,25 +36,19 @@ export default function(params) {
   });
 
   function match(assessment) {
-    return params.selected.filter((selAssessment) => {
-      console.log("assessment", assessment, "selAssessment", selAssessment);
-      return selAssessment.id === assessment.identifier
-    })[0];
+    return selectedGuids.has(assessment.identifier);
   }
   function configToView(assessment) {
-    let selectedAssessment = match(assessment);
-    let checked = !!selectedAssessment;
-    selectedAssessment = selectedAssessment || {};
     return {
-      title: selectedAssessment.title || assessment.title,
-      guid: selectedAssessment.guid || assessment.guid,
-      id: selectedAssessment.id || assessment.id,
-      checkedObs: ko.observable(checked)
+      title: assessment.title,
+      guid: assessment.guid,
+      id: assessment.id,
+      checkedObs: ko.observable(match(assessment))
     };
   }
 
   function load() {
-    serverService.getAssessments('', null, null, false)
+    serverService.getAssessments('', null, 100, false)
       .then(fn.handleMap("items", configToView))
       .then(fn.handleSort("items", "id"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
