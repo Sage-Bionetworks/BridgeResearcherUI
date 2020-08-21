@@ -1,7 +1,7 @@
 <div class="ui small modal">
   <i data-bind="click:cancel" class="close icon"></i>
   <div class="header">Select Files</div>
-  <div class="content" style="max-height: 25rem; padding-bottom: .5rem; overflow-y: auto">
+  <div class="content" style="max-height: 25rem; padding: 0 1rem; overflow-y: auto">
     <errors id="select-files"></errors>
     <div class="ui list" data-bind="visible: itemsObs().length > 0, foreach: itemsObs">
       <div class="item">

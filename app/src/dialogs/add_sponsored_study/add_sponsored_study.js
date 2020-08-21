@@ -19,7 +19,7 @@ export default function(params) {
   self.addAndClose = (vm, event) => {
     utils.startHandler(vm, event);
 
-    let fn = (study) => serverService.addSponsor(study.id, params.orgId);
+    let fn = (study) => serverService.addSponsor(study.identifier, params.orgId);
     let adds = self.itemsObs().filter(acct => acct.checkedObs());
     Promise.each(adds, (org) => fn(org))
       .then(params.closeFunc)
@@ -29,10 +29,10 @@ export default function(params) {
   self.sponsoredStudiesIds = new Set();
 
   serverService.getSponsoredStudies(params.orgId, {offsetBy: 0, pageSize: 100})
-    .then((response) => self.sponsoredStudiesIds = new Set(response.items.map(study => study.id)))
+    .then((response) => self.sponsoredStudiesIds = new Set(response.items.map(study => study.identifier)))
     .then(() => serverService.getStudies(0, 100))
     .then((response) => {
-      response.items = response.items.filter(item => !self.sponsoredStudiesIds.has(item.id));
+      response.items = response.items.filter(item => !self.sponsoredStudiesIds.has(item.identifier));
       return response;
     })
     .then(fn.handleObsUpdate(self.itemsObs, "items"))

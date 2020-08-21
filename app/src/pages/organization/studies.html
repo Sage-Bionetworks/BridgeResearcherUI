@@ -37,10 +37,10 @@
       <tbody data-bind="foreach: itemsObs">
         <tr>
           <td>
-            <a data-bind="href: '#/studies/'+$data.id, text: $data.name, visible: $parent.isAdmin()"></a>
+            <a data-bind="href: '#/studies/'+$data.identifier, text: $data.name, visible: $parent.isAdmin()"></a>
             <span data-bind="text: $data.name, visible: !$parent.isAdmin()"></span>
           </td>
-          <td data-bind="text: $data.id"></td>
+          <td data-bind="text: $data.identifier"></td>
           <td style="white-space: nowrap">
             <button class="ui basic compact mini red button" data-bind="visible: $parent.isAdmin(),
               click: $parent.removeSponsored">

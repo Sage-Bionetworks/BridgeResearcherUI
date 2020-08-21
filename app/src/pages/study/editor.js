@@ -28,7 +28,7 @@ export default function(params) {
     .bind("version")
     .bind("name")
     .bind("orgId")
-    .bind("id", params.id === "new" ? null : params.id);
+    .bind("identifier", params.id === "new" ? null : params.id);
 
   function load() {
     return params.id === "new" ? 
@@ -59,7 +59,7 @@ export default function(params) {
     saveStudy()
       .then(response => {
         if (params.id === "new") {
-          document.location = "#/studies/" + self.idObs();
+          document.location = "#/studies/" + self.identifierObs();
         }
         return response;
       })

@@ -12,7 +12,7 @@ export default function(params) {
   self.query = {};
   self.reload = () => load(self.query);
 
-  fn.copyProps(self, fn, "isAdmin");
+  fn.copyProps(self, root, "isAdmin");
 
   let binder = new Binder(self)
     .obs("isNew", false)
@@ -25,9 +25,12 @@ export default function(params) {
     .bind("canEdit", false);
 
   tables.prepareTable(self, {
-    name: "assessment history",
+    name: "assessment revision",
     refresh: self.reload,
-    id: "assessment_history"
+    id: "assessment_history",
+    delete: (item) => serverService.deleteAssessment(item.guid, false),
+    deletePermanently: (item) => serverService.deleteAssessment(item.guid, true),
+    undelete: (item) => serverService.updateAssessment(item)
   });
 
   // some nonsense related to the pager that I copy now by rote
@@ -70,7 +73,7 @@ export default function(params) {
     .then(assessment => self.assessment = assessment)
     .then(serverService.getSession)
     .then((session) => self.canEditObs(
-        root.isSuperadmin() || self.assessment.ownerId === session.orgMembership))
+        root.isAdmin() || self.assessment.ownerId === session.orgMembership))
     .then(optionsService.getOrganizationNames)
     .then((map) => self.orgNames = map)
     .then(() => serverService.getAssessment(params.guid))

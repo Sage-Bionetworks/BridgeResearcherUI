@@ -16,7 +16,7 @@ var failureHandler = utils.failureHandler({
 
 function newAssessment() {
   return {
-    title: "New Assessment",
+    title: "",
     identifier: "",
     summary: "",
     normingStatus: "",
@@ -68,21 +68,31 @@ export default function(params) {
     return "#/assessments/" + self.guidObs() + "/history";
   });
 
-  function saveAssessment(isNotNew) {
-    if (isNotNew) {
-      return serverService.updateAssessment(self.assessment);
+  let redirect = (response) => document.location = "#/assessments/" + response.guid + "/general";
+
+  function saveAssessment(isNew, revisionChanged) {
+    if (isNew) {
+      return serverService.createAssessment(self.assessment).then(redirect);
+    } else if (revisionChanged) {
+      return serverService.createAssessmentRevision(self.assessment).then(redirect);
+    } else {
+      return serverService.updateAssessment(self.assessment)
+        .then(fn.handleStaticObsUpdate(self.isNewObs, false))
+        .then(binder.assign("assessment"))
+        .then(binder.update())
+        .then(fn.handleObsUpdate(self.pageTitleObs, "title"))
+        .then(fn.handleObsUpdate(self.pageRevObs, "revision"))
+        .then(fn.handleObsUpdate(self.originGuidObs, "originGuid"))
+        .then(fn.handleCopyProps(params, "guid"))
+        .then(fn.returning(self.assessment));
     }
-    return serverService.createAssessment(self.assessment);
   }
   function load() {
     if (params.guid === "new") {
       self.canEditObs(true);
       return Promise.resolve(newAssessment())
         .then(binder.assign("assessment"))
-        .then(binder.update())
-        .then(fn.handleObsUpdate(self.pageTitleObs, "title"))
-        .then(fn.handleObsUpdate(self.pageRevObs, "revision"));
-        
+        .then(binder.update());
     } else {
       return serverService.getAssessment(params.guid)
         .then(binder.assign("assessment"))
@@ -107,20 +117,14 @@ export default function(params) {
   }
 
   self.save = function(vm, event) {
-    let isNotNew = (self.assessment.guid) && (self.revisionObs() === self.assessment.revision);
+    let isNew = !self.assessment.guid;
+    let revisionChanged = self.revisionObs() !== self.assessment.revision
+    console.log("isNew", isNew, "revisionChanged", revisionChanged);
 
     self.assessment = binder.persist(self.assessment);
 
     utils.startHandler(vm, event);
-    saveAssessment(isNotNew)
-      .then(fn.handleStaticObsUpdate(self.isNewObs, false))
-      .then(binder.assign("assessment"))
-      .then(binder.update())
-      .then(fn.handleObsUpdate(self.pageTitleObs, "title"))
-      .then(fn.handleObsUpdate(self.pageRevObs, "revision"))
-      .then(fn.handleObsUpdate(self.originGuidObs, "originGuid"))
-      .then(fn.handleCopyProps(params, "guid"))
-      .then(fn.returning(self.assessment))
+    saveAssessment(isNew, revisionChanged)
       .then(utils.successHandler(vm, event, "Assessment has been saved."))
       .catch(failureHandler);
   };

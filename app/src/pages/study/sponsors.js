@@ -18,7 +18,7 @@ export default function(params) {
   new Binder(self)
     .obs("title", "New Study")
     .obs("isNew", false)
-    .bind("id", params.id);
+    .bind("identifier", params.id);
 
   self.addSponsorDialog = function() {
     root.openDialog("add_sponsor", {

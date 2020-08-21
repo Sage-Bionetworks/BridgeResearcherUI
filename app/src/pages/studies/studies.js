@@ -14,8 +14,8 @@ export default function() {
     plural: "studies",
     id: "studies",
     refresh: load,
-    delete: (item) => serverService.deleteStudy(item.id, false),
-    deletePermanently: (item) => serverService.deleteStudy(item.id, true),
+    delete: (item) => serverService.deleteStudy(item.identifer, false),
+    deletePermanently: (item) => serverService.deleteStudy(item.identifier, true),
     undelete: (item) => serverService.updateStudy(item)
   });
 

@@ -699,6 +699,7 @@ export class ServerService {
     return this.post(config.appConfigs, appConfig);
   }
   updateAppConfig(appConfig) {
+    console.log(JSON.stringify(appConfig));
     return this.post(`${config.appConfigs}/${appConfig.guid}`, appConfig);
   }
   deleteAppConfig(guid, physical) {
@@ -739,6 +740,9 @@ export class ServerService {
   }
   createAssessment(assessment) { 
     return this.post(config.assessments, assessment);
+  }
+  createAssessmentRevision(assessment) {
+    return this.post(`/v1/assessments/${assessment.guid}/revisions`, assessment);
   }
   updateAssessment(assessment) { 
     return this.post(`${config.assessments}/${assessment.guid}`, assessment);
