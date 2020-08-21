@@ -53,6 +53,7 @@ export default function(params) {
     .bind("surveyReferences[]", [], Task.surveyListToView, Task.surveyListToTask)
     .bind("schemaReferences[]", [], Task.schemaListToView, Task.schemaListToTask)
     .bind("configReferences[]", [], Task.configListToView, Task.configListToTask)
+    .bind("assessmentReferences[]", [], Task.assessmentListToView, Task.assessmentListToTask)
     .bind("fileReferences[]", [], Task.fileListToView, Task.fileListToTask);
 
   let titleUpdated = fn.handleObsUpdate(self.titleObs, "label");
@@ -114,7 +115,7 @@ export default function(params) {
     });
   };
   self.openSurveySelector = function(vm, event) {
-    self.task = binder.persist(self.appConfig);
+    self.appConfig = binder.persist(self.appConfig);
     root.openDialog("select_surveys", {
       addSurveys: self.addSurveys.bind(self),
       allowMostRecent: true,
@@ -122,18 +123,25 @@ export default function(params) {
     });
   };
   self.openConfigSelector = function(vm, event) {
-    self.task = binder.persist(self.appConfig);
+    self.appConfig = binder.persist(self.appConfig);
     root.openDialog("select_configs", {
       addConfigs: self.addConfigs.bind(self),
       selected: self.appConfig.configReferences
     });
   };
   self.openFileSelector = function(vm, event) {
-    self.task = binder.persist(self.appConfig);
+    self.appConfig = binder.persist(self.appConfig);
     root.openDialog("select_files", {
       addFiles: self.addFiles.bind(self),
       allowMostRecent: true,
       selected: self.appConfig.fileReferences
+    });
+  }
+  self.openAssessmentSelector = function(vm, event) {
+    self.appConfig = binder.persist(self.appConfig);
+    root.openDialog("select_assessments", {
+      addAssessments: self.addAssessments.bind(self),
+      selected: self.appConfig.assessmentReferences
     });
   }
   self.addSchemas = function(schemas) {
@@ -171,7 +179,16 @@ export default function(params) {
       Task.loadFileRevisions(newFile);
     }
     root.closeDialog();
-  }
+  };
+  self.addAssessments = function(assessments) {
+    self.assessmentReferencesObs([]);
+    for (let i = 0; i < assessments.length; i++) {
+      let newAssessment = Task.assessmentToView(assessments[i]);
+      this.assessmentReferencesObs.push(newAssessment);
+      Task.loadAssessmentRevisions(newAssessment);
+    }
+    root.closeDialog();
+  };
   self.removeSchema = function(object, event) {
     self.schemaReferencesObs.remove(object);
   };
@@ -183,6 +200,9 @@ export default function(params) {
   };
   self.removeFile = function(object, event) {
     this.fileReferencesObs.remove(object);
+  }
+  self.removeAssessment = function(object, event) {
+    this.assessmentReferencesObs.remove(object);
   }
   self.preview = function(vm, event) {
     if (updateClientData()) {

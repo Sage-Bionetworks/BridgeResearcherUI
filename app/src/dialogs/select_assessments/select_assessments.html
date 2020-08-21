@@ -1,12 +1,13 @@
 <div class="ui small modal">
   <i data-bind="click:cancel" class="close icon"></i>
-  <div class="header" data-bind="text: title"></div>
+  <div class="header">Select Assessments</div>
   <div class="content" style="max-height: 25rem; padding: 0 1rem; overflow-y: auto">
-    <errors id="select-configs"></errors>
+    <errors id="select-assessments"></errors>
     <div class="ui list" data-bind="visible: itemsObs().length > 0, foreach: itemsObs">
-      <div class="item" data-bind="component: {name: $component.controlName, 
-        params: {checkedObs: $data.checkedObs, name: 'schema', id: $data.id}}">
-        <span data-bind="text: $parent.name"></span>
+      <div class="item">
+        <ui-checkbox params="checkedObs: $data.checkedObs">
+          <span data-bind="text: $parent.title"></span>
+        </ui-checkbox>
       </div>
     </div>
     <div data-bind="visible: itemsObs().length === 0, html: recordsMessageObs" class="selector-loading-indicator">

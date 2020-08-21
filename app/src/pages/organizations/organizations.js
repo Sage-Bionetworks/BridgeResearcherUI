@@ -19,7 +19,7 @@ export default function organizations() {
   self.postLoadPagerFunc = () => {};
   self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
 
-  fn.copyProps(self, root, "isSuperadmin");
+  fn.copyProps(self, root, "isAdmin");
 
   tables.prepareTable(self, {
     name: "organization",

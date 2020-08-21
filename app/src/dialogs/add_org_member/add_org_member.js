@@ -10,8 +10,7 @@ const PAGE_OPTS = {pageSize: 100, adminOnly: true, orgMembership: "<none>"};
 export default function(params) {
   const self = this;
 
-  new Binder(self).obs('disabled', true)
-    .obs('email');
+  new Binder(self).obs('email');
 
   self.closeDialog = params.closeFunc;
   fn.copyProps(self, fn, "formatIdentifiers", "formatNameAsFullLabel");
@@ -36,7 +35,7 @@ export default function(params) {
 
   self.search = function() {
     let params = Object.assign({emailFilter: self.emailObs()}, PAGE_OPTS);
-    serverService.searchAccountSummaries(params)
+    serverService.searchUnassignedAdminAccounts(params)
       .then(load)
       .catch(utils.failureHandler({ id: "add_member" }));
   };
@@ -55,7 +54,7 @@ export default function(params) {
     return response;
   }
 
-  serverService.searchAccountSummaries(PAGE_OPTS)
+  serverService.searchUnassignedAdminAccounts(PAGE_OPTS)
       .then(load)
       .catch(utils.failureHandler({ id: "add_member" }));
 }

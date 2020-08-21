@@ -55,7 +55,8 @@ export default {
   msgs: {
     shared_modules: {
       PUBLISH: "Are you sure you want to publish this shared module version?"
-    }
+    },
+    UNDO_SPONSOR: "Are you sure? This changes permissions, though you can redo this later."
   },
   retentionReports: ['api', 'biomarin-pku-study', 'crf-module', 'sage-mpower-2'],
   adminAuth: "/v3/auth/admin",

@@ -1,12 +1,13 @@
 import Binder from "../../binder";
 import fn from "../../functions";
+import optionsService from "../../services/options_service";
 import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
 var failureHandler = utils.failureHandler({
   redirectMsg: "Study not found.",
-  redirectTo: "admin/studies",
+  redirectTo: "studies",
   transient: false,
   id: 'study'
 });
@@ -16,16 +17,18 @@ export default function(params) {
   self.study = {};
 
   fn.copyProps(self, fn, "formatDateTime");
-  fn.copyProps(self, root, 'isSuperadmin');
+  fn.copyProps(self, root, 'isAdmin');
 
   let binder = new Binder(self)
     .obs("title", "New Study")
     .obs("isNew", params.id === "new")
     .obs("createdOn")
     .obs("modifiedOn")
+    .obs("orgOptions[]")
     .bind("version")
     .bind("name")
-    .bind("id", params.id === "new" ? null : params.id);
+    .bind("orgId")
+    .bind("identifier", params.id === "new" ? null : params.id);
 
   function load() {
     return params.id === "new" ? 
@@ -42,6 +45,13 @@ export default function(params) {
     return response;
   }
 
+  self.formatOrgId = function(orgId) {
+    const orgs = self.orgOptionsObs();
+    if (orgId && orgs.some(opt => opt.value === orgId)) {
+      return orgs.filter(opt => opt.value === orgId)[0].label;
+    }
+    return orgId;
+  }
   self.save = function(vm, event) {
     self.study = binder.persist(self.study);
 
@@ -49,7 +59,7 @@ export default function(params) {
     saveStudy()
       .then(response => {
         if (params.id === "new") {
-          document.location = "#/admin/studies/" + self.idObs();
+          document.location = "#/studies/" + self.identifierObs();
         }
         return response;
       })
@@ -63,7 +73,8 @@ export default function(params) {
       .catch(failureHandler);
   };
 
-  load()
-    .then(binder.assign("study"))
-    .then(binder.update());
+  load().then(binder.assign("study"))
+    .then(binder.update())
+    .then(optionsService.getOrganizationOptions)
+    .then((opts) => self.orgOptionsObs.pushAll(opts));
 };

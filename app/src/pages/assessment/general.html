@@ -52,8 +52,8 @@
     <div class="two fields">
       <div class="field" id="summary">
         <label>Summary</label>
-        <textarea id="summary" data-bind="textInput: summaryObs, visible: canEditObs" class="ui textarea"></textarea>
-        <div class="input-field-padding" data-bind="text: summaryObs, !visible: canEditObs()"></div>
+        <textarea id="summary" data-bind="textInput: summaryObs, visible: canEditObs()" class="ui textarea"></textarea>
+        <div class="input-field-padding" data-bind="text: summaryObs, visible: !canEditObs()"></div>
       </div>
       <div class="field">
         <div class="required field" id="osName">
@@ -62,7 +62,7 @@
             optionsText: 'label', optionsValue: 'value', value: osNameObs,
             optionsCaption: 'Select operating system...', visible: canEditObs">
           </select>
-          <div class="input-field-padding" data-bind="text: osNameObs, !visible: canEditObs()"></div>
+          <div class="input-field-padding" data-bind="text: osNameObs, visible: !canEditObs()"></div>
         </div>
         <div class="field" id="tags" style="margin-top: 1rem" data-bind="visible: canEditObs">
           <label>Tags</label>
@@ -85,16 +85,16 @@
         <label>Validation Status</label>
         <textarea id="validationStatus" data-bind="textInput: validationStatusObs, 
           visible: canEditObs()" class="ui textarea"></textarea>
-        <div class="input-field-padding" data-bind="text: validationStatusObs, !visible: canEditObs()"></div>
+        <div class="input-field-padding" data-bind="text: validationStatusObs, visible: !canEditObs()"></div>
       </div>
       <div class="field" id="normingStatus">
         <label>Norming Status</label>
         <textarea id="normingStatus" data-bind="textInput: normingStatusObs, 
           visible: canEditObs()" class="ui textarea"></textarea>
-        <div class="input-field-padding" data-bind="text: normingStatusObs, !visible: canEditObs()"></div>
+        <div class="input-field-padding" data-bind="text: normingStatusObs, visible: !canEditObs()"></div>
       </div>
     </div>
-    <div class="two fields">
+    <div class="two fields" data-bind="visible: !isNewObs()">
       <div class="field">
         <label>Created On</label>
         <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>

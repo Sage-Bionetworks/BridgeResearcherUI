@@ -113,6 +113,14 @@ function getOrganizationNames() {
     }, orgNamesMap);
   });
 }
+
+function getOrganizationOptions() {
+  return getOrganizationNames().then(orgMap => {
+    return Object.keys(orgMap).map((key) => ({label: orgMap[key], value: key}));
+  });
+}
+
+
 export default {
   CATEGORIES,
   CATEGORY_LABELS,
@@ -121,6 +129,7 @@ export default {
   getSchedules,
   getActivityOptions,
   getOrganizationNames,
+  getOrganizationOptions,
   getSurveyOptions,
   getTaskIdentifierOptions,
   getCompoundActivityOptions

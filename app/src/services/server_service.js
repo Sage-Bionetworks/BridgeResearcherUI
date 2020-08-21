@@ -443,6 +443,9 @@ export class ServerService {
   searchAccountSummaries(search) {
     return this.post(`${config.participants}/search`, search);
   }
+  searchUnassignedAdminAccounts(search) {
+    return this.post(`${config.organizations}/members/unassigned`, search);
+  }
   getParticipant(id) {
     if (session && session.id === id) {
       id = 'self';
@@ -696,6 +699,7 @@ export class ServerService {
     return this.post(config.appConfigs, appConfig);
   }
   updateAppConfig(appConfig) {
+    console.log(JSON.stringify(appConfig));
     return this.post(`${config.appConfigs}/${appConfig.guid}`, appConfig);
   }
   deleteAppConfig(guid, physical) {
@@ -736,6 +740,9 @@ export class ServerService {
   }
   createAssessment(assessment) { 
     return this.post(config.assessments, assessment);
+  }
+  createAssessmentRevision(assessment) {
+    return this.post(`/v1/assessments/${assessment.guid}/revisions`, assessment);
   }
   updateAssessment(assessment) { 
     return this.post(`${config.assessments}/${assessment.guid}`, assessment);
@@ -884,6 +891,25 @@ export class ServerService {
     let queryString = fn.queryString({ physical: physical === true });
     return this.del(`${config.studies}/${id}${queryString}`);
   }
+
+  getSponsors(studyId, query) {
+    let queryString = fn.queryString(query);
+    return this.gethttp(`/v5/studies/${studyId}/sponsors${queryString}`);
+  }
+  getSponsoredStudies(orgId, query) {
+    let queryString = fn.queryString(query);
+    return this.gethttp(`/v1/organizations/${orgId}/studies${queryString}`);
+  }
+  addSponsor(studyId, orgId) {
+    return this.post(`/v5/studies/${studyId}/sponsors/${orgId}`);
+  }
+  removeSponsor(studyId, orgId) {
+    return this.del(`/v5/studies/${studyId}/sponsors/${orgId}`);
+  }
+  removeSponsored(orgId, studyId) {
+    return this.del(`/v5/studies/${studyId}/sponsors/${orgId}`);
+  }
+
   getTemplates(query) {
     let queryString = fn.queryString(query);
     return this.gethttp(`${config.templates}${queryString}`);

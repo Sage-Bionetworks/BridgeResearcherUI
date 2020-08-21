@@ -7,30 +7,41 @@
       </div>
       <h3 data-bind="text: titleObs"></h3>
     </div>
-    <div class="fixed-header-buttons" data-bind="visible: isSuperadmin()">
+    <div class="fixed-header-buttons" data-bind="visible: isAdmin()">
       <button class="ui tiny primary button" data-bind="click: save">Save</button>
     </div>
   </div>
-  <div class="ui empty secondary pointing menu"></div>
+  <study-tabset params="identifierObs: identifierObs, isNewObs: isNewObs"></study-tabset>
 </div>
 <div class="scrollbox">
   <errors id="study"></errors>
   <form class="ui skinny form">
     <div class="two fields">
+      <div class="field required" id="name">
+        <label>Name</label>
+        <input data-bind="textInput: nameObs, hasFocus: true, visible: isAdmin()" />
+        <div class="input-field-padding" data-bind="text: nameObs, visible: !isAdmin()"></div>
+      </div>
       <div class="field required" id="id" data-bind="visible: isNewObs">
         <label>Identifier</label>
-        <input type="text" data-bind="textInput: idObs" />
+        <input type="text" data-bind="textInput: identifierObs" />
       </div>
       <div class="field" id="id" data-bind="visible: !isNewObs()">
         <label>Identifier</label>
-        <div class="input-field-padding" data-bind="text: idObs"></div>
-      </div>
-      <div class="field required" id="name">
-        <label>Name</label>
-        <input data-bind="textInput: nameObs, hasFocus: true, visible: isSuperadmin()" />
-        <div class="input-field-padding" data-bind="text: nameObs, visible: !isSuperadmin()"></div>
+        <div class="input-field-padding" data-bind="text: identifierObs"></div>
       </div>
     </div>
+
+    <div class="two fields" data-bind="visible: isNewObs()">
+      <div class="required field" id="orgId">
+        <label>Sponsoring Organization</label>
+        <select class="ui dropdown" data-bind="visible: isNewObs(), options: orgOptionsObs,
+          optionsText: 'label', optionsValue: 'value', value: orgIdObs,
+          optionsCaption: 'Select sponsor...'">
+        </select>
+      </div>
+    </div>
+
     <div class="two fields" data-bind="visible: !isNewObs()">
       <div class="field" id="createdOn">
         <label>Created On</label>

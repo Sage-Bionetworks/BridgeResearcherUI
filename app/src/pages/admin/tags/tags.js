@@ -19,7 +19,6 @@ export default function() {
 
   function load() {
     return serverService.getTags().then(response => {
-      console.log(response);
       let array = [];
       Object.keys(response).forEach(ns => {
         let nsString = (ns === 'default') ? '' : (ns+":");

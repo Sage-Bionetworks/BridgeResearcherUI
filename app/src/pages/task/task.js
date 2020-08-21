@@ -253,5 +253,40 @@ export default class Task {
   static fileRevisionToOption(revision) {
     let label = `${fn.formatDateTime(revision.createdOn)} (${revision.name})`;
     return { label: label, value: revision.createdOn };
-  }  
+  }
+
+  static assessmentListToView(assessmentList = [], context) {
+    return assessmentList.map(Task.assessmentToView).map(Task.loadAssessmentRevisions);
+  }
+  static assessmentListToTask(assessmentList, context) {
+    return assessmentList.map(function(assessment) {
+      return { guid: assessment.guidObs(), id: assessment.id };
+    });
+  }
+  static assessmentToView(assessmentRef) {
+    let view = {
+      id: assessmentRef.id,
+      guid: assessmentRef.guid,
+      titleObs: ko.observable(),
+      guidObs: ko.observable(),
+      guidsList: ko.observableArray([])
+    };
+    serverService.getAssessment(assessmentRef.guid)
+      .then(response => view.titleObs(response.title));
+    return view;
+  }
+  static loadAssessmentRevisions(assessmentRef) {
+    serverService.getAssessmentRevisions(assessmentRef.guid, {}, false).then((response) => {
+      response.items.forEach(revision => {
+        assessmentRef.guidsList.push(Task.assessmentToOption(revision));
+        if (assessmentRef.guid === revision.guid) {
+          assessmentRef.guidObs(revision.guid);
+        }
+      });
+    });
+    return assessmentRef;
+  }
+  static assessmentToOption(assessment) {
+    return { label: `v.   ${assessment.revision}`, value: assessment.guid };
+  }
 };
