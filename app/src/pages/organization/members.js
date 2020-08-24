@@ -37,6 +37,8 @@ export default function(params) {
   fn.copyProps(self, fn, "formatIdentifiers", "formatNameAsFullLabel");
 
   self.addMemberDialog = function() {
+    alert("Not yet implemented.");
+    /*
     root.openDialog("add_org_member", {
       closeFunc: fn.seq(root.closeDialog, () => {
         self.query.offsetBy = 0;
@@ -44,6 +46,7 @@ export default function(params) {
       }),
       orgId: params.id
     });
+    */
   };
   self.removeOrgMember = (item, event) => {
     utils.startHandler(self, event);
