@@ -37,7 +37,10 @@
       </tbody>
       <tbody data-bind="foreach: itemsObs">
         <tr>
-          <td data-bind="text: $data.name"></td>
+          <td>
+            <a href="" data-bind="attr: {'href': '#/organizations/' + $data.identifier}, text: $data.name">
+            </a>
+          </td>
           <td style="white-space: nowrap">
             <button class="ui basic compact mini red button" data-bind="click: $parent.removeSponsor,
               visible: $component.isAdmin">
