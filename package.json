@@ -14,8 +14,8 @@
     "test": "./node_modules/.bin/mocha --require @babel/register"
   },
   "devDependencies": {
-    "@babel/core": "^7.6.4",
-    "@babel/preset-env": "^7.6.3",
+    "@babel/core": "^7.11.4",
+    "@babel/preset-env": "^7.11.0",
     "@babel/register": "^7.6.2",
     "acorn": ">=6.4.1",
     "babel-loader": "^8.0.6",
@@ -36,7 +36,7 @@
     "knockout": "^3.4.0",
     "knockout-postbox": "^0.6.0",
     "lodash": "^4.17.19",
-    "mini-css-extract-plugin": "^0.8.0",
+    "mini-css-extract-plugin": "^0.10.0",
     "minimist": ">=1.2.3",
     "mocha": "^8.1.1",
     "node-sass": "^4.14.1",
@@ -46,7 +46,7 @@
     "serialize-javascript": ">=3.1.0",
     "sinon": "^7.5.0",
     "source-map-explorer": "^2.1.0",
-    "style-loader": "^1.0.0",
+    "style-loader": "^1.2.1",
     "sweetalert2": "^9.17.1",
     "toastr": "^2.1.2",
     "webpack": "^4.44.1",
