@@ -41,7 +41,8 @@ export default function(params) {
       serverService.updateStudy(self.study);
   }
   function updateModifiedOn(response) {
-    params.id = self.idObs();
+    params.id = self.identifierObs();
+    self.modifiedOnObs(response.modifiedOn);
     return response;
   }
 
@@ -76,5 +77,6 @@ export default function(params) {
   load().then(binder.assign("study"))
     .then(binder.update())
     .then(optionsService.getOrganizationOptions)
-    .then((opts) => self.orgOptionsObs.pushAll(opts));
+    .then((opts) => self.orgOptionsObs.pushAll(opts))
+    .catch(failureHandler);
 };

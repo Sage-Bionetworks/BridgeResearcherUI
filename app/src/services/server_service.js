@@ -444,8 +444,7 @@ export class ServerService {
     return this.post(`${config.participants}/search`, search);
   }
   searchUnassignedAdminAccounts(search) {
-    throw new Error("Not implemented.");
-    // return this.post(`${config.organizations}/nonmembers`, search);
+    return this.post(`${config.organizations}/nonmembers`, search);
   }
   getParticipant(id) {
     if (session && session.id === id) {
