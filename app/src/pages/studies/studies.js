@@ -19,8 +19,16 @@ export default function() {
     undelete: (item) => serverService.updateStudy(item)
   });
 
+  self.session = null;
+
+  self.canAccess = function(studyId) {
+    return self.session.roles.indexOf('admin') > -1 || self.session.studyIds.includes(studyId);
+  }
+
   function load() {
-    return serverService.getStudies(self.showDeletedObs())
+    return serverService.getSession()
+      .then((session) => self.session = session)
+      .then(() => serverService.getStudies(self.showDeletedObs()))
       .then(fn.handleSort("items", "label"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .catch(utils.failureHandler({id: 'studies'}));

@@ -48,9 +48,9 @@
               style="cursor: pointer" class="green undo icon"></i>
           </td>
           <td nowrap>
-            <span data-bind="text: $data.name, visible: $data.deletedObs"></span>
+            <span data-bind="text: $data.name, visible: $data.deletedObs() || !$parent.canAccess($data.identifier)"></span>
             <a data-bind="attr: {href: '#/studies/' + $data.identifier}, 
-              text: $data.name, visible: !$data.deletedObs()"></a>
+              text: $data.name, visible: !$data.deletedObs() && $parent.canAccess($data.identifier)"></a>
           </td>
           <td data-bind="text: $data.identifier"></td>
         </tr>

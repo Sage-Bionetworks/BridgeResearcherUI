@@ -187,7 +187,7 @@
       </div>
     </div>
 
-    <div class="two fields">
+    <div class="two fields" data-bind="visible: !isNewObs()">
       <div class="field">
         <label>Created On</label>
         <div class="input-field-padding" data-bind="text: createdOnObs"></div>
@@ -208,7 +208,7 @@
           Confidential. Do not redistribute.
         </div>
       </div>
-      <div class="field">
+      <div class="field" data-bind="visible: !isNewObs()">
         <label>User ID</label>
         <div data-bind="text: idObs" class="input-field-padding"></div>
       </div>
