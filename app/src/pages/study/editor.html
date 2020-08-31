@@ -31,17 +31,6 @@
         <div class="input-field-padding" data-bind="text: identifierObs"></div>
       </div>
     </div>
-
-    <div class="two fields" data-bind="visible: isNewObs()">
-      <div class="required field" id="orgId">
-        <label>Sponsoring Organization</label>
-        <select class="ui dropdown" data-bind="visible: isNewObs(), options: orgOptionsObs,
-          optionsText: 'label', optionsValue: 'value', value: orgIdObs,
-          optionsCaption: 'Select sponsor...'">
-        </select>
-      </div>
-    </div>
-
     <div class="two fields" data-bind="visible: !isNewObs()">
       <div class="field" id="createdOn">
         <label>Created On</label>

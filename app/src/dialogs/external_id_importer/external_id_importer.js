@@ -117,7 +117,7 @@ export default function(params) {
     .then(serverService.getStudies.bind(serverService))
     .then(response => {
       let opts = response.items.map(study => {
-        return { value: study.id, label: study.name };
+        return { value: study.identifier, label: study.name };
       });
       self.studyIdsObs(opts);
     });

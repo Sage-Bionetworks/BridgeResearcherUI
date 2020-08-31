@@ -455,6 +455,7 @@ function _asDate(value) {
     // casting to string detects breaks on values such as null
     return new Date(value.toString());
   } catch (e) {
+    // Really? We just make up a date?
     return new Date();
   }
 }

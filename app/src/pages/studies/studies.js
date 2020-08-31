@@ -14,14 +14,14 @@ export default function() {
     plural: "studies",
     id: "studies",
     refresh: load,
-    delete: (item) => serverService.deleteStudy(item.identifer, false),
+    delete: (item) => serverService.deleteStudy(item.identifier, false),
     deletePermanently: (item) => serverService.deleteStudy(item.identifier, true),
     undelete: (item) => serverService.updateStudy(item)
   });
 
   self.session = null;
 
-  self.canAccess = function(studyId) {
+  self.checkAdminOrSponsor = function(studyId) {
     return self.session.roles.indexOf('admin') > -1 || self.session.studyIds.includes(studyId);
   }
 

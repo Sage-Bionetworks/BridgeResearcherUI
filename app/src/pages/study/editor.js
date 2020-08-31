@@ -1,6 +1,5 @@
 import Binder from "../../binder";
 import fn from "../../functions";
-import optionsService from "../../services/options_service";
 import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
@@ -24,10 +23,8 @@ export default function(params) {
     .obs("isNew", params.id === "new")
     .obs("createdOn")
     .obs("modifiedOn")
-    .obs("orgOptions[]")
     .bind("version")
     .bind("name")
-    .bind("orgId")
     .bind("identifier", params.id === "new" ? null : params.id);
 
   function load() {
@@ -46,13 +43,6 @@ export default function(params) {
     return response;
   }
 
-  self.formatOrgId = function(orgId) {
-    const orgs = self.orgOptionsObs();
-    if (orgId && orgs.some(opt => opt.value === orgId)) {
-      return orgs.filter(opt => opt.value === orgId)[0].label;
-    }
-    return orgId;
-  }
   self.save = function(vm, event) {
     self.study = binder.persist(self.study);
 
@@ -60,7 +50,7 @@ export default function(params) {
     saveStudy()
       .then(response => {
         if (params.id === "new") {
-          document.location = "#/studies/" + self.identifierObs();
+          document.location = "#/studies/" + self.identifierObs() + "/sponsors";
         }
         return response;
       })
@@ -76,7 +66,5 @@ export default function(params) {
 
   load().then(binder.assign("study"))
     .then(binder.update())
-    .then(optionsService.getOrganizationOptions)
-    .then((opts) => self.orgOptionsObs.pushAll(opts))
     .catch(failureHandler);
 };
