@@ -16,6 +16,14 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
+      minify: {
+        collapseWhitespace: true,
+        removeComments: false,
+        removeRedundantAttributes: true,
+        removeScriptTypeAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        useShortDoctype: true        
+      },      
       hash: true,
       template: path.resolve('app/template.html'), 
       filename: path.resolve('app/index.html')
