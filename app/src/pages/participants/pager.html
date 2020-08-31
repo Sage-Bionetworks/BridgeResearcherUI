@@ -43,40 +43,37 @@
           <div class="eight wide column">
             <div class="field">
               <label>All these groups</label>
-              <tag-editor
-                params="selectedObs: allOfGroupsObs, 
-                allObs: dataGroupsObs, type: 'data groups'"
-              ></tag-editor>
+              <tag-editor params="selectedObs: allOfGroupsObs, 
+                allObs: dataGroupsObs, type: 'data groups'"></tag-editor>
             </div>
           </div>
           <div class="eight wide column">
             <div class="ui field">
               <div class="field">
                 <label>None of these groups</label>
-                <tag-editor
-                  params="selectedObs: noneOfGroupsObs, 
-                  allObs: dataGroupsObs, type: 'data groups'"
-                ></tag-editor>
+                <tag-editor params="selectedObs: noneOfGroupsObs, 
+                  allObs: dataGroupsObs, type: 'data groups'"></tag-editor>
               </div>
             </div>
           </div>
         </div>
+
+        <div class="row">
+          <div class="eight wide column">
+            <ui-checkbox params="checkedObs: adminOnlyObs" style="margin-left: .25rem">
+              Admins only (developers, researchers, etc.)
+            </ui-checkbox>
+          </div>
+          <div class="eight wide column">
+          </div>
+        </div>
+
         <div class="row">
           <div class="sixteen wide column">
-            <button
-              class="ui tiny button"
-              data-bind="click: doSearch, 
-              css:{ loading: searchLoadingObs }"
-            >
-              Search
-            </button>
-            <button
-              class="ui tiny button"
-              data-bind="click: clear, 
-              css:{ loading: searchLoadingObs }"
-            >
-              Clear
-            </button>
+            <button class="ui tiny button" data-bind="click: doSearch, 
+              css:{ loading: searchLoadingObs }">Search</button>
+            <button class="ui tiny button" data-bind="click: clear, 
+              css:{ loading: searchLoadingObs }">Clear</button>
           </div>
         </div>
       </div>

@@ -884,7 +884,7 @@ export class ServerService {
     return this.gethttp(`${config.studies}/${id}`);
   }
   updateStudy(study) {
-    return this.post(`${config.studies}/${study.id}`, study);
+    return this.post(`${config.studies}/${study.identifier}`, study);
   }
   deleteStudy(id, physical) {
     let queryString = fn.queryString({ physical: physical === true });
@@ -907,6 +907,16 @@ export class ServerService {
   }
   removeSponsored(orgId, studyId) {
     return this.del(`/v5/studies/${studyId}/sponsors/${orgId}`);
+  }
+  getEnrollments(studyId, query) {
+    let queryString = fn.queryString(query);
+    return this.gethttp(`/v5/studies/${studyId}/enrollments${queryString}`);
+  }
+  enroll(studyId, userId) {
+    return this.post(`/v5/studies/${studyId}/enrollments`, {userId});
+  }
+  unenroll(studyId, userId, reason) {
+    return this.post(`/v5/studies/${studyId}/enrollments/${userId}`, { reason });
   }
 
   getTemplates(query) {

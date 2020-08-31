@@ -20,7 +20,7 @@ const WarnToast = Swal.mixin({
 });
 const promptReply = (value) => {
   if (value === "") {
-    swal.showValidationError("Please enter a value");
+    Swal.showValidationMessage("Please enter a value");
     return false;
   }
   return value;

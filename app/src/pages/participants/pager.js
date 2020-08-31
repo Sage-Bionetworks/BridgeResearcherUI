@@ -46,7 +46,8 @@ export default function pager(params) {
     .obs("language", query.language)
     .obs("dataGroups[]")
     .obs("allOfGroups[]", query.allOfGroups)
-    .obs("noneOfGroups[]", query.noneOfGroups);
+    .obs("noneOfGroups[]", query.noneOfGroups)
+    .obs("adminOnly", false);
 
   self.doSearch = function(vm, event) {
     self.searchLoadingObs(true);
@@ -96,6 +97,7 @@ export default function pager(params) {
     self.allOfGroupsObs([]);
     self.noneOfGroupsObs([]);
     self.showSearchObs(false);
+    self.adminOnlyObs(false);
     wrappedLoadingFunc(0);
   };
 
@@ -114,6 +116,7 @@ export default function pager(params) {
       self.noneOfGroupsObs(rp.noneOfGroups);
       self.currentPageObs(Math.round(rp.offsetBy / PAGE_SIZE));
       self.totalPagesObs(Math.ceil(response.total / PAGE_SIZE));
+      self.adminOnlyObs(rp.adminOnly);
     }
   }
 
@@ -128,7 +131,8 @@ export default function pager(params) {
       noneOfGroups: self.noneOfGroupsObs(),
       language: self.languageObs() ? self.languageObs() : null,
       startTime: self.startTimeObs(),
-      endTime: self.endTimeObs()
+      endTime: self.endTimeObs(),
+      adminOnly: self.adminOnlyObs()
     };
     if (fn.is(search.startTime, "Date")) {
       search.startTime.setHours(0, 0, 0, 0);

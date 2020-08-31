@@ -147,6 +147,7 @@ router.on("/studies", routeTo("studies", "studies"));
 router.on("/studies/:id", redirectTo("/studies/{0}/general"));
 router.on("/studies/:id/general", routeTo("studyEditor", "studies", ID));
 router.on("/studies/:id/sponsors", routeTo("studySponsors", "studies", ID));
+router.on("/studies/:id/enrollments", routeTo("studyEnrollments", "studies", ID));
 
 router.on("/assessments", routeTo("assessments", "assessments"));
 router.on("/assessments/:guid", redirectTo("/assessments/{0}/general"));
