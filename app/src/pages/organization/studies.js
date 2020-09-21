@@ -46,7 +46,7 @@ export default function(params) {
   self.removeSponsored = (item, event) => {
     alerts.deleteConfirmation(config.msgs.UNDO_SPONSOR, () => {
       utils.startHandler(self, event);
-      serverService.removeSponsored(params.id, item.id)
+      serverService.removeSponsored(params.id, item.identifier)
         .then(() => loadSponsored(self.query))
         .then(utils.successHandler(self, event, "Study no longer sponsored."))
         .catch(utils.failureHandler({ id: 'org_sponsored' }));

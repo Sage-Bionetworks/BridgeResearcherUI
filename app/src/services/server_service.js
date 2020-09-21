@@ -915,8 +915,9 @@ export class ServerService {
   enroll(studyId, userId) {
     return this.post(`/v5/studies/${studyId}/enrollments`, {userId});
   }
-  unenroll(studyId, userId, reason) {
-    return this.post(`/v5/studies/${studyId}/enrollments/${userId}`, { reason });
+  unenroll(studyId, userId, withdrawalNote) {
+    let queryString = fn.queryString({withdrawalNote});
+    return this.del(`/v5/studies/${studyId}/enrollments/${userId}${queryString}`);
   }
 
   getTemplates(query) {
