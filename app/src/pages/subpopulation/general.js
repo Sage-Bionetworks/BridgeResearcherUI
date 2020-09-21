@@ -65,7 +65,7 @@ export default function general(params) {
     .then(binder.assign("app"))
     .then((app) => self.allDataGroupsObs(app.dataGroups))
     .then(() => serverService.getStudies())
-    .then((studies) => self.allStudyIdsObs(studies.items.map(sub => sub.id)))
+    .then((studies) => self.allStudyIdsObs(studies.items.map(sub => sub.identifier)))
     .then(() => {
       if (params.guid === "new") {
         return Promise.resolve(newSubpop())

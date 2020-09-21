@@ -31,9 +31,9 @@ export default function(params) {
     });
   };
   self.unenroll = (item, event) => {
-    alerts.prompt("Why are you withdrawing this person?", (reason) => {
+    alerts.prompt("Why are you withdrawing this person?", (withdrawalNote) => {
       utils.startHandler(self, event);
-      serverService.unenroll(params.id, item.userId, reason)
+      serverService.unenroll(params.id, item.userId, withdrawalNote)
         .then(() => loadEnrollments(self.query))
         .then(utils.successHandler(self, event, "Participant removed from study."))
         .catch(utils.failureHandler({ id: 'enrollments' }));

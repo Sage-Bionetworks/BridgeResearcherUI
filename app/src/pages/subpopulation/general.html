@@ -37,13 +37,10 @@
             If a user matches this consent group, they <i>must</i> sign the consent to access Bridge.
           </p>
         </div>
-        <div class="field">
-          <ui-checkbox params="checkedObs: autoSendConsentSuppressedObs">
-            Do not automatically send the signed consent to the user
-          </ui-checkbox>
-          <p class="checkbox-help-text">
-            They can still request the signed consent agreement via our APIs.
-          </p>
+        <div class="field required">
+          <label>When a user enrolls in this subpopulation, include them in these studies:</label>
+          <tag-editor params="selectedObs: studyIdsAssignedOnConsentObs, 
+            allObs: allStudyIdsObs, type: 'study IDs'"></tag-editor>
         </div>
       </div>
       <div class="seven wide column">
@@ -64,9 +61,12 @@
             allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
         </div>
         <div class="field">
-          <label>When a user enrolls in this subpopulation, include them in these studies:</label>
-          <tag-editor params="selectedObs: studyIdsAssignedOnConsentObs, 
-            allObs: allStudyIdsObs, type: 'study IDs'"></tag-editor>
+          <ui-checkbox params="checkedObs: autoSendConsentSuppressedObs">
+            Do not automatically send the signed consent to the user
+          </ui-checkbox>
+          <p class="checkbox-help-text">
+            They can still request the signed consent agreement via our APIs.
+          </p>
         </div>
       </div>
     </div>
