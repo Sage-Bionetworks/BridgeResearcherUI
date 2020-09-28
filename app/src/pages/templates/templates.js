@@ -21,10 +21,8 @@ export default function(params) {
   self.titleObs = ko.observable(TITLES[params.templateType] + ' templates');
 
   // capture post-processing of the pager control
-  self.postLoadPagerFunc = () => {};
-  self.postLoadFunc = function(func) {
-    self.postLoadPagerFunc = func;
-  }
+  self.postLoadPagerFunc = fn.identity;
+  self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
 
   tables.prepareTable(self, {
     name: "templates",

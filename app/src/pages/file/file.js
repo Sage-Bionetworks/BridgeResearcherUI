@@ -29,7 +29,7 @@ export default function editor(params) {
   fn.copyProps(self, fn, 'formatDateTime', 'formatTitleCase', 'formatFileSize');
 
   // capture post-processing of the pager control
-  self.postLoadPagerFunc = () => {};
+  self.postLoadPagerFunc = fn.identity;
   self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
   
   tables.prepareTable(self, {

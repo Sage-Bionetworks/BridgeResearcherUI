@@ -6,7 +6,6 @@ import ko from "knockout";
 import root from "../../root";
 import serverService from "../../services/server_service";
 import storeService from "../../services/store_service";
-import toastr from 'toastr';
 import utils from "../../utils";
 
 const FAILURE_HANDLER = utils.failureHandler({transient: false, id: 'sign-in'});
@@ -110,7 +109,6 @@ export default function() {
       .catch((e) => {
         self.stateObs("SignIn");
         FAILURE_HANDLER(e);
-        // toastr.error(e.responseJSON.message);
       });
   }
 

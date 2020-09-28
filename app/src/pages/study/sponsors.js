@@ -2,6 +2,7 @@ import alerts from "../../widgets/alerts";
 import Binder from "../../binder";
 import config from "../../config";
 import fn from "../../functions";
+import ko from "knockout";
 import root from "../../root";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
@@ -11,7 +12,7 @@ export default function(params) {
   let self = this;
 
   self.query = {pageSize: 100};
-  self.postLoadPagerFunc = () => {};
+  self.postLoadPagerFunc = fn.identity;
   self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
   fn.copyProps(self, root, "isAdmin");
 
@@ -61,5 +62,5 @@ export default function(params) {
       .then(self.postLoadPagerFunc)
       .catch(utils.failureHandler({ id: 'sponsors' }));
   }
-  loadSponsors(self.query);  
+  ko.postbox.subscribe('sp-refresh', loadSponsors);
 };

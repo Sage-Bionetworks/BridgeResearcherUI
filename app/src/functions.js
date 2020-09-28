@@ -212,6 +212,8 @@ function formatNameAsFullLabel(summary) {
     name = 'Synapse ID ' + summary.synapseUserId;
   } else if (summary.id) {
     name = summary.id.split("-")[0] + "…";
+  } else if (summary.identifier) {
+    name = summary.identifier.split("-")[0] + "…";
   }
   return name;
 }

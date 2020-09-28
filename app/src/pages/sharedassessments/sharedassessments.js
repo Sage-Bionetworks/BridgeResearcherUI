@@ -24,7 +24,7 @@ export default function() {
   });
 
   // some nonsense related to the pager that I copy now by rote
-  self.postLoadPagerFunc = () => {};
+  self.postLoadPagerFunc = fn.identity;
   self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
 
   self.orgNames = {};

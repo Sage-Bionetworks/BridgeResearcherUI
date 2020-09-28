@@ -19,9 +19,9 @@
   <errors id="enrollments"></errors>
   <form class="ui skinny form">
     <div class="line-control">
-      <div class="line-control-stretch ">
+      <div class="line-control-stretch">
       </div>
-      <pager params="prefix: 'enrollments', postLoadFunc: postLoadFunc, pageSize: 100"></pager>
+      <pager params="prefix: 'en', postLoadFunc: postLoadFunc"></pager>
     </div>
     <table class="ui compact selectable table">
       <thead>
@@ -39,14 +39,15 @@
       <tbody data-bind="foreach: itemsObs">
         <tr>
           <td>
-            <a data-bind="attr: {'href': '#/participants/' + $data.userId}, text: $data.userIdLabel">
+            <a data-bind="attr: {'href': '#/participants/' + $data.participant.identifier}, 
+              text: $parent.formatNameAsFullLabel($data.participant)">
             </a>
           </td>
           <td>
             <div class="ui small text" data-bind="if: $data.enrolledOn">
               Enrolled 
               <span data-bind="if: $data.enrolledBy">
-                by <span data-bind="text: $data.enrolledByLabel"></span> on
+                by <span data-bind="text: $parent.formatNameAsFullLabel($data.enrolledBy)"></span> on
               </span>
               <span data-bind="text: $parent.formatDateTime($data.enrolledOn)"></span>
             </div>
@@ -54,7 +55,7 @@
               attr:{'data-html': 'Withdrawal note: ' + $data.withdrawalNote}">
               Withdrawn 
               <span data-bind="if: $data.withdrawnBy">
-                by <span data-bind="text: $data.withdrawnByLabel"></span> on
+                by <span data-bind="text: $parent.formatNameAsFullLabel($data.withdrawnBy)"></span> on
               </span>
               <span data-bind="text: $parent.formatDateTime($data.withdrawnOn)"></span>
             </div>
@@ -63,8 +64,8 @@
             </div>
           </td>
           <td nowrap>
-            <button class="ui basic compact mini red button" data-bind="click: $parent.unenroll, hidden: $data.withdrawnOn">
-              Withdraw
+            <button class="ui basic compact mini red button" 
+              data-bind="click: $parent.unenroll, hidden: $data.withdrawnOn">Withdraw
             </button>
           </td>
         </tr>

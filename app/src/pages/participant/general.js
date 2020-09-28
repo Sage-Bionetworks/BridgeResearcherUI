@@ -286,7 +286,7 @@ export default function general(params) {
   function updateAllStudiesObs(session) {
     if (self.isNewObs() || self.isAdmin()) {
       return serverService.getStudies(false).then(response => {
-        self.allStudiesObs(response.items.map(item => item.id));
+        self.allStudiesObs(response.items.map(item => item.identifier));
       });
     } else {
       self.allStudiesObs(session.studyIds);

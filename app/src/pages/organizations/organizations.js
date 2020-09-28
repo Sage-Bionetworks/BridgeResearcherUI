@@ -16,7 +16,7 @@ export default function organizations() {
   self.query = {}; // capture this for when the *parent* wants to refresh the page
 
   // capture post-processing of the pager control
-  self.postLoadPagerFunc = () => {};
+  self.postLoadPagerFunc = fn.identity;
   self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
 
   fn.copyProps(self, root, "isAdmin");

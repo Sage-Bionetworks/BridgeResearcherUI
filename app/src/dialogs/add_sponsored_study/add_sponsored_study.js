@@ -1,5 +1,5 @@
-import Binder from '../../binder';
 import fn from '../../functions';
+import ko from 'knockout';
 import Promise from "bluebird";
 import serverService from '../../services/server_service';
 import tables from '../../tables';

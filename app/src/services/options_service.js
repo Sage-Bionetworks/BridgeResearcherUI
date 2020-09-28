@@ -31,9 +31,6 @@ function getCategoryOptions() {
   // return [{ value: "", label: "Select category:" }].concat(opts);
   return Object.keys(CATEGORIES).map(key => ({label: key, value: CATEGORIES[key]}));
 }
-function getCategorylabel(value) {
-
-}
 
 const LABEL_SORTER = fn.makeFieldSorter("label");
 
@@ -100,6 +97,20 @@ function getCompoundActivityOptions() {
   });
 }
 
+let studyNamesMap = {};
+
+function getStudyNames() {
+  if (Object.keys(studyNamesMap).length) {
+    return Promise.resolve(studyNamesMap);
+  }
+  return serverService.getStudies(false).then(response => {
+    return response.items.reduce((map, study) => {
+      map[study.identifier] = study.name;
+      return map;
+    }, studyNamesMap);
+  });
+}
+
 let orgNamesMap = {};
 
 function getOrganizationNames() {
@@ -130,6 +141,7 @@ export default {
   getActivityOptions,
   getOrganizationNames,
   getOrganizationOptions,
+  getStudyNames,
   getSurveyOptions,
   getTaskIdentifierOptions,
   getCompoundActivityOptions

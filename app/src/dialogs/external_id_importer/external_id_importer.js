@@ -97,16 +97,12 @@ export default function(params) {
     .obs("enable", true)
     .obs("isDisabled", false)
     .obs("closeText", "Close")
-    .obs("createCredentials", true)
     .obs("dataGroups[]")
     .obs("allDataGroups[]")
     .obs("studyId")
     .obs("studyIds[]");
 
   self.statusObs('');
-  self.createCredentialsObs.subscribe(function(newValue) {
-    self.isDisabledObs(!newValue);
-  });
   serverService.getApp()
     .then(function(app) {
       self.allDataGroupsObs(app.dataGroups);
@@ -139,7 +135,7 @@ export default function(params) {
     }
 
     self.run(importWorker).then(function(identifiers) {
-      if (self.createCredentialsObs() && identifiers.length) {
+      if (identifiers.length) {
         let credentialsWorker = new CreateCredentialsWorker(
           supportEmail,
           identifiers,
