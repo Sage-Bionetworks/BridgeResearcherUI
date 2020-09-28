@@ -53,7 +53,7 @@
         </td>
         <td data-bind="html: $component.formatIdentifiers($data)"></td>
         <td data-bind="text: $parent.orgNames[$data.orgMembership]"></td>
-        <td data-bind="text: $data.studyIds.join(', ')"></td>
+        <td data-bind="text: $data.studyIds.map($parent.formatStudyName).join(', ')"></td>
         <td style="padding: 0; text-align:right">
           <span style="padding-right: .6rem; white-space: nowrap" data-bind="visible: $data.status === 'disabled'">
             <i class="warning sign icon"></i>Disabled</span>

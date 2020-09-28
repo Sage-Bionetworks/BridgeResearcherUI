@@ -79,6 +79,10 @@ export default function participants() {
     return response;
   }
 
+  self.formatStudyName = function(id) {
+    return self.studyNames[id];
+  }
+
   self.doSearch = function(event) {
     event.target.parentNode.parentNode.classList.add("loading");
 
@@ -114,6 +118,8 @@ export default function participants() {
 
     return options_service.getOrganizationNames()
       .then((map) => self.orgNames = map)
+      .then(() => options_service.getStudyNames())
+      .then((map) => self.studyNames = map)
       .then(() => serverService.searchAccountSummaries(search))
       .then(load)
       .catch(utils.failureHandler({ id: "participants" }));

@@ -1,15 +1,10 @@
 .line-control {
-    @include flex-box(row);
-    @include justify-content(space-after);
-    @include align-items(center);
-
-    .pagination {
-        cursor: pointer;
-    }
-    > * {
-        @include flex-box(row);
-        @include flex-wrap();
-    }
+    display: flex; 
+    flex-direction: row; 
+    align-items: center;
+}
+.pagination {
+    cursor: pointer;
 }
 .line-control-stretch {
     flex: 1;
@@ -26,19 +21,10 @@
         width: 10.5rem;
     }    
 }
-    .line-control-stretch > div {
-        margin-right: .5rem;
-    }
-.line-control-radio {
-    padding-left: 1rem;
-    label {
-        padding-right:.75rem;
-    }
-    .checkbox {
-        margin-left: 0;
-    }
+.line-control-stretch > div {
+    margin-right: .5rem;
 }
 .ui.small.pagination.menu {
-    margin: 0!important;
-    i { margin: 0!important; }
+    text-align: right;
+    i { margin: 0!important; }  
 }

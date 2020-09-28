@@ -71,7 +71,6 @@ export default function externalIds() {
     self.showResultsObs(false);
     root.openDialog("external_id_importer", {
       vm: self,
-      showCreateCredentials: true,
       reload: self.loadingFunc.bind(self)
     });
   };

@@ -32,7 +32,7 @@ export default function(params) {
     .catch(failureHandler);
 
   self.query = {pageSize: 100};
-  self.postLoadPagerFunc = () => {};
+  self.postLoadPagerFunc = fn.identity;
   self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
   fn.copyProps(self, fn, "formatIdentifiers", "formatNameAsFullLabel");
 

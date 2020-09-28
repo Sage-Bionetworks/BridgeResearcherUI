@@ -20,7 +20,7 @@ export default function files() {
   self.showDeletedObs = ko.observable(false);
 
   // capture post-processing of the pager control
-  self.postLoadPagerFunc = () => {};
+  self.postLoadPagerFunc = fn.identity;
   self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
 
   tables.prepareTable(self, {
