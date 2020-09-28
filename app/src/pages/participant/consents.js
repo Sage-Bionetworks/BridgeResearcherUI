@@ -21,25 +21,18 @@ serverService.addSessionEndListener(() => session = null);
 export default function consents(params) {
   let self = this;
   fn.copyProps(self, root, "isResearcher");
-  
   new Binder(self)
     .obs("userId", params.userId)
     .obs("items[]")
-    .obs("noConsent", true)
     .obs("status")
+    .obs('studyId', '...')
     .obs("title", "&#160;");
 
   tables.prepareTable(self, { 
-    name: "consent",
-    id: 'participant-consents'
+    name: "consent signature",
+    id: 'participant-consents',
+    reload: load
   });
-
-  serverService.getParticipantName(params.userId)
-    .then(function(part) {
-      self.titleObs(part.name);
-      self.statusObs(part.status);
-    })
-    .catch(failureHandler);
 
   self.resendConsent = function(vm, event) {
     let subpopGuid = vm.consentURL.split("/subpopulations/")[1].split("/consents/")[0];
@@ -96,51 +89,65 @@ export default function consents(params) {
 
   // I know, ridiculous...
   function load() {
-    self.itemsObs([]);
-    self.recordsMessageObs("<div class='ui tiny active inline loader'></div>");
-    serverService
-      .getParticipant(self.userIdObs())
-      .then(function(response) {
-        let histories = response.consentHistories;
+    // self.itemsObs([]);
+    // self.recordsMessageObs("<div class='ui tiny active inline loader'></div>");
 
-        return Promise.map(Object.keys(histories), function(guid) {
-          return serverService.getSubpopulation(guid);
-        }).then(function(subpopulations) {
-          subpopulations.forEach(function(subpop) {
-            if (histories[subpop.guid].length === 0) {
-              self.itemsObs.push({
-                consentGroupName: subpop.name,
-                name: "No consent",
-                consented: false,
-                eligibleToWithdraw: false
-              });
-            }
-            histories[subpop.guid].reverse().map(function(record, i) {
-              let history = { consented: true, isFirst: i === 0 };
-              history.consentGroupName = subpop.name;
-              history.consentURL = "/#/subpopulations/" + subpop.guid + "/consents/" + record.consentCreatedOn;
-              history.subpopulationGuid = subpop.guid;
-              history.subpopulationGuidIndex = i;
-              history.name = record.name;
-              history.birthdate = fn.formatDateTime(record.birthdate);
-              history.signedOn = fn.formatDateTime(record.signedOn);
-              history.consentCreatedOn = fn.formatDateTime(record.consentCreatedOn);
-              history.hasSignedActiveConsent = record.hasSignedActiveConsent;
-              if (record.withdrewOn) {
-                history.withdrewOn = fn.formatDateTime(record.withdrewOn);
-              } else {
-                self.noConsentObs(false);
-                history.eligibleToWithdraw = true;
-              }
-              if (record.imageMimeType && record.imageData) {
-                history.imageData = "data:" + record.imageMimeType + ";base64," + record.imageData;
-              }
-              self.itemsObs.push(history);
+    serverService.getParticipant(self.userIdObs()).then(function(response) {
+      let histories = response.consentHistories;
+
+      console.log(histories);
+
+      return Promise.map(Object.keys(histories), function(guid) {
+        return serverService.getSubpopulation(guid);
+      }).then(function(subpopulations) {
+        return subpopulations.filter(subpop => subpop.studyIdsAssignedOnConsent.includes(params.studyId))
+      }).then(function(subpopulations) {
+        if (subpopulations.length === 0) {
+          self.itemsObs([]);
+        }
+        subpopulations.forEach(function(subpop) {
+          if (histories[subpop.guid].length === 0) {
+            self.itemsObs.push({
+              consentGroupName: subpop.name,
+              name: "No consent",
+              consented: false,
+              eligibleToWithdraw: false
             });
+          }
+          histories[subpop.guid].reverse().map(function(record, i) {
+            let history = { consented: true, isFirst: i === 0 };
+            history.consentGroupName = subpop.name;
+            history.consentURL = "/#/subpopulations/" + subpop.guid + "/consents/" + record.consentCreatedOn;
+            history.subpopulationGuid = subpop.guid;
+            history.subpopulationGuidIndex = i;
+            history.name = record.name;
+            history.birthdate = fn.formatDateTime(record.birthdate);
+            history.signedOn = fn.formatDateTime(record.signedOn);
+            history.consentCreatedOn = fn.formatDateTime(record.consentCreatedOn);
+            history.hasSignedActiveConsent = record.hasSignedActiveConsent;
+            if (record.withdrewOn) {
+              history.withdrewOn = fn.formatDateTime(record.withdrewOn);
+            } else {
+              history.eligibleToWithdraw = true;
+            }
+            if (record.imageMimeType && record.imageData) {
+              history.imageData = "data:" + record.imageMimeType + ";base64," + record.imageData;
+            }
+            self.itemsObs.push(history);
           });
         });
-      })
+      }).then(utils.successHandler())
       .catch(failureHandler);
+    }).catch(failureHandler);
   }
-  load();
+
+  serverService.getParticipantName(params.userId)
+    .then(function(part) {
+      self.titleObs(part.name);
+      self.statusObs(part.status);
+    })
+    .then(() => serverService.getStudy(params.studyId))
+    .then(study => self.studyIdObs(study.name))
+    .then(load)
+    .catch(failureHandler);
 };

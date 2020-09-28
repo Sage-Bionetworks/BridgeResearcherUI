@@ -1,8 +1,5 @@
-<div class="ui radio checkbox">
-  <input
-    type="radio"
-    data-bind="checked: checkedObs, checkedValue: true, 
-        attr: {name: name, id: 'n'+id}"
-  />
-  <label data-bind="attr:{for: 'n'+id}"> <!-- ko template: { nodes: $componentTemplateNodes } --><!-- /ko --> </label>
+<div data-bind="semantic: 'radiobox', checkboxObs: checkedObs, disabled: $data.disabled,
+    style: {'width': $componentTemplateNodes.length ? 'auto': '0px'}">
+  <input type="checkbox" class="hidden" data-bind="checked: checkedObs" />
+  <label><!-- ko template: { nodes: $componentTemplateNodes } --><!-- /ko --></label>
 </div>

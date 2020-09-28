@@ -30,14 +30,24 @@
       <tbody data-bind="foreach: itemsObs">
         <tr>
           <td>
+            <ui-radio params="checkedObs: $data.checkedObs"></ui-radio>
+            <!--
             <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+            -->
           </td>
           <td data-bind="text: $component.formatNameAsFullLabel($data)"></td>
           <td data-bind="html: $component.formatIdentifiers($data)"></td>
         </tr>
       </tbody>
     </table>
-  
+  </div>
+  <div class="actions ui form">
+    <div class="two fields">
+      <div class="field">
+        <label>External ID for this enrollment (optional)</label>
+        <input class="ui input" data-bind="textInput: externalIdObs" type="text"/>
+      </div>
+    </div>
   </div>
   <div class="actions">
     <button class="ui primary small button" 

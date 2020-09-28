@@ -115,6 +115,8 @@ import partActivity from "./pages/participant/activity";
 import partActivityHtml from "./pages/participant/activity.html";
 import partClientData from "./pages/participant/client_data";
 import partClientDataHtml from "./pages/participant/client_data.html";
+import partEnrollments from "./pages/participant/enrollments";
+import partEnrollmentsHtml from "./pages/participant/enrollments.html";
 import partConsents from "./pages/participant/consents";
 import partConsentsHtml from "./pages/participant/consents.html";
 import partReports from "./pages/participant/reports";
@@ -438,6 +440,7 @@ reg("participant_activities", {viewModel: partActivities, template: partActiviti
 reg("participant_activity_events", {viewModel: partEvents, template: partEventsHtml});
 reg("participant_activity", {viewModel: partActivity, template: partActivityHtml});
 reg("participant_clientData", {viewModel: partClientData, template: partClientDataHtml});
+reg("participant_enrollments", {viewModel: partEnrollments, template: partEnrollmentsHtml});
 reg("participant_consents", {viewModel: partConsents, template: partConsentsHtml});
 reg("participant_reports", {viewModel: partReports, template: partReportsHtml});
 reg("participant_notifications", {viewModel: partNots, template: partNotsHtml});
