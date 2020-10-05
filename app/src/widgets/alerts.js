@@ -30,6 +30,11 @@ const PromptToast = Swal.mixin({
   showCancelButton: true,
   preConfirm: promptReply
 });
+const OptionalPromptToast = Swal.mixin({
+  input: "text",
+  showCancelButton: true,
+  inputValidator: (value) => false
+});
 const NotificationToast = Swal.mixin({
   type: "success"
 });
@@ -59,8 +64,14 @@ function prompt(text, okFunc, inputValue = '') {
     }
   });
 }
+function optionalPrompt(text, okFunc, inputValue = '') {
+  OptionalPromptToast.fire({text, inputValue}).then(result => {
+    okFunc(result.value);
+    Swal.close();
+  });
+}
 function notification(title, text) {
   NotificationToast.fire({title, text});
 }
 
-export default { confirmation, deleteConfirmation, notification, prompt, warn };
+export default { confirmation, deleteConfirmation, notification, prompt, optionalPrompt, warn };

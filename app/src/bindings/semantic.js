@@ -14,6 +14,18 @@ var handlers = {
       .attr("data-total", config.total);
     $element.progress();
   },
+  radiobox: function($element, allBindings) {
+    var input = $element.children("input[type=checkbox]").get(0);
+    input.disabled = !!allBindings().disabled;
+
+    var observer = allBindings().checkboxObs;
+    $element.addClass("ui radio checkbox").on("click", function() {
+      if (!input.disabled) {
+        observer(!observer());
+        $element.toggleClass("checked", observer());
+      }
+    });
+  },
   checkbox: function($element, allBindings) {
     var input = $element.children("input[type=checkbox]").get(0);
     input.disabled = !!allBindings().disabled;

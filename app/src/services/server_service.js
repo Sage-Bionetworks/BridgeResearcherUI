@@ -471,6 +471,9 @@ export class ServerService {
   getParticipantRecentSmsMessage(id) {
     return this.gethttp(`${config.participants}/${id}/sms/recent`);
   }
+  getParticipantEnrollments(id) {
+    return this.gethttp(`${config.participants}/${id}/enrollments`);
+  }
   sendUserNotification(id, message) {
     return this.post(`${config.participants}/${id}/sendNotification`, message);
   }
@@ -725,7 +728,7 @@ export class ServerService {
     return this.gethttp(`${config.assessments}/${guid}/revisions${queryString}`)
   }
   getAssessments(tags = '', offsetBy, pageSize, includeDeleted) { 
-    let tag = tags.replace(/[^\sa-zA-Z0-9]+/g,' ').replace(/\s+/g, ' ')
+    let tag = tags.replace(/[^\sa-zA-Z0-9-_]+/g,' ').replace(/\s+/g, ' ')
       .trim().split(' ').filter(s => s.length);
     let queryString = fn.queryString({ tag, offsetBy, pageSize, includeDeleted: includeDeleted === true});
     return this.gethttp(config.assessments + queryString);
@@ -912,8 +915,10 @@ export class ServerService {
     let queryString = fn.queryString(query);
     return this.gethttp(`/v5/studies/${studyId}/enrollments${queryString}`);
   }
-  enroll(studyId, userId) {
-    return this.post(`/v5/studies/${studyId}/enrollments`, {userId});
+  enroll(studyId, userId, extId) {
+    let payload = {userId};
+    if (extId) { payload.externalId = extId };
+    return this.post(`/v5/studies/${studyId}/enrollments`, payload);
   }
   unenroll(studyId, userId, withdrawalNote) {
     let queryString = fn.queryString({withdrawalNote});

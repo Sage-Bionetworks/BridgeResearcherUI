@@ -51,15 +51,14 @@
         <th width="10">
         </th>
         <th nowrap>Title</th>
-        <th>Summary</th>
-        <th>Identifier</th>
+        <th>Derived From</th>
         <th>Owner</th>
         <th>Tags</th>
       </tr>
     </thead>
     <tbody class="no_records" data-bind="if: itemsObs().length === 0">
       <tr>
-        <td colspan="7" data-bind="html: recordsMessageObs"></td>
+        <td colspan="6" data-bind="html: recordsMessageObs"></td>
       </tr>
     </tbody>
     <tbody data-bind="foreach: itemsObs">
@@ -77,8 +76,7 @@
         <td nowrap>
           <a data-bind="text: $data.title, href: '#/assessments/' + $data.guid"></a>
         </td>
-        <td data-bind="text: $data.summary"></td>
-        <td data-bind="text: $data.identifier"></td>
+        <td data-bind="text: $data.originGuid"></td>
         <td data-bind="text: $parent.formatOrg($data.ownerId)"></td>
         <td data-bind="text: $data.tags.join(', ')"></td>
       </tr>

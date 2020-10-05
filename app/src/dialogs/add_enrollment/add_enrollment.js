@@ -16,6 +16,8 @@ export default function(params) {
   self.closeDialog = params.closeFunc;
   fn.copyProps(self, fn, "formatIdentifiers", "formatNameAsFullLabel");
 
+  self.externalIdObs = ko.observable('');
+
   tables.prepareTable(self, {
     name: "participant",
     id: "add_enrollment",
@@ -25,7 +27,7 @@ export default function(params) {
   self.addAndClose = (vm, event) => {
     utils.startHandler(vm, event);
 
-    let fn = (acct) => serverService.enroll(params.studyId, acct.id);
+    let fn = (acct) => serverService.enroll(params.studyId, acct.id, self.externalIdObs());
 
     let adds = self.itemsObs().filter(acct => acct.checkedObs());
 

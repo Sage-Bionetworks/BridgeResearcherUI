@@ -1,0 +1,77 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb" data-bind="visible: isResearcher()">
+        <a class="section" href="#/participants">Participants</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="html: titleObs"></h3>
+    </div>
+    <div class="fixed-header-buttons">
+      <button class="ui red tiny button" data-bind="click: withdraw">
+        Withdraw from all studies in app&hellip;
+      </button>
+    </div>
+  </div>
+  <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
+</div>
+<div class="scrollbox">
+  <errors id="participant-enrollments"></errors>
+  <table class="ui compact selectable table">
+    <thead>
+      <tr>
+        <th>Study</th>
+        <th nowrap>External ID</th>
+        <th>Status</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+      <tr>
+        <td colspan="5" data-bind="html: recordsMessageObs"></td>
+      </tr>
+    </tbody>
+    <tbody data-bind="foreach: itemsObs">
+      <tr>
+        <td>
+          <a data-bind="attr: {href: '#/studies/' + $data.studyId + '/general'}, 
+            text: $data.studyName"></a>
+        </td>
+        <td data-bind="text: $data.externalId"></td>
+        <td>
+          <div class="ui small text" data-bind="if: $data.enrolledOn">
+            Enrolled 
+            <span data-bind="if: $data.enrolledBy">
+              by <span data-bind="text: $parent.formatNameAsFullLabel($data.enrolledBy)"></span> on
+            </span>
+            <span data-bind="text: $parent.formatDateTime($data.enrolledOn)"></span>
+          </div>
+          <div class="ui small red text" data-bind="if: $data.withdrawnOn, semantic: 'popup',
+            attr:{'data-html': 'Withdrawal note: ' + $data.withdrawalNote}">
+            Withdrawn 
+            <span data-bind="if: $data.withdrawnBy">
+              by <span data-bind="text: $parent.formatNameAsFullLabel($data.withdrawnBy)"></span> on
+            </span>
+            <span data-bind="text: $parent.formatDateTime($data.withdrawnOn)"></span>
+          </div>
+          <div class="ui small text" data-bind="if: $data.enrolledOn && !$data.withdrawnOn">
+            <span data-bind="text: $data.consentRequired ? 'Must still consent to research' : ''"></span>
+          </div>
+        </td>
+        <td nowrap>
+          <a data-bind="attr: { href: '#/participants/' + $parent.userIdObs() + 
+            '/consents/' + $data.studyId } ">View Signatures</a>
+        </td>
+        <td width="10" nowrap>
+          <button class="ui basic compact mini red button" 
+            data-bind="click: $parent.unenroll, hidden: $data.withdrawnOn">Withdraw
+          </button>
+          <button class="ui basic compact mini blue button" 
+            data-bind="click: $parent.enroll, visible: $data.withdrawnOn">Enroll
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
