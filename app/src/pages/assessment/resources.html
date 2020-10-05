@@ -63,8 +63,7 @@
         <th width="10" data-bind="visible: canEditObs">
           <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
         </th>
-        <th nowrap>Title</th>
-        <th>Description</th>
+        <th>Title</th>
         <th>Category</th>
         <th>Creators</th>
         <th>Revisions</th>
@@ -73,8 +72,8 @@
     </thead>
     <tbody class="no_records" data-bind="if: itemsObs().length === 0">
       <tr>
-        <td colspan="7" data-bind="html: recordsMessageObs, attr: {
-          colspan: canEditObs() ? '7' : '6'}"></td>
+        <td colspan="6" data-bind="html: recordsMessageObs, attr: {
+          colspan: canEditObs() ? '6' : '5'}"></td>
       </tr>
     </tbody>
     <tbody data-bind="foreach: itemsObs">
@@ -84,13 +83,13 @@
           <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
             style="cursor: pointer" class="green undo icon"></i>
         </td>
-        <td nowrap>
+        <td>
           <a data-bind="visible: $parent.canEditObs, text: $data.title, 
             href: '#/assessments/' + $parent.guidObs() + '/resources/' + $data.guid"></a>
           <a target="_blank" data-bind="visible: !$parent.canEditObs(), text: $data.title, href: $data.url"></a>
+          <div data-bind="text: $data.description"></div>
         </td>
-        <td data-bind="text: $data.description"></td>
-        <td data-bind="text: $parent.formatCategory($data.category)"></td>
+        <td nowrap data-bind="text: $parent.formatCategory($data.category)"></td>
         <td data-bind="text: $data.creators.join(', ')"></td>
         <td data-bind="text: $parent.formatRevisions($data)"></td>
         <td data-bind="text: $data.date"></td>

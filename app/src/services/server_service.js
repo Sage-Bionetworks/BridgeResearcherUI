@@ -728,7 +728,7 @@ export class ServerService {
     return this.gethttp(`${config.assessments}/${guid}/revisions${queryString}`)
   }
   getAssessments(tags = '', offsetBy, pageSize, includeDeleted) { 
-    let tag = tags.replace(/[^\sa-zA-Z0-9]+/g,' ').replace(/\s+/g, ' ')
+    let tag = tags.replace(/[^\sa-zA-Z0-9-_]+/g,' ').replace(/\s+/g, ' ')
       .trim().split(' ').filter(s => s.length);
     let queryString = fn.queryString({ tag, offsetBy, pageSize, includeDeleted: includeDeleted === true});
     return this.gethttp(config.assessments + queryString);

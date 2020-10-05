@@ -44,6 +44,7 @@
       <div id="url" class="required field">
         <label>URL</label>
         <input type="text" data-bind="textInput: urlObs" />
+        <a target="_blank" data-bind="attr: {href: urlObs}"><i class="ui linkify icon"></i></a>
       </div>
       <div class="field">
         <label>Format</label>
