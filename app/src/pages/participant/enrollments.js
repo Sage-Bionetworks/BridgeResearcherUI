@@ -30,6 +30,11 @@ export default function consents(params) {
     id: 'participant-enrollments'
   });
 
+  self.hasSignatures = function(item) {
+    let array = self.participant.consentHistories[item.studyId];
+    return (array && array.length);
+  }
+
   self.withdraw = function(vm, event) {
     root.openDialog("withdrawal", {
       userId: params.userId,
@@ -68,13 +73,14 @@ export default function consents(params) {
   }
 
   function load() {
-    serverService.getParticipantName(params.userId)
-    .then(function(part) {
+    serverService.getParticipantName(params.userId).then(function(part) {
       self.titleObs(part.name);
       self.statusObs(part.status);
-    })
-    .then(() => serverService.getParticipantEnrollments(params.userId))
-    .then(response => {
+      return serverService.getParticipant(params.userId);
+    }).then(function(part) {
+      self.participant = part;
+      return serverService.getParticipantEnrollments(params.userId);
+    }).then(response => {
       return Promise.all(response.map(loadStudy)).then(() => self.itemsObs(response));
     })
     .catch(failureHandler);

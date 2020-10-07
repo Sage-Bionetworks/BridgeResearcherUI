@@ -1,5 +1,6 @@
 import Binder from "../../binder";
 import fn from "../../functions";
+import ko from "knockout";
 import root from '../../root';
 import serverService from "../../services/server_service";
 import tables from '../../tables';
@@ -79,5 +80,5 @@ export default function(params) {
       .then(self.postLoadPagerFunc)
       .catch(utils.failureHandler({ id: 'org_members' }));
   }
-  loadMembers(self.query);    
+  ko.postbox.subscribe('members-refresh', loadMembers);
 };

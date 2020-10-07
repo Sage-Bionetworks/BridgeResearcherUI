@@ -8,10 +8,8 @@ export default function pager(params) {
   let pageSize = params.pageSize || 25;
 
   let self = this;
-  let query = storeService.restoreQuery(prefix);
-  if (!query || !query.pageSize) {
-    query = {includeDeleted:false, pageSize: pageSize, offsetBy: 0};
-  }
+  let query = storeService.restoreQuery(prefix) ||
+    {includeDeleted:false, pageSize: pageSize, offsetBy: 0};
 
   new Binder(self)
     .bind("offsetBy", 0)
@@ -62,6 +60,5 @@ export default function pager(params) {
     }
     return response;
   });
-
-  ko.postbox.publish(`${prefix}-refresh`, query);
+  setTimeout(() => ko.postbox.publish(`${prefix}-refresh`, query), 1);
 };

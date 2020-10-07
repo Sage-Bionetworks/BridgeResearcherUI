@@ -876,8 +876,8 @@ export class ServerService {
   updateAppConfigElement(element) {
     return this.post(`${config.appConfigElements}/${element.id}/revisions/${element.revision}`, element);
   }
-  getStudies(includeDeleted) {
-    let queryString = fn.queryString({ includeDeleted: includeDeleted === true });
+  getStudies(query) {
+    let queryString = fn.queryString(query);
     return this.gethttp(config.studies + queryString);
   }
   createStudy(study) {
