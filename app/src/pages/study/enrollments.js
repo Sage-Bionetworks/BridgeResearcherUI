@@ -30,8 +30,8 @@ export default function(params) {
     .obs("enrollmentFilter", "both")
     .bind("identifier", params.id);
 
-    self.includeTestersObs.subscribe(() => loadEnrollments(self.query));
-    self.enrollmentFilterObs.subscribe(() => loadEnrollments(self.query));
+  self.includeTestersObs.subscribe(() => loadEnrollments(self.query));
+  self.enrollmentFilterObs.subscribe(() => loadEnrollments(self.query));
 
   self.enrollDialog = function() {
     root.openDialog("add_enrollment", {
