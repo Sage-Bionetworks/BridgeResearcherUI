@@ -95,8 +95,6 @@ export default function consents(params) {
     serverService.getParticipant(self.userIdObs()).then(function(response) {
       let histories = response.consentHistories;
 
-      console.log(histories);
-
       return Promise.map(Object.keys(histories), function(guid) {
         return serverService.getSubpopulation(guid);
       }).then(function(subpopulations) {

@@ -59,17 +59,17 @@
             <span data-bind="text: $data.consentRequired ? 'Must still consent to research' : ''"></span>
           </div>
         </td>
-        <td nowrap>
-          <a data-bind="attr: { href: '#/participants/' + $parent.userIdObs() + 
-            '/consents/' + $data.studyId } ">View Signatures</a>
-        </td>
-        <td width="10" nowrap>
+        <td width="10">
           <button class="ui basic compact mini red button" 
             data-bind="click: $parent.unenroll, hidden: $data.withdrawnOn">Withdraw
           </button>
           <button class="ui basic compact mini blue button" 
             data-bind="click: $parent.enroll, visible: $data.withdrawnOn">Enroll
           </button>
+        </td>
+        <td width="10">
+          <a style="white-space: nowrap" data-bind="attr: { href: '#/participants/' + $parent.userIdObs() + 
+            '/consents/' + $data.studyId } ">View Signatures</a>
         </td>
       </tr>
     </tbody>

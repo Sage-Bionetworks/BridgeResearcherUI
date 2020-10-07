@@ -7,10 +7,17 @@ import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
 
+const OPTIONS = [
+  {label: 'Enrolled', value: 'enrolled'},
+  {label: 'Withdrawn', value: 'withdrawn'},
+  {label: 'Both', value: 'all'}
+];
+
 export default function(params) {
   let self = this;
 
-  self.query = {pageSize: 10};
+  self.options = OPTIONS;
+  self.query = {pageSize: 10, enrollmentFilter: 'all', includeTesters: false};
   self.postLoadPagerFunc = fn.identity;
   self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
   fn.copyProps(self, root, "isAdmin", "isResearcher");
@@ -19,7 +26,12 @@ export default function(params) {
   new Binder(self)
     .obs("title", "New Study")
     .obs("isNew", false)
+    .obs("includeTesters", false)
+    .obs("enrollmentFilter", "both")
     .bind("identifier", params.id);
+
+    self.includeTestersObs.subscribe(() => loadEnrollments(self.query));
+    self.enrollmentFilterObs.subscribe(() => loadEnrollments(self.query));
 
   self.enrollDialog = function() {
     root.openDialog("add_enrollment", {
@@ -53,6 +65,8 @@ export default function(params) {
   function loadEnrollments(query) {
     // some state is not in the pager, update that and capture last known state of paging
     self.query = query;
+    self.query.enrollmentFilter = self.enrollmentFilterObs();
+    self.query.includeTesters = self.includeTestersObs();
 
     serverService.getEnrollments(params.id, query)
       .then(self.postLoadPagerFunc)

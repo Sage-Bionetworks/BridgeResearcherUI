@@ -17,10 +17,22 @@
 </div>
 <div class="scrollbox">
   <errors id="enrollments"></errors>
-  <form class="ui skinny form">
+  <form class="ui form">
     <div class="line-control">
-      <div class="line-control-stretch">
+      <div style="margin-right: 1rem">Show only: </div>
+      <div style="margin-right: 1rem">
+        <div class="field">
+          <select class="ui dropdown" data-bind="options: options, optionsText: 'label', 
+            optionsValue: 'value', value: $component.enrollmentFilterObs"></select>
+        </div>
       </div>
+      <div>
+        <div class="ui checkbox">
+          <input data-bind="checked: includeTestersObs" type="checkbox">
+          <label>Include testers?</label>
+        </div>
+      </div>
+      <div class="line-control-stretch"></div>
       <pager params="prefix: 'en', postLoadFunc: postLoadFunc"></pager>
     </div>
     <table class="ui compact selectable table">
@@ -45,7 +57,7 @@
             </a>
           </td>
           <td data-bind="text: $data.externalId"></td>
-          <td>
+          <td style="white-space: nowrap">
             <div class="ui small text" data-bind="if: $data.enrolledOn">
               Enrolled 
               <span data-bind="if: $data.enrolledBy">
