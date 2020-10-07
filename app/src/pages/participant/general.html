@@ -164,29 +164,6 @@
       </div>
     </div>
 
-    <div class="two fields">
-      <div class="field externalId externalIds" data-bind="visible: !isNewObs()">
-        <label>Assigned External ID(s)</label>
-        <div style="display:flex; align-items: center">
-          <input data-bind="textInput: newExternalIdObs" placeholder="Add ID"
-            style="max-width: 5.5rem; margin-right: 1rem" type="text" />
-          <span class="input-field-padding" data-bind="text: externalIdsObs"></span>
-        </div>
-      </div>
-      <div class="field externalId" data-bind="visible: isNewObs">
-        <label>External ID</label>
-        <input type="text" data-bind="textInput: newExternalIdObs" />
-      </div>
-      <div class="field" data-bind="visible: isAdmin() || isNewObs()">
-        <label>Study Enrollments</label>
-        <tag-editor params="selectedObs: studyIdsObs, allObs: allStudiesObs, type: 'studies'"></tag-editor>
-      </div>
-      <div class="field" data-bind="visible: !isAdmin() && !isNewObs()">
-        <label>Study Enrollments</label>
-        <span class="input-field-padding" data-bind="text: studyIdsObs().join(', ')"></span>
-      </div>
-    </div>
-
     <div class="two fields" data-bind="visible: !isNewObs()">
       <div class="field">
         <label>Created On</label>

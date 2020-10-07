@@ -44,7 +44,7 @@
         <td style="white-space:pre" data-bind="text: $data.consentGroupName"></td>
         <td>
           <div data-bind="if: $data.name === 'No consent'">
-            <i>Not consented</i>
+            <i>Not signed</i>
           </div>
           <div data-bind="visible: $data.name !== 'No consent', text: $data.name"></div>
         </td>
@@ -60,10 +60,6 @@
           </div>
         </td>
         <td>
-          <button class="ui basic red compact mini button"
-            data-bind="visible: $data.eligibleToWithdraw, click: $component.withdrawFromSubpopulation">
-            Withdraw consent
-          </button>
           <span class="red" data-bind="text: $data.withdrewOn"></span>
         </td>
         <td>
