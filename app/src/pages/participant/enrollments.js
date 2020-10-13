@@ -31,8 +31,10 @@ export default function consents(params) {
   });
 
   self.hasSignatures = function(item) {
-    let array = self.participant.consentHistories[item.studyId];
-    return (array && array.length);
+    return self.subpopulations.some(subpop => {
+      let array = self.participant.consentHistories[subpop.guid];
+      return subpop.studyIdsAssignedOnConsent.includes(item.studyId) && array && array.length;
+    });
   }
 
   self.withdraw = function(vm, event) {
@@ -71,19 +73,21 @@ export default function consents(params) {
   function loadStudy(enrollment) {
     return serverService.getStudy(enrollment.studyId).then((study) => enrollment.studyName = study.name);
   }
+  function loadName(part) {
+    self.titleObs(part.name);
+    self.statusObs(part.status);
+  }
 
   function load() {
-    serverService.getParticipantName(params.userId).then(function(part) {
-      self.titleObs(part.name);
-      self.statusObs(part.status);
-      return serverService.getParticipant(params.userId);
-    }).then(function(part) {
-      self.participant = part;
-      return serverService.getParticipantEnrollments(params.userId);
-    }).then(response => {
-      return Promise.all(response.map(loadStudy)).then(() => self.itemsObs(response));
-    })
-    .catch(failureHandler);
+    serverService.getParticipantName(params.userId)
+      .then(loadName)
+      .then(() => serverService.getParticipant(params.userId))
+      .then(part => self.participant = part)
+      .then(() => serverService.getAllSubpopulations(true))
+      .then(response => self.subpopulations = response.items)
+      .then(() => serverService.getParticipantEnrollments(params.userId))
+      .then(response => Promise.all(response.map(loadStudy)).then(() => self.itemsObs(response)))
+      .catch(failureHandler);
   }
   load();
 };
