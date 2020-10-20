@@ -17,7 +17,7 @@
 </div>
 <div class="scrollbox">
   <errors id="enrollments"></errors>
-  <form class="ui form">
+  <form class="ui skinny form">
     <div class="line-control">
       <div style="margin-right: 1rem">Show only: </div>
       <div style="margin-right: 1rem">
@@ -39,24 +39,22 @@
       <thead>
         <tr>
           <th nowrap>User</th>
-          <th>External ID</th>
           <th>Status</th>
           <th width="10"></th>
         </tr>
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td colspan="4" data-bind="html: recordsMessageObs"></td>
+          <td colspan="3" data-bind="html: recordsMessageObs"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
         <tr>
           <td>
             <a data-bind="attr: {'href': '#/participants/' + $data.participant.identifier}, 
-              text: $parent.formatNameAsFullLabel($data.participant)">
+              text: $parent.formatParticipant($data)">
             </a>
           </td>
-          <td data-bind="text: $data.externalId"></td>
           <td style="white-space: nowrap">
             <div class="ui small text" data-bind="if: $data.enrolledOn">
               Enrolled 

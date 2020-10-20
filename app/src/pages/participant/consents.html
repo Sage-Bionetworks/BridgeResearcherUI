@@ -41,7 +41,11 @@
     </tbody>
     <tbody data-bind="foreach: itemsObs">
       <tr>
-        <td style="white-space:pre" data-bind="text: $data.consentGroupName"></td>
+        <td style="white-space:pre">
+          <a data-bind="text: $data.consentGroupName, 
+            attr: {'href': '#/subpopulations/' + $data.subpopulationGuid + '/general'}">
+          </a>
+        </td>
         <td>
           <div data-bind="if: $data.name === 'No consent'">
             <i>Not signed</i>

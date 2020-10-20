@@ -20,33 +20,35 @@
   <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
 </div>
 <div class="scrollbox">
-  <errors id="participant-reports"></errors>
-  <table class="ui compact selectable table">
-    <thead>
-      <tr>
-        <th width="10" data-bind="visible: isDeveloper"></th>
-        <th>Report identifier</th>
-        <th>Studies</th>
-      </tr>
-    </thead>
-    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-      <tr>
-        <td colspan="3" data-bind="html: recordsMessageObs"></td>
-      </tr>
-    </tbody>
-    <tbody data-bind="foreach: itemsObs">
-      <tr>
-        <td data-bind="visible: $component.isDeveloper">
-          <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
-        </td>
-        <td>
-          <a data-bind="visible: $component.isVisible($data), href: $component.reportURL($data), 
-            text: $data.identifier"> </a>
-          <span data-bind="visible: !$component.isVisible($data), text: $data.identifier"> </span>
-        </td>
-        <td data-bind="text: ($data.studyIds || []).join(', ')">
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <form class="ui skinny form">
+    <errors id="participant-reports"></errors>
+    <table class="ui compact selectable table">
+      <thead>
+        <tr>
+          <th width="10" data-bind="visible: isDeveloper"></th>
+          <th>Report identifier</th>
+          <th>Studies</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="3" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr>
+          <td data-bind="visible: $component.isDeveloper">
+            <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+          </td>
+          <td>
+            <a data-bind="visible: $component.isVisible($data), href: $component.reportURL($data), 
+              text: $data.identifier"> </a>
+            <span data-bind="visible: !$component.isVisible($data), text: $data.identifier"> </span>
+          </td>
+          <td data-bind="text: ($data.studyIds || []).join(', ')">
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
 </div>

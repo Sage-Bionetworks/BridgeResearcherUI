@@ -44,8 +44,11 @@ function selectRoles(session) {
   return roles;
 }
 function persistExternalId(value, context) {
-  if (value) {
-    context.copy.externalId = value;
+  if (value && context.vm.studyIdObs() !== 'Select study') {
+    context.copy.enrollment = { 
+      externalId: context.vm.newExternalIdObs(), 
+      studyId: context.vm.studyIdObs() 
+    };
   }
   return value;
 }
@@ -84,7 +87,8 @@ export default function general(params) {
     .bind("userId", params.userId)
     .bind("id", params.userId)
     .bind("roles[]", null, fn.formatRoles, fn.persistRoles)
-    .bind("studyIds[]")
+    .bind("studyId")
+    .bind("studyLabel", 'Select study')
     .bind("orgMembership");
 
   fn.copyProps(self, root, "isAdmin", "isResearcher");
@@ -121,7 +125,12 @@ export default function general(params) {
       self.phoneRegionObs(event.target.textContent);
     }
   };
-
+  self.updateStudy = function(model, event) {
+    if (event.target.classList.contains("item")) {
+      self.studyIdObs(event.target.getAttribute('data-id'));
+      self.studyLabelObs(event.target.textContent);
+    }
+  };
   self.showIdentifier = function(credential) {
     return ko.computed(() => {
       return self[credential + 'Obs']();
@@ -280,17 +289,15 @@ export default function general(params) {
     }
     return participant;
   }
-  function getSession() {
-    return serverService.getSession();
+
+  function studyToOptions(study) {
+    return {label: study.name, value: study.identifier};
   }
-  function updateAllStudiesObs(session) {
-    if (self.isNewObs() || self.isAdmin()) {
-      return serverService.getStudies(false).then(response => {
-        self.allStudiesObs(response.items.map(item => item.identifier));
-      });
-    } else {
-      self.allStudiesObs(session.studyIds);
-    }
+
+  function updateAllStudiesObs() {
+    return serverService.getStudies(false).then(response => {
+      self.allStudiesObs(response.items.map(studyToOptions));
+    });
   }
   self.orgNames = {};
 
@@ -303,7 +310,6 @@ export default function general(params) {
     .then(binder.assign("participant"))
     .then(noteInitialStatus)
     .then(binder.update())
-    .then(getSession)
     .then(updateAllStudiesObs)
     .catch(failureHandler);
 };

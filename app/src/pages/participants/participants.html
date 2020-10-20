@@ -52,8 +52,15 @@
             text: $component.formatNameAsFullLabel($data)"></a>
         </td>
         <td data-bind="html: $component.formatIdentifiers($data)"></td>
-        <td data-bind="text: $parent.orgNames[$data.orgMembership]"></td>
-        <td data-bind="text: $data.studyIds.map($parent.formatStudyName).join(', ')"></td>
+        <td>
+          <a data-bind="href: '#/organizations/' + $data.orgMembership + '/general', 
+            text: $parent.orgNames[$data.orgMembership]">
+          </a>
+        </td>
+        <td data-bind="foreach: $data.studyIds"><span 
+            data-bind="visible: $index() > 0">, </span><a 
+            data-bind="text: $component.formatStudyName($data),
+            href: '#/studies/' + $data + '/general'"></a></td>
         <td style="padding: 0; text-align:right">
           <span style="padding-right: .6rem; white-space: nowrap" data-bind="visible: $data.status === 'disabled'">
             <i class="warning sign icon"></i>Disabled</span>

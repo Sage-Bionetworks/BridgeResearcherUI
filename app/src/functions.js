@@ -211,9 +211,9 @@ function formatNameAsFullLabel(summary) {
   } else if (summary.synapseUserId) {
     name = 'Synapse ID ' + summary.synapseUserId;
   } else if (summary.id) {
-    name = summary.id.split("-")[0] + "…";
+    name = summary.id;
   } else if (summary.identifier) {
-    name = summary.identifier.split("-")[0] + "…";
+    name = summary.identifier;
   }
   return name;
 }
@@ -368,16 +368,13 @@ function formatList(array = [], finalWord = "and", separator = ", ") {
     } else if (array.length === 2) {
       return `${array[0]} ${finalWord} ${array[1]}`;
     } else {
-      let middle = array.splice(1, array.length - 2).join(separator);
+      let middle = array.slice(1, array.length - 1).join(separator);
       return `${array[0]}, ${middle}, ${finalWord} ${array[array.length - 1]}`;
     }
   }
   return "";
 }
-function formatSearch(originalSearch) {
-  // TODO: This fixes a bug in the use of formatList which is destructive; that
-  // should be fixed everywhere, then this can be removed
-  let search = JSON.parse(JSON.stringify(originalSearch));
+function formatSearch(search) {
   if (!search) {
     return "";
   }

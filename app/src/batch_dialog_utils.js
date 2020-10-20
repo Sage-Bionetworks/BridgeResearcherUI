@@ -17,7 +17,13 @@ export default {
     vm._cancel = false;
 
     function errorMessage(e) {
-      if (e.responseJSON && e.responseJSON.message) {
+      if (e.responseJSON && e.responseJSON.errors) {
+        let array = [];
+        Object.keys(e.responseJSON.errors).forEach(key => {
+          array.push(e.responseJSON.errors[key].join('; '));
+        });
+        return array.join('; ');
+      } else if (e.responseJSON && e.responseJSON.message) {
         return e.responseJSON.message;
       } else if (e.message) {
         return e.message;
@@ -36,7 +42,7 @@ export default {
         }
         vm.updateStatus(++vm.progressIndex, vm.steps);
         if (isErrorHandler) {
-          vm.errorMessagesObs.unshift(JSON.stringify(worker.currentWorkItem()) + ": " + errorMessage(e));
+          vm.errorMessagesObs.unshift(errorMessage(e));
           if (vm.enableObs) {
             vm.enableObs(true);
           }
