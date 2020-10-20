@@ -33,6 +33,12 @@ export default function(params) {
   self.includeTestersObs.subscribe(() => loadEnrollments(self.query));
   self.enrollmentFilterObs.subscribe(() => loadEnrollments(self.query));
 
+  self.formatParticipant = function(en) {
+    let p = en.participant;
+    p.externalId = en.externalId;
+    return fn.formatNameAsFullLabel(p);
+  }
+
   self.enrollDialog = function() {
     root.openDialog("add_enrollment", {
       closeFunc: fn.seq(root.closeDialog, () => {

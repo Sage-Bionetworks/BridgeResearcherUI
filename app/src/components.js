@@ -498,7 +498,6 @@ reg("tag-editor", {viewModel: tagEditor, template: tagEditorHtml});
 reg("ui-duration", {viewModel: uiDur, template: uiDurHtml});
 reg("events-tabset", {template: eventsTabsetHtml});
 
-
 reg("survey-tabset", {viewModel: surveyTabset, template: surveyTabsetHtml});
 reg("subpop-tabset", {viewModel: subpopTabset, template: subpopTabsetHtml});
 reg("line-editor", {viewModel: lineEditor, template: lineEditorHtml});

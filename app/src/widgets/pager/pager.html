@@ -1,5 +1,6 @@
 <div>
-  <span class="item" style="margin-right:1rem" data-bind="text: totalRecordsObs() + ' records'">
+  <span class="item" style="margin-right:1rem" 
+    data-bind="text: formatCount(totalRecordsObs())">
   </span>
   <div class="ui small pagination menu" 
     data-bind="visible: totalPagesObs() > 1, css: { loading:showLoaderObs }">

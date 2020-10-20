@@ -7,10 +7,11 @@ import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
 
-let OPTIONS = { offsetBy: null, pageSize: 1, assignmentFilter: false };
-
 export default function externalIds() {
   let self = this;
+
+  self.query = {};
+  self.userStudies = [];
 
   let binder = new Binder(self)
     .obs("items[]", [])
@@ -21,19 +22,18 @@ export default function externalIds() {
     .obs("studyId")
     .obs("showResults", false);
 
-  // For the forward pager control.
-  self.vm = self;
-  self.callback = fn.identity;
-  self.userStudies = [];
-
   fn.copyProps(self, root, "isAdmin", "isDeveloper", "isResearcher");
+  
   tables.prepareTable(self, {
+    refresh: () => self.load(self.query),
     name: "external ID",
     delete: (item) => serverService.deleteExternalId(item.identifier),
-    id: 'external-ids',
-    refresh: load
+    id: 'external-ids'
   });
+
   self.canDeleteObs = ko.computed(() => self.isAdmin());
+  self.postLoadPagerFunc = fn.identity;
+  self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
 
   function extractId(response) {
     if (response.items.length === 0) {
@@ -56,12 +56,6 @@ export default function externalIds() {
   function convertToPaged(identifier) {
     return () => { items: [{ identifier }] };
   }
-  function msgIfNoRecords(response) {
-    if (response.items.length === 0) {
-      self.recordsMessageObs("There are no external IDs (or none that start with your search string).");
-    }
-    return response;
-  }
   function initFromSession(session) {
     self.userStudies = session.studyIds;
     return serverService.getApp();
@@ -71,7 +65,7 @@ export default function externalIds() {
     self.showResultsObs(false);
     root.openDialog("external_id_importer", {
       vm: self,
-      reload: self.loadingFunc.bind(self)
+      reload: self.load.bind(self)
     });
   };
   self.createFrom = function(data, event) {
@@ -82,18 +76,12 @@ export default function externalIds() {
       .then(utils.successHandler(self, event))
       .catch(utils.failureHandler({ transient: false, id: 'external-ids' }));
   };
-  self.createFromNext = function(vm, event) {
-    self.showResultsObs(false);
-    utils.startHandler(vm, event);
-    serverService.getExternalIds(OPTIONS)
-      .then(extractId)
-      .then(createNewCredentials)
-      .then(updatePageWithResult)
-      .then(utils.successHandler(vm, event))
-      .catch(utils.failureHandler({ transient: false, id: 'external-ids' }));
-  };
   self.link = (item) => "#/participants/" + encodeURIComponent("externalId:" + item.identifier) + "/general";
-  self.doSearch = (vm, event) => self.callback(event);
+  self.doSearch = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    self.load(self.query);
+  };
 
   // This is called from the dialog that allows a user to enter a new external identifier.
   self.createFromNew = function(identifier) {
@@ -111,14 +99,15 @@ export default function externalIds() {
     .then(initFromSession)
     .then(binder.assign("app"));
 
-  function load(params) {
-    params = params || {};
-    params.idFilter = self.idFilterObs();
-    return serverService.getExternalIds(params)
+  self.load = function(query) {
+    query = query || {};
+    self.query = query;
+    self.query.idFilter = self.idFilterObs();
+    return serverService.getExternalIds(self.query)
       .then(binder.update("total", "items"))
-      .then(msgIfNoRecords)
+      .then(self.postLoadPagerFunc)
+      //.then(msgIfNoRecords)
       .catch(utils.failureHandler({ id: 'external-ids' }));
   }
-
-  self.loadingFunc = load;
+  ko.postbox.subscribe('external-ids-refresh', self.load);
 };

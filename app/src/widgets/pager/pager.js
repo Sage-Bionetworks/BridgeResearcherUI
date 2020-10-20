@@ -2,6 +2,8 @@ import Binder from "../../binder";
 import ko from "knockout";
 import storeService from "../../services/store_service";
 
+const FORMAT = new Intl.NumberFormat();
+
 export default function pager(params) {
   let prefix = params.prefix;
   let postLoadFunc = params.postLoadFunc;
@@ -16,7 +18,12 @@ export default function pager(params) {
     .bind("totalRecords", 0)
     .bind("totalPages", 0)
     .bind("showLoader", false)
-    .bind("currentPage", 0)
+    .bind("currentPage", 0);
+
+  self.formatCount = function(count) {
+    let plural = count > 1 ? ' records' : ' record';
+    return FORMAT.format(count) + plural;
+  }
 
   self.previousPage = function() {
     let page = self.currentPageObs() - 1;
