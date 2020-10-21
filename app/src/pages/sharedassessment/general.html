@@ -33,9 +33,17 @@
       </div>
     </div>
     <div class="two fields">
-      <div class="required field" id="identifier">
-        <label>Identifier</label>
-        <div class="input-field-padding" data-bind="text: identifierObs"></div>
+      <div class="field">
+        <div class="two fields">
+          <div class="required field" id="identifier">
+            <label>Identifier</label>
+            <div class="input-field-padding" data-bind="text: identifierObs"></div>
+          </div>
+          <div class="field" id="minutesToComplete">
+            <label>Minutes to complete</label>
+            <div class="input-field-padding" data-bind="text: minutesToCompleteObs"></div>
+          </div>
+        </div>
       </div>
       <div class="required field" id="ownerId">
         <label>Organization</label>

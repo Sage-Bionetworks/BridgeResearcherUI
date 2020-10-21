@@ -42,6 +42,7 @@ export default function(params) {
     .bind("originGuid")
     .bind("validationStatus")
     .bind("normingStatus")
+    .bind("minutesToComplete")
     .bind("tags[]")
     .obs("allTags[]")
     .obs("addTag");
