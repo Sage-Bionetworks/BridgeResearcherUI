@@ -9,6 +9,7 @@ import utils from "../../utils";
 
 export default function externalIds() {
   let self = this;
+  self.vm = this;
 
   self.query = {};
   self.userStudies = [];
@@ -109,5 +110,6 @@ export default function externalIds() {
       //.then(msgIfNoRecords)
       .catch(utils.failureHandler({ id: 'external-ids' }));
   }
+  self.loadingFunc = self.load;
   ko.postbox.subscribe('external-ids-refresh', self.load);
 };
