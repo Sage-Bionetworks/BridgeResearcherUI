@@ -40,13 +40,12 @@ IdImportWorker.prototype = {
     if (!password.isPasswordValid(this.app.passwordPolicy, this.currentCredentialPair.password)) {
       return Promise.reject(new Error("Password is invalid. " + password.passwordPolicyDescription(this.app.passwordPolicy)));
     }
-    this.currentCredentialPair.enrollment = {
-      studyId: this.studyId, 
-      externalId: this.currentCredentialPair.externalId
-    };
-    delete this.currentCredentialPair.externalId;
+    this.currentCredentialPair.studyId = this.studyId;
+    return serverService.createExternalId(this.currentCredentialPair)
+      .then(this._success.bind(this));
+  },
+  _success: function(response) {
     this.importedCredentialPairs.push(this.currentCredentialPair);
-    return Promise.resolve();
   },
   currentWorkItem: function() {
     return this.currentCredentialPair;
@@ -69,7 +68,7 @@ CreateCredentialsWorker.prototype = {
     return this.credentialPairs.length > 0;
   },
   workDescription: function() {
-    return "Creating credentials for " + this.credentialPairs[0].enrollment.externalId;
+    return "Creating credentials for " + this.credentialPairs[0].externalId;
   },
   performWork: function() {
     this.credentialPair = this.credentialPairs.shift();
