@@ -28,17 +28,29 @@
         <input type="text" data-bind="textInput: titleObs, hasFocus: true, visible: canEditObs" />
         <div class="input-field-padding" data-bind="text: titleObs, visible: !canEditObs()"></div>
       </div>
-      <div class="field" id="revision" style="width: 10rem">
-        <label>Revision</label>
-        <input type="text" data-bind="textInput: revisionObs, visible: canEditObs" />
-        <div class="input-field-padding" data-bind="text: revisionObs, visible: !canEditObs()"></div>
+      <div class="field">
+        <div class="two fields">
+          <div class="field" id="revision" style="width: 10rem">
+            <label>Revision</label>
+            <input type="text" data-bind="textInput: revisionObs, visible: canEditObs" />
+            <div class="input-field-padding" data-bind="text: revisionObs, visible: !canEditObs()"></div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="two fields">
-      <div class="required field" id="identifier">
-        <label>Identifier</label>
-        <input type="text" data-bind="textInput: identifierObs, visible: isNewObs" />
-        <div class="input-field-padding" data-bind="text: identifierObs, visible: !isNewObs()"></div>
+      <div class="field">
+        <div class="two fields">
+          <div class="required field" id="identifier">
+            <label>Identifier</label>
+            <input type="text" data-bind="textInput: identifierObs, visible: isNewObs" />
+            <div class="input-field-padding" data-bind="text: identifierObs, visible: !isNewObs()"></div>
+          </div>
+          <div class="field" id="minutesToComplete">
+            <label>Minutes to complete</label>
+            <input type="text" data-bind="textInput: minutesToCompleteObs, visible: canEditObs" />
+          </div>
+        </div>
       </div>
       <div class="required field" id="ownerId">
         <label>Organization</label>

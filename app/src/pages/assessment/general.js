@@ -20,6 +20,7 @@ function newAssessment() {
     identifier: "",
     summary: "",
     normingStatus: "",
+    minutesToComplete: 1,
     validationStatus: "",
     osName: "",
     tags: [],
@@ -58,6 +59,7 @@ export default function(params) {
     .bind("originGuid")
     .bind("validationStatus")
     .bind("normingStatus")
+    .bind("minutesToComplete")
     .bind("tags[]")
     .obs("allTags[]")
     .obs("addTag")
