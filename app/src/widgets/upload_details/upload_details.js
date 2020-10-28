@@ -65,7 +65,7 @@ export default function uploadDetails(params) {
     return "#/schemas/" + self.schemaIdObs() + "/versions/" + self.schemaRevisionObs() + "/editor";
   });
   self.schemaLabel = ko.computed(function() {
-    return self.schemaIdObs() + " v." + self.schemaRevisionObs();
+    return (self.schemaIdObs()) ? (self.schemaIdObs() + " v." + self.schemaRevisionObs()) : '';
   });
 
   self.iconFor = function(status) {

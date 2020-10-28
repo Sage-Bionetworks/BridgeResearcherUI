@@ -51,8 +51,8 @@
       <tbody data-bind="foreach: itemsObs">
         <tr>
           <td>
-            <a data-bind="attr: {'href': '#/participants/' + $data.participant.identifier}, 
-              text: $parent.formatParticipant($data)">
+            <a data-bind="text: $parent.formatParticipant($data),
+              attr: {'href': '#/participants/' + $data.participant.identifier + '/general'}">
             </a>
           </td>
           <td style="white-space: nowrap">
