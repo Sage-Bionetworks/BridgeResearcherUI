@@ -40,12 +40,11 @@ IdImportWorker.prototype = {
     if (!password.isPasswordValid(this.app.passwordPolicy, this.currentCredentialPair.password)) {
       return Promise.reject(new Error("Password is invalid. " + password.passwordPolicyDescription(this.app.passwordPolicy)));
     }
-    this.currentCredentialPair.studyId = this.studyId;
-    return serverService.createExternalId(this.currentCredentialPair)
-      .then(this._success.bind(this));
-  },
-  _success: function(response) {
+    this.currentCredentialPair.externalIds = {};
+    this.currentCredentialPair.externalIds[this.studyId] = this.currentCredentialPair.identifier;
+    delete this.currentCredentialPair.identifier;
     this.importedCredentialPairs.push(this.currentCredentialPair);
+    return Promise.resolve();
   },
   currentWorkItem: function() {
     return this.currentCredentialPair;
@@ -98,9 +97,7 @@ export default function(params) {
     .obs("isDisabled", false)
     .obs("closeText", "Close")
     .obs("dataGroups[]")
-    .obs("allDataGroups[]")
-    .obs("studyId")
-    .obs("studyIds[]");
+    .obs("allDataGroups[]");
 
   self.statusObs('');
   serverService.getApp()
@@ -109,13 +106,6 @@ export default function(params) {
       self.app = app;
       supportEmail = app.supportEmail;
       self.statusObs("Please enter a list of identifiers, separated by commas or new lines. If you wish to include passwords, use the format <code>externalid=password</code> (again these can be separated by commas or new lines). <em>" + password.passwordPolicyDescription(self.app.passwordPolicy) + "</em>");
-    })
-    .then(serverService.getStudies.bind(serverService))
-    .then(response => {
-      let opts = response.items.map(study => {
-        return { value: study.identifier, label: study.name };
-      });
-      self.studyIdsObs(opts);
     });
 
   function displayComplete() {
@@ -125,7 +115,7 @@ export default function(params) {
     self.errorMessagesObs([]);
     self.statusObs("Preparing to import...");
 
-    let importWorker = new IdImportWorker(self.app, self.importObs(), self.studyIdObs());
+    let importWorker = new IdImportWorker(self.app, self.importObs(), params.studyId);
     if (!importWorker.hasWork()) {
       self.errorMessagesObs.unshift("You must enter some identifiers.");
       return;

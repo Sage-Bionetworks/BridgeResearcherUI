@@ -21,13 +21,6 @@
         </ul>
       </div>
       <div class="ui two fields" style="margin-top: 1rem" data-bind="visible: isResearcher()">
-        <div class="field">
-          <label>Create IDs for this study</label>
-          <select style="margin-top: .5rem" class="ui dropdown" data-bind="options: studyIdsObs,
-            optionsText: 'label', optionsValue: 'value', value: studyIdObs,
-            optionsCaption: 'Select study...'">
-          </select>          
-        </div>
         <div class="field" data-bind="css: {disabled: isDisabledObs}">
           <label>Add these data groups to the accounts</label>
           <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>

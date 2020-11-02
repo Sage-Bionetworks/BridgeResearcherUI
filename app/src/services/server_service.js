@@ -516,6 +516,9 @@ export class ServerService {
   getExternalIds(params) {
     return this.gethttp(`${config.externalIds}${fn.queryString(params || {})}`);
   }
+  getExternalIdsForStudy(studyId, params) {
+    return this.gethttp(`${config.studies}/${studyId}/externalids${fn.queryString(params || {})}`);
+  }
   createExternalId(identifier) {
     return this.post(config.externalIds, identifier);
   }

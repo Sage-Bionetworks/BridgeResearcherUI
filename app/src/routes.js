@@ -123,7 +123,6 @@ router.on("/participants/:userId/general", routeTo("participant_general", "parti
 router.on("/participants/:userId/requestInfo", routeTo("participant_request_info", "participants", USERID));
 router.on("/participants/:userId", routeTo("participant_general", "participants", USERID));
 router.on("/participants", routeTo("participants", "participants"));
-router.on("/external_ids", routeTo("external_ids", "extids"));
 router.on("/events", redirectTo("/events/event_keys"));
 router.on("/events/event_keys", routeTo("event_keys", "events"));
 router.on("/events/auto_custom_events", routeTo("auto_custom_events", "events"));
@@ -148,6 +147,7 @@ router.on("/studies/:id", redirectTo("/studies/{0}/general"));
 router.on("/studies/:id/general", routeTo("studyEditor", "studies", ID));
 router.on("/studies/:id/sponsors", routeTo("studySponsors", "studies", ID));
 router.on("/studies/:id/enrollments", routeTo("studyEnrollments", "studies", ID));
+router.on("/studies/:id/externalids", routeTo("external_ids", "studies", ID));
 
 router.on("/assessments", routeTo("assessments", "assessments"));
 router.on("/assessments/:guid", redirectTo("/assessments/{0}/general"));
