@@ -7,7 +7,8 @@ import utils from "../../utils";
 
 const failureHandler = utils.failureHandler({
   redirectMsg: "Consent group not found.",
-  redirectTo: "subpopulations"
+  redirectTo: "subpopulations",
+  id: "consent-history"
 });
 
 export default function history(params) {
