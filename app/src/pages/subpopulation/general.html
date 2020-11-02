@@ -37,8 +37,8 @@
             If a user matches this consent group, they <i>must</i> sign the consent to access Bridge.
           </p>
         </div>
-        <div class="field required">
-          <label>When a user enrolls in this subpopulation, include them in these studies:</label>
+        <div class="field required" id="studyIdsAssignedOnConsent">
+          <label>When a user signs this consent, enroll them in these studies:</label>
           <tag-editor params="selectedObs: studyIdsAssignedOnConsentObs, 
             allObs: allStudyIdsObs, type: 'study IDs'"></tag-editor>
         </div>
@@ -56,7 +56,7 @@
       </div>
       <div class="nine wide column">
         <div class="field">
-          <label>While a user is enrolled in this subpopulation, assign these data groups:</label>
+          <label>When a user signs this consent, assign them to these data groups:</label>
           <tag-editor params="selectedObs: dataGroupsAssignedWhileConsentedObs, 
             allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
         </div>
