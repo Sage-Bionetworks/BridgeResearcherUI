@@ -33,7 +33,7 @@ export default function() {
     if (orgId) {
       let [appIdPart, orgIdPart] = orgId.split(':');
       let orgName = self.orgNames[orgIdPart] ? self.orgNames[orgIdPart] : orgIdPart;
-      return `${orgName} (${appIdPart})`;
+      return orgName;
     }
     return '';
   }
