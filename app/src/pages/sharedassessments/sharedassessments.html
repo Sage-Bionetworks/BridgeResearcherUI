@@ -28,7 +28,7 @@
       <tr>
         <th>Title</th>
         <th>Owner</th>
-        <th>Tags</th>
+        <th width="25%">Tags</th>
       </tr>
     </thead>
     <tbody class="no_records" data-bind="if: itemsObs().length === 0">
@@ -39,10 +39,8 @@
     <tbody data-bind="foreach: itemsObs">
       <tr data-bind="css: {negative: $data.deleted}">
         <td>
-          <div>
-            <a data-bind="text: $data.title, href: '#/sharedassessments/' + $data.guid"></a>
-            <span class="help-text" data-bind="text: ' (rev. ' + $data.revision + ')'"></span>
-          </div>
+          <a data-bind="text: $data.title, href: '#/sharedassessments/' + $data.guid"></a>
+          <span class="help-text" data-bind="text: ' (rev. ' + $data.revision + ')'"></span>
           <div data-bind="text: $data.summary"></div>
         </td>
         <td nowrap data-bind="text: $parent.formatOrg($data.ownerId)"></td>
