@@ -45,9 +45,8 @@ function selectRoles(session) {
 }
 function persistExternalId(value, context) {
   if (value && context.vm.studyIdObs() !== 'Select study') {
-    context.copy.enrollment = { 
-      externalId: context.vm.newExternalIdObs(), 
-      studyId: context.vm.studyIdObs() 
+    context.copy.externalIds = {
+      [context.vm.studyIdObs()]: context.vm.newExternalIdObs()
     };
   }
   return value;
