@@ -513,6 +513,9 @@ export class ServerService {
   resendEmailVerification(id) {
     return this.post(`${config.participants}/${id}/resendEmailVerification`);
   }
+  resendPhoneVerification(id) {
+    return this.post(`${config.participants}/${id}/resendPhoneVerification`);
+  }
   getExternalIds(params) {
     return this.gethttp(`${config.externalIds}${fn.queryString(params || {})}`);
   }

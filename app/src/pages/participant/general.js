@@ -195,6 +195,14 @@ export default function general(params) {
         .catch(utils.failureHandler({id: 'participant-general'}));
     });
   };
+  self.resendPhoneVerification = function(vm, event) {
+    alerts.confirmation("This will send an SMS message to this user.\n\nDo you wish to continue?", function() {
+      utils.startHandler(vm, event);
+      serverService.resendPhoneVerification(self.userIdObs())
+        .then(utils.successHandler(vm, event, "Sent message to verify participant's phone number."))
+        .catch(utils.failureHandler({id: 'participant-general'}));
+    });
+  };
 
   self.resendVisible = ko.computed(() => self.statusObs() === "unverified");
   self.resetPwdVisible = ko.computed(() => self.statusObs() !== "disabled");
