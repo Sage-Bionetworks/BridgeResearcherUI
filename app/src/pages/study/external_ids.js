@@ -31,11 +31,13 @@ export default function externalIds(params) {
   tables.prepareTable(self, {
     refresh: () => self.load(self.query),
     name: "external ID",
-    delete: (item) => serverService.deleteExternalId(item.identifier),
+    delete: (item) => serverService.getParticipant("externalid:"+item.identifier)
+      .then((p) => serverService.deleteParticipant(p.id)),
     id: 'external-ids'
   });
 
-  self.canDeleteObs = ko.computed(() => self.isAdmin());
+  
+
   self.postLoadPagerFunc = fn.identity;
   self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
 
