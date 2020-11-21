@@ -129,12 +129,12 @@ import partUploads from "./pages/participant/uploads";
 import partUploadsHtml from "./pages/participant/uploads.html";
 import partUpload from "./pages/participant/upload";
 import partUploadHtml from "./pages/participant/upload.html";
+import partRequestInfo from "./pages/participant/request_info";
+import partRequestInfoHtml from "./pages/participant/request_info.html";
 import uploadDetails from "./widgets/upload_details/upload_details";
 import uploadDetailsHtml from "./widgets/upload_details/upload_details.html";
 import lineEditor from "./widgets/line_editor/line_editor";
 import lineEditorHtml from "./widgets/line_editor/line_editor.html";
-import partRequestInfo from "./pages/participant/request_info";
-import partRequestInfoHtml from "./pages/participant/request_info.html";
 import setEditor from "./pages/set_editors/set_editor";
 import eventKeysHtml from "./pages/events/event_keys.html";
 import customEvents from "./pages/events/auto_custom_events";
@@ -182,6 +182,17 @@ import orgEditor from "./pages/organization/editor";
 import orgEditorHtml from "./pages/organization/editor.html";
 import orgMembers from "./pages/organization/members";
 import orgMembersHtml from "./pages/organization/members.html";
+import memGeneral from "./pages/member/general";
+import memGeneralHtml from "./pages/member/general.html";
+import memClientData from "./pages/member/client_data";
+import memClientDataHtml from "./pages/member/client_data.html";
+import memRequestInfo from "./pages/member/request_info";
+import memRequestInfoHtml from "./pages/member/request_info.html";
+import memTabset from "./pages/member/tabset";
+import memTabsetHtml from "./pages/member/tabset.html";
+import memBreadcrumb from "./pages/member/breadcrumb";
+import memBreadcrumbHtml from "./pages/member/breadcrumb.html";
+
 import orgStudies from "./pages/organization/studies";
 import orgStudiesHtml from "./pages/organization/studies.html";
 import orgTabset from "./pages/organization/tabset";
@@ -474,6 +485,11 @@ reg("orgEditor", {viewModel: orgEditor, template: orgEditorHtml})
 reg("orgMembers", {viewModel: orgMembers, template: orgMembersHtml})
 reg("orgStudies", {viewModel: orgStudies, template: orgStudiesHtml})
 reg("org-tabset", {viewModel: orgTabset, template: orgTabsetHtml});
+reg("memGeneral", {viewModel: memGeneral, template: memGeneralHtml});
+reg("memClientData", {viewModel: memClientData, template: memClientDataHtml});
+reg("memRequestInfo", {viewModel: memRequestInfo, template: memRequestInfoHtml});
+reg("mem-tabset", {viewModel: memTabset, template: memTabsetHtml});
+reg("mem-breadcrumb", {viewModel: memBreadcrumb, template: memBreadcrumbHtml});
 reg("studies", {viewModel: studies, template: studiesHtml});
 reg("studyEditor", {viewModel: studyEditor, template: studyEditorHtml});
 reg("studySponsors", {viewModel: studySponsors, template: studySponsorsHtml});

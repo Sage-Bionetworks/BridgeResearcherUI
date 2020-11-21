@@ -7,8 +7,27 @@
       </div>
       <h3 data-bind="text: titleObs"></h3>
     </div>
-    <div class="fixed-header-buttons" data-bind="visible: isAdmin()">
-      <button class="ui tiny primary button" data-bind="click: addMemberDialog">Add Member&hellip;</button>
+    <div class="fixed-header-buttons" data-bind="visible: canAddRemove()">
+      <button class="ui red tiny button" data-bind="disable: !atLeastOneChecked(), 
+        click: deleteItems">Delete</button>
+
+      <div class="ui primary tiny buttons">
+        <div class="ui tiny button" data-bind="semantic: 'dropdown-button-toggle', container: '.buttons'">
+          Create Member
+        </div>
+        <div class="ui tiny floating dropdown icon button" data-bind="semantic: 'dropdown-button'">
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <a class="item" data-bind="href: '#/organizations/'+identifierObs()+'/members/new/general'">
+              New Account
+            </a>
+            <div class="item" data-bind="click: addMemberDialog">
+              Add Member&hellip;
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
   <org-tabset params="identifierObs: identifierObs, isNewObs: isNewObs"></org-tabset>
@@ -23,6 +42,9 @@
     <table class="ui compact selectable table">
       <thead>
         <tr>
+          <th width="10">
+            <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+          </th>
           <th>Name</th>
           <th>Identifiers</th>
           <th width="10"></th>
@@ -30,22 +52,22 @@
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td colspan="3" data-bind="html: recordsMessageObs"></td>
+          <td colspan="4" data-bind="html: recordsMessageObs"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
-        <tr>
+        <tr data-bind="css: $component.classNameForStatus($data)">
           <td>
-            <a data-bind="href: '#/participants/'+$data.id+'/general',
-              text: $component.formatNameAsFullLabel($data), 
-              visible: $parent.isUserNavigable()"></a>
-            <span data-bind="text: $component.formatNameAsFullLabel($data), 
-              visible: !$parent.isUserNavigable()"></span>
+            <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+          </td>
+          <td>
+            <a data-bind="text: $component.formatNameAsFullLabel($data), 
+              href: '#/organizations/' + $parent.identifierObs() + '/members/' + $data.id + '/general'"></a>
           </td>
           <td data-bind="html: $component.formatIdentifiers($data)"></td>
           <td style="white-space: nowrap">
             <button class="ui basic compact mini red button" data-bind="click: $parent.removeOrgMember,
-              visible: $component.isAdmin">
+              visible: $component.canAddRemove()">
               Remove
             </button>
           </td>

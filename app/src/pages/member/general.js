@@ -7,11 +7,6 @@ import optionsService from "../../services/options_service";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
-const failureHandler = utils.failureHandler({
-  id: "participant-general",
-  redirectTo: "participants",
-  redirectMsg: "Participant not found"
-});
 const OPTIONS = [
   { value: "no_sharing", label: "No Sharing" },
   { value: "sponsors_and_partners", label: "Sponsors And Partners" },
@@ -31,13 +26,13 @@ function selectRoles(session) {
         set.add("Worker");
         set.add("Administrator");
         /* falls through */
-      case "researcher":
-        set.add("Researcher");
-        /* falls through */
       case "org_admin":
         set.add("Organization Administrator");
         /* falls through */
-        case "developer":
+      case "researcher":
+        set.add("Researcher");
+        /* falls through */
+      case "developer":
         set.add("Developer");
         /* falls through */
     }
@@ -56,8 +51,16 @@ function persistExternalId(value, context) {
 }
 
 export default function general(params) {
+  const failureHandler = utils.failureHandler({
+    id: "mem-general",
+    redirectTo: "organizations/" + params.orgId + "/members",
+    redirectMsg: "Organization member not found"
+  });
+  
   let self = this;
   self.participant = NEW_PARTICIPANT;
+  self.sharingScopeOptions = OPTIONS;
+  self.orgNames = {};
 
   let binder = new Binder(self)
     .obs("showEnableAccount", false)
@@ -68,7 +71,7 @@ export default function general(params) {
     .obs("modifiedOn", null, fn.formatDateTime)
     .obs("allRoles[]", [])
     .obs("allStudies[]")
-    .obs("title", params.userId === "new" ? "New participant" : "&#160;")
+    .obs("title", params.userId === "new" ? "New account" : "&#160;")
     .obs("externalIds", '', Binder.formatExternalIds)
     .bind("newExternalId", null, null, persistExternalId)
     .bind("email", null, null, value => (fn.isBlank(value) ? null : value))
@@ -91,9 +94,11 @@ export default function general(params) {
     .bind("roles[]", null, fn.formatRoles, fn.persistRoles)
     .bind("studyId")
     .bind("studyLabel", 'Select study')
-    .bind("orgMembership");
+    .bind("orgMembership", params.orgId)
+    .bind("orgName");
 
-  fn.copyProps(self, root, "isAdmin", "isResearcher");
+  fn.copyProps(self, root, "isAdmin", "isOrgAdmin");
+  fn.copyProps(self, params, "orgId", "userId");
 
   self.statusObs.subscribe(function(status) {
     self.showEnableAccountObs(status !== "enabled");
@@ -148,22 +153,19 @@ export default function general(params) {
       return !self[credential + 'Obs']() && !self.updateIdsVisible();
     });
   };
-  self.formatOrg = function() {
-    return self.orgMembershipObs() ? self.orgNames[self.orgMembershipObs()] : '—';
-  }
 
   function makeStatusChanger(status) {
     return function(vm, event) {
-      serverService.getParticipant(self.userIdObs())
+      serverService.getOrgMember(params.orgId, self.userIdObs())
         .then((participant) => {
           participant.status = status;
           return participant;
         })
-        .then((p) => serverService.updateParticipant(p))
+        .then((p) => serverService.updateOrgMember(params.orgId, self.userIdObs()))
         .then(() => self.statusObs(status))
-        .then(() => serverService.signOutUser(self.userIdObs()))
+        .then(() => serverService.signOutOrgMember(params.orgId, self.userIdObs()))
         .then(utils.successHandler(self, event, "User account has been "+status+"."))
-        .catch(utils.failureHandler({id: 'participant-general'}));
+        .catch(utils.failureHandler({id: 'mem-general'}));
     }
   }
 
@@ -172,37 +174,28 @@ export default function general(params) {
   self.requestResetPassword = function(vm, event) {
     alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
       utils.startHandler(self, event);
-      serverService.requestResetPasswordUser(self.userIdObs())
+      serverService.requestOrgMemberResetPassword(self.orgId, self.userIdObs())
         .then(utils.successHandler(self, event, "Reset password email has been sent to user."))
-        .catch(utils.failureHandler({id: 'participant-general'}));
+        .catch(utils.failureHandler({id: 'mem-general'}));
     });
   };
   self.signOutUser = function() {
     root.openDialog("sign_out_user", { userId: self.userIdObs() });
   };
-  self.deleteTestUser = function(vm, event) {
-    alerts.confirmation("This will delete the account.\n\nDo you wish to continue?", function() {
-      utils.startHandler(self, event);
-      serverService.deleteTestUser(self.userIdObs())
-        .then(utils.successHandler(self, event, "User deleted."))
-        .then(() => document.location = "#/participants")
-        .catch(utils.failureHandler({id: 'participant-general'}));
-    });
-  };
   self.resendEmailVerification = function(vm, event) {
     alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
       utils.startHandler(vm, event);
-      serverService.resendEmailVerification(self.userIdObs())
-        .then(utils.successHandler(vm, event, "Sent email to verify participant's email address."))
-        .catch(utils.failureHandler({id: 'participant-general'}));
+      serverService.resendOrgMemberEmailVerification(params.orgId, self.userIdObs())
+        .then(utils.successHandler(vm, event, "Sent email to verify account’s email address."))
+        .catch(utils.failureHandler({id: 'mem-general'}));
     });
   };
   self.resendPhoneVerification = function(vm, event) {
     alerts.confirmation("This will send an SMS message to this user.\n\nDo you wish to continue?", function() {
       utils.startHandler(vm, event);
-      serverService.resendPhoneVerification(self.userIdObs())
-        .then(utils.successHandler(vm, event, "Sent message to verify participant's phone number."))
-        .catch(utils.failureHandler({id: 'participant-general'}));
+      serverService.resendOrgMemberPhoneVerification(params.orgId, self.userIdObs())
+        .then(utils.successHandler(vm, event, "Sent message to verify account’s phone number."))
+        .catch(utils.failureHandler({id: 'mem-general'}));
     });
   };
 
@@ -211,7 +204,7 @@ export default function general(params) {
   self.enableVisible = ko.computed(() => self.statusObs() === "disabled" && root.isAdmin());
   self.disableVisible = ko.computed(() => self.statusObs() === "enabled" && root.isAdmin());
   self.signOutVisible = ko.computed(() => !['disabled','unverified'].includes(self.statusObs()));
-  self.deleteVisible = ko.computed(() => root.isResearcher() && self.dataGroupsObs().includes('test_user'));
+  self.deleteVisible = ko.computed(() => root.isOrgAdmin() && self.dataGroupsObs().includes('test_user'));
   self.updateIdsVisible = ko.observable(false);
 
   serverService.getSession().then(session => {
@@ -230,7 +223,9 @@ export default function general(params) {
     self.attributesObs(attrs);
   }
   function getParticipant(response) {
-    return self.isNewObs() ? Promise.resolve(NEW_PARTICIPANT) : serverService.getParticipant(self.userIdObs());
+    return self.isNewObs() ? 
+      Promise.resolve(NEW_PARTICIPANT) : 
+      serverService.getOrgMember(params.orgId, self.userIdObs());
   }
   function afterCreate(response) {
     self.statusObs("enabled");
@@ -239,16 +234,16 @@ export default function general(params) {
     self.userIdObs(response.identifier);
     return response;
   }
-  function saveParticipant(participant) {
+  function saveOrgMember(participant) {
     if (self.isNewObs()) {
-      return serverService.createParticipant(participant)
+      return serverService.createOrgMember(params.orgId, participant)
         .then(afterCreate)
-        .then(response => (window.location = "#/participants/" + response.identifier + "/general"));
+        .then(response => (window.location = "#/organizations/" + params.orgId + 
+          "/members/" + response.identifier + "/general"));
     } else {
-      return serverService.updateParticipant(participant);
+      return serverService.updateOrgMember(params.orgId, participant);
     }
   }
-  self.sharingScopeOptions = OPTIONS;
 
   self.formatPhone = function(phone, phoneRegion) {
     return phone ? fn.flagForRegionCode(phoneRegion) + " " + phone : "";
@@ -267,19 +262,19 @@ export default function general(params) {
 
   self.save = function(vm, event) {
     let participant = binder.persist(self.participant);
-    let confirmMsg = (self.isNewObs()) ? "Participant created." : "Participant updated.";
+    let confirmMsg = (self.isNewObs()) ? "Account created." : "Account updated.";
 
     let updatedTitle = self.app.emailVerificationEnabled ? 
       fn.formatNameAsFullLabel(participant) : 
       participant.externalId;
     function updateName() {
       self.titleObs(updatedTitle);
-      return serverService.getParticipant(self.userIdObs());
+      return serverService.getOrgMember(params.orgId, self.userIdObs());
     }
 
     utils.startHandler(vm, event);
     return updateSynapseUserId(participant)
-      .then(() => saveParticipant(participant))
+      .then(() => saveOrgMember(participant))
       .then(updateName)
       .then(binder.update())
       .then(() => self.newExternalIdObs(null))
@@ -291,11 +286,9 @@ export default function general(params) {
     // fix the ID to the be real ID, then use that to call getParticipantName
     self.userIdObs(participant.id);
     if (!self.isNewObs()) {
-      serverService.getParticipantName(participant.id)
-        .then(function(part) {
-          self.titleObs(part.name);
-        })
-        .catch(failureHandler);
+      serverService.getOrgMemberName(params.orgId, participant.id).then(function(part) {
+        self.titleObs(part.name);
+      }).catch(failureHandler);
     }
     return participant;
   }
@@ -309,13 +302,15 @@ export default function general(params) {
       self.allStudiesObs(response.items.map(studyToOptions));
     });
   }
-  self.orgNames = {};
 
   serverService.getApp()
     .then(binder.assign("app"))
     .then(initApp)
     .then(optionsService.getOrganizationNames)
-    .then((response) => self.orgNames = response)
+    .then((response) => {
+      self.orgNames = response;
+      self.orgNameObs(self.orgNames[params.orgId]);
+    })
     .then(getParticipant)
     .then(binder.assign("participant"))
     .then(noteInitialStatus)

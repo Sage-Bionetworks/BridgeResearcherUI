@@ -22,6 +22,8 @@ const TYPE = ["templateType"];
 const TYPE_GUID = ["templateType", "guid"];
 const TYPE_GUID_CREATEDON = ["templateType", "guid", "createdOn"];
 const USERID = ["userId"];
+const ORGID = ["orgId"];
+const ORGID_USERID = ["orgId", "userId"];
 const USERID_STUDYID = ["userId", "studyId"];
 const USERID_IDENTIFIER = ["userId", "identifier"];
 const USERID_GUID = ["userId", "guid"];
@@ -137,12 +139,17 @@ router.on("/admin/uploads", routeTo("uploads", "uploads"));
 router.on("/admin/uploads/:guid", routeTo("upload", "uploads", GUID));
 // router.on("/admin/masterschedules", routeTo("masterschedules"));
 router.on("/organizations", routeTo("organizations", "organizations"));
-router.on("/organizations/:id", redirectTo("/organizations/{0}/general"));
-router.on("/organizations/:id/general", routeTo("orgEditor", "organizations", ID));
-router.on("/organizations/:id/members", routeTo("orgMembers", "organizations", ID));
-router.on("/organizations/:id/studies", routeTo("orgStudies", "organizations", ID));
+router.on("/organizations/:orgId", redirectTo("/organizations/{0}/general"));
+router.on("/organizations/:orgId/general", routeTo("orgEditor", "organizations", ORGID));
+router.on("/organizations/:orgId/studies", routeTo("orgStudies", "organizations", ORGID));
+router.on("/organizations/:orgId/members", routeTo("orgMembers", "organizations", ORGID));
+router.on("/organizations/:orgId/members/:userId/general", 
+  routeTo("memGeneral", "organizations", ORGID_USERID));
+router.on("/organizations/:orgId/members/:userId/clientData", 
+  routeTo("memClientData", "organizations", ORGID_USERID));
+router.on("/organizations/:orgId/members/:userId/requestInfo", 
+  routeTo("memRequestInfo", "organizations", ORGID_USERID));
 router.on("/studies", routeTo("studies", "studies"));
-
 router.on("/studies/:id", redirectTo("/studies/{0}/general"));
 router.on("/studies/:id/general", routeTo("studyEditor", "studies", ID));
 router.on("/studies/:id/sponsors", routeTo("studySponsors", "studies", ID));

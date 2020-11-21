@@ -7,7 +7,7 @@
       </div>
       <h3 data-bind="text: titleObs"></h3>
     </div>
-    <div class="fixed-header-buttons">
+    <div class="fixed-header-buttons" data-bind="visible: isAdmin">
       <button class="ui tiny primary button" data-bind="click: addSponsoredStudyDialog">
         Add Study&hellip;
       </button>      
@@ -38,15 +38,13 @@
       <tbody data-bind="foreach: itemsObs">
         <tr>
           <td>
-            <a data-bind="href: '#/studies/'+$data.identifier, text: $data.name, visible: $parent.isAdmin()"></a>
-            <span data-bind="text: $data.name, visible: !$parent.isAdmin()"></span>
+            <a data-bind="visible: $component.isAdmin(), 
+              href: '#/studies/'+$data.identifier, text: $data.name"></a>
+            <span data-bind="visible: !$component.isAdmin(), text: $data.name"></span>
           </td>
           <td data-bind="text: $data.identifier"></td>
           <td style="white-space: nowrap">
-            <button class="ui basic compact mini red button" data-bind="visible: $parent.isAdmin(),
-              click: $parent.removeSponsored">
-              Remove
-            </button>
+            <button class="ui basic compact mini red button" data-bind="click: $parent.removeSponsored, visible: $parent.isAdmin">Remove</button>
           </td>
         </tr>
       </tbody>

@@ -10,24 +10,38 @@ let failureHandler = utils.failureHandler({
   redirectMsg: "Organization not found.",
   redirectTo: "organizations",
   transient: false,
-  id: 'org'
+  id: 'org_members'
 });
+
+const cssClassNameForStatus = {
+  disabled: "negative",
+  unverified: "warning",
+  verified: ""
+};
+
+function assignClassForStatus(participant) {
+  // does not have sharing scope so we can't show it on summary page.
+  return cssClassNameForStatus[participant.status];
+}
 
 export default function(params) {
   let self = this;
 
-  fn.copyProps(self, root, "isAdmin");
+  self.classNameForStatus = assignClassForStatus;
   
   self.isUserNavigable = function() {
-    return root.isAdmin() || root.isResearcher();
+    return root.isAdmin() || root.isOrgAdmin();
+  }
+  self.canAddRemove = function() {
+    return root.isOrgAdmin() || root.isAdmin();
   }
 
   let binder = new Binder(self)
     .obs("isNew", false)
     .obs("title")
-    .obs("identifier");
+    .obs("identifier", params.orgId);
 
-  serverService.getOrganization(params.id)
+  serverService.getOrganization(params.orgId)
     .then(binder.update())
     .then(fn.handleObsUpdate(self.titleObs, "name"))
     .catch(failureHandler);
@@ -43,12 +57,12 @@ export default function(params) {
         self.query.offsetBy = 0;
         loadMembers(self.query)
       }),
-      orgId: params.id
+      orgId: params.orgId
     });
   };
   self.removeOrgMember = (item, event) => {
     utils.startHandler(self, event);
-    serverService.removeOrgMember(params.id, item.id)
+    serverService.removeOrgMember(params.orgId, item.id)
       .then(() => loadMembers(self.query))
       .then(utils.successHandler(self, event, "Member removed."))
       .catch(utils.failureHandler({ id: 'org_members' }));
@@ -58,6 +72,7 @@ export default function(params) {
     name: "organization member",
     type: "Organization Members",
     id: "org_members",
+    delete: (item) => serverService.deleteOrgMember(params.orgId, item.id),
     refresh: () => loadMembers(self.query)
   });
 
@@ -73,7 +88,7 @@ export default function(params) {
     // some state is not in the pager, update that and capture last known state of paging
     self.query = query;
 
-    serverService.getOrganizationMembers(params.id, query)
+    serverService.getOrganizationMembers(params.orgId, query)
       .then(mapItems)
       .then(fn.handleSort("items", "fullName"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
