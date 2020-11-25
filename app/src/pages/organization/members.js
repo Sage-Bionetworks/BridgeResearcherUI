@@ -72,7 +72,7 @@ export default function(params) {
     name: "organization member",
     type: "Organization Members",
     id: "org_members",
-    delete: (item) => serverService.deleteOrgMember(params.orgId, item.id),
+    delete: (item) => serverService.deleteAccount(item.id),
     refresh: () => loadMembers(self.query)
   });
 
@@ -88,7 +88,7 @@ export default function(params) {
     // some state is not in the pager, update that and capture last known state of paging
     self.query = query;
 
-    serverService.getOrganizationMembers(params.orgId, query)
+    serverService.getOrgMembers(params.orgId, query)
       .then(mapItems)
       .then(fn.handleSort("items", "fullName"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))

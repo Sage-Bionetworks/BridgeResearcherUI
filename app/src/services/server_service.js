@@ -532,9 +532,6 @@ export class ServerService {
   deleteExternalId(id) {
     return this.del(`${config.externalIds}/${id}`);
   }
-  updateIdentifiers(payload) {
-    return this.post(config.participants + '/self/identifiers', payload);
-  }
   getSession() {
     if (session) {
       return Promise.resolve(session);
@@ -1025,11 +1022,45 @@ export class ServerService {
   deleteOrganization(orgId) {
     return this.del(`${config.organizations}/${orgId}`);
   }
-  getOrganizationMembers(orgId, search) {
-    return this.post(`${config.organizations}/${orgId}/members/search`, search);
+  // ACCOUNTS
+  createAccount(account) {
+    return this.post(config.accounts, account);
   }
-  deleteOrgMember(orgId, userId) {
-    return this.del(`${config.organizations}/members/${userId}`);
+  getAccount(userId) {
+    return this.gethttp(`${config.accounts}/${userId}`)
+      .then(this.cacheParticipantName.bind(this));
+  }
+  getAccountName(userId) {
+    return this.getParticipantName(userId);
+  }
+  updateAccount(userId, account) {
+    return this.post(`${config.accounts}/${userId}`, account);
+  }
+  deleteAccount(userId) {
+    return this.del(`${config.accounts}/${userId}`);
+  }
+  getAccountRequestInfo(userId) {
+    return this.gethttp(`${config.accounts}/${userId}/requestInfo`);
+  }
+  requestAccountResetPassword(userId) {
+    return this.post(`${config.accounts}/${userId}/requestResetPassword`);
+  }
+  resendAccountEmailVerification(userId) {
+    return this.post(`${config.accounts}/${userId}/resendEmailVerification`);
+  }
+  resendAccountPhoneVerification(userId) {
+    return this.post(`${config.accounts}/${userId}/resendPhoneVerification`);
+  }
+  signOutAccount(userId, deleteReauthToken) {
+    return this.post(`${config.accounts}/${userId}/signOut${fn.queryString({ deleteReauthToken })}`);
+  }
+  updateIdentifiersForSelf(payload) {
+    return this.post(config.accounts + '/self/identifiers', payload);
+  }
+
+  // ORGANIZATION MEMBERS
+  getOrgMembers(orgId, search) {
+    return this.post(`${config.organizations}/${orgId}/members`, search);
   }
   addOrgMember(orgId, userId) {
     return this.post(`${config.organizations}/${orgId}/members/${userId}`);
@@ -1037,47 +1068,7 @@ export class ServerService {
   removeOrgMember(orgId, userId) {
     return this.del(`${config.organizations}/${orgId}/members/${userId}`);
   }
-  getOrgMember(orgId, userId) {
-    console.log("####", orgId, userId);
-    return this.gethttp(`${config.organizations}/${orgId}/members/${userId}`)
-      .then(this.cacheParticipantName.bind(this));
-  }
-  getOrgMemberName(orgId, userId) {
-    let name = cache.get(userId + ":name");
-    return name ? Promise.resolve(name) : 
-      this.gethttp(`${config.organizations}/${orgId}/members/${userId}`)
-        .then(this.cacheParticipantName.bind(this))
-        .then(() => Promise.resolve(cache.get(userId + ":name")));
-  }
-  getOrgMemberRequestInfo(orgId, userId) {
-    return this.gethttp(`${config.organizations}/${orgId}/members/${userId}/requestInfo`);
-  }
-  createOrgMember(orgId, participant) {
-    return this.post(`${config.organizations}/${orgId}/members`, participant);
-  }
-  updateOrgMember(orgId, participant) {
-    cache.clear(participant.id + ":name");
-    return this.post(`${config.organizations}/members/${participant.id}`, participant);
-  }
-  deleteOrgMember(orgId, userId) {
-    cache.clear(userId + ":name");
-    return this.del(`${config.organizations}/${orgId}/members/${userId}`);
-  }
-  requestOrgMemberResetPassword(orgId, userId) {
-    return this.post(`${config.organizations}/${orgId}/members/${userId}/requestResetPassword`);
-  }
-  resendOrgMemberEmailVerification(orgId, userId) {
-    return this.post(`${config.organizations}/${orgId}/members/${userId}/resendEmailVerification`);
-  }
-  resendOrgMemberPhoneVerification(orgId, userId) {
-    return this.post(`${config.organizations}/${orgId}/members/${userId}/resendPhoneVerification`);
-  }
-  signOutOrgMember(orgId, userId, deleteReauthToken) {
-    return this.post(`${config.organizations}/${orgId}/members/${userId}`+
-      `/signOut${fn.queryString({ deleteReauthToken })}`);
-  }
-
-
+  // SESSION LISTENERS
   addSessionStartListener(listener) {
     if (typeof listener !== "function") {
       throw new Error(ERROR);

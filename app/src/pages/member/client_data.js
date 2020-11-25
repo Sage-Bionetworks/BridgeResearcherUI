@@ -6,16 +6,16 @@ import optionsService from "../../services/options_service";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
-let failureHandler = utils.failureHandler({
-  redirectTo: "participants",
-  redirectMsg: "Participant not found",
-  id: 'mem-client-data'
-});
-
 export default function clientData(params) {
   let self = this;
-  self.participant = null;
+  self.account = null;
   self.orgId = params.orgId;
+
+  const failureHandler = utils.failureHandler({
+    id: "mem-client-data",
+    redirectTo: "organizations/" + params.orgId + "/members",
+    redirectMsg: "Organization member not found"
+  });
 
   const binder  = new Binder(self)
     .obs("userId", params.userId)
@@ -39,10 +39,10 @@ export default function clientData(params) {
   function updateClientData() {
     try {
       if (self.clientDataObs()) {
-        self.participant.clientData = JSON.parse(self.clientDataObs());
-        self.clientDataObs(jsonFormatter.prettyPrint(self.participant.clientData));
+        self.account.clientData = JSON.parse(self.clientDataObs());
+        self.clientDataObs(jsonFormatter.prettyPrint(self.account.clientData));
       } else {
-        delete self.participant.clientData;
+        delete self.account.clientData;
       }
     } catch (e) {
       let error = new BridgeError();
@@ -59,7 +59,7 @@ export default function clientData(params) {
       return;
     }
     utils.startHandler(vm, event);
-    serverService.updateOrgMember(params.orgId, self.participant)
+    serverService.updateAccount(self.account.id, self.account)
       .then(utils.successHandler(vm, event, "Client data updated."))
       .catch(utils.failureHandler({ id: 'mem-client-data' }));
   };
@@ -70,11 +70,11 @@ export default function clientData(params) {
 
   optionsService.getOrganizationNames()
     .then(fn.handleObsUpdate(self.orgNameObs, params.orgId))
-    .then(() => serverService.getOrgMemberName(params.orgId, params.userId))
+    .then(() => serverService.getAccountName(params.userId))
     .then(fn.handleObsUpdate(self.titleObs, "name"))
     .then(fn.handleObsUpdate(self.statusObs, "status"))
-    .then(() => serverService.getOrgMember(params.orgId, params.userId))
-    .then(binder.assign('participant'))
+    .then(() => serverService.getAccount(params.userId))
+    .then(binder.assign('account'))
     .then(response => setClientData(response))
     .catch(failureHandler);
 };

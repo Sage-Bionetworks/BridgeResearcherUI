@@ -57,7 +57,7 @@ export default function(params) {
       payload.phoneUpdate = {number: self.phoneObs(), regionCode: self.phoneRegionObs()};
     }
     updateSynapseUserId(payload)
-      .then(() => serverService.updateIdentifiers(payload))
+      .then(() => serverService.updateIdentifiersForSelf(payload))
       .then(() => document.location.reload())
       .catch(utils.failureHandler({id: 'update-identifiers-dialog'}));
   };

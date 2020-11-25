@@ -44,10 +44,10 @@ export default function(params) {
     .obs("orgName");
 
   function requestInfo() {
-    return serverService.getOrgMemberRequestInfo(params.orgId, params.userId);
+    return serverService.getAccountRequestInfo(params.userId);
   }
 
-  serverService.getOrgMemberName(params.orgId, params.userId)
+  serverService.getAccountName(params.userId)
     .then(function(part) {
       self.titleObs(part.name);
       self.nameObs(part.name);

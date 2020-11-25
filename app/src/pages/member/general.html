@@ -15,13 +15,13 @@
           <i class="dropdown icon"></i>
           <div class="menu">
 
-            <div class="item" data-bind="click: resendEmailVerification, visible: resendVisible">
+            <div class="item" data-bind="click: resendEmailVerification, visible: resendEmailVisible">
               Send email verification
             </div>
-            <div class="item" data-bind="click: resendPhoneVerification, visible: resendVisible">
+            <div class="item" data-bind="click: resendPhoneVerification, visible: resendPhoneVisible">
               Send phone verification
             </div>
-            <div class="item" data-bind="click: requestResetPassword, visible: resetPwdVisible">
+            <div class="item" data-bind="click: requestResetPassword">
               Send reset password email
             </div>
             <div class="item" data-bind="click: enableAccount, visible: enableVisible">
@@ -30,8 +30,11 @@
             <div class="item" data-bind="click: disableAccount, visible: disableVisible">
               Disable Account
             </div>
-            <div class="item" data-bind="click: signOutUser, visible: signOutVisible">
+            <div class="item" data-bind="click: signOutUser">
               Sign out user&hellip;
+            </div>
+            <div class="item" data-bind="click: deleteUser, visible: deleteVisible">
+              <span class="red ui text">Delete Account</span>
             </div>
 
           </div>
