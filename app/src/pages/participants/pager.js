@@ -30,7 +30,7 @@ export default function pager(params) {
 
   let query = storeService.restoreQuery("p", "allOfGroups", "noneOfGroups");
 
-  let binder = new Binder(self)
+  new Binder(self)
     .obs("emailFilter", query.emailFilter)
     .obs("phoneFilter", query.phoneFilter)
     .obs("startTime", query.startTime || defaultStart)
@@ -47,7 +47,7 @@ export default function pager(params) {
     .obs("dataGroups[]")
     .obs("allOfGroups[]", query.allOfGroups)
     .obs("noneOfGroups[]", query.noneOfGroups)
-    .obs("adminOnly", false);
+    .obs("adminOnly", query.adminOnly);
 
   self.doSearch = function(vm, event) {
     self.searchLoadingObs(true);

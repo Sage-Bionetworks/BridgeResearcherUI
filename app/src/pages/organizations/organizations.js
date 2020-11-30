@@ -32,7 +32,7 @@ export default function organizations() {
   self.orgMembership = null;
 
   self.canEdit = function(item) {
-    return self.orgMembership === item.identifier;
+    return self.orgMembership === item.identifier || self.isAdmin();
   }
 
   function load(query) {
