@@ -436,6 +436,7 @@ export class ServerService {
   deleteCacheKey(cacheKey) {
     return this.del(`${config.cache}/${esc(cacheKey)}`);
   }
+  // TODO: This can be removed, but you need to refactor and test.
   getParticipants(offsetBy, pageSize, emailFilter, phoneFilter, startTime, endTime) {
     let queryString = fn.queryString({ offsetBy, pageSize, emailFilter, phoneFilter, startTime, endTime });
     return this.gethttp(config.participants + queryString);
@@ -515,9 +516,6 @@ export class ServerService {
   }
   resendPhoneVerification(id) {
     return this.post(`${config.participants}/${id}/resendPhoneVerification`);
-  }
-  getExternalIds(params) {
-    return this.gethttp(`${config.externalIds}${fn.queryString(params || {})}`);
   }
   getExternalIdsForStudy(studyId, params) {
     return this.gethttp(`${config.studies}/${studyId}/externalids${fn.queryString(params || {})}`);
@@ -930,6 +928,80 @@ export class ServerService {
     let queryString = fn.queryString({withdrawalNote});
     return this.del(`/v5/studies/${studyId}/enrollments/${userId}${queryString}`);
   }
+
+
+  getStudyParticipants(studyId, search) {
+    return this.post(`${config.studies}/${studyId}/participants/search`, search);
+  }
+  getStudyParticipant(studyId, userId) {
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}`);
+  }
+  getStudyParticipantRequestInfo(studyId, userId) {
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/requestInfo`);
+  }
+  getStudyParticipantNotifications(studyId, userId) {
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/notifications`);
+  }
+  getStudyParticipantRecentSmsMessage(studyId, userId) {
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/sms/recent`);
+  }
+  getStudyParticipantEnrollments(studyId, userId) {
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/enrollments`);
+  }
+  getStudyParticipantUploads(studyId, userId, args) {
+    let queryString = fn.queryString(args);
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/uploads${queryString}`);
+  }
+  getStudyParticipantReport(studyId, userId, reportId, startDate, endDate) {
+    let queryString = fn.queryString({ startDate, endDate });
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/reports/${reportId}${queryString}`);
+  }
+  getStudyParticipantReportIndex(studyId, reportId) {
+    return this.gethttp(`${config.studies}/${studyId}/reports/${reportId}/index`);
+  }
+  getStudyParticipantActivityEvents(studyId, userId) {
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/activityEvents`);
+  }
+  createStudyParticipant(studyId, participant) {
+    return this.post(`${config.studies}/${studyId}/participants`, participant);
+  }
+  addStudyParticipantReport(studyId, userId, reportId, report) {
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/reports/${reportId}`, report);
+  }
+  deleteStudyParticipantReport(studyId, reportId, userId) {
+    return this.del(`${config.studies}/${studyId}/participants/${userId}/reports/${reportId}`);
+  }
+  deleteStudyParticipantReportRecord(studyId, userId, reportId, date) {
+    return this.del(`${config.studies}/${studyId}/participants/${userId}/reports/${reportId}/${date}`);
+  }
+  withdrawStudyParticipantFromStudy(studyId, userId, subpopGuid, reason) {
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/consents/${subpopGuid}/withdraw`, reason);
+  }
+  sendStudyParticipantNotification(studyId, userId, message) {
+    return this.post(`${config.studies}/${studyId}/participants/${studyId}/sendNotification`, message);
+  }
+  sendStudyParticipantSmsMessage(studyId, userId, message) {
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/sendSmsMessage`, message);
+  }
+  signOutStudyParticipant(studyId, userId, deleteReauthToken) {
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/signOut${fn.queryString({ deleteReauthToken })}`);
+  }
+  requestStudyParticipantResetPassword(studyId, userId) {
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/requestResetPassword`);
+  }
+  resendStudyParticipantConsentAgreement(studyId, userId, subpopGuid) {
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/consents/${subpopGuid}/resendConsent`);
+  }
+  resendStudyParticipantEmailVerification(studyId, userId) {
+    return this.post(`${config.studies}/${studyId}/participatns/${userId}/resendEmailVerification`);
+  }
+  resendStudyParticipantPhoneVerification(studyId, userId) {
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/resendPhoneVerification`);
+  }
+  
+
+
+
 
   getTemplates(query) {
     let queryString = fn.queryString(query);

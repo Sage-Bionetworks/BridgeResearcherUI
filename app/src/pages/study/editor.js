@@ -20,25 +20,25 @@ export default function(params) {
 
   let binder = new Binder(self)
     .obs("title", "New Study")
-    .obs("isNew", params.id === "new")
+    .obs("isNew", params.studyId === "new")
     .obs("createdOn")
     .obs("modifiedOn")
     .bind("version")
     .bind("name")
-    .bind("identifier", params.id === "new" ? null : params.id);
+    .bind("identifier", params.studyId === "new" ? null : params.studyId);
 
   function load() {
-    return params.id === "new" ? 
+    return params.studyId === "new" ? 
       Promise.resolve({}) : 
-      serverService.getStudy(params.id).then(fn.handleObsUpdate(self.titleObs, "name"));
+      serverService.getStudy(params.studyId).then(fn.handleObsUpdate(self.titleObs, "name"));
   }
   function saveStudy() {
-    return params.id === "new" ? 
+    return params.studyId === "new" ? 
       serverService.createStudy(self.study) : 
       serverService.updateStudy(self.study);
   }
   function updateModifiedOn(response) {
-    params.id = self.identifierObs();
+    params.studyId = self.identifierObs();
     self.modifiedOnObs(response.modifiedOn);
     return response;
   }
@@ -49,7 +49,7 @@ export default function(params) {
     utils.startHandler(vm, event);
     saveStudy()
       .then(response => {
-        if (params.id === "new") {
+        if (params.studyId === "new") {
           document.location = "#/studies/" + self.identifierObs() + "/sponsors";
         }
         return response;

@@ -4,58 +4,43 @@
       <div class="ui breadcrumb">
         <a href="#/studies" class="section">Studies</a>
         <i class="right chevron icon divider"></i>
+        <a class="section" data-bind="href: '#/studies/' + navStudyIdObs() + '/participants', text: navStudyNameObs()">StudyName</a>
+        <i class="right chevron icon divider"></i>
+        <span class="section">Participants</span>
       </div>
       <h3 data-bind="text: titleObs"></h3>
     </div>
     <div class="fixed-header-buttons">
-      <button class="ui tiny primary button" data-bind="click: enrollDialog, visible: isResearcher">
-        Enroll Participant&hellip;
-      </button>      
     </div>
   </div>
-  <study-tabset params="identifierObs: identifierObs, isNewObs: isNewObs"></study-tabset>
+  <studyparticipant-tabset params="studyIdObs: navStudyIdObs, userIdObs: userIdObs, 
+        statusObs: statusObs"></studyparticipant-tabset>
 </div>
 <div class="scrollbox">
-  <errors id="enrollments"></errors>
   <form class="ui skinny form">
-    <div class="line-control">
-      <div style="margin-right: 1rem">Show only: </div>
-      <div style="margin-right: 1rem">
-        <div class="field">
-          <select class="ui dropdown" data-bind="options: options, optionsText: 'label', 
-            optionsValue: 'value', value: $component.enrollmentFilterObs"></select>
-        </div>
-      </div>
-      <div>
-        <div class="ui checkbox">
-          <input data-bind="checked: includeTestersObs" type="checkbox">
-          <label>Include testers?</label>
-        </div>
-      </div>
-      <div class="line-control-stretch"></div>
-      <pager params="prefix: 'en', postLoadFunc: postLoadFunc"></pager>
-    </div>
+    <errors id="studyparticipant-enrollments"></errors>
     <table class="ui compact selectable table">
       <thead>
         <tr>
-          <th nowrap>User</th>
+          <th>Study</th>
+          <th nowrap>External ID</th>
           <th>Status</th>
-          <th width="10"></th>
+          <th></th>
         </tr>
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td colspan="3" data-bind="html: recordsMessageObs"></td>
+          <td colspan="4" data-bind="html: recordsMessageObs"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
         <tr>
           <td>
-            <a data-bind="text: $parent.formatParticipant($data),
-              attr: {'href': '#/studies/' + $parent.identifierObs() + '/participants/' + $data.participant.identifier + '/general'}">
-            </a>
+            <a data-bind="attr: {href: '#/studies/' + $data.studyId + '/general'}, 
+              text: $data.studyName"></a>
           </td>
-          <td style="white-space: nowrap">
+          <td data-bind="text: $data.externalId"></td>
+          <td>
             <div class="ui small text" data-bind="if: $data.enrolledOn">
               Enrolled 
               <span data-bind="if: $data.enrolledBy">
@@ -75,16 +60,19 @@
               <span data-bind="text: $data.consentRequired ? 'Must still consent to research' : ''"></span>
             </div>
           </td>
-          <td nowrap>
+          <td nowrap style="text-align: right">
             <button class="ui basic compact mini red button" 
               data-bind="click: $parent.unenroll, hidden: $data.withdrawnOn">Withdraw
             </button>
+            <button class="ui basic compact mini blue button" 
+              data-bind="click: $parent.enroll, visible: $data.withdrawnOn">Enroll
+            </button>
+            <a style="margin-left: 1rem; white-space: nowrap" data-bind="visible: $parent.hasSignatures($data),
+              attr: { href: '#/participants/' + $parent.userIdObs() + 
+              '/consents/' + $data.studyId } ">View Signatures</a>
           </td>
         </tr>
       </tbody>
     </table>
   </form>
 </div>
-
-
-

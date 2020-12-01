@@ -69,7 +69,7 @@
               <span data-bind="visible: $data.assigned">
                 <span data-bind="visible: !$parent.isResearcher(), text: $data.identifier"></span>
                 <a data-bind="text: $data.identifier, visible: $parent.isResearcher, 
-                  attr: {'href': $parent.link($data)}"></a>
+                  href: $parent.link($data)"></a>
               </span>
             </td>
           </tr>

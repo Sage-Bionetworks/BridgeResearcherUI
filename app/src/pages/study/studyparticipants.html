@@ -1,0 +1,76 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/studies" class="section">Studies</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="text: titleObs"></h3>
+    </div>
+    <div class="fixed-header-buttons">
+      <button class="ui tiny button" data-bind="click: exportDialog">Export&hellip;</button>
+      <button class="ui red tiny button" data-bind="visible: isAdmin, 
+        disable: !atLeastOneChecked(), click: deleteItems">
+        Delete
+      </button>
+      <a data-bind="href: '#/studies/'+studyIdObs()+'/participants/new/general'"
+        class="ui primary tiny button">New Participant</a>
+      <div class="ui search">
+        <div class="ui icon input">
+          <input class="prompt" type="text" style="padding: .47857143em 1em"
+            placeholder="Find by any identifier" data-bind="textInput: findObs, returnHandler: doSearch"/>
+          <i class="search icon"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <study-tabset params="identifierObs: studyIdObs, isNewObs: isNewObs"></study-tabset>
+</div>
+<div class="scrollbox">
+  <errors id="studyparticipants"></errors>
+  <participants-pager params="loadingFunc: loadingFunc, pageKey: 'participants-page'"></participants-pager>
+  <table class="ui compact selectable table">
+    <thead>
+      <tr>
+        <th width="10" data-bind="visible: isAdmin">
+          <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+        </th>
+        <th>Name</th>
+        <th>Identifier(s)</th>
+        <th>Organization</th>
+        <th>Studies</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+      <tr>
+        <td colspan="6" data-bind="html: recordsMessageObs"></td>
+      </tr>
+    </tbody>
+    <tbody data-bind="foreach: itemsObs">
+      <tr data-bind="css: $component.classNameForStatus($data)">
+        <td data-bind="visible: $parent.isAdmin">
+          <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+        </td>
+        <td>
+          <a data-bind="href: '#/studies/'+$parent.studyIdObs()+'/participants/'+$data.id+'/general',
+            text: $component.formatNameAsFullLabel($data)"></a>
+        </td>
+        <td data-bind="html: $component.formatIdentifiers($data)"></td>
+        <td>
+          <a data-bind="href: '#/organizations/' + $data.orgMembership + '/general', 
+            text: $parent.orgNames[$data.orgMembership]">
+          </a>
+        </td>
+        <td data-bind="foreach: $data.studyIds"><span 
+            data-bind="visible: $index() > 0">, </span><a 
+            data-bind="text: $component.formatStudyName($data),
+            href: '#/studies/' + $data + '/general'"></a></td>
+        <td style="padding: 0; text-align:right">
+          <span style="padding-right: .6rem; white-space: nowrap" data-bind="visible: $data.status === 'disabled'">
+            <i class="warning sign icon"></i>Disabled</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

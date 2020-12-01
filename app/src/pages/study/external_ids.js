@@ -22,8 +22,8 @@ export default function externalIds(params) {
     .obs("result", "")
     .obs("searchLoading", false)
     .obs("idFilter")
-    .obs("studyId", params.id)
-    .bind("identifier", params.id)
+    .obs("studyId", params.studyId)
+    .bind("identifier", params.studyId)
     .obs("showResults", false);
 
   fn.copyProps(self, root, "isAdmin", "isDeveloper", "isResearcher");
@@ -71,48 +71,31 @@ export default function externalIds(params) {
     self.showResultsObs(false);
     root.openDialog("external_id_importer", {
       vm: self,
-      studyId: params.id,
+      studyId: params.studyId,
       reload: self.load.bind(self)
     });
   };
-  // self.createFrom = function(data, event) {
-  //   self.showResultsObs(false);
-  //   utils.startHandler(self, event);
-  //   createNewCredentials(data.identifier)
-  //     .then(updatePageWithResult)
-  //     .then(utils.successHandler(self, event))
-  //     .catch(utils.failureHandler({ transient: false, id: 'external-ids' }));
-  // };
-  self.link = (item) => "#/participants/" + encodeURIComponent("externalId:" + item.identifier) + "/general";
+  self.link = (item) => 
+    `#/studies/${params.studyId}/participants/${encodeURIComponent("externalId:" + item.identifier)}/general`;
   self.doSearch = (event) => {
     event.preventDefault();
     event.stopPropagation();
     self.load(self.query);
   };
 
-  // This is called from the dialog that allows a user to enter a new external identifier.
-  // self.createFromNew = function(identifier) {
-  //   serverService.addExternalIds([identifier])
-  //     .then(convertToPaged(identifier))
-  //     .then(extractId)
-  //     .then(createNewCredentials)
-  //     .then(updatePageWithResult)
-  //     .then(utils.successHandler())
-  //     .catch(utils.failureHandler({ id: 'external-ids' }));
-  // };
   self.matchesStudy = (studyId) => fn.studyMatchesUser(self.userStudies, studyId);
 
   serverService.getSession()
     .then(initFromSession)
     .then(binder.assign("app"))
-    .then(() => serverService.getStudy(params.id))
+    .then(() => serverService.getStudy(params.studyId))
     .then(fn.handleObsUpdate(self.titleObs, "name"));
 
   self.load = function(query) {
     query = query || {};
     self.query = query;
     self.query.idFilter = self.idFilterObs();
-    return serverService.getExternalIdsForStudy(params.id, self.query)
+    return serverService.getExternalIdsForStudy(params.studyId, self.query)
       .then(binder.update("total", "items"))
       .then(self.postLoadPagerFunc)
       .catch(utils.failureHandler({ id: 'external-ids' }));

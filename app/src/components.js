@@ -1,8 +1,11 @@
 import ko from "knockout";
+
 import errors from "./widgets/errors/errors";
 import errorsHtml from "./widgets/errors/errors.html";
+
 import assessments from "./pages/assessments/assessments";
 import assessmentsHtml from "./pages/assessments/assessments.html";
+
 import assessment from "./pages/assessment/general";
 import assessmentHtml from "./pages/assessment/general.html";
 import assessmentConfig from "./pages/assessment/config";
@@ -19,8 +22,10 @@ import assessmentCustomize from "./pages/assessment/customize";
 import assessmentCustomizeHtml from "./pages/assessment/customize.html";
 import assessmentTabs from "./pages/assessment/tabset";
 import assessmentTabsHtml from "./pages/assessment/tabset.html";
+
 import sharedassessments from "./pages/sharedassessments/sharedassessments";
 import sharedassessmentsHtml from "./pages/sharedassessments/sharedassessments.html";
+
 import sharedassessment from "./pages/sharedassessment/general";
 import sharedassessmentHtml from "./pages/sharedassessment/general.html";
 import sharedassessmentHistory from "./pages/sharedassessment/history";
@@ -33,22 +38,19 @@ import sharedassessmentResource from "./pages/sharedassessment/resource";
 import sharedassessmentResourceHtml from "./pages/sharedassessment/resource.html";
 import sharedassessmentTabs from "./pages/sharedassessment/tabset";
 import sharedassessmentTabsHtml from "./pages/sharedassessment/tabset.html";
+
 import tags from "./pages/admin/tags/tags";
 import tagsHtml from "./pages/admin/tags/tags.html";
-// import sharedModules from "./pages/shared_modules/shared_modules";
-// import sharedModulesHtml from "./pages/shared_modules/shared_modules.html";
+
 import dailyUploads from "./pages/studyreports/dailyUploads";
 import dailyUploadsHtml from "./pages/studyreports/dailyUploads.html";
+
 import retention from "./pages/studyreports/retention";
 import retentionHtml from "./pages/studyreports/retention.html";
-// import sharedModule from "./pages/shared_module/shared_module";
-// import sharedModuleHtml from "./pages/shared_module/shared_module.html";
-// import sharedModuleVersions from "./pages/shared_module/shared_module_versions";
-// import sharedModuleVersionsHtml from "./pages/shared_module/shared_module_versions.html";
-// import shTabset from "./pages/shared_module/tabset";
-// import shTabsetHtml from "./pages/shared_module/tabset.html";
 import studyReportsTabset from "./pages/studyreports/tabset";
 import studyReportsTabsetHtml from "./pages/studyreports/tabset.html";
+
+// Settings
 import general from "./pages/settings/general";
 import generalHtml from "./pages/settings/general.html";
 import email from "./pages/settings/email";
@@ -63,16 +65,22 @@ import installLinks from "./pages/settings/install_links";
 import installLinksHtml from "./pages/settings/install_links.html";
 import advanced from "./pages/settings/advanced";
 import advancedHtml from "./pages/settings/advanced.html";
-import externalIds from "./pages/study/external_ids";
-import externalIdsHtml from "./pages/study/external_ids.html";
+import dataGroups from "./pages/settings/data_groups.html";
+import userAtts from "./pages/settings/user_attributes.html";
+import settingsTabset from "./pages/settings/tabset";
+import settingsTabsetHtml from "./pages/settings/tabset.html";
+
+// study reports
 import signUps from "./pages/studyreports/signUps";
 import signUpsHtml from "./pages/studyreports/signUps.html";
 import reports from "./pages/studyreports/reports";
 import reportsHtml from "./pages/studyreports/reports.html";
 import report from "./pages/studyreports/report";
 import reportHtml from "./pages/studyreports/report.html";
+
 import subpops from "./pages/subpopulations/subpopulations";
 import subpopsHtml from "./pages/subpopulations/subpopulations.html";
+
 import subpop from "./pages/subpopulation/general";
 import subpopHtml from "./pages/subpopulation/general.html";
 import subpopEditor from "./pages/subpopulation/editor";
@@ -81,78 +89,20 @@ import subpopHistory from "./pages/subpopulation/history";
 import subpopHistoryHtml from "./pages/subpopulation/history.html";
 import subpopDl from "./pages/subpopulation/download";
 import subpopDlHtml from "./pages/subpopulation/download.html";
+import subpopTabset from "./pages/subpopulation/tabset";
+import subpopTabsetHtml from "./pages/subpopulation/tabset.html";
+
 import surveys from "./pages/surveys/surveys";
 import surveysHtml from "./pages/surveys/surveys.html";
+
 import survey from "./pages/survey/survey";
 import surveyHtml from "./pages/survey/survey.html";
 import surveyVers from "./pages/survey/survey_versions";
 import surveyVersHtml from "./pages/survey/survey_versions.html";
 import surveySchema from "./pages/survey/survey_schema";
 import surveySchemaHtml from "./pages/survey/survey_schema.html";
-import schemas from "./pages/schemas/schemas";
-import schemasHtml from "./pages/schemas/schemas.html";
-import schema from "./pages/schema/schema";
-import schemaHtml from "./pages/schema/schema.html";
-import schemaVers from "./pages/schema/schema_versions";
-import schemaVersHtml from "./pages/schema/schema_versions.html";
-import exportSettings from "./pages/export_settings/export_settings";
-import exportSettingsHtml from "./pages/export_settings/export_settings.html";
-import uploadMetadata from "./pages/shared_upload_metadata/shared_upload_metadata";
-import uploadMetadataHtml from "./pages/shared_upload_metadata/shared_upload_metadata.html";
-import scheduleplans from "./pages/scheduleplans/scheduleplans";
-import scheduleplansHtml from "./pages/scheduleplans/scheduleplans.html";
-import scheduleplan from "./pages/scheduleplan/scheduleplan";
-import scheduleplanHtml from "./pages/scheduleplan/scheduleplan.html";
-import participants from "./pages/participants/participants";
-import participantsHtml from "./pages/participants/participants.html";
-import partGeneral from "./pages/participant/general";
-import partGeneralHtml from "./pages/participant/general.html";
-import partActivities from "./pages/participant/activities";
-import partActivitiesHtml from "./pages/participant/activities.html";
-import partEvents from "./pages/participant/activity_events";
-import partEventsHtml from "./pages/participant/activity_events.html";
-import partActivity from "./pages/participant/activity";
-import partActivityHtml from "./pages/participant/activity.html";
-import partClientData from "./pages/participant/client_data";
-import partClientDataHtml from "./pages/participant/client_data.html";
-import partEnrollments from "./pages/participant/enrollments";
-import partEnrollmentsHtml from "./pages/participant/enrollments.html";
-import partConsents from "./pages/participant/consents";
-import partConsentsHtml from "./pages/participant/consents.html";
-import partReports from "./pages/participant/reports";
-import partReportsHtml from "./pages/participant/reports.html";
-import partNots from "./pages/participant/notifications";
-import partNotsHtml from "./pages/participant/notifications.html";
-import partReport from "./pages/participant/report";
-import partReportHtml from "./pages/participant/report.html";
-import partUploads from "./pages/participant/uploads";
-import partUploadsHtml from "./pages/participant/uploads.html";
-import partUpload from "./pages/participant/upload";
-import partUploadHtml from "./pages/participant/upload.html";
-import uploadDetails from "./widgets/upload_details/upload_details";
-import uploadDetailsHtml from "./widgets/upload_details/upload_details.html";
-import lineEditor from "./widgets/line_editor/line_editor";
-import lineEditorHtml from "./widgets/line_editor/line_editor.html";
-import partRequestInfo from "./pages/participant/request_info";
-import partRequestInfoHtml from "./pages/participant/request_info.html";
-import setEditor from "./pages/set_editors/set_editor";
-import eventKeysHtml from "./pages/events/event_keys.html";
-import customEvents from "./pages/events/auto_custom_events";
-import customEventsHtml from "./pages/events/auto_custom_events.html";
-import topics from "./pages/topics/topics";
-import topicsHtml from "./pages/topics/topics.html";
-import topic from "./pages/topic/topic";
-import topicHtml from "./pages/topic/topic.html";
-import files from "./pages/files/files";
-import filesHtml from "./pages/files/files.html";
-import file from "./pages/file/file";
-import fileHtml from "./pages/file/file.html";
-import schedule from "./pages/schedule/schedule";
-import scheduleHtml from "./pages/schedule/schedule.html";
-import uploads from "./pages/uploads/uploads";
-import uploadsHtml from "./pages/uploads/uploads.html";
-import upload from "./pages/upload/upload";
-import uploadHtml from "./pages/upload/upload.html";
+import surveyPanel from "./pages/survey/panels/survey";
+import surveyPanelHtml from "./pages/survey/panels/survey.html";
 import ss from "./pages/schedule/strategies/simple_strategy";
 import ssHtml from "./pages/schedule/strategies/simple_strategy.html";
 import abs from "./pages/schedule/strategies/ab_strategy";
@@ -165,40 +115,6 @@ import csPanel from "./pages/schedule/panels/criteria_strategy_panel";
 import csPanelHtml from "./pages/schedule/panels/criteria_strategy_panel.html";
 import ssPanel from "./pages/schedule/panels/simple_strategy_panel";
 import ssPanelHtml from "./pages/schedule/panels/simple_strategy_panel.html";
-import surveyPanel from "./pages/survey/panels/survey";
-import surveyPanelHtml from "./pages/survey/panels/survey.html";
-import adminCache from "./pages/admin/cache/cache";
-import adminCacheHtml from "./pages/admin/cache/cache.html";
-import adminApps from "./pages/admin/apps/apps";
-import adminAppsHtml from "./pages/admin/apps/apps.html";
-import adminApp from "./pages/admin/app/app";
-import adminAppHtml from "./pages/admin/app/app.html";
-// import adminMasterSchedules from "./pages/admin/masterschedules/masterschedules";
-// import adminMasterSchedulesHtml from "./pages/admin/masterschedules/masterschedules.html";
-import orgs from "./pages/organizations/organizations";
-import orgsHtml from "./pages/organizations/organizations.html";
-
-import orgEditor from "./pages/organization/editor";
-import orgEditorHtml from "./pages/organization/editor.html";
-import orgMembers from "./pages/organization/members";
-import orgMembersHtml from "./pages/organization/members.html";
-import orgStudies from "./pages/organization/studies";
-import orgStudiesHtml from "./pages/organization/studies.html";
-import orgTabset from "./pages/organization/tabset";
-import orgTabsetHtml from "./pages/organization/tabset.html";
-
-import studies from "./pages/studies/studies";
-import studiesHtml from "./pages/studies/studies.html";
-
-import studyEditor from "./pages/study/editor";
-import studyEditorHtml from "./pages/study/editor.html";
-import studySponsors from "./pages/study/sponsors";
-import studySponsorsHtml from "./pages/study/sponsors.html";
-import studyEnrollments from "./pages/study/enrollments";
-import studyEnrollmentsHtml from "./pages/study/enrollments.html";
-import studyTabset from "./pages/study/tabset";
-import studyTabsetHtml from "./pages/study/tabset.html";
-
 import boolConst from "./pages/survey/constraints/boolean_constraints";
 import boolConstHtml from "./pages/survey/constraints/boolean_constraints.html";
 import dateConst from "./pages/survey/constraints/date_constraints";
@@ -229,50 +145,238 @@ import heightConst from "./pages/survey/constraints/height_constraints";
 import heightConstHtml from "./pages/survey/constraints/height_constraints.html";
 import bpConst from "./pages/survey/constraints/bloodpressure_constraints.js";
 import bpConstHtml from "./pages/survey/constraints/bloodpressure_constraints.html";
-import tagEditor from "./widgets/tag-editor/tag_editor";
-import tagEditorHtml from "./widgets/tag-editor/tag_editor.html";
-import uiDur from "./widgets/form/ui_duration";
-import uiDurHtml from "./widgets/form/ui_duration.html";
-import eventsTabsetHtml from "./pages/events/tabset.html";
 import surveyTabset from "./pages/survey/tabset";
 import surveyTabsetHtml from "./pages/survey/tabset.html";
-import subpopTabset from "./pages/subpopulation/tabset";
-import subpopTabsetHtml from "./pages/subpopulation/tabset.html";
-import critEditor from "./dialogs/criteria_editor/criteria_editor";
-import critEditorHtml from "./dialogs/criteria_editor/criteria_editor.html";
-import appVersionCrit from "./widgets/criteria/app_version_criteria";
-import appVersionCritHtml from "./widgets/criteria/app_version_criteria.html";
-import templateCrit from "./widgets/criteria/template_criteria";
-import templateCritHtml from "./widgets/criteria/template_criteria.html";
-import partPager from "./pages/participants/pager";
-import partPagerHtml from "./pages/participants/pager.html";
-import fieldDef from "./pages/schema/field_definition";
-import fieldDefHtml from "./pages/schema/field_definition.html";
 import infoScreen from "./pages/survey/survey_info";
 import infoScreenHtml from "./pages/survey/survey_info.html";
 import questionHtml from "./pages/survey/survey_question.html";
 import constLabelHtml from "./pages/survey/constraints/constraints_label.html";
 import rules from "./pages/survey/constraints/ui_rules";
 import rulesHtml from "./pages/survey/constraints/ui_rules.html";
+
+import schemas from "./pages/schemas/schemas";
+import schemasHtml from "./pages/schemas/schemas.html";
+
+import schema from "./pages/schema/schema";
+import schemaHtml from "./pages/schema/schema.html";
+import schemaVers from "./pages/schema/schema_versions";
+import schemaVersHtml from "./pages/schema/schema_versions.html";
+
+import exportSettings from "./pages/export_settings/export_settings";
+import exportSettingsHtml from "./pages/export_settings/export_settings.html";
+
+import uploadMetadata from "./pages/shared_upload_metadata/shared_upload_metadata";
+import uploadMetadataHtml from "./pages/shared_upload_metadata/shared_upload_metadata.html";
+
+import scheduleplans from "./pages/scheduleplans/scheduleplans";
+import scheduleplansHtml from "./pages/scheduleplans/scheduleplans.html";
+
+import scheduleplan from "./pages/scheduleplan/scheduleplan";
+import scheduleplanHtml from "./pages/scheduleplan/scheduleplan.html";
+
+import participants from "./pages/participants/participants";
+import participantsHtml from "./pages/participants/participants.html";
+import partPager from "./pages/participants/pager";
+import partPagerHtml from "./pages/participants/pager.html";
+
+import partGeneral from "./pages/participant/general";
+import partGeneralHtml from "./pages/participant/general.html";
+import partActivities from "./pages/participant/activities";
+import partActivitiesHtml from "./pages/participant/activities.html";
+import partEvents from "./pages/participant/activity_events";
+import partEventsHtml from "./pages/participant/activity_events.html";
+import partActivity from "./pages/participant/activity";
+import partActivityHtml from "./pages/participant/activity.html";
+import partClientData from "./pages/participant/client_data";
+import partClientDataHtml from "./pages/participant/client_data.html";
+import partEnrollments from "./pages/participant/enrollments";
+import partEnrollmentsHtml from "./pages/participant/enrollments.html";
+import partConsents from "./pages/participant/consents";
+import partConsentsHtml from "./pages/participant/consents.html";
+import partReports from "./pages/participant/reports";
+import partReportsHtml from "./pages/participant/reports.html";
+import partNots from "./pages/participant/notifications";
+import partNotsHtml from "./pages/participant/notifications.html";
+import partReport from "./pages/participant/report";
+import partReportHtml from "./pages/participant/report.html";
+import partUploads from "./pages/participant/uploads";
+import partUploadsHtml from "./pages/participant/uploads.html";
+import partUpload from "./pages/participant/upload";
+import partUploadHtml from "./pages/participant/upload.html";
+import partRequestInfo from "./pages/participant/request_info";
+import partRequestInfoHtml from "./pages/participant/request_info.html";
+import verifiedIcon from "./pages/participant/verified-icon";
+import verifiedIconHtml from "./pages/participant/verified-icon.html";
+import partTabset from "./pages/participant/tabset";
+import partTabsetHtml from "./pages/participant/tabset.html";
+
+import setEditor from "./pages/set_editors/set_editor"; // however, this is a widget
+
+import taskIdentifiers from "./pages/set_editors/task_identifiers.html";
+
+import eventKeysHtml from "./pages/events/event_keys.html";
+import customEvents from "./pages/events/auto_custom_events";
+import customEventsHtml from "./pages/events/auto_custom_events.html";
+import eventsTabsetHtml from "./pages/events/tabset.html";
+
+import topics from "./pages/topics/topics";
+import topicsHtml from "./pages/topics/topics.html";
+
+import topic from "./pages/topic/topic";
+import topicHtml from "./pages/topic/topic.html";
+
+import files from "./pages/files/files";
+import filesHtml from "./pages/files/files.html";
+
+import file from "./pages/file/file";
+import fileHtml from "./pages/file/file.html";
+
+import schedule from "./pages/schedule/schedule";
+import scheduleHtml from "./pages/schedule/schedule.html";
+
+import uploads from "./pages/uploads/uploads";
+import uploadsHtml from "./pages/uploads/uploads.html";
+
+import upload from "./pages/upload/upload";
+import uploadHtml from "./pages/upload/upload.html";
+
+import adminCache from "./pages/admin/cache/cache";
+import adminCacheHtml from "./pages/admin/cache/cache.html";
+
+import adminApps from "./pages/admin/apps/apps";
+import adminAppsHtml from "./pages/admin/apps/apps.html";
+
+import adminApp from "./pages/admin/app/app";
+import adminAppHtml from "./pages/admin/app/app.html";
+
+// import adminMasterSchedules from "./pages/admin/masterschedules/masterschedules";
+// import adminMasterSchedulesHtml from "./pages/admin/masterschedules/masterschedules.html";
+
+import orgs from "./pages/organizations/organizations";
+import orgsHtml from "./pages/organizations/organizations.html";
+
+import orgEditor from "./pages/organization/editor";
+import orgEditorHtml from "./pages/organization/editor.html";
+import orgMembers from "./pages/organization/members";
+import orgMembersHtml from "./pages/organization/members.html";
+import orgStudies from "./pages/organization/studies";
+import orgStudiesHtml from "./pages/organization/studies.html";
+import orgTabset from "./pages/organization/tabset";
+import orgTabsetHtml from "./pages/organization/tabset.html";
+
+import studies from "./pages/studies/studies";
+import studiesHtml from "./pages/studies/studies.html";
+
+import studyEditor from "./pages/study/editor";
+import studyEditorHtml from "./pages/study/editor.html";
+import studySponsors from "./pages/study/sponsors";
+import studySponsorsHtml from "./pages/study/sponsors.html";
+import studyEnrollments from "./pages/study/enrollments";
+import studyEnrollmentsHtml from "./pages/study/enrollments.html";
+import externalIds from "./pages/study/external_ids";
+import externalIdsHtml from "./pages/study/external_ids.html";
+import studyTabset from "./pages/study/tabset";
+import studyTabsetHtml from "./pages/study/tabset.html";
+
+import studyparticipants from "./pages/study/studyparticipants";
+import studyparticipantsHtml from "./pages/study/studyparticipants.html";
+
+// ???
+import studypartPager from "./pages/study/pager";
+import studypartPagerHtml from "./pages/study/pager.html";
+
+import studypartGeneral from "./pages/studyparticipant/general";
+import studypartGeneralHtml from "./pages/studyparticipant/general.html";
+import studypartEnrollments from "./pages/studyparticipant/enrollments";
+import studypartEnrollmentsHtml from "./pages/studyparticipant/enrollments.html";
+import studypartUploads from "./pages/studyparticipant/uploads";
+import studypartUploadsHtml from "./pages/studyparticipant/uploads.html";
+import studypartUpload from "./pages/studyparticipant/upload";
+import studypartUploadHtml from "./pages/studyparticipant/upload.html";
+import studypartNots from "./pages/studyparticipant/notifications";
+import studypartNotsHtml from "./pages/studyparticipant/notifications.html";
+import studypartTabset from "./pages/studyparticipant/tabset";
+import studypartTabsetHtml from "./pages/studyparticipant/tabset.html";
+import studypartReports from "./pages/studyparticipant/reports";
+import studypartReportsHtml from "./pages/studyparticipant/reports.html";
+import studypartReport from "./pages/studyparticipant/report";
+import studypartReportHtml from "./pages/studyparticipant/report.html";
+import studypartClientData from "./pages/studyparticipant/client_data";
+import studypartClientDataHtml from "./pages/studyparticipant/client_data.html";
+import studypartRequestInfo from "./pages/studyparticipant/request_info";
+import studypartRequestInfoHtml from "./pages/studyparticipant/request_info.html";
+/*
+import studypartEvents from "./pages/studyparticipant/activity_events";
+import studypartEventsHtml from "./pages/studyparticipant/activity_events.html";
+import studypartConsents from "./pages/studyparticipant/consents";
+import studypartConsentsHtml from "./pages/studyparticipant/consents.html";
+import studyverifiedIcon from "./pages/studyparticipant/verified-icon";
+import studyverifiedIconHtml from "./pages/studyparticipant/verified-icon.html";
+*/
+import schemaTabset from "./pages/schema/tabset";
+import schemaTabsetHtml from "./pages/schema/tabset.html";
+import fieldDef from "./pages/schema/field_definition";
+import fieldDefHtml from "./pages/schema/field_definition.html";
+
+import appConfigs from "./pages/appconfigs/appconfigs";
+import appConfigsHtml from "./pages/appconfigs/appconfigs.html";
+
+import appConfig from "./pages/appconfig/appconfig";
+import appConfigHtml from "./pages/appconfig/appconfig.html";
+
+import configs from "./pages/configs/configs";
+import configsHtml from "./pages/configs/configs.html";
+
+import configEditor from "./pages/config/editor";
+import configEditorHtml from "./pages/config/editor.html";
+import configHistory from "./pages/config/history";
+import configHistoryHtml from "./pages/config/history.html";
+import configTabset from "./pages/config/tabset";
+import configTabsetHtml from "./pages/config/tabset.html";
+
+import templatesList from './pages/templates/list';
+import templatesListHtml from './pages/templates/list.html';
+import templates from './pages/templates/templates';
+import templatesHtml from './pages/templates/templates.html';
+
+import templateGeneral from './pages/template/general';
+import templateGeneralHtml from './pages/template/general.html';
+import templateEditor from './pages/template/editor';
+import templateEditorHtml from './pages/template/editor.html';
+import templateHistory from './pages/template/history';
+import templateHistoryHtml from './pages/template/history.html';
+import templateTabset from './pages/template/tabset';
+import templateTabsetHtml from './pages/template/tabset.html';
+
+// WIDGETS
+import appVersionCrit from "./widgets/criteria/app_version_criteria";
+import appVersionCritHtml from "./widgets/criteria/app_version_criteria.html";
+import templateCrit from "./widgets/criteria/template_criteria";
+import templateCritHtml from "./widgets/criteria/template_criteria.html";
 import checkHtml from "./widgets/form/ui_checkbox.html";
 import radioHtml from "./widgets/form/ui_radio.html";
 import dateHtml from "./widgets/form/ui_date.html";
 import datetimeHtml from "./widgets/form/ui_datetime.html";
 import selectHtml from "./widgets/form/ui_select.html";
 import textareaHtml from "./widgets/form/ui_textarea.html";
-import settingsTabset from "./pages/settings/tabset";
-import settingsTabsetHtml from "./pages/settings/tabset.html";
-import partTabset from "./pages/participant/tabset";
-import partTabsetHtml from "./pages/participant/tabset.html";
-import schemaTabset from "./pages/schema/tabset";
-import schemaTabsetHtml from "./pages/schema/tabset.html";
-import verifiedIcon from "./pages/participant/verified-icon";
-import verifiedIconHtml from "./pages/participant/verified-icon.html";
-import nfHtml from "./pages/not_found/not_found.html";
+import uploadDetails from "./widgets/upload_details/upload_details";
+import uploadDetailsHtml from "./widgets/upload_details/upload_details.html";
+import lineEditor from "./widgets/line_editor/line_editor";
+import lineEditorHtml from "./widgets/line_editor/line_editor.html";
 import sm from "./widgets/shared_module/shared_module";
 import smHtml from "./widgets/shared_module/shared_module.html";
 import fp from "./widgets/forward_pager/forward_pager";
 import fpHtml from "./widgets/forward_pager/forward_pager.html";
+import pager from './widgets/pager/pager';
+import pagerHtml from './widgets/pager/pager.html';
+import tagEditor from "./widgets/tag-editor/tag_editor";
+import tagEditorHtml from "./widgets/tag-editor/tag_editor.html";
+import uiDur from "./widgets/form/ui_duration";
+import uiDurHtml from "./widgets/form/ui_duration.html";
+
+// DIALOGS
+import critEditor from "./dialogs/criteria_editor/criteria_editor";
+import critEditorHtml from "./dialogs/criteria_editor/criteria_editor.html";
 import signOutUser from "./dialogs/sign_out_user/sign_out_user";
 import signOutUserHtml from "./dialogs/sign_out_user/sign_out_user.html";
 import moduleBrowser from "./dialogs/module_browser/module_browser";
@@ -339,46 +443,13 @@ import addSponsor from "./dialogs/add_sponsor/add_sponsor";
 import addSponsorHtml from "./dialogs/add_sponsor/add_sponsor.html";
 import addSponsoredStudy from "./dialogs/add_sponsored_study/add_sponsored_study";
 import addSponsoredStudyHtml from "./dialogs/add_sponsored_study/add_sponsored_study.html";
-import appConfigs from "./pages/appconfigs/appconfigs";
-import appConfigsHtml from "./pages/appconfigs/appconfigs.html";
-import appConfig from "./pages/appconfig/appconfig";
-import appConfigHtml from "./pages/appconfig/appconfig.html";
-import configs from "./pages/configs/configs";
-import configsHtml from "./pages/configs/configs.html";
-import configEditor from "./pages/config/editor";
-import configEditorHtml from "./pages/config/editor.html";
-import configHistory from "./pages/config/history";
-import configHistoryHtml from "./pages/config/history.html";
-import configTabset from "./pages/config/tabset";
-import configTabsetHtml from "./pages/config/tabset.html";
-import taskIdentifiers from "./pages/set_editors/task_identifiers.html";
-import dataGroups from "./pages/settings/data_groups.html";
-import userAtts from "./pages/settings/user_attributes.html";
-import templatesList from './pages/templates/list';
-import templatesListHtml from './pages/templates/list.html';
-import templates from './pages/templates/templates';
-import templatesHtml from './pages/templates/templates.html';
-import templateGeneral from './pages/template/general';
-import templateGeneralHtml from './pages/template/general.html';
-import templateEditor from './pages/template/editor';
-import templateEditorHtml from './pages/template/editor.html';
-import templateHistory from './pages/template/history';
-import templateHistoryHtml from './pages/template/history.html';
-import templateTabset from './pages/template/tabset';
-import templateTabsetHtml from './pages/template/tabset.html';
-// TODO: This is the most generic and reusable variant of the pager, and should replace the 
-// others. Participants might remain separate because of the complexity of the search UI.
-import pager from './widgets/pager/pager';
-import pagerHtml from './widgets/pager/pager.html';
 import updateIdentifiers from './dialogs/update_identifiers/update_identifiers_dialog';
 import updateIdentifiersHtml from './dialogs/update_identifiers/update_identifiers_dialog.html';
 
+import nfHtml from "./pages/not_found/not_found.html";
+
 const reg = ko.components.register;
 reg("errors", {viewModel: errors, template: errorsHtml});
-// reg("shared_modules", {viewModel: sharedModules, template: sharedModulesHtml});
-// reg("shared_module", {viewModel: sharedModule, template: sharedModuleHtml});
-// reg("shared_module_versions", {viewModel: sharedModuleVersions, template: sharedModuleVersionsHtml});
-// reg("sharedmodule-tabset", {viewModel: shTabset, template: shTabsetHtml});
 reg("none", {template: '<div class="ui modal dialog"></div>'});
 reg("assessments", {viewModel: assessments, template: assessmentsHtml});
 reg("assessment_general", {viewModel: assessment, template: assessmentHtml});
@@ -414,7 +485,7 @@ reg("password_policy", {viewModel: passwordPolicy, template: passwordPolicyHtml}
 reg("oauth_providers", {viewModel: oauthProviders, template: oauthProvidersHtml});
 reg("install_links", {viewModel: installLinks, template: installLinksHtml});
 reg("advanced", {viewModel: advanced, template: advancedHtml});
-reg("external_ids", {viewModel: externalIds, template: externalIdsHtml});
+reg("externalIds", {viewModel: externalIds, template: externalIdsHtml});
 reg("signUps", {viewModel: signUps, template: signUpsHtml});
 reg("reports", {viewModel: reports, template: reportsHtml});
 reg("report", {viewModel: report, template: reportHtml});
@@ -447,8 +518,8 @@ reg("participant_notifications", {viewModel: partNots, template: partNotsHtml});
 reg("participant_report", {viewModel: partReport, template: partReportHtml});
 reg("participant_uploads", {viewModel: partUploads, template: partUploadsHtml});
 reg("participant_upload", {viewModel: partUpload, template: partUploadHtml});
-reg("upload-details", {viewModel: uploadDetails, template: uploadDetailsHtml});
 reg("participant_request_info", {viewModel: partRequestInfo, template: partRequestInfoHtml});
+reg("upload-details", {viewModel: uploadDetails, template: uploadDetailsHtml});
 reg("event_keys", {template: eventKeysHtml, viewModel: setEditor("activityEventKeys")});
 reg("auto_custom_events", {viewModel: customEvents, template: customEventsHtml});
 reg("topics", {viewModel: topics, template: topicsHtml});
@@ -478,7 +549,24 @@ reg("studies", {viewModel: studies, template: studiesHtml});
 reg("studyEditor", {viewModel: studyEditor, template: studyEditorHtml});
 reg("studySponsors", {viewModel: studySponsors, template: studySponsorsHtml});
 reg("studyEnrollments", {viewModel: studyEnrollments, template: studyEnrollmentsHtml});
+reg("studyParticipants", {viewModel: studyparticipants, template: studyparticipantsHtml});
 reg("study-tabset", {viewModel: studyTabset, template: studyTabsetHtml});
+reg("studyparticipant_general", {viewModel: studypartGeneral, template: studypartGeneralHtml});
+reg("studyparticipant_enrollments", {viewModel: studypartEnrollments, template: studypartEnrollmentsHtml});
+reg("studyparticipant-tabset", {viewModel: studypartTabset, template: studypartTabsetHtml});
+reg("studyparticipant_uploads", {viewModel: studypartUploads, template: studypartUploadsHtml});
+reg("studyparticipant_upload", {viewModel: studypartUpload, template: studypartUploadHtml});
+reg("studyparticipant_notifications", {viewModel: studypartNots, template: studypartNotsHtml});
+reg("studyparticipant_reports", {viewModel: studypartReports, template: studypartReportsHtml});
+reg("studyparticipant_report", {viewModel: studypartReport, template: studypartReportHtml});
+reg("studyparticipant_clientData", {viewModel: studypartClientData, template: studypartClientDataHtml});
+reg("studyparticipant_request_info", {viewModel: studypartRequestInfo, template: studypartRequestInfoHtml});
+/*
+reg("studyparticipant_activity_events", {viewModel: studypartEvents, template: studypartEventsHtml});
+reg("studyparticipant_activity", {viewModel: studypartActivity, template: studypartActivityHtml});
+reg("studyparticipant_consents", {viewModel: studypartConsents, template: studypartConsentsHtml});
+
+*/
 reg("BooleanConstraints", {viewModel: boolConst, template: boolConstHtml});
 reg("DateConstraints", {viewModel: dateConst, template:  dateConstHtml});
 reg("DateTimeConstraints", {viewModel: dateTimeConst, template: dateTimeConstHtml});
@@ -497,11 +585,9 @@ reg("BloodPressureConstraints", {viewModel: bpConst, template: bpConstHtml});
 reg("tag-editor", {viewModel: tagEditor, template: tagEditorHtml});
 reg("ui-duration", {viewModel: uiDur, template: uiDurHtml});
 reg("events-tabset", {template: eventsTabsetHtml});
-
 reg("survey-tabset", {viewModel: surveyTabset, template: surveyTabsetHtml});
 reg("subpop-tabset", {viewModel: subpopTabset, template: subpopTabsetHtml});
 reg("line-editor", {viewModel: lineEditor, template: lineEditorHtml});
-
 reg("app_version_criteria", {viewModel: appVersionCrit, template: appVersionCritHtml});
 reg("template_criteria", {viewModel: templateCrit, template: templateCritHtml});
 reg("participants-pager", {viewModel: partPager, template: partPagerHtml});
