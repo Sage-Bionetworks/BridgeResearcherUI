@@ -41,6 +41,7 @@ let RootViewModel = function() {
     .obs("notificationsEnabled", false)
     .obs("appMemberships[]")
     .obs("sidePanel", "navigation")
+    .obs("accountUrl")
     .obs("dialog", { name: "none" });
 
   self.mainPageObs.subscribe(self.selectedObs);
@@ -106,11 +107,12 @@ let RootViewModel = function() {
     }, 500);
   };
   serverService.addSessionStartListener(function(session) {
+    console.log(session);
     self.appNameObs(session.appName);
     self.environmentObs(session.environment);
     self.appIdObs(session.appId);
     self.rolesObs(session.roles);
-
+    self.accountUrlObs(`#/organizations/${session.orgMembership}/members/${session.id}`);
     serverService.getApp().then(function(app) {
       self.notificationsEnabledObs(Object.keys(app.pushNotificationARNs).length > 0);
     });

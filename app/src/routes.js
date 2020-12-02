@@ -143,6 +143,7 @@ router.on("/organizations/:orgId", redirectTo("/organizations/{0}/general"));
 router.on("/organizations/:orgId/general", routeTo("orgEditor", "organizations", ORGID));
 router.on("/organizations/:orgId/studies", routeTo("orgStudies", "organizations", ORGID));
 router.on("/organizations/:orgId/members", routeTo("orgMembers", "organizations", ORGID));
+router.on("/organizations/:orgId/members/:userId", redirectTo("/organizations/{0}/members/{1}/general"));
 router.on("/organizations/:orgId/members/:userId/general", 
   routeTo("memGeneral", "organizations", ORGID_USERID));
 router.on("/organizations/:orgId/members/:userId/clientData", 
