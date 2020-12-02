@@ -22,7 +22,7 @@ export default function upload(params) {
   serverService.getStudy(params.studyId).then((response) => {
     self.navStudyNameObs(response.name);
   });
-  serverService.getParticipantName(params.userId).then(function(part) {
+  serverService.getStudyParticipantName(params.studyId, params.userId).then(function(part) {
     self.titleObs(part.name);
     self.nameObs(part.name);
     self.statusObs(part.status);

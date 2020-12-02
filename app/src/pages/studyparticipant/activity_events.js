@@ -39,7 +39,7 @@ export default function activityEvents(params) {
     return "";
   };
 
-  serverService.getParticipantName(params.userId)
+  serverService.getStudyParticipantName(params.studyId, params.userId)
     .then(function(part) {
       self.titleObs(part.name);
       self.statusObs(part.status);

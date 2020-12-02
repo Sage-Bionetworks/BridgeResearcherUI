@@ -20,8 +20,8 @@
           <li data-bind="text: $data"></li>
         </ul>
       </div>
-      <div class="ui two fields" style="margin-top: 1rem" data-bind="visible: isResearcher()">
-        <div class="field" data-bind="css: {disabled: isDisabledObs}">
+      <div class="ui two fields" style="margin-top: 1rem">
+        <div class="field">
           <label>Add these data groups to the accounts</label>
           <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
         </div>

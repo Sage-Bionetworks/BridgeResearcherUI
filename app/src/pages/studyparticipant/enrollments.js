@@ -70,7 +70,7 @@ export default function consents(params) {
   });
 
   function load() {
-    serverService.getParticipantName(params.userId)
+    serverService.getStudyParticipantName(params.studyId, params.userId)
       .then(loadName)
       .then(() => serverService.getStudyParticipant(params.studyId, params.userId))
       .then(part => self.participant = part)

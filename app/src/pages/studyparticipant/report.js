@@ -18,7 +18,7 @@ export default function report(params) {
 
   tables.prepareTable(self, {
     name: "report",
-    delete: (item) => serverService.deleteParticipantReportRecord(params.userId, params.identifier, item.date),
+    delete: (item) => serverService.deleteReportRecord(params.userId, params.identifier, item.date),
     id: 'studyparticipant-report',
     refresh: load
   });
@@ -43,7 +43,7 @@ export default function report(params) {
     }
   };
 
-  serverService.getParticipantName(params.userId).then(function(part) {
+  serverService.getStudyParticipantName(params.studyId, params.userId).then(function(part) {
     self.titleObs(part.name);
     self.nameObs(part.name);
     self.statusObs(part.status);
@@ -92,9 +92,9 @@ export default function report(params) {
   });
 
   function load() {
-    return serverService.getParticipantReportIndex(params.identifier)
+    return serverService.getParticipantReportIndex(params.studyId, params.identifier)
       .then((index) => self.studyIds = index.studyIds)
-      .then(() => serverService.getParticipant(params.userId))
+      .then(() => serverService.getStudyParticipant(params.studyId, params.userId))
       .then(loadReport)
       .then(fn.handleMap("items", jsonFormatter.mapItem))
       .then(fn.handleSort("items", "date", true))

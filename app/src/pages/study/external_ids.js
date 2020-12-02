@@ -36,8 +36,6 @@ export default function externalIds(params) {
     id: 'external-ids'
   });
 
-  
-
   self.postLoadPagerFunc = fn.identity;
   self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
 

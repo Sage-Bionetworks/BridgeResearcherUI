@@ -78,6 +78,7 @@ let RootViewModel = function() {
   self.isDeveloper = roleFunc(self.rolesObs, "developer");
   self.isAdmin = roleFunc(self.rolesObs, "admin");
   self.isSuperadmin = roleFunc(self.rolesObs, "superadmin");
+  self.isStudyCoordinator = roleFunc(self.rolesObs, "study_coordinator");
   self.isResearcherOnly = ko.computed(function() {
     let roles = self.rolesObs();
     return roles.indexOf("researcher") > -1 && roles.indexOf("developer") === -1;

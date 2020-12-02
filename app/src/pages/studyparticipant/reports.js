@@ -26,7 +26,7 @@ export default function reports(params) {
 
   fn.copyProps(self, root, "isDeveloper", "isResearcher");
 
-  serverService.getParticipantName(params.userId)
+  serverService.getStudyParticipantName(params.studyId, params.userId)
     .then(function(part) {
       self.titleObs(part.name);
       self.nameObs(part.name);
@@ -36,7 +36,7 @@ export default function reports(params) {
 
   tables.prepareTable(self, {
     name: "report",
-    delete: (item) => serverService.deleteStudyParticipantReport(item.identifier, params.userId),
+    delete: (item) => serverService.deleteParticipantReport(item.identifier, params.userId),
     id: 'studyparticipant-reports',
     refresh: load
   });

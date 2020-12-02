@@ -157,7 +157,7 @@ export class ServerService {
   }
   isSupportedUser() {
     return this.roles.some(function(role) {
-      return ["developer", "researcher", "admin", "superadmin"].indexOf(role) > -1;
+      return ["developer", "researcher", "admin", "org_admin", "study_coordinator", "superadmin"].indexOf(role) > -1;
     });
   }
   cacheParticipantName(response) {
@@ -186,7 +186,7 @@ export class ServerService {
       }
       // Easier than testing for superadmin everywhere.
       if (sess.roles.includes('superadmin')) {
-        sess.roles = ['developer', 'researcher', 'admin', 'superadmin'];
+        sess.roles = ['developer', 'researcher', 'admin', 'org_admin', 'study_coordinator', 'superadmin'];
       }
       session = sess;
       storeService.set(SESSION_KEY, session);
@@ -952,27 +952,25 @@ export class ServerService {
     let queryString = fn.queryString(args);
     return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/uploads${queryString}`);
   }
-  getStudyParticipantReport(studyId, userId, reportId, startDate, endDate) {
-    let queryString = fn.queryString({ startDate, endDate });
-    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/reports/${reportId}${queryString}`);
-  }
-  getStudyParticipantReportIndex(studyId, reportId) {
-    return this.gethttp(`${config.studies}/${studyId}/reports/${reportId}/index`);
-  }
   getStudyParticipantActivityEvents(studyId, userId) {
     return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/activityEvents`);
+  }
+  getStudyParticipantName(studyId, id) {
+    if (session && session.id === id) {
+      id = 'self';
+    }
+    let name = cache.get(id + ":name");
+    return name ? Promise.resolve(name) : 
+      this.gethttp(`${config.studies}/${studyId}/participants/${id}`)
+        .then(this.cacheParticipantName.bind(this))
+        .then(() => Promise.resolve(cache.get(id + ":name")));
   }
   createStudyParticipant(studyId, participant) {
     return this.post(`${config.studies}/${studyId}/participants`, participant);
   }
-  addStudyParticipantReport(studyId, userId, reportId, report) {
-    return this.post(`${config.studies}/${studyId}/participants/${userId}/reports/${reportId}`, report);
-  }
-  deleteStudyParticipantReport(studyId, reportId, userId) {
-    return this.del(`${config.studies}/${studyId}/participants/${userId}/reports/${reportId}`);
-  }
-  deleteStudyParticipantReportRecord(studyId, userId, reportId, date) {
-    return this.del(`${config.studies}/${studyId}/participants/${userId}/reports/${reportId}/${date}`);
+  updateStudyParticipant(studyId, participant) {
+    cache.clear(participant.id + ":name");
+    return this.post(`${config.studies}/${studyId}/participants/${participant.id}`, participant);
   }
   withdrawStudyParticipantFromStudy(studyId, userId, subpopGuid, reason) {
     return this.post(`${config.studies}/${studyId}/participants/${userId}/consents/${subpopGuid}/withdraw`, reason);

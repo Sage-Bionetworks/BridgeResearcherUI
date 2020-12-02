@@ -11,7 +11,7 @@ const PAGE_KEY = "us";
 const failureHandler = utils.failureHandler({
   redirectTo: "participants",
   redirectMsg: "Participant not found",
-  id: 'participant-uploads'
+  id: 'studyparticipant-uploads'
 });
 
 export default class ParticipantUploadsViewModel extends UploadsViewModel {
@@ -37,13 +37,14 @@ export default class ParticipantUploadsViewModel extends UploadsViewModel {
     this.query.pageSize = 10;
     storeService.persistQuery(PAGE_KEY, this.query);
 
-    return serverService.getParticipantName(this.userIdObs()).then(part => {
+    return serverService.getStudyParticipantName(this.studyId, this.userIdObs()).then(part => {
       this.titleObs(part.name);
       this.nameObs(part.name);
       this.statusObs(part.status);
       this.sharingScopeObs(part.sharingScope);
-    }).then(() => serverService.getParticipantUploads(this.userIdObs(), this.query))
-      .then(this.processUploads.bind(this))
-      .catch(utils.failureHandler({ id: 'participant-uploads' }));
+    })
+    .then(() => serverService.getStudyParticipantUploads(this.studyId, this.userIdObs(), this.query))
+    .then(this.processUploads.bind(this))
+    .catch(utils.failureHandler({ id: 'studyparticipant-uploads' }));
   }
 };

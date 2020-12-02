@@ -19,30 +19,26 @@ const OPTIONS = [
 ];
 const NEW_PARTICIPANT = { id: "new", attributes: {}, email: "", phone: { number: "", regionCode: "US" } };
 
+const CAN_BE_EDITED_BY = {
+  'superadmin': ["Administrator", "Developer", "Organization Administrator", "Researcher", "Study Coordinator", "Worker"],
+  'admin': ['Developer', "Organization Administrator", 'Researcher', 'Study Coordinator'],
+  'researcher': ['Developer'],
+  'study_coordinator': [],
+  'developer': [],
+  'worker': []
+};
+
 function selectRoles(session) {
   let set = new Set();
   for (let i = 0; i < session.roles.length; i++) {
     var role = session.roles[i];
-    switch (role) {
-      case "superadmin":
-        set.add("Super Admin");
-        /* falls through */
-      case "admin":
-        set.add("Worker");
-        set.add("Administrator");
-        /* falls through */
-      case "researcher":
-        set.add("Researcher");
-        /* falls through */
-      case "developer":
-        set.add("Developer");
-        /* falls through */
-    }
+    CAN_BE_EDITED_BY[role].forEach(role => set.add(role));
   }
   var roles = Array.from(set);
   roles.sort();
   return roles;
 }
+
 function persistExternalId(value, context) {
   if (value && context.vm.studyIdObs() !== 'Select study') {
     context.copy.externalIds = {

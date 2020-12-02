@@ -19,25 +19,20 @@ const OPTIONS = [
 ];
 const NEW_PARTICIPANT = { id: "new", attributes: {}, email: "", phone: { number: "", regionCode: "US" } };
 
+const CAN_BE_EDITED_BY = {
+  'superadmin': ["Administrator", "Developer", "Organization Administrator", "Researcher", "Study Coordinator", "Worker"],
+  'admin': ['Developer', "Organization Administrator", 'Researcher', 'Study Coordinator'],
+  'researcher': ['Developer'],
+  'study_coordinator': [],
+  'developer': [],
+  'worker': []
+};
+
 function selectRoles(session) {
   let set = new Set();
   for (let i = 0; i < session.roles.length; i++) {
     var role = session.roles[i];
-    switch (role) {
-      case "superadmin":
-        set.add("Super Admin");
-        /* falls through */
-      case "admin":
-        set.add("Worker");
-        set.add("Administrator");
-        /* falls through */
-      case "researcher":
-        set.add("Researcher");
-        /* falls through */
-      case "developer":
-        set.add("Developer");
-        /* falls through */
-    }
+    CAN_BE_EDITED_BY[role].forEach(role => set.add(role));
   }
   var roles = Array.from(set);
   roles.sort();
@@ -177,7 +172,7 @@ export default function general(params) {
     });
   };
   self.signOutUser = function() {
-    root.openDialog("sign_out_user", { userId: self.userIdObs() });
+    root.openDialog("sign_out_user", { studyId: params.studyId, userId: self.userIdObs() });
   };
   self.resendEmailVerification = function(vm, event) {
     alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
@@ -200,7 +195,6 @@ export default function general(params) {
   self.resetPwdVisible = ko.computed(() => self.statusObs() !== "disabled");
   self.enableVisible = ko.computed(() => self.statusObs() === "disabled" && root.isAdmin());
   self.disableVisible = ko.computed(() => self.statusObs() === "enabled" && root.isAdmin());
-  self.signOutVisible = ko.computed(() => !['disabled','unverified'].includes(self.statusObs()));
 
   serverService.getSession().then(session => {
     var roles = selectRoles(session);
@@ -275,10 +269,10 @@ export default function general(params) {
   };
   function noteInitialStatus(participant) {
     // The general page can be linked to using externalId: or healthCode:... here we
-    // fix the ID to the be real ID, then use that to call getParticipantName
+    // fix the ID to the be real ID, then use that to call getStudyParticipantName
     self.userIdObs(participant.id);
     if (!self.isNewObs()) {
-      serverService.getParticipantName(participant.id)
+      serverService.getStudyParticipantName(params.studyId, participant.id)
         .then(function(part) {
           self.titleObs(part.name);
         })

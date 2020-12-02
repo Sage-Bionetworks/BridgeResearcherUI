@@ -54,7 +54,8 @@ IdImportWorker.prototype = {
   }
 };
 
-function CreateCredentialsWorker(supportEmail, credentialPairs, dataGroups) {
+function CreateCredentialsWorker(studyId, supportEmail, credentialPairs, dataGroups) {
+  this.studyId = studyId;
   this.supportEmail = supportEmail;
   this.credentialPairs = credentialPairs;
   this.dataGroups = dataGroups;
@@ -72,7 +73,7 @@ CreateCredentialsWorker.prototype = {
   performWork: function() {
     this.credentialPair = this.credentialPairs.shift();
     this.credentialPair.dataGroups = this.dataGroups;
-    return serverService.createParticipant(this.credentialPair);
+    return serverService.createStudyParticipant(this.studyId, this.credentialPair);
   },
   currentWorkItem: function() {
     return this.credentialPair;
@@ -89,24 +90,20 @@ export default function(params) {
   batchDialogUtils.initBatchDialog(self);
   self.cancelDialog = fn.seq(self.cancel, params.reload, root.closeDialog);
 
-  fn.copyProps(self, root, "isResearcher");
-
   new Binder(self)
     .obs("import", "")
     .obs("enable", true)
-    .obs("isDisabled", false)
     .obs("closeText", "Close")
     .obs("dataGroups[]")
     .obs("allDataGroups[]");
 
   self.statusObs('');
-  serverService.getApp()
-    .then(function(app) {
-      self.allDataGroupsObs(app.dataGroups);
-      self.app = app;
-      supportEmail = app.supportEmail;
-      self.statusObs("Please enter a list of identifiers, separated by commas or new lines. If you wish to include passwords, use the format <code>externalid=password</code> (again these can be separated by commas or new lines). <em>" + password.passwordPolicyDescription(self.app.passwordPolicy) + "</em>");
-    });
+  serverService.getApp().then(function(app) {
+    self.allDataGroupsObs(app.dataGroups);
+    self.app = app;
+    supportEmail = app.supportEmail;
+    self.statusObs("Please enter a list of identifiers, separated by commas or new lines. If you wish to include passwords, use the format <code>externalid=password</code> (again these can be separated by commas or new lines). <em>" + password.passwordPolicyDescription(self.app.passwordPolicy) + "</em>");
+  });
 
   function displayComplete() {
     self.statusObs("Import finished. There were " + self.errorMessagesObs().length + " errors.");
@@ -127,6 +124,7 @@ export default function(params) {
     self.run(importWorker).then(function(identifiers) {
       if (identifiers.length) {
         let credentialsWorker = new CreateCredentialsWorker(
+          params.studyId,
           supportEmail,
           identifiers,
           self.dataGroupsObs()

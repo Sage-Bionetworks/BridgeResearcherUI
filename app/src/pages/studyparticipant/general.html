@@ -37,7 +37,7 @@
             <div class="item" data-bind="click: disableAccount, visible: disableVisible">
               Disable Account
             </div>
-            <div class="item" data-bind="click: signOutUser, visible: signOutVisible">
+            <div class="item" data-bind="click: signOutUser">
               Sign out user&hellip;
             </div>
 
@@ -57,35 +57,15 @@
     <div class="two fields">
       <div class="field">
         <label>First Name</label>
-        <input type="text" placeholder="First Name" data-bind="textInput: firstNameObs, hasFocus: true" />
+        <input type="text" data-bind="textInput: firstNameObs, hasFocus: true" />
       </div>
       <div class="field">
         <label>Last Name</label>
-        <input type="text" placeholder="Last Name" data-bind="textInput: lastNameObs" />
+        <input type="text" data-bind="textInput: lastNameObs" />
       </div>
     </div>
 
     <div class="two fields" data-bind="visible: isNewObs">
-      <div class="field">
-        <label>Enrollment via External ID</label>
-        <div class="ui left labeled input">
-          <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateStudy">
-            <div class="text" data-bind="text: studyLabelObs"></div>
-            <i class="dropdown icon"></i>
-            <div class="menu" data-bind="foreach: allStudiesObs">
-              <div class="item" data-bind="attr: {'data-id': $data.value}, text: $data.label"></div>
-            </div>
-          </div>
-          <input type="text" placeholder="External ID" data-bind="textInput: newExternalIdObs" />
-        </div>
-      </div>
-      <div class="required field password">
-        <label>Password</label>
-        <input type="password" autocomplete="new-password" data-bind="textInput: passwordObs" />
-      </div>
-    </div>
-
-    <div class="two fields">
       <div class="field email" data-bind="visible: isNewObs">
         <label>Email
           <verified-icon params="valueObs: emailObs, verifiedObs: emailVerifiedObs"> </verified-icon>
@@ -100,10 +80,9 @@
         </span>
         <span data-bind="visible: showDash('email')" class="input-field-padding">—</span>
       </div>
-      <div class="field">
-        <label>Sharing Scope</label>
-        <select class="ui dropdown" data-bind="options: sharingScopeOptions, optionsText: 'label', 
-          optionsValue: 'value', value: sharingScopeObs"></select>
+      <div class="required field password">
+        <label>Password</label>
+        <input type="password" autocomplete="new-password" data-bind="textInput: passwordObs" />
       </div>
     </div>
 
@@ -135,41 +114,11 @@
         </span>
         <span data-bind="visible: showDash('phone')" class="input-field-padding">—</span>
       </div>
-      <!--
-      <div class="field">
-        <label>Roles</label>
-        <tag-editor params="selectedObs: rolesObs, allObs: allRolesObs, type: 'roles'"></tag-editor>
-      </div>
-      -->
       <div class="field">
         <label>Data Groups</label>
         <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
       </div>
     </div>
-    <!--
-    <div class="two fields">
-      <div class="field synapseUserId" data-bind="visible: isNewObs">
-        <label>Synapse User ID (or email address, or alias)</label>
-        <input type="text" class="input-field-padding" data-bind="textInput: synapseUserIdObs">
-      </div>
-      <div class="field synapseUserId" data-bind="visible: !isNewObs()">
-        <label>Synapse User ID</label>
-        <span class="input-field-padding" data-bind="visible: showIdentifier('synapseUserId'), 
-          text: synapseUserIdObs"></span>
-        <span class="input-field-padding" data-bind="visible: showDash('synapseUserId')">—</span>
-      </div>
-      <div class="field">
-        <label>Data Groups</label>
-        <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
-      </div>
-    </div>
-    <div class="two fields">
-      <div class="field">
-        <label>Organization</label>
-        <div class="input-field-padding" data-bind="text: formatOrg()"></div>
-      </div>
-    </div>
-    -->
 
     <div class="two fields">
       <div class="field">

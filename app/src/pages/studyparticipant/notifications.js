@@ -26,7 +26,7 @@ export default function notifications(params) {
     .bind("navStudyId", params.studyId)
     .bind("navStudyName");
 
-  serverService.getParticipantName(params.userId)
+  serverService.getStudyParticipantName(params.studyId, params.userId)
     .then(function(part) {
       self.titleObs(part.name);
       self.nameObs(part.name);

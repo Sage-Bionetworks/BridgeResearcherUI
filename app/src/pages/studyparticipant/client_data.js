@@ -29,7 +29,7 @@ export default function clientData(params) {
     .bind("navStudyId", params.studyId)
     .bind("navStudyName");
 
-  serverService.getParticipantName(params.userId)
+  serverService.getStudyParticipantName(params.studyId, params.userId)
     .then(function(part) {
       self.titleObs(part.name);
       self.statusObs(part.status);
