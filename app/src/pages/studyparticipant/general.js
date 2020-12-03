@@ -172,7 +172,7 @@ export default function general(params) {
       serverService.deleteStudyParticipant(params.studyId, self.userIdObs())
         .then(utils.successHandler(self, event, "User deleted."))
         .then(() => document.location = "#/studies/" + params.studyId + "/participants")
-        .catch(utils.failureHandler({id: 'studyparticipant-general'}));
+        .catch(utils.failureHandler({id: 'studyparticipant-general', redirect: false}));
     });
   };
   self.resendEmailVerification = function(vm, event) {

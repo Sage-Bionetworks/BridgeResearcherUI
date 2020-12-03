@@ -171,7 +171,7 @@ export default function general(params) {
       serverService.deleteTestUser(self.userIdObs())
         .then(utils.successHandler(self, event, "User deleted."))
         .then(() => document.location = "#/participants")
-        .catch(utils.failureHandler({id: 'participant-general'}));
+        .catch(utils.failureHandler({id: 'participant-general', redirect: false}));
     });
   };
   self.resendEmailVerification = function(vm, event) {
