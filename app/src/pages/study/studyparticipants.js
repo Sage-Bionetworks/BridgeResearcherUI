@@ -115,7 +115,7 @@ export default function participants(params) {
     promise.catch(utils.failureHandler({id: 'studyparticipants'}));
   };
   self.exportDialog = function() {
-    root.openDialog("participant_export", { total: self.total, search: self.search });
+    root.openDialog("participant_export", { total: self.total, search: self.search, studyId: params.studyId });
   };
   self.loadingFunc = function(search) {
     utils.clearErrors();

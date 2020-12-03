@@ -1,5 +1,6 @@
 import alerts from "../../widgets/alerts";
 import Binder from "../../binder";
+import config from "../../config";
 import fn from "../../functions";
 import ko from "knockout";
 import root from "../../root";
@@ -19,20 +20,11 @@ const OPTIONS = [
 ];
 const NEW_PARTICIPANT = { id: "new", attributes: {}, email: "", phone: { number: "", regionCode: "US" } };
 
-const CAN_BE_EDITED_BY = {
-  'superadmin': ["Administrator", "Developer", "Organization Administrator", "Researcher", "Study Coordinator", "Worker"],
-  'admin': ['Developer', "Organization Administrator", 'Researcher', 'Study Coordinator'],
-  'researcher': ['Developer'],
-  'study_coordinator': [],
-  'developer': [],
-  'worker': []
-};
-
 function selectRoles(session) {
   let set = new Set();
   for (let i = 0; i < session.roles.length; i++) {
-    var role = session.roles[i];
-    CAN_BE_EDITED_BY[role].forEach(role => set.add(role));
+    const role = session.roles[i];
+    config.canBeEditedBy[role].forEach(role => set.add(role));
   }
   var roles = Array.from(set);
   roles.sort();

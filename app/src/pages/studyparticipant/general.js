@@ -1,5 +1,6 @@
 import alerts from "../../widgets/alerts";
 import Binder from "../../binder";
+import config from "../../config";
 import fn from "../../functions";
 import ko from "knockout";
 import root from "../../root";
@@ -19,20 +20,11 @@ const OPTIONS = [
 ];
 const NEW_PARTICIPANT = { id: "new", attributes: {}, email: "", phone: { number: "", regionCode: "US" } };
 
-const CAN_BE_EDITED_BY = {
-  'superadmin': ["Administrator", "Developer", "Organization Administrator", "Researcher", "Study Coordinator", "Worker"],
-  'admin': ['Developer', "Organization Administrator", 'Researcher', 'Study Coordinator'],
-  'researcher': ['Developer'],
-  'study_coordinator': [],
-  'developer': [],
-  'worker': []
-};
-
 function selectRoles(session) {
   let set = new Set();
   for (let i = 0; i < session.roles.length; i++) {
-    var role = session.roles[i];
-    CAN_BE_EDITED_BY[role].forEach(role => set.add(role));
+    const role = session.roles[i];
+    config.canBeEditedBy[role].forEach(role => set.add(role));
   }
   var roles = Array.from(set);
   roles.sort();
@@ -174,6 +166,15 @@ export default function general(params) {
   self.signOutUser = function() {
     root.openDialog("sign_out_user", { studyId: params.studyId, userId: self.userIdObs() });
   };
+  self.deleteTestUser = function(vm, event) {
+    alerts.confirmation("This will delete the account.\n\nDo you wish to continue?", function() {
+      utils.startHandler(self, event);
+      serverService.deleteStudyParticipant(params.studyId, self.userIdObs())
+        .then(utils.successHandler(self, event, "User deleted."))
+        .then(() => document.location = "#/studies/" + params.studyId + "/participants")
+        .catch(utils.failureHandler({id: 'studyparticipant-general'}));
+    });
+  };
   self.resendEmailVerification = function(vm, event) {
     alerts.confirmation("This will send email to this user.\n\nDo you wish to continue?", function() {
       utils.startHandler(vm, event);
@@ -195,6 +196,8 @@ export default function general(params) {
   self.resetPwdVisible = ko.computed(() => self.statusObs() !== "disabled");
   self.enableVisible = ko.computed(() => self.statusObs() === "disabled" && root.isAdmin());
   self.disableVisible = ko.computed(() => self.statusObs() === "enabled" && root.isAdmin());
+  self.deleteVisible = ko.computed(() => root.isStudyCoordinator() && 
+    self.dataGroupsObs().includes('test_user'));
 
   serverService.getSession().then(session => {
     var roles = selectRoles(session);

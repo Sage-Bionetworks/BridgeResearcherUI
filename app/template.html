@@ -106,10 +106,6 @@
                   data-bind="visible: !isResearcher()">
                   My Account
                 </a>
-                <a href="#/participants" class="item" data-ref="participants"
-                  data-bind="visible: isResearcher()">
-                  Participants
-                </a>
                 <a href="#/studies" class="item" data-ref="studies">
                   Studies
                 </a>
@@ -128,6 +124,9 @@
             </div>
             <div class="content" data-bind="visible: isDeveloper()">
               <div class="ui secondary vertical menu">
+                <a href="#/participants" class="item" data-ref="participants" data-bind="visible: isResearcher()">
+                  Participants
+                </a>
                 <a href="#/subpopulations" class="item" data-ref="subpops">
                   Consent Groups
                 </a>

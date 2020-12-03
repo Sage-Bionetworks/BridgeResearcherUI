@@ -2,7 +2,6 @@ import fn from "../../functions";
 import ko from "knockout";
 
 export default function tabset(params) {
-  console.log(params);
   let self = this;
 
   if (!params.isNewObs) {

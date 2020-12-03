@@ -40,6 +40,9 @@
             <div class="item" data-bind="click: signOutUser">
               Sign out user&hellip;
             </div>
+            <div class="item" data-bind="click: deleteTestUser, visible: deleteVisible">
+              <span class="red ui text">Delete Test Account</span>
+            </div>
 
           </div>
         </div>
@@ -65,7 +68,7 @@
       </div>
     </div>
 
-    <div class="two fields" data-bind="visible: isNewObs">
+    <div class="two fields">
       <div class="field email" data-bind="visible: isNewObs">
         <label>Email
           <verified-icon params="valueObs: emailObs, verifiedObs: emailVerifiedObs"> </verified-icon>
@@ -80,7 +83,7 @@
         </span>
         <span data-bind="visible: showDash('email')" class="input-field-padding">—</span>
       </div>
-      <div class="required field password">
+      <div class="required field password" data-bind="visible: isNewObs">
         <label>Password</label>
         <input type="password" autocomplete="new-password" data-bind="textInput: passwordObs" />
       </div>
@@ -115,8 +118,9 @@
         <span data-bind="visible: showDash('phone')" class="input-field-padding">—</span>
       </div>
       <div class="field">
-        <label>Data Groups</label>
-        <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
+        <label>Sharing Scope</label>
+        <select class="ui dropdown" data-bind="options: sharingScopeOptions, optionsText: 'label', 
+          optionsValue: 'value', value: sharingScopeObs"></select>
       </div>
     </div>
 
@@ -126,10 +130,8 @@
         <input type="text" class="input-field-padding" data-bind="textInput: languagesObs">
       </div>
       <div class="field">
-        <label>Email Preference</label>
-        <ui-checkbox class="input-field-padding" params="checkedObs: notifyByEmailObs">
-          Consents to receive email from study
-        </ui-checkbox>
+        <label>Data Groups</label>
+        <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
       </div>
     </div>
 
@@ -144,8 +146,10 @@
         </div>
       </div>
       <div class="field">
-        <label>User ID</label>
-        <div data-bind="text: idObs" class="input-field-padding"></div>
+        <label>Email Preference</label>
+        <ui-checkbox class="input-field-padding" params="checkedObs: notifyByEmailObs">
+          Consents to receive email from study
+        </ui-checkbox>
       </div>
     </div>
 

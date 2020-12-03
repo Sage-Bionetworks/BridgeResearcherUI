@@ -13,7 +13,7 @@ let failureHandler = utils.failureHandler({
   id: 'studyparticipant-enrollments'
 });
 
-export default function consents(params) {
+export default function enrollments(params) {
   let self = this;
   fn.copyProps(self, root, "isResearcher");
   fn.copyProps(self, fn, "formatDateTime", "formatNameAsFullLabel");
@@ -58,7 +58,9 @@ export default function consents(params) {
   };
 
   function loadStudy(enrollment) {
-    return serverService.getStudy(enrollment.studyId).then((study) => enrollment.studyName = study.name);
+    return serverService.getStudy(enrollment.studyId)
+      .then((study) => enrollment.studyName = study.name)
+      .then(() => enrollment);
   }
   function loadName(part) {
     self.titleObs(part.name);
@@ -77,7 +79,8 @@ export default function consents(params) {
       .then(() => serverService.getAllSubpopulations(true))
       .then(response => self.subpopulations = response.items)
       .then(() => serverService.getStudyParticipantEnrollments(params.studyId, params.userId))
-      .then(response => Promise.all(response.map(loadStudy)).then(() => self.itemsObs(response)))
+      .then(response => Promise.all(response.items.map(loadStudy))
+      .then((response) => self.itemsObs(response)))
       .catch(failureHandler);
   }
   load();

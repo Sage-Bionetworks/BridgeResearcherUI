@@ -972,11 +972,15 @@ export class ServerService {
     cache.clear(participant.id + ":name");
     return this.post(`${config.studies}/${studyId}/participants/${participant.id}`, participant);
   }
+  deleteStudyParticipant(studyId, userId) {
+    return this.del(`${config.studies}/${studyId}/participants/${userId}`);
+  }
+  
   withdrawStudyParticipantFromStudy(studyId, userId, subpopGuid, reason) {
     return this.post(`${config.studies}/${studyId}/participants/${userId}/consents/${subpopGuid}/withdraw`, reason);
   }
   sendStudyParticipantNotification(studyId, userId, message) {
-    return this.post(`${config.studies}/${studyId}/participants/${studyId}/sendNotification`, message);
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/sendNotification`, message);
   }
   sendStudyParticipantSmsMessage(studyId, userId, message) {
     return this.post(`${config.studies}/${studyId}/participants/${userId}/sendSmsMessage`, message);
@@ -991,7 +995,7 @@ export class ServerService {
     return this.post(`${config.studies}/${studyId}/participants/${userId}/consents/${subpopGuid}/resendConsent`);
   }
   resendStudyParticipantEmailVerification(studyId, userId) {
-    return this.post(`${config.studies}/${studyId}/participatns/${userId}/resendEmailVerification`);
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/resendEmailVerification`);
   }
   resendStudyParticipantPhoneVerification(studyId, userId) {
     return this.post(`${config.studies}/${studyId}/participants/${userId}/resendPhoneVerification`);
