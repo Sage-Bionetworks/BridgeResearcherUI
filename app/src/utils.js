@@ -64,7 +64,7 @@ function notAdmin(response) {
 function notFound(response, params) {
   if (params.redirectTo) {
     document.location = "#/" + params.redirectTo;
-    // root.changeView(params.redirectTo);
+    root.changeView(params.redirectTo);
     if (params.redirectMsg) {
       setTimeout(function() {
         toastr.warning(params.redirectMsg);

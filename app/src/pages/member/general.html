@@ -78,13 +78,6 @@
           click: addIdentifier('email')">Add&hellip;</a>
         <span data-bind="visible: showDash('email')" class="input-field-padding">—</span>
       </div>
-      <!--
-      <div class="field">
-        <label>Sharing Scope</label>
-        <select class="ui dropdown" data-bind="options: sharingScopeOptions, optionsText: 'label', 
-          optionsValue: 'value', value: sharingScopeObs"></select>
-      </div>
-      -->
       <div class="field synapseUserId" data-bind="visible: isNewObs">
         <label>Synapse User ID (or email address, or alias)</label>
         <input type="text" class="input-field-padding" data-bind="textInput: synapseUserIdObs">
@@ -145,43 +138,7 @@
         <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
       </div>
     </div>
-<!--
-    <div class="two fields">
-      <div class="field">
-        <label>Organization</label>
-        <div class="input-field-padding" data-bind="text: orgNameObs()"></div>
-      </div>
-    </div>
 
-    <div class="two fields">
-      <div class="field">
-        <label>Language(s)</label>
-        <input type="text" class="input-field-padding" data-bind="textInput: languagesObs">
-      </div>
-      <div class="field">
-        <label>Email Preference</label>
-        <ui-checkbox class="input-field-padding" params="checkedObs: notifyByEmailObs">
-          Consents to receive email from study
-        </ui-checkbox>
-      </div>
-    </div>
-
-    <div class="two fields" data-bind="visible: !isNewObs()">
-      <div class="field">
-        <label>Health Code</label>
-        <div class="input-field-padding" data-bind="text: healthCodeObs" 
-          style="margin-bottom: 0; padding-bottom: 0">
-        </div>
-        <div class="ui small red text" data-bind="visible: healthCodeObs() !== 'N/A'">
-          Confidential. Do not redistribute.
-        </div>
-      </div>
-      <div class="field">
-        <label>User ID</label>
-        <div data-bind="text: idObs" class="input-field-padding"></div>
-      </div>
-    </div>
--->
     <div class="two fields" data-bind="visible: !isNewObs()">
       <div class="field">
         <label>Created On</label>

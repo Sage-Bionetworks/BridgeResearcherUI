@@ -107,7 +107,6 @@ let RootViewModel = function() {
     }, 500);
   };
   serverService.addSessionStartListener(function(session) {
-    console.log(session);
     self.appNameObs(session.appName);
     self.environmentObs(session.environment);
     self.appIdObs(session.appId);
