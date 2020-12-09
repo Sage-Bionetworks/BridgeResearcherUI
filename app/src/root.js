@@ -41,6 +41,7 @@ let RootViewModel = function() {
     .obs("notificationsEnabled", false)
     .obs("appMemberships[]")
     .obs("sidePanel", "navigation")
+    .obs("accountUrl")
     .obs("dialog", { name: "none" });
 
   self.mainPageObs.subscribe(self.selectedObs);
@@ -77,6 +78,7 @@ let RootViewModel = function() {
   self.isResearcher = roleFunc(self.rolesObs, "researcher");
   self.isDeveloper = roleFunc(self.rolesObs, "developer");
   self.isAdmin = roleFunc(self.rolesObs, "admin");
+  self.isOrgAdmin = roleFunc(self.rolesObs, "org_admin");
   self.isSuperadmin = roleFunc(self.rolesObs, "superadmin");
   self.isResearcherOnly = ko.computed(function() {
     let roles = self.rolesObs();
@@ -109,7 +111,7 @@ let RootViewModel = function() {
     self.environmentObs(session.environment);
     self.appIdObs(session.appId);
     self.rolesObs(session.roles);
-
+    self.accountUrlObs(`#/organizations/${session.orgMembership}/members/${session.id}`);
     serverService.getApp().then(function(app) {
       self.notificationsEnabledObs(Object.keys(app.pushNotificationARNs).length > 0);
     });

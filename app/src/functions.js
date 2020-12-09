@@ -160,13 +160,22 @@ function persistLanguages(value) {
 }
 function formatRoles(roles) {
   return (roles || []).map(function(role) {
-    return role === "admin" ? "Administrator" : 
-      role === "superadmin" ? "Super Admin" : formatTitleCase(role);
+    if (role === "admin") {
+      return "Administrator";
+    } else if (role === "org_admin") {
+      return "Organization Administrator";
+    }
+    return formatTitleCase(role);
   });
 }
 function persistRoles(roles) {
   return (roles || []).map(function(role) {
-    return role === "Administrator" ? "admin" : role.toLowerCase().replace(" ", "");
+    if (role === "Administrator") {
+      return "admin";
+    } else if (role === "Organization Administrator") {
+      return "org_admin";
+    }
+    return role.toLowerCase().replace(" ", "");
   });
 }
 function notBlankName(array, value) {

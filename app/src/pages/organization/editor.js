@@ -25,10 +25,10 @@ export default function organization(params) {
   }
 
   let binder = new Binder(self)
-    .obs("isNew", params.id === "new")
+    .obs("isNew", params.orgId === "new")
     .obs("title", "New Organization")
     .bind("name")
-    .bind("identifier", params.id === "new" ? null : params.id)
+    .bind("identifier", params.orgId === "new" ? null : params.orgId)
     .bind("description")
     .bind("createdOn")
     .bind("modifiedOn")
@@ -57,7 +57,7 @@ export default function organization(params) {
         .then(binder.assign("organization"))
         .then(binder.update());
     } else {
-      return serverService.getOrganization(params.id)
+      return serverService.getOrganization(params.orgId)
         .then(binder.assign("organization"))
         .then(binder.update())
         .then(fn.handleObsUpdate(self.titleObs, "name"))

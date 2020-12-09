@@ -1,0 +1,14 @@
+<div class="ui secondary pointing menu" data-bind="visible: !isNewObs()">
+  <a data-bind="tabber, href: linkMaker('general')"> <i class="setting icon"></i> General </a>
+  <a data-bind="tabber, href: linkMaker('clientData')"> <i class="database icon"></i> Client Data </a>
+  <a data-bind="tabber, href: linkMaker('requestInfo')"> <i class="world icon"></i> Request Info </a>
+  <div class="right menu">
+    <div class="item" data-bind="visible: statusObs() === 'disabled'">
+      <span class="ui red tiny label"><i class="warning sign icon"></i> Disabled</span>
+    </div>
+    <div class="item" data-bind="visible: statusObs() === 'unverified'">
+      <span class="ui orange tiny label"><i class="warning sign icon"></i> Unverified</span>
+    </div>
+  </div>
+</div>
+<div class="ui empty secondary pointing menu" data-bind="visible: isNewObs"></div>
