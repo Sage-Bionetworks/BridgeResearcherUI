@@ -10,6 +10,7 @@ deploy:
   - provider: s3
     edge: true
     bucket: research-staging.sagebridge.org
+    region: us-west-2
     skip_cleanup: true
     acl: public_read
     detect_encoding: false
@@ -20,6 +21,7 @@ deploy:
   - provider: s3
     edge: true
     bucket: research.sagebridge.org
+    region: us-west-2
     skip_cleanup: true
     acl: public_read
     detect_encoding: false
