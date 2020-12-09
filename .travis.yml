@@ -14,7 +14,6 @@ deploy:
     skip_cleanup: true
     acl: public_read
     detect_encoding: false
-    region: us-east-1
     local_dir: app
     on:
       branch: develop
@@ -25,7 +24,6 @@ deploy:
     skip_cleanup: true
     acl: public_read
     detect_encoding: false
-    region: us-east-1
     local_dir: app
     on:
       branch: release  
