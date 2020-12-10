@@ -52,8 +52,9 @@ module.exports = {
         use: {
           loader: 'html-loader', 
           options: {
-            removeComments: false, 
-            minimize: true
+            minimize: {
+              removeComments: false
+            }
           }
         }
       }    
