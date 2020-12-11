@@ -1,20 +1,18 @@
 import fn from "../../functions";
 import ko from "knockout";
-import root from "../../root";
 
 export default function tabset(params) {
   let self = this;
 
-  fn.copyProps(self, params, "identifierObs->studyIdObs", "isNewObs");
-
-  self.canAdminParticipants = function() {
-    return root.isResearcher() || root.isStudyCoordinator() || root.isAdmin();
+  if (!params.isNewObs) {
+    params.isNewObs = ko.observable(false);
   }
+  fn.copyProps(self, params, "isNewObs", "userIdObs", "statusObs", "orgIdObs");
 
   self.computeds = [];
-  self.linkMaker = function(tabName) {
+  self.linkMaker = function(postfix) {
     let c = ko.computed(function() {
-      return "#/studies/" + self.studyIdObs() + '/' + tabName;
+      return `#/organizations/${self.orgIdObs()}/members/${self.userIdObs()}/${postfix}`;
     });
     self.computeds.push(c);
     return c;

@@ -17,6 +17,8 @@ const GUID_CREATEDON = ["guid", "createdOn"];
 const ID = ["id"];
 const ID_GUID = ["id", "guid"];
 const ID_REVISION = ["id", "revision"];
+const ORGID = ["orgId"];
+const ORGID_USERID = ["orgId", "userId"];
 const SCHEMAID = ["schemaId"];
 const SCHEMAID_REVISION = ["schemaId", "revision"];
 const STUDYID = ["studyId"];
@@ -136,15 +138,22 @@ router.on("/files/:guid", routeTo("file", "files", GUID));
 router.on("/files", routeTo("files", "files"));
 router.on("/admin/cache", routeTo("admin_cache", "cache"));
 router.on("/admin/apps", routeTo("admin_apps", "apps"));
-router.on("/admin/apps/:id", routeTo("admin_app", "apps", ID));
+  router.on("/admin/apps/:id", routeTo("admin_app", "apps", ID));
 router.on("/admin/uploads", routeTo("uploads", "uploads"));
 router.on("/admin/uploads/:guid", routeTo("upload", "uploads", GUID));
 // router.on("/admin/masterschedules", routeTo("masterschedules"));
 router.on("/organizations", routeTo("organizations", "organizations"));
-router.on("/organizations/:id", redirectTo("/organizations/{0}/general"));
-router.on("/organizations/:id/general", routeTo("orgEditor", "organizations", ID));
-router.on("/organizations/:id/members", routeTo("orgMembers", "organizations", ID));
-router.on("/organizations/:id/studies", routeTo("orgStudies", "organizations", ID));
+router.on("/organizations/:orgId", redirectTo("/organizations/{0}/general"));
+router.on("/organizations/:orgId/general", routeTo("orgEditor", "organizations", ORGID));
+router.on("/organizations/:orgId/studies", routeTo("orgStudies", "organizations", ORGID));
+router.on("/organizations/:orgId/members", routeTo("orgMembers", "organizations", ORGID));
+router.on("/organizations/:orgId/members/:userId", redirectTo("/organizations/{0}/members/{1}/general"));
+router.on("/organizations/:orgId/members/:userId/general", 
+  routeTo("memGeneral", "organizations", ORGID_USERID));
+router.on("/organizations/:orgId/members/:userId/clientData", 
+  routeTo("memClientData", "organizations", ORGID_USERID));
+router.on("/organizations/:orgId/members/:userId/requestInfo", 
+  routeTo("memRequestInfo", "organizations", ORGID_USERID));
 router.on("/studies", routeTo("studies", "studies"));
 
 router.on("/studies/:studyId", redirectTo("/studies/{0}/general"));

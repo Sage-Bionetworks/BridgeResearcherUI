@@ -1,10 +1,12 @@
 import fn from "../../functions";
 import ko from "knockout";
+import root from "../../root";
 
 export default function tabset(params) {
   let self = this;
 
   fn.copyProps(self, params, "identifierObs", "isNewObs");
+  fn.copyProps(self, root, "isOrgAdmin");
 
   self.computeds = [];
   self.linkMaker = function(tabName) {

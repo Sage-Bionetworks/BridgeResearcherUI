@@ -68,6 +68,7 @@ export default {
     UNDO_SPONSOR: "Are you sure? This changes permissions, though you can redo this later."
   },
   retentionReports: ['api', 'biomarin-pku-study', 'crf-module', 'sage-mpower-2'],
+  accounts: "/v1/accounts",
   adminAuth: "/v3/auth/admin",
   appConfigs: "/v3/appconfigs",
   appConfigElements: "/v3/appconfigs/elements",

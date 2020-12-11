@@ -29,10 +29,18 @@ export default function organizations() {
     delete: org => serverService.deleteOrganization(org.identifier)
   });
 
+  self.orgMembership = null;
+
+  self.canEdit = function(item) {
+    return self.orgMembership === item.identifier || self.isAdmin();
+  }
+
   function load(query) {
     // some state is not in the pager, update that and capture last known state of paging
     self.query = query;
-    serverService.getOrganizations(query.offsetBy, query.pageSize)
+    serverService.getSession()
+      .then((session) => self.orgMembership = session.orgMembership)
+      .then(() => serverService.getOrganizations(query.offsetBy, query.pageSize))
       .then(fn.handleSort("items", "label"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .then(self.postLoadPagerFunc)

@@ -12,6 +12,8 @@ export default function(params) {
   function signOut(deleteReauthToken) {
     if (params.studyId) {
       return serverService.signOutStudyParticipant(params.studyId, params.userId, deleteReauthToken);
+    } else if (params.accounts === true) {
+      return serverService.signOutAccount(params.userId, deleteReauthToken);
     } else {
       return serverService.signOutUser(params.userId, deleteReauthToken);
     }
@@ -26,4 +28,4 @@ export default function(params) {
       .then(self.cancel)
       .catch(utils.failureHandler({id: 'sign-out-user'}));
   };
-};
+}

@@ -530,9 +530,6 @@ export class ServerService {
   deleteExternalId(id) {
     return this.del(`${config.externalIds}/${id}`);
   }
-  updateIdentifiers(payload) {
-    return this.post(config.participants + '/self/identifiers', payload);
-  }
   getSession() {
     if (session) {
       return Promise.resolve(session);
@@ -1087,27 +1084,65 @@ export class ServerService {
     let queryString = fn.queryString({ offsetBy, pageSize });
     return this.gethttp(config.organizations + queryString);
   }
-  getOrganization(id) {
-    return this.gethttp(`${config.organizations}/${id}`);
+  getOrganization(orgId) {
+    return this.gethttp(`${config.organizations}/${orgId}`);
   }
   createOrganization(organization) {
     return this.post(config.organizations, organization);
   }
-  updateOrganization(id, organization) {
-    return this.post(`${config.organizations}/${id}`, organization);
+  updateOrganization(orgId, organization) {
+    return this.post(`${config.organizations}/${orgId}`, organization);
   }
-  deleteOrganization(id) {
-    return this.del(`${config.organizations}/${id}`);
+  deleteOrganization(orgId) {
+    return this.del(`${config.organizations}/${orgId}`);
   }
-  getOrganizationMembers(identifier, search) {
-    return this.post(`${config.organizations}/${identifier}/members`, search);
+  // ACCOUNTS
+  createAccount(account) {
+    return this.post(config.accounts, account);
   }
-  addOrgMember(identifier, userId) {
-    return this.post(`${config.organizations}/${identifier}/members/${userId}`);
+  getAccount(userId) {
+    return this.gethttp(`${config.accounts}/${userId}`)
+      .then(this.cacheParticipantName.bind(this));
   }
-  removeOrgMember(identifier, userId) {
-    return this.del(`${config.organizations}/${identifier}/members/${userId}`);
+  getAccountName(userId) {
+    return this.getParticipantName(userId);
   }
+  updateAccount(userId, account) {
+    return this.post(`${config.accounts}/${userId}`, account);
+  }
+  deleteAccount(userId) {
+    return this.del(`${config.accounts}/${userId}`);
+  }
+  getAccountRequestInfo(userId) {
+    return this.gethttp(`${config.accounts}/${userId}/requestInfo`);
+  }
+  requestAccountResetPassword(userId) {
+    return this.post(`${config.accounts}/${userId}/requestResetPassword`);
+  }
+  resendAccountEmailVerification(userId) {
+    return this.post(`${config.accounts}/${userId}/resendEmailVerification`);
+  }
+  resendAccountPhoneVerification(userId) {
+    return this.post(`${config.accounts}/${userId}/resendPhoneVerification`);
+  }
+  signOutAccount(userId, deleteReauthToken) {
+    return this.post(`${config.accounts}/${userId}/signOut${fn.queryString({ deleteReauthToken })}`);
+  }
+  updateIdentifiersForSelf(payload) {
+    return this.post(config.accounts + '/self/identifiers', payload);
+  }
+
+  // ORGANIZATION MEMBERS
+  getOrgMembers(orgId, search) {
+    return this.post(`${config.organizations}/${orgId}/members`, search);
+  }
+  addOrgMember(orgId, userId) {
+    return this.post(`${config.organizations}/${orgId}/members/${userId}`);
+  }
+  removeOrgMember(orgId, userId) {
+    return this.del(`${config.organizations}/${orgId}/members/${userId}`);
+  }
+  // SESSION LISTENERS
   addSessionStartListener(listener) {
     if (typeof listener !== "function") {
       throw new Error(ERROR);

@@ -17,7 +17,7 @@ let failureHandler = utils.failureHandler({
 
 export default function(params) {
   let self = this;
-
+  
   fn.copyProps(self, root, 'isAdmin');
 
   let binder = new Binder(self)
@@ -25,7 +25,7 @@ export default function(params) {
     .obs("title")
     .obs("identifier");
 
-  serverService.getOrganization(params.id)
+  serverService.getOrganization(params.orgId)
     .then(binder.update())
     .then(fn.handleObsUpdate(self.titleObs, "name"))
     .catch(failureHandler);
@@ -40,14 +40,14 @@ export default function(params) {
         self.query.offsetBy = 0;
         loadSponsored(self.query)
       }),
-      orgId: params.id
+      orgId: params.orgId
     });
 
   };
   self.removeSponsored = (item, event) => {
     alerts.deleteConfirmation(config.msgs.UNDO_SPONSOR, () => {
       utils.startHandler(self, event);
-      serverService.removeSponsored(params.id, item.identifier)
+      serverService.removeSponsored(params.orgId, item.identifier)
         .then(() => loadSponsored(self.query))
         .then(utils.successHandler(self, event, "Study no longer sponsored."))
         .catch(utils.failureHandler({ id: 'org_sponsored' }));
@@ -68,7 +68,7 @@ export default function(params) {
     // some state is not in the pager, update that and capture last known state of paging
     self.query = query;
 
-    serverService.getSponsoredStudies(params.id, query)
+    serverService.getSponsoredStudies(params.orgId, query)
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .then(self.postLoadPagerFunc)
       .catch(utils.failureHandler({ id: 'org_sponsored' }));
