@@ -565,7 +565,7 @@ export class ServerService {
     return this.gethttp(`${config.reports}/${identifier}/index`);
   }
   updateStudyReportIndex(index) {
-    return this.post(`${config.reports}/${identifier}/index`, index);
+    return this.post(`${config.reports}/${index.identifier}/index`, index);
   }
   getParticipantReports() {
     return this.gethttp(`${config.reports}${fn.queryString({ type: "participant" })}`);
