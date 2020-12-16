@@ -43,8 +43,6 @@ export default class GeneralBaseAccount extends BaseAccount {
   constructor(params) {
     super(params);
 
-    this.failureParams.redirectTo = "participants";
-    this.failureParams.redirectMsg = "Participant not found";
     this.orgNames = {};
 
     this.binder = new Binder(this)
