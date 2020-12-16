@@ -20,6 +20,10 @@ export default function organization(params) {
   fn.copyProps(self, fn, 'formatDateTime', 'formatTitleCase');
   fn.copyProps(self, root, 'isAdmin');
 
+  self.canEdit = function() {
+    return root.isAdmin() || root.isOrgAdmin();
+  }
+
   self.isUserNavigable = function() {
     return root.isAdmin() || root.isResearcher();
   }

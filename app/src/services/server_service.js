@@ -453,6 +453,16 @@ export class ServerService {
     }
     return this.gethttp(`${config.participants}/${id}`).then(this.cacheParticipantName.bind(this));
   }
+  // EXPERIMENTAL
+  getAccountName(id, func) {
+    let name = cache.get(id + ":name");
+    if (name) {
+      return Promise.resolve(name);
+    }
+    return func().then(this.cacheParticipantName.bind(this))
+      .then(() => Promise.resolve(cache.get(id + ":name")));
+  }
+
   getParticipantName(id) {
     if (session && session.id === id) {
       id = 'self';
@@ -480,9 +490,6 @@ export class ServerService {
   }
   sendTopicNotification(guid, message) {
     return this.post(`${config.topics}/${guid}/sendNotification`, message);
-  }
-  sendSmsMessage(id, message) {
-    return this.post(`${config.participants}/${id}/sendSmsMessage`, message);
   }
   createParticipant(participant) {
     return this.post(config.participants, participant);
@@ -979,9 +986,6 @@ export class ServerService {
   sendStudyParticipantNotification(studyId, userId, message) {
     return this.post(`${config.studies}/${studyId}/participants/${userId}/sendNotification`, message);
   }
-  sendStudyParticipantSmsMessage(studyId, userId, message) {
-    return this.post(`${config.studies}/${studyId}/participants/${userId}/sendSmsMessage`, message);
-  }
   signOutStudyParticipant(studyId, userId, deleteReauthToken) {
     return this.post(`${config.studies}/${studyId}/participants/${userId}/signOut${fn.queryString({ deleteReauthToken })}`);
   }
@@ -997,11 +1001,6 @@ export class ServerService {
   resendStudyParticipantPhoneVerification(studyId, userId) {
     return this.post(`${config.studies}/${studyId}/participants/${userId}/resendPhoneVerification`);
   }
-  
-
-
-
-
   getTemplates(query) {
     let queryString = fn.queryString(query);
     return this.gethttp(`${config.templates}${queryString}`);

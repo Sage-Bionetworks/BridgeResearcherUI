@@ -607,6 +607,7 @@ reg("line-editor", {viewModel: lineEditor, template: lineEditorHtml});
 reg("app_version_criteria", {viewModel: appVersionCrit, template: appVersionCritHtml});
 reg("template_criteria", {viewModel: templateCrit, template: templateCritHtml});
 reg("participants-pager", {viewModel: partPager, template: partPagerHtml});
+reg("studyparticipants-pager", {viewModel: studypartPager, template: studypartPagerHtml});
 reg("field_definition", {viewModel: fieldDef, template: fieldDefHtml});
 reg("SurveyInfoScreen", {viewModel: infoScreen, template: infoScreenHtml});
 reg("SurveyQuestion", {template: questionHtml});

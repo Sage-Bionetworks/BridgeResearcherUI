@@ -53,7 +53,7 @@ export default function participants(params) {
     name: "participant",
     id: "studyparticipants",
     delete: (item) => serverService.deleteStudyParticipant(params.studyId, item.id),
-    refresh: () => ko.postbox.publish("page-refresh")
+    refresh: () => ko.postbox.publish("studyparticipants")
   });
 
   fn.copyProps(self, fn, "formatName", "formatDateTime", "formatIdentifiers", "formatNameAsFullLabel");

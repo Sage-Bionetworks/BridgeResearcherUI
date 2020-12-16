@@ -451,4 +451,17 @@ describe("studyMatchesUser", function() {
         expect(fn.studyMatchesUser(["studyA"])).to.be.false;
     });
 });
+describe("formatCount", function() {
+    it("formats plural", () => {
+        expect(fn.formatCount(2)).to.equal("2 records");
+    });
+    it("formats singular", () => {
+        expect(fn.formatCount(1)).to.equal("1 record");
+    });
+    it("handles bad values", () => {
+        expect(fn.formatCount(0)).to.equal("No records");
+        expect(fn.formatCount()).to.equal("");
+        expect(fn.formatCount("A")).to.equal("A");
+    });
+});
 });

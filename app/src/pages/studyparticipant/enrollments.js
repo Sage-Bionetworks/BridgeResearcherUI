@@ -1,87 +1,24 @@
-import alerts from "../../widgets/alerts";
-import Binder from "../../binder";
-import fn from "../../functions";
-import root from "../../root";
-import Promise from "bluebird";
+import EnrollmentsBaseAccount from "../../accounts/enrollments_base_account";
 import serverService from "../../services/server_service";
-import tables from "../../tables";
-import utils from "../../utils";
 
-let failureHandler = utils.failureHandler({
-  redirectTo: "participants",
-  redirectMsg: "Participant not found",
-  id: 'studyparticipant-enrollments'
-});
-
-export default function enrollments(params) {
-  let self = this;
-  fn.copyProps(self, root, "isResearcher");
-  fn.copyProps(self, fn, "formatDateTime", "formatNameAsFullLabel");
-  
-  new Binder(self)
-    .obs("userId", params.userId)
-    .obs("items[]")
-    .obs("status")
-    .obs("noConsent", true)
-    .obs("title", "&#160;")
-    .bind("navStudyId", params.studyId)
-    .bind("navStudyName");
-
-  tables.prepareTable(self, { 
-    name: "enrollment",
-    id: 'studyparticipant-enrollments'
-  });
-
-  self.hasSignatures = function(item) {
-    return self.subpopulations.some(subpop => {
-      let array = self.participant.consentHistories[subpop.guid];
-      return subpop.studyIdsAssignedOnConsent.includes(item.studyId) && array && array.length;
+export default class StudyParticipantEnrollments extends EnrollmentsBaseAccount {
+  constructor(params) {
+    super({ 
+      ...params, 
+      errorId: 'studyparticipant-enrollments',
+      notFoundParams: {
+        redirectTo: `studies/${params.studyId}/participants`,
+        redirectMsg: 'Participant not found'
+      }
+    });
+    serverService.getStudy(this.studyId).then((response) => {
+      this.navStudyNameObs(response.name);
     });
   }
-
-  self.enroll = (item, event) => {
-    alerts.optionalPrompt("Add an external ID to this enrollment (optional)?", (extId) => {
-      utils.startHandler(self, event);
-      serverService.enroll(item.studyId, item.participant.identifier, extId)
-        .then(load)
-        .catch(utils.failureHandler({ id: 'studyparticipant-enrollments' }));
-    });
-  };
-  self.unenroll = (item, event) => {
-    alerts.prompt("Why are you withdrawing this person?", (withdrawalNote) => {
-      utils.startHandler(self, event);
-      serverService.unenroll(item.studyId, item.participant.identifier, withdrawalNote)
-        .then(utils.successHandler(self, event, "Participant removed from study."))
-        .then(load)
-        .catch(utils.failureHandler({ id: 'studyparticipant-enrollments' }));
-    });
-  };
-
-  function loadStudy(enrollment) {
-    return serverService.getStudy(enrollment.studyId)
-      .then((study) => enrollment.studyName = study.name)
-      .then(() => enrollment);
+  loadAccount() { 
+    return serverService.getStudyParticipant(this.studyId, this.userId);
   }
-  function loadName(part) {
-    self.titleObs(part.name);
-    self.statusObs(part.status);
+  loadEnrollments() {
+    return serverService.getStudyParticipantEnrollments(this.studyId, this.userId);
   }
-
-  serverService.getStudy(params.studyId).then((response) => {
-    self.navStudyNameObs(response.name);
-  });
-
-  function load() {
-    serverService.getStudyParticipantName(params.studyId, params.userId)
-      .then(loadName)
-      .then(() => serverService.getStudyParticipant(params.studyId, params.userId))
-      .then(part => self.participant = part)
-      .then(() => serverService.getAllSubpopulations(true))
-      .then(response => self.subpopulations = response.items)
-      .then(() => serverService.getStudyParticipantEnrollments(params.studyId, params.userId))
-      .then(response => Promise.all(response.items.map(loadStudy))
-      .then((response) => self.itemsObs(response)))
-      .catch(failureHandler);
-  }
-  load();
-};
+}

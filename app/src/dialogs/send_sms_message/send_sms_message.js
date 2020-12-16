@@ -9,6 +9,14 @@ export default function(params) {
 
   new Binder(self).obs("message", "");
 
+  function sendMessage() {
+    if (params.studyId) {
+      return serverService.sendSmsMessage(params.studyId, params.userId, template)
+    }
+    return serverService.sendSmsMessage(params.userId, template)
+  }
+
+
   self.cancel = root.closeDialog;
   self.send = function(vm, event) {
     let template = {

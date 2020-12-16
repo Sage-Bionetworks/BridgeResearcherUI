@@ -12,7 +12,9 @@ export default function(params) {
   new Binder(self).obs("subject", "").obs("message", "");
 
   function sendNotification(msgObj) {
-    if (params.userId) {
+    if (params.studyId) {
+      return serverService.sendStudyParticipantNotification(params.studyId, params.userId, msgObj);
+    } else if (params.userId) {
       return serverService.sendUserNotification(params.userId, msgObj);
     } else if (params.topicId) {
       return serverService.sendTopicNotification(params.topicId, msgObj);

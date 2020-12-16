@@ -18,6 +18,7 @@ export default function pager(params) {
   let pageKey = params.pageKey;
   let loadingFunc = params.loadingFunc;
   let { defaultStart, defaultEnd } = fn.getRangeInDays(-14, 0);
+  self.formatCount = fn.formatCount;
 
   let searchPanel = document.querySelector("#searchPanel");
   this.closeHandler = e => {
@@ -120,7 +121,7 @@ export default function pager(params) {
     }
   }
 
-  ko.postbox.subscribe("page-refresh", wrappedLoadingFunc.bind(self));
+  ko.postbox.subscribe(pageKey, wrappedLoadingFunc.bind(self));
 
   function wrappedLoadingFunc(offsetBy) {
     let search = {
@@ -132,7 +133,7 @@ export default function pager(params) {
       language: self.languageObs() ? self.languageObs() : null,
       startTime: self.startTimeObs(),
       endTime: self.endTimeObs(),
-      adminOnly: self.adminOnlyObs()
+      adminOnly: false
     };
     if (fn.is(search.startTime, "Date")) {
       search.startTime.setHours(0, 0, 0, 0);

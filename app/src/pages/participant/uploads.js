@@ -8,12 +8,6 @@ import utils from "../../utils";
 
 const PAGE_KEY = "us";
 
-const failureHandler = utils.failureHandler({
-  redirectTo: "participants",
-  redirectMsg: "Participant not found",
-  id: 'participant-uploads'
-});
-
 export default class ParticipantUploadsViewModel extends UploadsViewModel {
   constructor(params) {
     super(params, PAGE_KEY);

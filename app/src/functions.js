@@ -18,6 +18,7 @@ const LOCAL_TIMEZONE = Date()
   .replace(/[^A-Z]/g, "");
 const IS_BROWSER = typeof window !== "undefined" && typeof window.document !== "undefined";
 const BYTE_UNITS = [' KB', ' MB', ' GB', ' TB'];
+const FORMAT = new Intl.NumberFormat();
 
 function flagForRegionCode(regionCode) {
   return FLAGS[regionCode];
@@ -557,11 +558,22 @@ function formatTimeISO(date) {
     .split("T")[1]
     .split(".")[0];
 }
+function formatCount(count = '') {
+  if (typeof count === 'number') {
+    if (count < 1) {
+      return 'No records';
+    }
+    let plural = count > 1 ? ' records' : ' record';
+    return FORMAT.format(count) + plural;
+  }
+  return count;
+}
 
 export default {
   copyProps,
   deleteUnusedProperties,
   flagForRegionCode,
+  formatCount,
   formatDate,
   formatDateTime,
   formatFileSize,

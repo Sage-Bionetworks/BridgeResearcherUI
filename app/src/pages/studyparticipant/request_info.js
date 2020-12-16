@@ -1,61 +1,15 @@
-import Binder from "../../binder";
-import fn from "../../functions";
-import root from "../../root";
+import RequestInfoBaseAccount from "../../accounts/request_info_base_account";
 import serverService from "../../services/server_service";
-import utils from "../../utils";
 
-function joiner(value) {
-  return value && value.length ? value.join(", ") : "<none>";
-}
-function stringer(value) {
-  let array = [];
-  if (value) {
-    delete value.type;
-    for (let prop in value) {
-      array.push(prop + " = " + value[prop]);
-    }
+export default class RequestInfoParticipant extends RequestInfoBaseAccount {
+  constructor(params) {
+    super({ ...params, id: 'studyparticipant-request-info' });
+    serverService.getStudy(params.studyId).then(res => this.navStudyNameObs(res.name));
   }
-  return array.join("<br>");
-}
-function dater(value) {
-  return value ? fn.formatDateTime(value) : "<none>";
-}
-function noner(value) {
-  return value ? value : "<none>";
-}
-
-export default function(params) {
-  let self = this;
-  fn.copyProps(self, root, "isResearcher");
-
-  let binder = new Binder(self)
-    .obs("userId", params.userId)
-    .obs("name", "")
-    .obs("title", "&#160;")
-    .obs("status")
-    .obs("languages", null, joiner)
-    .obs("userDataGroups", null, joiner)
-    .obs("signedInOn", null, dater)
-    .obs("clientInfo", null, stringer)
-    .obs("uploadedOn", null, dater)
-    .obs("activitiesAccessedOn", null, dater)
-    .obs("timeZone", null, noner)
-    .obs("userAgent", null, noner)
-    .bind("navStudyId", params.studyId)
-    .bind("navStudyName");
-
-  function requestInfo() {
-    return serverService.getStudyParticipantRequestInfo(params.studyId, params.userId);
+  loadAccount() { 
+    return serverService.getStudyParticipant(this.studyId, this.userId);
   }
-  serverService.getStudy(params.studyId).then((response) => {
-    self.navStudyNameObs(response.name);
-  });
-  serverService.getStudyParticipantName(params.studyId, params.userId).then(function(part) {
-      self.titleObs(part.name);
-      self.nameObs(part.name);
-      self.statusObs(part.status);
-    })
-    .then(requestInfo)
-    .then(binder.update())
-    .catch(utils.failureHandler({ id: 'participant-request-info' }));
-};
+  requestInfo() {
+    return serverService.getStudyParticipantRequestInfo(this.studyId, this.userId);
+  }
+}

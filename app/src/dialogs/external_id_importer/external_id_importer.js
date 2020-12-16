@@ -73,6 +73,7 @@ CreateCredentialsWorker.prototype = {
   performWork: function() {
     this.credentialPair = this.credentialPairs.shift();
     this.credentialPair.dataGroups = this.dataGroups;
+    delete this.credentialPair.externalId;
     return serverService.createStudyParticipant(this.studyId, this.credentialPair);
   },
   currentWorkItem: function() {
