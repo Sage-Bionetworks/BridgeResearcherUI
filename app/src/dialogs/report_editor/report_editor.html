@@ -11,7 +11,8 @@
       <div class="two fields">
         <div class="field" id="date">
           <label>Date</label>
-          <input data-bind="flatpickr: dateObs" />
+          <input data-bind="flatpickr: dateObs, visible: isAddObs()" />
+          <div class="inline-form-text" data-bind="text: dateObs, visible: !isAddObs()"></div>
         </div>
         <div class="field tag-editor studyIds" data-bind="visible: isAddObs">
           <label>Restricted to studies</label>
@@ -20,7 +21,7 @@
         </div>
         <div class="field" data-bind="visible: !isAddObs()">
           <label>Restricted to studies</label>
-          <div class="inline-form-text" data-bind="text: (studyIdsObs() || []).join(', ')"></div>
+          <div class="inline-form-text" data-bind="text: studyIdsObs().join(', ')"></div>
         </div>
       </div>
       <div class="field" id="data">

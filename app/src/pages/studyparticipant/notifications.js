@@ -4,7 +4,14 @@ import serverService from "../../services/server_service";
 
 export default class NotificationsParticipant extends NotificationsBaseAccount {
   constructor(params) {
-    super({ ...params, errorId: 'studyparticipant-notifications' });
+    super({
+      ...params, 
+      errorId: 'studyparticipant-notifications',
+      notFoundParams: {
+        redirectTo: `#/studies/${params.studyId}/participants`,
+        redirectMsg: "Participant not found"
+      }
+    });
     serverService.getStudy(params.studyId).then(res => this.navStudyNameObs(res.name));
   }
   getAccountNotifications() {

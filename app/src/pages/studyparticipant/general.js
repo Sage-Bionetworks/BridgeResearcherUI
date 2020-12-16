@@ -5,7 +5,14 @@ import utils from "../../utils";
 
 export default class GeneralParticipant extends GeneralBaseAccount {
   constructor(params) {
-    super({ ...params, errorId: 'studyparticipant-general' });
+    super({
+      ...params,
+      errorId: 'studyparticipant-general',
+      notFoundParams: {
+        redirectTo: `#/studies/${params.studyId}/participants`,
+        redirectMsg: "Participant not found"
+      }
+    });
     serverService.getStudy(params.studyId).then(res => this.navStudyNameObs(res.name));
   }
   loadAccount() {

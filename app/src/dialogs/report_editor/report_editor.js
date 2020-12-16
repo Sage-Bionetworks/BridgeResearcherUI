@@ -10,7 +10,8 @@ function formatDateISO(value) {
 
 export default class AddReport {
   constructor(params) {
-    fn.copyProps(this, params, "type", "userId", "closeDialog->close");
+    console.log(params);
+    fn.copyProps(this, params, "type", "userId", "studyId", "closeDialog->close");
 
     this.binder = new Binder(this)
       .obs("showIdentifier", !fn.isDefined(params.identifier))
@@ -18,13 +19,16 @@ export default class AddReport {
       .bind("identifier", params.identifier)
       .bind("date", AddReport.getLocalDate(params.date), null, formatDateISO)
       .bind("data", AddReport.jsonAsString(params.data), null, AddReport.stringAsJson)
-      .bind("studyIds[]", params.studyIds)
+      .bind("studyIds[]", params.studyIds || [])
       .obs("studyOptions[]")
-      .obs("isAdd", params.add);
+      .obs("isAdd", params.add && !params.studyId);
 
-      serverService.getStudies().then((studies) => {
-        this.studyOptionsObs(studies.items.map(sub => sub.id));
-      });
+    if (this.studyId) {
+      this.studyIdsObs([this.studyId]);
+    }
+    serverService.getStudies().then((studies) => {
+      this.studyOptionsObs(studies.items.map(sub => sub.identifier));
+    });
   }
   addReport(entry) {
     return this.type === "participant" ? 
