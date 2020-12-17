@@ -75,15 +75,12 @@ let RootViewModel = function() {
     self.mainParamsObs(params);
   };
 
-  self.isResearcher = roleFunc(self.rolesObs, "researcher");
-  self.isDeveloper = roleFunc(self.rolesObs, "developer");
+  self.isResearcher = roleFunc(self.rolesObs, "researcher", "admin");
+  self.isDeveloper = roleFunc(self.rolesObs, "developer", "admin");
   self.isAdmin = roleFunc(self.rolesObs, "admin");
-  self.isOrgAdmin = roleFunc(self.rolesObs, "org_admin");
+  self.isOrgAdmin = roleFunc(self.rolesObs, "org_admin", "admin");
   self.isSuperadmin = roleFunc(self.rolesObs, "superadmin");
-  self.isStudyCoordinator = roleFunc(self.rolesObs, "study_coordinator");
-
-  self.canAccessStudies = roleFunc(self.rolesObs, "study_coordinator", "admin");
-  self.canAccessOrganizations = roleFunc(self.rolesObs, "org_admin", "admin");
+  self.isStudyCoordinator = roleFunc(self.rolesObs, "study_coordinator", "admin");
 
   self.isResearcherOnly = ko.computed(function() {
     let roles = self.rolesObs();
