@@ -41,17 +41,10 @@ export default class BaseAccount {
     if (!this.isNewObs()) {
       this.titleObs(fn.formatNameAsFullLabel(this.account));
     }
-    if (this.isNewObs()) {
-      return this.createAccount()
-        .then(this.afterCreate.bind(this))
+    let promise = this.isNewObs() ? this.createAccount() : this.updateAccount();
+    return promise.then(this.afterCreate.bind(this))
         .then(utils.successHandler(this))
         .catch(utils.failureHandler(this.failureParams));
-    } else {
-      return this.updateAccount()
-        .then(this.afterCreate.bind(this))
-        .then(utils.successHandler(this))
-        .catch(utils.failureHandler(this.failureParams));
-    }
   }
   getAccount() {
     if (this.isNewObs()) {
