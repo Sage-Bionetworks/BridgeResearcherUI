@@ -108,7 +108,7 @@ function queryToObject(query, arrayPropertyNames, prefix) {
       if (ns !== "") {
         key = key.split(ns)[1];
       }
-      if (obj[key] && isArray(obj[key])) {
+      if (obj[key] && Array.isArray(obj[key])) {
         obj[key].push(convertValue(value));
       } else if (obj[key]) {
         obj[key] = [obj[key], convertValue(value)];
