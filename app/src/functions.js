@@ -1,5 +1,3 @@
-import { isArray } from "util";
-
 // The only requirement for this module is that it have zero dependencies.
 const SECOND = 1000;
 const MINUTE = SECOND * 60;
@@ -90,7 +88,7 @@ function queryString(object, prefix) {
       let finalKey = ns + key;
       if (isDate(object[key])) {
         query.append(finalKey, object[key].toISOString());
-      } else if (isArray(object[key])) {
+      } else if (Array.isArray(object[key])) {
         for (var i = 0; i < object[key].length; i++) {
           query.append(finalKey, object[key][i]);
         }
