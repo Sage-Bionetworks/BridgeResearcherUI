@@ -7,7 +7,7 @@ console.log('[Webpack] Use dev configuration\n');
 
 module.exports = Object.assign({}, {
     mode: 'development',
-    devtool: '#source-map',
+    devtool: 'source-map',
     devServer: {
         writeToDisk: true
     }

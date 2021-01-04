@@ -11,7 +11,7 @@ module.exports = {
     moment: 'moment'
   },
   output: {
-    filename: '[name].[hash].js',
+    filename: '[name].[fullhash].js',
     path: path.resolve('app/dist')
   },
   plugins: [
@@ -29,7 +29,7 @@ module.exports = {
       filename: path.resolve('app/index.html')
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].[hash].css',
+      filename: '[name].[fullhash].css',
       chunkFilename: '[id].css',
       ignoreOrder: false, // Enable to remove warnings about conflicting order
     })
