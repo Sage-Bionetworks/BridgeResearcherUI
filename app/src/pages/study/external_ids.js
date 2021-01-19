@@ -87,7 +87,8 @@ export default function externalIds(params) {
     .then(initFromSession)
     .then(binder.assign("app"))
     .then(() => serverService.getStudy(params.studyId))
-    .then(fn.handleObsUpdate(self.titleObs, "name"));
+    .then(fn.handleObsUpdate(self.titleObs, "name"))
+    .catch(utils.failureHandler({ id: 'external-ids' }));
 
   self.load = function(query) {
     query = query || {};

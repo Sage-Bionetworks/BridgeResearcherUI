@@ -1,7 +1,6 @@
 import GeneralBaseAccount from "../../accounts/general_base_account";
 import root from "../../root";
 import serverService from "../../services/server_service";
-import utils from "../../utils";
 
 export default class GeneralParticipant extends GeneralBaseAccount {
   constructor(params) {

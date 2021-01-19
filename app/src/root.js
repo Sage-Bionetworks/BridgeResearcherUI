@@ -42,6 +42,7 @@ let RootViewModel = function() {
     .obs("appMemberships[]")
     .obs("sidePanel", "navigation")
     .obs("accountUrl")
+    .obs("email")
     .obs("dialog", { name: "none" });
 
   self.mainPageObs.subscribe(self.selectedObs);
@@ -113,6 +114,7 @@ let RootViewModel = function() {
     self.environmentObs(session.environment);
     self.appIdObs(session.appId);
     self.rolesObs(session.roles);
+    self.emailObs(session.email);
     self.accountUrlObs(`#/organizations/${session.orgMembership}/members/${session.id}`);
     serverService.getApp().then(function(app) {
       self.notificationsEnabledObs(Object.keys(app.pushNotificationARNs).length > 0);

@@ -102,7 +102,7 @@
             </div>
             <div class="content">
               <div class="ui secondary vertical menu">
-                <a class="item" data-ref="participants" data-bind="href: accountUrlObs, visible: !isResearcher()">
+                <a class="item" data-ref="participants" data-bind="href: accountUrlObs, visible: isDeveloper()"> <!-- and whatever is the study-scoped version of a developer -->
                   My Account
                 </a>
                 <a href="#/studies" class="item" data-ref="studies">
@@ -184,8 +184,9 @@
       </section>
       <footer>
         <p>
-          <span style="color: silver" data-bind="html: '[' + environmentObs() + ']',
-            visible: environmentObs() !== 'production'"></span>
+          <span style="color: silver" data-bind="html: '[' + emailObs() + ' on ' + 
+            environmentObs() + ']', visible: environmentObs() !== 'production'">
+          </span>
           &copy; 2015-2019 Sage Bionetworks | 
           <a target="_blank" href="/privacy.html">Privacy Policy</a> | 
           <a target="_blank" href="/terms-of-use.html">Terms of Use</a> 
