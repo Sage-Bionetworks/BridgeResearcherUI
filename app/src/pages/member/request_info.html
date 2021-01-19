@@ -13,6 +13,10 @@
   <div class="ui grid">
     <div class="ten wide column">
       <form class="ui form">
+        <div class="field">
+          <label>User Agent</label>
+          <p data-bind="text: userAgentObs"></p>
+        </div>
         <div class="two fields">
           <div class="field">
             <label>Data groups</label>
@@ -42,10 +46,6 @@
             <label>Last uploads on</label>
             <p data-bind="text: uploadedOnObs"></p>
           </div>
-        </div>
-        <div class="field">
-          <label>User Agent</label>
-          <p data-bind="text: userAgentObs"></p>
         </div>
         <div class="field">
           <label>Client info</label>

@@ -5,9 +5,9 @@ import ko from "knockout";
 import serverService from "./services/server_service";
 import toastr from 'toastr';
 
-function roleFunc(observer, role) {
+function roleFunc(observer, ...role) {
   return ko.computed(function() {
-    return observer().indexOf(role) > -1;
+    return role.some(role => observer().indexOf(role) > -1);
   });
 }
 function checkVerifyStatus() {
@@ -75,11 +75,13 @@ let RootViewModel = function() {
     self.mainParamsObs(params);
   };
 
-  self.isResearcher = roleFunc(self.rolesObs, "researcher");
-  self.isDeveloper = roleFunc(self.rolesObs, "developer");
+  self.isResearcher = roleFunc(self.rolesObs, "researcher", "admin");
+  self.isDeveloper = roleFunc(self.rolesObs, "developer", "admin");
   self.isAdmin = roleFunc(self.rolesObs, "admin");
-  self.isOrgAdmin = roleFunc(self.rolesObs, "org_admin");
+  self.isOrgAdmin = roleFunc(self.rolesObs, "org_admin", "admin");
   self.isSuperadmin = roleFunc(self.rolesObs, "superadmin");
+  self.isStudyCoordinator = roleFunc(self.rolesObs, "study_coordinator", "admin");
+
   self.isResearcherOnly = ko.computed(function() {
     let roles = self.rolesObs();
     return roles.indexOf("researcher") > -1 && roles.indexOf("developer") === -1;

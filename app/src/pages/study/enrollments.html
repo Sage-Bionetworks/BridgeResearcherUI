@@ -52,7 +52,7 @@
         <tr>
           <td>
             <a data-bind="text: $parent.formatParticipant($data),
-              attr: {'href': '#/participants/' + $data.participant.identifier + '/general'}">
+              attr: {'href': '#/studies/' + $parent.identifierObs() + '/participants/' + $data.participant.identifier + '/general'}">
             </a>
           </td>
           <td style="white-space: nowrap">

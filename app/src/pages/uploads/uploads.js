@@ -22,6 +22,7 @@ export default class UploadsViewModel {
     this.doCalSearch = this.doCalSearch.bind(this);
     this.doSearch = this.doSearch.bind(this);
     this.vm = this;
+    this.studyId = params.studyId;
     fn.copyProps(this, fn, "formatDateTime", "identity->callback");
     fn.copyProps(this, root, "isAdmin");
     tables.prepareTable(this, { name: "upload", id: "uploads" });

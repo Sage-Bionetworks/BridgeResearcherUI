@@ -4,6 +4,7 @@ import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
+// NOT USED
 export default function(params) {
   let self = this;
 

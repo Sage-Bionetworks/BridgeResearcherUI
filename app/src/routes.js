@@ -11,24 +11,28 @@ import ko from "knockout";
 import "knockout-postbox";
 import root from "./root";
 
-const GUID_CREATEDON = ["guid", "createdOn"];
+const $ACCORDIAN = $("#nav-accordian");
 const GUID = ["guid"];
+const GUID_CREATEDON = ["guid", "createdOn"];
 const ID = ["id"];
 const ID_GUID = ["id", "guid"];
 const ID_REVISION = ["id", "revision"];
+const ORGID = ["orgId"];
+const ORGID_USERID = ["orgId", "userId"];
 const SCHEMAID = ["schemaId"];
 const SCHEMAID_REVISION = ["schemaId", "revision"];
+const STUDYID = ["studyId"];
+const STUDYID_USERID = ["studyId", "userId"];
+const STUDYID_USERID_GUID = ["studyId", "userId", "guid"];
+const STUDYID_USERID_IDENTIFIER = ["studyId", "userId", "identifier"];
 const TYPE = ["templateType"];
 const TYPE_GUID = ["templateType", "guid"];
 const TYPE_GUID_CREATEDON = ["templateType", "guid", "createdOn"];
 const USERID = ["userId"];
-const ORGID = ["orgId"];
-const ORGID_USERID = ["orgId", "userId"];
-const USERID_STUDYID = ["userId", "studyId"];
-const USERID_IDENTIFIER = ["userId", "identifier"];
 const USERID_GUID = ["userId", "guid"];
+const USERID_IDENTIFIER = ["userId", "identifier"];
 const USERID_REFERENT_GUID = ["userId", "referentType", "guid"];
-const $ACCORDIAN = $("#nav-accordian");
+const USERID_STUDYID = ["userId", "studyId"];
 
 function namedParams(fields, args) {
   return (fields || []).reduce(function(params, name, i) {
@@ -134,7 +138,7 @@ router.on("/files/:guid", routeTo("file", "files", GUID));
 router.on("/files", routeTo("files", "files"));
 router.on("/admin/cache", routeTo("admin_cache", "cache"));
 router.on("/admin/apps", routeTo("admin_apps", "apps"));
-router.on("/admin/apps/:id", routeTo("admin_app", "apps", ID));
+  router.on("/admin/apps/:id", routeTo("admin_app", "apps", ID));
 router.on("/admin/uploads", routeTo("uploads", "uploads"));
 router.on("/admin/uploads/:guid", routeTo("upload", "uploads", GUID));
 // router.on("/admin/masterschedules", routeTo("masterschedules"));
@@ -151,11 +155,38 @@ router.on("/organizations/:orgId/members/:userId/clientData",
 router.on("/organizations/:orgId/members/:userId/requestInfo", 
   routeTo("memRequestInfo", "organizations", ORGID_USERID));
 router.on("/studies", routeTo("studies", "studies"));
-router.on("/studies/:id", redirectTo("/studies/{0}/general"));
-router.on("/studies/:id/general", routeTo("studyEditor", "studies", ID));
-router.on("/studies/:id/sponsors", routeTo("studySponsors", "studies", ID));
-router.on("/studies/:id/enrollments", routeTo("studyEnrollments", "studies", ID));
-router.on("/studies/:id/externalids", routeTo("external_ids", "studies", ID));
+
+router.on("/studies/:studyId", redirectTo("/studies/{0}/general"));
+router.on("/studies/:studyId/general", routeTo("studyEditor", "studies", STUDYID));
+router.on("/studies/:studyId/sponsors", routeTo("studySponsors", "studies", STUDYID));
+router.on("/studies/:studyId/enrollments", routeTo("studyEnrollments", "studies", STUDYID));
+router.on("/studies/:studyId/externalids", routeTo("externalIds", "studies", STUDYID));
+router.on("/studies/:studyId/participants", routeTo("studyParticipants", "studies", STUDYID));
+router.on("/studies/:studyId/participants/:userId", redirectTo("/studies/{0}/participants/{1}/general"));
+router.on("/studies/:studyId/participants/:userId/general", 
+  routeTo("studyparticipant_general", "studies", STUDYID_USERID));
+router.on("/studies/:studyId/participants/:userId/enrollments", 
+  routeTo("studyparticipant_enrollments", "studies", STUDYID_USERID));
+router.on("/studies/:studyId/participants/:userId/uploads", 
+  routeTo("studyparticipant_uploads", "studies", STUDYID_USERID));
+router.on("/studies/:studyId/participants/:userId/uploads/:guid", 
+  routeTo("studyparticipant_upload", "studies", STUDYID_USERID_GUID));
+router.on("/studies/:studyId/participants/:userId/notifications", 
+  routeTo("studyparticipant_notifications", "studies", STUDYID_USERID));
+router.on("/studies/:studyId/participants/:userId/reports", 
+  routeTo("studyparticipant_reports", "studies", STUDYID_USERID));
+router.on("/studies/:studyId/participants/:userId/reports/:identifier", 
+  routeTo("studyparticipant_report", "studies", STUDYID_USERID_IDENTIFIER));
+router.on("/studies/:studyId/participants/:userId/clientData", 
+  routeTo("studyparticipant_clientData", "studies", STUDYID_USERID));
+router.on("/studies/:studyId/participants/:userId/requestInfo", 
+  routeTo("studyparticipant_request_info", "studies", STUDYID_USERID));
+  /*
+reg("studyparticipant_general", {viewModel: studypartGeneral, template: studypartGeneralHtml});
+reg("studyparticipant_activity_events", {viewModel: studypartEvents, template: studypartEventsHtml});
+reg("studyparticipant_activity", {viewModel: studypartActivity, template: studypartActivityHtml});
+reg("studyparticipant_consents", {viewModel: studypartConsents, template: studypartConsentsHtml});
+*/
 
 router.on("/assessments", routeTo("assessments", "assessments"));
 router.on("/assessments/:guid", redirectTo("/assessments/{0}/general"));
@@ -183,10 +214,6 @@ router.on("/sharedassessments/:id/resources/:guid",
 
 router.on("/admin/tags", routeTo("tags", "tags"));
 
-// router.on("/shared_modules", routeTo("shared_modules", "modules"));
-// router.on("/shared_modules/:id", routeTo("shared_module", "modules", ID)); // unused now?
-// router.on("/shared_modules/:id/versions/:version/editor", routeTo("shared_module", "modules", ID_VERSION));
-// router.on("/shared_modules/:id/versions/:version/history", routeTo("shared_module_versions", "modules", ID_VERSION));
 router.on("/app_configs", routeTo("appconfigs", "appConfigs"));
 router.on("/app_configs/:guid", routeTo("appconfig", "appConfigs", GUID));
 router.on("/templates/:templateType/:guid/general", routeTo("template_general", "templates", TYPE_GUID));

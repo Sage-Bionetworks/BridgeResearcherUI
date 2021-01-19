@@ -49,9 +49,10 @@ function formatConsentRecords(record) {
   return entry;
 }
 
-let CollectParticipantsWorker = function(total, search) {
+let CollectParticipantsWorker = function(total, search, studyId) {
   this.total = total;
   this.search = search;
+  this.studyId = studyId;
   this.identifiers = [];
   let pages = [];
   let numPages = Math.floor(this.total / PAGE_SIZE);
@@ -77,7 +78,10 @@ CollectParticipantsWorker.prototype = {
     this.offsetBy = this.pageOffsets[0];
     this.search.offsetBy = this.offsetBy;
     this.search.pageSize = PAGE_SIZE;
-    return serverService.searchAccountSummaries(this.search).then(this._success.bind(this));
+    const p = (this.studyId) ?
+      serverService.getStudyParticipants(this.studyId, this.search) :
+      serverService.searchAccountSummaries(this.search);
+    return p.then(this._success.bind(this));
   },
   _success: function(response) {
     this.pageOffsets.shift();
@@ -94,9 +98,10 @@ CollectParticipantsWorker.prototype = {
     return Promise.resolve(this.identifiers);
   }
 };
-let FetchParticipantWorker = function(identifiers, canContactByEmail) {
+let FetchParticipantWorker = function(identifiers, canContactByEmail, studyId) {
   this.identifiers = identifiers;
   this.canContactByEmail = canContactByEmail;
+  this.studyId = studyId;
   this.fields = FIELDS;
   this.attributes = ATTRIBUTES;
   this.formatters = FIELD_FORMATTERS;
@@ -121,7 +126,10 @@ FetchParticipantWorker.prototype = {
     }
     this.identifier = this.identifiers[0];
     return Promise.delay(FETCH_DELAY).then(() => {
-      return serverService.getParticipant(this.identifier).then(this._success.bind(this));
+      const p = (this.studyId) ?
+        serverService.getStudyParticipant(this.studyId, this.identifier) :
+        serverService.getParticipant(this.identifier);
+      return p.then(this._success.bind(this));
     });
   },
   _success: function(response) {
@@ -132,15 +140,13 @@ FetchParticipantWorker.prototype = {
     return Promise.resolve();
   },
   _canExport: function(participant) {
-    return (
-      participant &&
-      participant.status === "enabled" &&
-      (participant.email || participant.phone) &&
-      (!this.canContactByEmail || this._canContact(participant))
-    );
+    return (participant && (!this.canContactByEmail || this._canContact(participant)));
   },
   _canContact: function(participant) {
-    return participant.notifyByEmail === true && participant.sharingScope !== "no_sharing";
+    return participant.status === "enabled" &&
+      (participant.email || participant.phone) &&
+      participant.notifyByEmail === true && 
+      participant.sharingScope !== "no_sharing";
   },
   _formatOneParticipant: function(participant) {
     let array = this.fields.map(function(field) {
@@ -158,7 +164,7 @@ FetchParticipantWorker.prototype = {
   }
 };
 
-export default function(params /*total, search*/) {
+export default function(params /*total, search, studyId*/) {
   let self = this;
   self.total = params.total;
   self.search = params.search;
@@ -176,12 +182,7 @@ export default function(params /*total, search*/) {
   serverService.getApp().then(function(app) {
     self.reauthenticationEnabledObs(app.reauthenticationEnabled);
     ATTRIBUTES = Object.freeze([].concat(app.userProfileAttributes));
-    HEADERS = Object.freeze(
-      []
-        .concat(FIELDS)
-        .concat(ATTRIBUTES)
-        .join("\t")
-    );
+    HEADERS = Object.freeze([].concat(FIELDS).concat(ATTRIBUTES).join("\t"));
   });
 
   if (self.search.emailFilter) {
@@ -205,10 +206,10 @@ export default function(params /*total, search*/) {
     self.statusObs("Currently preparing your *.tsv file...");
     event.target.setAttribute("disabled", "disabled");
 
-    let collectWorker = new CollectParticipantsWorker(self.total, self.search);
+    let collectWorker = new CollectParticipantsWorker(self.total, self.search, params.studyId);
 
     self.run(collectWorker).then(function(identifiers) {
-      let fetchWorker = new FetchParticipantWorker(identifiers, self.canContactByEmailObs());
+      let fetchWorker = new FetchParticipantWorker(identifiers, self.canContactByEmailObs(), params.studyId);
       let totalParticipants = identifiers.length;
 
       self.run(fetchWorker).then(function(output) {

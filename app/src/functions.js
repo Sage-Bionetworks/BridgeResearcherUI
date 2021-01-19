@@ -16,6 +16,7 @@ const LOCAL_TIMEZONE = Date()
   .replace(/[^A-Z]/g, "");
 const IS_BROWSER = typeof window !== "undefined" && typeof window.document !== "undefined";
 const BYTE_UNITS = [' KB', ' MB', ' GB', ' TB'];
+const FORMAT = new Intl.NumberFormat();
 
 function flagForRegionCode(regionCode) {
   return FLAGS[regionCode];
@@ -160,6 +161,8 @@ function formatRoles(roles) {
   return (roles || []).map(function(role) {
     if (role === "admin") {
       return "Administrator";
+    } else if (role === "study_coordinator") {
+      return "Study Coordinator";
     } else if (role === "org_admin") {
       return "Organization Administrator";
     }
@@ -170,6 +173,8 @@ function persistRoles(roles) {
   return (roles || []).map(function(role) {
     if (role === "Administrator") {
       return "admin";
+    } else if (role === "Study Coordinator") {
+      return "study_coordinator";
     } else if (role === "Organization Administrator") {
       return "org_admin";
     }
@@ -551,11 +556,22 @@ function formatTimeISO(date) {
     .split("T")[1]
     .split(".")[0];
 }
+function formatCount(count = '') {
+  if (typeof count === 'number') {
+    if (count < 1) {
+      return 'No records';
+    }
+    let plural = count > 1 ? ' records' : ' record';
+    return FORMAT.format(count) + plural;
+  }
+  return count;
+}
 
 export default {
   copyProps,
   deleteUnusedProperties,
   flagForRegionCode,
+  formatCount,
   formatDate,
   formatDateTime,
   formatFileSize,

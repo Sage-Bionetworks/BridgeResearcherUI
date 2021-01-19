@@ -20,6 +20,10 @@ export default function(params) {
   
   fn.copyProps(self, root, 'isAdmin');
 
+  self.canAccessStudy = function() {
+    return root.isStudyCoordinator() || root.isAdmin();
+  }
+
   let binder = new Binder(self)
     .obs("isNew", false)
     .obs("title")

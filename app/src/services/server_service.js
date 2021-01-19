@@ -157,7 +157,7 @@ export class ServerService {
   }
   isSupportedUser() {
     return this.roles.some(function(role) {
-      return ["developer", "researcher", "admin", "org_admin", "superadmin"].indexOf(role) > -1;
+      return ["developer", "researcher", "admin", "org_admin", "study_coordinator", "superadmin"].indexOf(role) > -1;
     });
   }
   cacheParticipantName(response) {
@@ -186,7 +186,7 @@ export class ServerService {
       }
       // Easier than testing for superadmin everywhere.
       if (sess.roles.includes('superadmin')) {
-        sess.roles = ['developer', 'researcher', 'admin', 'org_admin', 'superadmin'];
+        sess.roles = ['developer', 'researcher', 'admin', 'org_admin', 'study_coordinator', 'superadmin'];
       }
       session = sess;
       storeService.set(SESSION_KEY, session);
@@ -436,6 +436,7 @@ export class ServerService {
   deleteCacheKey(cacheKey) {
     return this.del(`${config.cache}/${esc(cacheKey)}`);
   }
+  // TODO: This can be removed, but you need to refactor and test.
   getParticipants(offsetBy, pageSize, emailFilter, phoneFilter, startTime, endTime) {
     let queryString = fn.queryString({ offsetBy, pageSize, emailFilter, phoneFilter, startTime, endTime });
     return this.gethttp(config.participants + queryString);
@@ -452,6 +453,16 @@ export class ServerService {
     }
     return this.gethttp(`${config.participants}/${id}`).then(this.cacheParticipantName.bind(this));
   }
+  // EXPERIMENTAL
+  getAccountName(id, func) {
+    let name = cache.get(id + ":name");
+    if (name) {
+      return Promise.resolve(name);
+    }
+    return func().then(this.cacheParticipantName.bind(this))
+      .then(() => Promise.resolve(cache.get(id + ":name")));
+  }
+
   getParticipantName(id) {
     if (session && session.id === id) {
       id = 'self';
@@ -479,9 +490,6 @@ export class ServerService {
   }
   sendTopicNotification(guid, message) {
     return this.post(`${config.topics}/${guid}/sendNotification`, message);
-  }
-  sendSmsMessage(id, message) {
-    return this.post(`${config.participants}/${id}/sendSmsMessage`, message);
   }
   createParticipant(participant) {
     return this.post(config.participants, participant);
@@ -515,9 +523,6 @@ export class ServerService {
   }
   resendPhoneVerification(id) {
     return this.post(`${config.participants}/${id}/resendPhoneVerification`);
-  }
-  getExternalIds(params) {
-    return this.gethttp(`${config.externalIds}${fn.queryString(params || {})}`);
   }
   getExternalIdsForStudy(studyId, params) {
     return this.gethttp(`${config.studies}/${studyId}/externalids${fn.queryString(params || {})}`);
@@ -928,6 +933,74 @@ export class ServerService {
     return this.del(`/v5/studies/${studyId}/enrollments/${userId}${queryString}`);
   }
 
+
+  getStudyParticipants(studyId, search) {
+    return this.post(`${config.studies}/${studyId}/participants/search`, search);
+  }
+  getStudyParticipant(studyId, userId) {
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}`);
+  }
+  getStudyParticipantRequestInfo(studyId, userId) {
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/requestInfo`);
+  }
+  getStudyParticipantNotifications(studyId, userId) {
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/notifications`);
+  }
+  getStudyParticipantRecentSmsMessage(studyId, userId) {
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/sms/recent`);
+  }
+  getStudyParticipantEnrollments(studyId, userId) {
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/enrollments`);
+  }
+  getStudyParticipantUploads(studyId, userId, args) {
+    let queryString = fn.queryString(args);
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/uploads${queryString}`);
+  }
+  getStudyParticipantActivityEvents(studyId, userId) {
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/activityEvents`);
+  }
+  getStudyParticipantName(studyId, id) {
+    if (session && session.id === id) {
+      id = 'self';
+    }
+    let name = cache.get(id + ":name");
+    return name ? Promise.resolve(name) : 
+      this.gethttp(`${config.studies}/${studyId}/participants/${id}`)
+        .then(this.cacheParticipantName.bind(this))
+        .then(() => Promise.resolve(cache.get(id + ":name")));
+  }
+  createStudyParticipant(studyId, participant) {
+    return this.post(`${config.studies}/${studyId}/participants`, participant);
+  }
+  updateStudyParticipant(studyId, participant) {
+    cache.clear(participant.id + ":name");
+    return this.post(`${config.studies}/${studyId}/participants/${participant.id}`, participant);
+  }
+  deleteStudyParticipant(studyId, userId) {
+    return this.del(`${config.studies}/${studyId}/participants/${userId}`);
+  }
+  
+  withdrawStudyParticipantFromStudy(studyId, userId, subpopGuid, reason) {
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/consents/${subpopGuid}/withdraw`, reason);
+  }
+  sendStudyParticipantNotification(studyId, userId, message) {
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/sendNotification`, message);
+  }
+  signOutStudyParticipant(studyId, userId, deleteReauthToken) {
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/signOut${fn.queryString({ deleteReauthToken })}`);
+  }
+  requestStudyParticipantResetPassword(studyId, userId) {
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/requestResetPassword`);
+  }
+  resendStudyParticipantConsentAgreement(studyId, userId, subpopGuid) {
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/consents/${subpopGuid}/resendConsent`);
+  }
+  resendStudyParticipantEmailVerification(studyId, userId) {
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/resendEmailVerification`);
+  }
+  resendStudyParticipantPhoneVerification(studyId, userId) {
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/resendPhoneVerification`);
+  }
   getTemplates(query) {
     let queryString = fn.queryString(query);
     return this.gethttp(`${config.templates}${queryString}`);

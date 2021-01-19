@@ -1,0 +1,178 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/studies" class="section">Studies</a>
+        <i class="right chevron icon divider"></i>
+        <a class="section" data-bind="href: '#/studies/' + navStudyIdObs() + '/participants', text: navStudyNameObs()">&#160;</a>
+        <i class="right chevron icon divider"></i>
+        <span class="section">Participants</span>
+      </div>
+      <h3 data-bind="text: titleObs">&#160;</h3>
+    </div>
+    <div class="fixed-header-buttons">
+
+      <button class="ui tiny primary button" data-bind="click: save">Save</button>
+
+      <div class="ui tiny buttons">
+        <div class="ui tiny button" data-bind="semantic: 'dropdown-button-toggle', container: '.buttons'">
+          More Actions
+        </div>
+        <div class="ui tiny floating dropdown icon button" data-bind="semantic: 'dropdown-button'">
+          <i class="dropdown icon"></i>
+          <div class="menu">
+
+            <div class="item" data-bind="click: resendEmailVerification, visible: resendVisible">
+              Send email verification
+            </div>
+            <div class="item" data-bind="click: resendPhoneVerification, visible: resendVisible">
+              Send phone verification
+            </div>
+            <div class="item" data-bind="click: requestResetPassword, visible: resetPwdVisible">
+              Send reset password email
+            </div>
+            <div class="item" data-bind="click: enableAccount, visible: enableVisible">
+              Enable Account
+            </div>
+            <div class="item" data-bind="click: disableAccount, visible: disableVisible">
+              Disable Account
+            </div>
+            <div class="item" data-bind="click: signOutUser">
+              Sign out user&hellip;
+            </div>
+            <div class="item" data-bind="click: deleteTestUser, visible: deleteVisible">
+              <span class="red ui text">Delete Test Account</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <studyparticipant-tabset params="isNewObs: isNewObs, studyIdObs: navStudyIdObs, userIdObs: userIdObs, 
+        statusObs: statusObs"></studyparticipant-tabset>
+</div>
+<div class="scrollbox">
+  <errors id="studyparticipant-general"></errors>
+  <form class="ui skinny form">
+
+    <div class="two fields">
+      <div class="field">
+        <label>First Name</label>
+        <input type="text" data-bind="textInput: firstNameObs, hasFocus: true" />
+      </div>
+      <div class="field">
+        <label>Last Name</label>
+        <input type="text" data-bind="textInput: lastNameObs" />
+      </div>
+    </div>
+
+    <div class="two fields">
+      <div class="field email" data-bind="visible: isNewObs">
+        <label>Email
+          <verified-icon params="valueObs: emailObs, verifiedObs: emailVerifiedObs"> </verified-icon>
+        </label>
+        <input type="text" data-bind="textInput: emailObs" />
+      </div>
+      <div class="field email" data-bind="visible: !isNewObs()">
+        <label>Email</label>
+        <span data-bind="visible: showIdentifier('email')">
+          <a class="input-field-padding" data-bind="href: emailLink, text: emailObs"></a>
+          <verified-icon params="valueObs: emailObs, verifiedObs: emailVerifiedObs"> </verified-icon>
+        </span>
+        <span data-bind="visible: showDash('email')" class="input-field-padding">—</span>
+      </div>
+      <div class="required field password" data-bind="visible: isNewObs">
+        <label>Password</label>
+        <input type="password" autocomplete="new-password" data-bind="textInput: passwordObs" />
+      </div>
+    </div>
+
+    <div class="two fields">
+      <div class="field phone" data-bind="visible: isNewObs">
+        <label>Phone
+          <verified-icon params="valueObs: phoneObs, verifiedObs: phoneVerifiedObs"> </verified-icon>
+        </label>
+        <div class="ui left labeled input">
+          <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
+            <div class="text" data-bind="text: phoneRegionObs"></div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <div class="item">US</div>
+              <div class="item">CA</div>
+              <div class="item">IN</div>
+              <div class="item">MX</div>
+            </div>
+          </div>
+          <input type="text" placeholder="Phone number" data-bind="textInput: phoneObs" />
+        </div>
+      </div>
+      <div class="field phone" data-bind="visible: !isNewObs()">
+        <label>Phone</label>
+        <span data-bind="visible: showIdentifier('phone')">
+          <a class="input-field-padding" data-bind="href: phoneLink, 
+            text: $component.formatPhone(phoneObs(), phoneRegionObs())"></a>
+          <verified-icon params="valueObs: phoneObs, verifiedObs: phoneVerifiedObs"> </verified-icon>
+        </span>
+        <span data-bind="visible: showDash('phone')" class="input-field-padding">—</span>
+      </div>
+      <div class="field">
+        <label>Sharing Scope</label>
+        <select class="ui dropdown" data-bind="options: sharingScopeOptions, optionsText: 'label', 
+          optionsValue: 'value', value: sharingScopeObs"></select>
+      </div>
+    </div>
+
+    <div class="two fields">
+      <div class="field">
+        <label>Language(s)</label>
+        <input type="text" class="input-field-padding" data-bind="textInput: languagesObs">
+      </div>
+      <div class="field">
+        <label>Data Groups</label>
+        <tag-editor params="selectedObs: dataGroupsObs, allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
+      </div>
+    </div>
+
+    <div class="two fields" data-bind="visible: !isNewObs()">
+      <div class="field">
+        <label>Health Code</label>
+        <div class="input-field-padding" data-bind="text: healthCodeObs" 
+          style="margin-bottom: 0; padding-bottom: 0">
+        </div>
+        <div class="ui small red text" data-bind="visible: healthCodeObs() !== 'N/A'">
+          Confidential. Do not redistribute.
+        </div>
+      </div>
+      <div class="field">
+        <label>Email Preference</label>
+        <ui-checkbox class="input-field-padding" params="checkedObs: notifyByEmailObs">
+          Consents to receive email from study
+        </ui-checkbox>
+      </div>
+    </div>
+
+    <div class="two fields" data-bind="visible: !isNewObs()">
+      <div class="field">
+        <label>Created On</label>
+        <div class="input-field-padding" data-bind="text: createdOnObs"></div>
+      </div>
+      <div class="field">
+        <label>Modified On</label>
+        <div class="input-field-padding" data-bind="text: modifiedOnObs"></div>
+      </div>
+    </div>
+    
+    <h4 class="ui dividing header">Attributes</h4>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; grid-column-gap: 1rem">
+      <!-- ko foreach: attributesObs -->
+      <div class="field">
+        <label data-bind="text: $data.label"></label>
+        <input type="text" data-bind="textInput: $data.obs" />
+      </div>
+      <!-- /ko -->
+    </div>
+  </div>
+</form>
+</div>

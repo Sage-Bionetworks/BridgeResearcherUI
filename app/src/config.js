@@ -13,6 +13,15 @@ export default {
     'sms_signed_consent':'Consent agreement (SMS)',
     'sms_verify_phone':'Verify phone number'
   },
+  canBeEditedBy: {
+    'superadmin': ["Administrator", "Developer", "Organization Administrator", "Researcher", "Study Coordinator", "Worker"],
+    'admin': ['Developer', "Organization Administrator", 'Researcher', 'Study Coordinator'],
+    'org_admin': ['Study Coordinator', "Organization Administrator"],
+    'researcher': ['Developer'],
+    'study_coordinator': [],
+    'developer': [],
+    'worker': []
+  },
   environments: [
     { value: "local", label: "Local" },
     { value: "develop", label: "Development" },

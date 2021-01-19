@@ -28,7 +28,7 @@ export default function(params) {
     .obs("isNew", false)
     .obs("includeTesters", false)
     .obs("enrollmentFilter", "both")
-    .bind("identifier", params.id);
+    .bind("identifier", params.studyId);
 
   self.includeTestersObs.subscribe(() => loadEnrollments(self.query));
   self.enrollmentFilterObs.subscribe(() => loadEnrollments(self.query));
@@ -45,13 +45,13 @@ export default function(params) {
         self.query.offsetBy = 0;
         loadEnrollments(self.query)
       }),
-      studyId: params.id
+      studyId: params.studyId
     });
   };
   self.unenroll = (item, event) => {
     alerts.prompt("Why are you withdrawing this person?", (withdrawalNote) => {
       utils.startHandler(self, event);
-      serverService.unenroll(params.id, item.participant.identifier, withdrawalNote)
+      serverService.unenroll(params.studyId, item.participant.identifier, withdrawalNote)
         .then(() => loadEnrollments(self.query))
         .then(utils.successHandler(self, event, "Participant removed from study."))
         .catch(utils.failureHandler({ id: 'enrollments' }));
@@ -65,7 +65,7 @@ export default function(params) {
     refresh: () => loadEnrollments(self.query)
   });
 
-  serverService.getStudy(params.id)
+  serverService.getStudy(params.studyId)
     .then(fn.handleObsUpdate(self.titleObs, "name"));
 
   function loadEnrollments(query) {
@@ -74,7 +74,7 @@ export default function(params) {
     self.query.enrollmentFilter = self.enrollmentFilterObs();
     self.query.includeTesters = self.includeTestersObs();
 
-    serverService.getEnrollments(params.id, query)
+    serverService.getEnrollments(params.studyId, query)
       .then(self.postLoadPagerFunc)
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .catch(utils.failureHandler({ id: 'enrollments' }));

@@ -1,0 +1,58 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/studies" class="section">Studies</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="text: titleObs"></h3>
+    </div>
+    <div class="fixed-header-buttons">
+      <button class="ui tiny button" data-bind="click: exportDialog">Export&hellip;</button>
+      <a data-bind="href: '#/studies/'+studyIdObs()+'/participants/new/general'"
+        class="ui primary tiny button">New Participant</a>
+      <div class="ui search">
+        <div class="ui icon input">
+          <input class="prompt" type="text" style="padding: .47857143em 1em"
+            placeholder="Find by any identifier" data-bind="textInput: findObs, returnHandler: doSearch"/>
+          <i class="search icon"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <study-tabset params="identifierObs: studyIdObs, isNewObs: isNewObs"></study-tabset>
+</div>
+<div class="scrollbox">
+  <errors id="studyparticipants"></errors>
+  <form class="ui skinny form">
+    <studyparticipants-pager params="loadingFunc: loadingFunc, pageKey: 'studyparticipants'">
+    </studyparticipants-pager>
+    <table class="ui compact selectable table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Identifier(s)</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="3" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr data-bind="css: $component.classNameForStatus($data)">
+          <td>
+            <a data-bind="href: '#/studies/'+$parent.studyIdObs()+'/participants/'+$data.id+'/general',
+              text: $component.formatNameAsFullLabel($data)"></a>
+          </td>
+          <td data-bind="html: $component.formatIdentifiers($data)"></td>
+          <td style="padding: 0; text-align:right">
+            <span style="padding-right: .6rem; white-space: nowrap" data-bind="visible: $data.status === 'disabled'">
+              <i class="warning sign icon"></i>Disabled</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</div>

@@ -38,9 +38,9 @@
       <tbody data-bind="foreach: itemsObs">
         <tr>
           <td>
-            <a data-bind="visible: $component.isAdmin(), 
+            <a data-bind="visible: $component.canAccessStudy(), 
               href: '#/studies/'+$data.identifier, text: $data.name"></a>
-            <span data-bind="visible: !$component.isAdmin(), text: $data.name"></span>
+            <span data-bind="visible: !$component.canAccessStudy(), text: $data.name"></span>
           </td>
           <td data-bind="text: $data.identifier"></td>
           <td style="white-space: nowrap">

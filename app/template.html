@@ -105,14 +105,10 @@
                 <a class="item" data-ref="participants" data-bind="href: accountUrlObs, visible: !isResearcher()">
                   My Account
                 </a>
-                <a href="#/participants" class="item" data-ref="participants"
-                  data-bind="visible: isResearcher()">
-                  Participants
-                </a>
                 <a href="#/studies" class="item" data-ref="studies">
                   Studies
                 </a>
-                <a href="#/organizations" class="item" data-ref="organizations">
+                <a href="#/organizations" class="item" data-ref="organizations" data-bind="visible: isOrgAdmin()">
                   Organizations
                 </a>
                 <a href="#/reports" class="item" data-ref="reports">
@@ -127,6 +123,9 @@
             </div>
             <div class="content" data-bind="visible: isDeveloper()">
               <div class="ui secondary vertical menu">
+                <a href="#/participants" class="item" data-ref="participants" data-bind="visible: isResearcher()">
+                  Participants
+                </a>
                 <a href="#/subpopulations" class="item" data-ref="subpops">
                   Consent Groups
                 </a>

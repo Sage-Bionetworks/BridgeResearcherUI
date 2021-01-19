@@ -5,13 +5,16 @@ import root from "../../root";
 export default function tabset(params) {
   let self = this;
 
-  fn.copyProps(self, params, "identifierObs", "isNewObs");
-  fn.copyProps(self, root, "isDeveloper", "isResearcher", "isAdmin");
+  fn.copyProps(self, params, "identifierObs->studyIdObs", "isNewObs");
+
+  self.canAdminParticipants = function() {
+    return root.isResearcher() || root.isStudyCoordinator() || root.isAdmin();
+  }
 
   self.computeds = [];
   self.linkMaker = function(tabName) {
     let c = ko.computed(function() {
-      return "#/studies/" + self.identifierObs() + '/' + tabName;
+      return "#/studies/" + self.studyIdObs() + '/' + tabName;
     });
     self.computeds.push(c);
     return c;

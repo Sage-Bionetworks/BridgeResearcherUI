@@ -19,7 +19,7 @@ export default function(params) {
   new Binder(self)
     .obs("title", "New Study")
     .obs("isNew", false)
-    .bind("identifier", params.id);
+    .bind("identifier", params.studyId);
 
   self.addSponsorDialog = function() {
     root.openDialog("add_sponsor", {
@@ -27,13 +27,13 @@ export default function(params) {
         self.query.offsetBy = 0;
         loadSponsors(self.query)
       }),
-      studyId: params.id
+      studyId: params.studyId
     });
   };
   self.removeSponsor = (item, event) => {
     alerts.deleteConfirmation(config.msgs.UNDO_SPONSOR, () => {
       utils.startHandler(self, event);
-      serverService.removeSponsor(params.id, item.identifier)
+      serverService.removeSponsor(params.studyId, item.identifier)
         .then(() => loadSponsors(self.query))
         .then(utils.successHandler(self, event, "Sponsor removed."))
         .catch(utils.failureHandler({ id: 'sponsors' }));
@@ -47,7 +47,7 @@ export default function(params) {
     refresh: () => loadSponsors(self.query)
   });
 
-  serverService.getStudy(params.id)
+  serverService.getStudy(params.studyId)
     .then(fn.handleObsUpdate(self.titleObs, "name"));
 
   function loadSponsors(query) {
@@ -57,7 +57,7 @@ export default function(params) {
     // some state is not in the pager, update that and capture last known state of paging
     self.query = query;
 
-    serverService.getSponsors(params.id, query)
+    serverService.getSponsors(params.studyId, query)
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .then(self.postLoadPagerFunc)
       .catch(utils.failureHandler({ id: 'sponsors' }));
