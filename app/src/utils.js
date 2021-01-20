@@ -96,7 +96,7 @@ function statusNotHandled(res) {
  *  redirectMsg: message
  *  scrollTo: scrollTo function to execute.
  */
-function failureHandler(params) {
+function failureHandler(params = {}) {
   return function(response) {
     clearPendingControl();
 

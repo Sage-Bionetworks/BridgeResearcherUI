@@ -1,11 +1,11 @@
 import ko from "knockout";
-import printer from 'pretty-print-json';
 
 function prettyPrintHTML(obj) {
   if (!obj) {
     return "";
   }
-  return printer.toHtml(obj);
+  // This used to be a pretty print library but it broke.
+  return JSON.stringify(obj, undefined, 2);
 }
 function prettyPrint(obj) {
   if (!obj) {
