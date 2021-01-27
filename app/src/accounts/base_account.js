@@ -10,7 +10,9 @@ const ACCOUNT = { id: "new", attributes: {}, email: "", phone: { number: "", reg
 export default class BaseAccount {
   constructor(params = {}) {
     this.failureParams = { id: params.errorId };
-
+    console.log("BaseAccount.params", params);
+    this.userId = params.userId;
+    this.studyId = params.studyId;
     this.account = ACCOUNT;
     Object.keys(params).forEach(key => this[key] = params[key]);
     fn.copyProps(this, root, "isDeveloper", "isResearcher", "isAdmin");

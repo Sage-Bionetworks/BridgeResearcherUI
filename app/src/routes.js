@@ -167,6 +167,8 @@ router.on("/studies/:studyId/participants/:userId/general",
   routeTo("studyparticipant_general", "studies", STUDYID_USERID));
 router.on("/studies/:studyId/participants/:userId/enrollments", 
   routeTo("studyparticipant_enrollments", "studies", STUDYID_USERID));
+router.on("/studies/:studyId/participants/:userId/schedule", 
+  routeTo("studyparticipant_schedule", "studies", STUDYID_USERID));
 router.on("/studies/:studyId/participants/:userId/uploads", 
   routeTo("studyparticipant_uploads", "studies", STUDYID_USERID));
 router.on("/studies/:studyId/participants/:userId/uploads/:guid", 

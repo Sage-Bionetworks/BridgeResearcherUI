@@ -10,7 +10,6 @@ function formatDateISO(value) {
 
 export default class AddReport {
   constructor(params) {
-    console.log(params);
     fn.copyProps(this, params, "type", "userId", "studyId", "closeDialog->close");
 
     this.binder = new Binder(this)

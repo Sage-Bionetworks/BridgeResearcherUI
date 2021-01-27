@@ -1,0 +1,22 @@
+<div class="ui mini modal">
+  <i data-bind="click:cancel" class="close icon"></i>
+  <div class="header">Edit Scheduling Event</div>
+  <div class="content ui form">
+    <errors id="event-editor"></errors>
+    <div class="field" id="eventId">
+      <label>Event ID</label>
+      <div class="text-input-padding" data-bind="visible: readOnlyObs, text: eventIdObs"></div>
+      <select class="ui dropdown"  data-bind="visible: !readOnlyObs(), 
+        options: eventIdOptionsObs, optionsText: 'label', optionsValue: 'value', 
+        value: eventIdObs, optionsCaption: 'Select an event ID:'"></select>
+    </div>
+    <div class="field" id="timestamp">
+      <label>Timestamp</label>
+      <input class="ui input" data-enableTime="true" data-bind="flatpickr: timestampObs" />
+    </div>
+  </div>
+  <div class="actions">
+    <button class="ui primary small button" data-bind="click: save">Save</button>
+    <button class="ui small button" data-bind="click: cancel">Cancel</button>
+  </div>
+</div>

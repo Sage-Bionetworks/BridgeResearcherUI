@@ -316,6 +316,8 @@ import studypartClientData from "./pages/studyparticipant/client_data";
 import studypartClientDataHtml from "./pages/studyparticipant/client_data.html";
 import studypartRequestInfo from "./pages/studyparticipant/request_info";
 import studypartRequestInfoHtml from "./pages/studyparticipant/request_info.html";
+import studypartSchedule from "./pages/studyparticipant/schedule";
+import studypartScheduleHtml from "./pages/studyparticipant/schedule.html";
 /*
 import studypartEvents from "./pages/studyparticipant/activity_events";
 import studypartEventsHtml from "./pages/studyparticipant/activity_events.html";
@@ -456,6 +458,8 @@ import addSponsoredStudy from "./dialogs/add_sponsored_study/add_sponsored_study
 import addSponsoredStudyHtml from "./dialogs/add_sponsored_study/add_sponsored_study.html";
 import updateIdentifiers from './dialogs/update_identifiers/update_identifiers_dialog';
 import updateIdentifiersHtml from './dialogs/update_identifiers/update_identifiers_dialog.html';
+import eventEditor from "./dialogs/event_editor/event_editor";
+import eventEditorHtml from "./dialogs/event_editor/event_editor.html";
 
 import nfHtml from "./pages/not_found/not_found.html";
 
@@ -569,6 +573,7 @@ reg("studyParticipants", {viewModel: studyparticipants, template: studyparticipa
 reg("study-tabset", {viewModel: studyTabset, template: studyTabsetHtml});
 reg("studyparticipant_general", {viewModel: studypartGeneral, template: studypartGeneralHtml});
 reg("studyparticipant_enrollments", {viewModel: studypartEnrollments, template: studypartEnrollmentsHtml});
+reg("studyparticipant_schedule", {viewModel: studypartSchedule, template: studypartScheduleHtml});
 reg("studyparticipant-tabset", {viewModel: studypartTabset, template: studypartTabsetHtml});
 reg("studyparticipant_uploads", {viewModel: studypartUploads, template: studypartUploadsHtml});
 reg("studyparticipant_upload", {viewModel: studypartUpload, template: studypartUploadHtml});
@@ -645,6 +650,7 @@ reg("sign_in_dialog", {viewModel: signIn, template: signInHtml, synchronous: tru
 reg("enumeration_editor", {viewModel: enumEditor, template: enumEditorHtml, synchronous: true});
 reg("multichoice_editor", {viewModel: mcEditor, template: mcEditorHtml, synchronous: true});
 reg("event_id_editor", {viewModel: eventIdEditor, template: eventIdEditorHtml, synchronous: true});
+reg("event_editor", {viewModel: eventEditor, template: eventEditorHtml, synchronous: true});
 reg("times_editor", {viewModel: timesEditor, template: timesEditorHtml, synchronous: true});
 reg("rules_editor", {viewModel: rulesEditor, template: rulesEditorHtml, synchronous: true});
 reg("date_window_editor", {viewModel: dateWindowEditor, template: dateWindowEditorHtml, synchronous: true});

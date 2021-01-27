@@ -111,11 +111,14 @@ export default class GeneralBaseAccount extends BaseAccount {
       .catch(utils.failureHandler(this.failureParams));
   }
   afterCreate(res) {
-    this.statusObs("enabled");
-    this.isNewObs(false);
-    this.idObs(res.identifier);
-    this.userIdObs(res.identifier);
-    this.userId = res.identifier
+    if (res.identifier) { // IdentifierHolder (created)
+      this.isNewObs(false);
+      this.idObs(id);
+      this.userIdObs(id);
+      this.userId = id;
+    } else { // StatusMessage (updated)
+      this.statusObs("enabled");
+    }
     return res;
   }
   addIdentifier(credential) {
@@ -189,9 +192,8 @@ export default class GeneralBaseAccount extends BaseAccount {
   deleteTestUser(vm, event) {
     alerts.confirmation("This will delete the account.\n\nDo you wish to continue?", () => {
       utils.startHandler(vm, event);
-      this.deleteAccount(this.userId)
+      this.deleteAccount()
         .then(utils.successHandler(this, event, "User deleted."))
-        .then(() => document.location = "#/participants")
         .catch(utils.failureHandler(this.failureParams));
     });
   }
@@ -233,7 +235,6 @@ export default class GeneralBaseAccount extends BaseAccount {
     utils.startHandler(vm, event);
     return this.updateSynapseUserId(this.account)
       .then(this.saveAccount.bind(this))
-      .then(() => this.newExternalIdObs(null))
       .then(utils.successHandler(vm, event, confirmMsg))
       .catch(utils.failureHandler({ ...this.failureParams, transient: false }));
   }  
