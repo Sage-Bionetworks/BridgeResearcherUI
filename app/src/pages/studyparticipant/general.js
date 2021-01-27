@@ -25,7 +25,6 @@ export default class GeneralParticipant extends GeneralBaseAccount {
     return serverService.updateStudyParticipant(this.studyId, this.account);
   }
   deleteAccount() {
-    console.log(this);
     return serverService.deleteStudyParticipant(this.studyId, this.userId)
         .then(() => window.location = `#/studies/${this.studyId}/participants`);
   }
