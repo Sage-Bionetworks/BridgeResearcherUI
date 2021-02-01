@@ -11,6 +11,8 @@ export default class BaseAccount {
   constructor(params = {}) {
     this.failureParams = { id: params.errorId };
 
+    this.userId = params.userId;
+    this.studyId = params.studyId;
     this.account = ACCOUNT;
     Object.keys(params).forEach(key => this[key] = params[key]);
     fn.copyProps(this, root, "isDeveloper", "isResearcher", "isAdmin");

@@ -31,35 +31,13 @@ export default function externalIds(params) {
   tables.prepareTable(self, {
     refresh: () => self.load(self.query),
     name: "external ID",
-    delete: (item) => serverService.getParticipant("externalid:"+item.identifier)
-      .then((p) => serverService.deleteParticipant(p.id)),
+    delete: (item) => serverService.deleteExternalId(item.identifier),
     id: 'external-ids'
   });
 
   self.postLoadPagerFunc = fn.identity;
   self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
 
-  function extractId(response) {
-    if (response.items.length === 0) {
-      throw new Error(
-        "There are no unassigned external IDs registered with your app. Please import more IDs to create more credentials."
-      );
-    }
-    return response.items[0].identifier;
-  }
-  function createNewCredentials(identifier) {
-    self.resultObs(identifier);
-    let participant = utils.createParticipantForID(identifier, password.generatePassword(32));
-    return serverService.createParticipant(participant);
-  }
-  function updatePageWithResult(response) {
-    self.showResultsObs(true);
-    ko.postbox.publish("page-refresh");
-    return response;
-  }
-  function convertToPaged(identifier) {
-    return () => { items: [{ identifier }] };
-  }
   function initFromSession(session) {
     self.userStudies = session.studyIds;
     return serverService.getApp();

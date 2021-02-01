@@ -21,6 +21,12 @@ export default class ParticipantUploadsViewModel extends UploadsViewModel {
       .bind("navStudyId", params.studyId)
       .bind("navStudyName");
 
+    serverService.getStudyParticipantName(params.studyId, params.userId).then((part) => {
+      this.titleObs(part.name);
+      this.statusObs(part.status);
+      this.nameObs(part.name);
+      this.sharingScopeObs(part.sharingScope);
+    });
     serverService.getStudy(params.studyId).then((response) => {
       this.navStudyNameObs(response.name);
     });
@@ -31,14 +37,8 @@ export default class ParticipantUploadsViewModel extends UploadsViewModel {
     this.query.pageSize = 10;
     storeService.persistQuery(PAGE_KEY, this.query);
 
-    return serverService.getStudyParticipantName(this.studyId, this.userIdObs()).then(part => {
-      this.titleObs(part.name);
-      this.nameObs(part.name);
-      this.statusObs(part.status);
-      this.sharingScopeObs(part.sharingScope);
-    })
-    .then(() => serverService.getStudyParticipantUploads(this.studyId, this.userIdObs(), this.query))
-    .then(this.processUploads.bind(this))
-    .catch(utils.failureHandler({ id: 'studyparticipant-uploads' }));
+    return serverService.getStudyParticipantUploads(this.studyId, this.userIdObs(), this.query)
+      .then(this.processUploads.bind(this))
+      .catch(utils.failureHandler({ id: 'studyparticipant-uploads' }));
   }
 };

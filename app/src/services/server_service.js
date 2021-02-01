@@ -162,13 +162,9 @@ export class ServerService {
   }
   cacheParticipantName(response) {
     if (response && response.id) {
-      let name = fn.formatNameAsFullLabel(response);
+      response.name = fn.formatNameAsFullLabel(response);
       let id = (session && session.id === response.id) ? 'self' : response.id;
-      cache.set(id + ":name", { 
-        name: name, 
-        status: response.status, 
-        sharingScope: response.sharingScope 
-      });
+      cache.set(id + ":name", response);
     }
     return response;
   }
@@ -451,16 +447,8 @@ export class ServerService {
     if (session && session.id === id) {
       id = 'self';
     }
-    return this.gethttp(`${config.participants}/${id}`).then(this.cacheParticipantName.bind(this));
-  }
-  // EXPERIMENTAL
-  getAccountName(id, func) {
-    let name = cache.get(id + ":name");
-    if (name) {
-      return Promise.resolve(name);
-    }
-    return func().then(this.cacheParticipantName.bind(this))
-      .then(() => Promise.resolve(cache.get(id + ":name")));
+    return this.gethttp(`${config.participants}/${id}`)
+      .then(this.cacheParticipantName.bind(this));
   }
 
   getParticipantName(id) {
@@ -470,8 +458,7 @@ export class ServerService {
     let name = cache.get(id + ":name");
     return name ? Promise.resolve(name) : 
       this.gethttp(config.participants + "/" + id)
-        .then(this.cacheParticipantName.bind(this))
-        .then(() => Promise.resolve(cache.get(id + ":name")));
+        .then(this.cacheParticipantName.bind(this));
   }
   getParticipantRequestInfo(id) {
     return this.gethttp(`${config.participants}/${id}/requestInfo`);
@@ -966,8 +953,7 @@ export class ServerService {
     let name = cache.get(id + ":name");
     return name ? Promise.resolve(name) : 
       this.gethttp(`${config.studies}/${studyId}/participants/${id}`)
-        .then(this.cacheParticipantName.bind(this))
-        .then(() => Promise.resolve(cache.get(id + ":name")));
+        .then(this.cacheParticipantName.bind(this));
   }
   createStudyParticipant(studyId, participant) {
     return this.post(`${config.studies}/${studyId}/participants`, participant);
@@ -980,6 +966,12 @@ export class ServerService {
     return this.del(`${config.studies}/${studyId}/participants/${userId}`);
   }
   
+  getStudyParticipantActivityEvents(studyId, userId) {
+    return this.gethttp(`/v5/studies/${studyId}/participants/${userId}/activityEvents`);
+  }
+  createStudyParticipantActivityEvent(studyId, userId, event) {
+    return this.post(`/v5/studies/${studyId}/participants/${userId}/activityEvents`, event);
+  }
   withdrawStudyParticipantFromStudy(studyId, userId, subpopGuid, reason) {
     return this.post(`${config.studies}/${studyId}/participants/${userId}/consents/${subpopGuid}/withdraw`, reason);
   }
@@ -1102,9 +1094,6 @@ export class ServerService {
   getAccount(userId) {
     return this.gethttp(`${config.accounts}/${userId}`)
       .then(this.cacheParticipantName.bind(this));
-  }
-  getAccountName(userId) {
-    return this.getParticipantName(userId);
   }
   updateAccount(userId, account) {
     return this.post(`${config.accounts}/${userId}`, account);

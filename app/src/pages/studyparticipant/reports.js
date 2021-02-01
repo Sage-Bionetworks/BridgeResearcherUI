@@ -20,7 +20,7 @@ export default class StudyParticipantReport extends ReportBaseAccount {
     return serverService.deleteParticipantReport(item.identifier, this.userId);
   }
   reportURL(item) {
-    return `#/studies/${this.studyId}/participants/${this.userId}/reports/${item.identifier}`
+    return `#/studies/${this.studyId}/participants/${encodeURIComponent(this.userId)}/reports/${item.identifier}`
   }
   loadReports() { 
     return serverService.getParticipantReports();

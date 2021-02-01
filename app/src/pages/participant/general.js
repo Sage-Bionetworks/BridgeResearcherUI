@@ -23,7 +23,8 @@ export default class ParticipantGeneral extends GeneralBaseAccount {
     return serverService.updateParticipant(this.account);
   }
   deleteAccount() { 
-    return serverService.deleteTestUser(this.userId);
+    return serverService.deleteTestUser(this.userId)
+      .then(res => window.location = `#/participants`);
   }
   signOutAccount() {
     return serverService.signOutUser(this.userId);

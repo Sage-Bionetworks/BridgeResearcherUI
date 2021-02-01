@@ -20,6 +20,6 @@ export default class StudyParticipantReport extends ReportBaseAccount {
     return serverService.deleteParticipantReportRecord(this.userId, this.identifier, item.date);
   }
   linkMaker() {
-    return `#/studies/${this.studyId}/participants/${this.userId}/reports`;
+    return `#/studies/${this.studyId}/participants/${encodeURIComponent(this.userId)}/reports`;
   }
 }
