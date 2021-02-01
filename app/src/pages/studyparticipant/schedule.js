@@ -40,9 +40,12 @@ export default class StudyParticipantEnrollments extends BaseAccount {
     let self = ko.contextFor(browserEvent.target).$component;
     alerts.deleteConfirmation("Are you sure?", () => {
       utils.startHandler(self, event);
-      event.eventId = event.eventId.replace(/^custom\:/, '');
-      event.timestamp = null;
-      self.saveEvent(event);
+      let eventId = event.eventId.replace(/^custom\:/, '');
+      serverService.deleteStudyParticipantActivityEvent(self.studyId, self.userId, eventId)
+        .then(utils.successHandler(self, event, "Event deleted."))
+        .then(() => serverService.getStudyParticipantActivityEvents(self.studyId, self.userId))
+        .then(res => self.itemsObs(res.items))
+        .catch(utils.failureHandler({ id: 'studyparticipant-schedule' }));
     });
   }
   editEvent(event, browserEvent) {
