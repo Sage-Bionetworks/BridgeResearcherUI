@@ -25,10 +25,10 @@ function getHealthCode(studyId, userId) {
   return serverService.getStudyParticipant(studyId, "healthCode:" + userId);
 }
 function getExternalId(studyId, userId) {
-  return serverService.getParticipant(studyId, "externalId:" + userId);
+  return serverService.getStudyParticipant(studyId, "externalId:" + userId);
 }
 function getSynapseUserId(studyId, userId) {
-  return serverService.getParticipant(studyId, "synapseUserId:" + userId);
+  return serverService.getStudyParticipant(studyId, "synapseUserId:" + userId);
 }
 function getEmail(studyId, userId) {
   return serverService.getStudyParticipants(studyId, {emailFilter: userId}).then(function(response) {
@@ -40,7 +40,7 @@ function getEmail(studyId, userId) {
 function makeSuccess(vm, event) {
   return function(response) {
     event.target.parentNode.parentNode.classList.remove("loading");
-    document.location = "#/participants/" + response.id + "/general";
+    document.location = `#/studies/${vm.studyIdObs()}/participants/${response.id}/general`;
   };
 }
 
