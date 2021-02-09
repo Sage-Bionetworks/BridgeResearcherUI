@@ -35,8 +35,6 @@ export default function() {
     self.query = query;
     serverService.getSession()
       .then((session) => self.session = session)
-      .then(() => serverService.getSponsoredStudies(self.session.orgMembership))
-      .then((response) => self.session.orgStudies = response.items.map(el => el.identifier))
       .then(() => serverService.getStudies(query))
       .then(fn.handleSort("items", "label"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
