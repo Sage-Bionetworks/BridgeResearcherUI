@@ -12,7 +12,7 @@ export default class ReportsBaseAccount extends BaseAccount {
 
     this.studyIds = [];
     
-    new Binder(this).obs("name", "");
+    this.binder.obs("name", "");
 
     tables.prepareTable(this, {
       name: "report",

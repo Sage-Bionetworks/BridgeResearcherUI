@@ -28,8 +28,7 @@ export default class RequestInfoBaseAccount extends BaseAccount {
   constructor(params) {
     super(params);
 
-    this.binder = new Binder(this)
-      .obs("name", "")
+    this.binder.obs("name", "")
       .obs("languages", null, joiner)
       .obs("userDataGroups", null, joiner)
       .obs("signedInOn", null, dater)

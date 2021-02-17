@@ -45,9 +45,7 @@ export default class GeneralBaseAccount extends BaseAccount {
 
     this.orgNames = {};
 
-    this.binder = new Binder(this)
-      //.obs("showEnableAccount", false)
-      .obs("isNew", params.userId === "new")
+    this.binder.obs("isNew", params.userId === "new")
       .obs("healthCode", "N/A", Binder.formatHealthCode)
       .obs("createdOn", null, fn.formatDateTime)
       .obs("modifiedOn", null, fn.formatDateTime)
@@ -77,9 +75,6 @@ export default class GeneralBaseAccount extends BaseAccount {
       .bind("orgMembership");
 
     // subscribers
-    // this.statusObs.subscribe((status) => {
-    //   this.showEnableAccountObs(status !== "enabled");
-    // });
     this.emailLink = ko.computed(() => "mailto:" + this.emailObs());
     this.phoneLink = ko.computed(() => "tel:" + this.phoneObs());
     // TODO: One of these is better than the other, use it
@@ -229,6 +224,7 @@ export default class GeneralBaseAccount extends BaseAccount {
     });
   }
   save(vm, event) {
+    console.log(this);
     this.account = this.binder.persist(this.account);
     let confirmMsg = (this.isNewObs()) ? "Participant created." : "Participant updated.";
 
