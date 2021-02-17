@@ -17,7 +17,7 @@ export default class BaseAccount {
     Object.keys(params).forEach(key => this[key] = params[key]);
     fn.copyProps(this, root, "isDeveloper", "isResearcher", "isAdmin");
 
-    new Binder(this)
+    this.binder = new Binder(this)
       .obs("isNew", params.userId === "new")
       .obs("userId", params.userId)
       .obs("guid", params.guid)

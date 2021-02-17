@@ -16,8 +16,7 @@ export default class ReportBaseAccount extends BaseAccount {
     let sd = new Date(new Date().setHours(new Date().getHours()-168)).toISOString().split("T")[0];
     let ed = new Date(new Date().toISOString()).toISOString().split("T")[0];
 
-    new Binder(this)
-      .obs("name", "")
+    this.binder.obs("name", "")
       .obs("identifier", this.identifier)
       .obs("startDate", sd)
       .obs("endDate", ed)

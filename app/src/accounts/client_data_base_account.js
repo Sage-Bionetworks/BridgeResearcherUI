@@ -8,8 +8,7 @@ export default class ClientDataBaseAccount extends BaseAccount {
   constructor(params) {
     super({...params, errorId: 'participant-client-data'});
 
-    new Binder(this)
-      .obs("startDate")
+    this.binder.obs("startDate")
       .obs("endDate")
       .obs("clientData");
 

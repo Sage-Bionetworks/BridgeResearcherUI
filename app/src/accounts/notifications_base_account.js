@@ -13,8 +13,7 @@ export default class NotificationsBaseAccount extends BaseAccount {
     fn.copyProps(this, root, "notificationsEnabledObs");
     fn.copyProps(this, fn, "formatDate");
 
-    new Binder(this)
-      .obs("name", "")
+    this.binder.obs("name", "")
       .obs("isRegistered", false)
       .obs("hasPhone", false)
       .obs('smsType')
