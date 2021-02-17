@@ -27,6 +27,7 @@ export default function() {
   self.session = null;
 
   self.checkAdminOrSponsor = function(studyId) {
+    console.log(self.session);
     return root.isAdmin()  || self.session.orgStudies.includes(studyId);
   }
 
@@ -36,6 +37,10 @@ export default function() {
     serverService.getSession()
       .then((session) => self.session = session)
       .then(() => serverService.getStudies(query))
+      .then((studies) => {
+        self.session.orgStudies = studies.items.map(s => s.identifier);
+        return studies;
+      })
       .then(fn.handleSort("items", "label"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .then(self.postLoadPagerFunc)
