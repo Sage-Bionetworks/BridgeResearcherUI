@@ -21,7 +21,7 @@ export default function(params) {
     .obs("isNew", false)
     .bind("identifier", params.studyId);
 
-  self.addSponsorDialog = function() {
+  self.addSponsorDialog = function() {a
     root.openDialog("add_sponsor", {
       closeFunc: fn.seq(root.closeDialog, () => {
         self.query.offsetBy = 0;

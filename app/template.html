@@ -105,7 +105,10 @@
             </div>
             <div class="content">
               <div class="ui secondary vertical menu">
-                <a class="item" data-ref="participants" data-bind="href: accountUrlObs, visible: isDeveloper()"> <!-- and whatever is the study-scoped version of a developer -->
+                <!-- This view of an account doesn't work for a superadmin because they are not in any project 
+                they can view. Otherwise, if you are not a researcher, you need access to your own account as a 
+                developer so you can develop app code against it. -->
+                <a class="item" data-ref="participants" data-bind="href: accountUrlObs, visible: isDeveloper() && !isSuperadmin()"> 
                   My Account
                 </a>
                 <a href="#/studies" class="item" data-ref="studies">

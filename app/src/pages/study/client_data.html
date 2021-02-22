@@ -1,0 +1,27 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/studies" class="section">Studies</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="text: nameObs"></h3>
+    </div>
+    <div class="fixed-header-buttons">
+      <button class="ui tiny primary button" data-bind="click: save">Save</button>
+    </div>
+  </div>
+  <study-tabset params="identifierObs: identifierObs, isNewObs: isNewObs"></study-tabset>
+</div>
+<div class="scrollbox">
+  <errors id="study-client-data"></errors>
+  <form class="ui skinny form">
+    <div class="field" id="clientData">
+      <label>Client data should be in JSON format</label>
+      <textarea style="font-family: monospace" data-bind="textInput: clientDataObs"></textarea>
+    </div>
+    <div style="padding-top:1rem">
+      <button class="ui tiny primary button" data-bind="click: reformat">Reformat</button>
+    </div>    
+  </form>
+</div>
