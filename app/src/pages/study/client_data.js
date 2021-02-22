@@ -1,13 +1,7 @@
-import alerts from "../../widgets/alerts";
 import Binder from "../../binder";
 import BridgeError from "../../bridge_error";
 import jsonFormatter from "../../json_formatter";
-import config from "../../config";
-import fn from "../../functions";
-import ko from "knockout";
-import root from "../../root";
 import serverService from "../../services/server_service";
-import tables from "../../tables";
 import utils from "../../utils";
 
 export default function(params) {
