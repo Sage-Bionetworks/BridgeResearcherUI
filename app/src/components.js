@@ -286,6 +286,8 @@ import studyEnrollments from "./pages/study/enrollments";
 import studyEnrollmentsHtml from "./pages/study/enrollments.html";
 import externalIds from "./pages/study/external_ids";
 import externalIdsHtml from "./pages/study/external_ids.html";
+import studyClientData from "./pages/study/client_data";
+import studyClientDataHtml from "./pages/study/client_data.html";
 import studyTabset from "./pages/study/tabset";
 import studyTabsetHtml from "./pages/study/tabset.html";
 
@@ -569,6 +571,7 @@ reg("studies", {viewModel: studies, template: studiesHtml});
 reg("studyEditor", {viewModel: studyEditor, template: studyEditorHtml});
 reg("studySponsors", {viewModel: studySponsors, template: studySponsorsHtml});
 reg("studyEnrollments", {viewModel: studyEnrollments, template: studyEnrollmentsHtml});
+reg("studyClientData", {viewModel: studyClientData, template: studyClientDataHtml});
 reg("studyParticipants", {viewModel: studyparticipants, template: studyparticipantsHtml});
 reg("study-tabset", {viewModel: studyTabset, template: studyTabsetHtml});
 reg("studyparticipant_general", {viewModel: studypartGeneral, template: studypartGeneralHtml});
