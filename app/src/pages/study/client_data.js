@@ -1,6 +1,8 @@
 import Binder from "../../binder";
 import BridgeError from "../../bridge_error";
+import fn from "../../functions";
 import jsonFormatter from "../../json_formatter";
+import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
@@ -12,6 +14,8 @@ export default function(params) {
     .obs("identifier")
     .obs("isNew", false)
     .obs("clientData");
+
+  fn.copyProps(self, root, "isDevRole");
 
   self.save = function(vm, event) {
     utils.clearErrors();

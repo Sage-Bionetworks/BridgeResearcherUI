@@ -226,12 +226,9 @@ export default class GeneralBaseAccount extends BaseAccount {
   save(vm, event) {
     console.log(this);
     this.account = this.binder.persist(this.account);
-    let confirmMsg = (this.isNewObs()) ? "Participant created." : "Participant updated.";
 
     utils.startHandler(vm, event);
     return this.updateSynapseUserId(this.account)
-      .then(this.saveAccount.bind(this))
-      .then(utils.successHandler(vm, event, confirmMsg))
-      .catch(utils.failureHandler({ ...this.failureParams, transient: false }));
+      .then(this.saveAccount.bind(this));
   }  
 }

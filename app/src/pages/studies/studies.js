@@ -8,7 +8,7 @@ import utils from "../../utils";
 export default function() {
   let self = this;
 
-  fn.copyProps(self, root, "isAdmin");
+  fn.copyProps(self, root, "isAdmin", "isStudyCoordinator");
 
   tables.prepareTable(self, {
     name: "study",

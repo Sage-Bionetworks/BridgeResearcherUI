@@ -3,9 +3,9 @@
     <div class="fixed-header-heading">
       <h3>Studies</h3>
     </div>
-    <div class="fixed-header-buttons" data-bind="visible: isAdmin()"">
+    <div class="fixed-header-buttons">
       <div class="ui red tiny buttons" 
-        data-bind="disable: !atLeastOneChecked()">
+        data-bind="disable: !atLeastOneChecked(), visible: isAdmin">
         <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()},
           semantic: 'dropdown-button-toggle', container: '.buttons'">Delete</div>
         <div class="ui primary tiny floating dropdown icon button"
@@ -17,7 +17,8 @@
           </div>
         </div>
       </div>
-      <a href="#/studies/new" class="ui primary tiny button">New Study</a>
+      <a href="#/studies/new" data-bind="visible: isStudyCoordinator"
+        class="ui primary tiny button">New Study</a>
     </div>
   </div>
   <div class="ui empty secondary pointing menu"></div>
@@ -33,7 +34,7 @@
     <table class="ui compact selectable table">
       <thead>
         <tr>
-          <th width="10" data-bind="visible: $parent.isAdmin()">
+          <th width="10" data-bind="visible: $parent.isAdmin">
             <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
           </th>
           <th>Study</th>
@@ -47,7 +48,7 @@
       </tbody>
       <tbody data-bind="foreach: itemsObs">
         <tr data-bind="css: {negative: $data.deleted}">
-          <td data-bind="visible: $parent.isAdmin()">
+          <td data-bind="visible: $parent.isAdmin">
             <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
             <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
               style="cursor: pointer" class="green undo icon"></i>
@@ -61,7 +62,8 @@
         </tr>
       </tbody>
     </table>
-    <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
+    <div class="field" style="margin-left: .75rem" 
+      data-bind="visible: isAdmin">
       <ui-checkbox params="checkedObs: showDeletedObs">
         Show deleted studies
       </ui-checkbox>

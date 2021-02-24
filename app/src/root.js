@@ -82,6 +82,9 @@ let RootViewModel = function() {
   self.isOrgAdmin = roleFunc(self.rolesObs, "org_admin", "admin");
   self.isSuperadmin = roleFunc(self.rolesObs, "superadmin");
   self.isStudyCoordinator = roleFunc(self.rolesObs, "study_coordinator", "admin");
+  // this will change
+  self.isDevRole = roleFunc(self.rolesObs, "developer", "study_coordinator", "admin");
+  self.isResearcherRole = roleFunc(self.rolesObs, "researcher", "study_coordinator", "admin");
 
   self.isResearcherOnly = ko.computed(function() {
     let roles = self.rolesObs();
@@ -115,7 +118,7 @@ let RootViewModel = function() {
     self.appIdObs(session.appId);
     self.rolesObs(session.roles);
     self.emailObs(session.email);
-    self.accountUrlObs(`#/organizations/${session.orgMembership}/members/${session.id}`);
+    self.accountUrlObs(`#/participants/${session.id}/general`);
     serverService.getApp().then(function(app) {
       self.notificationsEnabledObs(Object.keys(app.pushNotificationARNs).length > 0);
     });
