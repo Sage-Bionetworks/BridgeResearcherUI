@@ -7,7 +7,7 @@
       </div>
       <h3 data-bind="text: titleObs"></h3>
     </div>
-    <div class="fixed-header-buttons" data-bind="visible: isAdmin()">
+    <div class="fixed-header-buttons" data-bind="visible: isDevRole()">
       <button class="ui tiny primary button" data-bind="click: save">Save</button>
     </div>
   </div>
@@ -19,8 +19,8 @@
     <div class="two fields">
       <div class="field required" id="name">
         <label>Name</label>
-        <input data-bind="textInput: nameObs, hasFocus: true, visible: isAdmin()" />
-        <div class="input-field-padding" data-bind="text: nameObs, visible: !isAdmin()"></div>
+        <input data-bind="textInput: nameObs, hasFocus: true, visible: isDevRole()" />
+        <div class="input-field-padding" data-bind="text: nameObs, visible: !isDevRole()"></div>
       </div>
       <div class="field required" id="id" data-bind="visible: isNewObs">
         <label>Identifier</label>

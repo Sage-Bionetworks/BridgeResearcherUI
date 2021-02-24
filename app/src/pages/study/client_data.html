@@ -8,7 +8,7 @@
       <h3 data-bind="text: nameObs"></h3>
     </div>
     <div class="fixed-header-buttons">
-      <button class="ui tiny primary button" data-bind="click: save">Save</button>
+      <button class="ui tiny primary button" data-bind="click: save, visible: isDevRole">Save</button>
     </div>
   </div>
   <study-tabset params="identifierObs: identifierObs, isNewObs: isNewObs"></study-tabset>
@@ -16,12 +16,14 @@
 <div class="scrollbox">
   <errors id="study-client-data"></errors>
   <form class="ui skinny form">
-    <div class="field" id="clientData">
+    <div class="field" id="clientData" data-bind="visible: isDevRole">
       <label>Client data should be in JSON format</label>
       <textarea style="font-family: monospace" data-bind="textInput: clientDataObs"></textarea>
     </div>
+    <div style="font-family: monospace; white-space: pre" 
+      data-bind="text: clientDataObs, visible: !isDevRole()"></div>
     <div style="padding-top:1rem">
-      <button class="ui tiny primary button" data-bind="click: reformat">Reformat</button>
+      <button class="ui tiny primary button" data-bind="click: reformat, visible: isDevRole">Reformat</button>
     </div>    
   </form>
 </div>

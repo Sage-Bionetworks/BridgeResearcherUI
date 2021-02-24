@@ -111,7 +111,7 @@
                 <a class="item" data-ref="participants" data-bind="href: accountUrlObs, visible: isDeveloper() && !isSuperadmin()"> 
                   My Account
                 </a>
-                <a href="#/studies" class="item" data-ref="studies">
+                <a href="#/studies" class="item" data-ref="studies" data-bind="visible: isOrgAdmin() || isStudyCoordinator()">
                   Studies
                 </a>
                 <a href="#/organizations" class="item" data-ref="organizations" data-bind="visible: isOrgAdmin()">
@@ -123,28 +123,28 @@
               </div>
             </div>
   
-            <div class="title" data-bind="visible: isDeveloper()">
+            <div class="title" data-bind="visible: isDeveloper() || isResearcher()">
               <i class="archive icon"></i> Legacy Support
               <i class="dropdown icon"></i>
             </div>
-            <div class="content" data-bind="visible: isDeveloper()">
+            <div class="content" data-bind="visible: isDeveloper() || isResearcher()">
               <div class="ui secondary vertical menu">
-                <a href="#/participants" class="item" data-ref="participants" data-bind="visible: isResearcher()">
+                <a href="#/participants" class="item" data-ref="participants" data-bind="visible: isResearcher">
                   Participants
                 </a>
-                <a href="#/subpopulations" class="item" data-ref="subpops">
+                <a href="#/subpopulations" class="item" data-ref="subpops" data-bind="visible: isDeveloper">
                   Consent Groups
                 </a>
-                <a href="#/surveys" class="item" data-ref="surveys">
+                <a href="#/surveys" class="item" data-ref="surveys" data-bind="visible: isDeveloper">
                   Surveys
                 </a>
-                <a href="#/task_identifiers" class="item" data-ref="taskIds">
+                <a href="#/task_identifiers" class="item" data-ref="taskIds" data-bind="visible: isDeveloper">
                   Task Identifiers
                 </a>
-                <a href="#/scheduleplans" class="item" data-ref="scheduling">
+                <a href="#/scheduleplans" class="item" data-ref="scheduling" data-bind="visible: isDeveloper">
                   Scheduling
                 </a>
-                <a href="#/schemas" class="item" data-ref="schemas">
+                <a href="#/schemas" class="item" data-ref="schemas" data-bind="visible: isDeveloper">
                   Upload Schemas
                 </a>
               </div>

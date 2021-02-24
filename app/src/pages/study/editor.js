@@ -16,7 +16,7 @@ export default function(params) {
   self.study = {};
 
   fn.copyProps(self, fn, "formatDateTime");
-  fn.copyProps(self, root, 'isAdmin');
+  fn.copyProps(self, root, 'isDevRole');
 
   let binder = new Binder(self)
     .obs("title", "New Study")
@@ -50,7 +50,7 @@ export default function(params) {
     saveStudy()
       .then(response => {
         if (params.studyId === "new") {
-          document.location = "#/studies/" + self.identifierObs() + "/sponsors";
+          document.location = "#/studies/" + self.identifierObs() + "/general";
         }
         return response;
       })
