@@ -94,6 +94,7 @@ export default {
   reports: "/v3/reports",
   requestPhoneSignIn: "/v3/auth/phone",
   requestResetPassword: "/v3/auth/requestResetPassword",
+  schedules: "/v5/schedules",
   schemaPlans: "/v3/scheduleplans",
   schemas: "/v3/uploadschemas",
   schemasV4: "/v4/uploadschemas",

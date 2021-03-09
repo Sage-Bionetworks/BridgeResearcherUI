@@ -328,6 +328,24 @@ import studypartConsentsHtml from "./pages/studyparticipant/consents.html";
 import studyverifiedIcon from "./pages/studyparticipant/verified-icon";
 import studyverifiedIconHtml from "./pages/studyparticipant/verified-icon.html";
 */
+
+import schedules2 from "./pages/schedules2/schedules";
+import schedules2Html from "./pages/schedules2/schedules.html";
+import schedule2 from "./pages/schedule2/schedule";
+import schedule2Html from "./pages/schedule2/schedule.html";
+import session from "./pages/schedule2/session";
+import sessionHtml from "./pages/schedule2/session.html";
+import timeWindow from "./pages/schedule2/time_window";
+import timeWindowHtml from "./pages/schedule2/time_window.html";
+import assessmentRef from "./pages/schedule2/assessment_ref";
+import assessmentRefHtml from "./pages/schedule2/assessment_ref.html";
+import messageRef from "./pages/schedule2/message";
+import messageRefHtml from "./pages/schedule2/message.html";
+import label from "./pages/schedule2/label";
+import labelHtml from "./pages/schedule2/label.html";
+import selectAssessmentRefs from "./dialogs/select_assessment_refs/select_assessment_refs";
+import selectAssessmentRefsHtml from "./dialogs/select_assessment_refs/select_assessment_refs.html";
+
 import schemaTabset from "./pages/schema/tabset";
 import schemaTabsetHtml from "./pages/schema/tabset.html";
 import fieldDef from "./pages/schema/field_definition";
@@ -589,8 +607,15 @@ reg("studyparticipant_request_info", {viewModel: studypartRequestInfo, template:
 reg("studyparticipant_activity_events", {viewModel: studypartEvents, template: studypartEventsHtml});
 reg("studyparticipant_activity", {viewModel: studypartActivity, template: studypartActivityHtml});
 reg("studyparticipant_consents", {viewModel: studypartConsents, template: studypartConsentsHtml});
-
 */
+reg("schedules2", {viewModel: schedules2, template: schedules2Html});
+reg("schedule2", {viewModel: schedule2, template: schedule2Html});
+reg("session", {viewModel: session, template: sessionHtml});
+reg("time-window", {viewModel: timeWindow, template: timeWindowHtml});
+reg("assessment-ref", {viewModel: assessmentRef, template: assessmentRefHtml});
+reg("message", {viewModel: messageRef, template: messageRefHtml});
+reg("localized-label", {viewModel: label, template: labelHtml});
+
 reg("BooleanConstraints", {viewModel: boolConst, template: boolConstHtml});
 reg("DateConstraints", {viewModel: dateConst, template:  dateConstHtml});
 reg("DateTimeConstraints", {viewModel: dateTimeConst, template: dateTimeConstHtml});
@@ -668,6 +693,7 @@ reg("select_schemas", {viewModel: selectSchemas, template: selectSchemasHtml, sy
 reg("select_surveys", {viewModel: selectSurveys, template: selectSurveysHtml, synchronous: true});
 reg("select_configs", {viewModel: selectConfigs, template: selectConfigsHtml, synchronous: true});
 reg("select_assessments", {viewModel: selectAssessments, template: selectAssessmentsHtml, synchronous: true});
+reg("select_assessment_refs", {viewModel: selectAssessmentRefs, template: selectAssessmentRefsHtml, synchronous: true});
 reg("select_files", {viewModel: selectFiles, template: selectFilesHtml, synchronous: true});
 reg("preview_appconfig", {viewModel: previewAppConfig, template: previewAppConfigHtml, synchronous: true});
 reg("edit_apple_link", {viewModel: editAppleLink, template: editAppleLinkHtml, synchronous: true});

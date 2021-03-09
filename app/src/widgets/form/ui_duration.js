@@ -10,7 +10,8 @@ const DURATION_OPTIONS = Object.freeze([
 const DURATION_NO_HOURS_OPTIONS = Object.freeze([
   { value: "P*D", label: "Days" },
   { value: "P*W", label: "Weeks" },
-  { value: "P*M", label: "Months" }
+  { value: "P*M", label: "Months" },
+  { value: "P*Y", label: "Years" }
 ]);
 
 /**

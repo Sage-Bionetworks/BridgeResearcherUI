@@ -2,6 +2,7 @@ import config from "./config";
 import ko from "knockout";
 import fn from "./functions.js";
 import jsonFormatter from "./json_formatter";
+import { map } from "bluebird";
 
 function nameInspector(string) {
   let isArray = /\[\]$/.test(string);
@@ -133,6 +134,10 @@ export default class Binder {
       return model;
     };
   }
+  // do not add the binder to JSON serializations
+  toJSON() {
+    return null;
+  }
   /**
    * Retrieve the value of a property on an object that is set as a property on the model
    * (rather than directly as a property of the model);
@@ -200,6 +205,18 @@ export default class Binder {
       return { number: context.vm.phoneObs(), regionCode: context.vm.phoneRegionObs() };
     }
     return null;
+  }
+  // I've figured out an elegant way to retrieve the data from deeply nested component
+  // structures, look at how schedules v2 deal with this. It does require creating a 
+  // component for every repeating element in the tree. It's worth it.
+  static persistArrayWithBinder(array, context) {
+    for (var i=0; i < array.length; i++) {
+      let item = array[i];
+      if (item.binder) {
+        array[i] = item.binder.persist(item);
+      }
+    }
+    return array;
   }
   static fromJson(json, context) {
     if (json) {

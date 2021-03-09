@@ -1,0 +1,22 @@
+<div style="display: grid; grid-template-columns: 70% 15% 15%; grid-template-rows: auto; align-items: center"
+  class="field_definition draggable">
+  <div class="draggable">
+    <span style="font-weight: bold" data-bind="text: titleObs"></span>
+    <i class="ui green globe icon"
+      data-content="This is an imported shared component"
+      data-bind="visible: $data.appIdObs() === 'shared', semantic: 'popup'"></i>
+  </div>
+  <div class="draggable" data-bind="text: minutesToCompleteObs() + 'min'"></div>
+  <div class="draggable" style="text-align: right">
+    <i class="large ui language icon link-icon" data-bind="visible: labelsObs().length === 0, 
+      click: addLabel"></i>
+    <i data-bind="click: remove" 
+      class="red large times circle outline icon link-icon"></i>
+  </div>
+  <div class="draggable" style="grid-column-start: 1; grid-column-end: 4; padding-left: 2rem">
+    <!-- ko foreach: labelsObs -->
+      <localized-label message params="labelsObs: $parent.labelsObs, label: $data, prefix: $parent.prefix">
+      </localized-label>
+    <!-- /ko -->
+  </div>
+</div>

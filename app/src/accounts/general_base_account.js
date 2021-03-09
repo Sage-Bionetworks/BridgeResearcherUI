@@ -224,7 +224,6 @@ export default class GeneralBaseAccount extends BaseAccount {
     });
   }
   save(vm, event) {
-    console.log(this);
     this.account = this.binder.persist(this.account);
 
     utils.startHandler(vm, event);

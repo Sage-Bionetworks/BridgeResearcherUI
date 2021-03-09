@@ -1,0 +1,29 @@
+<div class="field_definition draggable">
+  <div class="draggable" style="flex: 0; white-space: nowrap">
+    Starts at
+  </div>
+  <div class="draggable">
+    <div class="field" data-bind="attr: {id: generateId('startTime')}">
+      <select class="ui dropdown" data-bind="options: timeOptions,
+        optionsCaption: 'Start time...', optionsText: 'label', 
+        optionsValue: 'value', value: startTimeObs"></select>
+    </div>
+  </div>
+  <div class="draggable">
+    <div class="text-input-padding">Expires after</div>
+  </div>
+  <div class="draggable">
+    <ui-duration params="fieldObs: expirationObs"></ui-duration>
+  </div>
+  <div class="draggable required" style="flex:1">
+    <ui-checkbox params="checkedObs: persistentObs">Persistent?</ui-checkbox>
+  </div>
+  <div class="draggable activity-controls">
+    <i class="large plus square outline link icon"
+      data-bind="click: addBelow, semantic: 'popup'" data-content="Add below"
+    ></i>
+    <i class="red large times circle outline link icon"
+      data-bind="fadeRemove: {selector: '.field_definition', object: timeWindow, collection: 'timeWindowsObs'}"
+    ></i>
+  </div>
+</div>

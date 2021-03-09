@@ -1,0 +1,59 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/schedules" class="section">Schedules</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="text: titleObs"></h3>
+    </div>
+    <div class="fixed-header-buttons">
+      <button class="ui tiny primary button" data-bind="click: save">Save</button>
+    </div>
+  </div>
+  <div class="ui empty secondary pointing menu"></div>
+</div>
+<div class="scrollbox">
+  <errors id="schedule"></errors>
+  <form class="ui skinny form">
+
+    <div class="fields">
+      <div class="sixteen wide field" id="name">
+        <label>Name</label>
+        <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
+      </div>
+    </div>
+    <div class="fields">
+      <div class="twelve wide field" id="duration">
+        <label>Duration</label>
+        <ui-duration params="fieldObs: durationObs, noHours: true"></ui-duration>
+      </div>
+      <div class="six wide field" data-bind="visible: !isNewObs()">
+        <label>Created On</label>
+        <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
+      </div>
+    </div>
+    <div class="fields">
+      <div class="twelve wide field" id="durationStartEventId">
+        <label>Measured from event ID</label>
+        <select class="ui dropdown" style="width: 70%" data-bind="options: eventIdsObs,
+          optionsCaption: 'Select an event ID...', optionsText: 'text', 
+          optionsValue: 'value', value: durationStartEventIdObs"></select>
+      </div>
+      <div class="six wide field" data-bind="visible: !isNewObs()">
+        <label>Modified On</label>
+        <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
+      </div>
+    </div>
+
+    <h3 data-bind="visible: !isNewObs()">Sessions</h3>
+
+    <div data-bind="foreach: sessionsObs">
+      <session params="sessionsObs: $parent.sessionsObs, session: $data" 
+        style="display: block; margin-bottom: 1rem"></session>
+    </div>
+    <div>
+      <button class="ui primary button" data-bind="click: addSession">Add Session</button>
+    </div>
+  </form>
+</div>

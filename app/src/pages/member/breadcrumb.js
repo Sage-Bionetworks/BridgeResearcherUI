@@ -4,7 +4,6 @@ import root from "../../root";
 
 export default function breadcrumb(params) {
   let self = this;
-  console.log(params);
 
   self.orgNames = {}
   self.orgIdObs = ko.observable(params.orgId);

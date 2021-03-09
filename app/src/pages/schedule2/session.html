@@ -1,0 +1,136 @@
+<div class="ui segments" style="padding-bottom: 2rem">
+  <div class="session2 ui blue inverted segment">
+    <span style="flex: 1" data-bind="text: 'Session: ' + nameObs() + totalMinutesObs()"></span>
+    <span>
+      <i class="large arrow alternate circle up outline icon"
+        data-bind="click: moveSessionUp, style: {opacity: firstOpacityObs($index())}"></i>
+      <i class="large arrow alternate circle down outline icon"
+        data-bind="click: moveSessionDown, style: {opacity: lastOpacityObs($index())}"></i>
+      <i class="red large times circle outline icon" 
+        data-bind="click: removeSession"></i>
+    </span>
+  </div>
+  <div class="ui segment">
+    <div class="fields">
+      <div class="twelve wide field" data-bind="attr: { id: generateId('name') }">
+        <label>Name</label>
+        <input type="text" data-bind="textInput: nameObs">
+      </div>
+      <div class="six wide field" data-bind="attr: { id: generateId('startEventId') }">
+        <label>Start event ID</label>
+        <select class="ui dropdown" style="width: 70%" data-bind="options: eventIdsObs,
+          optionsCaption: 'Select an event ID...', optionsText: 'text', 
+          optionsValue: 'value', value: startEventIdObs"></select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Label</label>
+      <!-- ko foreach: labelsObs -->
+        <localized-label message params="labelsObs: $parent.labelsObs, label: $data, prefix: $parent.prefix">
+        </localized-label>
+      <!-- /ko -->
+      <button class="ui mini button" data-bind="click: addLabel, 
+        visible: labelsObs().length === 0">
+        Add Label
+      </button>
+    </div>
+    <div class="fields">
+      <div class="field">
+        <label>Delay</label>
+        <ui-duration params="fieldObs: delayObs, noHours: true"></ui-duration>
+      </div>
+      <div class="field">
+        <label>Then repeat every</label>
+        <ui-duration params="fieldObs: intervalObs, noHours: true"></ui-duration>
+      </div>
+      <div class="field">
+        <label>This many times</label>
+        <input type="text" placeholder="Until end of study" style="width:10rem"
+          data-bind="textInput: occurrencesObs">
+      </div>
+    </div>
+  </div>
+
+
+  <div class="ui segment" data-bind="attr: {id: generateId('timeWindows')}">
+    <h4>Time Windows</h4>
+    <button class="ui mini button" data-bind="click: addWindow,
+      visible: timeWindowsObs().length === 0">
+      Add Field
+    </button>
+    <div data-bind="foreach: timeWindowsObs, dragula: { 
+        dragHandleSelector: '.draggable', indexObs: indexObs, listObs: timeWindowsObs }">
+      <time-window style="display: block; margin-bottom: 1rem" 
+        params="timeWindowsObs: $parent.timeWindowsObs, timeWindow: $data, prefix: $parent.prefix">
+      </time-window>
+    </div>
+  </div>
+
+
+  <div class="ui segment" data-bind="attr: {id: generateId('assessments')}">
+    <h4>Assessments</h4>
+    <div class="field">
+      <div data-bind="foreach: assessmentsObs, dragula: { 
+        dragHandleSelector: '.draggable', indexObs: aIndexObs, listObs: assessmentsObs }">
+        <assessment-ref params="assessmentsObs: $parent.assessmentsObs, assessment: $data, prefix: $parent.prefix">
+        </assessment-ref>
+      </div>
+    </div>
+    <div class="two fields">
+      <div class="field">
+        <button class="ui mini button" data-bind="click: openAssessmentDialog">
+          Edit Assessment List&hellip;
+        </button>
+      </div>
+      <div class="field" data-bind="attr: {id: generateId('performanceOrder')}">
+        <label>Performance Order</label>
+        <select class="ui dropdown" data-bind="options: performanceOrderTypesObs,
+          optionsCaption: 'Select...', optionsText: 'text', 
+          optionsValue: 'value', value: performanceOrderObs"></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui segment">
+    <h4>Notifications</h4>
+    <div class="fields">
+      <div class="field">
+        <label>Notify Participant</label>
+        <select class="ui dropdown" data-bind="options: notifyAtTypesObs,
+          optionsCaption: 'None', optionsText: 'text', 
+          optionsValue: 'value', value: notifyAtObs"></select>
+      </div>
+      <div class="field">
+        <label>Remind again at</label>
+        <div class="ui right labeled input">
+          <input type="text" data-bind="textInput: remindMinBeforeObs" style="width: 4rem">
+          <div class="ui basic label">min</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>&#160;</label>
+        <select class="ui dropdown" data-bind="options: remindAtTypesObs,
+          optionsCaption: 'None', optionsText: 'text', 
+          optionsValue: 'value', value: remindAtObs"></select>
+      </div>
+      <div class="field">
+        <label>&#160;</label>
+        <div class="text-input-padding" style="line-height: 3; white-space: nowrap">
+          <ui-checkbox params="checkedObs: allowSnoozeObs">
+            Allow snooze
+          </ui-checkbox>
+        </div>
+      </div>
+    </div>
+
+    <div data-bind="attr: {id: generateId('messages')}">
+      <h4>Messages</h4>
+      <!-- ko foreach: messagesObs -->
+        <message params="messagesObs: $parent.messagesObs, message: $data, prefix: $parent.prefix"></message>
+      <!-- /ko -->
+      <button class="ui mini button" style="margin-top: 1rem" data-bind="click: addMessage">
+        Add Message
+      </button>
+    </div>
+  </div>
+</div>
