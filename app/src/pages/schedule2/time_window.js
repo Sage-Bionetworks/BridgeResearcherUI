@@ -15,7 +15,6 @@ export default function(params) {
   self.timeWindow = timeWindow
   self.timeOptions = scheduleFormatter.timeOptions;
 
-
   timeWindow.binder = new Binder(self)
     .bind('guid', timeWindow.guid)
     .bind('startTime', timeWindow.startTime)

@@ -1,4 +1,4 @@
-<div class="ui segments" style="padding-bottom: 2rem">
+<div class="ui segments" data-bind="attr: {id: generateId('')}">
   <div class="session2 ui blue inverted segment">
     <span style="flex: 1" data-bind="text: 'Session: ' + nameObs() + totalMinutesObs()"></span>
     <span>
@@ -12,11 +12,11 @@
   </div>
   <div class="ui segment">
     <div class="fields">
-      <div class="twelve wide field" data-bind="attr: { id: generateId('name') }">
+      <div class="required twelve wide field" data-bind="attr: { id: generateId('name') }">
         <label>Name</label>
         <input type="text" data-bind="textInput: nameObs">
       </div>
-      <div class="six wide field" data-bind="attr: { id: generateId('startEventId') }">
+      <div class="required six wide field" data-bind="attr: { id: generateId('startEventId') }">
         <label>Start event ID</label>
         <select class="ui dropdown" style="width: 70%" data-bind="options: eventIdsObs,
           optionsCaption: 'Select an event ID...', optionsText: 'text', 
@@ -49,20 +49,18 @@
           data-bind="textInput: occurrencesObs">
       </div>
     </div>
-  </div>
-
-
-  <div class="ui segment" data-bind="attr: {id: generateId('timeWindows')}">
     <h4>Time Windows</h4>
-    <button class="ui mini button" data-bind="click: addWindow,
-      visible: timeWindowsObs().length === 0">
-      Add Field
-    </button>
-    <div data-bind="foreach: timeWindowsObs, dragula: { 
-        dragHandleSelector: '.draggable', indexObs: indexObs, listObs: timeWindowsObs }">
-      <time-window style="display: block; margin-bottom: 1rem" 
-        params="timeWindowsObs: $parent.timeWindowsObs, timeWindow: $data, prefix: $parent.prefix">
-      </time-window>
+    <div class="field" data-bind="attr: {id: generateId('timeWindows')}">
+      <button class="ui mini button" data-bind="click: addWindow,
+        visible: timeWindowsObs().length === 0">
+        Add Time Window
+      </button>
+      <div data-bind="foreach: timeWindowsObs, dragula: { 
+          dragHandleSelector: '.draggable', indexObs: indexObs, listObs: timeWindowsObs }">
+        <time-window style="display: block; margin-bottom: 1rem" 
+          params="timeWindowsObs: $parent.timeWindowsObs, timeWindow: $data, prefix: $parent.prefix">
+        </time-window>
+      </div>
     </div>
   </div>
 
@@ -94,32 +92,31 @@
   <div class="ui segment">
     <h4>Notifications</h4>
     <div class="fields">
-      <div class="field">
+      <div class="six wide field">
         <label>Notify Participant</label>
         <select class="ui dropdown" data-bind="options: notifyAtTypesObs,
           optionsCaption: 'None', optionsText: 'text', 
           optionsValue: 'value', value: notifyAtObs"></select>
       </div>
-      <div class="field">
-        <label>Remind again at</label>
-        <div class="ui right labeled input">
-          <input type="text" data-bind="textInput: remindMinBeforeObs" style="width: 4rem">
-          <div class="ui basic label">min</div>
-        </div>
+      <div class="four wide field">
+        <label>Reminder</label>
+        <ui-duration params="fieldObs: reminderPeriodObs, small: true"></ui-duration>
       </div>
-      <div class="field">
+      <div class="six wide field">
         <label>&#160;</label>
-        <select class="ui dropdown" data-bind="options: remindAtTypesObs,
+        <select class="ui dropdown" data-bind="options: remindAtTypesObs, 
           optionsCaption: 'None', optionsText: 'text', 
           optionsValue: 'value', value: remindAtObs"></select>
       </div>
-      <div class="field">
-        <label>&#160;</label>
-        <div class="text-input-padding" style="line-height: 3; white-space: nowrap">
-          <ui-checkbox params="checkedObs: allowSnoozeObs">
-            Allow snooze
-          </ui-checkbox>
-        </div>
+    </div>
+    <div class="fields" style="margin-top: -1rem">
+      <div class="six wide field">
+        &#160;
+      </div>
+      <div class="ten wide field">
+        <ui-checkbox style="line-height: 3" params="checkedObs: allowSnoozeObs">
+          Allow snooze
+        </ui-checkbox>
       </div>
     </div>
 

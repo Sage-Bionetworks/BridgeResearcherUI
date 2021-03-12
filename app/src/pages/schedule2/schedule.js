@@ -18,7 +18,6 @@ export default function(params) {
     .bind('name')
     .bind('guid', params.guid === 'new' ? null : params.guid)
     .bind('duration')
-    .bind('durationStartEventId')
     .bind('version')
     .bind('sessions[]', [], null, Binder.persistArrayWithBinder)
     .obs('eventIds[]');
@@ -47,7 +46,8 @@ export default function(params) {
   self.addSession = function(vm, event) {
     self.sessionsObs.push({
       'name': 'Session #' + (self.sessionsObs().length+1),
-      'startEventId': self.durationStartEventIdObs()
+      'performanceOrder': 'sequential',
+      'timeWindows': [{'startTime': '08:00'}]
     });
   }
 

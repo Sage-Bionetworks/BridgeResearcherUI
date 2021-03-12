@@ -5,9 +5,9 @@ import ko from "knockout";
 import root from "../../root";
 
 const NOTIFY_AT_OPTIONS = [
-  {text: 'At start of window', value: 'at_start_of_window'},
-  {text: 'At time participant picks', value: 'at_time_specified'},
-  {text: 'At random', value: 'at_random'}
+  {text: 'At start of window', value: 'start_of_window'},
+  {text: 'At random', value: 'random'},
+  {text: 'At time participant chooses', value: 'participant_choice'}
 ];
 
 const REMIND_AT_OPTIONS = [
@@ -18,7 +18,7 @@ const REMIND_AT_OPTIONS = [
 const PERFORMANCE_ORDER_OPTIONS = [
   {text: 'Sequential', value: 'sequential'},
   {text: 'Randomized', value: 'randomized'},
-  {text: 'No constraint (participant chooses)', value: 'participant_choice'},
+  {text: 'In order participant chooses', value: 'participant_choice'}
 ];
 
 function moveArrayItem(array, from, to) {
@@ -42,12 +42,13 @@ export default function(params) {
     .bind('notifyAt', session.notifyAt)
     .bind('remindAt', session.remindAt)
     .bind('performanceOrder', session.performanceOrder)
-    .bind('remindMinBefore', session.remindMinBefore)
+    .bind('reminderPeriod', session.reminderPeriod)
     .bind('allowSnooze', session.allowSnooze)
     .bind('assessments[]', session.assessments, null, Binder.persistArrayWithBinder)
     .bind('timeWindows[]', session.timeWindows, null, Binder.persistArrayWithBinder)
     .bind('labels[]', session.labels, null, Binder.persistArrayWithBinder)
     .bind('messages[]', session.messages, null, Binder.persistArrayWithBinder)
+    .obs('enableReminder')
     .obs('index')
     .obs('aIndex')
     .obs('notifyAtTypes', NOTIFY_AT_OPTIONS)
@@ -71,7 +72,10 @@ export default function(params) {
   });
 
   self.generateId = function(fieldName) {
-    return self.prefix + '_' + fieldName;
+    if (fieldName.length) {
+      fieldName = '_' + fieldName;
+    }
+    return self.prefix + fieldName;
   }
   self.moveSessionUp = function(vm, event) {
     let index = ko.contextFor(event.target).$index();

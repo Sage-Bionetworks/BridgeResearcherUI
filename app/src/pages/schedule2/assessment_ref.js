@@ -12,6 +12,7 @@ export default function(params) {
     .bind('guid', assessment.guid)
     .bind('appId', assessment.appId)
     .bind('title', assessment.title)
+    .bind('identifier', assessment.identifier)
     .bind('minutesToComplete', assessment.minutesToComplete)
     .bind('labels[]', assessment.labels, null, Binder.persistArrayWithBinder);
 

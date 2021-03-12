@@ -1,6 +1,11 @@
 import ko from "knockout";
 import utils from "../../utils";
 
+const DURATION_SMALL_OPTIONS = Object.freeze([
+  { value: "PT*M", label: "Minutes" },
+  { value: "PT*H", label: "Hours" },
+  { value: "P*D", label: "Days" }
+]);
 const DURATION_OPTIONS = Object.freeze([
   { value: "PT*H", label: "Hours" },
   { value: "P*D", label: "Days" },
@@ -29,7 +34,10 @@ export default function uiDuration(params) {
   self.amountObs = ko.observable();
   self.durationObs = ko.observable();
 
-  if (params.noHours === true) {
+  if (params.small === true) {
+    self.durationOptions = DURATION_SMALL_OPTIONS;
+    self.durationOptionsLabel = utils.makeOptionLabelFinder(DURATION_SMALL_OPTIONS);
+  } else if (params.noHours === true) {
     self.durationOptions = DURATION_NO_HOURS_OPTIONS;
     self.durationOptionsLabel = utils.makeOptionLabelFinder(DURATION_NO_HOURS_OPTIONS);
   } else {

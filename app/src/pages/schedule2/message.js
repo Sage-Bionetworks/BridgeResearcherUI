@@ -9,9 +9,9 @@ export default function(params) {
   self.prefix = params.prefix + '_messages' + index;
 
   message.binder = new Binder(self)
-    .bind('language', message.language)
+    .bind('lang', message.lang)
     .bind('subject', message.subject)
-    .bind('body', message.body);
+    .bind('message', message.message);
 
   self.generateId = function(fieldName) {
     return `${self.prefix}_${fieldName}`;
