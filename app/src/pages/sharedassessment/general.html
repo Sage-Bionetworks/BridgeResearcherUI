@@ -76,15 +76,8 @@
         <div class="input-field-padding" data-bind="text: normingStatusObs"></div>
       </div>
     </div>
-    <div class="two fields">
-      <div class="field">
-        <label>Created On</label>
-        <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
-      </div>
-      <div class="field">
-        <label>Modified On</label>
-        <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
-      </div>
-    </div>
+
+    <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
+    </timestamps>
   </form>
 </div>

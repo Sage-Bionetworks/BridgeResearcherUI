@@ -1,5 +1,5 @@
-import alerts from "../../widgets/alerts";
 import Binder from "../../binder";
+import fn from "../../functions";
 import ko from "knockout";
 import scheduleFormatter from "../../schedule_formatter";
 
@@ -28,18 +28,28 @@ export default function(params) {
   self.moveWindowUp = function(vm, event) {
     let index = ko.contextFor(event.target).$index();
     if (index > 0) {
-      let array = moveArrayItem(timeWindowsObs(), index, index-1);
+      let array = fn.moveArrayItem(timeWindowsObs(), index, index-1);
       timeWindowsObs(array);
     }
   }
   self.moveWindowDown = function(vm, event) {
     let index = ko.contextFor(event.target).$index();
     if (index < timeWindowsObs().length) {
-      let array = moveArrayItem(timeWindowsObs(), index, index+1);
+      let array = fn.moveArrayItem(timeWindowsObs(), index, index+1);
       timeWindowsObs(array);
     }
   }
+  self.firstOpacityObs = function(index) {
+    return index === 0 ? .5 : 1;
+  };
+  self.lastOpacityObs = function(index) {
+    return index === (timeWindowsObs().length-1) ? .5 : 1;
+  };
   self.addBelow = function(vm, event) {
     timeWindowsObs.push({ 'startTime': null });
+  }
+  self.removeWindow = function(vm, event) {
+    let $context = ko.contextFor(event.target);
+    timeWindowsObs.remove(timeWindowsObs()[$context.$index()]);
   }
 }

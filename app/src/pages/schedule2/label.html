@@ -1,13 +1,13 @@
-<div class="inline fields field_definition" style="padding: .2rem 0; font-size: 75%">
+<div class="inline fields">
   <div class="three wide field" data-bind="attr: {id: generateId('lang')}">
     <label>Lang</label>
     <input type="text" class="ui input" data-bind="textInput: langObs">
   </div>
-  <div class="eleven wide field" data-bind="attr: {id: generateId('label')}">
+  <div class="eleven wide field" data-bind="attr: {id: generateId('value')}">
     <label>Label</label>
-    <input type="text"  class="ui input" data-bind="textInput: labelObs">
+    <input type="text"  class="ui input" data-bind="textInput: valueObs">
   </div>
-  <div class="two wide field" style="text-align: right">
+  <div class="two wide field" style="text-align: right; font-size: 140%">
     <i class="plus square outline link icon"
       data-bind="click: addBelow, semantic: 'popup'" data-content="Add below"></i>
     <i class="red times circle outline link icon"

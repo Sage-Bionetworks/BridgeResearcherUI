@@ -24,7 +24,7 @@
       </div>
       <div class="required four wide field" id="duration">
         <label>Duration</label>
-        <ui-duration params="fieldObs: durationObs, noHours: true"></ui-duration>
+        <ui-duration params="fieldObs: durationObs, fields: 'days weeks'"></ui-duration>
       </div>
     </div>
 
@@ -38,15 +38,8 @@
       <button class="ui primary button" data-bind="click: addSession">Add Session</button>
     </div>
 
-    <div class="two fields" data-bind="visible: !isNewObs()" style="margin-top: 2rem">
-      <div class="field">
-        <label>Created On</label>
-        <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
-      </div>
-      <div class="field">
-        <label>Modified On</label>
-        <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
-      </div>
-    </div>
+    <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
+    </timestamps>
+
   </form>
 </div>

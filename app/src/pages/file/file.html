@@ -15,74 +15,58 @@
 </div>
 <div class="scrollbox">
   <errors id="file"></errors>
-  <form class="ui form">
-    <div class="ui grid">
-      <div class="seven wide column">
-        <div class="required field" id="name">
-          <label>Name</label>
-          <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
-        </div>
-        <div class="field" id="description">
-          <label>Description</label>
-          <input type="text" data-bind="textInput: descriptionObs">
-        </div>
-      </div>
-      <div class="two wide column">
-      </div>
-      <div class="seven wide column">
-        <div class="two fields" data-bind="visible: !isNewObs()">
-          <div class="field" id="createdOn">
-              <label>Created On</label>
-              <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
-            </div>
-            <div class="field" id="modifiedOn">
-              <label>Modified On</label>
-              <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
-            </div>
-          </div>
-      </div>
+  <form class="ui skinny form">
+    <div class="required field" id="name">
+      <label>Name</label>
+      <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
     </div>
-  </form>
-  <h4 data-bind="visible: !isNewObs()" class="ui dividing header">Revisions</h4>
-  <div class="line-control" data-bind="visible: !isNewObs()">
-    <div class="line-control-stretch ">
-      <button class="ui tiny primary button" data-bind="click: newRevisionDialog">Upload New Revision</button>
+    <div class="field" id="description">
+      <label>Description</label>
+      <input type="text" data-bind="textInput: descriptionObs">
     </div>
-    <pager params="prefix: 'fr', postLoadFunc: postLoadFunc"></pager>
+    <h4 data-bind="visible: !isNewObs()" class="ui dividing header">Revisions</h4>
+    <div class="line-control" data-bind="visible: !isNewObs()">
+      <div class="line-control-stretch ">
+        <button class="ui tiny primary button" data-bind="click: newRevisionDialog">Upload New Revision</button>
+      </div>
+      <pager params="prefix: 'fr', postLoadFunc: postLoadFunc"></pager>
+    </div>
+    <table class="ui compact selectable table" data-bind="visible: !isNewObs()">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Created On</th>
+          <th>File Size</th>
+          <th>Status</th>
+          <th width="10"></th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="5" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr data-bind="css: $component.classNameForStatus($data)">
+          <td style="line-height:1.1">
+            <div>
+              <a data-bind="text: $data.name, attr: {href: $data.downloadURL}"></a>
+            </div>
+            <div style="color: #bbb; font-size: smaller" data-bind="text: $data.description"></div>
+          </td>
+          <td data-bind="text: $parent.formatDateTime($data.createdOn)"></td>
+          <td data-bind="text: $parent.formatFileSize($data.size)"></td>
+          <td data-bind="text: $parent.formatTitleCase($data.status)"></td>
+          <td>
+            <button class="ui tiny basic icon button" 
+              data-bind="visible: $data.status === 'pending', click: $parent.verify">
+              <i class="redo icon"></i>
+            </button>          
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
+    </timestamps>
   </div>
-  <table class="ui compact selectable table" data-bind="visible: !isNewObs()">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Created On</th>
-        <th>File Size</th>
-        <th>Status</th>
-        <th width="10"></th>
-      </tr>
-    </thead>
-    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-      <tr>
-        <td colspan="5" data-bind="html: recordsMessageObs"></td>
-      </tr>
-    </tbody>
-    <tbody data-bind="foreach: itemsObs">
-      <tr data-bind="css: $component.classNameForStatus($data)">
-        <td style="line-height:1.1">
-          <div>
-            <a data-bind="text: $data.name, attr: {href: $data.downloadURL}"></a>
-          </div>
-          <div style="color: #bbb; font-size: smaller" data-bind="text: $data.description"></div>
-        </td>
-        <td data-bind="text: $parent.formatDateTime($data.createdOn)"></td>
-        <td data-bind="text: $parent.formatFileSize($data.size)"></td>
-        <td data-bind="text: $parent.formatTitleCase($data.status)"></td>
-        <td>
-          <button class="ui tiny basic icon button" 
-            data-bind="visible: $data.status === 'pending', click: $parent.verify">
-            <i class="redo icon"></i>
-          </button>          
-        </td>
-      </tr>
-    </tbody>
-  </table>  
 </div>

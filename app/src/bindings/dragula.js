@@ -25,11 +25,14 @@ ko.bindingHandlers.dragula = {
       // recreates all the HTML of all the list items... It may be because the
       // list is bound to two different sections of HTML, I'm not sure. On schedule
       // pages this wipes out the schedule component embedded in the scheduleCriteria/
-      // scheduleGroup arrays.
+      // scheduleGroup arrays. Note that this *breaks* the more recent schedule v2
+      // editor.
+      /*
       el.parentNode.removeChild(el);
       config.listObs.remove(data);
       config.listObs.splice(index, 0, data);
       config.indexObs(index);
+      */
     });
     autoScroll([element], {
       margin: 100,

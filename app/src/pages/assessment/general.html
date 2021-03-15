@@ -106,15 +106,38 @@
         <div class="input-field-padding" data-bind="text: normingStatusObs, visible: !canEditObs()"></div>
       </div>
     </div>
-    <div class="two fields" data-bind="visible: !isNewObs()">
-      <div class="field">
-        <label>Created On</label>
-        <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
+        
+    <h4>Display Information</h4>
+    <div class="field">
+      <label>Label</label>
+      <!-- ko foreach: labelsObs -->
+        <localized-label message params="labelsObs: $parent.labelsObs, label: $data, prefix: ''">
+        </localized-label>
+      <!-- /ko -->
+      <button class="ui mini button" data-bind="click: addLabel, visible: labelsObs().length === 0">
+        Add Label
+      </button>
+    </div>
+    <div class="fields">
+      <div class="field" id="colorScheme_background">
+        <label>Background Color</label>
+        <input type="text" data-bind="textInput: backgroundObs">
       </div>
-      <div class="field">
-        <label>Modified On</label>
-        <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
+      <div class="field" id="colorScheme_foreground">
+        <label>Foreground Color</label>
+        <input type="text" data-bind="textInput: foregroundObs">
+      </div>
+      <div class="field" id="colorScheme_activated">
+        <label>Activated Color</label>
+        <input type="text" data-bind="textInput: activatedObs">
+      </div>
+      <div class="field" id="colorScheme_inactivated">
+        <label>Inactivated Color</label>
+        <input type="text" data-bind="textInput: inactivatedObs">
       </div>
     </div>
+
+    <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
+    </timestamps>
   </form>
 </div>

@@ -1,7 +1,8 @@
-<div class="ui segments" data-bind="attr: {id: generateId('')}">
+<div class="session ui segments" data-bind="attr: {id: generateId('')}">
   <div class="session2 ui blue inverted segment">
-    <span style="flex: 1" data-bind="text: 'Session: ' + nameObs() + totalMinutesObs()"></span>
+    <span style="flex: 1" data-bind="text: nameObs"></span>
     <span>
+      <span data-bind="text: totalMinutesObs()" style="margin-right: 1rem"></span>
       <i class="large arrow alternate circle up outline icon"
         data-bind="click: moveSessionUp, style: {opacity: firstOpacityObs($index())}"></i>
       <i class="large arrow alternate circle down outline icon"
@@ -26,7 +27,7 @@
     <div class="field">
       <label>Label</label>
       <!-- ko foreach: labelsObs -->
-        <localized-label message params="labelsObs: $parent.labelsObs, label: $data, prefix: $parent.prefix">
+        <localized-label message params="labelsObs: $parent.labelsObs, label: $data, prefix: $parent.prefix + '_'">
         </localized-label>
       <!-- /ko -->
       <button class="ui mini button" data-bind="click: addLabel, 
@@ -37,11 +38,11 @@
     <div class="fields">
       <div class="field">
         <label>Delay</label>
-        <ui-duration params="fieldObs: delayObs, noHours: true"></ui-duration>
+        <ui-duration params="fieldObs: delayObs, fields: 'minutes hours days weeks'"></ui-duration>
       </div>
       <div class="field">
         <label>Then repeat every</label>
-        <ui-duration params="fieldObs: intervalObs, noHours: true"></ui-duration>
+        <ui-duration params="fieldObs: intervalObs, fields: 'days weeks'"></ui-duration>
       </div>
       <div class="field">
         <label>This many times</label>
@@ -55,8 +56,7 @@
         visible: timeWindowsObs().length === 0">
         Add Time Window
       </button>
-      <div data-bind="foreach: timeWindowsObs, dragula: { 
-          dragHandleSelector: '.draggable', indexObs: indexObs, listObs: timeWindowsObs }">
+      <div data-bind="foreach: timeWindowsObs">
         <time-window style="display: block; margin-bottom: 1rem" 
           params="timeWindowsObs: $parent.timeWindowsObs, timeWindow: $data, prefix: $parent.prefix">
         </time-window>
@@ -65,22 +65,21 @@
   </div>
 
 
-  <div class="ui segment" data-bind="attr: {id: generateId('assessments')}">
+  <div class="ui blue segment" data-bind="attr: {id: generateId('assessments')}">
     <h4>Assessments</h4>
     <div class="field">
-      <div data-bind="foreach: assessmentsObs, dragula: { 
-        dragHandleSelector: '.draggable', indexObs: aIndexObs, listObs: assessmentsObs }">
+      <div data-bind="foreach: assessmentsObs">
         <assessment-ref params="assessmentsObs: $parent.assessmentsObs, assessment: $data, prefix: $parent.prefix">
         </assessment-ref>
       </div>
     </div>
-    <div class="two fields">
-      <div class="field">
+    <div class="fields" style="align-items: baseline">
+      <div class="inline field" style="flex:1">
         <button class="ui mini button" data-bind="click: openAssessmentDialog">
-          Edit Assessment List&hellip;
+          Add Assessment(s)&hellip;
         </button>
       </div>
-      <div class="field" data-bind="attr: {id: generateId('performanceOrder')}">
+      <div class="inline field" data-bind="attr: {id: generateId('performanceOrder')}">
         <label>Performance Order</label>
         <select class="ui dropdown" data-bind="options: performanceOrderTypesObs,
           optionsCaption: 'Select...', optionsText: 'text', 
@@ -89,7 +88,7 @@
     </div>
   </div>
 
-  <div class="ui segment">
+  <div class="ui blue segment">
     <h4>Notifications</h4>
     <div class="fields">
       <div class="six wide field">
@@ -98,11 +97,11 @@
           optionsCaption: 'None', optionsText: 'text', 
           optionsValue: 'value', value: notifyAtObs"></select>
       </div>
-      <div class="four wide field">
+      <div class="four wide field" data-bind="attr: {id: generateId('reminderPeriod')}">
         <label>Reminder</label>
-        <ui-duration params="fieldObs: reminderPeriodObs, small: true"></ui-duration>
+        <ui-duration params="fieldObs: reminderPeriodObs, fields: 'minutes hours days'"></ui-duration>
       </div>
-      <div class="six wide field">
+      <div class="six wide field" data-bind="attr: {id: generateId('remindAt')}">
         <label>&#160;</label>
         <select class="ui dropdown" data-bind="options: remindAtTypesObs, 
           optionsCaption: 'None', optionsText: 'text', 
@@ -113,7 +112,7 @@
       <div class="six wide field">
         &#160;
       </div>
-      <div class="ten wide field">
+      <div class="ten wide field" data-bind="attr: {id: generateId('allowSnooze')}">
         <ui-checkbox style="line-height: 3" params="checkedObs: allowSnoozeObs">
           Allow snooze
         </ui-checkbox>

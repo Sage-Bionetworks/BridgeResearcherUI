@@ -406,6 +406,8 @@ import tagEditor from "./widgets/tag-editor/tag_editor";
 import tagEditorHtml from "./widgets/tag-editor/tag_editor.html";
 import uiDur from "./widgets/form/ui_duration";
 import uiDurHtml from "./widgets/form/ui_duration.html";
+import timestamps from "./widgets/timestamps/timestamps";
+import timestampsHtml from "./widgets/timestamps/timestamps.html";
 
 // DIALOGS
 import critEditor from "./dialogs/criteria_editor/criteria_editor";
@@ -667,6 +669,7 @@ reg("template_editor", {viewModel: templateEditor, template: templateEditorHtml}
 reg("template_history", {viewModel: templateHistory, template: templateHistoryHtml});
 reg("template-tabset", {viewModel: templateTabset, template: templateTabsetHtml});
 reg("pager", {viewModel: pager, template: pagerHtml});
+reg("timestamps", {viewModel: timestamps, template: timestampsHtml});
 
 // Dialogs. These must be synchronous.
 reg("sign_out_user", {viewModel: signOutUser, template: signOutUserHtml, synchronous: true});

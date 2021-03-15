@@ -7,6 +7,7 @@ const CATEGORIES = {
   'Data Repositories': 'data_repository',
   'Science Documentation': 'science_documentation',
   'Developer Documentation': 'developer_documentation',
+  'Icon': 'icon',
   'Licenses': 'license',
   'Publications': 'publication',
   'Release Notes': 'release_note',

@@ -96,6 +96,8 @@ export default class Errors {
       globalErrors.push("Please see the errors in red below");
     }
     this.errorsObs.pushAll(globalErrors);
+
+    $('.scrollbox').scrollTo(0, 0);
   }
   renderFieldError(fieldEl, string) { 
     let containerDiv = fieldEl.querySelector(".error.box");

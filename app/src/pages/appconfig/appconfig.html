@@ -168,15 +168,7 @@
       </div>
     </div>
 
-    <div class="two fields" data-bind="visible: !isNewObs()" style="margin-top: 2rem">
-      <div class="field" id="createdOn">
-        <label>Created On</label>
-        <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
-      </div>
-      <div class="field" id="modifiedOn">
-        <label>Modified On</label>
-        <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
-      </div>
-    </div>
+    <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
+    </timestamps>
   </form>
 </div>

@@ -6,11 +6,11 @@ export default function(params) {
   var labelsObs = params.labelsObs;
   var label = params.label;
   var index = labelsObs().indexOf(label);
-  self.prefix = params.prefix + '_labels' + index;
+  self.prefix = params.prefix + 'labels' + index;
 
   label.binder = new Binder(self)
     .bind('lang', label.lang)
-    .bind('label', label.label);
+    .bind('value', label.value);
 
   self.generateId = function(fieldName) {
     return `${self.prefix}_${fieldName}`;

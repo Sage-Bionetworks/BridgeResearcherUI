@@ -1,6 +1,7 @@
 import { getEventIds } from "./schedule2utils";
 import alerts from "../../widgets/alerts";
 import Binder from "../../binder";
+import fn from "../../functions";
 import ko from "knockout";
 import root from "../../root";
 
@@ -20,11 +21,6 @@ const PERFORMANCE_ORDER_OPTIONS = [
   {text: 'Randomized', value: 'randomized'},
   {text: 'In order participant chooses', value: 'participant_choice'}
 ];
-
-function moveArrayItem(array, from, to) {
-  array.splice(to, 0, array.splice(from, 1)[0]);
-  return array;
-};
 
 export default function(params) {
   var self = this;
@@ -59,15 +55,24 @@ export default function(params) {
     .obs('body')
     .obs('eventIds[]');
 
+  self.notifyAtObs.subscribe((val) => {
+    if (!val) {
+      self.remindAtObs(null);
+      self.reminderPeriodObs(null);
+      self.allowSnoozeObs(null);
+      self.messagesObs([]);
+    }
+  })
+
   self.totalMinutesObs = ko.computed(function() {
     var sum = self.assessmentsObs()
       .map(asmt => asmt.minutesToComplete).reduce((a,  b) => a + b, 0);
     if (sum < 1) {
       return '';
     } else if (sum === 1) {
-      return ' (1 minute)';
+      return '1 minute';
     } else {
-      return ' (' + sum + ' minutes)';
+      return sum + ' minutes';
     }
   });
 
@@ -80,14 +85,14 @@ export default function(params) {
   self.moveSessionUp = function(vm, event) {
     let index = ko.contextFor(event.target).$index();
     if (index > 0) {
-      let array = moveArrayItem(sessionsObs(), index, index-1);
+      let array = fn.moveArrayItem(sessionsObs(), index, index-1);
       sessionsObs(array);
     }
   }
   self.moveSessionDown = function(vm, event) {
     let index = ko.contextFor(event.target).$index();
     if (index < sessionsObs().length) {
-      let array = moveArrayItem(sessionsObs(), index, index+1);
+      let array = fn.moveArrayItem(sessionsObs(), index, index+1);
       sessionsObs(array);
     }
   }
@@ -105,13 +110,37 @@ export default function(params) {
   self.lastOpacityObs = function(index) {
     return index === (sessionsObs().length-1) ? .5 : 1;
   };
+  self.addAssessments = function(assessments) {
+    // We don't want to overwrite the assessments that are already in
+    // the session, because they might have been modified (in particular,
+    // there might be labels). Once added you should be able to edit the 
+    // reference without wiping it out.
+    var selected = assessments.reduce(function(obj, val) {
+      obj[val.guid] = val;
+      return obj;
+    }, {});
+    var current = self.assessmentsObs().reduce(function(obj, val) {
+      obj[val.guid] = val;
+      return obj;
+    }, {});
+    var selectedKeys = new Set(Object.keys(selected));
+    var currentKeys = new Set(Object.keys(current));
+    currentKeys.forEach(guid => {
+      if (!selectedKeys.has(guid)) {
+        self.assessmentsObs.remove(current[guid]);
+      }
+    });
+    selectedKeys.forEach(guid => {
+      if (!currentKeys.has(guid)) {
+        self.assessmentsObs.push(selected[guid]);
+      }
+    });
+    root.closeDialog();
+  };
   self.openAssessmentDialog = function() {
     root.openDialog("select_assessment_refs", {
       selected: self.assessmentsObs(),
-      addAssessmentRefs: (assessments) => {
-        self.assessmentsObs(assessments);
-        root.closeDialog();
-      }
+      addAssessmentRefs: self.addAssessments.bind(self)
     });
   }
   self.addWindow = function() {

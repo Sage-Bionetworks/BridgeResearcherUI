@@ -1,23 +1,27 @@
-<div style="display: grid; grid-template-columns: 4fr .3fr 3fr .5fr 1fr; grid-template-rows: auto; align-items: center" class="field_definition draggable">
-  <div class="draggable">
-    <span style="font-weight: bold" data-bind="text: titleObs"></span>
-  </div>
-  <div class="draggable">
+<div class="asmt-list-item">
+  <div>
     <i class="ui green globe icon"
       data-content="This is an imported shared component"
       data-bind="visible: $data.appIdObs() === 'shared', semantic: 'popup'"></i>
   </div>
-  <div class="draggable" data-bind="text: 'id: ' + identifierObs()"></div>
-  <div class="draggable" data-bind="text: minutesToCompleteObs() + 'min'"></div>
-  <div class="draggable" style="text-align: right">
-    <i class="large ui language icon link-icon" 
-      data-bind="visible: labelsObs().length === 0, click: addLabel"></i>
-    <i data-bind="click: remove" 
-      class="red large times circle outline icon link-icon"></i>
+  <div>
+    <span style="font-weight: bold" data-bind="text: titleObs"></span>
   </div>
-  <div class="draggable" style="grid-column-start: 1; grid-column-end: 4; padding-left: 2rem">
+  <div data-bind="text: 'id: ' + identifierObs()"></div>
+  <div data-bind="text: minutesToCompleteObs() + 'min'"></div>
+  <div class="asmt-list-item-controls">
+    <i class="blue ui language icon" 
+      style="margin-right: .4rem!important"
+      data-bind="visible: labelsObs().length === 0, click: addLabel"></i>
+    <i class="arrow alternate circle up outline icon"
+      data-bind="click: moveAssessmentUp, style: {opacity: firstOpacityObs($index())}"></i>
+    <i class="arrow alternate circle down outline icon"
+      data-bind="click: moveAssessmentDown, style: {opacity: lastOpacityObs($index())}"></i>
+    <i class="red times circle outline icon" data-bind="click: remove"></i>
+  </div>
+  <div class="asmt-labels">
     <!-- ko foreach: labelsObs -->
-      <localized-label message params="labelsObs: $parent.labelsObs, label: $data, prefix: $parent.prefix">
+      <localized-label message params="labelsObs: $parent.labelsObs, label: $data, prefix: $parent.prefix + '_'">
       </localized-label>
     <!-- /ko -->
   </div>

@@ -19,7 +19,7 @@
 </div>
 <div class="scrollbox">
   <errors id="topic"></errors>
-  <form class="ui form">
+  <form class="ui skinny form">
     <div class="fields">
       <div class="seven wide required field" id="name">
         <label>Name</label>
@@ -38,24 +38,14 @@
         <input data-bind="textInput: descriptionObs" />
       </div>
     </div>
-    <div class="fields">
-      <div class="seven wide field">
-        <label>Assignment based on</label>
-        <div class="input-field-padding" data-bind="html: criteriaLabel(criteriaObs())"></div>
-        <div class="inline-editor-controls">
-          <a data-bind="click: openCriteriaDialog">
-            <i class="write icon"></i>Edit…
-          </a>
-        </div>
-      </div>
-      <div class="five wide field">
-        <label>Created On</label>
-        <div class="input-field-padding" data-bind="text: createdOnObs"></div>
-      </div>
-      <div class="four wide field">
-        <label>Modified On</label>
-        <div class="input-field-padding" data-bind="text: modifiedOnObs"></div>
-      </div>
+    <h5>Assignment based on</h5>
+    <div class="input-field-padding" data-bind="html: criteriaLabel(criteriaObs())"></div>
+    <div class="inline-editor-controls">
+      <a data-bind="click: openCriteriaDialog">
+        <i class="write icon"></i>Edit…
+      </a>
     </div>
+    <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
+    </timestamps>
   </form>
 </div>

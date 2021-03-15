@@ -1,4 +1,5 @@
 import Binder from "../../binder";
+import fn from "../../functions";
 import ko from "knockout";
 
 export default function(params) {
@@ -26,4 +27,24 @@ export default function(params) {
     let $context = ko.contextFor(event.target);
     assessmentsObs.remove(assessmentsObs()[$context.$index()]);
   }
+  self.moveAssessmentUp = function(vm, event) {
+    let index = ko.contextFor(event.target).$index();
+    if (index > 0) {
+      let array = fn.moveArrayItem(assessmentsObs(), index, index-1);
+      assessmentsObs(array);
+    }
+  }
+  self.moveAssessmentDown = function(vm, event) {
+    let index = ko.contextFor(event.target).$index();
+    if (index < assessmentsObs().length) {
+      let array = fn.moveArrayItem(assessmentsObs(), index, index+1);
+      assessmentsObs(array);
+    }
+  }
+  self.firstOpacityObs = function(index) {
+    return index === 0 ? .5 : 1;
+  };
+  self.lastOpacityObs = function(index) {
+    return index === (assessmentsObs().length-1) ? .5 : 1;
+  };
 }

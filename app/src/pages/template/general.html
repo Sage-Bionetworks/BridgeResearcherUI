@@ -20,39 +20,22 @@
 </div>
 <div class="scrollbox">
   <errors id="template-general"></errors>
-  <form class="ui form">
-    <div class="ui grid">
-      <div class="seven wide column">
-        <div class="required field" id="name">
-          <label>Name</label>
-          <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
-        </div>
-        <div class="field" id="description">
-          <label>Description</label>
-          <input type="text" data-bind="textInput: descriptionObs" />
-        </div>
-      </div>
-      <div class="two wide column">
-      </div>
-      <div class="seven wide column">
-        <div class="two fields" data-bind="visible: !isNewObs()">
-          <div class="field" id="createdOn">
-              <label>Created On</label>
-              <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
-            </div>
-            <div class="field" id="modifiedOn">
-              <label>Modified On</label>
-              <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
-            </div>
-          </div>
-      </div>
-
-      <div class="sixteen wide column">
-        <h4>Assignment based on</h4>
-        <!-- ko component: {name:"template_criteria", params:{ id:"", criteriaObs: criteriaObs}} -->
-        <!-- /ko -->
-      </div>
+  <form class="ui skinny form">
+    <div class="required field" id="name">
+      <label>Name</label>
+      <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
     </div>
+    <div class="field" id="description">
+      <label>Description</label>
+      <input type="text" data-bind="textInput: descriptionObs" />
+    </div>
+
+    <h4>Assignment based on</h4>
+    <!-- ko component: {name:"template_criteria", params:{ id:"", criteriaObs: criteriaObs}} -->
+    <!-- /ko -->
+
+    <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
+    </timestamps>
   </form>
 </div>
   
