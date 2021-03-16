@@ -1,0 +1,97 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/sharedassessments" class="section">Shared Assessments</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="text: pageTitleObs"></h3>
+    </div>
+    <div class="fixed-header-buttons" data-bind="visible: canEditObs">
+      <button class="ui tiny primary button" data-bind="click: save">Save</button>
+    </div>
+  </div>
+  <sharedassessment-tabset params="guidObs: guidObs, revisionObs: pageRevObs, 
+    originGuidObs: originGuidObs, canEditObs: canEditObs">
+  </sharedassessment-tabset>
+</div>
+<div class="scrollbox">
+  <div class="ui grid">
+    <div class="ten wide column">
+      <errors id="sharedassessment-ui"></errors>
+      <form class="ui skinny form">
+        <div class="field">
+          <label>Label(s)</label>
+          <!-- ko foreach: labelsObs -->
+            <localized-label message params="labelsObs: $parent.labelsObs, label: $data, prefix: '',
+              canEditObs: $parent.canEditObs"></localized-label>
+          <!-- /ko -->
+          <button class="ui mini button" data-bind="click: addLabel, visible: labelsObs().length === 0">
+            Add Label
+          </button>
+        </div>
+        <div class="field" id="minutesToComplete">
+          <label>Minutes to complete</label>
+          <input type="text" style="width: 8rem" 
+            data-bind="textInput: minutesToCompleteObs, visible: canEditObs" />
+          <div class="input-field-padding" data-bind="text: minutesToCompleteObs, 
+            visible: !canEditObs()"></div>
+        </div>
+        <div class="fields">
+          <div class="field" id="colorScheme_background">
+            <label>Background Color</label>
+            <div class="ui right labeled input" data-bind="visible: canEditObs">
+              <input type="text" data-bind="textInput: backgroundObs">
+              <div class="ui basic label" data-bind="style: {backgroundColor: backgroundObs}"></div>
+            </div>
+            <div class="input-field-padding" data-bind="visible: !canEditObs()">
+              <span data-bind="text: backgroundObs"></span>
+              <span data-bind="visible: backgroundObs, style: { color: backgroundObs }">⬤</span>
+            </div>
+          </div>
+          <div class="field" id="colorScheme_foreground">
+            <label>Foreground Color</label>
+            <div class="ui right labeled input" data-bind="visible: canEditObs">
+              <input type="text" data-bind="textInput: foregroundObs">
+              <div class="ui basic label" data-bind="style: {backgroundColor: foregroundObs}"></div>
+            </div>
+            <div class="input-field-padding" data-bind="visible: !canEditObs()">
+              <span data-bind="text: foregroundObs"></span>
+              <span data-bind="visible: foregroundObs, style: { color: foregroundObs }">⬤</span>
+            </div>
+          </div>
+        </div>
+        <div class="fields">
+          <div class="field" id="colorScheme_activated">
+            <label>Activated Color</label>
+            <div class="ui right labeled input" data-bind="visible: canEditObs">
+              <input type="text" data-bind="textInput: activatedObs">
+              <div class="ui basic label" data-bind="style: {backgroundColor: activatedObs}"></div>
+            </div>
+            <div class="input-field-padding" data-bind="visible: !canEditObs()">
+              <span data-bind="text: activatedObs"></span>
+              <span data-bind="visible: activatedObs, style: { color: activatedObs }">⬤</span>
+            </div>
+          </div>
+          <div class="field" id="colorScheme_inactivated">
+            <label>Inactivated Color</label>
+            <div class="ui right labeled input" data-bind="visible: canEditObs">
+              <input type="text" data-bind="textInput: inactivatedObs">
+              <div class="ui basic label" data-bind="style: {backgroundColor: inactivatedObs}"></div>
+            </div>
+            <div class="input-field-padding" data-bind="visible: !canEditObs()">
+              <span data-bind="text: inactivatedObs"></span>
+              <span data-bind="visible: inactivatedObs, style: { color: inactivatedObs }">⬤</span>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="six wide column">
+      <div class="ui message">
+        <p>These fields are included in the scheduling information that is provided to the client, which will use it to render tasks for study participants to perform. It is enough information to show a task without having to load the assessment’s configuration. </p>
+      </div>
+    </div>
+  </div>
+
+</div>

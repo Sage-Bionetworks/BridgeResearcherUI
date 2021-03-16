@@ -61,17 +61,7 @@ export default function(params) {
     .bind("originGuid")
     .bind("validationStatus")
     .bind("normingStatus")
-    .bind("minutesToComplete")
     .bind("tags[]")
-    .bind('labels[]', null, null, Binder.persistArrayWithBinder)
-    .bind("background", null, Binder.fromObjectField("colorScheme", "background"),
-        Binder.toObjectField("colorScheme", "background"))
-    .bind("foreground", null, Binder.fromObjectField("colorScheme", "foreground"),
-        Binder.toObjectField("colorScheme", "foreground"))
-    .bind("activated", null, Binder.fromObjectField("colorScheme", "activated"),
-        Binder.toObjectField("colorScheme", "activated"))
-    .bind("inactivated", null, Binder.fromObjectField("colorScheme", "inactivated"),
-        Binder.toObjectField("colorScheme", "inactivated"))
     .obs("allTags[]")
     .obs("addTag")
     .obs("canEdit", false);
@@ -154,10 +144,6 @@ export default function(params) {
       self.tagsObs.push(tag.trim());
     }
   }
-  self.addLabel = function() {
-    self.labelsObs.push({});
-  }
-
   function addTags(response) {
     let array = [];
     Object.keys(response).forEach(ns => {

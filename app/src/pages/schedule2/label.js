@@ -8,6 +8,8 @@ export default function(params) {
   var index = labelsObs().indexOf(label);
   self.prefix = params.prefix + 'labels' + index;
 
+  self.canEditObs = params.canEditObs || ko.observable(true);
+
   label.binder = new Binder(self)
     .bind('lang', label.lang)
     .bind('value', label.value);

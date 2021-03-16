@@ -1,6 +1,9 @@
 <div class="ui secondary pointing menu" data-bind="visible: !isNewObs()">
   <a data-bind="tabber, href: linkMaker('general')"> <i class="setting icon"></i> General </a>
 
+  <a data-bind="tabber, href: linkMaker('ui'), visible: canEditObs()"> 
+    <i class="desktop icon"></i> Task Display</a>
+
   <a data-bind="tabber, href: linkMaker('template'), visible: !originGuidObs() && canEditObs()"> 
     <i class="list icon"></i> Customization Template </a>
 

@@ -8,6 +8,8 @@ import assessmentsHtml from "./pages/assessments/assessments.html";
 
 import assessment from "./pages/assessment/general";
 import assessmentHtml from "./pages/assessment/general.html";
+import assessmentUi from "./pages/assessment/ui";
+import assessmentUiHtml from "./pages/assessment/ui.html";
 import assessmentConfig from "./pages/assessment/config";
 import assessmentConfigHtml from "./pages/assessment/config.html";
 import assessmentTemplate from "./pages/assessment/template";
@@ -28,6 +30,8 @@ import sharedassessmentsHtml from "./pages/sharedassessments/sharedassessments.h
 
 import sharedassessment from "./pages/sharedassessment/general";
 import sharedassessmentHtml from "./pages/sharedassessment/general.html";
+import sharedassessmentUi from "./pages/sharedassessment/ui";
+import sharedassessmentUiHtml from "./pages/sharedassessment/ui.html";
 import sharedassessmentHistory from "./pages/sharedassessment/history";
 import sharedassessmentHistoryHtml from "./pages/sharedassessment/history.html";
 import sharedassessmentConfig from "./pages/sharedassessment/config";
@@ -490,6 +494,7 @@ reg("errors", {viewModel: errors, template: errorsHtml});
 reg("none", {template: '<div class="ui modal dialog"></div>'});
 reg("assessments", {viewModel: assessments, template: assessmentsHtml});
 reg("assessment_general", {viewModel: assessment, template: assessmentHtml});
+reg("assessment_ui", {viewModel: assessmentUi, template: assessmentUiHtml});
 reg("assessment_config", {viewModel: assessmentConfig, template: assessmentConfigHtml});
 reg("assessment_template", {viewModel: assessmentTemplate, template: assessmentTemplateHtml});
 reg("assessment_history", {viewModel: assessmentHistory, template: assessmentHistoryHtml});
@@ -501,6 +506,8 @@ reg("sharedassessments",
   {viewModel: sharedassessments, template: sharedassessmentsHtml});
 reg("sharedassessment_general", 
   {viewModel: sharedassessment, template: sharedassessmentHtml});
+reg("sharedassessment_ui", 
+  {viewModel: sharedassessmentUi, template: sharedassessmentUiHtml});
 reg("sharedassessment_history", 
   {viewModel: sharedassessmentHistory, template: sharedassessmentHistoryHtml});
 reg("sharedassessment_config", 

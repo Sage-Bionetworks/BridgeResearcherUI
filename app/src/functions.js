@@ -319,7 +319,6 @@ function lowerCaseStringSorter(a, b) {
 }
 function log(label) {
   return function(response) {
-    console.info(label, response);
     return response;
   };
 }
