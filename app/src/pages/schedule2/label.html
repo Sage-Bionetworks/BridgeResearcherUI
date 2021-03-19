@@ -9,10 +9,10 @@
     <input type="text"  class="ui input" data-bind="visible: canEditObs, textInput: valueObs">
     <div class="input-field-padding" data-bind="text: valueObs, visible: !canEditObs()"></div>
   </div>
-  <div class="two wide field" style="font-size: 155%" data-bind="visible: canEditObs">
-      <i class="plus square outline link icon" style="margin:0"
+  <div class="two wide field list-item-controls" data-bind="visible: canEditObs">
+      <i class="plus square outline link icon"
         data-bind="click: addBelow, semantic: 'popup'" data-content="Add below"></i>
-      <i class="red times circle outline link icon" style="margin:0"
+      <i class="red times circle outline link icon"
         data-bind="click: removeLabel"></i>
   </div>
 </div>
