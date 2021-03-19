@@ -2,6 +2,12 @@ import Binder from "../../binder";
 import fn from "../../functions";
 import ko from "knockout";
 
+function bindColor(assessment, field) {
+  assessment.binder.bind(field, (assessment.colorScheme) ? assessment.colorScheme[field] : null, 
+    Binder.fromObjectField("colorScheme", field),
+    Binder.toObjectField("colorScheme", field))
+}
+
 export default function(params) {
   var self = this;
   var assessmentsObs = params.assessmentsObs;
@@ -16,6 +22,10 @@ export default function(params) {
     .bind('identifier', assessment.identifier)
     .bind('minutesToComplete', assessment.minutesToComplete)
     .bind('labels[]', assessment.labels, null, Binder.persistArrayWithBinder);
+  bindColor(assessment, "background");
+  bindColor(assessment, "foreground");
+  bindColor(assessment, "activated");
+  bindColor(assessment, "inactivated");
 
   self.generateId = function(fieldName) {
     return `${self.prefix}_${fieldName}`;

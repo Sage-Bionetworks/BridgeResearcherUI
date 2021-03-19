@@ -1,18 +1,18 @@
-<div class="inline fields">
-  <div class="three wide field" data-bind="attr: {id: generateId('lang')}">
+<div class="inline fields" style="font-size: 80%">
+  <div class="four wide field" data-bind="attr: {id: generateId('lang')}">
     <label>Lang</label>
     <input type="text" class="ui input" data-bind="visible: canEditObs, textInput: langObs">
     <div class="input-field-padding" data-bind="text: langObs, visible: !canEditObs()"></div>
   </div>
-  <div class="eleven wide field" data-bind="attr: {id: generateId('value')}">
+  <div class="ten wide field" data-bind="attr: {id: generateId('value')}">
     <label>Label</label>
     <input type="text"  class="ui input" data-bind="visible: canEditObs, textInput: valueObs">
     <div class="input-field-padding" data-bind="text: valueObs, visible: !canEditObs()"></div>
   </div>
-  <div class="two wide field" style="text-align: right; font-size: 140%" data-bind="visible: canEditObs">
-    <i class="plus square outline link icon"
-      data-bind="click: addBelow, semantic: 'popup'" data-content="Add below"></i>
-    <i class="red times circle outline link icon"
-      data-bind="click: removeLabel"></i>
+  <div class="two wide field" style="font-size: 155%" data-bind="visible: canEditObs">
+      <i class="plus square outline link icon" style="margin:0"
+        data-bind="click: addBelow, semantic: 'popup'" data-content="Add below"></i>
+      <i class="red times circle outline link icon" style="margin:0"
+        data-bind="click: removeLabel"></i>
   </div>
 </div>
