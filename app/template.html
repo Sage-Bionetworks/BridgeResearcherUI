@@ -117,7 +117,8 @@
                 <a href="#/organizations" class="item" data-ref="organizations" data-bind="visible: isOrgAdmin()">
                   Organizations
                 </a>
-                <a href="#/schedules" class="item" data-ref="schedules" data-bind="visible: isStudyCoordinator() || isDeveloper()">
+                <!--  data-bind="visible: isStudyCoordinator() || isDeveloper()" -->
+                <a href="#/schedules" class="item" data-ref="schedules" data-bind="visible: isSuperadmin()">
                   Schedules
                 </a>
                 <a href="#/reports" class="item" data-ref="reports">
