@@ -196,19 +196,18 @@ div.te.container {
     padding: .25rem;
     white-space: nowrap;
   }
-  .list-item-controls {
-    flex: 1;
-    text-align: right;
+}
+.list-item-controls {
+  flex: 1;
+  text-align: right;
 
-    i.icon {
-      margin: 0!important;
-      cursor: pointer;
-      font-size: 130%
-    }
+  i.icon {
+    margin: 0!important;
+    cursor: pointer;
+    font-size: 140%
   }
 }
-
-/* This is multi-row, and so needs a grid layout. */
+/* This is multi-row, and so needs a grid layout. Still uses .line-item-controls */
 .asmt-list-item {
   display: grid; 
   grid-template-columns: .4fr 4fr 3fr .5fr 2fr; 
@@ -216,18 +215,9 @@ div.te.container {
   align-items: center; 
   padding: .5rem 0;
 
-  .asmt-list-item-controls {
-    text-align: right;
-
-    i.icon {
-      margin: 0!important;
-      cursor: pointer;
-      font-size: 130%
-    }
-  }
   .asmt-labels {
-    grid-column-start: 1; 
-    grid-column-end: 4; 
-    padding-left: 2rem;
+    grid-column-start: 2; 
+    grid-column-end: 5; 
+    padding-top: .25rem;
   }
 }
