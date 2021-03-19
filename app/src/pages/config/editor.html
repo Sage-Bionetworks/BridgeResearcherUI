@@ -15,9 +15,9 @@
 </div>
 <div class="scrollbox">
   <errors id="config-el-editor"></errors>
-  <form class="ui form">
+  <form class="ui skinny form">
     <div class="fields">
-      <div class="six wide field">
+      <div class="twelve wide field">
         <div class="field required" id="id" data-bind="visible: isNewObs">
           <label>Identifier</label>
           <input type="text" data-bind="textInput: idObs, hasFocus: true" />
@@ -33,18 +33,6 @@
           <input type="text" style="width: 8rem" data-bind="textInput: revisionObs" />
         </div>
       </div>
-      <div class="three wide field">
-        <div class="field" id="createdOn">
-          <label>Created On</label>
-          <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
-        </div>
-      </div>
-      <div class="three wide field">
-        <div class="field" id="modifiedOn">
-          <label>Modified On</label>
-          <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
-        </div>
-      </div>
     </div>
     <h4>JSON</h4>
     <div id="data">
@@ -53,5 +41,9 @@
     <div style="padding-top:1rem">
       <button class="ui tiny primary button" data-bind="click: reformat">Reformat</button>
     </div>
+
+    <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
+    </timestamps>
+
   </form>
 </div>

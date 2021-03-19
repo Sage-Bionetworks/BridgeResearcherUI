@@ -30,15 +30,12 @@
   <div class="three fields" data-bind="visible: editorScheduleTypeObs() !== 'persistent'">
     <div class="field">
       <label>Delay first task by</label>
-      <ui-duration params="fieldObs: delayObs"></ui-duration>
+      <ui-duration params="fieldObs: delayObs, fields: 'hours days weeks months'"></ui-duration>
     </div>
-    <div
-      class="field"
-      data-bind="attr:{id:'strategy_'+$component.collectionName+'schedule_interval'}, 
-            visible: editorScheduleTypeObs() === 'interval' || editorScheduleTypeObs() === 'sequence'"
-    >
+    <div class="field" data-bind="attr:{id:'strategy_'+$component.collectionName+'schedule_interval'}, 
+      visible: editorScheduleTypeObs() === 'interval' || editorScheduleTypeObs() === 'sequence'">
       <label>Then schedule every</label>
-      <ui-duration params="fieldObs: intervalObs, noHours: true"></ui-duration>
+      <ui-duration params="fieldObs: intervalObs, fields: 'days weeks months years'"></ui-duration>
     </div>
     <div
       class="field"
@@ -68,7 +65,7 @@
       <label
         data-bind="text: (editorScheduleTypeObs() !== 'once') ? 'Tasks expire after' : 'Task expires after'"
       ></label>
-      <ui-duration params="fieldObs: expiresObs"></ui-duration>
+      <ui-duration params="fieldObs: expiresObs, fields: 'hours days weeks months'"></ui-duration>
     </div>
     <div
       class="field"
@@ -76,7 +73,7 @@
             attr:{id:'strategy_'+$component.collectionName+'schedule_expires'}"
     >
       <label>Ending sequence after</label>
-      <ui-duration params="fieldObs: sequencePeriodObs, noHours: true"></ui-duration>
+      <ui-duration params="fieldObs: sequencePeriodObs, fields: 'days weeks months years'"></ui-duration>
     </div>
   </div>
 

@@ -8,6 +8,8 @@ import assessmentsHtml from "./pages/assessments/assessments.html";
 
 import assessment from "./pages/assessment/general";
 import assessmentHtml from "./pages/assessment/general.html";
+import assessmentUi from "./pages/assessment/ui";
+import assessmentUiHtml from "./pages/assessment/ui.html";
 import assessmentConfig from "./pages/assessment/config";
 import assessmentConfigHtml from "./pages/assessment/config.html";
 import assessmentTemplate from "./pages/assessment/template";
@@ -28,6 +30,8 @@ import sharedassessmentsHtml from "./pages/sharedassessments/sharedassessments.h
 
 import sharedassessment from "./pages/sharedassessment/general";
 import sharedassessmentHtml from "./pages/sharedassessment/general.html";
+import sharedassessmentUi from "./pages/sharedassessment/ui";
+import sharedassessmentUiHtml from "./pages/sharedassessment/ui.html";
 import sharedassessmentHistory from "./pages/sharedassessment/history";
 import sharedassessmentHistoryHtml from "./pages/sharedassessment/history.html";
 import sharedassessmentConfig from "./pages/sharedassessment/config";
@@ -328,6 +332,24 @@ import studypartConsentsHtml from "./pages/studyparticipant/consents.html";
 import studyverifiedIcon from "./pages/studyparticipant/verified-icon";
 import studyverifiedIconHtml from "./pages/studyparticipant/verified-icon.html";
 */
+
+import schedules2 from "./pages/schedules2/schedules";
+import schedules2Html from "./pages/schedules2/schedules.html";
+import schedule2 from "./pages/schedule2/schedule";
+import schedule2Html from "./pages/schedule2/schedule.html";
+import session from "./pages/schedule2/session";
+import sessionHtml from "./pages/schedule2/session.html";
+import timeWindow from "./pages/schedule2/time_window";
+import timeWindowHtml from "./pages/schedule2/time_window.html";
+import assessmentRef from "./pages/schedule2/assessment_ref";
+import assessmentRefHtml from "./pages/schedule2/assessment_ref.html";
+import messageRef from "./pages/schedule2/message";
+import messageRefHtml from "./pages/schedule2/message.html";
+import label from "./pages/schedule2/label";
+import labelHtml from "./pages/schedule2/label.html";
+import selectAssessmentRefs from "./dialogs/select_assessment_refs/select_assessment_refs";
+import selectAssessmentRefsHtml from "./dialogs/select_assessment_refs/select_assessment_refs.html";
+
 import schemaTabset from "./pages/schema/tabset";
 import schemaTabsetHtml from "./pages/schema/tabset.html";
 import fieldDef from "./pages/schema/field_definition";
@@ -388,6 +410,8 @@ import tagEditor from "./widgets/tag-editor/tag_editor";
 import tagEditorHtml from "./widgets/tag-editor/tag_editor.html";
 import uiDur from "./widgets/form/ui_duration";
 import uiDurHtml from "./widgets/form/ui_duration.html";
+import timestamps from "./widgets/timestamps/timestamps";
+import timestampsHtml from "./widgets/timestamps/timestamps.html";
 
 // DIALOGS
 import critEditor from "./dialogs/criteria_editor/criteria_editor";
@@ -470,6 +494,7 @@ reg("errors", {viewModel: errors, template: errorsHtml});
 reg("none", {template: '<div class="ui modal dialog"></div>'});
 reg("assessments", {viewModel: assessments, template: assessmentsHtml});
 reg("assessment_general", {viewModel: assessment, template: assessmentHtml});
+reg("assessment_ui", {viewModel: assessmentUi, template: assessmentUiHtml});
 reg("assessment_config", {viewModel: assessmentConfig, template: assessmentConfigHtml});
 reg("assessment_template", {viewModel: assessmentTemplate, template: assessmentTemplateHtml});
 reg("assessment_history", {viewModel: assessmentHistory, template: assessmentHistoryHtml});
@@ -481,6 +506,8 @@ reg("sharedassessments",
   {viewModel: sharedassessments, template: sharedassessmentsHtml});
 reg("sharedassessment_general", 
   {viewModel: sharedassessment, template: sharedassessmentHtml});
+reg("sharedassessment_ui", 
+  {viewModel: sharedassessmentUi, template: sharedassessmentUiHtml});
 reg("sharedassessment_history", 
   {viewModel: sharedassessmentHistory, template: sharedassessmentHistoryHtml});
 reg("sharedassessment_config", 
@@ -589,8 +616,15 @@ reg("studyparticipant_request_info", {viewModel: studypartRequestInfo, template:
 reg("studyparticipant_activity_events", {viewModel: studypartEvents, template: studypartEventsHtml});
 reg("studyparticipant_activity", {viewModel: studypartActivity, template: studypartActivityHtml});
 reg("studyparticipant_consents", {viewModel: studypartConsents, template: studypartConsentsHtml});
-
 */
+reg("schedules2", {viewModel: schedules2, template: schedules2Html});
+reg("schedule2", {viewModel: schedule2, template: schedule2Html});
+reg("session", {viewModel: session, template: sessionHtml});
+reg("time-window", {viewModel: timeWindow, template: timeWindowHtml});
+reg("assessment-ref", {viewModel: assessmentRef, template: assessmentRefHtml});
+reg("message", {viewModel: messageRef, template: messageRefHtml});
+reg("localized-label", {viewModel: label, template: labelHtml});
+
 reg("BooleanConstraints", {viewModel: boolConst, template: boolConstHtml});
 reg("DateConstraints", {viewModel: dateConst, template:  dateConstHtml});
 reg("DateTimeConstraints", {viewModel: dateTimeConst, template: dateTimeConstHtml});
@@ -642,6 +676,7 @@ reg("template_editor", {viewModel: templateEditor, template: templateEditorHtml}
 reg("template_history", {viewModel: templateHistory, template: templateHistoryHtml});
 reg("template-tabset", {viewModel: templateTabset, template: templateTabsetHtml});
 reg("pager", {viewModel: pager, template: pagerHtml});
+reg("timestamps", {viewModel: timestamps, template: timestampsHtml});
 
 // Dialogs. These must be synchronous.
 reg("sign_out_user", {viewModel: signOutUser, template: signOutUserHtml, synchronous: true});
@@ -668,6 +703,7 @@ reg("select_schemas", {viewModel: selectSchemas, template: selectSchemasHtml, sy
 reg("select_surveys", {viewModel: selectSurveys, template: selectSurveysHtml, synchronous: true});
 reg("select_configs", {viewModel: selectConfigs, template: selectConfigsHtml, synchronous: true});
 reg("select_assessments", {viewModel: selectAssessments, template: selectAssessmentsHtml, synchronous: true});
+reg("select_assessment_refs", {viewModel: selectAssessmentRefs, template: selectAssessmentRefsHtml, synchronous: true});
 reg("select_files", {viewModel: selectFiles, template: selectFilesHtml, synchronous: true});
 reg("preview_appconfig", {viewModel: previewAppConfig, template: previewAppConfigHtml, synchronous: true});
 reg("edit_apple_link", {viewModel: editAppleLink, template: editAppleLinkHtml, synchronous: true});

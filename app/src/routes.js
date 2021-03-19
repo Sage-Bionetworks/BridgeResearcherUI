@@ -192,9 +192,13 @@ reg("studyparticipant_activity", {viewModel: studypartActivity, template: studyp
 reg("studyparticipant_consents", {viewModel: studypartConsents, template: studypartConsentsHtml});
 */
 
+router.on("/schedules", routeTo("schedules2", "schedules"));
+router.on("/schedules/:guid", routeTo("schedule2", "schedules", GUID));
+
 router.on("/assessments", routeTo("assessments", "assessments"));
 router.on("/assessments/:guid", redirectTo("/assessments/{0}/general"));
 router.on("/assessments/:guid/general", routeTo("assessment_general", "assessments", GUID));
+router.on("/assessments/:guid/ui", routeTo("assessment_ui", "assessments", GUID));
 router.on("/assessments/:guid/config", routeTo("assessment_config", "assessments", GUID));
 router.on("/assessments/:guid/history", routeTo("assessment_history", "assessments", GUID));
 router.on("/assessments/:guid/resources", routeTo("assessment_resources", "assessments", GUID));
@@ -207,6 +211,8 @@ router.on("/sharedassessments", routeTo("sharedassessments", "sharedassessments"
 router.on("/sharedassessments/:guid", redirectTo("/sharedassessments/{0}/general"));
 router.on("/sharedassessments/:guid/general", 
   routeTo("sharedassessment_general", "sharedassessments", GUID));
+router.on("/sharedassessments/:guid/ui", 
+  routeTo("sharedassessment_ui", "sharedassessments", GUID));
 router.on("/sharedassessments/:guid/history", 
   routeTo("sharedassessment_history", "sharedassessments", GUID));
 router.on("/sharedassessments/:guid/config", 

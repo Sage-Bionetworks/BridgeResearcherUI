@@ -1,0 +1,45 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/schedules" class="section">Schedules</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="text: titleObs"></h3>
+    </div>
+    <div class="fixed-header-buttons">
+      <button class="ui tiny primary button" data-bind="click: save">Save</button>
+    </div>
+  </div>
+  <div class="ui empty secondary pointing menu"></div>
+</div>
+<div class="scrollbox">
+  <errors id="schedule"></errors>
+  <form class="ui skinny form">
+
+    <div class="fields">
+      <div class="required twelve wide field" id="name">
+        <label>Name</label>
+        <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
+      </div>
+      <div class="required four wide field" id="duration">
+        <label>Duration</label>
+        <ui-duration params="fieldObs: durationObs, fields: 'days weeks'"></ui-duration>
+      </div>
+    </div>
+
+    <h3>Sessions</h3>
+
+    <div data-bind="foreach: sessionsObs">
+      <session params="sessionsObs: $parent.sessionsObs, session: $data" 
+        style="display: block; margin-bottom: 1rem"></session>
+    </div>
+    <div>
+      <button class="ui primary button" data-bind="click: addSession">Add Session</button>
+    </div>
+
+    <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
+    </timestamps>
+
+  </form>
+</div>

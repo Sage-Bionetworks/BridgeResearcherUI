@@ -67,7 +67,10 @@ export default function(params) {
       .then(self.postLoadPagerFunc)
       .catch(utils.failureHandler({ id: 'sharedassessment_resources' }));
   }
-  self.doImport = 
+  // TODO: This was never finished!
+  self.doImport = function() {
+
+  }
 
   serverService.getSharedAssessment(params.guid)
     .then(fn.handleObsUpdate(self.pageRevObs, "revision"))

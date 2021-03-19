@@ -21,7 +21,7 @@ export default function(params) {
     return item.checkedObs();
   }
 
-  const selectedGuids = new Set(params.selected.map(item => item.id));
+  const selectedGuids = new Set(params.selected.map(item => item.identifier));
 
   self.select = function() {
     let assessments = self.itemsObs().filter(selectByChecked);
@@ -39,18 +39,14 @@ export default function(params) {
     return selectedGuids.has(assessment.identifier);
   }
   function configToView(assessment) {
-    return {
-      title: assessment.title,
-      guid: assessment.guid,
-      id: assessment.id,
-      checkedObs: ko.observable(match(assessment))
-    };
+    assessment.checkedObs = ko.observable(match(assessment));
+    return assessment;
   }
 
   function load() {
     serverService.getAssessments('', null, 100, false)
       .then(fn.handleMap("items", configToView))
-      .then(fn.handleSort("items", "id"))
+      .then(fn.handleSort("items", "title"))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .catch(utils.failureHandler({}));
   }

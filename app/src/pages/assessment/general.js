@@ -25,6 +25,8 @@ function newAssessment() {
     osName: "",
     tags: [],
     revision: 1,
+    labels: [],
+    colorScheme: { background: null, foreground: null, activated: null, inactivated: null},
     customizationFields: {}
   };
 }
@@ -59,7 +61,6 @@ export default function(params) {
     .bind("originGuid")
     .bind("validationStatus")
     .bind("normingStatus")
-    .bind("minutesToComplete")
     .bind("tags[]")
     .obs("allTags[]")
     .obs("addTag")
@@ -143,7 +144,6 @@ export default function(params) {
       self.tagsObs.push(tag.trim());
     }
   }
-
   function addTags(response) {
     let array = [];
     Object.keys(response).forEach(ns => {

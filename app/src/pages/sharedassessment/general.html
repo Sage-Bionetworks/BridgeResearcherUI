@@ -7,84 +7,89 @@
       </div>
       <h3 data-bind="text: pageTitleObs"></h3>
     </div>
-    <div class="fixed-header-buttons">
-      <button data-bind="click: doImport" class="ui tiny button">Import</button>
+    <div class="fixed-header-buttons" data-bind="visible: canEditObs">
+      <button class="ui tiny primary button" data-bind="click: doImport">Import</button>
+      <button class="ui tiny button" data-bind="click: save">Save</button>
     </div>
   </div>
-  <sharedassessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
-    revisionObs: pageRevObs, originGuidObs: originGuidObs">
+  <sharedassessment-tabset params="guidObs: guidObs, revisionObs: pageRevObs, 
+    originGuidObs: originGuidObs, canEditObs: canEditObs">
   </sharedassessment-tabset>
 </div>
 <div class="scrollbox">
-  <errors id="assessment"></errors>
+  <errors id="sharedassessment"></errors>
   <p> View the <a data-bind="href: createHistoryLink"> 
-    <i style="margin-right:0" class="history icon"></i>Edit History</a> of this assessment.
+    <i style="margin-right:0" class="history icon"></i>Edit History</a> of this shared assessment.
   </p>
-
   <form class="ui skinny form">
-    <div class="two fields">
-      <div class="required field" id="title">
+    <div class="fields">
+      <div class="eight wide required field" id="title">
         <label>Title</label>
-        <div class="input-field-padding" data-bind="text: titleObs"></div>
+        <input type="text" data-bind="textInput: titleObs, hasFocus: true, visible: canEditObs" />
+        <div class="input-field-padding" data-bind="text: titleObs, visible: !canEditObs()"></div>
       </div>
-      <div class="field" id="revision" style="width: 10rem">
+      <div class="required four wide field" id="identifier">
+        <label>Identifier</label>
+        <div class="input-field-padding" data-bind="text: identifierObs"></div>
+      </div>
+      <div class="four wide field" id="revision" style="width: 10rem">
         <label>Revision</label>
         <div class="input-field-padding" data-bind="text: revisionObs"></div>
       </div>
     </div>
     <div class="two fields">
-      <div class="field">
-        <div class="two fields">
-          <div class="required field" id="identifier">
-            <label>Identifier</label>
-            <div class="input-field-padding" data-bind="text: identifierObs"></div>
-          </div>
-          <div class="field" id="minutesToComplete">
-            <label>Minutes to complete</label>
-            <div class="input-field-padding" data-bind="text: minutesToCompleteObs"></div>
-          </div>
-        </div>
-      </div>
       <div class="required field" id="ownerId">
         <label>Organization</label>
         <div class="input-field-padding" data-bind="text: formatOrgId(ownerIdObs())"></div>
+      </div>
+      <div class="required field" id="osName">
+        <label>Operating System</label>
+        <select class="ui dropdown" data-bind="options: osNameOpts,
+          optionsText: 'label', optionsValue: 'value', value: osNameObs,
+          optionsCaption: 'Select operating system...', visible: canEditObs">
+        </select>
+        <div class="input-field-padding" data-bind="text: osNameObs, visible: !canEditObs()"></div>
       </div>
     </div>
     <div class="two fields">
       <div class="field" id="summary">
         <label>Summary</label>
-        <div class="input-field-padding" data-bind="text: summaryObs"></div>
+        <textarea id="summary" data-bind="textInput: summaryObs, visible: canEditObs()" class="ui textarea"></textarea>
+        <div class="input-field-padding" data-bind="text: summaryObs, visible: !canEditObs()"></div>
       </div>
       <div class="field">
-        <div class="required field" id="osName">
-          <label>Operation System</label>
-          <div class="input-field-padding" data-bind="text: osNameObs"></div>
-        </div>
-        <div class="field" id="tags" style="margin-top: 1rem">
+        <div class="field" id="tags" style="margin-top: 1rem" data-bind="visible: canEditObs">
           <label>Tags</label>
-          <div class="input-field-padding" data-bind="text: tagsObs"></div>
+          <tag-editor params="selectedObs: tagsObs, 
+            allObs: allTagsObs, type: 'tags'"></tag-editor>
+          <div class="ui small action input" style="margin-top: 1rem">
+            <input type="text" data-bind="textInput: $component.addTagObs, 
+              event: {keypress: $component.keyHandler}, hasFocus: true"/>
+            <button class="ui small button" data-bind="click: $component.addTag">New Tag</button>
+          </div>
+        </div>
+        <div class="field" id="tags" style="margin-top: 1rem" data-bind="visible: !canEditObs()">
+          <label>Tags</label>
+          <div class="input-field-padding" class="text: tagsObs().join(', ')"></div>
         </div>
       </div>
     </div>
     <div class="two fields">
       <div class="field" id="validationStatus">
         <label>Validation Status</label>
-        <div class="input-field-padding" data-bind="text: validationStatusObs"></div>
+        <textarea id="validationStatus" data-bind="textInput: validationStatusObs, 
+          visible: canEditObs()" class="ui textarea"></textarea>
+        <div class="input-field-padding" data-bind="text: validationStatusObs, visible: !canEditObs()"></div>
       </div>
       <div class="field" id="normingStatus">
         <label>Norming Status</label>
-        <div class="input-field-padding" data-bind="text: normingStatusObs"></div>
+        <textarea id="normingStatus" data-bind="textInput: normingStatusObs, 
+          visible: canEditObs()" class="ui textarea"></textarea>
+        <div class="input-field-padding" data-bind="text: normingStatusObs, visible: !canEditObs()"></div>
       </div>
     </div>
-    <div class="two fields">
-      <div class="field">
-        <label>Created On</label>
-        <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
-      </div>
-      <div class="field">
-        <label>Modified On</label>
-        <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
-      </div>
-    </div>
+        
+    <timestamps params="createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
+    </timestamps>
   </form>
 </div>

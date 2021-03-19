@@ -3,18 +3,23 @@ import Binder from "../../binder";
 import fn from "../../functions";
 import ko from "knockout";
 import optionsService from "../../services/options_service";
+import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
+const IMPORT_MSG = "Do you want to define a new identifier for this assessment "+
+  "when it is imported into your app? (Press enter to keep the current identifier)?"
+
 var failureHandler = utils.failureHandler({
-  redirectMsg: "Assessment not found.",
-  redirectTo: "assessments",
+  redirectMsg: "Shared assessment not found.",
+  redirectTo: "sharedassessments",
   transient: false,
-  id: 'assessment'
+  id: 'sharedassessment'
 });
 
 export default function(params) {
   let self = this;
+  self.assessment = null;
 
   fn.copyProps(self, fn, "formatDateTime");
 
@@ -25,11 +30,10 @@ export default function(params) {
   ];
 
   let binder = new Binder(self)
-    .obs("isNew", params.guid === "new")
     .obs("guid")
     .obs("createdOn")
     .obs("modifiedOn")
-    .obs("pageTitle", "New Assessment")
+    .obs("pageTitle")
     .obs("pageRev")
     .bind("title")
     .bind("version")
@@ -42,54 +46,69 @@ export default function(params) {
     .bind("originGuid")
     .bind("validationStatus")
     .bind("normingStatus")
-    .bind("minutesToComplete")
     .bind("tags[]")
     .obs("allTags[]")
-    .obs("addTag");
+    .obs("addTag")
+    .obs("canEdit", false);
   fn.copyProps(self, fn, "formatDateTime");
 
   self.createHistoryLink = ko.computed(function() {
     return "#/sharedassessments/" + self.guidObs() + "/history";
   });
 
-  function load() {
-    return serverService.getSharedAssessment(params.guid)
-      .then(binder.assign("sharedassessment"))
+  function saveAssessment() {
+    return serverService.updateSharedAssessment(self.assessment)
+      .then(binder.assign("assessment"))
       .then(binder.update())
       .then(fn.handleObsUpdate(self.pageTitleObs, "title"))
-      .then(fn.handleObsUpdate(self.pageRevObs, "revision"));
+      .then(fn.handleObsUpdate(self.pageRevObs, "revision"))
+      .then(fn.handleObsUpdate(self.originGuidObs, "originGuid"))
+      .then(fn.handleCopyProps(params, "guid"))
+      .then(fn.returning(self.assessment));
+  }
+  function load() {
+    return serverService.getSharedAssessment(params.guid)
+      .then(binder.assign("assessment"))
+      .then(binder.update())
+      .then(fn.handleObsUpdate(self.pageTitleObs, "title"))
+      .then(fn.handleObsUpdate(self.pageRevObs, "revision"))
+      .then(serverService.getSession)
+      .then((session) => self.canEditObs(
+        root.isSuperadmin() || self.assessment.ownerId === session.orgMembership));
   }
 
   self.doImport = function(vm, event) {
-    alerts.prompt("Do you want to define a new identifier for this assessment "+
-      "when it is imported into your app?", function(newIdentifier) {
-      utils.startHandler(vm, event);
-      serverService.importSharedAssessment(params.guid, newIdentifier)
+    alerts.prompt(IMPORT_MSG, function(newIdentifier) {
+        utils.startHandler(vm, event);
+        serverService.importSharedAssessment(params.guid, newIdentifier)
         .then(load)
-        .then(utils.successHandler(vm, event, "Assessment has been published as a shared assessment."))
+        .then(utils.successHandler(vm, event, "Assessment has been imported into the app."))
         .catch(failureHandler);
-    }, self.identifierObs());
+      }, self.identifierObs());
   }
 
-  self.orgMap = null;
+  self.save = function(vm, event) {
+    self.assessment = binder.persist(self.assessment);
 
-  function setOrgOptions(orgMap) {
-    self.orgMap = orgMap;
-    let opts = Object.keys(orgMap).map((key) => ({label: orgMap[key], value: key}));
-    self.orgOptionsObs.pushAll(opts);
-  }
+    utils.startHandler(vm, event);
+    saveAssessment()
+      .then(utils.successHandler(vm, event, "Shared assessment has been saved."))
+      .catch(failureHandler);
+  };
 
   self.formatOrgId = function(orgId) {
-    return (orgId && self.orgMap[orgId]) ? self.orgMap[orgId] : orgId;
+    const orgs = self.orgOptionsObs();
+    if (orgId && orgs.some(opt => opt.value === orgId)) {
+      return orgs.filter(opt => opt.value === orgId)[0].label;
+    }
+    return orgId;
   }
-
   self.addTag = function() {
     let tag = self.addTagObs();
     if (tag.trim()) {
       self.tagsObs.push(tag.trim());
     }
   }
-
   function addTags(response) {
     let array = [];
     Object.keys(response).forEach(ns => {
@@ -103,7 +122,7 @@ export default function(params) {
 
   serverService.getTags()
     .then(addTags)
-    .then(() => optionsService.getOrganizationNames())
-    .then(setOrgOptions)
+    .then(optionsService.getOrganizationOptions)
+    .then((opts) => self.orgOptionsObs.pushAll(opts))
     .then(load);
 };

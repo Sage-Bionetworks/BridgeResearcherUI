@@ -117,6 +117,10 @@
                 <a href="#/organizations" class="item" data-ref="organizations" data-bind="visible: isOrgAdmin()">
                   Organizations
                 </a>
+                <!--  data-bind="visible: isStudyCoordinator() || isDeveloper()" -->
+                <a href="#/schedules" class="item" data-ref="schedules" data-bind="visible: isSuperadmin()">
+                  Schedules
+                </a>
                 <a href="#/reports" class="item" data-ref="reports">
                   Study Reports
                 </a>
@@ -190,7 +194,7 @@
           <span style="color: silver" data-bind="html: '[' + emailObs() + ' on ' + 
             environmentObs() + ']', visible: environmentObs() !== 'production'">
           </span>
-          &copy; 2015-2019 Sage Bionetworks | 
+          &copy; 2015-2021 Sage Bionetworks | 
           <a target="_blank" href="/privacy.html">Privacy Policy</a> | 
           <a target="_blank" href="/terms-of-use.html">Terms of Use</a> 
         </p>

@@ -824,6 +824,28 @@ export class ServerService {
   importAssessmentResource(id) {
     return this.post(`${config.sharedassessments}/identifier:${id}/resources/import`);
   }
+
+  getSchedules(query, includeDeleted) {
+    let queryString = fn.queryString({ 
+      offsetBy: query.offsetBy, 
+      pageSize: query.pageSize, 
+      includeDeleted: includeDeleted === true
+    });
+    return this.gethttp(config.schedules + queryString);
+  }
+  createSchedule(schedule) {
+    return this.post(config.schedules, schedule);
+  }
+  getSchedule(guid) {
+    return this.gethttp(`${config.schedules}/${guid}`);
+  }
+  updateSchedule(schedule) {
+    return this.post(`${config.schedules}/${schedule.guid}`, schedule);
+  }
+  deleteSchedule(guid, physical) {
+    let queryString = fn.queryString({ physical: physical === true });
+    return this.del(`${config.schedules}/${guid}${queryString}`);
+  }
   
   adminSignIn(appName, environment, signIn) {
     return postInt(`${config.host[environment]}${config.adminAuth}/signIn`, signIn).then(

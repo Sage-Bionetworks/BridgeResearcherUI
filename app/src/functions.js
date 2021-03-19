@@ -291,6 +291,10 @@ function copyProps(target, source, ...fieldNames) {
     fieldUpdater.call(target, source, fieldName);
   });
 }
+function moveArrayItem(array, from, to) {
+  array.splice(to, 0, array.splice(from, 1)[0]);
+  return array;
+}
 function returning(object) {
   return function() {
     return object;
@@ -315,7 +319,6 @@ function lowerCaseStringSorter(a, b) {
 }
 function log(label) {
   return function(response) {
-    console.info(label, response);
     return response;
   };
 }
@@ -608,6 +611,7 @@ export default {
   log,
   lowerCaseStringSorter,
   makeFieldSorter,
+  moveArrayItem,
   persistLanguages,
   persistRoles,
   queryString,

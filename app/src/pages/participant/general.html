@@ -199,17 +199,6 @@
       </div>
     </div>
 
-    <div class="two fields" data-bind="visible: !isNewObs()">
-      <div class="field">
-        <label>Created On</label>
-        <div class="input-field-padding" data-bind="text: createdOnObs"></div>
-      </div>
-      <div class="field">
-        <label>Modified On</label>
-        <div class="input-field-padding" data-bind="text: modifiedOnObs"></div>
-      </div>
-    </div>
-    
     <h4 class="ui dividing header">Attributes</h4>
     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; grid-column-gap: 1rem">
       <!-- ko foreach: attributesObs -->
@@ -219,6 +208,7 @@
       </div>
       <!-- /ko -->
     </div>
-  </div>
-</form>
+    <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
+    </timestamps>
+  </form>
 </div>

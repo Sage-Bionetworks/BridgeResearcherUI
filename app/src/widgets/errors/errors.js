@@ -61,7 +61,9 @@ export default class Errors {
     this.errorsObs.removeAll();
     toastr.clear();
     this.errorQueue.forEach(field => field.classList.remove("error"));
-    this.errorLabelQueue.forEach(el => el.parentNode.removeChild(el));
+    this.errorLabelQueue.forEach(el => {
+      if (el.parentNode) el.parentNode.removeChild(el);
+    });
     this.errorQueue = [];
     this.errorLabelQueue = [];
   }
@@ -86,6 +88,7 @@ export default class Errors {
       if (fieldEl) {
         this.renderFieldError(fieldEl, string);
       } else {
+        console.warn("Could not find error key ", id);
         globalErrors.push(string);
       }
     }
@@ -93,6 +96,8 @@ export default class Errors {
       globalErrors.push("Please see the errors in red below");
     }
     this.errorsObs.pushAll(globalErrors);
+
+    $('.scrollbox').scrollTo(0, 0);
   }
   renderFieldError(fieldEl, string) { 
     let containerDiv = fieldEl.querySelector(".error.box");

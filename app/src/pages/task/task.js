@@ -260,12 +260,12 @@ export default class Task {
   }
   static assessmentListToTask(assessmentList, context) {
     return assessmentList.map(function(assessment) {
-      return { guid: assessment.guidObs(), id: assessment.id };
+      return { guid: assessment.guidObs(), identifier: assessment.identifier };
     });
   }
   static assessmentToView(assessmentRef) {
     let view = {
-      id: assessmentRef.id,
+      identifier: assessmentRef.identifier,
       guid: assessmentRef.guid,
       titleObs: ko.observable(),
       guidObs: ko.observable(),
@@ -287,6 +287,6 @@ export default class Task {
     return assessmentRef;
   }
   static assessmentToOption(assessment) {
-    return { label: `v.   ${assessment.revision}`, value: assessment.guid };
+    return { label: `v. ${assessment.revision}`, value: assessment.guid };
   }
 };

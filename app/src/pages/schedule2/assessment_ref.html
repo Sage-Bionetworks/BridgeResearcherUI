@@ -1,0 +1,28 @@
+<div class="asmt-list-item">
+  <div>
+    <i class="ui green globe icon"
+      data-content="This is an imported shared component"
+      data-bind="visible: $data.appIdObs() === 'shared', semantic: 'popup'"></i>
+  </div>
+  <div>
+    <span style="font-weight: bold" data-bind="text: titleObs"></span>
+  </div>
+  <div data-bind="text: 'id: ' + identifierObs()"></div>
+  <div data-bind="text: minutesToCompleteObs() + 'min'"></div>
+  <div class="asmt-list-item-controls">
+    <i class="blue ui language icon" 
+      style="margin-right: .4rem!important"
+      data-bind="visible: labelsObs().length === 0, click: addLabel"></i>
+    <i class="arrow alternate circle up outline icon"
+      data-bind="click: moveAssessmentUp, style: {opacity: firstOpacityObs($index())}"></i>
+    <i class="arrow alternate circle down outline icon"
+      data-bind="click: moveAssessmentDown, style: {opacity: lastOpacityObs($index())}"></i>
+    <i class="red times circle outline icon" data-bind="click: remove"></i>
+  </div>
+  <div class="asmt-labels">
+    <!-- ko foreach: labelsObs -->
+      <localized-label message params="labelsObs: $parent.labelsObs, label: $data, prefix: $parent.prefix + '_'">
+      </localized-label>
+    <!-- /ko -->
+  </div>
+</div>

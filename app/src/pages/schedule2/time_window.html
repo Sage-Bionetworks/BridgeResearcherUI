@@ -1,0 +1,24 @@
+<div class="list-item">
+  <div>Starts at</div>
+  <div>
+    <div class="field" data-bind="attr: {id: generateId('startTime')}">
+      <select class="ui dropdown" data-bind="options: timeOptions,
+        optionsCaption: 'Start time...', optionsText: 'label', 
+        optionsValue: 'value', value: startTimeObs"></select>
+    </div>
+  </div>
+  <div>Expires after</div>
+  <div data-bind="attr: {id: generateId('expiration')}">
+    <ui-duration params="fieldObs: expirationObs, fields: 'minutes hours days weeks'"></ui-duration>
+  </div>
+  <div><ui-checkbox params="checkedObs: persistentObs">Persistent?</ui-checkbox></div>
+  <div class="list-item-controls">
+    <i class="arrow alternate circle up outline icon"
+      data-bind="click: moveWindowUp, style: {opacity: firstOpacityObs($index())}"></i>
+    <i class="arrow alternate circle down outline icon"
+      data-bind="click: moveWindowDown, style: {opacity: lastOpacityObs($index())}"></i>
+    <i class="blue plus square outline icon" data-content="Add below" 
+      data-bind="click: addBelow, semantic: 'popup'"></i>
+    <i class="red times circle outline icon" data-bind="click: removeWindow"></i>
+  </div>
+</div>

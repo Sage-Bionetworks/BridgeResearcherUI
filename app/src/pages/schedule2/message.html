@@ -1,0 +1,22 @@
+<div style="display:flex; margin-top: 1rem; font-size: 75%">
+  <div style="border-right: 1px solid #aaa; width: 6rem">
+    <div class="field" data-bind="attr: {id: generateId('lang')}">
+      <label>Language</label>
+      <input type="text" data-bind="textInput: langObs" style="width: 4rem">
+    </div>
+  </div>
+  <div style="padding: 0 2rem; flex: 1">
+    <div class="field" data-bind="attr: {id: generateId('subject')}">
+      <label>Subject line (40 character limit)</label>
+      <input type="text" data-bind="textInput: subjectObs">
+    </div>
+    <div class="field" data-bind="attr: {id: generateId('message')}">
+      <label>Body text (60 character limit)</label>
+      <input type="text" data-bind="textInput: messageObs">
+    </div>
+  </div>
+  <div style="padding: 1rem 0 0 1rem">
+    <i  data-bind="click: removeMessage" 
+      class="red large times circle outline link icon"></i>
+  </div>
+</div>

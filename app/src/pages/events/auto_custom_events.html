@@ -22,7 +22,8 @@
           <div>
             <label>Schedule for</label>
             <div style="display:flex">
-              <ui-duration style="margin-right: 1.5rem" params="fieldObs: periodObs, noHours: true"></ui-duration>
+              <ui-duration style="margin-right: 1.5rem" params="fieldObs: periodObs, 
+                fields: 'days weeks months years'"></ui-duration>
               <select style="width: 8rem; margin-right: .5rem" class="ui dropdown"
                 data-bind="options: $parent.allDeltasObs, optionsText: 'label', 
                   optionsValue: 'value', value: deltaObs">

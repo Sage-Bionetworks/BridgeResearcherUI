@@ -20,30 +20,14 @@
             <i class="add square icon"></i> Add Field
           </button>
         </p>
-
-        <p></p>
       </div>
 
-      <div
-        class="ui form schema sfieldZone"
-        data-bind="foreach: fieldDefinitionsObs, 
-            dragula: { 
-                dragHandleSelector: '.draggable', 
-                indexObs: indexObs, 
-                listObs: fieldDefinitionsObs 
-            }"
-      >
-        <div
-          class="field_definitions"
-          data-bind="component: {
-                    name: 'field_definition', 
-                    params: {
-                        field: $data, 
-                        itemsObs: $parent.fieldDefinitionsObs, 
-                        indexObs: $index 
-                    }
-                }"
-        ></div>
+      <div class="ui form schema sfieldZone" data-bind="foreach: fieldDefinitionsObs, 
+            dragula: { dragHandleSelector: '.draggable', indexObs: indexObs, listObs: fieldDefinitionsObs }">
+        <div class="field_definitions" data-bind="component: {
+          name: 'field_definition', params: { field: $data, itemsObs: $parent.fieldDefinitionsObs, 
+                indexObs: $index }
+        }"></div>
       </div>
     </div>
     <div class="five wide column">

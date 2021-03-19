@@ -21,8 +21,6 @@
         <label>Name</label>
         <input type="text" data-bind="textInput: nameObs, hasFocus: true, 
           visible: isNewObs() || canEdit()" />
-        <div class="input-field-padding" data-bind="text: identifierObs, 
-          visible: !isNewObs() || !canEdit()"></div>
       </div>
       <div class="field required" id="identifier">
         <label>Identifier</label>
@@ -35,21 +33,10 @@
         <label>Description</label>
         <input type="text" data-bind="textInput: descriptionObs,
           visible: isNewObs() || canEdit()">
-        <div class="input-field-padding" data-bind="text: identifierObs, 
-          visible: !isNewObs() || !canEdit()"></div>
       </div>
     </div>
-    <div class="two fields" data-bind="visible: !isNewObs()">
-      <div class="field" id="createdOn">
-        <label>Created On</label>
-        <div class="input-field-padding" data-bind="text: formatDateTime(createdOnObs())"></div>
-      </div>
-      <div class="field" id="modifiedOn">
-        <label>Modified On</label>
-        <div class="input-field-padding" data-bind="text: formatDateTime(modifiedOnObs())"></div>
-      </div>
-    </div>
-     
+    <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
+    </timestamps>
   </div>
 </form>
 </div>
