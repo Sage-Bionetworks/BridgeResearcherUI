@@ -82,6 +82,7 @@ let RootViewModel = function() {
   self.isOrgAdmin = roleFunc(self.rolesObs, "org_admin", "admin");
   self.isSuperadmin = roleFunc(self.rolesObs, "superadmin");
   self.isStudyCoordinator = roleFunc(self.rolesObs, "study_coordinator", "admin");
+  self.isStudyDesigner = roleFunc(self.rolesObs, "study_designer", "admin");
   // this will change
   self.isDevRole = roleFunc(self.rolesObs, "developer", "study_coordinator", "admin");
   self.isResearcherRole = roleFunc(self.rolesObs, "researcher", "study_coordinator", "admin");

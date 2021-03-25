@@ -20,7 +20,7 @@ export default function(params) {
     .bind('appId', assessment.appId)
     .bind('title', assessment.title)
     .bind('identifier', assessment.identifier)
-    .bind('minutesToComplete', assessment.minutesToComplete)
+    .bind('minutesToComplete', assessment.minutesToComplete || 0)
     .bind('labels[]', assessment.labels, null, Binder.persistArrayWithBinder);
   bindColor(assessment, "background");
   bindColor(assessment, "foreground");

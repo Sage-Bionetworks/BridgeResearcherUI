@@ -18,7 +18,8 @@ const SESSION_ENDED_EVENT_KEY = "sessionEnded";
 const SESSION_KEY = "session";
 const SESSION_STARTED_EVENT_KEY = "sessionStarted";
 const ERROR = "Session listener not a function";
-
+const ADMIN_ROLES = Object.freeze(["developer", "researcher", "admin", "org_admin", 
+  "study_coordinator", "study_designer", "superadmin"]);
 // We want this to be shared by all server service instances.
 const cache = new Cache();
 const listeners = new EventEmitter();
@@ -157,7 +158,7 @@ export class ServerService {
   }
   isSupportedUser() {
     return this.roles.some(function(role) {
-      return ["developer", "researcher", "admin", "org_admin", "study_coordinator", "superadmin"].indexOf(role) > -1;
+      return ADMIN_ROLES.indexOf(role) > -1;
     });
   }
   cacheParticipantName(response) {
@@ -182,7 +183,7 @@ export class ServerService {
       }
       // Easier than testing for superadmin everywhere.
       if (sess.roles.includes('superadmin')) {
-        sess.roles = ['developer', 'researcher', 'admin', 'org_admin', 'study_coordinator', 'superadmin'];
+        sess.roles = ADMIN_ROLES;
       }
       session = sess;
       storeService.set(SESSION_KEY, session);
