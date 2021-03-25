@@ -218,9 +218,10 @@ import setEditor from "./pages/set_editors/set_editor"; // however, this is a wi
 
 import taskIdentifiers from "./pages/set_editors/task_identifiers.html";
 
-import eventKeysHtml from "./pages/events/event_keys.html";
-import customEvents from "./pages/events/auto_custom_events";
-import customEventsHtml from "./pages/events/auto_custom_events.html";
+import autoCustomEvents from "./pages/events/auto_custom_events";
+import autoCustomEventsHtml from "./pages/events/auto_custom_events.html";
+import customEvents from "./pages/events/custom_events";
+import customEventsHtml from "./pages/events/custom_events.html";
 import eventsTabsetHtml from "./pages/events/tabset.html";
 
 import topics from "./pages/topics/topics";
@@ -564,8 +565,8 @@ reg("participant_uploads", {viewModel: partUploads, template: partUploadsHtml});
 reg("participant_upload", {viewModel: partUpload, template: partUploadHtml});
 reg("participant_request_info", {viewModel: partRequestInfo, template: partRequestInfoHtml});
 reg("upload-details", {viewModel: uploadDetails, template: uploadDetailsHtml});
-reg("event_keys", {template: eventKeysHtml, viewModel: setEditor("activityEventKeys")});
-reg("auto_custom_events", {viewModel: customEvents, template: customEventsHtml});
+reg("custom_events", {viewModel: customEvents, template: customEventsHtml});
+reg("auto_custom_events", {viewModel: autoCustomEvents, template: autoCustomEventsHtml});
 reg("topics", {viewModel: topics, template: topicsHtml});
 reg("topic", {viewModel: topic, template: topicHtml});
 reg("files", {viewModel: files, template: filesHtml});

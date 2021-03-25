@@ -1,5 +1,4 @@
 import BaseAccount from "./base_account";
-import Binder from "../binder";
 import BridgeError from "../bridge_error";
 import jsonFormatter from "../json_formatter";
 import utils from "../utils";
