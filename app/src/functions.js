@@ -163,6 +163,8 @@ function formatRoles(roles) {
       return "Administrator";
     } else if (role === "study_coordinator") {
       return "Study Coordinator";
+    } else if (role === "study_designer") {
+      return "Study Designer";
     } else if (role === "org_admin") {
       return "Organization Administrator";
     }
@@ -175,6 +177,8 @@ function persistRoles(roles) {
       return "admin";
     } else if (role === "Study Coordinator") {
       return "study_coordinator";
+    } else if (role === "Study Designer") {
+      return "study_designer";
     } else if (role === "Organization Administrator") {
       return "org_admin";
     }

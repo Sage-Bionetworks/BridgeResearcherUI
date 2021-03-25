@@ -14,11 +14,12 @@ export default {
     'sms_verify_phone':'Verify phone number'
   },
   canBeEditedBy: {
-    'superadmin': ["Administrator", "Developer", "Organization Administrator", "Researcher", "Study Coordinator", "Worker"],
-    'admin': ['Developer', "Organization Administrator", 'Researcher', 'Study Coordinator'],
-    'org_admin': ['Study Coordinator', "Organization Administrator"],
+    'superadmin': ['Administrator', 'Developer', 'Organization Administrator', 'Researcher', 'Study Coordinator', 'Study Designer', 'Worker'],
+    'admin': ['Developer', 'Organization Administrator', 'Researcher', 'Study Coordinator', 'Study Designer'],
+    'org_admin': ['Study Coordinator', 'Study Designer', 'Organization Administrator'],
     'researcher': ['Developer'],
     'study_coordinator': [],
+    'study_designer': [],
     'developer': [],
     'worker': []
   },
