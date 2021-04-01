@@ -16,6 +16,7 @@ export default function(params) {
   // fix this before it drives you nuts...
   params.assessmentGuid = params.id;
   delete params.id;
+  self.assessment = null;
   
   fn.copyProps(self, fn, "formatDateTime");
 
@@ -28,11 +29,14 @@ export default function(params) {
     .obs("subPageTitle", "New Assessment Resource")
     .obs("pageRev")
     .obs("originGuid")
-
+    .obs("canEdit")
+    .obs("createdOn")
+    .obs("modifiedOn")
+    .obs('categoriesOptions[]', optionsService.getCategoryOptions())
     .obs("guid")// resource GUID
+
     .bind("title")
     .bind("category")
-    .obs('categoriesOptions[]', optionsService.getCategoryOptions())
     .bind("url")
     .bind("format")
     .bind("date")
@@ -43,11 +47,30 @@ export default function(params) {
     .bind("language")
     .bind("minRevision")
     .bind("maxRevision")
-    .bind("createdAtRevision")
-    .bind("createdOn")
-    .bind("modifiedOn");
+    .bind("createdAtRevision");
+
+  self.save = function(vm, event) {
+    self.resource = binder.persist(self.resource);
+
+    utils.startHandler(vm, event);
+    serverService.updateSharedAssessmentResource(self.assessment.identifier, self.resource)
+      .then(fn.handleStaticObsUpdate(self.isNewObs, false))
+      .then(binder.assign("resource"))
+      .then(binder.update())
+      .then(fn.handleObsUpdate(self.subPageTitleObs, "title"))
+      .then(utils.successHandler(vm, event, "Assessment resource has been saved."))
+      .catch(failureHandler);
+  }
+
+  self.doImport = function(vm, event) {
+    utils.startHandler(vm, event);
+    serverService.importAssessmentResource(self.assessment.identifier, self.resource.guid)
+      .then(utils.successHandler(vm, event, "Assessment resource has been imported."))
+      .catch(failureHandler);
+  };
 
   serverService.getSharedAssessment(params.assessmentGuid)
+    .then(binder.assign('assessment'))
     .then(fn.handleObsUpdate(self.pageRevObs, "revision"))
     .then(fn.handleObsUpdate(self.pageTitleObs, "title"))
     .then(fn.handleObsUpdate(self.originGuidObs, "originGuid"))
@@ -55,5 +78,7 @@ export default function(params) {
     .then((assessment) => serverService.getSharedAssessmentResource(assessment.identifier, params.guid))
     .then(binder.update())
     .then(binder.assign('resource'))
-    .then(fn.handleObsUpdate(self.subPageTitleObs, "title"));
+    .then(fn.handleObsUpdate(self.subPageTitleObs, "title"))
+    .then(serverService.getSession)
+    .then((session) => self.canEditObs(fn.canEditAssessment(self.assessment, session)));
 };

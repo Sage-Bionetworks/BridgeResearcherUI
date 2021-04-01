@@ -18,6 +18,16 @@ const IS_BROWSER = typeof window !== "undefined" && typeof window.document !== "
 const BYTE_UNITS = [' KB', ' MB', ' GB', ' TB'];
 const FORMAT = new Intl.NumberFormat();
 
+function canEditAssessment(assessment, session) {
+  if (assessment.ownerId.indexOf(':') > -1) {
+    var [appId, orgId] = assessment.ownerId.split(':');
+  } else {
+    var appId = session.appId;
+    var orgId = assessment.ownerId;
+  }
+  return session.roles.indexOf('superadmin') > -1 || 
+    (session.roles.indexOf('developer') > -1 && session.appId === appId && session.orgMembership === orgId);
+}
 function flagForRegionCode(regionCode) {
   return FLAGS[regionCode];
 }
@@ -575,6 +585,7 @@ function formatCount(count = '') {
 }
 
 export default {
+  canEditAssessment,
   copyProps,
   deleteUnusedProperties,
   flagForRegionCode,

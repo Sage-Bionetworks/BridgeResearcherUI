@@ -46,24 +46,11 @@ export default function(params) {
   self.formatOrg = function(orgId) {
     return self.orgNames[orgId] ? self.orgNames[orgId] : orgId;
   }
-  
-  function responseLookups(response) {
-    response.items.forEach(lookupSharedTitle);
-    return response;
-  }
-  function lookupSharedTitle(item) {
-    item.originGuidObs = ko.observable(item.originGuid);
-    if (item.originGuid) {
-      serverService.getSharedAssessment(item.originGuid)
-            .then(shared => item.originGuidObs(
-              `<a target="_blank" href="#/sharedassessments/${shared.guid}">${shared.title}</a>`));
-    }
-  }
 
   function load(query) {
     self.query = query;
     return serverService.getAssessmentRevisions(params.guid, query, self.showDeletedObs())
-      .then(responseLookups)
+      .then(utils.resolveDerivedFrom)
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .then(self.postLoadPagerFunc)
       .catch(utils.failureHandler({ id: 'assessment_history' }));
@@ -72,8 +59,7 @@ export default function(params) {
   serverService.getAssessment(params.guid)
     .then(assessment => self.assessment = assessment)
     .then(serverService.getSession)
-    .then((session) => self.canEditObs(
-        root.isAdmin() || self.assessment.ownerId === session.orgMembership))
+    .then((session) => self.canEditObs(fn.canEditAssessment(self.assessment, session)))
     .then(optionsService.getOrganizationNames)
     .then((map) => self.orgNames = map)
     .then(() => serverService.getAssessment(params.guid))

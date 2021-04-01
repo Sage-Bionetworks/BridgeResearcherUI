@@ -349,6 +349,8 @@ import label from "./pages/schedule2/label";
 import labelHtml from "./pages/schedule2/label.html";
 import selectAssessmentRefs from "./dialogs/select_assessment_refs/select_assessment_refs";
 import selectAssessmentRefsHtml from "./dialogs/select_assessment_refs/select_assessment_refs.html";
+import previewTimeline from "./dialogs/preview_timeline/preview_timeline";
+import previewTimelineHtml from "./dialogs/preview_timeline/preview_timeline.html";
 
 import schemaTabset from "./pages/schema/tabset";
 import schemaTabsetHtml from "./pages/schema/tabset.html";
@@ -624,6 +626,7 @@ reg("time-window", {viewModel: timeWindow, template: timeWindowHtml});
 reg("assessment-ref", {viewModel: assessmentRef, template: assessmentRefHtml});
 reg("message", {viewModel: messageRef, template: messageRefHtml});
 reg("localized-label", {viewModel: label, template: labelHtml});
+reg("preview_timeline", {viewModel: previewTimeline, template: previewTimelineHtml, synchronous: true});
 
 reg("BooleanConstraints", {viewModel: boolConst, template: boolConstHtml});
 reg("DateConstraints", {viewModel: dateConst, template:  dateConstHtml});

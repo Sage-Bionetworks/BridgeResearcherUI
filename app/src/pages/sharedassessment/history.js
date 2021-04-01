@@ -2,7 +2,6 @@ import Binder from "../../binder";
 import fn from "../../functions";
 import ko from "knockout";
 import optionsService from "../../services/options_service";
-import root from "../../root";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
@@ -54,8 +53,8 @@ export default function(params) {
   optionsService.getOrganizationNames()
     .then(map => self.orgNames = map)
     .then(() => serverService.getSharedAssessment(params.guid))
-    .then(fn.handleObsUpdate(self.pageRevObs, "pageRev"))
-    .then(fn.handleObsUpdate(self.pageTitleObs, "pageTitle"))
+    .then(fn.handleObsUpdate(self.pageRevObs, "revision"))
+    .then(fn.handleObsUpdate(self.pageTitleObs, "title"))
     .then(fn.handleObsUpdate(self.originGuidObs, "originGuid"))
     .then(() => ko.postbox.subscribe('asmh-refresh', self.load))
     .then(self.reload);

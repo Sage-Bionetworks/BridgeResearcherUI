@@ -23,7 +23,9 @@ export default function(params) {
     .obs("originGuid")
     .obs("pageTitle", "New Assessment")
     .obs("pageRev")
-    .obs("canEdit", false)
+    .obs("canEdit")
+    .obs('createdOn')
+    .obs('modifiedOn')
     .bind("config", null, Binder.fromJson, Binder.toJson)
 
   self.save = function(vm, event) {
@@ -67,7 +69,5 @@ export default function(params) {
     .then(binder.assign("config"))
     .then(binder.update())
     .then(serverService.getSession)
-    .then((session) => self.canEditObs(
-      root.isSuperadmin() || self.assessment.ownerId === session.orgMembership));
-
+    .then((session) => self.canEditObs(fn.canEditAssessment(self.assessment, session)));
 };

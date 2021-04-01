@@ -80,8 +80,7 @@ export default function(params) {
     .then(fn.handleObsUpdate(self.pageTitleObs, "title"))
     .then(fn.handleObsUpdate(self.idObs, "identifier"))
     .then(serverService.getSession)
-    .then((session) => self.canEditObs(
-      root.isSuperadmin() || self.assessment.ownerId === session.orgMembership))
+    .then((session) => self.canEditObs(fn.canEditAssessment(self.assessment, session)))
     .then(() => {
       ko.postbox.subscribe('asmr-refresh', self.load);
       self.forRevisionObs.subscribe(self.reload);

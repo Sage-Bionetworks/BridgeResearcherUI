@@ -63,6 +63,5 @@ export default function(params) {
     .then(binder.assign("assessment"))
     .then(binder.update())
     .then(serverService.getSession)
-    .then((session) => self.canEditObs(
-      root.isSuperadmin() || self.assessment.ownerId === session.orgMembership));
+    .then((session) => self.canEditObs(fn.canEditAssessment(self.assessment, session)));
 };
