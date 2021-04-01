@@ -110,6 +110,5 @@ export default function(params) {
     .then(binder.assign('resource'))
     .then(fn.handleObsUpdate(self.subPageTitleObs, "title"))
     .then(serverService.getSession)
-    .then((session) => self.canEditObs(
-      root.isSuperadmin() || self.assessment.ownerId === session.orgMembership));
+    .then((session) => self.canEditObs(fn.canEditAssessment(self.assessment, session)));
 };

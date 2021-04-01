@@ -60,8 +60,7 @@ export default class ReportsBaseAccount extends BaseAccount {
   }
   isVisible(item) {
     item.studyIds = item.studyIds || [];
-    return item.public || 
-      this.studyIds.length === 0 || 
-      this.studyIds.some((el) => item.studyIds.includes(el));
+    return root.isAdmin() || root.isSuperadmin() ||  item.public || 
+      this.studyIds.length === 0 || this.studyIds.some((el) => item.studyIds.includes(el));
   }
 }

@@ -115,7 +115,8 @@
                   data-bind="visible: isStudyDesigner() || isDeveloper()">
                   Schedules
                 </a>
-                <a href="#/assessments" class="item" data-ref="assessments" data-bind="visible: isStudyDesigner() || isDeveloper()">
+                <a href="#/assessments" class="item" data-ref="assessments" 
+                  data-bind="visible: appIdObs() !== 'shared' && (isStudyDesigner() || isDeveloper())">
                   Assessments
                 </a>
                 <a href="#/sharedassessments" class="item" data-ref="sharedassessments">

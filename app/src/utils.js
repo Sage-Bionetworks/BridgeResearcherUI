@@ -5,6 +5,7 @@ import fn from "./functions";
 import ko from "knockout";
 import root from "./root";
 import toastr from "toastr";
+import serverService from "./services/server_service";
 import { ERROR_BUS } from './widgets/errors/errors';
 
 const FAILURE_HANDLER = failureHandler({ transient: true });
@@ -13,6 +14,7 @@ const TIMEOUT_ERROR = "The request timed out. Please verify you have an internet
 const ROLE_ERROR = "You do not appear to be a developer, researcher, or admin.";
 const PERM_ERROR = "You do not have permissions to perform that action.";
 const NETWORK_ERROR = "A network error occurred. Please verify you have an internet connection, and try again.";
+
 const statusHandlers = {
   0: localError,
   400: badResponse,
@@ -27,6 +29,17 @@ const statusHandlers = {
 let pendingControl = null;
 toastr.options = config.toastr;
 
+function resolveDerivedFrom(response) {
+  response.items.forEach((item) => {
+    item.originGuidObs = ko.observable(item.originGuid);
+    if (item.originGuid) {
+      serverService.getSharedAssessment(item.originGuid)
+        .then(shared => item.originGuidObs(
+          `<a target="_blank" href="#/sharedassessments/${shared.guid}">${shared.title}</a> (rev.${shared.revision})`));
+    }
+  });
+  return response;
+}
 function notAllowed(response, params) {
   let payload = response.responseJSON || {};
   let message = payload.message || PERM_ERROR;
@@ -308,5 +321,6 @@ export default {
   findAppName,
   copyString,
   failureHandler,
-  synapseAliasToUserId
+  synapseAliasToUserId,
+  resolveDerivedFrom
 };

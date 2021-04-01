@@ -1,6 +1,7 @@
 import { getEventIds } from "./schedule2utils";
 import Binder from "../../binder";
 import fn from "../../functions";
+import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
@@ -25,6 +26,10 @@ export default function(params) {
   self.generateId = function(fieldName) {
     return fieldName;
   }
+  self.preview = function(vm, event) {
+    utils.clearErrors();
+    root.openDialog("preview_timeline", { scheduleGuid: self.schedule.guid });
+  };
   self.save = function(vm, event) {
     self.schedule = binder.persist(self.schedule);
 

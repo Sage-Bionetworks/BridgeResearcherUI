@@ -822,8 +822,8 @@ export class ServerService {
     let queryString = fn.queryString({ physical: physical === true });
     return this.del(`${config.sharedassessments}/identifier:${id}/resources/${resourceGuid}${queryString}`);
   }
-  importAssessmentResource(id) {
-    return this.post(`${config.sharedassessments}/identifier:${id}/resources/import`);
+  importAssessmentResource(id, guid) {
+    return this.post(`${config.sharedassessments}/identifier:${id}/resources/import`, [guid]);
   }
 
   getSchedules(query, includeDeleted) {
@@ -839,6 +839,9 @@ export class ServerService {
   }
   getSchedule(guid) {
     return this.gethttp(`${config.schedules}/${guid}`);
+  }
+  getScheduleTimeline(guid) {
+    return this.gethttp(`${config.schedules}/${guid}/timeline`);
   }
   updateSchedule(schedule) {
     return this.post(`${config.schedules}/${schedule.guid}`, schedule);

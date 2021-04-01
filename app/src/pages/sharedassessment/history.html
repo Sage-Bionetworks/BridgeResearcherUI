@@ -31,14 +31,13 @@
     <thead>
       <tr>
         <th nowrap>Title</th>
-        <th>Derived From</th>
         <th>Owner</th>
         <th>Tags</th>
       </tr>
     </thead>
     <tbody class="no_records" data-bind="if: itemsObs().length === 0">
       <tr>
-        <td colspan="4" data-bind="html: recordsMessageObs"></td>
+        <td colspan="3" data-bind="html: recordsMessageObs"></td>
       </tr>
     </tbody>
     <tbody data-bind="foreach: itemsObs">
@@ -46,7 +45,6 @@
         <td nowrap>
           <a data-bind="text: $parent.formatTitle($data), href: '#/sharedassessments/' + $data.guid"></a>
         </td>
-        <td data-bind="text: $data.originGuid"></td>
         <td data-bind="text: $parent.formatOrg($data.ownerId)"></td>
         <td data-bind="text: $data.tags.join(', ')"></td>
       </tr>

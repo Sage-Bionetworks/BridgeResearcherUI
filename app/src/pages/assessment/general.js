@@ -103,8 +103,7 @@ export default function(params) {
         .then(fn.handleObsUpdate(self.pageTitleObs, "title"))
         .then(fn.handleObsUpdate(self.pageRevObs, "revision"))
         .then(serverService.getSession)
-        .then((session) => self.canEditObs(
-          root.isSuperadmin() || self.assessment.ownerId === session.orgMembership));
+        .then((session) => self.canEditObs(fn.canEditAssessment(self.assessment, session)));
     }
   }
 
