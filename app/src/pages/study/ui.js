@@ -24,8 +24,21 @@ export default function(params) {
     .obs("createdOn")
     .obs("modifiedOn")
     .bind("version")
-    .bind("name")
-    .bind("identifier", params.studyId === "new" ? null : params.studyId);
+    .bind("contacts[]", [], null, Binder.persistArrayWithBinder)
+    .bind("identifier", params.studyId === "new" ? null : params.studyId)
+    .bind("studyLogoUrl")
+    .bind("background", null, 
+      Binder.fromObjectField("colorScheme", "background"),
+      Binder.toObjectField("colorScheme", "background"))
+    .bind("foreground", null, 
+      Binder.fromObjectField("colorScheme", "foreground"),
+      Binder.toObjectField("colorScheme", "foreground"))
+    .bind("activated", null, 
+      Binder.fromObjectField("colorScheme", "activated"),
+      Binder.toObjectField("colorScheme", "activated"))
+    .bind("inactivated", null, 
+      Binder.fromObjectField("colorScheme", "inactivated"),
+      Binder.toObjectField("colorScheme", "inactivated"));
 
   function load() {
     return params.studyId === "new" ? 
@@ -55,6 +68,10 @@ export default function(params) {
     self.modifiedOnObs(response.modifiedOn);
     return response;
   }
+
+  self.addContact = function() {
+    self.contactsObs.push({address: {}});
+  };
 
   self.save = function(vm, event) {
     self.study = binder.persist(self.study);

@@ -284,6 +284,8 @@ import studiesHtml from "./pages/studies/studies.html";
 
 import studyEditor from "./pages/study/editor";
 import studyEditorHtml from "./pages/study/editor.html";
+import studyUi from "./pages/study/ui";
+import studyUiHtml from "./pages/study/ui.html";
 import studySponsors from "./pages/study/sponsors";
 import studySponsorsHtml from "./pages/study/sponsors.html";
 import studyEnrollments from "./pages/study/enrollments";
@@ -294,6 +296,8 @@ import studyClientData from "./pages/study/client_data";
 import studyClientDataHtml from "./pages/study/client_data.html";
 import studyTabset from "./pages/study/tabset";
 import studyTabsetHtml from "./pages/study/tabset.html";
+import studyContact from "./pages/study/contact";
+import studyContactHtml from "./pages/study/contact.html";
 
 import studyparticipants from "./pages/study/studyparticipants";
 import studyparticipantsHtml from "./pages/study/studyparticipants.html";
@@ -598,6 +602,8 @@ reg("mem-tabset", {viewModel: memTabset, template: memTabsetHtml});
 reg("mem-breadcrumb", {viewModel: memBreadcrumb, template: memBreadcrumbHtml});
 reg("studies", {viewModel: studies, template: studiesHtml});
 reg("studyEditor", {viewModel: studyEditor, template: studyEditorHtml});
+reg("study-contact", {viewModel: studyContact, template: studyContactHtml});
+reg("studyUi", {viewModel: studyUi, template: studyUiHtml});
 reg("studySponsors", {viewModel: studySponsors, template: studySponsorsHtml});
 reg("studyEnrollments", {viewModel: studyEnrollments, template: studyEnrollmentsHtml});
 reg("studyClientData", {viewModel: studyClientData, template: studyClientDataHtml});
