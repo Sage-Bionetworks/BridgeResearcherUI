@@ -104,6 +104,15 @@ ko.bindingHandlers.flatpickr = {
     let includeTime = element.hasAttribute("data-enableTime");
     let formatter = includeTime ? fn.formatDateTime : fn.formatDate;
     let _init = false;
+    let _init2 = false;
+
+    observer.subscribe(newValue => {
+      if (_init2) {
+        return;
+      }
+      _init2 = true;
+      instance.setDate(newValue);
+    });
 
     function setInstance() {
       if (_init) {

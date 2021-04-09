@@ -1,4 +1,5 @@
 import Binder from "../../binder";
+import config from "../../config";
 import fn from "../../functions";
 import root from "../../root";
 import serverService from "../../services/server_service";
@@ -17,16 +18,51 @@ export default function(params) {
 
   fn.copyProps(self, fn, "formatDateTime");
   fn.copyProps(self, root, 'isDevRole');
+  fn.copyProps(self, config, 'phasesOpts');
+
+  function toDateString(value) {
+    if (!value) {
+      return;
+    }
+    if (typeof value === 'string') {
+      value = new Date(value);
+    }
+    return value.toISOString().split('T')[0];
+  }
 
   let binder = new Binder(self)
     .obs("title", "New Study")
     .obs("isNew", params.studyId === "new")
     .obs("createdOn")
     .obs("modifiedOn")
+    .obs('schedules[]')
     .bind("version")
     .bind("name")
+    .bind("details")
+    .bind("phase")
+    .bind("institutionId")
+    .bind("irbProtocolId")
+    .bind("irbApprovedOn", null, null, toDateString)
+    .bind("irbApprovedUntil", null, null, toDateString)
+    .bind("scheduleGuid", null)
+    .bind("disease")
+    .bind("studyDesignType")
     .bind("identifier", params.studyId === "new" ? null : params.studyId);
 
+  self.formatPhase = function(phase) {
+    if (phase) {
+      return config.phasesOpts.filter(opt => opt.value === phase)[0].label;
+    }
+    return '';
+  }
+
+  function loadSchedules() {
+    return serverService.getSchedules(0, 100).then(response => {
+      self.schedulesObs.pushAll(response.items.map(sch => {
+        return {label: sch.name, value: sch.guid};
+      }));
+    });
+  }
   function load() {
     return params.studyId === "new" ? 
       Promise.resolve({}) : 
@@ -58,7 +94,6 @@ export default function(params) {
 
   self.save = function(vm, event) {
     self.study = binder.persist(self.study);
-    console.log(JSON.stringify(self.study));
 
     utils.startHandler(vm, event);
     if (self.isNewObs()) {
@@ -68,7 +103,9 @@ export default function(params) {
     }
   };
 
-  load().then(binder.assign("study"))
+  loadSchedules()
+    .then(load)
+    .then(binder.assign("study"))
     .then(binder.update())
     .catch(failureHandler);
 };

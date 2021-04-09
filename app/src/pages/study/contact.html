@@ -25,7 +25,7 @@
     </div>
     <div class="four wide field">
       <label>Jurisdiction</label>
-      <input type="text" placeholder="USA" data-bind="textInput: jurisdictionObs">
+      <input type="text" placeholder="GCP" data-bind="textInput: jurisdictionObs">
     </div>
   </div>
   <div class="fields">
@@ -72,9 +72,13 @@
         Address <i data-bind="class: addressVisibleObs() ? 'angle down icon' : 'angle up icon'"></i>
       </a>
     </div>
-    <div class="twelve wide field" data-bind="visible: addressVisibleObs">
+    <div class="eight wide field" data-bind="visible: addressVisibleObs">
       <label>Place Name</label>
       <input type="text" placeholder="Dept. of Numerology" data-bind="textInput: placeNameObs">
+    </div>
+    <div class="four wide field" data-bind="visible: addressVisibleObs">
+      <label>Country</label>
+      <input type="text" placeholder="USA" data-bind="textInput: countryObs">
     </div>
   </div>
   <div class="fields" data-bind="visible: addressVisibleObs">

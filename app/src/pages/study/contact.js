@@ -1,3 +1,4 @@
+import alerts from "../../widgets/alerts";
 import Binder from "../../binder";
 import fn from "../../functions";
 import ko from "knockout";
@@ -7,7 +8,8 @@ const ROLE_OPTS = [
   {label: 'Principal Investigator', value: 'principal_investigator'},
   {label: 'Investigator', value: 'investigator'},
   {label: 'Sponsor', value: 'sponsor'},
-  {label: 'Support', value: 'support'}
+  {label: 'Study Support', value: 'study_support'},
+  {label: 'Technical Support', value: 'technical_support'}
 ];
 
 export default function(params) {
@@ -30,6 +32,7 @@ export default function(params) {
     .bind("phone", contact.phone ? contact.phone.number : null, Binder.formatPhone, Binder.persistPhone)
     .obs("phoneRegion", contact.phone ? contact.phone.regionCode : 'US')
     .bind('jurisdiction', contact.jurisdiction)
+    .bind('country', contact.country)
     .bind('placeName', contact.address.placeName, 
       Binder.fromObjectField("address", "placeName"), 
       Binder.toObjectField("address", "placeName"))
@@ -56,8 +59,10 @@ export default function(params) {
     return `contacts${index}_${fieldName}`;
   }
   self.remove = function(vm, event) {
-    let $context = ko.contextFor(event.target);
-    contactsObs.remove(contactsObs()[$context.$index()]);
+    alerts.deleteConfirmation("Are you sure? We cannot undo this.", function() {
+      let $context = ko.contextFor(event.target);
+      contactsObs.remove(contactsObs()[$context.$index()]);
+    }, "Delete");    
   }
   self.moveUp = function(vm, event) {
     let index = ko.contextFor(event.target).$index();

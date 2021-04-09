@@ -75,7 +75,6 @@ export default function(params) {
 
   self.save = function(vm, event) {
     self.study = binder.persist(self.study);
-    console.log(JSON.stringify(self.study));
 
     utils.startHandler(vm, event);
     if (self.isNewObs()) {

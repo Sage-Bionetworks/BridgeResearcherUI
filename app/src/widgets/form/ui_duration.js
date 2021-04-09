@@ -36,6 +36,11 @@ export default function uiDuration(params) {
     if (value) {
       let amt = parseInt(value.replace(/\D/g, ""), 10);
       let duration = value.split(/\d+/).join("*");
+      if (amt === 0) {
+        self.amountObs(null);
+        self.durationObs(null);
+        return;
+      }
       if (amt === parseInt(amt, 10) && self.durationOptionsLabel(duration) !== "") {
         self.amountObs(amt);
         self.durationObs(duration);

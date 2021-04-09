@@ -29,47 +29,46 @@
 </div>
 <div class="scrollbox">
   <errors id="schedules"></errors>
-
-  <div class="line-control">
-    <div class="line-control-stretch "></div>
-    <pager params="prefix: 'schedules', postLoadFunc: postLoadFunc"></pager>
-  </div>
-  <table class="ui compact selectable table">
-    <thead>
-      <tr>
-        <th width="10">
-          <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
-        </th>
-        <th nowrap>Title</th>
-        <th>Created On</th>
-        <th>Modified On</th>
-        <th>Owner</th>
-      </tr>
-    </thead>
-    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-      <tr>
-        <td colspan="5" data-bind="html: recordsMessageObs"></td>
-      </tr>
-    </tbody>
-    <tbody data-bind="foreach: itemsObs">
-      <tr data-bind="css: {negative: $data.deleted}">
-        <td>
-          <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
-          <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
-            style="cursor: pointer" class="green undo icon"></i>
-        </td>
-        <td nowrap>
-          <a data-bind="text: $data.name, href: '#/schedules/' + $data.guid"></a>
-        </td>
-        <td data-bind="text: $parent.formatDateTime($data.createdOn)"></td>
-        <td data-bind="text: $parent.formatDateTime($data.modifiedOn)"></td>
-        <td data-bind="text: $parent.formatOrg($data.ownerId)"></td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
-    <ui-checkbox params="checkedObs: showDeletedObs">
-      Show deleted schedules
-    </ui-checkbox>
-  </div>
+  <form class="ui skinny form">
+    <div class="line-control">
+      <div class="line-control-stretch "></div>
+      <pager params="prefix: 'schedules', postLoadFunc: postLoadFunc"></pager>
+    </div>
+    <table class="ui compact selectable table">
+      <thead>
+        <tr>
+          <th width="10">
+            <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+          </th>
+          <th nowrap>Title</th>
+          <th>Owner</th>
+          <th>Last Modified On</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="4" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr data-bind="css: {negative: $data.deleted}">
+          <td>
+            <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
+            <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
+              style="cursor: pointer" class="green undo icon"></i>
+          </td>
+          <td nowrap>
+            <a data-bind="text: $data.name, href: '#/schedules/' + $data.guid"></a>
+          </td>
+          <td data-bind="text: $parent.formatOrg($data.ownerId)"></td>
+          <td data-bind="text: $parent.formatDateTime($data.modifiedOn)"></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
+      <ui-checkbox params="checkedObs: showDeletedObs">
+        Show deleted schedules
+      </ui-checkbox>
+    </div>
+  </form>
 </div>

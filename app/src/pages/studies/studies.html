@@ -38,12 +38,14 @@
             <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
           </th>
           <th>Study</th>
+          <th>Phase</th>
           <th>ID</th>
+          <th>Last Modified On</th>
         </tr>
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td colspan="3" data-bind="html: recordsMessageObs"></td>
+          <td colspan="6" data-bind="html: recordsMessageObs"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
@@ -58,7 +60,9 @@
             <a data-bind="attr: {href: '#/studies/' + $data.identifier}, 
               text: $data.name, visible: !$data.deletedObs()"></a>
           </td>
+          <td data-bind="text: $parent.formatPhase($data.phase)"></td>
           <td data-bind="text: $data.identifier"></td>
+          <td data-bind="text: $parent.formatDateTime($data.modifiedOn)"></td>
         </tr>
       </tbody>
     </table>
