@@ -71,8 +71,7 @@ export default {
   phasesOpts: [
     {label: 'Legacy', value: 'legacy'},
     {label: 'Design', value: 'design'},
-    {label: 'Public Recruitment', value: 'public_recruitment'},
-    {label: 'Enrolling by Invitation', value: 'enroll_by_invitation'},
+    {label: 'Recruitment', value: 'recruitment'},
     {label: 'In Flight', value: 'in_flight'},
     {label: 'Analysis', value: 'analysis'},
     {label: 'Completed', value: 'completed'},

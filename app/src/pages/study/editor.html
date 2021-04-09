@@ -22,7 +22,7 @@
         <input data-bind="textInput: nameObs, hasFocus: true, visible: isDevRole()" />
         <div class="input-field-padding" data-bind="text: nameObs, visible: !isDevRole()"></div>
       </div>
-      <div class="four wide field required" id="id" data-bind="visible: isNewObs">
+      <div class="four wide field required" id="identifier" data-bind="visible: isNewObs">
         <label>Identifier</label>
         <input type="text" data-bind="textInput: identifierObs" />
       </div>
