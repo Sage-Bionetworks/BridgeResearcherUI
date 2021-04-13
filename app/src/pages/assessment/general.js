@@ -3,7 +3,6 @@ import Binder from "../../binder";
 import fn from "../../functions";
 import ko from "knockout";
 import optionsService from "../../services/options_service";
-import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
@@ -71,7 +70,7 @@ export default function(params) {
     return "#/assessments/" + self.guidObs() + "/history";
   });
 
-  let redirect = (response) => document.location = "#/assessments/" + response.guid + "/general";
+  let redirect = (response) => document.location = `#/assessments/${response.guid}/general`;
 
   function saveAssessment(isNew, revisionChanged) {
     if (isNew) {

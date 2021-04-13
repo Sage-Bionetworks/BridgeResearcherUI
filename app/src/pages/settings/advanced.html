@@ -53,6 +53,16 @@
             Issue reauthentication tokens
           </ui-checkbox>
         </div>
+        <div class="field">
+          <ui-checkbox params="checkedObs: autoVerificationEmailSuppressedObs">
+            Do not automatically send an email to verify a new email address
+          </ui-checkbox>
+        </div>
+        <div class="field">
+          <ui-checkbox params="checkedObs: autoVerificationPhoneSuppressedObs">
+            Do not automatically send an SMS message to verify a new phone number
+          </ui-checkbox>
+        </div>
 
         <h4 class="ui dividing header">External IDs</h4>
         <div class="field" id="externalIdRequiredOnSignup">
@@ -95,8 +105,6 @@
     <div class="six wide column">
       <div class="ui message">
         <p>If email verification is enabled, email addresses must be verified by the user. This can happen one of two ways: </p>
-        
-        <p></p>
 
         <p>&#8226; through an email requesting verification of the email (which can be turned on or off by app developers where the template is defined), or</p>
 

@@ -38,7 +38,7 @@ export default function(params) {
       serverService.createSchedule(self.schedule)
         .then(afterSave)
         .then(utils.successHandler(vm, event, "Schedule created."))
-        .then((sch) => document.location = '#/schedules/' + sch.guid)
+        .then((sch) => document.location = `#/schedules/${sch.guid}`)
         .catch(utils.failureHandler({ id: 'schedule' }))
     } else {
       serverService.updateSchedule(self.schedule)

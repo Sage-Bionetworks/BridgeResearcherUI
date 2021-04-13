@@ -94,8 +94,8 @@ export default function(params) {
       .then(binder.assign("resource"))
       .then(binder.update())
       .then(fn.handleObsUpdate(self.subPageTitleObs, "title"))
-      .then(() => document.location = '#/assessments/' + self.assessmentGuidObs() + '/resources/'  + self.guidObs())
       .then(utils.successHandler(vm, event, "Assessment resource has been saved."))
+      .then(() => document.location = `#/assessments/${self.assessmentGuidObs()}/resources/${self.guidObs()}`)
       .catch(failureHandler);
   }
 

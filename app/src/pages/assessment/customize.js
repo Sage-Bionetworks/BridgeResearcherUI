@@ -74,7 +74,7 @@ export default function(params) {
   self.unlink = function(vm, event) {
     alerts.deleteConfirmation("Are you sure? We cannot undo this.", function() {
       serverService.updateAssessmentConfig(params.guid, self.config)
-        .then(() => document.location = '#/assessments/' + params.guid + '/config');
+        .then(() => document.location = `#/assessments/${params.guid}/config`);
     }, "Delete");    
   };
 

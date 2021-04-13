@@ -21,6 +21,8 @@ export default function info() {
     .bind("healthCodeExportEnabled")
     .bind("usesCustomExportSchedule")
     .bind("verifyChannelOnSignInEnabled")
+    .bind("autoVerificationEmailSuppressed")
+    .bind("autoVerificationPhoneSuppressed")
     .bind("iosArn", null, ios.fromObject, ios.toObject)
     .bind("strictUploadValidationEnabled")
     .bind("appIdExcludedInExport");
