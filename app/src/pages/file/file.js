@@ -57,7 +57,7 @@ export default function editor(params) {
   function saveFile(file) {
     if (self.isNewObs()) {
       return serverService.createFile(file.guid, file).then(response => {
-        document.location = "#/files/" + response.guid;
+        document.location = `#/files/${response.guid}`;
         return response;
       });
     }

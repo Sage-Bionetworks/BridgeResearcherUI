@@ -48,7 +48,7 @@ export default function(params) {
   function createStudy(vm, event) {
       serverService.createStudy(self.study)
         .then(utils.successHandler(vm, event, "Study has been saved."))
-        .then(() => document.location = "#/studies/" + self.identifierObs() + "/general")
+        .then(() => document.location = `#/studies/${self.identifierObs()}/general`)
         .catch(failureHandler);
   }
   function updateStudy(vm, event) {
