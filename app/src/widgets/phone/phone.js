@@ -16,22 +16,19 @@ export default function(params) {
     .obs('countries', fn.SUPPORTED_COUNTRIES);
 
   self.phoneNumberObs.subscribe(newValue => {
-    if (newValue && self.phoneRegionObs()) {
-      params.phoneObs({regionCode: self.phoneRegionObs(), number: newValue});
-    } else {
-      console.log("clear");
-      params.phoneObs(null);
-    }
+    updatePhone(newValue, self.phoneRegionObs());
   });
   self.phoneRegionObs.subscribe(newValue => {
-    if (newValue && self.phoneNumberObs()) {
-      params.phoneObs({regionCode: newValue, number: self.phoneNumberObs()});
+    updatePhone(self.phoneNumberObs(), newValue);
+  });
+  function updatePhone(number, regionCode) {
+    if (number && regionCode) {
+      params.phoneObs({number, regionCode});
     } else {
-      console.log("clear");
       params.phoneObs(null);
     }
-    
-  });
+  }
+
   self.updateRegion = function(model, event) {
     let context = ko.contextFor(event.target);
     if (context && context.$index) {
