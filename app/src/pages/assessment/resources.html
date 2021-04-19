@@ -42,6 +42,10 @@
     <a data-bind="attr: {href:'#/sharedassessments/'+originGuidObs()+'/resources'}">
       all of that assessment’s documentation</a> applies to this assessment.</p>
 
+  <p data-bind="visible: itemsObs().length === 0">
+    There are no resources documenting this assessment.    
+  </p>
+    
   <form class="ui form" onsubmit="return false" data-bind="visible: !originGuidObs() && canEditObs()">
     <div class="line-control">
       <input type="text" style="width: 8rem; margin-right: 1rem"

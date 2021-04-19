@@ -52,20 +52,7 @@
         </div>
       </div>
       <div class="field phone" data-bind="visible: isState('PhoneSignIn')">
-        <div class="ui left labeled input">
-          <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
-            <div class="text" data-bind="text: phoneRegionObs"></div>
-            <i class="dropdown icon"></i>
-            <div class="menu">
-              <div class="item">US</div>
-              <div class="item">CA</div>
-              <div class="item">IN</div>
-              <div class="item">MX</div>
-            </div>
-          </div>
-          <input type="text" placeholder="Phone number" autocomplete="mobile"
-            data-bind="textInput: phoneObs, hasFocus: handleFocus('PhoneSignIn')"/>
-        </div>
+        <phone params="phoneObs: phoneObs"></phone>
       </div>
       <div class="field token" data-bind="visible: isState('EnterCode')">
         <div class="ui left icon input">

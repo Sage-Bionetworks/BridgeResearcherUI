@@ -29,8 +29,7 @@ export default function(params) {
     .bind('position', contact.position)
     .bind('affiliation', contact.affiliation)
     .bind('email', contact.email)
-    .bind("phone", contact.phone ? contact.phone.number : null, Binder.formatPhone, Binder.persistPhone)
-    .obs("phoneRegion", contact.phone ? contact.phone.regionCode : 'US')
+    .bind("phone", contact.phone)
     .bind('jurisdiction', contact.jurisdiction)
     .bind('country', contact.country)
     .bind('placeName', contact.address.placeName, 
@@ -90,10 +89,4 @@ export default function(params) {
   self.togglePerson = function() {
     self.personVisibleObs( !self.personVisibleObs() );
   };
-  self.updateRegion = function(model, event) {
-    if (event.target.classList.contains("item")) {
-      self.phoneRegionObs(event.target.textContent);
-    }
-  }
-  
 };

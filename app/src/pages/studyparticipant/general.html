@@ -94,25 +94,13 @@
         <label>Phone
           <verified-icon params="valueObs: phoneObs, verifiedObs: phoneVerifiedObs"> </verified-icon>
         </label>
-        <div class="ui left labeled input">
-          <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
-            <div class="text" data-bind="text: phoneRegionObs"></div>
-            <i class="dropdown icon"></i>
-            <div class="menu">
-              <div class="item">US</div>
-              <div class="item">CA</div>
-              <div class="item">IN</div>
-              <div class="item">MX</div>
-            </div>
-          </div>
-          <input type="text" placeholder="Phone number" data-bind="textInput: phoneObs" />
-        </div>
+        <phone params="phoneObs: phoneObs"></phone>
       </div>
       <div class="field phone" data-bind="visible: !isNewObs()">
         <label>Phone</label>
         <span data-bind="visible: showIdentifier('phone')">
           <a class="input-field-padding" data-bind="href: phoneLink, 
-            text: $component.formatPhone(phoneObs(), phoneRegionObs())"></a>
+            text: $component.formatPhone(phoneObs())"></a>
           <verified-icon params="valueObs: phoneObs, verifiedObs: phoneVerifiedObs"> </verified-icon>
         </span>
         <span data-bind="visible: showDash('phone')" class="input-field-padding">—</span>

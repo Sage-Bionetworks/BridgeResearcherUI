@@ -4,12 +4,15 @@ const MINUTE = SECOND * 60;
 const HOUR = MINUTE * 60;
 const DAY = HOUR * 24;
 const WEEK = DAY * 7;
-const FLAGS = {
-  US: "🇺🇸",
-  MX: "🇲🇽",
-  CA: "🇨🇦",
-  IN: "🇮🇳"
-};
+
+const SUPPORTED_COUNTRIES = [
+  {regionCode: 'US', flag: '🇺🇸', name: 'United States'},
+  {regionCode: 'CA', flag: '🇨🇦', name: 'Canada'},
+  {regionCode: 'IN', flag: '🇮🇳', name: 'India'},
+  {regionCode: 'MX', flag: '🇲🇽', name: 'Mexico'},
+  {regionCode: 'NG', flag: '🇳🇬', name: 'Nigeria'},
+];
+
 const LOCAL_TIMEZONE = Date()
   .split("(")[1]
   .split(")")[0]
@@ -29,7 +32,8 @@ function canEditAssessment(assessment, session) {
     (session.roles.indexOf('developer') > -1 && session.appId === appId && session.orgMembership === orgId);
 }
 function flagForRegionCode(regionCode) {
-  return FLAGS[regionCode];
+  let entries = SUPPORTED_COUNTRIES.filter(entry => entry.regionCode === regionCode);
+  return (entries.length) ? entries[0].flag : '';
 }
 function identity(arg) {
   return arg;
@@ -633,5 +637,6 @@ export default {
   queryToObject,
   returning,
   seq,
-  studyMatchesUser
+  studyMatchesUser,
+  SUPPORTED_COUNTRIES
 };
