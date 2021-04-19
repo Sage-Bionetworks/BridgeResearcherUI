@@ -850,7 +850,10 @@ export class ServerService {
     let queryString = fn.queryString({ physical: physical === true });
     return this.del(`${config.schedules}/${guid}${queryString}`);
   }
-  
+  getStudyParticipantTimeline(studyId, userId) {
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/timeline`);
+  }
+
   adminSignIn(appName, environment, signIn) {
     return postInt(`${config.host[environment]}${config.adminAuth}/signIn`, signIn).then(
       this.cacheSession(appName, signIn.appId, environment)

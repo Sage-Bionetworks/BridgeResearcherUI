@@ -9,21 +9,26 @@ export default function(params) {
   let self = this;
 
   let phone = params.phoneObs();
-  if (!phone) {
-    phone = {number: '', regionCode: 'US'};
-  }
 
   new Binder(self)
-    .obs("phoneNumber", phone.number)
-    .obs("phoneRegion", phone.regionCode)
+    .obs("phoneNumber", (phone) ? phone.number : '')
+    .obs("phoneRegion", (phone) ? phone.regionCode : 'US')
     .obs('countries', fn.SUPPORTED_COUNTRIES);
 
   self.phoneNumberObs.subscribe(newValue => {
-    params.phoneObs({regionCode: self.phoneRegionObs(), number: newValue});
+    updatePhone(newValue, self.phoneRegionObs());
   });
   self.phoneRegionObs.subscribe(newValue => {
-    params.phoneObs({regionCode: newValue, number: self.phoneNumberObs()});
+    updatePhone(self.phoneNumberObs(), newValue);
   });
+  function updatePhone(number, regionCode) {
+    if (number && regionCode) {
+      params.phoneObs({number, regionCode});
+    } else {
+      params.phoneObs(null);
+    }
+  }
+
   self.updateRegion = function(model, event) {
     let context = ko.contextFor(event.target);
     if (context && context.$index) {
