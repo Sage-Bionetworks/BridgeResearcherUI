@@ -7,7 +7,7 @@ export default class TimelineBaseAccount extends BaseAccount {
     this.binder.obs("json");
     this.getAccount()
       .then(res => this.account = res)
-      .then(() => serverService.getTimelineForStudy(params.studyId, params.userId))
+      .then(() => serverService.getStudyParticipantTimeline(params.studyId, params.userId))
       .then(res => this.jsonObs(res));
   }
   loadAccount() {

@@ -850,7 +850,7 @@ export class ServerService {
     let queryString = fn.queryString({ physical: physical === true });
     return this.del(`${config.schedules}/${guid}${queryString}`);
   }
-  getTimelineForStudy(studyId, userId) {
+  getStudyParticipantTimeline(studyId, userId) {
     return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/timeline`);
   }
 
