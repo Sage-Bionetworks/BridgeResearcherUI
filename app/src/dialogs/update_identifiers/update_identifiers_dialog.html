@@ -21,19 +21,8 @@
               textInput: signInEmailObs" placeholder="Email">
             <input type="text" data-bind="visible: credentialTypeObs() === 'External ID', 
               textInput: externalIdObs" placeholder="External ID">
-            <div class="ui left labeled input" data-bind="visible: credentialTypeObs() === 'Phone'">
-              <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
-                <div class="text" data-bind="text: phoneRegionObs"></div>
-                <i class="dropdown icon"></i>
-                <div class="menu">
-                  <div class="item">US</div>
-                  <div class="item">CA</div>
-                  <div class="item">IN</div>
-                  <div class="item">MX</div>
-                </div>
-              </div>
-              <input type="text" placeholder="Phone number" data-bind="textInput: phoneObs" />
-            </div>
+            <phone params="phoneObs: phoneObs"
+              data-bind="visible: credentialTypeObs() === 'Phone'"></phone>
           </div>
         </div>
       </div>
@@ -54,20 +43,7 @@
       </div>
       <div class="field" data-bind="visible: isVisible('phone')">
         <label>Phone</label>
-        <div class="ui left labeled input">
-          <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
-            <div class="text" data-bind="text: phoneRegionObs"></div>
-            <i class="dropdown icon"></i>
-            <div class="menu">
-              <div class="item">US</div>
-              <div class="item">CA</div>
-              <div class="item">IN</div>
-              <div class="item">MX</div>
-            </div>
-          </div>
-          <input type="text" placeholder="Phone number" 
-            data-bind="textInput: phoneObs" />
-        </div>
+        <phone params="phoneObs: phoneObs"></phone>
       </div>
       <div class="field" data-bind="visible: isVisible('synapseUserId')">
         <label>Synapse User ID (or email address, or alias)</label>

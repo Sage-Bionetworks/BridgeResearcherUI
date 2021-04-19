@@ -193,19 +193,6 @@ export default class Binder {
   static callObsCallback(value, context) {
     return context.observer.callback();
   }
-  static formatPhone(value, context) {
-    if (value) {
-      context.vm.phoneRegionObs(value.regionCode);
-      return value.number;
-    }
-    return null;
-  }
-  static persistPhone(value, context) {
-    if (context.vm.phoneObs() && context.vm.phoneRegionObs()) {
-      return { number: context.vm.phoneObs(), regionCode: context.vm.phoneRegionObs() };
-    }
-    return null;
-  }
   // I've figured out an elegant way to retrieve the data from deeply nested component
   // structures, look at how schedules v2 deal with this. It does require creating a 
   // component for every repeating element in the tree. It's worth it.

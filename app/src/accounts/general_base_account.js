@@ -55,8 +55,7 @@ export default class GeneralBaseAccount extends BaseAccount {
       .obs("externalIds", '', Binder.formatExternalIds)
       .bind("newExternalId", null, null, persistExternalId)
       .bind("email", null, null, value => (fn.isBlank(value) ? null : value))
-      .bind("phone", null, Binder.formatPhone, Binder.persistPhone)
-      .bind("phoneRegion", "US")
+      .bind("phone")
       .bind("emailVerified", false)
       .bind("phoneVerified", false)
       .bind("synapseUserId", null, null, (value) => (value) ? value : null)
@@ -76,7 +75,7 @@ export default class GeneralBaseAccount extends BaseAccount {
 
     // subscribers
     this.emailLink = ko.computed(() => "mailto:" + this.emailObs());
-    this.phoneLink = ko.computed(() => "tel:" + this.phoneObs());
+    this.phoneLink = ko.computed(() => "tel:" + (this.phoneObs() ? this.phoneObs().number : ''));
     // TODO: One of these is better than the other, use it
     this.resendVisible = ko.computed(() => this.statusObs() === "unverified");
     this.resendEmailVisible = ko.computed(() => this.emailObs() && !this.emailVerifiedObs());
@@ -127,16 +126,10 @@ export default class GeneralBaseAccount extends BaseAccount {
         params.email = this.emailObs();
       } else if (credential === 'phone') {
         params.phone = this.phoneObs();
-        params.phoneRegion = this.phoneRegionObs();
       } else if (credential === 'synapseUserId') {
         params.synapseUserId = this.synapseUserIdObs();
       }
       root.openDialog('update_identifiers_dialog', params);
-    }
-  }
-  updateRegion(model, event) {
-    if (event.target.classList.contains("item")) {
-      this.phoneRegionObs(event.target.textContent);
     }
   }
   updateStudy(model, event) {
@@ -157,8 +150,8 @@ export default class GeneralBaseAccount extends BaseAccount {
   formatOrg() {
     return this.orgMembershipObs() ? this.orgNames[this.orgMembershipObs()] : '—';
   }
-  formatPhone(phone, phoneRegion) {
-    return phone ? fn.flagForRegionCode(phoneRegion) + " " + phone : "";
+  formatPhone(phone) {
+    return (phone) ? fn.flagForRegionCode(phone.regionCode) + " " + phone.number : "";
   }
   makeStatusChanger(status) {
     return (vm, event) => {

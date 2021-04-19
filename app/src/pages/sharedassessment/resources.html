@@ -17,6 +17,10 @@
 <div class="scrollbox">
   <errors id="sharedassessment_resources"></errors>
   
+  <p data-bind="visible: itemsObs().length === 0">
+    There are no resources documenting this assessment.    
+  </p>
+
   <div class="ui link cards" data-bind="foreach: itemsObs" target="_blank">
     <a class="card" data-bind="href: $data.url">
       <div class="image">

@@ -5,7 +5,7 @@ import root from "../root";
 import serverService from "../services/server_service";
 import utils from "../utils";
 
-const ACCOUNT = { id: "new", attributes: {}, email: "", phone: { number: "", regionCode: "US" } };
+const ACCOUNT = { id: "new", attributes: {}, email: "", phone: { number: "", regionCode: "" } };
 
 export default class BaseAccount {
   constructor(params = {}) {

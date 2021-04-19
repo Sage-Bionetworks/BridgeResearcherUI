@@ -418,6 +418,8 @@ import uiDur from "./widgets/form/ui_duration";
 import uiDurHtml from "./widgets/form/ui_duration.html";
 import timestamps from "./widgets/timestamps/timestamps";
 import timestampsHtml from "./widgets/timestamps/timestamps.html";
+import phone from "./widgets/phone/phone";
+import phoneHtml from "./widgets/phone/phone.html";
 
 // DIALOGS
 import critEditor from "./dialogs/criteria_editor/criteria_editor";
@@ -686,6 +688,7 @@ reg("template_history", {viewModel: templateHistory, template: templateHistoryHt
 reg("template-tabset", {viewModel: templateTabset, template: templateTabsetHtml});
 reg("pager", {viewModel: pager, template: pagerHtml});
 reg("timestamps", {viewModel: timestamps, template: timestampsHtml});
+reg("phone", {viewModel: phone, template: phoneHtml});
 
 // Dialogs. These must be synchronous.
 reg("sign_out_user", {viewModel: signOutUser, template: signOutUserHtml, synchronous: true});
