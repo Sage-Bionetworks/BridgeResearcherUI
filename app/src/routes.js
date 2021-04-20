@@ -172,6 +172,8 @@ router.on("/studies/:studyId/participants/:userId/enrollments",
   routeTo("studyparticipant_enrollments", "studies", STUDYID_USERID));
 router.on("/studies/:studyId/participants/:userId/schedule", 
   routeTo("studyparticipant_schedule", "studies", STUDYID_USERID));
+router.on("/studies/:studyId/participants/:userId/schedule/timeline", 
+  routeTo("studyparticipant_timeline", "studies", STUDYID_USERID));
 router.on("/studies/:studyId/participants/:userId/uploads", 
   routeTo("studyparticipant_uploads", "studies", STUDYID_USERID));
 router.on("/studies/:studyId/participants/:userId/uploads/:guid", 
@@ -188,8 +190,6 @@ router.on("/studies/:studyId/participants/:userId/requestInfo",
   routeTo("studyparticipant_request_info", "studies", STUDYID_USERID));
   /*
 reg("studyparticipant_general", {viewModel: studypartGeneral, template: studypartGeneralHtml});
-reg("studyparticipant_activity_events", {viewModel: studypartEvents, template: studypartEventsHtml});
-reg("studyparticipant_activity", {viewModel: studypartActivity, template: studypartActivityHtml});
 reg("studyparticipant_consents", {viewModel: studypartConsents, template: studypartConsentsHtml});
 */
 

@@ -969,6 +969,9 @@ export class ServerService {
     let queryString = fn.queryString(args);
     return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/uploads${queryString}`);
   }
+  getStudyParticipantTimeline(studyId, userId) {
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/timeline`);
+  }
   getStudyParticipantName(studyId, id) {
     if (session && session.id === id) {
       id = 'self';
