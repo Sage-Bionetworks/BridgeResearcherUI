@@ -328,9 +328,9 @@ import studypartRequestInfo from "./pages/studyparticipant/request_info";
 import studypartRequestInfoHtml from "./pages/studyparticipant/request_info.html";
 import studypartSchedule from "./pages/studyparticipant/schedule";
 import studypartScheduleHtml from "./pages/studyparticipant/schedule.html";
+import studypartTimeline from "./pages/studyparticipant/timeline";
+import studypartTimelineHtml from "./pages/studyparticipant/timeline.html";
 /*
-import studypartEvents from "./pages/studyparticipant/activity_events";
-import studypartEventsHtml from "./pages/studyparticipant/activity_events.html";
 import studypartConsents from "./pages/studyparticipant/consents";
 import studypartConsentsHtml from "./pages/studyparticipant/consents.html";
 import studyverifiedIcon from "./pages/studyparticipant/verified-icon";
@@ -614,6 +614,7 @@ reg("study-tabset", {viewModel: studyTabset, template: studyTabsetHtml});
 reg("studyparticipant_general", {viewModel: studypartGeneral, template: studypartGeneralHtml});
 reg("studyparticipant_enrollments", {viewModel: studypartEnrollments, template: studypartEnrollmentsHtml});
 reg("studyparticipant_schedule", {viewModel: studypartSchedule, template: studypartScheduleHtml});
+reg("studyparticipant_timeline", {viewModel: studypartTimeline, template: studypartTimelineHtml});
 reg("studyparticipant-tabset", {viewModel: studypartTabset, template: studypartTabsetHtml});
 reg("studyparticipant_uploads", {viewModel: studypartUploads, template: studypartUploadsHtml});
 reg("studyparticipant_upload", {viewModel: studypartUpload, template: studypartUploadHtml});
@@ -623,8 +624,6 @@ reg("studyparticipant_report", {viewModel: studypartReport, template: studypartR
 reg("studyparticipant_clientData", {viewModel: studypartClientData, template: studypartClientDataHtml});
 reg("studyparticipant_request_info", {viewModel: studypartRequestInfo, template: studypartRequestInfoHtml});
 /*
-reg("studyparticipant_activity_events", {viewModel: studypartEvents, template: studypartEventsHtml});
-reg("studyparticipant_activity", {viewModel: studypartActivity, template: studypartActivityHtml});
 reg("studyparticipant_consents", {viewModel: studypartConsents, template: studypartConsentsHtml});
 */
 reg("schedules2", {viewModel: schedules2, template: schedules2Html});
