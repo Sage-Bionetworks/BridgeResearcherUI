@@ -15,33 +15,28 @@
     revisionObs: pageRevObs, originGuidObs: originGuidObs, canEditObs: canEditObs">
   </assessment-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="assessment_config"></errors>
-  <div class="ui grid">
-    <div class="ten wide column">
-      <div class="ui warning message" data-bind="visible: editorsObs().length === 0">
-        <p>No customizable fields have been set for this assessment (the whole configuration will need to be edited as JSON, but this assessment will no longer be an instance of a shared assessment). </p>
-      </div>
-      <form class="ui skinny form" data-bind="foreach: editorsObs">
-        <div class="two fields">
-          <div class="field">
-            <label>
-              <span data-bind="text: $data.label"></span> 
-              <span style="float:right; color:#bbb"
-                data-bind="text: '[' + $data.fieldIdentifier + ']'"></span>
-            </label>
-            <input type="text" data-bind="textInput: $data.valueObs" />
-            <div class="help-text" data-bind="text: $data.description"></div>
-          </div>
+<bsm-layout id="assessment_customize">
+  <div slot="content">
+    <div class="ui warning message" data-bind="visible: editorsObs().length === 0">
+      <p>No customizable fields have been set for this assessment (the whole configuration will need to be edited as JSON, but this assessment will no longer be an instance of a shared assessment). </p>
+    </div>
+    <form class="ui skinny form" data-bind="foreach: editorsObs">
+      <div class="two fields">
+        <div class="field">
+          <label>
+            <span data-bind="text: $data.label"></span> 
+            <span style="float:right; color:#bbb"
+              data-bind="text: '[' + $data.fieldIdentifier + ']'"></span>
+          </label>
+          <input type="text" data-bind="textInput: $data.valueObs" />
+          <div class="help-text" data-bind="text: $data.description"></div>
         </div>
-      </form>
-    </div>
-    <div class="six wide column">
-      <div class="ui message">
-        <p>This assessment is a copy of a shared assessment. Only limited modifications to the assessment’s configuration can be made, as specified by the original author of the shared assessment. </p>
-        
-        <p><b>If you wish to edit the configuration (which will delete the link to a shared component), you can <a class="link" data-bind="click: unlink">click on this link.</a></b></p>
       </div>
-    </div>
+    </form>
   </div>
-</div>
+  <div slot="help">
+    <p>This assessment is a copy of a shared assessment. Only limited modifications to the assessment’s configuration can be made, as specified by the original author of the shared assessment. </p>
+    
+    <p><b>If you wish to edit the configuration (which will delete the link to a shared component), you can <a class="link" data-bind="click: unlink">click on this link.</a></b></p>
+  </div>
+</bsm-layout>

@@ -14,33 +14,32 @@
     revisionObs: pageRevObs, originGuidObs: originGuidObs">
   </sharedassessment-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="sharedassessment_resources"></errors>
-  
-  <p data-bind="visible: itemsObs().length === 0">
-    There are no resources documenting this assessment.    
-  </p>
-
-  <div class="ui link cards" data-bind="foreach: itemsObs" target="_blank">
-    <a class="card" data-bind="href: $data.url">
-      <div class="image">
-        <div data-bind="style: $parent.image($data)"></div>
-      </div>
-      <div class="content">
-        <div class="header" data-bind="text: $data.title"></div>
-        <div class="meta" data-bind="text: $parent.formatCategory($data.category)"></div>
-        <div class="description" data-bind="text: $data.description"></div>
-      </div>
-      <div class="extra content">
-        <span class="right floated linked" data-bind="click: 
-          () => document.location = `#/sharedassessments/${$parent.guidObs()}/resources/${$data.guid}`">
-          Edit Details
-        </span>
-        <span>
-          <i class="calendar alternate outline icon"></i>
-          <span data-bind="text: $data.date"></span>
-        </span>
-      </div>
+<bsm-layout id="sharedassessment_resources">
+  <div slot="content">
+    <p data-bind="visible: itemsObs().length === 0">
+      There are no resources documenting this assessment.    
+    </p>
+    <div class="ui link cards" data-bind="foreach: itemsObs" target="_blank">
+      <a class="card" style="width: 31%" data-bind="href: $data.url">
+        <div class="image">
+          <div data-bind="style: $parent.image($data)"></div>
+        </div>
+        <div class="content">
+          <div class="header" data-bind="text: $data.title"></div>
+          <div class="meta" data-bind="text: $parent.formatCategory($data.category)"></div>
+          <div class="description" data-bind="text: $data.description"></div>
+        </div>
+        <div class="extra content">
+          <span class="right floated linked" data-bind="click: 
+            () => document.location = `#/sharedassessments/${$parent.guidObs()}/resources/${$data.guid}`">
+            Edit Details
+          </span>
+          <span>
+            <i class="calendar alternate outline icon"></i>
+            <span data-bind="text: $data.date"></span>
+          </span>
+        </div>
+      </a>
     </div>
-
-</div>
+  </div>
+</bsm-layout>

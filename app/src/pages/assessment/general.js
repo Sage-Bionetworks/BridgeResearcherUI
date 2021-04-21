@@ -138,7 +138,7 @@ export default function(params) {
   }
   self.addTag = function() {
     let tag = self.addTagObs();
-    if (tag.trim()) {
+    if (tag && tag.trim()) {
       self.tagsObs.push(tag.trim());
     }
   }

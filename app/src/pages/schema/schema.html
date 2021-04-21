@@ -14,9 +14,8 @@
   <schema-tabset params="viewModel: $data"></schema-tabset>
   <div class="ui empty secondary pointing menu" data-bind="visible: isNewObs"></div>
 </div>
-<div class="scrollbox">
-  <form class="ui form">
-    <errors id="schema"></errors>
+<bsm-layout id="schema">
+  <div slot="content">
     <div class="three fields">
       <div class="required field" id="name">
         <label>Name</label>
@@ -64,34 +63,27 @@
         <label>Revision Number</label>
         <input type="number" style="width: 8rem" type="text" data-bind="textInput: $data.revisionObs" />
       </div>
+    </div>    
+    <h3>Field Definitions</h3>
+
+    <p class="help-text">Drag items to reorder them.</p>
+  
+    <div data-bind="visible: fieldDefinitionsObs().length === 0">
+      <p>There are currently no field definitions in this upload schema.</p>
+      <p>
+        <button class="ui primary button" data-bind="click: addFirst"><i class="add square icon"></i> Add Field</button>
+      </p>
+  
+      <p></p>
     </div>
-  </form>
-
-  <h3>Field Definitions</h3>
-
-  <p class="help-text">Drag items to reorder them.</p>
-
-  <div data-bind="visible: fieldDefinitionsObs().length === 0">
-    <p>There are currently no field definitions in this upload schema.</p>
-    <p>
-      <button class="ui primary button" data-bind="click: addFirst"><i class="add square icon"></i> Add Field</button>
-    </p>
-
-    <p></p>
-  </div>
-
-  <div
-    class="ui form schema sfieldZone"
-    data-bind="foreach: fieldDefinitionsObs, 
-        dragula: { dragHandleSelector: '.draggable', indexObs: indexObs, 
-        listObs: fieldDefinitionsObs }"
-  >
-    <div
-      class="field_definitions"
-      data-bind="component: {
-            name: 'field_definition', params: { field: $data, 
+  
+    <div class="ui form schema sfieldZone" data-bind="foreach: fieldDefinitionsObs, 
+          dragula: { dragHandleSelector: '.draggable', indexObs: indexObs, 
+          listObs: fieldDefinitionsObs }">
+      <div class="field_definitions" data-bind="component: {
+          name: 'field_definition', params: { field: $data, 
                 itemsObs: $parent.itemsObs, indexObs: $index }
-        }"
-    ></div>
+        }"></div>
+    </div>
   </div>
-</div>
+</bsm-layout>

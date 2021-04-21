@@ -11,55 +11,50 @@
   </div>
   <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="participant-request-info"></errors>
-  <div class="ui grid">
-    <div class="ten wide column">
-      <form class="ui form">
-        <div class="field">
-          <label>User Agent</label>
-          <p data-bind="text: userAgentObs"></p>
-        </div>
-        <div class="two fields">
-          <div class="field">
-            <label>Data groups</label>
-            <p data-bind="text: userDataGroupsObs"></p>
-          </div>
-          <div class="field">
-            <label>Last signed in</label>
-            <p data-bind="text: signedInOnObs"></p>
-          </div>
-        </div>
-        <div class="two fields">
-          <div class="field">
-            <label>Languages</label>
-            <p data-bind="text: languagesObs"></p>
-          </div>
-          <div class="field">
-            <label>Activities last accessed on</label>
-            <p data-bind="text: activitiesAccessedOnObs"></p>
-          </div>
-        </div>
-        <div class="two fields">
-          <div class="field">
-            <label>Time zone</label>
-            <p data-bind="text: timeZoneObs"></p>
-          </div>
-          <div class="field">
-            <label>Last uploads on</label>
-            <p data-bind="text: uploadedOnObs"></p>
-          </div>
-        </div>
-        <div class="field">
-          <label>Client info</label>
-          <p data-bind="html: clientInfoObs"></p>
-        </div>
-      </form>
-    </div>
-    <div class="six wide column">
-      <div class="ui message">
-        <p>Information about recent requests to the server by this user. The client info is parsed from the User-Agent header, but the two may be different if the header does not follow the Bridge format. </p>
+<bsm-layout id="participant-request-info">
+  <div slot="content">
+    <form class="ui form">
+      <div class="field">
+        <label>User Agent</label>
+        <p data-bind="text: userAgentObs"></p>
       </div>
-    </div>
+      <div class="two fields">
+        <div class="field">
+          <label>Data groups</label>
+          <p data-bind="text: userDataGroupsObs"></p>
+        </div>
+        <div class="field">
+          <label>Last signed in</label>
+          <p data-bind="text: signedInOnObs"></p>
+        </div>
+      </div>
+      <div class="two fields">
+        <div class="field">
+          <label>Languages</label>
+          <p data-bind="text: languagesObs"></p>
+        </div>
+        <div class="field">
+          <label>Activities last accessed on</label>
+          <p data-bind="text: activitiesAccessedOnObs"></p>
+        </div>
+      </div>
+      <div class="two fields">
+        <div class="field">
+          <label>Time zone</label>
+          <p data-bind="text: timeZoneObs"></p>
+        </div>
+        <div class="field">
+          <label>Last uploads on</label>
+          <p data-bind="text: uploadedOnObs"></p>
+        </div>
+      </div>
+      <div class="field">
+        <label>Client info</label>
+        <p data-bind="html: clientInfoObs"></p>
+      </div>
+    </form>
   </div>
-</div>
+  <div slot="help">
+    <p>Information about recent requests to the server by this user. The client info is parsed from the User-Agent header, but the two may be different if the header does not follow the Bridge format. </p>
+  </div>
+</bsm-layout>

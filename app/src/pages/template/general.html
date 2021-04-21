@@ -18,9 +18,8 @@
   </template-tabset>
   <div class="ui empty secondary pointing menu" data-bind="visible: isNewObs"></div>
 </div>
-<div class="scrollbox">
-  <errors id="template-general"></errors>
-  <form class="ui skinny form">
+<bsm-layout id="template-general">
+  <div slot="content">
     <div class="required field" id="name">
       <label>Name</label>
       <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
@@ -36,6 +35,6 @@
 
     <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
     </timestamps>
-  </form>
-</div>
+  </div>
+</bsm-layout>
   

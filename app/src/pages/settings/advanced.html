@@ -9,109 +9,105 @@
   </div>
   <!-- ko component: {name: 'settings-tabset', params: {active: 'advanced'}} --><!-- /ko -->
 </div>
-<div class="scrollbox">
-  <errors id="info"></errors>
-  <div class="ui grid">
-    <div class="ten wide column">
-      <form class="ui form">
-        <div class="field">
-          <label>Account limit</label>
-          <input type="range" min="0" max="200" data-bind="value: accountLimitObs, valueUpdate: 'input'" />
-          <div class="ui large label" data-bind="text: accountLimitLabel"></div>
-        </div>
-
-        <h4 class="ui dividing header">Export Options</h4>
-        <div class="field">
-          <ui-checkbox params="checkedObs: strictUploadValidationEnabledObs">
-            Enable strict validation of upload files
-          </ui-checkbox>
-        </div>
-        <div class="field">
-          <ui-checkbox params="checkedObs: usesCustomExportScheduleObs">
-            This app has a custom export schedule set up for it
-          </ui-checkbox>
-        </div>
-        <div class="field">
-          <ui-checkbox params="checkedObs: healthCodeExportEnabledObs">
-            Return participant health codes through the API
-          </ui-checkbox>
-        </div>
-
-        <h4 class="ui dividing header">Authentication</h4>
-        <div class="field">
-          <ui-checkbox params="checkedObs: emailSignInEnabledObs">
-            Enable sign in via email
-          </ui-checkbox>
-        </div>
-        <div class="field">
-          <ui-checkbox params="checkedObs: phoneSignInEnabledObs">
-            Enable sign in via phone
-          </ui-checkbox>
-        </div>
-        <div class="field">
-          <ui-checkbox params="checkedObs: reauthenticationEnabledObs">
-            Issue reauthentication tokens
-          </ui-checkbox>
-        </div>
-        <div class="field">
-          <ui-checkbox params="checkedObs: autoVerificationEmailSuppressedObs">
-            Do not automatically send an email to verify a new email address
-          </ui-checkbox>
-        </div>
-        <div class="field">
-          <ui-checkbox params="checkedObs: autoVerificationPhoneSuppressedObs">
-            Do not automatically send an SMS message to verify a new phone number
-          </ui-checkbox>
-        </div>
-
-        <h4 class="ui dividing header">External IDs</h4>
-        <div class="field" id="externalIdRequiredOnSignup">
-          <ui-checkbox params="checkedObs: externalIdRequiredOnSignupObs">
-            Require external ID on sign up
-          </ui-checkbox>
-        </div>
-
-        <h4 class="ui dividing header">Legacy App Support</h4>
-        <p class="error-message">
-          Unless this is a legacy app, all these feature flags should be enabled.
-        </p>
-        <div class="field">
-          <ui-checkbox params="checkedObs: verifyChannelOnSignInEnabledObs">
-            Check that channel is verified on sign in
-          </ui-checkbox>
-        </div>
-        <div class="field">
-          <ui-checkbox params="checkedObs: emailVerificationEnabledObs">
-            Verify new email addresses
-          </ui-checkbox>
-        </div>
-        <div class="field">
-          <ui-checkbox params="checkedObs: appIdExcludedInExportObs">
-            Exclude app ID from columnn names of export data
-          </ui-checkbox>
-        </div>
-
-        <h4 class="ui dividing header">Notifications</h4>
-        <div class="field">
-          <label>iOS Platform ARN</label>
-          <input style="width:40rem" type="text" data-bind="textInput: iosArnObs" />
-        </div>
-        <div class="field">
-          <label>Android Platform ARN</label>
-          <input style="width:40rem" type="text" data-bind="textInput: androidArnObs" />
-        </div>
-      </form>
-    </div>
-    <div class="six wide column">
-      <div class="ui message">
-        <p>If email verification is enabled, email addresses must be verified by the user. This can happen one of two ways: </p>
-
-        <p>&#8226; through an email requesting verification of the email (which can be turned on or off by app developers where the template is defined), or</p>
-
-        <p>&#8226; by signing in through an email with a link that is sent to the user’s email address. In the latter case, signing in via email only API needs to be enabled for the app.</p>
-
-        <p>If email verification is disabled, then the app must either require an external ID on sign up, it must validate the external ID against a list of IDs maintained by Bridge, or both must be enabled.</p>
+<bsm-layout id="info">
+  <div slot="content">
+    <form class="ui form">
+      <div class="field">
+        <label>Account limit</label>
+        <input type="range" min="0" max="200" data-bind="value: accountLimitObs, valueUpdate: 'input'" />
+        <div class="ui large label" data-bind="text: accountLimitLabel"></div>
       </div>
-    </div>
+
+      <h4 class="ui dividing header">Export Options</h4>
+      <div class="field">
+        <ui-checkbox params="checkedObs: strictUploadValidationEnabledObs">
+          Enable strict validation of upload files
+        </ui-checkbox>
+      </div>
+      <div class="field">
+        <ui-checkbox params="checkedObs: usesCustomExportScheduleObs">
+          This app has a custom export schedule set up for it
+        </ui-checkbox>
+      </div>
+      <div class="field">
+        <ui-checkbox params="checkedObs: healthCodeExportEnabledObs">
+          Return participant health codes through the API
+        </ui-checkbox>
+      </div>
+
+      <h4 class="ui dividing header">Authentication</h4>
+      <div class="field">
+        <ui-checkbox params="checkedObs: emailSignInEnabledObs">
+          Enable sign in via email
+        </ui-checkbox>
+      </div>
+      <div class="field">
+        <ui-checkbox params="checkedObs: phoneSignInEnabledObs">
+          Enable sign in via phone
+        </ui-checkbox>
+      </div>
+      <div class="field">
+        <ui-checkbox params="checkedObs: reauthenticationEnabledObs">
+          Issue reauthentication tokens
+        </ui-checkbox>
+      </div>
+      <div class="field">
+        <ui-checkbox params="checkedObs: autoVerificationEmailSuppressedObs">
+          Do not automatically send an email to verify a new email address
+        </ui-checkbox>
+      </div>
+      <div class="field">
+        <ui-checkbox params="checkedObs: autoVerificationPhoneSuppressedObs">
+          Do not automatically send an SMS message to verify a new phone number
+        </ui-checkbox>
+      </div>
+
+      <h4 class="ui dividing header">External IDs</h4>
+      <div class="field" id="externalIdRequiredOnSignup">
+        <ui-checkbox params="checkedObs: externalIdRequiredOnSignupObs">
+          Require external ID on sign up
+        </ui-checkbox>
+      </div>
+
+      <h4 class="ui dividing header">Legacy App Support</h4>
+      <p class="error-message">
+        Unless this is a legacy app, all these feature flags should be enabled.
+      </p>
+      <div class="field">
+        <ui-checkbox params="checkedObs: verifyChannelOnSignInEnabledObs">
+          Check that channel is verified on sign in
+        </ui-checkbox>
+      </div>
+      <div class="field">
+        <ui-checkbox params="checkedObs: emailVerificationEnabledObs">
+          Verify new email addresses
+        </ui-checkbox>
+      </div>
+      <div class="field">
+        <ui-checkbox params="checkedObs: appIdExcludedInExportObs">
+          Exclude app ID from columnn names of export data
+        </ui-checkbox>
+      </div>
+
+      <h4 class="ui dividing header">Notifications</h4>
+      <div class="field">
+        <label>iOS Platform ARN</label>
+        <input style="width:40rem" type="text" data-bind="textInput: iosArnObs" />
+      </div>
+      <div class="field">
+        <label>Android Platform ARN</label>
+        <input style="width:40rem" type="text" data-bind="textInput: androidArnObs" />
+      </div>
+    </form>
   </div>
-</div>
+  <div slot="help">
+    <p>If email verification is enabled, email addresses must be verified by the user. This can happen one of two ways: </p>
+
+    <p>&#8226; through an email requesting verification of the email (which can be turned on or off by app developers where the template is defined), or</p>
+
+    <p>&#8226; by signing in through an email with a link that is sent to the user’s email address. In the latter case, signing in via email only API needs to be enabled for the app.</p>
+
+    <p>If email verification is disabled, then the app must either require an external ID on sign up, it must validate the external ID against a list of IDs maintained by Bridge, or both must be enabled.</p>
+
+  </div>
+</bsm-layout>

@@ -13,77 +13,78 @@
   </div>
   <survey-tabset params="viewModel: $data"></survey-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="survey"></errors>
-  <form class="ui form">
-    <div class="two fields">
-      <div class="required field" id="name">
-        <label>Name</label>
-        <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
-      </div>
-      <div class="required field" id="identifier">
-        <label>Identifier</label>
-        <input type="text" data-bind="textInput: identifierObs" />
-      </div>
-    </div>
-    <div class="field">
-      <label>Copyright Notice</label>
-      <input type="text" data-bind="textInput: copyrightNoticeObs" />
-    </div>
-  </form>
-
-  <h3>Questions</h3>
-
-  <h4 data-bind="visible: !isLoadedObs()">Loading&hellip;</h4>
-
-  <div data-bind="visible: elementsObs().length === 0 && isLoadedObs()">
-    <p>There are currently no questions in this survey. Create a question:</p>
-    <button class="ui primary button" data-type="MultiValueConstraints" data-bind="click: createNewElement">
-      Create New Element
-    </button>
-  </div>
-  <div class="survey" data-bind="template: {foreach: elementsObs, beforeRemove: fadeUp}">
-    <div class="element">
-      <div class="element-content">
-        <!-- ko component: {name: $data.type, params: {element: $data, elementsObs: $parent.elementsObs, 
-                    indexObs: $index, collectionName: 'elements'+$index()+'_' }
-                } -->
-        <!-- /ko -->
-      </div>
-      <div class="element-callout">
-        <div>
-          <span
-            class="ui huge circular label"
-            data-bind="text: $index()+1, css:{
-                        'blue': $data.type === 'SurveyQuestion',
-                        'green': $data.type === 'SurveyInfoScreen',
-                    }"
-          ></span>
+<bsm-layout id="survey">
+  <div slot="content">
+    <form class="ui form">
+      <div class="two fields">
+        <div class="required field" id="name">
+          <label>Name</label>
+          <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
         </div>
-        <div class="element-callout-box">
-          <div class="element-callout-box-identifier field" data-bind="attr:{id: 'elements'+$index()+'_identifier'}">
-            <input type="text" class="editor element-callout-identifier" data-bind="textInput: identifierObs" />
-            <div class="require element-callout-identifier-label">Identifier</div>
-          </div>
-          <div class="ui compact pointing secondary vertical menu">
-            <div class="item">
-              <button class="fluid ui compact mini basic button" data-bind="click: $component.createElementAfter">
-                <i class="add icon"></i>Add below
-              </button>
-            </div>
-            <div class="item">
-              <button class="fluid ui compact mini basic button" data-bind="click: $parent.copyElement">
-                <i class="copy icon"></i>Copy
-              </button>
-            </div>
-            <div class="item">
-              <button class="fluid ui compact red mini basic button" data-bind="click: $parent.deleteElement">
-                <i class="delete icon"></i>Delete
-              </button>
-            </div>
-          </div>
+        <div class="required field" id="identifier">
+          <label>Identifier</label>
+          <input type="text" data-bind="textInput: identifierObs" />
         </div>
       </div>
+      <div class="field">
+        <label>Copyright Notice</label>
+        <input type="text" data-bind="textInput: copyrightNoticeObs" />
+      </div>
+    </form>
+  
+    <h3>Questions</h3>
+  
+    <h4 data-bind="visible: !isLoadedObs()">Loading&hellip;</h4>
+  
+    <div data-bind="visible: elementsObs().length === 0 && isLoadedObs()">
+      <p>There are currently no questions in this survey. Create a question:</p>
+      <button class="ui primary button" data-type="MultiValueConstraints" data-bind="click: createNewElement">
+        Create New Element
+      </button>
+    </div>
+    <div class="survey" data-bind="template: {foreach: elementsObs, beforeRemove: fadeUp}">
+      <div class="element">
+        <div class="element-content">
+          <!-- ko component: {name: $data.type, params: {element: $data, elementsObs: $parent.elementsObs, 
+                      indexObs: $index, collectionName: 'elements'+$index()+'_' }
+                  } -->
+          <!-- /ko -->
+        </div>
+        <div class="element-callout">
+          <div>
+            <span
+              class="ui huge circular label"
+              data-bind="text: $index()+1, css:{
+                          'blue': $data.type === 'SurveyQuestion',
+                          'green': $data.type === 'SurveyInfoScreen',
+                      }"
+            ></span>
+          </div>
+          <div class="element-callout-box">
+            <div class="element-callout-box-identifier field" data-bind="attr:{id: 'elements'+$index()+'_identifier'}">
+              <input type="text" class="editor element-callout-identifier" data-bind="textInput: identifierObs" />
+              <div class="require element-callout-identifier-label">Identifier</div>
+            </div>
+            <div class="ui compact pointing secondary vertical menu">
+              <div class="item">
+                <button class="fluid ui compact mini basic button" data-bind="click: $component.createElementAfter">
+                  <i class="add icon"></i>Add below
+                </button>
+              </div>
+              <div class="item">
+                <button class="fluid ui compact mini basic button" data-bind="click: $parent.copyElement">
+                  <i class="copy icon"></i>Copy
+                </button>
+              </div>
+              <div class="item">
+                <button class="fluid ui compact red mini basic button" data-bind="click: $parent.deleteElement">
+                  <i class="delete icon"></i>Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+</bsm-layout>

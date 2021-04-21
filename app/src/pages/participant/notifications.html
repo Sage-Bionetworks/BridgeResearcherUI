@@ -16,65 +16,49 @@
   </div>
   <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
 </div>
-<div class="scrollbox">
-  <div class="ui grid">
-    <div class="ten wide column">
-      <div class="ui warning message" data-bind="visible: !notificationsEnabledObs()">
-        <p>
-          No push notification services have been configured (APNS, FCM). Client applications can only register for SMS
-          messages until this is done. Contact Bridge server administration if you wish to include push notifications in
-          your Bridge participant management.
-        </p>
-      </div>
-      <errors id="notifications"></errors>
-      <table class="ui compact selectable table" data-bind="visible: isResearcher">
-        <thead>
-          <tr>
-            <th>Registration</th>
-            <th>Platform</th>
-            <th>Last Modified</th>
-          </tr>
-        </thead>
-        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-          <tr>
-            <td colspan="3" data-bind="html: recordsMessageObs"></td>
-          </tr>
-        </tbody>
-        <tbody data-bind="foreach: itemsObs">
-          <tr>
-            <td data-bind="text: $data.guid"></td>
-            <td data-bind="text: $data.osName"></td>
-            <td data-bind="text: $parent.formatDate($data.modifiedOn)"></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="ui message" style="margin-top: 3rem" 
-        data-bind="visible: isAdmin() && smsTypeObs()">
-        <div class="header">Most recent SMS message</div>
-          <p style="margin-top: .5rem"><span data-bind="text: messageBodyObs"></span></p>
-          <p><b>Sent On:</b> <span data-bind="text: formatDate(sentOnObs())"></span></p>
-          <p><b>Type:</b> <span data-bind="text: smsTypeObs"></span></p>
-          <p><b>ID:</b> <span data-bind="text: messageIdObs"></span></p>
-      </div>
-
+<bsm-layout id="notifications">
+  <div slot="content">
+    <div class="ui warning message" data-bind="visible: !notificationsEnabledObs()">
+      <p>No push notification services have been configured (APNS, FCM). Client applications can only register for SMS messages until this is done. Contact Bridge server administration if you wish to include push notifications in your Bridge participant management.
+      </p>
     </div>
-    <div class="six wide column">
-      <div class="ui message">
-        <p>
-          If the client application has registered with the Bridge server, there will be a record here of the
-          registration. You can attempt to send a push notification directly to this user.
-        </p>
-        <p>
-          If there is more than one record here, the user has installed your app on more than one device. If you message
-          the user, we will send the message to all devices.
-        </p>
-        <p>
-          The user is not guaranteed to receive your message. If they turn off notifications or delete the app without
-          telling Bridge, there will still be a registration record here, but the notification will be rejected by the
-          push notification services.
-        </p>
-      </div>
+    <table class="ui compact selectable table" data-bind="visible: isResearcher">
+      <thead>
+        <tr>
+          <th>Registration</th>
+          <th>Platform</th>
+          <th>Last Modified</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="3" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr>
+          <td data-bind="text: $data.guid"></td>
+          <td data-bind="text: $data.osName"></td>
+          <td data-bind="text: $parent.formatDate($data.modifiedOn)"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="ui message" style="margin-top: 3rem" 
+      data-bind="visible: isAdmin() && smsTypeObs()">
+      <div class="header">Most recent SMS message</div>
+        <p style="margin-top: .5rem"><span data-bind="text: messageBodyObs"></span></p>
+        <p><b>Sent On:</b> <span data-bind="text: formatDate(sentOnObs())"></span></p>
+        <p><b>Type:</b> <span data-bind="text: smsTypeObs"></span></p>
+        <p><b>ID:</b> <span data-bind="text: messageIdObs"></span></p>
     </div>
   </div>
-</div>
+  <div slot="help">
+    <p>If the client application has registered with the Bridge server, there will be a record here of the registration. You can attempt to send a push notification directly to this user.
+    </p>
+    <p>If there is more than one record here, the user has installed your app on more than one device. If you message the user, we will send the message to all devices.
+    </p>
+    <p>The user is not guaranteed to receive your message. If they turn off notifications or delete the app without telling Bridge, there will still be a registration record here, but the notification will be rejected by the push notification services.
+    </p>
+  </div>
+</bsm-layout>

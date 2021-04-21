@@ -9,76 +9,61 @@
   </div>
   <div class="ui empty secondary pointing menu"></div>
 </div>
-<div class="scrollbox">
-  <errors id="applinks"></errors>
-  <div class="ui grid form">
-    <div class="ten wide column">
-      <h3>Apple Universal Links</h3>
-      <table class="ui compact table" data-bind="visible: appleAppLinksObs().length > 0">
-        <tbody
-          data-bind="foreach: appleAppLinksObs, dragula: {listObs: appleAppLinksObs, 
-                    indexObs: appleIndexObs, dragHandleSelector: 'dragHandle'}"
-        >
-          <tr>
-            <td class="dragHandle" data-bind="text: $data.appIdObs"></td>
-            <td data-bind="text: $component.pathFormatter($data)"></td>
-            <td style="text-align:right">
-              <i class="red large times circle outline link icon" data-bind="click: $component.removeAppleAppLink"></i>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <button class="ui tiny button" data-bind="click: openAppleAppLinkEditor">Add Link</button>
+<bsm-layout id="applinks">
+  <div slot="content">
+    <h3>Apple Universal Links</h3>
+    <table class="ui compact table" data-bind="visible: appleAppLinksObs().length > 0">
+      <tbody
+        data-bind="foreach: appleAppLinksObs, dragula: {listObs: appleAppLinksObs, 
+                  indexObs: appleIndexObs, dragHandleSelector: 'dragHandle'}"
+      >
+        <tr>
+          <td class="dragHandle" data-bind="text: $data.appIdObs"></td>
+          <td data-bind="text: $component.pathFormatter($data)"></td>
+          <td style="text-align:right">
+            <i class="red large times circle outline link icon" data-bind="click: $component.removeAppleAppLink"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="ui tiny button" data-bind="click: openAppleAppLinkEditor">Add Link</button>
 
-      <h3>Android App Links</h3>
-      <table class="ui compact table" data-bind="visible: androidAppLinksObs().length > 0">
-        <tbody
-          data-bind="foreach: androidAppLinksObs, dragula: {listObs: androidAppLinksObs, 
-                    indexObs: androidIndexObs, dragHandleSelector: 'dragHandle'}"
-        >
-          <tr>
-            <td class="dragHandle" data-bind="text: $data.packageNameObs"></td>
-            <td data-bind="text: $data.namespaceObs"></td>
-            <td data-bind="html: $component.fingerprintsFormatter($data)"></td>
-            <td style="text-align:right">
-              <i
-                class="red large times circle outline link icon"
-                data-bind="click: $component.removeAndroidAppLink"
-              ></i>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <button class="ui tiny button" data-bind="click: openAndroidAppLinkEditor">Add Link</button>
-    </div>
-    <div class="six wide column">
-      <div class="ui message">
-        <p> To create links that are intercepted by your application (“App Links” on Android, “Universal Links” on iPhone), we provide the server support to register those links with your application. (It is more typical to use your own external website for this purpose, however.) </p>
-
-        <p> Your links must point to the host and path <code>https://ws.sagebridge.org/<span data-bind="text: identifierObs"></span></code>. <b><i>You should define paths here for Apple OS that always include this app-based context path.</i></b> </p>
-        
-        <p> On Android, you should declare the Intents to capture these links so they include the <code>&lt;data android:pathPrefix="/<span data-bind="text: identifierObs"></span>"/&gt;</code> element to scope your captured URLs. </p>
-
-        <p>Bridge enforces these constraints.</p>
-
-        <p>
-          <b>References:</b><br />
-          Android
-          <a
-            href="https://developer.android.com/training/app-links/verify-site-associations.html"
-            target="_blank"
-            rel="noopener"
-            >App Links</a
-          ><br />
-          Apple
-          <a
-            href="https://developer.apple.com/library/content/documentation/General/Conceptual/AppSearch/UniversalLinks.html"
-            target="_blank"
-            rel="noopener"
-            >Universal Links</a
-          >
-        </p>
-      </div>
-    </div>
+    <h3>Android App Links</h3>
+    <table class="ui compact table" data-bind="visible: androidAppLinksObs().length > 0">
+      <tbody
+        data-bind="foreach: androidAppLinksObs, dragula: {listObs: androidAppLinksObs, 
+                  indexObs: androidIndexObs, dragHandleSelector: 'dragHandle'}"
+      >
+        <tr>
+          <td class="dragHandle" data-bind="text: $data.packageNameObs"></td>
+          <td data-bind="text: $data.namespaceObs"></td>
+          <td data-bind="html: $component.fingerprintsFormatter($data)"></td>
+          <td style="text-align:right">
+            <i
+              class="red large times circle outline link icon"
+              data-bind="click: $component.removeAndroidAppLink"
+            ></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="ui tiny button" data-bind="click: openAndroidAppLinkEditor">Add Link</button>
   </div>
-</div>
+  <div slot="help">
+    <p> To create links that are intercepted by your application (“App Links” on Android, “Universal Links” on iPhone), we provide the server support to register those links with your application. (It is more typical to use your own external website for this purpose, however.) </p>
+
+    <p> Your links must point to the host and path <code>https://ws.sagebridge.org/<span data-bind="text: identifierObs"></span></code>. <b><i>You should define paths here for Apple OS that always include this app-based context path.</i></b> </p>
+    
+    <p> On Android, you should declare the Intents to capture these links so they include the <code>&lt;data android:pathPrefix="/<span data-bind="text: identifierObs"></span>"/&gt;</code> element to scope your captured URLs. </p>
+
+    <p>Bridge enforces these constraints.</p>
+
+    <p><b>References:</b><br />
+      Android
+      <a href="https://developer.android.com/training/app-links/verify-site-associations.html"
+        target="_blank" rel="noopener" >App Links</a><br />
+      Apple
+      <a href="https://developer.apple.com/library/content/documentation/General/Conceptual/AppSearch/UniversalLinks.html" target="_blank" rel="noopener">Universal Links</a>
+    </p>
+  </div>
+</bsm-layout>

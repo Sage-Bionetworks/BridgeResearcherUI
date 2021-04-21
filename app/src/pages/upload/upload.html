@@ -11,7 +11,8 @@
   </div>
   <div class="ui empty secondary pointing menu"></div>
 </div>
-<div class="scrollbox">
-  <errors id="upload"></errors>
-  <upload-details params="uploadDetailsObs: uploadDetailsObs, showApp: true"></upload-details>
-</div>
+<bsm-layout id="upload">
+  <div slot="content">
+    <upload-details params="uploadDetailsObs: uploadDetailsObs, showApp: true"></upload-details>
+  </div>
+</bsm-layout>

@@ -9,7 +9,7 @@ var failureHandler = utils.failureHandler({
   redirectMsg: "Assessment not found.",
   redirectTo: "assessments",
   transient: false,
-  id: 'assessment_config'
+  id: 'assessment_customize'
 });
 
 function findByIdAndProp(data, nodeId, propName) {

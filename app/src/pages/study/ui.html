@@ -13,57 +13,56 @@
   </div>
   <study-tabset params="identifierObs: identifierObs, isNewObs: isNewObs"></study-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="study"></errors>
-  <form class="ui skinny form">
-    <div class="field" id="name">
-      <label>Study Logo URL</label>
-      <input data-bind="textInput: studyLogoUrlObs, hasFocus: true" />
-    </div>
-
-    <div class="fields">
-      <div class="field" id="colorScheme_background">
-        <label>Background Color</label>
-        <div class="ui right labeled input">
-          <input type="text" data-bind="textInput: backgroundObs">
-          <div class="ui basic label" data-bind="style: {backgroundColor: backgroundObs}"></div>
+<bsm-layout id="study-ui">
+  <div slot="content">
+    <form class="ui form">
+      <div class="field" id="name">
+        <label>Study Logo URL</label>
+        <input data-bind="textInput: studyLogoUrlObs, hasFocus: true" />
+      </div>
+  
+      <div class="fields">
+        <div class="field" id="colorScheme_background">
+          <label>Background Color</label>
+          <div class="ui right labeled input">
+            <input type="text" data-bind="textInput: backgroundObs">
+            <div class="ui basic label" data-bind="style: {backgroundColor: backgroundObs}"></div>
+          </div>
+        </div>
+        <div class="field" id="colorScheme_foreground">
+          <label>Foreground Color</label>
+          <div class="ui right labeled input">
+            <input type="text" data-bind="textInput: foregroundObs">
+            <div class="ui basic label" data-bind="style: {backgroundColor: foregroundObs}"></div>
+          </div>
         </div>
       </div>
-      <div class="field" id="colorScheme_foreground">
-        <label>Foreground Color</label>
-        <div class="ui right labeled input">
-          <input type="text" data-bind="textInput: foregroundObs">
-          <div class="ui basic label" data-bind="style: {backgroundColor: foregroundObs}"></div>
+      <div class="fields">
+        <div class="field" id="colorScheme_activated">
+          <label>Activated Color</label>
+          <div class="ui right labeled input">
+            <input type="text" data-bind="textInput: activatedObs">
+            <div class="ui basic label" data-bind="style: {backgroundColor: activatedObs}"></div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="fields">
-      <div class="field" id="colorScheme_activated">
-        <label>Activated Color</label>
-        <div class="ui right labeled input">
-          <input type="text" data-bind="textInput: activatedObs">
-          <div class="ui basic label" data-bind="style: {backgroundColor: activatedObs}"></div>
+        <div class="field" id="colorScheme_inactivated">
+          <label>Inactivated Color</label>
+          <div class="ui right labeled input">
+            <input type="text" data-bind="textInput: inactivatedObs">
+            <div class="ui basic label" data-bind="style: {backgroundColor: inactivatedObs}"></div>
+          </div>
         </div>
-      </div>
-      <div class="field" id="colorScheme_inactivated">
-        <label>Inactivated Color</label>
-        <div class="ui right labeled input">
-          <input type="text" data-bind="textInput: inactivatedObs">
-          <div class="ui basic label" data-bind="style: {backgroundColor: inactivatedObs}"></div>
-        </div>
-      </div>
-    </div>    
-
-    <h4>Contacts</h4>
-    <!-- ko foreach: contactsObs -->
-      <study-contact params="contact: $data, contactsObs: $parent.contactsObs"></study-contact>
-    <!-- /ko -->
-    <button class="ui mini button" data-bind="click: addContact">
-      Add Contact
-    </button>
-
-    <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
-    </timestamps>
-
-  </form>
-</div>
+      </div>    
+  
+      <h4>Contacts</h4>
+      <!-- ko foreach: contactsObs -->
+        <study-contact params="contact: $data, contactsObs: $parent.contactsObs"></study-contact>
+      <!-- /ko -->
+      <button class="ui mini button" data-bind="click: addContact">
+        Add Contact
+      </button>
+      <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
+      </timestamps>
+    </form>
+  </div>
+</bsm-layout>

@@ -10,6 +10,7 @@ const SUPPORTED_COUNTRIES = [
   {regionCode: 'CA', flag: '🇨🇦', name: 'Canada'},
   {regionCode: 'IN', flag: '🇮🇳', name: 'India'},
   {regionCode: 'MX', flag: '🇲🇽', name: 'Mexico'},
+  {regionCode: 'NL', flag: '🇳🇱', name: 'Netherlands'},
   {regionCode: 'NG', flag: '🇳🇬', name: 'Nigeria'},
 ];
 

@@ -19,9 +19,9 @@
   </div>
   <studyreports-tabset></studyreports-tabset>
 </div>
-<div class="scrollbox">
-  <div style="padding: 0 2rem">
+<bsm-layout>
+  <div slot="content">
     <p data-bind="visible: !hasDataObs()">No data available.</p>
     <canvas data-bind="visible: hasDataObs, chart: chartObs"></canvas>
   </div>
-</div>
+</bsm-layout>

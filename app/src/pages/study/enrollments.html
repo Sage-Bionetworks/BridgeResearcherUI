@@ -15,9 +15,8 @@
   </div>
   <study-tabset params="identifierObs: identifierObs, isNewObs: isNewObs"></study-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="enrollments"></errors>
-  <form class="ui skinny form">
+<bsm-layout id="enrollments">
+  <div slot="header">
     <div class="line-control">
       <div style="margin-right: 1rem">Show only: </div>
       <div style="margin-right: 1rem">
@@ -35,6 +34,8 @@
       <div class="line-control-stretch"></div>
       <pager params="prefix: 'en', postLoadFunc: postLoadFunc"></pager>
     </div>
+  </div>
+  <div slot="content">
     <table class="ui compact selectable table">
       <thead>
         <tr>
@@ -84,8 +85,8 @@
         </tr>
       </tbody>
     </table>
-  </form>
-</div>
+  </div>
+</bsm-layout>
 
 
 

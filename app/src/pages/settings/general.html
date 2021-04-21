@@ -10,54 +10,49 @@
   </div>
   <!-- ko component: {name: 'settings-tabset', params: {active: 'info'}} --><!-- /ko -->
 </div>
-<div class="scrollbox">
-  <div class="ui grid">
-    <div class="ten wide column">
-      <errors id="general"></errors>
-      <form class="ui form">
-        <div class="fields">
-          <div class="twelve wide required field" id="name">
-            <label>App name</label>
-            <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
-          </div>
-          <div class="six wide field" id="shortName">
-            <label>Short name (10 chars or less)</label>
-            <input maxlength="10" type="text" data-bind="textInput: shortNameObs" />
-          </div>
+<bsm-layout id="general">
+  <div slot="content">
+    <form class="ui form">
+      <div class="fields">
+        <div class="twelve wide required field" id="name">
+          <label>App name</label>
+          <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
         </div>
-        <div class="required field" id="sponsorName">
-          <label>Sponsor name</label>
-          <input type="text" data-bind="textInput: sponsorNameObs" />
+        <div class="six wide field" id="shortName">
+          <label>Short name (10 chars or less)</label>
+          <input maxlength="10" type="text" data-bind="textInput: shortNameObs" />
         </div>
-        <div class="field">
-          <label>Youngest allowable age for participants</label>
-          <input type="range" min="18" max="121" data-bind="value: minAgeOfConsentObs, valueUpdate: 'input'" />
-          <div class="ui large label" data-bind="text: minAgeLabel"></div>
-        </div>
-        <div class="field">
-          <label>Minimum Supported App Versions</label>
-          <div class="six fields">
-            <div class="field">
-              <label>iPhone</label>
-              <input placeholder="#" type="number" data-bind="textInput: minIosObs" />
-            </div>
-            <div class="field">
-              <label>Android</label>
-              <input placeholder="#" type="number" data-bind="textInput: minAndroidObs" />
-            </div>
-          </div>
-          <p class="help-text">Leave blank or set to zero if you support all versions that have been released</p>
-        </div>
-      </form>
-    </div>
-    <div class="six wide column">
-      <div class="ui message">
-        <p> The identifier for this app is <b style="color:black; font-family: monospace" data-bind="text: identifierObs"></b>. Your technical staff will need this identifier to integrate with the Bridge server. </p>
-
-        <p>If your app no longer supports an older app version on a particular platform, lock that version out by setting a <b>minimum supported app version</b>. Apps older than this version on that platform will receive a 410 response from the server. Your app should prevent the user from doing anything but upgrading when it receives this response.</p>
-
-        <p> The CMS key is provided to encrypt data you send to the Bridge server. The encryption key (specific to your app) ensures that the data cannot be read on the phone, or in transit to the Bridge server. </p>
       </div>
-    </div>
+      <div class="required field" id="sponsorName">
+        <label>Sponsor name</label>
+        <input type="text" data-bind="textInput: sponsorNameObs" />
+      </div>
+      <div class="field">
+        <label>Youngest allowable age for participants</label>
+        <input type="range" min="18" max="121" data-bind="value: minAgeOfConsentObs, valueUpdate: 'input'" />
+        <div class="ui large label" data-bind="text: minAgeLabel"></div>
+      </div>
+      <div class="field">
+        <label>Minimum Supported App Versions</label>
+        <div class="six fields">
+          <div class="field">
+            <label>iPhone</label>
+            <input placeholder="#" type="number" data-bind="textInput: minIosObs" />
+          </div>
+          <div class="field">
+            <label>Android</label>
+            <input placeholder="#" type="number" data-bind="textInput: minAndroidObs" />
+          </div>
+        </div>
+        <p class="help-text">Leave blank or set to zero if you support all versions that have been released</p>
+      </div>
+    </form>
   </div>
-</div>
+  <div slot="help">
+    <p> The identifier for this app is <b style="color:black; font-family: monospace" data-bind="text: identifierObs"></b>. Your technical staff will need this identifier to integrate with the Bridge server. </p>
+
+    <p>If your app no longer supports an older app version on a particular platform, lock that version out by setting a <b>minimum supported app version</b>. Apps older than this version on that platform will receive a 410 response from the server. Your app should prevent the user from doing anything but upgrading when it receives this response.</p>
+
+    <p> The CMS key is provided to encrypt data you send to the Bridge server. The encryption key (specific to your app) ensures that the data cannot be read on the phone, or in transit to the Bridge server. </p>
+  </div>
+</bsm-layout>

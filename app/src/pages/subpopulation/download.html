@@ -11,39 +11,33 @@
   </div>
   <subpop-tabset params="guidObs: guidObs"></subpop-tabset>
 </div>
-<div class="scrollbox">
-  <div class="ui grid">
-    <div class="ten wide column">
-      <table class="ui compact table">
-        <thead>
-          <tr>
-            <th>Format</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>HTML</td>
-            <td>
-              <a target="_blank" rel="noopener" data-bind="attr: {'href': htmlUrlObs}, text: htmlUrlObs"></a>
-            </td>
-          </tr>
-          <tr>
-            <td>PDF</td>
-            <td>
-              <a target="_blank" rel="noopener" data-bind="attr: {'href': pdfUrlObs}, text: pdfUrlObs"></a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="six wide column">
-      <div class="ui message">
-        <p>
-          The published version of the consent can be accessed from your mobile app, or from other support materials, at
-          the following addresses.
-        </p>
-      </div>
-    </div>
+<bsm-layout>
+  <div slot="content">
+    <table class="ui compact table">
+      <thead>
+        <tr>
+          <th>Format</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>HTML</td>
+          <td>
+            <a target="_blank" rel="noopener" data-bind="attr: {'href': htmlUrlObs}, text: htmlUrlObs"></a>
+          </td>
+        </tr>
+        <tr>
+          <td>PDF</td>
+          <td>
+            <a target="_blank" rel="noopener" data-bind="attr: {'href': pdfUrlObs}, text: pdfUrlObs"></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>    
   </div>
-</div>
+  <div slot="help">
+    <p>The published version of the consent can be accessed from your mobile app, or from other support materials, at the following addresses.
+    </p>
+  </div>
+</bsm-layout>

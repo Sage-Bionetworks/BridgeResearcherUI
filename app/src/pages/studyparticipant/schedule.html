@@ -19,54 +19,46 @@
   <studyparticipant-tabset params="studyIdObs: navStudyIdObs, userIdObs: userIdObs, 
         statusObs: statusObs"></studyparticipant-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="studyparticipant-schedule"></errors>
-  <div class="ui grid">
-    <div class="ten wide column">
-      <div class="ui tabular menu" style="margin-bottom:2rem">
-        <a class="active item">
-          Schedule Events
-        </a>
-        <a class="item" data-bind="href: link('schedule/timeline')">
-          Timeline
-        </a>
-      </div>
-
-      <table class="ui compact selectable table">
-        <thead>
-          <tr>
-            <th>Scheduling Event</th>
-            <th>Timestamp</th>
-            <th nowrap>Days Since Event</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-          <tr>
-            <td colspan="4" data-bind="html: recordsMessageObs"></td>
-          </tr>
-        </tbody>
-        <tbody data-bind="foreach: itemsObs">
-          <tr>
-            <td width="100%" data-bind="text: $parent.formatEventId($data.eventId)"></td>
-            <td nowrap data-bind="text: $parent.formatDateTime($data.timestamp)"></td>
-            <td data-bind="text: $parent.formatDaysSince($data.timestamp)"></td>
-            <td nowrap>
-              <span data-bind="visible: $parent.canEdit($data)">
-                <button class="ui basic compact mini button" 
-                  data-bind="click: $component.editEvent">Edit</button>
-                <button class="ui basic red compact mini button" 
-                  data-bind="click: $component.deleteEvent">Delete</button>
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>      
-    </div>
-    <div class="six wide column">
-      <div class="ui message" style="margin-top: 5rem">
-        <p>Please note that ”days since event” is being shown for diagnostic purposes only and is not normative. The value may be different from the value calculated by the client. The fast but simple calculation provided here may not accurately handle calendar issues like daylight savings time or leap days.</p>
-      </div>
+<bsm-layout id="studyparticipant-schedule">
+  <div slot="header">
+    <div class="ui tabular menu" style="margin-bottom:2rem">
+      <a class="active item">Schedule Events</a>
+      <a class="item" data-bind="href: link('schedule/timeline')">Timeline</a>
     </div>
   </div>
-</div>
+  <div slot="content">
+    <table class="ui compact selectable table">
+      <thead>
+        <tr>
+          <th>Scheduling Event</th>
+          <th>Timestamp</th>
+          <th nowrap>Days Since Event</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="4" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr>
+          <td width="100%" data-bind="text: $parent.formatEventId($data.eventId)"></td>
+          <td nowrap data-bind="text: $parent.formatDateTime($data.timestamp)"></td>
+          <td data-bind="text: $parent.formatDaysSince($data.timestamp)"></td>
+          <td nowrap>
+            <span data-bind="visible: $parent.canEdit($data)">
+              <button class="ui basic compact mini button" 
+                data-bind="click: $component.editEvent">Edit</button>
+              <button class="ui basic red compact mini button" 
+                data-bind="click: $component.deleteEvent">Delete</button>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>    
+  </div>
+  <div slot="help">
+    <p>Please note that ”days since event” is being shown for diagnostic purposes only and is not normative. The value may be different from the value calculated by the client. The fast but simple calculation provided here may not accurately handle calendar issues like daylight savings time or leap days.</p>
+  </div>
+</bsm-layout>

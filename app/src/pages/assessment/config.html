@@ -15,33 +15,24 @@
     revisionObs: pageRevObs, originGuidObs: originGuidObs, canEditObs: canEditObs">
   </assessment-tabset>
 </div>
-<div class="scrollbox">
-  <div class="ui grid">
-    <div class="ten wide column" data-bind="visible: canEditObs">
-      <errors id="assessment_config"></errors>
-      <form class="ui skinny form">
+<bsm-layout id="assessment_config">
+  <div slot="content">
+    <form class="ui form" data-bind="visible: canEditObs">
+      <div style="white-space: pre" 
+        data-bind="html: configFormatted(configObs()), visible: !canEditObs()"></div>
+      <textarea style="font-family: monospace; height: 50rem" 
+        data-bind="textInput: configObs, visible: canEditObs"></textarea>
 
-        <errors id="sharedassessment_config"></errors>
+      <button class="ui tiny primary button" style="margin-top: 1rem" 
+        data-bind="click: reformat">Reformat</button>
 
-        <div style="white-space: pre" 
-          data-bind="html: configFormatted(configObs()), visible: !canEditObs()"></div>
-        <textarea style="font-family: monospace; height: 50rem" 
-          data-bind="textInput: configObs, visible: canEditObs"></textarea>
-
-        <button class="ui tiny primary button" style="margin-top: 1rem" 
-          data-bind="click: reformat">Reformat</button>
-
-        <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
-        </timestamps>
-
-      </form>
-    </div>
-    <div class="six wide column">
-      <div class="ui message">
-        <p>This is the JSON configuration that a client can download to drive UI behavior. It is defined by our client SDKs and it is not validated by the server.</p>
-
-        <p>Modifying this JSON can break apps. To allow for controlled change to assessments when they are used in an app, we have a <em>customization API</em> that limits specific changes to safe parts of the JSON (e.g. to labels, colors, or behavior that can be toggled). Defining the fields that can be customized is a responsibility of the assessment developer (availiable in another tab of this editor).</p>
-      </div>
-    </div>
+      <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
+      </timestamps>
+    </form>
   </div>
-</div>
+  <div slot="help">
+    <p>This is the JSON configuration that a client can download to drive UI behavior. It is defined by our client SDKs and it is not validated by the server.</p>
+
+    <p>Modifying this JSON can break apps. To allow for controlled change to assessments when they are used in an app, we have a <em>customization API</em> that limits specific changes to safe parts of the JSON (e.g. to labels, colors, or behavior that can be toggled). Defining the fields that can be customized is a responsibility of the assessment developer (availiable in another tab of this editor).</p>
+  </div>
+</bsm-layout>

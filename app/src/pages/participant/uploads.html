@@ -11,61 +11,64 @@
   </div>
   <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
 </div>
-<div class="scrollbox">
-  <div class="ui warning message" data-bind="visible: sharingScopeObs() == 'no_sharing'">
-    This user has data sharing turned off (either manually or by withdrawing from the study). Uploaded data will not be exported to Synapse while sharing is off. To determine if a specific upload has failed to export for this or some other reason, click on the upload and look at the “User Sharing Scope” field in the upload’s metadata.
+<bsm-layout id="participant-uploads">
+  <div slot="header">
+    <div class="ui warning message" data-bind="visible: sharingScopeObs() == 'no_sharing'">
+      This user has data sharing turned off (either manually or by withdrawing from the study). Uploaded data will not be exported to Synapse while sharing is off. To determine if a specific upload has failed to export for this or some other reason, click on the upload and look at the “User Sharing Scope” field in the upload’s metadata.
+    </div>
+    <div class="line-control">
+      <div style="width: 30rem" class="ui icon input" data-bind="range: {
+        onChange: doCalSearch, startDateObs: uploadsStartDateObs, endDateObs: uploadsEndDateObs}">
+        <input type="text" placeholder="Uploaded in range" readonly />
+        <i class="calendar icon"></i>
+      </div>
+      <div class="line-control-stretch">
+      </div>
+      <div>
+        <forward-pager params="vm: vm"></forward-pager>
+      </div>
+    </div>
   </div>
-  <errors id="participant-uploads"></errors>
-  <div class="line-control">
-    <div style="width: 30rem" class="ui icon input" data-bind="range: {
-      onChange: doCalSearch, startDateObs: uploadsStartDateObs, endDateObs: uploadsEndDateObs}">
-      <input type="text" placeholder="Uploaded in range" readonly />
-      <i class="calendar icon"></i>
-    </div>
-    <div class="line-control-stretch">
-    </div>
-    <div>
-      <forward-pager params="vm: vm"></forward-pager>
-    </div>
+  <div slot="content">
+    <table class="ui compact selectable table">
+      <thead>
+        <tr class="non-breaking-rows">
+          <th style="width:10px"></th>
+          <th>Upload ID</th>
+          <th>Requested On</th>
+          <th>Completed On</th>
+          <th>Schema of content</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="6" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr data-bind="attr:{class: $component.classFor($data)}">
+          <td>
+            <i data-bind="attr:{class:$component.iconFor($data)}"></i>
+          </td>
+          <td>
+            <a data-bind="visible: $component.isAdmin, text: $data.uploadId, 
+              href: '#/participants/' + $component.userIdObs() + '/uploads/' + $data.uploadId"></a>
+            <span data-bind="visible: !$component.isAdmin(), text: $data.uploadId"></span>
+          </td>
+          <td data-bind="text: $component.formatDateTime($data.requestedOn)"></td>
+          <td data-bind="html: $data.completedByObs"></td>
+          <td>
+            <a target="_blank" rel="noopener" data-bind="href: $data.hrefObs, text: $data.contentObs"></a>
+          </td>
+          <td style="width:12rem">
+            <div data-bind="semantic: $data.progressState">
+              <div class="bar"></div>
+              <div class="label" data-bind="text: $data.progressState.label"></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  <table class="ui compact selectable table">
-    <thead>
-      <tr class="non-breaking-rows">
-        <th style="width:10px"></th>
-        <th>Upload ID</th>
-        <th>Requested On</th>
-        <th>Completed On</th>
-        <th>Schema of content</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-      <tr>
-        <td colspan="6" data-bind="html: recordsMessageObs"></td>
-      </tr>
-    </tbody>
-    <tbody data-bind="foreach: itemsObs">
-      <tr data-bind="attr:{class: $component.classFor($data)}">
-        <td>
-          <i data-bind="attr:{class:$component.iconFor($data)}"></i>
-        </td>
-        <td>
-          <a data-bind="visible: $component.isAdmin, text: $data.uploadId, 
-            href: '#/participants/' + $component.userIdObs() + '/uploads/' + $data.uploadId"></a>
-          <span data-bind="visible: !$component.isAdmin(), text: $data.uploadId"></span>
-        </td>
-        <td data-bind="text: $component.formatDateTime($data.requestedOn)"></td>
-        <td data-bind="html: $data.completedByObs"></td>
-        <td>
-          <a target="_blank" rel="noopener" data-bind="href: $data.hrefObs, text: $data.contentObs"></a>
-        </td>
-        <td style="width:12rem">
-          <div data-bind="semantic: $data.progressState">
-            <div class="bar"></div>
-            <div class="label" data-bind="text: $data.progressState.label"></div>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+</bsm-layout>

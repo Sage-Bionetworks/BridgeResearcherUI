@@ -32,13 +32,14 @@
   </div>
   <org-tabset params="identifierObs: identifierObs, isNewObs: isNewObs"></org-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="org_members"></errors>
-  <form class="ui skinny form">
+<bsm-layout id="org_members">
+  <div slot="header">
     <div class="line-control">
       <div class="line-control-stretch "></div>
       <pager params="prefix: 'members', postLoadFunc: postLoadFunc"></pager>
     </div>
+  </div>
+  <div slot="content">
     <table class="ui compact selectable table">
       <thead>
         <tr>
@@ -74,5 +75,5 @@
         </tr>
       </tbody>
     </table>
-  </form>
-</div>
+  </div>
+</bsm-layout>

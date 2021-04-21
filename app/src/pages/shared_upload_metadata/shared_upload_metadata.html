@@ -9,36 +9,29 @@
   </div>
   <div class="ui empty secondary pointing menu"></div>
 </div>
-<div class="scrollbox">
-  <div class="ui grid">
-    <div class="eleven wide column">
-      <errors id="shared-upload-metadata"></errors>
-      <div data-bind="visible: fieldDefinitionsObs().length === 0">
-        <p>There are currently no upload metadata fields.</p>
-        <p>
-          <button class="ui primary button" data-bind="click: addFirst">
-            <i class="add square icon"></i> Add Field
-          </button>
-        </p>
-      </div>
-
-      <div class="ui form schema sfieldZone" data-bind="foreach: fieldDefinitionsObs, 
-            dragula: { dragHandleSelector: '.draggable', indexObs: indexObs, listObs: fieldDefinitionsObs }">
-        <div class="field_definitions" data-bind="component: {
-          name: 'field_definition', params: { field: $data, itemsObs: $parent.fieldDefinitionsObs, 
-                indexObs: $index }
-        }"></div>
-      </div>
+<bsm-layout id="shared-upload-metadata">
+  <div slot="content">
+    <div data-bind="visible: fieldDefinitionsObs().length === 0">
+      <p>There are currently no upload metadata fields.</p>
+      <p>
+        <button class="ui primary button" data-bind="click: addFirst">
+          <i class="add square icon"></i> Add Field
+        </button>
+      </p>
     </div>
-    <div class="five wide column">
-      <div class="ui message">
-        <p>
-          You can define common metadata fields that should be included in the JSON of every upload, such as the start
-          and end date of the activity.
-        </p>
 
-        <p>You do not need to add these fields to every upload schema you create.</p>
-      </div>
+    <div class="ui form schema sfieldZone" data-bind="foreach: fieldDefinitionsObs, 
+          dragula: { dragHandleSelector: '.draggable', indexObs: indexObs, listObs: fieldDefinitionsObs }">
+      <div class="field_definitions" data-bind="component: {
+        name: 'field_definition', params: { field: $data, itemsObs: $parent.fieldDefinitionsObs, 
+              indexObs: $index }
+      }"></div>
     </div>
   </div>
-</div>
+  <div slot="help">
+    <p>You can define common metadata fields that should be included in the JSON of every upload, such as the start and end date of the activity.
+    </p>
+
+    <p>You do not need to add these fields to every upload schema you create.</p>
+  </div>
+</bsm-layout>

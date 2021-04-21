@@ -15,9 +15,8 @@
   </div>
   <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
 </div>
-<div class="scrollbox">
-  <form class="ui skinny form">
-    <errors id="participant-enrollments"></errors>
+<bsm-layout id="participant-enrollments">
+  <div slot="content">
     <table class="ui compact selectable table">
       <thead>
         <tr>
@@ -73,5 +72,5 @@
         </tr>
       </tbody>
     </table>
-  </form>
-</div>
+  </div>
+</bsm-layout>

@@ -13,75 +13,76 @@
   </div>
   <study-tabset params="identifierObs: identifierObs, isNewObs: isNewObs"></study-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="study"></errors>
-  <form class="ui skinny form">
-    <div class="fields">
-      <div class="eight wide field required" id="name">
-        <label>Name</label>
-        <input data-bind="textInput: nameObs, hasFocus: true, visible: isDevRole()" />
-        <div class="input-field-padding" data-bind="text: nameObs, visible: !isDevRole()"></div>
+<bsm-layout id="study">
+  <div slot="content">
+    <form class="ui form">
+      <div class="fields">
+        <div class="eight wide field required" id="name">
+          <label>Name</label>
+          <input data-bind="textInput: nameObs, hasFocus: true, visible: isDevRole()" />
+          <div class="input-field-padding" data-bind="text: nameObs, visible: !isDevRole()"></div>
+        </div>
+        <div class="four wide field required" id="identifier" data-bind="visible: isNewObs">
+          <label>Identifier</label>
+          <input type="text" data-bind="textInput: identifierObs" />
+        </div>
+        <div class="four wide field" id="id" data-bind="visible: !isNewObs()">
+          <label>Identifier</label>
+          <div class="input-field-padding" data-bind="text: identifierObs"></div>
+        </div>
+        <div class="four wide field" id="phase">
+          <label>Phase</label>
+          <div class="input-field-padding" data-bind="text: formatPhase(phaseObs())"></div>
+        </div>
       </div>
-      <div class="four wide field required" id="identifier" data-bind="visible: isNewObs">
-        <label>Identifier</label>
-        <input type="text" data-bind="textInput: identifierObs" />
+      <div class="fields">
+        <div class="eight wide field">
+          <label>Schedule</label>
+          <select class="ui dropdown" data-bind="
+          options: schedulesObs,
+          optionsCaption: 'Select a schedule:', 
+            optionsText: 'label', optionsValue: 'value', 
+            value: scheduleGuidObs">
+          </select>
+        </div>
+        <div class="eight wide field">
+          <label>Institution ID</label>
+          <input type="text" data-bind="textInput: institutionIdObs" />
+        </div>
       </div>
-      <div class="four wide field" id="id" data-bind="visible: !isNewObs()">
-        <label>Identifier</label>
-        <div class="input-field-padding" data-bind="text: identifierObs"></div>
-      </div>
-      <div class="four wide field" id="phase">
-        <label>Phase</label>
-        <div class="input-field-padding" data-bind="text: formatPhase(phaseObs())"></div>
-      </div>
-    </div>
-    <div class="fields">
-      <div class="eight wide field">
-        <label>Schedule</label>
-        <select class="ui dropdown" data-bind="
-        options: schedulesObs,
-        optionsCaption: 'Select a schedule:', 
-          optionsText: 'label', optionsValue: 'value', 
-          value: scheduleGuidObs">
-        </select>
-      </div>
-      <div class="eight wide field">
-        <label>Institution ID</label>
-        <input type="text" data-bind="textInput: institutionIdObs" />
-      </div>
-    </div>
-    <div class="two fields">
-      <div class="field">
-        <label>Details</label>
-        <textarea style="height: 15rem" data-bind="textInput:detailsObs, hasFocus: true"></textarea>
-      </div>
-      <div class="field">
+      <div class="two fields">
         <div class="field">
-          <label>Study Design Type</label>
-          <input type="text" data-bind="textInput: studyDesignTypeObs" />
+          <label>Details</label>
+          <textarea style="height: 15rem" data-bind="textInput:detailsObs, hasFocus: true"></textarea>
         </div>
-        <div class="field" style="margin-top: 1rem">
-          <label>Disease</label>
-          <input type="text" data-bind="textInput: diseaseObs" />
+        <div class="field">
+          <div class="field">
+            <label>Study Design Type</label>
+            <input type="text" data-bind="textInput: studyDesignTypeObs" />
+          </div>
+          <div class="field" style="margin-top: 1rem">
+            <label>Disease</label>
+            <input type="text" data-bind="textInput: diseaseObs" />
+          </div>
         </div>
       </div>
-    </div>
-    <h4 class="ui dividing header">IRB Approval</h4>
-    <div class="three fields">
-      <div class="field">
-        <label>IRB Protocol ID</label>
-        <input type="text" data-bind="textInput: irbProtocolIdObs" />
+      <h4 class="ui dividing header">IRB Approval</h4>
+      <div class="three fields">
+        <div class="field">
+          <label>IRB Protocol ID</label>
+          <input type="text" data-bind="textInput: irbProtocolIdObs" />
+        </div>
+        <div class="field">
+          <label>Approved On Date</label>
+          <input data-bind="flatpickr: irbApprovedOnObs" />
+        </div>
+        <div class="field">
+          <label>Approved Until Date</label>
+          <input data-bind="flatpickr: irbApprovedUntilObs" />
+        </div>
       </div>
-      <div class="field">
-        <label>Approved On Date</label>
-        <input data-bind="flatpickr: irbApprovedOnObs" />
-      </div>
-      <div class="field">
-        <label>Approved Until Date</label>
-        <input data-bind="flatpickr: irbApprovedUntilObs" />
-      </div>
-    </div>
-    <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
-    </timestamps>
-  </form>
-</div>
+      <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
+      </timestamps>
+    </form>
+  </div>
+</bsm-layout>

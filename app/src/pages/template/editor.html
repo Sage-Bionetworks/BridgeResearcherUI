@@ -16,328 +16,323 @@
     </div>
     <template-tabset params="guidObs: guidObs, templateTypeObs: templateTypeObs"></template-tabset>
   </div>
-  <div class="scrollbox">
-    <div class="line-control" style="margin-bottom: 1rem">
-      <div class="line-control-stretch">
-        <p>
-        View the <a data-bind="href: createHistoryLink"> <i style="margin-right:0" 
-          class="history icon"></i>Edit History</a> of this document.
-        </p>
-      </div>
+  <bsm-layout>
+    <div slot="header">
       <div class="line-control">
-        <div data-bind="visible: !!createdOnObs()" style="margin-right: 1rem">
-          <i class="clock icon"></i> <span data-bind="text: formatDateTime(createdOnObs())"></span>
+        <div class="line-control-stretch">
+          <p>
+          View the <a data-bind="href: createHistoryLink"> <i style="margin-right:0" 
+            class="history icon"></i>Edit History</a> of this document.
+          </p>
         </div>
-        <div class="green mini ui label" data-bind="visible: activeObs"><i class="checkmark icon"></i> 
-          Published</div>
-        <div class="orange ui mini label" data-bind="visible: !activeObs()">
-          <i class="warning icon"></i> Not Published
+        <div class="line-control">
+          <div data-bind="visible: !!createdOnObs()" style="margin-right: 1rem">
+            <i class="clock icon"></i> <span data-bind="text: formatDateTime(createdOnObs())"></span>
+          </div>
+          <div class="green mini ui label" data-bind="visible: activeObs"><i class="checkmark icon"></i> 
+            Published</div>
+          <div class="orange ui mini label" data-bind="visible: !activeObs()">
+            <i class="warning icon"></i> Not Published
+          </div>
         </div>
       </div>
     </div>
-
-    <div class="ui grid" style="margin-bottom: .5rem">
-      <div class="ten wide column">
-
-        <div class="ui form" data-bind="visible: isEmailObs">
-          <div class="field">
-            <label>Subject</label>
-            <input type="text" data-bind="textInput: subjectObs" />
-          </div>
-          <textarea id="consentEditor" data-bind="ckeditor: initEditor" class="ui textarea"></textarea>
+    <div slot="content">
+      <div class="ui form" data-bind="visible: isEmailObs">
+        <div class="field">
+          <label>Subject</label>
+          <input type="text" data-bind="textInput: subjectObs" />
         </div>
-        <div class="ui form" data-bind="visible: !isEmailObs()">
-          <div class="field">
-            <label>SMS Message</label>
-            <textarea data-bind="visible: !isEmailObs(), textInput: documentContentObs" 
-              class="ui textarea"></textarea>
-          </div>
-        </div>
-
+        <textarea id="consentEditor" data-bind="ckeditor: initEditor" class="ui textarea"></textarea>
       </div>
-      <div class="six wide column">
-
-        <div class="ui message" data-bind="visible: templateTypeObs() === 'sms_account_exists'">
-          <p>If a user tries to sign up twice for the same app, and the app is enabled to verify a phone number, we will send this message intead. It notes the account already exists, and provides either a link to reset the account password, or sign in via phone (depending on your app’s design). </p>
-  
-          <p><strong>It <em>must</em> contain the value <code>${resetPasswordUrl}</code> or <code>${token}</code>.</strong> The former is to allow the user to reset their password, the latter is to support signing in via phone.</p>
-  
-          <p>There are other values available for use in your template:</p>
-  
-          <dl>
-            <dt>${appShortName}</dt>
-            <dd>the short name you entered for your app</dd>
-  
-            <dt>${sponsorName}</dt>
-            <dd>the name you entered for the group sponsoring the app</dd>
-  
-            <dt>${supportEmail}</dt>
-            <dd>your support email address</dd>
-  
-            <dt>${expirationPeriod}</dt>
-            <dd>the period before authentication link/token in the message will expire (e.g. "2 hours")</dd>
-  
-            <dt>${resetPasswordExpirationPeriod}</dt>
-            <dd>the period before the reset password URL will expire (e.g. "2 hours")</dd>
-  
-            <dt>${phoneSignInExpirationPeriod}</dt>
-            <dd>the period before the sign in token will expire (e.g. "2 hours")</dd>
-          </dl>
+      <div class="ui form" data-bind="visible: !isEmailObs()">
+        <div class="field">
+          <label>SMS Message</label>
+          <textarea data-bind="visible: !isEmailObs(), textInput: documentContentObs" 
+            class="ui textarea"></textarea>
         </div>
-          
-        <div class="ui message" data-bind="visible: templateTypeObs() === 'sms_app_install_link'">
-          <p>An app with a workflow that consents a user prior to registering for an account, can direct the user to an app store to download and install an app. This is the message that is sent to the user with the link. </p>
-  
-          <p><strong>It <em>must</em> contain the value <code>${appInstallUrl}</code>.</strong> This will be the link to the app in the app store. </p>
-  
-          <p>There are other values available for use in your template:</p>
-  
-          <dl>
-            <dt>${appShortName}</dt>
-            <dd>the short name you entered for your app</dd>
-  
-            <dt>${sponsorName}</dt>
-            <dd>the name you entered for the group sponsoring the app</dd>
-  
-            <dt>${supportEmail}</dt>
-            <dd>your support email address</dd>
-          </dl>
-        </div>
-
-        <div class="ui message" data-bind="visible: templateTypeObs() === 'sms_phone_sign_in'">
-          <p>This is the message sent to a user that will contain a link to sign in to the app. This requires coordination with the app itself to capture the link and process the URL accordingly.</p>
-
-          <p><strong>It <em>must</em> contain the value <code>${token}</code>,</strong> which is the numeric token the user will need to enter into the app to verify the phone number. The app will send this number back to the server to complete the verification setp. </p>
-  
-          <p>There are other values available for use in your template:</p>
-  
-          <dl>
-            <dt>${appShortName}</dt>
-            <dd>the short name you entered for your app</dd>
-  
-            <dt>${sponsorName}</dt>
-            <dd>the name you entered for the group sponsoring the app</dd>
-  
-            <dt>${supportEmail}</dt>
-            <dd>your support email address</dd>
-  
-            <dt>${expirationPeriod}</dt>
-            <dd>the period before the authentication token in the message will expire (e.g. "2 hours")</dd>
-          </dl>
-        </div>
-  
-        <div class="ui message" data-bind="visible: templateTypeObs() === 'sms_reset_password'">
-          <p>This is the message sent to users when they ask to reset their password.</p>
-
-          <p><strong>It <em>must</em> contain the value <code>${resetPasswordUrl}</code>,</strong> which is a variable that will be replaced with the address users must click to reset their password. This opens a page on the Bridge server to reset a password.</p>
-  
-          <p>There are other values available for use in your template:</p>
-  
-          <dl>
-            <dt>${appShortName}</dt>
-            <dd>the short name you entered for your app</dd>
-  
-            <dt>${sponsorName}</dt>
-            <dd>the name you entered for the group sponsoring the app</dd>
-  
-            <dt>${supportEmail}</dt>
-            <dd>your support email address</dd>
-  
-            <dt>${expirationPeriod}</dt>
-            <dd>the period before authentication links in the email will expire (e.g. "2 hours")</dd>
-          </dl>
-        </div>
-
-        <div class="ui message" data-bind="visible: templateTypeObs() === 'sms_signed_consent'">
-          <p>After a user signs a consent agreement, if we have a phone number for that person, we’ll send a link to the signed copy of the agreement to them via an SMS message. If we have both an email and phone number for the user, we’ll use the email address. </p>
-  
-          <p><strong>It <em>must</em> contain the value <code>${consentUrl}</code>,</strong> which is a variable that will be replaced with the link users must click to download their consent. </p>
-  
-          <p>There are template values available for use in your template:</p>
-  
-          <dl>
-            <dt>${appName}</dt>
-            <dd>the name you entered for your app</dd>
-  
-            <dt>${appShortName}</dt>
-            <dd>the short name you entered for your app</dd>
-  
-            <dt>${sponsorName}</dt>
-            <dd>the name you entered for the group sponsoring the app</dd>
-  
-            <dt>${supportEmail}</dt>
-            <dd>your support email address</dd>
-          </dl>
-        </div>
-
-        <div class="ui message" data-bind="visible: templateTypeObs() === 'sms_verify_phone'">
-          <p>This message is sent to users when they sign up for your app with a phone number, so we can verify they own the number. </p>
-  
-          <p><strong>It <em>must</em> contain the value <code>${token}</code>,</strong> which is the numeric token the user will need to enter into the app to verify the phone number. The app will send this number back to the server to complete the verification setp. </p>
-  
-          <p>There are other values available for use in your template:</p>
-  
-          <dl>
-            <dt>${appShortName}</dt>
-            <dd>the short name you entered for your app</dd>
-  
-            <dt>${sponsorName}</dt>
-            <dd>the name you entered for the group sponsoring the app</dd>
-  
-            <dt>${supportEmail}</dt>
-            <dd>your support email address</dd>
-  
-            <dt>${expirationPeriod}</dt>
-            <dd>the period before the verification token in the message will expire (e.g. "2 hours")</dd>
-          </dl>
-        </div>
-
-        <div class="ui message" data-bind="visible: templateTypeObs() === 'email_account_exists'">
-          <p>If a user tries to sign up twice for the same app, and the app is configured to send a verification email, we will send this email message instead. It notes the account already exists, and provides a link to reset the password or sign in via email (depending on your app’s design). </p>
-    
-          <p><strong>It <em>must</em> contain the value <code>${resetPasswordUrl}</code> or <code>${emailSignInUrl}</code>.</strong> Most web email clients will link these URLs automatically, but you can also create a link. </p>
-    
-          <p>There are other values available for use in your template:</p>
-    
-          <dl>
-            <dt>${appName}</dt>
-            <dd>the name you entered for your app</dd>
-  
-            <dt>${appShortName}</dt>
-            <dd>the short name you entered for your app</dd>
-  
-            <dt>${sponsorName}</dt>
-            <dd>the name you entered for the group sponsoring the app</dd>
-  
-            <dt>${supportEmail}</dt>
-            <dd>your support email address</dd>
-  
-            <dt>${resetPasswordExpirationPeriod}</dt>
-            <dd>the period before the reset password link in the email will expire (e.g. "1 day")</dd>
-  
-            <dt>${emailSignInExpirationPeriod}</dt>
-            <dd>the period before the authentication link in the email will expire (e.g. "2 hours")</dd>
-          </dl>
-        </div>
-
-        <div class="ui message" data-bind="visible: templateTypeObs() === 'email_app_install_link'">
-          <p>An app with a workflow that consents a user prior to registering for an account, can direct the user to an app store to download and install an app. This is the message that is sent to the user with the link.</p>
-  
-          <p><strong>It <em>must</em> contain the value <code>${appInstallUrl}</code>.</strong> This will be the link to the app in the app store.</p>
-  
-          <p>There are other values available for use in your template:</p>
-  
-          <dl>
-            <dt>${appShortName}</dt>
-            <dd>the short name you entered for your app</dd>
-  
-            <dt>${sponsorName}</dt>
-            <dd>the name you entered for the group sponsoring the app</dd>
-  
-            <dt>${supportEmail}</dt>
-            <dd>your support email address</dd>
-          </dl>
-        </div>
-
-        <div class="ui message" data-bind="visible: templateTypeObs() === 'email_reset_password'">
-          <p>This is the email sent to users when they ask to reset their password.</p>
-
-          <p><strong>It <em>must</em> contain the value <code>${url}</code>,</strong> which is a variable that will be replaced with the address users must click to reset their password. Most web email clients will link these URLs automatically, but you can also create a link. </p>
-  
-          <p>There are other values available for use in your template:</p>
-  
-          <dl>
-            <dt>${appName}</dt>
-            <dd>the name you entered for your app</dd>
-  
-            <dt>${appShortName}</dt>
-            <dd>the short name you entered for your app</dd>
-  
-            <dt>${sponsorName}</dt>
-            <dd>the name you entered for the group sponsoring the app</dd>
-  
-            <dt>${supportEmail}</dt>
-            <dd>your support email address</dd>
-  
-            <dt>${expirationPeriod}</dt>
-            <dd>the period before authentication links in the email will expire (e.g. "2 hours")</dd>
-          </dl>
-        </div>
-    
-        <div class="ui message" data-bind="visible: templateTypeObs() === 'email_sign_in'">
-          <p>This is the email sent to a user that will contain a link to sign in to the app. This requires coordination with the app itself to capture the link and process the token accordingly. </p>
-  
-          <p><strong>It <em>must</em> contain the value <code>${url}</code>,</strong> which is a variable that will be replaced with the address the application must intercept to complete the sign in. The URL will take the format <code class="wrap-long-line">https://ws.sagebridge.org/s/<span data-bind="text: appIdObs"></span></code>. Most web email clients will link these URLs automatically, but you can also create a link. </p>
-  
-          <p>There are other values available for use in your template:</p>
-  
-          <dl>
-            <dt>${appName}</dt>
-            <dd>the name you entered for your app</dd>
-  
-            <dt>${appShortName}</dt>
-            <dd>the short name you entered for your app</dd>
-  
-            <dt>${sponsorName}</dt>
-            <dd>the name you entered for the group sponsoring the app</dd>
-  
-            <dt>${supportEmail}</dt>
-            <dd>your support email address</dd>
-  
-            <dt>${expirationPeriod}</dt>
-            <dd>the period before authentication links in the email will expire (e.g. "2 hours")</dd>
-          </dl>
-        </div>
-
-        <div class="ui message" data-bind="visible: templateTypeObs() === 'email_signed_consent'">
-          <p>After a user signs a consent agreement, if we have an email for that person, we’ll send a signed copy of the agreement to them as an attachment to this email. </p>
-  
-          <p>There are no required variables in the template. This is a place to tell the user what they are receiving, so they don’t delete your email or report it as spam. </p>
-  
-          <p>There are template values available for use in your template:</p>
-  
-          <dl>
-            <dt>${appName}</dt>
-            <dd>the name you entered for your app</dd>
-  
-            <dt>${appShortName}</dt>
-            <dd>the short name you entered for your app</dd>
-  
-            <dt>${sponsorName}</dt>
-            <dd>the name you entered for the group sponsoring the app</dd>
-  
-            <dt>${supportEmail}</dt>
-            <dd>your support email address</dd>
-          </dl>
-        </div>
-
-        <div class="ui message" data-bind="visible: templateTypeObs() === 'email_verify_email'">
-          <p>This is the email sent to users when they sign up for your app with an email address, so we can verify the address. </p>
-  
-          <p><strong>It <em>must</em> contain the value <code>${url}</code>,</strong> which is a variable that will be replaced with the address users must click to verify their email addresses. Most web email clients will link these URLs automatically, but you can also create a link. </p>
-  
-          <p>There are other values available for use in your template:</p>
-  
-          <dl>
-            <dt>${appName}</dt>
-            <dd>the name you entered for your app</dd>
-  
-            <dt>${appShortName}</dt>
-            <dd>the short name you entered for your app</dd>
-  
-            <dt>${sponsorName}</dt>
-            <dd>the name you entered for the group sponsoring the app</dd>
-  
-            <dt>${supportEmail}</dt>
-            <dd>your support email address</dd>
-  
-            <dt>${expirationPeriod}</dt>
-            <dd>the period before authentication links in the email will expire (e.g. "2 hours")</dd>
-          </dl>
-        </div>
-
       </div>
     </div>
-  </div>
-</div>
+    <div slot="help">
+      <div data-bind="visible: templateTypeObs() === 'sms_account_exists'">
+        <p>If a user tries to sign up twice for the same app, and the app is enabled to verify a phone number, we will send this message intead. It notes the account already exists, and provides either a link to reset the account password, or sign in via phone (depending on your app’s design). </p>
+
+        <p><strong>It <em>must</em> contain the value <code>${resetPasswordUrl}</code> or <code>${token}</code>.</strong> The former is to allow the user to reset their password, the latter is to support signing in via phone.</p>
+
+        <p>There are other values available for use in your template:</p>
+
+        <dl>
+          <dt>${appShortName}</dt>
+          <dd>the short name you entered for your app</dd>
+
+          <dt>${sponsorName}</dt>
+          <dd>the name you entered for the group sponsoring the app</dd>
+
+          <dt>${supportEmail}</dt>
+          <dd>your support email address</dd>
+
+          <dt>${expirationPeriod}</dt>
+          <dd>the period before authentication link/token in the message will expire (e.g. "2 hours")</dd>
+
+          <dt>${resetPasswordExpirationPeriod}</dt>
+          <dd>the period before the reset password URL will expire (e.g. "2 hours")</dd>
+
+          <dt>${phoneSignInExpirationPeriod}</dt>
+          <dd>the period before the sign in token will expire (e.g. "2 hours")</dd>
+        </dl>
+      </div>
+        
+      <div data-bind="visible: templateTypeObs() === 'sms_app_install_link'">
+        <p>An app with a workflow that consents a user prior to registering for an account, can direct the user to an app store to download and install an app. This is the message that is sent to the user with the link. </p>
+
+        <p><strong>It <em>must</em> contain the value <code>${appInstallUrl}</code>.</strong> This will be the link to the app in the app store. </p>
+
+        <p>There are other values available for use in your template:</p>
+
+        <dl>
+          <dt>${appShortName}</dt>
+          <dd>the short name you entered for your app</dd>
+
+          <dt>${sponsorName}</dt>
+          <dd>the name you entered for the group sponsoring the app</dd>
+
+          <dt>${supportEmail}</dt>
+          <dd>your support email address</dd>
+        </dl>
+      </div>
+
+      <div data-bind="visible: templateTypeObs() === 'sms_phone_sign_in'">
+        <p>This is the message sent to a user that will contain a link to sign in to the app. This requires coordination with the app itself to capture the link and process the URL accordingly.</p>
+
+        <p><strong>It <em>must</em> contain the value <code>${token}</code>,</strong> which is the numeric token the user will need to enter into the app to verify the phone number. The app will send this number back to the server to complete the verification setp. </p>
+
+        <p>There are other values available for use in your template:</p>
+
+        <dl>
+          <dt>${appShortName}</dt>
+          <dd>the short name you entered for your app</dd>
+
+          <dt>${sponsorName}</dt>
+          <dd>the name you entered for the group sponsoring the app</dd>
+
+          <dt>${supportEmail}</dt>
+          <dd>your support email address</dd>
+
+          <dt>${expirationPeriod}</dt>
+          <dd>the period before the authentication token in the message will expire (e.g. "2 hours")</dd>
+        </dl>
+      </div>
+
+      <div data-bind="visible: templateTypeObs() === 'sms_reset_password'">
+        <p>This is the message sent to users when they ask to reset their password.</p>
+
+        <p><strong>It <em>must</em> contain the value <code>${resetPasswordUrl}</code>,</strong> which is a variable that will be replaced with the address users must click to reset their password. This opens a page on the Bridge server to reset a password.</p>
+
+        <p>There are other values available for use in your template:</p>
+
+        <dl>
+          <dt>${appShortName}</dt>
+          <dd>the short name you entered for your app</dd>
+
+          <dt>${sponsorName}</dt>
+          <dd>the name you entered for the group sponsoring the app</dd>
+
+          <dt>${supportEmail}</dt>
+          <dd>your support email address</dd>
+
+          <dt>${expirationPeriod}</dt>
+          <dd>the period before authentication links in the email will expire (e.g. "2 hours")</dd>
+        </dl>
+      </div>
+
+      <div data-bind="visible: templateTypeObs() === 'sms_signed_consent'">
+        <p>After a user signs a consent agreement, if we have a phone number for that person, we’ll send a link to the signed copy of the agreement to them via an SMS message. If we have both an email and phone number for the user, we’ll use the email address. </p>
+
+        <p><strong>It <em>must</em> contain the value <code>${consentUrl}</code>,</strong> which is a variable that will be replaced with the link users must click to download their consent. </p>
+
+        <p>There are template values available for use in your template:</p>
+
+        <dl>
+          <dt>${appName}</dt>
+          <dd>the name you entered for your app</dd>
+
+          <dt>${appShortName}</dt>
+          <dd>the short name you entered for your app</dd>
+
+          <dt>${sponsorName}</dt>
+          <dd>the name you entered for the group sponsoring the app</dd>
+
+          <dt>${supportEmail}</dt>
+          <dd>your support email address</dd>
+        </dl>
+      </div>
+
+      <div data-bind="visible: templateTypeObs() === 'sms_verify_phone'">
+        <p>This message is sent to users when they sign up for your app with a phone number, so we can verify they own the number. </p>
+
+        <p><strong>It <em>must</em> contain the value <code>${token}</code>,</strong> which is the numeric token the user will need to enter into the app to verify the phone number. The app will send this number back to the server to complete the verification setp. </p>
+
+        <p>There are other values available for use in your template:</p>
+
+        <dl>
+          <dt>${appShortName}</dt>
+          <dd>the short name you entered for your app</dd>
+
+          <dt>${sponsorName}</dt>
+          <dd>the name you entered for the group sponsoring the app</dd>
+
+          <dt>${supportEmail}</dt>
+          <dd>your support email address</dd>
+
+          <dt>${expirationPeriod}</dt>
+          <dd>the period before the verification token in the message will expire (e.g. "2 hours")</dd>
+        </dl>
+      </div>
+
+      <div data-bind="visible: templateTypeObs() === 'email_account_exists'">
+        <p>If a user tries to sign up twice for the same app, and the app is configured to send a verification email, we will send this email message instead. It notes the account already exists, and provides a link to reset the password or sign in via email (depending on your app’s design). </p>
   
+        <p><strong>It <em>must</em> contain the value <code>${resetPasswordUrl}</code> or <code>${emailSignInUrl}</code>.</strong> Most web email clients will link these URLs automatically, but you can also create a link. </p>
+  
+        <p>There are other values available for use in your template:</p>
+  
+        <dl>
+          <dt>${appName}</dt>
+          <dd>the name you entered for your app</dd>
+
+          <dt>${appShortName}</dt>
+          <dd>the short name you entered for your app</dd>
+
+          <dt>${sponsorName}</dt>
+          <dd>the name you entered for the group sponsoring the app</dd>
+
+          <dt>${supportEmail}</dt>
+          <dd>your support email address</dd>
+
+          <dt>${resetPasswordExpirationPeriod}</dt>
+          <dd>the period before the reset password link in the email will expire (e.g. "1 day")</dd>
+
+          <dt>${emailSignInExpirationPeriod}</dt>
+          <dd>the period before the authentication link in the email will expire (e.g. "2 hours")</dd>
+        </dl>
+      </div>
+
+      <div data-bind="visible: templateTypeObs() === 'email_app_install_link'">
+        <p>An app with a workflow that consents a user prior to registering for an account, can direct the user to an app store to download and install an app. This is the message that is sent to the user with the link.</p>
+
+        <p><strong>It <em>must</em> contain the value <code>${appInstallUrl}</code>.</strong> This will be the link to the app in the app store.</p>
+
+        <p>There are other values available for use in your template:</p>
+
+        <dl>
+          <dt>${appShortName}</dt>
+          <dd>the short name you entered for your app</dd>
+
+          <dt>${sponsorName}</dt>
+          <dd>the name you entered for the group sponsoring the app</dd>
+
+          <dt>${supportEmail}</dt>
+          <dd>your support email address</dd>
+        </dl>
+      </div>
+
+      <div data-bind="visible: templateTypeObs() === 'email_reset_password'">
+        <p>This is the email sent to users when they ask to reset their password.</p>
+
+        <p><strong>It <em>must</em> contain the value <code>${url}</code>,</strong> which is a variable that will be replaced with the address users must click to reset their password. Most web email clients will link these URLs automatically, but you can also create a link. </p>
+
+        <p>There are other values available for use in your template:</p>
+
+        <dl>
+          <dt>${appName}</dt>
+          <dd>the name you entered for your app</dd>
+
+          <dt>${appShortName}</dt>
+          <dd>the short name you entered for your app</dd>
+
+          <dt>${sponsorName}</dt>
+          <dd>the name you entered for the group sponsoring the app</dd>
+
+          <dt>${supportEmail}</dt>
+          <dd>your support email address</dd>
+
+          <dt>${expirationPeriod}</dt>
+          <dd>the period before authentication links in the email will expire (e.g. "2 hours")</dd>
+        </dl>
+      </div>
+  
+      <div data-bind="visible: templateTypeObs() === 'email_sign_in'">
+        <p>This is the email sent to a user that will contain a link to sign in to the app. This requires coordination with the app itself to capture the link and process the token accordingly. </p>
+
+        <p><strong>It <em>must</em> contain the value <code>${url}</code>,</strong> which is a variable that will be replaced with the address the application must intercept to complete the sign in. The URL will take the format <code class="wrap-long-line">https://ws.sagebridge.org/s/<span data-bind="text: appIdObs"></span></code>. Most web email clients will link these URLs automatically, but you can also create a link. </p>
+
+        <p>There are other values available for use in your template:</p>
+
+        <dl>
+          <dt>${appName}</dt>
+          <dd>the name you entered for your app</dd>
+
+          <dt>${appShortName}</dt>
+          <dd>the short name you entered for your app</dd>
+
+          <dt>${sponsorName}</dt>
+          <dd>the name you entered for the group sponsoring the app</dd>
+
+          <dt>${supportEmail}</dt>
+          <dd>your support email address</dd>
+
+          <dt>${expirationPeriod}</dt>
+          <dd>the period before authentication links in the email will expire (e.g. "2 hours")</dd>
+        </dl>
+      </div>
+
+      <div data-bind="visible: templateTypeObs() === 'email_signed_consent'">
+        <p>After a user signs a consent agreement, if we have an email for that person, we’ll send a signed copy of the agreement to them as an attachment to this email. </p>
+
+        <p>There are no required variables in the template. This is a place to tell the user what they are receiving, so they don’t delete your email or report it as spam. </p>
+
+        <p>There are template values available for use in your template:</p>
+
+        <dl>
+          <dt>${appName}</dt>
+          <dd>the name you entered for your app</dd>
+
+          <dt>${appShortName}</dt>
+          <dd>the short name you entered for your app</dd>
+
+          <dt>${sponsorName}</dt>
+          <dd>the name you entered for the group sponsoring the app</dd>
+
+          <dt>${supportEmail}</dt>
+          <dd>your support email address</dd>
+        </dl>
+      </div>
+
+      <div data-bind="visible: templateTypeObs() === 'email_verify_email'">
+        <p>This is the email sent to users when they sign up for your app with an email address, so we can verify the address. </p>
+
+        <p><strong>It <em>must</em> contain the value <code>${url}</code>,</strong> which is a variable that will be replaced with the address users must click to verify their email addresses. Most web email clients will link these URLs automatically, but you can also create a link. </p>
+
+        <p>There are other values available for use in your template:</p>
+
+        <dl>
+          <dt>${appName}</dt>
+          <dd>the name you entered for your app</dd>
+
+          <dt>${appShortName}</dt>
+          <dd>the short name you entered for your app</dd>
+
+          <dt>${sponsorName}</dt>
+          <dd>the name you entered for the group sponsoring the app</dd>
+
+          <dt>${supportEmail}</dt>
+          <dd>your support email address</dd>
+
+          <dt>${expirationPeriod}</dt>
+          <dd>the period before authentication links in the email will expire (e.g. "2 hours")</dd>
+        </dl>
+      </div>
+    </div>
+  </bsm-layout>
+
+ 

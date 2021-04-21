@@ -13,8 +13,8 @@
   </div>
   <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="participant-client-data"></errors>
+<bsm-layout id="participant-client-data">
+  <div slot="content">
     <div class="ui form" style="max-width: 50rem">
       <div class="field" id="clientData">
         <label>Client data should be in JSON format</label>
@@ -25,4 +25,4 @@
       <button class="ui tiny primary button" data-bind="click: reformat">Reformat</button>
     </div>
   </div>
-</div>
+</bsm-layout>

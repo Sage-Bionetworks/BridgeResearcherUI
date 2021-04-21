@@ -13,8 +13,8 @@
   </div>
   <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
 </div>
-<div class="scrollbox">
-  <form class="ui skinny form">
+<bsm-layout id="participant-activities">
+  <div slot="content">
     <p>View the <a data-bind="href: '#/participants/'+userIdObs()+'/activities/events'">
         <i style="margin-right:0" class="calendar alternate outline icon"></i>Events</a>
       we’re using to schedule this participant.</p>
@@ -38,5 +38,5 @@
         </tr>
       </tbody>
     </table>
-  </form>
-</div>
+  </div>
+</bsm-layout>

@@ -27,44 +27,47 @@
   </div>
   <div class="ui empty secondary pointing menu"></div>
 </div>
-<div class="scrollbox">
-  <errors id="files"></errors>
-  <pager style="display: flex; justify-content: flex-end"
-    params="prefix: 'f', postLoadFunc: postLoadFunc"></pager>
-  <table class="ui compact selectable table">
-    <thead>
-      <tr>
-        <th width="10">
-          <ui-checkbox params="checkedObs: checkAllObs, visible: isDeveloper"></ui-checkbox>
-        </th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-      <tr>
-        <td colspan="3" data-bind="html: recordsMessageObs"></td>
-      </tr>
-    </tbody>
-    <tbody data-bind="foreach: itemsObs">
-      <tr data-bind="css: {negative: $data.deleted}">
-        <td>
-          <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
-          <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
-            style="cursor: pointer" class="green undo icon"></i>
-        </td>
-        <td>
-          <span data-bind="text: $data.name, visible: $data.deletedObs"></span>
-          <a data-bind="href: '#/files/'+$data.guid, text: $data.name, 
-            visible: !$data.deletedObs()"></a>
-        </td>
-        <td data-bind="text: $data.description"></td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
-    <ui-checkbox params="checkedObs: showDeletedObs">
-      Show deleted files
-    </ui-checkbox>
+<bsm-layout id="files">
+  <div slot="header">
+    <pager style="display: flex; justify-content: flex-end"
+      params="prefix: 'f', postLoadFunc: postLoadFunc"></pager>
   </div>
-</div>
+  <div slot="content">
+    <table class="ui compact selectable table">
+      <thead>
+        <tr>
+          <th width="10">
+            <ui-checkbox params="checkedObs: checkAllObs, visible: isDeveloper"></ui-checkbox>
+          </th>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="3" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr data-bind="css: {negative: $data.deleted}">
+          <td>
+            <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
+            <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
+              style="cursor: pointer" class="green undo icon"></i>
+          </td>
+          <td>
+            <span data-bind="text: $data.name, visible: $data.deletedObs"></span>
+            <a data-bind="href: '#/files/'+$data.guid, text: $data.name, 
+              visible: !$data.deletedObs()"></a>
+          </td>
+          <td data-bind="text: $data.description"></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
+      <ui-checkbox params="checkedObs: showDeletedObs">
+        Show deleted files
+      </ui-checkbox>
+    </div>
+  </div>
+</bsm-layout>

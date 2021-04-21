@@ -10,28 +10,52 @@
   </div>
   <div class="ui empty secondary pointing menu"></div>
 </div>
-<div class="scrollbox">
-  <errors id="cache"></errors>
-  <p data-bind="text: signOutStatusObs"></p>
-  <table class="ui compact selectable table">
-    <thead>
-      <tr>
-        <th width="10"></th>
-        <th width="250">Cache key</th>
-      </tr>
-    </thead>
-    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-      <tr>
-        <td colspan="2" data-bind="html: recordsMessageObs"></td>
-      </tr>
-    </tbody>
-    <tbody data-bind="foreach: itemsObs">
-      <tr>
-        <td>
-          <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
-        </td>
-        <td width="100%" data-bind="text: $data.key"></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+<bsm-layout id="cache">
+  <div slot="content">
+    <p data-bind="text: signOutStatusObs"></p>
+    <table class="ui compact selectable table">
+      <thead>
+        <tr>
+          <th width="10"></th>
+          <th width="250">Cache key</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="2" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr>
+          <td>
+            <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+          </td>
+          <td width="100%" data-bind="text: $data.key"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p data-bind="text: signOutStatusObs"></p>
+    <table class="ui compact selectable table">
+      <thead>
+        <tr>
+          <th width="10"></th>
+          <th width="250">Cache key</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="2" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr>
+          <td>
+            <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+          </td>
+          <td width="100%" data-bind="text: $data.key"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</bsm-layout>

@@ -10,16 +10,14 @@
   </div>
   <mem-tabset params="userIdObs: userIdObs, orgIdObs: orgIdObs, statusObs: statusObs"></mem-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="mem-client-data"></errors>
-    <div class="ui form" style="max-width: 50rem">
-      <div class="field" id="clientData">
-        <label>Client data should be in JSON format</label>
-        <textarea style="font-family: monospace" data-bind="textInput: clientDataObs"></textarea>
-      </div>
+<bsm-layout id="mem-client-data">
+  <div slot="content">
+    <div class="field" id="clientData">
+      <label>Client data should be in JSON format</label>
+      <textarea style="font-family: monospace" data-bind="textInput: clientDataObs"></textarea>
     </div>
     <div style="padding-top:1rem">
       <button class="ui tiny primary button" data-bind="click: reformat">Reformat</button>
     </div>
   </div>
-</div>
+</bsm-layout>
