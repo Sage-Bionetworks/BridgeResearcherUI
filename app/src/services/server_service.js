@@ -18,9 +18,10 @@ const SESSION_ENDED_EVENT_KEY = "sessionEnded";
 const SESSION_KEY = "session";
 const SESSION_STARTED_EVENT_KEY = "sessionStarted";
 const ERROR = "Session listener not a function";
-const ADMIN_ROLES = ['developer', 'researcher', 'admin', 'org_admin', 'study_coordinator', 'study_designer', 'superadmin'];
+const ADMIN_ROLES = Object.freeze(["developer", "researcher", "admin", "org_admin", 
+  "study_coordinator", "study_designer", "superadmin"]);
 
-// We want this to be shared by all server service instances.
+  // We want this to be shared by all server service instances.
 const cache = new Cache();
 const listeners = new EventEmitter();
 let session = null;
@@ -822,8 +823,8 @@ export class ServerService {
     let queryString = fn.queryString({ physical: physical === true });
     return this.del(`${config.sharedassessments}/identifier:${id}/resources/${resourceGuid}${queryString}`);
   }
-  importAssessmentResource(id) {
-    return this.post(`${config.sharedassessments}/identifier:${id}/resources/import`);
+  importAssessmentResource(id, guid) {
+    return this.post(`${config.sharedassessments}/identifier:${id}/resources/import`, [guid]);
   }
 
   getSchedules(query, includeDeleted) {
@@ -840,6 +841,9 @@ export class ServerService {
   getSchedule(guid) {
     return this.gethttp(`${config.schedules}/${guid}`);
   }
+  getScheduleTimeline(guid) {
+    return this.gethttp(`${config.schedules}/${guid}/timeline`);
+  }
   updateSchedule(schedule) {
     return this.post(`${config.schedules}/${schedule.guid}`, schedule);
   }
@@ -847,7 +851,10 @@ export class ServerService {
     let queryString = fn.queryString({ physical: physical === true });
     return this.del(`${config.schedules}/${guid}${queryString}`);
   }
-  
+  getStudyParticipantTimeline(studyId, userId) {
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/timeline`);
+  }
+
   adminSignIn(appName, environment, signIn) {
     return postInt(`${config.host[environment]}${config.adminAuth}/signIn`, signIn).then(
       this.cacheSession(appName, signIn.appId, environment)
@@ -965,6 +972,9 @@ export class ServerService {
   getStudyParticipantUploads(studyId, userId, args) {
     let queryString = fn.queryString(args);
     return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/uploads${queryString}`);
+  }
+  getStudyParticipantTimeline(studyId, userId) {
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/timeline`);
   }
   getStudyParticipantName(studyId, id) {
     if (session && session.id === id) {

@@ -2,8 +2,15 @@
   <div class="header" data-bind="text: titleObs"></div>
   <div class="content" data-bind="visible: stateObs() !== 'Oauth'">
     <div data-bind="component: 'errors'" id="sign-in"></div>
-    <!--<errors id="sign-in"></errors>-->
     <form class="ui form" data-bind="returnHandler: submit" action="">
+      <div data-bind="if: !isLockedObs()">
+        <div class="field environment" style="margin-bottom: 1rem">
+          <select taborder="-1" name="environment" class="ui dropdown" data-bind="value: environmentObs,
+            options: environmentOptions, optionsText: 'label', optionsValue: 'value',
+            optionsCaption: 'Select an environment…'">
+          </select>
+        </div>
+      </div>
       <div class="field app" data-bind="visible: !isLockedObs()">
         <select taborder="-1" class="ui dropdown" data-bind="value: appIdObs,
           optionsCaption: 'Select a app…', options: appOptionsObs, 
@@ -45,20 +52,7 @@
         </div>
       </div>
       <div class="field phone" data-bind="visible: isState('PhoneSignIn')">
-        <div class="ui left labeled input">
-          <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
-            <div class="text" data-bind="text: phoneRegionObs"></div>
-            <i class="dropdown icon"></i>
-            <div class="menu">
-              <div class="item">US</div>
-              <div class="item">CA</div>
-              <div class="item">IN</div>
-              <div class="item">MX</div>
-            </div>
-          </div>
-          <input type="text" placeholder="Phone number" autocomplete="mobile"
-            data-bind="textInput: phoneObs, hasFocus: handleFocus('PhoneSignIn')"/>
-        </div>
+        <phone params="phoneObs: phoneObs"></phone>
       </div>
       <div class="field token" data-bind="visible: isState('EnterCode')">
         <div class="ui left icon input">
@@ -67,31 +61,9 @@
             data-bind="textInput: tokenObs, hasFocus: handleFocus('EnterCode')" />
         </div>
       </div>
-<!--
-      <div style="margin-top: 1rem">
-        <div class="field" data-bind="visible: isState('SignIn')">
-          Sign in using
-          <a href="" data-bind="click: useExternalId">external ID</a> or
-          <a href="" data-bind="click: usePhone">phone</a>
-        </div>
-        <div class="field" data-bind="visible: isState('PhoneSignIn')">
-          Sign in using <a href="" data-bind="click: cancel">email</a> or 
-          <a href="" data-bind="click: useExternalId">external ID</a>
-        </div>
-        <div class="field" data-bind="visible: isState('ExternalIdSignIn')">
-          Sign in using <a href="" data-bind="click: cancel">email</a> or 
-          <a href="" data-bind="click: usePhone">phone</a>
-        </div>
-      </div>
--->
+
       <div data-bind="if: !isLockedObs()">
-        <div class="field environment" style="margin-top: 1rem">
-          <select taborder="-1" name="environment" class="ui dropdown" data-bind="value: environmentObs,
-            options: environmentOptions, optionsText: 'label', optionsValue: 'value',
-            optionsCaption: 'Select an environment…'">
-          </select>
-        </div>
-        <div class="field" data-bind="visible: stateObs() !== 'ForgotPassword'">
+        <div class="field" style="margin-top: 1rem" data-bind="visible: stateObs() !== 'ForgotPassword'">
           <ui-checkbox params="checkedObs: imAnAdminObs">
             I’m an admin
           </ui-checkbox>

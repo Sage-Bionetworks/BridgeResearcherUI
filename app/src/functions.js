@@ -4,12 +4,15 @@ const MINUTE = SECOND * 60;
 const HOUR = MINUTE * 60;
 const DAY = HOUR * 24;
 const WEEK = DAY * 7;
-const FLAGS = {
-  US: "🇺🇸",
-  MX: "🇲🇽",
-  CA: "🇨🇦",
-  IN: "🇮🇳"
-};
+
+const SUPPORTED_COUNTRIES = [
+  {regionCode: 'US', flag: '🇺🇸', name: 'United States'},
+  {regionCode: 'CA', flag: '🇨🇦', name: 'Canada'},
+  {regionCode: 'IN', flag: '🇮🇳', name: 'India'},
+  {regionCode: 'MX', flag: '🇲🇽', name: 'Mexico'},
+  {regionCode: 'NG', flag: '🇳🇬', name: 'Nigeria'},
+];
+
 const LOCAL_TIMEZONE = Date()
   .split("(")[1]
   .split(")")[0]
@@ -18,8 +21,19 @@ const IS_BROWSER = typeof window !== "undefined" && typeof window.document !== "
 const BYTE_UNITS = [' KB', ' MB', ' GB', ' TB'];
 const FORMAT = new Intl.NumberFormat();
 
+function canEditAssessment(assessment, session) {
+  if (assessment.ownerId.indexOf(':') > -1) {
+    var [appId, orgId] = assessment.ownerId.split(':');
+  } else {
+    var appId = session.appId;
+    var orgId = assessment.ownerId;
+  }
+  return session.roles.indexOf('superadmin') > -1 || 
+    (session.roles.indexOf('developer') > -1 && session.appId === appId && session.orgMembership === orgId);
+}
 function flagForRegionCode(regionCode) {
-  return FLAGS[regionCode];
+  let entries = SUPPORTED_COUNTRIES.filter(entry => entry.regionCode === regionCode);
+  return (entries.length) ? entries[0].flag : '';
 }
 function identity(arg) {
   return arg;
@@ -163,6 +177,8 @@ function formatRoles(roles) {
       return "Administrator";
     } else if (role === "study_coordinator") {
       return "Study Coordinator";
+    } else if (role === "study_designer") {
+      return "Study Designer";
     } else if (role === "org_admin") {
       return "Organization Administrator";
     }
@@ -175,6 +191,8 @@ function persistRoles(roles) {
       return "admin";
     } else if (role === "Study Coordinator") {
       return "study_coordinator";
+    } else if (role === "Study Designer") {
+      return "study_designer";
     } else if (role === "Organization Administrator") {
       return "org_admin";
     }
@@ -571,6 +589,7 @@ function formatCount(count = '') {
 }
 
 export default {
+  canEditAssessment,
   copyProps,
   deleteUnusedProperties,
   flagForRegionCode,
@@ -618,5 +637,6 @@ export default {
   queryToObject,
   returning,
   seq,
-  studyMatchesUser
+  studyMatchesUser,
+  SUPPORTED_COUNTRIES
 };

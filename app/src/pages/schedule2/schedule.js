@@ -1,6 +1,7 @@
 import { getEventIds } from "./schedule2utils";
 import Binder from "../../binder";
 import fn from "../../functions";
+import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
@@ -25,6 +26,10 @@ export default function(params) {
   self.generateId = function(fieldName) {
     return fieldName;
   }
+  self.preview = function(vm, event) {
+    utils.clearErrors();
+    root.openDialog("preview_timeline", { scheduleGuid: self.schedule.guid });
+  };
   self.save = function(vm, event) {
     self.schedule = binder.persist(self.schedule);
 
@@ -33,7 +38,7 @@ export default function(params) {
       serverService.createSchedule(self.schedule)
         .then(afterSave)
         .then(utils.successHandler(vm, event, "Schedule created."))
-        .then((sch) => document.location = '#/schedules/' + sch.guid)
+        .then((sch) => document.location = `#/schedules/${sch.guid}`)
         .catch(utils.failureHandler({ id: 'schedule' }))
     } else {
       serverService.updateSchedule(self.schedule)

@@ -1,0 +1,102 @@
+<div class="ui segment" style="margin-bottom: 1rem">
+  <div class="fields" style="text-align:right">
+    <div class="sixteen wide field" style="margin-top: -.5rem; margin-bottom: -1rem;">
+      <i class="large arrow alternate circle up outline icon"
+        style="background-color: rgba(255,255,255,1.0)"
+        data-bind="click: moveUp, style: {opacity: firstOpacityObs($index())}"></i>
+      <i class="large arrow alternate circle down outline icon"
+        style="background-color: rgba(255,255,255,1.0)"
+        data-bind="click: moveDown, style: {opacity: lastOpacityObs($index())}"></i>
+      <i class="red large times circle outline icon" 
+        style="background-color: rgba(255,255,255,1.0)"
+        data-bind="click: remove"></i>
+    </div>
+  </div>
+  <div class="fields">
+    <div class="four wide field" data-bind="attr: {id: generateId('role')}">
+      <label>Role</label>
+      <select class="ui dropdown"  data-bind="options: roleOptsObs, 
+        optionsText: 'label', optionsValue: 'value', 
+        value: roleObs, optionsCaption: 'Select a role:'"></select>
+    </div>
+    <div class="eight wide field" data-bind="attr: {id: generateId('name')}">
+      <label>Name</label>
+      <input type="text" data-bind="textInput: nameObs">
+    </div>
+    <div class="four wide field">
+      <label>Jurisdiction</label>
+      <input type="text" placeholder="GCP" data-bind="textInput: jurisdictionObs">
+    </div>
+  </div>
+  <div class="fields">
+    <div class="four wide field"></div>
+    <div class="six wide field" data-bind="attr: {id: generateId('email')}">
+      <label>Email</label>
+      <input type="text" data-bind="textInput: emailObs">
+    </div>
+    <div class="six wide field" data-bind="attr: {id: generateId('phone')}">
+      <label>Phone</label>
+      <phone params="phoneObs: phoneObs"></phone>
+    </div>
+  </div>
+  <div class="fields">
+    <div class="four wide field" style="text-align: right">
+      <a data-bind="click: togglePerson" style="font-weight: bold" href="#">
+        Person <i data-bind="class: personVisibleObs() ? 'angle down icon' : 'angle up icon'"></i>
+      </a>
+    </div>
+    <div class="six wide field" data-bind="visible: personVisibleObs">
+      <label>Position</label>
+      <input type="text" data-bind="textInput: positionObs">
+    </div>
+    <div class="six wide field" data-bind="visible: personVisibleObs">
+      <label>Affiliation</label>
+      <input type="text" data-bind="textInput: affiliationObs">
+    </div>
+  </div>
+  <div class="fields">
+    <div class="four wide field" style="text-align: right">
+      <a data-bind="click: toggleAddress" style="font-weight: bold" href="#">
+        Address <i data-bind="class: addressVisibleObs() ? 'angle down icon' : 'angle up icon'"></i>
+      </a>
+    </div>
+    <div class="eight wide field" data-bind="visible: addressVisibleObs">
+      <label>Place Name</label>
+      <input type="text" placeholder="Dept. of Numerology" data-bind="textInput: placeNameObs">
+    </div>
+    <div class="four wide field" data-bind="visible: addressVisibleObs">
+      <label>Country</label>
+      <input type="text" placeholder="USA" data-bind="textInput: countryObs">
+    </div>
+  </div>
+  <div class="fields" data-bind="visible: addressVisibleObs">
+    <div class="four wide field"></div>
+    <div class="twelve wide field">
+      <label>Street</label>
+      <input type="text" placeholder="123 Sesame St." data-bind="textInput: streetObs">
+    </div>
+  </div>
+  <div class="fields" data-bind="visible: addressVisibleObs">
+    <div class="four wide field"></div>
+    <div class="twelve wide field">
+      <label>Mail Routing</label>
+      <input type="text" placeholder="Mailbox 435" data-bind="textInput: mailRoutingObs">
+    </div>
+  </div>
+  <div class="fields" data-bind="visible: addressVisibleObs">
+    <div class="four wide field"></div>
+    <div class="four wide field">
+      <label>City</label>
+      <input type="text" placeholder="Big Town" data-bind="textInput: cityObs">
+    </div>
+    <div class="four wide field">
+      <label>State/Province</label>
+      <input type="text" placeholder="WA" data-bind="textInput: stateObs">
+    </div>
+    <div class="four wide field">
+      <label>Postal Code</label>
+      <input type="text" placeholder="98103" data-bind="textInput: postalCodeObs">
+    </div>
+  </div>
+
+</div>

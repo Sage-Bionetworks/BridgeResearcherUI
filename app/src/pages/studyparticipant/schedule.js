@@ -30,11 +30,21 @@ export default class StudyParticipantEnrollments extends BaseAccount {
       .then(() => serverService.getStudyParticipantActivityEvents(this.studyId, this.userId))
       .then(res => this.itemsObs(res.items));
   }
+  formatDaysSince(timestamp) {
+    let start = new Date(timestamp);
+    let end = new Date();
+    let days = (end - start) / 1000 / 60 / 60 / 24;
+    let result = Math.ceil(days - (end.getTimezoneOffset() - start.getTimezoneOffset()) / (60 * 24));
+    return (result > 0) ? result : '';
+  }
   formatEventId(eventId) {
     return eventId.replace(/^custom\:/, '');
   }
   loadAccount() { 
     return serverService.getStudyParticipant(this.studyId, this.userId);
+  }
+  link(postfix) {
+    return `#/studies/${this.studyId}/participants/${encodeURIComponent(this.userId)}/${postfix}`;
   }
   deleteEvent(event, browserEvent) {
     let self = ko.contextFor(browserEvent.target).$component;

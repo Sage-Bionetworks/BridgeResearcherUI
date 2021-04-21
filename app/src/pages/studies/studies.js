@@ -1,3 +1,4 @@
+import config from "../../config";
 import fn from "../../functions";
 import ko from "knockout";
 import root from "../../root";
@@ -9,6 +10,7 @@ export default function() {
   let self = this;
 
   fn.copyProps(self, root, "isAdmin", "isStudyCoordinator");
+  fn.copyProps(self, fn, "formatDateTime");
 
   tables.prepareTable(self, {
     name: "study",
@@ -25,6 +27,10 @@ export default function() {
   self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
 
   self.session = null;
+
+  self.formatPhase = function(phase) {
+    return config.phasesOpts.filter(opt => opt.value === phase)[0].label;
+  }
 
   function load(query) {
     query.includeDeleted = self.showDeletedObs();

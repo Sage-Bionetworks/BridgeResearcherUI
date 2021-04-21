@@ -42,6 +42,10 @@
     <a data-bind="attr: {href:'#/sharedassessments/'+originGuidObs()+'/resources'}">
       all of that assessment’s documentation</a> applies to this assessment.</p>
 
+  <p data-bind="visible: itemsObs().length === 0">
+    There are no resources documenting this assessment.    
+  </p>
+    
   <form class="ui form" onsubmit="return false" data-bind="visible: !originGuidObs() && canEditObs()">
     <div class="line-control">
       <input type="text" style="width: 8rem; margin-right: 1rem"
@@ -65,6 +69,7 @@
         </th>
         <th>Title</th>
         <th>Category</th>
+        <th width="10"></th>
         <th>Creators</th>
         <th>Revisions</th>
         <th>Date</th>
@@ -90,6 +95,11 @@
           <div data-bind="text: $data.description"></div>
         </td>
         <td nowrap data-bind="text: $parent.formatCategory($data.category)"></td>
+        <td>
+          <a data-bind="href: $data.url" target="_blank">
+            <i class="link icon"></i>
+          </a>
+        </td>
         <td data-bind="text: $data.creators.join(', ')"></td>
         <td data-bind="text: $parent.formatRevisions($data)"></td>
         <td data-bind="text: $data.date"></td>

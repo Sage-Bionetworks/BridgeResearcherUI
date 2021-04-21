@@ -41,6 +41,7 @@ export default function() {
       .then((response) => self.orgNames = response)
       .then(() => serverService.getAssessments(
           query.tags, query.offsetBy, query.pageSize, self.showDeletedObs()))
+      .then(utils.resolveDerivedFrom)
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .then(self.postLoadPagerFunc)
       .catch(utils.failureHandler({ id: 'assessments' }));

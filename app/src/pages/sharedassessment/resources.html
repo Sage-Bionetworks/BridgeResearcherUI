@@ -8,7 +8,6 @@
       <h3 data-bind="text: pageTitleObs"></h3>
     </div>
     <div class="fixed-header-buttons">
-      <button data-bind="click: doImport" class="ui tiny button">Import</button>
     </div>
   </div>
   <sharedassessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
@@ -17,33 +16,31 @@
 </div>
 <div class="scrollbox">
   <errors id="sharedassessment_resources"></errors>
-  <table class="ui compact selectable table">
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Category</th>
-        <th>Creators</th>
-        <th>Revisions</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-      <tr>
-        <td colspan="5" data-bind="html: recordsMessageObs"></td>
-      </tr>
-    </tbody>
-    <tbody data-bind="foreach: itemsObs">
-      <tr data-bind="css: {negative: $data.deleted}">
-        <td>
-          <a data-bind="text: $data.title, href: '#/sharedassessments/' + $parent.guidObs() 
-            + '/resources/' + $data.guid"></a>
-          <div data-bind="text: $data.description"></div>
-        </td>
-        <td nowrap data-bind="text: $parent.formatCategory($data.category)"></td>
-        <td data-bind="text: $data.creators.join(', ')"></td>
-        <td data-bind="text: $parent.formatRevisions($data)"></td>
-        <td data-bind="text: $data.date"></td>
-      </tr>
-    </tbody>
-  </table>
+  
+  <p data-bind="visible: itemsObs().length === 0">
+    There are no resources documenting this assessment.    
+  </p>
+
+  <div class="ui link cards" data-bind="foreach: itemsObs" target="_blank">
+    <a class="card" data-bind="href: $data.url">
+      <div class="image">
+        <div data-bind="style: $parent.image($data)"></div>
+      </div>
+      <div class="content">
+        <div class="header" data-bind="text: $data.title"></div>
+        <div class="meta" data-bind="text: $parent.formatCategory($data.category)"></div>
+        <div class="description" data-bind="text: $data.description"></div>
+      </div>
+      <div class="extra content">
+        <span class="right floated linked" data-bind="click: 
+          () => document.location = `#/sharedassessments/${$parent.guidObs()}/resources/${$data.guid}`">
+          Edit Details
+        </span>
+        <span>
+          <i class="calendar alternate outline icon"></i>
+          <span data-bind="text: $data.date"></span>
+        </span>
+      </div>
+    </div>
+
 </div>

@@ -82,6 +82,9 @@ export default function(params) {
     }
     return self.prefix + fieldName;
   }
+  // TODO: What we know now is that all of this can be moved to the session component, which
+  // makes it easier to find and work with. Even add can be moved there by directly manipulating
+  // the array which is also passed in.
   self.moveSessionUp = function(vm, event) {
     let index = ko.contextFor(event.target).$index();
     if (index > 0) {

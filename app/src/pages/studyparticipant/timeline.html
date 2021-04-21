@@ -1,0 +1,59 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/studies" class="section">Studies</a>
+        <i class="right chevron icon divider"></i>
+        <a class="section" data-bind="href: '#/studies/' + navStudyIdObs() + '/participants', text: navStudyNameObs()">StudyName</a>
+        <i class="right chevron icon divider"></i>
+        <span class="section">Participants</span>
+      </div>
+      <h3 data-bind="text: titleObs"></h3>
+    </div>
+    <div class="fixed-header-buttons">
+    </div>
+  </div>
+  <studyparticipant-tabset params="studyIdObs: navStudyIdObs, userIdObs: userIdObs, 
+        statusObs: statusObs"></studyparticipant-tabset>
+</div>
+<div class="scrollbox">
+  <errors id="studyparticipant-timeline"></errors>
+  <div class="ui grid">
+    <div class="ten wide column">
+      <div class="ui tabular menu" style="margin-bottom:2rem">
+        <a class="item" data-bind="href: link('schedule')">
+          Schedule Events
+        </a>
+        <a class="active item">
+          Timeline
+        </a>
+      </div>
+      <div data-bind="foreach: entriesObs">
+        <div class="ui vertical menu" style="width: 100%">
+          <div class="active item">
+            <div style="margin-bottom: .5rem">
+              <span data-bind="text: $parent.line1($data)"></span>
+              <span data-bind="text: $parent.line2($data)" style="float:right"></span>
+            </div>
+            <div>
+              <span data-bind="text: $parent.performanceOrder($data.guid)"></span>
+              <span style="float:right">
+                <b>Session instance GUID:</b> <span data-bind="text: $data.instanceGuid"></span>
+              </span>
+            </div>
+          </div>
+          <!-- ko foreach: $data.assessments-->
+            <div class="item">
+                <span data-bind="text: $parents[1].asmt($data)"></span>
+                <span style="float: right">
+                  <b>Instance GUID:</b> <span data-bind="text: $data.instanceGuid"></span>
+                </span>
+            </div>
+          <!-- /ko -->
+        </div>
+      </div>
+    </div>
+    <div class="six wide column">
+    </div>
+  </div>
+</div>

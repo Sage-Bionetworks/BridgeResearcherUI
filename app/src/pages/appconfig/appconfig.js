@@ -59,11 +59,15 @@ export default function(params) {
   let titleUpdated = fn.handleObsUpdate(self.titleObs, "label");
   fn.copyProps(self, fn, "formatDateTime");
 
+  function redirect(res) {
+    document.location = `#/app_configs/${res.guid}`;
+    return res;
+  }
   function saveAppConfig() {
     self.enablePreviewObs(false);
     return self.appConfig.guid ? 
       serverService.updateAppConfig(self.appConfig) : 
-      serverService.createAppConfig(self.appConfig);
+      serverService.createAppConfig(self.appConfig).then(redirect);
   }
   function updateModifiedOn(response) {
     self.modifiedOnObs(new Date());
@@ -76,8 +80,7 @@ export default function(params) {
         .then(binder.update())
         .then(() => self.enablePreviewObs(true));
     } else {
-      return serverService
-        .getAppConfig(params.guid)
+      return serverService.getAppConfig(params.guid)
         .then(binder.assign("appConfig"))
         .then(binder.update())
         .then(titleUpdated)

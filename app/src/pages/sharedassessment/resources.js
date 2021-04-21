@@ -67,9 +67,21 @@ export default function(params) {
       .then(self.postLoadPagerFunc)
       .catch(utils.failureHandler({ id: 'sharedassessment_resources' }));
   }
-  // TODO: This was never finished!
-  self.doImport = function() {
 
+  self.image = function(item) {
+    let src = '/images/globe.svg';
+    let size = '25%';
+    if (item.format && item.url && item.format.startsWith('image/')) {
+      src = item.url;
+      size = 'contain';
+    }
+    return { 
+      'height': '10rem',
+      'background-repeat': 'no-repeat',
+      'background-position': 'center',
+      'background-size': size,
+      'background-image': 'url('+src+')'
+    };
   }
 
   serverService.getSharedAssessment(params.guid)

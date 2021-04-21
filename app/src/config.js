@@ -68,6 +68,15 @@ export default {
     },
     UNDO_SPONSOR: "Are you sure? This changes permissions, though you can redo this later."
   },
+  phasesOpts: [
+    {label: 'Legacy', value: 'legacy'},
+    {label: 'Design', value: 'design'},
+    {label: 'Recruitment', value: 'recruitment'},
+    {label: 'In Flight', value: 'in_flight'},
+    {label: 'Analysis', value: 'analysis'},
+    {label: 'Completed', value: 'completed'},
+    {label: 'Withdrawn', value: 'withdrawn'},
+  ],
   retentionReports: ['api', 'biomarin-pku-study', 'crf-module', 'sage-mpower-2'],
   accounts: "/v1/accounts",
   adminAuth: "/v3/auth/admin",

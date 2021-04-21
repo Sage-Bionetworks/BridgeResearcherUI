@@ -70,7 +70,6 @@ export default function() {
     .obs("email")
     .obs("password")
     .obs("phone")
-    .obs("phoneRegion", "US")
     .obs("token")
     .obs("imAnAdmin", false)
     .obs("externalId")
@@ -116,8 +115,7 @@ export default function() {
     self.emailObs("");
     self.externalIdObs("");
     self.passwordObs("");
-    self.phoneObs("");
-    self.phoneRegionObs("US");
+    self.phoneObs(null);
     self.tokenObs("");
     return response;
   }
@@ -249,11 +247,6 @@ export default function() {
   self.useCode = function() {
     utils.clearErrors();
     self.stateObs("EnterCode");
-  };
-  self.updateRegion = function(model, event) {
-    if (event.target.classList.contains("item")) {
-      self.phoneRegionObs(event.target.textContent);
-    }
   };
   self.titleObs = ko.computed(() => TITLES[self.stateObs()]);
   self.buttonTextObs = ko.computed(() => BUTTONS[self.stateObs()]);

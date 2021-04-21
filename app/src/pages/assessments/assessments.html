@@ -48,17 +48,15 @@
         <th width="10">
           <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
         </th>
-        <th width="10">
-        </th>
         <th nowrap>Title</th>
-        <th>Derived From</th>
+        <th>Imported From Shared Assessment</th>
         <th>Owner</th>
         <th>Tags</th>
       </tr>
     </thead>
     <tbody class="no_records" data-bind="if: itemsObs().length === 0">
       <tr>
-        <td colspan="6" data-bind="html: recordsMessageObs"></td>
+        <td colspan="5" data-bind="html: recordsMessageObs"></td>
       </tr>
     </tbody>
     <tbody data-bind="foreach: itemsObs">
@@ -68,17 +66,12 @@
           <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
             style="cursor: pointer" class="green undo icon"></i>
         </td>
-        <td>
-          <i class="ui green globe icon"
-            data-content="This is an imported shared component"
-            data-bind="visible: $data.originGuid, semantic: 'popup'"></i>
-        </td>
         <td nowrap>
           <a data-bind="text: $data.title, href: '#/assessments/' + $data.guid"></a>
           <span class="help-text" data-bind="text: ' (rev. ' + $data.revision + ')'"></span>
         </td>
-        <td data-bind="text: $data.originGuid"></td>
-        <td data-bind="text: $parent.formatOrg($data.ownerId)"></td>
+        <td data-bind="html: $data.originGuidObs"></td>
+        <td nowrap data-bind="text: $parent.formatOrg($data.ownerId)"></td>
         <td data-bind="text: $data.tags.join(', ')"></td>
       </tr>
     </tbody>

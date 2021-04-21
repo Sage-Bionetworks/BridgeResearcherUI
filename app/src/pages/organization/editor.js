@@ -46,7 +46,7 @@ export default function organization(params) {
   function saveOrg(org) {
     if (self.isNewObs()) {
       return serverService.createOrganization(org).then(response => {
-        document.location = "#/organizations/" + response.identifier;
+        document.location = `#/organizations/${response.identifier}`;
         return response;
       });
     }

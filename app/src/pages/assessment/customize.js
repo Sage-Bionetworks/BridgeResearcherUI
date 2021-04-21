@@ -2,7 +2,6 @@ import alerts from "../../widgets/alerts";
 import Binder from "../../binder";
 import fn from "../../functions";
 import ko from "knockout";
-import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
@@ -75,7 +74,7 @@ export default function(params) {
   self.unlink = function(vm, event) {
     alerts.deleteConfirmation("Are you sure? We cannot undo this.", function() {
       serverService.updateAssessmentConfig(params.guid, self.config)
-        .then(() => document.location = '#/assessments/' + params.guid + '/config');
+        .then(() => document.location = `#/assessments/${params.guid}/config`);
     }, "Delete");    
   };
 
@@ -101,6 +100,5 @@ export default function(params) {
     .then((response) => self.data = response.config)
     .then(updateEditors)
     .then(serverService.getSession)
-    .then((session) => self.canEditObs(
-      root.isSuperadmin() || self.assessment.ownerId === session.orgMembership));
+    .then((session) => self.canEditObs(fn.canEditAssessment(self.assessment, session)));
 };

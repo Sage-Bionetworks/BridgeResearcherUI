@@ -285,6 +285,8 @@ import studiesHtml from "./pages/studies/studies.html";
 
 import studyEditor from "./pages/study/editor";
 import studyEditorHtml from "./pages/study/editor.html";
+import studyUi from "./pages/study/ui";
+import studyUiHtml from "./pages/study/ui.html";
 import studySponsors from "./pages/study/sponsors";
 import studySponsorsHtml from "./pages/study/sponsors.html";
 import studyEnrollments from "./pages/study/enrollments";
@@ -295,6 +297,8 @@ import studyClientData from "./pages/study/client_data";
 import studyClientDataHtml from "./pages/study/client_data.html";
 import studyTabset from "./pages/study/tabset";
 import studyTabsetHtml from "./pages/study/tabset.html";
+import studyContact from "./pages/study/contact";
+import studyContactHtml from "./pages/study/contact.html";
 
 import studyparticipants from "./pages/study/studyparticipants";
 import studyparticipantsHtml from "./pages/study/studyparticipants.html";
@@ -325,9 +329,9 @@ import studypartRequestInfo from "./pages/studyparticipant/request_info";
 import studypartRequestInfoHtml from "./pages/studyparticipant/request_info.html";
 import studypartSchedule from "./pages/studyparticipant/schedule";
 import studypartScheduleHtml from "./pages/studyparticipant/schedule.html";
+import studypartTimeline from "./pages/studyparticipant/timeline";
+import studypartTimelineHtml from "./pages/studyparticipant/timeline.html";
 /*
-import studypartEvents from "./pages/studyparticipant/activity_events";
-import studypartEventsHtml from "./pages/studyparticipant/activity_events.html";
 import studypartConsents from "./pages/studyparticipant/consents";
 import studypartConsentsHtml from "./pages/studyparticipant/consents.html";
 import studyverifiedIcon from "./pages/studyparticipant/verified-icon";
@@ -350,6 +354,8 @@ import label from "./pages/schedule2/label";
 import labelHtml from "./pages/schedule2/label.html";
 import selectAssessmentRefs from "./dialogs/select_assessment_refs/select_assessment_refs";
 import selectAssessmentRefsHtml from "./dialogs/select_assessment_refs/select_assessment_refs.html";
+import previewTimeline from "./dialogs/preview_timeline/preview_timeline";
+import previewTimelineHtml from "./dialogs/preview_timeline/preview_timeline.html";
 
 import schemaTabset from "./pages/schema/tabset";
 import schemaTabsetHtml from "./pages/schema/tabset.html";
@@ -413,6 +419,8 @@ import uiDur from "./widgets/form/ui_duration";
 import uiDurHtml from "./widgets/form/ui_duration.html";
 import timestamps from "./widgets/timestamps/timestamps";
 import timestampsHtml from "./widgets/timestamps/timestamps.html";
+import phone from "./widgets/phone/phone";
+import phoneHtml from "./widgets/phone/phone.html";
 
 // DIALOGS
 import critEditor from "./dialogs/criteria_editor/criteria_editor";
@@ -597,6 +605,8 @@ reg("mem-tabset", {viewModel: memTabset, template: memTabsetHtml});
 reg("mem-breadcrumb", {viewModel: memBreadcrumb, template: memBreadcrumbHtml});
 reg("studies", {viewModel: studies, template: studiesHtml});
 reg("studyEditor", {viewModel: studyEditor, template: studyEditorHtml});
+reg("study-contact", {viewModel: studyContact, template: studyContactHtml});
+reg("studyUi", {viewModel: studyUi, template: studyUiHtml});
 reg("studySponsors", {viewModel: studySponsors, template: studySponsorsHtml});
 reg("studyEnrollments", {viewModel: studyEnrollments, template: studyEnrollmentsHtml});
 reg("studyClientData", {viewModel: studyClientData, template: studyClientDataHtml});
@@ -605,6 +615,7 @@ reg("study-tabset", {viewModel: studyTabset, template: studyTabsetHtml});
 reg("studyparticipant_general", {viewModel: studypartGeneral, template: studypartGeneralHtml});
 reg("studyparticipant_enrollments", {viewModel: studypartEnrollments, template: studypartEnrollmentsHtml});
 reg("studyparticipant_schedule", {viewModel: studypartSchedule, template: studypartScheduleHtml});
+reg("studyparticipant_timeline", {viewModel: studypartTimeline, template: studypartTimelineHtml});
 reg("studyparticipant-tabset", {viewModel: studypartTabset, template: studypartTabsetHtml});
 reg("studyparticipant_uploads", {viewModel: studypartUploads, template: studypartUploadsHtml});
 reg("studyparticipant_upload", {viewModel: studypartUpload, template: studypartUploadHtml});
@@ -614,8 +625,6 @@ reg("studyparticipant_report", {viewModel: studypartReport, template: studypartR
 reg("studyparticipant_clientData", {viewModel: studypartClientData, template: studypartClientDataHtml});
 reg("studyparticipant_request_info", {viewModel: studypartRequestInfo, template: studypartRequestInfoHtml});
 /*
-reg("studyparticipant_activity_events", {viewModel: studypartEvents, template: studypartEventsHtml});
-reg("studyparticipant_activity", {viewModel: studypartActivity, template: studypartActivityHtml});
 reg("studyparticipant_consents", {viewModel: studypartConsents, template: studypartConsentsHtml});
 */
 reg("schedules2", {viewModel: schedules2, template: schedules2Html});
@@ -625,6 +634,7 @@ reg("time-window", {viewModel: timeWindow, template: timeWindowHtml});
 reg("assessment-ref", {viewModel: assessmentRef, template: assessmentRefHtml});
 reg("message", {viewModel: messageRef, template: messageRefHtml});
 reg("localized-label", {viewModel: label, template: labelHtml});
+reg("preview_timeline", {viewModel: previewTimeline, template: previewTimelineHtml, synchronous: true});
 
 reg("BooleanConstraints", {viewModel: boolConst, template: boolConstHtml});
 reg("DateConstraints", {viewModel: dateConst, template:  dateConstHtml});
@@ -678,6 +688,7 @@ reg("template_history", {viewModel: templateHistory, template: templateHistoryHt
 reg("template-tabset", {viewModel: templateTabset, template: templateTabsetHtml});
 reg("pager", {viewModel: pager, template: pagerHtml});
 reg("timestamps", {viewModel: timestamps, template: timestampsHtml});
+reg("phone", {viewModel: phone, template: phoneHtml});
 
 // Dialogs. These must be synchronous.
 reg("sign_out_user", {viewModel: signOutUser, template: signOutUserHtml, synchronous: true});

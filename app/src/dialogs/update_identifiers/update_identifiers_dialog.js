@@ -10,8 +10,7 @@ export default function(params) {
     .obs("signInPassword")
     .obs("email", params.email)
     .obs("synapseUserId", params.synapseUserId)
-    .obs("phone", params.phone, Binder.formatPhone, Binder.persistPhone)
-    .obs("phoneRegion", params.phoneRegion)
+    .obs("phone")
     .obs("credentialType", "Email")
     .obs("externalId");
 
@@ -28,11 +27,6 @@ export default function(params) {
   self.isVisible = function(field) {
     return params.editor === field;
   }
-  self.updateRegion = function(model, event) {
-    if (event.target.classList.contains("item")) {
-      self.phoneRegionObs(event.target.textContent);
-    }
-  };
 
   self.save = function(vm, event)  {
     utils.startHandler(vm, event);
@@ -45,7 +39,7 @@ export default function(params) {
     } else if (self.credentialTypeObs() === 'External ID') {
       payload.signIn.externalId = self.externalIdObs();
     } else if (self.credentialTypeObs() === 'Phone') {
-      payload.signIn.phone = { number: self.phoneObs(), regionCode: self.phoneRegionObs() };
+      payload.signIn.phone = self.phoneObs();
     }
     if (self.isVisible('email')) {
       payload.emailUpdate = self.emailObs();
@@ -54,7 +48,7 @@ export default function(params) {
       payload.synapseUserIdUpdate = new String(self.synapseUserIdObs());
     }
     if (self.isVisible('phone')) {
-      payload.phoneUpdate = {number: self.phoneObs(), regionCode: self.phoneRegionObs()};
+      payload.phoneUpdate = self.phoneObs();
     }
     updateSynapseUserId(payload)
       .then(() => serverService.updateIdentifiersForSelf(payload))

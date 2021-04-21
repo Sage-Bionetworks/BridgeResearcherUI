@@ -3,7 +3,6 @@ import Binder from "../../binder";
 import fn from "../../functions";
 import ko from "knockout";
 import optionsService from "../../services/options_service";
-import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
@@ -73,8 +72,7 @@ export default function(params) {
       .then(fn.handleObsUpdate(self.pageTitleObs, "title"))
       .then(fn.handleObsUpdate(self.pageRevObs, "revision"))
       .then(serverService.getSession)
-      .then((session) => self.canEditObs(
-        root.isSuperadmin() || self.assessment.ownerId === session.orgMembership));
+      .then((session) => self.canEditObs(fn.canEditAssessment(self.assessment, session)));
   }
 
   self.doImport = function(vm, event) {
