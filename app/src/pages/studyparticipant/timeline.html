@@ -20,7 +20,7 @@
   <errors id="studyparticipant-timeline"></errors>
   <div class="ui grid">
     <div class="ten wide column">
-      <div class="ui tabular menu" style="margin-bottom:2rem">
+      <div class="ui tabular menu">
         <a class="item" data-bind="href: link('schedule')">
           Schedule Events
         </a>
@@ -28,28 +28,32 @@
           Timeline
         </a>
       </div>
-      <div data-bind="foreach: entriesObs">
-        <div class="ui vertical menu" style="width: 100%">
-          <div class="active item">
-            <div style="margin-bottom: .5rem">
-              <span data-bind="text: $parent.line1($data)"></span>
-              <span data-bind="text: $parent.line2($data)" style="float:right"></span>
-            </div>
-            <div>
-              <span data-bind="text: $parent.performanceOrder($data.guid)"></span>
-              <span style="float:right">
-                <b>Session instance GUID:</b> <span data-bind="text: $data.instanceGuid"></span>
-              </span>
-            </div>
-          </div>
-          <!-- ko foreach: $data.assessments-->
-            <div class="item">
-                <span data-bind="text: $parents[1].asmt($data)"></span>
-                <span style="float: right">
-                  <b>Instance GUID:</b> <span data-bind="text: $data.instanceGuid"></span>
+    </div>
+    <div class="ui grid">
+      <div class="ten wide column">
+        <div data-bind="foreach: entriesObs">
+          <div class="ui vertical menu" style="width: 100%">
+            <div class="active item">
+              <div style="margin-bottom: .5rem">
+                <span data-bind="text: $parent.line1($data)"></span>
+                <span data-bind="text: $parent.line2($data)" style="float:right"></span>
+              </div>
+              <div>
+                <span data-bind="text: $parent.performanceOrder($data.guid)"></span>
+                <span style="float:right">
+                  <b>Session instance GUID:</b> <span data-bind="text: $data.instanceGuid"></span>
                 </span>
+              </div>
             </div>
-          <!-- /ko -->
+            <!-- ko foreach: $data.assessments-->
+              <div class="item">
+                  <span data-bind="text: $parents[1].asmt($data)"></span>
+                  <span style="float: right">
+                    <b>Instance GUID:</b> <span data-bind="text: $data.instanceGuid"></span>
+                  </span>
+              </div>
+            <!-- /ko -->
+          </div>
         </div>
       </div>
     </div>

@@ -20,7 +20,8 @@ const SESSION_STARTED_EVENT_KEY = "sessionStarted";
 const ERROR = "Session listener not a function";
 const ADMIN_ROLES = Object.freeze(["developer", "researcher", "admin", "org_admin", 
   "study_coordinator", "study_designer", "superadmin"]);
-// We want this to be shared by all server service instances.
+
+  // We want this to be shared by all server service instances.
 const cache = new Cache();
 const listeners = new EventEmitter();
 let session = null;

@@ -129,8 +129,8 @@ router.on("/participants/:userId/general", routeTo("participant_general", "parti
 router.on("/participants/:userId/requestInfo", routeTo("participant_request_info", "participants", USERID));
 router.on("/participants/:userId", routeTo("participant_general", "participants", USERID));
 router.on("/participants", routeTo("participants", "participants"));
-router.on("/events", redirectTo("/events/event_keys"));
-router.on("/events/event_keys", routeTo("event_keys", "events"));
+router.on("/events", redirectTo("/events/custom_events"));
+router.on("/events/custom_events", routeTo("custom_events", "events"));
 router.on("/events/auto_custom_events", routeTo("auto_custom_events", "events"));
 router.on("/topics/:guid", routeTo("topic", "notifications", GUID));
 router.on("/topics", routeTo("topics", "notifications"));

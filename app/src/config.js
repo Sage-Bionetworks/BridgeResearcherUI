@@ -15,7 +15,7 @@ export default {
   },
   canBeEditedBy: {
     'superadmin': ['Administrator', 'Developer', 'Organization Administrator', 'Researcher', 'Study Coordinator', 'Study Designer', 'Worker'],
-    'admin': ['Developer', 'Organization Administrator', 'Researcher', 'Study Coordinator', 'Study Designer'],
+    'admin': ['Developer', "Organization Administrator", 'Researcher', 'Study Coordinator', 'Study Designer'],
     'org_admin': ['Study Coordinator', 'Study Designer', 'Organization Administrator'],
     'researcher': ['Developer'],
     'study_coordinator': [],

@@ -1,6 +1,6 @@
 <div class="ui left labeled input">
   <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
-    <div style="float:left" data-bind="text: phoneRegionObs"></div>
+    <div style="float:left" data-bind="text: formatRegion"></div>
     <i class="dropdown icon"></i>
     <div class="menu" data-bind="foreach: countriesObs">
       <div class="item" data-bind="attr: {'data-code': $data.regionCode}">

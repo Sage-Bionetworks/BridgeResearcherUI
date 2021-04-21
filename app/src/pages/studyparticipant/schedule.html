@@ -52,7 +52,7 @@
             <td nowrap data-bind="text: $parent.formatDateTime($data.timestamp)"></td>
             <td data-bind="text: $parent.formatDaysSince($data.timestamp)"></td>
             <td nowrap>
-              <span data-bind="visible: $data.eventId.startsWith('custom:')">
+              <span data-bind="visible: $parent.canEdit($data)">
                 <button class="ui basic compact mini button" 
                   data-bind="click: $component.editEvent">Edit</button>
                 <button class="ui basic red compact mini button" 
