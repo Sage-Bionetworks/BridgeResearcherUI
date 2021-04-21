@@ -17,7 +17,7 @@ export default function() {
   tables.prepareTable(self, {
     name: "assessment",
     refresh: self.reload,
-    id: "assessments",
+    id: "sharedassessments",
     delete: (item) => serverService.deleteSharedAssessment(item.guid, false),
     deletePermanently: (item) => serverService.deleteSharedAssessment(item.guid, true),
     undelete: (item) => serverService.updateSharedAssessment(item)
@@ -47,7 +47,7 @@ export default function() {
       .then(() => serverService.getSharedAssessments(query, self.showDeletedObs()))
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .then(self.postLoadPagerFunc)
-      .catch(utils.failureHandler({ id: 'assessments' }));
+      .catch(utils.failureHandler({ id: 'sharedassessments' }));
   }
   ko.postbox.subscribe('asm-refresh', load);
 };

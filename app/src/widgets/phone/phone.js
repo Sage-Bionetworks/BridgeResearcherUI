@@ -21,6 +21,10 @@ export default function(params) {
   self.phoneRegionObs.subscribe(newValue => {
     updatePhone(self.phoneNumberObs(), newValue);
   });
+  self.formatRegion = ko.computed(() => {
+    let entry = fn.SUPPORTED_COUNTRIES.filter(e => e.regionCode === self.phoneRegionObs())[0];
+    return `${entry.flag} ${entry.regionCode}`;
+  });
   function updatePhone(number, regionCode) {
     if (number && regionCode) {
       params.phoneObs({number, regionCode});

@@ -17,11 +17,9 @@ export default function(params) {
   self.eventIdObs = ko.observable(eventId);
   self.timestampObs = ko.observable(params.event.timestamp);
   serverService.getApp().then(app => {
-    if (self.readOnlyObs()) {
-      Object.keys(app.automaticCustomEvents).forEach(
-        key => self.eventIdOptionsObs.push({label: key, value: key}));
-    }
-    app.activityEventKeys.forEach(
+    Object.keys(app.automaticCustomEvents).forEach(
+      key => self.eventIdOptionsObs.push({label: key, value: key}));
+    Object.keys(app.customEvents).forEach(
       key => self.eventIdOptionsObs.push({label: key, value: key}));
     self.eventIdObs(eventId);
   });

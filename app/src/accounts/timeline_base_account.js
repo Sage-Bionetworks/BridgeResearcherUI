@@ -1,9 +1,10 @@
 import BaseAccount from "./base_account";
 import serverService from "../services/server_service";
+import utils from "../utils";
 
 export default class TimelineBaseAccount extends BaseAccount {
   constructor(params) {
-    super({...params, errorId: 'participant-timeline'});
+    super(params);
     this.binder
       .obs("json")
       .obs('entries[]');
@@ -14,7 +15,8 @@ export default class TimelineBaseAccount extends BaseAccount {
     this.getAccount()
       .then(res => this.account = res)
       .then(() => serverService.getStudyParticipantTimeline(params.studyId, params.userId))
-      .then(res => this.init(res));
+      .then(res => this.init(res))
+      .catch(utils.failureHandler(this.failureParams));
   }
   init(res) {
     this.jsonObs(JSON.stringify(res, null, 2));

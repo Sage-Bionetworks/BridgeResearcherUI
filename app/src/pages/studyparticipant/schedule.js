@@ -7,6 +7,8 @@ import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
 
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
 export default class StudyParticipantEnrollments extends BaseAccount {
   constructor(params) {
     super({ 
@@ -25,17 +27,22 @@ export default class StudyParticipantEnrollments extends BaseAccount {
     tables.prepareTable(this, { 
       name: "activity events",
       id: this.failureParams.id
-    });    
-    this.getAccount()
+    });
+    serverService.getApp().then(app => {
+      this.autoKeys = Object.keys(app.automaticCustomEvents).map(s => `custom:${s}`);
+    }).then(() => this.getAccount())
       .then(() => serverService.getStudyParticipantActivityEvents(this.studyId, this.userId))
       .then(res => this.itemsObs(res.items));
   }
   formatDaysSince(timestamp) {
     let start = new Date(timestamp);
     let end = new Date();
-    let days = (end - start) / 1000 / 60 / 60 / 24;
-    let result = Math.ceil(days - (end.getTimezoneOffset() - start.getTimezoneOffset()) / (60 * 24));
-    return (result > 0) ? result : '';
+    // Set to noon to avoid DST errors, probably
+    start.setHours(12, 0, 0);
+    end.setHours(12, 0, 0);
+    // Round to remove daylight saving errors, probably
+    let result = Math.round( (end - start) / MS_PER_DAY );
+    return result >= 0 ? result : ''; 
   }
   formatEventId(eventId) {
     return eventId.replace(/^custom\:/, '');
@@ -57,6 +64,9 @@ export default class StudyParticipantEnrollments extends BaseAccount {
         .then(res => self.itemsObs(res.items))
         .catch(utils.failureHandler({ id: 'studyparticipant-schedule' }));
     });
+  }
+  canEdit(item) {
+    return this.autoKeys.indexOf(item.eventId) === -1 && item.eventId.startsWith('custom:');
   }
   editEvent(event, browserEvent) {
     let self = ko.contextFor(browserEvent.target).$component;
