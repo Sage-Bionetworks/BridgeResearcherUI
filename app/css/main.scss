@@ -209,6 +209,7 @@ progress {
 
 /* This didn't use to be misaligned, but looks wrong now. */
 .ui.compact.table {
+    margin-top: 0;
     .ui.checkbox {
         vertical-align: middle;
     }
@@ -284,4 +285,12 @@ progress {
     li {
         margin-bottom: 1rem;
     }
+}
+
+/* Necessary for participant search controls to open correctly. */
+bsm-layout, .scrollbox {
+  height: 100% !important;
+}
+errors + .ui.message {
+  margin-top: 0;
 }

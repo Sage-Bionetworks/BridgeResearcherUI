@@ -8,44 +8,47 @@
   </div>
   <div class="ui empty secondary pointing menu"></div>
 </div>
-<div class="scrollbox">
-  <errors id="sharedassessments"></errors>
-  <div class="line-control">
-    <div>
-      <div class="ui left icon input">
-        <input type="text" placeholder="Filter with tags..."
-          data-bind="textInput: tagsObs, click: reload, returnHandler: reload"/>
-        <i class="filter icon"></i>
+<bsm-layout id="sharedassessments">
+  <div slot="header">
+    <div class="line-control">
+      <div>
+        <div class="ui left icon input">
+          <input type="text" placeholder="Filter with tags..."
+            data-bind="textInput: tagsObs, click: reload, returnHandler: reload"/>
+          <i class="filter icon"></i>
+        </div>
+      </div>
+      <div class="line-control-stretch">
+        <pager style="display: flex; justify-content: flex-end" 
+          params="prefix: 'asm', postLoadFunc: postLoadFunc"></pager>
       </div>
     </div>
-    <div class="line-control-stretch">
-      <pager style="display: flex; justify-content: flex-end" 
-        params="prefix: 'asm', postLoadFunc: postLoadFunc"></pager>
-    </div>
   </div>
-  <table class="ui compact selectable table">
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Owner</th>
-        <th width="25%">Tags</th>
-      </tr>
-    </thead>
-    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-      <tr>
-        <td colspan="3" data-bind="html: recordsMessageObs"></td>
-      </tr>
-    </tbody>
-    <tbody data-bind="foreach: itemsObs">
-      <tr data-bind="css: {negative: $data.deleted}">
-        <td>
-          <a data-bind="text: $data.title, href: '#/sharedassessments/' + $data.guid"></a>
-          <span class="help-text" data-bind="text: ' (rev. ' + $data.revision + ')'"></span>
-          <div data-bind="text: $data.summary"></div>
-        </td>
-        <td nowrap data-bind="text: $parent.formatOrg($data.ownerId)"></td>
-        <td data-bind="text: $data.tags.join(', ')"></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+  <div slot="content">
+    <table class="ui compact selectable table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Owner</th>
+          <th width="25%">Tags</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="3" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr data-bind="css: {negative: $data.deleted}">
+          <td>
+            <a data-bind="text: $data.title, href: '#/sharedassessments/' + $data.guid"></a>
+            <span class="help-text" data-bind="text: ' (rev. ' + $data.revision + ')'"></span>
+            <div data-bind="text: $data.summary"></div>
+          </td>
+          <td nowrap data-bind="text: $parent.formatOrg($data.ownerId)"></td>
+          <td data-bind="text: $data.tags.join(', ')"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</bsm-layout>

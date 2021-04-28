@@ -9,64 +9,59 @@
   </div>
   <!-- ko component: {name: 'settings-tabset', params: {active: 'email'}} --><!-- /ko -->
 </div>
-<div class="scrollbox">
-  <div class="ui grid">
-    <div class="ten wide column">
-      <errors id="email"></errors>
-      <form class="ui form">
-        <div class="two fields">
-          <div class="required field" id="supportEmail">
-            <label>Support email</label>
-            <input type="text" data-bind="textInput: supportEmailObs" />
+<bsm-layout id="email">
+  <div slot="content">
+    <form class="ui form">
+      <div class="two fields">
+        <div class="required field" id="supportEmail">
+          <label>Support email</label>
+          <input type="text" data-bind="textInput: supportEmailObs" />
+        </div>
+        <div class="field">
+          <label>&nbsp;</label>
+          <div class="label-field-padding" data-bind="visible: statusObs() == 'verified'">
+            <div class="green ui label"><i class="check circle icon"></i> Verified</div>
           </div>
-          <div class="field">
-            <label>&nbsp;</label>
-            <div class="label-field-padding" data-bind="visible: statusObs() == 'verified'">
-              <div class="green ui label"><i class="check circle icon"></i> Verified</div>
-            </div>
-            <div class="label-field-padding" data-bind="visible: statusObs() == 'unverified'">
-              <div class="red ui label"><i class="warning sign icon"></i> Unverified</div>
-              <div class="link" data-bind="click:verifyEmail">Send verification email</div>
-            </div>
-            <div class="label-field-padding" data-bind="visible: statusObs() == 'pending'">
-              <div class="orange ui label"><i class="warning sign icon"></i> Pending</div>
-              <div>
-                <span class="link" data-bind="click:verifyEmail">Send verification email</span> &bull;
-                <span class="link" data-bind="click:refreshStatus">Refresh</span>
-              </div>
+          <div class="label-field-padding" data-bind="visible: statusObs() == 'unverified'">
+            <div class="red ui label"><i class="warning sign icon"></i> Unverified</div>
+            <div class="link" data-bind="click:verifyEmail">Send verification email</div>
+          </div>
+          <div class="label-field-padding" data-bind="visible: statusObs() == 'pending'">
+            <div class="orange ui label"><i class="warning sign icon"></i> Pending</div>
+            <div>
+              <span class="link" data-bind="click:verifyEmail">Send verification email</span> &bull;
+              <span class="link" data-bind="click:refreshStatus">Refresh</span>
             </div>
           </div>
         </div>
-        <div class="two fields">
-          <div class="field" id="consentNotificationEmail">
-            <label>Consent notification email</label>
-            <input type="text" data-bind="textInput: consentNotificationEmailObs" />
-          </div>
-          <div class="field">
-            <label>&nbsp;</label>
-            <div class="label-field-padding" data-bind="visible: consentNotificationEmailVerifiedObs">
-              <div class="green ui label"><i class="check circle icon"></i> Verified</div>
-            </div>
-            <div class="label-field-padding" data-bind="visible: !consentNotificationEmailVerifiedObs()">
-              <div class="red ui label"><i class="warning sign icon"></i> Unverified</div>
-              <div class="link" data-bind="click:verifyConsentEmail">Send verification email</div>
-            </div>
-          </div>
-        </div>
-        <div class="two fields">
-          <div class="field" id="technicalEmail">
-            <label>Technical contact email</label>
-            <input type="text" data-bind="textInput: technicalEmailObs, hasFocus: true" />
-          </div>
-        </div>
-      </form>
-    </div>
-    <div class="six wide column">
-      <div class="ui message">
-        <p>Sage Bionetworks will use the technical email address to contact you about administration of the app.</p>
-        <p>The support email will be given to participants to contact you about the app and to ask for technical support. This is the only email address exposed to end users. <strong >We must verify your email address with our provider, Amazon SES, before your consent emails can be sent.</strong></p>
-        <p>The consent notification address will receive a copy of every consent that is signed by participants. The recipient should have permission to view personally-identifying information about participants.</p>
       </div>
-    </div>
+      <div class="two fields">
+        <div class="field" id="consentNotificationEmail">
+          <label>Consent notification email</label>
+          <input type="text" data-bind="textInput: consentNotificationEmailObs" />
+        </div>
+        <div class="field">
+          <label>&nbsp;</label>
+          <div class="label-field-padding" data-bind="visible: consentNotificationEmailVerifiedObs">
+            <div class="green ui label"><i class="check circle icon"></i> Verified</div>
+          </div>
+          <div class="label-field-padding" data-bind="visible: !consentNotificationEmailVerifiedObs()">
+            <div class="red ui label"><i class="warning sign icon"></i> Unverified</div>
+            <div class="link" data-bind="click:verifyConsentEmail">Send verification email</div>
+          </div>
+        </div>
+      </div>
+      <div class="two fields">
+        <div class="field" id="technicalEmail">
+          <label>Technical contact email</label>
+          <input type="text" data-bind="textInput: technicalEmailObs, hasFocus: true" />
+        </div>
+      </div>
+    </form>
   </div>
-</div>
+  <div slot="help">
+    <p>Sage Bionetworks will use the technical email address to contact you about administration of the app.</p>
+    <p>The support email will be given to participants to contact you about the app and to ask for technical support. This is the only email address exposed to end users. <strong >We must verify your email address with our provider, Amazon SES, before your consent emails can be sent.</strong></p>
+    <p>The consent notification address will receive a copy of every consent that is signed by participants. The recipient should have permission to view personally-identifying information about participants.</p>
+  </div>
+</bsm-layout>

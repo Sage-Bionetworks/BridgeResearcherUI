@@ -13,62 +13,63 @@
   </div>
   <subpop-tabset params="isNewObs: isNewObs, guidObs: guidObs"></subpop-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="subpop-general"></errors>
-  <form class="ui form">
-    <div class="ui grid">
-      <div class="seven wide column">
-        <div class="required field" id="name">
-          <label>Name</label>
-          <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
+<bsm-layout id="subpop-general">
+  <div slot="content">
+    <form class="ui form">
+      <div class="ui grid">
+        <div class="seven wide column">
+          <div class="required field" id="name">
+            <label>Name</label>
+            <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
+          </div>
+          <div class="field" id="description">
+            <label>Description</label>
+            <input type="text" data-bind="textInput: descriptionObs" />
+          </div>
         </div>
-        <div class="field" id="description">
-          <label>Description</label>
-          <input type="text" data-bind="textInput: descriptionObs" />
+        <div class="nine wide column">
+          <label>&#160;</label>
+          <div class="field">
+            <ui-checkbox params="checkedObs: requiredObs">
+              User must consent to this agreement
+            </ui-checkbox>
+            <p class="checkbox-help-text">
+              If a user matches this consent group, they <i>must</i> sign the consent to access Bridge.
+            </p>
+          </div>
+          <div class="field required" id="studyIdsAssignedOnConsent">
+            <label>When a user signs this consent, enroll them in these studies:</label>
+            <tag-editor params="selectedObs: studyIdsAssignedOnConsentObs, 
+              allObs: allStudyIdsObs, type: 'study IDs'"></tag-editor>
+          </div>
         </div>
-      </div>
-      <div class="nine wide column">
-        <label>&#160;</label>
-        <div class="field">
-          <ui-checkbox params="checkedObs: requiredObs">
-            User must consent to this agreement
-          </ui-checkbox>
-          <p class="checkbox-help-text">
-            If a user matches this consent group, they <i>must</i> sign the consent to access Bridge.
-          </p>
+        <div class="seven wide column">
+          <div class="field">
+            <label>Assignment based on</label>
+            <div data-bind="html: criteriaLabel(criteriaObs())"></div>
+            <div class="inline-editor-controls">
+              <a data-bind="click: openCriteriaDialog">
+                <i class="write icon"></i>Edit…
+              </a>
+            </div>
+          </div>
         </div>
-        <div class="field required" id="studyIdsAssignedOnConsent">
-          <label>When a user signs this consent, enroll them in these studies:</label>
-          <tag-editor params="selectedObs: studyIdsAssignedOnConsentObs, 
-            allObs: allStudyIdsObs, type: 'study IDs'"></tag-editor>
-        </div>
-      </div>
-      <div class="seven wide column">
-        <div class="field">
-          <label>Assignment based on</label>
-          <div data-bind="html: criteriaLabel(criteriaObs())"></div>
-          <div class="inline-editor-controls">
-            <a data-bind="click: openCriteriaDialog">
-              <i class="write icon"></i>Edit…
-            </a>
+        <div class="nine wide column">
+          <div class="field">
+            <label>When a user signs this consent, assign them to these data groups:</label>
+            <tag-editor params="selectedObs: dataGroupsAssignedWhileConsentedObs, 
+              allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
+          </div>
+          <div class="field">
+            <ui-checkbox params="checkedObs: autoSendConsentSuppressedObs">
+              Do not automatically send the signed consent to the user
+            </ui-checkbox>
+            <p class="checkbox-help-text">
+              They can still request the signed consent agreement via our APIs.
+            </p>
           </div>
         </div>
       </div>
-      <div class="nine wide column">
-        <div class="field">
-          <label>When a user signs this consent, assign them to these data groups:</label>
-          <tag-editor params="selectedObs: dataGroupsAssignedWhileConsentedObs, 
-            allObs: allDataGroupsObs, type: 'data groups'"></tag-editor>
-        </div>
-        <div class="field">
-          <ui-checkbox params="checkedObs: autoSendConsentSuppressedObs">
-            Do not automatically send the signed consent to the user
-          </ui-checkbox>
-          <p class="checkbox-help-text">
-            They can still request the signed consent agreement via our APIs.
-          </p>
-        </div>
-      </div>
-    </div>
-  </form>
-</div>
+    </form>
+  </div>
+</bsm-layout>

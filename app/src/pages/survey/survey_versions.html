@@ -11,53 +11,47 @@
   </div>
   <survey-tabset params="viewModel: $data"></survey-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="survey-versions"></errors>
-  <table class="ui table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Created On</th>
-        <th>Upload Schema</th>
-        <th>&nbsp;</th>
-      </tr>
-    </thead>
-    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-      <tr>
-        <td colspan="4" data-bind="html: recordsMessageObs"></td>
-      </tr>
-    </tbody>
-    <tbody data-bind="foreach: itemsObs">
-      <tr data-bind="css: { positive: $data.published }">
-        <!--
-        <td>
-            <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
-        </td>
-        -->
-        <td>
-          <a data-bind="href: '#/surveys/'+$data.guid+'/'+$data.createdOn+'/editor', text: $data.name"></a>
-        </td>
-        <td data-bind="text:$parent.formatDateTime($data.createdOn)"></td>
-        <td>
-          <span data-bind="visible: $data.schemaRevision, text: 'v'+$data.schemaRevision"></span>
-          <em data-bind="visible: !$data.schemaRevision">Draft</em>
-        </td>
-        <td>
-          <div data-bind="visible: $data.published" style="text-align: right">
-            <i class="checkmark icon"></i> Published
-          </div>
-          <div data-bind="visible: !$data.published" style="text-align: right">
-            <button class="ui basic compact mini button" data-bind="click:  $component.publish">Publish</button>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <!--
-  <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
-      <ui-checkbox params="checkedObs: showDeletedObs">
-          Show deleted survey versions
-      </ui-checkbox>
+<bsm-layout id="survey-versions">
+  <div slot="content">
+    <table class="ui table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Created On</th>
+          <th>Upload Schema</th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="4" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr data-bind="css: { positive: $data.published }">
+          <!--
+          <td>
+              <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+          </td>
+          -->
+          <td>
+            <a data-bind="href: '#/surveys/'+$data.guid+'/'+$data.createdOn+'/editor', text: $data.name"></a>
+          </td>
+          <td data-bind="text:$parent.formatDateTime($data.createdOn)"></td>
+          <td>
+            <span data-bind="visible: $data.schemaRevision, text: 'v'+$data.schemaRevision"></span>
+            <em data-bind="visible: !$data.schemaRevision">Draft</em>
+          </td>
+          <td>
+            <div data-bind="visible: $data.published" style="text-align: right">
+              <i class="checkmark icon"></i> Published
+            </div>
+            <div data-bind="visible: !$data.published" style="text-align: right">
+              <button class="ui basic compact mini button" data-bind="click:  $component.publish">Publish</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  -->
-</div>
+</bsm-layout>

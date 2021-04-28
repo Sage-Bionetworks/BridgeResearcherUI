@@ -21,51 +21,50 @@
   </div>
   <div class="ui empty secondary pointing menu"></div>
 </div>
-<div class="scrollbox">
-  <errors id="participants"></errors>
-  <participants-pager params="loadingFunc: loadingFunc, pageKey: 'participants-page'"></participants-pager>
-  <table class="ui compact selectable table">
-    <thead>
-      <tr>
-        <th width="10" data-bind="visible: isAdmin">
-          <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
-        </th>
-        <th>Name</th>
-        <th>Identifier(s)</th>
-        <th>Organization</th>
-        <th>Studies</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-      <tr>
-        <td colspan="6" data-bind="html: recordsMessageObs"></td>
-      </tr>
-    </tbody>
-    <tbody data-bind="foreach: itemsObs">
-      <tr data-bind="css: $component.classNameForStatus($data)">
-        <td data-bind="visible: $parent.isAdmin">
-          <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
-        </td>
-        <td>
-          <a data-bind="href: '#/participants/'+$data.id+'/general',
-            text: $component.formatNameAsFullLabel($data)"></a>
-        </td>
-        <td data-bind="html: $component.formatIdentifiers($data)"></td>
-        <td>
-          <a data-bind="href: '#/organizations/' + $data.orgMembership + '/general', 
-            text: $parent.orgNames[$data.orgMembership]">
-          </a>
-        </td>
-        <td data-bind="foreach: $data.studyIds"><span 
-            data-bind="visible: $index() > 0">, </span><a 
-            data-bind="text: $component.formatStudyName($data),
-            href: '#/studies/' + $data + '/general'"></a></td>
-        <td style="padding: 0; text-align:right">
-          <span style="padding-right: .6rem; white-space: nowrap" data-bind="visible: $data.status === 'disabled'">
-            <i class="warning sign icon"></i>Disabled</span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+<bsm-layout id="participants">
+  <div slot="header">
+    <participants-pager params="loadingFunc: loadingFunc, pageKey: 'participants-page'"></participants-pager>
+  </div>
+  <div slot="content">
+    <table class="ui compact selectable table">
+      <thead>
+        <tr>
+          <th width="10" data-bind="visible: isAdmin">
+            <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+          </th>
+          <th>Name</th>
+          <th>Identifier(s)</th>
+          <th>Studies</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="5" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr data-bind="css: $component.classNameForStatus($data)">
+          <td data-bind="visible: $parent.isAdmin">
+            <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+          </td>
+          <td>
+            <a data-bind="href: '#/participants/'+$data.id+'/general',
+              text: $component.formatNameAsFullLabel($data)"></a>
+          </td>
+          <td data-bind="html: $component.formatIdentifiers($data)"></td>
+          <td data-bind="foreach: $data.studyIds">
+            <span data-bind="visible: $index() > 0">, 
+            </span><a data-bind="text: $component.formatStudyName($data),
+              href: '#/studies/' + $data + '/general'"></a>
+          </td>
+          <td style="padding: 0; text-align:right">
+            <span style="padding-right: .6rem; white-space: nowrap" 
+              data-bind="visible: $data.status === 'disabled'">
+              <i class="warning sign icon"></i>Disabled</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</bsm-layout>

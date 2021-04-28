@@ -15,13 +15,14 @@
   </div>
   <org-tabset params="identifierObs: identifierObs, isNewObs: isNewObs"></org-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="org_sponsored"></errors>
-  <form class="ui skinny form">
+<bsm-layout id="org_sponsored">
+  <div slot="header">
     <div class="line-control">
       <div class="line-control-stretch "></div>
       <pager params="prefix: 'sponsored', postLoadFunc: postLoadFunc"></pager>
     </div>
+  </div>
+  <div slot="content">
     <table class="ui compact selectable table">
       <thead>
         <tr>
@@ -49,5 +50,5 @@
         </tr>
       </tbody>
     </table>
-  </form>
-</div>
+  </div>
+</bsm-layout>

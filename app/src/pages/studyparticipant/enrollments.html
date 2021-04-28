@@ -16,63 +16,64 @@
   <studyparticipant-tabset params="studyIdObs: navStudyIdObs, userIdObs: userIdObs, 
         statusObs: statusObs"></studyparticipant-tabset>
 </div>
-<div class="scrollbox">
-  <form class="ui skinny form">
-    <errors id="studyparticipant-enrollments"></errors>
-    <table class="ui compact selectable table">
-      <thead>
-        <tr>
-          <th>Study</th>
-          <th nowrap>External ID</th>
-          <th>Status</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-        <tr>
-          <td colspan="4" data-bind="html: recordsMessageObs"></td>
-        </tr>
-      </tbody>
-      <tbody data-bind="foreach: itemsObs">
-        <tr>
-          <td>
-            <a data-bind="attr: {href: '#/studies/' + $data.studyId + '/general'}, 
-              text: $data.studyName"></a>
-          </td>
-          <td data-bind="text: $data.externalId"></td>
-          <td>
-            <div class="ui small text" data-bind="if: $data.enrolledOn">
-              Enrolled 
-              <span data-bind="if: $data.enrolledBy">
-                by <span data-bind="text: $parent.formatNameAsFullLabel($data.enrolledBy)"></span> on
-              </span>
-              <span data-bind="text: $parent.formatDateTime($data.enrolledOn)"></span>
-            </div>
-            <div class="ui small red text" data-bind="if: $data.withdrawnOn, semantic: 'popup',
-              attr:{'data-html': 'Withdrawal note: ' + $data.withdrawalNote}">
-              Withdrawn 
-              <span data-bind="if: $data.withdrawnBy">
-                by <span data-bind="text: $parent.formatNameAsFullLabel($data.withdrawnBy)"></span> on
-              </span>
-              <span data-bind="text: $parent.formatDateTime($data.withdrawnOn)"></span>
-            </div>
-            <div class="ui small text" data-bind="if: $data.enrolledOn && !$data.withdrawnOn">
-              <span data-bind="text: $data.consentRequired ? 'Must still consent to research' : ''"></span>
-            </div>
-          </td>
-          <td nowrap style="text-align: right">
-            <button class="ui basic compact mini red button" 
-              data-bind="click: $parent.unenroll, hidden: $data.withdrawnOn">Withdraw
-            </button>
-            <button class="ui basic compact mini blue button" 
-              data-bind="click: $parent.enroll, visible: $data.withdrawnOn">Enroll
-            </button>
-            <a style="margin-left: 1rem; white-space: nowrap" data-bind="visible: $parent.hasSignatures($data),
-              attr: { href: '#/participants/' + $parent.userIdObs() + 
-              '/consents/' + $data.studyId } ">View Signatures</a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </form>
-</div>
+<bsm-layout id="studyparticipant-enrollments">
+  <div slot="content">
+    <form class="ui form">
+      <table class="ui compact selectable table">
+        <thead>
+          <tr>
+            <th>Study</th>
+            <th nowrap>External ID</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+          <tr>
+            <td colspan="4" data-bind="html: recordsMessageObs"></td>
+          </tr>
+        </tbody>
+        <tbody data-bind="foreach: itemsObs">
+          <tr>
+            <td>
+              <a data-bind="attr: {href: '#/studies/' + $data.studyId + '/general'}, 
+                text: $data.studyName"></a>
+            </td>
+            <td data-bind="text: $data.externalId"></td>
+            <td>
+              <div class="ui small text" data-bind="if: $data.enrolledOn">
+                Enrolled 
+                <span data-bind="if: $data.enrolledBy">
+                  by <span data-bind="text: $parent.formatNameAsFullLabel($data.enrolledBy)"></span> on
+                </span>
+                <span data-bind="text: $parent.formatDateTime($data.enrolledOn)"></span>
+              </div>
+              <div class="ui small red text" data-bind="if: $data.withdrawnOn, semantic: 'popup',
+                attr:{'data-html': 'Withdrawal note: ' + $data.withdrawalNote}">
+                Withdrawn 
+                <span data-bind="if: $data.withdrawnBy">
+                  by <span data-bind="text: $parent.formatNameAsFullLabel($data.withdrawnBy)"></span> on
+                </span>
+                <span data-bind="text: $parent.formatDateTime($data.withdrawnOn)"></span>
+              </div>
+              <div class="ui small text" data-bind="if: $data.enrolledOn && !$data.withdrawnOn">
+                <span data-bind="text: $data.consentRequired ? 'Must still consent to research' : ''"></span>
+              </div>
+            </td>
+            <td nowrap style="text-align: right">
+              <button class="ui basic compact mini red button" 
+                data-bind="click: $parent.unenroll, hidden: $data.withdrawnOn">Withdraw
+              </button>
+              <button class="ui basic compact mini blue button" 
+                data-bind="click: $parent.enroll, visible: $data.withdrawnOn">Enroll
+              </button>
+              <a style="margin-left: 1rem; white-space: nowrap" data-bind="visible: $parent.hasSignatures($data),
+                attr: { href: '#/participants/' + $parent.userIdObs() + 
+                '/consents/' + $data.studyId } ">View Signatures</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+</bsm-layout>

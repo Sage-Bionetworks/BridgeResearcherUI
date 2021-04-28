@@ -17,9 +17,8 @@
   </div>
   <div class="ui empty secondary pointing menu"></div>
 </div>
-<div class="scrollbox">
-  <errors id="topic"></errors>
-  <form class="ui skinny form">
+<bsm-layout id="topic">
+  <div slot="content">
     <div class="fields">
       <div class="seven wide required field" id="name">
         <label>Name</label>
@@ -47,5 +46,5 @@
     </div>
     <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
     </timestamps>
-  </form>
-</div>
+  </div>
+</bsm-layout>

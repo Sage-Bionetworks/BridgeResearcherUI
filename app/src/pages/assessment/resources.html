@@ -36,79 +36,77 @@
     revisionObs: pageRevObs, originGuidObs: originGuidObs, canEditObs: canEditObs">
   </assessment-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="assessment_resources"></errors>
-  <p data-bind="visible: originGuidObs">This is a copy of a shared assessment, so 
-    <a data-bind="attr: {href:'#/sharedassessments/'+originGuidObs()+'/resources'}">
-      all of that assessment’s documentation</a> applies to this assessment.</p>
-
-  <p data-bind="visible: itemsObs().length === 0">
-    There are no resources documenting this assessment.    
-  </p>
-    
-  <form class="ui form" onsubmit="return false" data-bind="visible: !originGuidObs() && canEditObs()">
-    <div class="line-control">
-      <input type="text" style="width: 8rem; margin-right: 1rem"
-        data-bind="textInput: forRevisionObs, hasFocus: true" placeholder="Target Rev"/>
+<bsm-layout id="assessment_resources">
+  <div slot="header">
+    <p data-bind="visible: originGuidObs">This is a copy of a shared assessment, so 
+      <a data-bind="attr: {href:'#/sharedassessments/'+originGuidObs()+'/resources'}">
+        all of that assessment’s documentation</a> applies to this assessment.</p>
+    <div class="ui form line-control" data-bind="visible: !originGuidObs() && canEditObs()">
+      <div>
+        <input type="text" style="width: 8rem; margin-right: 1rem"
+          data-bind="textInput: forRevisionObs, hasFocus: true" placeholder="Target Rev"/>
+      </div>
       <div>
         <select class="ui dropdown" data-bind="options: categoriesOptionsObs,
           optionsText: 'label', optionsValue: 'value', value: categoryObs,
-          optionsCaption: 'Select category...'">
+          optionsCaption: 'Select category...'"></select>
+      </div>
+      <div class="line-control-stretch">
+        <pager style="display: flex; justify-content: flex-end" 
+          params="prefix: 'asmr', postLoadFunc: postLoadFunc"></pager>
       </div>
     </div>
-    <div class="line-control-stretch">
-      <pager style="display: flex; justify-content: flex-end" 
-        params="prefix: 'asmr', postLoadFunc: postLoadFunc"></pager>
-    </div>
-  </form>
-  <table class="ui compact selectable table">
-    <thead>
-      <tr>
-        <th width="10" data-bind="visible: canEditObs">
-          <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
-        </th>
-        <th>Title</th>
-        <th>Category</th>
-        <th width="10"></th>
-        <th>Creators</th>
-        <th>Revisions</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-      <tr>
-        <td colspan="6" data-bind="html: recordsMessageObs, attr: {
-          colspan: canEditObs() ? '6' : '5'}"></td>
-      </tr>
-    </tbody>
-    <tbody data-bind="foreach: itemsObs">
-      <tr data-bind="css: {negative: $data.deleted}">
-        <td data-bind="visible: $parent.canEditObs">
-          <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
-          <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
-            style="cursor: pointer" class="green undo icon"></i>
-        </td>
-        <td>
-          <a data-bind="visible: $parent.canEditObs, text: $data.title, 
-            href: '#/assessments/' + $parent.guidObs() + '/resources/' + $data.guid"></a>
-          <a target="_blank" data-bind="visible: !$parent.canEditObs(), text: $data.title, href: $data.url"></a>
-          <div data-bind="text: $data.description"></div>
-        </td>
-        <td nowrap data-bind="text: $parent.formatCategory($data.category)"></td>
-        <td>
-          <a data-bind="href: $data.url" target="_blank">
-            <i class="link icon"></i>
-          </a>
-        </td>
-        <td data-bind="text: $data.creators.join(', ')"></td>
-        <td data-bind="text: $parent.formatRevisions($data)"></td>
-        <td data-bind="text: $data.date"></td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
-    <ui-checkbox params="checkedObs: showDeletedObs">
-      Show deleted assessment resources
-    </ui-checkbox>
   </div>
-</div>
+  <div slot="content">
+    <table class="ui compact selectable table">
+      <thead>
+        <tr>
+          <th width="10" data-bind="visible: canEditObs">
+            <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+          </th>
+          <th>Title</th>
+          <th>Category</th>
+          <th width="10"></th>
+          <th>Creators</th>
+          <th>Revisions</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="6" data-bind="html: recordsMessageObs, attr: {
+            colspan: canEditObs() ? '6' : '5'}"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr data-bind="css: {negative: $data.deleted}">
+          <td data-bind="visible: $parent.canEditObs">
+            <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
+            <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
+              style="cursor: pointer" class="green undo icon"></i>
+          </td>
+          <td>
+            <a data-bind="visible: $parent.canEditObs, text: $data.title, 
+              href: '#/assessments/' + $parent.guidObs() + '/resources/' + $data.guid"></a>
+            <a target="_blank" data-bind="visible: !$parent.canEditObs(), text: $data.title, href: $data.url"></a>
+            <div data-bind="text: $data.description"></div>
+          </td>
+          <td nowrap data-bind="text: $parent.formatCategory($data.category)"></td>
+          <td>
+            <a data-bind="href: $data.url" target="_blank">
+              <i class="link icon"></i>
+            </a>
+          </td>
+          <td data-bind="text: $data.creators.join(', ')"></td>
+          <td data-bind="text: $parent.formatRevisions($data)"></td>
+          <td data-bind="text: $data.date"></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
+      <ui-checkbox params="checkedObs: showDeletedObs">
+        Show deleted assessment resources
+      </ui-checkbox>
+    </div>
+  </div>
+</bsm-layout>

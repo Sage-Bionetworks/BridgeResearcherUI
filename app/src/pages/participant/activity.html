@@ -11,76 +11,78 @@
   </div>
   <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
 </div>
-<div class="scrollbox">
-  <div class="line-control" style="margin-bottom: 1rem">
-    <div class="line-control-stretch">
-      <div class="ui breadcrumb">
-        <a class="section" data-bind="href:'#/participants/'+userIdObs()+'/activities'">All Activities</a>
-        <i class="right chevron icon divider"></i>
-        <b data-bind="html: activityLabelObs"></b>
+<bsm-layout id="participant-activity">
+  <div slot="header">
+    <div class="line-control">
+      <div class="line-control-stretch">
+        <div class="ui breadcrumb">
+          <a class="section" data-bind="href:'#/participants/'+userIdObs()+'/activities'">All Activities</a>
+          <i class="right chevron icon divider"></i>
+          <b data-bind="html: activityLabelObs"></b>
+        </div>
       </div>
     </div>
   </div>
-  <errors id="participant-activity"></errors>
-  <div class="line-control">
-    <div class="line-control-stretch">
-      <div class="ui icon input" data-bind="css:{loading: searchLoadingObs}, range: {
-        startDateObs: startDateObs, endDateObs: endDateObs, onChange: doCalSearch}">
-        <input type="text" placeholder="Created in range" readonly />
-        <i class="calendar icon"></i>
+  <div slot="header">
+    <div class="line-control">
+      <div class="line-control-stretch">
+        <div class="ui icon input" data-bind="css:{loading: searchLoadingObs}, range: {
+          startDateObs: startDateObs, endDateObs: endDateObs, onChange: doCalSearch}">
+          <input type="text" placeholder="Created in range" readonly />
+          <i class="calendar icon"></i>
+        </div>
+      </div>
+      <div>
+        <forward-pager params="vm: vm"></forward-pager>
       </div>
     </div>
-    <div>
-      <forward-pager params="vm: vm"></forward-pager>
-    </div>
   </div>
-  <table class="ui compact selectable table">
-    <thead>
-      <tr>
-        <th>Activity</th>
-        <th>Status</th>
-        <th>Schedule Window</th>
-        <th>Execution Time</th>
-        <th>Client Data</th>
-      </tr>
-    </thead>
-    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-      <tr>
-        <td colspan="5" data-bind="html: recordsMessageObs"></td>
-      </tr>
-    </tbody>
-    <tbody data-bind="foreach: itemsObs">
-      <tr>
-        <td data-bind="attr: {title: $parent.formatTitleCase($data.activity.activityType)},
-          css: {disabled: $data.isDisabled}">
-          <i data-bind="css: $parent.formatActivityClass($data)"></i>
-          <a target="_blank" rel="noopener"
-            data-bind="text: $parent.formatActivity($data), 
-              href: '#/scheduleplans/'+$data.schedulePlanGuid"></a>
-        </td>
-        <td data-bind="text: $parent.formatTitleCase($data.status), 
-          css: {disabled: $data.isDisabled}"></td>
-        <td data-bind="css: {disabled: $data.isDisabled},
-          html: $parent.formatDateTimeRange($data.scheduledOn, $data.expiresOn)"></td>
-        <td data-bind="css: {disabled: $data.isDisabled}, 
-          html: $parent.formatDateTimeRange($data.startedOn, $data.finishedOn)"></td>
-        <td>
-          <div data-bind="visible: $data.clientData">
-            <div class="json-expand-control" data-bind="visible: $data.collapsedObs">
-              <a href="" class="json-expand-control" data-bind="visible: $data.collapsedObs, click: $component.toggle">
-                {<i style="margin:0;padding:0" class="plus square outline icon"></i>}
-              </a>
+  <div slot="content">
+    <table class="ui compact selectable table">
+      <thead>
+        <tr>
+          <th>Activity</th>
+          <th>Status</th>
+          <th>Schedule Window</th>
+          <th>Execution Time</th>
+          <th>Client Data</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="5" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr>
+          <td data-bind="attr: {title: $parent.formatTitleCase($data.activity.activityType)},
+            css: {disabled: $data.isDisabled}">
+            <i data-bind="css: $parent.formatActivityClass($data)"></i>
+            <a target="_blank" rel="noopener"
+              data-bind="text: $parent.formatActivity($data), 
+                href: '#/scheduleplans/'+$data.schedulePlanGuid"></a>
+          </td>
+          <td data-bind="text: $parent.formatTitleCase($data.status), 
+            css: {disabled: $data.isDisabled}"></td>
+          <td data-bind="css: {disabled: $data.isDisabled},
+            html: $parent.formatDateTimeRange($data.scheduledOn, $data.expiresOn)"></td>
+          <td data-bind="css: {disabled: $data.isDisabled}, 
+            html: $parent.formatDateTimeRange($data.startedOn, $data.finishedOn)"></td>
+          <td>
+            <div data-bind="visible: $data.clientData">
+              <div class="json-expand-control" data-bind="visible: $data.collapsedObs">
+                <a href="" class="json-expand-control" data-bind="visible: $data.collapsedObs, click: $component.toggle">
+                  {<i style="margin:0;padding:0" class="plus square outline icon"></i>}
+                </a>
+              </div>
+              <div style="position:relative" class="json-expand-control" data-bind="visible: !$data.collapsedObs()">
+                  class="json-expand-control" data-bind="visible: !$data.collapsedObs(), click: $component.toggle">
+                <pre data-bind="visible: !$data.collapsedObs(), html: $data.formattedData"></pre>
+              </div>
             </div>
-            <div style="position:relative" class="json-expand-control" data-bind="visible: !$data.collapsedObs()">
-              <a href="" style="position:absolute; left:.75rem; top:.15rem"
-                class="json-expand-control" data-bind="visible: !$data.collapsedObs(), click: $component.toggle">
-                <i class="minus square outline icon"></i>
-              </a>
-              <pre data-bind="visible: !$data.collapsedObs(), html: $data.formattedData"></pre>
-            </div>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</bsm-layout>

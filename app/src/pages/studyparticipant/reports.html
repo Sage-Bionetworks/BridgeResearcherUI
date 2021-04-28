@@ -23,9 +23,8 @@
   <studyparticipant-tabset params="studyIdObs: navStudyIdObs, userIdObs: userIdObs, 
         statusObs: statusObs"></studyparticipant-tabset>
 </div>
-<div class="scrollbox">
-  <form class="ui skinny form">
-    <errors id="studyparticipant-reports"></errors>
+<bsm-layout id="studyparticipant-reports">
+  <div slot="content">
     <table class="ui compact selectable table">
       <thead>
         <tr>
@@ -54,5 +53,5 @@
         </tr>
       </tbody>
     </table>
-  </form>
-</div>
+  </div>
+</bsm-layout>

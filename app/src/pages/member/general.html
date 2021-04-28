@@ -46,10 +46,8 @@
   <mem-tabset params="isNewObs: isNewObs, userIdObs: userIdObs, orgIdObs: orgMembershipObs,
         statusObs: statusObs"></mem-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="mem-general"></errors>
-  <form class="ui skinny form">
-
+<bsm-layout id="mem-general">
+  <div slot="content">
     <div class="two fields">
       <div class="field">
         <label>First Name</label>
@@ -140,5 +138,4 @@
     <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
     </timestamps>
   </div>
-</form>
-</div>
+</bsm-layout>

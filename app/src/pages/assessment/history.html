@@ -32,55 +32,58 @@
     revisionObs: pageRevObs, originGuidObs: originGuidObs, canEditObs: canEditObs">
   </assessment-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="assessment_history"></errors>
-  <div class="line-control">
-    <div class="ui breadcrumb">
-      <a class="section" data-bind="href:'#/assessments/'+guidObs()+'/general'">Latest Assessment</a>
-      <i class="right chevron icon divider"></i>
-      <b>Assessment Revisions</b>
-    </div>
-    <div class="line-control-stretch">
-      <pager style="display: flex; justify-content: flex-end" 
-        params="prefix: 'asmr', postLoadFunc: postLoadFunc"></pager>
+<bsm-layout id="assessment_history">
+  <div slot="header">
+    <div class="line-control">
+      <div class="ui breadcrumb">
+        <a class="section" data-bind="href:'#/assessments/'+guidObs()+'/general'">Latest Assessment</a>
+        <i class="right chevron icon divider"></i>
+        <b>Assessment Revisions</b>
+      </div>
+      <div class="line-control-stretch">
+        <pager style="display: flex; justify-content: flex-end" 
+          params="prefix: 'asmr', postLoadFunc: postLoadFunc"></pager>
+      </div>
     </div>
   </div>
-  <table class="ui compact selectable table">
-    <thead>
-      <tr>
-        <th width="10" data-bind="visible: canEditObs()">
-          <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
-        </th>
-        <th nowrap>Title</th>
-        <th>Imported From Shared Assessment</th>
-        <th>Owner</th>
-        <th>Tags</th>
-      </tr>
-    </thead>
-    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-      <tr>
-        <td data-bind="html: recordsMessageObs, attr: {colspan: canEditObs() ? '5' : '4'}"></td>
-      </tr>
-    </tbody>
-    <tbody data-bind="foreach: itemsObs">
-      <tr data-bind="css: {negative: $data.deleted}">
-        <td data-bind="visible: $parent.canEditObs()">
-          <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
-          <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
-            style="cursor: pointer" class="green undo icon"></i>
-        </td>
-        <td nowrap>
-          <a data-bind="text: $parent.formatTitle($data), href: '#/assessments/' + $data.guid"></a>
-        </td>
-        <td data-bind="html: $data.originGuidObs"></td>
-        <td data-bind="text: $parent.formatOrg($data.ownerId)"></td>
-        <td data-bind="text: $data.tags.join(', ')"></td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
-    <ui-checkbox params="checkedObs: showDeletedObs">
-      Show deleted assessment revisions
-    </ui-checkbox>
+  <div slot="content">
+    <table class="ui compact selectable table">
+      <thead>
+        <tr>
+          <th width="10" data-bind="visible: canEditObs()">
+            <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+          </th>
+          <th nowrap>Title</th>
+          <th>Imported From Shared Assessment</th>
+          <th>Owner</th>
+          <th>Tags</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td data-bind="html: recordsMessageObs, attr: {colspan: canEditObs() ? '5' : '4'}"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr data-bind="css: {negative: $data.deleted}">
+          <td data-bind="visible: $parent.canEditObs()">
+            <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
+            <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
+              style="cursor: pointer" class="green undo icon"></i>
+          </td>
+          <td nowrap>
+            <a data-bind="text: $parent.formatTitle($data), href: '#/assessments/' + $data.guid"></a>
+          </td>
+          <td data-bind="html: $data.originGuidObs"></td>
+          <td data-bind="text: $parent.formatOrg($data.ownerId)"></td>
+          <td data-bind="text: $data.tags.join(', ')"></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
+      <ui-checkbox params="checkedObs: showDeletedObs">
+        Show deleted assessment revisions
+      </ui-checkbox>
+    </div>
   </div>
-</div>
+</bsm-layout>

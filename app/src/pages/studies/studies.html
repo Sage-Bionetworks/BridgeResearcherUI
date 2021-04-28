@@ -23,14 +23,15 @@
   </div>
   <div class="ui empty secondary pointing menu"></div>
 </div>
-<div class="scrollbox">
-  <errors id="studies"></errors>
-  <form class="ui skinny form">
+<bsm-layout id="studies">
+  <div slot="header">
     <div class="line-control">
       <div class="line-control-stretch ">
       </div>
       <pager params="prefix: 'studies', postLoadFunc: postLoadFunc"></pager>
     </div>
+  </div>
+  <div slot="content">
     <table class="ui compact selectable table">
       <thead>
         <tr>
@@ -72,5 +73,5 @@
         Show deleted studies
       </ui-checkbox>
     </div>
-  </form>
-</div>
+  </div>
+</bsm-layout>

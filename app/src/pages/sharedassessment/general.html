@@ -16,12 +16,13 @@
     originGuidObs: originGuidObs, canEditObs: canEditObs">
   </sharedassessment-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="sharedassessment"></errors>
-  <p> View the <a data-bind="href: createHistoryLink"> 
-    <i style="margin-right:0" class="history icon"></i>Edit History</a> of this shared assessment.
-  </p>
-  <form class="ui skinny form">
+<bsm-layout id="sharedassessment">
+  <div slot="header">
+    <p> View the <a data-bind="href: createHistoryLink"> 
+      <i style="margin-right:0" class="history icon"></i>Edit History</a> of this shared assessment.
+    </p>
+  </div>
+  <div slot="content">
     <div class="fields">
       <div class="eight wide required field" id="title">
         <label>Title</label>
@@ -91,5 +92,5 @@
         
     <timestamps params="createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
     </timestamps>
-  </form>
-</div>
+  </div>
+</bsm-layout>

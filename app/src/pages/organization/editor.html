@@ -13,9 +13,8 @@
   </div>
   <org-tabset params="identifierObs: identifierObs, isNewObs: isNewObs"></org-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="org"></errors>
-  <form class="ui skinny form">
+<bsm-layout id="org">
+  <div slot="content">
     <div class="two fields">
       <div class="required field" id="name">
         <label>Name</label>
@@ -38,5 +37,4 @@
     <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
     </timestamps>
   </div>
-</form>
-</div>
+</bsm-layout>

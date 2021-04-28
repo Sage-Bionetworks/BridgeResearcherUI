@@ -15,47 +15,46 @@
   </div>
   <studyreports-tabset></studyreports-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="reports"></errors>
-  <p>
-    For reports on individual participants, look up that participant and find the <i>Reports</i> tab under their record.
-  </p>
-  <table class="ui compact selectable table">
-    <thead>
-      <tr>
-        <th width="10" data-bind="visible: isDeveloper"></th>
-        <th width="250">Report</th>
-        <th>Studies</th>
-        <th colspan="2">Visibility</th>
-      </tr>
-    </thead>
-    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-      <tr>
-        <td data-bind="attr:{colspan: $component.isDeveloper ? 4 : 3}, html: recordsMessageObs"></td>
-      </tr>
-    </tbody>
-    <tbody data-bind="foreach: itemsObs">
-      <tr class="non-breaking-rows">
-        <td data-bind="visible: $component.isDeveloper">
-          <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
-        </td>
-        <td style="width:50%">
-          <a data-bind="visible: $component.isVisible($data), 
-                        href: '#/reports/raw/' + encodeURIComponent($data.identifier), 
-                        text: $data.identifier"></a>
-          <span data-bind="visible: !$component.isVisible($data), text: $data.identifier"></span>
-        </td>
-        <td style="width: 50%" data-bind="text: ($data.studyIds || []).join(', ')"></td>
-        <td data-bind="text: $data.publicObs() ? 'Public' : 'Signed in users only'"></td>
-        <td data-bind="visible: $parent.isDeveloper">
-          <div class="ui toggle checkbox" data-bind="semantic: 'checkbox', 
-                      checkboxObs: $data.toggleObs">
-            <input type="checkbox" name="gift" tabindex="0" class="hidden"
-              data-bind="attr: {checked: $data.toggleObs}"/>
-            <label></label>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+<bsm-layout id="reports">
+  <div slot="content">
+    <p>For reports on individual participants, look up that participant and find the <i>Reports</i> tab under their record.</p>
+    <table class="ui compact selectable table">
+      <thead>
+        <tr>
+          <th width="10" data-bind="visible: isDeveloper"></th>
+          <th width="250">Report</th>
+          <th>Studies</th>
+          <th colspan="2">Visibility</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td data-bind="attr:{colspan: $component.isDeveloper ? 4 : 3}, html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr class="non-breaking-rows">
+          <td data-bind="visible: $component.isDeveloper">
+            <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+          </td>
+          <td style="width:50%">
+            <a data-bind="visible: $component.isVisible($data), 
+                          href: '#/reports/raw/' + encodeURIComponent($data.identifier), 
+                          text: $data.identifier"></a>
+            <span data-bind="visible: !$component.isVisible($data), text: $data.identifier"></span>
+          </td>
+          <td style="width: 50%" data-bind="text: ($data.studyIds || []).join(', ')"></td>
+          <td data-bind="text: $data.publicObs() ? 'Public' : 'Signed in users only'"></td>
+          <td data-bind="visible: $parent.isDeveloper">
+            <div class="ui toggle checkbox" data-bind="semantic: 'checkbox', 
+                        checkboxObs: $data.toggleObs">
+              <input type="checkbox" name="gift" tabindex="0" class="hidden"
+                data-bind="attr: {checked: $data.toggleObs}"/>
+              <label></label>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</bsm-layout>

@@ -49,10 +49,8 @@
   <participant-tabset params="isNewObs: isNewObs, userIdObs: userIdObs, 
         statusObs: statusObs"></participant-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="participant-general"></errors>
-  <form class="ui skinny form">
-
+<bsm-layout id="participant-general">
+  <div slot="content">
     <div class="two fields">
       <div class="field">
         <label>First Name</label>
@@ -198,5 +196,5 @@
     </div>
     <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
     </timestamps>
-  </form>
-</div>
+  </div>
+</bsm-layout>

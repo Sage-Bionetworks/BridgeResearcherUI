@@ -16,18 +16,19 @@
     revisionObs: pageRevObs, originGuidObs: originGuidObs">
   </sharedassessment-tabset>
 </div>
-<div class="scrollbox">
-  <div class="line-control" style="margin-bottom: 1rem">
-    <div class="line-control-stretch">
-      <div class="ui breadcrumb">
-        <a class="section" data-bind="href:'#/sharedassessments/'+assessmentGuidObs()+'/resources'">All Resources</a>
-        <i class="right chevron icon divider"></i>
-        <b data-bind="text: subPageTitleObs"></b>
+<bsm-layout id="sharedassessment_resource">
+  <div slot="header">
+    <div class="line-control">
+      <div class="line-control-stretch">
+        <div class="ui breadcrumb">
+          <a class="section" data-bind="href:'#/sharedassessments/'+assessmentGuidObs()+'/resources'">All Resources</a>
+          <i class="right chevron icon divider"></i>
+          <b data-bind="text: subPageTitleObs"></b>
+        </div>
       </div>
     </div>
   </div>
-  <errors id="sharedassessment_resource"></errors>
-  <form class="ui skinny form">
+  <div slot="content">
     <div class="two fields">
       <div class="field">
         <label>Title</label>
@@ -117,9 +118,7 @@
         </line-editor>
       </div>
     </div>
-
     <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
     </timestamps>
-
-  </form>
-</div>
+  </div>
+</bsm-layout>

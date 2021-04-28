@@ -8,7 +8,7 @@ var failureHandler = utils.failureHandler({
   redirectMsg: "Study not found.",
   redirectTo: "studies",
   transient: false,
-  id: 'study'
+  id: 'study-ui'
 });
 
 export default function(params) {

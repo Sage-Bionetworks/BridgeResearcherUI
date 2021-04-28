@@ -11,37 +11,32 @@
   </div>
   <div class="ui empty secondary pointing menu"></div>
 </div>
-<div class="scrollbox">
-  <errors id="taskIdentifiers"></errors>
-  <div class="ui grid">
-    <div class="ten wide column">
-      <div class="ui large labels" data-bind="foreach: recordsObs">
-        <div class="ui label">
-          <span data-bind="text: $data"></span>
-        </div>
-        <br />
+<bsm-layout id="taskIdentifiers">
+  <div slot="content">
+    <div class="ui large labels" data-bind="foreach: recordsObs">
+      <div class="ui label">
+        <span data-bind="text: $data"></span>
       </div>
-      <div class="ui large labels" data-bind="foreach: newRecordsObs">
-        <div class="ui label">
-          <span data-bind="text: $data"></span> <i class="icon close" data-bind="click: $component.remove"></i>
-        </div>
-        <br />
-      </div>
-      <div class="field" id="value">
-        <div class="ui action input">
-          <input data-bind="textInput: $component.addFieldObs, 
-            event: {keypress: $component.keyHandler}, hasFocus: true" type="text"/>
-          <button class="ui button" data-bind="click: $component.add">Add</button>
-        </div>
-      </div>
+      <br />
     </div>
-    <div class="six wide column">
-      <div class="ui message">
-        <p>Tasks are known only to your application. However you can schedule them by assigning them unique
-            <em>identifiers</em>. A complete list of these should be defined here.</p>
-  
-        <p>Once this is done, these identifiers will be available to you when you schedule tasks in the scheduler. Your application should know what task to run when a schedule references one of these identifiers.</p>
+    <div class="ui large labels" data-bind="foreach: newRecordsObs">
+      <div class="ui label">
+        <span data-bind="text: $data"></span> <i class="icon close" data-bind="click: $component.remove"></i>
+      </div>
+      <br />
+    </div>
+    <div class="field" id="value">
+      <div class="ui action input">
+        <input data-bind="textInput: $component.addFieldObs, 
+          event: {keypress: $component.keyHandler}, hasFocus: true" type="text"/>
+        <button class="ui button" data-bind="click: $component.add">Add</button>
       </div>
     </div>
   </div>
-</div>
+  <div slot="help">
+    <p>Tasks are known only to your application. However you can schedule them by assigning them unique
+      <em>identifiers</em>. A complete list of these should be defined here.</p>
+
+    <p>Once this is done, these identifiers will be available to you when you schedule tasks in the scheduler. Your application should know what task to run when a schedule references one of these identifiers.</p>
+  </div>
+</bsm-layout> 

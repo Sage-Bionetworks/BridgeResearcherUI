@@ -19,64 +19,61 @@
   </div>
   <study-tabset params="identifierObs: identifierObs, isNewObs: isNewObs"></study-tabset>
 </div>
-<div class="scrollbox">
-  <div class="ui grid">
-    <div class="ten wide column">
-      <errors id="external-ids"></errors>
-      <div class="ui success icon message" style="margin-bottom: 1.4rem" data-bind="visible: showResultsObs">
-        <i class="check sign icon"></i>
-        <div class="content">
-          <div class="header">Participant credentials created</div>
-          <p style="margin-top:1rem">
-            Credentials created for user ID: <span class="identifier-emphasis" data-bind="text: resultObs"></span>
-          </p>
-          <p>Enter this ID into the app to register the device.</p>
-        </div>
+<bsm-layout id="external-ids">
+  <div slot="header">
+    <div class="ui success icon message" style="margin-bottom: 1.4rem" data-bind="visible: showResultsObs">
+      <i class="check sign icon"></i>
+      <div class="content">
+        <div class="header">Participant credentials created</div>
+        <p style="margin-top:1rem">
+          Credentials created for user ID: <span class="identifier-emphasis" data-bind="text: resultObs"></span>
+        </p>
+        <p>Enter this ID into the app to register the device.</p>
       </div>
-      <div class="line-control">
-        <div class="line-control-stretch">
-          <div class="ui icon input" data-bind="css:{loading: searchLoadingObs}">
-            <input type="text" placeholder="Start of ID"
-              data-bind="textInput: idFilterObs, returnHandler: doSearch"/>
-            <i class="search icon"></i>
-          </div>
-        </div>
-        <div>
-          <pager params="prefix: 'external-ids', postLoadFunc: postLoadFunc"></pager>
-        </div>
-      </div>
-      <table class="ui compact selectable table">
-        <thead>
-          <tr>
-            <th width="10" data-bind="visible: isAdmin()">
-              <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
-            </th>
-            <th>Identifier</th>
-          </tr>
-        </thead>
-        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-          <tr>
-            <td colspan="3" data-bind="html: recordsMessageObs"></td>
-          </tr>
-        </tbody>
-        <tbody data-bind="foreach: itemsObs">
-          <tr>
-            <td data-bind="visible: $parent.isAdmin()">
-              <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
-            </td>
-            <td>
-              <a data-bind="text: $data.identifier, href: $parent.link($data)"></a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
-    <div class="six wide column">
-      <div class="ui message">
-        <p>An account can be assigned an external ID that enrolls the account in a study. Some studies use these external IDs as the exclusive identifier for an account. For those studies, it can be easier to create and find accounts using this view of study participants.</p>
-
-        <p>You can also add accounts with an external ID using the import feature. </p>
+    <div class="line-control">
+      <div class="line-control-stretch">
+        <div class="ui icon input" data-bind="css:{loading: searchLoadingObs}">
+          <input type="text" placeholder="Start of ID"
+            data-bind="textInput: idFilterObs, returnHandler: doSearch"/>
+          <i class="search icon"></i>
+        </div>
+      </div>
+      <div>
+        <pager params="prefix: 'external-ids', postLoadFunc: postLoadFunc"></pager>
       </div>
     </div>
   </div>
-</div>
+  <div slot="content">
+    <table class="ui compact selectable table">
+      <thead>
+        <tr>
+          <th width="10" data-bind="visible: isAdmin()">
+            <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+          </th>
+          <th>Identifier</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="3" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr>
+          <td data-bind="visible: $parent.isAdmin()">
+            <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+          </td>
+          <td>
+            <a data-bind="text: $data.identifier, href: $parent.link($data)"></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div slot="header">
+    <p>An account can be assigned an external ID that enrolls the account in a study. Some studies use these external IDs as the exclusive identifier for an account. For those studies, it can be easier to create and find accounts using this view of study participants.</p>
+
+    <p>You can also add accounts with an external ID using the import feature. </p>
+  </div>
+</bsm-layout>

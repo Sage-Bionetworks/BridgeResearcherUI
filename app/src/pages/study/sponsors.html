@@ -15,14 +15,15 @@
   </div>
   <study-tabset params="identifierObs: identifierObs, isNewObs: isNewObs"></study-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="sponsors"></errors>
-  <form class="ui skinny form">
+<bsm-layout id="sponsors">
+  <div slot="header">
     <div class="line-control" data-bind="visible: isAdmin()">
       <div class="line-control-stretch ">
       </div>
       <pager params="prefix: 'sp', postLoadFunc: postLoadFunc"></pager>
     </div>
+  </div>
+  <div slot="content">
     <table class="ui compact selectable table">
       <thead>
         <tr>
@@ -52,8 +53,8 @@
         </tr>
       </tbody>
     </table>
-  </form>
-</div>
+  </div>
+</bsm-layout>
 
 
 

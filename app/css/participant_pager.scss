@@ -8,15 +8,15 @@
     position: relative;
 }
     .pp_filter_control .ui.input {
-        width: 30rem;
+        width: 25rem;
     }
     .pp_filter_control input {
         cursor: pointer;
     }
 .pp_search_panel {
     position: absolute; 
-    top: 13rem; 
-    width: 50%;
+    top: 4rem;
+    width: 90%;
 }
     .pp_search_panel .ui.segment {
         z-index:100;

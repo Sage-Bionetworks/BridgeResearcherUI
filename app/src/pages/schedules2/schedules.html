@@ -27,13 +27,14 @@
   </div>
   <div class="ui empty secondary pointing menu"></div>
 </div>
-<div class="scrollbox">
-  <errors id="schedules"></errors>
-  <form class="ui skinny form">
+<bsm-layout id="schedules">
+  <div slot="header">
     <div class="line-control">
       <div class="line-control-stretch "></div>
       <pager params="prefix: 'schedules', postLoadFunc: postLoadFunc"></pager>
     </div>
+  </div>
+  <div slot="content">
     <table class="ui compact selectable table">
       <thead>
         <tr>
@@ -69,6 +70,6 @@
       <ui-checkbox params="checkedObs: showDeletedObs">
         Show deleted schedules
       </ui-checkbox>
-    </div>
-  </form>
-</div>
+    </div>    
+  </div>
+</bsm-layout>

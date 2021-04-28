@@ -13,11 +13,12 @@
   </div>
   <div class="ui empty secondary pointing menu"></div>
 </div>
-<div class="scrollbox">
-  <errors id="orgs"></errors>
-  <form class="ui skinny form">
+<bsm-layout id="orgs">
+  <div slot="header">
     <pager style="display: flex; justify-content: flex-end" 
       params="prefix: 'org', postLoadFunc: postLoadFunc"></pager>
+  </div>
+  <div slot="content">
     <table class="ui compact selectable table">
       <thead>
         <tr>
@@ -49,5 +50,5 @@
         </tr>
       </tbody>
     </table>
-  </form>
-</div>
+  </div>
+</bsm-layout>

@@ -16,17 +16,14 @@
   </div>
   <div class="ui empty secondary pointing menu"></div>
 </div>
-<div class="scrollbox">
-  <form class="ui form">
-    <errors id="scheduleplan"></errors>
+<bsm-layout id="scheduleplan">
+  <div slot="content">
     <div class="two fields">
       <div class="required field" id="label">
         <label>Label</label>
         <input type="text" data-bind="textInput: labelObs, hasFocus: true" />
       </div>
     </div>
-  </form>
-  <div>
     <div class="schedule-strategy-header">
       <div data-bind="semantic: 'dropdown', click: updateType">
         <input type="hidden" name="schedulePlanType" />
@@ -41,10 +38,7 @@
         </div>
       </div>
     </div>
+    <div style="margin-top: 1rem" data-bind="component: {
+      name: schedulePlanTypeObs, params: {strategyObs: strategyObs, labelObs: labelObs}}"></div>
   </div>
-  <div
-    style="margin-top: 1rem"
-    data-bind="component: {
-        name: schedulePlanTypeObs, params: {strategyObs: strategyObs, labelObs: labelObs}}"
-  ></div>
-</div>
+</bsm-layout>

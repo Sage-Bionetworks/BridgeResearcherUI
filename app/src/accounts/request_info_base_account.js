@@ -26,7 +26,7 @@ function noner(value) {
 
 export default class RequestInfoBaseAccount extends BaseAccount {
   constructor(params) {
-    super(params);
+    super(params); // except there's not user, yes?
 
     this.binder.obs("name", "")
       .obs("languages", null, joiner)
@@ -39,8 +39,8 @@ export default class RequestInfoBaseAccount extends BaseAccount {
       .obs("userAgent", null, noner);
 
     this.getAccount()
-      .then(() => this.requestInfo())
       .then(this.binder.update())
+      .then(() => this.requestInfo())
       .catch(utils.failureHandler(this.failureParams));
   }
   loadAccount() { 

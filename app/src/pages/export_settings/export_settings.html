@@ -16,95 +16,90 @@
   </div>
   <div class="ui empty secondary pointing menu"></div>
 </div>
-<div class="scrollbox">
-  <div class="ui grid">
-    <div class="ten wide column">
-      <errors id="export-settings"></errors>
-      <form class="ui form" data-bind="css: {disabled: disableExportObs}">
-        <div class="field" style="margin: 1rem auto 2rem" data-bind="visible: isDeveloper">
-          <div>
-            <ui-checkbox params="checkedObs: disableExportObs">
-              Disable data export
-            </ui-checkbox>
-          </div>
+<bsm-layout id="export-settings">
+  <div slot="content">
+    <form class="ui form" data-bind="css: {disabled: disableExportObs}">
+      <div class="field" style="margin: 1rem auto 2rem" data-bind="visible: isDeveloper">
+        <div>
+          <ui-checkbox params="checkedObs: disableExportObs">
+            Disable data export
+          </ui-checkbox>
         </div>
-        <div class="disable-pane">
-          <div class="fields">
-            <div class="six wide field">
-              <label>Synapse Project ID</label>
-              <input type="text" name="synapseProjectId"
-                data-bind="textInput: synapseProjectIdObs, hasFocus: true, 
-                  attr: {readonly: isResearcherOnly() || disableExportObs()}"/>
-            </div>
-            <div class="eight wide field">
-              <label>&#160;</label>
-              <div style="margin-top:1rem">
-                <a target="_blank" rel="noopener" 
-                  data-bind="visible: projectLinkObs, href: projectLinkObs">
-                  View Project on Synapse
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="fields">
-            <div class="six wide field">
-              <label>Synapse Access Team ID</label>
-              <input type="text" name="synapseDataAccessTeamId"
-                data-bind="textInput: synapseDataAccessTeamIdObs, 
-                  attr: {readonly: isResearcherOnly() || disableExportObs()}"/>
-            </div>
-            <div class="eight wide field">
-              <label>&#160;</label>
-              <div style="margin-top:1rem">
-                <a target="_blank" rel="noopener" data-bind="visible: teamLinkObs, href: teamLinkObs">
-                  View Team on Synapse
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="grouped fields">
-            <label>Upload Validation Strictness</label>
-            <div class="field">
-              <div class="ui radio checkbox">
-                <input id="uvs3" type="radio" name="uploadValidationStrictness" class="hidden" value="strict"
-                  data-bind="checked: uploadValidationStrictnessObs, attr:{disabled: disableExportObs}"/>
-                <label for="uvs3">Strict</label>
-                <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
-                  Return an error response and do not complete upload if validation fails.
-                </div>
-              </div>
-            </div>
-            <div class="field">
-              <div class="ui radio checkbox">
-                <input id="uvs2" type="radio" name="uploadValidationStrictness" class="hidden" value="report"
-                  data-bind="checked: uploadValidationStrictnessObs, attr:{disabled: disableExportObs}"/>
-                <label for="uvs2">Report</label>
-                <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
-                  Allow the upload, but capture an error message and export it to Synapse with your data.
-                </div>
-              </div>
-              <div class="field">
-                <div class="ui radio checkbox">
-                  <input id="uvs1" type="radio" name="uploadValidationStrictness" class="hidden" value="warning"
-                    data-bind="checked: uploadValidationStrictnessObs, attr:{disabled: disableExportObs}"/>
-                  <label for="uvs1">None</label>
-                  <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
-                    No error reporting.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
-    <div class="six wide column">
-      <div class="ui message">
-        <p><i><b>NOTE:</b> these settings will eventually be specific to each study in an app, but for now, they are set globally for all studies in an app.</i></p>
-        <p>Research data is exported to Synapse, a portal for researchers to manage data, collaborate with one another, and perform data analysis.</p>
-        <p>Links lead to projects in Synapse where this app’s data is archived (Synapse credentials are separate from Bridge credentials so you will need a Synapse account to access).</p>
-        <p>You can also trigger manual exports, change the frequency of your app’s production export schedule, and change how the reporting of errors are handled.</p>
       </div>
-    </div>
+      <div class="disable-pane">
+        <div class="fields">
+          <div class="six wide field">
+            <label>Synapse Project ID</label>
+            <input type="text" name="synapseProjectId"
+              data-bind="textInput: synapseProjectIdObs, hasFocus: true, 
+                attr: {readonly: isResearcherOnly() || disableExportObs()}"/>
+          </div>
+          <div class="eight wide field">
+            <label>&#160;</label>
+            <div style="margin-top:1rem">
+              <a target="_blank" rel="noopener" 
+                data-bind="visible: projectLinkObs, href: projectLinkObs">
+                View Project on Synapse
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="fields">
+          <div class="six wide field">
+            <label>Synapse Access Team ID</label>
+            <input type="text" name="synapseDataAccessTeamId"
+              data-bind="textInput: synapseDataAccessTeamIdObs, 
+                attr: {readonly: isResearcherOnly() || disableExportObs()}"/>
+          </div>
+          <div class="eight wide field">
+            <label>&#160;</label>
+            <div style="margin-top:1rem">
+              <a target="_blank" rel="noopener" data-bind="visible: teamLinkObs, href: teamLinkObs">
+                View Team on Synapse
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="grouped fields">
+          <label>Upload Validation Strictness</label>
+          <div class="field">
+            <div class="ui radio checkbox">
+              <input id="uvs3" type="radio" name="uploadValidationStrictness" class="hidden" value="strict"
+                data-bind="checked: uploadValidationStrictnessObs, attr:{disabled: disableExportObs}"/>
+              <label for="uvs3">Strict</label>
+              <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
+                Return an error response and do not complete upload if validation fails.
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              <input id="uvs2" type="radio" name="uploadValidationStrictness" class="hidden" value="report"
+                data-bind="checked: uploadValidationStrictnessObs, attr:{disabled: disableExportObs}"/>
+              <label for="uvs2">Report</label>
+              <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
+                Allow the upload, but capture an error message and export it to Synapse with your data.
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input id="uvs1" type="radio" name="uploadValidationStrictness" class="hidden" value="warning"
+                  data-bind="checked: uploadValidationStrictnessObs, attr:{disabled: disableExportObs}"/>
+                <label for="uvs1">None</label>
+                <div class="help-text" style="margin-left: 18px; margin-bottom: 5px">
+                  No error reporting.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
   </div>
-</div>
+  <div slot="help">
+    <p><i><b>NOTE:</b> these settings will eventually be specific to each study in an app, but for now, they are set globally for all studies in an app.</i></p>
+    <p>Research data is exported to Synapse, a portal for researchers to manage data, collaborate with one another, and perform data analysis.</p>
+    <p>Links lead to projects in Synapse where this app’s data is archived (Synapse credentials are separate from Bridge credentials so you will need a Synapse account to access).</p>
+    <p>You can also trigger manual exports, change the frequency of your app’s production export schedule, and change how the reporting of errors are handled.</p>
+  </div>
+</bsm-layout>

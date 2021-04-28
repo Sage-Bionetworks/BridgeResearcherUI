@@ -14,74 +14,65 @@
     margin-top: 0.35rem;
   }
 </style>
-<div class="scrollbox">
-  <div class="ui grid">
-    <div class="ten wide column">
-      <errors id="oauth-providers"></errors>
-      <p data-bind="visible: oAuthProvidersObs().length === 0">
-        There are no providers configured to issue OAuth 2.0 access tokens.
-      </p>
-      <div data-bind="visible: oAuthProvidersObs().length > 0, foreach: oAuthProvidersObs">
-        <div class="ui card" style="width:100%; margin-bottom: 1rem">
-          <div class="content">
-            <span style="margin-bottom:.25rem" class="header" data-bind="text:$data.vendorId"></span>
-            <span class="right floated">
-              <div class="event">
-                <span class="header"><b>Secret</b></span>
-                <div class="content">
-                  <div class="summary" data-bind="text: $data.secret"></div>
-                </div>
-              </div>
-            </span>
+<bsm-layout id="oauth-providers">
+  <div slot="content">
+    <p data-bind="visible: oAuthProvidersObs().length === 0">
+      There are no providers configured to issue OAuth 2.0 access tokens.
+    </p>
+    <div data-bind="visible: oAuthProvidersObs().length > 0, foreach: oAuthProvidersObs">
+      <div class="ui card" style="width:100%; margin-bottom: 1rem">
+        <div class="content">
+          <span style="margin-bottom:.25rem" class="header" data-bind="text:$data.vendorId"></span>
+          <span class="right floated">
             <div class="event">
-              <span class="header"><b>Client ID</b></span>
+              <span class="header"><b>Secret</b></span>
               <div class="content">
-                <div class="summary" data-bind="text: $data.clientId"></div>
+                <div class="summary" data-bind="text: $data.secret"></div>
               </div>
             </div>
-          </div>
-          <div class="content">
-              <div class="event">
-                <span class="header"><b>URL</b></span>
-                <div class="content">
-                  <div class="summary" data-bind="text: $data.endpoint"></div>
-                </div>
-              </div>
-              <div class="event">
-                <span class="header"><b>Callback URL</b></span>
-                <div class="content">
-                  <div class="summary" data-bind="text: $data.callbackUrl"></div>
-                </div>
-              </div>
-              <div class="event">
-                <span class="header"><b>Introspect Endpoint</b></span>
-                <div class="content">
-                  <div class="summary" data-bind="text: $data.introspectEndpoint"></div>
-                </div>
-              </div>
-          </div>
-          <div class="extra content">
-            <button class="ui basic red compact mini button" data-bind="click: $component.removeProvider">
-              Delete
-            </button>
-            <button class="ui basic compact mini button" data-bind="click: $component.editProvider">Edit</button>
+          </span>
+          <div class="event">
+            <span class="header"><b>Client ID</b></span>
+            <div class="content">
+              <div class="summary" data-bind="text: $data.clientId"></div>
+            </div>
           </div>
         </div>
+        <div class="content">
+            <div class="event">
+              <span class="header"><b>URL</b></span>
+              <div class="content">
+                <div class="summary" data-bind="text: $data.endpoint"></div>
+              </div>
+            </div>
+            <div class="event">
+              <span class="header"><b>Callback URL</b></span>
+              <div class="content">
+                <div class="summary" data-bind="text: $data.callbackUrl"></div>
+              </div>
+            </div>
+            <div class="event">
+              <span class="header"><b>Introspect Endpoint</b></span>
+              <div class="content">
+                <div class="summary" data-bind="text: $data.introspectEndpoint"></div>
+              </div>
+            </div>
+        </div>
+        <div class="extra content">
+          <button class="ui basic red compact mini button" data-bind="click: $component.removeProvider">
+            Delete
+          </button>
+          <button class="ui basic compact mini button" data-bind="click: $component.editProvider">Edit</button>
+        </div>
       </div>
-      <button class="ui tiny button" data-bind="click: addProvider">Add Provider</button>
     </div>
-    <div class="six wide column">
-      <div class="ui message">
-        <p>Configure one or more OAuth providers for the Authorization Code Grant pathway.</p>
-
-        <p>
-          The Bridge server expects to receive the authorization token from the client application. It will retrieve and
-          manage an access token and refresh token so that both the client app and worker processes can access the
-          user’s resources.
-        </p>
-
-        <p>This allows us to import data from devices like Fitbit once the user gives us permission to do so.</p>
-      </div>
-    </div>
+    <button class="ui tiny button" data-bind="click: addProvider">Add Provider</button>
   </div>
-</div>
+  <div slot="help">
+    <p>Configure one or more OAuth providers for the Authorization Code Grant pathway.</p>
+
+    <p>The Bridge server expects to receive the authorization token from the client application. It will retrieve and manage an access token and refresh token so that both the client app and worker processes can access the user’s resources. </p>
+
+    <p>This allows us to import data from devices like Fitbit once the user gives us permission to do so.</p>
+  </div>
+</bsm-layout>

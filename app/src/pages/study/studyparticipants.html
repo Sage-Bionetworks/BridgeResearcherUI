@@ -22,11 +22,12 @@
   </div>
   <study-tabset params="identifierObs: studyIdObs, isNewObs: isNewObs"></study-tabset>
 </div>
-<div class="scrollbox">
-  <errors id="studyparticipants"></errors>
-  <form class="ui skinny form">
+<bsm-layout id="studyparticipants">
+  <div slot="header">
     <studyparticipants-pager params="loadingFunc: loadingFunc, pageKey: 'studyparticipants'">
     </studyparticipants-pager>
+  </div>
+  <div slot="content">
     <table class="ui compact selectable table">
       <thead>
         <tr>
@@ -54,5 +55,5 @@
         </tr>
       </tbody>
     </table>
-  </form>
-</div>
+  </div>
+</bsm-layout>

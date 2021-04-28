@@ -27,46 +27,47 @@
   </div>
   <div class="ui empty secondary pointing menu"></div>
 </div>
-<div class="scrollbox">
-  <errors id="configs"></errors>
-  <table class="ui compact selectable table">
-    <thead>
-      <tr>
-        <th width="10">
-          <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
-        </th>
-        <th nowrap>Identifier</th>
-        <th>Revision</th>
-        <th>Last Modified</th>
-      </tr>
-    </thead>
-    <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-      <tr>
-        <td colspan="4" data-bind="html: recordsMessageObs"></td>
-      </tr>
-    </tbody>
-    <tbody data-bind="foreach: itemsObs">
-      <tr data-bind="css: {negative: $data.deleted}">
-        <td>
-          <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
-          <i
-            data-bind="visible: $data.deletedObs, click: $parent.undelete"
-            style="cursor: pointer"
-            class="green undo icon"
-          ></i>
-        </td>
-        <td nowrap>
-          <span data-bind="text: $data.id, visible: $data.deletedObs"></span>
-          <a data-bind="href: $parent.createLink($data), text: $data.id, visible: !$data.deletedObs()"></a>
-        </td>
-        <td data-bind="text: $data.revision"></td>
-        <td data-bind="text: $parent.formatDateTime($data.modifiedOn)"></td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
-    <ui-checkbox params="checkedObs: showDeletedObs">
-      Show deleted app configs
-    </ui-checkbox>
+<bsm-layout id="configs">
+  <div slot="content">
+    <table class="ui compact selectable table">
+      <thead>
+        <tr>
+          <th width="10">
+            <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+          </th>
+          <th nowrap>Identifier</th>
+          <th>Revision</th>
+          <th>Last Modified</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="4" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr data-bind="css: {negative: $data.deleted}">
+          <td>
+            <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
+            <i
+              data-bind="visible: $data.deletedObs, click: $parent.undelete"
+              style="cursor: pointer"
+              class="green undo icon"
+            ></i>
+          </td>
+          <td nowrap>
+            <span data-bind="text: $data.id, visible: $data.deletedObs"></span>
+            <a data-bind="href: $parent.createLink($data), text: $data.id, visible: !$data.deletedObs()"></a>
+          </td>
+          <td data-bind="text: $data.revision"></td>
+          <td data-bind="text: $parent.formatDateTime($data.modifiedOn)"></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
+      <ui-checkbox params="checkedObs: showDeletedObs">
+        Show deleted app configs
+      </ui-checkbox>
+    </div>
   </div>
-</div>
+</bsm-layout>

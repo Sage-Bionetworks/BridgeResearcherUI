@@ -29,5 +29,5 @@ export default function upload(params) {
   });
   serverService.getUploadById(params.guid)
     .then(response => self.uploadDetailsObs(response))
-    .catch(utils.failureHandler({ id: 'participant-upload' }));
+    .catch(utils.failureHandler({ id: 'studyparticipant-upload' }));
 };
