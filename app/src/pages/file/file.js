@@ -33,7 +33,7 @@ export default function editor(params) {
   self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
   
   tables.prepareTable(self, {
-    name: "file revisions",
+    name: "file revision",
     type: "File Revisions",
     id: "file",
     refresh: () => loadRevisions(self.query)

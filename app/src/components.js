@@ -331,9 +331,9 @@ import studypartSchedule from "./pages/studyparticipant/schedule";
 import studypartScheduleHtml from "./pages/studyparticipant/schedule.html";
 import studypartTimeline from "./pages/studyparticipant/timeline";
 import studypartTimelineHtml from "./pages/studyparticipant/timeline.html";
-/*
 import studypartConsents from "./pages/studyparticipant/consents";
 import studypartConsentsHtml from "./pages/studyparticipant/consents.html";
+/*
 import studyverifiedIcon from "./pages/studyparticipant/verified-icon";
 import studyverifiedIconHtml from "./pages/studyparticipant/verified-icon.html";
 */
@@ -624,9 +624,8 @@ reg("studyparticipant_reports", {viewModel: studypartReports, template: studypar
 reg("studyparticipant_report", {viewModel: studypartReport, template: studypartReportHtml});
 reg("studyparticipant_clientData", {viewModel: studypartClientData, template: studypartClientDataHtml});
 reg("studyparticipant_request_info", {viewModel: studypartRequestInfo, template: studypartRequestInfoHtml});
-/*
 reg("studyparticipant_consents", {viewModel: studypartConsents, template: studypartConsentsHtml});
-*/
+
 reg("schedules2", {viewModel: schedules2, template: schedules2Html});
 reg("schedule2", {viewModel: schedule2, template: schedule2Html});
 reg("session", {viewModel: session, template: sessionHtml});

@@ -119,7 +119,7 @@ router.on("/participants/:userId/activities/events", routeTo("participant_activi
 router.on("/participants/:userId/activities/:referentType/:guid", routeTo("participant_activity", "participants", USERID_REFERENT_GUID));
 router.on("/participants/:userId/activities", routeTo("participant_activities", "participants", USERID));
 router.on("/participants/:userId/enrollments", routeTo("participant_enrollments", "participants", USERID));
-router.on("/participants/:userId/consents/:studyId", routeTo("participant_consents", "participants", USERID_STUDYID));
+router.on("/participants/:userId/enrollments/consents/:studyId", routeTo("participant_consents", "participants", USERID_STUDYID));
 router.on("/participants/:userId/notifications", routeTo("participant_notifications", "participants", USERID));
 router.on("/participants/:userId/reports", routeTo("participant_reports", "participants", USERID));
 router.on("/participants/:userId/uploads", routeTo("participant_uploads", "participants", USERID));
@@ -188,10 +188,13 @@ router.on("/studies/:studyId/participants/:userId/clientData",
   routeTo("studyparticipant_clientData", "studies", STUDYID_USERID));
 router.on("/studies/:studyId/participants/:userId/requestInfo", 
   routeTo("studyparticipant_request_info", "studies", STUDYID_USERID));
+router.on("/studies/:studyId/participants/:userId/enrollments/consents", 
+  routeTo("studyparticipant_consents", "studies", STUDYID_USERID));
+
   /*
 reg("studyparticipant_general", {viewModel: studypartGeneral, template: studypartGeneralHtml});
-reg("studyparticipant_consents", {viewModel: studypartConsents, template: studypartConsentsHtml});
 */
+
 
 router.on("/schedules", routeTo("schedules2", "schedules"));
 router.on("/schedules/:guid", routeTo("schedule2", "schedules", GUID));

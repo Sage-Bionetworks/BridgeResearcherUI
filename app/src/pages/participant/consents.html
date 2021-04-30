@@ -28,22 +28,20 @@
     <table class="ui compact selectable table">
       <thead>
         <tr>
-          <th>Consent Group</th>
+          <th nowrap>Consent Group</th>
           <th>Name</th>
-          <th>Consented On</th>
-          <th>Withdrew On</th>
-          <th></th>
+          <th nowrap>Consented On</th>
           <th></th>
         </tr>
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td colspan="6" data-bind="html: recordsMessageObs"></td>
+          <td colspan="4" data-bind="html: recordsMessageObs"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
         <tr>
-          <td style="white-space:pre">
+          <td>
             <a data-bind="text: $data.consentGroupName, 
               attr: {'href': '#/subpopulations/' + $data.subpopulationGuid + '/general'}">
             </a>
@@ -53,6 +51,12 @@
               <i>Not signed</i>
             </div>
             <div data-bind="visible: $data.name !== 'No consent', text: $data.name"></div>
+            <p style="margin-top: .5rem">
+              <a target="_blank" rel="noopener"
+                data-bind="visible: $data.name !== 'No consent', href: $parent.linkToDocument($data)">
+                View document <i class="ui external icon"> </i>
+              </a>
+            </p>
           </td>
           <td>
             <div data-bind="visible: !$parent.isUpToDateConsent($data), semantic: 'popup'"
@@ -66,19 +70,10 @@
             </div>
           </td>
           <td>
-            <span class="red" data-bind="text: $data.withdrewOn"></span>
-          </td>
-          <td>
             <button class="ui basic compact mini button"
               data-bind="visible: $data.eligibleToWithdraw, click: $component.resendConsent">
               Resend consent
             </button>
-          </td>
-          <td>
-            <a target="_blank" rel="noopener"
-              data-bind="visible: $data.name !== 'No consent', href: $parent.linkToDocument($data)">
-              View document <i class="ui external icon"> </i>
-            </a>
           </td>
         </tr>
       </tbody>

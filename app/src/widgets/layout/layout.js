@@ -9,7 +9,7 @@ class BsmLayout extends HTMLElement {
     if (headers.length) {
       headers.forEach(header => {
         headerHtml += `<div class="ui grid">
-          <div class="eleven wide column">
+          <div class="eleven wide column" style="padding-bottom:0">
             ${header.innerHTML}
           </div>
         </div>`;
