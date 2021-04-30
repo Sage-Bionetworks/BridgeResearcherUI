@@ -111,7 +111,11 @@ function config(url) {
   };
 }
 
-$.ajax(config("/v3/participants/" + queryParams.userId)).done(function(response) {
+var url = (queryParams.studyId) ?
+  `/v5/studies/${queryParams.studyId}/participants/${queryParams.userId}` :
+  `/v3/participants/${queryParams.userId}`;
+
+$.ajax(config(url)).done(function(response) {
   var user = response;
   // The index references the consents in reverse order, so we must reverse them here as well.
   var history = user.consentHistories[queryParams.guid].reverse()[queryParams.index];

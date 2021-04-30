@@ -1,23 +1,26 @@
 <div class="fixed-header">
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
-      <div class="ui breadcrumb" data-bind="visible: isResearcher()">
-        <a class="section" href="#/participants">Participants</a>
+      <div class="ui breadcrumb">
+        <a href="#/studies" class="section">Studies</a>
         <i class="right chevron icon divider"></i>
+        <a class="section" data-bind="href: '#/studies/' + navStudyIdObs() + '/participants', text: navStudyNameObs()">StudyName</a>
+        <i class="right chevron icon divider"></i>
+        <span class="section">Participants</span>
       </div>
-      <h3 data-bind="html: titleObs"></h3>
+      <h3 data-bind="text: titleObs"></h3>
     </div>
     <div class="fixed-header-buttons">
     </div>
   </div>
   <participant-tabset params="userIdObs: userIdObs, statusObs: statusObs"></participant-tabset>
 </div>
-<bsm-layout id="participant-consents">
+<bsm-layout id="studyparticipant-consents">
   <div slot="header">
     <div class="line-control" style="margin-bottom: 1rem">
       <div class="line-control-stretch">
         <div class="ui breadcrumb">
-          <a class="section" data-bind="href:'#/participants/'+userIdObs()+'/enrollments'">Enrollments</a>
+          <a class="section" data-bind="href: '#/studies/'+studyId+'/participants/'+userIdObs()+'/enrollments'">Enrollments</a>
           <i class="right chevron icon divider"></i>
           <b>Consent signatures for <span data-bind="text: studyIdObs"></span></b>
         </div>
@@ -28,22 +31,20 @@
     <table class="ui compact selectable table">
       <thead>
         <tr>
-          <th>Consent Group</th>
+          <th nowrap>Consent Group</th>
           <th>Name</th>
-          <th>Consented On</th>
-          <th>Withdrew On</th>
-          <th></th>
+          <th nowrap>Consented On</th>
           <th></th>
         </tr>
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td colspan="6" data-bind="html: recordsMessageObs"></td>
+          <td colspan="4" data-bind="html: recordsMessageObs"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
         <tr>
-          <td style="white-space:pre">
+          <td>
             <a data-bind="text: $data.consentGroupName, 
               attr: {'href': '#/subpopulations/' + $data.subpopulationGuid + '/general'}">
             </a>
@@ -53,6 +54,12 @@
               <i>Not signed</i>
             </div>
             <div data-bind="visible: $data.name !== 'No consent', text: $data.name"></div>
+            <div style="margin-top: .5rem">
+              <a target="_blank" rel="noopener"
+                data-bind="visible: $data.name !== 'No consent', href: $parent.linkToDocument($data)">
+                View document <i class="ui external icon"> </i>
+              </a>
+            </div>
           </td>
           <td>
             <div data-bind="visible: !$parent.isUpToDateConsent($data), semantic: 'popup'"
@@ -66,19 +73,10 @@
             </div>
           </td>
           <td>
-            <span class="red" data-bind="text: $data.withdrewOn"></span>
-          </td>
-          <td>
             <button class="ui basic compact mini button"
               data-bind="visible: $data.eligibleToWithdraw, click: $component.resendConsent">
               Resend consent
             </button>
-          </td>
-          <td>
-            <a target="_blank" rel="noopener"
-              data-bind="visible: $data.name !== 'No consent', href: $parent.linkToDocument($data)">
-              View document <i class="ui external icon"> </i>
-            </a>
           </td>
         </tr>
       </tbody>

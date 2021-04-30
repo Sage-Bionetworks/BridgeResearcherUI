@@ -61,15 +61,14 @@
               </div>
             </td>
             <td nowrap style="text-align: right">
+              <a style="margin-right: 1rem; white-space: nowrap" data-bind="visible: $parent.hasSignatures($data),
+                attr: { href: '#/studies/' + $data.studyId + '/participants/' + $parent.userIdObs() + '/enrollments/consents'}">View Signatures</a>
               <button class="ui basic compact mini red button" 
                 data-bind="click: $parent.unenroll, hidden: $data.withdrawnOn">Withdraw
               </button>
               <button class="ui basic compact mini blue button" 
                 data-bind="click: $parent.enroll, visible: $data.withdrawnOn">Enroll
               </button>
-              <a style="margin-left: 1rem; white-space: nowrap" data-bind="visible: $parent.hasSignatures($data),
-                attr: { href: '#/participants/' + $parent.userIdObs() + 
-                '/consents/' + $data.studyId } ">View Signatures</a>
             </td>
           </tr>
         </tbody>
