@@ -8,7 +8,7 @@
     <h4 data-bind="text: titleObs"></h4>
   </div>
   <div data-bind="text: 'id: ' + identifierObs()"></div>
-  <div data-bind="text: minutesToCompleteObs() + 'min'"></div>
+  <div data-bind="text: minutesFormatted(minutesToCompleteObs())"></div>
   <div class="list-item-controls">
     <i class="blue ui language icon" 
       style="margin-right: .4rem!important"
