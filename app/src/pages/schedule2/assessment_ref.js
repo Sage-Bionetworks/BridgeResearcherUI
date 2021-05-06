@@ -58,4 +58,7 @@ export default function(params) {
   self.lastOpacityObs = function(index) {
     return index === (assessmentsObs().length-1) ? .5 : 1;
   };
+  self.minutesFormatted = function(min) {
+    return (min === 0) ? '' : `${min}min`;
+  }
 }

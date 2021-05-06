@@ -35,7 +35,7 @@
   
       <h4 class="ui dividing header">Bridge Users</h4>
       <div data-bind="foreach: usersObs" class="users">
-        <div class="four fields">
+        <div class="fields">
           <div class="field">
             <input placeholder="First Name" data-bind="textInput: $data.firstNameObs" />
           </div>
@@ -46,17 +46,17 @@
             <input placeholder="Email" data-bind="textInput: $data.emailObs" />
           </div>
           <div class="field" data-bind="attr: {id: 'users'+$index()+'_synapseUserId'}">
-              <input placeholder="Synapse Email" data-bind="textInput: $data.synapseUserIdObs" />
+              <input placeholder="Synapse ID" data-bind="textInput: $data.synapseUserIdObs" />
             </div>
           <div class="field" data-bind="attr: {id: 'users'+$index()+'_roles'}">
             <tag-editor params="selectedObs: $data.rolesObs, 
               allObs: $parent.allRolesObs, type: 'roles'"></tag-editor>
           </div>
-          <div class="field" style="width:7rem">
-            <div class="input-field-padding">
-              <i class="large plus square outline link icon" data-content="Add below"
+          <div class="field" style="white-space: nowrap">
+            <div class="input-field-padding" style="margin-right: 0; padding-right: 0">
+              <i class="plus square outline link icon" data-content="Add below"
                 data-bind="click: $parent.addBelow, semantic: 'popup'"></i>
-              <i class="red large times circle outline link icon"
+              <i class="red times circle outline link icon"
                 data-bind="fadeRemove: {selector: '.four.fields', object: $data, 
                   collection: 'usersObs'}"></i>
             </div>
@@ -67,25 +67,41 @@
   
       <h4 class="ui dividing header">Synapse Team Administrators</h4>
       <div id="adminIds">
-        <div class="field">
-          <ui-checkbox params="checkedObs: darkObs">
-            Alx Dark
-          </ui-checkbox>
+        <div class="two fields">
+          <div class="field">
+            <ui-checkbox params="checkedObs: darkObs">
+              Alx Dark
+            </ui-checkbox>
+          </div>
+          <div class="field">
+            <ui-checkbox params="checkedObs: mountsObs">
+              Erin Mounts
+            </ui-checkbox>
+          </div>
         </div>
-        <div class="field">
-          <ui-checkbox params="checkedObs: kellenObs">
-            Mike Kellen
-          </ui-checkbox>
+        <div class="two fields">
+          <div class="field">
+            <ui-checkbox params="checkedObs: websterObs">
+              Dan Webster
+            </ui-checkbox>
+          </div>
+          <div class="field">
+            <ui-checkbox params="checkedObs: carlsonObs">
+              Sonia Carlson
+            </ui-checkbox>
+          </div>
         </div>
-        <div class="field">
-          <ui-checkbox params="checkedObs: botObs">
-            Brian Bot
-          </ui-checkbox>
-        </div>
-        <div class="field">
-          <ui-checkbox params="checkedObs: websterObs">
-            Dan Webster
-          </ui-checkbox>
+        <div class="two fields">
+          <div class="field">
+            <ui-checkbox params="checkedObs: ombergObs">
+              Larsson Omberg
+            </ui-checkbox>
+          </div>
+          <div class="field">
+            <ui-checkbox params="checkedObs: siebertsObs">
+              Solly Sieberts
+            </ui-checkbox>
+          </div>
         </div>
       </div>
     </form>

@@ -67,7 +67,7 @@ export default function(params) {
   self.totalMinutesObs = ko.computed(function() {
     var sum = self.assessmentsObs()
       .map(asmt => asmt.minutesToComplete).reduce((a,  b) => a + b, 0);
-    if (sum < 1) {
+    if (isNaN(sum) || sum < 1) {
       return '';
     } else if (sum === 1) {
       return '1 minute';

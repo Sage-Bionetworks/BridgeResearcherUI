@@ -4,10 +4,12 @@ import serverService from "../../../services/server_service";
 import utils from "../../../utils";
 
 const SYNAPSE_ADMINS = [
-  { name: "Alx Dark", id: "2026857", obs: "darkObs" },
-  { name: "Brian Bot", id: "273979", obs: "botObs" },
-  { name: "Mike Kellen", id: "273984", obs: "kellenObs" },
-  { name: "Dan Webster", id: "3373388", obs: "websterObs" }
+   { name: "Alx Dark", id: "2026857", obs: "darkObs" }
+  ,{ name: "Erin Mounts", id: "3342639", obs: "mountsObs" }
+  ,{ name: "Dan Webster", id: "3373388", obs: "websterObs" }
+  ,{ name: "Sonia Carlson", id: "3418713", obs: "carlsonObs" }
+  ,{ name: "Larsson Omberg", id: "372127", obs: "ombergObs" }
+  ,{ name: "Solly Sieberts", id: "273959", obs: "siebertsObs" }
 ];
 const UPLOAD_SHARED_METADATA_FIELD_DEFS = [
   { name: "taskIdentifier", maxLength: 100, type: "string" },
