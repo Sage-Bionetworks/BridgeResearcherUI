@@ -39,8 +39,8 @@ export default class RequestInfoBaseAccount extends BaseAccount {
       .obs("userAgent", null, noner);
 
     this.getAccount()
-      .then(this.binder.update())
       .then(() => this.requestInfo())
+      .then(this.binder.update())
       .catch(utils.failureHandler(this.failureParams));
   }
   loadAccount() { 
