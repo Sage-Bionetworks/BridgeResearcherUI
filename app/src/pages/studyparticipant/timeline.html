@@ -18,32 +18,43 @@
 </div>
 <bsm-layout id="studyparticipant-timeline">
   <div slot="header">
-    <div class="ui tabular menu">
+    <div class="ui breadcrumb">
+      Timeline
+      <div class="divider"> | </div>
       <a class="item" data-bind="href: link('schedule')">Schedule Events</a>
-      <a class="active item">Timeline</a>
-    </div>
+    </div>    
   </div>
   <div slot="content">
     <div data-bind="foreach: entriesObs">
       <div class="ui vertical menu" style="width: 100%">
         <div class="active item">
-          <div style="margin-bottom: .5rem">
-            <span data-bind="text: $parent.line1($data)"></span>
-            <span data-bind="text: $parent.line2($data)" style="float:right"></span>
-          </div>
-          <div>
-            <span data-bind="text: $parent.performanceOrder($data.guid)"></span>
-            <span style="float:right">
-              <b>Session instance GUID:</b> <span data-bind="text: $data.instanceGuid"></span>
-            </span>
-          </div>
+          <table width="100%">
+            <tr valign="top">
+              <td rowspan="2" style="width: 40%" data-bind="text: $parent.line1($data)"></td>
+              <td data-bind="text: $parent.line2($data)"></td>
+            </tr>
+            <tr>
+              <td>
+                <b>Session instance GUID:</b> <span data-bind="text: $data.instanceGuid"></span>
+              </td>
+            </tr>
+          </table>
         </div>
         <!-- ko foreach: $data.assessments-->
           <div class="item">
-              <span data-bind="text: $parents[1].asmt($data)"></span>
-              <span style="float: right">
-                <b>Instance GUID:</b> <span data-bind="text: $data.instanceGuid"></span>
-              </span>
+            <table width="100%">
+              <tr valign="top">
+                <td rowspan="2" style="width: 40%" data-bind="text: $parents[1].asmtLabel($data)"></td>
+                <td>
+                  <b>ID: </b> <span data-bind="text: $parents[1].asmtId($data)"></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <b>Instance GUID:</b> <span data-bind="text: $data.instanceGuid"></span>
+                </td>
+              </tr>
+            </table>
           </div>
         <!-- /ko -->
       </div>

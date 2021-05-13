@@ -25,6 +25,7 @@ const STUDYID = ["studyId"];
 const STUDYID_USERID = ["studyId", "userId"];
 const STUDYID_USERID_GUID = ["studyId", "userId", "guid"];
 const STUDYID_USERID_IDENTIFIER = ["studyId", "userId", "identifier"];
+const STUDYID_USERID_EVENTID = ["studyId", "userId", "eventId"];
 const TYPE = ["templateType"];
 const TYPE_GUID = ["templateType", "guid"];
 const TYPE_GUID_CREATEDON = ["templateType", "guid", "createdOn"];
@@ -174,6 +175,8 @@ router.on("/studies/:studyId/participants/:userId/schedule",
   routeTo("studyparticipant_schedule", "studies", STUDYID_USERID));
 router.on("/studies/:studyId/participants/:userId/schedule/timeline", 
   routeTo("studyparticipant_timeline", "studies", STUDYID_USERID));
+router.on("/studies/:studyId/participants/:userId/schedule/history/:eventId", 
+  routeTo("studyparticipant_history", "studies", STUDYID_USERID_EVENTID));
 router.on("/studies/:studyId/participants/:userId/uploads", 
   routeTo("studyparticipant_uploads", "studies", STUDYID_USERID));
 router.on("/studies/:studyId/participants/:userId/uploads/:guid", 

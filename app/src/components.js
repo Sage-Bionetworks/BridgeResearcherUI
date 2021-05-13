@@ -329,6 +329,8 @@ import studypartRequestInfo from "./pages/studyparticipant/request_info";
 import studypartRequestInfoHtml from "./pages/studyparticipant/request_info.html";
 import studypartSchedule from "./pages/studyparticipant/schedule";
 import studypartScheduleHtml from "./pages/studyparticipant/schedule.html";
+import studypartHistory from "./pages/studyparticipant/history";
+import studypartHistoryHtml from "./pages/studyparticipant/history.html";
 import studypartTimeline from "./pages/studyparticipant/timeline";
 import studypartTimelineHtml from "./pages/studyparticipant/timeline.html";
 import studypartConsents from "./pages/studyparticipant/consents";
@@ -616,6 +618,7 @@ reg("studyparticipant_general", {viewModel: studypartGeneral, template: studypar
 reg("studyparticipant_enrollments", {viewModel: studypartEnrollments, template: studypartEnrollmentsHtml});
 reg("studyparticipant_schedule", {viewModel: studypartSchedule, template: studypartScheduleHtml});
 reg("studyparticipant_timeline", {viewModel: studypartTimeline, template: studypartTimelineHtml});
+reg("studyparticipant_history", {viewModel: studypartHistory, template: studypartHistoryHtml});
 reg("studyparticipant-tabset", {viewModel: studypartTabset, template: studypartTabsetHtml});
 reg("studyparticipant_uploads", {viewModel: studypartUploads, template: studypartUploadsHtml});
 reg("studyparticipant_upload", {viewModel: studypartUpload, template: studypartUploadHtml});

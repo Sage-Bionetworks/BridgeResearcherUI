@@ -221,6 +221,8 @@ export default class GeneralBaseAccount extends BaseAccount {
 
     utils.startHandler(vm, event);
     return this.updateSynapseUserId(this.account)
-      .then(this.saveAccount.bind(this));
+      .then(this.saveAccount.bind(this))
+      .then(utils.successHandler(vm, event, "Participant updated."))
+      .catch(utils.failureHandler(this.failureParams));
   }  
 }

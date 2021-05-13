@@ -30,6 +30,7 @@ export default class StudyParticipantEnrollments extends BaseAccount {
     });
     serverService.getApp().then(app => {
       this.autoKeys = Object.keys(app.automaticCustomEvents).map(s => `custom:${s}`);
+      this.customUpdateTypes = app.customEvents;
     }).then(() => this.getAccount())
       .then(() => serverService.getStudyParticipantActivityEvents(this.studyId, this.userId))
       .then(res => this.itemsObs(res.items));
@@ -43,6 +44,12 @@ export default class StudyParticipantEnrollments extends BaseAccount {
     // Round to remove daylight saving errors, probably
     let result = Math.round( (end - start) / MS_PER_DAY );
     return result >= 0 ? result : ''; 
+  }
+  formatUpdateType(eventId) {
+    return this.customUpdateTypes[this.formatEventId(eventId)] || 'system';
+  }
+  formatShortUpdateType(item) {
+    return this.canEdit(item) ? 'Y' : 'N';
   }
   formatEventId(eventId) {
     return eventId.replace(/^custom\:/, '');
@@ -66,7 +73,13 @@ export default class StudyParticipantEnrollments extends BaseAccount {
     });
   }
   canEdit(item) {
-    return this.autoKeys.indexOf(item.eventId) === -1 && item.eventId.startsWith('custom:');
+    let updateType = this.formatUpdateType(item.eventId);
+    return updateType === 'mutable' || updateType === 'future_only';
+
+  }
+  canDelete(item) {
+    let updateType = this.formatUpdateType(item.eventId);
+    return updateType === 'mutable';
   }
   editEvent(event, browserEvent) {
     let self = ko.contextFor(browserEvent.target).$component;

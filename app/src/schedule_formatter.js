@@ -5,6 +5,7 @@ import fn from "./functions";
 const UNARY_EVENTS = Object.freeze({
   enrollment: "On consent to participate",
   activities_retrieved: "On activities first retrieved",
+  timeline_retrieved: "On timeline first retrieved",
   created_on: "On account created",
   study_start_date: "On most recent of account creation, consent, or activity retrieval"
 });

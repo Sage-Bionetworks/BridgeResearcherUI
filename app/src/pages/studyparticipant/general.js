@@ -1,6 +1,7 @@
 import GeneralBaseAccount from "../../accounts/general_base_account";
 import root from "../../root";
 import serverService from "../../services/server_service";
+import utils from "../../utils";
 
 export default class GeneralParticipant extends GeneralBaseAccount {
   constructor(params) {
@@ -21,7 +22,7 @@ export default class GeneralParticipant extends GeneralBaseAccount {
     return serverService.createStudyParticipant(this.studyId, this.account)
       .then(res => window.location = `#/studies/${this.studyId}/participants/${res.identifier}/general`);
   }
-  updateAccount() { 
+  updateAccount(vm, event) { 
     return serverService.updateStudyParticipant(this.studyId, this.account);
   }
   deleteAccount() {

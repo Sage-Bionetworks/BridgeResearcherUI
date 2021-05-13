@@ -183,7 +183,9 @@ export default class Binder {
   }
   static formatAttributes(value, context) {
     context.vm.attributesObs().map(function(attr) {
-      attr.obs(value[attr.key]);
+      if (value) {
+        attr.obs(value[attr.key]);
+      }
     });
     return context.vm.attributesObs();
   }

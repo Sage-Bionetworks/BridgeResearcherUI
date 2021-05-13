@@ -25,7 +25,6 @@ export default class ReportsBaseAccount extends BaseAccount {
       .then(session => this.studyIds = session.studyIds)
       .then(() => this.getAccount())
       .then(() => this.getReports());
-
   }
   loadAccount() {
     throw new Error('loadAccount not implemented');

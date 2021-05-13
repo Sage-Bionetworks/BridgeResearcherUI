@@ -19,34 +19,36 @@ export default class TimelineBaseAccount extends BaseAccount {
       .catch(utils.failureHandler(this.failureParams));
   }
   init(res) {
-    this.jsonObs(JSON.stringify(res, null, 2));
     res.assessments.forEach(asmt => this.assessments[asmt.key] = asmt);
-    res.sessions.forEach(sess => this.sessions[sess.refGuid] = sess);
+    res.sessions.forEach(sess => this.sessions[sess.guid] = sess);
     this.entriesObs.pushAll(res.schedule);
   }
   days(startDay, endDay) {
     return (startDay === endDay) ? `Day ${startDay}` : `Days ${startDay}—${endDay}`;
   }
-  eventId(guid) {
-    return this.sessions[guid].startEventId;
+  eventId(sch) {
+    return this.sessions[sch.refGuid].startEventId.replace("custom:", "");
   }
-  performanceOrder(guid) {
-    let po = this.sessions[guid].performanceOrder;
-    return po.substring(0,1).toUpperCase() + po.substring(1);
+  line1(sch) {
+    return this.days(sch.startDay, sch.endDay) + ' after “' + this.eventId(sch) + '”';
   }
-  line1($data) {
-    return this.days($data.startDay, $data.endDay) + ' after “' + this.eventId($data.guid) + '”';
+  line2(sch) {
+    let str = 'Start time: ' + sch.startTime;
+    if (sch.expiration) {
+      str += ', expiring after ' + sch.expiration;
+    }
+    let po = this.sessions[sch.refGuid].performanceOrder;
+    str += ', ' + po.substring(0,1).toUpperCase() + po.substring(1);
+    return str;
   }
-  line2($data) {
-    return 'Start time: ' + $data.startTime + ', expiring after ' + $data.expiration;
+  /* This is the data we could be displaying: 
+  {"key":"eab1a821eab1a821","guid":"ts2Fc9M6O-0fiE5xkfpPax_t","appId":"shared","identifier":"asmt3","revision":1,"label":"This is a test","minutesToComplete":3,"colorScheme":{"background":"#ff33ff","type":"ColorScheme"},"type":"AssessmentInfo"}
+  */
+  asmtLabel(asmt) {
+    return this.assessments[asmt.refKey].label;
   }
-  line3(item) {
-    return `${item.label} [${item.appId}-${item.identifier}]`;
-    /* This is the data we could be displaying: 
-    {"key":"eab1a821eab1a821","guid":"ts2Fc9M6O-0fiE5xkfpPax_t","appId":"shared","identifier":"asmt3","revision":1,"label":"This is a test","minutesToComplete":3,"colorScheme":{"background":"#ff33ff","type":"ColorScheme"},"type":"AssessmentInfo"}
-    */
-  }
-  asmt($data) {
-    return this.line3(this.assessments[$data.refKey]);
+  asmtId(asmt) {
+    var item = this.assessments[asmt.refKey];
+    return `${item.appId}-${item.identifier}`;
   }
 }

@@ -45,5 +45,5 @@ export default function() {
       };
     })
     self.customEventsObs.pushAll(customEvents);
-  });
+  }).catch(utils.failureHandler());
 };
