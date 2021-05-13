@@ -50,6 +50,7 @@
     "style-loader": "^2.0.0",
     "sweetalert2": "^10.16.7",
     "toastr": "^2.1.2",
+    "url-parse": "^1.5.1",
     "webpack": "^5.36.2",
     "webpack-cli": "^4.7.0",
     "webpack-dev-server": "^3.11.2",
