@@ -1,4 +1,4 @@
-class BsmLayout extends HTMLElement {
+export default class BsmLayout extends HTMLElement {
   constructor() {
     super();
     let headers = this.querySelectorAll("div[slot='header']");
