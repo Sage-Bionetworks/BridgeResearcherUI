@@ -4,6 +4,7 @@ import $ from 'jquery';
 import ko from "knockout";
 import serverService from "./services/server_service";
 import toastr from 'toastr';
+import BsmLayout from "./widgets/layout/layout";
 
 function roleFunc(observer, ...role) {
   return ko.computed(function() {
