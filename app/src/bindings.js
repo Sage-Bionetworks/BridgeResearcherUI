@@ -1,7 +1,7 @@
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 import $ from "jquery";
 import alert from "./widgets/alerts";
-import Chart from "chart.js";
+import { Chart } from "chart.js";
 import flatpickr from "flatpickr";
 import fn from "./functions";
 import ko from "knockout";
