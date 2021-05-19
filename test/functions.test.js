@@ -464,4 +464,24 @@ describe("formatCount", function() {
         expect(fn.formatCount("A")).to.equal("A");
     });
 });
+describe("parseDuration", function() {
+    it("works", () => {
+      var output = fn.parseDuration("P31D");
+      expect(output.days).to.equal(31);
+    });
+    it("parses compound values", () => {
+      var output = fn.parseDuration("-P3W12DT10H8M");
+      expect(output.negative).to.be.true;
+      expect(output.weeks).to.equal(3);
+      expect(output.days).to.equal(12);
+      expect(output.hours).to.equal(10);
+      expect(output.minutes).to.equal(8);
+      expect(output.totalDays).to.equal(-33);
+    });
+    it("correctly adds days", () => {
+      var output = fn.parseDuration("PT21H180M");
+      expect(output.days).to.equal(0);
+      expect(output.totalDays).to.equal(1);
+    });
+});
 });

@@ -335,6 +335,8 @@ import studypartTimeline from "./pages/studyparticipant/timeline";
 import studypartTimelineHtml from "./pages/studyparticipant/timeline.html";
 import studypartConsents from "./pages/studyparticipant/consents";
 import studypartConsentsHtml from "./pages/studyparticipant/consents.html";
+import studypartAdherence from "./pages/studyparticipant/adherence";
+import studypartAdherenceHtml from "./pages/studyparticipant/adherence.html";
 /*
 import studyverifiedIcon from "./pages/studyparticipant/verified-icon";
 import studyverifiedIconHtml from "./pages/studyparticipant/verified-icon.html";
@@ -618,6 +620,7 @@ reg("studyparticipant_general", {viewModel: studypartGeneral, template: studypar
 reg("studyparticipant_enrollments", {viewModel: studypartEnrollments, template: studypartEnrollmentsHtml});
 reg("studyparticipant_schedule", {viewModel: studypartSchedule, template: studypartScheduleHtml});
 reg("studyparticipant_timeline", {viewModel: studypartTimeline, template: studypartTimelineHtml});
+reg("studyparticipant_adherence", {viewModel: studypartAdherence, template: studypartAdherenceHtml});
 reg("studyparticipant_history", {viewModel: studypartHistory, template: studypartHistoryHtml});
 reg("studyparticipant-tabset", {viewModel: studypartTabset, template: studypartTabsetHtml});
 reg("studyparticipant_uploads", {viewModel: studypartUploads, template: studypartUploadsHtml});

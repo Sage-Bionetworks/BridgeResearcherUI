@@ -21,6 +21,36 @@ const LOCAL_TIMEZONE = Date()
 const IS_BROWSER = typeof window !== "undefined" && typeof window.document !== "undefined";
 const BYTE_UNITS = [' KB', ' MB', ' GB', ' TB'];
 const FORMAT = new Intl.NumberFormat();
+const ISO_DURATION = /(-)?P(\d*W)?(\d*D)?T?(\d+H)?(\d+M)?/;
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+function parseDuration(duration) {
+    let matches = duration.match(ISO_DURATION);
+    let parsed = {
+        negative: matches[1] === undefined ? false : true,
+        weeks: matches[2] === undefined ? 0 : parseInt(matches[2]),
+        days: matches[3] === undefined ? 0 : parseInt(matches[3]),
+        hours: matches[4] === undefined ? 0 : parseInt(matches[4]),
+        minutes: matches[5] === undefined ? 0 : parseInt(matches[5])
+    };
+    let totalDays = (parsed.weeks*7) + parsed.days + ((parsed.hours + parsed.minutes/60)/24);
+    parsed.totalDays = parsed.negative ? -Math.floor(totalDays) : Math.floor(totalDays);
+    return parsed;
+};
+
+function daysSince(timestamp, now = new Date()) {
+  let start = new Date(timestamp);
+  let end = now;
+  // Set to noon to avoid DST errors, probably
+  start.setHours(12, 0, 0);
+  end.setHours(12, 0, 0);
+  // Round to remove daylight saving errors, probably
+  return Math.round( (end - start) / MS_PER_DAY );
+}
+function formatDaysSince(timestamp, now = new Date()) {
+  let result = daysSince(timestamp, now);
+  return result >= 0 ? result : ''; 
+}
 
 function canEditAssessment(assessment, session) {
   if (assessment.ownerId.indexOf(':') > -1) {
@@ -592,11 +622,13 @@ function formatCount(count = '') {
 export default {
   canEditAssessment,
   copyProps,
+  daysSince,
   deleteUnusedProperties,
   flagForRegionCode,
   formatCount,
   formatDate,
   formatDateTime,
+  formatDaysSince,
   formatFileSize,
   formatIdentifiers,
   formatTime,
@@ -632,6 +664,7 @@ export default {
   lowerCaseStringSorter,
   makeFieldSorter,
   moveArrayItem,
+  parseDuration,
   persistLanguages,
   persistRoles,
   queryString,

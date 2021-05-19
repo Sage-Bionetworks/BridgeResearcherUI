@@ -976,6 +976,9 @@ export class ServerService {
   getStudyParticipantTimeline(studyId, userId) {
     return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/timeline`);
   }
+  getStudyParticipantAdherenceRecords(studyId, userId, search) {
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/adherence/search`, search);
+  }
   getStudyParticipantName(studyId, id) {
     if (session && session.id === id) {
       id = 'self';

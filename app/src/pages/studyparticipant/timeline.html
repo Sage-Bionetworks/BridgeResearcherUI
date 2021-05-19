@@ -18,11 +18,11 @@
 </div>
 <bsm-layout id="studyparticipant-timeline">
   <div slot="header">
-    <div class="ui breadcrumb">
-      Timeline
-      <div class="divider"> | </div>
+    <div class="ui small secondary menu">
       <a class="item" data-bind="href: link('schedule')">Schedule Events</a>
-    </div>    
+      <a class="item" data-bind="href: link('schedule/adherence')">Adherence</a>
+      <span class="active item">Timeline</span>
+    </div>
   </div>
   <div slot="content">
     <div data-bind="foreach: entriesObs">
