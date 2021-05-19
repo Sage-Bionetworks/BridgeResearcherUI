@@ -1,0 +1,56 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/studies" class="section">Studies</a>
+        <i class="right chevron icon divider"></i>
+        <a class="section" data-bind="href: '#/studies/' + navStudyIdObs() + '/participants', text: navStudyNameObs()">StudyName</a>
+        <i class="right chevron icon divider"></i>
+        <span class="section">Participants</span>
+      </div>
+      <h3 data-bind="text: titleObs"></h3>
+    </div>
+    <div class="fixed-header-buttons">
+    </div>
+  </div>
+  <studyparticipant-tabset params="studyIdObs: navStudyIdObs, userIdObs: userIdObs, 
+        statusObs: statusObs"></studyparticipant-tabset>
+</div>
+<bsm-layout id="studyparticipant-schedule">
+  <div slot="header">
+    <div class="line-control">
+      <div class="ui breadcrumb">
+        <a class="section" data-bind="href: link('schedule')">Schedule Events</a>
+        <i class="right chevron icon divider"></i>
+        <b>History of “<span data-bind="text: formatEventId(eventId)"></span>”</b>
+      </div>
+      <div class="line-control-stretch">
+        <pager style="display: flex; justify-content: flex-end" 
+          params="prefix: 'spe', postLoadFunc: postLoadFunc"></pager>
+      </div>
+    </div>
+  </div>
+  <div slot="content">
+    <table class="ui compact selectable table">
+      <thead>
+        <tr>
+          <th>Event Timestamp</th>
+          <th>Client Time Zone</th>
+          <th>Recorded On</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="3" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr>
+          <td data-bind="text: $parent.formatDateTime($data.timestamp)"></td>
+          <td data-bind="text: $data.clientTimeZone"></td>
+          <td data-bind="text: $parent.formatDateTime($data.createdOn)"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</bsm-layout>

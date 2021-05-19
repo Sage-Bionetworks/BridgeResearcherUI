@@ -576,7 +576,7 @@ export class ServerService {
     return this.gethttp(`${config.participants}/reports/${identifier}/index`);
   }
   getParticipantActivityEvents(userId) {
-    return this.gethttp(`${config.participants}/${userId}/activityEvents`);
+    return this.gethttp(`${config.participants}/${userId}/activityevents`);
   }
   addParticipantReport(userId, identifier, report) {
     return this.post(`${config.participants}/${userId}/reports/${identifier}`, report);
@@ -976,6 +976,9 @@ export class ServerService {
   getStudyParticipantTimeline(studyId, userId) {
     return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/timeline`);
   }
+  getStudyParticipantAdherenceRecords(studyId, userId, search) {
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/adherence/search`, search);
+  }
   getStudyParticipantName(studyId, id) {
     if (session && session.id === id) {
       id = 'self';
@@ -997,13 +1000,17 @@ export class ServerService {
   }
   
   getStudyParticipantActivityEvents(studyId, userId) {
-    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/activityEvents`);
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/activityevents`);
+  }
+  getStudyParticipantActivityEventHistory(studyId, userId, eventId, offsetBy, pageSize) {
+    let queryString = fn.queryString({ offsetBy, pageSize });
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/activityevents/${eventId}${queryString}`);
   }
   createStudyParticipantActivityEvent(studyId, userId, event) {
-    return this.post(`${config.studies}/${studyId}/participants/${userId}/activityEvents`, event);
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/activityevents`, event);
   }
   deleteStudyParticipantActivityEvent(studyId, userId, eventId) {
-    return this.del(`${config.studies}/${studyId}/participants/${userId}/activityEvents/${eventId}`);
+    return this.del(`${config.studies}/${studyId}/participants/${userId}/activityevents/${eventId}`);
   }
   withdrawStudyParticipantFromStudy(studyId, userId, subpopGuid, reason) {
     return this.post(`${config.studies}/${studyId}/participants/${userId}/consents/${subpopGuid}/withdraw`, reason);

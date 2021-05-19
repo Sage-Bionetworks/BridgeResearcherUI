@@ -25,8 +25,13 @@
           <span data-bind="text: appNameObs"></span>
         </h2>
         <div class="header-app-name">
-          <span>Bridge Study Manager</span>
-          <i class="white heartbeat icon"></i>
+          <div>
+            <div>Bridge Study Manager</div>
+            <div style="font-size: 50%; font-variant: normal" data-bind="text: 'APP ID: ' + appIdObs()"></div>
+          </div>
+          <div>
+            <i class="white heartbeat icon"></i>
+          </div>
         </div>
       </header>
       <section>
@@ -94,7 +99,7 @@
             </div>
 
             <div class="title">
-              <i class="line chart icon"></i> Studies
+              <i class="heartbeat icon"></i> Studies
               <i class="dropdown icon"></i>
             </div>
             <div class="content">

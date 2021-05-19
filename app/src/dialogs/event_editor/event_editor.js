@@ -1,46 +1,40 @@
-import BridgeError from "../../bridge_error";
-import ko from "knockout";
+import Binder from "../../binder";
 import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
 export default function(params) {
   let self = this;
-  self.readOnlyObs = ko.observable(!!params.event);
 
-  params.event = params.event || { eventId: '', timestamp: new Date().toISOString()};
-  let eventId = params.event.eventId.replace('custom:', '');
-  self.eventIdOptionsObs = ko.observableArray([]);
-  self.titleObs = ko.observable("Edit " + eventId);
-  self.studyId = params.studyId;
-  self.userId = params.userId;
-  self.eventIdObs = ko.observable(eventId);
-  self.timestampObs = ko.observable(params.event.timestamp);
-  serverService.getApp().then(app => {
-    Object.keys(app.automaticCustomEvents).forEach(
-      key => self.eventIdOptionsObs.push({label: key, value: key}));
-    Object.keys(app.customEvents).forEach(
-      key => self.eventIdOptionsObs.push({label: key, value: key}));
-    self.eventIdObs(eventId);
+  params.event = params.event || 
+    {'eventId': null, 'timestamp': new Date().toISOString(), 'clientTimeZone': null};
+  self.event = params.event;
+
+  var binder = new Binder(self)
+    .bind('eventId', null, (t) => (t) ? t.replace('custom:','') : null, (t) => 'custom:'+t)
+    .bind('timestamp', null)
+    .bind('clientTimeZone', null)
+    .obs('title', 'Edit New Event')
+    .obs('readOnly', !!params.event.eventId)
+    .obs('eventIdOptions[]');
+
+  self.eventIdObs.subscribe(newValue => {
+    if (newValue) {
+      self.titleObs('Edit ' + newValue);
+    }
   });
 
-  self.save = function() {
-    // check that they haven't added custom:
-    params.event.eventId = self.eventIdObs();
-    params.event.timestamp = self.timestampObs();
+  serverService.getApp().then(app => {
+    Object.keys(app.customEvents).forEach(
+      key => self.eventIdOptionsObs.push({label: key, value: key}));
+  }).then(() => binder.update()(params.event));
 
-    let error = new BridgeError();
-    if (!params.event.eventId) {
-      error.addError("eventId", "is required");
-    }
-    if (!params.event.timestamp) {
-      error.addError("timestamp", "is required");
-    }
-    if (error.hasErrors()) {
-      utils.failureHandler({ id: 'event-editor' })(error);
-      return;
-    }
-    params.saveEvent(params.event).then(() => root.closeDialog());
+  self.save = function() {
+    self.event = binder.persist(self.event);
+
+    params.saveEvent(self.event)
+      .then(() => root.closeDialog())
+      .catch(utils.failureHandler({ id: 'event-editor' }))
   };
   self.cancel = root.closeDialog;
 };

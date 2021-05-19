@@ -1,0 +1,63 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/studies" class="section">Studies</a>
+        <i class="right chevron icon divider"></i>
+        <a class="section" data-bind="href: '#/studies/' + navStudyIdObs() + '/participants', text: navStudyNameObs()">StudyName</a>
+        <i class="right chevron icon divider"></i>
+        <span class="section">Participants</span>
+      </div>
+      <h3 data-bind="text: titleObs"></h3>
+    </div>
+    <div class="fixed-header-buttons">
+    </div>
+  </div>
+  <studyparticipant-tabset params="studyIdObs: navStudyIdObs, userIdObs: userIdObs, 
+        statusObs: statusObs"></studyparticipant-tabset>
+</div>
+<bsm-layout id="studyparticipant-adherence">
+  <div slot="header">
+    <div class="ui small secondary menu">
+      <a class="item" data-bind="href: link('schedule')">Schedule Events</a>
+      <span class="active item">Adherence</span>
+      <a class="item" data-bind="href: link('schedule/timeline')">Timeline</a>
+    </div>
+  </div>
+  <div slot="content">
+    <table class="ui compact selectable table" style="overflow-x: scroll; display: block">
+      <thead>
+        <tr>
+          <th>Session</th>
+          <th nowrap>Event Timestamp</th>
+          <!-- ko foreach: countObs -->
+            <th data-bind="text: $index"></th>
+          <!-- /ko -->
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td data-bind="html: recordsMessageObs, attr: {colspan: 2 + colCountObs()}"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr>
+          <td valign="top" nowrap data-bind="text: $data.label">
+          </td>
+          <td valign="top" nowrap data-bind="text: $data.eventTimestamp">
+          </td>
+          <!-- ko foreach: $parent.countObs -->
+            <td style="text-align: center; padding: 0 .1rem; font-weight: bold" data-bind="
+              style: { backgroundColor: $parents[1].streamEntryBg($parentContext.$data, $index()) },
+              foreach: $parents[1].streamEntry($parentContext.$data, $index())">
+              <div data-bind="style: { color: $data.color }, text: $data.text"></div>
+            </td>
+          <!-- /ko -->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div slot="help">
+    <p>Need to describe what this is and provide a legend. </p>
+  </div>
+</bsm-layout>

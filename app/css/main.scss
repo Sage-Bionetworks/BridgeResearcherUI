@@ -76,19 +76,20 @@ header {
     }
     .header-app-name {
         font-size: 1.5rem;
-        padding: 0 4.5rem 0rem 1.5rem;
+        padding: 0 2.5rem 0rem 0rem;
         color: white;
         position: relative;
-        span {
+        display: flex;
+        align-items: center;
+        div {
             font-variant: small-caps;
             letter-spacing: 2px;
             opacity: 0.8!important;
+            margin-left: 1rem;
         }
         i {
-            position: absolute; 
-            right: 1rem; 
-            top: .2rem;
-            font-size: 2rem!important;
+            font-size: 2.5rem!important;
+            line-height: 1;
         }
     }
 }

@@ -43,7 +43,8 @@ export default function() {
   self.allDeltasObs = ko.observableArray([{ label: "before", value: "before" }, { label: "after", value: "after" }]);
   self.allEventsObs = ko.observableArray([
     { label: "enrollment", value: "enrollment" },
-    { label: "activities retrieved", value: "activities_retrieved" }
+    { label: "activities retrieved", value: "activities_retrieved" },
+    { label: "timeline retrieved", value: "timeline_retrieved" }
   ]);
 
   self.save = function(vm, event) {
@@ -71,5 +72,5 @@ export default function() {
         .sort((a, b) => a[0].localeCompare(b[0]))
         .map(mapToObservers)
     );
-  });
+  }).catch(utils.failureHandler());
 };
