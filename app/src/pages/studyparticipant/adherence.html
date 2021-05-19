@@ -50,7 +50,10 @@
             <td class="data-cell" data-bind="
               class: $parents[1].streamEntryBg($parentContext.$data, $index()),
               foreach: $parents[1].streamEntry($parentContext.$data, $index())">
-              <div data-bind="class: $data.className, style: { borderColor: $data.borderColor }"></div>
+              <div data-bind="class: $data.className, 
+                style: { borderColor: $data.borderColor }"></div>
+              <div data-bind="class: $data.secondClassName, 
+                style: { borderColor: $data.secondBorderColor }"></div>
             </td>
           <!-- /ko -->
         </tr>
@@ -60,8 +63,8 @@
   <div slot="help">
     <table class="adherence-table" style="overflow-x: auto; border: none">
       <tr>
-        <td class="data-cell today" style="width:2rem">
-          &#160;
+        <td class="data-cell" style="width:2">
+          <div class="today" style="width:1.5rem">&#160;</div>
         </td>
         <td style="padding-left:.5rem">
           Current day of stream
@@ -93,14 +96,6 @@
       </tr>
       <tr>
         <td class="data-cell" style="width:2rem">
-          <div class="bgRed bar right"></div>
-        </td>
-        <td style="padding-left:.5rem">
-          Started but unfinished
-        </td>
-      </tr>
-      <tr>
-        <td class="data-cell" style="width:2rem">
           <div class="green bgGreen bar right"></div>
         </td>
         <td style="padding-left:.5rem">
@@ -109,10 +104,18 @@
       </tr>
       <tr>
         <td class="data-cell" style="width:2rem">
+          <div class="bgRed bar right"></div>
+        </td>
+        <td style="padding-left:.5rem">
+          Expired unfinished
+        </td>
+      </tr>
+      <tr>
+        <td class="data-cell" style="width:2rem">
           <div class="red bgRed bar right"></div>
         </td>
         <td style="padding-left:.5rem">
-          Failed to complete
+          Expired never started
         </td>
       </tr>
     </table>

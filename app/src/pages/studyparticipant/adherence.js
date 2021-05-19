@@ -43,6 +43,7 @@ class AdherenceGraph {
     stream.label = session.label;
     stream.eventTimestamp = event.timestamp;
     stream.daysSince = fn.daysSince(event.timestamp);
+    stream.timeWindows = session.timeWindowGuids;
     this.streams.push(stream);
 
     let arr = this.streamsByGuidMap[session.guid] || [];
@@ -92,12 +93,12 @@ export default class StudyParticipantAdherence extends BaseAccount {
       this.navStudyNameObs(response.name);
     }).then(() => this.getAccount())
       .then(() => serverService.getStudyParticipantActivityEvents(this.studyId, this.userId))
-      .then((res) => this.loadEventHistories(res))
+      .then(res => this.loadEventHistories(res))
       .then(() => serverService.getStudyParticipantTimeline(this.studyId, this.userId))
-      .then((res) => this.processTimeline(res))
+      .then(res => this.processTimeline(res))
       // This initial request is to get the total and calculate pages
       .then(() => serverService.getStudyParticipantAdherenceRecords(this.studyId, this.userId, SEARCH_PARAMS))
-      .then((res) => this.loadAdherenceRecords(res))
+      .then(res => this.loadAdherenceRecords(res))
       ;
   }
   loadEventHistories(response) {
@@ -114,10 +115,10 @@ export default class StudyParticipantAdherence extends BaseAccount {
   processTimeline(timeline) {
     this.graph.durationInDays = fn.parseDuration(timeline.duration).totalDays;
     
-    timeline.sessions.forEach(session => {
+    timeline.sessions.forEach(sess => {
       let first = true;
-      this.graph.events.filter(event => event.eventId === session.startEventId).forEach(e => {
-        this.graph.addStream(session, e, first);
+      this.graph.events.filter(e => e.eventId === sess.startEventId).forEach(e => {
+        this.graph.addStream(sess, e, first);
         first = false;
       });
     });
@@ -152,9 +153,12 @@ export default class StudyParticipantAdherence extends BaseAccount {
     this.itemsObs(this.graph.streams);
   }
   streamEntry(stream, day) {
-    return stream.entries.filter(e => e.startDay <= day && e.endDay >= day).map(entry => {
+    let array = new Array(stream.timeWindows.length);
+    stream.entries.filter(e => e.startDay <= day && e.endDay >= day).map((entry) => {
+      let index = stream.entries.indexOf(entry);
+
       // unstarted
-      let data = {  };
+      let data = { secondClassName: '', secondBorderColor: '' };
 
       // past or abandoned
       if (!stream.active || entry.endDay < stream.daysSince) {
@@ -181,8 +185,22 @@ export default class StudyParticipantAdherence extends BaseAccount {
           data.className = 'blue bgBlue';
         }
       }
+      // We need this for the "both bars" calculation, below
+      entry.className = data.className;
+
       // add the bar graphic
-      if (entry.startDay === day && entry.endDay === day) {
+      let previous = null;
+      for (let i=index-1; i >=0; i--) {
+        if (entry.timeWindowGuid === stream.entries[i].timeWindowGuid) {
+          previous = stream.entries[i];
+          break;
+        }
+      }
+      if (previous && entry.startDay === day && previous.endDay === entry.startDay) {
+        // we want this to be the previous day's calculation...
+        data.secondClassName = data.className + ' rightBoth bar';
+        data.className = previous.className + ' leftBoth bar';
+      } else if (entry.startDay === day && entry.endDay === day) {
         data.className += ' bar single';
       } else if (entry.startDay === day) {
         data.className += ' bar left';
@@ -191,8 +209,14 @@ export default class StudyParticipantAdherence extends BaseAccount {
       } else {
         data.className += ' bar mid';
       }
-      return data;
+      array[stream.timeWindows.indexOf(entry.timeWindowGuid)] = data;
     });
+    for (let i=0; i < array.length; i++) {
+      if (typeof array[i] === 'undefined') {
+        array[i] = { className: 'white bgWhite bar mid' };
+      }
+    }
+    return array;
   }
   streamEntryBg(stream, day) {
     if (!stream.active) { 
