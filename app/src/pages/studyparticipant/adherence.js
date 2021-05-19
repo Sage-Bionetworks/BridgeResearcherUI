@@ -4,18 +4,7 @@ import ko from "knockout";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
 import Promise from "bluebird";
-import { padStart } from "lodash";
 
-/*
-expired   ● red
-abandoned ○ red
-completed ● green
-active    ○ green
-available ○ orange
-future    ○ gray
-■ □ ▣
-
-*/
 const UNSTARTED = '◎';
 const STARTED = '◉';
 const FINISHED = '◉';
@@ -31,7 +20,7 @@ class AdherenceStream {
     this.entries = [];
     this.mapToEntry = {};
   }
-  addEntry(entry, session) {
+  addEntry(entry) {
     entry = JSON.parse(JSON.stringify(entry));
     entry.stream = this;
     this.entries.push(entry);
@@ -44,7 +33,7 @@ class AdherenceGraph {
     this.durationInDays = 0;
     this.streams = [];
     // key = session guid, value = AdherenceStream[]
-    this.streamByGuidMap = {};
+    this.streamsByGuidMap = {};
   }
   getEntry(instanceGuid, eventTimestamp) {
     for (let i=0; i < this.streams.length; i++) {
@@ -65,9 +54,9 @@ class AdherenceGraph {
     stream.daysSince = fn.daysSince(event.timestamp);
     this.streams.push(stream);
 
-    let arr = this.streamByGuidMap[session.guid] || [];
+    let arr = this.streamsByGuidMap[session.guid] || [];
     arr.push(stream);
-    this.streamByGuidMap[session.guid] = arr;
+    this.streamsByGuidMap[session.guid] = arr;
     return stream;
   }
   addAdherenceRecord(rec) {
@@ -152,9 +141,9 @@ export default class StudyParticipantAdherence extends BaseAccount {
     for (let i=0; i < timeline.schedule.length; i++) {
       let sch = timeline.schedule[i];
 
-      let streams = this.graph.streamByGuidMap[sch.refGuid];
+      let streams = this.graph.streamsByGuidMap[sch.refGuid];
       if (streams) {
-        streams.forEach(stream => stream.addEntry(sch, sessionMap.get(sch.refGuid)));
+        streams.forEach(stream => stream.addEntry(sch));
       }
     }
     this.graph.streams.sort((a, b) => a.label.localeCompare(b.label));
@@ -177,14 +166,6 @@ export default class StudyParticipantAdherence extends BaseAccount {
     this.countObs(new Array(this.graph.durationInDays));
     this.itemsObs(this.graph.streams);
   }
-  /*
-    expired   ● red
-    abandoned ○ red
-    completed ● green
-    active    ○ green
-    available ○ orange
-    future    ○ gray
-  */
   streamEntry(stream, day) {
     return stream.entries.filter(e => e.startDay <= day && e.endDay >= day).map(entry => {
       // unstarted
@@ -199,7 +180,6 @@ export default class StudyParticipantAdherence extends BaseAccount {
       } else if (entry.state === 'started') {
         data.text = STARTED;
       }
-      console.log(entry.startDay, entry.endDay, stream.daysSince);
       if (!entry.stream.active && entry !== 'finished') {
         data.color = GRAY;
       } else if (entry.startDay > stream.daysSince) {
