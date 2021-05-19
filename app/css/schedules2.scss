@@ -6,3 +6,91 @@
   display: flex; 
   align-items: center;
 }
+
+.adherence-table {
+  overflow-x: scroll; 
+  display: block;
+  border: 1px solid rgba(34,36,38,.15);
+  border-radius: 5px;
+  border-collapse: collapse;
+  border-spacing: 0px;
+
+  .th { /* fake headers along left side of table */
+    padding: .5rem;
+    vertical-align: top;
+    white-space: nowrap;
+  } 
+  th {
+    padding: .7rem;
+    background-color: rgb(249, 250, 251);
+    border-bottom: 1.5px solid rgba(34,36,38,.15);
+  }
+  .data-cell {
+    text-align: center; 
+    font-weight: bold;
+    border: none;
+    line-height: 1;
+  }
+  .today {
+    border-radius: 4px;
+    background-color: #FFDC00;
+  }
+  .inactive {
+    background-color: #f4f4f4;
+  }
+  .none {
+    display: none;
+  }
+  .bar {
+    height: 8px;
+    border: 2px solid;
+    display: inline-block;
+    width: 100%;
+  }
+  .single {
+    width: 60%;
+    border-radius: .2rem;    
+  }
+  .left {
+    border-top-left-radius: .2rem;
+    border-bottom-left-radius: .2rem;
+    border-right: none;
+    width: 70%;
+    margin-left: 30%;
+  }
+  .mid {
+    border-left: none;
+    border-right: none;
+  }
+  .right {
+    border-top-right-radius: .2rem;
+    border-bottom-right-radius: .2rem;
+    border-left: none;
+    width: 70%;
+    margin-right: 30%;
+  }
+  .green {
+    background-color: #2ECC40;
+  }
+  .blue {
+    background-color: #4183c4;
+  }
+  .red {
+    background-color: #B22222;
+  }
+  .gray {
+    background-color: #ccc;
+  }
+  .bgGray {
+    border-color: #999; 
+  }
+  .bgGreen {
+    border-color: #3D9970;
+  }
+  .bgOrange {
+    border-color: #FF851B;
+  }
+  .bgRed {
+    border-color: #85144b;
+  }
+}
