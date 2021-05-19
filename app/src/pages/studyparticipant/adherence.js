@@ -5,19 +5,11 @@ import serverService from "../../services/server_service";
 import tables from "../../tables";
 import Promise from "bluebird";
 
-const UNSTARTED = '◎';
-const STARTED = '◉';
-const FINISHED = '◉';
-const GREEN = 'green';
-const BLUE = '#4183c4';
-const RED = '#b22222';
-const GRAY = '#ccc';
-
 class AdherenceStream {
   constructor() { 
     this.label = "";
-    this.sessionInfo = null;
     this.entries = [];
+    // key = instanceGuid + timestamp, value = timeline entry
     this.mapToEntry = {};
   }
   addEntry(entry) {
@@ -45,12 +37,11 @@ class AdherenceGraph {
     }
     return null;
   }
-  createStream(session, event, active) {
+  addStream(session, event, active) {
     let stream = new AdherenceStream();
     stream.active = active;
     stream.label = session.label;
     stream.eventTimestamp = event.timestamp;
-    stream.sessionInfo = session;
     stream.daysSince = fn.daysSince(event.timestamp);
     this.streams.push(stream);
 
@@ -86,6 +77,8 @@ export default class StudyParticipantAdherence extends BaseAccount {
       }
     });
 
+    fn.copyProps(this, fn, "formatDateTime");
+
     tables.prepareTable(this, { 
       name: "adherence record",
       id: 'studyparticipant-adherence'
@@ -93,7 +86,6 @@ export default class StudyParticipantAdherence extends BaseAccount {
 
     this.graph = new AdherenceGraph();
     this.itemsObs([]);
-    this.colCountObs = ko.observable(0);
     this.countObs = ko.observableArray([]);
 
     serverService.getStudy(this.studyId).then((response) => {
@@ -121,18 +113,11 @@ export default class StudyParticipantAdherence extends BaseAccount {
   }
   processTimeline(timeline) {
     this.graph.durationInDays = fn.parseDuration(timeline.duration).totalDays;
-    this.colCountObs(this.graph.durationInDays);
     
-    const sessionMap = new Map();
-    for (let i=0; i < timeline.sessions.length; i++) {
-      let session = timeline.sessions[i];
-      sessionMap.set(session.guid, session);
-    }
-
     timeline.sessions.forEach(session => {
       let first = true;
       this.graph.events.filter(event => event.eventId === session.startEventId).forEach(e => {
-        this.graph.createStream(session, e, first);
+        this.graph.addStream(session, e, first);
         first = false;
       });
     });
@@ -169,32 +154,53 @@ export default class StudyParticipantAdherence extends BaseAccount {
   streamEntry(stream, day) {
     return stream.entries.filter(e => e.startDay <= day && e.endDay >= day).map(entry => {
       // unstarted
-      let data = { text: UNSTARTED, color: BLUE};
+      let data = {  };
 
-      // let options = ['started', 'unstarted', 'finished']
-      // entry.state = options[Math.floor(Math.random() * options.length)];
-      if (entry.state === 'finished') {
-        data.text = FINISHED;
-        data.color = GREEN;
-        return data;
-      } else if (entry.state === 'started') {
-        data.text = STARTED;
+      // past or abandoned
+      if (!stream.active || entry.endDay < stream.daysSince) {
+        // Only finished counts, everything else is red
+        if (entry.state === 'finished') {
+          data.className = 'green bgGreen';
+        } else if (entry.state === 'started') {
+          data.className = 'bgRed';
+        } else {
+          data.className = 'red bgRed';
+        }
+      } 
+      // future
+      else if (entry.startDay > stream.daysSince) {
+        data.className = 'gray bgGray';
+      } 
+      // currently active
+      else {
+        if (entry.state === 'finished') {
+          data.className = 'green bgGreen';
+        } else if (entry.state === 'started') {
+          data.className = 'bgGreen';
+        } else {
+          data.className = 'blue bgBlue';
+        }
       }
-      if (!entry.stream.active && entry !== 'finished') {
-        data.color = GRAY;
-      } else if (entry.startDay > stream.daysSince) {
-        data.color = GRAY;
-      } else if (entry.endDay < stream.daysSince) {
-        data.color = RED;
-      } else if (data.state === 'finished') {
-        data.color = GREEN;
+      // add the bar graphic
+      if (entry.startDay === day && entry.endDay === day) {
+        data.className += ' bar single';
+      } else if (entry.startDay === day) {
+        data.className += ' bar left';
+      } else if (entry.endDay === day) {
+        data.className += ' bar right';
+      } else {
+        data.className += ' bar mid';
       }
       return data;
     });
   }
   streamEntryBg(stream, day) {
-    if (!stream.active) { return '#f4f4f4' };
-    return (day === stream.daysSince) ? 'lightyellow' : 'transparent';
+    if (!stream.active) { 
+      return 'inactive';
+    } else if (day === stream.daysSince) {
+      return 'today';
+    }
+    return '';
   }
   // basic view model functions/subclass functions
   loadAccount() { 
