@@ -23,7 +23,7 @@
     "bluebird": "^3.7.1",
     "chai": "^4.3.4",
     "chart.js": "^3.2.1",
-    "css-loader": "^5.2.4",
+    "css-loader": "^5.2.5",
     "director": "^1.2.8",
     "dom-autoscroller": "^2.3.1 ",
     "dragula": "^3.7.3",
