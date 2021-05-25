@@ -4,6 +4,7 @@ import ko from "knockout";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
 import Promise from "bluebird";
+import utils from "../../utils";
 
 class AdherenceStream {
   constructor() { 
@@ -65,7 +66,7 @@ class AdherenceGraph {
   }
 }
 
-const SEARCH_PARAMS = {adherenceRecordType: 'session'};
+const SEARCH_PARAMS = {adherenceRecordType: 'session', pageSize: 5};
 
 export default class StudyParticipantAdherence extends BaseAccount {
   constructor(params) {
@@ -97,9 +98,10 @@ export default class StudyParticipantAdherence extends BaseAccount {
       .then(() => serverService.getStudyParticipantTimeline(this.studyId, this.userId))
       .then(res => this.processTimeline(res))
       // This initial request is to get the total and calculate pages
-      .then(() => serverService.getStudyParticipantAdherenceRecords(this.studyId, this.userId, SEARCH_PARAMS))
-      .then(res => this.loadAdherenceRecords(res))
-      ;
+      .then(() => serverService.getStudyParticipantAdherenceRecords(
+          this.studyId, this.userId, SEARCH_PARAMS))
+      .then(res => this.loadAdherenceRecords(res));
+      //.catch(utils.failureHandler({ id: 'studyparticipant-adherence' }));
   }
   loadEventHistories(response) {
     return Promise.map(response.items, (event) => {
@@ -139,8 +141,8 @@ export default class StudyParticipantAdherence extends BaseAccount {
     let pages = Math.ceil(total/250);
     let promises = [];
     for (let i=0; i < pages; i++) {
-      promises.push( serverService.getStudyParticipantAdherenceRecords(
-        this.studyId, this.userId, {offset: i*250, pageSize:250, adherenceRecordType: 'session'}).then(res => res.items) );
+      promises.push( serverService.getStudyParticipantAdherenceRecords(this.studyId, this.userId, 
+        {offset: i*250, pageSize:250, adherenceRecordType: 'session'}).then(res => res.items) );
     }
     return Promise.reduce(promises, (prev, cur) => prev.concat(cur), [])
       .then((res) => this.processAdherenceRecords(res));

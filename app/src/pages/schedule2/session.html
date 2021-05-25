@@ -36,15 +36,15 @@
       </button>
     </div>
     <div class="fields">
-      <div class="field">
+      <div class="field" data-bind="attr: {id: generateId('delay')}">
         <label>Delay</label>
         <ui-duration params="fieldObs: delayObs, fields: 'minutes hours days weeks'"></ui-duration>
       </div>
-      <div class="field">
+      <div class="field" data-bind="attr: {id: generateId('interval')}">
         <label>Then repeat every</label>
         <ui-duration params="fieldObs: intervalObs, fields: 'days weeks'"></ui-duration>
       </div>
-      <div class="field">
+      <div class="field" data-bind="attr: {id: generateId('occurrences')}">
         <label>This many times</label>
         <input type="text" placeholder="Until end of study" style="width:10rem"
           data-bind="textInput: occurrencesObs">
@@ -52,15 +52,14 @@
     </div>
     <h4>Time Windows</h4>
     <div class="field" data-bind="attr: {id: generateId('timeWindows')}">
-      <button class="ui mini button" data-bind="click: addWindow,
-        visible: timeWindowsObs().length === 0">
-        Add Time Window
-      </button>
       <div data-bind="foreach: timeWindowsObs">
         <time-window style="display: block; margin-bottom: 1rem" 
           params="timeWindowsObs: $parent.timeWindowsObs, timeWindow: $data, prefix: $parent.prefix">
         </time-window>
       </div>
+      <button class="ui mini button" data-bind="click: addWindow">
+        Add Time Window
+      </button>
     </div>
   </div>
 
@@ -73,7 +72,7 @@
         </assessment-ref>
       </div>
     </div>
-    <div class="fields" style="align-items: baseline">
+    <div class="fields" style="align-items: baseline; margin-bottom: 0">
       <div class="inline field" style="flex:1">
         <button class="ui mini button" data-bind="click: openAssessmentDialog">
           Add Assessment(s)&hellip;
@@ -88,45 +87,16 @@
     </div>
   </div>
 
-  <div class="ui blue segment">
-    <h4>Notifications</h4>
-    <div class="fields">
-      <div class="six wide field">
-        <label>Notify Participant</label>
-        <select class="ui dropdown" data-bind="options: notifyAtTypesObs,
-          optionsCaption: 'None', optionsText: 'text', 
-          optionsValue: 'value', value: notifyAtObs"></select>
-      </div>
-      <div class="four wide field" data-bind="attr: {id: generateId('reminderPeriod')}">
-        <label>Reminder</label>
-        <ui-duration params="fieldObs: reminderPeriodObs, fields: 'minutes hours days'"></ui-duration>
-      </div>
-      <div class="six wide field" data-bind="attr: {id: generateId('remindAt')}">
-        <label>&#160;</label>
-        <select class="ui dropdown" data-bind="options: remindAtTypesObs, 
-          optionsCaption: 'None', optionsText: 'text', 
-          optionsValue: 'value', value: remindAtObs"></select>
-      </div>
+  <div class="ui blue segment" style="padding-left: 0; padding-right: 0">
+    <h4 style="margin-left:1rem">Notifications</h4>
+    <div data-bind="foreach: notificationsObs, 
+      attr: {id: generateId('notifications')}">
+      <notification style="display: block; margin-bottom: 1rem" 
+        params="notificationsObs: $parent.notificationsObs, notification: $data, prefix: $parent.prefix">
+      </notification>
     </div>
-    <div class="fields" style="margin-top: -1rem">
-      <div class="six wide field">
-        &#160;
-      </div>
-      <div class="ten wide field" data-bind="attr: {id: generateId('allowSnooze')}">
-        <ui-checkbox style="line-height: 3" params="checkedObs: allowSnoozeObs">
-          Allow snooze
-        </ui-checkbox>
-      </div>
-    </div>
-
-    <div data-bind="attr: {id: generateId('messages')}">
-      <h4>Messages</h4>
-      <!-- ko foreach: messagesObs -->
-        <message params="messagesObs: $parent.messagesObs, message: $data, prefix: $parent.prefix"></message>
-      <!-- /ko -->
-      <button class="ui mini button" style="margin-top: 1rem" data-bind="click: addMessage">
-        Add Message
-      </button>
-    </div>
+    <button style="margin-left:1rem" class="ui mini button" data-bind="click: addNotification">
+      Add Notification
+    </button>
   </div>
 </div>

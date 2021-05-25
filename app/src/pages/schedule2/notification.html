@@ -1,0 +1,35 @@
+<div class="note-list-item">
+  <div class="field" data-bind="attr: {id: generateId('offset')}">
+    <label>Notify At</label>
+    <ui-duration params="fieldObs: offsetObs, fields: 'minutes hours days', allowZero: true">
+    </ui-duration>
+  </div>
+  <div class="field" data-bind="attr: {id: generateId('notifyAt')}">
+    <label>&#160;</label>
+    <select class="ui dropdown" data-bind="options: notifyAtTypesObs,
+      optionsText: 'text', optionsValue: 'value', value: notifyAtObs"></select>
+  </div>
+  <div class="field" data-bind="attr: {id: generateId('interval')}">
+    <label>Repeat every</label>
+    <ui-duration params="fieldObs: intervalObs, fields: 'hours days'"></ui-duration>
+  </div>
+  <div class="field">
+    <label>&#160;</label>
+    <div class="inline-form-text">
+      <ui-checkbox params="checkedObs: allowSnoozeObs">Allow Snooze?</ui-checkbox>
+    </div>
+  </div>
+  <div class="list-item-controls">
+    <i  data-bind="click: removeNotification" 
+      class="red large times circle outline link icon"></i>
+  </div>
+  <div class="note-labels" data-bind="attr: {id: generateId('messages')}">
+    <!-- ko foreach: messagesObs -->
+      <message params="messagesObs: $parent.messagesObs, message: $data, prefix: $parent.prefix"></message>
+    <!-- /ko -->
+    <button class="ui mini button" 
+      data-bind="click: addMessage, visible: messagesObs().length === 0">
+      Add Message
+    </button>
+  </div>
+</div>

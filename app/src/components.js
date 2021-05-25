@@ -360,6 +360,8 @@ import selectAssessmentRefs from "./dialogs/select_assessment_refs/select_assess
 import selectAssessmentRefsHtml from "./dialogs/select_assessment_refs/select_assessment_refs.html";
 import previewTimeline from "./dialogs/preview_timeline/preview_timeline";
 import previewTimelineHtml from "./dialogs/preview_timeline/preview_timeline.html";
+import notification from "./pages/schedule2/notification";
+import notificationHtml from "./pages/schedule2/notification.html";
 
 import schemaTabset from "./pages/schema/tabset";
 import schemaTabsetHtml from "./pages/schema/tabset.html";
@@ -638,6 +640,7 @@ reg("session", {viewModel: session, template: sessionHtml});
 reg("time-window", {viewModel: timeWindow, template: timeWindowHtml});
 reg("assessment-ref", {viewModel: assessmentRef, template: assessmentRefHtml});
 reg("message", {viewModel: messageRef, template: messageRefHtml});
+reg("notification", {viewModel: notification, template: notificationHtml});
 reg("localized-label", {viewModel: label, template: labelHtml});
 reg("preview_timeline", {viewModel: previewTimeline, template: previewTimelineHtml, synchronous: true});
 
