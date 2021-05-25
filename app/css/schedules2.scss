@@ -9,7 +9,8 @@
 
 .adherence-table {
   overflow-x: scroll;
-  display: block;
+  display: inline-block;
+  max-width: 100%;
   border: 1px solid rgba(34,36,38,.15);
   border-radius: 5px;
 

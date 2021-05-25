@@ -30,14 +30,14 @@
         <tr>
           <th>Session</th>
           <th nowrap>Event Timestamp</th>
-          <!-- ko foreach: countObs -->
+          <!-- ko foreach: dayCountObs -->
             <th data-bind="text: $index"></th>
           <!-- /ko -->
         </tr>
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td data-bind="html: recordsMessageObs, attr: {colspan: 2 + countObs().length}"></td>
+          <td data-bind="html: recordsMessageObs, attr: {colspan: 2 + dayCountObs().length}"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
@@ -46,14 +46,12 @@
           </td>
           <td class="th" nowrap data-bind="text: $parent.formatDateTime($data.eventTimestamp)">
           </td>
-          <!-- ko foreach: $parent.countObs -->
+          <!-- ko foreach: $parent.dayCountObs -->
             <td class="data-cell" data-bind="
               class: $parents[1].streamEntryBg($parentContext.$data, $index()),
               foreach: $parents[1].streamEntry($parentContext.$data, $index())">
-              <div data-bind="class: $data.className, 
-                style: { borderColor: $data.borderColor }"></div>
-              <div data-bind="class: $data.secondClassName, 
-                style: { borderColor: $data.secondBorderColor }"></div>
+              <div data-bind="class: $data.className, style: { borderColor: $data.borderColor }"></div>
+              <div data-bind="class: $data.secondClassName"></div>
             </td>
           <!-- /ko -->
         </tr>
