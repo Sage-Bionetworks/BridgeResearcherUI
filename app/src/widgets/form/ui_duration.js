@@ -24,7 +24,6 @@ export default function uiDuration(params) {
   self.fieldObs = params.fieldObs;
   self.amountObs = ko.observable();
   self.durationObs = ko.observable();
-  const allowZero = params.allowZero || false;
 
   let fieldNames = params.fields.split(' ');
 
@@ -37,7 +36,7 @@ export default function uiDuration(params) {
     if (value) {
       let amt = parseInt(value.replace(/\D/g, ""), 10);
       let duration = value.split(/\d+/).join("*");
-      if (amt === 0 && !allowZero) {
+      if (amt === 0) {
         self.amountObs(null);
         self.durationObs(null);
         return;
@@ -59,7 +58,8 @@ export default function uiDuration(params) {
     self.fieldObs(null);
 
     amt = parseInt(amt, 10);
-    if (!isNaN(amt)) {
+    // if (!isNaN(amt)) {
+    if (typeof amt === "number" && amt % 1 === 0 && self.durationOptionsLabel(duration) !== "" && amt > -1) {
       self.fieldObs(duration.replace("*", amt));
     }
   }
