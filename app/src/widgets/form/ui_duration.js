@@ -58,6 +58,7 @@ export default function uiDuration(params) {
     self.fieldObs(null);
 
     amt = parseInt(amt, 10);
+    // if (!isNaN(amt)) {
     if (typeof amt === "number" && amt % 1 === 0 && self.durationOptionsLabel(duration) !== "" && amt > -1) {
       self.fieldObs(duration.replace("*", amt));
     }

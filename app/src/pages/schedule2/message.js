@@ -16,6 +16,9 @@ export default function(params) {
   self.generateId = function(fieldName) {
     return `${self.prefix}_${fieldName}`;
   }
+  self.addBelow = function() {
+    messagesObs.push({});
+  }
   self.removeMessage = function(vm, event) {
     let $context = ko.contextFor(event.target);
     messagesObs.remove(messagesObs()[$context.$index()]);

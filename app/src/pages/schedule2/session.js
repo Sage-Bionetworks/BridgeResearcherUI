@@ -5,17 +5,6 @@ import fn from "../../functions";
 import ko from "knockout";
 import root from "../../root";
 
-const NOTIFY_AT_OPTIONS = [
-  {text: 'At start of window', value: 'start_of_window'},
-  {text: 'At random', value: 'random'},
-  {text: 'At time participant chooses', value: 'participant_choice'}
-];
-
-const REMIND_AT_OPTIONS = [
-  {text: 'After window starts', value: 'after_window_start'},
-  {text: 'Before window ends', value: 'before_window_end'}
-];
-
 const PERFORMANCE_ORDER_OPTIONS = [
   {text: 'Sequential', value: 'sequential'},
   {text: 'Randomized', value: 'randomized'},
@@ -35,34 +24,13 @@ export default function(params) {
     .bind('delay', session.delay)
     .bind('occurrences', session.occurrences)
     .bind('interval', session.interval)
-    .bind('notifyAt', session.notifyAt)
-    .bind('remindAt', session.remindAt)
     .bind('performanceOrder', session.performanceOrder)
-    .bind('reminderPeriod', session.reminderPeriod)
-    .bind('allowSnooze', session.allowSnooze)
+    .bind('labels[]', session.labels, null, Binder.persistArrayWithBinder)
     .bind('assessments[]', session.assessments, null, Binder.persistArrayWithBinder)
     .bind('timeWindows[]', session.timeWindows, null, Binder.persistArrayWithBinder)
-    .bind('labels[]', session.labels, null, Binder.persistArrayWithBinder)
-    .bind('messages[]', session.messages, null, Binder.persistArrayWithBinder)
-    .obs('enableReminder')
-    .obs('index')
-    .obs('aIndex')
-    .obs('notifyAtTypes', NOTIFY_AT_OPTIONS)
-    .obs('remindAtTypes', REMIND_AT_OPTIONS)
+    .bind('notifications[]', session.notifications, null, Binder.persistArrayWithBinder)
     .obs('performanceOrderTypes', PERFORMANCE_ORDER_OPTIONS)
-    .obs('lang')
-    .obs('subject')
-    .obs('body')
     .obs('eventIds[]');
-
-  self.notifyAtObs.subscribe((val) => {
-    if (!val) {
-      self.remindAtObs(null);
-      self.reminderPeriodObs(null);
-      self.allowSnoozeObs(null);
-      self.messagesObs([]);
-    }
-  })
 
   self.totalMinutesObs = ko.computed(function() {
     var sum = self.assessmentsObs()
@@ -148,11 +116,11 @@ export default function(params) {
       'startTime': '08:00'
     });
   }
-  self.addMessage = function() {
-    self.messagesObs.push({});
-  }
   self.addLabel = function() {
     self.labelsObs.push({});
+  }
+  self.addNotification = function() { 
+    self.notificationsObs.push({messages: [{}]});
   }
 
   getEventIds().then(array => {

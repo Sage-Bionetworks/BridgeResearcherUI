@@ -22,7 +22,7 @@ export default function(params) {
     .bind('persistent', timeWindow.persistent);
 
   self.generateId = function(fieldName) {
-    return `${self.prefix}_${fieldName}`;
+    return `${self.prefix}${fieldName}`;
   }
 
   self.moveWindowUp = function(vm, event) {
@@ -45,9 +45,9 @@ export default function(params) {
   self.lastOpacityObs = function(index) {
     return index === (timeWindowsObs().length-1) ? .5 : 1;
   };
-  self.addBelow = function(vm, event) {
-    timeWindowsObs.push({ 'startTime': null });
-  }
+  // self.addBelow = function(vm, event) {
+  //   timeWindowsObs.push({ 'startTime': null });
+  // }
   self.removeWindow = function(vm, event) {
     let $context = ko.contextFor(event.target);
     timeWindowsObs.remove(timeWindowsObs()[$context.$index()]);

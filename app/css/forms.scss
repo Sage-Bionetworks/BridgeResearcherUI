@@ -122,9 +122,9 @@ form.disabled  .disable-pane {
     opacity: .6;
 }
 
-.error .editor.textarea {
-    border-color: #E0B4B4;
-    background-color: rgb(255, 246, 246);
+.error input, .error select, .error .editor.textarea {
+  border-color: #E0B4B4!important;
+  background-color: rgb(255, 246, 246)!important;
 }
 /* For some reason this isn't being set by Semantic UI. */
 .dropdown:focus {
@@ -211,14 +211,30 @@ div.te.container {
 /* This is multi-row, and so needs a grid layout. Still uses .line-item-controls */
 .asmt-list-item {
   display: grid; 
-  grid-template-columns: .4fr 4fr 3fr .5fr 2fr; 
+  grid-template-columns: .4fr 3fr 3fr .5fr 2fr; 
   grid-template-rows: auto; 
   align-items: center; 
-  padding: .5rem 0;
+  column-gap: 1rem;
 
   .asmt-labels {
     grid-column-start: 2; 
     grid-column-end: 5; 
-    padding-top: .25rem;
+    padding-top: .5rem;
+  }
+}
+notification:nth-of-type(even) .note-list-item {
+  background-color: #f4f4f4;
+}
+.note-list-item {
+  display: grid; 
+  grid-template-columns: 1fr 1.5fr 1fr 1fr .4fr;
+  grid-template-rows: auto; 
+  align-items: center; 
+  column-gap: 1rem;
+  padding: 1rem; 
+
+  .note-labels {
+    grid-column-start: 1;
+    grid-column-end: 5; 
   }
 }

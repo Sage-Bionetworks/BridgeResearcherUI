@@ -4,21 +4,7 @@ import ko from "knockout";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
 import Promise from "bluebird";
-
-class AdherenceStream {
-  constructor() { 
-    this.label = "";
-    this.entries = [];
-    // key = instanceGuid + timestamp, value = timeline entry
-    this.mapToEntry = {};
-  }
-  addEntry(entry) {
-    entry = JSON.parse(JSON.stringify(entry));
-    entry.stream = this;
-    this.entries.push(entry);
-    this.mapToEntry[entry.instanceGuid + entry.stream.eventTimestamp] = entry;
-  }
-}
+import utils from "../../utils";
 
 class AdherenceGraph {
   constructor() {
@@ -65,7 +51,22 @@ class AdherenceGraph {
   }
 }
 
-const SEARCH_PARAMS = {adherenceRecordType: 'session'};
+class AdherenceStream {
+  constructor() { 
+    this.label = ""; // session name
+    this.entries = []; // 
+    // key = instanceGuid + timestamp, value = timeline entry
+    this.mapToEntry = {};
+  }
+  addEntry(entry) {
+    entry = JSON.parse(JSON.stringify(entry));
+    entry.stream = this;
+    this.entries.push(entry);
+    this.mapToEntry[entry.instanceGuid + entry.stream.eventTimestamp] = entry;
+  }
+}
+
+const SEARCH_PARAMS = {adherenceRecordType: 'session', pageSize: 5};
 
 export default class StudyParticipantAdherence extends BaseAccount {
   constructor(params) {
@@ -86,70 +87,74 @@ export default class StudyParticipantAdherence extends BaseAccount {
     });
 
     this.graph = new AdherenceGraph();
-    this.itemsObs([]);
-    this.countObs = ko.observableArray([]);
+    // the Y axis of days we are going to graph
+    this.dayCountObs = ko.observableArray([]);
 
+    // 1. get study, get account
+    // 2. get the most recent activity events
+    // 3. for those having more than 1 entry, load the full history up to 100 entries
+    // 4. get the timeline for the user, process
+    // 5. get a page of adherence records to get total number and calc pages
+    // 6. get all adherence records, process
     serverService.getStudy(this.studyId).then((response) => {
       this.navStudyNameObs(response.name);
-    }).then(() => this.getAccount())
-      .then(() => serverService.getStudyParticipantActivityEvents(this.studyId, this.userId))
-      .then(res => this.loadEventHistories(res))
-      .then(() => serverService.getStudyParticipantTimeline(this.studyId, this.userId))
+    }).then(() => this.getAccount()) // 1
+      .then(() => serverService.getStudyParticipantActivityEvents(this.studyId, this.userId)) // 2
+      .then(res => this.loadEventHistories(res)) // 3
+      .then(() => serverService.getStudyParticipantTimeline(this.studyId, this.userId)) // 4
       .then(res => this.processTimeline(res))
-      // This initial request is to get the total and calculate pages
-      .then(() => serverService.getStudyParticipantAdherenceRecords(this.studyId, this.userId, SEARCH_PARAMS))
-      .then(res => this.loadAdherenceRecords(res))
-      ;
+      .then(() => serverService.getStudyParticipantAdherenceRecords(this.studyId, this.userId, SEARCH_PARAMS)) // 5
+      .then(res => this.loadAdherenceRecords(res)) // 6
+      .catch(utils.failureHandler({ id: 'studyparticipant-adherence' }));
   }
-  loadEventHistories(response) {
+    // if record count is one, you have the event, otherwise, get the last 100 of them, adding all events 
+    // in an array to graph events for later processing into streams.
+    loadEventHistories(response) {
     return Promise.map(response.items, (event) => {
       if (event.recordCount === 1) {
         return Promise.resolve([event]);
       } else {
         return serverService.getStudyParticipantActivityEventHistory(
-            this.studyId, this.userId, event.eventId).then(res => res.items);
+            this.studyId, this.userId, event.eventId, 0, 100).then(res => res.items);
       }
     }).reduce((prev, cur) => prev.concat(cur), [])
       .then(res => this.graph.events = res);
   }
+  // For each session in the timeline, filter the events into a stream for that session. 
+  // One session == one stream. The first under an event ID is marked out as the active stream. 
+  // 
   processTimeline(timeline) {
     this.graph.durationInDays = fn.parseDuration(timeline.duration).totalDays;
     
+    // Create streams (the X-axis of the graph). There's a stream for each session, for 
+    // each event that triggers the session.
     timeline.sessions.forEach(sess => {
-      let first = true;
-      this.graph.events.filter(e => e.eventId === sess.startEventId).forEach(e => {
-        this.graph.addStream(sess, e, first);
-        first = false;
+      this.graph.events.filter(e => e.eventId === sess.startEventId).forEach((e, i) => {
+        this.graph.addStream(sess, e, i === 0);
       });
     });
 
-    // Now filter the events of the timeline into these streams.
-    for (let i=0; i < timeline.schedule.length; i++) {
-      let sch = timeline.schedule[i];
-
-      let streams = this.graph.streamsByGuidMap[sch.refGuid];
-      if (streams) {
-        streams.forEach(stream => stream.addEntry(sch));
-      }
-    }
-    this.graph.streams.sort((a, b) => a.label.localeCompare(b.label));
+    // Filter the scheduled sessions into these streams. 
+    timeline.schedule.forEach(sch => {
+      let streams = this.graph.streamsByGuidMap[sch.refGuid] || [];
+      streams.forEach(stream => stream.addEntry(sch));
+    });
   }
+  // load all pages of adherence records, reduce them to a single array, pass to processing func
   loadAdherenceRecords(res) {
     let total = res.total;
     let pages = Math.ceil(total/250);
     let promises = [];
     for (let i=0; i < pages; i++) {
-      promises.push( serverService.getStudyParticipantAdherenceRecords(
-        this.studyId, this.userId, {offset: i*250, pageSize:250, adherenceRecordType: 'session'}).then(res => res.items) );
+      promises.push( serverService.getStudyParticipantAdherenceRecords(this.studyId, this.userId, 
+        {offset: i*250, pageSize:250, adherenceRecordType: 'session'}).then(res => res.items) );
     }
     return Promise.reduce(promises, (prev, cur) => prev.concat(cur), [])
       .then((res) => this.processAdherenceRecords(res));
   }
   processAdherenceRecords(items) {
-    for (let i=0; i < items.length; i++) {
-      this.graph.addAdherenceRecord(items[i]);
-    }
-    this.countObs(new Array(this.graph.durationInDays));
+    items.forEach(item => this.graph.addAdherenceRecord(item));
+    this.dayCountObs(new Array(this.graph.durationInDays));
     this.itemsObs(this.graph.streams);
   }
   streamEntry(stream, day) {
@@ -157,8 +162,7 @@ export default class StudyParticipantAdherence extends BaseAccount {
     stream.entries.filter(e => e.startDay <= day && e.endDay >= day).map((entry) => {
       let index = stream.entries.indexOf(entry);
 
-      // unstarted
-      let data = { secondClassName: '', secondBorderColor: '' };
+      let data = { className: '', secondClassName: '' };
 
       // past or abandoned
       if (!stream.active || entry.endDay < stream.daysSince) {
@@ -185,7 +189,8 @@ export default class StudyParticipantAdherence extends BaseAccount {
           data.className = 'blue bgBlue';
         }
       }
-      // We need this for the "both bars" calculation, below
+      // We need this for the "both bars" calculation, below, where we refer to it as
+      // "previous.className"
       entry.className = data.className;
 
       // add the bar graphic
