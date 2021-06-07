@@ -41,9 +41,6 @@ export default class TimelineBaseAccount extends BaseAccount {
     str += ', ' + po.substring(0,1).toUpperCase() + po.substring(1);
     return str;
   }
-  /* This is the data we could be displaying: 
-  {"key":"eab1a821eab1a821","guid":"ts2Fc9M6O-0fiE5xkfpPax_t","appId":"shared","identifier":"asmt3","revision":1,"label":"This is a test","minutesToComplete":3,"colorScheme":{"background":"#ff33ff","type":"ColorScheme"},"type":"AssessmentInfo"}
-  */
   asmtLabel(asmt) {
     return this.assessments[asmt.refKey].label;
   }

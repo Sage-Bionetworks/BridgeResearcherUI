@@ -67,22 +67,40 @@
         </div>
       </div>
       <h4 class="ui dividing header">IRB Approval</h4>
-      <div class="three fields">
+      <div class="two fields">
+        <div class="field">
+          <label>IRB Name</label>
+          <input type="text" data-bind="textInput: irbNameObs" />
+        </div>
         <div class="field">
           <label>IRB Protocol ID</label>
           <input type="text" data-bind="textInput: irbProtocolIdObs" />
         </div>
-        <div class="field">
-          <label>Approved On Date</label>
-          <input data-bind="flatpickr: irbApprovedOnObs" />
+      </div>
+      <div class="three fields">
+        <div class="field" id="irbDecisionType">
+          <label>IRB decision</label>
+          <select class="ui dropdown" data-bind="options: decisionTypeObs,
+            optionsCaption: 'Select decision type:', 
+            optionsText: 'label', optionsValue: 'value', 
+            value: irbDecisionTypeObs">
+          </select>
         </div>
-        <div class="field">
-          <label>Approved Until Date</label>
-          <input data-bind="flatpickr: irbApprovedUntilObs" />
+        <div class="field" id="irbDecisionOn">
+          <label>Decision Date</label>
+          <input data-bind="flatpickr: irbDecisionOnObs" />
+        </div>
+        <div class="field" id="irbExpiresOn">
+          <label>Decision expires on</label>
+          <input data-bind="flatpickr: irbExpiresOnObs" />
         </div>
       </div>
       <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
       </timestamps>
     </form>
+  </div>
+  <div slot="help">
+    <p>IRB name is optional. If you list more than one IRB under contacts, you specify
+      an IRB name to indicate the primary institution that reviewed your protocol.</p>
   </div>
 </bsm-layout>

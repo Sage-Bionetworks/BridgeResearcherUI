@@ -1,6 +1,7 @@
 import BaseAccount from "../../accounts/base_account";
 import fn from "../../functions";
 import ko from "knockout";
+import root from "../../root";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
 import Promise from "bluebird";
@@ -28,6 +29,7 @@ class AdherenceGraph {
     stream.active = active;
     stream.label = session.label;
     stream.eventTimestamp = event.timestamp;
+    stream.eventId = event.eventId;
     stream.daysSince = fn.daysSince(event.timestamp);
     stream.timeWindows = session.timeWindowGuids;
     this.streams.push(stream);
@@ -86,9 +88,13 @@ export default class StudyParticipantAdherence extends BaseAccount {
       id: 'studyparticipant-adherence'
     });
 
+    this.load();
+  }
+  load() {
     this.graph = new AdherenceGraph();
     // the Y axis of days we are going to graph
     this.dayCountObs = ko.observableArray([]);
+    this.itemsObs([]);
 
     // 1. get study, get account
     // 2. get the most recent activity events
@@ -107,9 +113,9 @@ export default class StudyParticipantAdherence extends BaseAccount {
       .then(res => this.loadAdherenceRecords(res)) // 6
       .catch(utils.failureHandler({ id: 'studyparticipant-adherence' }));
   }
-    // if record count is one, you have the event, otherwise, get the last 100 of them, adding all events 
-    // in an array to graph events for later processing into streams.
-    loadEventHistories(response) {
+  // if record count is one, you have the event, otherwise, get the last 100 of them, adding all events 
+  // in an array to graph events for later processing into streams.
+  loadEventHistories(response) {
     return Promise.map(response.items, (event) => {
       if (event.recordCount === 1) {
         return Promise.resolve([event]);
@@ -155,14 +161,20 @@ export default class StudyParticipantAdherence extends BaseAccount {
   processAdherenceRecords(items) {
     items.forEach(item => this.graph.addAdherenceRecord(item));
     this.dayCountObs(new Array(this.graph.durationInDays));
-    this.itemsObs(this.graph.streams);
+    this.itemsObs(this.graph.streams);  
   }
   streamEntry(stream, day) {
     let array = new Array(stream.timeWindows.length);
     stream.entries.filter(e => e.startDay <= day && e.endDay >= day).map((entry) => {
       let index = stream.entries.indexOf(entry);
 
-      let data = { className: '', secondClassName: '' };
+      let data = {
+        className: '',
+        secondClassName: '',
+        instanceGuid: entry.instanceGuid,
+        eventTimestamp: entry.stream.eventTimestamp,
+        eventId: entry.stream.eventId
+      };
 
       // past or abandoned
       if (!stream.active || entry.endDay < stream.daysSince) {
@@ -177,7 +189,13 @@ export default class StudyParticipantAdherence extends BaseAccount {
       } 
       // future
       else if (entry.startDay > stream.daysSince) {
-        data.className = 'gray bgGray';
+        if (entry.state === 'finished') {
+          data.className = 'green bgGreen';
+        } else if (entry.state === 'started') {
+          data.className = 'bgGreen';
+        } else {
+          data.className = 'gray bgGray';
+        }
       } 
       // currently active
       else {
@@ -224,7 +242,7 @@ export default class StudyParticipantAdherence extends BaseAccount {
     return array;
   }
   streamEntryBg(stream, day) {
-    if (!stream.active) { 
+    if (!stream.active) {
       return 'inactive';
     } else if (day === stream.daysSince) {
       return 'today';
@@ -232,13 +250,33 @@ export default class StudyParticipantAdherence extends BaseAccount {
     return '';
   }
   // basic view model functions/subclass functions
-  loadAccount() { 
+  loadAccount() {
     return serverService.getStudyParticipant(this.studyId, this.userId);
   }
   link(postfix) {
     return `#/studies/${this.studyId}/participants/${encodeURIComponent(this.userId)}/${postfix}`;
   }
+  formatEventId(eventId) {
+    return eventId.replace("custom:", "");
+  }
   formatTime(item) {
     return `${item.startEventId}: ${item.startDay}—${item.endDay} @ ${item.startTime}`;
+  }
+  closeDialog() {
+    root.closeDialog();
+    this.load();
+  }
+  editSession(item, event) {
+    let component = ko.contextFor(event.target).$component;
+    setTimeout(() => {
+      root.openDialog("session_editor", { 
+        studyId: component.studyId,
+        userId: component.userId,
+        instanceGuid: item.instanceGuid, 
+        eventId: item.eventId,
+        eventTimestamp: item.eventTimestamp,
+        closeDialog: component.closeDialog.bind(component)
+      });
+    }, 1);
   }
 }

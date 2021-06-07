@@ -35,6 +35,7 @@ export default class RequestInfoBaseAccount extends BaseAccount {
       .obs("clientInfo", null, stringer)
       .obs("uploadedOn", null, dater)
       .obs("activitiesAccessedOn", null, dater)
+      .obs("timelineAccessedOn", null, dater)
       .obs("timeZone", null, noner)
       .obs("userAgent", null, noner);
 

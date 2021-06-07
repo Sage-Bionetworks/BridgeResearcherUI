@@ -10,8 +10,7 @@
       </div>
       <h3 data-bind="text: titleObs"></h3>
     </div>
-    <div class="fixed-header-buttons">
-    </div>
+    <div class="fixed-header-buttons"></div>
   </div>
   <studyparticipant-tabset params="studyIdObs: navStudyIdObs, userIdObs: userIdObs, 
         statusObs: statusObs"></studyparticipant-tabset>
@@ -21,6 +20,7 @@
     <div class="ui small secondary menu">
       <a class="item" data-bind="href: link('schedule')">Schedule Events</a>
       <span class="active item">Adherence</span>
+      <a class="item" data-bind="href: link('schedule/adherencesearch')">Search</a>
       <a class="item" data-bind="href: link('schedule/timeline')">Timeline</a>
     </div>
   </div>
@@ -29,7 +29,7 @@
       <thead>
         <tr>
           <th>Session</th>
-          <th nowrap>Event Timestamp</th>
+          <th nowrap colspan="2">Event Time Stream</th>
           <!-- ko foreach: dayCountObs -->
             <th data-bind="text: $index"></th>
           <!-- /ko -->
@@ -37,20 +37,25 @@
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td data-bind="html: recordsMessageObs, attr: {colspan: 2 + dayCountObs().length}"></td>
+          <td data-bind="html: recordsMessageObs, 
+            attr: {colspan: 3 + dayCountObs().length}"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
         <tr>
-          <td class="th" data-bind="text: $data.label">
+          <td class="th" data-bind="text: $data.label"></td>
+          <td class="th" style="font-size: smaller; text-align: right" 
+            data-bind="text: $parent.formatEventId($data.eventId)">
           </td>
-          <td class="th" nowrap data-bind="text: $parent.formatDateTime($data.eventTimestamp)">
+          <td class="th" nowrap style="font-size: smaller" 
+            data-bind="text: $parent.formatDateTime($data.eventTimestamp)">
           </td>
           <!-- ko foreach: $parent.dayCountObs -->
             <td class="data-cell" data-bind="
               class: $parents[1].streamEntryBg($parentContext.$data, $index()),
               foreach: $parents[1].streamEntry($parentContext.$data, $index())">
-              <div data-bind="class: $data.className, style: { borderColor: $data.borderColor }"></div>
+              <div data-bind="class: $data.className, style: { borderColor: $data.borderColor }, 
+                click: $parents[2].editSession"></div>
               <div data-bind="class: $data.secondClassName"></div>
             </td>
           <!-- /ko -->

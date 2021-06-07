@@ -1,0 +1,142 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/studies" class="section">Studies</a>
+        <i class="right chevron icon divider"></i>
+        <a class="section" data-bind="href: '#/studies/' + navStudyIdObs() + '/participants', text: navStudyNameObs()">StudyName</a>
+        <i class="right chevron icon divider"></i>
+        <span class="section">Participants</span>
+      </div>
+      <h3 data-bind="text: titleObs"></h3>
+    </div>
+    <div class="fixed-header-buttons"></div>
+  </div>
+  <studyparticipant-tabset params="studyIdObs: navStudyIdObs, userIdObs: userIdObs, 
+        statusObs: statusObs"></studyparticipant-tabset>
+</div>
+<bsm-layout id="studyparticipant-adherencesearch">
+  <div slot="header">
+    <div class="line-control">
+      <div class="line-control-stretch ">
+        <div class="ui small secondary menu">
+          <a class="item" data-bind="href: link('schedule')">Schedule Events</a>
+          <a class="item" data-bind="href: link('schedule/adherence')">Adherence</a>
+          <span class="active item">Search</span>
+          <a class="item" data-bind="href: link('schedule/timeline')">Timeline</a>
+        </div>
+      </div>
+      <pager params="prefix: 'adherencesearch', postLoadFunc: postLoadFunc"></pager>
+    </div>
+  </div>
+  <div slot="content">
+
+    <form onsubmit="return false" class="ui form segment" 
+      style="width: 100%; margin-bottom: 2rem">
+      <div class="two fields">
+        <div class="field">
+          <label>Instance GUIDs</label>
+          <input type="text" data-bind="textInput: instanceGuidsObs">
+        </div>
+        <div class="field">
+          <label>Session GUIDs</label>
+          <input type="text" data-bind="textInput: sessionGuidsObs">
+        </div>
+      </div>
+      <div class="two fields">
+        <div class="field">
+          <label>Time Window GUIDs</label>
+          <input type="text" data-bind="textInput: timeWindowGuidsObs">
+        </div>
+        <div class="field">
+          <label>Assessment IDs</label>
+          <input type="text" data-bind="textInput: assessmentIdsObs">
+        </div>
+      </div>
+      <div class="three fields">
+        <div class="field">
+          <label>Record Type</label>
+          <select class="ui dropdown"  data-bind="value: adherenceRecordTypeObs">
+            <option value="">Both</option>
+            <option value="assessment">Assessments</option>
+            <option value="session">Sessions</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>&#160;</label>
+          <div class="input-field-padding">
+            <ui-checkbox params="checkedObs: includeRepeatsObs">Include repeats?</ui-checkbox>
+          </div>
+        </div>
+        <div class="field">
+          <label>&#160;</label>
+          <div class="input-field-padding">
+            <ui-checkbox params="checkedObs: currentTimestampsOnlyObs">Current event timestamps only?</ui-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="three fields">
+        <div class="field">
+          <label>Start Time</label>
+          <input type="text" data-bind="flatpickr: startTimeObs" data-enableTime>
+        </div>
+        <div class="field">
+          <label>End Time</label>
+          <input type="text" data-bind="flatpickr: endTimeObs" data-enableTime>
+        </div>
+        <div class="field">
+          <label>Sort order (by startedOn)</label>
+          <select data-bind="value: sortOrderObs" class="ui dropdown">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+        </div>
+      </div>
+      <p>
+        <button class="ui small primary button" data-bind="click: search">
+          Filter
+        </button>
+      </p>
+    </form>
+
+    <table class="ui compact selectable table" 
+      style="display: inline-block; overflow-x: auto; max-width: 100%;">
+      <thead>
+        <tr>
+          <th>Label</th>
+          <th>Session GUID/Assessment ID</th>
+          <th nowrap>Day(s)</th>
+          <th nowrap>Stream</th>
+          <th nowrap>Started On</th>
+          <th nowrap>Finished On</th>
+          <th nowrap>Client Data</th>
+          <th nowrap>Time Zone</th>
+          <th nowrap>Declined?</th>
+          <th nowrap>Instance GUID</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="10" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: itemsObs">
+        <tr>
+          <td nowrap data-bind="text: $parent.formatRecord($data)"></td>
+          <td nowrap data-bind="text: $parent.formatAsmtId($data)"></td>
+          <td nowrap data-bind="text: $parent.formatDays($data)"></td>
+          <td nowrap data-bind="text: $parent.formatStream($data)"></td>
+          <td nowrap data-bind="text: $parent.startedOn($data)"></td>
+          <td nowrap data-bind="text: $parent.finishedOn($data)"></td>
+          <td nowrap>
+            <a href="#" data-bind="click: $parent.editClientData">Edit&hellip;</a>
+            <i class="database icon" data-bind="visible: $data.clientDataObs()"></i>
+          </td>
+          <td nowrap data-bind="text: $parent.clientTimeZone($data)"></td>
+          <td nowrap style="text-align: center" data-bind="html: $parent.declined($data)"></td>
+          <td nowrap data-bind="text: $data.instanceGuid"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</bsm-layout>
