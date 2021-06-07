@@ -58,7 +58,6 @@ export default function activity(params) {
     id: 'participant-activity'
   });
 
-  //
   self.toggle = (model) => model.collapsedObs(!model.collapsedObs());
   self.editReportRecord = function(item, event) {
     root.openDialog("json_editor", {
