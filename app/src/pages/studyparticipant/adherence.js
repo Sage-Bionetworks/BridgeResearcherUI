@@ -271,7 +271,6 @@ export default class StudyParticipantAdherence extends BaseAccount {
     this.load();
   }
   editSession(item, event) {
-    console.log(event.target);
     let component = ko.contextFor(event.target).$component;
     let instanceGuid = event.target.getAttribute('data-guid');
     setTimeout(() => {

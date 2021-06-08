@@ -1,4 +1,3 @@
-import kind_of from "kind-of";
 import Binder from "../../binder";
 import ko from "knockout";
 import root from "../../root";
@@ -7,7 +6,6 @@ import utils from "../../utils";
 
 export default function(params) {
   let self = this;
-  console.log("params", params);
 
   self.save = (vm, event) => {
     utils.startHandler(self, event)
