@@ -31,7 +31,7 @@
           <th>Session</th>
           <th nowrap colspan="2">Event Time Stream</th>
           <!-- ko foreach: dayCountObs -->
-            <th data-bind="text: $index"></th>
+            <th style="min-width: 30px" data-bind="text: $index"></th>
           <!-- /ko -->
         </tr>
       </thead>
@@ -54,9 +54,13 @@
             <td class="data-cell" data-bind="
               class: $parents[1].streamEntryBg($parentContext.$data, $index()),
               foreach: $parents[1].streamEntry($parentContext.$data, $index())">
-              <div data-bind="class: $data.className, style: { borderColor: $data.borderColor }, 
-                click: $parents[2].editSession"></div>
-              <div data-bind="class: $data.secondClassName"></div>
+              <div data-bind="class: $data.className, 
+                style: { borderColor: $data.borderColor }, 
+                click: $parents[2].editSession, 
+                attr: {'data-guid': $data.previousInstanceGuid}"></div>
+              <div data-bind="class: $data.secondClassName, 
+                click: $parents[2].editSession,
+                attr: {'data-guid': $data.instanceGuid}"></div>
             </td>
           <!-- /ko -->
         </tr>

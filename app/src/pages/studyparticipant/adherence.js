@@ -209,7 +209,8 @@ export default class StudyParticipantAdherence extends BaseAccount {
       }
       // We need this for the "both bars" calculation, below, where we refer to it as
       // "previous.className"
-      entry.className = data.className;
+      entry.previousClassName = data.className;
+      entry.previousInstanceGuid = data.instanceGuid;
 
       // add the bar graphic
       let previous = null;
@@ -219,10 +220,12 @@ export default class StudyParticipantAdherence extends BaseAccount {
           break;
         }
       }
+
       if (previous && entry.startDay === day && previous.endDay === entry.startDay) {
         // we want this to be the previous day's calculation...
         data.secondClassName = data.className + ' rightBoth bar';
-        data.className = previous.className + ' leftBoth bar';
+        data.className = previous.previousClassName + ' leftBoth bar';
+        data.previousInstanceGuid = previous.previousInstanceGuid;
       } else if (entry.startDay === day && entry.endDay === day) {
         data.className += ' bar single';
       } else if (entry.startDay === day) {
@@ -268,11 +271,12 @@ export default class StudyParticipantAdherence extends BaseAccount {
   }
   editSession(item, event) {
     let component = ko.contextFor(event.target).$component;
+    let instanceGuid = event.target.getAttribute('data-guid');
     setTimeout(() => {
       root.openDialog("session_editor", { 
         studyId: component.studyId,
         userId: component.userId,
-        instanceGuid: item.instanceGuid, 
+        instanceGuid: instanceGuid, 
         eventId: item.eventId,
         eventTimestamp: item.eventTimestamp,
         closeDialog: component.closeDialog.bind(component)

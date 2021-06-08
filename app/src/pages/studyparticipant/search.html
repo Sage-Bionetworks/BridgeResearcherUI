@@ -26,11 +26,7 @@
           <a class="item" data-bind="href: link('schedule/timeline')">Timeline</a>
         </div>
       </div>
-      <pager params="prefix: 'adherencesearch', postLoadFunc: postLoadFunc"></pager>
     </div>
-  </div>
-  <div slot="content">
-
     <form onsubmit="return false" class="ui form segment" 
       style="width: 100%; margin-bottom: 2rem">
       <div class="two fields">
@@ -98,21 +94,25 @@
         </button>
       </p>
     </form>
-
-    <table class="ui compact selectable table" 
-      style="display: inline-block; overflow-x: auto; max-width: 100%;">
+    <div class="line-control">
+      <div class="line-control-stretch "></div>
+      <pager params="prefix: 'adherencesearch', postLoadFunc: postLoadFunc"></pager>
+    </div>
+  </div>
+  <div slot="content">
+    <table class="ar-search-table ui compact selectable table">
       <thead>
         <tr>
           <th>Label</th>
           <th>Session GUID/Assessment ID</th>
-          <th nowrap>Day(s)</th>
-          <th nowrap>Stream</th>
-          <th nowrap>Started On</th>
-          <th nowrap>Finished On</th>
-          <th nowrap>Client Data</th>
-          <th nowrap>Time Zone</th>
-          <th nowrap>Declined?</th>
-          <th nowrap>Instance GUID</th>
+          <th>Day(s)</th>
+          <th>Stream</th>
+          <th>Started On</th>
+          <th>Finished On</th>
+          <th>Client Data</th>
+          <th>Time Zone</th>
+          <th>Declined?</th>
+          <th>Instance GUID</th>
         </tr>
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
@@ -122,19 +122,19 @@
       </tbody>
       <tbody data-bind="foreach: itemsObs">
         <tr>
-          <td nowrap data-bind="text: $parent.formatRecord($data)"></td>
-          <td nowrap data-bind="text: $parent.formatAsmtId($data)"></td>
-          <td nowrap data-bind="text: $parent.formatDays($data)"></td>
-          <td nowrap data-bind="text: $parent.formatStream($data)"></td>
-          <td nowrap data-bind="text: $parent.startedOn($data)"></td>
-          <td nowrap data-bind="text: $parent.finishedOn($data)"></td>
-          <td nowrap>
-            <a href="#" data-bind="click: $parent.editClientData">Edit&hellip;</a>
-            <i class="database icon" data-bind="visible: $data.clientDataObs()"></i>
+          <td data-bind="text: $parent.formatRecord($data)"></td>
+          <td data-bind="text: $parent.formatAsmtId($data)"></td>
+          <td data-bind="text: $parent.formatDays($data)"></td>
+          <td data-bind="text: $parent.formatStream($data)"></td>
+          <td data-bind="text: $parent.startedOn($data)"></td>
+          <td data-bind="text: $parent.finishedOn($data)"></td>
+          <td>
+            <a data-bind="click: $parent.editClientData" href="#">Edit&hellip;</a>
+            <i data-bind="visible: $data.clientDataObs()" class="database icon"></i>
           </td>
-          <td nowrap data-bind="text: $parent.clientTimeZone($data)"></td>
-          <td nowrap style="text-align: center" data-bind="html: $parent.declined($data)"></td>
-          <td nowrap data-bind="text: $data.instanceGuid"></td>
+          <td data-bind="text: $parent.clientTimeZone($data)"></td>
+          <td data-bind="html: $parent.declined($data)" style="text-align: center"></td>
+          <td data-bind="text: $data.instanceGuid"></td>
         </tr>
       </tbody>
     </table>
