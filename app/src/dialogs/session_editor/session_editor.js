@@ -1,4 +1,3 @@
-import kind_of from "kind-of";
 import Binder from "../../binder";
 import ko from "knockout";
 import root from "../../root";

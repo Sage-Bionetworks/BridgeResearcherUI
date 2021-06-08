@@ -220,6 +220,7 @@ export default class StudyParticipantAdherence extends BaseAccount {
           break;
         }
       }
+      data.previousInstanceGuid = data.instanceGuid;
 
       if (previous && entry.startDay === day && previous.endDay === entry.startDay) {
         // we want this to be the previous day's calculation...
