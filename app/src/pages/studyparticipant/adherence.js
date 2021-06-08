@@ -220,6 +220,7 @@ export default class StudyParticipantAdherence extends BaseAccount {
           break;
         }
       }
+      data.previousInstanceGuid = data.instanceGuid;
 
       if (previous && entry.startDay === day && previous.endDay === entry.startDay) {
         // we want this to be the previous day's calculation...
@@ -270,6 +271,7 @@ export default class StudyParticipantAdherence extends BaseAccount {
     this.load();
   }
   editSession(item, event) {
+    console.log(event.target);
     let component = ko.contextFor(event.target).$component;
     let instanceGuid = event.target.getAttribute('data-guid');
     setTimeout(() => {

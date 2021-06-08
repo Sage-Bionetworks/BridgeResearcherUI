@@ -7,6 +7,7 @@ import utils from "../../utils";
 
 export default function(params) {
   let self = this;
+  console.log("params", params);
 
   self.save = (vm, event) => {
     utils.startHandler(self, event)
