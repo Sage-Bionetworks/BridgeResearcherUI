@@ -193,13 +193,10 @@ router.on("/studies/:studyId/participants/:userId/requestInfo",
   routeTo("studyparticipant_request_info", "studies", STUDYID_USERID));
 router.on("/studies/:studyId/participants/:userId/enrollments/consents", 
   routeTo("studyparticipant_consents", "studies", STUDYID_USERID));
-  router.on("/studies/:studyId/participants/:userId/schedule/adherence", 
+router.on("/studies/:studyId/participants/:userId/schedule/adherence", 
   routeTo("studyparticipant_adherence", "studies", STUDYID_USERID));
-
-  /*
-reg("studyparticipant_general", {viewModel: studypartGeneral, template: studypartGeneralHtml});
-*/
-
+router.on("/studies/:studyId/participants/:userId/schedule/adherencesearch", 
+  routeTo("studyparticipant_adherencesearch", "studies", STUDYID_USERID));
 
 router.on("/schedules", routeTo("schedules2", "schedules"));
 router.on("/schedules/:guid", routeTo("schedule2", "schedules", GUID));

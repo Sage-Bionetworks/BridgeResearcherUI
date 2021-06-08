@@ -40,13 +40,19 @@
         <p data-bind="text: timeZoneObs"></p>
       </div>
       <div class="field">
+        <label>Timeline APIs last accessed on</label>
+        <p data-bind="text: timelineAccessedOnObs"></p>
+      </div>
+    </div>
+    <div class="two fields">
+      <div class="field">
+        <label>Client info</label>
+        <p data-bind="html: clientInfoObs"></p>
+      </div>
+      <div class="field">
         <label>Last uploads on</label>
         <p data-bind="text: uploadedOnObs"></p>
       </div>
-    </div>
-    <div class="field">
-      <label>Client info</label>
-      <p data-bind="html: clientInfoObs"></p>
     </div>
   </div>
   <div slot="help">

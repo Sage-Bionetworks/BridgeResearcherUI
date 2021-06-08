@@ -13,7 +13,7 @@ export default function(params) {
   var binder = new Binder(self)
     .bind('eventId', null, (t) => (t) ? t.replace('custom:','') : null, (t) => 'custom:'+t)
     .bind('timestamp', null)
-    .bind('clientTimeZone', null)
+    .bind('clientTimeZone', Intl.DateTimeFormat().resolvedOptions().timeZone)
     .obs('title', 'Edit New Event')
     .obs('readOnly', !!params.event.eventId)
     .obs('eventIdOptions[]');

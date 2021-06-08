@@ -150,7 +150,7 @@ ko.bindingHandlers.condPopup = {
       $(element).popup();
     }
     let className = object.className(data);
-    if (letlassName) {
+    if (className) {
       element.classList.add(object.className(data));
     }
   }

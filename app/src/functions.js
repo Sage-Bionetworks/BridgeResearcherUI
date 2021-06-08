@@ -38,6 +38,29 @@ function parseDuration(duration) {
     return parsed;
 };
 
+function formatField(array, value, field) {
+  if (value > 0) {
+    if (value === 1) {
+      array.push(value + ' ' + field);
+    } else {
+      array.push(value + ' ' + field + 's');
+    }
+  }
+}
+
+function formatDuration(duration) {
+  if (!duration) {
+    return '';
+  }
+  let d = parseDuration(duration);
+  let array = [];
+  formatField(array, d.weeks, 'wk');
+  formatField(array, d.days, 'day');
+  formatField(array, d.hours, 'hr');
+  formatField(array, d.minutes, 'min');
+  return array.join(', ');
+}
+
 function daysSince(timestamp, now = new Date()) {
   let start = new Date(timestamp);
   let end = now;
@@ -629,6 +652,7 @@ export default {
   formatDate,
   formatDateTime,
   formatDaysSince,
+  formatDuration,
   formatFileSize,
   formatIdentifiers,
   formatTime,

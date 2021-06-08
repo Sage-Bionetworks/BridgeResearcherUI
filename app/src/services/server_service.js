@@ -979,6 +979,9 @@ export class ServerService {
   getStudyParticipantAdherenceRecords(studyId, userId, search) {
     return this.post(`${config.studies}/${studyId}/participants/${userId}/adherence/search`, search);
   }
+  updateStudyParticipantAdherenceRecords(studyId, userId, records) { 
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/adherence`, records);
+  }
   getStudyParticipantName(studyId, id) {
     if (session && session.id === id) {
       id = 'self';
@@ -1004,7 +1007,7 @@ export class ServerService {
   }
   getStudyParticipantActivityEventHistory(studyId, userId, eventId, offsetBy, pageSize) {
     let queryString = fn.queryString({ offsetBy, pageSize });
-    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/activityevents/${eventId}${queryString}`);
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/activityevents/${encodeURIComponent(eventId)}${queryString}`);
   }
   createStudyParticipantActivityEvent(studyId, userId, event) {
     return this.post(`${config.studies}/${studyId}/participants/${userId}/activityevents`, event);

@@ -36,14 +36,20 @@ export default function(params) {
     .obs("createdOn")
     .obs("modifiedOn")
     .obs('schedules[]')
+    .obs('decisionType[]', [
+      {label: 'Approved', value: 'approved'},
+      {label: 'Exempted', value: 'exempt'}
+    ])
     .bind("version")
     .bind("name")
     .bind("details")
     .bind("phase")
     .bind("institutionId")
+    .bind("irbName")
     .bind("irbProtocolId")
-    .bind("irbApprovedOn", null, null, toDateString)
-    .bind("irbApprovedUntil", null, null, toDateString)
+    .bind("irbDecisionOn", null, null, toDateString)
+    .bind("irbExpiresOn", null, null, toDateString)
+    .bind("irbDecisionType")
     .bind("scheduleGuid", null)
     .bind("disease")
     .bind("studyDesignType")

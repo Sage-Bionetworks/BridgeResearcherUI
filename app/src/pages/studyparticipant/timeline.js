@@ -1,7 +1,7 @@
 import TimelineBaseAccount from "../../accounts/timeline_base_account";
 import serverService from "../../services/server_service";
 
-export default class StudyParticipantEnrollments extends TimelineBaseAccount {
+export default class StudyParticipantTimeline extends TimelineBaseAccount {
   constructor(params) {
     super({ 
       ...params, 

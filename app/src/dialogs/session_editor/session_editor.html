@@ -1,0 +1,61 @@
+<div class="ui modal">
+  <i data-bind="click: cancel" class="close icon"></i>
+  <div class="header">
+    Edit Session
+  </div>
+  <div class="ui form content" style="padding-top: 1rem; padding-bottom: 1rem">
+    <errors id="session-editor"></errors>
+    <div class="fields">
+      <div class="four wide field">
+        <label>&#160;</label>
+        <div class="input-field-padding" style="font-weight: bold" data-bind="text: sessionLabelObs"></div>
+      </div>
+      <div class="five wide field">
+        <label>Started On</label>
+        <input type="text" data-bind="flatpickr: sessionStartedOnObs" data-enableTime>
+      </div>
+      <div class="five wide field">
+        <label>Finished On</label>
+        <input type="text" data-bind="flatpickr: sessionFinishedOnObs" data-enableTime>
+      </div>
+      <div class="two wide field">
+        <label>Declined?</label>
+        <div class="input-field-padding">
+          <ui-checkbox params="checkedObs: sessionDeclinedObs"></ui-checkbox>
+        </div>
+      </div>
+  </div>
+  </div>
+  <div style="max-height: 22rem; overflow-y: auto; border-top: 1px solid rgba(34,36,38,.15)"
+    class="ui form content">
+    <!-- ko foreach: assessmentsObs -->
+      <div class="fields">
+        <div class="four wide field">
+          <label>&#160;</label>
+          <div class="input-field-padding" data-bind="text: $data.label"></div>
+        </div>
+        <div class="five wide field">
+          <label>Started On</label>
+          <input type="text" data-bind="flatpickr: $data.startedOnObs" data-enableTime>
+        </div>
+        <div class="five wide field">
+          <label>Finished On</label>
+          <input type="text" data-bind="flatpickr: $data.finishedOnObs" data-enableTime>
+        </div>
+        <div class="two wide field">
+          <label>Declined?</label>
+          <div class="input-field-padding">
+            <ui-checkbox params="checkedObs: $data.declinedObs"></ui-checkbox>
+          </div>
+        </div>
+      </div>
+    <!-- /ko -->
+  </div>
+  <div class="actions" style="display: flex; align-items: center">
+    <button class="ui primary small button" data-bind="click: save">Send</button>
+    <button class="ui small button" data-bind="click: cancel">Cancel</button>
+    <div style="flex: 1; text-align: right">
+      Time zone will be <span data-bind="text: clientTimeZoneObs"></span>
+    </div>
+  </div>
+</div>

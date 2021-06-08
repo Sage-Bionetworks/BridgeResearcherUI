@@ -337,10 +337,8 @@ import studypartConsents from "./pages/studyparticipant/consents";
 import studypartConsentsHtml from "./pages/studyparticipant/consents.html";
 import studypartAdherence from "./pages/studyparticipant/adherence";
 import studypartAdherenceHtml from "./pages/studyparticipant/adherence.html";
-/*
-import studyverifiedIcon from "./pages/studyparticipant/verified-icon";
-import studyverifiedIconHtml from "./pages/studyparticipant/verified-icon.html";
-*/
+import studypartAdherenceSearch from "./pages/studyparticipant/search";
+import studypartAdherenceSearchHtml from "./pages/studyparticipant/search.html";
 
 import schedules2 from "./pages/schedules2/schedules";
 import schedules2Html from "./pages/schedules2/schedules.html";
@@ -499,6 +497,8 @@ import addSponsoredStudy from "./dialogs/add_sponsored_study/add_sponsored_study
 import addSponsoredStudyHtml from "./dialogs/add_sponsored_study/add_sponsored_study.html";
 import updateIdentifiers from './dialogs/update_identifiers/update_identifiers_dialog';
 import updateIdentifiersHtml from './dialogs/update_identifiers/update_identifiers_dialog.html';
+import sessionEditor from './dialogs/session_editor/session_editor';
+import sessionEditorHtml from './dialogs/session_editor/session_editor.html';
 import eventEditor from "./dialogs/event_editor/event_editor";
 import eventEditorHtml from "./dialogs/event_editor/event_editor.html";
 
@@ -623,6 +623,7 @@ reg("studyparticipant_enrollments", {viewModel: studypartEnrollments, template: 
 reg("studyparticipant_schedule", {viewModel: studypartSchedule, template: studypartScheduleHtml});
 reg("studyparticipant_timeline", {viewModel: studypartTimeline, template: studypartTimelineHtml});
 reg("studyparticipant_adherence", {viewModel: studypartAdherence, template: studypartAdherenceHtml});
+reg("studyparticipant_adherencesearch", {viewModel: studypartAdherenceSearch, template: studypartAdherenceSearchHtml});
 reg("studyparticipant_history", {viewModel: studypartHistory, template: studypartHistoryHtml});
 reg("studyparticipant-tabset", {viewModel: studypartTabset, template: studypartTabsetHtml});
 reg("studyparticipant_uploads", {viewModel: studypartUploads, template: studypartUploadsHtml});
@@ -742,6 +743,7 @@ reg("config_history", {viewModel: configHistory, template: configHistoryHtml});
 reg("config-tabset", {viewModel: configTabset, template: configTabsetHtml});
 reg("criteria_editor", {viewModel: critEditor, template: critEditorHtml, synchronous: true});
 reg("update_identifiers_dialog", {viewModel: updateIdentifiers, template: updateIdentifiersHtml, synchronous: true});
+reg("session_editor", {viewModel: sessionEditor, template: sessionEditorHtml, synchronous: true});
 // Attribute editors
 reg("user_attributes", {template: userAtts, viewModel: setEditor("userProfileAttributes")});
 reg("task_identifiers", {template: taskIdentifiers, viewModel: setEditor("taskIdentifiers")});
