@@ -59,7 +59,12 @@ export default function uploadDetails(params) {
     load();
   });
   self.linkObs = ko.computed(function() {
-    return "#/participants/" + encodeURIComponent("healthCode:" + self.healthCodeObs()) + "/general";
+    if (params.studyIdObs) {
+      return `#/studies/${params.studyIdObs()}/participants/${encodeURIComponent("healthCode:" + self.healthCodeObs())}/general`;
+    } else {
+      return `#/participants/${encodeURIComponent("healthCode:" + self.healthCodeObs())}/general`;
+    }
+    
   });
   self.schemaLinkObs = ko.computed(function() {
     return "#/schemas/" + self.schemaIdObs() + "/versions/" + self.schemaRevisionObs() + "/editor";

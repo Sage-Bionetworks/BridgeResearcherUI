@@ -14,6 +14,7 @@ export default class ParticipantUploadsViewModel extends UploadsViewModel {
     fn.copyProps(this, root, "isResearcher");
     new Binder(this)
       .obs("userId", params.userId)
+      .obs("studyId", params.studyId)
       .obs("name", "")
       .obs("status")
       .obs("title", "&#160;")

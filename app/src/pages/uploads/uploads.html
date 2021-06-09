@@ -53,8 +53,7 @@
             <i data-bind="attr:{class:$component.iconFor($data)}"></i>
           </td>
           <td>
-            <a style="font-family: monospace"
-              data-bind="text: $data.uploadId, href: '#/admin/uploads/' + $data.uploadId"></a>
+            <a data-bind="text: $data.uploadId, href: '#/admin/uploads/' + $data.uploadId"></a>
             <span data-bind="visible: !!$data.contentObs()">
               Schema: <a target="_blank" rel="noopener" data-bind="href: $data.hrefObs, text: $data.contentObs"></a><br>
             </span>

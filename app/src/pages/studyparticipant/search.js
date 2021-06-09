@@ -29,8 +29,10 @@ export default class StudyParticipantAdherence extends BaseAccount {
     this.sessions = {};
     this.schedules = {};
 
+    let ig = root.queryParams.instanceGuid ? root.queryParams.instanceGuid : null;
+
     this.binder = new Binder(this)
-      .bind('instanceGuids', null, arrayToString, stringToArray)
+      .bind('instanceGuids', ig, arrayToString, stringToArray)
       .bind('assessmentIds', null, arrayToString, stringToArray)
       .bind('sessionGuids', null, arrayToString, stringToArray)
       .bind('timeWindowGuids', null, arrayToString, stringToArray)

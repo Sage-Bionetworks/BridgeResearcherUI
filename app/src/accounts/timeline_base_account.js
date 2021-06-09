@@ -1,4 +1,5 @@
 import BaseAccount from "./base_account";
+import fn from "../functions";
 import serverService from "../services/server_service";
 import utils from "../utils";
 
@@ -23,29 +24,20 @@ export default class TimelineBaseAccount extends BaseAccount {
     res.sessions.forEach(sess => this.sessions[sess.guid] = sess);
     this.entriesObs.pushAll(res.schedule);
   }
-  days(startDay, endDay) {
-    return (startDay === endDay) ? `Day ${startDay}` : `Days ${startDay}—${endDay}`;
+  sessionInfo(sch) {
+    let session = this.sessions[sch.refGuid];
+    let eventId = session.startEventId.replace('custom:', '');
+    let exp = (sch.expiration) ? ` for ${fn.formatDuration(sch.expiration)}` : '';
+    let days = (sch.startDay === sch.endDay) ? `Day ${sch.startDay}` : `Days ${sch.startDay}—${sch.endDay}`;
+    return `<h4>${session.label}</h4>` +
+      `<p>${days} after “${eventId}” start @ ${sch.startTime}${exp}<br>` +
+      `Instance GUID: <a href="${this.searchLink(sch)}">${sch.instanceGuid}</a><br>` +
+      `Order: ${session.performanceOrder}</p>`;
   }
-  eventId(sch) {
-    return this.sessions[sch.refGuid].startEventId.replace("custom:", "");
-  }
-  line1(sch) {
-    return this.days(sch.startDay, sch.endDay) + ' after “' + this.eventId(sch) + '”';
-  }
-  line2(sch) {
-    let str = 'Start time: ' + sch.startTime;
-    if (sch.expiration) {
-      str += ', expiring after ' + sch.expiration;
-    }
-    let po = this.sessions[sch.refGuid].performanceOrder;
-    str += ', ' + po.substring(0,1).toUpperCase() + po.substring(1);
-    return str;
-  }
-  asmtLabel(asmt) {
-    return this.assessments[asmt.refKey].label;
-  }
-  asmtId(asmt) {
-    var item = this.assessments[asmt.refKey];
-    return `${item.appId}-${item.identifier}`;
+  asmtInfo(asmt) {
+    let assessment = this.assessments[asmt.refKey];
+    let shared = (assessment.appId === 'shared') ? ' in shared' : '';
+    return `<b>${assessment.label}</b> (${assessment.identifier}${shared})<br>` +
+      `Instance GUID: <a href="${this.searchLink(asmt)}">${asmt.instanceGuid}</a>`;
   }
 }
