@@ -40,15 +40,13 @@
         <tr class="non-breaking-rows">
           <th style="width:10px"></th>
           <th>Upload ID</th>
-          <th>Requested On</th>
-          <th>Completed On</th>
-          <th>Schema of content</th>
+          <th>Requested On / Completed On</th>
           <th>Status</th>
         </tr>
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td colspan="6" data-bind="html: recordsMessageObs"></td>
+          <td colspan="4" data-bind="html: recordsMessageObs"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
@@ -57,15 +55,22 @@
             <i data-bind="attr:{class:$component.iconFor($data)}"></i>
           </td>
           <td>
-            <a data-bind="visible: $component.isAdmin, text: $data.uploadId, 
-              href: '#/participants/' + $component.userIdObs() + '/uploads/' + $data.uploadId"></a>
-            <span data-bind="visible: !$component.isAdmin(), text: $data.uploadId"></span>
+            <div>
+              <a data-bind="text: $data.uploadId,
+              href: `#/studies/${$component.studyIdObs()}/participants/${$component.userIdObs()}/uploads/${$data.uploadId}`"></a>
+            </div>
+            <div data-bind="visible: !!$data.contentObs()">
+              Schema: <a target="_blank" rel="noopener" data-bind="href: $data.hrefObs, text: $data.contentObs"></a>
+            </div>
           </td>
+          <td>
+            <div style="white-space:nowrap">Requested: <span data-bind="text: $component.formatDateTime($data.requestedOn)"></span> / </div>
+            <div style="white-space:nowrap">Completed: <span data-bind="html: $data.completedByObs"></span></div>
+          </td>
+          <!--
           <td data-bind="text: $component.formatDateTime($data.requestedOn)"></td>
           <td data-bind="html: $data.completedByObs"></td>
-          <td>
-            <a target="_blank" rel="noopener" data-bind="href: $data.hrefObs, text: $data.contentObs"></a>
-          </td>
+          -->
           <td style="width:12rem">
             <div data-bind="semantic: $data.progressState">
               <div class="bar"></div>

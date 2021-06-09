@@ -14,6 +14,7 @@ export default function upload(params) {
     .obs("name")
     .obs("status")
     .obs("userId", params.userId)
+    .obs("studyId", params.studyId)
     .obs("subTitle", params.guid)
     .obs("uploadDetails")
     .bind("navStudyId", params.studyId)

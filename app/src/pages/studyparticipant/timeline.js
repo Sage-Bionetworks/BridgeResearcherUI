@@ -15,6 +15,9 @@ export default class StudyParticipantTimeline extends TimelineBaseAccount {
       this.navStudyNameObs(response.name);
     });
   }
+  searchLink(item) {
+    return `?instanceGuid=${item.instanceGuid}#/studies/${this.studyId}/participants/${this.userId}/schedule/adherencesearch`
+  }
   loadAccount() { 
     return serverService.getStudyParticipant(this.studyId, this.userId);
   }

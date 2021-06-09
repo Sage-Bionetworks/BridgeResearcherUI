@@ -38,7 +38,10 @@ function mapClientDataItem(item) {
 }
 
 function prettyPrintStringAsHTML(string) {
-  return JSON.stringify(JSON.parse(string), null, 2)
+  if (string) {
+    return JSON.stringify(JSON.parse(string), null, 2)
+  }
+  return '';
 }
 
 export default { prettyPrint, mapItem, mapClientDataItem, prettyPrintHTML, prettyPrintStringAsHTML };

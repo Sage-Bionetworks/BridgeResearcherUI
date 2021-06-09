@@ -26,39 +26,16 @@
     </div>
   </div>
   <div slot="content">
-    <div data-bind="foreach: entriesObs">
-      <div class="ui vertical menu" style="width: 100%">
-        <div class="active item">
-          <table width="100%">
-            <tr valign="top">
-              <td rowspan="2" style="width: 40%" data-bind="text: $parent.line1($data)"></td>
-              <td data-bind="text: $parent.line2($data)"></td>
-            </tr>
-            <tr>
-              <td>
-                <b>Session instance GUID:</b> <span data-bind="text: $data.instanceGuid"></span>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <!-- ko foreach: $data.assessments-->
-          <div class="item">
-            <table width="100%">
-              <tr valign="top">
-                <td rowspan="2" style="width: 40%" data-bind="text: $parents[1].asmtLabel($data)"></td>
-                <td>
-                  <b>ID: </b> <span data-bind="text: $parents[1].asmtId($data)"></span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <b>Instance GUID:</b> <span data-bind="text: $data.instanceGuid"></span>
-                </td>
-              </tr>
-            </table>
-          </div>
+    <style>
+      li { margin: 1rem 0; }
+    </style>
+    <!-- ko foreach: entriesObs -->
+      <div data-bind="html: $parent.sessionInfo($data)"></div>
+      <ul>
+        <!-- ko foreach: $data.assessments -->
+          <li data-bind="html: $parents[1].asmtInfo($data)"></li>
         <!-- /ko -->
-      </div>
-    </div>
+      </ul>  
+    <!-- /ko -->
   </div>
 </bsm-layout>
