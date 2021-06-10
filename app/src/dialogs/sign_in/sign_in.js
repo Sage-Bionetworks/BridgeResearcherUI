@@ -16,6 +16,7 @@ const APP_KEY = "appKey";
 const SUCCESS_MSG = "An email has been sent to that address with instructions on changing your password.";
 const COLLECTING_EMAIL = ['SignIn', 'ForgotPassword'];
 const OTHER_THAN_PHONE = ['SignIn', 'ExternalIdSignIn', 'ForgotPassword'];
+const SIGNIN_OPTIONS = ['SignIn', 'ExternalIdSignIn', 'PhoneSignIn'];
 
 const TITLES = {
   EnterCode: "Enter Code",
@@ -131,13 +132,6 @@ export default function() {
     if (error.hasErrors()) {
       return FAILURE_HANDLER(error);
     }
-    if (payload.phone && payload.phoneRegion) {
-      payload.phone = {
-        number: payload.phone.replace(/\D/g, ""),
-        regionCode: payload.phoneRegion
-      };
-      delete payload.phoneRegion;
-    }
     if (payload.token) {
       payload.token = payload.token.replace(/[^\d]/g, "");
     }
@@ -157,6 +151,13 @@ export default function() {
   });
   self.isState = function(state) {
     return self.stateObs() === state;
+  };
+  self.cycleCredentials = function(vm, event) {
+    var index = SIGNIN_OPTIONS.indexOf(self.stateObs());
+    if (++index > (SIGNIN_OPTIONS.length-1)) {
+      index = 0;
+    }
+    self.stateObs(SIGNIN_OPTIONS[index]);
   };
   self.submit = function(vm, event) {
     (event || vm).preventDefault();
@@ -192,7 +193,7 @@ export default function() {
     }
   };
   self.enterCode = function(vm, event) {
-    let payload = createPayload("token", "phone", "phoneRegion", "appId");
+    let payload = createPayload("token", "phone", "appId");
     if (payload) {
       self.cancel();
       clear();
@@ -206,7 +207,7 @@ export default function() {
     }
   };
   self.phoneSignIn = function(vm, event) {
-    let payload = createPayload("phone", "phoneRegion", "appId");
+    let payload = createPayload("phone", "appId");
     if (payload) {
       let { appKey, appName, environment } = collectValues();
       utils.startHandler(vm, SYNTH_EVENT);
