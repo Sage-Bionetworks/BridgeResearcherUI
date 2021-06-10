@@ -57,16 +57,20 @@
       <div class="field token" data-bind="visible: isState('EnterCode')">
         <div class="ui left icon input">
           <i class="phone icon"></i>
-          <input type="text" placeholder="Code" 
+          <input type="text" placeholder="Enter SMS Code" 
             data-bind="textInput: tokenObs, hasFocus: handleFocus('EnterCode')" />
         </div>
       </div>
 
-      <div data-bind="if: !isLockedObs()">
-        <div class="field" style="margin-top: 1rem" data-bind="visible: stateObs() !== 'ForgotPassword'">
+      <div data-bind="if: !isLockedObs()" style="display:flex; margin-top: 2rem">
+        <div class="field" style="flex:1" data-bind="visible: stateObs() !== 'ForgotPassword'">
           <ui-checkbox params="checkedObs: imAnAdminObs">
             I’m an admin
           </ui-checkbox>
+        </div>
+        <div>
+          <button style="margin-top: -.25rem" class="ui mini basic icon button"
+            data-bind="click: cycleCredentials"><i class="key icon"></i></button>
         </div>
       </div>
     </form>
