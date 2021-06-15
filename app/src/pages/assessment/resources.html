@@ -7,7 +7,7 @@
       </div>
       <h3 data-bind="text: pageTitleObs"></h3>
     </div>
-    <div class="fixed-header-buttons" data-bind="visible: canEditObs">
+    <div class="fixed-header-buttons" data-bind="visible: canEdit()">
       <button data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems"
         class="ui red tiny button">
         Delete
@@ -33,15 +33,15 @@
     </div>
   </div>
   <assessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
-    revisionObs: pageRevObs, originGuidObs: originGuidObs, canEditObs: canEditObs">
+    revisionObs: pageRevObs, originGuidObs: originGuidObs, canEditObs: canEdit">
   </assessment-tabset>
 </div>
-<bsm-layout id="assessment_resources">
+<bsm-layout id="assessment-resources">
   <div slot="header">
     <p data-bind="visible: originGuidObs">This is a copy of a shared assessment, so 
       <a data-bind="attr: {href:'#/sharedassessments/'+originGuidObs()+'/resources'}">
         all of that assessment’s documentation</a> applies to this assessment.</p>
-    <div class="ui form line-control" data-bind="visible: !originGuidObs() && canEditObs()">
+    <div class="ui form line-control" data-bind="visible: !originGuidObs() && canEdit()">
       <div>
         <input type="text" style="width: 8rem; margin-right: 1rem"
           data-bind="textInput: forRevisionObs, hasFocus: true" placeholder="Target Rev"/>
@@ -61,7 +61,7 @@
     <table class="ui compact selectable table">
       <thead>
         <tr>
-          <th width="10" data-bind="visible: canEditObs">
+          <th width="10" data-bind="visible: canEdit">
             <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
           </th>
           <th>Title</th>
@@ -75,20 +75,20 @@
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
           <td colspan="6" data-bind="html: recordsMessageObs, attr: {
-            colspan: canEditObs() ? '6' : '5'}"></td>
+            colspan: canEdit() ? '6' : '5'}"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
         <tr data-bind="css: {negative: $data.deleted}">
-          <td data-bind="visible: $parent.canEditObs">
+          <td data-bind="visible: $parent.canEdit()">
             <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
             <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
               style="cursor: pointer" class="green undo icon"></i>
           </td>
           <td>
-            <a data-bind="visible: $parent.canEditObs, text: $data.title, 
+            <a data-bind="visible: $parent.canEdit(), text: $data.title, 
               href: '#/assessments/' + $parent.guidObs() + '/resources/' + $data.guid"></a>
-            <a target="_blank" data-bind="visible: !$parent.canEditObs(), text: $data.title, href: $data.url"></a>
+            <a target="_blank" data-bind="visible: !$parent.canEdit(), text: $data.title, href: $data.url"></a>
             <div data-bind="text: $data.description"></div>
           </td>
           <td nowrap data-bind="text: $parent.formatCategory($data.category)"></td>

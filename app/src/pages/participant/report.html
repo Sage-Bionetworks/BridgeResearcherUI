@@ -9,10 +9,10 @@
     </div>
     <div class="fixed-header-buttons">
       <button class="ui tiny red button"
-        data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: deleteItems">
+        data-bind="disable: !atLeastOneChecked(), click: deleteItems">
         Delete records
       </button>
-      <button class="ui tiny primary button" data-bind="visible: isDeveloper, click: addReport">
+      <button class="ui tiny primary button" data-bind="click: addReport">
         Add report record&hellip;
       </button>
     </div>
@@ -40,7 +40,7 @@
     <table class="ui compact selectable json table">
       <thead>
         <tr>
-          <th width="10" data-bind="visible: isDeveloper"></th>
+          <th width="10"></th>
           <th width="100">Date</th>
           <th width="70"></th>
           <th>JSON</th>
@@ -53,7 +53,7 @@
       </tbody>
       <tbody data-bind="foreach: itemsObs">
         <tr>
-          <td data-bind="visible: $component.isDeveloper">
+          <td>
             <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
           </td>
           <td style="white-space: no-wrap" data-bind="text: $data.date"></td>

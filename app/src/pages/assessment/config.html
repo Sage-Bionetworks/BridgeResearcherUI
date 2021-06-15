@@ -7,21 +7,21 @@
       </div>
       <h3 data-bind="text: pageTitleObs"></h3>
     </div>
-    <div class="fixed-header-buttons">
+    <div class="fixed-header-buttons" data-bind="visible: canEdit()">
       <button class="ui tiny primary button" data-bind="click: save">Save</button>
     </div>
   </div>
   <assessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
-    revisionObs: pageRevObs, originGuidObs: originGuidObs, canEditObs: canEditObs">
+    revisionObs: pageRevObs, originGuidObs: originGuidObs, canEditObs: canEdit">
   </assessment-tabset>
 </div>
-<bsm-layout id="assessment_config">
+<bsm-layout id="assessment-config">
   <div slot="content">
-    <form class="ui form" data-bind="visible: canEditObs">
+    <form class="ui form" data-bind="visible: canEdit()">
       <div style="white-space: pre" 
-        data-bind="html: configFormatted(configObs()), visible: !canEditObs()"></div>
+        data-bind="html: configFormatted(configObs()), visible: !canEdit()"></div>
       <textarea style="font-family: monospace; height: 50rem" 
-        data-bind="textInput: configObs, visible: canEditObs"></textarea>
+        data-bind="textInput: configObs, visible: canEdit()"></textarea>
 
       <button class="ui tiny primary button" style="margin-top: 1rem" 
         data-bind="click: reformat">Reformat</button>

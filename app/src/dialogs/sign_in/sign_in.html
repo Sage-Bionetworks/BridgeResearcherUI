@@ -62,15 +62,17 @@
         </div>
       </div>
 
-      <div data-bind="if: !isLockedObs()" style="display:flex; margin-top: 2rem">
-        <div class="field" style="flex:1" data-bind="visible: stateObs() !== 'ForgotPassword'">
-          <ui-checkbox params="checkedObs: imAnAdminObs">
-            I’m an admin
-          </ui-checkbox>
-        </div>
-        <div>
-          <button style="margin-top: -.25rem" class="ui mini basic icon button"
-            data-bind="click: cycleCredentials"><i class="key icon"></i></button>
+      <div data-bind="visible: !isLockedObs() && stateObs() !== 'ForgotPassword'">
+        <div style="display: flex; margin-top: 2rem">
+          <div class="field" style="flex:1">
+            <ui-checkbox params="checkedObs: imAnAdminObs">
+              I’m an admin
+            </ui-checkbox>
+          </div>
+          <div>
+            <button style="margin-top: -.25rem" class="ui mini basic icon button"
+              data-bind="click: cycleCredentials"><i class="key icon"></i></button>
+          </div>
         </div>
       </div>
     </form>

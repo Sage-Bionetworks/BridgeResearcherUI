@@ -7,6 +7,9 @@ export default function tabset(params) {
 
   fn.copyProps(self, params, "identifierObs->studyIdObs", "isNewObs");
 
+  self.canEditStudy = function() {
+    return root.isDeveloper() || root.isStudyDesigner() || root.isAdmin();
+  }
   self.canAdminParticipants = function() {
     return root.isResearcher() || root.isStudyCoordinator() || root.isAdmin();
   }

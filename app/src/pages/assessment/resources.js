@@ -1,4 +1,3 @@
-import Binder from "../../binder";
 import fn from "../../functions";
 import ko from "knockout";
 import root from "../../root";
@@ -6,48 +5,50 @@ import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
 import optionsService from "../../services/options_service";
+import BaseAssessment from "./base_assessment";
 
-export default function(params) {
-  let self = this;
-  self.query = {};
+export default class AssessmentResources extends BaseAssessment {
+  constructor(params) {
+    super(params, 'assessment-resources');
+    this.query = {};
+    this.postLoadPagerFunc = fn.identity;
+    this.postLoadFunc = (func) => this.postLoadPagerFunc = func;
+  
+    fn.copyProps(this, root, "isAdmin");
+    this.loadResources = this.loadResources.bind(this);
 
-  fn.copyProps(self, root, "isAdmin");
-  self.reload = () => self.load(self.query);
+    this.binder
+      .obs("forRevision")
+      .obs('categories[]')
+      .obs('categoriesOptions[]', optionsService.getCategoryOptions())
+      .obs('category');
 
-  let binder = new Binder(self)
-    .obs("isNew", false)
-    .obs("guid", params.guid)
-    .obs("id")
-    .obs("originGuid")
-    .obs("pageTitle")
-    .obs("pageRev")
-    .obs("forRevision")
-    .obs('categories[]')
-    .obs('categoriesOptions[]', optionsService.getCategoryOptions())
-    .obs('category')
-    .bind('canEdit', false);
+    tables.prepareTable(this, {
+      name: "assessment documentation resource",
+      refresh: this.loadResources,
+      id: "assessment-resources",
+      delete: (item) => serverService.deleteAssessmentResource(this.identifierObs(), item.guid, false),
+      deletePermanently: (item) => serverService.deleteAssessmentResource(this.identifierObs(), item.guid, true),
+      undelete: (item) => serverService.updateAssessmentResource(this.identifierObs(), item),
+      publish: (item) => {
+        return serverService.getSharedAssessment(this.originGuidObs())
+          .then(shared => serverService.publishAssessmentResources(shared.identifier, [item.guid]));
+      }
+    });
 
-  tables.prepareTable(self, {
-    name: "assessment documentation resource",
-    refresh: self.reload,
-    id: "assessment_resources",
-    delete: (item) => serverService.deleteAssessmentResource(self.idObs(), item.guid, false),
-    deletePermanently: (item) => serverService.deleteAssessmentResource(self.idObs(), item.guid, true),
-    undelete: (item) => serverService.updateAssessmentResource(self.idObs(), item),
-    publish: (item) => {
-      return serverService.getSharedAssessment(self.originGuidObs())
-        .then(shared => serverService.publishAssessmentResources(shared.identifier, [item.guid]));
-    }
-  });
-
-  // some nonsense related to the pager that I copy now by rote
-  self.postLoadPagerFunc = fn.identity;
-  self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
-
-  self.formatCategory = function(value) {
+    super.load()
+      .then(this.loadResources)
+      .then(() => {
+        ko.postbox.subscribe('asmr-refresh', this.loadResources);
+        this.forRevisionObs.subscribe(this.loadResources);
+        this.categoryObs.subscribe(this.loadResources);
+      })
+      .catch(utils.failureHandler({ id: 'assessment_resources' }));
+  }
+  formatCategory(value) {
     return optionsService.CATEGORY_LABELS[value];
   }
-  self.formatRevisions = function(resource) {
+  formatRevisions(resource) {
     if (resource.minRevision && resource.maxRevision) {
       if (resource.minRevision === resource.maxRevision) {
         return resource.minRevision;
@@ -60,33 +61,15 @@ export default function(params) {
     }
     return '';
   }
-  self.load = function(query) {
-    query.category = self.categoryObs() ? [self.categoryObs()] : null;
-    query.minRevision = self.forRevisionObs();
-    query.maxRevision = self.forRevisionObs();
-    self.query = query;
+  loadResources(query) {
+    this.query = (typeof query === 'object') ? query : this.query;
+    this.query.category = this.categoryObs() ? [this.categoryObs()] : null;
+    this.query.minRevision = this.forRevisionObs();
+    this.query.maxRevision = this.forRevisionObs();
 
-    return serverService.getAssessmentResources(self.idObs(), query, self.showDeletedObs())
-      .then(fn.handleObsUpdate(self.itemsObs, "items"))
-      .then(self.postLoadPagerFunc)
-      .catch(utils.failureHandler({ id: 'assessment_resources' }));
+    return serverService.getAssessmentResources(this.identifierObs(), this.query, this.showDeletedObs())
+      .then(fn.handleObsUpdate(this.itemsObs, "items"))
+      .then(this.postLoadPagerFunc)
+      .catch(this.failureHandler);
   }
-
-  serverService.getAssessment(params.guid)
-    .then(binder.assign('assessment'))
-    .then(fn.handleObsUpdate(self.pageRevObs, "revision"))
-    .then(fn.handleObsUpdate(self.forRevisionObs, "revision"))
-    .then(fn.handleObsUpdate(self.originGuidObs, "originGuid"))
-    .then(fn.handleObsUpdate(self.pageTitleObs, "title"))
-    .then(fn.handleObsUpdate(self.idObs, "identifier"))
-    .then(serverService.getSession)
-    .then((session) => self.canEditObs(fn.canEditAssessment(self.assessment, session)))
-    .then(() => {
-      ko.postbox.subscribe('asmr-refresh', self.load);
-      self.forRevisionObs.subscribe(self.reload);
-      self.categoryObs.subscribe(self.reload);
-    })
-    .then(self.reload)
-    .catch(utils.failureHandler({ id: 'assessment_resources' }));
-
-};
+}

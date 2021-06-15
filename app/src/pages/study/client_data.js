@@ -1,46 +1,40 @@
-import Binder from "../../binder";
 import BridgeError from "../../bridge_error";
-import fn from "../../functions";
 import jsonFormatter from "../../json_formatter";
-import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
+import BaseStudy from "./base_study";
 
-export default function(params) {
-  let self = this;
+export default class StudyClientData extends BaseStudy {
+  constructor(params) {
+    super(params, 'study-client-data');
+    this.binder
+      .obs("name")
+      .obs("clientData");
 
-  var binder = new Binder(self)
-    .obs("name")
-    .obs("identifier")
-    .obs("isNew", false)
-    .obs("clientData");
-
-  fn.copyProps(self, root, "isDevRole");
-
-  self.save = function(vm, event) {
+    super.load().then(this.setClientData.bind(this));
+  }
+  save (vm, event) {
     utils.clearErrors();
-    if (!updateClientData()) {
+    if (!this.updateClientData()) {
       return;
     }
     utils.startHandler(vm, event);
-    serverService.updateStudy(self.study)
-      .then(res => self.study.version = res.version)
+    serverService.updateStudy(this.study)
+      .then(res => this.study.version = res.version)
       .then(utils.successHandler(vm, event, "Study updated."))
-      .catch(utils.failureHandler({id: 'study-client-data' }));
+      .catch(this.failureHandler);
   }
-
-  self.reformat = function() {
+  reformat() {
     utils.clearErrors();
-    updateClientData();
+    this.updateClientData();
   }
-
-  function updateClientData() {
+  updateClientData() {
     try {
-      if (self.clientDataObs()) {
-        self.study.clientData = JSON.parse(self.clientDataObs());
-        self.clientDataObs(jsonFormatter.prettyPrint(self.study.clientData));
+      if (this.clientDataObs()) {
+        this.study.clientData = JSON.parse(this.clientDataObs());
+        this.clientDataObs(jsonFormatter.prettyPrint(this.study.clientData));
       } else {
-        delete self.study.clientData;
+        delete this.study.clientData;
       }
     } catch (e) {
       let error = new BridgeError();
@@ -48,19 +42,13 @@ export default function(params) {
       utils.failureHandler({ id: 'study-client-data', transient: false })(error);
       return false;
     }
-    return true;    
+    return true;
   }
-
-  function setClientData(study) {
+  setClientData(study) {
     if (study.clientData) {
-      self.clientDataObs(jsonFormatter.prettyPrint(study.clientData));
+      this.clientDataObs(jsonFormatter.prettyPrint(study.clientData));
     } else {
-      self.clientDataObs("{}");
+      this.clientDataObs("{}");
     }
   }
-
-  serverService.getStudy(params.studyId)
-    .then(binder.assign('study'))
-    .then(binder.update())
-    .then(setClientData);
-};
+}

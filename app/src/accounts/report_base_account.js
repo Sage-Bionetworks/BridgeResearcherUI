@@ -43,6 +43,9 @@ export default class ReportBaseAccount extends BaseAccount {
   deleteReport(item) {
     throw new Error('deleteReport not implemented');
   }
+  canEdit() {
+    return root.isDeveloper() || root.isStudyCoordinator();
+  }
   getReports() {
     let startDate = fn.formatDate(this.startDateObs(), 'iso');
     let endDate = fn.formatDate(this.endDateObs(), 'iso');

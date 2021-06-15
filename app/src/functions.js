@@ -83,7 +83,8 @@ function canEditAssessment(assessment, session) {
     var orgId = assessment.ownerId;
   }
   return session.roles.indexOf('superadmin') > -1 || 
-    (session.roles.indexOf('developer') > -1 && session.appId === appId && session.orgMembership === orgId);
+    (session.roles.indexOf('study_designer') > -1 && session.appId === appId && session.orgMembership === orgId) ||
+    (session.roles.indexOf('developer') > -1 && session.appId === appId);
 }
 function flagForRegionCode(regionCode) {
   let entries = SUPPORTED_COUNTRIES.filter(entry => entry.regionCode === regionCode);

@@ -6,77 +6,75 @@ import root from "../../root";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
+import BaseStudy from "./base_study";
 
-export default function externalIds(params) {
-  let self = this;
-  self.vm = this;
+export default class StudyExternalIds extends BaseStudy {
+  constructor(params) {
+    super(params, 'external-ids');
 
-  self.query = {};
-  self.userStudies = [];
+    this.query = {};
+    this.userStudies = [];
+    this.postLoadPagerFunc = fn.identity;
+    this.postLoadFunc = (func) => this.postLoadPagerFunc = func;
 
-  let binder = new Binder(self)
-    .obs("title", "New Study")
-    .obs("isNew", false)
-    .obs("items[]", [])
-    .obs("total", 0)
-    .obs("result", "")
-    .obs("searchLoading", false)
-    .obs("idFilter")
-    .obs("studyId", params.studyId)
-    .bind("identifier", params.studyId)
-    .obs("showResults", false);
+    tables.prepareTable(this, {
+      refresh: () => this.loadExternalIds(this.query),
+      name: "external ID",
+      delete: (item) => serverService.deleteExternalId(item.identifier),
+      id: 'external-ids'
+    });
 
-  fn.copyProps(self, root, "isAdmin", "isDeveloper", "isResearcher");
+    console.log("this.itemsObs", this.itemsObs);
   
-  tables.prepareTable(self, {
-    refresh: () => self.load(self.query),
-    name: "external ID",
-    delete: (item) => serverService.deleteExternalId(item.identifier),
-    id: 'external-ids'
-  });
+    this.binder
+      .obs("total", 0)
+      .obs("result")
+      .obs("searchLoading", false)
+      .obs("idFilter")
+      .obs("showResults", false);
 
-  self.postLoadPagerFunc = fn.identity;
-  self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
+    fn.copyProps(this, root, "isAdmin", "isDeveloper", "isResearcher");
 
-  function initFromSession(session) {
-    self.userStudies = session.studyIds;
+    this.doSearch = this.doSearch.bind(this);
+
+    ko.postbox.subscribe('external-ids-refresh', this.loadExternalIds.bind(this));
+
+    serverService.getSession()
+      .then(this.initFromSession.bind(this))
+      .then(this.binder.assign("app"))
+      .then(() => super.load());
+  }
+  initFromSession(session) {
+    this.userStudies = session.studyIds;
     return serverService.getApp();
   }
-
-  self.openImportDialog = function(vm, event) {
-    self.showResultsObs(false);
+  openImportDialog(vm, event) {
+    this.showResultsObs(false);
     root.openDialog("external_id_importer", {
-      vm: self,
-      studyId: params.studyId,
-      reload: self.load.bind(self)
+      vm: this,
+      studyId: this.studyId,
+      reload: this.loadExternalIds.bind(this)
     });
-  };
-  self.link = (item) => 
-    `#/studies/${params.studyId}/participants/${encodeURIComponent("externalId:" + item.identifier)}/general`;
-  self.doSearch = (event) => {
+  }
+  link(item)  {
+    return`#/studies/${this.studyId}/participants/${encodeURIComponent("externalId:" + 
+      item.identifier)}/general`;
+  }
+  doSearch(event) {
     event.preventDefault();
     event.stopPropagation();
-    self.load(self.query);
-  };
-
-  self.matchesStudy = (studyId) => fn.studyMatchesUser(self.userStudies, studyId);
-
-  serverService.getSession()
-    .then(initFromSession)
-    .then(binder.assign("app"))
-    .then(() => serverService.getStudy(params.studyId))
-    .then(fn.handleObsUpdate(self.titleObs, "name"))
-    .catch(utils.failureHandler({ id: 'external-ids' }));
-
-  self.load = function(query) {
-    query = query || {};
-    self.query = query;
-    self.query.idFilter = self.idFilterObs();
-    return serverService.getExternalIdsForStudy(params.studyId, self.query)
-      .then(binder.update("total", "items"))
-      .then(self.postLoadPagerFunc)
-      .catch(utils.failureHandler({ id: 'external-ids' }));
+    this.loadExternalIds(this.query);
   }
-  self.loadingFunc = self.load;
-  ko.postbox.subscribe('external-ids-refresh', self.load);
-};
+  matchesStudy(studyId) {
+    fn.studyMatchesUser(this.userStudies, studyId);
+  }
+  loadExternalIds(query) {
+    query = query || {};
+    this.query = query;
+    this.query.idFilter = this.idFilterObs();
+    return serverService.getExternalIdsForStudy(this.studyId, this.query)
+      .then(fn.handleObsUpdate(this.itemsObs, "items"))
+      .then(this.postLoadPagerFunc)
+      .catch(this.failureHandler);
+  }
+}

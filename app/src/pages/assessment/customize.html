@@ -12,12 +12,12 @@
     </div>
   </div>
   <assessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
-    revisionObs: pageRevObs, originGuidObs: originGuidObs, canEditObs: canEditObs">
+    revisionObs: pageRevObs, originGuidObs: originGuidObs, canEditObs: canEdit">
   </assessment-tabset>
 </div>
-<bsm-layout id="assessment_customize">
+<bsm-layout id="assessment-customize">
   <div slot="content">
-    <div class="ui warning message" data-bind="visible: editorsObs().length === 0">
+    <div class="ui warning message" style="display:block" data-bind="if: editorsObs().length === 0">
       <p>No customizable fields have been set for this assessment (the whole configuration will need to be edited as JSON, but this assessment will no longer be an instance of a shared assessment). </p>
     </div>
     <form class="ui skinny form" data-bind="foreach: editorsObs">

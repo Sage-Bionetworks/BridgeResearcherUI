@@ -13,6 +13,9 @@ export default class StudyParticipantReport extends ReportBaseAccount {
     });
     serverService.getStudy(params.studyId).then(res => this.navStudyNameObs(res.name));
   }
+  canEdit() {
+    return super.canEdit();
+  }
   loadAccount() {
     return serverService.getStudyParticipant(this.studyId, this.userId);
   }

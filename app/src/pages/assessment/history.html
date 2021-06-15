@@ -7,7 +7,7 @@
       </div>
       <h3 data-bind="text: pageTitleObs"></h3>
     </div>
-    <div class="fixed-header-buttons">
+    <div class="fixed-header-buttons" data-bind="visible: canEdit">
       <button data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems"
         class="ui red tiny button">
         Delete
@@ -29,10 +29,10 @@
     </div>
   </div>
   <assessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
-    revisionObs: pageRevObs, originGuidObs: originGuidObs, canEditObs: canEditObs">
+    revisionObs: pageRevObs, originGuidObs: originGuidObs, canEditObs: canEdit">
   </assessment-tabset>
 </div>
-<bsm-layout id="assessment_history">
+<bsm-layout id="assessment-history">
   <div slot="header">
     <div class="line-control">
       <div class="ui breadcrumb">
@@ -50,7 +50,7 @@
     <table class="ui compact selectable table">
       <thead>
         <tr>
-          <th width="10" data-bind="visible: canEditObs()">
+          <th width="10" data-bind="visible: canEdit()">
             <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
           </th>
           <th nowrap>Title</th>
@@ -61,12 +61,12 @@
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td data-bind="html: recordsMessageObs, attr: {colspan: canEditObs() ? '5' : '4'}"></td>
+          <td data-bind="html: recordsMessageObs, attr: {colspan: canEdit() ? '5' : '4'}"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
         <tr data-bind="css: {negative: $data.deleted}">
-          <td data-bind="visible: $parent.canEditObs()">
+          <td data-bind="visible: $parent.canEdit()">
             <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
             <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
               style="cursor: pointer" class="green undo icon"></i>

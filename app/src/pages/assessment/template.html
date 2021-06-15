@@ -12,10 +12,10 @@
     </div>
   </div>
   <assessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
-    revisionObs: pageRevObs, originGuidObs: originGuidObs, canEditObs: canEditObs">
+    revisionObs: pageRevObs, originGuidObs: originGuidObs, canEditObs: canEdit">
   </assessment-tabset>
 </div>
-<bsm-layout id="assessment_template">
+<bsm-layout id="assessment-template">
   <div slot="content">
     <form class="ui form">
       <div data-bind="foreach: editorsObs">
@@ -28,7 +28,7 @@
             <div class="field">
               <div style="float:right; width: 8rem">
                 <button class="fluid ui compact red mini basic button" 
-                  data-bind="click: $parent.removeEditor">
+                  data-bind="click: $parent.removeEditor.bind($parent)">
                   <i class="delete icon"></i>Delete
                 </button>                  
               </div>

@@ -7,7 +7,7 @@
       </div>
       <h3 data-bind="text: titleObs"></h3>
     </div>
-    <div class="fixed-header-buttons" data-bind="visible: isDevRole()">
+    <div class="fixed-header-buttons" data-bind="visible: canEdit()">
       <button class="ui tiny primary button" data-bind="click: save">Save</button>
     </div>
   </div>
@@ -19,16 +19,11 @@
       <div class="fields">
         <div class="eight wide field required" id="name">
           <label>Name</label>
-          <input data-bind="textInput: nameObs, hasFocus: true, visible: isDevRole()" />
-          <div class="input-field-padding" data-bind="text: nameObs, visible: !isDevRole()"></div>
+          <input-editor params="obs: nameObs, canEdit: canEdit, hasFocus: true"></input-editor>
         </div>
-        <div class="four wide field required" id="identifier" data-bind="visible: isNewObs">
+        <div class="four wide field required" id="identifier">
           <label>Identifier</label>
-          <input type="text" data-bind="textInput: identifierObs" />
-        </div>
-        <div class="four wide field" id="id" data-bind="visible: !isNewObs()">
-          <label>Identifier</label>
-          <div class="input-field-padding" data-bind="text: identifierObs"></div>
+          <input-editor params="obs: identifierObs, canEdit: isNewObs()"></input-editor>
         </div>
         <div class="four wide field" id="phase">
           <label>Phase</label>
@@ -42,27 +37,30 @@
           options: schedulesObs,
           optionsCaption: 'Select a schedule:', 
             optionsText: 'label', optionsValue: 'value', 
-            value: scheduleGuidObs">
+            value: scheduleGuidObs, visible: canEdit()">
           </select>
+          <div class="input-field-padding" data-bind="text: scheduleGuidObs, visible: !canEdit()"></div>
         </div>
         <div class="eight wide field">
           <label>Institution ID</label>
-          <input type="text" data-bind="textInput: institutionIdObs" />
+          <input-editor params="obs: institutionIdObs, canEdit: canEdit"></input-editor>
         </div>
       </div>
       <div class="two fields">
         <div class="field">
           <label>Details</label>
-          <textarea style="height: 15rem" data-bind="textInput:detailsObs, hasFocus: true"></textarea>
+          <textarea style="height: 15rem" data-bind="textInput:detailsObs, 
+            hasFocus: true, visible: canEdit()"></textarea>
+          <div class="input-field-padding" data-bind="text: detailsObs, visible: !canEdit()"></div>
         </div>
         <div class="field">
           <div class="field">
             <label>Study Design Type</label>
-            <input type="text" data-bind="textInput: studyDesignTypeObs" />
+            <input-editor params="obs: studyDesignTypeObs, canEdit: canEdit"></input-editor>
           </div>
           <div class="field" style="margin-top: 1rem">
-            <label>Disease</label>
-            <input type="text" data-bind="textInput: diseaseObs" />
+            <label>Disease</irbNameObs>
+            <input-editor params="obs: diseaseObs, canEdit: canEdit"></input-editor>
           </div>
         </div>
       </div>
@@ -70,11 +68,11 @@
       <div class="two fields">
         <div class="field">
           <label>IRB Name</label>
-          <input type="text" data-bind="textInput: irbNameObs" />
+          <input-editor params="obs: irbNameObs, canEdit: canEdit"></input-editor>
         </div>
         <div class="field">
           <label>IRB Protocol ID</label>
-          <input type="text" data-bind="textInput: irbProtocolIdObs" />
+          <input-editor params="obs: irbProtocolIdObs, canEdit: canEdit"></input-editor>
         </div>
       </div>
       <div class="three fields">
@@ -83,16 +81,21 @@
           <select class="ui dropdown" data-bind="options: decisionTypeObs,
             optionsCaption: 'Select decision type:', 
             optionsText: 'label', optionsValue: 'value', 
-            value: irbDecisionTypeObs">
+            value: irbDecisionTypeObs, visible: canEdit()">
           </select>
+          <div class="input-field-padding" data-bind="text: irbDecisionTypeObs, visible: !canEdit()"></div>
         </div>
         <div class="field" id="irbDecisionOn">
           <label>Decision Date</label>
-          <input data-bind="flatpickr: irbDecisionOnObs" />
+          <input data-bind="flatpickr: irbDecisionOnObs, visible: canEdit()" />
+          <div class="input-field-padding" data-bind="text: formatDateTime(irbDecisionOnObs()), 
+            visible: !canEdit()"></div>
         </div>
         <div class="field" id="irbExpiresOn">
           <label>Decision expires on</label>
-          <input data-bind="flatpickr: irbExpiresOnObs" />
+          <input data-bind="flatpickr: irbExpiresOnObs, visible: canEdit()" />
+          <div class="input-field-padding" data-bind="text: formatDateTime(irbExpiresOnObs()), 
+            visible: !canEdit()"></div>
         </div>
       </div>
       <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">

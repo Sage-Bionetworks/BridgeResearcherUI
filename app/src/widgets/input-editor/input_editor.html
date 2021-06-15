@@ -1,0 +1,3 @@
+<input type="text" data-bind="textInput: obs, visible: canEdit(),
+  attr: {placeholder: placeholder}, hasFocus: hasFocus">
+<div class="input-field-padding" data-bind="text: formatter(obs()), visible: !canEdit()"></div>

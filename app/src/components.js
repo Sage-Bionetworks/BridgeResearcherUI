@@ -425,6 +425,8 @@ import timestamps from "./widgets/timestamps/timestamps";
 import timestampsHtml from "./widgets/timestamps/timestamps.html";
 import phone from "./widgets/phone/phone";
 import phoneHtml from "./widgets/phone/phone.html";
+import inputEditor from "./widgets/input-editor/input_editor";
+import inputEditorHtml from "./widgets/input-editor/input_editor.html";
 
 // DIALOGS
 import critEditor from "./dialogs/criteria_editor/criteria_editor";
@@ -698,6 +700,7 @@ reg("template-tabset", {viewModel: templateTabset, template: templateTabsetHtml}
 reg("pager", {viewModel: pager, template: pagerHtml});
 reg("timestamps", {viewModel: timestamps, template: timestampsHtml});
 reg("phone", {viewModel: phone, template: phoneHtml});
+reg("input-editor", {viewModel: inputEditor, template: inputEditorHtml})
 
 // Dialogs. These must be synchronous.
 reg("sign_out_user", {viewModel: signOutUser, template: signOutUserHtml, synchronous: true});

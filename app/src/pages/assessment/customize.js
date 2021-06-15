@@ -1,16 +1,8 @@
 import alerts from "../../widgets/alerts";
-import Binder from "../../binder";
-import fn from "../../functions";
 import ko from "knockout";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
-
-var failureHandler = utils.failureHandler({
-  redirectMsg: "Assessment not found.",
-  redirectTo: "assessments",
-  transient: false,
-  id: 'assessment_customize'
-});
+import BaseAssessment from "./base_assessment";
 
 function findByIdAndProp(data, nodeId, propName) {
   if (data && data.identifier === nodeId && data[propName]) {
@@ -41,64 +33,50 @@ function convertValue(type, value) {
   return value;
 }
 
-export default function(params) {
-  let self = this;
+export default class AssessmentCustomize extends BaseAssessment {
+  constructor(params) {
+    super(params, 'assessment-customize');
 
-  let binder = new Binder(self)
-    .obs("isNew", false)
-    .obs("guid", params.guid)
-    .obs("originGuid")
-    .obs("pageTitle", "New Assessment")
-    .obs("pageRev")
-    .obs("editors[]")
-    .obs("canEdit", false);
+    this.binder.obs("editors[]");
 
-  self.save = function(vm, event) {
+    super.load()
+      .then(() => serverService.getAssessmentConfig(params.guid))
+      .then(this.binder.assign('config'))
+      .then(response => this.data = response.config)
+      .then(this.updateEditors.bind(this));
+  }
+  save(vm, event) {
     utils.startHandler(vm, event);
 
     let map = {};
-    for (let i=0; i < self.editorsObs().length; i++) {
-      let editor = self.editorsObs()[i];
+    for (let i=0; i < this.editorsObs().length; i++) {
+      let editor = this.editorsObs()[i];
       if (!map[editor.fieldIdentifier]) {
         map[editor.fieldIdentifier] = {};
       }
       map[editor.fieldIdentifier][editor.propName] = 
         convertValue(editor.propType, editor.valueObs());
     }
-
-    serverService.customizeAssessmentConfig(params.guid, map)
-      .then(binder.update())
+    serverService.customizeAssessmentConfig(this.guidObs(), map)
+      .then(this.binder.update())
       .then(utils.successHandler(vm, event, "Assessment configuration has been customized."))
-      .catch(failureHandler);
-  };
-  self.unlink = function(vm, event) {
-    alerts.deleteConfirmation("Are you sure? We cannot undo this.", function() {
-      serverService.updateAssessmentConfig(params.guid, self.config)
-        .then(() => document.location = `#/assessments/${params.guid}/config`);
-    }, "Delete");    
-  };
-
-  function updateEditors() {
-    let cf = self.assessment.customizationFields || {};
+      .catch(this.failureHandler);
+  }
+  unlink(vm, event) {
+    alerts.deleteConfirmation("Are you sure? We cannot undo this.", () => {
+      serverService.updateAssessmentConfig(this.guidObs(), this.config)
+        .then(() => document.location = `#/assessments/${this.guidObs()}/config`);
+    }, "Delete");
+  }
+  updateEditors() {
+    let cf = this.assessment.customizationFields || {};
     Object.keys(cf).forEach(fieldIdentifier => {
       for (let i=0; i < cf[fieldIdentifier].length; i++) {
         let editor = cf[fieldIdentifier][i];
         editor.fieldIdentifier = fieldIdentifier;
-        editor.valueObs = ko.observable(findByIdAndProp(self.data, fieldIdentifier, editor.propName));
-        self.editorsObs.push(editor);
+        editor.valueObs = ko.observable(findByIdAndProp(this.data, fieldIdentifier, editor.propName));
+        this.editorsObs.push(editor);
       }
     });
   }
-  
-  serverService.getAssessment(params.guid)
-    .then(fn.handleObsUpdate(self.pageRevObs, "revision"))
-    .then(fn.handleObsUpdate(self.pageTitleObs, "title"))
-    .then(fn.handleObsUpdate(self.originGuidObs, "originGuid"))
-    .then(binder.assign('assessment'))
-    .then(() => serverService.getAssessmentConfig(params.guid))
-    .then(binder.assign('config'))
-    .then((response) => self.data = response.config)
-    .then(updateEditors)
-    .then(serverService.getSession)
-    .then((session) => self.canEditObs(fn.canEditAssessment(self.assessment, session)));
-};
+}

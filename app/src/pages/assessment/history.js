@@ -1,72 +1,52 @@
-import Binder from "../../binder";
 import fn from "../../functions";
-import ko from "knockout";
 import optionsService from "../../services/options_service";
 import root from "../../root";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
+import BaseAssessment from "./base_assessment";
 
-export default function(params) {
-  let self = this;
-  self.query = {};
-  self.reload = () => load(self.query);
+export default class AssessmentHistory extends BaseAssessment {
+  constructor(params) {
+    super(params, 'assessment-history');
+    this.query = {};
+    this.orgNames = {};
+    // some nonsense related to the pager that I copy now by rote
+    this.postLoadPagerFunc = fn.identity;
+    this.postLoadFunc = (func) => this.postLoadPagerFunc = func;
 
-  fn.copyProps(self, root, "isAdmin");
+    fn.copyProps(this, root, "isAdmin");
 
-  let binder = new Binder(self)
-    .obs("isNew", false)
-    .obs("guid", params.guid)
-    .obs("pageTitle")
-    .obs("pageRev")
-    .obs("originGuid")
-    .obs("showDeleted", false)
-    .bind("orgOptions[]")
-    .bind("canEdit", false);
+    this.binder
+      .obs("showDeleted", false)
+      .bind("orgOptions[]");
 
-  tables.prepareTable(self, {
-    name: "assessment revision",
-    refresh: self.reload,
-    id: "assessment_history",
-    delete: (item) => serverService.deleteAssessment(item.guid, false),
-    deletePermanently: (item) => serverService.deleteAssessment(item.guid, true),
-    undelete: (item) => serverService.updateAssessment(item)
-  });
+    tables.prepareTable(this, {
+      name: "assessment revision",
+      refresh: this.loadRevisions.bind(this),
+      id: "assessment-history",
+      delete: (item) => serverService.deleteAssessment(item.guid, false),
+      deletePermanently: (item) => serverService.deleteAssessment(item.guid, true),
+      undelete: (item) => serverService.updateAssessment(item)
+    });
 
-  // some nonsense related to the pager that I copy now by rote
-  self.postLoadPagerFunc = fn.identity;
-  self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
-  
-  self.orgNames = {};
-
-  self.formatTitle = function(item) {
+    super.load()
+      .then(optionsService.getOrganizationNames)
+      .then((map) => this.orgNames = map)
+      .then(() => this.loadRevisions(this.query));
+  }
+  formatTitle(item) {
     return `${item.title} (v${item.revision})`;
   }
-
-  self.formatOrg = function(orgId) {
-    return self.orgNames[orgId] ? self.orgNames[orgId] : orgId;
+  formatOrg(orgId) {
+    return this.orgNames[orgId] ? this.orgNames[orgId] : orgId;
   }
-
-  function load(query) {
-    self.query = query;
-    return serverService.getAssessmentRevisions(params.guid, query, self.showDeletedObs())
+  loadRevisions(query) {
+    this.query = query;
+    return serverService.getAssessmentRevisions(this.guidObs(), query, this.showDeletedObs())
       .then(utils.resolveDerivedFrom)
-      .then(fn.handleObsUpdate(self.itemsObs, "items"))
-      .then(self.postLoadPagerFunc)
-      .catch(utils.failureHandler({ id: 'assessment_history' }));
+      .then(fn.handleObsUpdate(this.itemsObs, "items"))
+      .then(this.postLoadPagerFunc)
+      .catch(this.failureHandler);
   }
-
-  serverService.getAssessment(params.guid)
-    .then(assessment => self.assessment = assessment)
-    .then(serverService.getSession)
-    .then((session) => self.canEditObs(fn.canEditAssessment(self.assessment, session)))
-    .then(optionsService.getOrganizationNames)
-    .then((map) => self.orgNames = map)
-    .then(() => serverService.getAssessment(params.guid))
-    .then(binder.assign('assessment'))
-    .then(fn.handleObsUpdate(self.pageRevObs, "revision"))
-    .then(fn.handleObsUpdate(self.pageTitleObs, "title"))
-    .then(fn.handleObsUpdate(self.originGuidObs, "originGuid"))
-    .then(() => ko.postbox.subscribe('asmh-refresh', self.load))
-    .then(self.reload);
-};
+}

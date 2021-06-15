@@ -7,12 +7,12 @@
       </div>
       <h3 data-bind="text: pageTitleObs"></h3>
     </div>
-    <div class="fixed-header-buttons" data-bind="visible: canEditObs">
+    <div class="fixed-header-buttons" data-bind="visible: canEdit()">
       <button class="ui tiny primary button" data-bind="click: save">Save</button>
     </div>
   </div>
   <assessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
-    revisionObs: pageRevObs, originGuidObs: originGuidObs, canEditObs: canEditObs">
+    revisionObs: pageRevObs, originGuidObs: originGuidObs, canEditObs: canEdit">
   </assessment-tabset>
 </div>
 <bsm-layout id="assessment-ui">
@@ -29,8 +29,7 @@
     </div>
     <div class="field" id="minutesToComplete">
       <label>Minutes to complete</label>
-      <input type="text" style="width: 8rem" 
-        data-bind="textInput: minutesToCompleteObs, visible: canEditObs" />
+      <input type="text" style="width: 8rem" data-bind="textInput: minutesToCompleteObs" />
     </div>
     <div class="fields">
       <div class="field" id="colorScheme_background">

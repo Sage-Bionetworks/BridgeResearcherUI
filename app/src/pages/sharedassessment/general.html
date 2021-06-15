@@ -26,16 +26,15 @@
     <div class="fields">
       <div class="eight wide required field" id="title">
         <label>Title</label>
-        <input type="text" data-bind="textInput: titleObs, hasFocus: true, visible: canEditObs" />
-        <div class="input-field-padding" data-bind="text: titleObs, visible: !canEditObs()"></div>
+        <input-editor params="obs: titleObs, canEdit: canEditObs, hasFocus: true"></input-editor>
       </div>
       <div class="required four wide field" id="identifier">
         <label>Identifier</label>
-        <div class="input-field-padding" data-bind="text: identifierObs"></div>
+        <input-editor params="obs: identifierObs, canEdit: false"></input-editor>
       </div>
       <div class="four wide field" id="revision" style="width: 10rem">
         <label>Revision</label>
-        <div class="input-field-padding" data-bind="text: revisionObs"></div>
+        <input-editor params="obs: revisionObs, canEdit: false"></input-editor>
       </div>
     </div>
     <div class="two fields">

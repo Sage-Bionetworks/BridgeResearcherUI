@@ -1,5 +1,4 @@
 import alerts from "../../widgets/alerts";
-import Binder from "../../binder";
 import config from "../../config";
 import fn from "../../functions";
 import ko from "knockout";
@@ -7,60 +6,56 @@ import root from "../../root";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
+import BaseStudy from "./base_study";
 
-export default function(params) {
-  let self = this;
+export default class StudySponsors extends BaseStudy {
+  constructor(params) {
+    super(params, 'sponsors');
+    fn.copyProps(this, root, "isAdmin");
 
-  self.query = {pageSize: 100};
-  self.postLoadPagerFunc = fn.identity;
-  self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
-  fn.copyProps(self, root, "isAdmin");
+    this.query = {pageSize: 100};
+    this.postLoadPagerFunc = fn.identity;
+    this.postLoadFunc = (func) => this.postLoadPagerFunc = func;
 
-  new Binder(self)
-    .obs("title", "New Study")
-    .obs("isNew", false)
-    .bind("identifier", params.studyId);
+    tables.prepareTable(this, {
+      name: "sponsor",
+      type: "Sponsor",
+      id: "sponsors",
+      refresh: () => this.loadSponsors(this.query)
+    });
+    ko.postbox.subscribe('sp-refresh', this.loadSponsors.bind(this));
 
-  self.addSponsorDialog = function() {
+    super.load();
+  }
+  addSponsorDialog() {
     root.openDialog("add_sponsor", {
       closeFunc: fn.seq(root.closeDialog, () => {
-        self.query.offsetBy = 0;
-        loadSponsors(self.query)
+        this.query.offsetBy = 0;
+        this.loadSponsors(this.query)
       }),
-      studyId: params.studyId
+      studyId: this.studyId
     });
-  };
-  self.removeSponsor = (item, event) => {
+  }
+  removeSponsor(item, event) {
+    console.log(this, item);
     alerts.deleteConfirmation(config.msgs.UNDO_SPONSOR, () => {
-      utils.startHandler(self, event);
-      serverService.removeSponsor(params.studyId, item.identifier)
-        .then(() => loadSponsors(self.query))
-        .then(utils.successHandler(self, event, "Sponsor removed."))
-        .catch(utils.failureHandler({ id: 'sponsors' }));
+      utils.startHandler(this, event);
+      serverService.removeSponsor(this.studyId, item.identifier)
+        .then(() => this.loadSponsors(this.query))
+        .then(utils.successHandler(this, event, "Sponsor removed."))
+        .catch(this.failureHandler);
     });
-  };
-
-  tables.prepareTable(self, {
-    name: "sponsor",
-    type: "Sponsor",
-    id: "sponsors",
-    refresh: () => loadSponsors(self.query)
-  });
-
-  serverService.getStudy(params.studyId)
-    .then(fn.handleObsUpdate(self.titleObs, "name"));
-
-  function loadSponsors(query) {
-    if (self.isNewObs()) {
+  }
+  loadSponsors(query) {
+    if (this.isNewObs()) {
       return Promise.resolve({});
     }
     // some state is not in the pager, update that and capture last known state of paging
-    self.query = query;
+    this.query = query;
 
-    serverService.getSponsors(params.studyId, query)
-      .then(fn.handleObsUpdate(self.itemsObs, "items"))
-      .then(self.postLoadPagerFunc)
-      .catch(utils.failureHandler({ id: 'sponsors' }));
+    serverService.getSponsors(this.studyId, query)
+      .then(fn.handleObsUpdate(this.itemsObs, "items"))
+      .then(this.postLoadPagerFunc)
+      .catch(this.failureHandler);
   }
-  ko.postbox.subscribe('sp-refresh', loadSponsors);
-};
+}
