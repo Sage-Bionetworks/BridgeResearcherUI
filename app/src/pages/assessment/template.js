@@ -1,8 +1,8 @@
 import alerts from "../../widgets/alerts";
+import BaseAssessment from "./base_assessment.js";
 import Binder from "../../binder";
 import config from "../../config";
 import ko from "knockout";
-import BaseAssessment from "./base_assessment.js";
 
 export default class AssessmentTemplate extends BaseAssessment {
   constructor(params) {

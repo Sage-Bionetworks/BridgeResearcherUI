@@ -31,9 +31,6 @@ export default class BaseAssessment {
   canEdit() {
     return root.isAdmin() || root.isStudyDesigner() || root.isDeveloper();
   }
-  canPublish() {
-    return root.isAdmin() || root.isDeveloper();
-  }
   saveAssessment(revisionChanged) {
     if (this.isNewObs()) {
       return serverService.createAssessment(this.assessment)

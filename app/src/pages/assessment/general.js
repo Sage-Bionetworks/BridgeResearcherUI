@@ -1,8 +1,8 @@
 import alerts from "../../widgets/alerts";
+import BaseAssessment from "./base_assessment.js";
 import optionsService from "../../services/options_service";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
-import BaseAssessment from "./base_assessment.js";
 
 export default class GeneralAssessment extends BaseAssessment {
   constructor(params) {
@@ -74,16 +74,3 @@ export default class GeneralAssessment extends BaseAssessment {
     this.allTagsObs.pushAll(array);
   }
 }
-
-/*
-
-
-
-
-  serverService.getTags()
-    .then(addTags)
-    .then(optionsService.getOrganizationOptions)
-    .then((opts) => self.orgOptionsObs.pushAll(opts))
-    .then(load);
-};
-*/

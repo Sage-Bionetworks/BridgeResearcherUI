@@ -1,5 +1,5 @@
-import Binder from "../../binder";
 import BaseAssessment from "./base_assessment.js";
+import Binder from "../../binder";
 
 export default class AssessmentUi extends BaseAssessment {
   constructor(params) {
@@ -18,8 +18,7 @@ export default class AssessmentUi extends BaseAssessment {
       .bind("activated", null, Binder.fromObjectField("colorScheme", "activated"),
           Binder.toObjectField("colorScheme", "activated"))
       .bind("inactivated", null, Binder.fromObjectField("colorScheme", "inactivated"),
-          Binder.toObjectField("colorScheme", "inactivated"))
-      .obs("canEdit", false);
+          Binder.toObjectField("colorScheme", "inactivated"));
 
     super.load()
       .catch(this.failureHandler);

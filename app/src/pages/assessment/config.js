@@ -1,9 +1,9 @@
+import BaseAssessment from "./base_assessment";
 import Binder from "../../binder";
 import BridgeError from "../../bridge_error";
 import jsonFormatter from "../../json_formatter";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
-import BaseAssessment from "./base_assessment";
 
 export default class AssessmentConfig extends BaseAssessment {
   constructor(params) {

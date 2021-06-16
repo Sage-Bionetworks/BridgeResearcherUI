@@ -1,9 +1,9 @@
+import BaseAssessment from "./base_assessment";
 import Binder from "../../binder";
 import fn from "../../functions";
 import optionsService from "../../services/options_service";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
-import BaseAssessment from "./base_assessment";
 
 export default class AssessmentResource extends BaseAssessment {
   constructor(params) {

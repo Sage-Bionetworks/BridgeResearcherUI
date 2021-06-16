@@ -1,8 +1,8 @@
 import alerts from "../../widgets/alerts";
+import BaseAssessment from "./base_assessment";
 import ko from "knockout";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
-import BaseAssessment from "./base_assessment";
 
 function findByIdAndProp(data, nodeId, propName) {
   if (data && data.identifier === nodeId && data[propName]) {
