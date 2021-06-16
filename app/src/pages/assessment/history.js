@@ -33,7 +33,8 @@ export default class AssessmentHistory extends BaseAssessment {
     super.load()
       .then(optionsService.getOrganizationNames)
       .then((map) => this.orgNames = map)
-      .then(() => this.loadRevisions(this.query));
+      .then(() => this.loadRevisions(this.query))
+      .catch(this.failureHandler);
   }
   formatTitle(item) {
     return `${item.title} (v${item.revision})`;
@@ -46,7 +47,6 @@ export default class AssessmentHistory extends BaseAssessment {
     return serverService.getAssessmentRevisions(this.guidObs(), query, this.showDeletedObs())
       .then(utils.resolveDerivedFrom)
       .then(fn.handleObsUpdate(this.itemsObs, "items"))
-      .then(this.postLoadPagerFunc)
-      .catch(this.failureHandler);
+      .then(this.postLoadPagerFunc);
   }
 }

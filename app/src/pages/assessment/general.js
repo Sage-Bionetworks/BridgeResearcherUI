@@ -34,7 +34,8 @@ export default class GeneralAssessment extends BaseAssessment {
       .then(res => this.addTags(res))
       .then(optionsService.getOrganizationOptions)
       .then(opts => this.orgOptionsObs.pushAll(opts))
-      .then(() => this.load());
+      .then(() => this.load())
+      .catch(this.failureHandler);
   }
   createHistoryLink() {
     return `#/assessments/${this.guidObs()}/history`;

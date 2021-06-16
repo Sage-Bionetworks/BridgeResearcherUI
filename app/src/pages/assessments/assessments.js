@@ -29,7 +29,7 @@ export default class Assessments {
     ko.postbox.subscribe('asm-refresh', this.load.bind(this));
   }
   canDelete() {
-    return root.isDeveloper() || root.isAdmin();
+    return root.isDeveloper() || root.isStudyDesigner() || root.isAdmin();
   }
   canEdit() {
     return root.isDeveloper() || root.isStudyDesigner() || root.isAdmin();

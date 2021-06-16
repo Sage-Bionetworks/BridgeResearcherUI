@@ -16,7 +16,8 @@ export default class AssessmentConfig extends BaseAssessment {
     super.load()
       .then(() => serverService.getAssessmentConfig(params.guid))
       .then(this.binder.assign("config"))
-      .then(this.binder.update());
+      .then(this.binder.update())
+      .catch(this.failureHandler);
   }
   save(vm, event) {
     let config = this.binder.persist(this.config);

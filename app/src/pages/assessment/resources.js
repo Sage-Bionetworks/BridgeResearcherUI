@@ -3,7 +3,6 @@ import ko from "knockout";
 import root from "../../root";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
-import utils from "../../utils";
 import optionsService from "../../services/options_service";
 import BaseAssessment from "./base_assessment";
 
@@ -43,7 +42,7 @@ export default class AssessmentResources extends BaseAssessment {
         this.forRevisionObs.subscribe(this.loadResources);
         this.categoryObs.subscribe(this.loadResources);
       })
-      .catch(utils.failureHandler({ id: 'assessment_resources' }));
+      .catch(this.failureHandler);
   }
   formatCategory(value) {
     return optionsService.CATEGORY_LABELS[value];

@@ -21,7 +21,8 @@ export default class AssessmentUi extends BaseAssessment {
           Binder.toObjectField("colorScheme", "inactivated"))
       .obs("canEdit", false);
 
-    super.load();
+    super.load()
+      .catch(this.failureHandler);
   }
   addLabel() {
     this.labelsObs.push({});

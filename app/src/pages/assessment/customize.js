@@ -43,7 +43,8 @@ export default class AssessmentCustomize extends BaseAssessment {
       .then(() => serverService.getAssessmentConfig(params.guid))
       .then(this.binder.assign('config'))
       .then(response => this.data = response.config)
-      .then(this.updateEditors.bind(this));
+      .then(this.updateEditors.bind(this))
+      .catch(this.failureHandler);
   }
   save(vm, event) {
     utils.startHandler(vm, event);
