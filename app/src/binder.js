@@ -241,6 +241,7 @@ export default class Binder {
   }
   static fromCustomizationFields(object, context) {
     let editorsObs = context.vm.editorsObs;
+    editorsObs([]);
     let cf = object || {};
     Object.keys(cf).forEach(fieldIdentifier => {
       for (let i=0; i < cf[fieldIdentifier].length; i++) {

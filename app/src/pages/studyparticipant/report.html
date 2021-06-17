@@ -15,7 +15,7 @@
         data-bind="visible: isDeveloper, disable: !atLeastOneChecked(), click: deleteItems">
         Delete records
       </button>
-      <button class="ui tiny primary button" data-bind="visible: isDeveloper, click: addReport">
+      <button class="ui tiny primary button" data-bind="visible: canEdit, click: addReport">
         Add report record&hellip;
       </button>
     </div>

@@ -4,11 +4,11 @@
       <h3>Assessments</h3>
     </div>
     <div class="fixed-header-buttons">
-      <button data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems"
+      <button data-bind="visible: canDelete() && !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems"
         class="ui red tiny button">
         Delete
       </button>
-      <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
+      <div class="ui red tiny buttons" data-bind="visible: canDelete() && isAdmin(), disable: !atLeastOneChecked()">
         <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()},
           semantic: 'dropdown-button-toggle', container: '.buttons'">
           Delete
@@ -33,7 +33,7 @@
       <div>
         <div class="ui left icon input">
           <input type="text" placeholder="Filter with tags..."
-            data-bind="textInput: tagsObs, click: reload, returnHandler: reload"/>
+            data-bind="textInput: tagsObs, click: load, returnHandler: load"/>
           <i class="filter icon"></i>
         </div>
       </div>
@@ -47,7 +47,7 @@
     <table class="ui compact selectable table">
       <thead>
         <tr>
-          <th width="10">
+          <th width="10" data-bind="visible: canDelete()">
             <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
           </th>
           <th nowrap>Title</th>
@@ -58,12 +58,13 @@
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td colspan="5" data-bind="html: recordsMessageObs"></td>
+          <td data-bind="html: recordsMessageObs, 
+            attr: {'colspan': canDelete() ? 5 : 4}"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
         <tr data-bind="css: {negative: $data.deleted}">
-          <td>
+          <td data-bind="visible: $parent.canDelete()">
             <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
             <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
               style="cursor: pointer" class="green undo icon"></i>

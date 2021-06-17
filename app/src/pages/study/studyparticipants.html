@@ -9,7 +9,7 @@
     </div>
     <div class="fixed-header-buttons">
       <button class="ui tiny button" data-bind="click: exportDialog">Export&hellip;</button>
-      <a data-bind="href: '#/studies/'+studyIdObs()+'/participants/new/general'"
+      <a data-bind="href: '#/studies/'+studyId+'/participants/new/general'"
         class="ui primary tiny button">New Participant</a>
       <div class="ui search">
         <div class="ui icon input">
@@ -20,7 +20,7 @@
       </div>
     </div>
   </div>
-  <study-tabset params="identifierObs: studyIdObs, isNewObs: isNewObs"></study-tabset>
+  <study-tabset params="identifierObs: identifierObs, isNewObs: isNewObs"></study-tabset>
 </div>
 <bsm-layout id="studyparticipants">
   <div slot="header">
@@ -44,7 +44,7 @@
       <tbody data-bind="foreach: itemsObs">
         <tr data-bind="css: $component.classNameForStatus($data)">
           <td>
-            <a data-bind="href: '#/studies/'+$parent.studyIdObs()+'/participants/'+$data.id+'/general',
+            <a data-bind="href: '#/studies/'+$parent.studyId+'/participants/'+$data.id+'/general',
               text: $component.formatNameAsFullLabel($data)"></a>
           </td>
           <td data-bind="html: $component.formatIdentifiers($data)"></td>

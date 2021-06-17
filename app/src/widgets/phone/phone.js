@@ -9,6 +9,7 @@ export default function(params) {
   let self = this;
 
   let phone = params.phoneObs();
+  self.canEdit = params.canEdit || ko.observable(true);
 
   new Binder(self)
     .obs("phoneNumber", (phone) ? phone.number : '')

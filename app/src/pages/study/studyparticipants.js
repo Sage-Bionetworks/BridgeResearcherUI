@@ -1,5 +1,3 @@
-import alerts from "../../widgets/alerts";
-import Binder from "../../binder";
 import fn from "../../functions";
 import ko from "knockout";
 import root from "../../root";
@@ -7,13 +5,13 @@ import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
 import options_service from "../../services/options_service";
+import BaseStudy from "./base_study";
 
 const cssClassNameForStatus = {
   disabled: "negative",
   unverified: "warning",
   verified: ""
 };
-
 function assignClassForStatus(participant) {
   // does not have sharing scope so we can't show it on summary page.
   return cssClassNameForStatus[participant.status];
@@ -40,34 +38,32 @@ function getEmail(studyId, userId) {
 function makeSuccess(vm, event) {
   return function(response) {
     event.target.parentNode.parentNode.classList.remove("loading");
-    document.location = `#/studies/${vm.studyIdObs()}/participants/${response.id}/general`;
+    document.location = `#/studies/${this.studyId}/participants/${response.id}/general`;
   };
 }
 
-export default function participants(params) {
-  let self = this;
+export default class StudyParticipant extends BaseStudy {
+  constructor(params) {
+    super(params, 'studyparticipants');
 
-  self.total = 0;
+    fn.copyProps(this, fn, "formatName", "formatDateTime", "formatIdentifiers", "formatNameAsFullLabel");
+    this.classNameForStatus = assignClassForStatus;
+  
+    tables.prepareTable(this, {
+      name: "participant",
+      id: "studyparticipants",
+      delete: (item) => serverService.deleteStudyParticipant(this.studyId, item.id),
+      refresh: () => ko.postbox.publish("studyparticipants")
+    });
+  
+    this.binder.obs("find");
+    this.loadingFunc = this.loadingFunc.bind(this);
 
-  tables.prepareTable(self, {
-    name: "participant",
-    id: "studyparticipants",
-    delete: (item) => serverService.deleteStudyParticipant(params.studyId, item.id),
-    refresh: () => ko.postbox.publish("studyparticipants")
-  });
-
-  fn.copyProps(self, fn, "formatName", "formatDateTime", "formatIdentifiers", "formatNameAsFullLabel");
-  fn.copyProps(self, root, "isAdmin", "isDeveloper", "isResearcher");
-  self.classNameForStatus = assignClassForStatus;
-
-  new Binder(self)
-    .obs("find", "")
-    .obs("title", "New Study")
-    .obs("isNew", false)
-    .bind("studyId", params.studyId);
-
-  function load(response) {
-    self.total = response.total;
+    super.load();
+  }
+  loadParticipants(response) {
+    // TODO: for some reason, we're doing this manually...why?
+    this.total = response.total;
     response.items = response.items.map(function(item) {
       item.studyIds = item.studyIds || [];
       if (item.phone) {
@@ -77,23 +73,21 @@ export default function participants(params) {
       }
       return item;
     });
-    self.itemsObs(response.items);
+    this.itemsObs(response.items);
     if (response.items.length === 0) {
-      self.recordsMessageObs("There are no user accounts, or none that match the filter.");
+      this.recordsMessageObs("There are no user accounts, or none that match the filter.");
     }
     return response;
   }
-
-  self.formatStudyName = function(id) {
-    return self.studyNames[id];
+  formatStudyName(id) {
+    return this.studyNames[id];
   }
-
-  self.doSearch = function(event) {
+  doSearch(event) {
     event.target.parentNode.parentNode.classList.add("loading");
 
-    let id = self.findObs().trim();
-    let success = makeSuccess(self, event);
-    utils.startHandler(self, event);
+    let id = this.findObs().trim();
+    let success = makeSuccess(this, event);
+    utils.startHandler(this, event);
 
     let promise = null;
     if (id.endsWith('@synapse.org')) {
@@ -113,22 +107,24 @@ export default function participants(params) {
       });
     }
     promise.catch(utils.failureHandler({id: 'studyparticipants'}));
-  };
-  self.exportDialog = function() {
-    root.openDialog("participant_export", { total: self.total, search: self.search, studyId: params.studyId });
-  };
-  self.loadingFunc = function(search) {
+  }
+  exportDialog() {
+    root.openDialog("participant_export", { 
+      total: this.total, 
+      search: this.search, 
+      studyId: this.studyId 
+    });
+  }
+  loadingFunc(search) {
     utils.clearErrors();
-    self.search = search;
+    this.search = search;
 
     return options_service.getOrganizationNames()
-      .then((map) => self.orgNames = map)
+      .then(map => this.orgNames = map)
       .then(() => options_service.getStudyNames())
-      .then((map) => self.studyNames = map)
-      .then(() => serverService.getStudyParticipants(params.studyId, search))
-      .then(load)
-      .catch(utils.failureHandler({ id: "studyparticipants" }));
-  };
-
-  serverService.getStudy(params.studyId).then(fn.handleObsUpdate(self.titleObs, "name"));
-};
+      .then(map => this.studyNames = map)
+      .then(() => serverService.getStudyParticipants(this.studyId, search))
+      .then(this.loadParticipants.bind(this))
+      .catch(utils.failureHandler);
+  }
+}

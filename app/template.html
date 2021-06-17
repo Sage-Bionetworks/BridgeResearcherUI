@@ -110,7 +110,7 @@
                 <a class="item" data-ref="participants" data-bind="href: accountUrlObs, visible: isDeveloper() && !isSuperadmin()"> 
                   My Account
                 </a>
-                <a href="#/studies" class="item" data-ref="studies" data-bind="visible: isOrgAdmin() || isStudyCoordinator()">
+                <a href="#/studies" class="item" data-ref="studies">
                   Studies
                 </a>
                 <a href="#/organizations" class="item" data-ref="organizations" data-bind="visible: isOrgAdmin()">
@@ -124,7 +124,8 @@
                   data-bind="visible: appIdObs() !== 'shared' && (isStudyDesigner() || isDeveloper())">
                   Assessments
                 </a>
-                <a href="#/sharedassessments" class="item" data-ref="sharedassessments">
+                <a href="#/sharedassessments" class="item" data-ref="sharedassessments"
+                  data-bind="visible: isStudyDesigner() || isDeveloper()">
                   Shared Assessments
                 </a>
                 <a href="#/reports" class="item" data-ref="reports">

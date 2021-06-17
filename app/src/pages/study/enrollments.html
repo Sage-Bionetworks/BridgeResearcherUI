@@ -8,7 +8,7 @@
       <h3 data-bind="text: titleObs"></h3>
     </div>
     <div class="fixed-header-buttons">
-      <button class="ui tiny primary button" data-bind="click: enrollDialog, visible: isResearcher">
+      <button class="ui tiny primary button" data-bind="click: enrollDialog, visible: canEdit">
         Enroll Participant&hellip;
       </button>      
     </div>
@@ -79,7 +79,7 @@
           </td>
           <td nowrap>
             <button class="ui basic compact mini red button" 
-              data-bind="click: $parent.unenroll, hidden: $data.withdrawnOn">Withdraw
+              data-bind="click: $parent.unenroll.bind($parent), hidden: $data.withdrawnOn">Withdraw
             </button>
           </td>
         </tr>

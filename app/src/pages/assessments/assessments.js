@@ -6,45 +6,49 @@ import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
 
-export default function() {
-  let self = this;
-  self.query = {};
-  fn.copyProps(self, root, "isAdmin");
-  self.reload = () => load(self.query);
+export default class Assessments {
+  constructor(params) {
+    this.query = {};
+    this.orgNames = {};
 
-  self.tagsObs = ko.observable('');
+    tables.prepareTable(this, {
+      name: "assessment",
+      refresh: this.load.bind(this),
+      id: "assessments",
+      delete: (item) => serverService.deleteAssessment(item.guid, false),
+      deletePermanently: (item) => serverService.deleteAssessment(item.guid, true),
+      undelete: (item) => serverService.updateAssessment(item)
+    });
+  
+    // some nonsense related to the pager that I copy now by rote
+    fn.copyProps(this, root, "isAdmin");
+    this.tagsObs = ko.observable('');
+    this.postLoadPagerFunc = fn.identity;
+    this.postLoadFunc = (func) => this.postLoadPagerFunc = func;
 
-  tables.prepareTable(self, {
-    name: "assessment",
-    refresh: self.reload,
-    id: "assessments",
-    delete: (item) => serverService.deleteAssessment(item.guid, false),
-    deletePermanently: (item) => serverService.deleteAssessment(item.guid, true),
-    undelete: (item) => serverService.updateAssessment(item)
-  });
-
-  // some nonsense related to the pager that I copy now by rote
-  self.postLoadPagerFunc = fn.identity;
-  self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
-
-  self.orgNames = {};
-
-  self.formatOrg = function(orgId) {
-    return self.orgNames[orgId] ? self.orgNames[orgId] : orgId;
+    ko.postbox.subscribe('asm-refresh', this.load.bind(this));
   }
-
-  function load(query) {
-    query.tags = self.tagsObs();
-    self.query = query;
+  canDelete() {
+    return root.isDeveloper() || root.isStudyDesigner() || root.isAdmin();
+  }
+  canEdit() {
+    return root.isDeveloper() || root.isStudyDesigner() || root.isAdmin();
+  }
+  formatOrg(orgId) {
+    return this.orgNames[orgId] ? this.orgNames[orgId] : orgId;
+  }
+  load(query) {
+    query = query || {};
+    query.tags = this.tagsObs();
+    this.query = query;
 
     optionsService.getOrganizationNames()
-      .then((response) => self.orgNames = response)
+      .then((response) => this.orgNames = response)
       .then(() => serverService.getAssessments(
-          query.tags, query.offsetBy, query.pageSize, self.showDeletedObs()))
+          query.tags, query.offsetBy, query.pageSize, this.showDeletedObs()))
       .then(utils.resolveDerivedFrom)
-      .then(fn.handleObsUpdate(self.itemsObs, "items"))
-      .then(self.postLoadPagerFunc)
+      .then(fn.handleObsUpdate(this.itemsObs, "items"))
+      .then(this.postLoadPagerFunc)
       .catch(utils.failureHandler({ id: 'assessments' }));
   }
-  ko.postbox.subscribe('asm-refresh', load);
-};
+}

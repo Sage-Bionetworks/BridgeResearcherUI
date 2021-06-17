@@ -6,6 +6,7 @@ import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
 import optionsService from "../../services/options_service";
+import alerts from "../../widgets/alerts";
 
 export default function(params) {
   let self = this;
@@ -30,9 +31,9 @@ export default function(params) {
     name: "shared assessment resource",
     refresh: self.reload,
     id: "sharedassessment_resources",
-    delete: (item) => serverService.deleteAssessmentResource(self.idObs(), item.guid, false),
-    deletePermanently: (item) => serverService.deleteAssessmentResource(self.idObs(), item.guid, true),
-    undelete: (item) => serverService.updateAssessmentResource(self.idObs(), item),
+    delete: (item) => serverService.deleteSharedAssessmentResource(self.idObs(), item.guid, false),
+    deletePermanently: (item) => serverService.deleteSharedAssessmentResource(self.idObs(), item.guid, true),
+    undelete: (item) => serverService.updateSharedAssessmentResource(self.idObs(), item),
     publish: (item) => serverService.importSharedAssessmentResources(self.idObs(), [item.guid])
   });
 
@@ -66,6 +67,10 @@ export default function(params) {
       .then(fn.handleObsUpdate(self.itemsObs, "items"))
       .then(self.postLoadPagerFunc)
       .catch(utils.failureHandler({ id: 'sharedassessment_resources' }));
+  }
+
+  self.canEdit = (item) => {
+    return true;
   }
 
   self.image = function(item) {

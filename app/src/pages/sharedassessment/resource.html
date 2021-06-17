@@ -16,7 +16,7 @@
     revisionObs: pageRevObs, originGuidObs: originGuidObs">
   </sharedassessment-tabset>
 </div>
-<bsm-layout id="sharedassessment_resource">
+<bsm-layout id="sharedassessment-resource">
   <div slot="header">
     <div class="line-control">
       <div class="line-control-stretch">
@@ -32,8 +32,7 @@
     <div class="two fields">
       <div class="field">
         <label>Title</label>
-        <div class="input-field-padding" data-bind="text: titleObs, visible: !canEditObs()"></div>
-        <input type="text" data-bind="textInput: titleObs, visible: canEditObs" />
+        <input-editor params="obs: titleObs, canEdit: canEditObs"></input-editor>
       </div>
       <div class="field">
         <label>Category</label>
@@ -54,39 +53,33 @@
       </div>
       <div class="field">
         <label>Format</label>
-        <div class="input-field-padding" data-bind="text: formatObs, visible: !canEditObs()"></div>
-        <input type="text" data-bind="textInput: formatObs, visible: canEditObs" />
+        <input-editor params="obs: formatObs, canEdit: canEditObs"></input-editor>
       </div>
     </div>
     <div class="two fields">
       <div class="field">
         <label>Language</label>
-        <div class="input-field-padding" data-bind="text: languageObs, visible: !canEditObs()"></div>
-        <input type="text" data-bind="textInput: languageObs, visible: canEditObs" />
+        <input-editor params="obs: languageObs, canEdit: canEditObs"></input-editor>
       </div>
       <div class="field">
         <label>Date</label>
-        <div class="input-field-padding" data-bind="text: dateObs, visible: !canEditObs()"></div>
-        <input type="text" data-bind="textInput: dateObs, visible: canEditObs" />
+        <input-editor params="obs: dateObs, canEdit: canEditObs"></input-editor>
       </div>
     </div>
     <div class="two fields">
       <div class="field">
         <label>Description</label>
-        <div class="input-field-padding" data-bind="text: descriptionObs, visible: !canEditObs()"></div>
-        <input type="text" data-bind="textInput: descriptionObs, visible: canEditObs" />
+        <input-editor params="obs: descriptionObs, canEdit: canEditObs"></input-editor>
       </div>
       <div class="field">
         <div class="two fields">
           <div class="field">
             <label>Min Revision</label>
-            <div class="input-field-padding" data-bind="text: minRevisionObs, visible: !canEditObs()"></div>
-            <input type="text" data-bind="textInput: minRevisionObs, visible: canEditObs" />
+            <input-editor params="obs: minRevisionObs, canEdit: canEditObs"></input-editor>
           </div>
           <div class="field">
             <label>Max Revision</label>
-            <div class="input-field-padding" data-bind="text: maxRevisionObs, visible: !canEditObs()"></div>
-            <input type="text" data-bind="textInput: maxRevisionObs, visible: canEditObs" />
+            <input-editor params="obs: maxRevisionObs, canEdit: canEditObs"></input-editor>
           </div>
         </div>
       </div>

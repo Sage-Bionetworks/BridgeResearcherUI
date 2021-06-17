@@ -1,4 +1,4 @@
-<div class="ui left labeled input">
+<div class="ui left labeled input" data-bind="visible: canEdit()">
   <div class="ui basic dropdown label" data-bind="semantic: 'dropdown', click: updateRegion">
     <div style="float:left" data-bind="text: formatRegion"></div>
     <i class="dropdown icon"></i>
@@ -12,3 +12,4 @@
   <input type="text" placeholder="Phone number" autocomplete="mobile"
     data-bind="textInput: phoneNumberObs"/>
 </div>
+<div class="input-field-padding" data-bind="text: phoneNumberObs, visible: !canEdit()"></div>

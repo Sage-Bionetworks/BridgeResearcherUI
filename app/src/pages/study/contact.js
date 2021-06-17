@@ -15,6 +15,7 @@ const ROLE_OPTS = [
 export default function(params) {
   let self = this;
 
+  self.canEdit = params.canEdit;
   var contactsObs = params.contactsObs;
   var contact = params.contact;
   contact.address = contact.address || {};
@@ -89,4 +90,7 @@ export default function(params) {
   self.togglePerson = function() {
     self.personVisibleObs( !self.personVisibleObs() );
   };
+  self.formatRole = function(role) {
+    return ROLE_OPTS.filter(opt => opt.value === role)[0].label;
+  }
 };

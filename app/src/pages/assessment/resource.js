@@ -1,114 +1,95 @@
+import BaseAssessment from "./base_assessment";
 import Binder from "../../binder";
 import fn from "../../functions";
 import optionsService from "../../services/options_service";
-import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 
-function newAssessmentResource() {
-  return {
-    'title': '',
-    'category': null,
-    'url': '',
-    'format': '',
-    'date': '',
-    'description': '',
-    'contributors': [],
-    'creators': [],
-    'publishers': [],
-    'language': 'en',
-    'minRevision': null,
-    'maxRevision': null,
-    'createdAtRevision': null
-  };
-}
+export default class AssessmentResource extends BaseAssessment {
+  constructor(params) {
+    console.log(params);
+    super({guid: params.id}, 'assessment-resource');
+    this.resource = this.newAssessmentResource();
 
-var failureHandler = utils.failureHandler({
-  redirectMsg: "Assessment resource not found.",
-  redirectTo: "assessments",
-  transient: false,
-  id: 'assessment_resource'
-});
+    this.resourceFailureHandler = utils.failureHandler({
+      redirectMsg: "Assessment resource not found.",
+      redirectTo: "assessments/"+params.id+"/resources",
+      transient: false,
+      id: 'assessment-resource'
+    });
 
-export default function(params) {
-  let self = this;
-  // fix this before it drives you nuts...
-  params.assessmentGuid = params.id;
-  delete params.id;
-  
-  self.resource = newAssessmentResource();
+    this.resourceBinder = new Binder(this)
+      .obs("subPageTitle", "New Assessment Resource")
+      .bind("resourceGuid", params.guid)
+      .bind("title")
+      .bind("category")
+      .obs('categoriesOptions[]', optionsService.getCategoryOptions())
+      .bind("url")
+      .bind("format")
+      .bind("date")
+      .bind("description")
+      .bind("contributors[]")
+      .bind("creators[]")
+      .bind("publishers[]")
+      .bind("language")
+      .bind("minRevision")
+      .bind("maxRevision")
+      .bind("createdAtRevision")
+      .bind("createdOn")
+      .bind("modifiedOn");
 
-  fn.copyProps(self, fn, "formatDateTime");
-
-  let binder = new Binder(self)
-    .obs("isAssessmentNew", false)
-    .obs("isNew", params.guid === "new")
-    .obs("assessmentGuid", params.assessmentGuid)
-    .obs("assessmentId")
-    .obs("pageTitle", "New Assessment")
-    .obs("subPageTitle", "New Assessment Resource")
-    .obs("pageRev")
-    .obs("originGuid")
-    .obs("canEdit", false)
-
-    .obs("guid")// resource GUID
-    .bind("title")
-    .bind("category")
-    .obs('categoriesOptions[]', optionsService.getCategoryOptions())
-    .bind("url")
-    .bind("format")
-    .bind("date")
-    .bind("description")
-    .bind("contributors[]")
-    .bind("creators[]")
-    .bind("publishers[]")
-    .bind("language")
-    .bind("minRevision")
-    .bind("maxRevision")
-    .bind("createdAtRevision")
-    .bind("createdOn")
-    .bind("modifiedOn");
-
-  function loadAssessmentResource(assessment) {
-    if (self.isNewObs()) {
-      return Promise.resolve(newAssessmentResource());
+    super.load()
+      .then(this.loadAssessmentResource.bind(this))
+      .catch(this.resourceFailureHandler);
+  }
+  newAssessmentResource() {
+    return {
+      'title': '',
+      'category': null,
+      'url': '',
+      'format': '',
+      'date': '',
+      'description': '',
+      'contributors': [],
+      'creators': [],
+      'publishers': [],
+      'language': 'en',
+      'minRevision': null,
+      'maxRevision': null,
+      'createdAtRevision': null
+    };
+  }
+  loadAssessmentResource() {
+    if (this.resourceGuidObs() === 'new') {
+      return Promise.resolve(this.newAssessmentResource())
+        .then(this.resourceBinder.update())
+        .then(this.resourceBinder.assign('resource'));
     } else {
-      return serverService.getAssessmentResource(assessment.identifier, params.guid);
+      return serverService.getAssessmentResource(this.identifierObs(), this.resourceGuidObs())
+        .then(this.resourceBinder.update())
+        .then(fn.handleObsUpdate(this.resourceGuidObs, "guid"))
+        .then(fn.handleObsUpdate(this.subPageTitleObs, "title"))
+        .then(this.resourceBinder.assign('resource'))
     }
   }
-
-  function saveAssessmentResource(resource) {
-    if (self.isNewObs()) {
-      return serverService.createAssessmentResource(self.assessmentIdObs(), resource);
+  saveAssessmentResource(resource) {
+    if (this.resourceGuidObs() === 'new') {
+      return serverService.createAssessmentResource(this.identifierObs(), resource);
     } else {
-      return serverService.updateAssessmentResource(self.assessmentIdObs(), resource);
+      return serverService.updateAssessmentResource(this.identifierObs(), resource);
     }
   }
-
-  self.save = function(vm, event) {
-    self.resource = binder.persist(self.resource);
+  save(vm, event) {
+    this.resource = this.resourceBinder.persist(this.resource);
 
     utils.startHandler(vm, event);
-    saveAssessmentResource(self.resource)
-      .then(fn.handleStaticObsUpdate(self.isNewObs, false))
-      .then(binder.assign("resource"))
-      .then(binder.update())
-      .then(fn.handleObsUpdate(self.subPageTitleObs, "title"))
+    this.saveAssessmentResource(this.resource)
+      .then(this.resourceBinder.assign("resource"))
+      .then(this.resourceBinder.update())
+      .then(fn.handleObsUpdate(this.subPageTitleObs, "title"))
+      .then(fn.handleObsUpdate(this.resourceGuidObs, "guid"))
       .then(utils.successHandler(vm, event, "Assessment resource has been saved."))
-      .then(() => document.location = `#/assessments/${self.assessmentGuidObs()}/resources/${self.guidObs()}`)
-      .catch(failureHandler);
+      .then(() => document.location = `#/assessments/${this.guidObs()}/resources/${this.resourceGuidObs()}`)
+      .catch(this.failureHandler);
   }
-
-  serverService.getAssessment(params.assessmentGuid)
-    .then(binder.assign('assessment'))
-    .then(fn.handleObsUpdate(self.pageRevObs, "revision"))
-    .then(fn.handleObsUpdate(self.pageTitleObs, "title"))
-    .then(fn.handleObsUpdate(self.originGuidObs, "originGuid"))
-    .then(fn.handleObsUpdate(self.assessmentIdObs, "identifier"))
-    .then(loadAssessmentResource)
-    .then(binder.update())
-    .then(binder.assign('resource'))
-    .then(fn.handleObsUpdate(self.subPageTitleObs, "title"))
-    .then(serverService.getSession)
-    .then((session) => self.canEditObs(fn.canEditAssessment(self.assessment, session)));
-};
+}

@@ -1,5 +1,6 @@
 import serverService from "../../services/server_service";
 import ReportBaseAccount from '../../accounts/report_base_account';
+import root from "../../root";
 
 export default class StudyParticipantReport extends ReportBaseAccount {
   constructor(params) {
@@ -14,7 +15,7 @@ export default class StudyParticipantReport extends ReportBaseAccount {
     serverService.getStudy(params.studyId).then(res => this.navStudyNameObs(res.name));
   }
   loadAccount() {
-    return serverService.getParticipant(this.userId);
+    return serverService.getStudyParticipant(this.studyId, this.userId);
   }
   deleteReport(item) {
     return serverService.deleteParticipantReportRecord(this.userId, this.identifier, item.date);

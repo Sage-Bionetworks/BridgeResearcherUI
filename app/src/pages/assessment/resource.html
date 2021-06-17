@@ -11,16 +11,16 @@
       <button class="ui tiny primary button" data-bind="click: save">Save</button>
     </div>
   </div>
-  <assessment-tabset params="isNewObs: isAssessmentNewObs, guidObs: assessmentGuidObs, 
-    revisionObs: pageRevObs, originGuidObs: originGuidObs, canEditObs: canEditObs">
+  <assessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
+    revisionObs: pageRevObs, originGuidObs: originGuidObs, canEditObs: canEdit">
   </assessment-tabset>
 </div>
-<bsm-layout id="assessment_resource">
+<bsm-layout id="assessment-resource">
   <div slot="content">
     <div class="line-control" style="margin-bottom: 1rem">
       <div class="line-control-stretch">
         <div class="ui breadcrumb">
-          <a class="section" data-bind="href:'#/assessments/'+assessmentGuidObs()+'/resources'">All Resources</a>
+          <a class="section" data-bind="href:'#/assessments/'+guidObs()+'/resources'">All Resources</a>
           <i class="right chevron icon divider"></i>
           <b data-bind="text: subPageTitleObs"></b>
         </div>
@@ -31,7 +31,7 @@
         <label>Title</label>
         <input type="text" data-bind="textInput: titleObs, hasFocus: true" />
       </div>
-      <div class="field" id="category">
+      <div class="required field" id="category">
         <label>Category</label>
         <select class="ui dropdown" data-bind="options: categoriesOptionsObs,
           optionsText: 'label', optionsValue: 'value', value: categoryObs,

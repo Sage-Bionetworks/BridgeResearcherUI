@@ -6,6 +6,7 @@ import root from "../../root";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
+import BaseStudy from "./base_study";
 
 const OPTIONS = [
   {label: 'Enrolled', value: 'enrolled'},
@@ -13,71 +14,66 @@ const OPTIONS = [
   {label: 'Both', value: 'all'}
 ];
 
-export default function(params) {
-  let self = this;
+export default class StudyEnrollments extends BaseStudy {
+  constructor(params) {
+    super(params, 'enrollments');
+    
+    this.options = OPTIONS;
+    this.query = {pageSize: 10, enrollmentFilter: 'all', includeTesters: false};
+    this.postLoadPagerFunc = fn.identity;
+    this.postLoadFunc = (func) => this.postLoadPagerFunc = func;
+    fn.copyProps(this, fn, "formatDateTime", "formatNameAsFullLabel");
 
-  self.options = OPTIONS;
-  self.query = {pageSize: 10, enrollmentFilter: 'all', includeTesters: false};
-  self.postLoadPagerFunc = fn.identity;
-  self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
-  fn.copyProps(self, root, "isAdmin", "isResearcher");
-  fn.copyProps(self, fn, "formatDateTime", "formatNameAsFullLabel");
+    this.binder
+      .obs("includeTesters", false)
+      .obs("enrollmentFilter", "both");
 
-  new Binder(self)
-    .obs("title", "New Study")
-    .obs("isNew", false)
-    .obs("includeTesters", false)
-    .obs("enrollmentFilter", "both")
-    .bind("identifier", params.studyId);
+    this.includeTestersObs.subscribe(() => this.loadEnrollments(this.query));
+    this.enrollmentFilterObs.subscribe(() => this.loadEnrollments(this.query));
 
-  self.includeTestersObs.subscribe(() => loadEnrollments(self.query));
-  self.enrollmentFilterObs.subscribe(() => loadEnrollments(self.query));
+    tables.prepareTable(this, {
+      name: "enrollee",
+      type: "Enrollee",
+      id: "enrollments",
+      refresh: () => this.loadEnrollments(this.query)
+    });
 
-  self.formatParticipant = function(en) {
+    ko.postbox.subscribe('en-refresh', this.loadEnrollments.bind(this));
+    
+    super.load();
+  }
+  formatParticipant(en) {
     let p = en.participant;
     p.externalId = en.externalId;
     return fn.formatNameAsFullLabel(p);
   }
-
-  self.enrollDialog = function() {
+  enrollDialog () {
     root.openDialog("add_enrollment", {
       closeFunc: fn.seq(root.closeDialog, () => {
-        self.query.offsetBy = 0;
-        loadEnrollments(self.query)
+        this.query.offsetBy = 0;
+        this.loadEnrollments(this.query)
       }),
-      studyId: params.studyId
+      studyId: this.studyId
     });
-  };
-  self.unenroll = (item, event) => {
-    alerts.prompt("Why are you withdrawing this person?", (withdrawalNote) => {
-      utils.startHandler(self, event);
-      serverService.unenroll(params.studyId, item.participant.identifier, withdrawalNote)
-        .then(() => loadEnrollments(self.query))
-        .then(utils.successHandler(self, event, "Participant removed from study."))
-        .catch(utils.failureHandler({ id: 'enrollments' }));
-    });
-  };
-
-  tables.prepareTable(self, {
-    name: "enrollee",
-    type: "Enrollee",
-    id: "enrollments",
-    refresh: () => loadEnrollments(self.query)
-  });
-
-  serverService.getStudy(params.studyId)
-    .then(fn.handleObsUpdate(self.titleObs, "name"));
-
-  function loadEnrollments(query) {
-    // some state is not in the pager, update that and capture last known state of paging
-    self.query = query;
-    self.query.enrollmentFilter = self.enrollmentFilterObs();
-    self.query.includeTesters = self.includeTestersObs();
-
-    serverService.getEnrollments(params.studyId, query)
-      .then(self.postLoadPagerFunc)
-      .then(fn.handleObsUpdate(self.itemsObs, "items"))
-      .catch(utils.failureHandler({ id: 'enrollments' }));
   }
-  ko.postbox.subscribe('en-refresh', loadEnrollments);
-};
+  unenroll(item, event) {
+    alerts.prompt("Why are you withdrawing this person?", (withdrawalNote) => {
+      utils.startHandler(this, event);
+      serverService.unenroll(this.studyId, item.participant.identifier, withdrawalNote)
+        .then(() => this.loadEnrollments(this.query))
+        .then(utils.successHandler(this, event, "Participant removed from study."))
+        .catch(this.failureHandler);
+    });
+  }
+  loadEnrollments(query) {
+    // some state is not in the pager, update that and capture last known state of paging
+    this.query = query;
+    this.query.enrollmentFilter = this.enrollmentFilterObs();
+    this.query.includeTesters = this.includeTestersObs();
+
+    serverService.getEnrollments(this.studyId, this.query)
+      .then(this.postLoadPagerFunc)
+      .then(fn.handleObsUpdate(this.itemsObs, "items"))
+      .catch(this.failureHandler);
+  }
+}
