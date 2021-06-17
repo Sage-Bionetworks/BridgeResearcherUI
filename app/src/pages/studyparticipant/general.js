@@ -38,6 +38,9 @@ export default class GeneralParticipant extends GeneralBaseAccount {
   resendAccountPhoneVerification() {
     return serverService.resendStudyParticipantPhoneVerification(this.studyId, this.userId);
   }
+  signOutAccount() {
+    return serverService.signOutUser(this.userId);
+  }
   signOutUser() {
     root.openDialog("sign_out_user", { studyId: this.studyId, userId: this.userId });
   }

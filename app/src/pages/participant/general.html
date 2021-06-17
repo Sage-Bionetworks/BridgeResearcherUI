@@ -99,10 +99,9 @@
           click: addIdentifier('email')">Add&hellip;</a>
         <span data-bind="visible: showDash('email')" class="input-field-padding">—</span>
       </div>
-      <div class="field">
-        <label>Sharing Scope</label>
-        <select class="ui dropdown" data-bind="options: sharingScopeOptions, optionsText: 'label', 
-          optionsValue: 'value', value: sharingScopeObs"></select>
+      <div class="field note" data-bind="visible: !isNewObs()">
+        <label>Notes</label>
+        <input type="text" class="input-field-padding" data-bind="textInput: noteObs">
       </div>
     </div>
 
@@ -153,6 +152,11 @@
       <div class="field">
         <label>Organization</label>
         <div class="input-field-padding" data-bind="text: formatOrg()"></div>
+      </div>
+      <div class="field">
+        <label>Sharing Scope</label>
+        <select class="ui dropdown" data-bind="options: sharingScopeOptions, optionsText: 'label', 
+          optionsValue: 'value', value: sharingScopeObs"></select>
       </div>
     </div>
 

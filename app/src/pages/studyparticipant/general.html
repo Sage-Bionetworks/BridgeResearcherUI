@@ -87,6 +87,10 @@
           <label>Password</label>
           <input type="password" autocomplete="new-password" data-bind="textInput: passwordObs" />
         </div>
+        <div class="field note" data-bind="visible: !isNewObs()">
+          <label>Notes</label>
+          <input type="text" data-bind="textInput: noteObs" />
+        </div>
       </div>
   
       <div class="two fields">

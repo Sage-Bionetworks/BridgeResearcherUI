@@ -71,7 +71,8 @@ export default class GeneralBaseAccount extends BaseAccount {
       .bind("roles[]", null, fn.formatRoles, fn.persistRoles)
       .bind("studyId")
       .bind("studyLabel", 'Select study')
-      .bind("orgMembership");
+      .bind("orgMembership")
+      .bind("note");
 
     // subscribers
     this.emailLink = ko.computed(() => "mailto:" + this.emailObs());
@@ -156,14 +157,15 @@ export default class GeneralBaseAccount extends BaseAccount {
   makeStatusChanger(status) {
     return (vm, event) => {
       this.getAccount().then(participant => {
-          participant.status = status;
-          return participant;
+          this.account = participant;
+          this.account.status = status;
+          return this.account;
         })
-        .then(this.updateAccount.bind(this))
-        .then(() => this.statusObs(status))
-        .then(this.signOutAccount.bind(this))
+        .then(vm.updateAccount.bind(vm))
+        .then(() => vm.statusObs(status))
+        .then(vm.signOutAccount.bind(vm))
         .then(utils.successHandler(vm, event, "User account has been "+status+"."))
-        .catch(this.failureHandler(this.failureParams));
+        .catch(utils.failureHandler(vm.failureParams));
     }
   }
   requestResetPassword(vm, event) {
