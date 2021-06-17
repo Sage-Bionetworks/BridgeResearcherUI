@@ -225,6 +225,9 @@ progress {
     th {
         padding: .7rem;
     }
+    td {
+      vertical-align: baseline;
+    }
 }
 
 .hasBorder td {

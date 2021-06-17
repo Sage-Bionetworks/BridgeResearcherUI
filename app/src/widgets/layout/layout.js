@@ -4,12 +4,14 @@ export default class BsmLayout extends HTMLElement {
     let headers = this.querySelectorAll("div[slot='header']");
     let content = this.querySelector("div[slot='content']");
     let help = this.querySelector("div[slot='help']");
+    let leftColumn = (help) ? 'eleven' : 'twelve';
+    let rightColumn = (help) ? 'five' : 'four';
 
     let headerHtml = '';
     if (headers.length) {
       headers.forEach(header => {
         headerHtml += `<div class="ui grid">
-          <div class="eleven wide column" style="padding-bottom:0">
+          <div class="${leftColumn} wide column" style="padding-bottom:0">
             ${header.innerHTML}
           </div>
         </div>`;
@@ -29,17 +31,17 @@ export default class BsmLayout extends HTMLElement {
     root.innerHTML = `
       ${headerHtml}
       <div class="ui grid">
-        <div class="eleven wide column ui form">
+        <div class="${leftColumn} wide column ui form">
           <errors id="${this.getAttribute('id')}"></errors>
           ${contentHtml}
         </div>
-        <div class="five wide column">
+        <div class="${rightColumn} wide column">
           ${helpHtml}
         </div>
       </div>`;
     this.innerHTML = '';
     this.appendChild(root);
-  }
+}
 }
 
 customElements.define('bsm-layout', BsmLayout);
