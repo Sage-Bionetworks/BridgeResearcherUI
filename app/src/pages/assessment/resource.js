@@ -7,6 +7,7 @@ import utils from "../../utils";
 
 export default class AssessmentResource extends BaseAssessment {
   constructor(params) {
+    console.log(params);
     super({guid: params.id}, 'assessment-resource');
     this.resource = this.newAssessmentResource();
 
@@ -39,10 +40,6 @@ export default class AssessmentResource extends BaseAssessment {
 
     super.load()
       .then(this.loadAssessmentResource.bind(this))
-      .then(this.resourceBinder.update())
-      .then(fn.handleObsUpdate(this.resourceGuidObs, "guid"))
-      .then(fn.handleObsUpdate(this.subPageTitleObs, "title"))
-      .then(this.resourceBinder.assign('resource'))
       .catch(this.resourceFailureHandler);
   }
   newAssessmentResource() {
@@ -63,10 +60,24 @@ export default class AssessmentResource extends BaseAssessment {
     };
   }
   loadAssessmentResource() {
-    return serverService.getAssessmentResource(this.identifierObs(), this.resourceGuidObs());
+    if (this.resourceGuidObs() === 'new') {
+      return Promise.resolve(this.newAssessmentResource())
+        .then(this.resourceBinder.update())
+        .then(this.resourceBinder.assign('resource'));
+    } else {
+      return serverService.getAssessmentResource(this.identifierObs(), this.resourceGuidObs())
+        .then(this.resourceBinder.update())
+        .then(fn.handleObsUpdate(this.resourceGuidObs, "guid"))
+        .then(fn.handleObsUpdate(this.subPageTitleObs, "title"))
+        .then(this.resourceBinder.assign('resource'))
+    }
   }
   saveAssessmentResource(resource) {
-    return serverService.updateAssessmentResource(this.identifierObs(), resource);
+    if (this.resourceGuidObs() === 'new') {
+      return serverService.createAssessmentResource(this.identifierObs(), resource);
+    } else {
+      return serverService.updateAssessmentResource(this.identifierObs(), resource);
+    }
   }
   save(vm, event) {
     this.resource = this.resourceBinder.persist(this.resource);

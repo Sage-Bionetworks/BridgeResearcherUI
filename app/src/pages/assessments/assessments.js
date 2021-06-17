@@ -38,7 +38,7 @@ export default class Assessments {
     return this.orgNames[orgId] ? this.orgNames[orgId] : orgId;
   }
   load(query) {
-    console.log(this);
+    query = query || {};
     query.tags = this.tagsObs();
     this.query = query;
 

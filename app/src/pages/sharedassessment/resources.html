@@ -7,7 +7,25 @@
       </div>
       <h3 data-bind="text: pageTitleObs"></h3>
     </div>
-    <div class="fixed-header-buttons">
+    <div class="fixed-header-buttons" data-bind="visible: canEdit">
+      <button data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems"
+        class="ui red tiny button">
+        Delete
+      </button>
+      <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
+        <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()},
+          semantic: 'dropdown-button-toggle', container: '.buttons'">
+          Delete
+        </div>
+        <div class="ui primary tiny floating dropdown icon button"
+          data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" data-bind="click: deleteItems">Delete</div>
+            <div class="item" data-bind="click: deletePermanently">Delete <b>Permanently</b></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <sharedassessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
@@ -20,26 +38,36 @@
       There are no resources documenting this assessment.    
     </p>
     <div class="ui link cards" data-bind="foreach: itemsObs" target="_blank">
-      <a class="card" style="width: 31%" data-bind="href: $data.url">
-        <div class="image">
+      <div class="card" style="width: 31%">
+        <a class="image" data-bind="href: $data.url">
           <div data-bind="style: $parent.image($data)"></div>
-        </div>
-        <div class="content">
+        </a>
+        <a class="content" data-bind="href: $data.url">
           <div class="header" data-bind="text: $data.title"></div>
           <div class="meta" data-bind="text: $parent.formatCategory($data.category)"></div>
           <div class="description" data-bind="text: $data.description"></div>
-        </div>
+        </a>
         <div class="extra content">
           <span class="right floated linked" data-bind="click: 
             () => document.location = `#/sharedassessments/${$parent.guidObs()}/resources/${$data.guid}`">
             Edit Details
           </span>
           <span>
+            <span data-bind="visible: $parent.canEdit()">
+              <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>
+              <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
+                style="cursor: pointer" class="green undo icon"></i>
+            </span>
             <i class="calendar alternate outline icon"></i>
             <span data-bind="text: $data.date"></span>
           </span>
         </div>
       </a>
     </div>
+  </div>
+  <div class="field" style="margin-top:2rem; margin-left: .75rem" data-bind="visible: canEdit">
+    <ui-checkbox params="checkedObs: showDeletedObs">
+      Show deleted shared assessment resources
+    </ui-checkbox>
   </div>
 </bsm-layout>

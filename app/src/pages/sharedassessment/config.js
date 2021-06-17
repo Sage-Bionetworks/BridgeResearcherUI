@@ -1,65 +1,41 @@
 import Binder from "../../binder";
-import fn from "../../functions";
 import jsonFormatter from "../../json_formatter";
-import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
+import BaseSharedAssessment from "./base_shared_assessment";
 
-var failureHandler = utils.failureHandler({
-  redirectMsg: "Assessment not found.",
-  redirectTo: "assessments",
-  transient: false,
-  id: 'sharedassessment_config'
-});
+export default class SharedAssessmentConfig extends BaseSharedAssessment {
+  constructor(params) {
+    super(params, 'sharedassessment-config');
+    this.config = null;
 
-export default function(params) {
-  let self = this;
-  self.config = null;
+    this.binder.bind("config", null, Binder.fromJson, Binder.toJson)
 
-  let binder = new Binder(self)
-    .obs("isNew", false)
-    .obs("guid", params.guid)
-    .obs("originGuid")
-    .obs("pageTitle", "New Assessment")
-    .obs("pageRev")
-    .obs("canEdit")
-    .obs('isNew', false)
-    .bind('createdOn')
-    .bind('modifiedOn')
-    .bind("config", null, Binder.fromJson, Binder.toJson)
-
-  // TODO: This code is duplicated several places and could go in utils
-  function updateConfig() {
-    if (self.configObs()) {
+    super.load()
+      .then(() => serverService.getSharedAssessmentConfig(params.guid))
+      .then(this.binder.assign("config"))
+      .then(this.binder.update())
+      .catch(this.failureHandler);
+  }
+  updateConfig() {
+    if (this.configObs()) {
       try {
-        let json = JSON.parse(self.configObs());
-        self.configObs(jsonFormatter.prettyPrint(json));
+        let json = JSON.parse(this.configObs());
+        this.configObs(jsonFormatter.prettyPrint(json));
       } catch (e) {
         let error = new BridgeError();
         error.addError("config", "is not valid JSON");
-        failureHandler(error);
+        this.failureHandler(error);
         return true;
       }
     }
     return false;
   }
-  self.reformat = function() {
+  reformat() {
     utils.clearErrors();
-    updateConfig();
+    this.updateConfig();
   };
-  self.configFormatted = function(json) {
+  configFormatted(json) {
     return jsonFormatter.prettyPrintStringAsHTML(json);
   }
-
-  serverService.getSharedAssessment(params.guid)
-    .then(binder.assign('assessment'))
-    .then(fn.handleObsUpdate(self.pageRevObs, "revision"))
-    .then(fn.handleObsUpdate(self.pageTitleObs, "title"))
-    .then(fn.handleObsUpdate(self.originGuidObs, "originGuid"))
-    .then(() => serverService.getSharedAssessmentConfig(params.guid))
-    .then(binder.assign("config"))
-    .then(binder.update())
-    .then(serverService.getSession)
-    .then((session) => self.canEditObs(fn.canEditAssessment(self.assessment, session)))
-    .catch(failureHandler);
-};
+}

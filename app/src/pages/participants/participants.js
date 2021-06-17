@@ -5,7 +5,7 @@ import root from "../../root";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
-import options_service from "../../services/options_service";
+import optionsService from "../../services/options_service";
 
 const cssClassNameForStatus = {
   disabled: "negative",
@@ -82,6 +82,9 @@ export default function participants() {
   self.formatStudyName = function(id) {
     return self.studyNames[id];
   }
+  self.formatOrgName = function(id) {
+    return self.orgNames[id];
+  }
 
   self.doSearch = function(event) {
     event.target.parentNode.parentNode.classList.add("loading");
@@ -116,9 +119,9 @@ export default function participants() {
     utils.clearErrors();
     self.search = search;
 
-    return options_service.getOrganizationNames()
+    return optionsService.getOrganizationNames()
       .then((map) => self.orgNames = map)
-      .then(() => options_service.getStudyNames())
+      .then(() => optionsService.getStudyNames())
       .then((map) => self.studyNames = map)
       .then(() => serverService.searchAccountSummaries(search))
       .then(load)

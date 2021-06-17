@@ -44,10 +44,10 @@ export default class GeneralAssessment extends BaseAssessment {
     alerts.prompt("Do you want to define a new identifier for this assessment "+
       "when it is published as a shared assessment?", (newIdentifier) => {
       utils.startHandler(vm, event);
-      serverService.publishAssessment(params.guid, newIdentifier)
+      serverService.publishAssessment(this.guid, newIdentifier)
         .then(() => this.load())
         .then(utils.successHandler(vm, event, "Assessment has been published as a shared assessment."))
-        .catch(failureHandler);
+        .catch(this.failureHandler);
     }, this.identifierObs());
   }
   formatOrgId(orgId) {

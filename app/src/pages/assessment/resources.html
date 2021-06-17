@@ -39,7 +39,7 @@
 <bsm-layout id="assessment-resources">
   <div slot="header">
     <p data-bind="visible: originGuidObs">This is a copy of a shared assessment, so 
-      <a data-bind="attr: {href:'#/sharedassessments/'+originGuidObs()+'/resources'}">
+      <a target="_blank" data-bind="attr: {href:'#/sharedassessments/'+originGuidObs()+'/resources'}">
         all of that assessment’s documentation</a> applies to this assessment.</p>
     <div class="ui form line-control" data-bind="visible: !originGuidObs() && canEdit()">
       <div>
@@ -74,8 +74,8 @@
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td colspan="6" data-bind="html: recordsMessageObs, attr: {
-            colspan: canEdit() ? '6' : '5'}"></td>
+          <td data-bind="html: recordsMessageObs, attr: {
+            'colspan': canEdit() ? '7' : '6'}"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">

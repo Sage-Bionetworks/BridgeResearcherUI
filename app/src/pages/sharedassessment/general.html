@@ -7,18 +7,18 @@
       </div>
       <h3 data-bind="text: pageTitleObs"></h3>
     </div>
-    <div class="fixed-header-buttons" data-bind="visible: canEditObs">
+    <div class="fixed-header-buttons">
       <button class="ui tiny primary button" data-bind="click: doImport">Import</button>
-      <button class="ui tiny button" data-bind="click: save">Save</button>
+      <button class="ui tiny button" data-bind="visible: canEdit(), click: save">Save</button>
     </div>
   </div>
   <sharedassessment-tabset params="guidObs: guidObs, revisionObs: pageRevObs, 
-    originGuidObs: originGuidObs, canEditObs: canEditObs">
+    originGuidObs: originGuidObs, canEditObs: canEdit">
   </sharedassessment-tabset>
 </div>
 <bsm-layout id="sharedassessment">
   <div slot="header">
-    <p> View the <a data-bind="href: createHistoryLink"> 
+    <p> View the <a data-bind="href: createHistoryLink()"> 
       <i style="margin-right:0" class="history icon"></i>Edit History</a> of this shared assessment.
     </p>
   </div>
@@ -26,7 +26,7 @@
     <div class="fields">
       <div class="eight wide required field" id="title">
         <label>Title</label>
-        <input-editor params="obs: titleObs, canEdit: canEditObs, hasFocus: true"></input-editor>
+        <input-editor params="obs: titleObs, canEdit: canEdit, hasFocus: true"></input-editor>
       </div>
       <div class="required four wide field" id="identifier">
         <label>Identifier</label>
@@ -46,19 +46,19 @@
         <label>Operating System</label>
         <select class="ui dropdown" data-bind="options: osNameOpts,
           optionsText: 'label', optionsValue: 'value', value: osNameObs,
-          optionsCaption: 'Select operating system...', visible: canEditObs">
+          optionsCaption: 'Select operating system...', visible: canEdit()">
         </select>
-        <div class="input-field-padding" data-bind="text: osNameObs, visible: !canEditObs()"></div>
+        <div class="input-field-padding" data-bind="text: osNameObs, visible: !canEdit()"></div>
       </div>
     </div>
     <div class="two fields">
       <div class="field" id="summary">
         <label>Summary</label>
-        <textarea id="summary" data-bind="textInput: summaryObs, visible: canEditObs()" class="ui textarea"></textarea>
-        <div class="input-field-padding" data-bind="text: summaryObs, visible: !canEditObs()"></div>
+        <textarea id="summary" data-bind="textInput: summaryObs, visible: canEdit()" class="ui textarea"></textarea>
+        <div class="input-field-padding" data-bind="text: summaryObs, visible: !canEdit()"></div>
       </div>
       <div class="field">
-        <div class="field" id="tags" style="margin-top: 1rem" data-bind="visible: canEditObs">
+        <div class="field" id="tags" style="margin-top: 1rem" data-bind="visible: canEdit()">
           <label>Tags</label>
           <tag-editor params="selectedObs: tagsObs, 
             allObs: allTagsObs, type: 'tags'"></tag-editor>
@@ -68,7 +68,7 @@
             <button class="ui small button" data-bind="click: $component.addTag">New Tag</button>
           </div>
         </div>
-        <div class="field" id="tags" style="margin-top: 1rem" data-bind="visible: !canEditObs()">
+        <div class="field" id="tags" style="margin-top: 1rem" data-bind="visible: !canEdit()">
           <label>Tags</label>
           <div class="input-field-padding" class="text: tagsObs().join(', ')"></div>
         </div>
@@ -78,14 +78,14 @@
       <div class="field" id="validationStatus">
         <label>Validation Status</label>
         <textarea id="validationStatus" data-bind="textInput: validationStatusObs, 
-          visible: canEditObs()" class="ui textarea"></textarea>
-        <div class="input-field-padding" data-bind="text: validationStatusObs, visible: !canEditObs()"></div>
+          visible: canEdit()" class="ui textarea"></textarea>
+        <div class="input-field-padding" data-bind="text: validationStatusObs, visible: !canEdit()"></div>
       </div>
       <div class="field" id="normingStatus">
         <label>Norming Status</label>
         <textarea id="normingStatus" data-bind="textInput: normingStatusObs, 
-          visible: canEditObs()" class="ui textarea"></textarea>
-        <div class="input-field-padding" data-bind="text: normingStatusObs, visible: !canEditObs()"></div>
+          visible: canEdit()" class="ui textarea"></textarea>
+        <div class="input-field-padding" data-bind="text: normingStatusObs, visible: !canEdit()"></div>
       </div>
     </div>
         
