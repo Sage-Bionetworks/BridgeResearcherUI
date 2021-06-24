@@ -36,7 +36,8 @@ export default class StudyEditor extends BaseStudy {
       .bind("irbDecisionType")
       .bind("scheduleGuid", null)
       .bind("diseases[]")
-      .bind("studyDesignTypes[]");
+      .bind("studyDesignTypes[]")
+      .bind("keywords");
 
     this.loadSchedules()
       .then(this.load.bind(this))
