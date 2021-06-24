@@ -16,13 +16,22 @@
 <bsm-layout id="file">
   <div slot="content">
     <form class="ui form">
-      <div class="required field" id="name">
-        <label>Name</label>
-        <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
+      <div class="two fields">
+        <div class="required field" id="name">
+          <label>Name</label>
+          <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
+        </div>
       </div>
-      <div class="field" id="description">
-        <label>Description</label>
-        <input type="text" data-bind="textInput: descriptionObs">
+      <div class="two fields">
+        <div class="field" id="description">
+          <label>Description</label>
+          <input type="text" data-bind="textInput: descriptionObs">
+        </div>
+        <div class="field" id="disposition">
+          <label>Content Disposition</label>
+          <select class="ui dropdown" data-bind="options: dispositionOpts,
+            optionsText: 'label', optionsValue: 'value', value: dispositionObs"></select>
+        </div>
       </div>
       <h4 data-bind="visible: !isNewObs()" class="ui dividing header">Revisions</h4>
       <div class="line-control" data-bind="visible: !isNewObs()">
@@ -37,25 +46,27 @@
             <th>Name</th>
             <th>Created On</th>
             <th>File Size</th>
+            <th>Mime Type</th>
             <th>Status</th>
             <th width="10"></th>
           </tr>
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
           <tr>
-            <td colspan="5" data-bind="html: recordsMessageObs"></td>
+            <td colspan="6" data-bind="html: recordsMessageObs"></td>
           </tr>
         </tbody>
         <tbody data-bind="foreach: itemsObs">
           <tr data-bind="css: $component.classNameForStatus($data)">
             <td style="line-height:1.1">
               <div>
-                <a data-bind="text: $data.name, attr: {href: $data.downloadURL}"></a>
+                <a data-bind="href: $data.downloadURL, text: $data.name"></a>
               </div>
               <div style="color: #bbb; font-size: smaller" data-bind="text: $data.description"></div>
             </td>
             <td data-bind="text: $parent.formatDateTime($data.createdOn)"></td>
             <td data-bind="text: $parent.formatFileSize($data.size)"></td>
+            <td data-bind="text: $data.mimeType"></td>
             <td data-bind="text: $parent.formatTitleCase($data.status)"></td>
             <td>
               <button class="ui tiny basic icon button" 
@@ -69,5 +80,8 @@
       <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
       </timestamps>
     </form>
+  </div>
+  <div slot="help">
+    <p>Content disposition provides a hint to downloading clients as to whether the file is being displayed (inline) or downloaded (attachment). Although this value can be changed for a file, it is set on each revision when that revision is uploaded, and cannot be changed for that revision. Any changes will be reflected in future revision uploads.</p>
   </div>
 </bsm-layout>

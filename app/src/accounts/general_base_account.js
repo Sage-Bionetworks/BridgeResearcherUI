@@ -105,17 +105,6 @@ export default class GeneralBaseAccount extends BaseAccount {
       .then(() => this.updateAllStudiesObs())
       .catch(utils.failureHandler(this.failureParams));
   }
-  afterCreate(res) {
-    if (res.identifier) { // IdentifierHolder (created)
-      this.isNewObs(false);
-      this.idObs(id);
-      this.userIdObs(id);
-      this.userId = id;
-    } else { // StatusMessage (updated)
-      this.statusObs("enabled");
-    }
-    return res;
-  }
   addIdentifier(credential) {
     return () => {
       let params = {

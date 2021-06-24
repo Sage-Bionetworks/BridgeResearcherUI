@@ -18,6 +18,9 @@ export default class BaseAccount {
     fn.copyProps(this, root, "isDeveloper", "isResearcher", "isAdmin");
 
     this.binder = new Binder(this)
+      .bind("status")
+      .bind("sharingScope")
+      .bind("attributes[]", [], Binder.formatAttributes, Binder.persistAttributes)
       .obs("isNew", params.userId === "new")
       .obs("userId", params.userId)
       .obs("guid", params.guid)
@@ -25,10 +28,7 @@ export default class BaseAccount {
       .obs("navStudyId", params.studyId) // this is for study-specific participant nav
       .obs("navStudyName") // this is for study-specific participant nav
       .obs("title", "&#160;")
-      .obs('allDataGroups[]')
-      .bind("status")
-      .bind("sharingScope")
-      .bind("attributes[]", [], Binder.formatAttributes, Binder.persistAttributes);
+      .obs('allDataGroups[]');
 
     serverService.getApp().then(app => {
       // there's a timer in the control involved here, we need to use an observer
@@ -47,6 +47,17 @@ export default class BaseAccount {
     return promise.then(this.afterCreate.bind(this))
         .then(utils.successHandler(this))
         .catch(utils.failureHandler(this.failureParams));
+  }
+  afterCreate(res) {
+    if (res.identifier) { // IdentifierHolder (created)
+      this.isNewObs(false);
+      this.idObs(id);
+      this.userIdObs(id);
+      this.userId = id;
+    } else { // StatusMessage (updated)
+      this.statusObs("enabled");
+    }
+    return res;
   }
   getAccount() {
     if (this.isNewObs()) {

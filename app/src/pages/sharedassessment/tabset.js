@@ -1,28 +1,22 @@
 import fn from "../../functions";
 import ko from "knockout";
-import serverService from "../../services/server_service";
 
-export default function asmTabset(params) {
-  let self = this;
-
-  fn.copyProps(self, params, "guidObs", "isNewObs", "revisionObs", "originGuidObs");
-
-  // Only passed in on the on the general tab
-  if (!self.isNewObs) {
-    self.isNewObs = ko.observable(false);
+export default class AsmtTabset {
+  constructor(params) {
+    fn.copyProps(this, params, "guidObs", "isNewObs", "revisionObs", "originGuidObs");
+    if (!this.isNewObs) {
+      this.isNewObs = ko.observable(false);
+    }
+    this.computeds = [];
   }
-
-  self.computeds = [];
-  self.linkMaker = function(tabName) {
-    let c = ko.computed(function() {
-      return "#/sharedassessments/" + self.guidObs() + "/" + tabName;
-    });
-    self.computeds.push(c);
+  linkMaker(tabName) {
+    let c = ko.computed(() => `#/sharedassessments/${this.guidObs()}/${tabName}`);
+    this.computeds.push(c);
     return c;
-  };
-};
-asmTabset.prototype.dispose = function() {
-  this.computeds.forEach(function(c) {
-    c.dispose();
-  });
-};
+  }
+  dispose() {
+    this.computeds.forEach(function(c) {
+      c.dispose();
+    });
+  }
+}

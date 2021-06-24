@@ -10,15 +10,15 @@
     <div class="fixed-header-buttons">
     </div>
   </div>
-  <sharedassessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
+  <sharedassessment-tabset params="guidObs: guidObs, 
     revisionObs: pageRevObs, originGuidObs: originGuidObs">
   </sharedassessment-tabset>
 </div>
-<bsm-layout id="sharedassessment_history">
+<bsm-layout id="sharedassessment-history">
   <div slot="header">
     <div class="line-control">
       <div class="ui breadcrumb">
-        <a class="section" data-bind="href:'#/sharedassessments/'+guidObs()+'/general'">Latest Assessment</a>
+        <a class="section" data-bind="href:'#/sharedassessments/'+guid+'/general'">Latest Assessment</a>
         <i class="right chevron icon divider"></i>
         <b>Assessment Revisions</b>
       </div>
@@ -52,7 +52,7 @@
         </tr>
       </tbody>
     </table>
-    <div class="field" style="margin-left: .75rem" data-bind="visible: isAdmin">
+    <div class="field" style="margin-left: .75rem" data-bind="visible: canEdit">
       <ui-checkbox params="checkedObs: showDeletedObs">
         Show deleted assessment revisions
       </ui-checkbox>

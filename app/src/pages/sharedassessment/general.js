@@ -1,7 +1,4 @@
 import alerts from "../../widgets/alerts";
-import Binder from "../../binder";
-import fn from "../../functions";
-import ko from "knockout";
 import optionsService from "../../services/options_service";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
@@ -12,6 +9,7 @@ const IMPORT_MSG = "Do you want to define a new identifier for this assessment "
 
 export default class GeneralSharedAssessment extends BaseSharedAssessment {
   constructor(params) {
+    console.log(params);
     super(params, 'sharedassessment');
 
     this.binder

@@ -24,6 +24,7 @@ export default class AssessmentConfig extends BaseAssessment {
     utils.startHandler(vm, event);
     serverService.updateAssessmentConfig(this.guidObs(), config)
       .then(this.binder.update())
+      .then(() => this.originGuidObs(null))
       .then(utils.successHandler(vm, event, "Assessment configuration has been saved."))
       .catch(this.failureHandler);
   }
