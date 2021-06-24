@@ -54,28 +54,19 @@
           <div class="input-field-padding" data-bind="text: detailsObs, visible: !canEdit()"></div>
         </div>
         <div class="field">
-          <!--
-          <div class="field">
-            <label>Study Design Type</label>
-            <input-editor params="obs: studyDesignTypeObs, canEdit: canEdit"></input-editor>
-          </div>
-          -->
           <div class="field">
             <label>Study Design Type</label>
             <line-editor params="arrayObs: studyDesignTypesObs, label: 'Type'"></line-editor>
           </div>
-
-          <!--
-          <div class="field" style="margin-top: 1rem">
-            <label>Disease</irbNameObs>
-            <input-editor params="obs: diseaseObs, canEdit: canEdit"></input-editor>
-          </div>
-        -->
           <div class="field" style="margin-top: 1rem">
             <label>Disease</label>
             <line-editor params="arrayObs: diseasesObs, label: 'Disease'"></line-editor>
           </div>
         </div>
+      </div>
+      <div class="field" id="keywords">
+        <label>Keywords</label>
+        <input-editor params="obs: keywordsObs, canEdit: canEdit"></input-editor>
       </div>
       <h4 class="ui dividing header">IRB Approval</h4>
       <div class="two fields">
