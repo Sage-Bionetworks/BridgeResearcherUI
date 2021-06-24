@@ -4,6 +4,10 @@ import Promise from "bluebird";
 import root from "./root";
 import utils from "./utils";
 
+// TODO: An updateTables call of some kind that can isolate the name of the 
+// collection
+// TODO: A way 
+
 const LOADER_TEXT = "<span class='ui tiny active inline loader'></span>";
 
 function hasBeenChecked(item) {

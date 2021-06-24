@@ -7,12 +7,12 @@
       </div>
       <h3 data-bind="text: pageTitleObs"></h3>
     </div>
-    <div class="fixed-header-buttons" data-bind="visible: canEditObs">
+    <div class="fixed-header-buttons" data-bind="visible: canEdit()">
       <button class="ui tiny primary button" data-bind="click: save">Save</button>
     </div>
   </div>
   <sharedassessment-tabset params="guidObs: guidObs, revisionObs: pageRevObs, 
-    originGuidObs: originGuidObs, canEditObs: canEditObs">
+    originGuidObs: originGuidObs, canEditObs: canEdit()">
   </sharedassessment-tabset>
 </div>
 <bsm-layout id="sharedassessment-ui">
@@ -22,7 +22,7 @@
         <label>Label(s)</label>
         <!-- ko foreach: labelsObs -->
           <localized-label message params="labelsObs: $parent.labelsObs, label: $data, prefix: '',
-            canEditObs: $parent.canEditObs"></localized-label>
+            canEditObs: $parent.canEdit()"></localized-label>
         <!-- /ko -->
         <button class="ui mini button" data-bind="click: addLabel, visible: labelsObs().length === 0">
           Add Label
@@ -31,29 +31,29 @@
       <div class="field" id="minutesToComplete">
         <label>Minutes to complete</label>
         <input type="text" style="width: 8rem" 
-          data-bind="textInput: minutesToCompleteObs, visible: canEditObs" />
+          data-bind="textInput: minutesToCompleteObs, visible: canEdit()" />
         <div class="input-field-padding" data-bind="text: minutesToCompleteObs, 
-          visible: !canEditObs()"></div>
+          visible: !canEdit()"></div>
       </div>
       <div class="fields">
         <div class="field" id="colorScheme_background">
           <label>Background Color</label>
-          <div class="ui right labeled input" data-bind="visible: canEditObs">
+          <div class="ui right labeled input" data-bind="visible: canEdit">
             <input type="text" data-bind="textInput: backgroundObs">
             <div class="ui basic label" data-bind="style: {backgroundColor: backgroundObs}"></div>
           </div>
-          <div class="input-field-padding" data-bind="visible: !canEditObs()">
+          <div class="input-field-padding" data-bind="visible: !canEdit()">
             <span data-bind="text: backgroundObs"></span>
             <span data-bind="visible: backgroundObs, style: { color: backgroundObs }">⬤</span>
           </div>
         </div>
         <div class="field" id="colorScheme_foreground">
           <label>Foreground Color</label>
-          <div class="ui right labeled input" data-bind="visible: canEditObs">
+          <div class="ui right labeled input" data-bind="visible: canEdit">
             <input type="text" data-bind="textInput: foregroundObs">
             <div class="ui basic label" data-bind="style: {backgroundColor: foregroundObs}"></div>
           </div>
-          <div class="input-field-padding" data-bind="visible: !canEditObs()">
+          <div class="input-field-padding" data-bind="visible: !canEdit()">
             <span data-bind="text: foregroundObs"></span>
             <span data-bind="visible: foregroundObs, style: { color: foregroundObs }">⬤</span>
           </div>
@@ -62,22 +62,22 @@
       <div class="fields">
         <div class="field" id="colorScheme_activated">
           <label>Activated Color</label>
-          <div class="ui right labeled input" data-bind="visible: canEditObs">
+          <div class="ui right labeled input" data-bind="visible: canEdit">
             <input type="text" data-bind="textInput: activatedObs">
             <div class="ui basic label" data-bind="style: {backgroundColor: activatedObs}"></div>
           </div>
-          <div class="input-field-padding" data-bind="visible: !canEditObs()">
+          <div class="input-field-padding" data-bind="visible: !canEdit()">
             <span data-bind="text: activatedObs"></span>
             <span data-bind="visible: activatedObs, style: { color: activatedObs }">⬤</span>
           </div>
         </div>
         <div class="field" id="colorScheme_inactivated">
           <label>Inactivated Color</label>
-          <div class="ui right labeled input" data-bind="visible: canEditObs">
+          <div class="ui right labeled input" data-bind="visible: canEdit">
             <input type="text" data-bind="textInput: inactivatedObs">
             <div class="ui basic label" data-bind="style: {backgroundColor: inactivatedObs}"></div>
           </div>
-          <div class="input-field-padding" data-bind="visible: !canEditObs()">
+          <div class="input-field-padding" data-bind="visible: !canEdit()">
             <span data-bind="text: inactivatedObs"></span>
             <span data-bind="visible: inactivatedObs, style: { color: inactivatedObs }">⬤</span>
           </div>

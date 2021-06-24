@@ -15,7 +15,7 @@ function toDateString(value) {
 
 export default class StudyEditor extends BaseStudy {
   constructor(params) {
-    super(params, 'study');
+    super(params, 'study', 'general');
 
     fn.copyProps(this, config, 'phasesOpts');
 
@@ -35,8 +35,8 @@ export default class StudyEditor extends BaseStudy {
       .bind("irbExpiresOn", null, null, toDateString)
       .bind("irbDecisionType")
       .bind("scheduleGuid", null)
-      .bind("disease")
-      .bind("studyDesignType");
+      .bind("diseases[]")
+      .bind("studyDesignTypes[]");
 
     this.loadSchedules()
       .then(this.load.bind(this))

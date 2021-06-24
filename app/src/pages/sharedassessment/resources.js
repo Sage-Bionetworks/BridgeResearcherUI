@@ -1,50 +1,59 @@
-import Binder from "../../binder";
+import BaseSharedAssessment from "./base_shared_assessment";
 import fn from "../../functions";
 import ko from "knockout";
-import root from "../../root";
+import optionsService from "../../services/options_service";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
-import utils from "../../utils";
-import optionsService from "../../services/options_service";
-import alerts from "../../widgets/alerts";
 
-export default function(params) {
-  let self = this;
-  self.query = {};
+export default class SharedAssessmentResources extends BaseSharedAssessment {
+  constructor(params) {
+    super(params, 'sharedassessment-resources');
+    // some nonsense related to the pager that I copy now by rote
+    this.postLoadPagerFunc = fn.identity;
+    this.postLoadFunc = (func) => this.postLoadPagerFunc = func;
 
-  fn.copyProps(self, root, "isAdmin");
-  self.reload = () => self.load(self.query);
+    this.binder
+      .obs("forRevision")
+      .obs('categories[]')
+      .obs('categoriesOptions[]', optionsService.getCategoryOptions())
+      .obs('category');
 
-  let binder = new Binder(self)
-    .obs("isNew", false)
-    .obs("guid", params.guid)
-    .obs("id")
-    .obs("originGuid")
-    .obs("pageTitle")
-    .obs("pageRev")
-    .obs("forRevision")
-    .obs('categories[]')
-    .obs('categoriesOptions[]', optionsService.getCategoryOptions())
-    .obs('category');
+    // rather than doing this many times
+    this.loadResources = this.loadResources.bind(this);
 
-  tables.prepareTable(self, {
-    name: "shared assessment resource",
-    refresh: self.reload,
-    id: "sharedassessment_resources",
-    delete: (item) => serverService.deleteSharedAssessmentResource(self.idObs(), item.guid, false),
-    deletePermanently: (item) => serverService.deleteSharedAssessmentResource(self.idObs(), item.guid, true),
-    undelete: (item) => serverService.updateSharedAssessmentResource(self.idObs(), item),
-    publish: (item) => serverService.importSharedAssessmentResources(self.idObs(), [item.guid])
-  });
+    function delItem(id, guid, inclDel) {
+      return serverService.deleteSharedAssessmentResource(id, guid, inclDel);
+    }
+    function upItem(id, item) {
+      return serverService.updateSharedAssessmentResource(id, item);
+    }
+    function pubItem(id, guid) {
+      return serverService.importSharedAssessmentResources(id, [guid]);
+    }
 
-  // some nonsense related to the pager that I copy now by rote
-  self.postLoadPagerFunc = fn.identity;
-  self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
+    tables.prepareTable(this, {
+      name: "shared assessment resource",
+      refresh: () => this.loadResources(),
+      id: "sharedassessment-resources",
+      delete: (item) => delItem(this.identifierObs(), item.guid, false),
+      deletePermanently: (item) => delItem(this.identifierObs(), item.guid, true),
+      undelete: (item) => upItem(this.identifierObs(), item),
+      publish: (item) => pubItem(this.identifierObs(), [item.guid])
+    });
 
-  self.formatCategory = function(value) {
+    super.load()
+      .then(this.loadResources)
+      .then(() => {
+        ko.postbox.subscribe('asmr-refresh', this.loadResources);
+        this.forRevisionObs.subscribe(this.loadResources);
+        this.categoryObs.subscribe(this.loadResources);
+      })
+      .catch(this.failureHandler);
+  }
+  formatCategory(value) {
     return optionsService.CATEGORY_LABELS[value];
   }
-  self.formatRevisions = function(resource) {
+  formatRevisions(resource) {
     if (resource.minRevision && resource.maxRevision) {
       if (resource.minRevision === resource.maxRevision) {
         return resource.minRevision;
@@ -57,23 +66,7 @@ export default function(params) {
     }
     return '';
   }
-  self.load = function(query) {
-    query.category = self.categoryObs() ? [self.categoryObs()] : null;
-    delete query.minRevision;// = self.forRevisionObs();
-    delete query.maxRevision;// = self.forRevisionObs();
-    self.query = query;
-
-    return serverService.getSharedAssessmentResources(self.idObs(), query, self.showDeletedObs())
-      .then(fn.handleObsUpdate(self.itemsObs, "items"))
-      .then(self.postLoadPagerFunc)
-      .catch(utils.failureHandler({ id: 'sharedassessment_resources' }));
-  }
-
-  self.canEdit = (item) => {
-    return true;
-  }
-
-  self.image = function(item) {
+  image(item) {
     let src = '/images/globe.svg';
     let size = '25%';
     if (item.format && item.url && item.format.startsWith('image/')) {
@@ -88,18 +81,15 @@ export default function(params) {
       'background-image': 'url('+src+')'
     };
   }
+  loadResources() {
+    let query = {};
+    query.category = this.categoryObs() ? [this.categoryObs()] : null;
+    query.minRevision = this.forRevisionObs();
+    query.maxRevision = this.forRevisionObs();
 
-  serverService.getSharedAssessment(params.guid)
-    .then(fn.handleObsUpdate(self.pageRevObs, "revision"))
-    .then(fn.handleObsUpdate(self.forRevisionObs, "revision"))
-    .then(fn.handleObsUpdate(self.originGuidObs, "originGuid"))
-    .then(fn.handleObsUpdate(self.pageTitleObs, "title"))
-    .then(fn.handleObsUpdate(self.idObs, "identifier"))
-    .then(() => {
-      ko.postbox.subscribe('asmr-refresh', self.load);
-      self.forRevisionObs.subscribe(self.reload);
-      self.categoryObs.subscribe(self.reload);
-    })
-    .then(self.reload)
-    .catch(utils.failureHandler({ id: 'assessment_resources' }));
-};
+    return serverService.getSharedAssessmentResources(this.identifierObs(), query, this.showDeletedObs())
+      .then(fn.handleObsUpdate(this.itemsObs, "items"))
+      .then(this.postLoadPagerFunc)
+      .catch(this.failureHandler);
+  }
+}

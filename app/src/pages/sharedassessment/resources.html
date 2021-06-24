@@ -7,12 +7,12 @@
       </div>
       <h3 data-bind="text: pageTitleObs"></h3>
     </div>
-    <div class="fixed-header-buttons" data-bind="visible: canEdit">
-      <button data-bind="visible: !isAdmin(), disable: !atLeastOneChecked(), click: deleteItems"
+    <div class="fixed-header-buttons" data-bind="visible: canEdit()">
+      <button data-bind="visible: !canEdit(), disable: !atLeastOneChecked(), click: deleteItems"
         class="ui red tiny button">
         Delete
       </button>
-      <div class="ui red tiny buttons" data-bind="visible: isAdmin(), disable: !atLeastOneChecked()">
+      <div class="ui red tiny buttons" data-bind="visible: canEdit(), disable: !atLeastOneChecked()">
         <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()},
           semantic: 'dropdown-button-toggle', container: '.buttons'">
           Delete
@@ -28,11 +28,27 @@
       </div>
     </div>
   </div>
-  <sharedassessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
-    revisionObs: pageRevObs, originGuidObs: originGuidObs">
+  <sharedassessment-tabset params="guidObs: guidObs, revisionObs: pageRevObs, originGuidObs: originGuidObs">
   </sharedassessment-tabset>
 </div>
-<bsm-layout id="sharedassessment_resources">
+<bsm-layout id="sharedassessment-resources">
+  <div slot="header">
+    <div class="ui form line-control" data-bind="visible: !originGuidObs() && canEdit()">
+      <div>
+        <input type="text" style="width: 8rem; margin-right: 1rem"
+          data-bind="textInput: forRevisionObs, hasFocus: true" placeholder="Target Rev"/>
+      </div>
+      <div>
+        <select class="ui dropdown" data-bind="options: categoriesOptionsObs,
+          optionsText: 'label', optionsValue: 'value', value: categoryObs,
+          optionsCaption: 'Select category...'"></select>
+      </div>
+      <div class="line-control-stretch">
+        <pager style="display: flex; justify-content: flex-end" 
+          params="prefix: 'asmr', postLoadFunc: postLoadFunc"></pager>
+      </div>
+    </div>
+  </div>
   <div slot="content">
     <p data-bind="visible: itemsObs().length === 0">
       There are no resources documenting this assessment.    
@@ -65,7 +81,7 @@
       </a>
     </div>
   </div>
-  <div class="field" style="margin-top:2rem; margin-left: .75rem" data-bind="visible: canEdit">
+  <div class="field" style="margin-top:2rem; margin-left: .75rem" data-bind="visible: canEdit()">
     <ui-checkbox params="checkedObs: showDeletedObs">
       Show deleted shared assessment resources
     </ui-checkbox>

@@ -1,4 +1,5 @@
 import Binder from "../../binder";
+import config from "../../config";
 import fn from "../../functions";
 import ko from 'knockout';
 import root from '../../root';
@@ -18,6 +19,11 @@ const cssClassNameForStatus = {
   available: ""
 };
 
+const DISPOSITION_OPTS = [
+  {value: 'inline', label: "Inline"},
+  {value: 'attachment', label: "Attachment"}
+]
+
 export default function editor(params) {
   let self = this;
   self.file = {};
@@ -25,6 +31,8 @@ export default function editor(params) {
   self.isNewObs = ko.observable(params.guid === 'new');
   self.guidObs = ko.observable(params.guid);
   self.titleObs = ko.observable("");
+
+  self.dispositionOpts = DISPOSITION_OPTS;
 
   fn.copyProps(self, fn, 'formatDateTime', 'formatTitleCase', 'formatFileSize');
 
@@ -45,6 +53,7 @@ export default function editor(params) {
     .bind("name")
     .bind("guid")
     .bind("description")
+    .bind("disposition")
     .bind("createdOn")
     .bind("modifiedOn")
     .bind("version");
@@ -67,17 +76,22 @@ export default function editor(params) {
       .then(fn.handleStaticObsUpdate(self.isNewObs, false));
   }
   function load() {
+    let p = serverService.getSession()
+      .then((sess) => self.session = sess);
+
+
     if (self.isNewObs()) {
-      return Promise.resolve({version:0})
+      p.then(() => Promise.resolve({version:0}))
         .then(binder.assign("file"))
         .then(binder.update());
     } else {
-      return serverService.getFile(params.guid)
+      p.then(() => serverService.getFile(params.guid)) 
         .then(binder.assign("file"))
         .then(binder.update())
         .then(fn.handleObsUpdate(self.titleObs, "name"))
         .catch(failureHandler);
     }
+    return p;
   }
   function loadRevisions(query) {
     if (self.isNewObs()) {

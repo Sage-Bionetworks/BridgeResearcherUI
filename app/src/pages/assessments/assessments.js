@@ -42,7 +42,7 @@ export default class Assessments {
     query.tags = this.tagsObs();
     this.query = query;
 
-    optionsService.getOrganizationNames()
+    return optionsService.getOrganizationNames()
       .then((response) => this.orgNames = response)
       .then(() => serverService.getAssessments(
           query.tags, query.offsetBy, query.pageSize, this.showDeletedObs()))

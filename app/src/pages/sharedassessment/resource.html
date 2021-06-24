@@ -9,10 +9,10 @@
     </div>
     <div class="fixed-header-buttons">
       <button data-bind="click: doImport" class="ui tiny button">Import</button>
-      <button class="ui tiny primary button" data-bind="click: save, visible: canEditObs">Save</button>
+      <button class="ui tiny primary button" data-bind="click: save, visible: canEdit()">Save</button>
     </div>
   </div>
-  <sharedassessment-tabset params="isNewObs: isAssessmentNewObs, guidObs: assessmentGuidObs, 
+  <sharedassessment-tabset params="isNewObs: isNewObs, guidObs: guidObs, 
     revisionObs: pageRevObs, originGuidObs: originGuidObs">
   </sharedassessment-tabset>
 </div>
@@ -21,7 +21,7 @@
     <div class="line-control">
       <div class="line-control-stretch">
         <div class="ui breadcrumb">
-          <a class="section" data-bind="href:'#/sharedassessments/'+assessmentGuidObs()+'/resources'">All Resources</a>
+          <a class="section" data-bind="href:'#/sharedassessments/'+guidObs()+'/resources'">All Resources</a>
           <i class="right chevron icon divider"></i>
           <b data-bind="text: subPageTitleObs"></b>
         </div>
@@ -32,14 +32,14 @@
     <div class="two fields">
       <div class="field">
         <label>Title</label>
-        <input-editor params="obs: titleObs, canEdit: canEditObs"></input-editor>
+        <input-editor params="obs: titleObs, canEdit: canEdit()"></input-editor>
       </div>
       <div class="field">
         <label>Category</label>
-        <div class="input-field-padding" data-bind="text: categoryObs, visible: !canEditObs()"></div>
+        <div class="input-field-padding" data-bind="text: categoryObs, visible: !canEdit()"></div>
         <select class="ui dropdown" data-bind="options: categoriesOptionsObs,
           optionsText: 'label', optionsValue: 'value', value: categoryObs,
-          optionsCaption: 'Select category...', visible: canEditObs">
+          optionsCaption: 'Select category...', visible: canEdit()">
         </select>
       </div>
     </div>
@@ -48,38 +48,38 @@
         <label>URL</label>
         <a class="input-field-padding" style="display:block; overflow: hidden; 
             text-overflow: ellipsis" data-bind="attr: {'href': urlObs}, text: urlObs,
-            visible: !canEditObs()"></a>
-        <input type="text" data-bind="textInput: urlObs, visible: canEditObs" />
+            visible: !canEdit()"></a>
+        <input type="text" data-bind="textInput: urlObs, visible: canEdit()" />
       </div>
       <div class="field">
         <label>Format</label>
-        <input-editor params="obs: formatObs, canEdit: canEditObs"></input-editor>
+        <input-editor params="obs: formatObs, canEdit: canEdit"></input-editor>
       </div>
     </div>
     <div class="two fields">
       <div class="field">
         <label>Language</label>
-        <input-editor params="obs: languageObs, canEdit: canEditObs"></input-editor>
+        <input-editor params="obs: languageObs, canEdit: canEdit"></input-editor>
       </div>
       <div class="field">
         <label>Date</label>
-        <input-editor params="obs: dateObs, canEdit: canEditObs"></input-editor>
+        <input-editor params="obs: dateObs, canEdit: canEdit"></input-editor>
       </div>
     </div>
     <div class="two fields">
       <div class="field">
         <label>Description</label>
-        <input-editor params="obs: descriptionObs, canEdit: canEditObs"></input-editor>
+        <input-editor params="obs: descriptionObs, canEdit: canEdit"></input-editor>
       </div>
       <div class="field">
         <div class="two fields">
           <div class="field">
             <label>Min Revision</label>
-            <input-editor params="obs: minRevisionObs, canEdit: canEditObs"></input-editor>
+            <input-editor params="obs: minRevisionObs, canEdit: canEdit"></input-editor>
           </div>
           <div class="field">
             <label>Max Revision</label>
-            <input-editor params="obs: maxRevisionObs, canEdit: canEditObs"></input-editor>
+            <input-editor params="obs: maxRevisionObs, canEdit: canEdit"></input-editor>
           </div>
         </div>
       </div>
@@ -87,27 +87,27 @@
     <div class="two fields">
       <div class="field">
         <label>Creators</label>
-        <div class="input-field-padding" data-bind="text: creatorsObs().join(', '), visible: !canEditObs()">
+        <div class="input-field-padding" data-bind="text: creatorsObs().join(', '), visible: !canEdit()">
         </div>
-        <line-editor params="arrayObs: creatorsObs, label: 'Creator'" data-bind="visible: canEditObs">
+        <line-editor params="arrayObs: creatorsObs, label: 'Creator'" data-bind="visible: canEdit()">
         </line-editor>
       </div>
     </div>
     <div class="two fields">
       <div class="field">
         <label>Contributors</label>
-        <div class="input-field-padding" data-bind="text: contributorsObs().join(', '), visible: !canEditObs()">
+        <div class="input-field-padding" data-bind="text: contributorsObs().join(', '), visible: !canEdit()">
         </div>
-        <line-editor params="arrayObs: contributorsObs, label: 'Contributor'" data-bind="visible: canEditObs">
+        <line-editor params="arrayObs: contributorsObs, label: 'Contributor'" data-bind="visible: canEdit()">
         </line-editor>
       </div>
     </div>
     <div class="two fields">
       <div class="field">
         <label>Publishers</label>
-        <div class="input-field-padding" data-bind="text: publishersObs().join(', '), visible: !canEditObs()">
+        <div class="input-field-padding" data-bind="text: publishersObs().join(', '), visible: !canEdit()">
         </div>
-        <line-editor params="arrayObs: publishersObs, label: 'Publisher'" data-bind="visible: canEditObs">
+        <line-editor params="arrayObs: publishersObs, label: 'Publisher'" data-bind="visible: canEdit()">
         </line-editor>
       </div>
     </div>

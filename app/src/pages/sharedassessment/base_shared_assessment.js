@@ -15,7 +15,8 @@ export default class SharedAssessmentBase {
     fn.copyProps(this, fn, "formatDateTime");
 
     this.binder = new Binder(this)
-      .obs("guid")
+      .obs("guid", params.guid)
+      .obs("identifier")
       .obs("createdOn")
       .obs("modifiedOn")
       .obs("pageTitle")

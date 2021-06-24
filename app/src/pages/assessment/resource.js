@@ -7,7 +7,6 @@ import utils from "../../utils";
 
 export default class AssessmentResource extends BaseAssessment {
   constructor(params) {
-    console.log(params);
     super({guid: params.id}, 'assessment-resource');
     this.resource = this.newAssessmentResource();
 
@@ -20,7 +19,7 @@ export default class AssessmentResource extends BaseAssessment {
 
     this.resourceBinder = new Binder(this)
       .obs("subPageTitle", "New Assessment Resource")
-      .bind("resourceGuid", params.guid)
+      .bind("resourceGuid", params.id)
       .bind("title")
       .bind("category")
       .obs('categoriesOptions[]', optionsService.getCategoryOptions())

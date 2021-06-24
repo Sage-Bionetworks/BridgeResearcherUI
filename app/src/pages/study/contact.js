@@ -91,6 +91,7 @@ export default function(params) {
     self.personVisibleObs( !self.personVisibleObs() );
   };
   self.formatRole = function(role) {
-    return ROLE_OPTS.filter(opt => opt.value === role)[0].label;
+    let opt = ROLE_OPTS.filter(opt => opt.value === role);
+    return (opt.length) ? opt[0].label : '';
   }
 };

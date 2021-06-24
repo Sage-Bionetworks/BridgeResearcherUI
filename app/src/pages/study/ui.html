@@ -15,13 +15,13 @@
 </div>
 <bsm-layout id="study-ui">
   <div slot="content">
-    <form class="ui form">
-      <div data-bind="visible: canEdit()">
-        <div class="field" id="name">
-          <label>Study Logo URL</label>
-          <input data-bind="textInput: studyLogoUrlObs, hasFocus: true" />
-        </div>
-        <div class="fields">
+    <form class="ui form" data-bind="visible: canEdit()">
+      <div class="field" id="name">
+        <label>Study Logo URL</label>
+        <input data-bind="textInput: studyLogoUrlObs, hasFocus: true" />
+      </div>
+      <div class="ui grid">
+        <div class="three wide column">
           <div class="field" id="colorScheme_background">
             <label>Background Color</label>
             <div class="ui right labeled input">
@@ -29,15 +29,6 @@
               <div class="ui basic label" data-bind="style: {backgroundColor: backgroundObs}"></div>
             </div>
           </div>
-          <div class="field" id="colorScheme_foreground">
-            <label>Foreground Color</label>
-            <div class="ui right labeled input">
-              <input type="text" data-bind="textInput: foregroundObs">
-              <div class="ui basic label" data-bind="style: {backgroundColor: foregroundObs}"></div>
-            </div>
-          </div>
-        </div>
-        <div class="fields">
           <div class="field" id="colorScheme_activated">
             <label>Activated Color</label>
             <div class="ui right labeled input">
@@ -45,11 +36,54 @@
               <div class="ui basic label" data-bind="style: {backgroundColor: activatedObs}"></div>
             </div>
           </div>
+        </div>
+        <div class="one wide column"></div>
+        <div class="three wide column">
+          <div class="field" id="colorScheme_foreground">
+            <label>Foreground Color</label>
+            <div class="ui right labeled input">
+              <input type="text" data-bind="textInput: foregroundObs">
+              <div class="ui basic label" data-bind="style: {backgroundColor: foregroundObs}"></div>
+            </div>
+          </div>
           <div class="field" id="colorScheme_inactivated">
             <label>Inactivated Color</label>
             <div class="ui right labeled input">
               <input type="text" data-bind="textInput: inactivatedObs">
               <div class="ui basic label" data-bind="style: {backgroundColor: inactivatedObs}"></div>
+            </div>
+          </div>
+        </div>
+        <div class="two wide column"></div>
+        <div class="seven wide column">
+          <div class="field">
+            <label>Sign in types</label>
+            <div class="multicheckbox">
+              <ui-checkbox params="checkedObs: emailMessageObs">
+                Via email message
+              </ui-checkbox>
+              <p style="margin-left:1.3rem" class="help-text">Email sign-in must also be enabled for the app</p>
+            </div>
+            <div class="multicheckbox">
+              <ui-checkbox params="checkedObs: phoneMessageObs">
+                Via phone SMS message (be sure to enable for app)
+              </ui-checkbox>
+              <p style="margin-left:1.3rem" class="help-text">Phone sign-in must also be enabled for the app</p>
+            </div>
+            <div class="multicheckbox">
+              <ui-checkbox params="checkedObs: externalIdPasswordObs">
+                External ID and password
+              </ui-checkbox>
+            </div>
+            <div class="multicheckbox">
+              <ui-checkbox params="checkedObs: emailPasswordObs">
+                Email and password
+              </ui-checkbox>
+            </div>
+            <div class="multicheckbox">
+              <ui-checkbox params="checkedObs: phonePasswordObs">
+                Phone and password
+              </ui-checkbox>
             </div>
           </div>
         </div>
