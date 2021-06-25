@@ -135,6 +135,7 @@ export default function editor(params) {
         self.query.offsetBy = 0;
         loadRevisions(self.query)
       }),
+      disposition: this.dispositionObs(),
       guid: params.guid
     });
   };

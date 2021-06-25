@@ -1,7 +1,8 @@
+import BaseStudy from "./base_study";
 import Binder from "../../binder";
 import fn from "../../functions";
 import ko from "knockout";
-import BaseStudy from "./base_study";
+import root from "../../root";
 
 const SIGN_IN_TYPES = [
   {label: 'Email and password', value: 'email_password', obs: 'emailPasswordObs'},
@@ -13,8 +14,8 @@ const SIGN_IN_TYPES = [
 
 export default class StudyUi extends BaseStudy {
   constructor(params) {
-    super(params, 'study-ui');
-    fn.copyProps(self, fn, "formatDateTime");
+    super(params, 'study-ui', 'ui');
+    fn.copyProps(this, fn, "formatDateTime");
 
     let toSignInTypes = () => {
       return SIGN_IN_TYPES.filter(type => this[type.obs]()).map(type => type.value);
@@ -46,5 +47,33 @@ export default class StudyUi extends BaseStudy {
   }
   addContact() {
     this.contactsObs.push({address: {}});
+  }
+  image(imageLogoUrl) {
+    let src = '/images/globe.svg';
+    let size = '50%';
+    if (imageLogoUrl) {
+      src = imageLogoUrl;
+      size = 'contain';
+    }
+    return { 
+      'height': '15rem',
+      'background-repeat': 'no-repeat',
+      'background-position': 'center',
+      'background-size': size,
+      'background-image': 'url('+src+')',
+      'border': '1px solid silver'
+    };
+  }
+  uploadLogo(vm, event) {
+    root.openDialog("file_upload", {
+      closeFunc: this.closeUploadDialog.bind(this),
+      studyId: this.studyId,
+      guid: 'logo',
+      disposition: 'inline'
+    });
+  }
+  closeUploadDialog() {
+    root.closeDialog();
+    this.load();
   }
 }
