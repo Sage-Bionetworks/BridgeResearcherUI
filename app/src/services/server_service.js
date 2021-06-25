@@ -1036,6 +1036,12 @@ export class ServerService {
   resendStudyParticipantPhoneVerification(studyId, userId) {
     return this.post(`${config.studies}/${studyId}/participants/${userId}/resendPhoneVerification`);
   }
+  createLogoUpload(studyId, revision) {
+    return this.post(`${config.studies}/${studyId}/logo`, revision);
+  }
+  finishLogoUpload(studyId, createdOn) {
+    return this.post(`${config.studies}/${studyId}/logo/${createdOn}`);
+  }
   getTemplates(query) {
     let queryString = fn.queryString(query);
     return this.gethttp(`${config.templates}${queryString}`);

@@ -3,6 +3,11 @@ import fn from "../../functions";
 import serverService from "../../services/server_service";
 import BaseStudy from "./base_study";
 
+const DECISION_TYPES = [
+  {label: 'Approved', value: 'approved'},
+  {label: 'Exempted', value: 'exempt'}
+];
+
 function toDateString(value) {
   if (!value) {
     return;
@@ -18,13 +23,10 @@ export default class StudyEditor extends BaseStudy {
     super(params, 'study', 'general');
 
     fn.copyProps(this, config, 'phasesOpts');
+    this.decisionType = DECISION_TYPES;
 
     this.binder
       .obs('schedules[]')
-      .obs('decisionType[]', [
-        {label: 'Approved', value: 'approved'},
-        {label: 'Exempted', value: 'exempt'}
-      ])
       .bind("name")
       .bind("details")
       .bind("phase")
