@@ -44,7 +44,9 @@ export default function() {
   self.allEventsObs = ko.observableArray([
     { label: "enrollment", value: "enrollment" },
     { label: "activities retrieved", value: "activities_retrieved" },
-    { label: "timeline retrieved", value: "timeline_retrieved" }
+    { label: "timeline retrieved", value: "timeline_retrieved" },
+    { label: "first sign in", value: "first_sign_in" },
+    { label: "install link message sent", value: "install_link_sent" }
   ]);
 
   self.save = function(vm, event) {

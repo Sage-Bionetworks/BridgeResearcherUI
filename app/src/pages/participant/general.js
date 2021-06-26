@@ -19,6 +19,9 @@ export default class ParticipantGeneral extends GeneralBaseAccount {
     return serverService.createParticipant(this.account)
       .then(res => window.location = `#/participants/${res.identifier}/general`);
   }
+  installLink() {
+    return serverService.sendInstallLink(this.userId);
+  }
   updateAccount() { 
     return serverService.updateParticipant(this.account);
   }

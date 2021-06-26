@@ -15,6 +15,9 @@ export default class GeneralParticipant extends GeneralBaseAccount {
     });
     serverService.getStudy(params.studyId).then(res => this.navStudyNameObs(res.name));
   }
+  installLink() {
+    return serverService.sendStudyParticipantInstallLink(this.studyId, this.userId);
+  }
   loadAccount() {
     return serverService.getStudyParticipant(this.studyId, this.userId);
   }
