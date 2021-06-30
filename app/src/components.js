@@ -254,9 +254,6 @@ import adminAppsHtml from "./pages/admin/apps/apps.html";
 import adminApp from "./pages/admin/app/app";
 import adminAppHtml from "./pages/admin/app/app.html";
 
-// import adminMasterSchedules from "./pages/admin/masterschedules/masterschedules";
-// import adminMasterSchedulesHtml from "./pages/admin/masterschedules/masterschedules.html";
-
 import orgs from "./pages/organizations/organizations";
 import orgsHtml from "./pages/organizations/organizations.html";
 
@@ -411,8 +408,6 @@ import uploadDetails from "./widgets/upload_details/upload_details";
 import uploadDetailsHtml from "./widgets/upload_details/upload_details.html";
 import lineEditor from "./widgets/line_editor/line_editor";
 import lineEditorHtml from "./widgets/line_editor/line_editor.html";
-import sm from "./widgets/shared_module/shared_module";
-import smHtml from "./widgets/shared_module/shared_module.html";
 import fp from "./widgets/forward_pager/forward_pager";
 import fpHtml from "./widgets/forward_pager/forward_pager.html";
 import pager from './widgets/pager/pager';
@@ -433,8 +428,6 @@ import critEditor from "./dialogs/criteria_editor/criteria_editor";
 import critEditorHtml from "./dialogs/criteria_editor/criteria_editor.html";
 import signOutUser from "./dialogs/sign_out_user/sign_out_user";
 import signOutUserHtml from "./dialogs/sign_out_user/sign_out_user.html";
-import moduleBrowser from "./dialogs/module_browser/module_browser";
-import moduleBrowserHtml from "./dialogs/module_browser/module_browser.html";
 import publicKey from "./dialogs/publickey/publickey";
 import publicKeyHtml from "./dialogs/publickey/publickey.html";
 import jsonEditor from "./dialogs/json_editor/json_editor";
@@ -465,8 +458,6 @@ import withdrawal from "./dialogs/withdrawal/withdrawal";
 import withdrawalHtml from "./dialogs/withdrawal/withdrawal.html";
 import sendNot from "./dialogs/send_notification/send_notification";
 import sendNotHtml from "./dialogs/send_notification/send_notification.html";
-// import sendSms from "./dialogs/send_sms_message/send_sms_message";
-// import sendSmsHtml from "./dialogs/send_sms_message/send_sms_message.html";
 import settings from "./dialogs/settings/settings";
 import settingsHtml from "./dialogs/settings/settings.html";
 import selectSchemas from "./dialogs/select_schemas/select_schemas";
@@ -689,7 +680,6 @@ reg("participant-tabset", {viewModel: partTabset, template: partTabsetHtml});
 reg("schema-tabset", {viewModel: schemaTabset, template: schemaTabsetHtml});
 reg("verified-icon", {viewModel: verifiedIcon, template: verifiedIconHtml});
 reg("not_found", {template: nfHtml });
-reg("shared-module", {viewModel: sm, template: smHtml});
 reg("forward-pager", {viewModel: fp, template: fpHtml});
 reg("templatesList", {viewModel: templatesList, template: templatesListHtml});
 reg("templates", {viewModel: templates, template: templatesHtml});
@@ -704,7 +694,6 @@ reg("input-editor", {viewModel: inputEditor, template: inputEditorHtml})
 
 // Dialogs. These must be synchronous.
 reg("sign_out_user", {viewModel: signOutUser, template: signOutUserHtml, synchronous: true});
-reg("module_browser", {viewModel: moduleBrowser, template: moduleBrowserHtml, synchronous: true});
 reg("publickey", {viewModel: publicKey, template: publicKeyHtml, synchronous: true});
 reg("json_editor", {viewModel: jsonEditor, template: jsonEditorHtml, synchronous: true});
 reg("report_editor", {viewModel: reportEditor, template: reportEditorHtml, synchronous: true});
@@ -721,7 +710,6 @@ reg("participant_export", {viewModel: partExport, template: partExportHtml, sync
 reg("copy_schemas", {viewModel: copySchemas, template: copySchemasHtml, synchronous: true});
 reg("withdrawal", {viewModel: withdrawal, template: withdrawalHtml, synchronous: true});
 reg("send_notification", {viewModel: sendNot, template: sendNotHtml, synchronous: true});
-// reg("send_sms_message", {viewModel: sendSms, template: sendSmsHtml, synchronous: true});
 reg("settings", {viewModel: settings, template: settingsHtml, synchronous: true});
 reg("select_schemas", {viewModel: selectSchemas, template: selectSchemasHtml, synchronous: true});
 reg("select_surveys", {viewModel: selectSurveys, template: selectSurveysHtml, synchronous: true});

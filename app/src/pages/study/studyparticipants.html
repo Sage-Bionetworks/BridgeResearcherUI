@@ -14,7 +14,8 @@
       <div class="ui search">
         <div class="ui icon input">
           <input class="prompt" type="text" style="padding: .47857143em 1em"
-            placeholder="Find by any identifier" data-bind="textInput: findObs, returnHandler: doSearch"/>
+            placeholder="Find by any identifier" 
+              data-bind="textInput: findObs, returnHandler: doSearch"/>
           <i class="search icon"></i>
         </div>
       </div>
@@ -24,7 +25,8 @@
 </div>
 <bsm-layout id="studyparticipants">
   <div slot="header">
-    <studyparticipants-pager params="loadingFunc: loadingFunc, pageKey: 'studyparticipants'">
+    <studyparticipants-pager params="loadingFunc: loadingFunc, pageKey: 'studyparticipants',
+      displayObs: formattedSearchObs">
     </studyparticipants-pager>
   </div>
   <div slot="content">
@@ -33,22 +35,24 @@
         <tr>
           <th>Name</th>
           <th>Identifier(s)</th>
+          <th>Status</th>
           <th>Note</th>
           <th></th>
         </tr>
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td colspan="4" data-bind="html: recordsMessageObs"></td>
+          <td colspan="5" data-bind="html: recordsMessageObs"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
         <tr data-bind="css: $component.classNameForStatus($data)">
           <td>
             <a data-bind="href: '#/studies/'+$parent.studyId+'/participants/'+$data.id+'/general',
-              text: $component.formatNameAsFullLabel($data)"></a>
+              text: $component.formatNameAsFullLabel($data, $parent.studyId)"></a>
           </td>
-          <td data-bind="html: $component.formatIdentifiers($data)"></td>
+          <td data-bind="html: $component.formatIdentifiers($data, $parent.studyId)"></td>
+          <td data-bind="text: $component.formatStatus($data)"></td>
           <td data-bind="text: $data.note"></td>
           <td style="padding: 0; text-align:right">
             <span style="padding-right: .6rem; white-space: nowrap" data-bind="visible: $data.status === 'disabled'">
@@ -57,5 +61,90 @@
         </tr>
       </tbody>
     </table>
+  </div>
+  <div slot="editor">
+    <div class="ui form" data-bind="event: {keyup: doFormSearch}">
+      <div style="padding: 0 0 .25rem 0">
+        <div class="ui icon input" style="width: 100%">
+          <input type="text" placeholder="Email address"
+            data-bind="textInput: emailFilterObs, hasFocus: true"/>
+          <i class="mail icon"></i>
+        </div>
+      </div>
+      <div style="padding: .25rem 0">
+        <div class="ui icon input" style="width: 100%">
+          <input type="text" placeholder="Phone number"
+            data-bind="textInput: phoneFilterObs"/>
+          <i class="phone icon"></i>
+        </div>
+      </div>
+      <div style="padding: .25rem 0">
+        <div class="ui icon input" style="width: 100%">
+          <input type="text" placeholder="External ID"
+            data-bind="textInput: externalIdFilterObs"/>
+          <i class="user secret icon"></i>
+        </div>
+      </div>
+      <div style="padding: .45rem 0">
+        <div style="display: flex">
+          <div class="field" style="margin-right: .25rem; margin-bottom: 0">
+            <select class="ui dropdown"  data-bind="options: attributeKeysObs, 
+              optionsText: 'label', optionsValue: 'value', 
+              value: attributeKeyObs, optionsCaption: 'Attribute:'"></select>
+          </div>
+          <div class="field" style="margin-bottom: 0">
+            <input type="text" data-bind="textInput: attributeValueObs"/>
+          </div>
+        </div>
+      </div>
+      <div style="padding: .25rem 0">
+        <div class="ui icon input" style="width: 100%">
+          <input type="text" placeholder="Language" data-bind="textInput: languageObs" />
+          <i class="language icon"></i>
+        </div>
+      </div>
+      <div style="padding: .25rem 0">
+        <div class="ui icon input" style="width: 100%" data-bind="range: {
+            startDateObs: startTimeObs, endDateObs: endTimeObs}">
+          <input type="text" placeholder="Created in date range" readonly />
+          <i class="calendar icon"></i>
+        </div>
+      </div>
+      <div style="padding: .25rem 0; display: flex">
+        <select class="ui dropdown" data-bind="value: statusFilterObs" style="margin-right: .25rem">
+          <option selected value="">Status:</option>
+          <option value="unverified">Unverified</option>
+          <option value="enabled">Enabled</option>
+          <option value="disabled">Disabled</option>
+        </select>
+        <select class="ui dropdown" data-bind="value: enrollmentFilterObs">
+          <option value="all">Enrollment:</option>
+          <option value="enrolled">Enrolled</option>
+          <option value="withdrawn">Withdrawn</option>
+        </select>
+      </div>
+      <div style="padding: .45rem 0">
+        <div class="field">
+          <label>All these groups</label>
+          <tag-editor params="selectedObs: allOfGroupsObs, 
+            allObs: dataGroupsObs, type: 'data groups'"></tag-editor>
+        </div>
+      </div>
+      <div style="padding: .45rem 0">
+        <div class="ui field">
+          <div class="field">
+            <label>None of these groups</label>
+            <tag-editor params="selectedObs: noneOfGroupsObs, 
+              allObs: dataGroupsObs, type: 'data groups'"></tag-editor>
+          </div>
+        </div>
+      </div>
+      <div style="padding: .25rem 0">
+        <button class="ui tiny button" data-bind="click: searchButton, 
+          css:{ loading: searchLoadingObs }">Search</button>
+        <button class="ui tiny button" data-bind="click: clear, 
+          css:{ loading: searchLoadingObs }">Clear</button>
+      </div>
+    </div>
   </div>
 </bsm-layout>
