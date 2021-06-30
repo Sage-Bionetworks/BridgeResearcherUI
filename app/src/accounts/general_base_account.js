@@ -88,6 +88,8 @@ export default class GeneralBaseAccount extends BaseAccount {
     this.signOutVisible = ko.computed(() => !['disabled','unverified'].includes(this.statusObs()));
     this.deleteVisible = ko.computed(() => (root.isResearcher() || root.isStudyCoordinator() || this.isDeveloper()) && this.dataGroupsObs().includes('test_user'));
     this.updateIdsVisible = ko.observable(false);
+    this.installLinkVisible = ko.observable(true);
+    
     this.enableAccount = this.makeStatusChanger("enabled");
     this.disableAccount = this.makeStatusChanger("disabled");
     this.sharingScopeOptions = OPTIONS;
@@ -103,6 +105,12 @@ export default class GeneralBaseAccount extends BaseAccount {
       .then(this.binder.assign("account"))
       .then(this.binder.update())
       .then(() => this.updateAllStudiesObs())
+      .catch(utils.failureHandler(this.failureParams));
+  }
+  sendInstallLink(vm, event) {
+    utils.startHandler(vm, event);
+    this.installLink()
+      .then(utils.successHandler(this, event, "Message has been sent to user."))
       .catch(utils.failureHandler(this.failureParams));
   }
   addIdentifier(credential) {

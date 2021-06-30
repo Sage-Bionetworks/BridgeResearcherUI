@@ -1,7 +1,7 @@
 import fn from "../../functions";
 import serverService from "../../services/server_service";
 
-const SYSTEM_EVENTS = ['enrollment', 'timeline_retrieved', 'created_on'];
+const SYSTEM_EVENTS = ['enrollment', 'timeline_retrieved', 'created_on', 'install_link_sent', 'first_sign_in'];
 const SORTER = fn.makeFieldSorter("text");
 
 export function getEventIds() {

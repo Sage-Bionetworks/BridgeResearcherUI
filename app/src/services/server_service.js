@@ -513,6 +513,9 @@ export class ServerService {
   resendPhoneVerification(id) {
     return this.post(`${config.participants}/${id}/resendPhoneVerification`);
   }
+  sendInstallLink(id) {
+    return this.post(`${config.participants}/${id}/sendInstallLink`);
+  }
   getExternalIdsForStudy(studyId, params) {
     return this.gethttp(`${config.studies}/${studyId}/externalids${fn.queryString(params || {})}`);
   }
@@ -1041,6 +1044,9 @@ export class ServerService {
   }
   finishLogoUpload(studyId, createdOn) {
     return this.post(`${config.studies}/${studyId}/logo/${createdOn}`);
+  }
+  sendStudyParticipantInstallLink(studyId, userId) {
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/sendInstallLink`);
   }
   getTemplates(query) {
     let queryString = fn.queryString(query);
