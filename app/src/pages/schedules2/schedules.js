@@ -6,44 +6,39 @@ import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
 
-export default function() {
-  let self = this;
-  self.query = {};
-  fn.copyProps(self, root, "isAdmin");
-  fn.copyProps(self, fn, "formatDateTime");
-  self.reload = () => load(self.query);
+export default class Schedules {
+  constructor(params) {
+    this.query = {};
+    this.orgNames = {};
+    this.tagsObs = ko.observable('');
+    this.postLoadPagerFunc = fn.identity;
+    this.postLoadFunc = (func) => this.postLoadPagerFunc = func;
 
-  self.tagsObs = ko.observable('');
+    fn.copyProps(this, root, "isAdmin");
+    fn.copyProps(this, fn, "formatDateTime");
 
-  tables.prepareTable(self, {
-    name: "schedule",
-    refresh: self.reload,
-    id: "schedules",
-    delete: (item) => serverService.deleteSchedule(item.guid, false),
-    deletePermanently: (item) => serverService.deleteSchedule(item.guid, true),
-    undelete: (item) => serverService.updateSchedule(item)
-  });
-
-  // some nonsense related to the pager that I copy now by rote
-  self.postLoadPagerFunc = fn.identity;
-  self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
-
-  self.orgNames = {};
-
-  self.formatOrg = function(orgId) {
-    return self.orgNames[orgId] ? self.orgNames[orgId] : orgId;
+    tables.prepareTable(this, {
+      name: "schedule",
+      refresh: () => this.load(this.query),
+      id: "schedules",
+      delete: (item) => serverService.deleteSchedule(item.guid, false),
+      deletePermanently: (item) => serverService.deleteSchedule(item.guid, true),
+      undelete: (item) => serverService.updateSchedule(item)
+    });
+    ko.postbox.subscribe('schedules-refresh', (arg) => this.load(arg));
   }
+  formatOrg(orgId) {
+    return this.orgNames[orgId] ? this.orgNames[orgId] : orgId;
+  }
+  load(query) {
+    query.tags = this.tagsObs();
+    this.query = query;
 
-  function load(query) {
-    query.tags = self.tagsObs();
-    self.query = query;
-
-    optionsService.getOrganizationNames()
-      .then((response) => self.orgNames = response)
-      .then(() => serverService.getSchedules(query, self.showDeletedObs()))
-      .then(fn.handleObsUpdate(self.itemsObs, "items"))
-      .then(self.postLoadPagerFunc)
+    return optionsService.getOrganizationNames()
+      .then(response => this.orgNames = response)
+      .then(() => serverService.getSchedules(query, this.showDeletedObs()))
+      .then(fn.handleObsUpdate(this.itemsObs, "items"))
+      .then(this.postLoadPagerFunc.bind(this))
       .catch(utils.failureHandler({ id: 'schedules' }));
   }
-  ko.postbox.subscribe('schedules-refresh', load);
-};
+}

@@ -4,6 +4,7 @@ export default class BsmLayout extends HTMLElement {
     let headers = this.querySelectorAll("div[slot='header']");
     let content = this.querySelector("div[slot='content']");
     let help = this.querySelector("div[slot='help']");
+    let editor = this.querySelector("div[slot='editor']");
     let leftColumn = (help) ? 'eleven' : 'twelve';
     let rightColumn = (help) ? 'five' : 'four';
 
@@ -22,6 +23,8 @@ export default class BsmLayout extends HTMLElement {
     let helpHtml = '';
     if (help) {
       helpHtml = `<div class="ui message">${help.innerHTML}</div>`;
+    } else if (editor) {
+      helpHtml = editor.innerHTML;
     }
 
     const root = document.createElement('div');

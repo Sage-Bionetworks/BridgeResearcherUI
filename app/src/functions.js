@@ -270,7 +270,7 @@ function formatName(participant) {
   }
   return array.length === 0 ? "—" : array.join(" ");
 }
-function formatNameAsFullLabel(summary) {
+function formatNameAsFullLabel(summary, studyId) {
   let name = formatName(summary);
   if (name !== "—") {
     return name;
@@ -290,7 +290,11 @@ function formatNameAsFullLabel(summary) {
       name = summary.phone;
     }
   } else if (summary.externalIds && (summary.externalIds.length || Object.keys(summary.externalIds).length)) {
-    name = Object.values(summary.externalIds).join(', ');
+    if (studyId) {
+      name = summary.externalIds[studyId] || summary.id;
+    } else {
+      name = Object.values(summary.externalIds).join(', ');
+    }
   } else if (summary.externalId) {
     name = summary.externalId;
   } else if (summary.synapseUserId) {
@@ -473,6 +477,9 @@ function formatSearch(search) {
   if (search.phoneFilter) {
     array.push(`phone matches “${search.phoneFilter}”`);
   }
+  if (search.externalIdFilter) {
+    array.push(`external ID matches “${search.externalIdFilter}”`);
+  }
   if (search.language) {
     array.push(`languages include “${search.language}”`);
   }
@@ -488,6 +495,17 @@ function formatSearch(search) {
     array.push(`account was created on or after ${formatDate(search.startTime)}`);
   } else if (search.endTime) {
     array.push(`account was created on or before ${formatDate(search.endTime)}`);
+  }
+  if (search.statusFilter) {
+    array.push('account is ' + search.statusFilter);
+  }
+  if (search.enrollmentFilter === 'withdrawn') {
+    array.push('account is withdrawn from study');
+  } else if (search.enrollmentFilter === 'enrolled') {
+    array.push('account is currently enrolled in study');
+  }
+  if (search.attributeKey && search.attributeValue) {
+    array.push(`attribute ${search.attributeKey} equal to “${search.attributeValue}”`);
   }
   return formatList(array, "and", "; ");
 }
@@ -506,7 +524,7 @@ function formatFileSize(fileSize) {
   } while (fileSize > 1024);
   return Math.max(fileSize, 0.1).toFixed(1) + BYTE_UNITS[i];
 }
-function formatIdentifiers(item) {
+function formatIdentifiers(item, studyId) {
   var array = [];
   if (item.email) {
     array.push(item.email);
@@ -518,9 +536,15 @@ function formatIdentifiers(item) {
       array.push(flagForRegionCode(item.phone.regionCode) + " " + item.phone.nationalFormat);
     }
   }
-  let arrays = Object.values(item.externalIds || []);
-  if (arrays.length) {
-    array.push(arrays.join(", "));
+  if (studyId) {
+    if (item.externalIds[studyId]) {
+      array.push(item.externalIds[studyId]);
+    }
+  } else {
+    let arrays = Object.values(item.externalIds || []);
+    if (arrays.length) {
+      array.push(arrays.join(", "));
+    }
   }
   if (item.synapseUserId) {
     array.push('Synapse ID ' + item.synapseUserId);

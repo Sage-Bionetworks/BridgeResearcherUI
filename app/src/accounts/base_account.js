@@ -9,7 +9,7 @@ const ACCOUNT = { id: "new", attributes: {}, email: "" };
 
 export default class BaseAccount {
   constructor(params = {}) {
-    this.failureParams = { id: params.errorId };
+    this.failureParams = { id: params.errorId, transient: false };
 
     this.userId = params.userId;
     this.studyId = params.studyId;
@@ -41,12 +41,10 @@ export default class BaseAccount {
   }
   saveAccount() {
     if (!this.isNewObs()) {
-      this.titleObs(fn.formatNameAsFullLabel(this.account));
+      this.titleObs(fn.formatNameAsFullLabel(this.account, this.studyId));
     }
     let promise = this.isNewObs() ? this.createAccount() : this.updateAccount();
-    return promise.then(this.afterCreate.bind(this))
-        .then(utils.successHandler(this))
-        .catch(utils.failureHandler(this.failureParams));
+    return promise.then(this.afterCreate.bind(this));
   }
   afterCreate(res) {
     if (res.identifier) { // IdentifierHolder (created)
@@ -64,7 +62,7 @@ export default class BaseAccount {
       return Promise.resolve(ACCOUNT);
     }
     return this.loadAccount().then(res => {
-      let name = fn.formatNameAsFullLabel(res);
+      let name = fn.formatNameAsFullLabel(res, this.studyId);
       this.titleObs(name);
       this.sharingScopeObs(res.sharingScope);
       this.statusObs(res.status);
