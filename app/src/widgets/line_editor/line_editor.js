@@ -6,6 +6,7 @@ export default function(params) {
   let self = this;
 
   self.arrayObs = params.arrayObs;
+  self.canEdit = params.canEdit || (() => true);
   self.indexObs = ko.observable();
   self.addObs = ko.observable();
 
@@ -16,7 +17,7 @@ export default function(params) {
   }
   self.add = function() {
     let value = self.addObs();
-    if (value && value.trim()) {
+    if (value && value.trim() && !self.arrayObs().includes(value)) {
       self.arrayObs.push(value.trim());
       self.addObs('');
     }

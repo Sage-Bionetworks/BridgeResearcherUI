@@ -1,3 +1,4 @@
+import alerts from "../../widgets/alerts";
 import fn from "../../functions";
 import ko from "knockout";
 import root from "../../root";
@@ -48,6 +49,7 @@ export default class StudyParticipant extends BaseStudy {
     super(params, 'studyparticipants');
 
     fn.copyProps(this, fn, "formatName", "formatDateTime", "formatIdentifiers", "formatNameAsFullLabel");
+    fn.copyProps(this, root, "isResearcher");
 
     this.search = storeService.restoreQuery("sp", "allOfGroups", "noneOfGroups");
     this.postLoadPagerFunc = fn.identity;
@@ -76,10 +78,10 @@ export default class StudyParticipant extends BaseStudy {
       .obs("dataGroups[]", this.search.dataGroups)
       .obs("allOfGroups[]", this.search.allOfGroups)
       .obs("noneOfGroups[]", this.search.noneOfGroups)
-      .obs("statusFilter", this.search.statusFilter)
-      .obs("enrollmentFilter", this.search.enrollmentFilter)
+      .obs("status", this.search.status)
+      .obs("enrollment", this.search.enrollment)
       .obs("attributeKey", this.search.attributeKey)
-      .obs("attributeValue", this.search.attributeValue)
+      .obs("attributeValueFilter", this.search.attributeValueFilter)
       .obs("attributeKeys[]", [])
       .obs('searchLoading');
 
@@ -95,24 +97,6 @@ export default class StudyParticipant extends BaseStudy {
         this.dataGroupsObs(app.dataGroups);
         this.attributeKeysObs(app.userProfileAttributes.sort().map(att => ({ value: att, label: att })));
       });
-  }
-  loadParticipants(response) {
-    // TODO: for some reason, we're doing this manually...why?
-    this.total = response.total;
-    response.items = response.items.map(function(item) {
-      item.studyIds = item.studyIds || [];
-      if (item.phone) {
-        item.phone = fn.flagForRegionCode(item.phone.regionCode) + " " + item.phone.nationalFormat;
-      } else {
-        item.phone = "";
-      }
-      return item;
-    });
-    this.itemsObs(response.items);
-    if (response.items.length === 0) {
-      this.recordsMessageObs("There are no user accounts, or none that match the filter.");
-    }
-    return response;
   }
   formatStudyName(id) {
     return this.studyNames[id];
@@ -150,6 +134,14 @@ export default class StudyParticipant extends BaseStudy {
       studyId: this.studyId 
     });
   }
+  importDialog(vm, event) {
+    //this.showResultsObs(false);
+    root.openDialog("external_id_importer", {
+      vm: this,
+      studyId: this.studyId,
+      reload: this.loadingFunc
+    });
+  }
   clear() {
     this.emailFilterObs(null);
     this.phoneFilterObs(null);
@@ -159,10 +151,10 @@ export default class StudyParticipant extends BaseStudy {
     this.languageObs(null);
     this.allOfGroupsObs([]);
     this.noneOfGroupsObs([]);
-    this.statusFilterObs(null);
-    this.enrollmentFilterObs('all');
+    this.statusObs(null);
+    this.enrollmentObs('all');
     this.attributeKeyObs(null);
-    this.attributeValueObs(null);
+    this.attributeValueFilterObs(null);
   }
   doFormSearch(vm, event) {
     if (event.keyCode === 13)  {
@@ -173,12 +165,30 @@ export default class StudyParticipant extends BaseStudy {
     ko.postbox.publish('studyparticipants', this.search.offsetBy);
   }
   formatStatus(item) {
-    if (item.externalIds[this.studyId]) {
+    if (item.studyIds.includes(this.studyId)) {
       return "Enrolled";
     }
     return "Withdrawn";
   }
+  enrollDialog () {
+    root.openDialog("add_enrollment", {
+      closeFunc: fn.seq(root.closeDialog, () => {
+        ko.postbox.publish('studyparticipants', 0);
+      }),
+      studyId: this.studyId
+    });
+  }
+  unenroll(item, event) {
+    alerts.prompt("Why are you withdrawing this person?", (withdrawalNote) => {
+      utils.startHandler(this, event);
+      serverService.unenroll(this.studyId, item.id, withdrawalNote)
+        .then(utils.successHandler(this, event, "Participant removed from study."))
+        .then(() => ko.postbox.publish('studyparticipants', 0))
+        .catch(this.failureHandler);
+    });
+  }
   loadingFunc(search) {
+    search = search || this.search;
     search.emailFilter = this.emailFilterObs();
     search.phoneFilter = this.phoneFilterObs();
     search.externalIdFilter = this.externalIdFilterObs();
@@ -187,22 +197,22 @@ export default class StudyParticipant extends BaseStudy {
     search.language = this.languageObs() ? this.languageObs() : null;
     search.startTime = this.startTimeObs();
     search.endTime = this.endTimeObs();
-    search.statusFilter = this.statusFilterObs();
-    search.enrollmentFilter = this.enrollmentFilterObs();
-    if (this.attributeValueObs()) {
+    search.status = this.statusObs();
+    search.enrollment = this.enrollmentObs();
+    if (this.attributeValueFilterObs()) {
       search.attributeKey = this.attributeKeyObs();
-      search.attributeValue = this.attributeValueObs();
+      search.attributeValueFilter = this.attributeValueFilterObs();
     } else {
       delete search.attributeKey;
-      delete search.attributeValue;
+      delete search.attributeValueFilter;
     }
     search.adminOnly = false; // TODO: enforce on server
     search.enrolledInStudy = this.studyId; //  TODO: enforce on server
-    if (search.statusFilter === '') {
-      delete search.statusFilter;
+    if (search.status === '') {
+      delete search.status;
     }
-    if (search.enrollmentFilter === '') {
-      delete search.enrollmentFilter;
+    if (search.enrollment === '') {
+      delete search.enrollment;
     }
     if (fn.is(search.startTime, "Date")) {
       search.startTime.setHours(0, 0, 0, 0);
@@ -217,7 +227,7 @@ export default class StudyParticipant extends BaseStudy {
 
     utils.clearErrors();
     return serverService.getStudyParticipants(this.studyId, search)
-      .then(this.loadParticipants.bind(this))
+      .then(fn.handleObsUpdate(this.itemsObs, "items"))
       .catch(this.failureHandler);
   }
 }

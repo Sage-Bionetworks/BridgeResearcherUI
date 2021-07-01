@@ -84,16 +84,10 @@ ko.bindingHandlers.range = {
       dateFormat: "Y-m-d"
     });
 
-    // control now does not close when you enter delete key, this fixes, but is not ideal
-    element.parentNode.addEventListener(
-      "keydown",
-      function(e) {
-        if (e.keyCode === 8) {
-          setTimeout(f.close, 100);
-        }
-      },
-      true
-    );
+    // Upate the controls when value is changed externally, not from the control itself.
+    // this doesn't seem to set up an infinite loop.
+    startDateObs.subscribe((newValue) => f.setDate([newValue, endDateObs()]));
+    endDateObs.subscribe((newValue) => f.setDate([startDateObs(), newValue]));
   }
 };
 
