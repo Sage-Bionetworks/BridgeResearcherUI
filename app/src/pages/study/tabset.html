@@ -10,14 +10,13 @@
 
   <a data-bind="href: linkMaker('participants'), tabber, visible: canAdminParticipants()">
     <i class="users icon"></i> Participants</a>
-    <!-- Very nearly redundant now with participants, although AccountSummary doesn't have
-    all the enrollment details
+  <!--  now replaced by the participants screen. Will eventually remove.
   <a data-bind="href: linkMaker('enrollments'), tabber, visible: canAdminParticipants()">
       <i class="handshake outline icon"></i> Enrollments</a>
--->
   <a data-bind="href: linkMaker('externalids'), tabber, visible: canAdminParticipants()">
     <i class="user secret icon"></i> External IDs</a>
-
+  -->
+  
   <a data-bind="href: linkMaker('clientdata'), tabber, visible: canEditStudy()">
     <i class="database icon"></i> Client Data</a>
 

@@ -1,86 +1,11 @@
 <div class="pp">
-  <div class="pp_filter_control">
-    <div class="ui left icon input">
-      <input readonly type="text" placeholder="Filter participants..." 
-        data-bind="textInput: formattedSearchObs, click: openSearchDialog, returnHandler: openSearchDialog"/>
-      <i class="filter icon"></i>
-    </div>
-  </div>
-  <div class="pp_search_panel" id="searchPanel" data-bind="visible: showSearchObs">
-    <div class="ui segment">
-      <div class="ui grid">
-        <div class="row">
-          <div class="eight wide column">
-            <div class="ui icon input">
-              <input type="text" placeholder="Email address"
-                data-bind="textInput: emailFilterObs, hasFocus: true, returnHandler: doSearch"/>
-              <i class="mail icon"></i>
-            </div>
-          </div>
-          <div class="eight wide column">
-            <div class="ui icon input">
-              <input type="text" placeholder="Phone number"
-                data-bind="textInput: phoneFilterObs, returnHandler: doSearch"/>
-              <i class="phone icon"></i>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="eight wide column">
-            <div class="ui input">
-              <input type="text" placeholder="Language" data-bind="textInput: languageObs, returnHandler: doSearch" />
-            </div>
-          </div>
-          <div class="eight wide column">
-            <div class="ui icon input" data-bind="range: {
-                startDateObs: startTimeObs, endDateObs: endTimeObs}">
-              <input type="text" placeholder="Created in date range" readonly />
-              <i class="calendar icon"></i>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="eight wide column">
-            <div class="field">
-              <label>All these groups</label>
-              <tag-editor params="selectedObs: allOfGroupsObs, 
-                allObs: dataGroupsObs, type: 'data groups'"></tag-editor>
-            </div>
-          </div>
-          <div class="eight wide column">
-            <div class="ui field">
-              <div class="field">
-                <label>None of these groups</label>
-                <tag-editor params="selectedObs: noneOfGroupsObs, 
-                  allObs: dataGroupsObs, type: 'data groups'"></tag-editor>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="eight wide column">
-            <ui-checkbox params="checkedObs: adminOnlyObs" style="margin-left: .25rem">
-              Admins only (developers, researchers, etc.)
-            </ui-checkbox>
-          </div>
-          <div class="eight wide column">
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="sixteen wide column">
-            <button class="ui tiny button" data-bind="click: doSearch, 
-              css:{ loading: searchLoadingObs }">Search</button>
-            <button class="ui tiny button" data-bind="click: clear, 
-              css:{ loading: searchLoadingObs }">Clear</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="pp_pager">
-    <div class="ui small pagination menu" data-bind="visible: totalPagesObs() > 1, css:{loading:showLoaderObs}">
+  <div class="pp_filter_control" data-bind="text: displayObs"></div>
+  <div class="pp_pager" style="white-space: nowrap; margin-left: 1rem">
+    <span class="item" style="margin-right:1rem" 
+      data-bind="text: formatCount(totalRecordsObs())">
+    </span>
+    <div class="ui small pagination menu" 
+      data-bind="visible: totalPagesObs() > 1, css:{loading:showLoaderObs}">
       <a class="item" title="First page" data-bind="click: firstPage, visible: currentPageObs() != 0">1</a>
       <a class="item" title="Previous page" data-bind="click: previousPage, visible: currentPageObs() != 0">
         <i class="chevron left icon" style="margin:0!important"></i>
@@ -90,20 +15,12 @@
         <span data-bind="text: currentPageObs() + 1"></span>&nbsp;of&nbsp;
         <span data-bind="text: totalPagesObs()"></span>
       </div>
-      <a
-        class="item"
-        title="Next page"
-        data-bind="click: nextPage, 
-        visible: currentPageObs() != (totalPagesObs()-1)"
-      >
+      <a class="item" title="Next page" data-bind="click: nextPage, 
+        visible: currentPageObs() != (totalPagesObs()-1)">
         <i class="chevron right icon"></i>
       </a>
-      <a
-        class="item"
-        title="Last page"
-        data-bind="click: lastPage, 
-        visible: currentPageObs() != (totalPagesObs()-1), text: totalPagesObs()"
-      ></a>
+      <a class="item" title="Last page" data-bind="click: lastPage, 
+        visible: currentPageObs() != (totalPagesObs()-1), text: totalPagesObs()"></a>
     </div>
   </div>
 </div>

@@ -236,3 +236,21 @@ notification:nth-of-type(even) .note-list-item {
 .multicheckbox {
   padding: 0 0 .3rem 0;
 }
+
+.vertical-search {
+  .panel {
+    padding: 0 0 .25rem 0;
+    display: flex;
+  }
+  .panel > * {
+    width: 100%;
+    margin-bottom: 0!important;
+  }
+  .panel > *:nth-child(2) {
+    margin-left: .3rem;
+  }
+  .labeled-panel {
+    padding: .45rem 0;
+    display: flex;
+  }
+}

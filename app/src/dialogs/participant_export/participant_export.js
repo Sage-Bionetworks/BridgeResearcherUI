@@ -7,7 +7,7 @@ import saveAs from "../../../lib/filesaver.min.js";
 import { ServerService } from "../../services/server_service";
 
 const serverService = new ServerService(false);
-const PREMSG = "Only exporting accounts that ";
+const PREMSG = "Only exporting accounts that meet these criteria: ";
 const FETCH_DELAY = 100;
 const PAGE_SIZE = 100;
 const FIELDS = Object.freeze([
@@ -185,22 +185,11 @@ export default function(params /*total, search, studyId*/) {
     HEADERS = Object.freeze([].concat(FIELDS).concat(ATTRIBUTES).join("\t"));
   });
 
-  if (self.search.emailFilter) {
-    self.filterMessageObs.push(PREMSG + "have email matching the string &ldquo;" + self.search.emailFilter + "&rdquo;");
-  }
-  if (self.search.startTime) {
-    self.filterMessageObs.push(
-      PREMSG + "were created on or after &ldquo;" + fn.formatDateTime(self.search.startTime) + "&rdquo;"
-    );
-  }
-  if (self.search.endTime) {
-    self.filterMessageObs.push(
-      PREMSG + "were created on or before &ldquo;" + fn.formatDateTime(self.search.endTime) + "&rdquo;"
-    );
-  }
+  let msg = fn.formatSearch(self.search);
+  self.filterMessageObs.push(`${PREMSG} “${msg}.”`);
   self.exportText = function() {
     var searchString = self.formatSearch(self.search);
-    return searchString === "" ? null : `Only exporting accounts where ${searchString}.`;
+    return searchString === "" ? null : `${PREMSG} “${msg}.”`;
   };
   self.startExport = function(vm, event) {
     self.statusObs("Currently preparing your *.tsv file...");

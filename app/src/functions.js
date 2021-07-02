@@ -484,10 +484,10 @@ function formatSearch(search) {
     array.push(`languages include “${search.language}”`);
   }
   if (search.allOfGroups.length) {
-    array.push(`data groups include ${formatList(search.allOfGroups)}`);
+    array.push(`data groups include ${formatList(search.allOfGroups.map(s => `“${s}”`))}`);
   }
   if (search.noneOfGroups.length) {
-    array.push(`data groups exclude ${formatList(search.noneOfGroups)}`);
+    array.push(`data groups exclude ${formatList(search.noneOfGroups.map(s => `“${s}”`))}`);
   }
   if (search.startTime && search.endTime) {
     array.push(`account was created from ${formatDate(search.startTime)} to ${formatDate(search.endTime)}`);
@@ -496,18 +496,21 @@ function formatSearch(search) {
   } else if (search.endTime) {
     array.push(`account was created on or before ${formatDate(search.endTime)}`);
   }
-  if (search.statusFilter) {
-    array.push('account is ' + search.statusFilter);
+  if (search.status) {
+    array.push(`status is ${search.status}`);
   }
-  if (search.enrollmentFilter === 'withdrawn') {
-    array.push('account is withdrawn from study');
-  } else if (search.enrollmentFilter === 'enrolled') {
-    array.push('account is currently enrolled in study');
+  if (search.enrollment === 'withdrawn') {
+    array.push('account is withdrawn');
+  } else if (search.enrollment === 'enrolled') {
+    array.push('account is actively enrolled');
   }
-  if (search.attributeKey && search.attributeValue) {
-    array.push(`attribute ${search.attributeKey} equal to “${search.attributeValue}”`);
+  if (search.attributeKey && search.attributeValueFilter) {
+    array.push(`attribute ${search.attributeKey} matches “${search.attributeValueFilter}”`);
   }
-  return formatList(array, "and", "; ");
+  if (array.length) {
+    return "Search for accounts where " + formatList(array, "and", "; ");
+  }
+  return "Search for all accounts";
 }
 function studyMatchesUser(userStudies, studyId) {
   return userStudies.length === 0 || userStudies.includes(studyId);
