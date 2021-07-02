@@ -1,8 +1,9 @@
-import alerts from "../../widgets/alerts";
+import Binder from "../../binder";
 import fn from "../../functions";
 import ko from "knockout";
 import root from "../../root";
 import serverService from "../../services/server_service";
+import storeService from "../../services/store_service";
 import tables from "../../tables";
 import utils from "../../utils";
 import optionsService from "../../services/options_service";
@@ -43,55 +44,76 @@ function makeSuccess(vm, event) {
   };
 }
 
-export default function participants() {
-  let self = this;
+export default class Participants {
+  constructor(params) {
+    this.total = 0;
+    this.classNameForStatus = assignClassForStatus;
+    this.loadingFunc = this.loadingFunc.bind(this);
+    
+    this.search = storeService.restoreQuery("p", "allOfGroups", "noneOfGroups");
 
-  self.total = 0;
+    fn.copyProps(this, fn, "formatName", "formatDateTime", "formatIdentifiers", "formatNameAsFullLabel");
+    fn.copyProps(this, root, "isAdmin", "isDeveloper", "isResearcher");
 
-  tables.prepareTable(self, {
-    name: "participant",
-    id: "participants",
-    delete: (item) => serverService.deleteParticipant(item.id),
-    refresh: () => ko.postbox.publish("page-refresh")
-  });
+    let { defaultStart, defaultEnd } = fn.getRangeInDays(-14, 0);
 
-  self.findObs = ko.observable("");
-  fn.copyProps(self, fn, "formatName", "formatDateTime", "formatIdentifiers", "formatNameAsFullLabel");
-  fn.copyProps(self, root, "isAdmin", "isDeveloper", "isResearcher");
-
-  self.classNameForStatus = assignClassForStatus;
-
-  function load(response) {
-    self.total = response.total;
-    response.items = response.items.map(function(item) {
-      item.studyIds = item.studyIds || [];
-      if (item.phone) {
-        item.phone = fn.flagForRegionCode(item.phone.regionCode) + " " + item.phone.nationalFormat;
-      } else {
-        item.phone = "";
-      }
-      return item;
+    tables.prepareTable(this, {
+      name: "participant",
+      id: "participants",
+      delete: (item) => serverService.deleteParticipant(item.id),
+      refresh: () => ko.postbox.publish("participants")
     });
-    self.itemsObs(response.items);
-    if (response.items.length === 0) {
-      self.recordsMessageObs("There are no user accounts, or none that match the filter.");
+
+    this.binder = new Binder(this)
+      .obs("find")
+      .obs("emailFilter", this.search.emailFilter)
+      .obs("phoneFilter", this.search.phoneFilter)
+      .obs("externalIdFilter", this.search.externalIdFilter)
+      .obs("startTime", this.search.startTime || defaultStart)
+      .obs("endTime", this.search.endTime || defaultEnd)
+      .obs("formattedSearch", "")
+      .obs("language", this.search.language)
+      .obs("dataGroups[]", this.search.dataGroups)
+      .obs("allOfGroups[]", this.search.allOfGroups)
+      .obs("noneOfGroups[]", this.search.noneOfGroups)
+      .obs("status", this.search.status)
+      .obs("enrollment", this.search.enrollment)
+      .obs("attributeKey", this.search.attributeKey)
+      .obs("attributeValueFilter", this.search.attributeValueFilter)
+      .obs("attributeKeys[]", [])
+      .obs("adminOnly")
+      .obs('searchLoading');
+
+    optionsService.getOrganizationNames()
+      .then(map => this.orgNames = map)
+      .then(() => optionsService.getStudyNames())
+      .then(map => this.studyNames = map)
+      .then(() => ko.postbox.publish('participants'));
+  }
+  formatStudyName(id) {
+    return this.studyNames[id];
+  }
+  formatOrgName(id) {
+    return this.orgNames[id];
+  }
+  exportDialog() {
+    root.openDialog("participant_export", { total: this.total, search: this.search });
+  }
+  doFormSearch(vm, event) {
+    if (event.keyCode === 13)  {
+      ko.postbox.publish('participants', 0);
     }
-    return response;
+    return false;
   }
-
-  self.formatStudyName = function(id) {
-    return self.studyNames[id];
+  searchButton() {
+    ko.postbox.publish('participants', 0);
   }
-  self.formatOrgName = function(id) {
-    return self.orgNames[id];
-  }
-
-  self.doSearch = function(event) {
+  doSearch(event) {
     event.target.parentNode.parentNode.classList.add("loading");
 
-    let id = self.findObs().trim();
-    let success = makeSuccess(self, event);
-    utils.startHandler(self, event);
+    let id = this.findObs().trim();
+    let success = makeSuccess(this, event);
+    utils.startHandler(this, event);
 
     let promise = null;
     if (id.endsWith('@synapse.org')) {
@@ -111,20 +133,65 @@ export default function participants() {
         });
       });
     }
-  };
-  self.exportDialog = function() {
-    root.openDialog("participant_export", { total: self.total, search: self.search });
-  };
-  self.loadingFunc = function(search) {
-    utils.clearErrors();
-    self.search = search;
+    promise.catch(utils.failureHandler({id: 'participants'}));
+  }
+  clear() {
+    this.emailFilterObs(null);
+    this.phoneFilterObs(null);
+    this.externalIdFilterObs(null);
+    this.startTimeObs(null);
+    this.endTimeObs(null);
+    this.languageObs(null);
+    this.allOfGroupsObs([]);
+    this.noneOfGroupsObs([]);
+    this.statusObs(null);
+    this.enrollmentObs('all');
+    this.attributeKeyObs(null);
+    this.attributeValueFilterObs(null);
+    this.adminOnly(null);
+    ko.postbox.publish('participants', 0)
+  }  
+  loadingFunc(search) {
+    search = search || this.search;
 
-    return optionsService.getOrganizationNames()
-      .then((map) => self.orgNames = map)
-      .then(() => optionsService.getStudyNames())
-      .then((map) => self.studyNames = map)
-      .then(() => serverService.searchAccountSummaries(search))
-      .then(load)
+    search.emailFilter = this.emailFilterObs();
+    search.phoneFilter = this.phoneFilterObs();
+    search.externalIdFilter = this.externalIdFilterObs();
+    search.allOfGroups = this.allOfGroupsObs();
+    search.noneOfGroups = this.noneOfGroupsObs();
+    search.language = this.languageObs() ? this.languageObs() : null;
+    search.startTime = this.startTimeObs();
+    search.endTime = this.endTimeObs();
+    search.status = this.statusObs();
+    search.enrollment = this.enrollmentObs();
+    if (this.attributeValueFilterObs()) {
+      search.attributeKey = this.attributeKeyObs();
+      search.attributeValueFilter = this.attributeValueFilterObs();
+    } else {
+      delete search.attributeKey;
+      delete search.attributeValueFilter;
+    }
+    search.adminOnly = this.adminOnlyObs();
+    if (search.status === '') {
+      delete search.status;
+    }
+    if (search.enrollment === '') {
+      delete search.enrollment;
+    }
+    if (fn.is(search.startTime, "Date")) {
+      search.startTime.setHours(0, 0, 0, 0);
+    }
+    if (fn.is(search.endTime, "Date")) {
+      search.endTime.setHours(23, 59, 59, 999);
+    }
+
+    this.search = search;
+    storeService.persistQuery("p", search);
+    this.formattedSearchObs(fn.formatSearch(search));
+
+    utils.clearErrors();
+    return serverService.searchAccountSummaries(search)
+      .then(fn.handleObsUpdate(this.itemsObs, "items"))
       .catch(utils.failureHandler({ id: "participants" }));
-  };
-};
+  }  
+}

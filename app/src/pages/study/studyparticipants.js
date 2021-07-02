@@ -44,7 +44,7 @@ function makeSuccess(vm, event) {
   };
 }
 
-export default class StudyParticipant extends BaseStudy {
+export default class StudyParticipants extends BaseStudy {
   constructor(params) {
     super(params, 'studyparticipants');
 
@@ -56,6 +56,7 @@ export default class StudyParticipant extends BaseStudy {
     this.postLoadFunc = (func) => this.postLoadPagerFunc = func;
     this.classNameForStatus = assignClassForStatus;
     this.doSearch = this.doSearch.bind(this);
+    this.loadingFunc = this.loadingFunc.bind(this);
 
     let { defaultStart, defaultEnd } = fn.getRangeInDays(-14, 0);
   
@@ -85,21 +86,64 @@ export default class StudyParticipant extends BaseStudy {
       .obs("attributeKeys[]", [])
       .obs('searchLoading');
 
-    this.loadingFunc = this.loadingFunc.bind(this);
-
     super.load()
       .then(() => options_service.getOrganizationNames())
       .then(map => this.orgNames = map)
       .then(() => options_service.getStudyNames())
       .then(map => this.studyNames = map)
       .then(() => serverService.getApp())
-      .then(app => {
-        this.dataGroupsObs(app.dataGroups);
-        this.attributeKeysObs(app.userProfileAttributes.sort().map(att => ({ value: att, label: att })));
-      });
+      .then(fn.handleObsUpdate(this.dataGroupsObs, "dataGroups"))
+      .then(app => this.attributeKeysObs(
+          app.userProfileAttributes.sort().map(att => ({ value: att, label: att }))))
+      .then(() => ko.postbox.publish('studyparticipants'))
   }
   formatStudyName(id) {
     return this.studyNames[id];
+  }
+  formatStatus(item) {
+    if (item.studyIds.includes(this.studyId)) {
+      return "Enrolled";
+    }
+    return "Withdrawn";
+  }
+  exportDialog() {
+    root.openDialog("participant_export", { 
+      total: this.total, 
+      search: this.search, 
+      studyId: this.studyId 
+    });
+  }
+  importDialog(vm, event) {
+    root.openDialog("external_id_importer", {
+      vm: this,
+      studyId: this.studyId,
+      reload: this.loadingFunc
+    });
+  }
+  enrollDialog () {
+    root.openDialog("add_enrollment", {
+      closeFunc: fn.seq(root.closeDialog, () => {
+        ko.postbox.publish('studyparticipants', 0);
+      }),
+      studyId: this.studyId
+    });
+  }
+  unenroll(item, event) {
+    alerts.prompt("Why are you withdrawing this person?", (withdrawalNote) => {
+      utils.startHandler(this, event);
+      serverService.unenroll(this.studyId, item.id, withdrawalNote)
+        .then(utils.successHandler(this, event, "Participant removed from study."))
+        .then(() => ko.postbox.publish('studyparticipants', 0))
+        .catch(this.failureHandler);
+    });
+  }
+  doFormSearch(vm, event) {
+    if (event.keyCode === 13)  {
+      ko.postbox.publish('studyparticipants', vm.search.offsetBy);
+    }
+  }
+  searchButton() {
+    ko.postbox.publish('studyparticipants', this.search.offsetBy);
   }
   doSearch(event) {
     event.target.parentNode.parentNode.classList.add("loading");
@@ -127,21 +171,6 @@ export default class StudyParticipant extends BaseStudy {
     }
     promise.catch(utils.failureHandler({id: 'studyparticipants'}));
   }
-  exportDialog() {
-    root.openDialog("participant_export", { 
-      total: this.total, 
-      search: this.search, 
-      studyId: this.studyId 
-    });
-  }
-  importDialog(vm, event) {
-    //this.showResultsObs(false);
-    root.openDialog("external_id_importer", {
-      vm: this,
-      studyId: this.studyId,
-      reload: this.loadingFunc
-    });
-  }
   clear() {
     this.emailFilterObs(null);
     this.phoneFilterObs(null);
@@ -155,40 +184,11 @@ export default class StudyParticipant extends BaseStudy {
     this.enrollmentObs('all');
     this.attributeKeyObs(null);
     this.attributeValueFilterObs(null);
-  }
-  doFormSearch(vm, event) {
-    if (event.keyCode === 13)  {
-      ko.postbox.publish('studyparticipants', vm.search.offsetBy);
-    }
-  }
-  searchButton() {
-    ko.postbox.publish('studyparticipants', this.search.offsetBy);
-  }
-  formatStatus(item) {
-    if (item.studyIds.includes(this.studyId)) {
-      return "Enrolled";
-    }
-    return "Withdrawn";
-  }
-  enrollDialog () {
-    root.openDialog("add_enrollment", {
-      closeFunc: fn.seq(root.closeDialog, () => {
-        ko.postbox.publish('studyparticipants', 0);
-      }),
-      studyId: this.studyId
-    });
-  }
-  unenroll(item, event) {
-    alerts.prompt("Why are you withdrawing this person?", (withdrawalNote) => {
-      utils.startHandler(this, event);
-      serverService.unenroll(this.studyId, item.id, withdrawalNote)
-        .then(utils.successHandler(this, event, "Participant removed from study."))
-        .then(() => ko.postbox.publish('studyparticipants', 0))
-        .catch(this.failureHandler);
-    });
-  }
+    ko.postbox.publish('studyparticipants', 0)
+  }  
   loadingFunc(search) {
     search = search || this.search;
+
     search.emailFilter = this.emailFilterObs();
     search.phoneFilter = this.phoneFilterObs();
     search.externalIdFilter = this.externalIdFilterObs();
@@ -206,8 +206,6 @@ export default class StudyParticipant extends BaseStudy {
       delete search.attributeKey;
       delete search.attributeValueFilter;
     }
-    search.adminOnly = false; // TODO: enforce on server
-    search.enrolledInStudy = this.studyId; //  TODO: enforce on server
     if (search.status === '') {
       delete search.status;
     }

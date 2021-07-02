@@ -8,14 +8,11 @@ const PAGE_SIZE = 25;
 /**
  * @params loadingFunc - the function to call to load resources. The function takes the parameters
  *      offsetBy, pageSize.
- * @params pageKey - a key to make the pagination on this table unique from other pagination on
- *      the screen
  * @params displayObs - an observer that holds display test left of the paging control (to 
  *      give a plain text description of the search).
  */
 export default function pager(params) {
   let self = this;
-  let pageKey = params.pageKey;
   let loadingFunc = params.loadingFunc;
   self.formatCount = fn.formatCount;
 
@@ -26,25 +23,17 @@ export default function pager(params) {
     .obs("totalRecords")
     .obs("totalPages")
     .obs("currentPage", 1)
-    .obs("searchLoading", false)
-    .obs("showLoader", false)
-    .obs("showSearch", false);
+    .obs("showLoader", false);
 
-  self.doSearch = function(vm, event) {
-    self.searchLoadingObs(true);
-    wrappedLoadingFunc(Math.round(self.currentPageObs()));
-  };
   self.previousPage = function(vm, event) {
     let page = self.currentPageObs() - 1;
     if (page >= 0) {
-      self.showLoaderObs(true);
       wrappedLoadingFunc(page * PAGE_SIZE);
     }
   };
   self.nextPage = function(vm, event) {
     let page = self.currentPageObs() + 1;
     if (page <= self.totalPagesObs() - 1) {
-      self.showLoaderObs(true);
       wrappedLoadingFunc(page * PAGE_SIZE);
     }
   };
@@ -52,20 +41,10 @@ export default function pager(params) {
     wrappedLoadingFunc(self.currentPageObs() * PAGE_SIZE);
   };
   self.firstPage = function(vm, event) {
-    self.showLoaderObs(true);
-    wrappedLoadingFunc(0, vm, event);
+    wrappedLoadingFunc(0);
   };
   self.lastPage = function(vm, event) {
-    self.showLoaderObs(true);
     wrappedLoadingFunc((self.totalPagesObs() - 1) * PAGE_SIZE);
-  };
-  self.openSearchDialog = function(vm, event) {
-    utils.clearErrors();
-    self.showSearchObs(!self.showSearchObs());
-  };
-  self.clear = function(vm, event) {
-    self.offsetByObs(0);
-    wrappedLoadingFunc(0);
   };
 
   function updateModel(response) {
@@ -78,16 +57,14 @@ export default function pager(params) {
     }
   }
 
-  ko.postbox.subscribe(pageKey, wrappedLoadingFunc.bind(self));
+  ko.postbox.subscribe('studyparticipants', wrappedLoadingFunc.bind(self));
 
   function wrappedLoadingFunc(offsetBy) {
     let search = {offsetBy: offsetBy, pageSize: PAGE_SIZE};
-
+    self.showLoaderObs(true);
     loadingFunc(search)
       .then(updateModel)
-      .then(fn.handleStaticObsUpdate(self.searchLoadingObs, false))
       .then(fn.handleStaticObsUpdate(self.showLoaderObs, false))
       .catch(utils.failureHandler());
   }
-  wrappedLoadingFunc(0);
 };
