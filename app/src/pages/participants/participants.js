@@ -88,6 +88,10 @@ export default class Participants {
       .then(map => this.orgNames = map)
       .then(() => optionsService.getStudyNames())
       .then(map => this.studyNames = map)
+      .then(() => serverService.getApp())
+      .then(fn.handleObsUpdate(this.dataGroupsObs, "dataGroups"))
+      .then(app => this.attributeKeysObs(
+          app.userProfileAttributes.sort().map(att => ({ value: att, label: att }))))
       .then(() => ko.postbox.publish('participants'));
   }
   formatStudyName(id) {
