@@ -131,15 +131,10 @@
           <option value="disabled">Disabled</option>
         </select>
         <select class="ui dropdown" data-bind="value: enrollmentObs">
-          <option value="all">Enrollment:</option>
+          <option value="">Enrollment:</option>
           <option value="enrolled">Enrolled</option>
           <option value="withdrawn">Withdrawn</option>
         </select>
-      </div>
-      <div class="labeled-panel">
-        <ui-checkbox params="checkedObs: adminOnlyObs">
-          Admin only?
-        </ui-checkbox>
       </div>
       <div class="labeled-panel">
         <div class="field">
@@ -156,6 +151,15 @@
               allObs: dataGroupsObs, type: 'data groups'"></tag-editor>
           </div>
         </div>
+      </div>
+      <div class="labeled-panel" style="white-space:nowrap; display:flex; align-items:center">
+        <span>Search for</span>
+        <input id="stp_any" style="margin:0 .25rem" type="radio" name="predicate"
+          value="or" data-bind="checked: predicateObs">
+        <label for="stp_any"> any </label>
+        <input id="stp_all" style="margin:0 .25rem" type="radio" name="predicate"
+          value="and" data-bind="checked: predicateObs">
+        <label for="stp_all"> all terms</label>
       </div>
       <div class="panel">
         <button class="ui tiny button" data-bind="click: searchButton">Search</button>

@@ -83,7 +83,7 @@ export default class Participants {
       .obs("attributeKey", this.search.attributeKey)
       .obs("attributeValueFilter", this.search.attributeValueFilter)
       .obs("attributeKeys[]", [])
-      .obs("adminOnly");
+      .obs("predicate", "and");
 
     optionsService.getOrganizationNames()
       .then(map => this.orgNames = map)
@@ -153,7 +153,7 @@ export default class Participants {
     this.enrollmentObs('all');
     this.attributeKeyObs(null);
     this.attributeValueFilterObs(null);
-    this.adminOnly(null);
+    this.predicateObs('and');
     ko.postbox.publish(PAGER_KEY, 0)
   }  
   loadingFunc(offsetBy) {
@@ -170,6 +170,7 @@ export default class Participants {
     search.endTime = this.endTimeObs();
     search.status = this.statusObs();
     search.enrollment = this.enrollmentObs();
+    search.predicate = this.predicateObs();
     if (this.attributeValueFilterObs()) {
       search.attributeKey = this.attributeKeyObs();
       search.attributeValueFilter = this.attributeValueFilterObs();
@@ -177,7 +178,9 @@ export default class Participants {
       delete search.attributeKey;
       delete search.attributeValueFilter;
     }
-    search.adminOnly = this.adminOnlyObs();
+    if (search.emailFilter === '') {
+      delete search.emailFilter;
+    }
     if (search.status === '') {
       delete search.status;
     }
@@ -190,7 +193,6 @@ export default class Participants {
     if (fn.is(search.endTime, "Date")) {
       search.endTime.setHours(23, 59, 59, 999);
     }
-
     //this.search = search;
     this.formattedSearchObs(fn.formatSearch(search));
 

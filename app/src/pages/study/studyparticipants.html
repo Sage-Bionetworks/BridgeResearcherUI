@@ -150,6 +150,15 @@
           </div>
         </div>
       </div>
+      <div class="labeled-panel" style="white-space:nowrap; display:flex; align-items:center">
+        <span>Search for</span>
+        <input id="stp_any" style="margin:0 .25rem" type="radio" name="predicate"
+          value="or" data-bind="checked: predicateObs">
+        <label for="stp_any"> any </label>
+        <input id="stp_all" style="margin:0 .25rem" type="radio" name="predicate"
+          value="and" data-bind="checked: predicateObs">
+        <label for="stp_all"> all terms</label>
+      </div>
       <div class="panel">
         <button class="ui tiny button" data-bind="click: searchButton">Search</button>
         <button class="ui tiny button" data-bind="click: clear">Clear</button>

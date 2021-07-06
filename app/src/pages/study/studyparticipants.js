@@ -85,7 +85,8 @@ export default class StudyParticipants extends BaseStudy {
       .obs("enrollment", this.search.enrollment)
       .obs("attributeKey", this.search.attributeKey)
       .obs("attributeValueFilter", this.search.attributeValueFilter)
-      .obs("attributeKeys[]", []);
+      .obs("attributeKeys[]", [])
+      .obs("predicate", "and");
 
     super.load()
       .then(() => options_service.getOrganizationNames())
@@ -185,6 +186,7 @@ export default class StudyParticipants extends BaseStudy {
     this.enrollmentObs('all');
     this.attributeKeyObs(null);
     this.attributeValueFilterObs(null);
+    this.predicateObs("and");
     ko.postbox.publish(PAGE_KEY, 0)
   }  
   loadingFunc(offsetBy) {
@@ -201,6 +203,7 @@ export default class StudyParticipants extends BaseStudy {
     search.endTime = this.endTimeObs();
     search.status = this.statusObs();
     search.enrollment = this.enrollmentObs();
+    search.predicate = this.predicateObs();
     if (this.attributeValueFilterObs()) {
       search.attributeKey = this.attributeKeyObs();
       search.attributeValueFilter = this.attributeValueFilterObs();
