@@ -8,6 +8,8 @@ import tables from "../../tables";
 import utils from "../../utils";
 import optionsService from "../../services/options_service";
 
+const PAGER_KEY = 'p-refresh';
+
 const cssClassNameForStatus = {
   disabled: "negative",
   unverified: "warning",
@@ -61,7 +63,7 @@ export default class Participants {
       name: "participant",
       id: "participants",
       delete: (item) => serverService.deleteParticipant(item.id),
-      refresh: () => ko.postbox.publish("participants")
+      refresh: () => ko.postbox.publish(PAGER_KEY)
     });
 
     this.binder = new Binder(this)
@@ -81,8 +83,7 @@ export default class Participants {
       .obs("attributeKey", this.search.attributeKey)
       .obs("attributeValueFilter", this.search.attributeValueFilter)
       .obs("attributeKeys[]", [])
-      .obs("adminOnly")
-      .obs('searchLoading');
+      .obs("predicate", "and");
 
     optionsService.getOrganizationNames()
       .then(map => this.orgNames = map)
@@ -92,7 +93,7 @@ export default class Participants {
       .then(fn.handleObsUpdate(this.dataGroupsObs, "dataGroups"))
       .then(app => this.attributeKeysObs(
           app.userProfileAttributes.sort().map(att => ({ value: att, label: att }))))
-      .then(() => ko.postbox.publish('participants'));
+      .then(() => ko.postbox.publish(PAGER_KEY));
   }
   formatStudyName(id) {
     return this.studyNames[id];
@@ -105,12 +106,12 @@ export default class Participants {
   }
   doFormSearch(vm, event) {
     if (event.keyCode === 13)  {
-      ko.postbox.publish('participants', 0);
+      ko.postbox.publish(PAGER_KEY, 0);
     }
     return false;
   }
   searchButton() {
-    ko.postbox.publish('participants', 0);
+    ko.postbox.publish(PAGER_KEY, 0);
   }
   doSearch(event) {
     event.target.parentNode.parentNode.classList.add("loading");
@@ -152,12 +153,13 @@ export default class Participants {
     this.enrollmentObs('all');
     this.attributeKeyObs(null);
     this.attributeValueFilterObs(null);
-    this.adminOnly(null);
-    ko.postbox.publish('participants', 0)
+    this.predicateObs('and');
+    ko.postbox.publish(PAGER_KEY, 0)
   }  
-  loadingFunc(search) {
-    search = search || this.search;
+  loadingFunc(offsetBy) {
+    this.search.offsetBy = offsetBy;
 
+    let search = this.search;
     search.emailFilter = this.emailFilterObs();
     search.phoneFilter = this.phoneFilterObs();
     search.externalIdFilter = this.externalIdFilterObs();
@@ -168,6 +170,7 @@ export default class Participants {
     search.endTime = this.endTimeObs();
     search.status = this.statusObs();
     search.enrollment = this.enrollmentObs();
+    search.predicate = this.predicateObs();
     if (this.attributeValueFilterObs()) {
       search.attributeKey = this.attributeKeyObs();
       search.attributeValueFilter = this.attributeValueFilterObs();
@@ -175,7 +178,9 @@ export default class Participants {
       delete search.attributeKey;
       delete search.attributeValueFilter;
     }
-    search.adminOnly = this.adminOnlyObs();
+    if (search.emailFilter === '') {
+      delete search.emailFilter;
+    }
     if (search.status === '') {
       delete search.status;
     }
@@ -188,9 +193,7 @@ export default class Participants {
     if (fn.is(search.endTime, "Date")) {
       search.endTime.setHours(23, 59, 59, 999);
     }
-
-    this.search = search;
-    storeService.persistQuery("p", search);
+    //this.search = search;
     this.formattedSearchObs(fn.formatSearch(search));
 
     utils.clearErrors();

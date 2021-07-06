@@ -5,14 +5,15 @@ import ko from "knockout";
 import root from "../../root";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
-import Promise from "bluebird";
 import utils from "../../utils";
+
+const PAGE_KEY = 'ad-refresh';
 
 function arrayToString(a) {
   return a ? a.join(', ') : null;
 }
 function stringToArray(s) {
-  return s ? s.split(/,\s?/) : null;
+  return (s && typeof s === 'string') ? s.split(/,\s?/) : null;
 }
 
 export default class StudyParticipantAdherence extends BaseAccount {
@@ -28,6 +29,7 @@ export default class StudyParticipantAdherence extends BaseAccount {
     this.assessments = {};
     this.sessions = {};
     this.schedules = {};
+    this.search = this.search.bind(this);
 
     let ig = root.queryParams.instanceGuid ? root.queryParams.instanceGuid : null;
 
@@ -41,30 +43,34 @@ export default class StudyParticipantAdherence extends BaseAccount {
       .bind('currentTimestampsOnly', true)
       .bind('startTime')
       .bind('endTime')
-      .bind('sortOrder', 'desc');
+      .bind('sortOrder', 'desc')
+      .obs("showLoader", false);
 
     tables.prepareTable(this, { 
       name: "adherence record",
       id: 'studyparticipant-adherencesearch',
-      refresh: () => search()
+      refresh: () => ko.postbox.publish(PAGE_KEY, 0)
     });
-
-    this.postLoadPagerFunc = (a) => fn.identity;
-    this.postLoadFunc = (func) => this.postLoadPagerFunc = func;
 
     serverService.getStudy(this.studyId).then((response) => {
       this.navStudyNameObs(response.name);
     });
-    this.getAccount().then(() => this.load());
+    this.getAccount()
+      .then(() => this.load())
+      .then(() => ko.postbox.publish(PAGE_KEY, 0));
   }
   load() {
     this.itemsObs([]);
     return serverService.getStudyParticipantTimeline(this.studyId, this.userId)
       .then(res => this.init(res))
-      .then(() => this.search())
+      .then(() => ko.postbox.publish(PAGE_KEY, 0))
       .catch(utils.failureHandler(this.failureParams));
   }
-  search() {
+  doFormSearch(vm, event) {
+    utils.startHandler(vm, event);
+    ko.postbox.publish(PAGE_KEY, 0);
+  }
+  search(offsetBy) {
     let query = this.binder.persist({
       'instanceGuids': [],
       'assessmentIds': [],
@@ -77,17 +83,32 @@ export default class StudyParticipantAdherence extends BaseAccount {
       'endTime': null,
       'sortOrder': null
     });
+    query.offsetBy = offsetBy;
     if (query.adherenceRecordType === '') {
       delete query.adherenceRecordType;
     }
     return serverService.getStudyParticipantAdherenceRecords(this.studyId, this.userId, query)
-      .then(res => this.postLoadPagerFunc(res))
       .then(res => {
         res.items.forEach(i => i.clientDataObs = ko.observable(i.clientData))
         return res;
       })
-      .then(res => this.itemsObs(res.items))
+      .then(fn.handleObsUpdate(this.itemsObs, "items"))
+      .then(utils.successHandler())
       .catch(utils.failureHandler(this.failureParams));
+  }
+  clear(vm, event) {
+    utils.startHandler(vm, event);
+    this.instanceGuidsObs([]);
+    this.assessmentIdsObs([]);
+    this.sessionGuidsObs([]);
+    this.timeWindowGuidsObs([]);
+    this.adherenceRecordTypeObs(null);
+    this.includeRepeatsObs(false);
+    this.currentTimestampsOnlyObs(false);
+    this.startTimeObs(null);
+    this.endTimeObs(null);
+    this.sortOrderObs('desc');
+    ko.postbox.publish(PAGE_KEY, 0);
   }
   init(res) {
     res.assessments.forEach(asmt => this.assessments[asmt.key] = asmt);

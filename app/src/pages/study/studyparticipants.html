@@ -34,8 +34,9 @@
 </div>
 <bsm-layout id="studyparticipants">
   <div slot="header">
-    <studyparticipants-pager params="loadingFunc: loadingFunc, displayObs: formattedSearchObs">
-    </studyparticipants-pager>
+    <pager2 params="prefix: 'sp', loadingFunc: loadingFunc">
+      <span data-bind="text: $parent.formattedSearchObs"></span>
+    </pager2>
   </div>
   <div slot="content">
     <table class="ui compact selectable table">
@@ -149,11 +150,18 @@
           </div>
         </div>
       </div>
+      <div class="labeled-panel" style="white-space:nowrap; display:flex; align-items:center">
+        <span>Search for</span>
+        <input id="stp_any" style="margin:0 .25rem" type="radio" name="predicate"
+          value="or" data-bind="checked: predicateObs">
+        <label for="stp_any"> any </label>
+        <input id="stp_all" style="margin:0 .25rem" type="radio" name="predicate"
+          value="and" data-bind="checked: predicateObs">
+        <label for="stp_all"> all terms</label>
+      </div>
       <div class="panel">
-        <button class="ui tiny button" data-bind="click: searchButton, 
-          css:{ loading: searchLoadingObs }">Search</button>
-        <button class="ui tiny button" data-bind="click: clear, 
-          css:{ loading: searchLoadingObs }">Clear</button>
+        <button class="ui tiny button" data-bind="click: searchButton">Search</button>
+        <button class="ui tiny button" data-bind="click: clear">Clear</button>
       </div>
     </div>
   </div>
