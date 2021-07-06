@@ -180,8 +180,6 @@ import scheduleplanHtml from "./pages/scheduleplan/scheduleplan.html";
 
 import participants from "./pages/participants/participants";
 import participantsHtml from "./pages/participants/participants.html";
-import partPager from "./pages/participants/pager";
-import partPagerHtml from "./pages/participants/pager.html";
 
 import partGeneral from "./pages/participant/general";
 import partGeneralHtml from "./pages/participant/general.html";
@@ -300,10 +298,6 @@ import studyContactHtml from "./pages/study/contact.html";
 import studyparticipants from "./pages/study/studyparticipants";
 import studyparticipantsHtml from "./pages/study/studyparticipants.html";
 
-// ???
-import studypartPager from "./pages/study/pager";
-import studypartPagerHtml from "./pages/study/pager.html";
-
 import studypartGeneral from "./pages/studyparticipant/general";
 import studypartGeneralHtml from "./pages/studyparticipant/general.html";
 import studypartEnrollments from "./pages/studyparticipant/enrollments";
@@ -412,6 +406,8 @@ import fp from "./widgets/forward_pager/forward_pager";
 import fpHtml from "./widgets/forward_pager/forward_pager.html";
 import pager from './widgets/pager/pager';
 import pagerHtml from './widgets/pager/pager.html';
+import pager2 from './widgets/pager2/pager2';
+import pager2Html from './widgets/pager2/pager2.html';
 import tagEditor from "./widgets/tag-editor/tag_editor";
 import tagEditorHtml from "./widgets/tag-editor/tag_editor.html";
 import uiDur from "./widgets/form/ui_duration";
@@ -661,8 +657,6 @@ reg("subpop-tabset", {viewModel: subpopTabset, template: subpopTabsetHtml});
 reg("line-editor", {viewModel: lineEditor, template: lineEditorHtml});
 reg("app_version_criteria", {viewModel: appVersionCrit, template: appVersionCritHtml});
 reg("template_criteria", {viewModel: templateCrit, template: templateCritHtml});
-reg("participants-pager", {viewModel: partPager, template: partPagerHtml});
-reg("studyparticipants-pager", {viewModel: studypartPager, template: studypartPagerHtml});
 reg("field_definition", {viewModel: fieldDef, template: fieldDefHtml});
 reg("SurveyInfoScreen", {viewModel: infoScreen, template: infoScreenHtml});
 reg("SurveyQuestion", {template: questionHtml});
@@ -688,6 +682,7 @@ reg("template_editor", {viewModel: templateEditor, template: templateEditorHtml}
 reg("template_history", {viewModel: templateHistory, template: templateHistoryHtml});
 reg("template-tabset", {viewModel: templateTabset, template: templateTabsetHtml});
 reg("pager", {viewModel: pager, template: pagerHtml});
+reg("pager2", {viewModel: pager2, template: pager2Html});
 reg("timestamps", {viewModel: timestamps, template: timestampsHtml});
 reg("phone", {viewModel: phone, template: phoneHtml});
 reg("input-editor", {viewModel: inputEditor, template: inputEditorHtml})

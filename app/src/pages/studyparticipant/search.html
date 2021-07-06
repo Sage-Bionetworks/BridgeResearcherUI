@@ -17,86 +17,14 @@
 </div>
 <bsm-layout id="studyparticipant-adherencesearch">
   <div slot="header">
-    <div class="line-control">
-      <div class="line-control-stretch ">
-        <div class="ui small secondary menu">
-          <a class="item" data-bind="href: link('schedule')">Schedule Events</a>
-          <a class="item" data-bind="href: link('schedule/adherence')">Adherence</a>
-          <span class="active item">Search</span>
-          <a class="item" data-bind="href: link('schedule/timeline')">Timeline</a>
-        </div>
+    <pager2 params="prefix: 'ad', loadingFunc: search">
+      <div class="ui small secondary menu">
+        <a class="item" data-bind="href: $parent.link('schedule')">Schedule Events</a>
+        <a class="item" data-bind="href: $parent.link('schedule/adherence')">Adherence</a>
+        <span class="active item">Search</span>
+        <a class="item" data-bind="href: $parent.link('schedule/timeline')">Timeline</a>
       </div>
-    </div>
-    <form onsubmit="return false" class="ui form segment" style="margin-bottom: 2rem">
-      <div class="two fields">
-        <div class="field">
-          <label>Instance GUIDs</label>
-          <input type="text" data-bind="textInput: instanceGuidsObs">
-        </div>
-        <div class="field">
-          <label>Session GUIDs</label>
-          <input type="text" data-bind="textInput: sessionGuidsObs">
-        </div>
-      </div>
-      <div class="two fields">
-        <div class="field">
-          <label>Time Window GUIDs</label>
-          <input type="text" data-bind="textInput: timeWindowGuidsObs">
-        </div>
-        <div class="field">
-          <label>Assessment IDs</label>
-          <input type="text" data-bind="textInput: assessmentIdsObs">
-        </div>
-      </div>
-      <div class="three fields">
-        <div class="field">
-          <label>Record Type</label>
-          <select class="ui dropdown"  data-bind="value: adherenceRecordTypeObs">
-            <option value="">Both</option>
-            <option value="assessment">Assessments</option>
-            <option value="session">Sessions</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>&#160;</label>
-          <div class="input-field-padding">
-            <ui-checkbox params="checkedObs: includeRepeatsObs">Include repeats?</ui-checkbox>
-          </div>
-        </div>
-        <div class="field">
-          <label>&#160;</label>
-          <div class="input-field-padding">
-            <ui-checkbox params="checkedObs: currentTimestampsOnlyObs">Current event timestamps only?</ui-checkbox>
-          </div>
-        </div>
-      </div>
-      <div class="three fields">
-        <div class="field">
-          <label>Start Time</label>
-          <input type="text" data-bind="flatpickr: startTimeObs" data-enableTime>
-        </div>
-        <div class="field">
-          <label>End Time</label>
-          <input type="text" data-bind="flatpickr: endTimeObs" data-enableTime>
-        </div>
-        <div class="field">
-          <label>Sort order (by startedOn)</label>
-          <select data-bind="value: sortOrderObs" class="ui dropdown">
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-          </select>
-        </div>
-      </div>
-      <p>
-        <button class="ui small primary button" data-bind="click: search">
-          Filter
-        </button>
-      </p>
-    </form>
-    <div class="line-control">
-      <div class="line-control-stretch "></div>
-      <pager params="prefix: 'adherencesearch', postLoadFunc: postLoadFunc"></pager>
-    </div>
+    </pager2>
   </div>
   <div slot="content">
     <table class="ar-search-table ui compact selectable table">
@@ -137,5 +65,60 @@
         </tr>
       </tbody>
     </table>
+  </div>
+  <div slot="editor">
+
+    <form class="ui form vertical-search" onsubmit="submit: doFormSearch">
+      <div class="panel">
+        <input type="text" placeholder="Instance GUIDs"
+          data-bind="textInput: instanceGuidsObs, hasFocus: true"/>
+      </div>
+      <div class="panel">
+        <input type="text" placeholder="Session GUIDs"
+          data-bind="textInput: sessionGuidsObs"/>
+      </div>
+      <div class="panel">
+        <input type="text" placeholder="Time Window GUIDs"
+          data-bind="textInput: timeWindowGuidsObs"/>
+      </div>
+      <div class="panel">
+        <input type="text" placeholder="Assessment IDs"
+          data-bind="textInput: assessmentIdsObs"/>
+      </div>
+      <div class="panel">
+        <select class="ui dropdown"  data-bind="value: adherenceRecordTypeObs">
+          <option value="">Record Type:</option>
+          <option value="assessment">Assessments</option>
+          <option value="session">Sessions</option>
+        </select>
+      </div>
+      <div class="labeled-panel">
+        <div class="field">
+          <ui-checkbox params="checkedObs: includeRepeatsObs">Include repeats?</ui-checkbox>
+        </div>
+      </div>
+      <div class="labeled-panel">
+        <div class="field">
+          <ui-checkbox params="checkedObs: currentTimestampsOnlyObs">Current event timestamps only?</ui-checkbox>
+        </div>
+      </div>
+      <div class="panel">
+        <input type="text" placeholder="Start time" data-bind="flatpickr: startTimeObs" data-enableTime>
+      </div>
+      <div class="panel">
+        <input type="text" placeholder="End time" data-bind="flatpickr: endTimeObs" data-enableTime>
+      </div>
+      <div class="panel">
+        <select data-bind="value: sortOrderObs" class="ui dropdown">
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
+      </div>
+      <div class="panel">
+        <button class="ui tiny button" data-bind="click: doFormSearch">Filter</button>
+        <button class="ui tiny button" data-bind="click: clear">Clear</button>
+      </div>
+    </form>
+
   </div>
 </bsm-layout>

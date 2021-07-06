@@ -14,6 +14,8 @@ const cssClassNameForStatus = {
   unverified: "warning",
   verified: ""
 };
+const PAGE_KEY = 'sp-refresh';
+
 function assignClassForStatus(participant) {
   // does not have sharing scope so we can't show it on summary page.
   return cssClassNameForStatus[participant.status];
@@ -64,7 +66,7 @@ export default class StudyParticipants extends BaseStudy {
       name: "participant",
       id: "studyparticipants",
       delete: (item) => serverService.deleteStudyParticipant(this.studyId, item.id),
-      refresh: () => ko.postbox.publish("studyparticipants")
+      refresh: () => ko.postbox.publish(PAGE_KEY)
     });
   
     this.binder
@@ -83,8 +85,7 @@ export default class StudyParticipants extends BaseStudy {
       .obs("enrollment", this.search.enrollment)
       .obs("attributeKey", this.search.attributeKey)
       .obs("attributeValueFilter", this.search.attributeValueFilter)
-      .obs("attributeKeys[]", [])
-      .obs('searchLoading');
+      .obs("attributeKeys[]", []);
 
     super.load()
       .then(() => options_service.getOrganizationNames())
@@ -95,7 +96,7 @@ export default class StudyParticipants extends BaseStudy {
       .then(fn.handleObsUpdate(this.dataGroupsObs, "dataGroups"))
       .then(app => this.attributeKeysObs(
           app.userProfileAttributes.sort().map(att => ({ value: att, label: att }))))
-      .then(() => ko.postbox.publish('studyparticipants'))
+      .then(() => ko.postbox.publish(PAGE_KEY))
   }
   formatStudyName(id) {
     return this.studyNames[id];
@@ -123,7 +124,7 @@ export default class StudyParticipants extends BaseStudy {
   enrollDialog () {
     root.openDialog("add_enrollment", {
       closeFunc: fn.seq(root.closeDialog, () => {
-        ko.postbox.publish('studyparticipants', 0);
+        ko.postbox.publish(PAGE_KEY, 0);
       }),
       studyId: this.studyId
     });
@@ -133,17 +134,17 @@ export default class StudyParticipants extends BaseStudy {
       utils.startHandler(this, event);
       serverService.unenroll(this.studyId, item.id, withdrawalNote)
         .then(utils.successHandler(this, event, "Participant removed from study."))
-        .then(() => ko.postbox.publish('studyparticipants', 0))
+        .then(() => ko.postbox.publish(PAGE_KEY, 0))
         .catch(this.failureHandler);
     });
   }
   doFormSearch(vm, event) {
     if (event.keyCode === 13)  {
-      ko.postbox.publish('studyparticipants', vm.search.offsetBy);
+      ko.postbox.publish(PAGE_KEY, vm.search.offsetBy);
     }
   }
   searchButton() {
-    ko.postbox.publish('studyparticipants', this.search.offsetBy);
+    ko.postbox.publish(PAGE_KEY, this.search.offsetBy);
   }
   doSearch(event) {
     event.target.parentNode.parentNode.classList.add("loading");
@@ -184,11 +185,12 @@ export default class StudyParticipants extends BaseStudy {
     this.enrollmentObs('all');
     this.attributeKeyObs(null);
     this.attributeValueFilterObs(null);
-    ko.postbox.publish('studyparticipants', 0)
+    ko.postbox.publish(PAGE_KEY, 0)
   }  
-  loadingFunc(search) {
-    search = search || this.search;
+  loadingFunc(offsetBy) {
+    this.search.offsetBy = offsetBy;
 
+    let search = this.search;
     search.emailFilter = this.emailFilterObs();
     search.phoneFilter = this.phoneFilterObs();
     search.externalIdFilter = this.externalIdFilterObs();

@@ -25,7 +25,9 @@
 </div>
 <bsm-layout id="participants">
   <div slot="header">
-    <participants-pager params="loadingFunc: loadingFunc, displayObs: formattedSearchObs"></participants-pager>
+    <pager2 params="prefix: 'p', loadingFunc: loadingFunc">
+      <span data-bind="text: $parent.formattedSearchObs"></span>
+    </pager2>
   </div>
   <div slot="content">
     <table class="ui compact selectable table">
@@ -156,10 +158,8 @@
         </div>
       </div>
       <div class="panel">
-        <button class="ui tiny button" data-bind="click: searchButton, 
-          css:{ loading: searchLoadingObs }">Search</button>
-        <button class="ui tiny button" data-bind="click: clear, 
-          css:{ loading: searchLoadingObs }">Clear</button>
+        <button class="ui tiny button" data-bind="click: searchButton">Search</button>
+        <button class="ui tiny button" data-bind="click: clear">Clear</button>
       </div>
     </div>
 
