@@ -64,7 +64,7 @@ export default class Participants {
       name: "participant",
       id: "participants",
       delete: (item) => serverService.deleteParticipant(item.id),
-      refresh: () => ko.postbox.publish(PAGER_KEY)
+      refresh: () => ko.postbox.publish(PAGER_KEY, 0)
     });
 
     this.binder = new Binder(this)
@@ -194,8 +194,9 @@ export default class Participants {
     if (fn.is(search.endTime, "Date")) {
       search.endTime.setHours(23, 59, 59, 999);
     }
-    //this.search = search;
     this.formattedSearchObs(fn.formatSearch(search));
+
+    storeService.persistQuery("p", search);
 
     utils.clearErrors();
     return serverService.searchAccountSummaries(search)

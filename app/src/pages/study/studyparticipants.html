@@ -39,41 +39,43 @@
     </pager2>
   </div>
   <div slot="content">
-    <table class="ui compact selectable table">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Identifier(s)</th>
-          <th>Status</th>
-          <th>Note</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-        <tr>
-          <td colspan="5" data-bind="html: recordsMessageObs"></td>
-        </tr>
-      </tbody>
-      <tbody data-bind="foreach: itemsObs">
-        <tr data-bind="css: $component.classNameForStatus($data)">
-          <td>
-            <a data-bind="href: '#/studies/'+$parent.studyId+'/participants/'+$data.id+'/general',
-              text: $component.formatNameAsFullLabel($data, $parent.studyId)"></a>
-          </td>
-          <td data-bind="html: $component.formatIdentifiers($data, $parent.studyId)"></td>
-          <td data-bind="text: $component.formatStatus($data)"></td>
-          <td data-bind="text: $data.note"></td>
-          <td style="white-space:nowrap; text-align: right; vertical-align: middle">
-            <span data-bind="visible: $data.status === 'disabled'">
-              <i class="warning sign icon"></i>Disabled</span>
-            <button class="ui basic compact mini red button" 
-              data-bind="click: $parent.unenroll.bind($parent)"
-              style="margin-left: .5rem">Withdraw
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div style="overflow-x: auto">
+      <table class="ui compact selectable table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Identifier(s)</th>
+            <th>Status</th>
+            <th>Note</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+          <tr>
+            <td colspan="5" data-bind="html: recordsMessageObs"></td>
+          </tr>
+        </tbody>
+        <tbody data-bind="foreach: itemsObs">
+          <tr data-bind="css: $component.classNameForStatus($data)">
+            <td>
+              <a data-bind="href: '#/studies/'+$parent.studyId+'/participants/'+$data.id+'/general',
+                text: $component.formatNameAsFullLabel($data, $parent.studyId)"></a>
+            </td>
+            <td data-bind="html: $component.formatIdentifiers($data, $parent.studyId)"></td>
+            <td data-bind="text: $component.formatStatus($data)"></td>
+            <td data-bind="text: $data.note"></td>
+            <td style="white-space:nowrap; text-align: right; vertical-align: middle">
+              <span data-bind="visible: $data.status === 'disabled'">
+                <i class="warning sign icon"></i>Disabled</span>
+              <button class="ui basic compact mini red button" 
+                data-bind="click: $parent.unenroll.bind($parent)"
+                style="margin-left: .5rem">Withdraw
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <div slot="editor">
     <div class="ui form vertical-search" data-bind="event: {keyup: doFormSearch}">
