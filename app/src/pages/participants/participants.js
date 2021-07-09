@@ -51,6 +51,7 @@ export default class Participants {
     this.total = 0;
     this.classNameForStatus = assignClassForStatus;
     this.loadingFunc = this.loadingFunc.bind(this);
+    this.doSearch = this.doSearch.bind(this);
     
     this.search = storeService.restoreQuery("p", "allOfGroups", "noneOfGroups");
 
