@@ -7,22 +7,19 @@
     <errors id="session-editor"></errors>
     <div class="fields">
       <div class="four wide field">
-        <label>&#160;</label>
         <div class="input-field-padding" style="font-weight: bold" data-bind="text: sessionLabelObs"></div>
       </div>
       <div class="five wide field">
         <label>Started On</label>
-        <input type="text" data-bind="flatpickr: sessionStartedOnObs" data-enableTime>
+        <div class="input-field-padding" data-bind="text: formatDateTime(sessionStartedOnObs())"></div>
       </div>
       <div class="five wide field">
         <label>Finished On</label>
-        <input type="text" data-bind="flatpickr: sessionFinishedOnObs" data-enableTime>
+        <div class="input-field-padding" data-bind="text: formatDateTime(sessionFinishedOnObs())"></div>
       </div>
       <div class="two wide field">
-        <label>Declined?</label>
-        <div class="input-field-padding">
-          <ui-checkbox params="checkedObs: sessionDeclinedObs"></ui-checkbox>
-        </div>
+        <label>&#160;</label>
+        <div class="input-field-padding" data-bind="text: formatDeclined(sessionDeclinedObs())"></div>
       </div>
   </div>
   </div>
@@ -54,7 +51,7 @@
   <div class="actions" style="display: flex; align-items: center">
     <button class="ui primary small button" data-bind="click: save">Send</button>
     <button class="ui small button" data-bind="click: cancel">Cancel</button>
-    <div style="flex: 1; text-align: right">
+    <div style="flex: 1; text-align: right; margin-right: 2rem">
       Time zone will be <span data-bind="text: clientTimeZoneObs"></span>
     </div>
   </div>
