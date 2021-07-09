@@ -21,8 +21,6 @@ export default class StudyExternalIds extends BaseStudy {
       delete: (item) => serverService.deleteExternalId(item.identifier),
       id: 'external-ids'
     });
-
-    console.log("this.itemsObs", this.itemsObs);
   
     this.binder
       .obs("total", 0)

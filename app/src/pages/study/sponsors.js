@@ -37,7 +37,6 @@ export default class StudySponsors extends BaseStudy {
     });
   }
   removeSponsor(item, event) {
-    console.log(this, item);
     alerts.deleteConfirmation(config.msgs.UNDO_SPONSOR, () => {
       utils.startHandler(this, event);
       serverService.removeSponsor(this.studyId, item.identifier)

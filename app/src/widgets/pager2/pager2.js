@@ -41,7 +41,6 @@ export default class CursorPager {
   wrappedLoadingFunc(offsetBy) {
     this.showLoaderObs(true);
     this.loadingFunc(offsetBy).then(response => {
-      console.log(response);
       let rp = response.requestParams;
       this.offsetByObs(rp.offsetBy);
       this.totalRecordsObs(response.total);

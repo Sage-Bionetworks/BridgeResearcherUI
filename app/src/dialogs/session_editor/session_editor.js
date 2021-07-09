@@ -1,4 +1,5 @@
 import Binder from "../../binder";
+import fn from "../../functions";
 import ko from "knockout";
 import root from "../../root";
 import serverService from "../../services/server_service";
@@ -7,11 +8,13 @@ import utils from "../../utils";
 export default function(params) {
   let self = this;
 
+  self.formatDateTime = (v) => v ? fn.formatDateTime(v) : '—';
+  self.formatDeclined = (v)=> v ? 'Declined' : '';
+
   self.save = (vm, event) => {
     utils.startHandler(self, event)
 
     var records = [];
-    addSession(records, self);
     self.assessmentsObs().forEach(asmt => addAssessment(records, asmt));
     serverService.updateStudyParticipantAdherenceRecords(params.studyId, params.userId, {records})
       .then(utils.successHandler(vm, event))
@@ -22,43 +25,28 @@ export default function(params) {
     root.closeDialog();
   };
 
-  function addSession(array, record) {
-    let obj = { instanceGuid: record.sessionInstanceGuidObs(), eventTimestamp: params.eventTimestamp };
-    if (record.sessionStartedOnObs()) {
-      obj.startedOn = record.sessionStartedOnObs();
-    }
-    if (record.sessionFinishedOnObs()) {
-      obj.finishedOn = record.sessionFinishedOnObs();
-    }
-    if (record.sessionDeclinedObs()) {
-      obj.declined = true;
-    }
-    array.push(obj);
-  }
   function addAssessment(array, record) {
-    let obj = { instanceGuid: record.instanceGuidObs(), eventTimestamp: params.eventTimestamp };
-    
     if (record.startedOnObs()) {
-      obj.startedOn = record.startedOnObs();
+      record.startedOn = record.startedOnObs();
     }
     if (record.finishedOnObs()) {
-      obj.finishedOn = record.finishedOnObs();
+      record.finishedOn = record.finishedOnObs();
     }
-    obj.declined = record.declinedObs();
-    obj.clientTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    array.push(obj);
+    if (!record.clientTimeZone) {
+      record.clientTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    }
+    record.declined = record.declinedObs();
+    record.eventTimestamp = params.eventTimestamp;
+    array.push(record);
   }
 
   new Binder(self)
-    .bind('sessionInstanceGuid', params.instanceGuid)
     .bind('sessionLabel')
     .bind('sessionStartedOn')
     .bind('sessionFinishedOn')
     .bind('sessionDeclined')
     .obs('clientTimeZone', Intl.DateTimeFormat().resolvedOptions().timeZone)
     .bind('assessments[]');
-
-  self.clientTimeZoneObs()
 
   serverService.getStudyParticipantTimeline(params.studyId, params.userId).then(timeline => {
     let asmtMap = {};
@@ -72,13 +60,12 @@ export default function(params) {
       if (item.instanceGuid === params.instanceGuid) {
         self.sessionLabelObs(sessMap[item.refGuid].label);
         item.assessments.forEach(asmt => {
-          self.assessmentsObs.push({
-            label: asmtMap[asmt.refKey].label,
-            instanceGuidObs: ko.observable(asmt.instanceGuid),
-            startedOnObs: ko.observable(),
-            finishedOnObs: ko.observable(),
-            declinedObs: ko.observable(false)
-          });
+          asmt.label = asmtMap[asmt.refKey].label;
+          asmt.instanceGuidObs = ko.observable(asmt.instanceGuid);
+          asmt.startedOnObs = ko.observable();
+          asmt.finishedOnObs = ko.observable();
+          asmt.declinedObs = ko.observable(false);
+          self.assessmentsObs.push(asmt);
         })
       }
     }
@@ -95,7 +82,7 @@ export default function(params) {
         let arr = self.assessmentsObs();
         for (let i=0; i < response.items.length; i++) {
           let record = response.items[i];
-          if (self.sessionInstanceGuidObs() === record.instanceGuid) {
+          if (params.instanceGuid === record.instanceGuid) {
             self.sessionStartedOnObs(record.startedOn);
             self.sessionFinishedOnObs(record.finishedOn);
             self.sessionDeclinedObs(record.declined);

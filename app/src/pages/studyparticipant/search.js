@@ -55,9 +55,7 @@ export default class StudyParticipantAdherence extends BaseAccount {
     serverService.getStudy(this.studyId).then((response) => {
       this.navStudyNameObs(response.name);
     });
-    this.getAccount()
-      .then(() => this.load())
-      .then(() => ko.postbox.publish(PAGE_KEY, 0));
+    this.getAccount().then(() => this.load());
   }
   load() {
     this.itemsObs([]);

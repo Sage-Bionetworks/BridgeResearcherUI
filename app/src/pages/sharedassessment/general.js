@@ -9,7 +9,6 @@ const IMPORT_MSG = "Do you want to define a new identifier for this assessment "
 
 export default class GeneralSharedAssessment extends BaseSharedAssessment {
   constructor(params) {
-    console.log(params);
     super(params, 'sharedassessment');
 
     this.binder
