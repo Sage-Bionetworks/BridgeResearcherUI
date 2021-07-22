@@ -921,7 +921,9 @@ export class ServerService {
     let queryString = fn.queryString({ physical: physical === true });
     return this.del(`${config.studies}/${id}${queryString}`);
   }
-
+  transitionTo(id, phase) {
+    return this.post(`${config.studies}/${id}/${phase}`);
+  }
   getSponsors(studyId, query) {
     let queryString = fn.queryString(query);
     return this.gethttp(`/v5/studies/${studyId}/sponsors${queryString}`);
@@ -952,8 +954,6 @@ export class ServerService {
     let queryString = fn.queryString({withdrawalNote});
     return this.del(`/v5/studies/${studyId}/enrollments/${userId}${queryString}`);
   }
-
-
   getStudyParticipants(studyId, search) {
     return this.post(`${config.studies}/${studyId}/participants/search`, search);
   }

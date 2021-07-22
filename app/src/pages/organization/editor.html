@@ -18,20 +18,18 @@
     <div class="two fields">
       <div class="required field" id="name">
         <label>Name</label>
-        <input type="text" data-bind="textInput: nameObs, hasFocus: true, 
-          visible: isNewObs() || canEdit()" />
+        <input-editor params="obs: nameObs, canEdit: canEdit, hasFocus: true"></input-editor>
       </div>
       <div class="field required" id="identifier">
         <label>Identifier</label>
-        <input type="text" data-bind="textInput: identifierObs, visible: isNewObs()" />
-        <div class="input-field-padding" data-bind="text: identifierObs, visible: !isNewObs()"></div>
+        <input-editor params="obs: identifierObs, canEdit: isNewObs"></input-editor>
       </div>
     </div>
     <div class="two fields">
       <div class="field" id="description">
         <label>Description</label>
-        <input type="text" data-bind="textInput: descriptionObs,
-          visible: isNewObs() || canEdit()">
+        <input type="text" data-bind="textInput: descriptionObs, visible: canEdit()">
+        <div data-bind="text: descriptionObs, visible: !canEdit()"></div>
       </div>
     </div>
     <timestamps params="isNewObs: isNewObs, createdOnObs: createdOnObs, modifiedOnObs: modifiedOnObs">
