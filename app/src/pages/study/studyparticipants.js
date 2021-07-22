@@ -106,7 +106,7 @@ export default class StudyParticipants extends BaseStudy {
     if (item.studyIds.includes(this.studyId)) {
       return "Enrolled";
     }
-    return "Withdrawn";
+    return "Withdrawn or not yet consented";
   }
   exportDialog() {
     root.openDialog("participant_export", { 
@@ -231,6 +231,13 @@ export default class StudyParticipants extends BaseStudy {
     utils.clearErrors();
     return serverService.getStudyParticipants(this.studyId, search)
       .then(fn.handleObsUpdate(this.itemsObs, "items"))
+      .then(req => {
+        // because test_user can be set by the server, update if it's there
+        this.allOfGroupsObs(req.requestParams.allOfGroups);
+        this.noneOfGroupsObs(req.requestParams.noneOfGroups);
+        this.formattedSearchObs(fn.formatSearch(req.requestParams));
+        return req;
+      })
       .catch(this.failureHandler);
   }
 }

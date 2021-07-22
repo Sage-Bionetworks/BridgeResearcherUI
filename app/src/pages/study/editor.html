@@ -21,16 +21,40 @@
           <label>Name</label>
           <input-editor params="obs: nameObs, canEdit: canEdit, hasFocus: true"></input-editor>
         </div>
-        <div class="four wide field required" id="identifier">
-          <label>Identifier</label>
-          <input-editor params="obs: identifierObs, canEdit: isNewObs()"></input-editor>
-        </div>
-        <div class="four wide field" id="phase">
+        <div class="eight wide field" id="phase">
           <label>Phase</label>
-          <div class="input-field-padding" data-bind="text: formatPhase(phaseObs())"></div>
+          <div style="display:flex; align-items: center">
+            <div class="input-field-padding" data-bind="text: formatPhase(phaseObs())" style="flex:1"></div>
+            <div>
+              <div class="ui tiny buttons" data-bind="visible: isPhaseButtonVisible()">
+                <div class="ui button" data-bind="semantic: 'dropdown-button-toggle', container: '.buttons'">Transition to&hellip;</div>
+                <div class="ui floating dropdown icon button">
+                  <i class="dropdown icon"></i>
+                  <div class="menu">
+                    <a class="item" data-bind="click: changeTo('design'), 
+                      visible: isPhaseVisible('design')">Design</a>
+                    <a class="item" data-bind="click: changeTo('recruit'), 
+                      visible: isPhaseVisible('recruitment')">Recruitment</a>
+                    <a class="item" data-bind="click: changeTo('conduct'), 
+                      visible: isPhaseVisible('in_flight')">In Flight</a>
+                    <a class="item" data-bind="click: changeTo('analyze'), 
+                      visible: isPhaseVisible('analysis')">Analysis</a>
+                    <a class="item" data-bind="click: changeTo('complete'), 
+                      visible: isPhaseVisible('completed')">Completed</a>
+                    <a class="item" data-bind="click: changeTo('withdraw'), 
+                      visible: isPhaseVisible('withdrawn')">Withdrawn</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="fields">
+        <div class="eight wide field required" id="identifier">
+          <label>Identifier</label>
+          <input-editor params="obs: identifierObs, canEdit: isNewObs()"></input-editor>
+        </div>
         <div class="eight wide field">
           <label>Schedule</label>
           <select class="ui dropdown" data-bind="
@@ -41,9 +65,15 @@
           </select>
           <div class="input-field-padding" data-bind="text: scheduleGuidObs, visible: !canEdit()"></div>
         </div>
+      </div>
+      <div class="fields">
         <div class="eight wide field">
           <label>Institution ID</label>
           <input-editor params="obs: institutionIdObs, canEdit: canEdit"></input-editor>
+        </div>
+        <div class="eight wide field" id="keywords">
+          <label>Keywords</label>
+          <input-editor params="obs: keywordsObs, canEdit: canEdit"></input-editor>
         </div>
       </div>
       <div class="two fields">
@@ -63,10 +93,6 @@
             <line-editor params="arrayObs: diseasesObs, label: 'Disease', canEdit: canEdit"></line-editor>
           </div>
         </div>
-      </div>
-      <div class="field" id="keywords">
-        <label>Keywords</label>
-        <input-editor params="obs: keywordsObs, canEdit: canEdit"></input-editor>
       </div>
       <h4 class="ui dividing header">IRB Approval</h4>
       <div class="two fields">
@@ -107,7 +133,7 @@
     </form>
   </div>
   <div slot="help">
-    <p>IRB name is optional. If you list more than one IRB under contacts, you specify
-      an IRB name to indicate the primary institution that reviewed your protocol.</p>
+    <p>IRB name is optional. If you list more than one IRB under contacts, you can specify
+      an IRB name in study to indicate the IRB contact record for the institution that reviewed your protocol.</p>
   </div>
 </bsm-layout>

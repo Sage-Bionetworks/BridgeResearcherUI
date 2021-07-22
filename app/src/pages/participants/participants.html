@@ -39,13 +39,12 @@
           <th>Name</th>
           <th>Identifier(s)</th>
           <th>Relationships</th>
-          <th>Notes</th>
           <th></th>
         </tr>
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td colspan="6" data-bind="html: recordsMessageObs"></td>
+          <td colspan="5" data-bind="html: recordsMessageObs"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
@@ -56,23 +55,25 @@
           <td>
             <a data-bind="href: '#/participants/'+$data.id+'/general',
               text: $component.formatNameAsFullLabel($data)"></a>
+            <p style="padding-left: 0" class="help-text" data-bind="text: $data.note"></p>
           </td>
           <td data-bind="html: $component.formatIdentifiers($data)"></td>
           <td>
             <div data-bind="foreach: $data.studyIds">
               <span data-bind="visible: $index() > 0">, 
               </span><a data-bind="text: $component.formatStudyName($data),
-                href: '#/studies/' + $data + '/general'"></a>  
+                href: '#/studies/' + $data + '/general'" style="white-space:nowrap"></a>  
             </div>
-            <div data-bind="text: $component.formatOrgName($data.orgMembership)"></div>
+            <div style="white-space:nowrap"
+              data-bind="text: $component.formatOrgName($data.orgMembership)"></div>
           </td>
-          <td data-bind="text: $data.note"></td>
           <td style="padding: 0; text-align:right">
             <span style="padding-right: .6rem; white-space: nowrap" 
               data-bind="visible: $data.status === 'disabled'">
               <i class="warning sign icon"></i>Disabled</span>
           </td>
         </tr>
+
       </tbody>
     </table>
   </div>
@@ -161,7 +162,7 @@
           value="and" data-bind="checked: predicateObs">
         <label for="stp_all"> all terms</label>
       </div>
-      <div class="panel">
+      <div class="labeled-panel">
         <button class="ui tiny button" data-bind="click: searchButton">Search</button>
         <button class="ui tiny button" data-bind="click: clear">Clear</button>
       </div>

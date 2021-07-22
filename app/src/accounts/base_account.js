@@ -13,6 +13,7 @@ export default class BaseAccount {
 
     this.userId = params.userId;
     this.studyId = params.studyId;
+    this.orgId = params.orgId;
     this.account = ACCOUNT;
     Object.keys(params).forEach(key => this[key] = params[key]);
     fn.copyProps(this, root, "isDeveloper", "isResearcher", "isAdmin");

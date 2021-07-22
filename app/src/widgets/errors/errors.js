@@ -70,7 +70,7 @@ export default class Errors {
   showErrors(payload) { 
     if (payload.id !== this.filterId) {
       if (!payload.id) {
-        console.error('Payload declares no error component target ID');
+        console.error('Payload declares no error component target ID', payload);
       }
       return;
     }

@@ -43,7 +43,7 @@
     <table class="ui compact selectable table">
       <thead>
         <tr>
-          <th width="10">
+          <th width="10" data-bind="visible: canAddRemove()">
             <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
           </th>
           <th>Name</th>
@@ -53,17 +53,20 @@
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td colspan="4" data-bind="html: recordsMessageObs"></td>
+          <td data-bind="attr: {colspan: canAddRemove() ? 4 : 3}, html: recordsMessageObs"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
         <tr data-bind="css: $component.classNameForStatus($data)">
-          <td>
+          <td width="10" data-bind="visible: $component.canAddRemove()">
             <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
           </td>
           <td>
-            <a data-bind="text: $component.formatNameAsFullLabel($data), 
+            <a data-bind="visible: $component.canAddRemove(), 
+              text: $component.formatNameAsFullLabel($data), 
               href: '#/organizations/' + $parent.identifierObs() + '/members/' + $data.id + '/general'"></a>
+            <span data-bind="visible: !$component.canAddRemove(),
+              text: $component.formatNameAsFullLabel($data)"></span>
           </td>
           <td data-bind="html: $component.formatIdentifiers($data)"></td>
           <td style="white-space: nowrap">

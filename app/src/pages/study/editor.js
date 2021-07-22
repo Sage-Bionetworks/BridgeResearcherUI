@@ -1,12 +1,31 @@
+import alerts from "../../widgets/alerts";
 import config from "../../config";
 import fn from "../../functions";
 import serverService from "../../services/server_service";
 import BaseStudy from "./base_study";
+import utils from "../../utils";
 
 const DECISION_TYPES = [
   {label: 'Approved', value: 'approved'},
   {label: 'Exempted', value: 'exempt'}
 ];
+const ALLOWED_TRANSITIONS = {
+  'legacy': ['design'],
+  'design': ['recruitment', 'withdrawn'],
+  'recruitment': ['in_flight', 'withdrawn'],
+  'in_flight': ['recruitment', 'analysis', 'withdrawn'],
+  'analysis': ['recruitment', 'in_flight', 'completed', 'withdrawn'],
+  'completed': [],
+  'withdrawn': [],
+};
+const PATHS_TO_STATES = {
+  'design': 'design',
+  'recruit': 'recruitment',
+  'conduct': 'in_flight',
+  'analyze': 'analysis',
+  'complete': 'completed',
+  'withdraw': 'withdrawn'
+}
 
 function toDateString(value) {
   if (!value) {
@@ -61,7 +80,22 @@ export default class StudyEditor extends BaseStudy {
     if (phase) {
       return config.phasesOpts.filter(opt => opt.value === phase)[0].label;
     }
-    return '';
+    return '<none>';
   }
-
+  changeTo(phase) {
+    return (vm, event) => {
+      alerts.confirmation("Are you sure? This cannot always be undone.", () => {
+        return serverService.transitionTo(this.studyId, phase)
+          .then(study => this.versionObs(study.version))
+          .then(() => this.phaseObs(PATHS_TO_STATES[phase]))
+          .then(utils.successHandler(vm, event, "Study updated."));
+      });
+    };
+  }
+  isPhaseButtonVisible() { 
+    return !['completed', 'withdrawn'].includes(this.phaseObs());
+  }
+  isPhaseVisible(phase) {
+    return (ALLOWED_TRANSITIONS[this.phaseObs()] || []).includes(phase);
+  }
 }

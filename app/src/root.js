@@ -121,6 +121,7 @@ let RootViewModel = function() {
     self.rolesObs(session.roles);
     self.emailObs(session.email);
     self.accountUrlObs(`#/participants/${session.id}/general`);
+    // self.accountUrlObs(`#/organizations/${session.orgMembership}/members/${session.id}`);
     serverService.getApp().then(function(app) {
       self.notificationsEnabledObs(Object.keys(app.pushNotificationARNs).length > 0);
     });

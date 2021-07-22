@@ -71,7 +71,7 @@ export default class GeneralBaseAccount extends BaseAccount {
       .bind("roles[]", null, fn.formatRoles, fn.persistRoles)
       .bind("studyId")
       .bind("studyLabel", 'Select study')
-      .bind("orgMembership")
+      .bind("orgMembership", this.orgId)
       .bind("note");
 
     // subscribers
