@@ -109,6 +109,7 @@ export default class StudyParticipants extends BaseStudy {
     return "Withdrawn or not yet consented";
   }
   exportDialog() {
+    this.search = this.updateSearch();
     root.openDialog("participant_export", { 
       total: this.total, 
       search: this.search, 
@@ -188,10 +189,8 @@ export default class StudyParticipants extends BaseStudy {
     this.attributeValueFilterObs(null);
     this.predicateObs("and");
     ko.postbox.publish(PAGE_KEY, 0)
-  }  
-  loadingFunc(offsetBy) {
-    this.search.offsetBy = offsetBy;
-
+  }
+  updateSearch() {
     let search = this.search;
     search.emailFilter = this.emailFilterObs();
     search.phoneFilter = this.phoneFilterObs();
@@ -223,6 +222,11 @@ export default class StudyParticipants extends BaseStudy {
     if (fn.is(search.endTime, "Date")) {
       search.endTime.setHours(23, 59, 59, 999);
     }
+    return search;
+  }
+  loadingFunc(offsetBy) {
+    this.search.offsetBy = offsetBy;
+    let search = this.updateSearch();
 
     this.search = search;
     storeService.persistQuery("sp", search);

@@ -88,7 +88,8 @@ export default class StudyEditor extends BaseStudy {
         return serverService.transitionTo(this.studyId, phase)
           .then(study => this.versionObs(study.version))
           .then(() => this.phaseObs(PATHS_TO_STATES[phase]))
-          .then(utils.successHandler(vm, event, "Study updated."));
+          .then(utils.successHandler(vm, event, "Study updated."))
+          .catch(utils.failureHandler({transient: true, id: 'study', redirect: false}));
       });
     };
   }
