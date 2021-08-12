@@ -2,7 +2,7 @@
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
       <div class="ui breadcrumb">
-        <a href="#/schedules" class="section">Schedules</a>
+        <a href="#/studies" class="section">Studies</a>
         <i class="right chevron icon divider"></i>
       </div>
       <h3 data-bind="text: titleObs"></h3>
@@ -13,7 +13,7 @@
       <button class="ui tiny primary button" data-bind="click: save">Save</button>
     </div>
   </div>
-  <div class="ui empty secondary pointing menu"></div>
+  <study-tabset params="identifierObs: identifierObs, isNewObs: isStudyNewObs, phaseObs: phaseObs"></study-tabset>
 </div>
 <bsm-layout id="schedule">
   <div slot="content">

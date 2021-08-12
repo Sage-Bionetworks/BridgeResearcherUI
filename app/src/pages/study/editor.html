@@ -8,10 +8,32 @@
       <h3 data-bind="text: titleObs"></h3>
     </div>
     <div class="fixed-header-buttons" data-bind="visible: canEdit()">
+
+      <div class="ui tiny buttons" data-bind="visible: isPhaseButtonVisible()">
+        <div class="ui button" data-bind="semantic: 'dropdown-button-toggle', container: '.buttons'">Transition to&hellip;</div>
+        <div class="ui floating dropdown icon button">
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <a class="item" data-bind="click: changeTo('design'), 
+              visible: isPhaseVisible('design')">Design</a>
+            <a class="item" data-bind="click: changeTo('recruit'), 
+              visible: isPhaseVisible('recruitment')">Recruitment</a>
+            <a class="item" data-bind="click: changeTo('conduct'), 
+              visible: isPhaseVisible('in_flight')">In Flight</a>
+            <a class="item" data-bind="click: changeTo('analyze'), 
+              visible: isPhaseVisible('analysis')">Analysis</a>
+            <a class="item" data-bind="click: changeTo('complete'), 
+              visible: isPhaseVisible('completed')">Completed</a>
+            <a class="item" data-bind="click: changeTo('withdraw'), 
+              visible: isPhaseVisible('withdrawn')">Withdrawn</a>
+          </div>
+        </div>
+      </div>
+
       <button class="ui tiny primary button" data-bind="click: save">Save</button>
     </div>
   </div>
-  <study-tabset params="identifierObs: identifierObs, isNewObs: isNewObs"></study-tabset>
+  <study-tabset params="identifierObs: identifierObs, isNewObs: isNewObs, phaseObs: phaseObs"></study-tabset>
 </div>
 <bsm-layout id="study">
   <div slot="content">
@@ -21,50 +43,20 @@
           <label>Name</label>
           <input-editor params="obs: nameObs, canEdit: canEdit, hasFocus: true"></input-editor>
         </div>
-        <div class="eight wide field" id="phase">
-          <label>Phase</label>
-          <div style="display:flex; align-items: center">
-            <div class="input-field-padding" data-bind="text: formatPhase(phaseObs())" style="flex:1"></div>
-            <div>
-              <div class="ui tiny buttons" data-bind="visible: isPhaseButtonVisible()">
-                <div class="ui button" data-bind="semantic: 'dropdown-button-toggle', container: '.buttons'">Transition to&hellip;</div>
-                <div class="ui floating dropdown icon button">
-                  <i class="dropdown icon"></i>
-                  <div class="menu">
-                    <a class="item" data-bind="click: changeTo('design'), 
-                      visible: isPhaseVisible('design')">Design</a>
-                    <a class="item" data-bind="click: changeTo('recruit'), 
-                      visible: isPhaseVisible('recruitment')">Recruitment</a>
-                    <a class="item" data-bind="click: changeTo('conduct'), 
-                      visible: isPhaseVisible('in_flight')">In Flight</a>
-                    <a class="item" data-bind="click: changeTo('analyze'), 
-                      visible: isPhaseVisible('analysis')">Analysis</a>
-                    <a class="item" data-bind="click: changeTo('complete'), 
-                      visible: isPhaseVisible('completed')">Completed</a>
-                    <a class="item" data-bind="click: changeTo('withdraw'), 
-                      visible: isPhaseVisible('withdrawn')">Withdrawn</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="fields">
         <div class="eight wide field required" id="identifier">
           <label>Identifier</label>
           <input-editor params="obs: identifierObs, canEdit: isNewObs()"></input-editor>
         </div>
-        <div class="eight wide field">
-          <label>Schedule</label>
-          <select class="ui dropdown" data-bind="
-          options: schedulesObs,
-          optionsCaption: 'Select a schedule:', 
-            optionsText: 'label', optionsValue: 'value', 
-            value: scheduleGuidObs, visible: canEdit()">
-          </select>
-          <div class="input-field-padding" data-bind="text: scheduleGuidObs, visible: !canEdit()"></div>
+        <!--
+        <div class="four wide field" id="phase">
+          <label>Phase</label>
+          <div style="display:flex; align-items: center">
+            <div class="input-field-padding" data-bind="text: formatPhase(phaseObs())" style="flex:1"></div>
+            <div>
+            </div>
+          </div>
         </div>
+        -->
       </div>
       <div class="fields">
         <div class="eight wide field">

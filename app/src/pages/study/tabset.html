@@ -8,6 +8,9 @@
   <a data-bind="href: linkMaker('ui'), tabber, visible: !canEditStudy()">
     <i class="alternate mobile icon"></i> Study Contacts</a>
 
+  <a data-bind="href: linkMaker('schedule'), tabber, visible: canEditStudy()">
+      <i class="alternate calendar icon"></i> Schedule</a>
+
   <a data-bind="href: linkMaker('participants'), tabber, visible: canAdminParticipants()">
     <i class="users icon"></i> Participants</a>
   <!--  now replaced by the participants screen. Will eventually remove.
@@ -22,4 +25,10 @@
 
   <a data-bind="href: linkMaker('sponsors'), tabber">
     <i class="hospital outline icon"></i> Sponsors</a>
+
+  <div class="right menu pub-status">
+    <div class="item">
+      <span class="violet ui label" data-bind="text: formatPhase()"></span>
+    </div>
+  </div>    
 </div>
