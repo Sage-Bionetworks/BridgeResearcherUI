@@ -7,17 +7,22 @@ import utils from "../../utils";
 
 export default function(params) {
   var self = this;
+  self.study = null;
   self.schedule = {};
 
   fn.copyProps(self, fn, 'formatDateTime');
 
   var binder = new Binder(self)
+    .obs('identifier')
     .obs('title')
-    .obs('isNew', params.guid === 'new')
+    .obs('isStudyNew', false)
+    .obs('phase')
+    
+    .obs('isNew')
     .obs('createdOn')
     .obs('modifiedOn')
     .bind('name')
-    .bind('guid', params.guid === 'new' ? null : params.guid)
+    .bind('guid')
     .bind('duration')
     .bind('version')
     .bind('sessions[]', [], null, Binder.persistArrayWithBinder)
@@ -28,20 +33,20 @@ export default function(params) {
   }
   self.preview = function(vm, event) {
     utils.clearErrors();
-    root.openDialog("preview_timeline", { scheduleGuid: self.schedule.guid });
+    root.openDialog("preview_timeline", { studyId: params.studyId, scheduleGuid: self.schedule.guid });
   };
   self.save = function(vm, event) {
     self.schedule = binder.persist(self.schedule);
 
     utils.startHandler(vm, event)
     if (self.isNewObs()) {
-      serverService.createSchedule(self.schedule)
+      serverService.createOrUpdateStudySchedule(params.studyId, self.schedule)
         .then(afterSave)
         .then(utils.successHandler(vm, event, "Schedule created."))
-        .then((sch) => document.location = `#/schedules/${sch.guid}`)
+        .then((sch) => document.location = `#/studies/${params.studyId}/schedule`)
         .catch(utils.failureHandler({ id: 'schedule' }))
     } else {
-      serverService.updateSchedule(self.schedule)
+      serverService.createOrUpdateStudySchedule(params.studyId, self.schedule)
         .then(afterSave)
         .then(utils.successHandler(vm, event, "Schedule saved."))
         .catch(utils.failureHandler({ id: 'schedule' }))
@@ -58,7 +63,6 @@ export default function(params) {
 
   function afterSave(schedule) {
     self.versionObs(schedule.version);
-    self.titleObs(schedule.name);
     self.guidObs(schedule.guid);
     self.isNewObs(false);
     self.modifiedOnObs(schedule.modifiedOn);
@@ -91,16 +95,24 @@ export default function(params) {
     }
   }
 
+  serverService.getStudy(params.studyId).then(study => {
+    self.study = study;
+    self.titleObs(study.name);
+    self.identifierObs(study.identifier);
+    self.phaseObs(study.phase);
+  });
   getEventIds().then(array => self.eventIdsObs(array)).then(() => {
-    if (params.guid !== 'new') {
-      serverService.getSchedule(params.guid)
+    if (self.study.scheduleGuid) {
+      serverService.getStudySchedule(params.studyId)
         .then(binder.assign('schedule'))
         .then(afterSave)
         .then(binder.update())
         .catch(utils.failureHandler({
-          redirectTo: `schedules`,
+          redirectTo: `#/studies/${params.studyId}/general`,
           redirectMsg: 'Schedule not found'
         }));
+    } else {
+      self.isNewObs(true);
     }
   });
 };

@@ -830,6 +830,7 @@ export class ServerService {
     return this.post(`${config.sharedassessments}/identifier:${id}/resources/import`, [guid]);
   }
 
+  // At least for now, it's useful to see them to delete them. This is probably going away.
   getSchedules(query, includeDeleted) {
     let queryString = fn.queryString({ 
       offsetBy: query.offsetBy, 
@@ -838,17 +839,14 @@ export class ServerService {
     });
     return this.gethttp(config.schedules + queryString);
   }
-  createSchedule(schedule) {
-    return this.post(config.schedules, schedule);
+  getStudySchedule(studyId) {
+    return this.gethttp(`${config.studies}/${studyId}/schedule`);
   }
-  getSchedule(guid) {
-    return this.gethttp(`${config.schedules}/${guid}`);
+  createOrUpdateStudySchedule(studyId, schedule) {
+    return this.post(`${config.studies}/${studyId}/schedule`, schedule);
   }
-  getScheduleTimeline(guid) {
-    return this.gethttp(`${config.schedules}/${guid}/timeline`);
-  }
-  updateSchedule(schedule) {
-    return this.post(`${config.schedules}/${schedule.guid}`, schedule);
+  getStudyScheduleTimeline(studyId) {
+    return this.gethttp(`${config.studies}/${studyId}/timeline`);
   }
   deleteSchedule(guid, physical) {
     let queryString = fn.queryString({ physical: physical === true });
