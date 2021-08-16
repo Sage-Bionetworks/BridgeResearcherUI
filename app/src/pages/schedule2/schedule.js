@@ -7,6 +7,7 @@ import utils from "../../utils";
 
 export default function(params) {
   var self = this;
+  self.studyId = params.studyId;
   self.study = null;
   self.schedule = {};
 
@@ -101,7 +102,7 @@ export default function(params) {
     self.identifierObs(study.identifier);
     self.phaseObs(study.phase);
   });
-  getEventIds().then(array => self.eventIdsObs(array)).then(() => {
+  getEventIds(params.studyId).then(array => self.eventIdsObs(array)).then(() => {
     if (self.study.scheduleGuid) {
       serverService.getStudySchedule(params.studyId)
         .then(binder.assign('schedule'))

@@ -8,6 +8,9 @@
   <a data-bind="href: linkMaker('ui'), tabber, visible: !canEditStudy()">
     <i class="alternate mobile icon"></i> Study Contacts</a>
 
+    <a data-bind="href: linkMaker('events'), tabber, visible: canEditStudy()">
+      <i class="setting icon"></i> Custom Events</a>
+
   <a data-bind="href: linkMaker('schedule'), tabber, visible: canEditStudy()">
       <i class="alternate calendar icon"></i> Schedule</a>
 
