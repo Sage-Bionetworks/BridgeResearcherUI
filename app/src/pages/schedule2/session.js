@@ -12,7 +12,6 @@ const PERFORMANCE_ORDER_OPTIONS = [
 ];
 
 export default function(params) {
-  console.log(params);
   var self = this;
   var session = params.session;
   var sessionsObs = params.sessionsObs;
