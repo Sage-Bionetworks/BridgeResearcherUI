@@ -10,7 +10,7 @@ function keyToUnary(key) {
   return { label: UNARY_EVENTS[key], value: key };
 }
 function keyToCustom(key) {
-  return { label: "When “" + key + "” occurs", value: "custom:" + key };
+  return { label: "When “" + key + "” occurs", value: key };
 }
 function collectAppEventKeys(eventKeys) {
   return function(app) {

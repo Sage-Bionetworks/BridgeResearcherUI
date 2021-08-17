@@ -19,17 +19,16 @@ export default class StudyParticipantEnrollments extends BaseAccount {
     });
     fn.copyProps(this, fn, "formatDateTime", "formatDaysSince");
 
-    serverService.getStudy(this.studyId).then((response) => {
-      this.navStudyNameObs(response.name);
-    });
     tables.prepareTable(this, { 
       name: "activity events",
       id: this.failureParams.id
     });
-    serverService.getApp().then(app => {
-      this.autoKeys = Object.keys(app.automaticCustomEvents).map(s => `custom:${s}`);
-      this.customUpdateTypes = app.customEvents;
-    }).then(() => this.getAccount())
+    serverService.getStudy(this.studyId).then((response) => {
+        this.navStudyNameObs(response.name);
+        this.customUpdateTypes = {};
+        response.customEvents.forEach(e => this.customUpdateTypes['custom:'+e.eventId] = e.updateType);
+      })
+      .then(() => this.getAccount())
       .then(() => serverService.getStudyParticipantActivityEvents(this.studyId, this.userId))
       .then(res => this.itemsObs(res.items));
   }
@@ -40,7 +39,7 @@ export default class StudyParticipantEnrollments extends BaseAccount {
     return this.canEdit(item) ? 'Y' : 'N';
   }
   formatEventId(eventId) {
-    return eventId.replace(/^custom\:/, '');
+    return eventId;
   }
   loadAccount() { 
     return serverService.getStudyParticipant(this.studyId, this.userId);
@@ -52,7 +51,7 @@ export default class StudyParticipantEnrollments extends BaseAccount {
     let self = ko.contextFor(browserEvent.target).$component;
     alerts.deleteConfirmation("Are you sure?", () => {
       utils.startHandler(self, event);
-      let eventId = event.eventId.replace(/^custom\:/, '');
+      let eventId = event.eventId;
       serverService.deleteStudyParticipantActivityEvent(self.studyId, self.userId, eventId)
         .then(utils.successHandler(self, event, "Event deleted."))
         .then(() => serverService.getStudyParticipantActivityEvents(self.studyId, self.userId))

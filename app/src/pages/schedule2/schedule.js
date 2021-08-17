@@ -1,4 +1,5 @@
 import { getEventIds } from "./schedule2utils";
+import alert from "../../widgets/alerts";
 import Binder from "../../binder";
 import fn from "../../functions";
 import root from "../../root";
@@ -12,6 +13,7 @@ export default function(params) {
   self.schedule = {};
 
   fn.copyProps(self, fn, 'formatDateTime');
+  fn.copyProps(self, root, 'isAdmin');
 
   var binder = new Binder(self)
     .obs('identifier')
@@ -39,7 +41,7 @@ export default function(params) {
   self.save = function(vm, event) {
     self.schedule = binder.persist(self.schedule);
 
-    utils.startHandler(vm, event)
+    utils.startHandler(vm, event);
     if (self.isNewObs()) {
       serverService.createOrUpdateStudySchedule(params.studyId, self.schedule)
         .then(afterSave)
@@ -59,6 +61,15 @@ export default function(params) {
       'name': 'Session #' + (self.sessionsObs().length+1),
       'performanceOrder': 'sequential',
       'timeWindows': [{'startTime': '08:00'}]
+    });
+  }
+  self.deletePermanently = function(vm, event) {
+    alert.deleteConfirmation("Are you sure you want to delete this schedule?", function() {
+      utils.startHandler(vm, event);
+      serverService.deleteSchedule(self.guidObs(), true)
+        .then(utils.successHandler(vm, event, "Schedule deleted."))
+        .then((sch) => window.location.reload(`#/studies/${params.studyId}/schedule`))
+        .catch(utils.failureHandler({ id: 'schedule' }))
     });
   }
 

@@ -261,7 +261,7 @@ export default class StudyParticipantAdherence extends BaseAccount {
     return `#/studies/${this.studyId}/participants/${encodeURIComponent(this.userId)}/${postfix}`;
   }
   formatEventId(eventId) {
-    return eventId.replace("custom:", "");
+    return eventId;
   }
   formatTime(item) {
     return `${item.startEventId}: ${item.startDay}—${item.endDay} @ ${item.startTime}`;
