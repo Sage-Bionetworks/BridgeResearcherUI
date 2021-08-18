@@ -5,10 +5,14 @@
     <errors id="event-editor"></errors>
     <div class="field" id="eventId">
       <label>Event ID</label>
-      <select class="ui dropdown"  data-bind="visible: !readOnlyObs(), 
-        options: eventIdOptionsObs, optionsText: 'label', optionsValue: 'value', 
-        value: eventIdObs, optionsCaption: 'Select an event ID:'"></select>
-      <div class="input-field-padding" data-bind="visible: readOnlyObs, text: eventIdObs"></div>
+      <!-- ko if: !readOnlyObs() -->
+        <select class="ui dropdown"  data-bind="options: eventIdOptionsObs, 
+          optionsText: 'text', optionsValue: 'value', value: eventIdObs, 
+          optionsCaption: 'Select an event ID:'"></select>
+      <!-- /ko -->
+      <!-- ko if: readOnlyObs() -->
+        <div class="input-field-padding" data-bind="text: eventIdObs"></div>
+      <!-- /ko -->
     </div>
     <div class="field" id="timestamp">
       <label>Timestamp</label>

@@ -123,7 +123,7 @@ export default function(params) {
     self.notificationsObs.push({messages: [{}]});
   }
 
-  getEventIds().then(array => {
+  getEventIds(params.studyId).then(array => {
     self.eventIdsObs(array);
     setTimeout(() => self.startEventIdObs(session.startEventId), 1);
   });  

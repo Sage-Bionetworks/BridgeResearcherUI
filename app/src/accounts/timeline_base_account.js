@@ -26,7 +26,7 @@ export default class TimelineBaseAccount extends BaseAccount {
   }
   sessionInfo(sch) {
     let session = this.sessions[sch.refGuid];
-    let eventId = session.startEventId.replace('custom:', '');
+    let eventId = session.startEventId;
     let exp = (sch.expiration) ? ` for ${fn.formatDuration(sch.expiration)}` : '';
     let days = (sch.startDay === sch.endDay) ? `Day ${sch.startDay}` : `Days ${sch.startDay}—${sch.endDay}`;
     return `<h4>${session.label}</h4>` +
