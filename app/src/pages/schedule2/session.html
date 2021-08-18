@@ -13,15 +13,14 @@
   </div>
   <div class="ui segment">
     <div class="fields">
-      <div class="required twelve wide field" data-bind="attr: { id: generateId('name') }">
+      <div class="required eight wide field" data-bind="attr: { id: generateId('name') }">
         <label>Name</label>
         <input type="text" data-bind="textInput: nameObs">
       </div>
-      <div class="required six wide field" data-bind="attr: { id: generateId('startEventId') }">
-        <label>Start event ID</label>
-        <select class="ui dropdown" style="width: 70%" data-bind="options: eventIdsObs,
-          optionsCaption: 'Select an event ID...', optionsText: 'text', 
-          optionsValue: 'value', value: startEventIdObs"></select>
+      <div class="required eight wide field" data-bind="attr: { id: generateId('startEventIds') }">
+        <label>Session sequence starts on event(s)</label>
+        <tag-editor params="selectedObs: startEventIdsObs, allObs: 
+          allEventIdsObs, type: 'event IDs'"></tag-editor>
       </div>
     </div>
     <div class="field">
