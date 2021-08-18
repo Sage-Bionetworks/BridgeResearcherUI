@@ -1,0 +1,69 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="#/studies" class="section">Studies</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="text: titleObs"></h3>
+    </div>
+    <div class="fixed-header-buttons">
+      <button class="ui tiny primary button" data-bind="click: save">Save</button>
+    </div>
+  </div>
+  <study-tabset params="identifierObs: identifierObs, isNewObs: isNewObs, phaseObs: phaseObs"></study-tabset>
+</div>
+<bsm-layout id="study-events">
+  <div slot="content">
+    <div data-bind="foreach: customEventsObs, visible: canEdit()">
+      <div class="fields">
+        <div class="seven wide field" data-bind="attr: {id: 'customEvents' + $index() + '_eventId'}">
+          <label style="white-space: nowrap">Event ID</label>
+          <input type="text" class="ui input" data-bind="textInput: $data.eventIdObs">
+        </div>
+        <div class="seven wide field" data-bind="attr: {id: 'customEvents' + $index() + '_updateType'}">
+          <label style="white-space: nowrap">Update Type</label>
+          <select class="ui dropdown" data-bind="value: $data.updateTypeObs, 
+            options: $data.allUpdateTypesObs, optionsText: 'label', optionsValue: 'value'"></select>
+        </div>
+        <div class="two wide field">
+          <label style="white-space: nowrap">&#160;</label>
+          <div class="input-field-padding">
+            <i class="red large times circle outline link icon" 
+              data-bind="click: $parent.removeEvent"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button data-bind="click: addCustomEvent, visible: canEdit()"
+      class="ui tiny button">Add Custom Event</button>
+
+    <table class="ui compact selectable table" data-bind="visible: !canEdit()">
+      <thead>
+        <tr>
+          <th nowrap>Event ID</th>
+          <th>Update Type</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: customEventsObs().length === 0">
+        <tr>
+          <td colspan="2">No custom events defined.</td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: customEventsObs">
+        <tr>
+          <td data-bind="text: $data.eventId"></td>
+          <td data-bind="text: $data.updateType"></td>
+    </table>
+  </div>
+  <div slot="help">
+    <p>You can create additional events for the user, against which you can schedule activities. Once a study is moved out of the design phase, these events cannot be changed, and they cannot be removed if they are referenced in the schedule. </p>
+    <p>When updated, the event can behave in one of three ways:</p>
+    <ul style="padding-left:1rem">
+      <li><b>mutable:</b> once created for a participant, the timestamp can be changed with a later update;</li>
+      <li><b>immutable:</b> once created for a participant, the timestamp cannot be changed (useful to prevent concurrent update issues);</li>
+      <li><b>future only:</b> once created for a participant, only updates that would set a later timestamp are accepted for updates.</li>
+    </ul>    
+
+  </div>
+</bsm-layout>

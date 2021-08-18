@@ -45,7 +45,6 @@ export default class StudyEditor extends BaseStudy {
     this.decisionType = DECISION_TYPES;
 
     this.binder
-      .obs('schedules[]')
       .bind("name")
       .bind("details")
       .bind("phase")
@@ -60,21 +59,13 @@ export default class StudyEditor extends BaseStudy {
       .bind("studyDesignTypes[]")
       .bind("keywords");
 
-    this.loadSchedules()
-      .then(this.load.bind(this))
+    this.load()
       .then(this.binder.assign("study"))
       .then(this.binder.update())
       .catch(this.failureHandler);
   }
   formatDateTime(date) {
     return (date) ? fn.formatDateTime(date) : '';
-  }
-  loadSchedules() {
-    return serverService.getSchedules(0, 100).then(response => {
-      this.schedulesObs.pushAll(response.items.map(sch => {
-        return {label: sch.name, value: sch.guid};
-      }));
-    });
   }
   formatPhase(phase) {
     if (phase) {

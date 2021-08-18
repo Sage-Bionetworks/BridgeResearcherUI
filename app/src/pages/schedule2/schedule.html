@@ -8,6 +8,8 @@
       <h3 data-bind="text: titleObs"></h3>
     </div>
     <div class="fixed-header-buttons">
+      <button class="ui tiny red button" data-bind="click: deletePermanently, 
+        visible: isAdmin && !isNewObs()">Delete</button>
       <button class="ui tiny button" data-bind="click: preview, 
         visible: !isNewObs()">Preview Timeline&hellip;</button>
       <button class="ui tiny primary button" data-bind="click: save">Save</button>
@@ -33,7 +35,7 @@
       <h3>Sessions</h3>
   
       <div data-bind="foreach: sessionsObs">
-        <session params="sessionsObs: $parent.sessionsObs, session: $data" 
+        <session params="sessionsObs: $parent.sessionsObs, session: $data, studyId: $parent.studyId" 
           style="display: block; margin-bottom: 1rem"></session>
       </div>
       <div>

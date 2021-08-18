@@ -125,5 +125,5 @@ export default function(params) {
 
   getEventIds(params.studyId).then(array => {
     self.allEventIdsObs(array.map(o => o.value));
-  });  
+  });
 }

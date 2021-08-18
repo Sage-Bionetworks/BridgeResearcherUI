@@ -87,7 +87,13 @@ export default class StudyParticipantAdherence extends BaseAccount {
     }
     return serverService.getStudyParticipantAdherenceRecords(this.studyId, this.userId, query)
       .then(res => {
-        res.items.forEach(i => i.clientDataObs = ko.observable(i.clientData))
+        // why filter these? If the account creates adherence records for a schedule that is
+        // then deleted, the adherence records hang around. This can only happen during design
+        // if an administrator deletes the study's schedule, so it's rare but I have done it 
+        // to myself, and it breaks the UI. Note that the total record count is *not* updated 
+        // and the pages will be a strange size.
+        res.items = res.items.filter(item => this.schedules[item.instanceGuid]);
+        res.items.forEach(i => i.clientDataObs = ko.observable(i.clientData));
         return res;
       })
       .then(fn.handleObsUpdate(this.itemsObs, "items"))

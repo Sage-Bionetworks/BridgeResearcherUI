@@ -1,34 +1,31 @@
+import { getEventIds } from "../../pages/schedule2/schedule2utils";
 import Binder from "../../binder";
 import root from "../../root";
-import serverService from "../../services/server_service";
 import utils from "../../utils";
+import { param } from "jquery";
 
+// This is the v2 event editor, not the v1 editor, which is activity_event_editor.js
 export default function(params) {
   let self = this;
 
-  params.event = params.event || 
-    {'eventId': null, 'timestamp': new Date().toISOString(), 'clientTimeZone': null};
+  params.event = params.event || {
+    'eventId': null, 
+    'timestamp': new Date().toISOString(), 
+    'clientTimeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
+  };
   self.event = params.event;
 
   var binder = new Binder(self)
-    .bind('eventId', null, (t) => (t) ? t.replace('custom:','') : null, (t) => 'custom:'+t)
-    .bind('timestamp', null)
-    .bind('clientTimeZone', Intl.DateTimeFormat().resolvedOptions().timeZone)
+    .bind('eventId', params.event.eventId)
+    .bind('timestamp', params.event.timestamp)
+    .bind('clientTimeZone', params.event.clientTimeZone)
     .obs('title', 'Edit New Event')
-    .obs('readOnly', !!params.event.eventId)
-    .obs('eventIdOptions[]');
+    .obs('readOnly', params.event.eventId !== null)
+    .obs('eventIdOptions[]', []);
 
-  self.eventIdObs.subscribe(newValue => {
-    if (newValue) {
-      self.titleObs('Edit ' + newValue);
-    }
+  getEventIds(params.studyId).then(array => {
+    self.eventIdOptionsObs(array);
   });
-
-  serverService.getApp().then(app => {
-    Object.keys(app.customEvents).forEach(
-      key => self.eventIdOptionsObs.push({label: key, value: key}));
-  }).then(() => binder.update()(params.event));
-
   self.save = function() {
     self.event = binder.persist(self.event);
 

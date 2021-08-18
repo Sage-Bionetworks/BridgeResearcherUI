@@ -161,6 +161,7 @@ router.on("/studies/:studyId", redirectTo("/studies/{0}/general"));
 router.on("/studies/:studyId/general", routeTo("studyEditor", "studies", STUDYID));
 router.on("/studies/:studyId/ui", routeTo("studyUi", "studies", STUDYID));
 router.on("/studies/:studyId/sponsors", routeTo("studySponsors", "studies", STUDYID));
+router.on("/studies/:studyId/events", routeTo("studyEvents", "studies", STUDYID));
 router.on("/studies/:studyId/schedule", routeTo("studySchedule", "studies", STUDYID));
 router.on("/studies/:studyId/enrollments", routeTo("studyEnrollments", "studies", STUDYID));
 router.on("/studies/:studyId/externalids", routeTo("externalIds", "studies", STUDYID));
