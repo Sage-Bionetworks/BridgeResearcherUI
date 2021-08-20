@@ -20,7 +20,7 @@ export default function(params) {
   session.binder = new Binder(self)
     .bind('guid', session.guid)
     .bind('name', session.name)
-    .bind('startEventId', session.startEventId)
+    .bind('startEventIds[]', session.startEventIds || [])
     .bind('delay', session.delay)
     .bind('occurrences', session.occurrences)
     .bind('interval', session.interval)
@@ -31,7 +31,7 @@ export default function(params) {
     .bind('timeWindows[]', session.timeWindows, null, Binder.persistArrayWithBinder)
     .bind('notifications[]', session.notifications, null, Binder.persistArrayWithBinder)
     .obs('performanceOrderTypes', PERFORMANCE_ORDER_OPTIONS)
-    .obs('eventIds[]');
+    .obs('allEventIds[]', []);
 
   self.totalMinutesObs = ko.computed(function() {
     var sum = self.assessmentsObs()
@@ -125,7 +125,6 @@ export default function(params) {
   }
 
   getEventIds(params.studyId).then(array => {
-    self.eventIdsObs(array);
-    setTimeout(() => self.startEventIdObs(session.startEventId), 1);
-  });  
+    self.allEventIdsObs(array.map(o => o.value));
+  });
 }
