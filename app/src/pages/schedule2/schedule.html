@@ -31,7 +31,17 @@
           <ui-duration params="fieldObs: durationObs, fields: 'days weeks'"></ui-duration>
         </div>
       </div>
-  
+
+      <h3>Study Bursts</h3>
+
+      <div data-bind="foreach: studyBurstsObs">
+        <study-burst params="studyBurstsObs: $parent.studyBurstsObs, studyBurst: $data, studyId: $parent.studyId" 
+          style="display: block; margin-bottom: 1rem"></study-burst>
+      </div>
+      <div>
+        <button class="ui button" data-bind="click: addStudyBurst">Add Study Burst</button>
+      </div>
+
       <h3>Sessions</h3>
   
       <div data-bind="foreach: sessionsObs">

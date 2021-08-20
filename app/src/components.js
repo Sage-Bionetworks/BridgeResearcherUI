@@ -339,6 +339,8 @@ import schedules2 from "./pages/schedules2/schedules";
 import schedules2Html from "./pages/schedules2/schedules.html";
 import schedule2 from "./pages/schedule2/schedule";
 import schedule2Html from "./pages/schedule2/schedule.html";
+import studyBurst from "./pages/schedule2/study_burst";
+import studyBurstHtml from "./pages/schedule2/study_burst.html";
 import session from "./pages/schedule2/session";
 import sessionHtml from "./pages/schedule2/session.html";
 import timeWindow from "./pages/schedule2/time_window";
@@ -632,6 +634,7 @@ reg("studyparticipant_consents", {viewModel: studypartConsents, template: studyp
 
 reg("schedules2", {viewModel: schedules2, template: schedules2Html});
 reg("schedule2", {viewModel: schedule2, template: schedule2Html});
+reg("study-burst", {viewModel: studyBurst, template: studyBurstHtml});
 reg("session", {viewModel: session, template: sessionHtml});
 reg("time-window", {viewModel: timeWindow, template: timeWindowHtml});
 reg("assessment-ref", {viewModel: assessmentRef, template: assessmentRefHtml});

@@ -25,6 +25,7 @@ export default function(params) {
     .bind('occurrences', session.occurrences)
     .bind('interval', session.interval)
     .bind('performanceOrder', session.performanceOrder)
+    .bind('studyBurstIds[]', session.studyBurstIds || [])
     .bind('labels[]', session.labels, null, Binder.persistArrayWithBinder)
     .bind('assessments[]', session.assessments, null, Binder.persistArrayWithBinder)
     .bind('timeWindows[]', session.timeWindows, null, Binder.persistArrayWithBinder)

@@ -28,8 +28,10 @@ export default function(params) {
     .bind('guid')
     .bind('duration')
     .bind('version')
+    .bind('studyBursts[]', [], null, Binder.persistArrayWithBinder)
     .bind('sessions[]', [], null, Binder.persistArrayWithBinder)
-    .obs('eventIds[]');
+    .obs('eventIds[]')
+    .obs('allStudyBurstIds[]', []);
 
   self.generateId = function(fieldName) {
     return fieldName;
@@ -63,6 +65,9 @@ export default function(params) {
       'timeWindows': [{'startTime': '08:00'}]
     });
   }
+  self.addStudyBurst = function(vm, event) {
+    self.studyBurstsObs.push({});
+  }
   self.deletePermanently = function(vm, event) {
     alert.deleteConfirmation("Are you sure you want to delete this schedule?", function() {
       utils.startHandler(vm, event);
@@ -79,6 +84,11 @@ export default function(params) {
     self.isNewObs(false);
     self.modifiedOnObs(schedule.modifiedOn);
     walkAndUpdateGuids(self.schedule, schedule);
+    schedule.sessions.forEach(session => {
+      session.studyBursts.forEach(burst => {
+        self.allStudyBurstIdsObs.push(burst.identifier);
+      });
+    });
     return schedule;
   }
   function walkAndUpdateGuids(schedule, savedSchedule) {
