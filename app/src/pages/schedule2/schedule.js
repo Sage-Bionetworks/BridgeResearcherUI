@@ -2,6 +2,7 @@ import { getEventIds } from "./schedule2utils";
 import alert from "../../widgets/alerts";
 import Binder from "../../binder";
 import fn from "../../functions";
+import ko from "knockout";
 import root from "../../root";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
@@ -30,8 +31,7 @@ export default function(params) {
     .bind('version')
     .bind('studyBursts[]', [], null, Binder.persistArrayWithBinder)
     .bind('sessions[]', [], null, Binder.persistArrayWithBinder)
-    .obs('eventIds[]')
-    .obs('allStudyBurstIds[]', []);
+    .obs('eventIds[]');
 
   self.generateId = function(fieldName) {
     return fieldName;
@@ -84,11 +84,6 @@ export default function(params) {
     self.isNewObs(false);
     self.modifiedOnObs(schedule.modifiedOn);
     walkAndUpdateGuids(self.schedule, schedule);
-    schedule.sessions.forEach(session => {
-      session.studyBursts.forEach(burst => {
-        self.allStudyBurstIdsObs.push(burst.identifier);
-      });
-    });
     return schedule;
   }
   function walkAndUpdateGuids(schedule, savedSchedule) {

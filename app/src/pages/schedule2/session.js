@@ -15,6 +15,7 @@ export default function(params) {
   var self = this;
   var session = params.session;
   var sessionsObs = params.sessionsObs;
+  var studyBurstsObs = params.studyBurstsObs;
   self.prefix = 'sessions' + sessionsObs().indexOf(session);
 
   session.binder = new Binder(self)
@@ -33,6 +34,19 @@ export default function(params) {
     .obs('performanceOrderTypes', PERFORMANCE_ORDER_OPTIONS)
     .obs('allEventIds[]', []);
 
+  self.formatStudyBurstIds = ko.computed(function() {
+    return (self.studyBurstIdsObs().length > 0) ? self.studyBurstIdsObs().join('<br>') : '&lt;None&gt;';
+  });
+  self.editStudyBurstIds = function(vm, event) {
+    let ids = studyBurstsObs().map(burst => burst.identifier);
+    root.openDialog('select_study_bursts', {
+      allStudyBurstIds: ids,
+      studyBurstIdsObs: self.studyBurstIdsObs
+    });
+  }
+  self.clearStudyBurstIds = function(vm, event) {
+    self.studyBurstIdsObs([]);
+  }
   self.totalMinutesObs = ko.computed(function() {
     var sum = self.assessmentsObs()
       .map(asmt => asmt.minutesToComplete).reduce((a,  b) => a + b, 0);

@@ -353,6 +353,8 @@ import label from "./pages/schedule2/label";
 import labelHtml from "./pages/schedule2/label.html";
 import selectAssessmentRefs from "./dialogs/select_assessment_refs/select_assessment_refs";
 import selectAssessmentRefsHtml from "./dialogs/select_assessment_refs/select_assessment_refs.html";
+import selectStudyBursts from "./dialogs/select_study_bursts/select_study_bursts";
+import selectStudyBurstsHtml from "./dialogs/select_study_bursts/select_study_bursts.html";
 import previewTimeline from "./dialogs/preview_timeline/preview_timeline";
 import previewTimelineHtml from "./dialogs/preview_timeline/preview_timeline.html";
 import notification from "./pages/schedule2/notification";
@@ -720,6 +722,7 @@ reg("select_surveys", {viewModel: selectSurveys, template: selectSurveysHtml, sy
 reg("select_configs", {viewModel: selectConfigs, template: selectConfigsHtml, synchronous: true});
 reg("select_assessments", {viewModel: selectAssessments, template: selectAssessmentsHtml, synchronous: true});
 reg("select_assessment_refs", {viewModel: selectAssessmentRefs, template: selectAssessmentRefsHtml, synchronous: true});
+reg("select_study_bursts", {viewModel: selectStudyBursts, template: selectStudyBurstsHtml, synchronous: true});
 reg("select_files", {viewModel: selectFiles, template: selectFilesHtml, synchronous: true});
 reg("preview_appconfig", {viewModel: previewAppConfig, template: previewAppConfigHtml, synchronous: true});
 reg("edit_apple_link", {viewModel: editAppleLink, template: editAppleLinkHtml, synchronous: true});

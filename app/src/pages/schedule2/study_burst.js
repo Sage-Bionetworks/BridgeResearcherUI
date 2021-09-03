@@ -1,9 +1,7 @@
 import { getEventIds } from "./schedule2utils";
 import alerts from "../../widgets/alerts";
 import Binder from "../../binder";
-import fn from "../../functions";
 import ko from "knockout";
-import root from "../../root";
 
 const UPDATE_TYPES = [
   {label: "Immutable", value: "immutable"},

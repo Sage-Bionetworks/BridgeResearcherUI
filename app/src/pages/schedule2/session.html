@@ -12,27 +12,37 @@
     </span>
   </div>
   <div class="ui segment">
-    <div class="fields">
-      <div class="required eight wide field" data-bind="attr: { id: generateId('name') }">
+    <div class="two fields">
+      <div class="required ten wide field" data-bind="attr: { id: generateId('name') }">
         <label>Name</label>
         <input type="text" data-bind="textInput: nameObs">
       </div>
-      <div class="required eight wide field" data-bind="attr: { id: generateId('startEventIds') }">
+      <div class="required six wide field" data-bind="attr: { id: generateId('startEventIds') }">
         <label>Session sequence starts on event(s)</label>
         <tag-editor params="selectedObs: startEventIdsObs, allObs: 
           allEventIdsObs, type: 'event IDs'"></tag-editor>
       </div>
     </div>
-    <div class="field">
-      <label>Label(s)</label>
-      <!-- ko foreach: labelsObs -->
-        <localized-label message params="labelsObs: $parent.labelsObs, label: $data, prefix: $parent.prefix + '_'">
-        </localized-label>
-      <!-- /ko -->
-      <button class="ui mini button" data-bind="click: addLabel, 
-        visible: labelsObs().length === 0">
-        Add Label
-      </button>
+    <div class="two fields">
+      <div class="ten wide field">
+        <label>Label(s)</label>
+        <!-- ko foreach: labelsObs -->
+          <localized-label message params="labelsObs: $parent.labelsObs, label: $data, prefix: $parent.prefix + '_'">
+          </localized-label>
+        <!-- /ko -->
+        <button class="ui mini button" data-bind="click: addLabel, 
+          visible: labelsObs().length === 0">
+          Add Label
+        </button>
+      </div>
+      <div class="six wide field">
+        <label>Study burst(s)</label>
+        <div style="margin: .5rem 0" data-bind="html: formatStudyBurstIds"></div>
+        <div class="inline-editor-controls">
+          <a data-bind="click: editStudyBurstIds"><i class="write icon"></i>Edit&hellip;</a>
+          <a data-bind="click: clearStudyBurstIds"><i class="delete icon"></i>Clear</a>
+        </div>
+      </div>
     </div>
     <div class="fields">
       <div class="field" data-bind="attr: {id: generateId('delay')}">
