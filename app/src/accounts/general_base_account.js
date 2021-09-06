@@ -14,6 +14,31 @@ const OPTIONS = [
   { value: "sponsors_and_partners", label: "Sponsors And Partners" },
   { value: "all_qualified_researchers", label: "All Qualified Researchers" }
 ];
+const TIME_ZONES = [
+  "America/Anchorage",
+  "America/Boise",
+  "America/Chicago",
+  "America/Denver",
+  "America/Detroit",
+  "America/Indiana/Knox",
+  "America/Indiana/Marengo",
+  "America/Indiana/Petersburg",
+  "America/Indiana/Tell_City",
+  "America/Indiana/Vevay",
+  "America/Indiana/Vincennes",
+  "America/Indiana/Winamac",
+  "America/Indianapolis",
+  "America/Kentucky/Monticello",
+  "America/Los_Angeles",
+  "America/Louisville",
+  "America/Nassau",
+  "America/New_York",
+  "America/North_Dakota/Beulah",
+  "America/North_Dakota/Center",
+  "America/North_Dakota/New_Salem",
+  "America/Phoenix",
+  "America/Puerto_Rico"
+];
 
 function selectRoles(session) {
   let set = new Set();
@@ -62,6 +87,7 @@ export default class GeneralBaseAccount extends BaseAccount {
       .bind("firstName")
       .bind("lastName")
       .bind("notifyByEmail")
+      .bind("clientTimeZone")
       .bind("dataGroups[]")
       .bind("password")
       .bind("languages", null, fn.formatLanguages, fn.persistLanguages)
@@ -93,6 +119,7 @@ export default class GeneralBaseAccount extends BaseAccount {
     this.enableAccount = this.makeStatusChanger("enabled");
     this.disableAccount = this.makeStatusChanger("disabled");
     this.sharingScopeOptions = OPTIONS;
+    this.timeZoneOptions = TIME_ZONES;
 
     serverService.getSession().then(session => {
       var roles = selectRoles(session);
