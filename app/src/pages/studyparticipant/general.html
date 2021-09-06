@@ -130,6 +130,15 @@
         </div>
       </div>
   
+      <div class="two fields">
+        <div class="field" id="clientTimeZone">
+          <label>Time Zone</label>
+          <select class="ui dropdown"  data-bind="options: timeZoneOptions, 
+            optionsText: $data, optionsLabel: $data, value: clientTimeZoneObs, 
+            optionsCaption: 'Select a time zone ID:'"></select>
+        </div>
+      </div>
+
       <div class="two fields" data-bind="visible: !isNewObs()">
         <div class="field">
           <label>Health Code</label>
