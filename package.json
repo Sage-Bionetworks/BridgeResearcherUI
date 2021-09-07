@@ -54,7 +54,7 @@
     "url-parse": "^1.5.3",
     "webpack": "^5.50.0",
     "webpack-cli": "^4.7.2",
-    "webpack-dev-server": "^3.11.2",
+    "webpack-dev-server": "^4.1.1",
     "websocket-extensions": "^0.1.4",
     "ws": "^8.1.0"
   },
