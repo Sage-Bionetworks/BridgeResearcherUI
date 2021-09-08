@@ -76,11 +76,11 @@
           <div class="input-field-padding" data-bind="text: detailsObs, visible: !canEdit()"></div>
         </div>
         <div class="field">
-          <div class="field">
+          <div class="field" id="studyDesignTypes">
             <label>Study Design Type</label>
             <line-editor params="arrayObs: studyDesignTypesObs, label: 'Type', canEdit: canEdit"></line-editor>
           </div>
-          <div class="field" style="margin-top: 1rem">
+          <div class="field" style="margin-top: 1rem" id="diseases">
             <label>Disease</label>
             <line-editor params="arrayObs: diseasesObs, label: 'Disease', canEdit: canEdit"></line-editor>
           </div>
