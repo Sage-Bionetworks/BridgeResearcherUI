@@ -69,10 +69,11 @@ export default function editor(params) {
   }
   function updateAfterPersist(response) {
     self.configElement.version = response.version;
+    self.versionObs(response.version);
     self.titleObs(self.idObs());
     self.isNewObs(false);
     self.modifiedOnObs(new Date());
-    window.history.pushState({}, document.title, `#/configs/${self.idObs()}/revisions/${self.revisionObs()}/editor`);
+    window.history.pushState({}, document.title, `#/configs/${encodeURIComponent(self.idObs())}/revisions/${self.revisionObs()}/editor`);
   }
 
   self.save = function(vm, event) {

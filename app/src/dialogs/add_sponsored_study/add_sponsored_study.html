@@ -4,8 +4,12 @@
     Sponsor Study
   </div>
   <div class="content" style="height: 30rem; overflow: hidden; overflow-y: scroll">
-
     <errors id="add_sponsored_study"></errors>
+
+    <div class="line-control" style="margin-bottom: 1rem">
+      <div class="line-control-stretch"></div>
+      <pager2 params="prefix: 'asp', pageSize: 5, loadingFunc: load"></pager2>
+    </div>
 
     <table class="ui compact selectable table">
       <thead>
@@ -24,10 +28,11 @@
       <tbody data-bind="foreach: itemsObs">
         <tr>
           <td>
-            <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+            <ui-checkbox params="checkedObs: $data.checkedObs, 
+              disabled: $parent.isPermanentlyChecked($data)"></ui-checkbox>
           </td>
           <td data-bind="text: $data.name"></td>
-          <td data-bind="html: $data.id"></td>
+          <td data-bind="html: $data.identifier"></td>
         </tr>
       </tbody>
     </table>
