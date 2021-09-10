@@ -201,6 +201,13 @@ export default class Participants {
     utils.clearErrors();
     return serverService.searchAccountSummaries(search)
       .then(fn.handleObsUpdate(this.itemsObs, "items"))
+      .then(req => {
+        // because test_user can be set by the server, update if it's there
+        this.allOfGroupsObs(req.requestParams.allOfGroups);
+        this.noneOfGroupsObs(req.requestParams.noneOfGroups);
+        this.formattedSearchObs(fn.formatSearch(req.requestParams));
+        return req;
+      })
       .catch(utils.failureHandler({ id: "participants" }));
   }  
 }

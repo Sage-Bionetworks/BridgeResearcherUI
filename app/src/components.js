@@ -211,6 +211,8 @@ import verifiedIcon from "./pages/participant/verified-icon";
 import verifiedIconHtml from "./pages/participant/verified-icon.html";
 import partTabset from "./pages/participant/tabset";
 import partTabsetHtml from "./pages/participant/tabset.html";
+import partBreadcrumb from "./pages/participant/breadcrumb";
+import partBreadcrumbHtml from "./pages/participant/breadcrumb.html";
 
 import setEditor from "./pages/set_editors/set_editor"; // however, this is a widget
 
@@ -334,6 +336,8 @@ import studypartAdherence from "./pages/studyparticipant/adherence";
 import studypartAdherenceHtml from "./pages/studyparticipant/adherence.html";
 import studypartAdherenceSearch from "./pages/studyparticipant/search";
 import studypartAdherenceSearchHtml from "./pages/studyparticipant/search.html";
+import studypartBreadcrumb from "./pages/studyparticipant/breadcrumb";
+import studypartBreadcrumbHtml from "./pages/studyparticipant/breadcrumb.html";
 
 import schedules2 from "./pages/schedules2/schedules";
 import schedules2Html from "./pages/schedules2/schedules.html";
@@ -571,6 +575,7 @@ reg("participant_report", {viewModel: partReport, template: partReportHtml});
 reg("participant_uploads", {viewModel: partUploads, template: partUploadsHtml});
 reg("participant_upload", {viewModel: partUpload, template: partUploadHtml});
 reg("participant_request_info", {viewModel: partRequestInfo, template: partRequestInfoHtml});
+reg("p-breadcrumb", {viewModel: partBreadcrumb, template: partBreadcrumbHtml});
 reg("upload-details", {viewModel: uploadDetails, template: uploadDetailsHtml});
 reg("custom_events", {viewModel: customEvents, template: customEventsHtml});
 reg("auto_custom_events", {viewModel: autoCustomEvents, template: autoCustomEventsHtml});
@@ -629,6 +634,7 @@ reg("studyparticipant_report", {viewModel: studypartReport, template: studypartR
 reg("studyparticipant_clientData", {viewModel: studypartClientData, template: studypartClientDataHtml});
 reg("studyparticipant_request_info", {viewModel: studypartRequestInfo, template: studypartRequestInfoHtml});
 reg("studyparticipant_consents", {viewModel: studypartConsents, template: studypartConsentsHtml});
+reg("sp-breadcrumb", {viewModel: studypartBreadcrumb, template: studypartBreadcrumbHtml});
 
 reg("schedules2", {viewModel: schedules2, template: schedules2Html});
 reg("schedule2", {viewModel: schedule2, template: schedule2Html});
