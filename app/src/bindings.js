@@ -1,10 +1,13 @@
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 import $ from "jquery";
 import alert from "./widgets/alerts";
-import { Chart } from "chart.js";
+import { Chart, registerables } from "chart.js";
 import flatpickr from "flatpickr";
 import fn from "./functions";
 import ko from "knockout";
+
+// See https://stackoverflow.com/questions/67238650/problem-for-display-a-chart-with-chart-js-and-angular
+Chart.register(...registerables);
 
 // need to make a global out of this for semantic to work, as it's not in a package.
 // This is hacky, webpack has better support for this. Worse, semantic is a jQuery

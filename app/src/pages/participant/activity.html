@@ -1,10 +1,7 @@
 <div class="fixed-header">
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
-      <div class="ui breadcrumb" data-bind="visible: isResearcher()">
-        <a class="section" href="#/participants">Participants</a>
-        <i class="right chevron icon divider"></i>
-      </div>
+      <p-breadcrumb params="userIdObs: userIdObs"></p-breadcrumb>
       <h3 data-bind="html: titleObs"></h3>
     </div>
     <div class="fixed-header-buttons"></div>

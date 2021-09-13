@@ -1,5 +1,6 @@
 import fn from "../../functions";
 import ko from "knockout";
+import root from "../../root";
 
 export default function tabset(params) {
   let self = this;
@@ -8,11 +9,12 @@ export default function tabset(params) {
     params.isNewObs = ko.observable(false);
   }
   fn.copyProps(self, params, "isNewObs", "userIdObs", "statusObs");
+  fn.copyProps(self, root, "isDeveloper", "isResearcher");
 
   self.computeds = [];
   self.linkMaker = function(postfix) {
     let c = ko.computed(function() {
-      return "#/participants/" + self.userIdObs() + "/" + postfix;
+      return `#/participants/${self.userIdObs()}/${postfix}`;
     });
     self.computeds.push(c);
     return c;

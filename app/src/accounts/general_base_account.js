@@ -112,7 +112,7 @@ export default class GeneralBaseAccount extends BaseAccount {
     this.enableVisible = ko.computed(() => this.statusObs() === "disabled" && root.isAdmin());
     this.disableVisible = ko.computed(() => this.statusObs() === "enabled" && root.isAdmin());
     this.signOutVisible = ko.computed(() => !['disabled','unverified'].includes(this.statusObs()));
-    this.deleteVisible = ko.computed(() => (root.isResearcher() || root.isStudyCoordinator() || this.isDeveloper()) && this.dataGroupsObs().includes('test_user'));
+    this.deleteVisible = ko.computed(() => this.dataGroupsObs().includes('test_user'));
     this.updateIdsVisible = ko.observable(false);
     this.installLinkVisible = ko.observable(true);
     

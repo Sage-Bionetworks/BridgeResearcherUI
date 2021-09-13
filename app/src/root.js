@@ -77,7 +77,7 @@ let RootViewModel = function() {
     self.mainParamsObs(params);
   };
 
-  self.isResearcher = roleFunc(self.rolesObs, "researcher", "admin");
+  self.isResearcher = roleFunc(self.rolesObs, "developer", "researcher", "admin");
   self.isDeveloper = roleFunc(self.rolesObs, "developer", "admin");
   self.isAdmin = roleFunc(self.rolesObs, "admin");
   self.isOrgAdmin = roleFunc(self.rolesObs, "org_admin", "admin");
@@ -87,11 +87,6 @@ let RootViewModel = function() {
   // this will change
   self.isDevRole = roleFunc(self.rolesObs, "developer", "study_coordinator", "admin");
   self.isResearcherRole = roleFunc(self.rolesObs, "researcher", "study_coordinator", "admin");
-
-  self.isResearcherOnly = ko.computed(function() {
-    let roles = self.rolesObs();
-    return roles.indexOf("researcher") > -1 && roles.indexOf("developer") === -1;
-  });
 
   self.openDialog = function(dialogName, params) {
     self.dialogObs({ name: dialogName, params: params });
@@ -120,8 +115,8 @@ let RootViewModel = function() {
     self.appIdObs(session.appId);
     self.rolesObs(session.roles);
     self.emailObs(session.email);
+    self.userId = session.id;
     self.accountUrlObs(`#/participants/${session.id}/general`);
-    // self.accountUrlObs(`#/organizations/${session.orgMembership}/members/${session.id}`);
     serverService.getApp().then(function(app) {
       self.notificationsEnabledObs(Object.keys(app.pushNotificationARNs).length > 0);
     });
