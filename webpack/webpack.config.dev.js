@@ -7,8 +7,9 @@ console.log('[Webpack] Use dev configuration\n');
 
 module.exports = Object.assign({}, {
     mode: 'development',
-    devtool: 'source-map',
+    devtool: 'inline-source-map',
     devServer: {
-        writeToDisk: true
+        static: './app',
+        watchFiles: ['./app/src/**']
     }
 }, common);
