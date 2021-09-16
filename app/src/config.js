@@ -92,7 +92,7 @@ export default {
   files: "/v3/files",
   getCurrentApp: "/v1/apps/self",
   getApp: "/v1/apps/",
-  getAppList: "/v1/apps?format=summary",
+  getAppList: "/v1/apps",
   getAppPublicKey: "/v1/apps/self/publicKey",
   masterschedule: "/v3/schedulerconfigs",
   metadata: "/v3/sharedmodules/metadata",
