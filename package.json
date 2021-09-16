@@ -10,8 +10,7 @@
     "clean": "rm -rf app/dist/",
     "clean:all": "rm -rf node_modules/ && npm run clean",
     "release": "webpack --config webpack/webpack.config.prod.js",
-    "dev": "webpack serve --hot --host localhost --port 8080 --watch-files --content-base app --config webpack/webpack.config.dev.js",
-    "start": "webpack serve --open --config webpack/webpack.config.dev.js",
+    "dev": "webpack serve --open --config webpack/webpack.config.dev.js",
     "test": "./node_modules/.bin/mocha --require @babel/register"
   },
   "devDependencies": {
@@ -26,8 +25,8 @@
     "chart.js": "^3.5.1",
     "css-loader": "^6.2.0",
     "director": "^1.2.8",
-    "dom-autoscroller": "^2.3.1 ",
     "dns-packet": "^5.3.0",
+    "dom-autoscroller": "^2.3.1 ",
     "dragula": "^3.7.3",
     "elliptic": "^6.5.4",
     "flatpickr": "^4.6.9",
@@ -49,7 +48,6 @@
     "serialize-javascript": ">=6.0.0",
     "sinon": "^11.1.1",
     "source-map-explorer": "^2.5.2",
-    "style-loader": "^3.2.1",
     "sweetalert2": "^11.1.5",
     "toastr": "^2.1.2",
     "url-parse": "^1.5.3",

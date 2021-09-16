@@ -12,7 +12,7 @@ module.exports = {
   },
   output: {
     filename: '[name].[fullhash].js',
-    path: path.resolve('app/dist')
+    path: path.resolve('app')
   },
   plugins: [
     new HtmlWebpackPlugin({
