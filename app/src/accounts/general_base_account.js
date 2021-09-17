@@ -112,7 +112,6 @@ export default class GeneralBaseAccount extends BaseAccount {
     this.enableVisible = ko.computed(() => this.statusObs() === "disabled" && root.isAdmin());
     this.disableVisible = ko.computed(() => this.statusObs() === "enabled" && root.isAdmin());
     this.signOutVisible = ko.computed(() => !['disabled','unverified'].includes(this.statusObs()));
-    this.deleteVisible = ko.computed(() => this.dataGroupsObs().includes('test_user'));
     this.updateIdsVisible = ko.observable(false);
     this.installLinkVisible = ko.observable(true);
     
@@ -203,12 +202,12 @@ export default class GeneralBaseAccount extends BaseAccount {
   signOutUser() {
     root.openDialog("sign_out_user", { userId: this.userId });
   }
-  deleteTestUser(vm, event) {
-    alerts.confirmation("This will delete the account.\n\nDo you wish to continue?", () => {
+  deleteUser(vm, event) {
+    alerts.confirmation("Only test and unused accounts can be deleted. This cannot be undone. Do you wish to continue?", () => {
       utils.startHandler(vm, event);
       this.deleteAccount()
-        .then(utils.successHandler(this, event, "User deleted."))
-        .catch(utils.failureHandler(this.failureParams));
+        .then(() => setTimeout(utils.successHandler(this, event, "User deleted."), 500))
+        .catch(utils.failureHandler({...this.failureParams, redirect: false}));
     });
   }
   resendEmailVerification(vm, event) {
