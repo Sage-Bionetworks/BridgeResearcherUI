@@ -1,13 +1,8 @@
 <div class="fixed-header">
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
-      <div class="ui breadcrumb">
-        <a href="#/studies" class="section">Studies</a>
-        <i class="right chevron icon divider"></i>
-        <a class="section" data-bind="href: '#/studies/' + navStudyIdObs() + '/participants', text: navStudyNameObs()">StudyName</a>
-        <i class="right chevron icon divider"></i>
-        <span class="section">Participants</span>
-      </div>
+      <sp-breadcrumb params="studyIdObs: navStudyIdObs, studyNameObs: navStudyNameObs">
+      </sp-breadcrumb>
       <h3 data-bind="text: titleObs"></h3>
     </div>
     <div class="fixed-header-buttons"></div>

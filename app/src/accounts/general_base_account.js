@@ -14,6 +14,31 @@ const OPTIONS = [
   { value: "sponsors_and_partners", label: "Sponsors And Partners" },
   { value: "all_qualified_researchers", label: "All Qualified Researchers" }
 ];
+const TIME_ZONES = [
+  "America/Anchorage",
+  "America/Boise",
+  "America/Chicago",
+  "America/Denver",
+  "America/Detroit",
+  "America/Indiana/Knox",
+  "America/Indiana/Marengo",
+  "America/Indiana/Petersburg",
+  "America/Indiana/Tell_City",
+  "America/Indiana/Vevay",
+  "America/Indiana/Vincennes",
+  "America/Indiana/Winamac",
+  "America/Indianapolis",
+  "America/Kentucky/Monticello",
+  "America/Los_Angeles",
+  "America/Louisville",
+  "America/Nassau",
+  "America/New_York",
+  "America/North_Dakota/Beulah",
+  "America/North_Dakota/Center",
+  "America/North_Dakota/New_Salem",
+  "America/Phoenix",
+  "America/Puerto_Rico"
+];
 
 function selectRoles(session) {
   let set = new Set();
@@ -62,6 +87,7 @@ export default class GeneralBaseAccount extends BaseAccount {
       .bind("firstName")
       .bind("lastName")
       .bind("notifyByEmail")
+      .bind("clientTimeZone")
       .bind("dataGroups[]")
       .bind("password")
       .bind("languages", null, fn.formatLanguages, fn.persistLanguages)
@@ -86,13 +112,13 @@ export default class GeneralBaseAccount extends BaseAccount {
     this.enableVisible = ko.computed(() => this.statusObs() === "disabled" && root.isAdmin());
     this.disableVisible = ko.computed(() => this.statusObs() === "enabled" && root.isAdmin());
     this.signOutVisible = ko.computed(() => !['disabled','unverified'].includes(this.statusObs()));
-    this.deleteVisible = ko.computed(() => (root.isResearcher() || root.isStudyCoordinator() || this.isDeveloper()) && this.dataGroupsObs().includes('test_user'));
     this.updateIdsVisible = ko.observable(false);
     this.installLinkVisible = ko.observable(true);
     
     this.enableAccount = this.makeStatusChanger("enabled");
     this.disableAccount = this.makeStatusChanger("disabled");
     this.sharingScopeOptions = OPTIONS;
+    this.timeZoneOptions = TIME_ZONES;
 
     serverService.getSession().then(session => {
       var roles = selectRoles(session);
@@ -176,12 +202,12 @@ export default class GeneralBaseAccount extends BaseAccount {
   signOutUser() {
     root.openDialog("sign_out_user", { userId: this.userId });
   }
-  deleteTestUser(vm, event) {
-    alerts.confirmation("This will delete the account.\n\nDo you wish to continue?", () => {
+  deleteUser(vm, event) {
+    alerts.confirmation("Only test and unused accounts can be deleted. This cannot be undone. Do you wish to continue?", () => {
       utils.startHandler(vm, event);
       this.deleteAccount()
-        .then(utils.successHandler(this, event, "User deleted."))
-        .catch(utils.failureHandler(this.failureParams));
+        .then(() => setTimeout(utils.successHandler(this, event, "User deleted."), 500))
+        .catch(utils.failureHandler({...this.failureParams, redirect: false}));
     });
   }
   resendEmailVerification(vm, event) {

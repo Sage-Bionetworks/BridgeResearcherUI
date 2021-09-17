@@ -95,7 +95,7 @@ export default function(params) {
           (users) => serverService.createApp({ app, adminIds, users }));
       })
       .then(utils.successHandler(vm, event, "App created."))
-      .then(() => self.titleObs(self.nameObs()))
+      .then(() => window.location = `#/admin/apps/${self.identifierObs()}`)
       .catch(utils.failureHandler({id: 'app'}));
   };
   function load() {
@@ -104,5 +104,10 @@ export default function(params) {
 
   load().then(binder.assign("app"))
     .then(binder.update())
+    .then((res) => {
+      if (params.id !== 'new') {
+        self.titleObs(res.name);
+      }
+    })
     .then(self.addUser(0));
 };

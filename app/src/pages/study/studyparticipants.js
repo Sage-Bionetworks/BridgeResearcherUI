@@ -54,8 +54,6 @@ export default class StudyParticipants extends BaseStudy {
     fn.copyProps(this, root, "isResearcher");
 
     this.search = storeService.restoreQuery("sp", "allOfGroups", "noneOfGroups");
-    this.postLoadPagerFunc = fn.identity;
-    this.postLoadFunc = (func) => this.postLoadPagerFunc = func;
     this.classNameForStatus = assignClassForStatus;
     this.doSearch = this.doSearch.bind(this);
     this.loadingFunc = this.loadingFunc.bind(this);

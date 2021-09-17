@@ -221,8 +221,15 @@ export class ServerService {
     let reauth = { appId: session.appId, email: session.email, reauthToken: session.reauthToken };
     return postInt(config.host[session.environment] + config.reauth, reauth).then(this.cacheSession());
   }
-  getAppList(env) {
-    return getInt(config.host[env] + config.getAppList).then(fn.handleSort("items", "name"));
+  getApps(env, includeDeleted) {
+    let queryString = fn.queryString({ includeDeleted: includeDeleted === true });
+    return getInt(config.host[env] + config.getAppList + queryString)
+      .then(fn.handleSort("items", "name"));
+  }
+  getAppList(env, includeDeleted) {
+    let queryString = fn.queryString({ includeDeleted: includeDeleted === true, summary: true  });
+    return getInt(config.host[env] + config.getAppList + queryString)
+      .then(fn.handleSort("items", "name"));
   }
   requestPhoneSignIn(env, data) {
     return postInt(config.host[env] + config.requestPhoneSignIn, data);
@@ -245,8 +252,9 @@ export class ServerService {
   createApp(appAndUsers) {
     return this.post(config.getApp + "init", appAndUsers);
   }
-  deleteApp(appId) {
-    return this.del(`${config.getApp}${appId}?physical=true`);
+  deleteApp(appId, physical) {
+    let queryString = fn.queryString({ physical: physical === true });
+    return this.del(`${config.getApp}${appId}${queryString}`);
   }
   getAppPublicKey() {
     return this.gethttp(config.getAppPublicKey);

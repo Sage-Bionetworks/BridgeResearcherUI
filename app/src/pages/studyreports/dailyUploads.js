@@ -3,6 +3,7 @@ import ko from "knockout";
 import serverService from "../../services/server_service";
 import utils from "../../utils";
 import { getDateRange, makeChart } from "./report_utils";
+import { LinearScale } from "chart.js";
 
 const APP_NAME = "Bridge-Reporter-Scheduler-prod-daily-upload-report";
 

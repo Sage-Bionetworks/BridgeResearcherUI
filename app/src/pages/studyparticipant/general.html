@@ -1,13 +1,8 @@
 <div class="fixed-header">
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
-      <div class="ui breadcrumb">
-        <a href="#/studies" class="section">Studies</a>
-        <i class="right chevron icon divider"></i>
-        <a class="section" data-bind="href: '#/studies/' + navStudyIdObs() + '/participants', text: navStudyNameObs()">&#160;</a>
-        <i class="right chevron icon divider"></i>
-        <span class="section">Participants</span>
-      </div>
+      <sp-breadcrumb params="studyIdObs: navStudyIdObs, studyNameObs: navStudyNameObs">
+      </sp-breadcrumb>
       <h3 data-bind="text: titleObs">&#160;</h3>
     </div>
     <div class="fixed-header-buttons">
@@ -43,8 +38,8 @@
             <div class="item" data-bind="click: signOutUser">
               Sign out user&hellip;
             </div>
-            <div class="item" data-bind="click: deleteTestUser, visible: deleteVisible">
-              <span class="red ui text">Delete Test Account</span>
+            <div class="item" data-bind="click: deleteUser">
+              <span class="red ui text">Delete Account</span>
             </div>
 
           </div>
@@ -130,6 +125,15 @@
         </div>
       </div>
   
+      <div class="two fields">
+        <div class="field" id="clientTimeZone">
+          <label>Time Zone</label>
+          <select class="ui dropdown"  data-bind="options: timeZoneOptions, 
+            optionsText: $data, optionsLabel: $data, value: clientTimeZoneObs, 
+            optionsCaption: 'Select a time zone ID:'"></select>
+        </div>
+      </div>
+
       <div class="two fields" data-bind="visible: !isNewObs()">
         <div class="field">
           <label>Health Code</label>
