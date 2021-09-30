@@ -131,7 +131,6 @@ export default class StudyParticipantAdherence extends BaseAccount {
   // if record count is one, you have the event, otherwise, get the last 100 of them, adding all events 
   // in an array to graph events for later processing into streams.
   loadEventHistories(response) {
-    // New plan because this is so freaking slow: only get one page of 100 events
     return Promise.map(response.items, (event) => {
       if (event.recordCount === 1) {
         return Promise.resolve([event]);
@@ -148,9 +147,9 @@ export default class StudyParticipantAdherence extends BaseAccount {
   processTimeline(timeline) {
     this.graph.events.sort(sortEvents);
 
-    // This is not really true. The graph only needs to be as wide as the greatest endDay
-    // of any stream. The duration of the schedule is pointless. Calculate this after adding
-    // all the streams.
+    // This is not really true. The graph only needs to be as wide as the largest endDay
+    // of any stream. The duration of the schedule only controls how many times sessions will 
+    // repeat if a hard number of iterations is not provided.
     // this.graph.durationInDays = fn.parseDuration(timeline.duration).totalDays;
 
     // create a map of sessions so we can look them up
@@ -178,8 +177,7 @@ export default class StudyParticipantAdherence extends BaseAccount {
       streams.forEach(stream => stream.addEntry(sch));
     });
 
-    // find durationInDays, it's only the longest duration of a stream, the whole schedule
-    // doesn’t actually matter.
+    // durationInDays === the largest end day of any stream (if there are any streams)
     if (this.graph.streams.length) {
       this.graph.durationInDays = Math.max.apply(this, this.graph.streams.map(s => s.maxDay)) + 1;
     }
