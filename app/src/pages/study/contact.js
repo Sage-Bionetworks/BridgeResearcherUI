@@ -21,7 +21,7 @@ export default class StudyContact {
     contact.address = contact.address || {};
     this.index = this.contactsObs().indexOf(contact);
       
-    contact.binder = new Binder(self)
+    contact.binder = new Binder(this)
       .obs('roleOpts', ROLE_OPTS)
       .obs('addressVisible', Object.keys(contact.address).length)
       .obs('personVisible', contact.position || contact.affiliation)
