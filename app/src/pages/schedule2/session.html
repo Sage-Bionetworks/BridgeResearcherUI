@@ -1,4 +1,4 @@
-<div class="session ui segments" data-bind="attr: {id: generateId('')}">
+<div class="session ui segments">
   <div class="session2 ui blue inverted segment">
     <span style="flex: 1" data-bind="text: nameObs"></span>
     <span>
@@ -37,10 +37,12 @@
       </div>
       <div class="six wide field">
         <label>Study burst(s)</label>
-        <div style="margin: .5rem 0" data-bind="html: formatStudyBurstIds"></div>
-        <div class="inline-editor-controls">
-          <a data-bind="click: editStudyBurstIds"><i class="write icon"></i>Edit&hellip;</a>
-          <a data-bind="click: clearStudyBurstIds"><i class="delete icon"></i>Clear</a>
+        <div data-bind="attr: {id: generateId('')}">
+          <div style="margin: .5rem 0" data-bind="html: formatStudyBurstIds"></div>
+          <div class="inline-editor-controls">
+            <a data-bind="click: editStudyBurstIds"><i class="write icon"></i>Edit&hellip;</a>
+            <a data-bind="click: clearStudyBurstIds"><i class="delete icon"></i>Clear</a>
+          </div>
         </div>
       </div>
     </div>

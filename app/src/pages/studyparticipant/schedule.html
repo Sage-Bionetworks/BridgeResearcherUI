@@ -24,7 +24,7 @@
     </div>
   </div>
   <div slot="content">
-    <table class="ui compact selectable table">
+    <table class="ui compact selectable table" data-bind="visible: itemsObs().length > 0">
       <thead>
         <tr>
           <th nowrap>Event ID</th>
@@ -51,7 +51,7 @@
           <td nowrap style="text-align: right" data-bind="semantic: 'popup',
             attr: { 'data-content': $parent.formatUpdateType($data.eventId) }">
             <button class="ui basic compact mini button" 
-              data-bind="click: $component.editEvent, enable: $parent.canEdit($data)">Edit</button>
+              data-bind="click: $component.editEvent, enable: $parent.canEdit($data)">Update</button>
             <button class="ui basic red compact mini button" 
               data-bind="click: $component.deleteEvent, enable: $parent.canDelete($data)">Delete</button>
           </td>

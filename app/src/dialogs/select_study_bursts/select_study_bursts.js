@@ -12,7 +12,9 @@ export default function(params) {
   // allStudyBurstIds: ids,
   // studyBurstIdsObs: self.studyBurstIdsObs
   let selectedStudyBurstIds = params.studyBurstIdsObs();
-  let items = params.allStudyBurstIds.map(id => {
+  console.log(selectedStudyBurstIds);
+  let items = params.allStudyBurstIds.filter(id => !!id).map(id => {
+    console.log(id);
     return {
       identifier: id,
       checkedObs: ko.observable(selectedStudyBurstIds.indexOf(id) > -1)

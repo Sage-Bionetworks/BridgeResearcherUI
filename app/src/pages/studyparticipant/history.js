@@ -3,6 +3,7 @@ import fn from "../../functions";
 import ko from "knockout";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
+import utils from "../../utils";
 
 export default class StudyParticipantActivityHistory extends BaseAccount {
   constructor(params) {
@@ -35,7 +36,11 @@ export default class StudyParticipantActivityHistory extends BaseAccount {
       .then(() => serverService.getStudyParticipantActivityEventHistory(
         this.studyId, this.userId, this.eventId, query.offsetBy, query.pageSize))
       .then(this.postLoadPagerFunc)
-      .then(res => this.itemsObs(res.items));
+      .then(res => this.itemsObs(res.items))
+      .catch((e) => { // ick
+        this.itemsObs([]);
+        utils.failureHandler({id: 'studyparticipant-history'})(e);
+      });
   }
   loadAccount() { 
     return serverService.getStudyParticipant(this.studyId, this.userId);

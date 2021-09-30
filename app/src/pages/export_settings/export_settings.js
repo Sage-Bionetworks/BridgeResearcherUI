@@ -24,7 +24,7 @@ export default function exportSettings() {
     .bind("uploadValidationStrictness", "warning")
     .bind("disableExport");
 
-  fn.copyProps(self, root, "isDeveloper", "isResearcherOnly");
+  fn.copyProps(self, root, "isDeveloper");
 
   self.isLinked = ko.computed(function() {
     return fn.isNotBlank(self.synapseProjectIdObs()) || fn.isNotBlank(self.synapseDataAccessTeamIdObs());

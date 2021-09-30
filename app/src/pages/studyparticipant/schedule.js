@@ -7,7 +7,7 @@ import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
 
-export default class StudyParticipantEnrollments extends BaseAccount {
+export default class StudyParticipantSchedule extends BaseAccount {
   constructor(params) {
     super({ 
       ...params, 
@@ -18,19 +18,31 @@ export default class StudyParticipantEnrollments extends BaseAccount {
       }
     });
     fn.copyProps(this, fn, "formatDateTime", "formatDaysSince");
+    this.customUpdateTypes = {};
 
     tables.prepareTable(this, { 
       name: "activity events",
       id: this.failureParams.id
     });
-    serverService.getStudy(this.studyId).then((response) => {
-        this.navStudyNameObs(response.name);
-        this.customUpdateTypes = {};
-        response.customEvents.forEach(e => this.customUpdateTypes['custom:'+e.eventId] = e.updateType);
+    serverService.getStudy(this.studyId).then(study => {
+        this.navStudyNameObs(study.name);
+        study.customEvents.forEach(e => 
+          this.customUpdateTypes['custom:'+e.eventId] = e.updateType);
       })
+      .then(() => serverService.getStudySchedule(this.studyId))
+      .then(study => this.collectScheduleStudyBursts(study))
       .then(() => this.getAccount())
       .then(() => serverService.getStudyParticipantActivityEvents(this.studyId, this.userId))
-      .then(res => this.itemsObs(res.items));
+      .then(res => this.itemsObs(res.items))
+      .catch(utils.failureHandler(this.failureParams));
+  }
+  collectScheduleStudyBursts(schedule) {
+    schedule.studyBursts.forEach(burst => {
+      for (var i=0; i < burst.occurrences; i++) {
+        let iter = (burst.occurrences < 10) ? ('0'+(i+1)) : i+1;
+        this.customUpdateTypes[`study_burst:${burst.identifier}:${iter}`] = burst.updateType;
+      }
+    });
   }
   formatUpdateType(eventId) {
     return this.customUpdateTypes[this.formatEventId(eventId)] || 'system';
