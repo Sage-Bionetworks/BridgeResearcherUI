@@ -12,6 +12,7 @@ export default function() {
   fn.copyProps(self, root, "isAdmin");
   self.reload = () => load(self.query);
 
+  fn.copyProps(this, root, "isSuperadmin");
   self.tagsObs = ko.observable('');
 
   tables.prepareTable(self, {

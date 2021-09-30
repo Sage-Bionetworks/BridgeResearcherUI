@@ -20,10 +20,15 @@
     white-space: nowrap;
   } 
   th {
-    padding: .7rem;
+    padding: .2rem;
     background-color: rgb(249, 250, 251);
-    border-bottom: 1.5px solid rgba(34,36,38,.15);
     white-space: nowrap;
+  }
+  tr:first-child th {
+    padding-top: .7rem;
+  }
+  tr:last-child th {
+    border-bottom: 1.5px solid rgba(34,36,38,.15);
   }
   .data-cell {
     text-align: center; 
@@ -35,6 +40,7 @@
   }
   .today {
     background-color: rgba(255,220,0,.5);
+    border-radius: 4px;
   }
   .inactive {
     background-color: #f4f4f4;

@@ -1,0 +1,32 @@
+<div class="fields">
+  <div class="field" data-bind="attr: {id: generateId('identifier')}">
+    <label>Identifier</label>
+    <input-editor params="obs: identifierObs, canEdit: canEdit, hasFocus: true"></input-editor>
+  </div>
+  <div class="field" data-bind="attr: {id: generateId('originEventId')}">
+    <label>Trigger Event</label>
+    <select class="ui dropdown" data-bind="options: allEventIdsObs,
+      optionsCaption: 'Select an event ID...', optionsText: 'text', 
+      optionsValue: 'value', value: originEventIdObs"></select>
+  </div>
+  <div class="field" data-bind="attr: {id: generateId('interval')}">
+    <label>Interval</label>
+    <ui-duration params="fieldObs: intervalObs, fields: 'days weeks'"></ui-duration>
+  </div>
+  <div class="field" data-bind="attr: {id: generateId('occurrences')}" style="width: 5rem">
+    <label style="white-space: nowrap"># Times</label>
+    <input-editor params="obs: occurrencesObs, canEdit: canEdit"></input-editor>
+  </div>
+  <div class="field" data-bind="attr: {id: generateId('updateType')}">
+    <label>Update Type</label>
+    <select class="ui dropdown" data-bind="value: $data.updateTypeObs, 
+      options: $data.allUpdateTypesObs, optionsText: 'label', optionsValue: 'value'"></select>
+  </div>
+  <div class="field list-item-controls" data-bind="visible: canEdit">
+      <label>&#160;</label>
+      <div class="input-field-padding">
+        <i class="red times circle outline link icon"
+          data-bind="click: removeStudyBurst"></i>
+      </div>
+  </div>
+</div>

@@ -26,11 +26,10 @@ export default class TimelineBaseAccount extends BaseAccount {
   }
   sessionInfo(sch) {
     let session = this.sessions[sch.refGuid];
-    let eventId = session.startEventId;
     let exp = (sch.expiration) ? ` for ${fn.formatDuration(sch.expiration)}` : '';
     let days = (sch.startDay === sch.endDay) ? `Day ${sch.startDay}` : `Days ${sch.startDay}—${sch.endDay}`;
     return `<h4>${session.label}</h4>` +
-      `<p>${days} after “${eventId}” start @ ${sch.startTime}${exp}<br>` +
+      `<p>${days} after “${sch.startEventId}” start @ ${sch.startTime}${exp}<br>` +
       `Instance GUID: <a href="${this.searchLink(sch)}">${sch.instanceGuid}</a><br>` +
       `Order: ${session.performanceOrder}</p>`;
   }

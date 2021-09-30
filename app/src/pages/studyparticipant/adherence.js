@@ -7,12 +7,21 @@ import tables from "../../tables";
 import Promise from "bluebird";
 import utils from "../../utils";
 
+// Sort them by session name and then the triggering event, but put the study bursts
+// after everything else.
+function sortEvents(e1, e2) {
+  let sb1 = e1.eventId.startsWith('study_burst');
+  let sb2 = e2.eventId.startsWith('study_burst');
+  let b = (sb1 && !sb2) ? 1 : (!sb1 && sb2) ? -1 : 0;
+  return b || e1.eventId.localeCompare(e2.eventId);
+}
+
 class AdherenceGraph {
   constructor() {
     this.durationInDays = 0;
     this.streams = [];
     // key = session guid, value = AdherenceStream[]
-    this.streamsByGuidMap = {};
+    this.streamsByGuidAndEventMap = {};
   }
   getEntry(instanceGuid, eventTimestamp) {
     for (let i=0; i < this.streams.length; i++) {
@@ -26,7 +35,8 @@ class AdherenceGraph {
   }
   addStream(session, event, active) {
     let stream = new AdherenceStream();
-    stream.active = active;
+    // this isn't working correctly...nowhere do we calculate the days, like the schedule tab.
+    stream.active = true; 
     stream.label = session.label;
     stream.eventTimestamp = event.timestamp;
     stream.eventId = event.eventId;
@@ -34,9 +44,9 @@ class AdherenceGraph {
     stream.timeWindows = session.timeWindowGuids;
     this.streams.push(stream);
 
-    let arr = this.streamsByGuidMap[session.guid] || [];
+    let arr = this.streamsByGuidAndEventMap[session.guid + event.eventId] || [];
     arr.push(stream);
-    this.streamsByGuidMap[session.guid] = arr;
+    this.streamsByGuidAndEventMap[session.guid + event.eventId] = arr;
     return stream;
   }
   addAdherenceRecord(rec) {
@@ -59,10 +69,15 @@ class AdherenceStream {
     this.entries = []; // 
     // key = instanceGuid + timestamp, value = timeline entry
     this.mapToEntry = {};
+    this.maxDay = 0;
   }
   addEntry(entry) {
     entry = JSON.parse(JSON.stringify(entry));
     entry.stream = this;
+    // optimization: we can stop processing the table when we know a stream has no more entries to look at.
+    if (entry.endDay > this.maxDay) {
+      this.maxDay = entry.endDay;
+    }
     this.entries.push(entry);
     this.mapToEntry[entry.instanceGuid + entry.stream.eventTimestamp] = entry;
   }
@@ -127,24 +142,45 @@ export default class StudyParticipantAdherence extends BaseAccount {
       .then(res => this.graph.events = res);
   }
   // For each session in the timeline, filter the events into a stream for that session. 
-  // One session == one stream. The first under an event ID is marked out as the active stream. 
-  // 
+  // One session / event timestamp == one stream. The first under an event ID is marked 
+  // out as the active stream.
   processTimeline(timeline) {
-    this.graph.durationInDays = fn.parseDuration(timeline.duration).totalDays;
-    
+    this.graph.events.sort(sortEvents);
+
+    // This is not really true. The graph only needs to be as wide as the largest endDay
+    // of any stream. The duration of the schedule only controls how many times sessions will 
+    // repeat if a hard number of iterations is not provided.
+    // this.graph.durationInDays = fn.parseDuration(timeline.duration).totalDays;
+
+    // create a map of sessions so we can look them up
+    let sessionMap = timeline.sessions.reduce((arr, sess) => {
+      sess.startEventIds = new Set();
+      arr[sess.guid] = sess;
+      return arr;
+    }, {});
+
+    // We need to assemble all possible event IDs that a session can be fired by, so the next
+    // step is grouped correctly.
+    timeline.schedule.forEach(sch => sessionMap[sch.refGuid].startEventIds.add(sch.startEventId));
+        
     // Create streams (the X-axis of the graph). There's a stream for each session, for 
-    // each event that triggers the session.
+    // each of the events that triggers the session.
     timeline.sessions.forEach(sess => {
-      this.graph.events.filter(e => e.eventId === sess.startEventId).forEach((e, i) => {
+      this.graph.events.filter(e => sess.startEventIds.has(e.eventId)).forEach((e, i) => {
         this.graph.addStream(sess, e, i === 0);
       });
     });
 
     // Filter the scheduled sessions into these streams. 
     timeline.schedule.forEach(sch => {
-      let streams = this.graph.streamsByGuidMap[sch.refGuid] || [];
+      let streams = this.graph.streamsByGuidAndEventMap[sch.refGuid + sch.startEventId] || [];
       streams.forEach(stream => stream.addEntry(sch));
     });
+
+    // durationInDays === the largest end day of any stream (if there are any streams)
+    if (this.graph.streams.length) {
+      this.graph.durationInDays = Math.max.apply(this, this.graph.streams.map(s => s.maxDay)) + 1;
+    }
   }
   // load all pages of adherence records, reduce them to a single array, pass to processing func
   loadAdherenceRecords(res) {
@@ -164,7 +200,18 @@ export default class StudyParticipantAdherence extends BaseAccount {
     this.itemsObs(this.graph.streams);  
   }
   streamEntry(stream, day) {
+    // This short-circuits all this processing...which has a negligible impact on performance
+    if (stream.maxDay < day) {
+      let array = new Array(stream.timeWindows.length);
+      for (var i=0; i < array.length; i++) {
+        array[i] = {};
+      }
+      return array;
+    }
+    /* end spurious optimization */
+    
     let array = new Array(stream.timeWindows.length);
+
     stream.entries.filter(e => e.startDay <= day && e.endDay >= day).map((entry) => {
       let index = stream.entries.indexOf(entry);
 
@@ -215,7 +262,8 @@ export default class StudyParticipantAdherence extends BaseAccount {
       // add the bar graphic
       let previous = null;
       for (let i=index-1; i >=0; i--) {
-        if (entry.timeWindowGuid === stream.entries[i].timeWindowGuid) {
+        if (entry.timeWindowGuid === stream.entries[i].timeWindowGuid && 
+          entry.startEventId === stream.entries[i].startEventId) {
           previous = stream.entries[i];
           break;
         }

@@ -28,6 +28,7 @@ export default function(params) {
     .bind('guid')
     .bind('duration')
     .bind('version')
+    .bind('studyBursts[]', [], null, Binder.persistArrayWithBinder)
     .bind('sessions[]', [], null, Binder.persistArrayWithBinder)
     .obs('eventIds[]');
 
@@ -62,6 +63,9 @@ export default function(params) {
       'performanceOrder': 'sequential',
       'timeWindows': [{'startTime': '08:00'}]
     });
+  }
+  self.addStudyBurst = function(vm, event) {
+    self.studyBurstsObs.push({});
   }
   self.deletePermanently = function(vm, event) {
     alert.deleteConfirmation("Are you sure you want to delete this schedule?", function() {

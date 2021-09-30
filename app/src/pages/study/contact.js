@@ -53,7 +53,7 @@ export default class StudyContact {
         Binder.toObjectField("address", "postalCode"))
       .bind('country', contact.address.country, 
         Binder.fromObjectField("address", "country"), 
-        Binder.toObjectField("address", "country"));    
+        Binder.toObjectField("address", "country")); 
   }
   generateId(fieldName) {
     return `contacts${this.index}_${fieldName}`;
@@ -80,16 +80,16 @@ export default class StudyContact {
   }
   firstOpacityObs(index) {
     return index === 0 ? .5 : 1;
-  };
+  }
   lastOpacityObs(index) {
     return index === (this.contactsObs().length-1) ? .5 : 1;
-  };
+  }
   toggleAddress() {
     this.addressVisibleObs( !this.addressVisibleObs() );
-  };
+  }
   togglePerson() {
     this.personVisibleObs( !this.personVisibleObs() );
-  };
+  }
   formatRole = function(role) {
     let opt = ROLE_OPTS.filter(opt => opt.value === role);
     return (opt.length) ? opt[0].label : '';

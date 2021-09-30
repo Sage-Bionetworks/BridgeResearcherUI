@@ -343,6 +343,8 @@ import schedules2 from "./pages/schedules2/schedules";
 import schedules2Html from "./pages/schedules2/schedules.html";
 import schedule2 from "./pages/schedule2/schedule";
 import schedule2Html from "./pages/schedule2/schedule.html";
+import studyBurst from "./pages/schedule2/study_burst";
+import studyBurstHtml from "./pages/schedule2/study_burst.html";
 import session from "./pages/schedule2/session";
 import sessionHtml from "./pages/schedule2/session.html";
 import timeWindow from "./pages/schedule2/time_window";
@@ -355,6 +357,8 @@ import label from "./pages/schedule2/label";
 import labelHtml from "./pages/schedule2/label.html";
 import selectAssessmentRefs from "./dialogs/select_assessment_refs/select_assessment_refs";
 import selectAssessmentRefsHtml from "./dialogs/select_assessment_refs/select_assessment_refs.html";
+import selectStudyBursts from "./dialogs/select_study_bursts/select_study_bursts";
+import selectStudyBurstsHtml from "./dialogs/select_study_bursts/select_study_bursts.html";
 import previewTimeline from "./dialogs/preview_timeline/preview_timeline";
 import previewTimelineHtml from "./dialogs/preview_timeline/preview_timeline.html";
 import notification from "./pages/schedule2/notification";
@@ -638,6 +642,7 @@ reg("sp-breadcrumb", {viewModel: studypartBreadcrumb, template: studypartBreadcr
 
 reg("schedules2", {viewModel: schedules2, template: schedules2Html});
 reg("schedule2", {viewModel: schedule2, template: schedule2Html});
+reg("study-burst", {viewModel: studyBurst, template: studyBurstHtml});
 reg("session", {viewModel: session, template: sessionHtml});
 reg("time-window", {viewModel: timeWindow, template: timeWindowHtml});
 reg("assessment-ref", {viewModel: assessmentRef, template: assessmentRefHtml});
@@ -723,6 +728,7 @@ reg("select_surveys", {viewModel: selectSurveys, template: selectSurveysHtml, sy
 reg("select_configs", {viewModel: selectConfigs, template: selectConfigsHtml, synchronous: true});
 reg("select_assessments", {viewModel: selectAssessments, template: selectAssessmentsHtml, synchronous: true});
 reg("select_assessment_refs", {viewModel: selectAssessmentRefs, template: selectAssessmentRefsHtml, synchronous: true});
+reg("select_study_bursts", {viewModel: selectStudyBursts, template: selectStudyBurstsHtml, synchronous: true});
 reg("select_files", {viewModel: selectFiles, template: selectFilesHtml, synchronous: true});
 reg("preview_appconfig", {viewModel: previewAppConfig, template: previewAppConfigHtml, synchronous: true});
 reg("edit_apple_link", {viewModel: editAppleLink, template: editAppleLinkHtml, synchronous: true});

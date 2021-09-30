@@ -1,0 +1,22 @@
+<div class="ui small modal">
+  <i data-bind="click:cancel" class="close icon"></i>
+  <div class="header">Execute on study bursts</div>
+  <div class="content">
+
+    <div class="ui list" data-bind="visible: itemsObs().length > 0, foreach: itemsObs">
+      <div class="item">
+        <ui-checkbox params="checkedObs: $data.checkedObs">
+          <span data-bind="text: $parent.identifier"></span>
+        </ui-checkbox>
+      </div>
+    </div>
+    <div data-bind="visible: itemsObs().length === 0">
+      <p>No study bursts have been defined.</p>
+    </div>
+
+  </div>
+  <div class="actions">
+    <button class="ui small primary button" data-bind="click: select">Select</button>
+    <button class="ui small button" data-bind="click: cancel">Cancel</button>
+  </div>
+</div>

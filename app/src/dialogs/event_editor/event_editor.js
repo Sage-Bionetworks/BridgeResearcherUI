@@ -1,8 +1,7 @@
-import { getEventIds } from "../../pages/schedule2/schedule2utils";
+import { getEventIds, getMutableEventIds } from "../../pages/schedule2/schedule2utils";
 import Binder from "../../binder";
 import root from "../../root";
 import utils from "../../utils";
-import { param } from "jquery";
 
 // This is the v2 event editor, not the v1 editor, which is activity_event_editor.js
 export default function(params) {
@@ -23,7 +22,7 @@ export default function(params) {
     .obs('readOnly', params.event.eventId !== null)
     .obs('eventIdOptions[]', []);
 
-  getEventIds(params.studyId).then(array => {
+  getMutableEventIds(params.studyId).then(array => {
     self.eventIdOptionsObs(array);
   });
   self.save = function() {

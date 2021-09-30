@@ -10,8 +10,6 @@ export default class AssessmentResource extends BaseAssessment {
     super({guid: params.id}, 'assessment-resource');
     this.resource = this.newAssessmentResource();
 
-    console.log("params", params);
-
     this.resourceFailureHandler = utils.failureHandler({
       redirectMsg: "Assessment resource not found.",
       redirectTo: "assessments/"+params.id+"/resources",
@@ -61,7 +59,6 @@ export default class AssessmentResource extends BaseAssessment {
     };
   }
   loadAssessmentResource() {
-    console.log(this.resourceGuidObs());
     if (this.resourceGuidObs() === 'new') {
       return Promise.resolve(this.newAssessmentResource())
         .then(this.resourceBinder.update())
