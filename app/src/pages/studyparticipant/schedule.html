@@ -24,29 +24,34 @@
     </div>
   </div>
   <div slot="content">
-    <table class="ui compact selectable table" data-bind="visible: itemsObs().length > 0">
+    <table class="ui compact selectable table">
       <thead>
         <tr>
           <th nowrap>Event ID</th>
           <th>Timestamp</th>
-          <th nowrap># Records</th>
+          <!--<th nowrap># Records</th>-->
           <th colspan="2">Days Since Event</th>
         </tr>
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td colspan="5" data-bind="html: recordsMessageObs"></td>
+          <td colspan="4" data-bind="html: recordsMessageObs"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
         <tr>
-          <td data-bind="text: $parent.formatEventId($data.eventId)"></td>
+          <td>
+            <a data-bind="text: $parent.formatEventId($data.eventId),
+              href: $parent.link('schedule/history/' + encodeURIComponent($data.eventId))"></a>
+          </td>
           <td nowrap data-bind="text: $parent.formatDateTime($data.timestamp)"></td>
+          <!--
           <td>
             <a data-bind="href: $parent.link('schedule/history/' + encodeURIComponent($data.eventId)), 
               text: $data.recordCount">
             </a>
           </td>
+          -->
           <td data-bind="text: $parent.formatDaysSince($data.timestamp)"></td>
           <td nowrap style="text-align: right" data-bind="semantic: 'popup',
             attr: { 'data-content': $parent.formatUpdateType($data.eventId) }">

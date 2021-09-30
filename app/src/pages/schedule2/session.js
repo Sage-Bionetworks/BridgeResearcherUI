@@ -26,7 +26,7 @@ export default function(params) {
     .bind('occurrences', session.occurrences)
     .bind('interval', session.interval)
     .bind('performanceOrder', session.performanceOrder)
-    .bind('studyBurstIds[]', session.studyBurstIds || [])
+    .bind('studyBurstIds[]', session.studyBurstIds || [], null, Binder.persistArrayWithBinder)
     .bind('labels[]', session.labels, null, Binder.persistArrayWithBinder)
     .bind('assessments[]', session.assessments, null, Binder.persistArrayWithBinder)
     .bind('timeWindows[]', session.timeWindows, null, Binder.persistArrayWithBinder)
@@ -38,7 +38,7 @@ export default function(params) {
     return (self.studyBurstIdsObs().length > 0) ? self.studyBurstIdsObs().join('<br>') : '&lt;None&gt;';
   });
   self.editStudyBurstIds = function(vm, event) {
-    let ids = studyBurstsObs().map(burst => burst.identifier);
+    let ids = studyBurstsObs().map(burst => burst.binder.vm.identifierObs());
     root.openDialog('select_study_bursts', {
       allStudyBurstIds: ids,
       studyBurstIdsObs: self.studyBurstIdsObs

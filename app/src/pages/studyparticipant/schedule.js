@@ -28,9 +28,14 @@ export default class StudyParticipantSchedule extends BaseAccount {
         this.navStudyNameObs(study.name);
         study.customEvents.forEach(e => 
           this.customUpdateTypes['custom:'+e.eventId] = e.updateType);
+        return study;
       })
-      .then(() => serverService.getStudySchedule(this.studyId))
-      .then(study => this.collectScheduleStudyBursts(study))
+      .then(study => {
+        if (study.scheduleGuid) {
+          serverService.getStudySchedule(this.studyId)
+            .then(study => this.collectScheduleStudyBursts(study))
+        }
+      })
       .then(() => this.getAccount())
       .then(() => serverService.getStudyParticipantActivityEvents(this.studyId, this.userId))
       .then(res => this.itemsObs(res.items))

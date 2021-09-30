@@ -22,8 +22,7 @@ export default function(params) {
     .obs('readOnly', params.event.eventId !== null)
     .obs('eventIdOptions[]', []);
 
-  // TODO: restore getMutableEventIds
-  getEventIds(params.studyId).then(array => {
+  getMutableEventIds(params.studyId).then(array => {
     self.eventIdOptionsObs(array);
   });
   self.save = function() {

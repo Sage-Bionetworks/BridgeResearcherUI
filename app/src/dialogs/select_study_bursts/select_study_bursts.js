@@ -4,7 +4,6 @@ import root from "../../root";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
-import { parseXML } from "jquery";
 
 export default function(params) {
   let self = this;
@@ -12,15 +11,12 @@ export default function(params) {
   // allStudyBurstIds: ids,
   // studyBurstIdsObs: self.studyBurstIdsObs
   let selectedStudyBurstIds = params.studyBurstIdsObs();
-  console.log(selectedStudyBurstIds);
   let items = params.allStudyBurstIds.filter(id => !!id).map(id => {
-    console.log(id);
     return {
       identifier: id,
       checkedObs: ko.observable(selectedStudyBurstIds.indexOf(id) > -1)
     };
   });
-  console.log(items);
   self.itemsObs = ko.observableArray(items);
 
   self.select = function() {

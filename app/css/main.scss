@@ -132,6 +132,12 @@ footer p {
 .red {
     color:#db2828
 }
+.ellipsis { /* must set a width on this element as well. */
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden
+}
 
 /* participant_consents */
 .signature-container {
