@@ -76,6 +76,7 @@ export default {
    * - refresh: a function to call to refresh items in the collection
    */
   prepareTable: function(vm, options) {
+    console.log("PREPARE TABLE", vm);
     // TODO: Know what's confusing? Renaming all the options like this
     let id = options.id;
     let objName = options.name;
@@ -105,32 +106,32 @@ export default {
     }
     if (deleteFunc) {
       vm.deleteItems = function(vm, event) {
-        let del = prepareDelete(vm, objName, objPlural);
-        alerts.deleteConfirmation(del.msg, function() {
-          utils.startHandler(self, event);
+        let del = prepareDelete(this, objName, objPlural);
+        alerts.deleteConfirmation(del.msg, () => {
+          utils.startHandler(this, event);
           Promise.each(del.deletables, deleteFunc)
-            .then(uncheckAll(vm))
+            .then(uncheckAll(this))
             .then(loadFunc)
-            .then(utils.successHandler(vm, event, del.confirmMsg))
-            .then(redirectHandler(vm, redirectTo))
+            .then(utils.successHandler(this, event, del.confirmMsg))
+            .then(redirectHandler(this, redirectTo))
             .catch(utils.failureHandler({ id }));
         });
-      };
+      }.bind(vm);
     }
     if (deletePermanentlyFunc) {
       vm.deletePermanently = function(vm, event) {
-        let del = prepareDelete(vm, objName, objPlural);
+        let del = prepareDelete(this, objName, objPlural);
         let msg = del.msg + " We cannot undo this kind of delete. Are you in production? Maybe rethink this.";
-        alerts.deleteConfirmation(msg, function() {
-          utils.startHandler(self, event);
+        alerts.deleteConfirmation(msg, () => {
+          utils.startHandler(this, event);
           Promise.each(del.deletables, deletePermanentlyFunc)
-            .then(utils.successHandler(vm, event, del.confirmMsg))
-            .then(uncheckAll(vm))
+            .then(utils.successHandler(this, event, del.confirmMsg))
+            .then(uncheckAll(this))
             .then(loadFunc)
-            .then(redirectHandler(vm, redirectTo))
+            .then(redirectHandler(this, redirectTo))
             .catch(utils.failureHandler({ id }));
         }, "Delete FOREVER");
-      };
+      }.bind(vm);
     }
     if (publishFunc) {
       vm.publish = function(vm, event) {
@@ -155,7 +156,7 @@ export default {
 
         event.target.parentNode.innerHTML = LOADER_TEXT;
         return undeleteFunc(item).then(loadFunc)
-          .then(utils.successHandler(self, event, titleCase(objName) + " has been restored."))
+          .then(utils.successHandler(vm, event, titleCase(objName) + " has been restored."))
           .catch(utils.failureHandler({ id }));
       };
     }

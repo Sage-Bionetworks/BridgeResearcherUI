@@ -430,6 +430,8 @@ import phone from "./widgets/phone/phone";
 import phoneHtml from "./widgets/phone/phone.html";
 import inputEditor from "./widgets/input-editor/input_editor";
 import inputEditorHtml from "./widgets/input-editor/input_editor.html";
+import deleteButton from "./widgets/delete_button/delete_button";
+import deleteButtonHtml from "./widgets/delete_button/delete_button.html";
 
 // DIALOGS
 import critEditor from "./dialogs/criteria_editor/criteria_editor";
@@ -702,7 +704,8 @@ reg("pager", {viewModel: pager, template: pagerHtml});
 reg("pager2", {viewModel: pager2, template: pager2Html});
 reg("timestamps", {viewModel: timestamps, template: timestampsHtml});
 reg("phone", {viewModel: phone, template: phoneHtml});
-reg("input-editor", {viewModel: inputEditor, template: inputEditorHtml})
+reg("input-editor", {viewModel: inputEditor, template: inputEditorHtml});
+reg("delete-button", {viewModel: deleteButton, template: deleteButtonHtml});
 
 // Dialogs. These must be synchronous.
 reg("sign_out_user", {viewModel: signOutUser, template: signOutUserHtml, synchronous: true});

@@ -1,0 +1,27 @@
+<!-- ko if: canDelete() && !canDeletePermanently() -->
+  <button class="ui red tiny button" data-bind="disable: disabledObs, click: deleteFunc">
+    Delete
+  </button>
+<!-- /ko -->
+<!-- ko if: !canDelete() && canDeletePermanently() -->
+  <button class="ui red tiny button" data-bind="disable: disabledObs, click: deletePermanentlyFunc">
+    Delete
+  </button>
+<!-- /ko -->
+<!-- ko if: canDelete() && canDeletePermanently() -->
+  <div class="ui red tiny buttons" data-bind="disable: disabledObs">
+    <div class="ui tiny button" data-bind="css: { disabled: disabledObs },
+      semantic: 'dropdown-button-toggle', container: '.buttons'">
+      Delete
+    </div>
+    <div class="ui primary tiny floating dropdown icon button"
+      data-bind="semantic: 'dropdown-button', css: { disabled: disabledObs }">
+      <i class="dropdown icon"></i>
+      <div class="menu">
+        <div class="item" data-bind="click: deleteFunc">Delete</div>
+        <div class="item" data-bind="click: deletePermanentlyFunc">Delete <b>Permanently</b></div>
+      </div>
+    </div>
+  </div>
+<!-- /ko -->
+
