@@ -7,25 +7,9 @@
       </div>
       <h3 data-bind="text: pageTitleObs"></h3>
     </div>
-    <div class="fixed-header-buttons" data-bind="visible: canEdit()">
-      <button data-bind="visible: !canEdit(), disable: !atLeastOneChecked(), click: deleteItems"
-        class="ui red tiny button">
-        Delete
-      </button>
-      <div class="ui red tiny buttons" data-bind="visible: canEdit(), disable: !atLeastOneChecked()">
-        <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()},
-          semantic: 'dropdown-button-toggle', container: '.buttons'">
-          Delete
-        </div>
-        <div class="ui primary tiny floating dropdown icon button"
-          data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
-          <i class="dropdown icon"></i>
-          <div class="menu">
-            <div class="item" data-bind="click: deleteItems">Delete</div>
-            <div class="item" data-bind="click: deletePermanently">Delete <b>Permanently</b></div>
-          </div>
-        </div>
-      </div>
+    <div class="fixed-header-buttons">
+      <delete-button params="canDeletePermanently: canEdit(), delete: deleteItems, 
+        deletePermanently: deletePermanently, disabled: !atLeastOneChecked()"></delete-button>
     </div>
   </div>
   <sharedassessment-tabset params="guidObs: guidObs, revisionObs: pageRevObs, originGuidObs: originGuidObs">
