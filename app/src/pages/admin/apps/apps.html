@@ -4,20 +4,8 @@
       <h3>Apps</h3>
     </div>
     <div class="fixed-header-buttons">
-      <div class="ui red tiny buttons" data-bind="disable: !atLeastOneChecked()">
-        <div class="ui tiny button" data-bind="css:{disabled: !atLeastOneChecked()},
-          semantic: 'dropdown-button-toggle', container: '.buttons'">
-          Delete
-        </div>
-        <div class="ui primary tiny floating dropdown icon button"
-          data-bind="semantic: 'dropdown-button', css:{disabled: !atLeastOneChecked()}">
-          <i class="dropdown icon"></i>
-          <div class="menu">
-            <div class="item" data-bind="click: deleteItems">Delete</div>
-            <div class="item" data-bind="click: deletePermanently">Delete <b>Permanently</b></div>
-          </div>
-        </div>
-      </div>
+      <delete-button params="delete: deleteItems, 
+        deletePermanently: deletePermanently, disabled: !atLeastOneChecked()"></delete-button>
       <a href="#/admin/apps/new" class="ui primary tiny button">New App</a>
     </div>
   </div>

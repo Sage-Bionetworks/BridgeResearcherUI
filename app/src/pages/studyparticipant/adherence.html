@@ -20,52 +20,57 @@
     </div>
   </div>
   <div slot="content">
-    <table class="adherence-table" cellpadding="0" cellspacing="0">
-      <thead>
-        <tr>
-          <th></th>
-          <th nowrap colspan="2"></th>
-          <th data-bind="attr: {colspan: dayCountObs().length}">Day Since Event</th>
-        </tr>
-        <tr>
-          <th>Session</th>
-          <th nowrap colspan="2">Event Time Stream</th>
-          <!-- ko foreach: dayCountObs -->
-            <th style="min-width: 30px" data-bind="text: $index"></th>
-          <!-- /ko -->
-        </tr>
-      </thead>
-      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-        <tr>
-          <td data-bind="html: recordsMessageObs, 
-            attr: {colspan: 3 + dayCountObs().length}"></td>
-        </tr>
-      </tbody>
-      <tbody data-bind="foreach: itemsObs">
-        <tr>
-          <td class="th" data-bind="text: $data.label"></td>
-          <td class="th" style="font-size: smaller; text-align: right" 
-            data-bind="text: $parent.formatEventId($data.eventId)">
-          </td>
-          <td class="th" nowrap style="font-size: smaller" 
-            data-bind="text: $parent.formatDateTime($data.eventTimestamp)">
-          </td>
-          <!-- ko foreach: $parent.dayCountObs -->
-            <td class="data-cell" data-bind="
-              class: $parents[1].streamEntryBg($parentContext.$data, $index()),
-              foreach: $parents[1].streamEntry($parentContext.$data, $index())">
-              <div data-bind="class: $data.className, 
-                style: { borderColor: $data.borderColor }, 
-                click: $parents[2].editSession, 
-                attr: {'data-guid': $data.previousInstanceGuid}"></div>
-              <div data-bind="class: $data.secondClassName, 
-                click: $parents[2].editSession,
-                attr: {'data-guid': $data.instanceGuid}"></div>
+    <div class="adherence-table-wrapper">
+      <table class="adherence-table" cellpadding="0" cellspacing="0">
+        <thead>
+          <tr>
+            <th></th>
+            <th nowrap colspan="2"></th>
+            <th data-bind="attr: {colspan: dayCountObs().length}">Day Since Event</th>
+          </tr>
+          <tr>
+            <th>Session</th>
+            <th nowrap colspan="2">Event Time Stream</th>
+            <!-- ko foreach: dayCountObs -->
+              <th style="min-width: 30px" data-bind="text: $index"></th>
+            <!-- /ko -->
+            <!-- ko if: dayCountObs().length === 0 -->
+              <th></th>
+            <!-- /ko -->
+          </tr>
+        </thead>
+        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+          <tr>
+            <td data-bind="html: recordsMessageObs, 
+              attr: {colspan: 4 + dayCountObs().length}"></td>
+          </tr>
+        </tbody>
+        <tbody data-bind="foreach: itemsObs">
+          <tr>
+            <td class="th" data-bind="text: $data.label"></td>
+            <td class="th" style="font-size: smaller; text-align: right" 
+              data-bind="text: $parent.formatEventId($data.eventId)">
             </td>
-          <!-- /ko -->
-        </tr>
-      </tbody>
-    </table>
+            <td class="th" nowrap style="font-size: smaller" 
+              data-bind="text: $parent.formatDateTime($data.eventTimestamp)">
+            </td>
+            <!-- ko foreach: $parent.dayCountObs -->
+              <td class="data-cell" data-bind="
+                class: $parents[1].streamEntryBg($parentContext.$data, $index()),
+                foreach: $parents[1].streamEntry($parentContext.$data, $index())">
+                <div data-bind="class: $data.className, 
+                  style: { borderColor: $data.borderColor }, 
+                  click: $parents[2].editSession, 
+                  attr: {'data-guid': $data.previousInstanceGuid}"></div>
+                <div data-bind="class: $data.secondClassName, 
+                  click: $parents[2].editSession,
+                  attr: {'data-guid': $data.instanceGuid}"></div>
+              </td>
+            <!-- /ko -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <div slot="help">
     <table class="adherence-table" style="overflow-x: auto; border: none">

@@ -12,7 +12,9 @@
         visible: isAdmin && !isNewObs()">Delete</button>
       <button class="ui tiny button" data-bind="click: preview, 
         visible: !isNewObs()">Preview Timeline&hellip;</button>
-      <button class="ui tiny primary button" data-bind="click: save">Save</button>
+      <button class="ui tiny primary button" data-bind="
+        visible: phaseObs() === 'legacy' || phaseObs() === 'design',
+        click: save">Save</button>
     </div>
   </div>
   <study-tabset params="identifierObs: identifierObs, isNewObs: isStudyNewObs, phaseObs: phaseObs"></study-tabset>
