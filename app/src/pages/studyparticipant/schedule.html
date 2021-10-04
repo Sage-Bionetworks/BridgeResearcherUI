@@ -29,7 +29,6 @@
         <tr>
           <th nowrap>Event ID</th>
           <th>Timestamp</th>
-          <!--<th nowrap># Records</th>-->
           <th colspan="2">Days Since Event</th>
         </tr>
       </thead>
@@ -42,19 +41,12 @@
         <tr>
           <td>
             <a data-bind="text: $parent.formatEventId($data.eventId),
-              href: $parent.link('schedule/history/' + encodeURIComponent($data.eventId))"></a>
+              href: $parent.link('schedule/history/' + encodeURIComponent($data.eventId)),
+              semantic: 'popup', attr: { 'data-content': $parent.hoverText($data) }"></a>
           </td>
           <td nowrap data-bind="text: $parent.formatDateTime($data.timestamp)"></td>
-          <!--
-          <td>
-            <a data-bind="href: $parent.link('schedule/history/' + encodeURIComponent($data.eventId)), 
-              text: $data.recordCount">
-            </a>
-          </td>
-          -->
           <td data-bind="text: $parent.formatDaysSince($data.timestamp)"></td>
-          <td nowrap style="text-align: right" data-bind="semantic: 'popup',
-            attr: { 'data-content': $parent.formatUpdateType($data.eventId) }">
+          <td nowrap style="text-align: right">
             <button class="ui basic compact mini button" 
               data-bind="click: $component.editEvent, enable: $parent.canEdit($data)">Update</button>
             <button class="ui basic red compact mini button" 
