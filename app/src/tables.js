@@ -86,6 +86,7 @@ export default {
     let redirectTo = options.redirect;
     let undeleteFunc = options.undelete;
     let publishFunc = options.publish;
+    let seekButton = (options.deletePermanently) ? "button" : null;
 
     if (!vm.itemsObs) {
       vm.itemsObs = ko.observableArray([]);
@@ -107,7 +108,7 @@ export default {
       vm.deleteItems = function(vm, event) {
         let del = prepareDelete(this, objName, objPlural);
         alerts.deleteConfirmation(del.msg, () => {
-          utils.startHandler(this, event);
+          utils.startHandler(this, event, seekButton);
           Promise.each(del.deletables, deleteFunc)
             .then(uncheckAll(this))
             .then(loadFunc)
@@ -122,7 +123,7 @@ export default {
         let del = prepareDelete(this, objName, objPlural);
         let msg = del.msg + " We cannot undo this kind of delete. Are you in production? Maybe rethink this.";
         alerts.deleteConfirmation(msg, () => {
-          utils.startHandler(this, event);
+          utils.startHandler(this, event, seekButton);
           Promise.each(del.deletables, deletePermanentlyFunc)
             .then(utils.successHandler(this, event, del.confirmMsg))
             .then(uncheckAll(this))
