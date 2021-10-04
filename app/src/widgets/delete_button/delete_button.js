@@ -5,8 +5,7 @@ export default function(params) {
 
   self.canDelete = params.canDelete || ko.observable(true);
   self.canDeletePermanently = params.canDeletePermanently || ko.observable(true);
-
   self.disabledObs = params.disabled;
-  self.deleteFunc = (item) => params.delete(item);
-  self.deletePermanentlyFunc = (item) => params.deletePermanently(item);
+  self.deleteFunc = (item, event) => params.delete(item, event);
+  self.deletePermanentlyFunc = (item, event) => params.deletePermanently(item, event);
 }

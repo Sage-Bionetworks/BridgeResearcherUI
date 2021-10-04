@@ -181,9 +181,13 @@ function findAppName(apps, appId) {
     return "App '" + appId + "' not found.";
   }
 }
-function startHandler(vm, event) {
+function startHandler(vm, event, seekButton) {
   if (event && event.target) {
-    displayPendingControl(event.target);
+    let btn = event.target;
+    while(seekButton && btn && !btn.classList.contains(seekButton)) {
+      btn = btn.parentNode;
+    }
+    displayPendingControl(btn);
   }
   ERROR_BUS.emit('clearErrors');
 }
