@@ -64,6 +64,9 @@ export default class StudyParticipantSchedule extends BaseAccount {
   link(postfix) {
     return `#/studies/${this.studyId}/participants/${encodeURIComponent(this.userId)}/${postfix}`;
   }
+  hoverText(item) {
+    return (item.recordCount <= 1) ? '1 record' : `${item.recordCount} records`;
+  }
   deleteEvent(event, browserEvent) {
     let self = ko.contextFor(browserEvent.target).$component;
     alerts.deleteConfirmation("Are you sure?", () => {
