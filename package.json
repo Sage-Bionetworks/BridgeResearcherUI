@@ -53,7 +53,7 @@
     "url-parse": "^1.5.3",
     "webpack": "^5.56.1",
     "webpack-cli": "^4.8.0",
-    "webpack-dev-server": "^4.3.0",
+    "webpack-dev-server": "^4.3.1",
     "websocket-extensions": "^0.1.4",
     "ws": "^8.2.3"
   },
