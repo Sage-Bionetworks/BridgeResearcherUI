@@ -46,20 +46,27 @@
           <th width="10" data-bind="visible: canAddRemove()">
             <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
           </th>
+          <th width="10"></th>
           <th>Name</th>
           <th>Identifiers</th>
+          <th>Roles</th>
           <th width="10"></th>
         </tr>
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td data-bind="attr: {colspan: canAddRemove() ? 4 : 3}, html: recordsMessageObs"></td>
+          <td data-bind="attr: {colspan: canAddRemove() ? 6 : 5}, html: recordsMessageObs"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
         <tr data-bind="css: $component.classNameForStatus($data)">
           <td width="10" data-bind="visible: $component.canAddRemove()">
             <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+          </td>
+          <td width="10">
+            <span data-bind="visible: $data.dataGroups.includes('test_user')">
+              <i class="ui red bug icon" title="Test Account"></i>
+            </span>
           </td>
           <td>
             <a data-bind="visible: $component.canAddRemove(), 
@@ -69,6 +76,7 @@
               text: $component.formatNameAsFullLabel($data)"></span>
           </td>
           <td data-bind="html: $component.formatIdentifiers($data)"></td>
+          <td data-bind="html: $component.formatRoles($data.roles)"></td>
           <td style="white-space: nowrap">
             <button class="ui basic compact mini red button" data-bind="click: $parent.removeOrgMember,
               visible: $component.canAddRemove()">

@@ -20,13 +20,15 @@ export default class ParticipantUploadsViewModel extends UploadsViewModel {
       .obs("title", "&#160;")
       .obs("sharingScope")
       .bind("navStudyId", params.studyId)
-      .bind("navStudyName");
+      .bind("navStudyName")
+      .obs("dataGroups", []);
 
-    serverService.getStudyParticipantName(params.studyId, params.userId).then((part) => {
+    serverService.getStudyParticipant(params.studyId, params.userId).then((part) => {
       this.titleObs(part.name);
       this.statusObs(part.status);
       this.nameObs(part.name);
       this.sharingScopeObs(part.sharingScope);
+      this.dataGroupsObs(part.dataGroups);
     });
     serverService.getStudy(params.studyId).then((response) => {
       this.navStudyNameObs(response.name);

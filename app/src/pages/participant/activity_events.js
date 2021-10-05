@@ -21,6 +21,7 @@ export default function activityEvents(params) {
     .obs("userId", params.userId)
     .obs("title", "&#160;")
     .obs("status")
+    .obs("dataGroups[]")
     .obs("items[]");
 
   tables.prepareTable(self, {
@@ -39,10 +40,11 @@ export default function activityEvents(params) {
     return "";
   };
 
-  serverService.getParticipantName(params.userId)
+  serverService.getParticipant(params.userId)
     .then(function(part) {
       self.titleObs(part.name);
       self.statusObs(part.status);
+      self.dataGroupsObs(part.dataGroups)
     })
     .catch(failureHandler);
 

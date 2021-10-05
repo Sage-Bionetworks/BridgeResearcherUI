@@ -22,6 +22,7 @@ export default class BaseAccount {
       .bind("status")
       .bind("sharingScope")
       .bind("attributes[]", [], Binder.formatAttributes, Binder.persistAttributes)
+      .bind("dataGroups[]", [])
       .obs("isNew", params.userId === "new")
       .obs("userId", params.userId)
       .obs("guid", params.guid)
@@ -67,6 +68,7 @@ export default class BaseAccount {
       this.titleObs(name);
       this.sharingScopeObs(res.sharingScope);
       this.statusObs(res.status);
+      this.dataGroupsObs(res.dataGroups);
       return res;
     })
     .catch(utils.failureHandler({...this.failureParams, ...this.notFoundParams}));

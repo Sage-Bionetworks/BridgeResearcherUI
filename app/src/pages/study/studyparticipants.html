@@ -43,6 +43,7 @@
       <table class="ui compact selectable table">
         <thead>
           <tr>
+            <th></th>
             <th>Name</th>
             <th>Identifier(s)</th>
             <th>Status</th>
@@ -51,11 +52,16 @@
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
           <tr>
-            <td colspan="4" data-bind="html: recordsMessageObs"></td>
+            <td colspan="5" data-bind="html: recordsMessageObs"></td>
           </tr>
         </tbody>
         <tbody data-bind="foreach: itemsObs">
           <tr data-bind="css: $component.classNameForStatus($data)">
+            <td width="10">
+              <span data-bind="visible: $data.dataGroups.includes('test_user')">
+                <i class="ui red bug icon" title="Test Account"></i>
+              </span>
+            </td>
             <td>
               <a data-bind="href: '#/studies/'+$parent.studyId+'/participants/'+$data.id+'/general',
                 text: $component.formatNameAsFullLabel($data, $parent.studyId)"></a>

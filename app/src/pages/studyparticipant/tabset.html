@@ -13,6 +13,9 @@
     <div class="item" data-bind="visible: statusObs() === 'unverified'">
       <span class="ui orange tiny label"><i class="warning sign icon"></i> Unverified</span>
     </div>
+    <div class="item" data-bind="visible: dataGroupsObs().includes('test_user')">
+      <i class="ui red bug icon" title="Test Account"></i>
+    </div>
   </div>
 </div>
 <div class="ui empty secondary pointing menu" data-bind="visible: isNewObs"></div>
