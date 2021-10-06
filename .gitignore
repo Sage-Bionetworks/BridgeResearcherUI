@@ -4,6 +4,7 @@ note.txt
 app/index.html
 nbproject
 dist/
+app/main*
 npm-debug.log*
 .vscode
 Untitled-1

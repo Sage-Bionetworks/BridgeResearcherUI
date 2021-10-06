@@ -260,23 +260,32 @@ export default class Task {
   }
   static assessmentListToTask(assessmentList, context) {
     return assessmentList.map(function(assessment) {
-      return { guid: assessment.guidObs(), identifier: assessment.identifier };
+      return { appId: assessment.appId, guid: assessment.guidObs(), identifier: assessment.identifier };
     });
   }
   static assessmentToView(assessmentRef) {
     let view = {
       identifier: assessmentRef.identifier,
       guid: assessmentRef.guid,
+      appId: assessmentRef.appId,
       titleObs: ko.observable(),
       guidObs: ko.observable(),
       guidsList: ko.observableArray([])
     };
-    serverService.getAssessment(assessmentRef.guid)
-      .then(response => view.titleObs(response.title));
+    if (view.appId === 'shared') {
+      serverService.getSharedAssessment(assessmentRef.guid)
+        .then(response => view.titleObs(response.title));
+    } else {
+      serverService.getAssessment(assessmentRef.guid)
+        .then(response => view.titleObs(response.title));
+    }
     return view;
   }
   static loadAssessmentRevisions(assessmentRef) {
-    serverService.getAssessmentRevisions(assessmentRef.guid, {}, false).then((response) => {
+    let serverCall = (assessmentRef.appId === 'shared') ?
+      serverService.getSharedAssessmentRevisions.bind(serverService) :
+      serverService.getAssessmentRevisions.bind(serverService);
+    serverCall(assessmentRef.guid, {}, false).then((response) => {
       response.items.forEach(revision => {
         assessmentRef.guidsList.push(Task.assessmentToOption(revision));
         if (assessmentRef.guid === revision.guid) {

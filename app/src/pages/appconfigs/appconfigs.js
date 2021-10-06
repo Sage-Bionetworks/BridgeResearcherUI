@@ -33,8 +33,13 @@ function formatReferencedModels(appconfig) {
     */
   }));
   promises = promises.concat((appconfig.assessmentReferences || []).map(ref => {
-    return serverService.getAssessment(ref.guid).then(assessment => {
-      array.push(`assessment “${assessment.title}” <i>(rev. ${assessment.revision})</i>`);
+    let serverCall = (ref.appId === 'shared') ?
+      serverService.getSharedAssessment.bind(serverService) :
+      serverService.getAssessment.bind(serverService);
+      
+    return serverCall(ref.guid).then(assessment => {
+      let shared = (ref.appId === 'shared') ? 'shared ' : '';
+      array.push(`${shared}assessment “${assessment.title}” <i>(rev. ${assessment.revision})</i>`);
     });
   }));
   return Promise.all(promises).then(() => {
