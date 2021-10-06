@@ -476,8 +476,6 @@ import selectSurveys from "./dialogs/select_surveys/select_surveys";
 import selectSurveysHtml from "./dialogs/select_surveys/select_surveys.html";
 import selectConfigs from "./dialogs/select_configs/select_configs";
 import selectConfigsHtml from "./dialogs/select_configs/select_configs.html";
-import selectAssessments from "./dialogs/select_assessments/select_assessments";
-import selectAssessmentsHtml from "./dialogs/select_assessments/select_assessments.html";
 import selectFiles from "./dialogs/select_files/select_files";
 import selectFilesHtml from "./dialogs/select_files/select_files.html";
 import previewAppConfig from "./dialogs/preview_appconfig/preview_appconfig";
@@ -729,7 +727,6 @@ reg("settings", {viewModel: settings, template: settingsHtml, synchronous: true}
 reg("select_schemas", {viewModel: selectSchemas, template: selectSchemasHtml, synchronous: true});
 reg("select_surveys", {viewModel: selectSurveys, template: selectSurveysHtml, synchronous: true});
 reg("select_configs", {viewModel: selectConfigs, template: selectConfigsHtml, synchronous: true});
-reg("select_assessments", {viewModel: selectAssessments, template: selectAssessmentsHtml, synchronous: true});
 reg("select_assessment_refs", {viewModel: selectAssessmentRefs, template: selectAssessmentRefsHtml, synchronous: true});
 reg("select_study_bursts", {viewModel: selectStudyBursts, template: selectStudyBurstsHtml, synchronous: true});
 reg("select_files", {viewModel: selectFiles, template: selectFilesHtml, synchronous: true});
