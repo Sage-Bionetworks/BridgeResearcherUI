@@ -142,8 +142,8 @@ export default function(params) {
   }
   self.openAssessmentSelector = function(vm, event) {
     self.appConfig = binder.persist(self.appConfig);
-    root.openDialog("select_assessments", {
-      addAssessments: self.addAssessments.bind(self),
+    root.openDialog("select_assessment_refs", {
+      addAssessmentRefs: self.addAssessments.bind(self),
       selected: self.appConfig.assessmentReferences
     });
   }
@@ -192,6 +192,11 @@ export default function(params) {
     }
     root.closeDialog();
   };
+  self.assessmentHref = function(item) {
+    return (item.appId === 'shared') ?
+      `#/sharedassessments/${item.guid}/general` :
+      `#/assessments/${item.guid}/general`;
+  }
   self.removeSchema = function(object, event) {
     self.schemaReferencesObs.remove(object);
   };

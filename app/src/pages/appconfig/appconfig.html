@@ -112,10 +112,11 @@
       <table class="ui compact table" style="width: auto" data-bind="visible: assessmentReferencesObs().length > 0">
         <tbody data-bind="foreach: assessmentReferencesObs">
           <td>
-            <a target="_blank" data-bind="attr: {href: '#/assessments/'+ $data.guid + '/general'}">
+            <a target="_blank" data-bind="attr: {href: $parent.assessmentHref($data)}">
               <span data-bind="text: $data.titleObs"></span>
               <i class="ui external icon"></i>
             </a>
+            <i class="globe icon" data-bind="visible: $data.appId === 'shared'"></i>
           </td>
           <td>
             <div style="width:100%" data-bind="attr: {id: 'assessmentReferences'+$index()+'_guid'}">
