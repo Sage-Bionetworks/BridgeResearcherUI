@@ -28,7 +28,8 @@ export default function activities(params) {
   new Binder(self)
     .obs("userId", params.userId)
     .obs("status")
-    .obs("title", "&#160;");
+    .obs("title", "&#160;")
+    .obs("dataGroups[]");
 
   tables.prepareTable(self, {
     name: "activitie",
@@ -36,12 +37,11 @@ export default function activities(params) {
     id: 'participant-activities'
   });
 
-  serverService.getParticipantName(params.userId)
-    .then(function(part) {
-      self.titleObs(part.name);
-      self.statusObs(part.status);
-    })
-    .catch(FAILURE_HANDLER);
+  serverService.getParticipant(params.userId).then(function(part) {
+    self.titleObs(part.name);
+    self.statusObs(part.status);
+    self.dataGroupsObs(part.dataGroups);
+  }).catch(FAILURE_HANDLER);
 
   self.linkMaker = function(ref) {
     let base = "#/participants/" + self.userIdObs() + "/activities/";

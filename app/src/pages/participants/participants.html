@@ -36,6 +36,7 @@
           <th width="10" data-bind="visible: isAdmin">
             <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
           </th>
+          <th width="10"></th>
           <th>Name</th>
           <th>Identifier(s)</th>
           <th>Relationships</th>
@@ -44,13 +45,18 @@
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td colspan="5" data-bind="html: recordsMessageObs"></td>
+          <td colspan="6" data-bind="html: recordsMessageObs"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
         <tr data-bind="css: $component.classNameForStatus($data)">
           <td data-bind="visible: $parent.isAdmin">
             <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
+          </td>
+          <td width="10" style="padding-left:0; padding-right:0">
+            <span data-bind="visible: $data.dataGroups.includes('test_user')">
+              <i class="ui red bug icon" title="Test Account"></i>
+            </span>
           </td>
           <td>
             <a data-bind="href: '#/participants/'+$data.id+'/general',

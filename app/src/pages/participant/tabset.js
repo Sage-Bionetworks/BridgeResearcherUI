@@ -8,7 +8,7 @@ export default function tabset(params) {
   if (!params.isNewObs) {
     params.isNewObs = ko.observable(false);
   }
-  fn.copyProps(self, params, "isNewObs", "userIdObs", "statusObs");
+  fn.copyProps(self, params, "isNewObs", "userIdObs", "statusObs", "dataGroupsObs");
   fn.copyProps(self, root, "isDeveloper", "isResearcher");
 
   self.computeds = [];

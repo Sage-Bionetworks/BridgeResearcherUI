@@ -51,6 +51,14 @@ export default function(params) {
   self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
   fn.copyProps(self, fn, "formatIdentifiers", "formatNameAsFullLabel");
 
+  function formatOneRole(role) {
+    return role.split('_').map(s => s.substring(0,1).toUpperCase() + s.substring(1)).join(' ');
+  }
+
+  self.formatRoles = function(roles) {
+    return roles.map(formatOneRole).join(', ');
+  }
+
   self.addMemberDialog = function() {
     root.openDialog("add_org_member", {
       closeFunc: fn.seq(root.closeDialog, () => {
