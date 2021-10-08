@@ -25,8 +25,7 @@ export default class StudyTabset {
     return root.isDeveloper() || root.isStudyDesigner() || root.isAdmin();
   }
   canAdminParticipants() {
-    return true;
-    // return root.isResearcher() || root.isStudyCoordinator() || root.isAdmin();
+    return root.isResearcher() || root.isStudyCoordinator() || root.isAdmin();
   }
   dispose() {
     this.computeds.forEach(c => c.dispose());
