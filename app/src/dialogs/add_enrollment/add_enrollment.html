@@ -6,8 +6,8 @@
   <div class="content" style="height: 30rem; overflow: hidden; overflow-y: scroll">
     <errors id="add_enrollment"></errors>
     <div class="ui left icon input" style="margin-bottom:1rem">
-      <input type="text" placeholder="Email filter..." 
-        data-bind="textInput: emailObs, returnHandler: search"/>
+      <input type="text" placeholder="Enter any identifier..." 
+        data-bind="textInput: searchObs, returnHandler: search"/>
       <i class="filter icon"></i>
     </div>
     <table class="ui compact selectable table">
@@ -17,20 +17,26 @@
           </th>
           <th>Name</th>
           <th>Identifier(s)</th>
+          <th></th>
         </tr>
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td colspan="3" data-bind="html: recordsMessageObs"></td>
+          <td colspan="4" data-bind="html: recordsMessageObs"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
-        <tr>
+        <tr data-bind="css: {'disabled': $data.studyIds.includes($parent.studyId)}">
           <td>
             <ui-radio params="checkedObs: $data.checkedObs"></ui-radio>
           </td>
           <td data-bind="text: $component.formatNameAsFullLabel($data)"></td>
           <td data-bind="html: $component.formatIdentifiers($data)"></td>
+          <td>
+            <span data-bind="visible: $data.studyIds.includes($parent.studyId)">
+              Account already enrolled in this study
+            </span>
+          </td>
         </tr>
       </tbody>
     </table>
