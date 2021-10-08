@@ -282,12 +282,10 @@ export default class Task {
     return view;
   }
   static loadAssessmentRevisions(assessmentRef) {
-
     let serverCall = (assessmentRef.appId === 'shared') ?
       serverService.getSharedAssessmentRevisions.bind(serverService) :
       serverService.getAssessmentRevisions.bind(serverService);
     serverCall(assessmentRef.guid, {}, false).then((response) => {
-      console.log(assessmentRef.appId === 'shared', response);
       response.items.forEach(revision => {
         assessmentRef.guidsList.push(Task.assessmentToOption(revision));
         if (assessmentRef.guid === revision.guid) {
