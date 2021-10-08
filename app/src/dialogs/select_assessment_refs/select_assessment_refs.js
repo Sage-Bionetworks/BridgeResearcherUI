@@ -20,24 +20,22 @@ export default class SelectAssessmentRefs {
     this.selectedGuids = this.selected.map(ref => ref.guid);
     this.addAssessmentRefs = params.addAssessmentRefs;
     this.cancel = root.closeDialog;
-
     this.tabObs = ko.observable('local');
     this.localsObs = ko.observableArray([]);
     this.sharedObs = ko.observableArray([]);
-
     this.load();
   }
   load() {
-    // Only gets the first 100 assesssments...we may eventually want to add filtering
+    // Only gets the first 100 assessments...we may eventually want to add filtering
     // by tags or something.
     serverService.getAssessments('', null, 100, false)
       .then(fn.handleMap("items", this.configToView.bind(this)))
-      .then(fn.handleSort("items", "identifier"))
+      .then(fn.handleSort("items", "title"))
       .then(fn.handleObsUpdate(this.localsObs, "items"))
       .catch(utils.failureHandler({}));
     serverService.getSharedAssessments({pageSize: 100}, false)
       .then(fn.handleMap("items", this.configToView.bind(this)))
-      .then(fn.handleSort("items", "identifier"))
+      .then(fn.handleSort("items", "title"))
       .then(fn.handleObsUpdate(this.sharedObs, "items"))
       .catch(utils.failureHandler({}));
   }
