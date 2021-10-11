@@ -1,4 +1,3 @@
-import Binder from '../../binder';
 import fn from '../../functions';
 import ko from 'knockout';
 import Promise from "bluebird";

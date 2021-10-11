@@ -44,6 +44,7 @@ let RootViewModel = function() {
     .obs("sidePanel", "navigation")
     .obs("accountUrl")
     .obs("email")
+    .obs("testUser")
     .obs("dialog", { name: "none" });
 
   self.mainPageObs.subscribe(self.selectedObs);
@@ -115,6 +116,7 @@ let RootViewModel = function() {
     self.appIdObs(session.appId);
     self.rolesObs(session.roles);
     self.emailObs(session.email);
+    self.testUserObs(session.dataGroups.includes('test_user'));
     self.userId = session.id;
     self.accountUrlObs(`#/participants/${session.id}/general`);
     serverService.getApp().then(function(app) {

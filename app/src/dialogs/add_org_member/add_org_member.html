@@ -4,15 +4,12 @@
     Add Organization Member
   </div>
   <div class="content" style="height: 30rem; overflow: hidden; overflow-y: scroll">
-
     <errors id="add_member"></errors>
-
-    <div class="ui left icon input">
-      <input type="text" placeholder="Email filter..." 
-        data-bind="textInput: emailObs, returnHandler: search"/>
+    <div class="ui left icon input" style="margin-bottom:1rem">
+      <input type="text" placeholder="Enter any identifier..." 
+        data-bind="textInput: searchObs, returnHandler: search"/>
       <i class="filter icon"></i>
     </div>
-
     <table class="ui compact selectable table">
       <thead>
         <tr>
