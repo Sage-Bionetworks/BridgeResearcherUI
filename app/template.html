@@ -102,8 +102,7 @@
             <div class="content">
               <div class="ui secondary vertical menu">
                 <!-- This view of an account doesn't work for a superadmin because they are not in any project they can view. -->
-                <a class="item" data-ref="participants" data-bind="href: accountUrlObs, 
-                  visible: !isSuperadmin() && !isResearcher()"> 
+                <a class="item" data-ref="participants" data-bind="href: accountUrlObs, visible: !isSuperadmin()"> 
                   My Account
                 </a>
                 <a href="#/studies" class="item" data-ref="studies">
@@ -138,7 +137,7 @@
                 <a href="#/subpopulations" class="item" data-ref="subpops" data-bind="visible: isDeveloper">
                   Consent Groups
                 </a>
-                <a href="#/events" class="item" data-ref="events">
+                <a href="#/events" class="item" data-ref="events" data-bind="visible: isDeveloper">
                   Scheduling Events
                 </a>
                 <a href="#/surveys" class="item" data-ref="surveys" data-bind="visible: isDeveloper">
