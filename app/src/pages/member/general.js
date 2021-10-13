@@ -3,7 +3,11 @@ import serverService from "../../services/server_service";
 
 export default class GeneralMember extends GeneralBaseAccount {
   constructor(params) {
-    super({ ...params, errorId: 'mem-general' });
+    super({ ...params,
+      errorId: 'mem-general', 
+      redirectMsg: "App config not found.", 
+      redirectTo: "app_configs"
+    });
   }
   loadAccount() {
     return serverService.getAccount(this.userId);
