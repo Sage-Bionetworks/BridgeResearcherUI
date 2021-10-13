@@ -71,7 +71,7 @@ export default class BaseAccount {
       this.dataGroupsObs(res.dataGroups);
       return res;
     })
-    .catch(utils.failureHandler(/*{...this.failureParams, ...this.notFoundParams})*/this.notFoundParams));
+    .catch(utils.failureHandler({...this.failureParams, ...this.notFoundParams}));
   }
   loadAccount() {
     throw new Error('loadAccount not implemented');
