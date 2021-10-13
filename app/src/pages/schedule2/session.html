@@ -1,6 +1,7 @@
 <div class="session ui segments">
   <div class="session2 ui blue inverted segment">
     <span style="flex: 1" data-bind="text: nameObs"></span>
+    <span style="font-size: larger; padding-right: 1rem" data-bind="text: symbolObs"></span>
     <span>
       <span data-bind="text: totalMinutesObs()" style="margin-right: 1rem"></span>
       <i class="large arrow alternate circle up outline icon"
@@ -12,10 +13,14 @@
     </span>
   </div>
   <div class="ui segment">
-    <div class="two fields">
-      <div class="required ten wide field" data-bind="attr: { id: generateId('name') }">
+    <div class="three fields">
+      <div class="required eight wide field" data-bind="attr: { id: generateId('name') }">
         <label>Name</label>
         <input type="text" data-bind="textInput: nameObs">
+      </div>
+      <div class="two wide field">
+        <label>Symbol</label>
+        <input type="text" data-bind="textInput: symbolObs">
       </div>
       <div class="required six wide field" data-bind="attr: { id: generateId('startEventIds') }">
         <label>Session sequence starts on event(s)</label>
