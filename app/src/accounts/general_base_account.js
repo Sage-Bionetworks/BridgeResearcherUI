@@ -103,11 +103,8 @@ export default class GeneralBaseAccount extends BaseAccount {
     // subscribers
     this.emailLink = ko.computed(() => "mailto:" + this.emailObs());
     this.phoneLink = ko.computed(() => "tel:" + (this.phoneObs() ? this.phoneObs().number : ''));
-    // TODO: One of these is better than the other, use it
-    this.resendVisible = ko.computed(() => this.statusObs() === "unverified");
     this.resendEmailVisible = ko.computed(() => this.emailObs() && !this.emailVerifiedObs());
     this.resendPhoneVisible = ko.computed(() => this.phoneObs() && !this.phoneVerifiedObs());
-    // END TODO
     this.resetPwdVisible = ko.computed(() => this.statusObs() !== "disabled");
     this.enableVisible = ko.computed(() => this.statusObs() === "disabled" && root.isAdmin());
     this.disableVisible = ko.computed(() => this.statusObs() === "enabled" && root.isAdmin());

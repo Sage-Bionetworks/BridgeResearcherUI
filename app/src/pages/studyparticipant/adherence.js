@@ -197,7 +197,7 @@ export default class StudyParticipantAdherence extends BaseAccount {
   processAdherenceRecords(items) {
     items.forEach(item => this.graph.addAdherenceRecord(item));
     this.dayCountObs(new Array(this.graph.durationInDays));
-    this.itemsObs(this.graph.streams);  
+    this.itemsObs(this.graph.streams);
   }
   streamEntry(stream, day) {
     // This short-circuits all this processing...which has a negligible impact on performance
