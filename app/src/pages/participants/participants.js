@@ -103,7 +103,7 @@ export default class Participants {
     return this.orgNames[id];
   }
   exportDialog() {
-    root.openDialog("participant_export", { total: this.total, search: this.search });
+    root.openDialog("participant_export", {});
   }
   doFormSearch(vm, event) {
     if (event.keyCode === 13)  {

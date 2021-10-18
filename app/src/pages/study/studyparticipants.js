@@ -108,11 +108,7 @@ export default class StudyParticipants extends BaseStudy {
   }
   exportDialog() {
     this.search = this.updateSearch();
-    root.openDialog("participant_export", { 
-      total: this.total, 
-      search: this.search, 
-      studyId: this.studyId 
-    });
+    root.openDialog("participant_export", {studyId: this.studyId});
   }
   importDialog(vm, event) {
     root.openDialog("external_id_importer", {
