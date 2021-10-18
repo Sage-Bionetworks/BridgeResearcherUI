@@ -288,8 +288,8 @@ export class ServerService {
   getConsentHistory(guid) {
     return this.gethttp(`${config.subpopulations}/${guid}/consents`);
   }
-  emailRoster() {
-    return this.post(`${config.users}/emailParticipantRoster`);
+  emailRoster(payload) {
+    return this.post(`${config.participants}/emailRoster`, payload);
   }
   getSurveys(includeDeleted) {
     let queryString = fn.queryString({ includeDeleted: includeDeleted === true });
