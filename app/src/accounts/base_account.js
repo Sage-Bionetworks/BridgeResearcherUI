@@ -36,7 +36,7 @@ export default class BaseAccount {
       // there's a timer in the control involved here, we need to use an observer
       this.allDataGroupsObs(app.dataGroups || []);
       let attrs = app.userProfileAttributes.map(function(key) {
-        return { key: key, label: fn.formatTitleCase(key, ""), obs: ko.observable() };
+        return { key: key, label: key, obs: ko.observable() };
       });
       this.attributesObs(attrs);
     });

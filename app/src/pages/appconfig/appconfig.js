@@ -217,8 +217,9 @@ export default function(params) {
       return;
     }
     self.appConfig = binder.persist(self.appConfig);
-    root.openDialog("preview_appconfig", {
-      appConfig: self.appConfig
+    root.openDialog("preview_dialog", {
+      title: 'Preview App Config',
+      supplier: () => Promise.resolve(self.appConfig)
     });
   };
   self.save = function(vm, event) {

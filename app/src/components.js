@@ -359,10 +359,10 @@ import selectAssessmentRefs from "./dialogs/select_assessment_refs/select_assess
 import selectAssessmentRefsHtml from "./dialogs/select_assessment_refs/select_assessment_refs.html";
 import selectStudyBursts from "./dialogs/select_study_bursts/select_study_bursts";
 import selectStudyBurstsHtml from "./dialogs/select_study_bursts/select_study_bursts.html";
-import previewTimeline from "./dialogs/preview_timeline/preview_timeline";
-import previewTimelineHtml from "./dialogs/preview_timeline/preview_timeline.html";
 import notification from "./pages/schedule2/notification";
 import notificationHtml from "./pages/schedule2/notification.html";
+import previewDialog from "./dialogs/preview/preview";
+import previewDialogHtml from "./dialogs/preview/preview.html";
 
 import schemaTabset from "./pages/schema/tabset";
 import schemaTabsetHtml from "./pages/schema/tabset.html";
@@ -478,8 +478,6 @@ import selectConfigs from "./dialogs/select_configs/select_configs";
 import selectConfigsHtml from "./dialogs/select_configs/select_configs.html";
 import selectFiles from "./dialogs/select_files/select_files";
 import selectFilesHtml from "./dialogs/select_files/select_files.html";
-import previewAppConfig from "./dialogs/preview_appconfig/preview_appconfig";
-import previewAppConfigHtml from "./dialogs/preview_appconfig/preview_appconfig.html";
 import editAppleLink from "./dialogs/edit_apple_link/edit_apple_link";
 import editAppleLinkHtml from "./dialogs/edit_apple_link/edit_apple_link.html";
 import editAndroidLink from "./dialogs/edit_android_link/edit_android_link";
@@ -649,7 +647,6 @@ reg("assessment-ref", {viewModel: assessmentRef, template: assessmentRefHtml});
 reg("message", {viewModel: messageRef, template: messageRefHtml});
 reg("notification", {viewModel: notification, template: notificationHtml});
 reg("localized-label", {viewModel: label, template: labelHtml});
-reg("preview_timeline", {viewModel: previewTimeline, template: previewTimelineHtml, synchronous: true});
 
 reg("BooleanConstraints", {viewModel: boolConst, template: boolConstHtml});
 reg("DateConstraints", {viewModel: dateConst, template:  dateConstHtml});
@@ -730,7 +727,6 @@ reg("select_configs", {viewModel: selectConfigs, template: selectConfigsHtml, sy
 reg("select_assessment_refs", {viewModel: selectAssessmentRefs, template: selectAssessmentRefsHtml, synchronous: true});
 reg("select_study_bursts", {viewModel: selectStudyBursts, template: selectStudyBurstsHtml, synchronous: true});
 reg("select_files", {viewModel: selectFiles, template: selectFilesHtml, synchronous: true});
-reg("preview_appconfig", {viewModel: previewAppConfig, template: previewAppConfigHtml, synchronous: true});
 reg("edit_apple_link", {viewModel: editAppleLink, template: editAppleLinkHtml, synchronous: true});
 reg("edit_android_link", {viewModel: editAndroidLink, template: editAndroidLinkHtml, synchronous: true});
 reg("file_upload", {viewModel: fileUpload, template: fileUploadHtml, synchronous: true});
@@ -753,3 +749,4 @@ reg("user_attributes", {template: userAtts, viewModel: setEditor("userProfileAtt
 reg("task_identifiers", {template: taskIdentifiers, viewModel: setEditor("taskIdentifiers")});
 reg("data_groups", {template: dataGroups, viewModel: setEditor("dataGroups")});
 reg("empty", {viewModel: function(){}, template: "<span></span>"});
+reg("preview_dialog", {viewModel: previewDialog, template: previewDialogHtml, synchronous: true});
