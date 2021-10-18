@@ -15,13 +15,12 @@
         <tr>
           <th width="10">
           </th>
-          <th>Name</th>
-          <th>Identifier(s)</th>
+          <th>Participant</th>
         </tr>
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td colspan="3" data-bind="html: recordsMessageObs"></td>
+          <td colspan="2" data-bind="html: recordsMessageObs"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
@@ -29,8 +28,7 @@
           <td>
             <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
           </td>
-          <td data-bind="text: $component.formatNameAsFullLabel($data)"></td>
-          <td data-bind="html: $component.formatIdentifiers($data)"></td>
+          <td data-bind="text: $component.formatParticipantLabel($data)"></td>
         </tr>
       </tbody>
     </table>

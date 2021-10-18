@@ -527,8 +527,11 @@ function formatFileSize(fileSize) {
   } while (fileSize > 1024);
   return Math.max(fileSize, 0.1).toFixed(1) + BYTE_UNITS[i];
 }
-function formatIdentifiers(item, studyId) {
-  var array = [];
+function formatParticipantLabel(item, studyId) {
+  let name = [];
+  notBlankName(name, item.firstName);
+  notBlankName(name, item.lastName);
+  let array = [];
   if (item.email) {
     array.push(item.email);
   }
@@ -550,13 +553,17 @@ function formatIdentifiers(item, studyId) {
     }
   }
   if (item.synapseUserId) {
-    array.push('Synapse ID ' + item.synapseUserId);
+    array.push('synID ' + item.synapseUserId);
   }
-  if (array.length === 0) {
-    array.push("<i>None</i>");
+  if (name.length > 0 && array.length > 0) {
+    return name.join(' ') + ' &bull; ' + array.join(" &bull; ");
+  } else if (name.length === 0) {
+    return array.join(" &bull; ");
+  } else if (array.length == 0) {
+    return name.join(' '); 
   }
-  return array.join(", ");
-};
+  return "—";
+}
 
 
 /* ==================================== DATE FUNCTIONS ==================================== */
@@ -682,13 +689,13 @@ export default {
   formatDaysSince,
   formatDuration,
   formatFileSize,
-  formatIdentifiers,
   formatTime,
   formatLanguages,
   formatList,
   formatMs,
   formatName,
   formatNameAsFullLabel,
+  formatParticipantLabel,
   formatRoles,
   formatSearch,
   formatSentenceCase,

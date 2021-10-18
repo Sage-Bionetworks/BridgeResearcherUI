@@ -4,10 +4,8 @@
   </div>
   <div class="ui form content">
     <errors id="participant_export"></errors>
-    <p>A zip file will be prepared with information about your participants in CSV format. 
-      The password you provide will be used to password encrypt the zip file before it 
-      is emailed to your account.</p>
-    <div class="field required" data-bind="hidden: studyIdHiddenObs">
+    <p style="margin-top:0">A zip file will be prepared with information about your participants in CSV format. The password you provide will be used to password protect the zip file before it is emailed to your account.</p>
+    <div class="field" data-bind="hidden: studyIdHiddenObs">
       <label>Study ID</label>
       <input type="text" data-bind="textInput: studyIdObs">
     </div>
