@@ -49,7 +49,7 @@ export default function(params) {
   self.query = {pageSize: 100};
   self.postLoadPagerFunc = fn.identity;
   self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
-  fn.copyProps(self, fn, "formatIdentifiers", "formatNameAsFullLabel");
+  fn.copyProps(self, fn, "formatParticipantLabel");
 
   function formatOneRole(role) {
     return role.split('_').map(s => s.substring(0,1).toUpperCase() + s.substring(1)).join(' ');

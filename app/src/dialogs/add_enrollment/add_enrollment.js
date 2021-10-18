@@ -18,7 +18,7 @@ export default class AddEnrollmentDialog {
     this.searchObs = ko.observable('');
     this.externalIdObs = ko.observable('');
     this.closeDialog = params.closeFunc;
-    fn.copyProps(this, fn, "formatIdentifiers", "formatNameAsFullLabel");
+    fn.copyProps(this, fn, "formatParticipantLabel");
 
     tables.prepareTable(this, {
       name: "participant",

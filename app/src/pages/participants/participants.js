@@ -55,7 +55,7 @@ export default class Participants {
     
     this.search = storeService.restoreQuery("p", "allOfGroups", "noneOfGroups");
 
-    fn.copyProps(this, fn, "formatName", "formatDateTime", "formatIdentifiers", "formatNameAsFullLabel");
+    fn.copyProps(this, fn, "formatName", "formatDateTime", "formatParticipantLabel");
     fn.copyProps(this, root, "isAdmin", "isDeveloper", "isResearcher");
 
     let { defaultStart, defaultEnd } = fn.getRangeInDays(-14, 0);

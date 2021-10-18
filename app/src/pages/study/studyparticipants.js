@@ -50,7 +50,7 @@ export default class StudyParticipants extends BaseStudy {
   constructor(params) {
     super(params, 'studyparticipants');
 
-    fn.copyProps(this, fn, "formatName", "formatDateTime", "formatIdentifiers", "formatNameAsFullLabel");
+    fn.copyProps(this, fn, "formatName", "formatDateTime", "formatParticipantLabel");
     fn.copyProps(this, root, "isResearcher");
 
     this.search = storeService.restoreQuery("sp", "allOfGroups", "noneOfGroups");

@@ -47,15 +47,14 @@
             <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
           </th>
           <th width="10"></th>
-          <th>Name</th>
-          <th>Identifiers</th>
+          <th>Member</th>
           <th>Roles</th>
           <th width="10"></th>
         </tr>
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td data-bind="attr: {colspan: canAddRemove() ? 6 : 5}, html: recordsMessageObs"></td>
+          <td data-bind="attr: {colspan: canAddRemove() ? 5 : 4}, html: recordsMessageObs"></td>
         </tr>
       </tbody>
       <tbody data-bind="foreach: itemsObs">
@@ -70,12 +69,11 @@
           </td>
           <td>
             <a data-bind="visible: $component.canAddRemove(), 
-              text: $component.formatNameAsFullLabel($data), 
+              html: $component.formatParticipantLabel($data), 
               href: '#/organizations/' + $parent.identifierObs() + '/members/' + $data.id + '/general'"></a>
             <span data-bind="visible: !$component.canAddRemove(),
-              text: $component.formatNameAsFullLabel($data)"></span>
+              html: $component.formatParticipantLabel($data)"></span>
           </td>
-          <td data-bind="html: $component.formatIdentifiers($data)"></td>
           <td data-bind="html: $component.formatRoles($data.roles)"></td>
           <td style="white-space: nowrap">
             <button class="ui basic compact mini red button" data-bind="click: $parent.removeOrgMember,
