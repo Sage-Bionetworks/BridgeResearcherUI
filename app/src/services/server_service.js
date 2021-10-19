@@ -863,6 +863,10 @@ export class ServerService {
   getStudyParticipantTimeline(studyId, userId) {
     return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/timeline`);
   }
+  emailStudyParticipantRoster(studyId, payload) {
+    return this.post(`${config.studies}/${studyId}/participants/emailRoster`, payload);
+  }
+
 
   adminSignIn(appName, environment, signIn) {
     return postInt(`${config.host[environment]}${config.adminAuth}/signIn`, signIn).then(
