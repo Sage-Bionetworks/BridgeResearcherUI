@@ -37,7 +37,10 @@ export default function(params) {
   }
   self.preview = function(vm, event) {
     utils.clearErrors();
-    root.openDialog("preview_timeline", { studyId: params.studyId, scheduleGuid: self.schedule.guid });
+    root.openDialog('preview_dialog', {
+      title: 'Preview Timeline',
+      supplier: () => serverService.getStudyScheduleTimeline(this.studyId)
+    });    
   };
   self.save = function(vm, event) {
     self.schedule = binder.persist(self.schedule);

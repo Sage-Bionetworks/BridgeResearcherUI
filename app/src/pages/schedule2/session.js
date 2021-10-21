@@ -21,6 +21,7 @@ export default function(params) {
   session.binder = new Binder(self)
     .bind('guid', session.guid)
     .bind('name', session.name)
+    .bind('symbol', session.symbol)
     .bind('startEventIds[]', session.startEventIds || [])
     .bind('delay', session.delay)
     .bind('occurrences', session.occurrences)
