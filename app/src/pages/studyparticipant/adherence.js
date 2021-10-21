@@ -332,4 +332,10 @@ export default class StudyParticipantAdherence extends BaseAccount {
       });
     }, 1);
   }
+  preview() {
+    root.openDialog('preview_dialog', {
+      title: 'Preview Event Day Report',
+      supplier: () => serverService.getStudyParticipantAdherenceEventDayReports(this.studyId, this.userId)
+    });
+  }
 }
