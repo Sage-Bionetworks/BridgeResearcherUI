@@ -2,7 +2,7 @@
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
       <div class="ui breadcrumb">
-        <a href="#/studies" class="section">Studies</a>
+        <a href="/studies" class="section">Studies</a>
         <i class="right chevron icon divider"></i>
       </div>
       <h3 data-bind="text: titleObs"></h3>
@@ -39,7 +39,7 @@
       <tbody data-bind="foreach: itemsObs">
         <tr>
           <td>
-            <a data-bind="attr: {'href': '#/organizations/' + $data.identifier}, 
+            <a data-bind="attr: {'href': '/organizations/' + $data.identifier}, 
               text: $data.name,
               visible: $parent.isAdmin()">
             </a>

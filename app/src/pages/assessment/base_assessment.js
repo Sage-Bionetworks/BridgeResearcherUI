@@ -34,10 +34,10 @@ export default class BaseAssessment {
   saveAssessment(revisionChanged) {
     if (this.isNewObs()) {
       return serverService.createAssessment(this.assessment)
-        .then((response) => document.location = `#/assessments/${response.guid}/general`);
+        .then((response) => document.location = `/assessments/${response.guid}/general`);
     } else if (revisionChanged) {
       return serverService.createAssessmentRevision(this.assessment)
-        .then((response) => document.location = `#/assessments/${response.guid}/general`);
+        .then((response) => document.location = `/assessments/${response.guid}/general`);
     } else {
       return serverService.updateAssessment(this.assessment)
         .then(fn.handleStaticObsUpdate(this.isNewObs, false))

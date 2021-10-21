@@ -35,7 +35,7 @@ function resolveDerivedFrom(response) {
     if (item.originGuid) {
       serverService.getSharedAssessment(item.originGuid)
         .then(shared => item.originGuidObs(
-          `<a target="_blank" href="#/sharedassessments/${shared.guid}">${shared.title}</a> (rev.${shared.revision})`));
+          `<a target="_blank" href="/sharedassessments/${shared.guid}">${shared.title}</a> (rev.${shared.revision})`));
     }
   });
   return response;
@@ -46,7 +46,7 @@ function notAllowed(response, params) {
   if (params.redirect === false) {
     toastr.error(message);
   } else {
-    document.location = "#/reports/uploads";
+    document.location = "/reports/uploads";
     root.changeView("dailyUploads", {});
     setTimeout(function() {
       toastr.error(message);
@@ -76,7 +76,7 @@ function notAdmin(response) {
 }
 function notFound(response, params) {
   if (params.redirectTo) {
-    document.location = "#/" + params.redirectTo;
+    document.location = "/" + params.redirectTo;
     root.changeView(params.redirectTo);
     if (params.redirectMsg) {
       setTimeout(function() {

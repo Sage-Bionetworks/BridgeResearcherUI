@@ -8,7 +8,7 @@ export default class NotificationsParticipant extends NotificationsBaseAccount {
       ...params, 
       errorId: 'studyparticipant-notifications',
       notFoundParams: {
-        redirectTo: `#/studies/${params.studyId}/participants`,
+        redirectTo: `/studies/${params.studyId}/participants`,
         redirectMsg: "Participant not found"
       }
     });

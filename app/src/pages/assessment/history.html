@@ -2,7 +2,7 @@
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
       <div class="ui breadcrumb">
-        <a href="#/assessments" class="section">Assessments</a>
+        <a href="/assessments" class="section">Assessments</a>
         <i class="right chevron icon divider"></i>
       </div>
       <h3 data-bind="text: pageTitleObs"></h3>
@@ -20,7 +20,7 @@
   <div slot="header">
     <div class="line-control">
       <div class="ui breadcrumb">
-        <a class="section" data-bind="href:'#/assessments/'+guidObs()+'/general'">Latest Assessment</a>
+        <a class="section" data-bind="href:'/assessments/'+guidObs()+'/general'">Latest Assessment</a>
         <i class="right chevron icon divider"></i>
         <b>Assessment Revisions</b>
       </div>
@@ -56,7 +56,7 @@
               style="cursor: pointer" class="green undo icon"></i>
           </td>
           <td nowrap>
-            <a data-bind="text: $parent.formatTitle($data), href: '#/assessments/' + $data.guid"></a>
+            <a data-bind="text: $parent.formatTitle($data), href: '/assessments/' + $data.guid"></a>
           </td>
           <td data-bind="html: $data.originGuidObs"></td>
           <td data-bind="text: $parent.formatOrg($data.ownerId)"></td>

@@ -8,7 +8,7 @@ export default class StudyTabset {
     fn.copyProps(this, params, "identifierObs->studyIdObs", "isNewObs");
     this.computeds = [];
     this.linkMaker = function(tabName) {
-      let c = ko.computed(() => `#/studies/${this.studyIdObs()}/${tabName}`);
+      let c = ko.computed(() => `/studies/${this.studyIdObs()}/${tabName}`);
       this.computeds.push(c);
       return c;
     };

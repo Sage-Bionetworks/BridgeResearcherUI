@@ -14,7 +14,7 @@
     <div class="line-control">
       <div class="line-control-stretch">
         <div class="ui breadcrumb">
-          <a class="section" data-bind="href:'#/participants/'+userIdObs()+'/activities'">All Activities</a>
+          <a class="section" data-bind="href:'/participants/'+userIdObs()+'/activities'">All Activities</a>
           <i class="right chevron icon divider"></i>
           <b data-bind="html: activityLabelObs"></b>
         </div>
@@ -58,7 +58,7 @@
             <i data-bind="css: $parent.formatActivityClass($data)"></i>
             <a target="_blank" rel="noopener"
               data-bind="text: $parent.formatActivity($data), 
-                href: '#/scheduleplans/'+$data.schedulePlanGuid"></a>
+                href: '/scheduleplans/'+$data.schedulePlanGuid"></a>
           </td>
           <td data-bind="text: $parent.formatTitleCase($data.status), 
             css: {disabled: $data.isDisabled}"></td>

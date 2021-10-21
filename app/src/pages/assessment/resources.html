@@ -2,7 +2,7 @@
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
       <div class="ui breadcrumb">
-        <a href="#/assessments" class="section">Assessments</a>
+        <a href="/assessments" class="section">Assessments</a>
         <i class="right chevron icon divider"></i>
       </div>
       <h3 data-bind="text: pageTitleObs"></h3>
@@ -12,7 +12,7 @@
         deletePermanently: deletePermanently, disabled: !atLeastOneChecked()"></delete-button>
       <button data-bind="click: publish, disable: !atLeastOneChecked() || !originGuidObs()" 
         class="ui tiny button">Publish</button>
-      <a data-bind="href: '#/assessments/' + guidObs() + '/resources/new'" 
+      <a data-bind="href: '/assessments/' + guidObs() + '/resources/new'" 
         class="ui primary tiny button">New Assessment Resource</a>
     </div>
   </div>
@@ -23,7 +23,7 @@
 <bsm-layout id="assessment-resources">
   <div slot="header">
     <p data-bind="visible: originGuidObs">This is a copy of a shared assessment, so 
-      <a target="_blank" data-bind="attr: {href:'#/sharedassessments/'+originGuidObs()+'/resources'}">
+      <a target="_blank" data-bind="attr: {href:'/sharedassessments/'+originGuidObs()+'/resources'}">
         all of that assessment’s documentation</a> applies to this assessment.</p>
     <div class="ui form line-control" data-bind="visible: !originGuidObs() && canEdit()">
       <div>
@@ -71,7 +71,7 @@
           </td>
           <td>
             <a data-bind="visible: $parent.canEdit(), text: $data.title, 
-              href: '#/assessments/' + $parent.guidObs() + '/resources/' + $data.guid"></a>
+              href: '/assessments/' + $parent.guidObs() + '/resources/' + $data.guid"></a>
             <a target="_blank" data-bind="visible: !$parent.canEdit(), text: $data.title, href: $data.url"></a>
             <div data-bind="text: $data.description"></div>
           </td>

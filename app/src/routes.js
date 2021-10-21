@@ -243,6 +243,7 @@ router.on("/templates/:templateType", routeTo("templates", "templates", TYPE));
 router.on("/templates", routeTo("templatesList", "templates"));
 
 router.configure({
+  html5history: true,
   notfound: routeTo("not_found"),
   on: [
     ko.postbox.reset,
@@ -251,4 +252,11 @@ router.configure({
     }
   ]
 });
-router.init("/reports/uploads");
+router.init(document.location.pathname + document.location.search);
+
+document.body.addEventListener('click', (event) => {
+  if (event.target.href) {
+    event.preventDefault();
+    router.setRoute(event.target.getAttribute('href'));
+  }
+}, true); // true = on the way down from top of tree?

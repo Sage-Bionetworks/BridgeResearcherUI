@@ -8,7 +8,7 @@ export default function tabset(params) {
   self.computeds = [];
   self.linkMaker = function(postfix) {
     let c = ko.computed(function() {
-      return "#/configs/" + encodeURIComponent(self.idObs()) + "/revisions/" + self.revisionObs() + "/" + postfix;
+      return "/configs/" + encodeURIComponent(self.idObs()) + "/revisions/" + self.revisionObs() + "/" + postfix;
     });
     self.computeds.push(c);
     return c;

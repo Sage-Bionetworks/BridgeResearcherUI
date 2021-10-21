@@ -16,7 +16,7 @@ export default function tabset(params) {
   self.computeds = [];
   self.linkMaker = function(tabName) {
     let c = ko.computed(function() {
-      let url = "#/surveys/" + self.guidObs();
+      let url = "/surveys/" + self.guidObs();
       if (self.createdOnObs()) {
         let createdOn = self.createdOnObs();
         if (typeof createdOn === "string") {

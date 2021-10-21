@@ -53,7 +53,7 @@ export default class StudyExternalIds extends BaseStudy {
     });
   }
   link(item)  {
-    return`#/studies/${this.studyId}/participants/${encodeURIComponent("externalId:" + 
+    return`/studies/${this.studyId}/participants/${encodeURIComponent("externalId:" + 
       item.identifier)}/general`;
   }
   doSearch(event) {

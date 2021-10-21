@@ -62,7 +62,7 @@ export default class StudyParticipantSchedule extends BaseAccount {
     return serverService.getStudyParticipant(this.studyId, this.userId);
   }
   link(postfix) {
-    return `#/studies/${this.studyId}/participants/${encodeURIComponent(this.userId)}/${postfix}`;
+    return `/studies/${this.studyId}/participants/${encodeURIComponent(this.userId)}/${postfix}`;
   }
   hoverText(item) {
     return (item.recordCount <= 1) ? '1 record' : `${item.recordCount} records`;

@@ -14,7 +14,7 @@ export default function tabset(params) {
   self.computeds = [];
   self.linkMaker = function(postfix) {
     let c = ko.computed(function() {
-      return `#/participants/${self.userIdObs()}/${postfix}`;
+      return `/participants/${self.userIdObs()}/${postfix}`;
     });
     self.computeds.push(c);
     return c;

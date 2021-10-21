@@ -17,7 +17,7 @@ export default class ParticipantGeneral extends GeneralBaseAccount {
   }
   createAccount() {
     return serverService.createParticipant(this.account)
-      .then(res => window.location = `#/participants/${res.identifier}/general`);
+      .then(res => window.location = `/participants/${res.identifier}/general`);
   }
   installLink() {
     return serverService.sendInstallLink(this.userId);
@@ -27,7 +27,7 @@ export default class ParticipantGeneral extends GeneralBaseAccount {
   }
   deleteAccount() { 
     return serverService.deleteTestUser(this.userId)
-      .then(() => window.location = `#/participants`, 100);
+      .then(() => window.location = `/participants`, 100);
   }
   signOutAccount() {
     return serverService.signOutUser(this.userId);

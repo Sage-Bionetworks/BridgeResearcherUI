@@ -15,7 +15,7 @@ export default function tabset(params) {
   self.computeds = [];
   self.linkMaker = function(tabName) {
     let c = ko.computed(function() {
-      return "#/subpopulations/" + self.guidObs() + "/" + tabName;
+      return "/subpopulations/" + self.guidObs() + "/" + tabName;
     });
     self.computeds.push(c);
     return c;

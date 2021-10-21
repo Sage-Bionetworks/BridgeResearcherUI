@@ -17,7 +17,7 @@
         <div class="ui primary tiny floating dropdown icon button" data-bind="semantic: 'dropdown-button'">
           <i class="dropdown icon"></i>
           <div class="menu">
-            <a href="#/surveys/new" class="item">New Survey</a>
+            <a href="/surveys/new" class="item">New Survey</a>
             <div class="item" data-bind="click: openModuleBrowser">Import Survey&hellip;</div>
           </div>
         </div>
@@ -58,7 +58,7 @@
           <td data-bind="attr:{title:$data.identifier}">
             <span data-bind="text: $data.name, visible: $data.deletedObs"></span>
             <a
-              data-bind="href: '#/surveys/'+$data.guid+'/'+$data.createdOn+'/editor', 
+              data-bind="href: '/surveys/'+$data.guid+'/'+$data.createdOn+'/editor', 
                           text: $data.name, visible: !$data.deletedObs()"
             ></a>
           </td>
@@ -66,7 +66,7 @@
           <td data-bind="foreach: $data.schedulePlanObs">
             <!-- ko if: $index() > 0 --><span>, </span
             ><!-- /ko -->
-            <a target="_blank" rel="noopener" data-bind="href: '#/scheduleplans/'+$data.guid, html: $data.label"></a>
+            <a target="_blank" rel="noopener" data-bind="href: '/scheduleplans/'+$data.guid, html: $data.label"></a>
           </td>
           <td
             data-bind="attr: {'data-html': $parent.moduleHTML($data)}, 

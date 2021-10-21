@@ -15,7 +15,7 @@
     <div class="line-control">
       <div class="line-control-stretch">
         <div class="ui breadcrumb">
-          <a class="section" data-bind="href:'#/participants/'+userIdObs()+'/enrollments'">Enrollments</a>
+          <a class="section" data-bind="href:'/participants/'+userIdObs()+'/enrollments'">Enrollments</a>
           <i class="right chevron icon divider"></i>
           <b>Consent signatures for <span data-bind="text: studyIdObs"></span></b>
         </div>
@@ -41,7 +41,7 @@
         <tr>
           <td>
             <a data-bind="text: $data.consentGroupName, 
-              attr: {'href': '#/subpopulations/' + $data.subpopulationGuid + '/general'}">
+              attr: {'href': '/subpopulations/' + $data.subpopulationGuid + '/general'}">
             </a>
           </td>
           <td>

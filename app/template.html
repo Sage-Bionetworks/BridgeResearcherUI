@@ -53,22 +53,22 @@
             </div>
             <div class="content" data-bind="visible: isDeveloper() || isAdmin()">
               <div class="ui secondary vertical menu">
-                <a href="#/settings" data-bind="visible: isDeveloper()" class="item" data-ref="settings">
+                <a href="/settings" data-bind="visible: isDeveloper()" class="item" data-ref="settings">
                   Settings
                 </a>
-                <a href="#/templates" data-bind="visible: isDeveloper()" class="item" data-ref="templates">
+                <a href="/templates" data-bind="visible: isDeveloper()" class="item" data-ref="templates">
                   Templates
                 </a>
-                <a href="#/export_settings" data-bind="visible: isDeveloper()" class="item" data-ref="export">
+                <a href="/export_settings" data-bind="visible: isDeveloper()" class="item" data-ref="export">
                   Export Settings
                 </a>
-                <a href="#/shared_upload_metadata" data-bind="visible: isDeveloper()" class="item" data-ref="metadata">
+                <a href="/shared_upload_metadata" data-bind="visible: isDeveloper()" class="item" data-ref="metadata">
                   Shared Upload Metadata
                 </a>
-                <a href="#/admin/uploads" data-bind="visible: isAdmin()" class="item" data-ref="uploads">
+                <a href="/admin/uploads" data-bind="visible: isAdmin()" class="item" data-ref="uploads">
                   Uploads
                 </a>
-                <a href="#/topics" data-bind="visible: isDeveloper()" class="item" data-ref="notifications">
+                <a href="/topics" data-bind="visible: isDeveloper()" class="item" data-ref="notifications">
                   Push Notifications
                 </a>
               </div>
@@ -80,16 +80,16 @@
             </div>
             <div class="content" data-bind="visible: isDeveloper()">
               <div class="ui secondary vertical menu">
-                <a href="#/app_configs" class="item" data-ref="appConfigs">
+                <a href="/app_configs" class="item" data-ref="appConfigs">
                   App Configs
                 </a>
-                <a href="#/configs" class="item" data-ref="configs">
+                <a href="/configs" class="item" data-ref="configs">
                   Configuration Elements
                 </a>
-                <a href="#/app_links" class="item" data-ref="links">
+                <a href="/app_links" class="item" data-ref="links">
                   App &amp; Universal Links
                 </a>
-                <a href="#/files" class="item" data-ref="files">
+                <a href="/files" class="item" data-ref="files">
                   File Hosting
                 </a>
               </div>
@@ -105,21 +105,21 @@
                 <a class="item" data-ref="participants" data-bind="href: accountUrlObs, visible: !isSuperadmin()"> 
                   My Account
                 </a>
-                <a href="#/studies" class="item" data-ref="studies">
+                <a href="/studies" class="item" data-ref="studies">
                   Studies
                 </a>
-                <a href="#/organizations" class="item" data-ref="organizations">
+                <a href="/organizations" class="item" data-ref="organizations">
                   Organizations
                 </a>
-                <a href="#/assessments" class="item" data-ref="assessments" 
+                <a href="/assessments" class="item" data-ref="assessments" 
                   data-bind="visible: appIdObs() !== 'shared' && (isStudyDesigner() || isDeveloper())">
                   Assessments
                 </a>
-                <a href="#/sharedassessments" class="item" data-ref="sharedassessments"
+                <a href="/sharedassessments" class="item" data-ref="sharedassessments"
                   data-bind="visible: isStudyDesigner() || isDeveloper()">
                   Shared Assessments
                 </a>
-                <a href="#/reports" class="item" data-ref="reports">
+                <a href="/reports" class="item" data-ref="reports">
                   Study Reports
                 </a>
               </div>
@@ -131,25 +131,25 @@
             </div>
             <div class="content" data-bind="visible: isDeveloper() || isResearcher()">
               <div class="ui secondary vertical menu">
-                <a href="#/participants" class="item" data-ref="participants" data-bind="visible: isResearcher">
+                <a href="/participants" class="item" data-ref="participants" data-bind="visible: isResearcher">
                   Participants
                 </a>
-                <a href="#/subpopulations" class="item" data-ref="subpops" data-bind="visible: isDeveloper">
+                <a href="/subpopulations" class="item" data-ref="subpops" data-bind="visible: isDeveloper">
                   Consent Groups
                 </a>
-                <a href="#/events" class="item" data-ref="events" data-bind="visible: isDeveloper">
+                <a href="/events" class="item" data-ref="events" data-bind="visible: isDeveloper">
                   Scheduling Events
                 </a>
-                <a href="#/surveys" class="item" data-ref="surveys" data-bind="visible: isDeveloper">
+                <a href="/surveys" class="item" data-ref="surveys" data-bind="visible: isDeveloper">
                   Surveys
                 </a>
-                <a href="#/task_identifiers" class="item" data-ref="taskIds" data-bind="visible: isDeveloper">
+                <a href="/task_identifiers" class="item" data-ref="taskIds" data-bind="visible: isDeveloper">
                   Task Identifiers
                 </a>
-                <a href="#/scheduleplans" class="item" data-ref="scheduling" data-bind="visible: isDeveloper">
+                <a href="/scheduleplans" class="item" data-ref="scheduling" data-bind="visible: isDeveloper">
                   Scheduling
                 </a>
-                <a href="#/schemas" class="item" data-ref="schemas" data-bind="visible: isDeveloper">
+                <a href="/schemas" class="item" data-ref="schemas" data-bind="visible: isDeveloper">
                   Upload Schemas
                 </a>
               </div>
@@ -161,17 +161,17 @@
             </div>
             <div class="content" data-bind="visible: isSuperadmin()">
               <div class="ui secondary vertical menu">
-                <a href="#/admin/apps" class="item" data-ref="apps">
+                <a href="/admin/apps" class="item" data-ref="apps">
                   Apps
                 </a>
-                <a href="#/admin/cache" class="item" data-ref="cache">
+                <a href="/admin/cache" class="item" data-ref="cache">
                   Cache Control
                 </a>
-                <a href="#/admin/tags" class="item" data-ref="tags">
+                <a href="/admin/tags" class="item" data-ref="tags">
                   Tags
                 </a>
                 <!--
-                <a href="#/admin/masterschedules" class="item" data-ref="masterschedules">
+                <a href="/admin/masterschedules" class="item" data-ref="masterschedules">
                   Master Schedules
                 </div>
                 -->

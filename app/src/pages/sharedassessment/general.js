@@ -37,7 +37,7 @@ export default class GeneralSharedAssessment extends BaseSharedAssessment {
     return orgId;
   }
   createHistoryLink() {
-    return `#/sharedassessments/${this.guid}/history`;
+    return `/sharedassessments/${this.guid}/history`;
   }
   doImport(vm, event) {
     alerts.prompt(IMPORT_MSG, (newIdentifier) => {

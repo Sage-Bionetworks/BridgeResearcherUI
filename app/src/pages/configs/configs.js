@@ -7,7 +7,7 @@ export default function() {
   let self = this;
   fn.copyProps(self, fn, "formatDateTime");
 
-  self.createLink = (config) => "#/configs/" + encodeURIComponent(config.id) + "/revisions/" + config.revision;
+  self.createLink = (config) => "/configs/" + encodeURIComponent(config.id) + "/revisions/" + config.revision;
 
   tables.prepareTable(self, {
     name: "configuration element",

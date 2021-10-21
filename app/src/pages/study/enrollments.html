@@ -2,7 +2,7 @@
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
       <div class="ui breadcrumb">
-        <a href="#/studies" class="section">Studies</a>
+        <a href="/studies" class="section">Studies</a>
         <i class="right chevron icon divider"></i>
       </div>
       <h3 data-bind="text: titleObs"></h3>
@@ -53,7 +53,7 @@
         <tr>
           <td>
             <a data-bind="text: $parent.formatParticipant($data),
-              attr: {'href': '#/studies/' + $parent.identifierObs() + '/participants/' + 
+              attr: {'href': '/studies/' + $parent.identifierObs() + '/participants/' + 
                 $data.participant.identifier + '/general'}">
             </a>
           </td>

@@ -95,7 +95,7 @@ export default function(params) {
           (users) => serverService.createApp({ app, adminIds, users }));
       })
       .then(utils.successHandler(vm, event, "App created."))
-      .then(() => window.location = `#/admin/apps/${self.identifierObs()}`)
+      .then(() => window.location = `/admin/apps/${self.identifierObs()}`)
       .catch(utils.failureHandler({id: 'app'}));
   };
   function load() {

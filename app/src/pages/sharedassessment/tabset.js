@@ -10,7 +10,7 @@ export default class AsmtTabset {
     this.computeds = [];
   }
   linkMaker(tabName) {
-    let c = ko.computed(() => `#/sharedassessments/${this.guidObs()}/${tabName}`);
+    let c = ko.computed(() => `/sharedassessments/${this.guidObs()}/${tabName}`);
     this.computeds.push(c);
     return c;
   }

@@ -12,7 +12,7 @@ export default function tabset(params) {
   self.computeds = [];
   self.linkMaker = function(postfix) {
     let c = ko.computed(function() {
-      return `#/studies/${self.studyIdObs()}/participants/${encodeURIComponent(self.userIdObs())}/${postfix}`;
+      return `/studies/${self.studyIdObs()}/participants/${encodeURIComponent(self.userIdObs())}/${postfix}`;
     });
     self.computeds.push(c);
     return c;

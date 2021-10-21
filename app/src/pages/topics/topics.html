@@ -6,7 +6,7 @@
     <div class="fixed-header-buttons">
       <delete-button params="canDeletePermanently: isAdmin(), delete: deleteItems, 
         deletePermanently: deletePermanently, disabled: !atLeastOneChecked()"></delete-button>
-      <a href="#/topics/new" class="ui primary tiny button">New Topic</a>
+      <a href="/topics/new" class="ui primary tiny button">New Topic</a>
     </div>
   </div>
   <div class="ui empty secondary pointing menu"></div>
@@ -41,7 +41,7 @@
               style="cursor: pointer" class="green undo icon"></i>
           </td>
           <td nowrap>
-            <div><a data-bind="text: $data.name, href: '#/topics/' + encodeURIComponent($data.guid)"></a></div>
+            <div><a data-bind="text: $data.name, href: '/topics/' + encodeURIComponent($data.guid)"></a></div>
             <div data-bind="text: $data.description"></div>
           </td>
           <td data-bind="text: $parent.label($data.criteria)"></td>

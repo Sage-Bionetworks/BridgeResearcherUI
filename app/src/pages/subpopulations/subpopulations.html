@@ -6,7 +6,7 @@
     <div class="fixed-header-buttons" data-bind="visible: isDeveloper">
       <delete-button params="canDeletePermanently: isAdmin(), delete: deleteItems, 
         deletePermanently: deletePermanently, disabled: !atLeastOneChecked()"></delete-button>
-      <a href="#/subpopulations/new" class="ui primary tiny button">New Consent Group</a>
+      <a href="/subpopulations/new" class="ui primary tiny button">New Consent Group</a>
     </div>
   </div>
   <div class="ui empty secondary pointing menu"></div>
@@ -37,7 +37,7 @@
           </td>
           <td>
             <div>
-              <a data-bind="attr: {'href': '#/subpopulations/'+encodeURIComponent($data.guid)}, 
+              <a data-bind="attr: {'href': '/subpopulations/'+encodeURIComponent($data.guid)}, 
                 text: $data.name"></a>
             </div>
             <div data-bind="text: $data.description"></div>

@@ -8,7 +8,7 @@
         class="ui red tiny button">
         Delete
       </button>
-      <a href="#/organizations/new" class="ui primary tiny button">New Organization</a>
+      <a href="/organizations/new" class="ui primary tiny button">New Organization</a>
     </div>
   </div>
   <div class="ui empty secondary pointing menu"></div>
@@ -42,7 +42,7 @@
           </td>
           <td>
             <span data-bind="text: $data.name, visible: !$parent.canEdit($data)"></span>
-            <a data-bind="href: '#/organizations/'+$data.identifier, text: $data.name,
+            <a data-bind="href: '/organizations/'+$data.identifier, text: $data.name,
               visible: $parent.canEdit($data)"></a>
           </td>
           <td data-bind="text: $data.identifier"></td>

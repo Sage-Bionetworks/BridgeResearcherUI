@@ -51,7 +51,7 @@
           </td>
           <td>
             <a data-bind="visible: $component.isAdmin, text: $data.uploadId, 
-              href: '#/participants/' + $component.userIdObs() + '/uploads/' + $data.uploadId"></a>
+              href: '/participants/' + $component.userIdObs() + '/uploads/' + $data.uploadId"></a>
             <span data-bind="visible: !$component.isAdmin(), text: $data.uploadId"></span>
           </td>
           <td data-bind="text: $component.formatDateTime($data.requestedOn)"></td>

@@ -60,7 +60,7 @@ export default function(params) {
   fn.copyProps(self, fn, "formatDateTime");
 
   function redirect(res) {
-    document.location = `#/app_configs/${res.guid}`;
+    document.location = `/app_configs/${res.guid}`;
     return res;
   }
   function saveAppConfig() {
@@ -194,8 +194,8 @@ export default function(params) {
   };
   self.assessmentHref = function(item) {
     return (item.appId === 'shared') ?
-      `#/sharedassessments/${item.guid}/general` :
-      `#/assessments/${item.guid}/general`;
+      `/sharedassessments/${item.guid}/general` :
+      `/assessments/${item.guid}/general`;
   }
   self.removeSchema = function(object, event) {
     self.schemaReferencesObs.remove(object);
