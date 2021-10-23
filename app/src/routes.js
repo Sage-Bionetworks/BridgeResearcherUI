@@ -252,7 +252,12 @@ router.configure({
     }
   ]
 });
-router.init(document.location.pathname + document.location.search);
+var route = document.location.pathname + document.location.search;
+console.log(route);
+if (route === '/') {
+  route = '/reports/uploads';
+}
+router.init(route);
 
 document.body.addEventListener('click', (event) => {
   if (event.target.href) {

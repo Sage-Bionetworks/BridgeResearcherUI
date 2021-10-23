@@ -95,7 +95,7 @@
           <a class="input-field-padding" data-bind="href: emailLink, text: emailObs"></a>
           <verified-icon params="valueObs: emailObs, verifiedObs: emailVerifiedObs"> </verified-icon>
         </span>
-        <a href="#" class="input-field-padding" data-bind="visible: showAddIdentifier('email'), 
+        <a class="link input-field-padding" data-bind="visible: showAddIdentifier('email'), 
           click: addIdentifier('email')">Add&hellip;</a>
         <span data-bind="visible: showDash('email')" class="input-field-padding">—</span>
       </div>
@@ -119,7 +119,7 @@
             text: $component.formatPhone(phoneObs())"></a>
           <verified-icon params="valueObs: phoneObs, verifiedObs: phoneVerifiedObs"> </verified-icon>
         </span>
-        <a href="#" class="input-field-padding" data-bind="visible: showAddIdentifier('phone'), 
+        <a class="link input-field-padding" data-bind="visible: showAddIdentifier('phone'), 
           click: addIdentifier('phone')">Add&hellip;</a>
         <span data-bind="visible: showDash('phone')" class="input-field-padding">—</span>
       </div>
@@ -138,7 +138,7 @@
         <label>Synapse User ID</label>
         <span class="input-field-padding" data-bind="visible: showIdentifier('synapseUserId'), 
           text: synapseUserIdObs"></span>
-        <a href="#" class="input-field-padding" data-bind="visible: showAddIdentifier('synapseUserId'), 
+        <a class="link input-field-padding" data-bind="visible: showAddIdentifier('synapseUserId'), 
           click: addIdentifier('synapseUserId')">Add&hellip;</a>
         <span class="input-field-padding" data-bind="visible: showDash('synapseUserId')">—</span>
       </div>
