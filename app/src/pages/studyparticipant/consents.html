@@ -16,7 +16,8 @@
     <div class="line-control" style="margin-bottom: 1rem">
       <div class="line-control-stretch">
         <div class="ui breadcrumb">
-          <a class="section" data-bind="href: '/studies/'+studyId+'/participants/'+userIdObs()+'/enrollments'">Enrollments</a>
+          <a class="section" 
+            data-bind="href: `/studies/${studyId}/participants/${userIdObs()}/enrollments`">Enrollments</a>
           <i class="right chevron icon divider"></i>
           <b>Consent signatures for <span data-bind="text: studyIdObs"></span></b>
         </div>

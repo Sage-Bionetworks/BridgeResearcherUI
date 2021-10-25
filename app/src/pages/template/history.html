@@ -4,7 +4,7 @@
       <div class="ui breadcrumb">
         <a data-bind="href: '/templates'" class="section">Templates</a>
         <i class="right chevron icon divider"></i>
-        <a data-bind="href: '/templates/' + templateTypeObs(), text: templateTitleObs" class="section"></a>
+        <a data-bind="href: `/templates/${templateTypeObs()}`, text: templateTitleObs" class="section"></a>
         <i class="right chevron icon divider"></i>
       </div>
       <h3 data-bind="text: titleObs"></h3>
@@ -20,8 +20,8 @@
     <div class="line-control" style="margin-bottom: 1rem">
       <div class="line-control-stretch">
         <div class="ui breadcrumb">
-          <a class="section" data-bind="href: '/templates/'+templateTypeObs()+'/'+
-            guidObs()+'/editor/'+createdOnObs()">Editor</a>
+          <a class="section" 
+            data-bind="href: `/templates/${templateTypeObs()}/${guidObs()}/editor/${createdOnObs()}`">Editor</a>
           <i class="right chevron icon divider"></i>
           <b>Edit History</b>
         </div>
@@ -70,8 +70,8 @@
       <tbody data-bind="foreach: itemsObs">
         <tr data-bind="css: { positive: $data.active }">
           <td>
-            <a data-bind="attr: {href: '/templates/'+$parent.templateTypeObs()+'/'+$parent.guidObs()+
-              '/editor/'+$data.createdOn}, text: $parent.formatDateTime($data.createdOn)"></a>
+            <a data-bind="href: `/templates/${$parent.templateTypeObs()}/${$parent.guidObs()}/editor/${$data.createdOn}`, 
+              text: $parent.formatDateTime($data.createdOn)"></a>
           </td>
           <td>
             <div data-bind="visible: $data.active" style="text-align: right">

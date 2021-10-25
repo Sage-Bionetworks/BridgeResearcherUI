@@ -42,8 +42,7 @@
           </td>
           <td nowrap>
             <span data-bind="text: $data.label, visible: $data.deletedObs"></span>
-            <a data-bind="href: '/app_configs/' + $data.guid, 
-              text: $data.label, visible: !$data.deletedObs()"></a>
+            <a data-bind="href: `/app_configs/${$data.guid}`, text: $data.label, visible: !$data.deletedObs()"></a>
           </td>
           <td data-bind="html: $parent.criteriaLabel($data.criteria)"></td>
           <td data-bind="html: $data.refLabel"></td>

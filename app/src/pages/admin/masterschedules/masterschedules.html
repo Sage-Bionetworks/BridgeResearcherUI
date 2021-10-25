@@ -33,7 +33,7 @@
             <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
           </td>
           <td nowrap>
-            <a data-bind="href: '/admin/masterschedules/' + $data.scheduledId, text: $data.scheduledId"></a>
+            <a data-bind="href: `/admin/masterschedules/${$data.scheduledId}`, text: $data.scheduledId"></a>
           </td>
         </tr>
       </tbody>

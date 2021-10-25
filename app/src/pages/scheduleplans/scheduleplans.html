@@ -41,7 +41,7 @@
           </td>
           <td>
             <span data-bind="text: $data.label, visible: $data.deletedObs"></span>
-            <a data-bind="href: '/scheduleplans/'+$data.guid, text: $data.label, 
+            <a data-bind="href: `/scheduleplans/${$data.guid}`, text: $data.label, 
               visible: !$data.deletedObs()"></a>
           </td>
           <td data-bind="html: $parent.formatStrategy($data.strategy)"></td>

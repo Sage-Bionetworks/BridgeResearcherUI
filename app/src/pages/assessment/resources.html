@@ -12,7 +12,7 @@
         deletePermanently: deletePermanently, disabled: !atLeastOneChecked()"></delete-button>
       <button data-bind="click: publish, disable: !atLeastOneChecked() || !originGuidObs()" 
         class="ui tiny button">Publish</button>
-      <a data-bind="href: '/assessments/' + guidObs() + '/resources/new'" 
+      <a data-bind="href: `/assessments/${guidObs()}/resources/new`" 
         class="ui primary tiny button">New Assessment Resource</a>
     </div>
   </div>
@@ -23,7 +23,7 @@
 <bsm-layout id="assessment-resources">
   <div slot="header">
     <p data-bind="visible: originGuidObs">This is a copy of a shared assessment, so 
-      <a target="_blank" data-bind="attr: {href:'/sharedassessments/'+originGuidObs()+'/resources'}">
+      <a target="_blank" data-bind="href: `/sharedassessments/${originGuidObs()}/resources`">
         all of that assessment’s documentation</a> applies to this assessment.</p>
     <div class="ui form line-control" data-bind="visible: !originGuidObs() && canEdit()">
       <div>

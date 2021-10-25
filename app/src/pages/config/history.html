@@ -41,7 +41,7 @@
           </td>
           <td nowrap>
             <span data-bind="text: $data.id, visible: $data.deletedObs"></span>
-            <a data-bind="href: '/configs/' + $data.id + '/revisions/' + $data.revision, 
+            <a data-bind="href: `/configs/${$data.id}/revisions/${$data.revision}`, 
               text: $data.id, visible: !$data.deletedObs()"></a>
           </td>
           <td data-bind="text: $data.revision"></td>

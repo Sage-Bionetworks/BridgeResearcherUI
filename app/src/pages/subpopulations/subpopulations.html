@@ -37,7 +37,7 @@
           </td>
           <td>
             <div>
-              <a data-bind="attr: {'href': '/subpopulations/'+encodeURIComponent($data.guid)}, 
+              <a data-bind="href: `/subpopulations/${encodeURIComponent($data.guid)}`, 
                 text: $data.name"></a>
             </div>
             <div data-bind="text: $data.description"></div>

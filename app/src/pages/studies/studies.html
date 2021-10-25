@@ -51,8 +51,7 @@
           </td>
           <td nowrap>
             <span data-bind="text: $data.name, visible: $data.deletedObs()"></span>
-            <a data-bind="attr: {href: '/studies/' + $data.identifier}, 
-              text: $data.name, visible: !$data.deletedObs()"></a>
+            <a data-bind="href: `/studies/${$data.identifier}`, text: $data.name, visible: !$data.deletedObs()"></a>
           </td>
           <td data-bind="text: $parent.formatPhase($data.phase)"></td>
           <td data-bind="text: $data.identifier"></td>

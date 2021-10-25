@@ -60,18 +60,14 @@
             ></i>
           </td>
           <td>
-            <a
-              data-bind="attr: {'href': '/schemas/'+encodeURIComponent($data.schemaId)+
-                          '/versions/'+$data.revision+'/editor'}, text: $data.name"
-            ></a>
+            <a data-bind="text: $data.name,
+              href: `/schemas/${encodeURIComponent($data.schemaId)}/versions/${$data.revision}/editor`"></a>
           </td>
           <td data-bind="text: $parent.schemaTypeLabel($data.schemaType)"></td>
           <td data-bind="text: $data.revision"></td>
           <td data-bind="html: $parent.label($data)"></td>
-          <td
-            data-bind="attr: {'data-html': $parent.moduleHTML($data)}, 
-                      semantic: 'popup', html: $parent.formatModuleLink($data)"
-          ></td>
+          <td data-bind="attr: {'data-html': $parent.moduleHTML($data)}, 
+            semantic: 'popup', html: $parent.formatModuleLink($data)"></td>
         </tr>
       </tbody>
     </table>

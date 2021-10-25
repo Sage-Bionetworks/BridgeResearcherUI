@@ -21,7 +21,7 @@
     <div class="line-control">
       <div class="line-control-stretch">
         <div class="ui breadcrumb">
-          <a class="section" data-bind="href:'/sharedassessments/'+guidObs()+'/resources'">All Resources</a>
+          <a class="section" data-bind="href: `/sharedassessments/${guidObs()}/resources`">All Resources</a>
           <i class="right chevron icon divider"></i>
           <b data-bind="text: subPageTitleObs"></b>
         </div>
@@ -46,9 +46,9 @@
     <div class="two fields">
       <div class="field">
         <label>URL</label>
-        <a class="input-field-padding" style="display:block; overflow: hidden; 
-            text-overflow: ellipsis" data-bind="attr: {'href': urlObs}, text: urlObs,
-            visible: !canEdit()"></a>
+        <a class="input-field-padding" 
+          style="display:block; overflow: hidden; text-overflow: ellipsis" 
+          data-bind="href: urlObs, text: urlObs, visible: !canEdit()"></a>
         <input type="text" data-bind="textInput: urlObs, visible: canEdit()" />
       </div>
       <div class="field">

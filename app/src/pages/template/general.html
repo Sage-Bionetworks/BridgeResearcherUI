@@ -4,7 +4,7 @@
       <div class="ui breadcrumb">
         <a data-bind="href: '/templates'" class="section">Templates</a>
         <i class="right chevron icon divider"></i>
-        <a data-bind="href: '/templates/' + templateTypeObs(), text: templateTitleObs" class="section"></a>
+        <a data-bind="href: `/templates/${templateTypeObs()}`, text: templateTitleObs" class="section"></a>
         <i class="right chevron icon divider"></i>
       </div>
       <h3 data-bind="text: titleObs"></h3>

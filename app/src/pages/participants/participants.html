@@ -58,7 +58,7 @@
             </span>
           </td>
           <td>
-            <a data-bind="href: '/participants/'+$data.id+'/general',
+            <a data-bind="href: `/participants/${$data.id}/general`,
               html: $component.formatParticipantLabel($data)"></a>
             <p style="padding-left: 0" class="help-text" data-bind="text: $data.note"></p>
           </td>

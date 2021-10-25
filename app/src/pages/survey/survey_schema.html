@@ -9,7 +9,7 @@
     </div>
     <div class="fixed-header-buttons">
       <a class="ui primary tiny button" 
-        data-bind="attr: { href: '/schemas/' + schemaObs().schemaId + '/versions/' + schemaObs().revision + '/editor' }">
+        data-bind="href: `/schemas/${schemaObs().schemaId}/versions/${schemaObs().revision}/editor`">
         Edit Schema In Schema Editor
       </button>
     </div>

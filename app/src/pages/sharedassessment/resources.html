@@ -52,12 +52,6 @@
             data-bind="href: `/sharedassessments/${$parent.guidObs()}/resources/${$data.guid}`">
           Edit Details
           </a>
-          <!--
-          <span class="right floated linked" data-bind="click: 
-            () => document.location = `/sharedassessments/${$parent.guidObs()}/resources/${$data.guid}`">
-            Edit Details
-          </span>
-          -->
           <span>
             <span data-bind="visible: $parent.canEdit()">
               <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>

@@ -43,7 +43,7 @@
               style="cursor: pointer" class="green undo icon"></i>
           </td>
           <td nowrap>
-            <a data-bind="text: $data.name, href: '/schedules/' + $data.guid"></a>
+            <a data-bind="text: $data.name, href: `/schedules/${$data.guid}`"></a>
           </td>
           <td data-bind="text: $parent.formatOrg($data.ownerId)"></td>
           <td data-bind="text: $parent.formatDateTime($data.modifiedOn)"></td>

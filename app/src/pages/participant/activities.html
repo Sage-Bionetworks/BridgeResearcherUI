@@ -13,7 +13,7 @@
 </div>
 <bsm-layout id="participant-activities">
   <div slot="content">
-    <p>View the <a data-bind="href: '/participants/'+userIdObs()+'/activities/events'">
+    <p>View the <a data-bind="href: `/participants/${userIdObs()}/activities/events`">
         <i style="margin-right:0" class="calendar alternate outline icon"></i>Events</a>
       we’re using to schedule this participant.</p>
     <errors id="participant-activities"></errors>
@@ -31,7 +31,7 @@
       <tbody data-bind="foreach: itemsObs">
         <tr>
           <td>
-            <a data-bind="attr:{href: $parent.linkMaker($data)}, text: label"></a>
+            <a data-bind="href: $parent.linkMaker($data), text: label"></a>
           </td>
         </tr>
       </tbody>

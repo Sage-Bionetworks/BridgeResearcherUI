@@ -31,8 +31,7 @@
         <tbody data-bind="foreach: itemsObs">
           <tr>
             <td>
-              <a data-bind="attr: {href: '/studies/' + $data.studyId + '/general'}, 
-                text: $data.studyName"></a>
+              <a data-bind="href: `/studies/${$data.studyId}/general`, text: $data.studyName"></a>
             </td>
             <td data-bind="text: $data.externalId"></td>
             <td>
