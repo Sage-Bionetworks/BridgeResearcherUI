@@ -63,6 +63,7 @@ function redirectTo(newRoute) {
       var prop = token.substring(1, token.length - 1);
       return args[prop];
     });
+    console.log("Hijacked navigation", route);
     router.setRoute(route);
   };
 }
@@ -247,13 +248,10 @@ router.configure({
   notfound: routeTo("not_found"),
   on: [
     ko.postbox.reset,
-    function() {
-      root.sidePanelObs("navigation");
-    }
+    () => root.sidePanelObs("navigation")
   ]
 });
 var route = document.location.pathname + document.location.search;
-console.log(route);
 if (route === '/') {
   route = '/reports/uploads';
 }
@@ -262,6 +260,7 @@ router.init(route);
 document.body.addEventListener('click', (event) => {
   if (event.target.href) {
     event.preventDefault();
-    router.setRoute(event.target.getAttribute('href'));
+    let route = event.target.getAttribute('href');
+    router.setRoute(route);
   }
-}, true); // true = on the way down from top of tree?
+}, true);
