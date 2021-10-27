@@ -932,36 +932,36 @@ export class ServerService {
   }
   getSponsors(studyId, query) {
     let queryString = fn.queryString(query);
-    return this.gethttp(`/v5/studies/${studyId}/sponsors${queryString}`);
+    return this.gethttp(`${config.studies}/${studyId}/sponsors${queryString}`);
   }
   getSponsoredStudies(orgId, query) {
     let queryString = fn.queryString(query);
-    return this.gethttp(`/v1/organizations/${orgId}/studies${queryString}`);
+    return this.gethttp(`${config.organizations}/${orgId}/studies${queryString}`);
   }
   addSponsor(studyId, orgId) {
-    return this.post(`/v5/studies/${studyId}/sponsors/${orgId}`);
+    return this.post(`${config.studies}/${studyId}/sponsors/${orgId}`);
   }
   removeSponsor(studyId, orgId) {
-    return this.del(`/v5/studies/${studyId}/sponsors/${orgId}`);
+    return this.del(`${config.studies}/${studyId}/sponsors/${orgId}`);
   }
   removeSponsored(orgId, studyId) {
-    return this.del(`/v5/studies/${studyId}/sponsors/${orgId}`);
+    return this.del(`${config.studies}/${studyId}/sponsors/${orgId}`);
   }
   getEnrollments(studyId, query) {
     let queryString = fn.queryString(query);
-    return this.gethttp(`/v5/studies/${studyId}/enrollments${queryString}`);
+    return this.gethttp(`${config.studies}/${studyId}/enrollments${queryString}`);
   }
   enroll(studyId, userId, extId) {
     let payload = {userId};
     if (extId) { payload.externalId = extId };
-    return this.post(`/v5/studies/${studyId}/enrollments`, payload);
+    return this.post(`${config.studies}/${studyId}/enrollments`, payload);
   }
   unenroll(studyId, userId, withdrawalNote) {
     let queryString = fn.queryString({withdrawalNote});
-    return this.del(`/v5/studies/${studyId}/enrollments/${userId}${queryString}`);
+    return this.del(`${config.studies}/${studyId}/enrollments/${userId}${queryString}`);
   }
   updateEnrollment(studyId, userId, enrollment) {
-    return this.post(`/v5/studies/${studyId}/enrollments/${userId}`, enrollment);
+    return this.post(`${config.studies}/${studyId}/enrollments/${userId}`, enrollment);
   }
   getStudyParticipants(studyId, search) {
     return this.post(`${config.studies}/${studyId}/participants/search`, search);
