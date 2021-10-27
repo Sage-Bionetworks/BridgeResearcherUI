@@ -960,6 +960,9 @@ export class ServerService {
     let queryString = fn.queryString({withdrawalNote});
     return this.del(`/v5/studies/${studyId}/enrollments/${userId}${queryString}`);
   }
+  updateEnrollment(studyId, userId, enrollment) {
+    return this.post(`/v5/studies/${studyId}/enrollments/${userId}`, enrollment);
+  }
   getStudyParticipants(studyId, search) {
     return this.post(`${config.studies}/${studyId}/participants/search`, search);
   }
