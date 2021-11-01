@@ -81,7 +81,7 @@
               <i class="link icon"></i>
             </a>
           </td>
-          <td data-bind="text: $data.creators.join(', ')"></td>
+          <td data-bind="text: ($data.creators || []).join(', ')"></td>
           <td data-bind="text: $parent.formatRevisions($data)"></td>
           <td data-bind="text: $data.date"></td>
         </tr>

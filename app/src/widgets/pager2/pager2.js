@@ -17,8 +17,7 @@ export default class CursorPager {
       .bind("showLoader", false)
       .bind("currentPage", 0);
 
-    ko.postbox.subscribe(`${this.prefix}-refresh`, 
-      () => this.wrappedLoadingFunc(0));
+    ko.postbox.subscribe(`${this.prefix}-refresh`, () => this.wrappedLoadingFunc(0));
   }
   previousPage() {
     let page = this.currentPageObs() - 1;
@@ -56,4 +55,3 @@ export default class CursorPager {
     });
   }
 }
-

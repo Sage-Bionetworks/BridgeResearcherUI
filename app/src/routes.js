@@ -6,7 +6,7 @@ import "./bindings";
 import "./bindings/dragula";
 import "./bindings/semantic";
 import "./components";
-import { Router } from "director/build/director";
+import { Router } from "../lib/router";
 import ko from "knockout";
 import "knockout-postbox";
 import root from "./root";
@@ -63,8 +63,8 @@ function redirectTo(newRoute) {
       var prop = token.substring(1, token.length - 1);
       return args[prop];
     });
-    console.log("Hijacked navigation", route);
-    router.setRoute(route);
+    console.log("redirectTo", route);
+    router.replaceRoute(route);
   };
 }
 
@@ -245,22 +245,23 @@ router.on("/templates", routeTo("templatesList", "templates"));
 
 router.configure({
   html5history: true,
+  run_handler_in_init: true,
   notfound: routeTo("not_found"),
-  on: [
-    ko.postbox.reset,
-    () => root.sidePanelObs("navigation")
-  ]
+  on: [ko.postbox.reset, () => root.sidePanelObs("navigation")]
 });
+
+window.addEventListener('click', (event) => {
+  if (event.target.href) {
+    event.preventDefault();
+    event.stopPropagation();
+    let route = event.target.getAttribute('href');
+    console.log("click captured: " + route);
+    router.setRoute(route);
+  }
+}, true);
+
 var route = document.location.pathname + document.location.search;
 if (route === '/') {
   route = '/reports/uploads';
 }
 router.init(route);
-
-document.body.addEventListener('click', (event) => {
-  if (event.target.href) {
-    event.preventDefault();
-    let route = event.target.getAttribute('href');
-    router.setRoute(route);
-  }
-}, true);
