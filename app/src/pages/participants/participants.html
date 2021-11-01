@@ -16,7 +16,7 @@
         disable: !atLeastOneChecked(), click: deleteItems">
         Delete
       </button>
-      <a href="#/participants/new/general" class="ui primary tiny button">New Participant</a>
+      <a href="/participants/new/general" class="ui primary tiny button">New Participant</a>
       <button class="ui tiny button" data-bind="click: exportDialog">Export&hellip;</button>
     </div>
   </div>
@@ -58,7 +58,7 @@
             </span>
           </td>
           <td>
-            <a data-bind="href: '#/participants/'+$data.id+'/general',
+            <a data-bind="href: `/participants/${$data.id}/general`,
               html: $component.formatParticipantLabel($data)"></a>
             <p style="padding-left: 0" class="help-text" data-bind="text: $data.note"></p>
           </td>
@@ -66,7 +66,7 @@
             <div data-bind="foreach: $data.studyIds">
               <span data-bind="visible: $index() > 0">, 
               </span><a data-bind="text: $component.formatStudyName($data),
-                href: '#/studies/' + $data + '/general'" style="white-space:nowrap"></a>  
+                href: '/studies/' + $data + '/general'" style="white-space:nowrap"></a>  
             </div>
             <div style="white-space:nowrap"
               data-bind="text: $component.formatOrgName($data.orgMembership)"></div>

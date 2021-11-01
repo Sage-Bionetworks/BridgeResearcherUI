@@ -50,7 +50,7 @@ export default function(params) {
       serverService.createOrUpdateStudySchedule(params.studyId, self.schedule)
         .then(afterSave)
         .then(utils.successHandler(vm, event, "Schedule created."))
-        .then((sch) => document.location = `#/studies/${params.studyId}/schedule`)
+        .then((sch) => document.location = `/studies/${params.studyId}/schedule`)
         .catch(utils.failureHandler({ id: 'schedule' }))
     } else {
       serverService.createOrUpdateStudySchedule(params.studyId, self.schedule)
@@ -75,7 +75,7 @@ export default function(params) {
       utils.startHandler(vm, event);
       serverService.deleteSchedule(self.guidObs(), true)
         .then(utils.successHandler(vm, event, "Schedule deleted."))
-        .then((sch) => window.location.reload(`#/studies/${params.studyId}/schedule`))
+        .then((sch) => window.location.reload(`/studies/${params.studyId}/schedule`))
         .catch(utils.failureHandler({ id: 'schedule' }))
     });
   }
@@ -127,7 +127,7 @@ export default function(params) {
         .then(afterSave)
         .then(binder.update())
         .catch(utils.failureHandler({
-          redirectTo: `#/studies/${params.studyId}/general`,
+          redirectTo: `/studies/${params.studyId}/general`,
           redirectMsg: 'Schedule not found'
         }));
     } else {

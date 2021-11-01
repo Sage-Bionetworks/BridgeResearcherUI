@@ -44,7 +44,7 @@ export default function activities(params) {
   }).catch(FAILURE_HANDLER);
 
   self.linkMaker = function(ref) {
-    let base = "#/participants/" + self.userIdObs() + "/activities/";
+    let base = "/participants/" + self.userIdObs() + "/activities/";
     return base + LINK_COMPONENTS[ref.type] + decodeURIComponent(ref.identifier);
   };
 

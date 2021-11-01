@@ -9,7 +9,7 @@ export default function tabset(params) {
   self.computeds = [];
   self.linkMaker = function(tabName) {
     let c = ko.computed(function() {
-      return "#/templates/" + self.templateTypeObs() + "/" + self.guidObs() + "/" + tabName;
+      return "/templates/" + self.templateTypeObs() + "/" + self.guidObs() + "/" + tabName;
     });
     self.computeds.push(c);
     return c;

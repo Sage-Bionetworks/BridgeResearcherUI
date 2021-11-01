@@ -31,8 +31,7 @@
         <tbody data-bind="foreach: itemsObs">
           <tr>
             <td>
-              <a data-bind="attr: {href: '#/studies/' + $data.studyId + '/general'}, 
-                text: $data.studyName"></a>
+              <a data-bind="href: `/studies/${$data.studyId}/general`, text: $data.studyName"></a>
             </td>
             <td data-bind="text: $data.externalId"></td>
             <td>
@@ -57,7 +56,7 @@
             </td>
             <td nowrap style="text-align: right">
               <a style="margin-right: 1rem; white-space: nowrap" data-bind="visible: $parent.hasSignatures($data),
-                attr: { href: '#/studies/' + $data.studyId + '/participants/' + $parent.userIdObs() + '/enrollments/consents'}">View Signatures</a>
+                attr: { href: '/studies/' + $data.studyId + '/participants/' + $parent.userIdObs() + '/enrollments/consents'}">View Signatures</a>
               <button class="ui basic compact mini red button" 
                 data-bind="click: $parent.unenroll, hidden: $data.withdrawnOn">Withdraw
               </button>

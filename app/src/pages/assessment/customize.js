@@ -66,7 +66,7 @@ export default class AssessmentCustomize extends BaseAssessment {
   unlink(vm, event) {
     alerts.deleteConfirmation("Are you sure? We cannot undo this.", () => {
       serverService.updateAssessmentConfig(this.guidObs(), this.config)
-        .then(() => document.location = `#/assessments/${this.guidObs()}/config`);
+        .then(() => document.location = `/assessments/${this.guidObs()}/config`);
     }, "Delete");
   }
   updateEditors() {

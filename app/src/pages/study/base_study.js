@@ -40,7 +40,7 @@ export default class BaseStudy {
   createStudy(vm, event) {
       serverService.createStudy(this.study)
         .then(utils.successHandler(vm, event, "Study has been saved."))
-        .then(() => document.location = `#/studies/${this.identifierObs()}/${this.tab}`)
+        .then(() => document.location = `/studies/${this.identifierObs()}/${this.tab}`)
         .catch(this.failureHandler);
   }
   updateStudy(vm, event) {

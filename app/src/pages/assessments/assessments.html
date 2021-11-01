@@ -7,7 +7,7 @@
       <delete-button params="canDelete: canDelete(), canDeletePermanently: canDelete() && isAdmin(), 
         delete: deleteItems, deletePermanently: deletePermanently, disabled: !atLeastOneChecked()">
       </delete-button>
-      <a href="#/assessments/new" class="ui primary tiny button">New Assessment</a>
+      <a href="/assessments/new" class="ui primary tiny button">New Assessment</a>
     </div>
   </div>
   <div class="ui empty secondary pointing menu"></div>
@@ -55,7 +55,7 @@
               style="cursor: pointer" class="green undo icon"></i>
           </td>
           <td nowrap>
-            <a data-bind="text: $data.title, href: '#/assessments/' + $data.guid"></a>
+            <a data-bind="text: $data.title, href: `/assessments/${$data.guid}`"></a>
             <span class="help-text" data-bind="text: ' (rev. ' + $data.revision + ')'"></span>
           </td>
           <td data-bind="html: $data.originGuidObs"></td>

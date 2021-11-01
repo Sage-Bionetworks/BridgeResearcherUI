@@ -38,7 +38,7 @@ export default function(params) {
   let titleUpdated = fn.handleObsUpdate(self.titleObs, "name");
 
   function redirect(keys) {
-    document.location = `#/templates/${self.templateTypeObs()}/${keys.guid}`;
+    document.location = `/templates/${self.templateTypeObs()}/${keys.guid}`;
     return keys;
   }
 

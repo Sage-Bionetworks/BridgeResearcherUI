@@ -14,7 +14,7 @@ export default class GeneralMember extends GeneralBaseAccount {
   }
   createAccount() {
     return serverService.createAccount(this.account)
-      .then(res => window.location = `#/organizations/${this.orgId}/members/${res.identifier}/general`);
+      .then(res => window.location = `/organizations/${this.orgId}/members/${res.identifier}/general`);
   }
   updateAccount() { 
     return serverService.updateAccount(this.userId, this.account);

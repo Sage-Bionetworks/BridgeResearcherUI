@@ -2,7 +2,7 @@
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
       <div class="ui breadcrumb">
-        <a href="#/studies" class="section">Studies</a>
+        <a href="/studies" class="section">Studies</a>
         <i class="right chevron icon divider"></i>
       </div>
       <h3 data-bind="text: titleObs"></h3>
@@ -21,7 +21,7 @@
         <div class="ui floating dropdown icon button">
           <i class="dropdown icon"></i>
           <div class="menu">
-            <a class="item" data-bind="href: '#/studies/'+studyId+'/participants/new/general'">New Participant</a>
+            <a class="item" data-bind="href: `/studies/${studyId}/participants/new/general`">New Participant</a>
             <a class="item" data-bind="click: enrollDialog, visible: isResearcher">Enroll Existing&hellip;</a>
             <a class="item" data-bind="click: importDialog">Import External IDs&hellip;</a>
           </div>
@@ -62,7 +62,8 @@
               </span>
             </td>
             <td>
-              <a data-bind="href: '#/studies/'+$parent.studyId+'/participants/'+$data.id+'/general', html: $component.formatParticipantLabel($data, $parent.studyId)"></a>
+              <a data-bind="href: `/studies/${$parent.studyId}/participants/${$data.id}/general`, 
+                html: $component.formatParticipantLabel($data, $parent.studyId)"></a>
               <p style="padding-left: 0" class="help-text" data-bind="text: $data.note"></p>
             </td>
             <td data-bind="text: $component.formatStatus($data)"></td>

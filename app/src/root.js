@@ -118,7 +118,7 @@ let RootViewModel = function() {
     self.emailObs(session.email);
     self.testUserObs(session.dataGroups.includes('test_user'));
     self.userId = session.id;
-    self.accountUrlObs(`#/participants/${session.id}/general`);
+    self.accountUrlObs(`/participants/${session.id}/general`);
     serverService.getApp().then(function(app) {
       self.notificationsEnabledObs(Object.keys(app.pushNotificationARNs).length > 0);
     });
@@ -147,7 +147,6 @@ let params = new URLSearchParams(document.location.search);
 for (let p of params.keys()) {
   root.queryParams[p] = params.get(p);
 }
-root.queryParams.appPath = document.location.pathname.substring(1);
 console.debug("root.queryParams", root.queryParams);
 
 export default root;

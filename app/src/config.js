@@ -52,10 +52,12 @@ export default {
     progressBar: true,
     positionClass: "toast-bottom-center",
     preventDuplicates: true,
+    /*
     showDuration: "300",
     hideDuration: 300,
     timeOut: 7000,
     extendedTimeOut: "1000",
+    */
     showEasing: "swing",
     hideEasing: "linear",
     showMethod: "fadeIn",

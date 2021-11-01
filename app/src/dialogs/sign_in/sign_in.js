@@ -53,7 +53,7 @@ function makeReloader(appKey, environment) {
 export default function() {
   let self = this;
 
-  let isLocked = fn.isNotBlank(root.queryParams.appPath);
+  let isLocked = fn.isNotBlank(root.queryParams.appId);
   const SYNTH_EVENT = { target: document.querySelector("#submitButton") };
 
   let appKey, env;

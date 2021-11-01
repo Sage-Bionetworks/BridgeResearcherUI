@@ -16,12 +16,12 @@ export default class StudyParticipantTimeline extends TimelineBaseAccount {
     });
   }
   searchLink(item) {
-    return `?instanceGuid=${item.instanceGuid}#/studies/${this.studyId}/participants/${this.userId}/schedule/adherencesearch`
+    return `/studies/${this.studyId}/participants/${this.userId}/schedule/adherencesearch?instanceGuid=${item.instanceGuid}`
   }
   loadAccount() { 
     return serverService.getStudyParticipant(this.studyId, this.userId);
   }
   link(postfix) {
-    return `#/studies/${this.studyId}/participants/${encodeURIComponent(this.userId)}/${postfix}`;
+    return `/studies/${this.studyId}/participants/${encodeURIComponent(this.userId)}/${postfix}`;
   }
 }

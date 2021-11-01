@@ -19,6 +19,6 @@ export default class ParticipantReport extends ReportBaseAccount {
     return serverService.deleteParticipantReportRecord(this.userId, this.identifier, item.date);
   }
   linkMaker() {
-    return `#/participants/${this.userId}/reports`; 
+    return `/participants/${this.userId}/reports`; 
   }
 }

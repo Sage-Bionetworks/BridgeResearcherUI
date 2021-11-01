@@ -34,14 +34,14 @@ export default function surveyVersions(params) {
     delete: (item) => serverService.deleteSurvey(item, false),
     deletePermanently: (item) => serverService.deleteSurvey(item, true),
     refresh: load,
-    redirect: "#/surveys"
+    redirect: "/surveys"
   });
 
   // redirect, you just deleted the record you last loaded in the tabset.
   function redirectIfDeleteSelf(thisSurvey) {
     return function(response) {
       if (thisSurvey.createdOn === fn.formatDateTime(params.createdOn, "iso")) {
-        document.location = "#/surveys";
+        document.location = "/surveys";
         return response;
       } else {
         return load();

@@ -28,7 +28,7 @@ export default function history(params) {
     name: "configuration element revision",
     refresh: load,
     id: "config-el-history",
-    redirect: "#/configs",
+    redirect: "/configs",
     delete: (item) => serverService.deleteAppConfigElementRevision(item.id, item.revision, false),
     deletePermanently: (item) => serverService.deleteAppConfigElementRevision(item.id, item.revision, true),
     undelete: (item) => serverService.updateAppConfigElement(item)

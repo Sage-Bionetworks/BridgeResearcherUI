@@ -8,7 +8,7 @@ export default class StudyParticipantReport extends ReportBaseAccount {
       ...params,
       errorId: 'studyparticipant-report',
       notFoundParams: {
-        redirectTo: `#/studies/${params.studyId}/participants`,
+        redirectTo: `/studies/${params.studyId}/participants`,
         redirectMsg: "Participant not found"
       }
     });
@@ -21,6 +21,6 @@ export default class StudyParticipantReport extends ReportBaseAccount {
     return serverService.deleteParticipantReportRecord(this.userId, this.identifier, item.date);
   }
   linkMaker() {
-    return `#/studies/${this.studyId}/participants/${encodeURIComponent(this.userId)}/reports`;
+    return `/studies/${this.studyId}/participants/${encodeURIComponent(this.userId)}/reports`;
   }
 }

@@ -2,7 +2,7 @@
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
       <div class="ui breadcrumb">
-        <a href="#/sharedassessments" class="section">Shared Assessments</a>
+        <a href="/sharedassessments" class="section">Shared Assessments</a>
         <i class="right chevron icon divider"></i>
       </div>
       <h3 data-bind="text: pageTitleObs"></h3>
@@ -18,7 +18,7 @@
   <div slot="header">
     <div class="line-control">
       <div class="ui breadcrumb">
-        <a class="section" data-bind="href:'#/sharedassessments/'+guid+'/general'">Latest Assessment</a>
+        <a class="section" data-bind="href: `/sharedassessments/${guid}/general`">Latest Assessment</a>
         <i class="right chevron icon divider"></i>
         <b>Assessment Revisions</b>
       </div>
@@ -45,7 +45,7 @@
       <tbody data-bind="foreach: itemsObs">
         <tr data-bind="css: {negative: $data.deleted}">
           <td nowrap>
-            <a data-bind="text: $parent.formatTitle($data), href: '#/sharedassessments/' + $data.guid"></a>
+            <a data-bind="text: $parent.formatTitle($data), href: `/sharedassessments/${$data.guid}`"></a>
           </td>
           <td data-bind="text: $parent.formatOrg($data.ownerId)"></td>
           <td data-bind="text: $data.tags.join(', ')"></td>

@@ -9,6 +9,7 @@ module.exports = Object.assign({}, {
     mode: 'development',
     devtool: 'inline-source-map',
     devServer: {
+        historyApiFallback: true,
         static: './app',
         watchFiles: ['./app/src/**']
     }

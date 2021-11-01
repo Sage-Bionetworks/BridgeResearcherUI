@@ -76,7 +76,7 @@ export default function(params) {
       .catch(utils.failureHandler({ id: "template-history" }));
   };
   self.createHistoryLink = ko.computed(function() {
-    return `#/templates/${self.templateTypeObs()}/${self.guidObs()}/history`;
+    return `/templates/${self.templateTypeObs()}/${self.guidObs()}/history`;
   });
 
   function publishState(template) {

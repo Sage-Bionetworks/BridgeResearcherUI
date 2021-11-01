@@ -30,7 +30,7 @@ export default class UploadsViewModel {
   makeSuccess(vm, event) {
     return response => {
       event.target.parentNode.parentNode.classList.remove("loading");
-      document.location = `#/admin/uploads/${response.uploadId}`;
+      document.location = `/admin/uploads/${response.uploadId}`;
     };
   }
   classFor(item) {
@@ -119,7 +119,7 @@ export default class UploadsViewModel {
       let id = item.schemaId;
       let rev = item.schemaRevision;
       item.contentObs(id);
-      item.hrefObs("/#/schemas/" + encodeURIComponent(id) + "/versions/" + rev + "/editor");
+      item.hrefObs("/schemas/" + encodeURIComponent(id) + "/versions/" + rev + "/editor");
     }
     item.progressState = this.uploadProgressBarState(item);
     item.requestedOnFormatted = fn.formatDateTime(item.requestedOn);

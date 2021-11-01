@@ -2,7 +2,7 @@
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
       <div class="ui breadcrumb">
-        <a href="#/sharedassessments" class="section">Shared Assessments</a>
+        <a href="/sharedassessments" class="section">Shared Assessments</a>
         <i class="right chevron icon divider"></i>
       </div>
       <h3 data-bind="text: pageTitleObs"></h3>
@@ -48,10 +48,10 @@
           <div class="description" data-bind="text: $data.description"></div>
         </a>
         <div class="extra content">
-          <span class="right floated linked" data-bind="click: 
-            () => document.location = `#/sharedassessments/${$parent.guidObs()}/resources/${$data.guid}`">
-            Edit Details
-          </span>
+          <a class="right floated linked" 
+            data-bind="href: `/sharedassessments/${$parent.guidObs()}/resources/${$data.guid}`">
+          Edit Details
+          </a>
           <span>
             <span data-bind="visible: $parent.canEdit()">
               <ui-checkbox data-bind="visible: !$data.deletedObs()" params="checkedObs: $data.checkedObs"></ui-checkbox>

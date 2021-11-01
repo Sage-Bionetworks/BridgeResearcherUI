@@ -60,14 +60,14 @@ export default function uploadDetails(params) {
   });
   self.linkObs = ko.computed(function() {
     if (params.studyIdObs) {
-      return `#/studies/${params.studyIdObs()}/participants/${encodeURIComponent("healthCode:" + self.healthCodeObs())}/general`;
+      return `/studies/${params.studyIdObs()}/participants/${encodeURIComponent("healthCode:" + self.healthCodeObs())}/general`;
     } else {
-      return `#/participants/${encodeURIComponent("healthCode:" + self.healthCodeObs())}/general`;
+      return `/participants/${encodeURIComponent("healthCode:" + self.healthCodeObs())}/general`;
     }
     
   });
   self.schemaLinkObs = ko.computed(function() {
-    return "#/schemas/" + self.schemaIdObs() + "/versions/" + self.schemaRevisionObs() + "/editor";
+    return "/schemas/" + self.schemaIdObs() + "/versions/" + self.schemaRevisionObs() + "/editor";
   });
   self.schemaLabel = ko.computed(function() {
     return (self.schemaIdObs()) ? (self.schemaIdObs() + " v." + self.schemaRevisionObs()) : '';

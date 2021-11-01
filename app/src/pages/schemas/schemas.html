@@ -17,7 +17,7 @@
         <div class="ui primary tiny floating dropdown icon button" data-bind="semantic: 'dropdown-button'">
           <i class="dropdown icon"></i>
           <div class="menu">
-            <a href="#/schemas/new" class="item">New Schema</a>
+            <a href="/schemas/new" class="item">New Schema</a>
             <div class="item" data-bind="click: openModuleBrowser">Import Upload Schema&hellip;</div>
           </div>
         </div>
@@ -28,7 +28,7 @@
 </div>
 <bsm-layout id="schemas">
   <div slot="content">
-    <p>Schemas are also produced for published surveys. View these schemas under the schema tab in the survey editor. Common metadata fields can be configured app-wide through <a href="#/shared_upload_metadata">shared upload medata configuration</a>.
+    <p>Schemas are also produced for published surveys. View these schemas under the schema tab in the survey editor. Common metadata fields can be configured app-wide through <a href="/shared_upload_metadata">shared upload medata configuration</a>.
     </p>
   
     <table class="ui compact selectable table">
@@ -60,18 +60,14 @@
             ></i>
           </td>
           <td>
-            <a
-              data-bind="attr: {'href': '#/schemas/'+encodeURIComponent($data.schemaId)+
-                          '/versions/'+$data.revision+'/editor'}, text: $data.name"
-            ></a>
+            <a data-bind="text: $data.name,
+              href: `/schemas/${encodeURIComponent($data.schemaId)}/versions/${$data.revision}/editor`"></a>
           </td>
           <td data-bind="text: $parent.schemaTypeLabel($data.schemaType)"></td>
           <td data-bind="text: $data.revision"></td>
           <td data-bind="html: $parent.label($data)"></td>
-          <td
-            data-bind="attr: {'data-html': $parent.moduleHTML($data)}, 
-                      semantic: 'popup', html: $parent.formatModuleLink($data)"
-          ></td>
+          <td data-bind="attr: {'data-html': $parent.moduleHTML($data)}, 
+            semantic: 'popup', html: $parent.formatModuleLink($data)"></td>
         </tr>
       </tbody>
     </table>

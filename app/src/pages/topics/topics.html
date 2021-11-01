@@ -6,7 +6,7 @@
     <div class="fixed-header-buttons">
       <delete-button params="canDeletePermanently: isAdmin(), delete: deleteItems, 
         deletePermanently: deletePermanently, disabled: !atLeastOneChecked()"></delete-button>
-      <a href="#/topics/new" class="ui primary tiny button">New Topic</a>
+      <a href="/topics/new" class="ui primary tiny button">New Topic</a>
     </div>
   </div>
   <div class="ui empty secondary pointing menu"></div>
@@ -41,7 +41,7 @@
               style="cursor: pointer" class="green undo icon"></i>
           </td>
           <td nowrap>
-            <div><a data-bind="text: $data.name, href: '#/topics/' + encodeURIComponent($data.guid)"></a></div>
+            <div><a data-bind="text: $data.name, href: `/topics/${encodeURIComponent($data.guid)}`"></a></div>
             <div data-bind="text: $data.description"></div>
           </td>
           <td data-bind="text: $parent.label($data.criteria)"></td>
@@ -55,13 +55,13 @@
     </div>
   </div>
   <div slot="help">
-        <p><b>To send a push notification to a group of users, send the message through a topic.</b></p>
+    <p><b>To send a push notification to a group of users, send the message through a topic.</b></p>
 
-        <p>You can define any topics you want for your app. Then, if an app has registered to receive notifications, <em>and</em> subscribed to a specific topic, that user will receive any notifications you send to that topic.</p>
+    <p>You can define any topics you want for your app. Then, if an app has registered to receive notifications, <em>and</em> subscribed to a specific topic, that user will receive any notifications you send to that topic.</p>
 
-        <p>The user always has a choice to receive notifications or not (this relates to registering the device through the Bridge API). It is up to your application's design whether to expose topic subscriptions as a user preference, but these can be likened to selecting the <em>kinds</em> of topics a participant would like to receive.</p>
+    <p>The user always has a choice to receive notifications or not (this relates to registering the device through the Bridge API). It is up to your application's design whether to expose topic subscriptions as a user preference, but these can be likened to selecting the <em>kinds</em> of topics a participant would like to receive.</p>
 
-        <p>It is strongly recommended you create a "General" topic and subscribe all users to it who agree to
-          notifications, in the event you wish to message your entire community of participants. </p>
+    <p>It is strongly recommended you create a "General" topic and subscribe all users to it who agree to
+      notifications, in the event you wish to message your entire community of participants. </p>
   </div>
 </bsm-layout>

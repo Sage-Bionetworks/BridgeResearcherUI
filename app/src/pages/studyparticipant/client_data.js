@@ -7,7 +7,7 @@ export default class ClientDataParticipant extends ClientDataBaseAccount {
       ...params, 
       errorId: 'studyparticipant-client-data',
       notFoundParams: {
-        redirectTo: `#/studies/${params.studyId}/participants`,
+        redirectTo: `/studies/${params.studyId}/participants`,
         redirectMsg: "Participant not found"
       }
     });

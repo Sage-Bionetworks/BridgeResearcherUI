@@ -131,7 +131,7 @@ export default class ConsentsBaseAccount extends BaseAccount {
           histories[subpop.guid].reverse().map((record, i) => {
             let history = { consented: true, isFirst: i === 0 };
             history.consentGroupName = subpop.name;
-            history.consentURL = "/#/subpopulations/" + subpop.guid + "/consents/" + record.consentCreatedOn;
+            history.consentURL = "/subpopulations/" + subpop.guid + "/consents/" + record.consentCreatedOn;
             history.subpopulationGuid = subpop.guid;
             history.subpopulationGuidIndex = i;
             history.name = record.name;
