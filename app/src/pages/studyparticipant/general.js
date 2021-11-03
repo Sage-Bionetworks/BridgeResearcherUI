@@ -8,7 +8,7 @@ export default class GeneralParticipant extends GeneralBaseAccount {
       ...params,
       errorId: 'studyparticipant-general',
       notFoundParams: {
-        redirectTo: `#/studies/${params.studyId}/participants`,
+        redirectTo: `/studies/${params.studyId}/participants`,
         redirectMsg: "Participant not found"
       }
     });
@@ -22,14 +22,14 @@ export default class GeneralParticipant extends GeneralBaseAccount {
   }
   createAccount() {
     return serverService.createStudyParticipant(this.studyId, this.account)
-      .then(res => window.location = `#/studies/${this.studyId}/participants/${res.identifier}/general`);
+      .then(res => window.location = `/studies/${this.studyId}/participants/${res.identifier}/general`);
   }
   updateAccount(vm, event) { 
     return serverService.updateStudyParticipant(this.studyId, this.account);
   }
   deleteAccount() {
     return serverService.deleteStudyParticipant(this.studyId, this.userId)
-        .then(() => window.location = `#/studies/${this.studyId}/participants`);
+        .then(() => window.location = `/studies/${this.studyId}/participants`);
   }
   requestAccountResetPassword() {
     return serverService.requestStudyParticipantResetPassword(this.studyId, this.userId);

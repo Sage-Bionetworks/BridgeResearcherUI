@@ -14,7 +14,7 @@ export default function tabset(params) {
   self.computeds = [];
   self.linkMaker = function(tabName) {
     let c = ko.computed(function() {
-      return "#/schemas/" + encodeURIComponent(self.schemaIdObs()) + "/versions/" + self.revisionObs() + "/" + tabName;
+      return "/schemas/" + encodeURIComponent(self.schemaIdObs()) + "/versions/" + self.revisionObs() + "/" + tabName;
     });
     self.computeds.push(c);
     return c;

@@ -18,7 +18,8 @@ export default function upload(params) {
     .obs("subTitle", params.guid)
     .obs("uploadDetails")
     .bind("navStudyId", params.studyId)
-    .bind("navStudyName");
+    .bind("navStudyName")
+    .bind("dataGroups[]", []);
 
   serverService.getStudy(params.studyId).then((response) => {
     self.navStudyNameObs(response.name);
@@ -27,6 +28,7 @@ export default function upload(params) {
     self.titleObs(part.name);
     self.nameObs(part.name);
     self.statusObs(part.status);
+    self.dataGroupsObs(part.dataGroups);
   });
   serverService.getUploadById(params.guid)
     .then(response => self.uploadDetailsObs(response))

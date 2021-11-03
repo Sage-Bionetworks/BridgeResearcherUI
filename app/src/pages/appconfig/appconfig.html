@@ -2,7 +2,7 @@
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
       <div class="ui breadcrumb">
-        <a href="#/app_configs" class="section">App Configs</a>
+        <a href="/app_configs" class="section">App Configs</a>
         <i class="right chevron icon divider"></i>
       </div>
       <h3 data-bind="text: titleObs"></h3>
@@ -39,7 +39,7 @@
           <tr>
             <td>
               <a target="_blank" data-bind="attr: {
-                href: '#/schemas/'+$data.id+'/versions/'+$data.revisionObs()+'/editor'}">
+                href: '/schemas/'+$data.id+'/versions/'+$data.revisionObs()+'/editor'}">
                 <span data-bind="text: $data.name"></span>
                 <i class="ui external icon"></i>
               </a>
@@ -65,7 +65,7 @@
           <tr>
             <td>
               <a target="_blank" data-bind="attr: {
-                href: '#/surveys/'+$data.guid+'/'+$data.createdOnObs()+'/editor'}">
+                href: '/surveys/'+$data.guid+'/'+$data.createdOnObs()+'/editor'}">
                 <span data-bind="text: $data.name"></span>
                 <i class="ui external icon"></i>
               </a>
@@ -89,7 +89,7 @@
       <table class="ui compact table" style="width: auto" data-bind="visible: fileReferencesObs().length > 0">
         <tbody data-bind="foreach: fileReferencesObs">
           <td>
-            <a target="_blank" data-bind="attr: {href: '#/files/'+$data.guid}">
+            <a target="_blank" data-bind="href: `/files/${$data.guid}`">
               <span data-bind="text: $data.name"></span>
               <i class="ui external icon"></i>
             </a>
@@ -112,7 +112,7 @@
       <table class="ui compact table" style="width: auto" data-bind="visible: assessmentReferencesObs().length > 0">
         <tbody data-bind="foreach: assessmentReferencesObs">
           <td>
-            <a target="_blank" data-bind="attr: {href: $parent.assessmentHref($data)}">
+            <a target="_blank" data-bind="href: $parent.assessmentHref($data)">
               <span data-bind="text: $data.titleObs"></span>
               <i class="ui external icon"></i>
             </a>
@@ -138,7 +138,7 @@
           <tr>
             <td>
               <a target="_blank" data-bind="attr: {
-                href: '#/configs/'+$data.id+'/revisions/'+$data.revisionObs()+'/editor'}">
+                href: '/configs/'+$data.id+'/revisions/'+$data.revisionObs()+'/editor'}">
                 <span data-bind="text: $data.name"></span>
                 <i class="ui external icon"></i>
               </a>

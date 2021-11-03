@@ -52,7 +52,7 @@
           <td>
             <div>
               <a data-bind="text: $data.uploadId,
-              href: `#/studies/${$component.studyIdObs()}/participants/${$component.userIdObs()}/uploads/${$data.uploadId}`"></a>
+              href: `/studies/${$component.studyIdObs()}/participants/${$component.userIdObs()}/uploads/${$data.uploadId}`"></a>
             </div>
             <div data-bind="visible: !!$data.contentObs()">
               Schema: <a target="_blank" rel="noopener" data-bind="href: $data.hrefObs, text: $data.contentObs"></a>

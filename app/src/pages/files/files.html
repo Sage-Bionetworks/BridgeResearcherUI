@@ -6,7 +6,7 @@
     <div class="fixed-header-buttons">
       <delete-button params="canDeletePermanently: isAdmin(), delete: deleteItems, 
         deletePermanently: deletePermanently, disabled: !atLeastOneChecked()"></delete-button>
-      <a href="#/files/new" class="ui primary tiny button">New File</a>
+      <a href="/files/new" class="ui primary tiny button">New File</a>
     </div>
   </div>
   <div class="ui empty secondary pointing menu"></div>
@@ -41,8 +41,7 @@
           </td>
           <td>
             <span data-bind="text: $data.name, visible: $data.deletedObs"></span>
-            <a data-bind="href: '#/files/'+$data.guid, text: $data.name, 
-              visible: !$data.deletedObs()"></a>
+            <a data-bind="href: `/files/${$data.guid}`, text: $data.name, visible: !$data.deletedObs()"></a>
           </td>
           <td data-bind="text: $data.description"></td>
         </tr>

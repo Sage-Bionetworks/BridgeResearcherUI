@@ -15,12 +15,14 @@ export default function upload(params) {
     .obs("status")
     .obs("userId", params.userId)
     .obs("subTitle", params.guid)
+    .obs("dataGroups[]")
     .obs("uploadDetails");
 
   serverService.getParticipantName(params.userId).then(function(part) {
     self.titleObs(part.name);
     self.nameObs(part.name);
     self.statusObs(part.status);
+    self.dataGroupsObs(part.dataGroups);
   });
   serverService.getUploadById(params.guid)
     .then(response => self.uploadDetailsObs(response))

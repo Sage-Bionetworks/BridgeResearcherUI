@@ -15,11 +15,11 @@ export default class ParticipantReports extends ReportsBaseAccount {
   loadAccount() {
     return serverService.getParticipant(this.userId);
   }
-  deleteReport(item) {
-    return serverService.deleteParticipantReport(item.identifier, this.userId);
+  deleteReportIndex(item) {
+    return serverService.deleteParticipantReportIndex(item.identifier);
   }
   reportURL(item) {
-    return `#/participants/${this.userId}/reports/${item.identifier}`;
+    return `/participants/${this.userId}/reports/${item.identifier}`;
   }
   loadReports() { 
     return serverService.getParticipantReports();

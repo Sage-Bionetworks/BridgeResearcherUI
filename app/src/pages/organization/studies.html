@@ -2,7 +2,7 @@
   <div class="fixed-header-title">
     <div class="fixed-header-heading">
       <div class="ui breadcrumb">
-        <a href="#/organizations" class="section">Organizations</a>
+        <a href="/organizations" class="section">Organizations</a>
         <i class="right chevron icon divider"></i>
       </div>
       <h3 data-bind="text: titleObs"></h3>
@@ -40,7 +40,7 @@
         <tr>
           <td>
             <a data-bind="visible: $component.canAccessStudy(), 
-              href: '#/studies/'+$data.identifier, text: $data.name"></a>
+              href: '/studies/'+$data.identifier, text: $data.name"></a>
             <span data-bind="visible: !$component.canAccessStudy(), text: $data.name"></span>
           </td>
           <td data-bind="text: $data.identifier"></td>

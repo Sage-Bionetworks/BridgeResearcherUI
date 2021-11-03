@@ -305,3 +305,16 @@ bsm-layout, .scrollbox {
 errors + .ui.message {
   margin-top: 0;
 }
+
+/* TODO: maybe remove this, the participants screen got too crowded. */
+.ui.secondary.pointing.menu {
+  /*outline: 1px solid red;*/
+  padding-top: 1rem!important;
+  padding-left: 1rem!important;
+}
+.ui.secondary.pointing.menu > * {
+  padding: .5rem .75rem!important;
+}
+.right.menu > * {
+  padding: 0rem .75rem!important;
+}

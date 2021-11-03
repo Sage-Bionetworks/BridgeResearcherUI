@@ -29,7 +29,7 @@ export default {
   persistQuery: function(prefix, object) {
     let queryString = fn.queryString(object, prefix);
     let url = window.location.origin + window.location.pathname + queryString + document.location.hash;
-    window.history.pushState({ path: url }, "", url);
+    window.history.replaceState({}, "", url);
   },
   restoreQuery: function(prefix, ...arrayNames) {
     let loc = document.location.search;

@@ -38,7 +38,7 @@ export default class GeneralAssessment extends BaseAssessment {
       .catch(this.failureHandler);
   }
   createHistoryLink() {
-    return `#/assessments/${this.guidObs()}/history`;
+    return `/assessments/${this.guidObs()}/history`;
   }
   publish(vm, event) {
     alerts.prompt("Do you want to define a new identifier for this assessment "+

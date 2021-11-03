@@ -51,7 +51,7 @@ export default function schemaVersions(params) {
   }
   // similar to tabset
   self.link = function(item) {
-    return "#/schemas/" + encodeURIComponent(item.schemaId) + "/versions/" + item.revision + "/editor";
+    return "/schemas/" + encodeURIComponent(item.schemaId) + "/versions/" + item.revision + "/editor";
   };
   self.publish = function(item) {
     utils.startHandler(item, event);

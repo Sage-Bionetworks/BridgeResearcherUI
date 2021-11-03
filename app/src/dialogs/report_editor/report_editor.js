@@ -20,7 +20,7 @@ export default class AddReport {
       .bind("data", AddReport.jsonAsString(params.data), null, AddReport.stringAsJson)
       .bind("studyIds[]", params.studyIds || [])
       .obs("studyOptions[]")
-      .obs("isAdd", params.add && !params.studyId);
+      .obs("isAdd", params.add);
 
     if (this.studyId) {
       this.studyIdsObs([this.studyId]);
@@ -29,25 +29,26 @@ export default class AddReport {
       this.studyOptionsObs(studies.items.map(sub => sub.identifier));
     });
   }
-  addReport(entry) {
-    return this.type === "participant" ? 
-      serverService.addParticipantReport(this.userId, entry.identifier, entry) : 
-      serverService.addStudyReport(entry.identifier, entry);
+  addReport(entry, event) {
+    if (this.studyId && this.type === 'participant') {
+      console.log("1");
+      return serverService.addStudyParticipantReport(this.studyId, this.userId, entry.identifier, entry)
+    } else if (this.type === 'participant') {
+      console.log("2");
+      return serverService.addParticipantReport(this.userId, entry.identifier, entry)
+    } else {
+      console.log("3");
+      return serverService.addStudyReport(entry.identifier, entry)
+    }
   }
   save(vm, event) {
     let entry = this.binder.persist({});
 
-    let error = new BridgeError();
-    error.addErrorIf(!entry.identifier, "identifier", "is required");
-    error.addErrorIf(!entry.data, "data", "is required");
-
-    if (!error.displayErrors()) {
-      utils.startHandler(vm, event);
-      this.addReport(entry)
-        .then(this.close)
-        .then(utils.successHandler(vm, event))
-        .catch(utils.failureHandler({id: 'report-editor'}));
-    }
+    utils.startHandler(vm, event);
+    this.addReport(entry)
+      .then(this.close)
+      .then(utils.successHandler(vm, event))
+      .catch(utils.failureHandler({id: 'report-editor'}));
   }
   static getLocalDate(value) {
     return fn.formatDate(value, "iso");

@@ -32,7 +32,7 @@ export default class ReportBaseAccount extends BaseAccount {
     this.doCalSearch = this.doCalSearch.bind(this);
 
     this.getAccount()
-      .then(() => serverService.getParticipantReportIndex(params.identifier))
+      .then(() => this.getParticipantReportIndex())
       .then((index) => this.studyIds = index.studyIds)
       .then(() => this.getReports())
       .catch(fn.seq(utils.failureHandler(this.failureParams), () => this.itemsObs([])));    
@@ -45,6 +45,9 @@ export default class ReportBaseAccount extends BaseAccount {
   }
   canEdit() {
     return root.isDeveloper() || root.isStudyCoordinator();
+  }
+  getParticipantReportIndex() {
+    return serverService.getParticipantReportIndex(this.identifierObs());
   }
   getReports() {
     let startDate = fn.formatDate(this.startDateObs(), 'iso');
@@ -71,6 +74,7 @@ export default class ReportBaseAccount extends BaseAccount {
       closeDialog: this.closeDialog.bind(this),
       identifier: this.identifier,
       userId: this.userId,
+      studyId: this.studyId,
       type: "participant",
       studyIds: this.studyIds
     });
@@ -89,6 +93,7 @@ export default class ReportBaseAccount extends BaseAccount {
       closeDialog: self.closeDialog.bind(self),
       identifier: self.identifier,
       userId: self.userId,
+      studyId: self.studyId,
       date: item.date,
       data: item.data,
       type: "participant",

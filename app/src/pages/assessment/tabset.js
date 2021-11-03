@@ -7,7 +7,7 @@ export default class AssessmentTabset {
       "originGuidObs", "canEditObs");
     this.computeds = [];
     this.linkMaker = (tabName) => {
-      let c = ko.computed(() => `#/assessments/${this.guidObs()}/${tabName}`);
+      let c = ko.computed(() => `/assessments/${this.guidObs()}/${tabName}`);
       this.computeds.push(c);
       return c;
     };

@@ -42,7 +42,7 @@ function getEmail(studyId, userId) {
 function makeSuccess(vm, event) {
   return function(response) {
     event.target.parentNode.parentNode.classList.remove("loading");
-    document.location = `#/studies/${vm.studyId}/participants/${response.id}/general`;
+    document.location = `/studies/${vm.studyId}/participants/${response.id}/general`;
   };
 }
 

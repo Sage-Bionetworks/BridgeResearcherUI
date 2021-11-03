@@ -27,7 +27,7 @@ export default function editor(params) {
     return self.createdOnObs() === "recent" || self.createdOnObs() === self.publishedConsentCreatedOnObs();
   });
   self.createHistoryLink = ko.computed(function() {
-    return "#/subpopulations/" + self.guidObs() + "/editor/" + self.createdOnObs() + "/history";
+    return "/subpopulations/" + self.guidObs() + "/editor/" + self.createdOnObs() + "/history";
   });
 
   // subpopulation fields

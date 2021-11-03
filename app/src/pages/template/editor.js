@@ -53,7 +53,7 @@ export default function(params) {
       .catch(utils.failureHandler())
   };
   self.createHistoryLink = ko.computed(() => {
-    return `#/templates/${self.templateTypeObs()}/${self.guidObs()}/editor/${self.createdOnObs()}/history`;
+    return `/templates/${self.templateTypeObs()}/${self.guidObs()}/editor/${self.createdOnObs()}/history`;
   });
   self.initEditor = ckeditor => {
     this.editor = ckeditor;

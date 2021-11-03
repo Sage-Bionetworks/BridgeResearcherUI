@@ -88,7 +88,7 @@ export default class AssessmentResource extends BaseAssessment {
       .then(fn.handleObsUpdate(this.subPageTitleObs, "title"))
       .then(fn.handleObsUpdate(this.resourceGuidObs, "guid"))
       .then(utils.successHandler(vm, event, "Assessment resource has been saved."))
-      .then(() => document.location = `#/assessments/${this.guidObs()}/resources/${this.resourceGuidObs()}`)
+      .then(() => document.location = `/assessments/${this.guidObs()}/resources/${this.resourceGuidObs()}`)
       .catch(this.failureHandler);
   }
 }

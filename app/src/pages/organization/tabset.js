@@ -11,7 +11,7 @@ export default function tabset(params) {
   self.computeds = [];
   self.linkMaker = function(tabName) {
     let c = ko.computed(function() {
-      return "#/organizations/" + self.identifierObs() + '/' + tabName;
+      return "/organizations/" + self.identifierObs() + '/' + tabName;
     });
     self.computeds.push(c);
     return c;

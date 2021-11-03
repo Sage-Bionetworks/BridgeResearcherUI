@@ -29,7 +29,7 @@
           <td>
             <ui-radio params="checkedObs: $data.checkedObs"></ui-radio>
           </td>
-          <td data-bind="text: $component.formatParticipantLabel($data)"></td>
+          <td data-bind="html: $component.formatParticipantLabel($data)"></td>
           <td>
             <span data-bind="visible: $data.studyIds.includes($parent.studyId)">
               Account already enrolled in this study

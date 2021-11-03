@@ -7,7 +7,7 @@ export default class RequestInfoParticipant extends RequestInfoBaseAccount {
       ...params, 
       errorId: 'studyparticipant-request-info',
       notFoundParams: {
-        redirectTo: `#/studies/${params.studyId}/participants`,
+        redirectTo: `/studies/${params.studyId}/participants`,
         redirectMsg: "Participant not found"
       }
     });

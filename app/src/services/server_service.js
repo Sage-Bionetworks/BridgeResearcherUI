@@ -595,6 +595,9 @@ export class ServerService {
   deleteParticipantReport(identifier, userId) {
     return this.del(`${config.participants}/${userId}/reports/${identifier}`);
   }
+  deleteParticipantReportIndex(identifier) {
+    return this.del(`${config.participants}/reports/${identifier}`);
+  }
   deleteParticipantReportRecord(userId, identifier, date) {
     return this.del(`${config.participants}/${userId}/reports/${identifier}/${date}`);
   }
@@ -648,50 +651,6 @@ export class ServerService {
   }
   deleteTaskDefinition(taskId) {
     return this.del(`${config.compoundactivitydefinitions}/${esc(taskId)}`);
-  }
-  getMetadata(search, modType) {
-    // mostrecent: "true", published: "false", name: null, notes: null, tags: null
-    search = search || {};
-    let queryString = fn.queryString(search);
-    return this.gethttp(config.metadata + queryString).then(function(response) {
-      if (modType === "survey" || modType === "schema") {
-        response.items = response.items.filter(function(item) {
-          return item.moduleType === modType;
-        });
-      }
-      return response;
-    });
-  }
-  createMetadata(metadata) {
-    return this.post(config.metadata, metadata);
-  }
-  getMetadataLatestVersion(id) {
-    return this.gethttp(`${config.metadata}/${esc(id)}`);
-  }
-  getMetadataVersion(id, version) {
-    return this.gethttp(`${config.metadata}/${esc(id)}/versions/${esc(version)}`);
-  }
-  getMetadataAllVersions(id, includeDeleted) {
-    // id, mostrecent: "true", published: "false", name: null, notes: null, tags: null
-    let queryString = fn.queryString({ includeDeleted: includeDeleted === true, mostrecent: false });
-    return this.gethttp(`${config.metadata}/${esc(id)}/versions${queryString}`);
-  }
-  updateMetadata(metadata) {
-    return this.post(`${config.metadata}/${esc(metadata.id)}/versions/${esc(metadata.version)}`, metadata);
-  }
-  deleteMetadata(id, physical) {
-    let queryString = fn.queryString({ physical: physical === true });
-    return this.del(`${config.metadata}/${esc(id)}/versions${queryString}`);
-  }
-  deleteMetadataVersion(id, version, physical) {
-    let queryString = fn.queryString({ physical: physical === true });
-    return this.del(`${config.metadata}/${esc(id)}/versions/${esc(version)}${queryString}`);
-  }
-  importMetadata(id, version) {
-    let url = typeof version === "number" ? 
-      `${config.sharedmodules}/${esc(id)}/versions/${esc(version)}/import` : 
-      `${config.sharedmodules}/${esc(id)}/import`;
-    return this.post(url);
   }
   startExport() {
     return this.post(`${config.export}/start`);
@@ -1060,6 +1019,30 @@ export class ServerService {
   sendStudyParticipantInstallLink(studyId, userId) {
     return this.post(`${config.studies}/${studyId}/participants/${userId}/sendInstallLink`);
   }
+
+  getStudyParticipantReports(studyId) {
+    return this.gethttp(`${config.studies}/${studyId}/participants/reports`);
+  }
+  getStudyParticipantReport(studyId, userId, identifier, startDate, endDate) {
+    let queryString = fn.queryString({ startDate, endDate });
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/reports/${identifier}${queryString}`);
+  }
+  getStudyParticipantReportIndex(studyId, identifier) {
+    return this.gethttp(`${config.studies}/${studyId}/participants/reports/${identifier}`);
+  }
+  addStudyParticipantReport(studyId, userId, identifier, report) {
+    return this.post(`${config.studies}/${studyId}/participants/${userId}/reports/${identifier}`, report);
+  }
+  deleteStudyParticipantReport(studyId, identifier, userId) {
+    return this.del(`${config.studies}/${studyId}/participants/${userId}/reports/${identifier}`);
+  }
+  deleteStudyParticipantReportIndex(studyId, identifier) {
+    return this.del(`${config.studies}/${studyId}/participants/reports/${identifier}`);
+  }
+  deleteStudyParticipantReportRecord(studyId, userId, identifier, date) {
+    return this.del(`${config.studies}/${studyId}/participants/${userId}/reports/${identifier}/${date}`);
+  }
+
   getTemplates(query) {
     let queryString = fn.queryString(query);
     return this.gethttp(`${config.templates}${queryString}`);
@@ -1122,21 +1105,6 @@ export class ServerService {
   }
   finishFileRevision(guid, createdOn) {
     return this.post(`${config.files}/${guid}/revisions/${createdOn}`);
-  }
-  getMasterSchedules() {
-    return this.gethttp(config.masterschedule);
-  }
-  createMasterSchedule(schedule) {
-    return this.post(config.masterschedule, schedule);
-  }
-  getMasterSchedule(scheduleId) {
-    return this.gethttp(`${config.masterschedule}/${scheduleId}`);
-  }
-  updateMasterSchedule(masterschedule) {
-    return this.post(`${config.masterschedule}/${masterschedule.scheduleId}`, masterschedule);
-  }
-  deleteMasterSchedule(scheduleId) {
-    return this.del(`${config.masterschedule}/${scheduleId}`);
   }
   getOrganizations(offsetBy, pageSize) {
     let queryString = fn.queryString({ offsetBy, pageSize });

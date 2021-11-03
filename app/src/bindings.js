@@ -343,10 +343,10 @@ ko.bindingHandlers.tab = {
 };
 
 function updateTabSelection(element) {
-  let hash = document.location.hash;
+  let path = document.location.pathname;
   let href = element.getAttribute("href");
   let tabPostFix = href ? "/" + href.split("/").pop() : href;
-  element.classList.toggle("active", hash.indexOf(tabPostFix) > -1);
+  element.classList.toggle("active", path.indexOf(tabPostFix) > -1);
 }
 
 ko.bindingHandlers.tabber = {

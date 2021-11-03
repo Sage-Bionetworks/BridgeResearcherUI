@@ -39,8 +39,7 @@
           </td>
           <td style="width:50%">
             <a data-bind="visible: $component.isVisible($data), 
-                          href: '#/reports/raw/' + encodeURIComponent($data.identifier), 
-                          text: $data.identifier"></a>
+                text: $data.identifier, href: `/reports/raw/${encodeURIComponent($data.identifier)}`"></a>
             <span data-bind="visible: !$component.isVisible($data), text: $data.identifier"></span>
           </td>
           <td style="width: 50%" data-bind="text: ($data.studyIds || []).join(', ')"></td>

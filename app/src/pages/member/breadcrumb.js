@@ -10,10 +10,10 @@ export default function breadcrumb(params) {
   self.orgNameObs = ko.observable('');
 
   self.getOrgLink = function(obs) {
-    return `#/organizations/${obs()}/general`;
+    return `/organizations/${obs()}/general`;
   }
   self.getMembersLink = function(obs) {
-    return `#/organizations/${obs()}/members`;
+    return `/organizations/${obs()}/members`;
   }
 
   optionsService.getOrganizationNames().then((response) => {
