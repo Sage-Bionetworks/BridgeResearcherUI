@@ -255,7 +255,6 @@ window.addEventListener('click', (event) => {
     event.preventDefault();
     event.stopPropagation();
     let route = event.target.getAttribute('href');
-    console.log("click captured: " + route);
     router.setRoute(route);
   }
 }, true);

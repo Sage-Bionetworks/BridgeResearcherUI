@@ -16,6 +16,9 @@
           <i class="search icon"></i>
         </div>
       </div>
+      <button class="ui red tiny button" data-bind="disable: !atLeastOneChecked(), click: deleteItems">
+        Delete
+      </button>
       <div class="ui primary tiny buttons">
         <div class="ui button" data-bind="semantic: 'dropdown-button-toggle', container: '.buttons'">Add Participant&hellip;</div>
         <div class="ui floating dropdown icon button">
@@ -43,10 +46,12 @@
       <table class="ui compact selectable table">
         <thead>
           <tr>
-            <th></th>
+            <th width="10">
+              <ui-checkbox params="checkedObs: checkAllObs"></ui-checkbox>
+            </th>
+            <th width="10"></th>
             <th>Participant</th>
             <th>Status</th>
-            <th></th>
           </tr>
         </thead>
         <tbody class="no_records" data-bind="if: itemsObs().length === 0">
@@ -56,7 +61,11 @@
         </tbody>
         <tbody data-bind="foreach: itemsObs">
           <tr data-bind="css: $component.classNameForStatus($data)">
-            <td width="10">
+            <td>
+              <ui-checkbox data-bind="visible: $parent.canDelete($data)" 
+                params="checkedObs: $data.checkedObs"></ui-checkbox>
+            </td>
+            <td>
               <span data-bind="visible: $data.dataGroups.includes('test_user')">
                 <i class="ui yellow bug icon" title="Test Account"></i>
               </span>
@@ -66,14 +75,10 @@
                 html: $component.formatParticipantLabel($data, $parent.studyId)"></a>
               <p style="padding-left: 0" class="help-text" data-bind="text: $data.note"></p>
             </td>
-            <td data-bind="text: $component.formatStatus($data)"></td>
-            <td style="white-space:nowrap; text-align: right; vertical-align: middle">
+            <td style="display: flex; white-space: nowrap; gap: 1rem; justify-content: space-between">
+              <span data-bind="text: $component.formatStatus($data)"></span>
               <span data-bind="visible: $data.status === 'disabled'">
                 <i class="warning sign icon"></i>Disabled</span>
-              <button class="ui basic compact mini red button" 
-                data-bind="click: $parent.unenroll.bind($parent)"
-                style="margin-left: .5rem">Withdraw
-              </button>
             </td>
           </tr>
         </tbody>

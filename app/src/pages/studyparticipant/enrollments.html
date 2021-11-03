@@ -35,33 +35,41 @@
             </td>
             <td data-bind="text: $data.externalId"></td>
             <td>
-              <div class="ui small text" data-bind="if: $data.enrolledOn">
+
+              <div data-bind="if: $data.enrolledOn">
                 Enrolled 
                 <span data-bind="if: $data.enrolledBy">
                   by <span data-bind="text: $parent.formatNameAsFullLabel($data.enrolledBy)"></span> on
                 </span>
                 <span data-bind="text: $parent.formatDateTime($data.enrolledOn)"></span>
+                <div data-bind="visible: $parent.hasSignatures($data)">
+                  <a style="margin-right: 1rem; white-space: nowrap" data-bind="href: '#/studies/' + $data.studyId + '/participants/' + $parent.userIdObs() + '/enrollments/consents'">View Signature</a>
+                </div>
               </div>
-              <div class="ui small red text" data-bind="if: $data.withdrawnOn, semantic: 'popup',
-                attr:{'data-html': 'Withdrawal note: ' + $data.withdrawalNote}">
+              <div data-bind="visible: $data.note, html: `<i>${$data.note}</i>`"></div>
+
+              <div class="ui red text" style="margin-top: .5rem" data-bind="if: $data.withdrawnOn">
                 Withdrawn 
                 <span data-bind="if: $data.withdrawnBy">
                   by <span data-bind="text: $parent.formatNameAsFullLabel($data.withdrawnBy)"></span> on
                 </span>
                 <span data-bind="text: $parent.formatDateTime($data.withdrawnOn)"></span>
               </div>
-              <div class="ui small text" data-bind="if: $data.enrolledOn && !$data.withdrawnOn">
+              <div data-bind="if: $data.enrolledOn && !$data.withdrawnOn">
                 <span data-bind="text: $data.consentRequired ? 'Must still consent to research' : ''"></span>
               </div>
+              <div data-bind="visible: $data.withdrawalNote, html: `<i>${$data.withdrawalNote}</i>`"></div>
+
             </td>
-            <td nowrap style="text-align: right">
-              <a style="margin-right: 1rem; white-space: nowrap" data-bind="visible: $parent.hasSignatures($data),
-                attr: { href: '/studies/' + $data.studyId + '/participants/' + $parent.userIdObs() + '/enrollments/consents'}">View Signatures</a>
+            <td style="white-space: nowrap; text-align: right">
               <button class="ui basic compact mini red button" 
                 data-bind="click: $parent.unenroll, hidden: $data.withdrawnOn">Withdraw
               </button>
               <button class="ui basic compact mini blue button" 
                 data-bind="click: $parent.enroll, visible: $data.withdrawnOn">Enroll
+              </button>
+              <button class="ui basic compact mini button" 
+                data-bind="click: $parent.note">Note
               </button>
             </td>
           </tr>

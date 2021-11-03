@@ -16,7 +16,7 @@ export default class ReportsBaseAccount extends BaseAccount {
 
     tables.prepareTable(this, {
       name: "report",
-      delete: (item) => this.deleteReport(item),
+      delete: (item) => this.deleteReportIndex(item),
       id: this.failureParams.id,
       refresh: () => this.getReports()
     });
@@ -29,7 +29,7 @@ export default class ReportsBaseAccount extends BaseAccount {
   loadAccount() {
     throw new Error('loadAccount not implemented');
   }
-  deleteReport() {
+  deleteReportIndex() {
     throw new Error('deleteReport not implemented');
   }
   reportURL(item) {

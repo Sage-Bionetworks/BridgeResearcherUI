@@ -7,6 +7,9 @@ console.log('[Webpack] Use dev configuration\n');
 
 module.exports = Object.assign({}, {
     mode: 'development',
+    optimization: {
+      minimize: false
+    },
     devtool: 'inline-source-map',
     devServer: {
         historyApiFallback: true,

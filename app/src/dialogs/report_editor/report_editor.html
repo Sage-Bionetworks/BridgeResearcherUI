@@ -1,7 +1,7 @@
 <div class="ui small modal">
   <i data-bind="click:close" class="close icon"></i>
   <div class="header" data-bind="text: titleObs"></div>
-  <div class="content">
+  <div class="content ui form">
     <errors id="report-editor"></errors>
     <form id="thisForm" class="ui form" data-bind="submitByButton: 'thisFormSubmit'">
       <div class="field" id="identifier" data-bind="visible: showIdentifierObs">
@@ -14,7 +14,7 @@
           <input data-bind="flatpickr: dateObs, visible: isAddObs()" />
           <div class="inline-form-text" data-bind="text: dateObs, visible: !isAddObs()"></div>
         </div>
-        <div class="field tag-editor studyIds" data-bind="visible: isAddObs">
+        <div class="field tag-editor" id="studyIds" data-bind="visible: isAddObs">
           <label>Restricted to studies</label>
           <tag-editor params="selectedObs: studyIdsObs, 
             allObs: studyOptionsObs, type: 'study IDs'"></tag-editor>
