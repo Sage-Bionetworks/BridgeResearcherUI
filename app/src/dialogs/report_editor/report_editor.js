@@ -31,13 +31,10 @@ export default class AddReport {
   }
   addReport(entry, event) {
     if (this.studyId && this.type === 'participant') {
-      console.log("1");
       return serverService.addStudyParticipantReport(this.studyId, this.userId, entry.identifier, entry)
     } else if (this.type === 'participant') {
-      console.log("2");
       return serverService.addParticipantReport(this.userId, entry.identifier, entry)
     } else {
-      console.log("3");
       return serverService.addStudyReport(entry.identifier, entry)
     }
   }

@@ -97,14 +97,17 @@ export default class StudyParticipants extends BaseStudy {
           app.userProfileAttributes.sort().map(att => ({ value: att, label: att }))))
       .then(() => ko.postbox.publish(PAGE_KEY))
   }
+  canDelete(item) {
+    return item.dataGroups.includes('test_user');
+  }
   formatStudyName(id) {
     return this.studyNames[id];
   }
   formatStatus(item) {
-    if (item.studyIds.includes(this.studyId)) {
-      return "Enrolled";
-    }
-    return "Withdrawn or not yet consented";
+    return (item.studyIds.includes(this.studyId))  ? "Enrolled" : "Withdrawn";
+  }
+  isWithdrawn(item) {
+    return !item.studyIds.includes(this.studyId);
   }
   exportDialog() {
     this.search = this.updateSearch();
@@ -119,19 +122,8 @@ export default class StudyParticipants extends BaseStudy {
   }
   enrollDialog () {
     root.openDialog("add_enrollment", {
-      closeFunc: fn.seq(root.closeDialog, () => {
-        ko.postbox.publish(PAGE_KEY, 0);
-      }),
+      closeFunc: fn.seq(root.closeDialog, () => ko.postbox.publish(PAGE_KEY, 0)),
       studyId: this.studyId
-    });
-  }
-  unenroll(item, event) {
-    alerts.prompt("Why are you withdrawing this person?", (withdrawalNote) => {
-      utils.startHandler(this, event);
-      serverService.unenroll(this.studyId, item.id, withdrawalNote)
-        .then(utils.successHandler(this, event, "Participant removed from study."))
-        .then(() => ko.postbox.publish(PAGE_KEY, 0))
-        .catch(this.failureHandler);
     });
   }
   doFormSearch(vm, event) {
