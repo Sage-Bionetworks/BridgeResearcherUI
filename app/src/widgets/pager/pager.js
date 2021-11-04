@@ -51,7 +51,6 @@ export default function pager(params) {
   };
 
   postLoadFunc((response) => {
-    console.log(query);
     storeService.persistQuery(prefix, query);
     let rp = response.requestParams;
     self.offsetByObs(rp.offsetBy);
