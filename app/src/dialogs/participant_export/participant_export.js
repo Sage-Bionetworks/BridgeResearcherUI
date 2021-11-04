@@ -12,7 +12,12 @@ export default class ParticipantExport {
     this.startExport = (vm, event) => {
       let payload = { studyId: this.studyIdObs(), password: this.passwordObs() };
       utils.startHandler(vm, event);
-      serverService.emailRoster(payload)
+      if (params.studyId) {
+        return serverService.emailStudyParticipantRoster(params.studyId, payload)
+          .then(utils.successHandler(vm, event, "Participant roster is being prepared."))
+          .catch(utils.failureHandler({ id: 'participant_export' }));
+      }
+      return serverService.emailRoster(payload)
         .then(utils.successHandler(vm, event, "Participant roster is being prepared."))
         .catch(utils.failureHandler({ id: 'participant_export' }));
     }
