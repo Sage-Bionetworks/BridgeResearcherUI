@@ -252,6 +252,9 @@ router.configure({
 
 window.addEventListener('click', (event) => {
   if (event.target.href) {
+    if (event.target.getAttribute('rel') === 'noopener') {
+      return;
+    }
     event.preventDefault();
     event.stopPropagation();
     let route = event.target.getAttribute('href');

@@ -12,7 +12,7 @@ export default function schemas() {
 
   schemaUtils.initSchemasVM(self);
   fn.copyProps(self, root, "isAdmin", "isDeveloper");
-  fn.copyProps(self, sharedModuleUtils, "formatModuleLink", "moduleHTML");
+  fn.copyProps(self, sharedModuleUtils, "formatModuleLink");
   fn.copyProps(self, criteriaUtils, "label");
 
   tables.prepareTable(self, {
