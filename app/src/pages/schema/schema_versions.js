@@ -36,7 +36,7 @@ export default function schemaVersions(params) {
   });
 
   fn.copyProps(self, criteriaUtils, "label->criteriaLabel");
-  fn.copyProps(self, sharedModuleUtils, "formatModuleLink", "moduleHTML");
+  fn.copyProps(self, sharedModuleUtils, "formatModuleLink");
   fn.copyProps(self, root, "isAdmin", "isDeveloper");
 
   function markSchemaPublished(schema) {

@@ -38,7 +38,7 @@ export default function surveys() {
 
   fn.copyProps(self, fn, "formatDateTime");
   fn.copyProps(self, root, "isDeveloper", "isAdmin");
-  fn.copyProps(self, sharedModuleUtils, "formatModuleLink", "moduleHTML");
+  fn.copyProps(self, sharedModuleUtils, "formatModuleLink");
 
   tables.prepareTable(self, {
     name: "survey",
