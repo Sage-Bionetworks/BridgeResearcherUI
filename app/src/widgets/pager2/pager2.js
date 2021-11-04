@@ -6,7 +6,7 @@ export default class CursorPager {
   constructor(params) {
     this.prefix = params.prefix;
     this.loadingFunc = params.loadingFunc;
-    this.pageSize = params.pageSize || 25;
+    this.pageSize = params.pageSize || 50;
     
     this.formatCount = fn.formatCount;
     

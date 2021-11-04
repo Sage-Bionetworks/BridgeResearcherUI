@@ -6,11 +6,13 @@ import storeService from "../../services/store_service";
 export default function pager(params) {
   let prefix = params.prefix;
   let postLoadFunc = params.postLoadFunc;
-  let pageSize = params.pageSize || 25;
+  let pageSize = params.pageSize || 50;
 
   let self = this;
-  let query = storeService.restoreQuery(prefix) ||
-    {includeDeleted:false, pageSize: pageSize, offsetBy: 0};
+  let query = storeService.restoreQuery(prefix) || {};
+  query.includeDeleted = query.includeDeleted || false;
+  query.pageSize = query.pageSize || pageSize;
+  query.offsetBy = query.offsetBy || 0;
 
   new Binder(self)
     .bind("offsetBy", 0)
@@ -49,6 +51,7 @@ export default function pager(params) {
   };
 
   postLoadFunc((response) => {
+    console.log(query);
     storeService.persistQuery(prefix, query);
     let rp = response.requestParams;
     self.offsetByObs(rp.offsetBy);
