@@ -4,6 +4,7 @@ import config from "./config";
 import fn from "./functions";
 import ko from "knockout";
 import root from "./root";
+import router from "./routes";
 import toastr from "toastr";
 import serverService from "./services/server_service";
 import { ERROR_BUS } from './widgets/errors/errors';
@@ -46,8 +47,7 @@ function notAllowed(response, params) {
   if (params.redirect === false) {
     toastr.error(message);
   } else {
-    document.location = "/reports/uploads";
-    root.changeView("dailyUploads", {});
+    router.setRoute('/reports/uploads');
     setTimeout(function() {
       toastr.error(message);
     }, 200);
@@ -76,8 +76,7 @@ function notAdmin(response) {
 }
 function notFound(response, params) {
   if (params.redirectTo) {
-    document.location = "/" + params.redirectTo;
-    root.changeView(params.redirectTo);
+    router.setRoute(params.redirectTo);
     if (params.redirectMsg) {
       setTimeout(function() {
         toastr.warning(params.redirectMsg);
