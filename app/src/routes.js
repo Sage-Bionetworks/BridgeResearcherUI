@@ -264,3 +264,5 @@ if (route === '/') {
   route = '/reports/uploads';
 }
 router.init(route);
+
+export default router;
