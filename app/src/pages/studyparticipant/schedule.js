@@ -65,7 +65,11 @@ export default class StudyParticipantSchedule extends BaseAccount {
     return `/studies/${this.studyId}/participants/${encodeURIComponent(this.userId)}/${postfix}`;
   }
   hoverText(item) {
-    return (item.recordCount <= 1) ? '1 record' : `${item.recordCount} records`;
+    let str = '';
+    if (item.studyBurstId) {
+      str = `<b>Study burst “${item.studyBurstId}”</b><br>trigger event: “${item.originEventId}”<br><br>` + str;
+    }
+    return str + ((item.recordCount <= 1) ? '1 record' : `${item.recordCount} records`);
   }
   deleteEvent(event, browserEvent) {
     let self = ko.contextFor(browserEvent.target).$component;
