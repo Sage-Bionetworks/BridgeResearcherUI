@@ -274,7 +274,7 @@ function synapseAliasToUserId(alias) {
     return response.json().then((json) => {
       return Promise.resolve(json.principalId);
     })
-  });  
+  });
 }
 
 export default {

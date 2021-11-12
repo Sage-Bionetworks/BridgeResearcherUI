@@ -23,6 +23,11 @@
       <input class="ui input" data-bind="textInput: clientTimeZoneObs" 
         placeholder="America/Los_Angeles"/>
     </div>
+    <div class="field" data-bind="visible: baseEventObs">
+      <ui-checkbox params="checkedObs: checkedObs">
+        Update any dependent study burst events
+      </ui-checkbox>
+    </div>
   </div>
   <div class="actions">
     <button class="ui primary small button" data-bind="click: save">Save</button>

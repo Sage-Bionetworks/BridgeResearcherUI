@@ -15,6 +15,8 @@ export default function(params) {
   self.event = params.event;
 
   var binder = new Binder(self)
+    .obs("baseEvent", typeof params.event.originEventId === 'undefined')
+    .obs("checked", true)
     .bind('eventId', params.event.eventId)
     .bind('timestamp', params.event.timestamp)
     .bind('clientTimeZone', params.event.clientTimeZone)
@@ -28,7 +30,7 @@ export default function(params) {
   self.save = function() {
     self.event = binder.persist(self.event);
 
-    params.saveEvent(self.event)
+    params.saveEvent(self.event, self.checkedObs())
       .then(() => root.closeDialog())
       .catch(utils.failureHandler({ id: 'event-editor' }))
   };
