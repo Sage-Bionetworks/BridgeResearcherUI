@@ -7,6 +7,17 @@ import serverService from "../../services/server_service";
 import tables from "../../tables";
 import utils from "../../utils";
 
+function sortRes(res) {
+  res.items.sort(sorter);
+  return res;
+}
+
+function sorter(a, b) {
+  let ka = (a.originEventId) ? a.originEventId : a.eventId;
+  let kb = (b.originEventId) ? b.originEventId : b.eventId;
+  return ka.localeCompare(kb);
+}
+
 export default class StudyParticipantSchedule extends BaseAccount {
   constructor(params) {
     super({ 
@@ -38,6 +49,7 @@ export default class StudyParticipantSchedule extends BaseAccount {
       })
       .then(() => this.getAccount())
       .then(() => serverService.getStudyParticipantActivityEvents(this.studyId, this.userId))
+      .then(sortRes)
       .then(res => this.itemsObs(res.items))
       .catch(utils.failureHandler(this.failureParams));
   }
@@ -72,8 +84,12 @@ export default class StudyParticipantSchedule extends BaseAccount {
     return str + ((item.recordCount <= 1) ? '1 record' : `${item.recordCount} records`);
   }
   deleteEvent(event, browserEvent) {
+    let msg = "Are you sure?";
+    if (typeof event.originEventId === 'undefined') {
+      msg += " Study burst events triggered by this event will also be deleted.";
+    }
     let self = ko.contextFor(browserEvent.target).$component;
-    alerts.deleteConfirmation("Are you sure?", () => {
+    alerts.deleteConfirmation(msg, () => {
       utils.startHandler(self, event);
       let eventId = event.eventId;
       serverService.deleteStudyParticipantActivityEvent(self.studyId, self.userId, eventId)
@@ -84,12 +100,11 @@ export default class StudyParticipantSchedule extends BaseAccount {
     });
   }
   canEdit(item) {
-    let updateType = this.formatUpdateType(item.eventId);
+    let updateType = item.updateType;
     return updateType === 'mutable' || updateType === 'future_only';
-
   }
   canDelete(item) {
-    let updateType = this.formatUpdateType(item.eventId);
+    let updateType = item.updateType;
     return updateType === 'mutable';
   }
   editEvent(event, browserEvent) {
@@ -109,9 +124,10 @@ export default class StudyParticipantSchedule extends BaseAccount {
       saveEvent: this.saveEvent.bind(this)
     });
   }
-  saveEvent(event) {
-    return serverService.createStudyParticipantActivityEvent(this.studyId, this.userId, event)
-      .then(() => serverService.getStudyParticipantActivityEvents(this.studyId, this.userId))
+  saveEvent(event, updateBursts) {
+    return serverService.createStudyParticipantActivityEvent(this.studyId, this.userId, event, updateBursts)
+      .then(() => serverService.getStudyParticipantActivityEvents(this.studyId, this.userId, updateBursts))
+      .then(sortRes)
       .then(res => this.itemsObs(res.items));
   }
 }
