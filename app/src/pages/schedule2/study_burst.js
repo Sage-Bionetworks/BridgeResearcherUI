@@ -20,6 +20,7 @@ export default function(params) {
   studyBurst.binder = new Binder(self)
     .bind('identifier', studyBurst.identifier)
     .bind('originEventId', studyBurst.originEventId)
+    .bind('delay', studyBurst.delay)
     .bind('interval', studyBurst.interval)
     .bind('occurrences', studyBurst.occurrences)
     .bind('updateType', studyBurst.updateType)

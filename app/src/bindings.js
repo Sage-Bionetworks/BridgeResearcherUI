@@ -343,10 +343,13 @@ ko.bindingHandlers.tab = {
 };
 
 function updateTabSelection(element) {
+  console.log(element);
   let path = document.location.pathname;
   let href = element.getAttribute("href");
   let tabPostFix = href ? "/" + href.split("/").pop() : href;
-  element.classList.toggle("active", path.indexOf(tabPostFix) > -1);
+  // This complicated match is to prevent matching identifiers that conflict with our URLs
+  // that are embedded in the navigation, for studies, schedules, etc.
+  element.classList.toggle("active", path.indexOf(tabPostFix + "/") > -1 || path.endsWith(tabPostFix));
 }
 
 ko.bindingHandlers.tabber = {
