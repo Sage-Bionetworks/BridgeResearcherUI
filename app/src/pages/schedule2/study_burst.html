@@ -9,6 +9,10 @@
       optionsCaption: 'Select an event ID...', optionsText: 'text', 
       optionsValue: 'value', value: originEventIdObs"></select>
   </div>
+  <div class="field" data-bind="attr: {id: generateId('delay')}">
+    <label>Delay</label>
+    <ui-duration params="fieldObs: delayObs, fields: 'days weeks'"></ui-duration>
+  </div>
   <div class="field" data-bind="attr: {id: generateId('interval')}">
     <label>Interval</label>
     <ui-duration params="fieldObs: intervalObs, fields: 'days weeks'"></ui-duration>

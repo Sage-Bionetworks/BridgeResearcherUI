@@ -981,7 +981,7 @@ export class ServerService {
   }
   
   getStudyParticipantActivityEvents(studyId, userId, updateBursts) {
-    let queryString = fn.queryString({ updateBursts });
+    let queryString = fn.queryString({ updateBursts, showError: true });
     return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/activityevents${queryString}`);
   }
   getStudyParticipantActivityEventHistory(studyId, userId, eventId, offsetBy, pageSize) {
@@ -989,7 +989,7 @@ export class ServerService {
     return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/activityevents/${encodeURIComponent(eventId)}${queryString}`);
   }
   createStudyParticipantActivityEvent(studyId, userId, event, updateBursts) {
-    let queryString = fn.queryString({ updateBursts });
+    let queryString = fn.queryString({ updateBursts, showError: true });
     return this.post(`${config.studies}/${studyId}/participants/${userId}/activityevents${queryString}`, event);
   }
   deleteStudyParticipantActivityEvent(studyId, userId, eventId) {

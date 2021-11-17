@@ -60,7 +60,7 @@
           <tr data-bind="css: $component.classNameForStatus($data)">
             <td style="line-height:1.1">
               <div>
-                <a data-bind="href: $data.downloadURL, text: $data.name"></a>
+                <a rel="noopener" data-bind="href: $data.downloadURL, text: $data.name"></a>
               </div>
               <div style="color: #bbb; font-size: smaller" data-bind="text: $data.description"></div>
             </td>
