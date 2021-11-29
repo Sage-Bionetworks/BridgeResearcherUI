@@ -178,23 +178,25 @@
               </div>
             </div>
           </div>
-          <p style="text-align: center; margin-top: 1rem">
-            <span style="padding-right:.5rem">
-              <i class="sign out icon"></i>
-              <a class="link" data-bind="click: signOut">Sign Out</a>
-            </span>
-            <span>
-              <i class="cogs icon"></i>
-              <a class="link" data-bind="click: settings">Settings</a>
-            </span>
-          </p>
+          <div style="margin-top: 1rem">
+            <div style="text-align: center" data-bind="html: emailObs() + ' on ' + 
+              environmentObs(), visible: environmentObs() !== 'production'">
+            </div>
+            <div style="text-align: center" >
+              <span style="padding-right:.5rem">
+                <i class="sign out icon"></i>
+                <a class="link" data-bind="click: signOut">Sign Out</a>
+              </span>
+              <span>
+                <i class="cogs icon"></i>
+                <a class="link" data-bind="click: settings">Settings</a>
+              </span>
+            </div>
+          </div>
         </nav>
       </section>
       <footer>
         <p>
-          <span style="color: silver" data-bind="html: '[' + emailObs() + ' on ' + 
-            environmentObs() + ']', visible: environmentObs() !== 'production'">
-          </span>
           &copy; 2015-2021 Sage Bionetworks | 
           <a target="_blank" rel="noopener" href="/privacy.html">Privacy Policy</a> | 
           <a target="_blank" rel="noopener" href="/terms-of-use.html">Terms of Use</a> 

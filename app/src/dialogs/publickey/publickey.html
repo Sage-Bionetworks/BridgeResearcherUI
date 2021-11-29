@@ -7,12 +7,8 @@
     <div data-bind="text:contentObs" class="ui segment public-key"></div>
   </div>
   <div class="actions">
-    <a
-      class="ui primary small button"
-      data-bind="attr: {
-            download: downloadHrefObs, href: downloadFileNameObs}"
-      >Download</a
-    >
+    <a rel="noopener" class="ui primary small button"
+      data-bind="attr: {download: downloadHrefObs, href: downloadFileNameObs}">Download</a>
     <button class="ui small button" data-bind="click: close">Close</button>
   </div>
 </div>

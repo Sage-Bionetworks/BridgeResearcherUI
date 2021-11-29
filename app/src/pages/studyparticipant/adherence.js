@@ -36,7 +36,7 @@ class AdherenceGraph {
   addStream(session, event, active) {
     let stream = new AdherenceStream();
     // this isn't working correctly...nowhere do we calculate the days, like the schedule tab.
-    stream.active = true; 
+    stream.active = active; 
     stream.label = session.label;
     stream.eventTimestamp = event.timestamp;
     stream.eventId = event.eventId;
@@ -139,14 +139,23 @@ export default class StudyParticipantAdherence extends BaseAccount {
             this.studyId, this.userId, event.eventId, 0, 100).then(res => res.items);
       }
     }).reduce((prev, cur) => prev.concat(cur), [])
-      .then(res => this.graph.events = res);
+      .then(res => {
+        this.graph.events = res;
+
+        // This map is used to determine the most recent timestamp, to detect defunct time streams.
+        this.graph.eventMap = {};
+        this.graph.events.forEach(evt => {
+          if (!this.graph.eventMap[evt.eventId]) {
+            this.graph.eventMap[evt.eventId] = evt.timestamp;
+          }
+        })
+      });
   }
   // For each session in the timeline, filter the events into a stream for that session. 
   // One session / event timestamp == one stream. The first under an event ID is marked 
   // out as the active stream.
   processTimeline(timeline) {
     this.graph.events.sort(sortEvents);
-
     // This is not really true. The graph only needs to be as wide as the largest endDay
     // of any stream. The duration of the schedule only controls how many times sessions will 
     // repeat if a hard number of iterations is not provided.
@@ -167,7 +176,7 @@ export default class StudyParticipantAdherence extends BaseAccount {
     // each of the events that triggers the session.
     timeline.sessions.forEach(sess => {
       this.graph.events.filter(e => sess.startEventIds.has(e.eventId)).forEach((e, i) => {
-        this.graph.addStream(sess, e, i === 0);
+        this.graph.addStream(sess, e, this.graph.eventMap[e.eventId] === e.timestamp);
       });
     });
 
@@ -334,8 +343,14 @@ export default class StudyParticipantAdherence extends BaseAccount {
   }
   preview() {
     root.openDialog('preview_dialog', {
-      title: 'Preview Event Day Report',
-      supplier: () => serverService.getStudyParticipantAdherenceEventDayReports(this.studyId, this.userId)
+      title: 'Preview Weekly Report',
+      supplier: () => serverService.getStudyParticipantAdherenceReport(this.studyId, this.userId, 'weekly')
+    });
+  }
+  preview2() {
+    root.openDialog('preview_dialog', {
+      title: 'Preview Adherence Report',
+      supplier: () => serverService.getStudyParticipantAdherenceReport(this.studyId, this.userId, 'eventstream?showActive=true')
     });
   }
 }
