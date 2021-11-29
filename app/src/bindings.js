@@ -343,7 +343,6 @@ ko.bindingHandlers.tab = {
 };
 
 function updateTabSelection(element) {
-  console.log(element);
   let path = document.location.pathname;
   let href = element.getAttribute("href");
   let tabPostFix = href ? "/" + href.split("/").pop() : href;

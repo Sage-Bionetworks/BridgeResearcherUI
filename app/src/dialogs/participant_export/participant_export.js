@@ -9,17 +9,16 @@ export default class ParticipantExport {
     this.studyIdObs = ko.observable(params.studyId);
     this.passwordObs = ko.observable();
     this.close = root.closeDialog;
-    this.startExport = (vm, event) => {
-      let payload = { studyId: this.studyIdObs(), password: this.passwordObs() };
-      utils.startHandler(vm, event);
-      if (params.studyId) {
-        return serverService.emailStudyParticipantRoster(params.studyId, payload)
-          .then(utils.successHandler(vm, event, "Participant roster is being prepared."))
-          .catch(utils.failureHandler({ id: 'participant_export' }));
-      }
-      return serverService.emailRoster(payload)
-        .then(utils.successHandler(vm, event, "Participant roster is being prepared."))
+  }
+  startExport(vm, event) {
+    let studyId = this.studyIdObs();
+    let payload = { studyId, password: this.passwordObs() };
+    utils.startHandler(vm, event);
+    let call = (studyId) ?
+      serverService.emailStudyParticipantRoster(studyId, payload) :
+      serverService.emailRoster(payload);
+    return call.then(utils.successHandler(vm, event, "Participant roster is being prepared."))
+        .then(() => this.passwordObs(''))
         .catch(utils.failureHandler({ id: 'participant_export' }));
-    }
   }
 }

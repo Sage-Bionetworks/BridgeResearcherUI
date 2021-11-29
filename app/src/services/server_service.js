@@ -954,8 +954,8 @@ export class ServerService {
   getStudyParticipantAdherenceRecords(studyId, userId, search) {
     return this.post(`${config.studies}/${studyId}/participants/${userId}/adherence/search`, search);
   }
-  getStudyParticipantAdherenceEventDayReports(studyId, userId) {
-    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/adherence/eventday`);
+  getStudyParticipantAdherenceReport(studyId, userId, report) {
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/adherence/${report}`);
   }
   updateStudyParticipantAdherenceRecords(studyId, userId, records) { 
     return this.post(`${config.studies}/${studyId}/participants/${userId}/adherence`, records);
