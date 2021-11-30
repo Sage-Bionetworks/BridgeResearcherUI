@@ -2,6 +2,7 @@ import alerts from "../widgets/alerts";
 import BaseAccount from "./base_account";
 import Binder from "../binder";
 import config from "../config";
+import { TIME_ZONES } from "../config";
 import fn from "../functions";
 import ko from "knockout";
 import optionsService from "../services/options_service";
@@ -13,31 +14,6 @@ const OPTIONS = [
   { value: "no_sharing", label: "No Sharing" },
   { value: "sponsors_and_partners", label: "Sponsors And Partners" },
   { value: "all_qualified_researchers", label: "All Qualified Researchers" }
-];
-const TIME_ZONES = [
-  "America/Anchorage",
-  "America/Boise",
-  "America/Chicago",
-  "America/Denver",
-  "America/Detroit",
-  "America/Indiana/Knox",
-  "America/Indiana/Marengo",
-  "America/Indiana/Petersburg",
-  "America/Indiana/Tell_City",
-  "America/Indiana/Vevay",
-  "America/Indiana/Vincennes",
-  "America/Indiana/Winamac",
-  "America/Indianapolis",
-  "America/Kentucky/Monticello",
-  "America/Los_Angeles",
-  "America/Louisville",
-  "America/Nassau",
-  "America/New_York",
-  "America/North_Dakota/Beulah",
-  "America/North_Dakota/Center",
-  "America/North_Dakota/New_Salem",
-  "America/Phoenix",
-  "America/Puerto_Rico"
 ];
 
 function selectRoles(session) {
