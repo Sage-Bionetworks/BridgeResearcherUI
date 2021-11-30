@@ -1,3 +1,35 @@
+export const TIME_ZONES = [
+  "America/Anchorage",
+  "America/Boise",
+  "America/Chicago",
+  "America/Denver",
+  "America/Detroit",
+  "America/Indiana/Knox",
+  "America/Indiana/Marengo",
+  "America/Indiana/Petersburg",
+  "America/Indiana/Tell_City",
+  "America/Indiana/Vevay",
+  "America/Indiana/Vincennes",
+  "America/Indiana/Winamac",
+  "America/Indianapolis",
+  "America/Kentucky/Monticello",
+  "America/Los_Angeles",
+  "America/Louisville",
+  "America/Nassau",
+  "America/New_York",
+  "America/North_Dakota/Beulah",
+  "America/North_Dakota/Center",
+  "America/North_Dakota/New_Salem",
+  "America/Phoenix",
+  "America/Puerto_Rico",
+  "Greenwich",
+  "Europe/London",
+  "Europe/Paris",
+  "Europe/Istanbul",
+  "Europe/Ulyanovsk",
+  "Asia/Kolkata"
+];
+
 export default {
   templateTitles: {
     'email_account_exists':'Account already exists notification (email)',

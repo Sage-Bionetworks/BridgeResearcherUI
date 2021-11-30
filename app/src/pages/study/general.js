@@ -1,8 +1,9 @@
+import { TIME_ZONES } from "../../config";
 import alerts from "../../widgets/alerts";
+import BaseStudy from "./base_study";
 import config from "../../config";
 import fn from "../../functions";
 import serverService from "../../services/server_service";
-import BaseStudy from "./base_study";
 import utils from "../../utils";
 
 const DECISION_TYPES = [
@@ -37,12 +38,13 @@ function toDateString(value) {
   return value.toISOString().split('T')[0];
 }
 
-export default class StudyEditor extends BaseStudy {
+export default class StudyGeneral extends BaseStudy {
   constructor(params) {
     super(params, 'study', 'general');
 
     fn.copyProps(this, config, 'phasesOpts');
     this.decisionType = DECISION_TYPES;
+    this.timeZoneOptions = TIME_ZONES;
 
     this.binder
       .bind("name")
@@ -57,7 +59,9 @@ export default class StudyEditor extends BaseStudy {
       .bind("scheduleGuid", null)
       .bind("diseases[]")
       .bind("studyDesignTypes[]")
-      .bind("keywords");
+      .bind("keywords")
+      .bind("studyTimeZone")
+      .bind("adherenceThresholdPercentage");
 
     this.load()
       .then(this.binder.assign("study"))
@@ -72,6 +76,9 @@ export default class StudyEditor extends BaseStudy {
       return config.phasesOpts.filter(opt => opt.value === phase)[0].label;
     }
     return '<none>';
+  }
+  formatPercentage(per) {
+    return (per) ? (per + '%') : '';
   }
   changeTo(phase) {
     return (vm, event) => {

@@ -159,7 +159,7 @@ router.on("/organizations/:orgId/members/:userId/requestInfo",
 router.on("/studies", routeTo("studies", "studies"));
 
 router.on("/studies/:studyId", redirectTo("/studies/{0}/general"));
-router.on("/studies/:studyId/general", routeTo("studyEditor", "studies", STUDYID));
+router.on("/studies/:studyId/general", routeTo("studyGeneral", "studies", STUDYID));
 router.on("/studies/:studyId/ui", routeTo("studyUi", "studies", STUDYID));
 router.on("/studies/:studyId/sponsors", routeTo("studySponsors", "studies", STUDYID));
 router.on("/studies/:studyId/events", routeTo("studyEvents", "studies", STUDYID));

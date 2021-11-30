@@ -47,16 +47,6 @@
           <label>Identifier</label>
           <input-editor params="obs: identifierObs, canEdit: isNewObs()"></input-editor>
         </div>
-        <!--
-        <div class="four wide field" id="phase">
-          <label>Phase</label>
-          <div style="display:flex; align-items: center">
-            <div class="input-field-padding" data-bind="text: formatPhase(phaseObs())" style="flex:1"></div>
-            <div>
-            </div>
-          </div>
-        </div>
-        -->
       </div>
       <div class="fields">
         <div class="eight wide field">
@@ -86,6 +76,27 @@
           </div>
         </div>
       </div>
+      <h4 class="ui dividing header">Adherence Reporting</h4>
+      <div class="two fields">
+        <div class="field" id="studyTimeZone">
+          <label>Study Time Zone</label>
+          <select class="ui dropdown"  data-bind="visible: canEdit(), options: timeZoneOptions, 
+            optionsText: $data, optionsLabel: $data, value: studyTimeZoneObs, 
+            optionsCaption: 'Select a time zone ID:'"></select>
+          <div class="input-field-padding" data-bind="text: studyTimeZoneObs, visible: !canEdit()"></div>
+        </div>
+        <div class="field" id="adherenceThresholdPercentage">
+          <label>Adherence Threshold Percentage</label>
+          <div class="ui right labeled input" style="width: 8rem" data-bind="visible: canEdit()">
+            <input type="text" data-bind="textInput: adherenceThresholdPercentageObs">
+            <div class="ui label">%</div>
+          </div>
+          <div class="input-field-padding" data-bind="
+            text: formatPercentage(adherenceThresholdPercentageObs()), visible: !canEdit()"></div>
+        </div>
+      </div>
+      <p class="help-text">Bridge will update adherence reports daily in the time zone of the study. If a participant’s adherence percentage drops under the adherence threshold percentage, a message will be sent to administrators for follow-up. (Set the threshold to zero to disable these messages.)</p>
+
       <h4 class="ui dividing header">IRB Approval</h4>
       <div class="two fields">
         <div class="field">

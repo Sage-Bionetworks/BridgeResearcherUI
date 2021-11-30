@@ -280,8 +280,8 @@ import orgTabsetHtml from "./pages/organization/tabset.html";
 import studies from "./pages/studies/studies";
 import studiesHtml from "./pages/studies/studies.html";
 
-import studyEditor from "./pages/study/editor";
-import studyEditorHtml from "./pages/study/editor.html";
+import studyGeneral from "./pages/study/general";
+import studyGeneralHtml from "./pages/study/general.html";
 import studyUi from "./pages/study/ui";
 import studyUiHtml from "./pages/study/ui.html";
 import studyEvents from "./pages/study/events";
@@ -610,7 +610,7 @@ reg("memRequestInfo", {viewModel: memRequestInfo, template: memRequestInfoHtml})
 reg("mem-tabset", {viewModel: memTabset, template: memTabsetHtml});
 reg("mem-breadcrumb", {viewModel: memBreadcrumb, template: memBreadcrumbHtml});
 reg("studies", {viewModel: studies, template: studiesHtml});
-reg("studyEditor", {viewModel: studyEditor, template: studyEditorHtml});
+reg("studyGeneral", {viewModel: studyGeneral, template: studyGeneralHtml});
 reg("study-contact", {viewModel: studyContact, template: studyContactHtml});
 reg("studyUi", {viewModel: studyUi, template: studyUiHtml});
 reg("studyEvents", {viewModel: studyEvents, template: studyEventsHtml});
