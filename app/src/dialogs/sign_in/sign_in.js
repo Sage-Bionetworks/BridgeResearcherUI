@@ -58,7 +58,7 @@ export default function() {
 
   let appKey, env;
   if (isLocked) {
-    appKey = root.queryParams.appPath;
+    appKey = root.queryParams.appId;
     env = "production";
   } else {
     appKey = storeService.get(APP_KEY);

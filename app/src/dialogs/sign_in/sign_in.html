@@ -81,9 +81,9 @@
     <div style="flex:1" data-bind="visible: stateObs() !== 'Oauth'">
       <button id="submitButton" class="ui primary small button" 
         data-bind="click: submit, text: buttonTextObs"></button>
-      <a style="padding-left: 1rem" href="" 
+      <span class="link" style="padding-left: 1rem" 
         data-bind="visible: !isState('ForgotPassword'), click: useForgotPassword">Forgot Password?</a>
-      <a style="padding-left: 1rem" href="" 
+      <a class="link" style="padding-left: 1rem" 
         data-bind="visible: isState('ForgotPassword'), click: cancel">Cancel</a>
     </div>
     <div data-bind="visible: stateObs() === 'Oauth'">
