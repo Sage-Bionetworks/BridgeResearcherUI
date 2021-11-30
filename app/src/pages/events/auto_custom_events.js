@@ -43,6 +43,7 @@ export default function() {
   self.allDeltasObs = ko.observableArray([{ label: "before", value: "before" }, { label: "after", value: "after" }]);
   self.allEventsObs = ko.observableArray([
     { label: "enrollment", value: "enrollment" },
+    { label: "activities retrieved", value: "activities_retrieved" },
     { label: "timeline retrieved", value: "timeline_retrieved" },
     { label: "install link message sent", value: "install_link_sent" }
   ]);
