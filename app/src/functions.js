@@ -12,6 +12,7 @@ const SUPPORTED_COUNTRIES = [
   {regionCode: 'MX', flag: '🇲🇽', name: 'Mexico'},
   {regionCode: 'NL', flag: '🇳🇱', name: 'Netherlands'},
   {regionCode: 'NG', flag: '🇳🇬', name: 'Nigeria'},
+  {regionCode: 'GB', flag: '🇬🇧', name: 'United Kingdom'},
 ];
 
 const LOCAL_TIMEZONE = Date()
