@@ -1,0 +1,57 @@
+<div class="adherence-table-wrapper">
+  <table class="adherence-table" cellpadding="0" cellspacing="0">
+    <thead>
+      <tr>
+        <th nowrap colspan="2"></th>
+        <th></th>
+        <th data-bind="attr: {colspan: daysRangeObs().length}" style="text-align: left">Day Since Event</th>
+      </tr>
+      <tr>
+        <th nowrap colspan="2">Event Time Stream</th>
+        <th style="text-align: right">Session</th>
+        <!-- ko foreach: daysRangeObs() -->
+          <th style="min-width: 30px" data-bind="text: $data"></th>
+        <!-- /ko -->
+        <!-- ko if: daysRangeObs().length === 0 -->
+          <th></th>
+        <!-- /ko -->
+      </tr>
+    </thead>
+    <tbody class="no_records" data-bind="if: streamsObs().length === 0">
+      <tr>
+        <td data-bind="attr: {'colspan': colspanObs()}">
+          <p>This participant has no schedule that applies to them based on their events (activeOnly = <span data-bind="text: activeOnlyObs"></span>).</p>
+        </td>
+      </tr>
+    </tbody>
+    <tbody data-bind="foreach: streamsObs">
+      <tr>
+        <td class="th" style="font-size: smaller; text-align: right" 
+          data-bind="text: $parent.formatEventId($data.startEventId), attr: {rowspan: $data.sessionGuids.length}">
+        </td>
+        <td class="th" nowrap style="font-size: smaller" 
+          data-bind="text: $parent.formatDateTime($data.eventTimestamp), attr: {rowspan: $data.sessionGuids.length}">
+        </td>
+        <td class="th" style="text-align: right" data-bind="text: $parent.firstRowSessionName($data)"></td>
+        <!-- ko foreach: $component.daysRangeObs() -->
+          <td data-bind="click: $component.openSession">
+            <div data-bind="class: $component.isToday($parent, $data, $parent.sessionGuids[0]),
+              html: $component.cell($parent, $data, $parent.sessionGuids[0])"></div>
+          </td>
+        <!-- /ko -->
+      </tr>
+      <!-- ko foreach: $data.sessionGuids.slice(1) -->
+        <tr>
+          <!-- skip 2 columns -->
+          <td class="th" data-bind="text: $component.otherRowSessionName($parent, $data)"></td>
+          <!-- ko foreach: $component.daysRangeObs() -->
+          <td data-bind="click: $component.openSession">
+            <div data-bind="class: $component.isToday($parents[1], $data, $parents[0]),
+              html: $component.cell($parents[1], $data, $parents[0])"></div>
+          </td>
+          <!-- /ko -->
+        </tr>
+      <!-- /ko -->
+    </tbody>
+  </table>
+</div>

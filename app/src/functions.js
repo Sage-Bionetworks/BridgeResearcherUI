@@ -565,6 +565,15 @@ function formatParticipantLabel(item, studyId) {
   }
   return "—";
 }
+function formatEventId(eventId) {
+  if (eventId.startsWith("study_burst:")) {
+    var parts = eventId.split(":");
+    return parts[1] + " #" + parseInt(parts[2]);
+  } else if (eventId.startsWith("custom:")) {
+    return eventId.substring(7);
+  }
+  return eventId;
+}
 
 
 /* ==================================== DATE FUNCTIONS ==================================== */
@@ -689,6 +698,7 @@ export default {
   formatDateTime,
   formatDaysSince,
   formatDuration,
+  formatEventId,
   formatFileSize,
   formatTime,
   formatLanguages,

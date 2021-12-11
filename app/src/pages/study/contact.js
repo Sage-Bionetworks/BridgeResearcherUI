@@ -45,9 +45,9 @@ export default class StudyContact {
       .bind('city', contact.address.city, 
         Binder.fromObjectField("address", "city"), 
         Binder.toObjectField("address", "city"))
-      .bind('state', contact.address.state, 
-        Binder.fromObjectField("address", "state"), 
-        Binder.toObjectField("address", "state"))
+      .bind('division', contact.address.division, 
+        Binder.fromObjectField("address", "division"), 
+        Binder.toObjectField("address", "division"))
       .bind('postalCode', contact.address.postalCode, 
         Binder.fromObjectField("address", "postalCode"), 
         Binder.toObjectField("address", "postalCode"))

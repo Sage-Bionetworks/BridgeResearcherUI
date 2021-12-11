@@ -339,6 +339,9 @@ import studypartAdherenceSearchHtml from "./pages/studyparticipant/search.html";
 import studypartBreadcrumb from "./pages/studyparticipant/breadcrumb";
 import studypartBreadcrumbHtml from "./pages/studyparticipant/breadcrumb.html";
 
+import eventStreamAdherenceReport from "./pages/studyparticipant/event_stream_adherence_report";
+import eventStreamAdherenceReportHtml from "./pages/studyparticipant/event_stream_adherence_report.html";
+
 import schedules2 from "./pages/schedules2/schedules";
 import schedules2Html from "./pages/schedules2/schedules.html";
 import schedule2 from "./pages/schedule2/schedule";
@@ -626,6 +629,9 @@ reg("studyparticipant_events", {viewModel: studypartEvents, template: studypartE
 reg("studyparticipant_timeline", {viewModel: studypartTimeline, template: studypartTimelineHtml});
 reg("studyparticipant_adherence", {viewModel: studypartAdherence, template: studypartAdherenceHtml});
 reg("studyparticipant_adherencesearch", {viewModel: studypartAdherenceSearch, template: studypartAdherenceSearchHtml});
+
+reg("event-stream-adherence-report", {viewModel: eventStreamAdherenceReport, template: eventStreamAdherenceReportHtml});
+
 reg("studyparticipant_history", {viewModel: studypartHistory, template: studypartHistoryHtml});
 reg("studyparticipant-tabset", {viewModel: studypartTabset, template: studypartTabsetHtml});
 reg("studyparticipant_uploads", {viewModel: studypartUploads, template: studypartUploadsHtml});

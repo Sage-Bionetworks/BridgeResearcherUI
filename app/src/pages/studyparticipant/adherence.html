@@ -6,8 +6,8 @@
       <h3 data-bind="text: titleObs"></h3>
     </div>
     <div class="fixed-header-buttons">
-      <!--
       <button class="ui tiny button" data-bind="click: preview2">Event Stream Report&hellip;</button>
+      <!--
       <button class="ui tiny button" data-bind="click: preview">Weekly Report&hellip;</button>
       -->
     </div>
@@ -25,56 +25,13 @@
     </div>
   </div>
   <div slot="content">
-    <div class="adherence-table-wrapper">
-      <table class="adherence-table" cellpadding="0" cellspacing="0">
-        <thead>
-          <tr>
-            <th></th>
-            <th nowrap colspan="2"></th>
-            <th data-bind="attr: {colspan: dayCountObs().length}">Day Since Event</th>
-          </tr>
-          <tr>
-            <th>Session</th>
-            <th nowrap colspan="2">Event Time Stream</th>
-            <!-- ko foreach: dayCountObs -->
-              <th style="min-width: 30px" data-bind="text: $index"></th>
-            <!-- /ko -->
-            <!-- ko if: dayCountObs().length === 0 -->
-              <th></th>
-            <!-- /ko -->
-          </tr>
-        </thead>
-        <tbody class="no_records" data-bind="if: itemsObs().length === 0">
-          <tr>
-            <td data-bind="html: recordsMessageObs, 
-              attr: {colspan: 4 + dayCountObs().length}"></td>
-          </tr>
-        </tbody>
-        <tbody data-bind="foreach: itemsObs">
-          <tr>
-            <td class="th" data-bind="text: $data.label"></td>
-            <td class="th" style="font-size: smaller; text-align: right" 
-              data-bind="text: $parent.formatEventId($data.eventId)">
-            </td>
-            <td class="th" nowrap style="font-size: smaller" 
-              data-bind="text: $parent.formatDateTime($data.eventTimestamp)">
-            </td>
-            <!-- ko foreach: $parent.dayCountObs -->
-              <td class="data-cell" data-bind="
-                class: $parents[1].streamEntryBg($parentContext.$data, $index()),
-                foreach: $parents[1].streamEntry($parentContext.$data, $index())">
-                <div data-bind="class: $data.className, 
-                  style: { borderColor: $data.borderColor }, 
-                  click: $parents[2].editSession, 
-                  attr: {'data-guid': $data.previousInstanceGuid}"></div>
-                <div data-bind="class: $data.secondClassName, 
-                  click: $parents[2].editSession,
-                  attr: {'data-guid': $data.instanceGuid}"></div>
-              </td>
-            <!-- /ko -->
-          </tr>
-        </tbody>
-      </table>
+    <event-stream-adherence-report 
+      params="reportObs: reportObs, editSession: editSession"></event-stream-adherence-report>
+    <div style="display:flex; margin: 1rem .75rem 0 .75rem">
+      <ui-checkbox params="checkedObs: activeOnlyObs" style="flex:1">
+        Show active sessions only
+      </ui-checkbox>
+      <div><b>Participant’s Time:</b> <span data-bind="text: dateObs"></span></div>
     </div>
   </div>
   <div slot="help">
@@ -89,7 +46,7 @@
       </tr>
       <tr>
         <td class="data-cell" style="width:2rem">
-          <div class="gray bgGray bar right"></div>
+          <div class="bar not_yet_available"></div>
         </td>
         <td style="padding-left:.5rem">
           Not yet available
@@ -97,7 +54,7 @@
       </tr>
       <tr>
         <td class="data-cell" style="width:2rem">
-          <div class="blue bgBlue bar right"></div>
+          <div class="bar unstarted"></div>
         </td>
         <td style="padding-left:.5rem">
           Available but unstarted
@@ -105,7 +62,7 @@
       </tr>
       <tr>
         <td class="data-cell" style="width:2rem">
-          <div class="bgGreen bar right"></div>
+          <div class="bar started"></div>
         </td>
         <td style="padding-left:.5rem">
           Started with time to finish
@@ -113,7 +70,7 @@
       </tr>
       <tr>
         <td class="data-cell" style="width:2rem">
-          <div class="green bgGreen bar right"></div>
+          <div class="bar completed"></div>
         </td>
         <td style="padding-left:.5rem">
           Successfully completed
@@ -121,22 +78,38 @@
       </tr>
       <tr>
         <td class="data-cell" style="width:2rem">
-          <div class="bgRed bar right"></div>
+          <div class="bar abandoned"></div>
         </td>
         <td style="padding-left:.5rem">
-          Expired unfinished
+          Expired unfinished (abandoned)
         </td>
       </tr>
       <tr>
         <td class="data-cell" style="width:2rem">
-          <div class="red bgRed bar right"></div>
+          <div class="bar expired"></div>
         </td>
         <td style="padding-left:.5rem">
           Expired never started
         </td>
       </tr>
+      <tr>
+        <td class="data-cell" style="width:2rem">
+          <div class="bar declined"></div>
+        </td>
+        <td style="padding-left:.5rem">
+          Declined
+        </td>
+      </tr>
+      <tr>
+        <td class="data-cell" style="width:2rem">
+          <div class="bar not_applicable"></div>
+        </td>
+        <td style="padding-left:.5rem">
+          Not applicable
+        </td>
+      </tr>
     </table>
-    <p>Grayed-out rows are streams that have been superceded by a more recent (mutable) event timestamp. Adherence is still calculated.</p>
+    <p>Grayed-out rows are streams that have been superseded by a more recent (mutable) event timestamp. Adherence is still calculated.</p>
     <p>Persistent assessments are considered done when one persistent assessment has been performed.</p>
     <p>If an event is invalid, it may be because a study burst was removed from the schedule assigned to this participant, or a custom event was removed from the study.</p>
   </div>
