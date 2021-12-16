@@ -49,7 +49,7 @@
             <i data-bind="visible: $data.deletedObs, click: $parent.undelete"
               style="cursor: pointer" class="green undo icon"></i>
           </td>
-          <td nowrap>
+          <td class="main-col-23rem">
             <span data-bind="text: $data.name, visible: $data.deletedObs()"></span>
             <a data-bind="href: `/studies/${$data.identifier}`, text: $data.name, visible: !$data.deletedObs()"></a>
           </td>

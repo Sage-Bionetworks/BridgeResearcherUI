@@ -1,4 +1,5 @@
 import BaseAccount from "../../accounts/base_account";
+import fn from "../../functions";
 import ko from "knockout";
 import root from "../../root";
 import serverService from "../../services/server_service";
@@ -18,6 +19,8 @@ export default class StudyParticipantAdherence extends BaseAccount {
     this.dateObs = ko.observable('');
     this.activeOnlyObs = ko.observable(false);
     this.editSession = this.editSession.bind(this);
+
+    fn.copyProps(this, fn, "formatDateTime");
 
     this.activeOnlyObs.subscribe(() => this.load());
 

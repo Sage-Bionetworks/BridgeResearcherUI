@@ -6,8 +6,8 @@
       <h3 data-bind="text: titleObs"></h3>
     </div>
     <div class="fixed-header-buttons">
-      <button class="ui tiny button" data-bind="click: preview2">Event Stream Report&hellip;</button>
       <!--
+      <button class="ui tiny button" data-bind="click: preview2">Event Stream Report&hellip;</button>
       <button class="ui tiny button" data-bind="click: preview">Weekly Report&hellip;</button>
       -->
     </div>
@@ -18,9 +18,9 @@
 <bsm-layout id="studyparticipant-adherence">
   <div slot="header">
     <div class="ui small secondary menu">
-      <a class="item" data-bind="href: link('schedule')">Schedule Events</a>
       <span class="active item">Adherence</span>
       <a class="item" data-bind="href: link('schedule/adherencesearch')">Search</a>
+      <a class="item" data-bind="href: link('schedule/events')">Schedule Events</a>
       <a class="item" data-bind="href: link('schedule/timeline')">Timeline</a>
     </div>
   </div>
@@ -31,7 +31,10 @@
       <ui-checkbox params="checkedObs: activeOnlyObs" style="flex:1">
         Show active sessions only
       </ui-checkbox>
-      <div><b>Participant’s Time:</b> <span data-bind="text: dateObs"></span></div>
+      <div>
+        <b>Participant’s Time:</b> 
+        <span data-bind="text: formatDateTime(dateObs())"></span>
+      </div>
     </div>
   </div>
   <div slot="help">
@@ -109,8 +112,6 @@
         </td>
       </tr>
     </table>
-    <p>Grayed-out rows are streams that have been superseded by a more recent (mutable) event timestamp. Adherence is still calculated.</p>
-    <p>Persistent assessments are considered done when one persistent assessment has been performed.</p>
-    <p>If an event is invalid, it may be because a study burst was removed from the schedule assigned to this participant, or a custom event was removed from the study.</p>
+    <p>Persistent session windows are excluded from adherence reports.</p>
   </div>
 </bsm-layout>

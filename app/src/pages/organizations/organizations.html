@@ -40,7 +40,7 @@
           <td data-bind="visible: $parent.isAdmin()">
             <ui-checkbox params="checkedObs: $data.checkedObs"></ui-checkbox>
           </td>
-          <td>
+          <td class="main-col-23rem">
             <span data-bind="text: $data.name, visible: !$parent.canEdit($data)"></span>
             <a data-bind="href: `/organizations/${$data.identifier}`, text: $data.name,
               visible: $parent.canEdit($data)"></a>
