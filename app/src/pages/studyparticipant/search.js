@@ -124,6 +124,7 @@ export default class StudyParticipantAdherence extends BaseAccount {
         asmt.assessment = this.assessments[asmt.refKey];
         asmt.session = sch.session;
         asmt.sessionInstanceGuid = sch.instanceGuid;
+        asmt.startEventId = sch.startEventId;
         this.schedules[asmt.instanceGuid] = asmt;
       });
     });
@@ -168,7 +169,7 @@ export default class StudyParticipantAdherence extends BaseAccount {
   }
   formatStream(item) {
     let entry = this.schedules[item.instanceGuid];
-    return `${entry.session.startEventId} @ ${item.eventTimestamp}`;
+    return `${fn.formatEventId(entry.startEventId)} @ ${item.eventTimestamp}`;
   }
   startedOn(item) {
     return (item.startedOn) ? fn.formatDateTime(item.startedOn) : '';

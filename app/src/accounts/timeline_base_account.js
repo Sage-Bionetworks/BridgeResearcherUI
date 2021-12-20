@@ -30,7 +30,7 @@ export default class TimelineBaseAccount extends BaseAccount {
     let days = (sch.startDay === sch.endDay) ? `Day ${sch.startDay}` : `Days ${sch.startDay}—${sch.endDay}`;
     return `<h4>${session.label}</h4>` +
       `<p>${days} after “${sch.startEventId}” start @ ${sch.startTime}${exp}<br>` +
-      `Instance GUID: <a href="${this.searchLink(sch)}">${sch.instanceGuid}</a><br>` +
+      `Instance GUID: <a rel="noopener" href="${this.searchLink(sch)}">${sch.instanceGuid}</a><br>` +
       `Order: ${session.performanceOrder}</p>`;
   }
   asmtInfo(asmt) {

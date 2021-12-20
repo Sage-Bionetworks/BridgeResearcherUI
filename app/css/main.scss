@@ -233,6 +233,12 @@ progress {
       vertical-align: baseline;
     }
 }
+.main-col-23rem {
+  white-space: nowrap; 
+  max-width: 25rem; 
+  overflow: hidden; 
+  text-overflow: ellipsis;
+}
 
 .hasBorder td {
     border-bottom: 1px solid #ccc;

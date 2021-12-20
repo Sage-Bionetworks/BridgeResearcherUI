@@ -14,9 +14,9 @@
   <div slot="header">
     <pager2 params="prefix: 'ad', loadingFunc: search">
       <div class="ui small secondary menu">
-        <a class="item" data-bind="href: $parent.link('schedule')">Schedule Events</a>
         <a class="item" data-bind="href: $parent.link('schedule/adherence')">Adherence</a>
         <span class="active item">Search</span>
+        <a class="item" data-bind="href: $parent.link('schedule/events')">Schedule Events</a>
         <a class="item" data-bind="href: $parent.link('schedule/timeline')">Timeline</a>
       </div>
     </pager2>
