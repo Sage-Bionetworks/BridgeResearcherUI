@@ -118,7 +118,7 @@ export default class Binder {
       if (info.bind) {
         let context = { oldValue: model[info.name], model: model, copy: copy, vm: this.vm, observer: info.observable };
         let value = info.obsTransform(info.observable(), context);
-        if (value !== null && typeof value !== "undefined") {
+        if (value !== null && value !== '' && typeof value !== "undefined") {
           copy[info.name] = value;
         } else {
           delete copy[info.name];
