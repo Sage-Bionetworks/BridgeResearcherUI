@@ -30,7 +30,7 @@
       <tbody data-bind="foreach: itemsObs">
         <tr>
           <td>
-            <!-- ko if: $data.identifier !== 'api' && $data.identifier !== 'shared'-->
+            <!-- ko if: !['api','api-2','shared'].includes($data.identifier) -->
               <ui-checkbox data-bind="visible: $data.active" params="checkedObs: $data.checkedObs">
               </ui-checkbox>
               <i data-bind="visible: !$data.active, click: $parent.undelete"
