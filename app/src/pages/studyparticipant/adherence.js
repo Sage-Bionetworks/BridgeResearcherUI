@@ -63,11 +63,10 @@ export default class StudyParticipantAdherence extends BaseAccount {
       });
     }, 1);
   }  
-  // REMOVEME
-  preview2() {
+  preview(report) {
     root.openDialog('preview_dialog', {
       title: 'Preview Adherence Report',
-      supplier: () => serverService.getStudyParticipantAdherenceReport(this.studyId, this.userId, this.path())
+      supplier: () => serverService.getStudyParticipantAdherenceReport(this.studyId, this.userId, report)
     });
   }
 }

@@ -6,10 +6,6 @@
       <h3 data-bind="text: titleObs"></h3>
     </div>
     <div class="fixed-header-buttons">
-      <!--
-      <button class="ui tiny button" data-bind="click: preview2">Event Stream Report&hellip;</button>
-      <button class="ui tiny button" data-bind="click: preview">Weekly Report&hellip;</button>
-      -->
     </div>
   </div>
   <studyparticipant-tabset params="studyIdObs: navStudyIdObs, userIdObs: userIdObs, 
@@ -36,6 +32,12 @@
         <span data-bind="text: formatDateTime(dateObs())"></span>
       </div>
     </div>
+    <p class="link" data-bind="click: () => preview('eventstream')">
+      View event stream report JSON
+    </p>
+    <p class="link" data-bind="click: () => preview('weekly')">
+      View weekly report JSON
+    </p>
   </div>
   <div slot="help">
     <table class="adherence-table" style="overflow-x: auto; border: none">

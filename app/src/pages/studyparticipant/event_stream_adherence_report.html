@@ -43,7 +43,7 @@
       <!-- ko foreach: $data.sessionGuids.slice(1) -->
         <tr>
           <!-- skip 2 columns -->
-          <td class="th" data-bind="text: $component.otherRowSessionName($parent, $data)"></td>
+          <td class="th" style="text-align: right" data-bind="text: $component.otherRowSessionName($parent, $data)"></td>
           <!-- ko foreach: $component.daysRangeObs() -->
           <td data-bind="click: $component.openSession">
             <div data-bind="class: $component.isToday($parents[1], $data, $parents[0]),
