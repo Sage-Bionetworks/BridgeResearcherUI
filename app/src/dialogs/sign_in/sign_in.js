@@ -49,6 +49,19 @@ function makeReloader(appKey, environment) {
       root.closeDialog();
     };
 }
+function getOauthConfig(env) {
+  let key = 'production';
+  if (document.location.origin.indexOf('127.0.0.1') > -1) {
+    key = 'local';
+  } else if (document.location.origin.indexOf('-staging') > -1) {
+    key = 'staging';
+  }
+  if (env === 'production') {
+    key = (key + '-prod');
+  }
+  alert(JSON.stringify(config.synapseOauthClients[key]));
+  return config.synapseOauthClients[key];
+}
 
 export default function() {
   let self = this;
@@ -99,9 +112,10 @@ export default function() {
     }
     let appKey = storeService.get(APP_KEY);
     let environment = storeService.get(ENVIRONMENT);
+    let config = getOauthConfig(environment);
     let appName = utils.findAppName(self.appOptionsObs(), appKey);
     storeService.remove(OAUTH_STATE);
-    let obj = {appId: appKey, vendorId: 'synapse', 
+    let obj = {appId: appKey, vendorId: config.vendor, 
       authToken: root.queryParams.code, callbackUrl: document.location.origin};
     return serverService.oauthSignIn(appName, environment, obj)
       .then(() => document.location = '/' + document.location.hash)
@@ -252,33 +266,26 @@ export default function() {
   self.titleObs = ko.computed(() => TITLES[self.stateObs()]);
   self.buttonTextObs = ko.computed(() => BUTTONS[self.stateObs()]);
 
-  function getClientId() {
-    if (document.location.origin.indexOf('127.0.0.1') > -1) {
-      return config.client.local;
-    } else if (document.location.origin.indexOf('-staging') > -1) {
-      return config.client.staging;
-    }
-    return config.client.production;
-  }
-
   self.synapse = function(vm, event) {
     event.stopPropagation();
     event.preventDefault();
-
+    
+    let environment = self.environmentObs();
+    let config = getOauthConfig(environment);
     let payload = createPayload('appId');
     let appKey = payload.appId;
     let state = new Date().getTime().toString(32);
     storeService.set(APP_KEY, appKey);
     storeService.set(OAUTH_STATE, state);
-    storeService.set(ENVIRONMENT, self.environmentObs());
+    storeService.set(ENVIRONMENT, environment);
     let array = [];
     array.push('response_type=code');
-    array.push('client_id=' + getClientId());
+    array.push('client_id=' + config.clientId);
     array.push('scope=openid');
     array.push('state=' + encodeURIComponent(state));
     array.push('redirect_uri=' + encodeURIComponent(document.location.origin));
     array.push('claims=' + encodeURIComponent('{"id_token":{"userid":null}}'));
-    document.location = 'https://signin.synapse.org/?' + array.join('&');
+    document.location = config.signIn + array.join('&');
   }
   self.handleFocus = function(focusOnState) {
     return ko.computed(function() {

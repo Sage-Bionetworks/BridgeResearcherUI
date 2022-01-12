@@ -32,12 +32,6 @@
         <span data-bind="text: formatDateTime(dateObs())"></span>
       </div>
     </div>
-    <p class="link" data-bind="click: () => preview('eventstream')">
-      View event stream report JSON
-    </p>
-    <p class="link" data-bind="click: () => preview('weekly')">
-      View weekly report JSON
-    </p>
   </div>
   <div slot="help">
     <table class="adherence-table" style="overflow-x: auto; border: none">
@@ -115,5 +109,16 @@
       </tr>
     </table>
     <p>Persistent session windows are excluded from adherence reports.</p>
+    <p>
+      <a class="link" data-bind="click: () => preview('eventstream')">
+        View event stream report JSON
+      </a><br>
+      <a class="link" data-bind="click: () => preview('weekly')">
+        View weekly report JSON
+      </a>
+      <a class="link" data-bind="click: () => preview('allWeeklies')">
+        View weekly reports JSON
+      </a>
+    </p>
   </div>
 </bsm-layout>

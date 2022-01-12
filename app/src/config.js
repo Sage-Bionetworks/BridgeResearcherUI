@@ -67,10 +67,39 @@ export default {
     staging: "https://ws-staging.sagebridge.org",
     production: "https://ws.sagebridge.org"
   },
-  client: {
-    local: "100019",
-    staging: "100020",
-    production: "100018"
+  synapseOauthClients: {
+    local: {
+      vendor: 'bsm-local',
+      clientId: '100008',
+      signIn: 'https://signin.dev.sagebase.org/?'
+
+    },
+    staging: {
+      vendor: 'bsm-staging',
+      clientId: '100007',
+      signIn: 'https://signin.dev.sagebase.org/?'
+    },
+    production: {
+      vendor: 'synapse',
+      clientId: '100018',
+      signIn: 'https://signin.synapse.org/?'
+    },
+    "local-prod": {
+      vendor: 'bsm-local',
+      clientId: '100019',
+      signIn: 'https://signin.synapse.org/?'
+
+    },
+    "staging-prod": {
+      vendor: 'bsm-staging',
+      clientId: '100020',
+      signIn: 'https://signin.synapse.org/?'
+    },
+    "production-prod": {
+      vendor: 'synapse',
+      clientId: '100018',
+      signIn: 'https://signin.synapse.org/?'
+    }
   },
   assessmentPropTypes: [
     {label: 'String', value: 'string'},
