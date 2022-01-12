@@ -59,7 +59,6 @@ function getOauthConfig(env) {
   if (env === 'production') {
     key = (key + '-prod');
   }
-  alert(JSON.stringify(config.synapseOauthClients[key]));
   return config.synapseOauthClients[key];
 }
 
