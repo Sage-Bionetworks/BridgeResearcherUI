@@ -17,7 +17,9 @@
   <a data-bind="href: linkMaker('participants'), tabber, visible: canAdminParticipants()">
     <i class="users icon"></i> Participants</a>
 
-  <!--  now replaced by the participants screen. Will eventually remove these views.
+  <a data-bind="href: linkMaker('adherence'), tabber, visible: canAdminParticipants()">
+    <i class="tasks icon"></i> Adherence</a>
+    <!--  now replaced by the participants screen. Will eventually remove these views.
   <a data-bind="href: linkMaker('enrollments'), tabber, visible: canAdminParticipants()">
       <i class="handshake outline icon"></i> Enrollments</a>
   <a data-bind="href: linkMaker('externalids'), tabber, visible: canAdminParticipants()">

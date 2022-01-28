@@ -957,8 +957,8 @@ export class ServerService {
   getStudyParticipantAdherenceReport(studyId, userId, report) {
     return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/adherence/${report}`);
   }
-  getStudyParticipantAdherenceReports(studyId, report) {
-    return this.gethttp(`${config.studies}/${studyId}/adherence/${report}`);
+  getStudyParticipantAdherenceReports(studyId, query) {
+    return this.post(`${config.studies}/${studyId}/adherence/weekly`, query);
   }
   updateStudyParticipantAdherenceRecords(studyId, userId, records) { 
     return this.post(`${config.studies}/${studyId}/participants/${userId}/adherence`, records);

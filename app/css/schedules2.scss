@@ -45,49 +45,49 @@
     vertical-align: middle;
     text-align: center;
   }
-  .bar {
-    border: 2px solid #333;
-    border-radius: 50%;
-    display: inline-block;
-    width: 1em;
-    height: 1em;
-    margin: 3px 1px 0 1px;
-  }
-  .not_yet_available {
-    background-color: #ccc;
-    border-color: #999;
-  }
-  .unstarted {
-    background-color: #4183c4;
-  }
-  .started {
-    background-color: transparent;
-    border-color: #3D9970;
-  }
-  .completed {
-    background-color: #2ECC40;
-    border-color: #3D9970;
-  }
-  .abandoned {
-    background-color: transparent;
-    border-color: #B22222;
-  }
-  .expired {
-    background-color: #B22222;
-    border-color: #85144b;
-  }
-  .not_applicable {
-    background-color: transparent;
-    border-color: #ccc;
-  }
-  .declined {
-    background-color: pink;
-    border-color: #B22222;
-  }
-  .empty {
-    background-color: transparent;
-    border-color: transparent;
-  }
+}
+.bar {
+  border: 2px solid #333;
+  border-radius: 50%;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin: 3px 1px 0 1px;
+}
+.not_yet_available {
+  background-color: #ccc;
+  border-color: #999;
+}
+.unstarted {
+  background-color: #4183c4;
+}
+.started {
+  background-color: transparent;
+  border-color: #3D9970;
+}
+.completed {
+  background-color: #2ECC40;
+  border-color: #3D9970;
+}
+.abandoned {
+  background-color: transparent;
+  border-color: #B22222;
+}
+.expired {
+  background-color: #B22222;
+  border-color: #85144b;
+}
+.not_applicable {
+  background-color: transparent;
+  border-color: #ccc;
+}
+.declined {
+  background-color: pink;
+  border-color: #B22222;
+}
+.empty {
+  background-color: transparent;
+  border-color: transparent;
 }
 
 .ar-search-table {
@@ -99,4 +99,8 @@
     white-space: nowrap;
     text-align: left;
   }
+}
+.center-aligned {
+  text-align: center !important;
+  min-width: 3rem!important;
 }

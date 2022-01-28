@@ -575,7 +575,6 @@ function formatEventId(eventId) {
   return eventId;
 }
 
-
 /* ==================================== DATE FUNCTIONS ==================================== */
 
 function _asDate(value) {

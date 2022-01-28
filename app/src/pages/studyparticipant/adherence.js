@@ -67,7 +67,7 @@ export default class StudyParticipantAdherence extends BaseAccount {
     if (report === 'allWeeklies') {
       root.openDialog('preview_dialog', {
         title: 'Preview Adherence Report',
-        supplier: () => serverService.getStudyParticipantAdherenceReports(this.studyId, 'weekly?labelFilter=Main')
+        supplier: () => serverService.getStudyParticipantAdherenceReports(this.studyId, 'weekly?testFilter=test')
       });
     } else {
       root.openDialog('preview_dialog', {
