@@ -5,14 +5,11 @@ import root from "../../root";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
 
-const DAY_ENTRIES = ['0', '1', '2', '3', '4', '5', '6'];
-
 export default class StudyAdherence extends BaseStudy {
   constructor(params) {
     super(params, 'adherence');
     this.studyId = params.studyId;
     this.study = null;
-    this.dayEntries = DAY_ENTRIES;
   
     fn.copyProps(this, fn, 'formatDate', 'formatDateTime', 'formatNameAsFullLabel');
     fn.copyProps(this, root, 'isAdmin');
@@ -34,9 +31,8 @@ export default class StudyAdherence extends BaseStudy {
       id: "adherence",
       refresh: () => ko.postbox.publish('adh-refresh', 0)
     });
-    super.load().then(() => ko.postbox.publish('adh-refresh', 0));
-
     this.loadingFunc = this.loadingFunc.bind(this);
+    super.load().then(() => ko.postbox.publish('adh-refresh', 0));
   }
   loadingFunc(offsetBy) {
     let query = {offsetBy, pageSize: 50};
@@ -95,7 +91,7 @@ export default class StudyAdherence extends BaseStudy {
     this.formattedSearchObs(array.join(', '));
     return res;
   }
-  finishedState(entry) {
+  formatProgression(entry) {
     return (entry.progression === 'unstarted') ? '— Unstarted —' : '— Done —';
   }
   formatWin(report, day, index) {

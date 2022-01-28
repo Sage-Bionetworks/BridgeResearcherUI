@@ -76,12 +76,12 @@
             </a>
           </td>
           <td></td>
-          <td colspan="7" style="text-align:center">
+          <td colspan="7" class="center-aligned">
             <div data-bind="visible: entry.nextActivity, 
               text: $component.formatNextActivity(entry.nextActivity)">
             </div>
             <div data-bind="visible: !entry.nextActivity,
-              text: $component.finishedState(entry)">
+              text: $component.formatProgression(entry)">
               &mdash;
             </div>
           </td>
