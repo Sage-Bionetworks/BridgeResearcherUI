@@ -79,16 +79,21 @@ export default class StudyAdherence extends BaseStudy {
       array.push(`labels include “${this.labelObs()}”`);
     }
     if (this.testObs() && this.testObs() !== 'both') {
-      array.push(`accounts in ${this.testObs()}`);
+      array.push(`accounts are ${this.testObs()} accounts`);
     }
     if (this.progressionObs()) {
-      array.push(`study ${this.progressionObs().replace("_", " ")} for user`);
+      array.push(`study is ${this.progressionObs().replace("_", " ")} for user`);
     }
     let range = this.rangeObs();
     if (range !== '0-100' && /^\d{1,3}-\d{1,3}$/.test(range)) {
-      array.push(`adherence in range ${range}%`);
+      array.push(`adherence is in range ${range}%`);
     }
-    this.formattedSearchObs(array.join(', '));
+    if (array.length) {
+      this.formattedSearchObs('Search for all reports where ' + 
+        fn.formatList(array, "and", "; "));
+    } else {
+      this.formattedSearchObs('Search for all reports');  
+    }
     return res;
   }
   formatProgression(entry) {
