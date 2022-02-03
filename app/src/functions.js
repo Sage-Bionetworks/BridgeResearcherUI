@@ -620,12 +620,15 @@ function getRangeInDays(deltaPast, deltaFuture) {
   return { start, end };
 }
 function formatDateTime(date, format) {
+  if (!date) { return ''; }
   return DATE_TIME[_format(format)](date);
 }
 function formatDate(date, format) {
+  if (!date) { return ''; }
   return DATE[_format(format)](date);
 }
 function formatTime(date, format) {
+  if (!date) { return ''; }
   return TIME[_format(format)](date);
 }
 

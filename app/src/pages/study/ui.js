@@ -25,7 +25,7 @@ export default class StudyUi extends BaseStudy {
     }
     SIGN_IN_TYPES.forEach(value => {
       this[value.obs] = ko.observable();
-    })
+    });
 
     this.binder
       .bind("contacts[]", [], null, Binder.persistArrayWithBinder)
