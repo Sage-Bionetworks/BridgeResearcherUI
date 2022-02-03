@@ -107,7 +107,7 @@ export default class StudyAdherence extends BaseStudy {
     }
     if (array.length) {
       this.formattedSearchObs('Search for all reports where ' + 
-        fn.formatList(array, "and", "; "));
+        fn.formatList(array, "and", ";"));
     } else {
       this.formattedSearchObs('Search for all reports');  
     }
