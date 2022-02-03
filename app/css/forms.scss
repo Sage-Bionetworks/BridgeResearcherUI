@@ -191,8 +191,7 @@ div.te.container {
     margin-bottom: 2rem;
 }
 
-/* Simple rows in a list-list editor, e.g. schedule 2 (as opposed to the more complicated DnD of the
-  schema and survey editors, which was as nightmare to maintain. I give up. */
+/* Simple rows in a list-list editor, e.g. schedule 2 (as opposed to the more complicated DnD of the schema and survey editors, which was as nightmare to maintain. I give up. */
 
 .list-item {
   display: flex;
@@ -245,9 +244,8 @@ notification:nth-of-type(even) .note-list-item {
   }
 }
 .multicheckbox {
-  padding: 0 0 .3rem 0;
+  padding: 0 0 .4rem 0;
 }
-
 .vertical-search {
   .panel {
     padding: 0 0 .25rem 0;

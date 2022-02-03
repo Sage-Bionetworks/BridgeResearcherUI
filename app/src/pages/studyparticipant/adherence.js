@@ -16,12 +16,9 @@ export default class StudyParticipantAdherence extends BaseAccount {
       }
     });
     this.reportObs = ko.observable();
-    this.dateObs = ko.observable('');
+    this.timeZoneObs = ko.observable('');
     this.activeOnlyObs = ko.observable(false);
     this.editSession = this.editSession.bind(this);
-
-    fn.copyProps(this, fn, "formatDateTime");
-
     this.activeOnlyObs.subscribe(() => this.load());
 
     serverService.getStudy(this.studyId).then((response) => {
@@ -35,7 +32,7 @@ export default class StudyParticipantAdherence extends BaseAccount {
   load() {
     return serverService.getStudyParticipantAdherenceReport(this.studyId, this.userId, this.path())
       .then(report => {
-        this.dateObs(report.timestamp);
+        this.timeZoneObs(report.clientTimeZone);
         this.reportObs(report);
       })
       .catch(utils.failureHandler({ id: 'studyparticipant-adherence' }));

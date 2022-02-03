@@ -5,6 +5,8 @@ import root from "../../root";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
 
+const DATE_TODAY = new Date().toISOString().split("T")[0];
+
 export default class StudyAdherence extends BaseStudy {
   constructor(params) {
     super(params, 'adherence');
@@ -21,9 +23,11 @@ export default class StudyAdherence extends BaseStudy {
       .obs('label')
       .obs('test', 'both')
       .obs('formattedSearch', '')
-      .obs('progression')
       .obs('id')
-      .obs('range', '0-100');
+      .obs('range', '0-100')
+      .obs('unstarted')
+      .obs('inProgress')
+      .obs('done');
 
     tables.prepareTable(this, {
       name: "weekly adherence report",
@@ -46,11 +50,21 @@ export default class StudyAdherence extends BaseStudy {
     if (this.labelObs()) {
       query.labelFilters = [this.labelObs()];
     }
-    if (this.progressionObs()) {
-      query.progressionFilter = this.progressionObs();
-    }
     if (this.idObs()){ 
       query.idFilter = this.idObs();
+    }
+    let pf = [];
+    if (this.unstartedObs()) {
+      pf.push('unstarted');
+    }
+    if (this.inProgressObs()) {
+      pf.push('in_progress');
+    }
+    if (this.doneObs()) {
+      pf.push('done');
+    }
+    if (pf.length) {
+      query.progressionFilters = pf;
     }
     return serverService.getStudyParticipantAdherenceReports(this.studyId, query)
       .then(this.postLoadPagerFunc)
@@ -60,9 +74,9 @@ export default class StudyAdherence extends BaseStudy {
   }
   formatActivity(entry) {
     if (entry.studyBurstId) {
-      return `${entry.studyBurstId} ${entry.studyBurstNum} (Week ${entry.week})`;
+      return `<span title="Week ${entry.week}">${entry.studyBurstId} ${entry.studyBurstNum}—${entry.sessionName}</span>`;
     }
-    return `${entry.sessionName} (Week ${entry.week})`
+    return `<span title="Week ${entry.week}">${entry.sessionName}</span>`
   }
   formatNextActivity(entry) {
     if (!entry)  {
@@ -81,8 +95,11 @@ export default class StudyAdherence extends BaseStudy {
     if (this.testObs() && this.testObs() !== 'both') {
       array.push(`accounts are ${this.testObs()} accounts`);
     }
-    if (this.progressionObs()) {
-      array.push(`study is ${this.progressionObs().replace("_", " ")} for user`);
+    if (res.requestParams.progressionFilters) {
+      let s = res.requestParams.progressionFilters
+        .map(s => s.replace('_', ' '))
+        .join(', ');
+      array.push(`study is ${s} for user`);
     }
     let range = this.rangeObs();
     if (range !== '0-100' && /^\d{1,3}-\d{1,3}$/.test(range)) {
@@ -101,6 +118,7 @@ export default class StudyAdherence extends BaseStudy {
   }
   formatWin(report, day, index) {
     let entry = report.byDayEntries[day][index];
+    console.log(entry);
     return entry.timeWindows
       .map(win => `<span title="${entry.startDate}" class="bar ${win.state}"></span>`)
       .join('');
@@ -114,7 +132,9 @@ export default class StudyAdherence extends BaseStudy {
     this.rangeObs('0-100');
     this.formattedSearchObs('');
     this.idObs('');
-    this.progressionObs(null);
+    this.unstartedObs(false);
+    this.inProgressObs(false);
+    this.doneObs(false);
     ko.postbox.publish('adh-refresh', 0);
   }
 }
