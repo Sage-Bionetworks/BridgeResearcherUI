@@ -64,16 +64,12 @@ export default class StudyParticipantAdherence extends BaseAccount {
     }, 1);
   }  
   preview(report) {
-    if (report === 'allWeeklies') {
-      root.openDialog('preview_dialog', {
-        title: 'Preview Adherence Report',
-        supplier: () => serverService.getStudyParticipantAdherenceReports(this.studyId, 'weekly?labelFilter=Main')
-      });
-    } else {
-      root.openDialog('preview_dialog', {
-        title: 'Preview Adherence Report',
-        supplier: () => serverService.getStudyParticipantAdherenceReport(this.studyId, this.userId, report)
-      });
-    }
+    let func = (report === 'weeklies') ?
+      () => serverService.getStudyParticipantAdherenceReports(this.studyId, {}) :
+      () => serverService.getStudyParticipantAdherenceReport(this.studyId, this.userId, report);
+    root.openDialog('preview_dialog', {
+      title: 'Preview Adherence Report', 
+      supplier: func
+    });
   }
 }

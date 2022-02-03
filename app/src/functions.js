@@ -462,7 +462,7 @@ function formatList(array = [], finalWord = "and", separator = ", ") {
       return `${array[0]} ${finalWord} ${array[1]}`;
     } else {
       let middle = array.slice(1, array.length - 1).join(separator);
-      return `${array[0]}, ${middle}, ${finalWord} ${array[array.length - 1]}`;
+      return `${array[0]}${separator} ${middle}${separator} ${finalWord} ${array[array.length - 1]}`;
     }
   }
   return "";
@@ -574,7 +574,6 @@ function formatEventId(eventId) {
   }
   return eventId;
 }
-
 
 /* ==================================== DATE FUNCTIONS ==================================== */
 

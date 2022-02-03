@@ -1,0 +1,146 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="/studies" class="section">Studies</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="text: titleObs"></h3>
+    </div>
+    <div class="fixed-header-buttons">
+    </div>
+  </div>
+  <study-tabset params="identifierObs: identifierObs, isNewObs: isNewObs, phaseObs: phaseObs"></study-tabset>
+</div>
+<bsm-layout id="schedule">
+  <div slot="header">
+    <pager2 params="prefix: 'adh', loadingFunc: loadingFunc">
+      <span data-bind="text: $parent.formattedSearchObs"></span>
+    </pager2>
+  </div>
+  <div slot="content">
+    <table class="ui compact table">
+      <thead>
+        <tr>
+          <th width="10"></th>
+          <th>Participant</th>
+          <th style="text-align:right">Day:</th>
+          <th class="center-aligned">1</th>
+          <th class="center-aligned">2</th>
+          <th class="center-aligned">3</th>
+          <th class="center-aligned">4</th>
+          <th class="center-aligned">5</th>
+          <th class="center-aligned">6</th>
+          <th class="center-aligned">7</th>
+          <th>Adherence</th>
+        </tr>
+      </thead>
+      <tbody class="no_records" data-bind="if: itemsObs().length === 0">
+        <tr>
+          <td colspan="11" data-bind="html: recordsMessageObs"></td>
+        </tr>
+      </tbody>
+      <tbody data-bind="foreach: { data: itemsObs, as: 'entry' }">
+        <!-- ko foreach: { data: entry.rows, as: 'row' } -->
+          <tr>
+            <td>
+              <span data-bind="visible: entry.testAccount && $index() === 0">
+                <i class="ui yellow bug icon" title="Test Account"></i>
+              </span>
+            </td>
+            <td><a data-bind="href: `/studies/${$component.studyId}/participants/${entry.participant.identifier}/schedule/adherence`,
+                html: $component.formatNameAsFullLabel(entry.participant), 
+                visible: $index() === 0"></a></td>
+            <td data-bind="text: $component.formatActivity(row)"></td>
+            <td class="center-aligned" data-bind="html: $component.formatWin(entry, '0', $index())"></td>
+            <td class="center-aligned" data-bind="html: $component.formatWin(entry, '1', $index())"></td>
+            <td class="center-aligned" data-bind="html: $component.formatWin(entry, '2', $index())"></td>
+            <td class="center-aligned" data-bind="html: $component.formatWin(entry, '3', $index())"></td>
+            <td class="center-aligned" data-bind="html: $component.formatWin(entry, '4', $index())"></td>
+            <td class="center-aligned" data-bind="html: $component.formatWin(entry, '5', $index())"></td>
+            <td class="center-aligned" data-bind="html: $component.formatWin(entry, '6', $index())"></td>
+            <td>
+              <span data-bind="text: entry.weeklyAdherencePercent + '%', visible: $index() === 0"></span>
+            </td>
+          </tr>
+        <!-- /ko -->
+        <tr data-bind="if: entry.rows.length == 0">
+          <td>
+            <span data-bind="visible: entry.testAccount">
+              <i class="ui yellow bug icon" title="Test Account"></i>
+            </span>
+          </td>
+          <td>
+            <a data-bind="href: `/studies/${$component.studyId}/participants/${entry.participant.identifier}/schedule/adherence`,
+              html: $component.formatNameAsFullLabel(entry.participant)">
+            </a>
+          </td>
+          <td></td>
+          <td colspan="7" class="center-aligned">
+            <div data-bind="visible: entry.nextActivity, 
+              text: $component.formatNextActivity(entry.nextActivity)">
+            </div>
+            <div data-bind="visible: !entry.nextActivity,
+              text: $component.formatProgression(entry)">
+              &mdash;
+            </div>
+          </td>
+          <td>
+            <span data-bind="text: entry.weeklyAdherencePercent + '%'"></span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+  <div slot="editor">
+
+    <form class="ui form vertical-search" onsubmit="submit: doFormSearch">
+      <div class="labeled-panel">
+        <div class="field">
+          <label>Participant Identifier</label>
+          <input type="text" data-bind="textInput: idObs"/>
+        </div>
+      </div>
+      <div class="labeled-panel">
+        <div class="field">
+          <label>Adherence (min-max %)</label>
+          <input type="text" data-bind="textInput: rangeObs"/>
+        </div>
+      </div>
+      <div class="labeled-panel">
+        <div class="field">
+          <label>Label</label>
+          <input type="text" data-bind="textInput: labelObs"/>
+        </div>
+      </div>
+      <div class="labeled-panel">
+        <div class="field">
+          <label>Test Accounts</label>
+          <select class="ui dropdown" data-bind="value: testObs">
+            <option value="both">Both</option>
+            <option value="test">Test</option>
+            <option value="production">Production</option>
+          </select>
+        </div>
+      </div>
+      <div class="labeled-panel">
+        <div class="field">
+          <label>Participant Progression</label>
+          <select class="ui dropdown" data-bind="value: progressionObs">
+            <option value="">All</option>
+            <option value="unstarted">Unstarted</option>
+            <option value="in_progress">In Progress</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="labeled-panel">
+        <button class="ui tiny button" data-bind="click: doFormSearch">Filter</button>
+        <button class="ui tiny button" data-bind="click: clear">Clear</button>
+      </div>
+    </form>
+
+  </div>
+</bsm-layout>
