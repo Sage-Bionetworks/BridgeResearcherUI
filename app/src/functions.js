@@ -454,14 +454,14 @@ function pad(num) {
   let norm = Math.abs(Math.floor(num));
   return (norm < 10 ? "0" : "") + norm;
 }
-function formatList(array = [], finalWord = "and", separator = ", ") {
+function formatList(array = [], finalWord = "and", separator = ",") {
   if (is(array, "Array") && array.length) {
     if (array.length === 1) {
       return array[0];
     } else if (array.length === 2) {
       return `${array[0]} ${finalWord} ${array[1]}`;
     } else {
-      let middle = array.slice(1, array.length - 1).join(separator);
+      let middle = array.slice(1, array.length - 1).join(`${separator} `);
       return `${array[0]}${separator} ${middle}${separator} ${finalWord} ${array[array.length - 1]}`;
     }
   }
@@ -509,7 +509,7 @@ function formatSearch(search) {
     array.push(`attribute ${search.attributeKey} matches “${search.attributeValueFilter}”`);
   }
   if (array.length) {
-    return "Search for accounts where " + formatList(array, "and", "; ");
+    return "Search for accounts where " + formatList(array, "and", ";");
   }
   return "Search for all accounts";
 }
