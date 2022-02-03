@@ -32,7 +32,7 @@
           <th class="center-aligned">5</th>
           <th class="center-aligned">6</th>
           <th class="center-aligned">7</th>
-          <th>Adherence</th>
+          <th></th>
         </tr>
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
@@ -52,20 +52,19 @@
                 html: $component.formatNameAsFullLabel(entry.participant), 
                 visible: $index() === 0"></a></td>
             <td data-bind="html: $component.formatActivity(row)"></td>
-            <td class="center-aligned" data-bind="html: $component.formatWin(entry, '0', $index())"></td>
-            <td class="center-aligned" data-bind="html: $component.formatWin(entry, '1', $index())"></td>
-            <td class="center-aligned" data-bind="html: $component.formatWin(entry, '2', $index())"></td>
-            <td class="center-aligned" data-bind="html: $component.formatWin(entry, '2', $index())"></td>
-            <td class="center-aligned" data-bind="html: $component.formatWin(entry, '3', $index())"></td>
-            <td class="center-aligned" data-bind="html: $component.formatWin(entry, '4', $index())"></td>
-            <td class="center-aligned" data-bind="html: $component.formatWin(entry, '5', $index())"></td>
-            <td class="center-aligned" data-bind="html: $component.formatWin(entry, '6', $index())"></td>
+            <td class="center-aligned" style="white-space: nowrap" data-bind="html: $component.formatWin(entry, '0', $index())"></td>
+            <td class="center-aligned" style="white-space: nowrap" data-bind="html: $component.formatWin(entry, '1', $index())"></td>
+            <td class="center-aligned" style="white-space: nowrap" data-bind="html: $component.formatWin(entry, '2', $index())"></td>
+            <td class="center-aligned" style="white-space: nowrap" data-bind="html: $component.formatWin(entry, '3', $index())"></td>
+            <td class="center-aligned" style="white-space: nowrap" data-bind="html: $component.formatWin(entry, '4', $index())"></td>
+            <td class="center-aligned" style="white-space: nowrap" data-bind="html: $component.formatWin(entry, '5', $index())"></td>
+            <td class="center-aligned" style="white-space: nowrap" data-bind="html: $component.formatWin(entry, '6', $index())"></td>
             <td>
               <span data-bind="text: entry.weeklyAdherencePercent + '%', visible: $index() === 0"></span>
             </td>
           </tr>
         <!-- /ko -->
-        <tr data-bind="if: entry.rows.length == 0">
+        <tr data-bind="if: entry.rows && entry.rows.length == 0">
           <td>
             <span data-bind="visible: entry.testAccount">
               <i class="ui yellow bug icon" title="Test Account"></i>

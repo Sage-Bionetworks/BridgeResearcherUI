@@ -5,8 +5,6 @@ import root from "../../root";
 import serverService from "../../services/server_service";
 import tables from "../../tables";
 
-const DATE_TODAY = new Date().toISOString().split("T")[0];
-
 export default class StudyAdherence extends BaseStudy {
   constructor(params) {
     super(params, 'adherence');
