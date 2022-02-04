@@ -119,6 +119,7 @@ export default function(params) {
     self.titleObs(study.name);
     self.identifierObs(study.identifier);
     self.phaseObs(study.phase);
+    self.isNewObs(!!study.scheduleGuid);
   });
   getEventIds(params.studyId).then(array => self.eventIdsObs(array)).then(() => {
     if (self.study.scheduleGuid) {
