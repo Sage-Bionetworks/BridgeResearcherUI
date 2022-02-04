@@ -11,7 +11,7 @@ export default class BaseStudy {
     this.tab = tab; // for redirects
     this.failureHandler = utils.failureHandler({
       redirectMsg: "Study not found.",
-      redirectTo: "studies",
+      redirectTo: "../../studies",
       transient: false,
       id: id
     });

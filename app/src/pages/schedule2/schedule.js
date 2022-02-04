@@ -120,7 +120,13 @@ export default function(params) {
     self.identifierObs(study.identifier);
     self.phaseObs(study.phase);
     self.isNewObs(!!study.scheduleGuid);
-  });
+  }).catch(
+    utils.failureHandler({
+      redirectMsg: "Study not found.",
+      redirectTo: "../../studies",
+      transient: false
+    })
+  );
   getEventIds(params.studyId).then(array => self.eventIdsObs(array)).then(() => {
     if (self.study.scheduleGuid) {
       serverService.getStudySchedule(params.studyId)
