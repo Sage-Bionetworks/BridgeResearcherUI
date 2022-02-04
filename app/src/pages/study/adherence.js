@@ -115,6 +115,9 @@ export default class StudyAdherence extends BaseStudy {
       .map(win => `<span title="${entry.startDate}" class="bar ${win.state}"></span>`)
       .join('');
   }
+  participantLink(id) {
+    return `/studies/${this.studyId}/participants/${id}/schedule/adherence`;
+  }
   updateSearch() {
     let search = {};
     if (this.testObs() !== '') {
