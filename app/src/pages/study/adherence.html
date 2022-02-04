@@ -95,29 +95,31 @@
   </div>
   <div slot="editor">
 
-    <form class="ui form vertical-search" onsubmit="submit: doFormSearch">
-      <div class="labeled-panel">
-        <div class="field">
-          <label>Participant Identifier</label>
-          <input type="text" data-bind="textInput: idObs"/>
+    <div class="ui form vertical-search" data-bind="event: {keyup: doFormSearch}">
+      <div class="panel">
+        <div class="ui icon input">
+          <input type="text" placeholder="Identifier"
+            data-bind="textInput: idObs, hasFocus: true"/>
+          <i class="address card icon"></i>
         </div>
       </div>
-      <div class="labeled-panel">
-        <div class="field">
-          <label>Adherence (min-max %)</label>
-          <input type="text" data-bind="textInput: rangeObs"/>
+      <div class="panel">
+        <div class="ui icon input">
+          <input type="text" placeholder="Adherence (min-max %)" data-bind="textInput: rangeObs"/>
+          <i class="percent icon"></i>
         </div>
       </div>
-      <div class="labeled-panel">
-        <div class="field">
-          <label>Label</label>
-          <input type="text" data-bind="textInput: labelObs"/>
+      <div class="panel">
+        <div class="ui icon input">
+          <input type="text" placeholder="Label"
+            data-bind="textInput: labelObs, hasFocus: true"/>
+          <i class="tag icon"></i>
         </div>
       </div>
-      <div class="labeled-panel">
+      <div class="panel">
         <div class="field">
-          <label>Test Accounts</label>
           <select class="ui dropdown" data-bind="value: testObs">
+            <option value>Progression:</option>
             <option value="both">Both</option>
             <option value="test">Test</option>
             <option value="production">Production</option>
@@ -125,7 +127,6 @@
         </div>
       </div>
       <div class="labeled-panel">
-
         <div class="field">
           <label>Participant Progression</label>
           <div class="multicheckbox">
@@ -146,7 +147,7 @@
         </div>
       </div>
       <div class="labeled-panel">
-        <button class="ui tiny button" data-bind="click: doFormSearch">Filter</button>
+        <button class="ui tiny button" data-bind="click: searchButton">Filter</button>
         <button class="ui tiny button" data-bind="click: clear">Clear</button>
       </div>
     </form>
