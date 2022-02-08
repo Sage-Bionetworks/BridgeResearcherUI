@@ -84,8 +84,8 @@ export default class Participants {
       .obs("attributeKey", this.search.attributeKey)
       .obs("attributeValueFilter", this.search.attributeValueFilter)
       .obs("attributeKeys[]", [])
-      .obs("predicate", "and")
-      .obs("inUse");
+      .obs("predicate", this.search.predicate || "and")
+      .obs("inUse", this.search.inUse);
 
     optionsService.getOrganizationNames()
       .then(map => this.orgNames = map)
