@@ -508,6 +508,14 @@ function formatSearch(search) {
   if (search.attributeKey && search.attributeValueFilter) {
     array.push(`attribute ${search.attributeKey} matches “${search.attributeValueFilter}”`);
   }
+  // when returned as a requestParam, this is not a string
+  if (typeof search.inUse !== 'undefined') {
+    if (search.inUse) {
+      array.push(`account is in use`);
+    } else {
+      array.push(`account is not in use`);
+    }
+  }
   if (array.length) {
     return "Search for accounts where " + formatList(array, "and", ";");
   }
