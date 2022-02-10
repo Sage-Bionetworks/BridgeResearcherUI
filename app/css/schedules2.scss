@@ -104,3 +104,19 @@
   text-align: center !important;
   white-space: nowrap;
 }
+
+/* Better tooltips */
+span[data-title] {
+  position: relative;
+}
+span[data-title]:hover::after {
+  content: attr(data-title);
+  position: absolute;
+  background-color: white;
+  border: 1px solid rgba(34,36,38,.1);
+  border-radius: 2px;
+  padding: .25rem .5rem;
+  white-space: nowrap;
+  top: -3rem;
+  left: 0;
+}

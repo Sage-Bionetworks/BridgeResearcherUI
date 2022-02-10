@@ -42,39 +42,41 @@
         </tr>
       </tbody>
       <tbody data-bind="foreach: { data: itemsObs, as: 'entry' }">
-        <!-- ko foreach: { data: entry.rows, as: 'row' } -->
-          <tr>
-            <td>
-              <span data-bind="visible: entry.testAccount && $index() === 0">
-                <i class="ui yellow bug icon" title="Test Account"></i>
-              </span>
-            </td>
-            <td><a data-bind="visible: $index() === 0,
-                href: $component.participantLink(entry.participant.identifier),
-                html: $component.formatNameAsFullLabel(entry.participant)"></a></td>
-            <td style="text-align: right" 
-              data-bind="html: $component.formatActivity(row)"></td>
-            <td class="center-aligned" 
-              data-bind="html: $component.formatWin(entry, '0', $index())"></td>
-            <td class="center-aligned" 
-              data-bind="html: $component.formatWin(entry, '1', $index())"></td>
-            <td class="center-aligned" 
-              data-bind="html: $component.formatWin(entry, '2', $index())"></td>
-            <td class="center-aligned" 
-              data-bind="html: $component.formatWin(entry, '3', $index())"></td>
-            <td class="center-aligned" 
-              data-bind="html: $component.formatWin(entry, '4', $index())"></td>
-            <td class="center-aligned" 
-              data-bind="html: $component.formatWin(entry, '5', $index())"></td>
-            <td class="center-aligned" 
-              data-bind="html: $component.formatWin(entry, '6', $index())"></td>
-            <td>
-              <span data-bind="text: entry.weeklyAdherencePercent + '%', 
-                visible: $index() === 0"></span>
-            </td>
-          </tr>
+        <!-- ko if: entry.progression === 'in_progress' -->
+          <!-- ko foreach: { data: entry.rows, as: 'row' } -->
+            <tr>
+              <td>
+                <span data-bind="visible: entry.testAccount && $index() === 0">
+                  <i class="ui yellow bug icon" title="Test Account"></i>
+                </span>
+              </td>
+              <td><a data-bind="visible: $index() === 0,
+                  href: $component.participantLink(entry.participant.identifier),
+                  html: $component.formatNameAsFullLabel(entry.participant)"></a></td>
+              <td style="text-align: right" 
+                data-bind="html: $component.formatActivity(row)"></td>
+              <td class="center-aligned" 
+                data-bind="html: $component.formatWin(entry, '0', $index())"></td>
+              <td class="center-aligned" 
+                data-bind="html: $component.formatWin(entry, '1', $index())"></td>
+              <td class="center-aligned" 
+                data-bind="html: $component.formatWin(entry, '2', $index())"></td>
+              <td class="center-aligned" 
+                data-bind="html: $component.formatWin(entry, '3', $index())"></td>
+              <td class="center-aligned" 
+                data-bind="html: $component.formatWin(entry, '4', $index())"></td>
+              <td class="center-aligned" 
+                data-bind="html: $component.formatWin(entry, '5', $index())"></td>
+              <td class="center-aligned" 
+                data-bind="html: $component.formatWin(entry, '6', $index())"></td>
+              <td>
+                <span data-bind="text: entry.weeklyAdherencePercent + '%', 
+                  visible: $index() === 0"></span>
+              </td>
+            </tr>
+          <!-- /ko -->
         <!-- /ko -->
-        <tr data-bind="if: entry.rows && entry.rows.length == 0">
+        <tr data-bind="if: entry.progression !== 'in_progress'">
           <td>
             <span data-bind="visible: entry.testAccount">
               <i class="ui yellow bug icon" title="Test Account"></i>

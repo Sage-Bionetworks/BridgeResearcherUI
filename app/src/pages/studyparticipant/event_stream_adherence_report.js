@@ -37,12 +37,15 @@ export default class EventStreamAdherenceReport {
     if (stream.byDayEntries[cellNum]) {
       let day = stream.byDayEntries[cellNum].filter(day => day.sessionGuid === guid);
       if (day.length) {
-        return day[0].timeWindows.map(win => `<span data-guid="${win.sessionInstanceGuid}" 
+        return day[0].timeWindows.map(win => {
+          let time = (day[0].startDate == win.endDate) ? 
+            day[0].startDate : `${day[0].startDate} to ${win.endDate}`;
+          return `<span data-guid="${win.sessionInstanceGuid}" 
             data-eventId="${stream.startEventId}" 
             data-eventTimestamp="${stream.eventTimestamp}" 
-            title="${day[0].startDate + ' ' + win.endDate}" 
-            class="bar ${win.state}"></span>`)
-          .join('');
+            data-title="${time}" 
+            class="bar ${win.state}"></span>`;
+        }).join('');
       }
     }
     return `<div class="empty bar"></div>`;
