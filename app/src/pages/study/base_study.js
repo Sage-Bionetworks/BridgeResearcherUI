@@ -10,7 +10,6 @@ export default class BaseStudy {
     this.studyId = params.studyId;
     this.tab = tab; // for redirects
     this.failureHandler = utils.failureHandler({
-      redirectMsg: "Study not found.",
       redirectTo: "../../studies",
       transient: false,
       id: id
@@ -38,21 +37,21 @@ export default class BaseStudy {
         .catch(this.failureHandler);
   }
   createStudy(vm, event) {
-      serverService.createStudy(this.study)
-        .then(utils.successHandler(vm, event, "Study has been saved."))
-        .then(() => document.location = `/studies/${this.identifierObs()}/${this.tab}`)
-        .catch(this.failureHandler);
+    serverService.createStudy(this.study)
+      .then(utils.successHandler(vm, event, "Study has been saved."))
+      .then(() => document.location = `/studies/${this.identifierObs()}/${this.tab}`)
+      .catch(this.failureHandler);
   }
   updateStudy(vm, event) {
-      serverService.updateStudy(this.study)
-        .then(fn.handleStaticObsUpdate(this.isNewObs, false))
-        .then(fn.handleObsUpdate(this.versionObs, "version"))
-        .then(fn.handleStaticObsUpdate(this.modifiedOnObs, new Date()))
-        .then(this.updateModifiedOn.bind(this))
-        .then(fn.returning(this.study))
-        .then(fn.handleObsUpdate(this.titleObs, "name"))
-        .then(utils.successHandler(vm, event, "Study has been saved."))
-        .catch(this.failureHandler);
+    serverService.updateStudy(this.study)
+      .then(fn.handleStaticObsUpdate(this.isNewObs, false))
+      .then(fn.handleObsUpdate(this.versionObs, "version"))
+      .then(fn.handleStaticObsUpdate(this.modifiedOnObs, new Date()))
+      .then(this.updateModifiedOn.bind(this))
+      .then(fn.returning(this.study))
+      .then(fn.handleObsUpdate(this.titleObs, "name"))
+      .then(utils.successHandler(vm, event, "Study has been saved."))
+      .catch(this.failureHandler);
   }
   updateModifiedOn(response) {
     this.studyId = this.identifierObs();
@@ -61,7 +60,6 @@ export default class BaseStudy {
   }
   save(vm, event) {
     this.study = this.binder.persist(this.study);
-
     utils.startHandler(vm, event);
     if (this.isNewObs()) {
       this.createStudy(vm, event);
