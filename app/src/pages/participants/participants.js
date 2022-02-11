@@ -174,7 +174,7 @@ export default class Participants {
     search.status = this.statusObs();
     search.enrollment = this.enrollmentObs();
     search.predicate = this.predicateObs();
-    search.inUse = (this.inUseObs() === 'true');
+    search.inUse = this.inUseObs();
     if (this.attributeValueFilterObs()) {
       search.attributeKey = this.attributeKeyObs();
       search.attributeValueFilter = this.attributeValueFilterObs();

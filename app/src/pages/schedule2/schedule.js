@@ -128,7 +128,7 @@ export default function(params) {
     })
   );
   getEventIds(params.studyId).then(array => self.eventIdsObs(array)).then(() => {
-    if (self.study.scheduleGuid) {
+    if (self.study && self.study.scheduleGuid) {
       serverService.getStudySchedule(params.studyId)
         .then(binder.assign('schedule'))
         .then(afterSave)

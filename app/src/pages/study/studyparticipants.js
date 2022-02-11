@@ -85,7 +85,7 @@ export default class StudyParticipants extends BaseStudy {
       .obs("attributeValueFilter", this.search.attributeValueFilter)
       .obs("attributeKeys[]", [])
       .obs("predicate", this.search.predicate || 'and')
-      .obs("inUse", this.search.inUse ? 'true' : 'false');
+      .obs("inUse", this.search.inUse);
 
     super.load()
       .then(() => options_service.getOrganizationNames())
@@ -191,7 +191,7 @@ export default class StudyParticipants extends BaseStudy {
     search.status = this.statusObs();
     search.enrollment = this.enrollmentObs();
     search.predicate = this.predicateObs();
-    search.inUse = (this.inUseObs() === 'true');
+    search.inUse = this.inUseObs();
     if (this.attributeValueFilterObs()) {
       search.attributeKey = this.attributeKeyObs();
       search.attributeValueFilter = this.attributeValueFilterObs();

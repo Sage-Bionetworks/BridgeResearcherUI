@@ -8,8 +8,8 @@ import utils from "../../utils";
 export default function(params) {
   let self = this;
 
-  let dates = params.dates.split(' ');
-  let dateString = (dates[0] === dates[1]) ? dates[0] : (dates[0] + ' to ' + dates[1]);
+  let dates = params.dates.split(' to ');
+  let dateString = (dates.length === 1 || dates[0] === dates[1]) ? dates[0] : (dates[0] + ' to ' + dates[1]);
 
   self.formatDateTime = (v) => v ? fn.formatDateTime(v) : '—';
   self.formatDeclined = (v)=> v ? 'Declined' : '';
