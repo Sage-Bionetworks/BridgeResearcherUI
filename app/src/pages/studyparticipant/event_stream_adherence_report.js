@@ -51,6 +51,7 @@ export default class EventStreamAdherenceReport {
     return `<div class="empty bar"></div>`;
   }
   isToday(stream, cellNum, guid) {
+    console.log(stream.daysSinceEvent, cellNum);
     if (stream.daysSinceEvent === cellNum) {
       return 'data-cell today';
     }
@@ -62,7 +63,7 @@ export default class EventStreamAdherenceReport {
       let eventId = event.target.getAttribute('data-eventId');
       let eventTimestamp = event.target.getAttribute('data-eventTimestamp');
       let instanceGuid = event.target.getAttribute('data-guid');
-      let dates = event.target.getAttribute('title');
+      let dates = event.target.getAttribute('data-title');
       context.$component.editSession(eventId, eventTimestamp, instanceGuid, dates);
     }
   }
