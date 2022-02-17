@@ -141,6 +141,9 @@ let RootViewModel = function() {
 
 let root = new RootViewModel();
 
+// Note that these don't update when you navigate to a new page with a different
+// query in at least some circumstances. It's safer to use URLSearchParams in that
+// case (see studyparticipant/search.js).
 root.queryParams = {};
 let params = new URLSearchParams(document.location.search);
 // eventually, will use Object.fromEntries (not supported in Edge yet)

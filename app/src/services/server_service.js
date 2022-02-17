@@ -955,7 +955,10 @@ export class ServerService {
     return this.post(`${config.studies}/${studyId}/participants/${userId}/adherence/search`, search);
   }
   getStudyParticipantAdherenceReport(studyId, userId, report) {
-    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/adherence/${report}`);
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/${report}`);
+  }
+  getStudyParticipantSchedule(studyId, userId) {
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/schedule`);
   }
   getStudyParticipantAdherenceReports(studyId, query) {
     return this.post(`${config.studies}/${studyId}/adherence/weekly`, query);

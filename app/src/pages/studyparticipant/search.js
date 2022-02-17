@@ -16,7 +16,7 @@ function stringToArray(s) {
   return (s && typeof s === 'string') ? s.split(/,\s?/) : null;
 }
 
-export default class StudyParticipantAdherence extends BaseAccount {
+export default class StudyParticipantAdherenceSearch extends BaseAccount {
   constructor(params) {
     super({ 
       ...params, 
@@ -31,7 +31,8 @@ export default class StudyParticipantAdherence extends BaseAccount {
     this.schedules = {};
     this.search = this.search.bind(this);
 
-    let ig = root.queryParams.instanceGuid ? root.queryParams.instanceGuid : null;
+    let query = new URLSearchParams(document.location.search);
+    let ig = query.get('instanceGuid') ? query.get('instanceGuid') : null;
 
     this.binder = new Binder(this)
       .bind('instanceGuids', ig, arrayToString, stringToArray)
@@ -81,6 +82,7 @@ export default class StudyParticipantAdherence extends BaseAccount {
       'endTime': null,
       'sortOrder': null
     });
+    
     query.offsetBy = offsetBy;
     if (query.adherenceRecordType === '') {
       delete query.adherenceRecordType;

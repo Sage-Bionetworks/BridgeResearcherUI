@@ -110,10 +110,13 @@
     </table>
     <p>Persistent session windows are excluded from adherence reports.</p>
     <p>
-      <a class="link" data-bind="click: () => preview('eventstream')">
+      <a class="link" data-bind="click: () => schedule()">
+        View schedule report JSON
+      </a><br>
+      <a class="link" data-bind="click: () => preview('adherence/eventstream')">
         View event stream report JSON
       </a><br>
-      <a class="link" data-bind="click: () => preview('weekly')">
+      <a class="link" data-bind="click: () => preview('adherence/weekly')">
         View weekly report JSON
       </a><br>
       <a class="link" data-bind="click: () => preview('weeklies')">
