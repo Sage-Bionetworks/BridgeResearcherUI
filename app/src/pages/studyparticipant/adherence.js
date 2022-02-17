@@ -59,7 +59,7 @@ export default class StudyParticipantAdherence extends BaseAccount {
         dates: dates
       });
     }, 1);
-  }  
+  }
   preview(report) {
     let func = (report === 'weeklies') ?
       () => serverService.getStudyParticipantAdherenceReports(this.studyId, {}) :
@@ -67,6 +67,12 @@ export default class StudyParticipantAdherence extends BaseAccount {
     root.openDialog('preview_dialog', {
       title: 'Preview Adherence Report', 
       supplier: func
+    });
+  }
+  schedule() {
+    root.openDialog('preview_dialog', {
+      title: 'Preview Adherence Report', 
+      supplier: () => serverService.getStudyParticipantSchedule(this.studyId, this.userId)
     });
   }
 }

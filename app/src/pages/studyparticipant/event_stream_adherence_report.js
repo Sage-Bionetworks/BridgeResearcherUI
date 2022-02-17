@@ -40,6 +40,7 @@ export default class EventStreamAdherenceReport {
         return day[0].timeWindows.map(win => {
           let time = (day[0].startDate == win.endDate) ? 
             day[0].startDate : `${day[0].startDate} to ${win.endDate}`;
+          if (!time) { time = 'N/A' };
           return `<span data-guid="${win.sessionInstanceGuid}" 
             data-eventId="${stream.startEventId}" 
             data-eventTimestamp="${stream.eventTimestamp}" 
