@@ -89,12 +89,6 @@ export default class StudyParticipantAdherenceSearch extends BaseAccount {
     }
     return serverService.getStudyParticipantAdherenceRecords(this.studyId, this.userId, query)
       .then(res => {
-        // why filter these? If the account creates adherence records for a schedule that is
-        // then deleted, the adherence records hang around. This can only happen during design
-        // if an administrator deletes the study's schedule, so it's rare but I have done it 
-        // to myself, and it breaks the UI. Note that the total record count is *not* updated 
-        // and the pages will be a strange size.
-        res.items = res.items.filter(item => this.schedules[item.instanceGuid]);
         res.items.forEach(i => i.clientDataObs = ko.observable(i.clientData));
         return res;
       })
@@ -151,14 +145,21 @@ export default class StudyParticipantAdherenceSearch extends BaseAccount {
   }
   formatRecord(item) {
     let entry = this.schedules[item.instanceGuid];
-    return (entry.assessment) ? entry.assessment.label :entry.session.label;
+    if (!entry) {
+      return '— deleted from schedule —';
+    }
+    return entry.assessment ?
+      `<i class="ui cube icon" style="color:rgba(0,0,0,.4)"></i> ${entry.assessment.label}` : 
+      `<i class="ui cubes icon" style="color:rgba(0,0,0,.4)"></i> ${entry.session.label}`
   }
   formatAsmtId(item) {
-    let entry = this.schedules[item.instanceGuid];
-    return (entry.assessment) ? entry.assessment.identifier : entry.session.guid;
+    return item.assessmentGuid || item.sessionGuid;
   }
   formatDays(item) {
     let entry = this.schedules[item.instanceGuid];
+    if (!entry) {
+      return '—';
+    }
     if (entry.assessment) {
       entry = this.schedules[entry.sessionInstanceGuid];
     }
@@ -171,6 +172,9 @@ export default class StudyParticipantAdherenceSearch extends BaseAccount {
   }
   formatStream(item) {
     let entry = this.schedules[item.instanceGuid];
+    if (!entry) {
+      return '—';
+    }
     return `${fn.formatEventId(entry.startEventId)} @ ${item.eventTimestamp}`;
   }
   startedOn(item) {
