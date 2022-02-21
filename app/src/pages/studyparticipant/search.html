@@ -26,7 +26,7 @@
       <thead>
         <tr>
           <th>Label</th>
-          <th>Session GUID/Assessment ID</th>
+          <th>Session/Assessment GUID</th>
           <th>Day(s)</th>
           <th>Stream</th>
           <th>Started On</th>
@@ -44,7 +44,7 @@
       </tbody>
       <tbody data-bind="foreach: itemsObs">
         <tr>
-          <td data-bind="text: $parent.formatRecord($data)"></td>
+          <td data-bind="html: $parent.formatRecord($data)"></td>
           <td data-bind="text: $parent.formatAsmtId($data)"></td>
           <td data-bind="text: $parent.formatDays($data)"></td>
           <td data-bind="text: $parent.formatStream($data)"></td>

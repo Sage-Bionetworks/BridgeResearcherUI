@@ -27,7 +27,7 @@ export default class StudyParticipantAdherence extends BaseAccount {
       .then(() => this.load());
   }
   path() {
-    return `eventstream?activeOnly=${this.activeOnlyObs()}`;
+    return `adherence/eventstream?activeOnly=${this.activeOnlyObs()}`;
   }
   load() {
     return serverService.getStudyParticipantAdherenceReport(this.studyId, this.userId, this.path())

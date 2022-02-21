@@ -154,11 +154,12 @@ export default class StudyAdherence extends BaseStudy {
       search.progressionFilters = pf;
     }
     this.search = search;
+    console.log(JSON.stringify(search));
     return search;
   }
   loadingFunc(offsetBy) {
-    this.search.offsetBy = offsetBy;
     this.search = this.updateSearch();
+    this.search.offsetBy = offsetBy;
 
     storeService.persistQuery("adh", this.search);
     this.formattedSearchObs(this.formatSearch());
