@@ -24,11 +24,17 @@
     <form class="ui form">
 
       <div class="fields">
-        <div class="required twelve wide field" id="name">
+        <div class="required nine wide field" id="name">
           <label>Name</label>
           <input type="text" data-bind="textInput: nameObs, hasFocus: true" />
         </div>
-        <div class="required four wide field" id="duration">
+        <div class="four wide field">
+          <label>Study start event ID</label>
+          <select class="ui dropdown"  data-bind="options: eventIdsObs, 
+          optionsText: 'text', optionsValue: 'value', value: studyStartEventIdObs, 
+          optionsCaption: 'Select an event ID:'"></select>
+        </div>
+        <div class="required three wide field" id="duration">
           <label>Duration</label>
           <ui-duration params="fieldObs: durationObs, fields: 'days weeks'"></ui-duration>
         </div>

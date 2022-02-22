@@ -30,7 +30,9 @@ export default function(params) {
     .bind('version')
     .bind('studyBursts[]', [], null, Binder.persistArrayWithBinder)
     .bind('sessions[]', [], null, Binder.persistArrayWithBinder)
-    .obs('eventIds[]');
+    .obs('eventIds[]')
+    .obs('allEventIds[]')
+    .obs('studyStartEventId');
 
   self.generateId = function(fieldName) {
     return fieldName;
@@ -44,20 +46,19 @@ export default function(params) {
   };
   self.save = function(vm, event) {
     self.schedule = binder.persist(self.schedule);
+    self.study.studyStartEventId = self.studyStartEventIdObs();
 
     utils.startHandler(vm, event);
+    let p = serverService.updateStudy(self.study)
+      .then(() => serverService.createOrUpdateStudySchedule(params.studyId, self.schedule))
+      .then(afterSave);
     if (self.isNewObs()) {
-      serverService.createOrUpdateStudySchedule(params.studyId, self.schedule)
-        .then(afterSave)
-        .then(utils.successHandler(vm, event, "Schedule created."))
-        .then((sch) => document.location = `/studies/${params.studyId}/schedule`)
-        .catch(utils.failureHandler({ id: 'schedule' }))
+        p.then(utils.successHandler(vm, event, "Schedule created."))
+          .then((sch) => document.location = `/studies/${params.studyId}/schedule`);
     } else {
-      serverService.createOrUpdateStudySchedule(params.studyId, self.schedule)
-        .then(afterSave)
-        .then(utils.successHandler(vm, event, "Schedule saved."))
-        .catch(utils.failureHandler({ id: 'schedule' }))
+        p.then(utils.successHandler(vm, event, "Schedule saved."));
     }
+    p.catch(utils.failureHandler({ id: 'schedule' }));
   }
 
   self.addSession = function(vm, event) {
@@ -127,18 +128,22 @@ export default function(params) {
       transient: false
     })
   );
-  getEventIds(params.studyId).then(array => self.eventIdsObs(array)).then(() => {
-    if (self.study && self.study.scheduleGuid) {
-      serverService.getStudySchedule(params.studyId)
-        .then(binder.assign('schedule'))
-        .then(afterSave)
-        .then(binder.update())
-        .catch(utils.failureHandler({
-          redirectTo: `/studies/${params.studyId}/general`,
-          redirectMsg: 'Schedule not found'
-        }));
-    } else {
-      self.isNewObs(true);
-    }
-  });
+  getEventIds(params.studyId).then(array => self.eventIdsObs(array))
+    .then(() => {
+      if (self.study) {
+        self.studyStartEventIdObs(self.study.studyStartEventId);
+        if (self.study.scheduleGuid) {
+          serverService.getStudySchedule(params.studyId)
+            .then(binder.assign('schedule'))
+            .then(afterSave)
+            .then(binder.update())
+            .catch(utils.failureHandler({
+              redirectTo: `/studies/${params.studyId}/general`,
+              redirectMsg: 'Schedule not found'
+            }));
+        }
+      } else {
+        self.isNewObs(true);
+      }
+    });
 };
