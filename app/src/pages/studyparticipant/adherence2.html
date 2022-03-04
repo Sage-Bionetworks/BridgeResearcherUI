@@ -11,25 +11,65 @@
   <studyparticipant-tabset params="studyIdObs: navStudyIdObs, userIdObs: userIdObs, 
         statusObs: statusObs, dataGroupsObs: dataGroupsObs"></studyparticipant-tabset>
 </div>
-<bsm-layout id="studyparticipant-adherence">
+<bsm-layout id="studyparticipant-adherence2">
   <div slot="header">
-    <div class="ui small secondary menu">
-      <span class="active item">Adherence</span>
-      <a class="item" data-bind="href: link('schedule/adherencesearch')">Search</a>
-      <a class="item" data-bind="href: link('schedule/events')">Schedule Events</a>
-      <a class="item" data-bind="href: link('schedule/timeline')">Timeline</a>
-    </div>
+    <adh-subtabs></adh-subtabs>
   </div>
   <div slot="content">
-    <event-stream-adherence-report 
-      params="reportObs: reportObs, editSession: editSession"></event-stream-adherence-report>
-    <div style="display:flex; margin: 1rem .75rem 0 .75rem">
-      <ui-checkbox params="checkedObs: activeOnlyObs" style="flex:1">
-        Show active sessions only
-      </ui-checkbox>
-      <div>
+    <div class="adherence-table-wrapper">
+      <table class="ui compact table adherence-table" cellpadding="0" cellspacing="0">
+        <thead>
+          <tr>
+            <th>Week</th>
+            <th class="label">Session</th>
+            <th class="center">1</th>
+            <th class="center">2</th>
+            <th class="center">3</th>
+            <th class="center">4</th>
+            <th class="center">5</th>
+            <th class="center">6</th>
+            <th class="center">7</th>
+            <th class="center">Adh %</th>
+          </tr>
+        </thead>
+        <tbody data-bind="foreach: {data: weeksObs, as: 'week', noChildContext: true}">
+          <!-- ko component: {name: 'adherence-report-row', params: {
+            showUser: false,
+            week: week,
+            report: $component.reportObs(),
+            studyId: $component.studyId,
+            userId: $component.userId
+          }} -->
+          <!-- /ko -->
+        </tbody>
+
+        <tbody data-bind="if: reportObs() && reportObs().progression !== 'in_progress'">
+          <tr>
+            <td style="text-align: center" colspan="10" 
+              data-bind="text: formatProgress()"></td>
+          </tr>
+        </tbody>
+        
+      </table>
+    </div>
+    <div style="display:flex; margin-top: 1rem; width: 100%">
+      <div style="width: 50%">
         <b>Participant’s Time Zone:</b> 
         <span data-bind="text: timeZoneObs()"></span>
+      </div>
+      <div style="width: 50%">
+        <b>Adherence: </b>
+        <span data-bind="text: adherenceObs()"></span>
+      </div>
+    </div>
+    <div style="display: flex; width: 100%">
+      <div style="width: 50%">
+        <b>Missing events: </b>
+        <span data-bind="text: unsetEventIdsObs()"></span>
+      </div>
+      <div style="width: 50%">
+        <b>Unscheduled session: </b>
+        <span data-bind="text: unscheduledSessionsObs()"></span>
       </div>
     </div>
   </div>
@@ -108,20 +148,20 @@
         </td>
       </tr>
     </table>
-    <p>Persistent session windows are excluded from adherence reports.</p>
+    <p>Persistent session windows and repeated event streams are excluded from adherence reports.</p>
     <p>
-      <a class="link" data-bind="click: () => schedule()">
-        View schedule report JSON
+      <a class="link" data-bind="click: () => preview('ps')">
+        Participant Schedule JSON
       </a><br>
-      <a class="link" data-bind="click: () => preview('adherence/eventstream')">
+      <a class="link" data-bind="click: () => preview('study')">
+        View study report JSON
+      </a><br>
+      <a class="link" data-bind="click: () => preview('eventstream')">
         View event stream report JSON
       </a><br>
-      <a class="link" data-bind="click: () => preview('adherence/weekly')">
+      <a class="link" data-bind="click: () => preview('weekly')">
         View weekly report JSON
       </a><br>
-      <a class="link" data-bind="click: () => preview('weeklies')">
-        View weekly reports JSON
-      </a>
     </p>
   </div>
 </bsm-layout>

@@ -63,7 +63,6 @@ function redirectTo(newRoute) {
       var prop = token.substring(1, token.length - 1);
       return args[prop];
     });
-    console.log("redirectTo", route);
     router.replaceRoute(route);
   };
 }
@@ -200,7 +199,7 @@ router.on("/studies/:studyId/participants/:userId/requestInfo",
 router.on("/studies/:studyId/participants/:userId/enrollments/consents", 
   routeTo("studyparticipant_consents", "studies", STUDYID_USERID));
 router.on("/studies/:studyId/participants/:userId/schedule/adherence", 
-  routeTo("studyparticipant_adherence", "studies", STUDYID_USERID));
+  routeTo("studyparticipant_adherence2", "studies", STUDYID_USERID));
 router.on("/studies/:studyId/participants/:userId/schedule/adherencesearch", 
   routeTo("studyparticipant_adherencesearch", "studies", STUDYID_USERID));
 

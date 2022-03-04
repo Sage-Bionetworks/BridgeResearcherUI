@@ -77,7 +77,6 @@ function notAdmin(response) {
 function notFound(response, params) {
   if (params.redirectTo) {
     router.setRoute(params.redirectTo);
-    console.log(response);
     let msg = params.redirectMsg || response.responseJSON.message;
     setTimeout(() => toastr.warning(msg), 500);
   } else {

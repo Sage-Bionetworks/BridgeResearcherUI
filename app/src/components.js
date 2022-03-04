@@ -334,15 +334,16 @@ import studypartTimeline from "./pages/studyparticipant/timeline";
 import studypartTimelineHtml from "./pages/studyparticipant/timeline.html";
 import studypartConsents from "./pages/studyparticipant/consents";
 import studypartConsentsHtml from "./pages/studyparticipant/consents.html";
-import studypartAdherence from "./pages/studyparticipant/adherence";
-import studypartAdherenceHtml from "./pages/studyparticipant/adherence.html";
+import studypartAdherence2 from "./pages/studyparticipant/adherence2";
+import studypartAdherenceHtml2 from "./pages/studyparticipant/adherence2.html";
 import studypartAdherenceSearch from "./pages/studyparticipant/search";
 import studypartAdherenceSearchHtml from "./pages/studyparticipant/search.html";
+import studypartAdherenceSubtabs from "./pages/studyparticipant/adh-subtabs";
+import studypartAdherenceSubtabsHtml from "./pages/studyparticipant/adh-subtabs.html";
+import studypartAdherenceReportRow from "./pages/studyparticipant/adherence-report-row";
+import studypartAdherenceReportRowHtml from "./pages/studyparticipant/adherence-report-row.html";
 import studypartBreadcrumb from "./pages/studyparticipant/breadcrumb";
 import studypartBreadcrumbHtml from "./pages/studyparticipant/breadcrumb.html";
-
-import eventStreamAdherenceReport from "./pages/studyparticipant/event_stream_adherence_report";
-import eventStreamAdherenceReportHtml from "./pages/studyparticipant/event_stream_adherence_report.html";
 
 import schedules2 from "./pages/schedules2/schedules";
 import schedules2Html from "./pages/schedules2/schedules.html";
@@ -630,10 +631,10 @@ reg("studyparticipant_general", {viewModel: studypartGeneral, template: studypar
 reg("studyparticipant_enrollments", {viewModel: studypartEnrollments, template: studypartEnrollmentsHtml});
 reg("studyparticipant_events", {viewModel: studypartEvents, template: studypartEventsHtml});
 reg("studyparticipant_timeline", {viewModel: studypartTimeline, template: studypartTimelineHtml});
-reg("studyparticipant_adherence", {viewModel: studypartAdherence, template: studypartAdherenceHtml});
+reg("studyparticipant_adherence2", {viewModel: studypartAdherence2, template: studypartAdherenceHtml2});
 reg("studyparticipant_adherencesearch", {viewModel: studypartAdherenceSearch, template: studypartAdherenceSearchHtml});
-
-reg("event-stream-adherence-report", {viewModel: eventStreamAdherenceReport, template: eventStreamAdherenceReportHtml});
+reg("adh-subtabs", {viewModel: studypartAdherenceSubtabs, template: studypartAdherenceSubtabsHtml});
+reg("adherence-report-row", {viewModel: studypartAdherenceReportRow, template: studypartAdherenceReportRowHtml});
 
 reg("studyparticipant_history", {viewModel: studypartHistory, template: studypartHistoryHtml});
 reg("studyparticipant-tabset", {viewModel: studypartTabset, template: studypartTabsetHtml});

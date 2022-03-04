@@ -13,12 +13,7 @@
 <bsm-layout id="studyparticipant-adherencesearch">
   <div slot="header">
     <pager2 params="prefix: 'ad', loadingFunc: search">
-      <div class="ui small secondary menu">
-        <a class="item" data-bind="href: $parent.link('schedule/adherence')">Adherence</a>
-        <span class="active item">Search</span>
-        <a class="item" data-bind="href: $parent.link('schedule/events')">Schedule Events</a>
-        <a class="item" data-bind="href: $parent.link('schedule/timeline')">Timeline</a>
-      </div>
+      <adh-subtabs></adh-subtabs>
     </pager2>
   </div>
   <div slot="content">
