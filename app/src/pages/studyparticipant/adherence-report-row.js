@@ -15,7 +15,7 @@ export default class AdherenceReportRow {
     fn.copyProps(this, fn, "formatNameAsFullLabel");
   }
   participantLink(id) {
-    return `/studies/${this.studyId}/participants/${id}/schedule/adherence`;
+    return `/studies/${this.studyId}/participants/${id}/adherence/study`;
   }
   formatAdh(week) {
     if (typeof week.weeklyAdherencePercent !== 'undefined') {

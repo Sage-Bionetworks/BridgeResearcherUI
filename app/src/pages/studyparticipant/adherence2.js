@@ -30,7 +30,6 @@ export default class StudyParticipantAdherence extends BaseAccount {
   path() {
     return `adherence/study`;
   }
-
   formatProgress() {
     if (this.reportObs()) {
       switch(this.reportObs().progression) {

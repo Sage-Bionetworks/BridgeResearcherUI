@@ -38,7 +38,7 @@
             <i class="ui calendar plus outline icon" data-bind="visible: $data.studyBurstId,
               semantic: 'popup', attr: { 'data-content': 'Study burst triggered from ' + $data.originEventId }"></i>
             <a data-bind="text: $parent.formatEventId($data.eventId),
-              href: $parent.link('schedule/history/' + encodeURIComponent($data.eventId)),
+              href: $parent.link(`adherence/events/history/${encodeURIComponent($data.eventId)}`),
               semantic: 'popup', attr: { 'data-html': $parent.hoverText($data) }"></a>
           </td>
           <td nowrap data-bind="text: $parent.formatDateTime($data.timestamp)"></td>
