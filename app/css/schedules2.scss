@@ -17,7 +17,7 @@
     border: none!important;
   }
   .today {
-    background-color: rgba(255,220,0,.5);
+    background-color: rgba(255,220,0,.2);
   }
   .label {
     text-align:right!important;
@@ -91,5 +91,5 @@ span[data-title]:hover::after {
   padding: .25rem .5rem;
   white-space: nowrap;
   top: -3rem;
-  right: 0;
+  left: 0;
 }

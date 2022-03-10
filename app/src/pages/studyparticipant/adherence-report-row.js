@@ -12,7 +12,7 @@ export default class AdherenceReportRow {
     this.userId = params.userId;
     this.editSession = this.editSession.bind(this);
 
-    fn.copyProps(this, fn, "formatNameAsFullLabel");
+    fn.copyProps(this, fn, "formatNameAsFullLabel", "formatDate");
   }
   participantLink(id) {
     return `/studies/${this.studyId}/participants/${id}/adherence/study`;
@@ -49,7 +49,8 @@ export default class AdherenceReportRow {
     if (Object.keys(this.report).length > 0) {
       return entry.timeWindows.map(win => {
         let time = (entry.startDate == win.endDate) ? 
-          entry.startDate : `${entry.startDate} to ${win.endDate}`;
+          this.formatDate(entry.startDate) : 
+          `${this.formatDate(entry.startDate)} to ${this.formatDate(win.endDate)}`;
         if (!time) { time = 'N/A' };
         return `<span data-guid="${win.sessionInstanceGuid}" 
           data-title="${time}"
@@ -60,18 +61,20 @@ export default class AdherenceReportRow {
     } else {
       return entry.timeWindows.map(win => {
         let time = (entry.startDate == win.endDate) ? 
-          entry.startDate : `${entry.startDate} to ${win.endDate}`;
+          this.formatDate(entry.startDate) : 
+          `${this.formatDate(entry.startDate)} to ${this.formatDate(win.endDate)}`;
         return `<span data-title="${time}" class="bar ${win.state}"></span>`
       }).join('');
     }
   }
   isToday(arg, rowIndex, dayIndex) {
     let entry = arg.byDayEntries[dayIndex][rowIndex];
+    console.log(entry.startDate, entry.today);
     return (entry.today) ? 'today' : '';
   }
   formatNextActivity(entry) {
     return (!entry) ? '' : 
-    `Next activity on ${fn.formatDate(entry.startDate)} (Week ${entry.week})`;
+    `Next activity on ${fn.formatDate(entry.startDate)} (Week ${entry.weekInStudy})`;
   }
   openSession(item, event) {
     if (event.target.nodeName === 'SPAN') {

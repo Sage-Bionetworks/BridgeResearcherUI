@@ -806,27 +806,11 @@ export class ServerService {
     });
     return this.gethttp(config.schedules + queryString);
   }
-  getStudySchedule(studyId) {
-    return this.gethttp(`${config.studies}/${studyId}/schedule`);
-  }
-  createOrUpdateStudySchedule(studyId, schedule) {
-    return this.post(`${config.studies}/${studyId}/schedule`, schedule);
-  }
-  getStudyScheduleTimeline(studyId) {
-    return this.gethttp(`${config.studies}/${studyId}/timeline`);
-  }
+
   deleteSchedule(guid, physical) {
     let queryString = fn.queryString({ physical: physical === true });
     return this.del(`${config.schedules}/${guid}${queryString}`);
   }
-  getStudyParticipantTimeline(studyId, userId) {
-    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/timeline`);
-  }
-  emailStudyParticipantRoster(studyId, payload) {
-    return this.post(`${config.studies}/${studyId}/participants/emailRoster`, payload);
-  }
-
-
   adminSignIn(appName, environment, signIn) {
     return postInt(`${config.host[environment]}${config.adminAuth}/signIn`, signIn).then(
       this.cacheSession(appName, signIn.appId, environment)
@@ -926,11 +910,36 @@ export class ServerService {
   updateEnrollment(studyId, userId, enrollment) {
     return this.post(`${config.studies}/${studyId}/enrollments/${userId}`, enrollment);
   }
+  createLogoUpload(studyId, revision) {
+    return this.post(`${config.studies}/${studyId}/logo`, revision);
+  }
+  finishLogoUpload(studyId, createdOn) {
+    return this.post(`${config.studies}/${studyId}/logo/${createdOn}`);
+  }
+  emailStudyParticipantRoster(studyId, payload) {
+    return this.post(`${config.studies}/${studyId}/participants/emailRoster`, payload);
+  }
+  getStudySchedule(studyId) {
+    return this.gethttp(`${config.studies}/${studyId}/schedule`);
+  }
+  createOrUpdateStudySchedule(studyId, schedule) {
+    return this.post(`${config.studies}/${studyId}/schedule`, schedule);
+  }
+  getStudyScheduleTimeline(studyId) {
+    return this.gethttp(`${config.studies}/${studyId}/timeline`);
+  }
+
+
+  // STUDY PARTICIPANT APIS
+
   getStudyParticipants(studyId, search) {
     return this.post(`${config.studies}/${studyId}/participants/search`, search);
   }
   getStudyParticipant(studyId, userId) {
     return this.gethttp(`${config.studies}/${studyId}/participants/${userId}`);
+  }
+  getStudyParticipantTimeline(studyId, userId) {
+    return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/timeline`);
   }
   getStudyParticipantRequestInfo(studyId, userId) {
     return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/requestInfo`);
@@ -960,6 +969,9 @@ export class ServerService {
   getStudyParticipantSchedule(studyId, userId) {
     return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/schedule`);
   }
+  getStudyAdherenceReportStatistics(studyId) {
+    return this.gethttp(`${config.studies}/${studyId}/adherence/weekly/stats`);
+  }
   getStudyParticipantAdherenceReports(studyId, query) {
     return this.post(`${config.studies}/${studyId}/adherence/weekly`, query);
   }
@@ -985,7 +997,6 @@ export class ServerService {
   deleteStudyParticipant(studyId, userId) {
     return this.del(`${config.studies}/${studyId}/participants/${userId}`);
   }
-  
   getStudyParticipantActivityEvents(studyId, userId, updateBursts) {
     let queryString = fn.queryString({ updateBursts, showError: true });
     return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/activityevents${queryString}`);
@@ -1022,16 +1033,9 @@ export class ServerService {
   resendStudyParticipantPhoneVerification(studyId, userId) {
     return this.post(`${config.studies}/${studyId}/participants/${userId}/resendPhoneVerification`);
   }
-  createLogoUpload(studyId, revision) {
-    return this.post(`${config.studies}/${studyId}/logo`, revision);
-  }
-  finishLogoUpload(studyId, createdOn) {
-    return this.post(`${config.studies}/${studyId}/logo/${createdOn}`);
-  }
   sendStudyParticipantInstallLink(studyId, userId) {
     return this.post(`${config.studies}/${studyId}/participants/${userId}/sendInstallLink`);
   }
-
   getStudyParticipantReports(studyId) {
     return this.gethttp(`${config.studies}/${studyId}/participants/reports`);
   }
