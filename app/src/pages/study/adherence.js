@@ -32,7 +32,8 @@ export default class StudyAdherence extends BaseStudy {
       .obs('range')
       .obs('unstarted')
       .obs('inProgress')
-      .obs('done');
+      .obs('done')
+      .obs('report', {});
     this.updateObservers();
 
     tables.prepareTable(this, {
@@ -62,20 +63,6 @@ export default class StudyAdherence extends BaseStudy {
       .obs('inProgress', pf.includes('in_progress'))
       .obs('done', pf.includes('done'));
   }
-  formatActivity(entry) {
-    // Some legacy studies don’t have session names. I think it's because they 
-    // were created before it was added to the report, but I’m not sure.
-    // entry.sessionName = entry.sessionName || 'Session';
-    if (entry.studyBurstId) {
-      return `<span data-title="Week ${entry.week}">${entry.studyBurstId} ${entry.studyBurstNum}—${entry.sessionName}</span>`;
-    } else if (entry.sessionName) {
-      return `<span data-title="Week ${entry.week}">${entry.sessionName}</span>`
-    }
-    return `<span data-title="Week ${entry.week}">Week ${entry.week}</span>`
-  }
-  formatNextActivity(entry) {
-    return (!entry) ? ';' : 'Next activity on ' + fn.formatDate(entry.startDate);
-  }
   formatSearch() {
     let array = [];
     if (this.idObs()) {
@@ -104,25 +91,6 @@ export default class StudyAdherence extends BaseStudy {
       return 'Search for all reports where ' + fn.formatList(array, "and", ";")
     }
     return 'Search for all reports';
-  }
-  formatProgression(entry) {
-    if (entry.progression === 'unstarted') {
-      return '— Unstarted —';
-    } else if (entry.progression === 'done') {
-      return '— Done —';
-    }
-    return '— No Schedule —';
-  }
-  formatWin(report, day, index) {
-    let entry = report.byDayEntries[day][index];
-    return entry.timeWindows.map(win => {
-      let time = (entry.startDate == win.endDate) ? 
-        entry.startDate : `${entry.startDate} to ${win.endDate}`;
-      return `<span data-title="${time}" class="bar ${win.state}"></span>`
-    }).join('');
-  }
-  participantLink(id) {
-    return `/studies/${this.studyId}/participants/${id}/schedule/adherence`;
   }
   updateSearch() {
     let search = {};
@@ -154,7 +122,6 @@ export default class StudyAdherence extends BaseStudy {
       search.progressionFilters = pf;
     }
     this.search = search;
-    console.log(JSON.stringify(search));
     return search;
   }
   loadingFunc(offsetBy) {
@@ -163,6 +130,9 @@ export default class StudyAdherence extends BaseStudy {
 
     storeService.persistQuery("adh", this.search);
     this.formattedSearchObs(this.formatSearch());
+
+    serverService.getStudyAdherenceReportStatistics(this.studyId)
+      .then(res => console.log(JSON.stringify(res, null, 2)));
 
     utils.clearErrors();
     return serverService.getStudyParticipantAdherenceReports(this.studyId, this.search)

@@ -19,6 +19,7 @@ export default function(params) {
   let self = this;
   
   fn.copyProps(self, root, 'isAdmin');
+  fn.copyProps(self, fn, 'formatDateTime');
 
   self.canAccessStudy = function() {
     return root.isOrgAdmin() || root.isStudyDesigner() || root.isStudyCoordinator() || root.isAdmin();
@@ -37,6 +38,9 @@ export default function(params) {
   self.query = {pageSize: 100};
   self.postLoadPagerFunc = fn.identity;
   self.postLoadFunc = (func) => self.postLoadPagerFunc = func;
+  self.formatPhase = function(phase) {
+    return config.phasesOpts.filter(opt => opt.value === phase)[0].label;
+  }
 
   self.addSponsoredStudyDialog = function() {
     root.openDialog("add_sponsored_study", {

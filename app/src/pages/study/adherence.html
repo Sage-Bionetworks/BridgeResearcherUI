@@ -20,87 +20,37 @@
     </pager2>
   </div>
   <div slot="content">
-    <table class="ui compact table">
+    <table class="ui compact table adherence-table">
       <thead>
         <tr>
           <th width="10"></th>
           <th>Participant</th>
-          <th style="text-align:right">Day:</th>
-          <th class="center-aligned">1</th>
-          <th class="center-aligned">2</th>
-          <th class="center-aligned">3</th>
-          <th class="center-aligned">4</th>
-          <th class="center-aligned">5</th>
-          <th class="center-aligned">6</th>
-          <th class="center-aligned">7</th>
           <th></th>
+          <th class="label">Day:</th>
+          <th class="center">1</th>
+          <th class="center">2</th>
+          <th class="center">3</th>
+          <th class="center">4</th>
+          <th class="center">5</th>
+          <th class="center">6</th>
+          <th class="center">7</th>
+          <th class="center">Adh %</th>
         </tr>
       </thead>
       <tbody class="no_records" data-bind="if: itemsObs().length === 0">
         <tr>
-          <td colspan="11" data-bind="html: recordsMessageObs"></td>
+          <td colspan="12" data-bind="html: recordsMessageObs"></td>
         </tr>
       </tbody>
-      <tbody data-bind="foreach: { data: itemsObs, as: 'entry' }">
-        <!-- ko if: entry.progression === 'in_progress' -->
-          <!-- ko foreach: { data: entry.rows, as: 'row' } -->
-            <tr>
-              <td>
-                <span data-bind="visible: entry.testAccount && $index() === 0">
-                  <i class="ui yellow bug icon" title="Test Account"></i>
-                </span>
-              </td>
-              <td><a data-bind="visible: $index() === 0,
-                  href: $component.participantLink(entry.participant.identifier),
-                  html: $component.formatNameAsFullLabel(entry.participant)"></a></td>
-              <td style="text-align: right" 
-                data-bind="html: $component.formatActivity(row)"></td>
-              <td class="center-aligned" 
-                data-bind="html: $component.formatWin(entry, '0', $index())"></td>
-              <td class="center-aligned" 
-                data-bind="html: $component.formatWin(entry, '1', $index())"></td>
-              <td class="center-aligned" 
-                data-bind="html: $component.formatWin(entry, '2', $index())"></td>
-              <td class="center-aligned" 
-                data-bind="html: $component.formatWin(entry, '3', $index())"></td>
-              <td class="center-aligned" 
-                data-bind="html: $component.formatWin(entry, '4', $index())"></td>
-              <td class="center-aligned" 
-                data-bind="html: $component.formatWin(entry, '5', $index())"></td>
-              <td class="center-aligned" 
-                data-bind="html: $component.formatWin(entry, '6', $index())"></td>
-              <td>
-                <span data-bind="text: entry.weeklyAdherencePercent + '%', 
-                  visible: $index() === 0"></span>
-              </td>
-            </tr>
-          <!-- /ko -->
+      <tbody data-bind="foreach: {data: itemsObs, as: 'week', noChildContext: true}">
+        <!-- ko component: {name: 'adherence-report-row', params: {
+          showUser: true,
+          week: week,
+          report: $component.reportObs(),
+          studyId: $component.studyId,
+          userId: $component.userId
+        }} -->
         <!-- /ko -->
-        <tr data-bind="if: entry.progression !== 'in_progress'">
-          <td>
-            <span data-bind="visible: entry.testAccount">
-              <i class="ui yellow bug icon" title="Test Account"></i>
-            </span>
-          </td>
-          <td>
-            <a data-bind="href: `/studies/${$component.studyId}/participants/${entry.participant.identifier}/schedule/adherence`,
-              html: $component.formatNameAsFullLabel(entry.participant)">
-            </a>
-          </td>
-          <td></td>
-          <td colspan="7" class="center-aligned">
-            <div data-bind="visible: entry.nextActivity, 
-              text: $component.formatNextActivity(entry.nextActivity)">
-            </div>
-            <div data-bind="visible: !entry.nextActivity,
-              text: $component.formatProgression(entry)">
-              &mdash;
-            </div>
-          </td>
-          <td>
-            <span data-bind="text: entry.weeklyAdherencePercent + '%'"></span>
-          </td>
-        </tr>
       </tbody>
     </table>
 

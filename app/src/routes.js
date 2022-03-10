@@ -63,7 +63,6 @@ function redirectTo(newRoute) {
       var prop = token.substring(1, token.length - 1);
       return args[prop];
     });
-    console.log("redirectTo", route);
     router.replaceRoute(route);
   };
 }
@@ -175,14 +174,6 @@ router.on("/studies/:studyId/participants/:userId/general",
   routeTo("studyparticipant_general", "studies", STUDYID_USERID));
 router.on("/studies/:studyId/participants/:userId/enrollments", 
   routeTo("studyparticipant_enrollments", "studies", STUDYID_USERID));
-router.on("/studies/:studyId/participants/:userId/schedule", 
-  redirectTo("/studies/{0}/participants/{1}/schedule/adherence"));
-router.on("/studies/:studyId/participants/:userId/schedule/events", 
-  routeTo("studyparticipant_events", "studies", STUDYID_USERID));
-router.on("/studies/:studyId/participants/:userId/schedule/timeline", 
-  routeTo("studyparticipant_timeline", "studies", STUDYID_USERID));
-router.on("/studies/:studyId/participants/:userId/schedule/history/:eventId", 
-  routeTo("studyparticipant_history", "studies", STUDYID_USERID_EVENTID));
 router.on("/studies/:studyId/participants/:userId/uploads", 
   routeTo("studyparticipant_uploads", "studies", STUDYID_USERID));
 router.on("/studies/:studyId/participants/:userId/uploads/:guid", 
@@ -199,10 +190,19 @@ router.on("/studies/:studyId/participants/:userId/requestInfo",
   routeTo("studyparticipant_request_info", "studies", STUDYID_USERID));
 router.on("/studies/:studyId/participants/:userId/enrollments/consents", 
   routeTo("studyparticipant_consents", "studies", STUDYID_USERID));
-router.on("/studies/:studyId/participants/:userId/schedule/adherence", 
-  routeTo("studyparticipant_adherence", "studies", STUDYID_USERID));
-router.on("/studies/:studyId/participants/:userId/schedule/adherencesearch", 
+
+router.on("/studies/:studyId/participants/:userId/adherence", 
+  redirectTo("/studies/{0}/participants/{1}/adherence/study"));
+router.on("/studies/:studyId/participants/:userId/adherence/study", 
+  routeTo("studyparticipant_adherence2", "studies", STUDYID_USERID));
+router.on("/studies/:studyId/participants/:userId/adherence/records", 
   routeTo("studyparticipant_adherencesearch", "studies", STUDYID_USERID));
+router.on("/studies/:studyId/participants/:userId/adherence/events", 
+  routeTo("studyparticipant_events", "studies", STUDYID_USERID));
+router.on("/studies/:studyId/participants/:userId/adherence/timeline", 
+  routeTo("studyparticipant_timeline", "studies", STUDYID_USERID));
+router.on("/studies/:studyId/participants/:userId/adherence/events/history/:eventId", 
+  routeTo("studyparticipant_history", "studies", STUDYID_USERID_EVENTID));
 
 router.on("/schedules", routeTo("schedules2", "schedules"));
 router.on("/schedules/:guid", routeTo("schedule2", "schedules", GUID));
