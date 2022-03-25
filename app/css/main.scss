@@ -312,9 +312,9 @@ errors + .ui.message {
   margin-top: 0;
 }
 
-/* TODO: maybe remove this, the participants screen got too crowded. */
+
 .ui.secondary.pointing.menu {
-  /*outline: 1px solid red;*/
+  flex-wrap: wrap;
   padding-top: 1rem!important;
   padding-left: 1rem!important;
 }

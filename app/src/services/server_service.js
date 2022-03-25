@@ -270,6 +270,12 @@ export class ServerService {
   createSynapseProject(synapseUserId) {
     return this.post(`${config.getCurrentApp}/synapseProject`, [synapseUserId]);
   }
+  createSynapseProjectForApp() {
+    return this.post(`/v1/apps/self/exporter3`);
+  }
+  createSynapseProjectForStudy(studyId) {
+    return this.post(`${config.studies}/${studyId}/exporter3`);
+  }
   getMostRecentStudyConsent(guid) {
     return this.gethttp(`${config.subpopulations}/${guid}/consents/recent`);
   }

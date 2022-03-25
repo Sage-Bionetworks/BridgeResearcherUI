@@ -81,7 +81,9 @@ router.on("/settings/install_links", routeTo("install_links", "settings"));
 router.on("/settings/advanced", routeTo("advanced", "settings"));
 //DELETEME
 router.on("/app_links", routeTo("app_links", "links"));
-router.on("/export_settings", routeTo("export_settings", "export"));
+router.on("/export", redirectTo("export/v3", "export"));
+router.on("/export/v2", routeTo("exportV2", "export"));
+router.on("/export/v3", routeTo("exportV3", "export"));
 router.on("/shared_upload_metadata", routeTo("shared_upload_metadata", "metadata"));
 router.on("/task_identifiers", routeTo("task_identifiers", "taskIds"));
 router.on("/subpopulations", routeTo("subpopulations", "subpops"));
@@ -159,6 +161,7 @@ router.on("/studies", routeTo("studies", "studies"));
 
 router.on("/studies/:studyId", redirectTo("/studies/{0}/general"));
 router.on("/studies/:studyId/general", routeTo("studyGeneral", "studies", STUDYID));
+router.on("/studies/:studyId/export", routeTo("studyExport", "studies", STUDYID));
 router.on("/studies/:studyId/ui", routeTo("studyUi", "studies", STUDYID));
 router.on("/studies/:studyId/sponsors", routeTo("studySponsors", "studies", STUDYID));
 router.on("/studies/:studyId/events", routeTo("studyEvents", "studies", STUDYID));

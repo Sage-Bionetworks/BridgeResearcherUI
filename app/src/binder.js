@@ -82,6 +82,7 @@ export default class Binder {
       for (let i = 0; i < fields.length; i++) {
         let field = fields[i];
         let info = this.fields[field];
+        
         let context = { oldValue: info.observable(), model: model, vm: this.vm, observer: info.observable };
         if (info.modelTransform) {
           let value = info.modelTransform(model[field], context);

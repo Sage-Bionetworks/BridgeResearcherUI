@@ -273,6 +273,12 @@ function synapseAliasToUserId(alias) {
     })
   });
 }
+function getSynapseServer() {
+  let env = localStorage.getItem("environment");
+  let server = (env === 'production') ? 
+    'www.synapse.org' : 'portal-dev.dev.sagebase.org';
+  return `https://${server}/#!`;
+}
 
 export default {
   clearErrors,
@@ -322,5 +328,6 @@ export default {
   copyString,
   failureHandler,
   synapseAliasToUserId,
-  resolveDerivedFrom
+  resolveDerivedFrom,
+  getSynapseServer
 };
