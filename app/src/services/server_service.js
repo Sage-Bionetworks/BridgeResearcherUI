@@ -970,7 +970,7 @@ export class ServerService {
     return this.gethttp(`${config.studies}/${studyId}/participants/${userId}/schedule`);
   }
   getStudyAdherenceReportStatistics(studyId) {
-    return this.gethttp(`${config.studies}/${studyId}/adherence/weekly/stats`);
+    return this.gethttp(`${config.studies}/${studyId}/adherence/stats`);
   }
   getStudyParticipantAdherenceReports(studyId, query) {
     return this.post(`${config.studies}/${studyId}/adherence/weekly`, query);
