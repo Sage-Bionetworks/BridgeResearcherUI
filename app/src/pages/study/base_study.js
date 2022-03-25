@@ -21,7 +21,7 @@ export default class BaseStudy {
       .obs("title", "New Study")
       .obs("isNew", this.studyId === "new")
       .obs("phase")
-      .bind("version")
+      .obs("version")
       .bind("identifier", this.studyId === "new" ? null : this.studyId);
   }
   canEdit() {

@@ -14,10 +14,11 @@
       <button class="ui tiny primary button" data-bind="click: save, visible: isDeveloper">Save</button>
     </div>
   </div>
-  <div class="ui empty secondary pointing menu"></div>
+  <export-tabset></export-tabset>
 </div>
-<bsm-layout id="export-settings">
+<bsm-layout id="app-export-v3">
   <div slot="content">
+    
     <form class="ui form" data-bind="css: {disabled: disableExportObs}">
       <div class="field" style="margin: 1rem auto 2rem" data-bind="visible: isDeveloper">
         <div>
@@ -97,7 +98,7 @@
     </form>
   </div>
   <div slot="help">
-    <p><i><b>NOTE:</b> these settings will eventually be specific to each study in an app, but for now, they are set globally for all studies in an app.</i></p>
+    <p><i><b>NOTE:</b> This version of the exporter service is deprecated and does not need to be configured, however, it is still in use for older apps.</i></p>
     <p>Research data is exported to Synapse, a portal for researchers to manage data, collaborate with one another, and perform data analysis.</p>
     <p>Links lead to projects in Synapse where this app’s data is archived (Synapse credentials are separate from Bridge credentials so you will need a Synapse account to access).</p>
     <p>You can also trigger manual exports, change the frequency of your app’s production export schedule, and change how the reporting of errors are handled.</p>

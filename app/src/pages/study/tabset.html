@@ -1,9 +1,12 @@
 <div class="ui secondary pointing menu" data-bind="visible: !isNewObs()">
   <a data-bind="href: linkMaker('general'), tabber">
     <i class="setting icon"></i>General</a>
-
+    
+  <a data-bind="href: linkMaker('export'), tabber">
+    <i class="cloud upload icon"></i> Export</a>
+  
   <a data-bind="href: linkMaker('ui'), tabber, visible: canEditStudy()">
-    <i class="alternate mobile icon"></i> Study Display</a>
+    <i class="alternate mobile icon"></i> Display</a>
 
   <a data-bind="href: linkMaker('ui'), tabber, visible: !canEditStudy()">
     <i class="alternate mobile icon"></i> Study Contacts</a>
@@ -26,7 +29,7 @@
   <a data-bind="href: linkMaker('sponsors'), tabber">
     <i class="hospital outline icon"></i> Sponsors</a>
 
-  <div class="right menu pub-status">
+    <div class="right menu pub-status">
     <div class="item">
       <span class="violet ui label" data-bind="text: formatPhase()"></span>
     </div>
