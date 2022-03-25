@@ -69,7 +69,6 @@ export default class AdherenceReportRow {
   }
   isToday(arg, rowIndex, dayIndex) {
     let entry = arg.byDayEntries[dayIndex][rowIndex];
-    console.log(entry.startDate, entry.today);
     return (entry.today) ? 'today' : '';
   }
   formatNextActivity(entry) {

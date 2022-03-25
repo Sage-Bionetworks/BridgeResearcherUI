@@ -1,0 +1,79 @@
+<div class="fixed-header">
+  <div class="fixed-header-title">
+    <div class="fixed-header-heading">
+      <div class="ui breadcrumb">
+        <a href="/studies" class="section">Studies</a>
+        <i class="right chevron icon divider"></i>
+      </div>
+      <h3 data-bind="text: titleObs"></h3>
+    </div>
+    <div class="fixed-header-buttons">
+    </div>
+  </div>
+  <study-tabset params="identifierObs: identifierObs, 
+    isNewObs: isNewObs, phaseObs: phaseObs"></study-tabset>
+</div>
+<bsm-layout id="adherence-stats">
+  <div slot="header">
+    <div class="ui small secondary menu">
+      <a class="item" data-bind="tabber, href: './weekly'">Weekly Participant Adherence</a>
+      <a class="item" data-bind="tabber, href: './stats'">Summary Statistics</a>
+    </div>
+  </div>
+  <div slot="content">
+    <table class="ui compact table">
+      <colgroup>
+        <col width="40%">
+        <col width="10%">
+        <col width="30%">
+        <col width="20%">
+      </colgroup>
+      <tr>
+        <td>Adherence threshold for study participants:</td>
+        <td data-bind="text: thresholdPercentDisplayObs"></td>
+        <td>Compliant:</td>
+        <td>
+          <span style="padding-right: 1rem" 
+            data-bind="text: compliantObs"></span>
+          <a data-bind="href: compliantLinkObs">
+            <i class="eye icon"></i>View
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <td>Active participants:</td>
+        <td data-bind="text: totalActiveObs"></td>
+        <td>Noncompliant:</td>
+        <td>
+          <span style="padding-right: 1rem" 
+            data-bind="text: noncompliantObs"></span>
+          <a data-bind="href: noncompliantLinkObs">
+            <i class="eye icon"></i>View
+          </a>
+          
+        </td>
+      </tr>
+    </table>
+
+    <table class="ui compact selectable table" data-bind="visible: entriesObs().length > 0">
+      <thead>
+        <tr>
+          <th>Week</th>
+          <th>Participants Active In This Week</th>
+        </tr>
+      </thead>
+      <tbody data-bind="foreach: entriesObs">
+        <tr>
+          <td data-bind="text: $data.label"></td>
+          <td>
+            <span style="padding-right: 1rem" 
+              data-bind="text: $data.totalActive"></span>
+            <a data-bind="href: $parent.inWeekLink($data)">
+              <i class="eye icon"></i>View
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</bsm-layout>

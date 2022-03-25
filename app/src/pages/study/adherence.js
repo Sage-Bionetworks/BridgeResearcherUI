@@ -131,9 +131,6 @@ export default class StudyAdherence extends BaseStudy {
     storeService.persistQuery("adh", this.search);
     this.formattedSearchObs(this.formatSearch());
 
-    serverService.getStudyAdherenceReportStatistics(this.studyId)
-      .then(res => console.log(JSON.stringify(res, null, 2)));
-
     utils.clearErrors();
     return serverService.getStudyParticipantAdherenceReports(this.studyId, this.search)
       .then(this.postLoadPagerFunc)
