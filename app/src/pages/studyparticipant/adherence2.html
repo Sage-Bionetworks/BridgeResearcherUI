@@ -43,13 +43,12 @@
           <!-- /ko -->
         </tbody>
 
-        <tbody data-bind="if: reportObs() && reportObs().progression !== 'in_progress'">
+        <tbody data-bind="if: reportObs() && reportObs().weeks.length == 00 && reportObs().progression !== 'in_progress'">
           <tr>
             <td style="text-align: center" colspan="10" 
               data-bind="text: formatProgress()"></td>
           </tr>
         </tbody>
-        
       </table>
     </div>
     <div style="display:flex; margin-top: 1rem; width: 100%">

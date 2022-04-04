@@ -15,6 +15,10 @@
 </div>
 <bsm-layout id="adherence">
   <div slot="header">
+    <div class="ui small secondary menu">
+      <a class="item" data-bind="tabber, href: './weekly'">Weekly Participant Adherence</a>
+      <a class="item" data-bind="tabber, href: './stats'">Summary Statistics</a>
+    </div>
     <pager2 params="prefix: 'adh', loadingFunc: loadingFunc">
       <span data-bind="text: $parent.formattedSearchObs"></span>
     </pager2>
