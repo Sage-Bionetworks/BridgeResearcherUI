@@ -7,6 +7,7 @@ import root from "./root";
 import router from "./routes";
 import toastr from "toastr";
 import serverService from "./services/server_service";
+import storeService from "./services/store_service";
 import { ERROR_BUS } from './widgets/errors/errors';
 
 const FAILURE_HANDLER = failureHandler({ transient: true });
@@ -274,7 +275,7 @@ function synapseAliasToUserId(alias) {
   });
 }
 function getSynapseServer() {
-  let env = localStorage.getItem("environment");
+  let env = storeService.get("environment");
   let server = (env === 'production') ? 
     'www.synapse.org' : 'portal-dev.dev.sagebase.org';
   return `https://${server}/#!`;
