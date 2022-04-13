@@ -50,11 +50,12 @@ export default function(params) {
 
     utils.startHandler(vm, event);
     let p = serverService.updateStudy(self.study)
+      .then(res => self.study.version = res.version)
       .then(() => serverService.createOrUpdateStudySchedule(params.studyId, self.schedule))
       .then(afterSave);
     if (self.isNewObs()) {
         p.then(utils.successHandler(vm, event, "Schedule created."))
-          .then((sch) => document.location = `/studies/${params.studyId}/schedule`);
+          .then(() => document.location = `/studies/${params.studyId}/schedule`);
     } else {
         p.then(utils.successHandler(vm, event, "Schedule saved."));
     }
