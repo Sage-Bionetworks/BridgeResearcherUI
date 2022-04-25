@@ -11,12 +11,12 @@
     </td>
   <!-- /ko -->
   <!-- ko if: week.rows.length > 0 -->
-    <td data-bind="attr: {rowspan: week.rows.length}">
+    <td data-bind="attr: {rowspan: week.rows.length}" nowrap>
       <span data-bind="text: 'Week ' + week.weekInStudy, 
         attr: {'data-title': 'Starts on ' + $component.formatDate(week.startDate)}">
       </span>
     </td>
-    <td class="label" data-bind="text: formatRow(week.rows[0])"></td>
+    <td class="label" data-bind="html: formatRow(week.rows[0])" nowrap></td>
     <td class="center" data-bind="class: isToday(week, 0, 0),
       html: formatWin(week, 0, 0), click: openSession"></td>
     <td class="center" data-bind="class: isToday(week, 0, 1),
@@ -35,12 +35,14 @@
       text: $component.formatAdh(week)"></td>
   <!-- /ko -->
   <!-- ko if: week.rows.length === 0 -->
-    <td class="center" colspan="10" data-bind="text: formatProgress(week)"></td>
+    <td></td>
+    <td></td>
+    <td class="center" colspan="8" data-bind="text: formatProgress(week)"></td>
   <!-- /ko -->
 </tr>
 <!-- ko foreach: {data: week.rows.slice(1), as: 'row', noChildContext: true} -->
   <tr>
-    <td class="cell label" data-bind="text: formatRow(row)"></td>
+    <td class="cell label" data-bind="html: formatRow(row)"></td>
     <td class="cell center" data-bind="class: isToday(week, $index()+1, 0),
       html: formatWin(week, $index()+1, 0), click: openSession"></td>
     <td class="cell center" data-bind="class: isToday(week, $index()+1, 1),

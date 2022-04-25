@@ -126,7 +126,7 @@ export default class StudyParticipantSchedule extends BaseAccount {
   }
   saveEvent(event, updateBursts) {
     return serverService.createStudyParticipantActivityEvent(this.studyId, this.userId, event, updateBursts)
-      .then(() => serverService.getStudyParticipantActivityEvents(this.studyId, this.userId, updateBursts))
+      .then(() => serverService.getStudyParticipantActivityEvents(this.studyId, this.userId))
       .then(sortRes)
       .then(res => this.itemsObs(res.items));
   }
