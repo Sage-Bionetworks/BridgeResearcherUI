@@ -161,7 +161,7 @@
     <div data-bind="visible: selectedTabObs() === 'clientData'">
       <label>Client data should be in JSON format</label>
       <div id="clientData">
-        <textarea style="font-family: monospace; height: 50rem" data-bind="textInput: clientDataObs"></textarea>
+        <textarea style="font-family: monospace; height: 50rem" data-bind="textInput: clientDataObs, hasFocus: true"></textarea>
       </div>
       <div style="padding-top:1rem">
         <button class="ui tiny primary button" data-bind="click: reformat">Reformat</button>

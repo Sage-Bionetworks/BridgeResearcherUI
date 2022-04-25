@@ -18,7 +18,7 @@
     <form class="ui form">
       <div class="field" id="clientData" data-bind="visible: canEdit">
         <label>Client data should be in JSON format</label>
-        <textarea style="font-family: monospace" data-bind="textInput: clientDataObs"></textarea>
+        <textarea style="font-family: monospace" data-bind="textInput: clientDataObs, hasFocus: true"></textarea>
       </div>
       <div style="font-family: monospace; white-space: pre" 
         data-bind="text: clientDataObs, visible: !canEdit()"></div>

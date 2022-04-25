@@ -27,7 +27,15 @@ export default class AdherenceReportRow {
     return '';
   }
   formatRow(row) {
-    return (row.studyBurstId) ? (`${row.studyBurstId} #${row.studyBurstNum}`) : row.sessionName;
+    if (row.studyBurstId) {
+      let burstLabel = row.studyBurstId;
+      if (burstLabel.length > 25) {
+        burstLabel = burstLabel.substring(0,20) + '…';
+      }
+      return `<span data-title="${row.studyBurstId}">` + 
+        `${burstLabel} #${row.studyBurstNum}</span>`;
+    }
+    return row.sessionName;
   }
   formatProgress(week) {
     if (week.progression) {
