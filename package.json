@@ -41,7 +41,7 @@
     "lodash": "^4.17.21",
     "mini-css-extract-plugin": "^2.4.1",
     "minimist": ">=1.2.3",
-    "mocha": "^9.1.2",
+    "mocha": "^10.0.0",
     "node-sass": "^7.0.1",
     "querystringify": ">=2.0.0",
     "sass-loader": "^12.4.0",
