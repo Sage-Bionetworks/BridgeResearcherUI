@@ -1,4 +1,4 @@
-import { getEventIds } from "./schedule2utils";
+import { getEventIdsForStudy } from "./schedule2utils";
 import alert from "../../widgets/alerts";
 import Binder from "../../binder";
 import fn from "../../functions";
@@ -20,8 +20,7 @@ export default function(params) {
     .obs('title')
     .obs('isStudyNew', false)
     .obs('phase')
-    
-    .obs('isNew')
+    .obs('isNew', false)
     .obs('createdOn')
     .obs('modifiedOn')
     .bind('name')
@@ -77,7 +76,7 @@ export default function(params) {
       utils.startHandler(vm, event);
       serverService.deleteSchedule(self.guidObs(), true)
         .then(utils.successHandler(vm, event, "Schedule deleted."))
-        .then((sch) => window.location.reload(`/studies/${params.studyId}/schedule`))
+        .then(() => window.location.reload(`/studies/${params.studyId}/schedule`))
         .catch(utils.failureHandler({ id: 'schedule' }))
     });
   }
@@ -122,6 +121,18 @@ export default function(params) {
     self.identifierObs(study.identifier);
     self.phaseObs(study.phase);
     self.isNewObs(!!study.scheduleGuid);
+    self.eventIdsObs( getEventIdsForStudy(study) );
+    self.studyStartEventIdObs(self.study.studyStartEventId);
+    if (self.study.scheduleGuid) {
+      serverService.getStudySchedule(params.studyId)
+        .then(binder.assign('schedule'))
+        .then(afterSave)
+        .then(binder.update())
+        .catch(utils.failureHandler({
+          redirectTo: `/studies/${params.studyId}/general`,
+          redirectMsg: 'Schedule not found'
+        }));
+    }
   }).catch(
     utils.failureHandler({
       redirectMsg: "Study not found.",
@@ -129,22 +140,4 @@ export default function(params) {
       transient: false
     })
   );
-  getEventIds(params.studyId).then(array => self.eventIdsObs(array))
-    .then(() => {
-      if (self.study) {
-        self.studyStartEventIdObs(self.study.studyStartEventId);
-        if (self.study.scheduleGuid) {
-          serverService.getStudySchedule(params.studyId)
-            .then(binder.assign('schedule'))
-            .then(afterSave)
-            .then(binder.update())
-            .catch(utils.failureHandler({
-              redirectTo: `/studies/${params.studyId}/general`,
-              redirectMsg: 'Schedule not found'
-            }));
-        }
-      } else {
-        self.isNewObs(true);
-      }
-    });
 };
