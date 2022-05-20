@@ -25,6 +25,7 @@ export default class Assessments {
     this.tagsObs = ko.observable('');
     this.postLoadPagerFunc = fn.identity;
     this.postLoadFunc = (func) => this.postLoadPagerFunc = func;
+    this.load = this.load.bind(this);
 
     ko.postbox.subscribe('asm-refresh', this.load.bind(this));
   }
