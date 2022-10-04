@@ -46,7 +46,7 @@
     "querystringify": ">=2.0.0",
     "sass-loader": "^12.4.0",
     "serialize-javascript": ">=6.0.0",
-    "sinon": "^13.0.1",
+    "sinon": "^14.0.1",
     "source-map-explorer": "^2.5.2",
     "sweetalert2": "^11.1.7",
     "toastr": "^2.1.2",
